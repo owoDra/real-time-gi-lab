@@ -9,6 +9,7 @@ This repository is a measurement-driven GI research lab.
   - `research-lane-a-split-rc`
   - `research-lane-b-traversal`
   - `research-lane-c-storage-locality`
+  - `research-lane-d-producer-optimization`
 - Push experiment commits directly to the active lane branch.
 - Do not create pull requests for normal research iterations.
 - Do not merge another lane or `research` without an explicit user request.
@@ -35,6 +36,12 @@ Lane C owns:
 - `shaders/research/lane_c_storage_locality/**`
 - `scripts/research/lane_c_storage_locality/**`
 - `research/lanes/lane-c-storage-locality/**`
+
+Lane D owns:
+- `src/research/lane_d_producer_optimization/**`
+- `shaders/research/lane_d_producer_optimization/**`
+- `scripts/research/lane_d_producer_optimization/**`
+- `research/lanes/lane-d-producer-optimization/**`
 
 Shared roots such as `CMakeLists.txt`, `mise.toml`, `src/*.cpp`,
 `shaders/*.glsl`, and `research/protocol.md` are read-mostly from lane
