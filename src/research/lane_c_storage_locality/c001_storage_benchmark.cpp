@@ -129,10 +129,12 @@ struct Workload {
     std::uint32_t occupancy{};
     std::vector<Unit> active_bricks;
     std::vector<Unit> leaving_bricks;
+    std::vector<Unit> entering_bricks;
     std::vector<Unit> probes;
     std::vector<Unit> update_probes;
     std::vector<Unit> invalidate_probes;
     std::vector<Unit> leaving_probes;
+    std::vector<Unit> entering_probes;
 };
 
 Workload make_workload(const Config& cfg, std::uint32_t occupancy) {
@@ -166,6 +168,19 @@ Workload make_workload(const Config& cfg, std::uint32_t occupancy) {
                         if ((index % 257u) == 0u) w.invalidate_probes.push_back(p);
                         if (bx == 0u) w.leaving_probes.push_back(p);
                     }
+                }
+                const Unit entering_brick{c, cfg.bricks_x, by, bz};
+                w.entering_bricks.push_back(entering_brick);
+                for (const auto local : locals) {
+                    const auto lx = local % kBrickEdge;
+                    const auto ly = (local / kBrickEdge) % kBrickEdge;
+                    const auto lz = local / (kBrickEdge * kBrickEdge);
+                    w.entering_probes.push_back({
+                        c,
+                        cfg.bricks_x * kBrickEdge + lx,
+                        by * kBrickEdge + ly,
+                        bz * kBrickEdge + lz,
+                    });
                 }
             }
         }
@@ -868,6 +883,7 @@ int run(int argc, char** argv) {
             const auto update_addr = addresses_for(workload.update_probes, rep, cfg);
             const auto invalidate_addr = addresses_for(workload.invalidate_probes, rep, cfg);
             const auto leaving_addr = addresses_for(workload.leaving_probes, rep, cfg);
+            const auto entering_addr = addresses_for(workload.entering_probes, rep, cfg);
 
             const auto seeded = make_state(rep, workload, all_addr, cfg, true);
             const auto empty = make_empty_like(seeded, rep);
@@ -877,16 +893,20 @@ int run(int argc, char** argv) {
             auto update_probes = bench.upload_vector(workload.update_probes);
             auto invalidate_probes = bench.upload_vector(workload.invalidate_probes);
             auto leaving_probes = bench.upload_vector(workload.leaving_probes);
+            auto entering_probes = bench.upload_vector(workload.entering_probes);
             auto active_bricks = bench.upload_vector(workload.active_bricks);
             auto leaving_bricks = bench.upload_vector(workload.leaving_bricks);
+            auto entering_bricks = bench.upload_vector(workload.entering_bricks);
 
             auto static_all_addr = bench.upload_vector(all_addr);
             auto static_update_addr = bench.upload_vector(update_addr);
             auto static_invalidate_addr = bench.upload_vector(invalidate_addr);
             auto static_leaving_addr = bench.upload_vector(leaving_addr);
+            auto static_entering_addr = bench.upload_vector(entering_addr);
 
             auto dynamic_all_addr = bench.make_zero(all_addr.size() * sizeof(Address));
             auto dynamic_update_addr = bench.make_zero(update_addr.size() * sizeof(Address));
+            auto dynamic_entering_addr = bench.make_zero(entering_addr.size() * sizeof(Address));
             auto output = bench.make_zero(workload.probes.size() * sizeof(std::uint32_t));
 
             const auto scratch_bytes =
@@ -908,15 +928,19 @@ int run(int argc, char** argv) {
 
             const auto addr_all_set = make_set(probes, dynamic_all_addr);
             const auto addr_update_set = make_set(update_probes, dynamic_update_addr);
+            const auto addr_entering_set = make_set(entering_probes, dynamic_entering_addr);
             const auto lookup_static_set = make_set(probes, static_all_addr);
             const auto lookup_dynamic_set = make_set(probes, dynamic_all_addr);
             const auto update_static_set = make_set(update_probes, static_update_addr);
             const auto update_dynamic_set = make_set(update_probes, dynamic_update_addr);
             const auto invalidate_set = make_set(invalidate_probes, static_invalidate_addr);
+            const auto lookup_entering_set = make_set(entering_probes, static_entering_addr);
+            const auto populate_entering_dynamic_set = make_set(entering_probes, dynamic_entering_addr);
             const auto evict_probe_set = make_set(leaving_probes, static_leaving_addr);
             const auto reserve_probe_static_set = lookup_static_set;
             const auto reserve_probe_dynamic_set = lookup_dynamic_set;
             const auto reserve_brick_set = make_set(active_bricks, static_all_addr);
+            const auto reserve_entering_brick_set = make_set(entering_bricks, dynamic_entering_addr);
             const auto evict_brick_set = make_set(leaving_bricks, static_all_addr);
 
             const auto address_all = Dispatch{
@@ -930,6 +954,12 @@ int run(int argc, char** argv) {
                 addr_update_set,
                 make_push(
                     static_cast<std::uint32_t>(workload.update_probes.size()),
+                    rep_mode(rep), state, cfg)};
+            const auto address_entering = Dispatch{
+                bench.address_pipeline(),
+                addr_entering_set,
+                make_push(
+                    static_cast<std::uint32_t>(workload.entering_probes.size()),
                     rep_mode(rep), state, cfg)};
 
             auto storage_dispatch = [&](VkDescriptorSet set, std::uint32_t count, std::uint32_t op) {
@@ -969,6 +999,18 @@ int run(int argc, char** argv) {
                 lookup_static_set, static_cast<std::uint32_t>(workload.probes.size()), 1u);
             const auto populate_dynamic = storage_dispatch(
                 lookup_dynamic_set, static_cast<std::uint32_t>(workload.probes.size()), 1u);
+            const auto lookup_entering = storage_dispatch(
+                lookup_entering_set, static_cast<std::uint32_t>(workload.entering_probes.size()), 2u);
+            const auto reserve_entering = rep == Rep::ProbeHash
+                ? storage_dispatch(
+                    populate_entering_dynamic_set,
+                    static_cast<std::uint32_t>(workload.entering_probes.size()), 0u)
+                : storage_dispatch(
+                    reserve_entering_brick_set,
+                    static_cast<std::uint32_t>(workload.entering_bricks.size()), 0u);
+            const auto populate_entering = storage_dispatch(
+                populate_entering_dynamic_set,
+                static_cast<std::uint32_t>(workload.entering_probes.size()), 1u);
 
             // Producer address generation: no storage mutation and no manufactured ordering.
             const auto producer_us = bench.measure({address_all}, {}, cfg.iterations);
@@ -1092,6 +1134,39 @@ int run(int argc, char** argv) {
                 evict_us, checksum(evicted_values), evict_ok});
             all_correct = all_correct && evict_ok;
 
+            // Dynamic one-brick X shift: evict the leaving plane, generate the
+            // entering probe addresses, reuse residency capacity, and repopulate.
+            const auto churn_us = bench.measure(
+                {evict, address_entering, reserve_entering, populate_entering},
+                baseline_reset(state), cfg.iterations);
+            bench.execute({lookup_static});
+            const auto churn_old_values =
+                download_u32(bench, output, workload.probes.size());
+            bench.execute({lookup_entering});
+            const auto churn_new_values =
+                download_u32(bench, output, workload.entering_probes.size());
+            std::vector<std::uint32_t> expected_entering;
+            expected_entering.reserve(entering_addr.size());
+            for (const auto& a : entering_addr) expected_entering.push_back(a.payload);
+            const bool churn_ok =
+                churn_old_values == expected_evicted &&
+                churn_new_values == expected_entering;
+            rows.push_back({
+                rep_name(rep), occupancy, "residency-churn-e2e",
+                static_cast<std::uint32_t>(workload.entering_probes.size()),
+                state.persistent_bytes, scratch_bytes,
+                (rep == Rep::ProbeHash
+                    ? workload.leaving_probes.size() * sizeof(Unit)
+                    : workload.leaving_bricks.size() * sizeof(Unit)) +
+                    workload.entering_probes.size() * sizeof(Unit) +
+                    (rep == Rep::ProbeHash
+                        ? 0u
+                        : workload.entering_bricks.size() * sizeof(Unit)),
+                churn_us,
+                checksum(churn_old_values) + checksum(churn_new_values),
+                churn_ok});
+            all_correct = all_correct && churn_ok;
+
             // Empty -> residency map/key allocation only.
             const auto allocation_us =
                 bench.measure({reserve_static}, empty_reset(state), cfg.iterations);
@@ -1131,14 +1206,18 @@ int run(int argc, char** argv) {
             all_correct = all_correct && build_ok;
 
             bench.context().destroy_buffer(output);
+            bench.context().destroy_buffer(dynamic_entering_addr);
             bench.context().destroy_buffer(dynamic_update_addr);
             bench.context().destroy_buffer(dynamic_all_addr);
+            bench.context().destroy_buffer(static_entering_addr);
             bench.context().destroy_buffer(static_leaving_addr);
             bench.context().destroy_buffer(static_invalidate_addr);
             bench.context().destroy_buffer(static_update_addr);
             bench.context().destroy_buffer(static_all_addr);
+            bench.context().destroy_buffer(entering_bricks);
             bench.context().destroy_buffer(leaving_bricks);
             bench.context().destroy_buffer(active_bricks);
+            bench.context().destroy_buffer(entering_probes);
             bench.context().destroy_buffer(leaving_probes);
             bench.context().destroy_buffer(invalidate_probes);
             bench.context().destroy_buffer(update_probes);
