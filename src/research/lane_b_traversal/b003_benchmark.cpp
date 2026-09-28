@@ -4,6 +4,7 @@
 #include "b002_scene.hpp"
 #include "b002_vulkan.hpp"
 #include "b003_macro_bvh8.hpp"
+#include "b003_micro_bvh8.hpp"
 #include "hierarchical_stratabrick.hpp"
 #include "software_bvh.hpp"
 
@@ -418,9 +419,9 @@ void write_rows(
         << "workload,candidate,workload_id,rays,iterations,mismatches,"
            "runtime_errors,semantic_checksum,stream_parse_us,replay_convert_us,"
            "scene_load_us,hierarchy_build_cpu_us,pack_cpu_us,"
-           "macro_build_cpu_us,accel_upload_us,ray_upload_us,trace_us,"
+           "candidate_build_cpu_us,accel_upload_us,ray_upload_us,trace_us,"
            "persistent_bytes,transient_bytes,logical_stack_bytes_per_ray,"
-           "macro_nodes,macro_depth\n";
+           "structure_nodes,structure_depth\n";
     output << std::fixed << std::setprecision(3);
 
     for (const auto& row : rows) {
@@ -514,16 +515,18 @@ void write_stage_a_summary(
     std::size_t errors = 0;
 
     for (const auto& row : rows) {
-        errors += row.mismatches +
-            row.runtime_errors;
         if (row.candidate ==
             "hierarchical-stratabrick") {
+            errors += row.mismatches +
+                row.runtime_errors;
             baseline_sum += row.trace_us;
             ++baseline_count;
             baseline_memory =
                 row.persistent_bytes;
         } else if (row.candidate ==
                    "macro-bvh8-binary-micro") {
+            errors += row.mismatches +
+                row.runtime_errors;
             macro_sum += row.trace_us;
             ++macro_count;
             macro_memory =
@@ -581,6 +584,102 @@ void write_stage_a_summary(
         << "  \"correctness_errors\": "
         << errors << ",\n"
         << "  \"advance_to_stage_b\": "
+        << (advance ? "true" : "false")
+        << "\n"
+        << "}\n";
+}
+
+
+void write_stage_b_summary(
+    const std::filesystem::path& path,
+    std::span<const ResultRow> rows) {
+    double baseline_sum = 0.0;
+    double wide_sum = 0.0;
+    std::size_t baseline_count = 0;
+    std::size_t wide_count = 0;
+    std::size_t baseline_memory = 0;
+    std::size_t wide_memory = 0;
+    std::size_t errors = 0;
+
+    for (const auto& row : rows) {
+        if (row.candidate ==
+            "hierarchical-stratabrick") {
+            errors += row.mismatches +
+                row.runtime_errors;
+            baseline_sum += row.trace_us;
+            ++baseline_count;
+            baseline_memory =
+                row.persistent_bytes;
+        } else if (row.candidate ==
+                   "dda-wide-micro-bvh8") {
+            errors += row.mismatches +
+                row.runtime_errors;
+            wide_sum += row.trace_us;
+            ++wide_count;
+            wide_memory =
+                row.persistent_bytes;
+        }
+    }
+
+    if (baseline_count != kB002Cases.size() ||
+        wide_count != kB002Cases.size()) {
+        throw std::runtime_error(
+            "B003 Stage B summary missing required candidate rows");
+    }
+
+    const auto baseline_mean =
+        baseline_sum /
+        static_cast<double>(baseline_count);
+    const auto wide_mean =
+        wide_sum /
+        static_cast<double>(wide_count);
+    const auto trace_ratio =
+        baseline_mean > 0.0
+        ? wide_mean / baseline_mean
+        : std::numeric_limits<double>::infinity();
+    const auto improvement =
+        baseline_mean > 0.0
+        ? 1.0 - trace_ratio
+        : 0.0;
+    const auto memory_ratio =
+        baseline_memory != 0
+        ? static_cast<double>(wide_memory) /
+            static_cast<double>(baseline_memory)
+        : std::numeric_limits<double>::infinity();
+
+    // An uncompressed float BVH8 only needs to stay close enough to the
+    // binary baseline to justify testing the compression mechanism that wide
+    // GPU BVHs normally rely on. A catastrophic slowdown rejects the branch.
+    const bool advance =
+        errors == 0 &&
+        trace_ratio <= 1.15 &&
+        memory_ratio <= 1.50;
+
+    std::ofstream output(path);
+    if (!output) {
+        throw std::runtime_error(
+            "Could not create B003 Stage B summary");
+    }
+    output
+        << std::fixed << std::setprecision(6)
+        << "{\n"
+        << "  \"baseline_mean_trace_us\": "
+        << baseline_mean << ",\n"
+        << "  \"wide_micro_mean_trace_us\": "
+        << wide_mean << ",\n"
+        << "  \"trace_ratio\": "
+        << trace_ratio << ",\n"
+        << "  \"trace_improvement_fraction\": "
+        << improvement << ",\n"
+        << "  \"baseline_persistent_bytes\": "
+        << baseline_memory << ",\n"
+        << "  \"wide_micro_persistent_bytes\": "
+        << wide_memory << ",\n"
+        << "  \"memory_ratio\": "
+        << memory_ratio << ",\n"
+        << "  \"correctness_errors\": "
+        << errors << ",\n"
+        << "  \"advance_to_quantization\": "
         << (advance ? "true" : "false")
         << "\n"
         << "}\n";
@@ -678,6 +777,34 @@ int main(int argc, char** argv) {
         const auto macro_payload =
             make_b003_macro_bvh8(flat, segment_size);
 
+        std::vector<double> wide_build_samples;
+        wide_build_samples.reserve(
+            cli.build_repeats);
+        for (std::uint32_t repeat = 0;
+             repeat < cli.build_repeats;
+             ++repeat) {
+            start = Clock::now();
+            auto candidate =
+                make_b003_wide_micro_payload(flat);
+            volatile auto nodes =
+                candidate.nodes.size();
+            (void)nodes;
+            wide_build_samples.push_back(
+                elapsed_us(start));
+        }
+        const auto wide_build_us =
+            median_us(
+                std::move(wide_build_samples));
+        const auto wide_payload =
+            make_b003_wide_micro_payload(flat);
+
+        if (wide_payload.segment_count !=
+                flat.segments.size() ||
+            wide_payload.max_stack_entries > 64U) {
+            throw std::runtime_error(
+                "B003 wide micro payload failed structural gate");
+        }
+
         if (macro_payload.root == kInvalidId ||
             macro_payload.segment_count !=
                 flat.segments.size()) {
@@ -737,6 +864,21 @@ int main(int argc, char** argv) {
                 << macro_payload.max_stack_entries
                 << ",\n"
                 << "  \"macro_fanout\": 8,\n"
+                << "  \"wide_micro_nodes\": "
+                << wide_payload.nodes.size()
+                << ",\n"
+                << "  \"wide_micro_depth\": "
+                << wide_payload.max_depth
+                << ",\n"
+                << "  \"wide_micro_max_stack_entries\": "
+                << wide_payload.max_stack_entries
+                << ",\n"
+                << "  \"wide_micro_hash_slots\": "
+                << wide_payload.hash_table.size()
+                << ",\n"
+                << "  \"wide_micro_hash_max_probe\": "
+                << wide_payload.hash_max_probe
+                << ",\n"
                 << "  \"iterations\": "
                 << cli.iterations << ",\n"
                 << "  \"build_repeats\": "
@@ -849,6 +991,31 @@ int main(int argc, char** argv) {
             elapsed_us(start) +
             triangle_upload_us;
 
+        start = Clock::now();
+        auto wide_node_buffer =
+            context.upload_device_buffer(
+                wide_payload.nodes.data(),
+                wide_payload.nodes.size() *
+                    sizeof(B003GpuWideNode),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        auto wide_order_buffer =
+            context.upload_device_buffer(
+                wide_payload
+                    .ordered_primitives.data(),
+                wide_payload
+                    .ordered_primitives.size() *
+                    sizeof(std::uint32_t),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        auto wide_hash_buffer =
+            context.upload_device_buffer(
+                wide_payload.hash_table.data(),
+                wide_payload.hash_table.size() *
+                    sizeof(GpuSegmentHashEntry),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        const auto wide_upload_us =
+            elapsed_us(start) +
+            triangle_upload_us;
+
         const auto baseline_persistent =
             static_cast<std::size_t>(
                 triangle_buffer.allocation_size +
@@ -861,6 +1028,12 @@ int main(int argc, char** argv) {
                 macro_node_buffer.allocation_size +
                 macro_order_buffer.allocation_size +
                 macro_top_buffer.allocation_size);
+        const auto wide_persistent =
+            static_cast<std::size_t>(
+                triangle_buffer.allocation_size +
+                wide_node_buffer.allocation_size +
+                wide_order_buffer.allocation_size +
+                wide_hash_buffer.allocation_size);
 
         for (const auto& replay : cases) {
             const auto ray_bytes =
@@ -1077,6 +1250,113 @@ int main(int argc, char** argv) {
                 macro_payload.max_depth,
             });
 
+            auto wide_hit_buffer =
+                context.create_device_buffer(
+                    hit_bytes,
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            std::array<const B002Buffer*, 6>
+                wide_bindings{
+                    &ray_buffer,
+                    &triangle_buffer,
+                    &wide_node_buffer,
+                    &wide_order_buffer,
+                    &wide_hash_buffer,
+                    &wide_hit_buffer,
+                };
+            B002ComputeTraversal wide_runner(
+                context,
+                (std::filesystem::path(
+                    PHOS_GI_LANE_B_SHADER_DIR) /
+                    "lane_b_b003_micro_bvh8.spv")
+                    .string(),
+                wide_bindings,
+                sizeof(HierarchicalTraversalPush));
+
+            HierarchicalTraversalPush wide_push{};
+            wide_push.values[0] =
+                static_cast<std::uint32_t>(
+                    replay.gpu_rays.size());
+            wide_push.values[1] =
+                wide_payload.hash_mask;
+            wide_push.values[2] =
+                wide_payload.hash_max_probe;
+            wide_push.values[3] =
+                static_cast<std::uint32_t>(
+                    std::min<std::uint64_t>(
+                        max_steps,
+                        std::numeric_limits<
+                            std::uint32_t>::max()));
+            wide_push
+                .occupied_min_segment_size[0] =
+                wide_payload.occupied_bounds.min.x;
+            wide_push
+                .occupied_min_segment_size[1] =
+                wide_payload.occupied_bounds.min.y;
+            wide_push
+                .occupied_min_segment_size[2] =
+                wide_payload.occupied_bounds.min.z;
+            wide_push
+                .occupied_min_segment_size[3] =
+                segment_size;
+            wide_push
+                .occupied_max_pad[0] =
+                wide_payload.occupied_bounds.max.x;
+            wide_push
+                .occupied_max_pad[1] =
+                wide_payload.occupied_bounds.max.y;
+            wide_push
+                .occupied_max_pad[2] =
+                wide_payload.occupied_bounds.max.z;
+
+            const auto wide_trace_us =
+                wide_runner.measure(
+                    wide_push.values[0],
+                    cli.iterations,
+                    &wide_push,
+                    sizeof(wide_push));
+
+            std::vector<GpuHit> wide_hits(
+                replay.gpu_rays.size());
+            context.download_device_buffer(
+                wide_hit_buffer,
+                wide_hits.data(),
+                hit_bytes);
+            const auto wide_validation =
+                validate_gpu_hits(
+                    replay.reference_hits,
+                    wide_hits);
+
+            rows.push_back({
+                replay.name,
+                "dda-wide-micro-bvh8",
+                replay.workload_id,
+                replay.rays.size(),
+                cli.iterations,
+                wide_validation.mismatches,
+                wide_validation.runtime_errors,
+                wide_validation.semantic_checksum,
+                replay.stream_parse_us,
+                replay.replay_convert_us,
+                scene_load_us,
+                hierarchy_measurement.total_us,
+                0.0,
+                wide_build_us,
+                wide_upload_us,
+                ray_upload_us,
+                wide_trace_us,
+                wide_persistent,
+                static_cast<std::size_t>(
+                    ray_buffer.allocation_size +
+                    wide_hit_buffer
+                        .allocation_size),
+                64U *
+                    sizeof(std::uint32_t),
+                wide_payload.nodes.size(),
+                wide_payload.max_depth,
+            });
+
+            context.destroy_buffer(
+                wide_hit_buffer);
             context.destroy_buffer(
                 macro_hit_buffer);
             context.destroy_buffer(
@@ -1084,6 +1364,12 @@ int main(int argc, char** argv) {
             context.destroy_buffer(ray_buffer);
         }
 
+        context.destroy_buffer(
+            wide_hash_buffer);
+        context.destroy_buffer(
+            wide_order_buffer);
+        context.destroy_buffer(
+            wide_node_buffer);
         context.destroy_buffer(
             macro_top_buffer);
         context.destroy_buffer(
@@ -1111,6 +1397,10 @@ int main(int argc, char** argv) {
             output_root /
                 "b003-stage-a-summary.json",
             rows);
+        write_stage_b_summary(
+            output_root /
+                "b003-stage-b-summary.json",
+            rows);
 
         std::size_t mismatches = 0;
         std::size_t runtime_errors = 0;
@@ -1134,10 +1424,10 @@ int main(int argc, char** argv) {
         }
 
         constexpr std::size_t kExpectedRows =
-            kB002Cases.size() * 2U;
+            kB002Cases.size() * 3U;
         if (rows.size() != kExpectedRows) {
             std::cerr
-                << "B003 Stage A candidate gate: FAIL rows="
+                << "B003 candidate gate: FAIL rows="
                 << rows.size()
                 << " expected="
                 << kExpectedRows << '\n';
@@ -1146,7 +1436,7 @@ int main(int argc, char** argv) {
         if (mismatches != 0 ||
             runtime_errors != 0) {
             std::cerr
-                << "B003 Stage A correctness: FAIL mismatches="
+                << "B003 correctness: FAIL mismatches="
                 << mismatches
                 << " runtime_errors="
                 << runtime_errors
@@ -1155,11 +1445,15 @@ int main(int argc, char** argv) {
         }
 
         std::cout
-            << "B003 Stage A correctness: PASS"
+            << "B003 correctness: PASS"
             << " macro_nodes="
             << macro_payload.nodes.size()
             << " macro_depth="
             << macro_payload.max_depth
+            << " wide_micro_nodes="
+            << wide_payload.nodes.size()
+            << " wide_micro_depth="
+            << wide_payload.max_depth
             << '\n';
         return 0;
     } catch (const std::exception& error) {
