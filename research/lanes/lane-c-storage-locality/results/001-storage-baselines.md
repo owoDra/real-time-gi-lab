@@ -137,3 +137,68 @@ On the target system:
 5. keep producer locality separate from representation;
 6. repeat the final comparison on Lane A's exact producer stream before any
    architectural promotion.
+
+
+## C001b target-GPU run v1 — 2026-09-28
+
+Status: **correctness accepted; representation decision provisional pending allocator rerun**
+
+The uploaded 3-repeat `c001b_summary.csv` contained 90/90 rows with
+`all_correct=true`.
+
+### Key median GPU timings
+
+| Occupancy | Phase | probe hash | hashed brick pool | virtual clipmap |
+| ---: | --- | ---: | ---: | ---: |
+| 4 | lookup | 8.296 us | 7.735 us | 7.494 us |
+| 4 | initial-build-e2e | 22.202 us | 16.551 us | 10.861 us |
+| 4 | residency-churn-e2e | 12.223 us | 110.169 us | 109.167 us |
+| 16 | lookup | 37.111 us | 11.903 us | 9.618 us |
+| 16 | initial-build-e2e | 85.803 us | 26.130 us | 19.998 us |
+| 16 | residency-churn-e2e | 17.593 us | 111.091 us | 109.328 us |
+| 48 | lookup | 189.560 us | 21.361 us | 18.635 us |
+| 48 | initial-build-e2e | 479.070 us | 59.433 us | 53.341 us |
+| 48 | residency-churn-e2e | 44.605 us | 111.452 us | 110.770 us |
+
+At medium/dense occupancy, both brick representations decisively improve
+lookup and initial-build cost in this synthetic source-order control. At
+occupancy 48, virtual clipmap lookup is about 10.2x faster than the probe hash
+and its initial build is about 9.0x faster.
+
+Sparse occupancy does not establish a meaningful lookup win: all three lookup
+medians are within roughly 11% at occupancy 4.
+
+### Memory
+
+| Occupancy | Representation | Persistent bytes |
+| ---: | --- | ---: |
+| 4 | probe hash | 1,048,576 |
+| 4 | hashed brick pool | 3,856,400 |
+| 4 | virtual clipmap | 3,790,864 |
+| 16 | probe hash | 4,194,304 |
+| 16 | hashed brick pool | 3,856,400 |
+| 16 | virtual clipmap | 3,790,864 |
+| 48 | probe hash | 16,777,216 |
+| 48 | hashed brick pool | 3,856,400 |
+| 48 | virtual clipmap | 3,790,864 |
+
+This confirms the C001a crossover: probe hash remains strongly preferable in
+persistent memory for sparse occupancy, while brick payload amortization wins
+at medium/dense occupancy.
+
+### Churn anomaly and required rerun
+
+The brick candidates show a highly repeatable ~109–111 us one-brick-plane
+churn cost almost independent of occupancy. The current shader's
+`take_physical()` uses a shared free-count read plus a CAS retry loop for each
+reclaimed brick. Under a plane-sized allocation batch, many invocations compete
+on the same counter and can retry repeatedly.
+
+This is a concrete algorithmic contention source visible in the implementation;
+it is **not** a claim about a particular GPU cache or microarchitectural cause.
+Because the current allocator can dominate the representation comparison,
+C001b must be rerun after replacing the retrying pop with bounded batch-claim
+bookkeeping.
+
+No representation is promoted or rejected from v1. The sparse hash remains the
+reference; both brick candidates remain under test.
