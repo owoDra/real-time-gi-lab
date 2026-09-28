@@ -1,0 +1,68 @@
+[tools]
+cmake = "4.4.3"
+ninja = "1.13.2"
+
+[env]
+CMAKE_GENERATOR = "Ninja"
+PHOS_GI_BUILD_DIR = "build/release"
+
+[tasks.assets]
+description = "Fetch the Sponza research scene"
+run = "./scripts/fetch_sponza.sh"
+
+[tasks.configure]
+description = "Configure the Release build"
+run = 'cmake -S . -B "$PHOS_GI_BUILD_DIR" -DCMAKE_BUILD_TYPE=Release'
+
+[tasks.build]
+description = "Build phos-gi-lab and shaders"
+depends = ["configure"]
+run = 'cmake --build "$PHOS_GI_BUILD_DIR"'
+
+[tasks.bench]
+description = "Run the Sponza cache-locality benchmark"
+depends = ["build", "assets"]
+usage = '''
+flag "--queries <queries>" help="Number of cache queries" default="4000000"
+flag "--iterations <iterations>" help="Timed dispatch iterations" default="100"
+flag "--validation" help="Enable Vulkan validation layers"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+args=(
+  --scene assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf
+  --queries "${usage_queries?}"
+  --iterations "${usage_iterations?}"
+)
+if [ "${usage_validation:-false}" = "true" ]; then
+  args+=(--validation)
+fi
+exec "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
+'''
+
+[tasks."bench:synthetic"]
+description = "Run the cache-locality benchmark without downloading Sponza"
+depends = ["build"]
+usage = '''
+flag "--queries <queries>" help="Number of cache queries" default="4000000"
+flag "--iterations <iterations>" help="Timed dispatch iterations" default="100"
+flag "--validation" help="Enable Vulkan validation layers"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+args=(
+  --synthetic
+  --queries "${usage_queries?}"
+  --iterations "${usage_iterations?}"
+)
+if [ "${usage_validation:-false}" = "true" ]; then
+  args+=(--validation)
+fi
+exec "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
+'''
+
+[tasks.clean]
+description = "Remove generated build files"
+run = 'cmake -E remove_directory build'
