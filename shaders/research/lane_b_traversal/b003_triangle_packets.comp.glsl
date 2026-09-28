@@ -158,7 +158,7 @@ bool prefer_hit(
 }
 
 bool intersect_packet_lane(
-    TrianglePacket4 packet,
+    uint packet_index,
     uint lane,
     vec3 origin,
     vec3 direction,
@@ -166,12 +166,18 @@ bool intersect_packet_lane(
     float best_t,
     out float t,
     out vec3 normal) {
-    vec3 e1 = packet.e1[lane].xyz;
-    vec3 e2 = packet.e2[lane].xyz;
+    vec3 v0 =
+        packets[packet_index].v0[lane].xyz;
+    vec3 e1 =
+        packets[packet_index].e1[lane].xyz;
+    vec3 e2 =
+        packets[packet_index].e2[lane].xyz;
+    uvec4 metadata =
+        packets[packet_index].metadata[lane];
     vec3 p = cross(direction, e2);
     float det = dot(e1, p);
     bool two_sided =
-        packet.metadata[lane].w != 0u;
+        metadata.w != 0u;
     if (two_sided
         ? abs(det) < 1.0e-8
         : det <= 1.0e-8) {
@@ -180,7 +186,7 @@ bool intersect_packet_lane(
 
     float inv = 1.0 / det;
     vec3 tv =
-        origin - packet.v0[lane].xyz;
+        origin - v0;
     float u = dot(tv, p) * inv;
     if (u < 0.0 || u > 1.0) return false;
     vec3 q = cross(tv, e1);
@@ -214,15 +220,14 @@ void trace_packet_leaf(
         ((token & WIDE_COUNT_MASK) >>
          WIDE_COUNT_SHIFT) + 1u;
 
-    // One binary leaf maps to exactly one four-triangle packet.
-    TrianglePacket4 packet =
-        packets[packet_index];
-
+    // One binary leaf maps to exactly one four-triangle packet. Read only the
+    // active lane fields instead of materializing all 256 packet bytes in
+    // invocation-local storage.
     for (uint lane = 0u; lane < count; ++lane) {
         float candidate_t;
         vec3 candidate_normal;
         if (intersect_packet_lane(
-                packet,
+                packet_index,
                 lane,
                 origin,
                 direction,
@@ -232,21 +237,26 @@ void trace_packet_leaf(
                 candidate_normal) &&
             prefer_hit(
                 candidate_t,
-                packet.metadata[lane].x,
+                packets[packet_index]
+                    .metadata[lane].x,
                 best_t,
                 best_primitive,
                 has_best)) {
             has_best = true;
             best_t = candidate_t;
             best_primitive =
-                packet.metadata[lane].x;
+                packets[packet_index]
+                    .metadata[lane].x;
             output_hit.normal_t =
                 vec4(candidate_normal, candidate_t);
             output_hit.metadata =
                 uvec4(
-                    packet.metadata[lane].x,
-                    packet.metadata[lane].y,
-                    packet.metadata[lane].z,
+                    packets[packet_index]
+                        .metadata[lane].x,
+                    packets[packet_index]
+                        .metadata[lane].y,
+                    packets[packet_index]
+                        .metadata[lane].z,
                     1u);
         }
     }
