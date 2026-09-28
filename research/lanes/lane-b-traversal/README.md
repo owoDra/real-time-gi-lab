@@ -7,9 +7,11 @@ Mission: determine which traversal architecture best serves Split RC gather rays
 under realistic dynamic-scene maintenance costs. StrataBrick is a candidate, not
 a requirement.
 
-## Status — complete
+## Status — B002 complete; B003 fallback optimization active
 
-Lane B is complete. B001 established the shared Hit contract and candidate
+Lane B's primary decision from B002 remains complete and accepted. B003 is an optional software-fallback optimization follow-up and does not block Integration #13.
+
+Lane B B001/B002 established the final primary decision. B001 established the shared Hit contract and candidate
 retention. B002 completed the final comparison on Lane A's accepted exact
 producer streams and controlled moving geometry.
 
@@ -81,3 +83,22 @@ Carry these caveats into integration:
 
 Do not interpret Lane B's traversal winner as proof that the combined GI
 architecture is superior before Integration #13 passes its end-to-end gate.
+
+
+## B003 — software fallback optimization
+
+B003 is testing whether a software traversal shaped more like a two-level wide
+RT hierarchy can materially reduce the gap to HWRT without losing the memory
+advantage.
+
+Stage A replaces only the B002 segment-grid DDA/hash front end with a Macro
+BVH8 while keeping the proven binary per-segment BVHs. This is intentionally the
+cheapest structural rejection test.
+
+If Stage A cuts same-run representative traversal by at least 20% with at most
+15% extra persistent memory, B003 will continue to wide micro-BVH,
+quantized/compressed bounds, compact stack, and only then consider triangle
+packets / GPU-side maintenance.
+
+Protocol:
+`experiments/003-wide-software-traversal.md`.
