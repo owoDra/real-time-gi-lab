@@ -130,3 +130,46 @@ D001's visibility-reuse accounting.
 - diagnostic validation first;
 - accepted timing with validation disabled;
 - 3 process-level repeats, 50 timed iterations per case.
+
+
+## Implementation / measurement readiness
+
+D002 is implemented with a dedicated tile-domain producer shader and reuses the
+D001 staged runtime only as a matched measurement harness. The accepted A001
+runtime remains unchanged and is executed in the same process as an external
+control.
+
+The surface and tile candidates differ only in producer source dispatch:
+
+- surface scan: one invocation per source surface;
+- tile scan: one invocation per screen tile.
+
+Both full variants still pay the same A001 visibility passes. Both depth-reuse
+variants use the D001-retained depth-reuse boundary. The current global
+output/work reservations remain inside producer emit; D002 does not claim that
+atomic allocation cost is zero. Only stream-capacity allocation/compaction is
+unchanged/absent in this experiment.
+
+Target-system diagnostic command:
+
+```bash
+mise run build
+mise run assets
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 002-visible-tile-emission \
+  --command "python scripts/research/lane_d_producer_optimization/run_d002.py --repeats 1 --iterations 1 --validation"
+```
+
+If validation/correctness passes, accepted timing candidate:
+
+```bash
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 002-visible-tile-emission \
+  --command "python scripts/research/lane_d_producer_optimization/run_d002.py --repeats 3 --iterations 50"
+```
+
+The runner writes `d002.csv`, `summary.json`, and one `metrics.json` per
+repeat/case. Any semantic mismatch or overflow stops the run before performance
+evidence is accepted.
