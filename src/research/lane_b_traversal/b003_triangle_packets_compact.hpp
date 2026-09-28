@@ -44,6 +44,26 @@ struct B003CompactPacketMicroPayload {
     std::size_t live_triangle_slots{};
 };
 
+[[nodiscard]] inline std::uint32_t
+b003_compact_material_id(std::uint32_t packed) noexcept {
+    const auto material =
+        packed & kB003CompactMaterialMask;
+    return material == kB003CompactMaterialInvalid
+        ? kInvalidId
+        : material;
+}
+
+[[nodiscard]] inline std::uint32_t
+b003_compact_instance_id(std::uint32_t packed) noexcept {
+    return (packed >> kB003CompactMaterialBits) &
+        kB003CompactInstanceMask;
+}
+
+[[nodiscard]] inline bool
+b003_compact_two_sided(std::uint32_t packed) noexcept {
+    return (packed & kB003CompactTwoSidedBit) != 0U;
+}
+
 namespace b003_compact_packet_detail {
 
 [[nodiscard]] inline std::uint32_t pack_aux_metadata(
