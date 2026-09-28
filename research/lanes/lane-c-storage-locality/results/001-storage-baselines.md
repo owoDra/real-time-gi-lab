@@ -202,3 +202,101 @@ bookkeeping.
 
 No representation is promoted or rejected from v1. The sparse hash remains the
 reference; both brick candidates remain under test.
+
+
+## C001b target-GPU run v2 — allocator-corrected rerun
+
+Status: **accepted for synthetic Vulkan candidate pruning; final Lane A replay still required**
+
+The allocator-corrected 3-repeat target-GPU summary contained 90/90 rows with
+`all_correct=true`.
+
+### Allocator correction validation
+
+The v1 brick/clipmap churn plateau was removed by replacing the shared CAS
+retrying free-list pop with bounded per-brick claims plus one finalize dispatch.
+
+| Occupancy | Representation | v1 churn | v2 churn | Improvement |
+| ---: | --- | ---: | ---: | ---: |
+| 4 | hashed brick pool | 110.169 us | 13.626 us | 8.1x |
+| 4 | virtual clipmap | 109.167 us | 8.817 us | 12.4x |
+| 16 | hashed brick pool | 111.091 us | 14.387 us | 7.7x |
+| 16 | virtual clipmap | 109.328 us | 9.939 us | 11.0x |
+| 48 | hashed brick pool | 111.452 us | 15.189 us | 7.3x |
+| 48 | virtual clipmap | 110.770 us | 10.941 us | 10.1x |
+
+The probe-hash control changed much less except at the largest workload. This
+supports treating the v1 plateau as an implementation-level allocator
+bottleneck, not as evidence against brick-granularity residency.
+
+### End-to-end comparison
+
+`producer+lookup` is the preferred lookup comparison because it includes the
+representation-specific address-generation work and was repeatable in v2.
+
+| Occupancy | probe hash | hashed brick pool | virtual clipmap |
+| ---: | ---: | ---: | ---: |
+| 4 | 11.221 us | 10.620 us | 9.298 us |
+| 16 | 47.490 us | 20.399 us | 18.155 us |
+| 48 | 236.650 us | 47.530 us | 43.122 us |
+
+Virtual clipmap is about 2.6x faster than the probe hash at occupancy 16 and
+5.5x faster at occupancy 48 for `producer+lookup`.
+
+Initial-build medians:
+
+| Occupancy | probe hash | hashed brick pool | virtual clipmap |
+| ---: | ---: | ---: | ---: |
+| 4 | 22.282 us | 15.309 us | 9.779 us |
+| 16 | 82.517 us | 26.250 us | 19.958 us |
+| 48 | 425.048 us | 49.815 us | 42.080 us |
+
+Allocator-corrected residency churn medians:
+
+| Occupancy | probe hash | hashed brick pool | virtual clipmap |
+| ---: | ---: | ---: | ---: |
+| 4 | 12.424 us | 13.626 us | 8.817 us |
+| 16 | 17.032 us | 14.387 us | 9.939 us |
+| 48 | 32.061 us | 15.189 us | 10.941 us |
+
+Virtual clipmap now wins the complete one-plane churn sequence at all three
+occupancies in this synthetic control.
+
+### Persistent memory
+
+| Occupancy | probe hash | hashed brick pool | virtual clipmap |
+| ---: | ---: | ---: | ---: |
+| 4 | 1,048,576 B | 3,856,400 B | 3,790,864 B |
+| 16 | 4,194,304 B | 3,856,400 B | 3,790,864 B |
+| 48 | 16,777,216 B | 3,856,400 B | 3,790,864 B |
+
+The probe hash remains the clear sparse-memory control. Virtual clipmap crosses
+below the probe hash by the medium occupancy case and remains bounded across the
+dense case.
+
+### Repeatability note
+
+The standalone virtual-clipmap `lookup` row was unstable at occupancy 4
+(6.372–23.445 us) and had one high repeat at occupancy 16. The corresponding
+`producer+lookup` rows were stable enough for candidate pruning, and the
+decision below does not rely on the unstable lookup-only rows. No
+microarchitectural explanation is inferred from this timing behavior.
+
+### C001b candidate decision
+
+Carry forward two primary representations:
+
+1. **per-probe sparse hash** — mandatory baseline and sparse-memory candidate;
+2. **virtual/clipmap sparse storage** — primary brick-granularity candidate.
+
+Do not carry the hashed contiguous brick pool as a primary representation into
+the next exact-stream comparison. In the bounded C001b workload, virtual
+clipmap has slightly lower persistent memory and better end-to-end lookup,
+initial build, allocation/residency, and corrected churn behavior. The hashed
+brick implementation remains in-tree as a diagnostic/fallback control for a
+case where the exact Lane A stream proves that bounded virtual addressing is
+not suitable.
+
+This is candidate pruning, **not architectural promotion**. Final selection
+still requires the exact Lane A producer stream and accounting for any extra
+producer work needed to emit virtual brick/page residency units.

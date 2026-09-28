@@ -1,7 +1,7 @@
 # Experiment C001 — Split RC storage baselines
 
-Status: active — C001a concluded; C001b Vulkan implementation complete and awaiting
-target-GPU validation/timing; Lane A replay remains mandatory for final promotion.
+Status: active — C001a and synthetic Vulkan C001b candidate pruning concluded;
+exact Lane A replay remains mandatory for final promotion.
 
 ## Question
 
@@ -237,3 +237,18 @@ complete end-to-end cost wins.
 
 Timestamp differences establish performance only. Any claim about a specific
 GPU cache or memory mechanism requires profiling evidence such as RGP.
+
+
+### C001b candidate outcome
+
+The allocator-corrected target-GPU rerun passed all correctness gates and
+narrows the primary exact-stream comparison to:
+
+- per-probe sparse hash baseline;
+- virtual/clipmap sparse storage.
+
+The hashed contiguous brick pool remains as a fallback diagnostic control, but
+is not a primary candidate unless Lane A demonstrates that the bounded virtual
+addressing contract is unsuitable for the actual producer stream.
+
+No representation is promoted until the exact Lane A replay is complete.

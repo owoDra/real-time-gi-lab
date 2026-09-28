@@ -5,7 +5,7 @@
     {
       "id": "001-storage-baselines",
       "status": "accepted",
-      "scope": "synthetic structural/correctness candidate retention only",
+      "scope": "synthetic structural/correctness + Vulkan candidate pruning; exact Lane A replay pending",
       "result": "research/lanes/lane-c-storage-locality/results/001-storage-baselines.md"
     }
   ]
