@@ -151,9 +151,15 @@ struct Validation {
         "002-lane-a-exact-stream-traversal/manual";
 }
 
-[[nodiscard]] std::vector<std::uint32_t> choose_moving_instance(
-    const B002Scene& scene,
-    std::uint32_t& instance_id) {
+struct MovingSelection {
+    std::uint32_t instance_id{};
+    std::vector<std::uint32_t> primitives;
+    Regime bounds_only;
+    Regime topology_change;
+};
+
+[[nodiscard]] std::vector<std::vector<std::uint32_t>> group_instances(
+    const B002Scene& scene) {
     std::uint32_t max_instance = 0;
     for (const auto& triangle : scene.triangles) {
         if (triangle.instance_id == kInvalidId) continue;
@@ -170,34 +176,7 @@ struct Validation {
             groups.at(instance).push_back(primitive);
         }
     }
-
-    // Pick the first medium-sized real Sponza mesh if possible. This prevents a
-    // single giant mesh from dominating the controlled maintenance mechanism
-    // while keeping the selection deterministic and independent of timings.
-    for (std::uint32_t candidate = 0;
-         candidate < groups.size();
-         ++candidate) {
-        if (groups[candidate].size() >= 32U &&
-            groups[candidate].size() <= 2048U) {
-            instance_id = candidate;
-            return groups[candidate];
-        }
-    }
-
-    std::size_t best_count = 0;
-    for (std::uint32_t candidate = 0;
-         candidate < groups.size();
-         ++candidate) {
-        if (groups[candidate].size() > best_count) {
-            best_count = groups[candidate].size();
-            instance_id = candidate;
-        }
-    }
-    if (best_count == 0) {
-        throw std::runtime_error(
-            "B002 maintenance could not select a moving instance");
-    }
-    return groups[instance_id];
+    return groups;
 }
 
 [[nodiscard]] std::vector<Triangle> translated(
@@ -279,6 +258,67 @@ struct Validation {
     }
     throw std::runtime_error(
         "B002 could not isolate a topology-changing hierarchical update");
+}
+
+[[nodiscard]] MovingSelection choose_moving_selection(
+    const B002Scene& scene,
+    float segment_size) {
+    const auto groups = group_instances(scene);
+    std::vector<std::uint32_t> candidates;
+    candidates.reserve(groups.size());
+
+    // Prefer medium-size real mesh groups so maintenance remains controlled,
+    // but choose by mechanism viability only. No timing result participates in
+    // this selection.
+    for (std::uint32_t instance = 0;
+         instance < groups.size();
+         ++instance) {
+        const auto count = groups[instance].size();
+        if (count >= 32U && count <= 2048U) {
+            candidates.push_back(instance);
+        }
+    }
+    for (std::uint32_t instance = 0;
+         instance < groups.size();
+         ++instance) {
+        if (groups[instance].empty() ||
+            std::find(
+                candidates.begin(),
+                candidates.end(),
+                instance) != candidates.end()) {
+            continue;
+        }
+        candidates.push_back(instance);
+    }
+
+    std::string last_error;
+    for (const auto instance : candidates) {
+        try {
+            const auto bounds_only =
+                find_bounds_only_regime(
+                    scene,
+                    groups[instance],
+                    segment_size);
+            const auto topology_change =
+                find_topology_regime(
+                    scene,
+                    groups[instance],
+                    segment_size);
+            return {
+                instance,
+                groups[instance],
+                bounds_only,
+                topology_change,
+            };
+        } catch (const std::exception& error) {
+            last_error = error.what();
+        }
+    }
+
+    throw std::runtime_error(
+        "B002 could not select a real Sponza mesh supporting both "
+        "controlled maintenance regimes; last failure: " +
+        last_error);
 }
 
 [[nodiscard]] std::vector<GpuTriangle> gpu_triangles(
@@ -945,21 +985,14 @@ int main(int argc, char** argv) {
         const auto replay_gpu =
             gpu_rays(replay.rays);
 
-        std::uint32_t moved_instance{};
-        const auto moved =
-            choose_moving_instance(
+        const auto moving =
+            choose_moving_selection(
                 scene,
-                moved_instance);
-        const auto bounds_regime =
-            find_bounds_only_regime(
-                scene,
-                moved,
                 segment_size);
-        const auto topology_regime =
-            find_topology_regime(
-                scene,
-                moved,
-                segment_size);
+        const auto moved_instance = moving.instance_id;
+        const auto& moved = moving.primitives;
+        const auto& bounds_regime = moving.bounds_only;
+        const auto& topology_regime = moving.topology_change;
 
         std::vector<Row> rows;
         std::size_t hwrt_rows = 0;
