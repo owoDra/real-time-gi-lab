@@ -167,12 +167,10 @@ void trace_segment(
     while (stack_size != 0u) {
         uint node_id = stack[--stack_size];
         BvhNode node = nodes[node_id];
-        // The Macro BVH child bound is exactly this segment-root bound, so
-        // repeating the root AABB test would charge the candidate twice for
-        // the same culling decision. Descendants still require their normal
-        // binary-BVH AABB tests.
-        if (node_id != root &&
-            !ray_node(
+        // The Macro BVH indexes the segment cell, while this micro node uses
+        // the actual triangle bounds. The root test is therefore required:
+        // cell membership is only a coarse spatial admission gate.
+        if (!ray_node(
                 origin,
                 direction,
                 has_best ? best_t : ray_tmax,

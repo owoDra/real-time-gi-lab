@@ -250,9 +250,32 @@ private:
 
 } // namespace b003_detail
 
+[[nodiscard]] inline Aabb
+b003_segment_cell_bounds(
+    SegmentCoord coord,
+    float segment_size) {
+    if (!std::isfinite(segment_size) ||
+        segment_size <= 0.0F) {
+        throw std::runtime_error(
+            "B003 segment size must be finite and positive");
+    }
+    const Vec3 minimum{
+        static_cast<float>(coord.x) * segment_size,
+        static_cast<float>(coord.y) * segment_size,
+        static_cast<float>(coord.z) * segment_size,
+    };
+    const Vec3 maximum{
+        static_cast<float>(coord.x + 1) * segment_size,
+        static_cast<float>(coord.y + 1) * segment_size,
+        static_cast<float>(coord.z + 1) * segment_size,
+    };
+    return {minimum, maximum};
+}
+
 [[nodiscard]] inline B003MacroBvh8Payload
 make_b003_macro_bvh8(
-    const HierarchicalFlatPayload& flat) {
+    const HierarchicalFlatPayload& flat,
+    float segment_size) {
     std::vector<b003_detail::MacroItem> items;
     items.reserve(flat.segments.size());
 
@@ -262,8 +285,14 @@ make_b003_macro_bvh8(
             throw std::runtime_error(
                 "B003 macro segment root is outside flat node buffer");
         }
+        // The top level indexes the disjoint spatial cells, not the full
+        // triangle bounds of each duplicated per-cell micro hierarchy. Using
+        // micro-root bounds here makes neighboring top-level leaves overlap
+        // heavily and can retraverse the same duplicated primitives many times.
         items.push_back({
-            flat.nodes[segment.root].bounds,
+            b003_segment_cell_bounds(
+                segment.coord,
+                segment_size),
             segment.root,
         });
     }

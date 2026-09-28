@@ -665,7 +665,7 @@ int main(int argc, char** argv) {
              ++repeat) {
             start = Clock::now();
             auto candidate =
-                make_b003_macro_bvh8(flat);
+                make_b003_macro_bvh8(flat, segment_size);
             volatile auto root =
                 candidate.root;
             (void)root;
@@ -676,7 +676,7 @@ int main(int argc, char** argv) {
             median_us(
                 std::move(macro_build_samples));
         const auto macro_payload =
-            make_b003_macro_bvh8(flat);
+            make_b003_macro_bvh8(flat, segment_size);
 
         if (macro_payload.root == kInvalidId ||
             macro_payload.segment_count !=

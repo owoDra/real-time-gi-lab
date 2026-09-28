@@ -150,14 +150,14 @@ int main() {
         HierarchicalFlatPayload empty;
         verify_payload(
             empty,
-            make_b003_macro_bvh8(empty));
+            make_b003_macro_bvh8(empty, 2.0F));
 
         for (const auto count :
              {1U, 8U, 9U, 64U, 257U, 682U}) {
             const auto flat =
                 make_control(count);
             const auto payload =
-                make_b003_macro_bvh8(flat);
+                make_b003_macro_bvh8(flat, 2.0F);
             verify_payload(flat, payload);
         }
 

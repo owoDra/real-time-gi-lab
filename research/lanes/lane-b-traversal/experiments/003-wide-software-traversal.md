@@ -203,3 +203,28 @@ If `advance_to_stage_b` is true, continue within B003 with wide micro-BVH and
 compression. If false, inspect the per-case data before deciding whether the
 Macro hypothesis is rejected or whether a correctness/build issue invalidated
 the run.
+
+
+## Stage A diagnostic correction — top-level bound definition
+
+The first target Stage A output passed correctness but produced a roughly 7 ms
+Macro-BVH8 traversal versus roughly 0.28 ms for the same-run B002 hierarchy.
+That output is diagnostic, not a valid rejection of the top-level-BVH
+hypothesis.
+
+Review found that the initial Macro leaves used each segment micro-BVH's full
+triangle root bounds. B002 duplicates primitives into every grid cell overlapped
+by the primitive AABB, and those full triangle bounds are not clipped to the
+cell. Using them again as top-level leaf bounds therefore creates heavy overlap
+between neighboring Macro leaves and can make a ray enter many duplicated
+micro-BVHs.
+
+The corrected Stage A top level now uses the **segment cell AABB** as the Macro
+leaf bound. The per-segment micro root retains its original full triangle bound
+and is tested after cell admission. This preserves correctness while testing the
+intended question: BVH traversal over the same spatial partition that B002's DDA
+walks.
+
+The first output remains useful evidence that a top-level BVH over duplicated
+micro-root bounds is a bad representation; it does not count toward the Stage A
+20% advance gate. A fresh target run from the corrected commit is required.
