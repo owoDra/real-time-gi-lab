@@ -32,6 +32,10 @@ VulkanContext::VulkanContext(VulkanContextOptions options) {
     vkb::PhysicalDeviceSelector selector(instance_);
     selector.set_minimum_version(1, 3);
     if (options.require_shader_buffer_int64_atomics) {
+        VkPhysicalDeviceFeatures required{};
+        required.shaderInt64 = VK_TRUE;
+        selector.set_required_features(required);
+
         VkPhysicalDeviceVulkan12Features required12{};
         required12.shaderBufferInt64Atomics = VK_TRUE;
         selector.set_required_features_12(required12);
