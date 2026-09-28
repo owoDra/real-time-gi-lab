@@ -297,8 +297,8 @@ struct D003Runtime::Impl {
             {10, &packed_visibility, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER},
         }};
 
-        std::array<VkDescriptorBufferInfo, buffers.size()> infos{};
-        std::array<VkWriteDescriptorSet, buffers.size()> writes{};
+        std::array<VkDescriptorBufferInfo, 9> infos{};
+        std::array<VkWriteDescriptorSet, 9> writes{};
         for (std::size_t i = 0; i < buffers.size(); ++i) {
             infos[i] = {
                 buffers[i].buffer->buffer,
