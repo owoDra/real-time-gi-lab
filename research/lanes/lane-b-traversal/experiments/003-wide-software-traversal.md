@@ -228,3 +228,47 @@ walks.
 The first output remains useful evidence that a top-level BVH over duplicated
 micro-root bounds is a bad representation; it does not count toward the Stage A
 20% advance gate. A fresh target run from the corrected commit is required.
+
+
+## Corrected Stage A outcome — Macro replacement rejected, B003 pivots
+
+The corrected Stage A rerun uses segment-cell AABBs at the Macro level and
+passes all shared-Hit correctness gates.
+
+Submitted Stage A summary:
+
+- same-run B002 hierarchy mean traversal: 286.050166 us;
+- Macro BVH8 + binary micro mean traversal: 632.889164 us;
+- trace improvement fraction: -1.212511 (the candidate is about 2.21x slower);
+- B002 hierarchy persistent bytes: 26,971,056;
+- Macro candidate persistent bytes: 26,998,832;
+- memory ratio: 1.001030;
+- correctness errors: 0;
+- Stage A advance gate: false.
+
+Per-case CSV timing is consistent rather than being driven by one outlier:
+
+- static: 276.485 us baseline versus 620.499 us Macro;
+- camera-motion: 277.828 us versus 599.319 us;
+- light-motion: 303.837 us versus 678.850 us.
+
+Interpretation: B002's segment DDA/hash front end is valuable on this disjoint
+grid partition. Replacing it with the simple balanced Macro BVH8 adds
+top-level box tests and overlap at internal group bounds without providing a
+compensating reduction in micro traversal. The Macro replacement is therefore
+rejected for this workload.
+
+This does **not** reject the independent wide-micro hypothesis. Stage A changed
+the already-efficient top level while leaving the binary micro hierarchy
+unchanged. B003 now pivots to a Stage B isolation test:
+
+- retain B002's segment DDA/hash exactly;
+- replace only each per-segment binary BVH with a collapsed BVH8;
+- preserve the same segment memberships, ordered primitive ranges, exact A001
+  streams, and B001 shared-Hit contract.
+
+The original Stage A rule "continue only if Macro improves" is superseded by
+this evidence-driven pivot because the result identified the top-level
+replacement as the wrong optimization target while leaving the micro-level
+hypothesis untested. Stage B must still independently earn further compression
+or packet work.
