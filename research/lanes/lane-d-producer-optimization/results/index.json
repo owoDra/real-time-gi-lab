@@ -30,6 +30,13 @@
       "result": "research/lanes/lane-d-producer-optimization/results/004-work-allocation-contention.md",
       "measurement_commit": "e2ecb35bcf5579a48460a425bf2ef905a536bbae",
       "decision": "do not retain workgroup-prefix allocation; atomic count reduction did not improve producer cost"
+    },
+    {
+      "id": "005-stream-capacity-overflow",
+      "status": "rejected",
+      "result": "research/lanes/lane-d-producer-optimization/results/005-stream-capacity-overflow.md",
+      "measurement_commit": "d58d27af73335f17781be8143290b922afec4397",
+      "decision": "do not promote bounded owner-slot implementation; retain bounded-capacity/safe-overflow policy as research evidence"
     }
   ]
 }
