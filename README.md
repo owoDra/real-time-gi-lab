@@ -18,7 +18,8 @@ The result is emitted as CSV-compatible rows with GPU timestamp time per dispatc
 
 The research workflow is managed by [mise](https://mise.jdx.dev/). The repository pins CMake and Ninja; the host supplies a C++20 compiler and the Vulkan loader/driver.
 
-A Vulkan SDK installation is **not required**:
+A Vulkan SDK installation is **not required**. On NixOS, `mise run bench` resolves `vulkan-loader` automatically while keeping the host GPU ICD/driver from `/run/opengl-driver`:
+
 
 - Vulkan headers are fetched by `vk-bootstrap`.
 - If `glslc` / `glslangValidator` is already installed it is reused.
@@ -30,6 +31,12 @@ Host requirements:
 - a C++20 compiler (`clang++` or `g++`)
 - a Vulkan 1.3-capable GPU and working Vulkan loader/driver
 - Bash for the Sponza fetch/benchmark tasks
+
+If Vulkan startup still fails on NixOS, verify the host driver independently with:
+
+```bash
+nix shell nixpkgs#vulkan-tools -c vulkaninfo --summary
+```
 
 ### Quick start
 
