@@ -1,6 +1,6 @@
 # Experiment 000 — page-local cache locality
 
-Status: active  
+Status: concluded  
 Milestone: M0 / scheduling viability gate
 
 ## Question
@@ -248,3 +248,40 @@ This experiment does not establish:
 - generalization beyond the tested GPU/driver/workload;
 - superiority to DDGI, SHaRC-like caches, Split RC, ReSTIR, or other complete
   GI systems.
+
+
+## Conclusion
+
+The accepted 2026-09-28 AMD Radeon 8060S / RADV STRIX_HALO sweep resolves the
+experiment's two primary questions.
+
+For 500k through 8M queries, page grouping improves hash lookup by roughly
+1.53x–2.88x while matched-order hash remains faster than matched-order paged.
+At 4M queries, for example, hash/source is 822.638 us, hash/page-grouped is
+376.244 us, and paged/page-grouped is 514.496 us. The paged representation
+therefore does not retain an independent lookup advantage once ordering is
+controlled at the medium/large workload sizes that dominate this experiment.
+
+The GPU counting-binning implementation also demonstrates that the same useful
+ordering can be created on the GPU: grouped lookup is close to the
+CPU-preordered control at larger sizes. However, the scheduler cost overwhelms
+the lookup savings. At 4M queries, scheduling costs 2521.140 us and
+hash scheduling + grouped lookup costs 2858.350 us end-to-end versus 822.638 us
+for hash/source. Across the matrix, hash GPU-grouped end-to-end is about
+3.06x–12.76x slower than hash/source.
+
+Therefore:
+
+- **representation hypothesis:** not supported strongly enough to promote paged
+  storage; hash remains the baseline;
+- **scheduling hypothesis:** supported for lookup-only execution; query ordering
+  is a major observed performance axis;
+- **current GPU scheduling implementation:** fails the practical end-to-end
+  gate;
+- **next direction:** obtain coherence more cheaply, preferably while producing
+  queries or by amortizing/reusing ordering rather than globally reordering
+  every batch.
+
+This conclusion is about the controlled ordering effect, not its precise GPU
+cache mechanism. RADV/RGP evidence is still required before attributing the
+effect to specific cache-hit, memory-traffic, stall, or occupancy behavior.
