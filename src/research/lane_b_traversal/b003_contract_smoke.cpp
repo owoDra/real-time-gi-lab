@@ -334,14 +334,24 @@ void verify_quantized_payload(
                 b003_decode_quant_child(
                     packed,
                     packed_child);
+            const float decoded_min[3]{
+                decoded.min.x,
+                decoded.min.y,
+                decoded.min.z,
+            };
+            const float decoded_max[3]{
+                decoded.max.x,
+                decoded.max.y,
+                decoded.max.z,
+            };
             for (int component = 0;
                  component < 3;
                  ++component) {
-                if (decoded.min[component] >
+                if (decoded_min[component] >
                         source_child
                             .bounds_min[component] +
                             kTolerance ||
-                    decoded.max[component] <
+                    decoded_max[component] <
                         source_child
                             .bounds_max[component] -
                             kTolerance) {
