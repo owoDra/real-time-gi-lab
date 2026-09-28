@@ -6,9 +6,9 @@ This repository is a measurement-driven GI research lab.
 
 - `research` is the long-lived integration and research source-of-truth branch.
 - Routine experiment work happens directly on exactly one lane branch:
-  - `research/lane-a-split-rc`
-  - `research/lane-b-traversal`
-  - `research/lane-c-storage-locality`
+  - `research-lane-a-split-rc`
+  - `research-lane-b-traversal`
+  - `research-lane-c-storage-locality`
 - Push experiment commits directly to the active lane branch.
 - Do not create pull requests for normal research iterations.
 - Do not merge another lane or `research` without an explicit user request.
