@@ -151,3 +151,57 @@ unmeasured.
 - accepted timing with validation disabled;
 - 3 process-level repeats;
 - 50 timed iterations per normal case.
+
+
+## Implementation / measurement readiness
+
+D005 is implemented on the staged Lane D runtime with an opt-in
+`OwnerSlotBounded` allocation mode.
+
+Implementation boundaries:
+
+- normal bounded capacity: 1,280 owner blocks;
+- forced overflow capacity: 512 owner blocks;
+- full fallback capacity: 9,216 owner blocks;
+- physical work/contribution/accum/resolved buffers are sized from the selected
+  owner capacity;
+- the owner-slot producer performs exactly one global slot reservation per
+  visible owner;
+- slots outside physical capacity only set overflow and never write stream/output
+  storage;
+- bounded finalize clamps accepted owners before writing counters and indirect
+  dispatch arguments;
+- forced-overflow partial output is discarded and never treated as valid GI;
+- the fallback rerun uses full owner capacity and must pass the A001 analyzer.
+
+The repeated runner embeds `git_commit` in every normal and overflow CSV row.
+It writes:
+
+- `d005.csv`;
+- `d005-overflow.csv`;
+- `summary.json`;
+- per-repeat/per-case `metrics.json`.
+
+GPU retry timing includes the failed bounded attempt plus the full-capacity
+rerun. Host allocation/reallocation latency is explicitly not measured and is
+reported in summary metadata.
+
+Target-system diagnostic command:
+
+```bash
+mise run build
+mise run assets
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 005-stream-capacity-overflow \
+  --command "python scripts/research/lane_d_producer_optimization/run_d005.py --repeats 1 --iterations 1 --validation"
+```
+
+If diagnostic correctness/overflow validation passes:
+
+```bash
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 005-stream-capacity-overflow \
+  --command "python scripts/research/lane_d_producer_optimization/run_d005.py --repeats 3 --iterations 50"
+```
