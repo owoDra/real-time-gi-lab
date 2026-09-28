@@ -81,7 +81,9 @@ All existing correctness guards remain mandatory:
 - grouped hash lookup must match the shared semantic checksum;
 - every reused end-to-end row must also match that checksum.
 
-Performance from a row failing correctness is invalid.
+Performance from a row failing correctness is invalid. These semantic/grouping
+guards run independently of Vulkan validation layers and remain mandatory in
+normal non-validation timing runs.
 
 ## Required target sweep
 
@@ -90,8 +92,8 @@ Use the standard matrix:
 - 100k / 500k / 1M / 4M / 8M queries;
 - 3 process-level repeats;
 - 100 timed iterations;
-- validation sweep first;
-- identical non-validation sweep for accepted timing evidence.
+- accepted timing uses the normal non-validation sweep;
+- Vulkan validation layers are optional diagnostics after Vulkan/API changes and are not a prerequisite for accepted timing evidence.
 
 Artifact layout remains unchanged:
 
