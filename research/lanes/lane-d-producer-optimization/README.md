@@ -47,3 +47,23 @@ beat accepted A001 by a repeatable material end-to-end margin on the target GPU,
 preserve representative semantics, report natural ordering/locality changes,
 and account for visibility, allocation, synchronization, stream memory, and
 fallback costs.
+
+## Progress — D001 visibility reuse accepted (2026-09-29)
+
+Target-GPU D001 evidence at measurement commit `c083db8925d362c8c8df3cebc046fb2ff62fc2c9`
+passed all semantic/correctness gates across static, camera-motion, and
+light-motion.
+
+Decision:
+
+- retain renderer **depth reuse** as the composition contract for later Lane D
+  experiments;
+- do not retain owner/surface-ID reuse under D001's fixed standalone gate;
+- promote no final producer architecture yet.
+
+Depth reuse cut incremental producer cost by roughly 46% while remaining within
+D001's 5% median standalone-regression ceiling in all three cases. Owner reuse
+saved more incremental work, but camera-motion standalone E2E regressed 6.47%
+and therefore missed the predeclared gate.
+
+Next gate: D002 visible-tile-driven emission.
