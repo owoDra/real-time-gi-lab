@@ -67,6 +67,9 @@ private:
     struct LookupMeasurement {
         double gpu_us_per_dispatch{};
         std::uint64_t checksum{};
+        // Order-sensitive guard for variants that must preserve source-index
+        // semantics. This is compared only between identical query orderings.
+        std::uint64_t sequence_fingerprint{};
     };
 
     VkPipeline create_pipeline(const std::string& filename);
