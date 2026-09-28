@@ -302,3 +302,24 @@ not suitable.
 This is candidate pruning, **not architectural promotion**. Final selection
 still requires the exact Lane A producer stream and accounting for any extra
 producer work needed to emit virtual brick/page residency units.
+
+
+## C001c implementation status
+
+C001c exact Lane A stream replay is implemented on the lane branch.
+
+It:
+
+- parses and validates schema-v1 `stream-v1.bin` including FNV workload identity;
+- preserves the recorded GPU append order with no CPU sort/grouping;
+- processes every raw work item in the measured GPU address path;
+- selects one storage event per A001 output via `ray_index == 0` on GPU;
+- compares the retained probe-hash and virtual/clipmap candidates;
+- measures producer+lookup/update/invalidation/allocation and initial build;
+- verifies exact values and allocator invariants;
+- aggregates static, camera-motion, and light-motion repeats through
+  `c001c_matrix.py`.
+
+Target-GPU C001c evidence is still pending. C001 remains active until those
+three exact-stream cases pass correctness/repeatability and the remaining
+virtual-window maintenance boundary is resolved.

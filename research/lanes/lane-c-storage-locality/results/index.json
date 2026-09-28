@@ -4,8 +4,8 @@
   "experiments": [
     {
       "id": "001-storage-baselines",
-      "status": "accepted",
-      "scope": "synthetic structural/correctness + Vulkan candidate pruning; exact Lane A replay pending",
+      "status": "active",
+      "scope": "C001a/C001b accepted for synthetic pruning; C001c exact Lane A replay implemented and target-GPU evidence pending",
       "result": "research/lanes/lane-c-storage-locality/results/001-storage-baselines.md"
     }
   ]
