@@ -270,3 +270,24 @@ workgroup-local mechanism did not beat `hash/source`: it was approximately
 0.7% slower at 100k, 8.1% slower at 500k, 5.0% slower at 1M, 7.4% slower at 4M,
 and 7.3% slower at 8M. The exact mechanism therefore fails the end-to-end
 decision gate and should not be advanced.
+
+
+### 2026-09-28 — Experiment 001 validation sweep
+
+Artifact: `out/benchmarks/20260928T103947Z`  
+Hardware: AMD Radeon 8060S Graphics / RADV STRIX_HALO  
+Scene: Sponza, 262,241 surface samples  
+Queries: 100k / 500k / 1M / 4M / 8M  
+Iterations: 100  
+Repeats: 3  
+Validation: enabled
+
+The full validation matrix completed successfully. Every row passed the shared
+semantic checksum guard, and `hash-wg-bin16` also passed the source-order
+fingerprint guard. This establishes correctness for the fused workgroup-local
+regrouping implementation.
+
+Validation-enabled timings are diagnostic only and are not used for the
+performance decision. They independently show the same qualitative direction as
+the accepted non-validation sweep: `hash-wg-bin16` is slower than
+`hash/source` at every tested query count.
