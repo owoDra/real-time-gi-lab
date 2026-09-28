@@ -101,3 +101,20 @@ Expected additional artifacts:
 `advance_to_stage_b=true` requires at least 20% same-run mean traversal
 improvement, no more than 1.15x persistent memory, and zero correctness/runtime
 errors. A false value is a valid rejected Stage A result, not a harness failure.
+
+
+### B003 Stage B pivot
+
+The corrected Stage A evidence rejected replacing the segment DDA/hash with a
+Macro BVH8. The current B003 executable now also measures a third candidate that
+retains DDA/hash and replaces only the per-segment binary micro BVH with a
+collapsed float BVH8.
+
+The same formal command is used. New artifacts include:
+
+- `b003-stage-b-summary.json`.
+
+`advance_to_quantization=true` means the uncompressed wide-micro path is within
+15% of the same-run binary baseline, uses at most 1.5x persistent memory, and is
+fully correct. This is deliberately a viability gate for compression, not the
+final B003 success target.

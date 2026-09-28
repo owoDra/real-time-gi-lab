@@ -300,9 +300,8 @@ void trace_segment(
             continue;
         }
 
-        WideNode node = nodes[token];
         uint axis =
-            node.children[0].data.y;
+            nodes[token].children[0].data.y;
         bool positive =
             direction[int(axis)] >= 0.0;
 
@@ -317,7 +316,7 @@ void trace_segment(
                 ? 7u - ordinal
                 : ordinal;
             WideChild child =
-                node.children[slot];
+                nodes[token].children[slot];
             if (child.data.x == INVALID_ID) {
                 continue;
             }

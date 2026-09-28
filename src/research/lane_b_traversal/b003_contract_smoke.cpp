@@ -1,4 +1,5 @@
 #include "b003_macro_bvh8.hpp"
+#include "b003_micro_bvh8.hpp"
 
 #include <cmath>
 #include <cstdint>
@@ -97,6 +98,54 @@ void verify_payload(
     }
 }
 
+
+void verify_wide_payload(
+    const HierarchicalFlatPayload& flat,
+    const B003WideMicroPayload& payload) {
+    if (payload.segment_count != flat.segments.size()) {
+        throw std::runtime_error(
+            "B003 wide payload changed segment count");
+    }
+    if (payload.max_stack_entries > 64U) {
+        throw std::runtime_error(
+            "B003 wide payload exceeds shader stack");
+    }
+    if (payload.hash_table.empty() ||
+        payload.nodes.empty()) {
+        throw std::runtime_error(
+            "B003 wide payload unexpectedly empty");
+    }
+
+    std::size_t hash_roots = 0;
+    for (const auto& entry : payload.hash_table) {
+        if (entry.metadata[0] == kInvalidId) {
+            continue;
+        }
+        ++hash_roots;
+        if (entry.metadata[0] >= payload.nodes.size()) {
+            throw std::runtime_error(
+                "B003 wide hash root is invalid");
+        }
+    }
+    if (hash_roots != flat.segments.size()) {
+        throw std::runtime_error(
+            "B003 wide hash changed occupied segment count");
+    }
+
+    for (std::uint32_t count = 1U;
+         count <= 8U;
+         ++count) {
+        const auto token =
+            b003_wide_leaf_token(12345U, count);
+        if (!b003_wide_is_leaf(token) ||
+            b003_wide_leaf_begin(token) != 12345U ||
+            b003_wide_leaf_count(token) != count) {
+            throw std::runtime_error(
+                "B003 wide leaf token round trip failed");
+        }
+    }
+}
+
 [[nodiscard]] HierarchicalFlatPayload
 make_control(std::uint32_t segments) {
     HierarchicalFlatPayload flat;
@@ -121,9 +170,10 @@ make_control(std::uint32_t segments) {
             bounds,
             kInvalidId,
             kInvalidId,
-            0U,
-            0U,
+            index,
+            1U,
         });
+        flat.ordered_primitives.push_back(index);
         flat.segments.push_back({
             {
                 static_cast<std::int32_t>(index),
@@ -159,14 +209,17 @@ int main() {
             const auto payload =
                 make_b003_macro_bvh8(flat, 2.0F);
             verify_payload(flat, payload);
+            const auto wide =
+                make_b003_wide_micro_payload(flat);
+            verify_wide_payload(flat, wide);
         }
 
         std::cout
-            << "B003 macro BVH8 structural smoke: PASS\n";
+            << "B003 macro/wide BVH8 structural smoke: PASS\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr
-            << "B003 macro BVH8 structural smoke: FAIL: "
+            << "B003 macro/wide BVH8 structural smoke: FAIL: "
             << error.what()
             << '\n';
         return 1;
