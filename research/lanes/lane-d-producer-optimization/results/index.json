@@ -37,6 +37,12 @@
       "result": "research/lanes/lane-d-producer-optimization/results/005-stream-capacity-overflow.md",
       "measurement_commit": "d58d27af73335f17781be8143290b922afec4397",
       "decision": "do not promote bounded owner-slot implementation; retain bounded-capacity/safe-overflow policy as research evidence"
+    },
+    {
+      "id": "006-final-cross-lane-decision",
+      "status": "accepted",
+      "result": "research/lanes/lane-d-producer-optimization/results/006-final-cross-lane-decision.md",
+      "decision": "keep A001 as standalone producer; retain D001 depth reuse as conditional integration optimization; carry D005 bounded-capacity policy as non-promoted integration research"
     }
   ]
 }
