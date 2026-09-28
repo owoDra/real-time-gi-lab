@@ -78,13 +78,19 @@ B002Scene load_b002_scene(const std::filesystem::path& scene_path) {
                 });
 
             std::uint32_t material_id = kInvalidId;
+            bool two_sided = false;
             if (primitive.materialIndex.has_value()) {
                 const auto value = primitive.materialIndex.value();
                 if (value > std::numeric_limits<std::uint32_t>::max()) {
                     throw std::runtime_error(
                         "B002 material index exceeds 32-bit identity");
                 }
+                if (value >= asset.materials.size()) {
+                    throw std::runtime_error(
+                        "B002 primitive references an invalid material");
+                }
                 material_id = static_cast<std::uint32_t>(value);
+                two_sided = asset.materials[value].doubleSided;
             }
 
             for (std::size_t index = 0; index + 2 < indices.size(); index += 3) {
@@ -108,7 +114,7 @@ B002Scene load_b002_scene(const std::filesystem::path& scene_path) {
                     primitive_id,
                     material_id,
                     static_cast<std::uint32_t>(mesh_index),
-                    true,
+                    two_sided,
                 });
                 scene.bounds = merge(scene.bounds, triangle_bounds(scene.triangles.back()));
             }

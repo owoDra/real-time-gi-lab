@@ -116,6 +116,9 @@ Candidate-specific semantics are not allowed.
 Representative replay uses the same Sponza asset as A001. Lane B loads actual
 triangle geometry for traversal and assigns deterministic primitive identity.
 The loader must not infer geometry from Lane A's centroid surface samples.
+Per-primitive face policy is taken from the referenced glTF material's
+`doubleSided` flag (default false when no material is referenced), so B002 does
+not silently make every surface two-sided.
 
 Synthetic geometry/rays may be used only for bring-up, contract tests and
 isolated dynamic-maintenance stress. Such rows must be labeled control evidence.
