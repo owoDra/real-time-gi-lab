@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: implementation in progress
+Status: target-ready; Stage A target measurement pending
 
 ## Question
 
@@ -158,3 +158,48 @@ The accepted/rejected result will be written only after target evidence exists:
 
 B002's primary HWRT/TLAS decision remains accepted while B003 runs. B003 is a
 fallback-optimization follow-up and does not block Integration #13.
+
+
+## Stage A implementation checkpoint
+
+Stage A is target-ready on the lane branch.
+
+Implemented:
+
+- deterministic balanced Macro BVH8 over the occupied B002 segment roots;
+- B002 binary per-segment micro BVHs retained unchanged;
+- segment DDA and segment hash removed only from the new candidate traversal;
+- split-axis child ordering with ray-direction-aware near-first DFS;
+- duplicate micro-root AABB test removed after the identical Macro child bound
+  has already passed;
+- fixed-capacity Macro stack with CPU-computed worst-frontier gate and runtime
+  overflow reporting;
+- exact A001 static/camera-motion/light-motion replay;
+- same-run B002 hierarchical baseline rebuilt and timed alongside the candidate;
+- B001 shared-Hit full-stream correctness validation;
+- persistent/transient/logical-stack accounting;
+- separate hierarchy build, pack, Macro build, upload, ray-upload, and traversal
+  boundaries;
+- automatic Stage A decision JSON;
+- clean-checkout and accepted-A001 provenance validation in the target runner;
+- GPU-independent B002 semantic smoke followed by B003 Macro-structure smoke
+  before Vulkan timing.
+
+The local assistant environment does not contain the repository's target Vulkan
+toolchain / GLSL compiler or the target GPU. The new C++ Macro builder was
+syntax-checked in isolation with `-Wall -Wextra -Wpedantic`; the formal build,
+shader compilation, correctness gate, and performance timing must be performed
+through the documented target-side `mise` workflow.
+
+Expected Stage A artifact additions:
+
+- `b003-stage-a.csv`;
+- `b003-stage-a-summary.json`;
+- `b003-correctness.json`;
+- `b003-device.json`;
+- `b003-config.json`.
+
+If `advance_to_stage_b` is true, continue within B003 with wide micro-BVH and
+compression. If false, inspect the per-case data before deciding whether the
+Macro hypothesis is rejected or whether a correctness/build issue invalidated
+the run.
