@@ -127,3 +127,8 @@ The same formal B003 command now also measures conservative 16-bit quantized Mic
 ### B003 Stage B3 triangle packets
 
 The same formal B003 command now also measures direct four-triangle leaf packets on top of the quantized BVH8. It emits `b003-stage-b3-summary.json`. `retain_triangle_packets=true` requires zero errors, packet traversal <=0.95x the quantized non-packet traversal, and packet persistent memory <=1.25x.
+
+
+### B003 Stage B3.1 compact packet metadata
+
+B3's 256-byte packet was correct and nearly met the fixed retention gate, but missed both thresholds narrowly. B3.1 keeps the same traversal and packet geometry while packing material/instance/two-sided metadata so each packet is 224 bytes. The same formal command emits `b003-stage-b31-summary.json`; the original <=0.95x traversal and <=1.25x memory thresholds remain unchanged.
