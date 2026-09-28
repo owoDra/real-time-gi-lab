@@ -480,12 +480,19 @@ def main() -> int:
     )
 
     print(f"Benchmark artifacts: {output}")
-    print("query_count,variant,median_gpu_us_per_dispatch,speedup_vs_hash,bytes")
+    print(
+        "query_count,variant,median_gpu_us_per_dispatch,speedup_vs_hash,bytes,"
+        "median_scheduling_gpu_us_per_dispatch,"
+        "median_end_to_end_gpu_us_per_dispatch,end_to_end_speedup_vs_hash"
+    )
     for row in summary_rows:
         print(
             f"{row['query_count']},{row['variant']},"
             f"{row['median_gpu_us_per_dispatch']},"
-            f"{row['speedup_vs_hash']},{row['bytes']}"
+            f"{row['speedup_vs_hash']},{row['bytes']},"
+            f"{row['median_scheduling_gpu_us_per_dispatch']},"
+            f"{row['median_end_to_end_gpu_us_per_dispatch']},"
+            f"{row['end_to_end_speedup_vs_hash']}"
         )
 
     return 0
