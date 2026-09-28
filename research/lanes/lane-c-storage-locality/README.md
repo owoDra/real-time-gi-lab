@@ -23,10 +23,11 @@ large-workload reuse threshold was roughly five to six consumers.
 C001a structural/correctness bring-up retains the probe hash, hashed contiguous
 brick pool, and virtual/clipmap representation for C001b GPU comparison.
 
-The sparse occupancy control makes the brick representations consume about
-twice the modeled persistent bytes of the probe hash, so brick storage has not
-been treated as an automatic win. Medium/dense occupancy keeps the two brick
-representations structurally plausible.
+After correcting the packed probe-hash slot model to 8 bytes (`uint32 key + uint32 payload`),
+the sparse occupancy control makes the brick representations consume about four times
+the modeled persistent bytes of the probe hash. Around 16 probes/brick the models are
+near parity, while dense occupancy favors brick amortization. Brick storage is therefore
+not treated as an automatic win.
 
 No StrataBrick-inspired fourth variant has been added because no concretely
 distinct structure/update contract has yet been identified.

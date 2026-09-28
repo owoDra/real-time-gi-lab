@@ -44,19 +44,25 @@ The unit tests also passed for all three representations, including explicit
 controls that require:
 
 - sparse bricks to be allowed to use more memory than the per-probe hash;
-- medium occupancy to be allowed to make brick storage structurally plausible.
+- dense occupancy to make brick storage structurally advantageous.
 
 ## Structural measurements
 
+Correction after self-review: the initial C001a result accidentally counted a
+packed `uint32 key + uint32 payload` probe-hash slot as 16 bytes. The actual
+packed model is 8 bytes/slot, matching the M0 representation. The table below
+contains the corrected probe-hash values. This correction strengthens the
+sparse-hash case and does not change the candidate-retention decision.
+
 | Regime | Representation | Active probes | Persistent bytes | Shift eviction/invalidation units |
 | --- | --- | ---: | ---: | ---: |
-| sparse (4/brick) | probe hash | 6,912 | 262,144 | 576 probes |
+| sparse (4/brick) | probe hash | 6,912 | 131,072 | 576 probes |
 | sparse (4/brick) | hashed brick pool | 6,912 | 528,640 | 144 bricks |
 | sparse (4/brick) | virtual clipmap | 6,912 | 518,400 | 144 bricks |
-| medium (16/brick) | probe hash | 27,648 | 1,048,576 | 2,304 probes |
+| medium (16/brick) | probe hash | 27,648 | 524,288 | 2,304 probes |
 | medium (16/brick) | hashed brick pool | 27,648 | 528,640 | 144 bricks |
 | medium (16/brick) | virtual clipmap | 27,648 | 518,400 | 144 bricks |
-| dense (48/brick) | probe hash | 82,944 | 4,194,304 | 6,912 probes |
+| dense (48/brick) | probe hash | 82,944 | 2,097,152 | 6,912 probes |
 | dense (48/brick) | hashed brick pool | 82,944 | 528,640 | 144 bricks |
 | dense (48/brick) | virtual clipmap | 82,944 | 518,400 | 144 bricks |
 
@@ -73,11 +79,12 @@ clipmap. These counts are not latency estimates.
 ## Analysis
 
 The sparse control rejects the premise that brick storage is automatically more
-memory-efficient. At 4 probes per brick, the per-probe hash uses 256 KiB while
-the brick candidates use about 506–516 KiB.
+memory-efficient. At 4 probes per brick, the corrected packed `uint32 key + uint32 payload`
+hash model uses 128 KiB while the brick candidates use about 506–516 KiB.
 
-At 16 and 48 probes per brick, physical brick payload is amortized across more
-live probes and both brick candidates become structurally memory-plausible.
+At 16 probes per brick, the corrected probe hash is about 512 KiB, essentially
+at parity with the brick models (about 506–516 KiB). At 48 probes per brick,
+the probe hash grows to 2 MiB while the brick models remain about 506–516 KiB.
 Their one-brick motion control also operates on 144 brick residency units rather
 than thousands of individual probe units. This is only a unit-count advantage;
 C001a does not measure whether a brick eviction/update is cheaper on the GPU.

@@ -69,7 +69,7 @@ class ProbeHashModel:
 
     @property
     def persistent_bytes(self) -> int:
-        return self.capacity * 16  # packed key/value slot model
+        return self.capacity * 8  # uint32 key + uint32 payload
 
 
 class HashedBrickPoolModel:

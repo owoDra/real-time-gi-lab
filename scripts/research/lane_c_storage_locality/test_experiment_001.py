@@ -37,8 +37,8 @@ class C001Tests(unittest.TestCase):
             b.upsert(p, m.payload(p))
         self.assertGreater(b.persistent_bytes, h.persistent_bytes)
 
-    def test_medium_occupancy_can_make_bricks_memory_plausible(self) -> None:
-        probes = m.generate(1, (4, 4, 2), 4, 16)
+    def test_dense_occupancy_can_make_bricks_memory_plausible(self) -> None:
+        probes = m.generate(1, (4, 4, 2), 4, 48)
         h = m.ProbeHashModel(len(probes))
         b = m.HashedBrickPoolModel(32, 4)
         for p in probes:
