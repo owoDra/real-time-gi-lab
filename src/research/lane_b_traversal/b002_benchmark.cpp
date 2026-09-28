@@ -9,6 +9,7 @@
 #include "software_bvh.hpp"
 
 #include <algorithm>
+#include <array>
 #include <chrono>
 #include <cstdint>
 #include <cstdlib>
@@ -540,6 +541,7 @@ int main(int argc, char** argv) {
             selected_driver = context.driver_name();
             selected_driver_info = context.driver_info();
             selected_api_version = context.api_version();
+            std::cout << "GPU: " << context.device_name() << '\n';
 
             start = Clock::now();
             auto triangle_buffer =
