@@ -162,6 +162,8 @@ A001Analysis analyze_a001(
 
     std::vector<bool>seen_tile(tiles,false);
     std::vector<bool>seen_output(r.resolved.size(),false);
+    std::uint64_t semantic_checks=0;
+    std::uint64_t semantic_failures=0;
 
     for(std::size_t base=0;base+block<=r.work_items.size();base+=block){
         const auto&first=r.work_items[base];
@@ -215,9 +217,35 @@ A001Analysis analyze_a001(
                     std::abs(i.probe_px-ppx)<1e-4f &&
                     std::abs(i.probe_py-ppy)<1e-4f &&
                     std::abs(i.probe_pz-ppz)<1e-4f;
+                ++semantic_checks;
                 if(!ok){
                     a.producer_correct=false;
-                    a.errors.push_back("producer work item failed semantic reference");
+                    ++semantic_failures;
+                    if(semantic_failures<=4){
+                        std::ostringstream detail;
+                        detail<<std::setprecision(9)
+                            <<"producer semantic mismatch item="
+                            <<(base+cascade*settings.rays_per_probe+ray)
+                            <<" actual={sid:"<<i.surface_id
+                            <<",tile:"<<i.tile_id
+                            <<",cascade:"<<i.cascade
+                            <<",ray:"<<i.ray_index
+                            <<",output:"<<i.output_id
+                            <<",probe:["<<i.probe_x<<","<<i.probe_y<<","<<i.probe_z<<"]"
+                            <<",interval:["<<i.interval_min<<","<<i.interval_max<<"]"
+                            <<",dir:["<<i.dir_x<<","<<i.dir_y<<","<<i.dir_z<<"]"
+                            <<",pos:["<<i.probe_px<<","<<i.probe_py<<","<<i.probe_pz<<"]}"
+                            <<" expected={sid:"<<sid
+                            <<",tile:"<<tile
+                            <<",cascade:"<<cascade
+                            <<",ray:"<<ray
+                            <<",output:"<<(output_base+cascade)
+                            <<",probe:["<<px<<","<<py<<","<<pz<<"]"
+                            <<",interval:["<<interval_min<<","<<interval_max<<"]"
+                            <<",dir:["<<rd.x<<","<<rd.y<<","<<rd.z<<"]"
+                            <<",pos:["<<ppx<<","<<ppy<<","<<ppz<<"]}";
+                        a.errors.push_back(detail.str());
+                    }
                 }
             }
 
@@ -229,6 +257,13 @@ A001Analysis analyze_a001(
                 seen_output[output_id]=true;
             }
         }
+    }
+
+    if(semantic_failures){
+        a.errors.push_back(
+            "producer semantic reference mismatches: "+
+            std::to_string(semantic_failures)+"/"+
+            std::to_string(semantic_checks));
     }
 
     for(std::uint32_t tile=0;tile<tiles;++tile){
