@@ -32,5 +32,11 @@ not treated as an automatic win.
 No StrataBrick-inspired fourth variant has been added because no concretely
 distinct structure/update contract has yet been identified.
 
-No storage representation is promoted. Target-GPU end-to-end measurements and
-the exact Lane A producer stream remain mandatory before a final decision.
+C001b is now implemented in Vulkan for all three retained representations. It
+measures producer address generation, lookup, update, invalidation,
+allocation/residency, eviction with physical-slot reclamation, one-brick
+residency churn, persistent memory, and scratch memory. The target-system
+validation/timing runs are still pending.
+
+No storage representation is promoted. The exact Lane A producer stream remains
+mandatory before a final decision.

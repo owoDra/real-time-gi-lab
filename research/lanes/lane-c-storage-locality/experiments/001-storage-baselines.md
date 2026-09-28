@@ -1,7 +1,7 @@
 # Experiment C001 — Split RC storage baselines
 
-Status: active — C001a structural/correctness bring-up concluded; target-GPU
-performance and Lane A replay remain.
+Status: active — C001a concluded; C001b Vulkan implementation complete and awaiting
+target-GPU validation/timing; Lane A replay remains mandatory for final promotion.
 
 ## Question
 
@@ -121,26 +121,102 @@ C001a retains a representation only when:
 Retention is not architectural promotion. Final promotion still requires
 target-GPU end-to-end evidence and replay of Lane A's exact producer stream.
 
-## C001b — required GPU comparison
+## C001b — Vulkan GPU comparison
 
-For every retained representation, C001b must measure or account for:
+C001b is implemented as a Lane C-owned Vulkan compute benchmark. It does not
+reuse the M0 paged lookup as a proxy for the new candidates.
 
-- lookup;
-- update;
-- allocation and residency;
-- eviction;
-- invalidation;
-- persistent memory;
-- scratch memory;
-- producer-side address/residency work.
+Default synthetic control:
 
-Ordering/locality remains a separate axis. Synthetic/GI-like streams may be
-used for bring-up, but final promotion requires Lane A's exact producer stream.
+- 3 cascades;
+- active window: 24 x 24 x 8 bricks per cascade;
+- virtual clipmap extent: 32 x 32 x 16 bricks per cascade;
+- brick size: 4 x 4 x 4 probes;
+- occupancy controls: 4 / 16 / 48 active probes per brick;
+- source order unchanged; no sorting/grouping;
+- update subset: every 17th source probe;
+- invalidation subset: every 257th source probe;
+- dynamic residency control: evict the X=0 brick plane and admit the adjacent
+  X=24 plane.
 
-Producer-side locality experiments may only use domains that the producer can
-naturally emit, such as screen tile, cascade, or spatial brick/page. A global
-post-generation reorder remains diagnostic unless its full cost wins end to
-end.
+Measured Vulkan phases:
+
+- `producer-address`;
+- `lookup`;
+- `producer+lookup`;
+- `update`;
+- `producer+update`;
+- `invalidation`;
+- `eviction`;
+- `residency-churn-e2e`;
+- `allocation-residency`;
+- `initial-build-e2e`.
+
+The hashed-brick and virtual/clipmap candidates use a GPU physical-brick free
+list. Eviction returns the physical slot to the free list, and the dynamic
+churn sequence must reuse those slots when the entering plane becomes resident.
+The probe hash reuses tombstoned hash slots instead.
+
+Persistent-byte accounting uses the actual modeled GPU buffers required by each
+candidate: hash/directory/page-table storage, physical payload pool, allocator
+counters, and the brick free list where applicable. Scratch accounting records
+the address/output workspace used by the measured producer/storage sequence.
+Benchmark-only seed copies are excluded from architecture memory accounting.
+
+### Timing boundary
+
+Mutating phases must begin from the same semantic state every iteration. C001b
+therefore copies an immutable GPU seed into the working representation before
+each mutation iteration. These reset copies and their required synchronization
+are deliberately outside the timestamp interval because they are benchmark
+harness work, not candidate architecture work.
+
+The reset can still perturb cache state. Therefore mutation timings are valid
+for candidate comparison only after repeatability is established, and they must
+not be used to claim a specific cache/memory mechanism. RGP or equivalent
+profiling evidence is still required for such claims.
+
+### C001b correctness gate
+
+Every performance row is invalid unless all applicable guards pass:
+
+- GPU-produced addresses exactly match the host semantic reference;
+- lookup output matches every expected probe payload, not checksum only;
+- update/invalidation/eviction return the exact expected logical state;
+- storage-operation error counters remain zero;
+- brick/clipmap allocator counts remain within the active physical capacity;
+- after one-brick X-shift churn, the old plane is absent, the entering plane is
+  present, and the free list is drained back to zero;
+- empty-to-resident initial build resolves every probe correctly.
+
+### Target runs
+
+First run Vulkan validation as diagnostics:
+
+```bash
+mise run research:record \
+  --lane lane-c-storage-locality \
+  --experiment 001-storage-baselines \
+  --command "python scripts/research/lane_c_storage_locality/c001b_matrix.py --repeats 1 --iterations 10 --validation"
+```
+
+Then collect accepted timing with validation disabled:
+
+```bash
+mise run research:record \
+  --lane lane-c-storage-locality \
+  --experiment 001-storage-baselines \
+  --command "python scripts/research/lane_c_storage_locality/c001b_matrix.py --repeats 3 --iterations 100"
+```
+
+Each process writes `repeat-NN/c001b.csv`; the matrix runner writes
+`c001b_summary.csv` with process-level median/min/max timings and rejects the
+run if any repeat fails correctness.
+
+Ordering/locality remains a separate axis. This synthetic/GI-like control may
+reject or retain candidates, but final promotion still requires Lane A's exact
+producer stream. A global post-generation reorder remains diagnostic unless its
+complete end-to-end cost wins.
 
 Timestamp differences establish performance only. Any claim about a specific
 GPU cache or memory mechanism requires profiling evidence such as RGP.

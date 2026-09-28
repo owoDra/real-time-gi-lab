@@ -131,8 +131,9 @@ On the target system:
 1. run `mise install`, `mise run research:check`, and
    `mise run build`;
 2. rerun C001 through `mise run research:record`;
-3. implement GPU lookup/update/allocation/residency/eviction/invalidation
-   measurement for the retained three representations;
-4. keep producer locality separate from representation;
-5. repeat the final comparison on Lane A's exact producer stream before any
+3. run the implemented Vulkan C001b validation matrix;
+4. run the non-validation 3-repeat C001b timing matrix and record/analyze the
+   resulting `c001b_summary.csv`;
+5. keep producer locality separate from representation;
+6. repeat the final comparison on Lane A's exact producer stream before any
    architectural promotion.
