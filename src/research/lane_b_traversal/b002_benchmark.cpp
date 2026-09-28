@@ -312,6 +312,27 @@ struct HierarchyBuildMeasurement {
     };
 }
 
+[[nodiscard]] std::string json_escape(std::string_view value) {
+    std::string output;
+    output.reserve(value.size());
+    for (const char ch : value) {
+        switch (ch) {
+        case '\\': output += "\\\\"; break;
+        case '"': output += "\\\""; break;
+        case '\n': output += "\\n"; break;
+        case '\r': output += "\\r"; break;
+        case '\t': output += "\\t"; break;
+        default:
+            if (static_cast<unsigned char>(ch) < 0x20U) {
+                output += '?';
+            } else {
+                output += ch;
+            }
+        }
+    }
+    return output;
+}
+
 [[nodiscard]] std::filesystem::path artifact_root() {
     if (const char* value =
             std::getenv("PHOS_RESEARCH_ARTIFACT_DIR");
@@ -372,43 +393,6 @@ void write_rows(
             << row.logical_stack_bytes_per_ray
             << '\n';
     }
-}
-
-void write_device_json(
-    const std::filesystem::path& path,
-    const B002VulkanContext& context,
-    std::string_view hwrt_status,
-    std::string_view hwrt_reason,
-    bool hwrt_correct) {
-    std::ofstream output(path);
-    if (!output) {
-        throw std::runtime_error("Could not create B002 device JSON");
-    }
-    output
-        << "{\n"
-        << "  \"target_device\": \"" << kB002TargetDeviceName << "\",\n"
-        << "  \"selected_device\": \"" << context.device_name() << "\",\n"
-        << "  \"driver_name\": \"" << context.driver_name() << "\",\n"
-        << "  \"driver_info\": \"" << context.driver_info() << "\",\n"
-        << "  \"api_version\": " << context.api_version() << ",\n"
-        << "  \"exact_device_match\": "
-        << (context.device_name() == kB002TargetDeviceName ? "true" : "false")
-        << ",\n"
-        << "  \"hwrt\": {\n"
-        << "    \"status\": \"" << hwrt_status << "\",\n"
-        << "    \"reason\": \"" << hwrt_reason << "\",\n"
-        << "    \"required_extensions\": ["
-           "\"VK_KHR_acceleration_structure\", "
-           "\"VK_KHR_ray_query\", "
-           "\"VK_KHR_deferred_host_operations\"],\n"
-        << "    \"required_features_requested_at_device_creation\": "
-        << (hwrt_status == "usable" ? "true" : "false") << ",\n"
-        << "    \"blas_tlas_created\": "
-        << (hwrt_status == "usable" ? "true" : "false") << ",\n"
-        << "    \"ray_query_correct\": "
-        << (hwrt_correct ? "true" : "false") << "\n"
-        << "  }\n"
-        << "}\n";
 }
 
 void write_correctness_json(
@@ -528,6 +512,45 @@ int main(int argc, char** argv) {
         const auto hierarchy_pack_us = elapsed_us(start);
 
         const auto gpu_triangles = make_gpu_triangles(scene);
+
+        {
+            std::ofstream config(output_root / "b002-config.json");
+            if (!config) {
+                throw std::runtime_error(
+                    "Could not create B002 config JSON");
+            }
+            config
+                << "{\n"
+                << "  \"schema_version\": 1,\n"
+                << "  \"experiment\": \"002-lane-a-exact-stream-traversal\",\n"
+                << "  \"lane_a_measurement_commit\": "
+                   "\"8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f\",\n"
+                << "  \"lane_a_artifact\": \""
+                << json_escape(cli.lane_a_artifact.string()) << "\",\n"
+                << "  \"scene\": \""
+                << json_escape(cli.scene.string()) << "\",\n"
+                << "  \"scene_triangles\": "
+                << scene.triangles.size() << ",\n"
+                << "  \"scene_diagonal\": "
+                << std::setprecision(9) << scene.diagonal << ",\n"
+                << "  \"hierarchy_segment_size\": "
+                << segment_size << ",\n"
+                << "  \"hierarchy_segments\": "
+                << flat.segments.size() << ",\n"
+                << "  \"hierarchy_memberships\": "
+                << hierarchy.membership_count() << ",\n"
+                << "  \"hierarchy_hash_slots\": "
+                << hierarchy_payload.hash_table.size() << ",\n"
+                << "  \"hierarchy_hash_max_probe\": "
+                << hierarchy_payload.hash_max_probe << ",\n"
+                << "  \"iterations\": " << cli.iterations << ",\n"
+                << "  \"build_repeats\": "
+                << cli.build_repeats << ",\n"
+                << "  \"validation\": "
+                << (cli.validation ? "true" : "false") << "\n"
+                << "}\n";
+        }
+
         std::vector<ResultRow> rows;
 
         std::string selected_device;
@@ -904,11 +927,11 @@ int main(int argc, char** argv) {
                 << "  \"target_device\": \""
                 << kB002TargetDeviceName << "\",\n"
                 << "  \"selected_device\": \""
-                << selected_device << "\",\n"
+                << json_escape(selected_device) << "\",\n"
                 << "  \"driver_name\": \""
-                << selected_driver << "\",\n"
+                << json_escape(selected_driver) << "\",\n"
                 << "  \"driver_info\": \""
-                << selected_driver_info << "\",\n"
+                << json_escape(selected_driver_info) << "\",\n"
                 << "  \"api_version\": "
                 << selected_api_version << ",\n"
                 << "  \"exact_device_match\": "
@@ -918,7 +941,8 @@ int main(int argc, char** argv) {
                 << ",\n"
                 << "  \"hwrt\": {\n"
                 << "    \"status\": \"" << hwrt_status << "\",\n"
-                << "    \"reason\": \"" << hwrt_reason << "\",\n"
+                << "    \"reason\": \""
+                << json_escape(hwrt_reason) << "\",\n"
                 << "    \"required_extensions\": ["
                    "\"VK_KHR_acceleration_structure\", "
                    "\"VK_KHR_ray_query\", "

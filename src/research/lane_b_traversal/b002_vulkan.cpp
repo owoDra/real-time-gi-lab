@@ -344,15 +344,11 @@ void B002VulkanContext::copy_buffer(
     auto barrier = detail::make_vk_info<VkMemoryBarrier>(
         VK_STRUCTURE_TYPE_MEMORY_BARRIER);
     barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
-    barrier.dstAccessMask =
-        VK_ACCESS_SHADER_READ_BIT |
-        VK_ACCESS_SHADER_WRITE_BIT |
-        VK_ACCESS_TRANSFER_READ_BIT;
+    barrier.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
     dispatch_.cmdPipelineBarrier(
         command,
         VK_PIPELINE_STAGE_TRANSFER_BIT,
-        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT |
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
         0,
         1,
         &barrier,
