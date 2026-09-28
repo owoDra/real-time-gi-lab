@@ -222,11 +222,13 @@ void CacheBenchmark::record_lookup_pass(
     // The barrier is intentionally part of every lookup pass for every
     // representation/ordering so the benchmark remains Vulkan-correct and fair.
     auto output_ready = buffer_barrier(
-        output, VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_SHADER_WRITE_BIT);
+        output,
+        VK_ACCESS_SHADER_WRITE_BIT,
+        VK_ACCESS_SHADER_WRITE_BIT | VK_ACCESS_TRANSFER_READ_BIT);
     ctx_.vk().cmdPipelineBarrier(
         command_buffer,
         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
         0, 0, nullptr, 1, &output_ready, 0, nullptr);
 }
 
@@ -351,11 +353,13 @@ void CacheBenchmark::record_schedule_pass(
     auto grouped_ready = buffer_barrier(
         scheduler.grouped_queries,
         VK_ACCESS_SHADER_WRITE_BIT,
-        VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT);
+        VK_ACCESS_SHADER_READ_BIT |
+            VK_ACCESS_SHADER_WRITE_BIT |
+            VK_ACCESS_TRANSFER_READ_BIT);
     ctx_.vk().cmdPipelineBarrier(
         command_buffer,
         VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT | VK_PIPELINE_STAGE_TRANSFER_BIT,
         0, 0, nullptr, 1, &grouped_ready, 0, nullptr);
 }
 
