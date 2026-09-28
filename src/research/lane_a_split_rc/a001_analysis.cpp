@@ -198,9 +198,12 @@ A001Analysis analyze_a001(
             const std::int32_t px=std::int32_t(std::floor((position.x-p.scene_origin_spacing[0])/spacing));
             const std::int32_t py=std::int32_t(std::floor((position.y-p.scene_origin_spacing[1])/spacing));
             const std::int32_t pz=std::int32_t(std::floor((position.z-p.scene_origin_spacing[2])/spacing));
-            const float ppx=p.scene_origin_spacing[0]+(float(px)+0.5f)*spacing;
-            const float ppy=p.scene_origin_spacing[1]+(float(py)+0.5f)*spacing;
-            const float ppz=p.scene_origin_spacing[2]+(float(pz)+0.5f)*spacing;
+            // GLSL permits contraction of a*b+c into an FMA. Mirror that
+            // arithmetic here so the semantic reference compares equivalent
+            // single-precision operations instead of compiler-dependent rounding.
+            const float ppx=std::fma(float(px)+0.5f,spacing,p.scene_origin_spacing[0]);
+            const float ppy=std::fma(float(py)+0.5f,spacing,p.scene_origin_spacing[1]);
+            const float ppz=std::fma(float(pz)+0.5f,spacing,p.scene_origin_spacing[2]);
             const float interval_max=p.light_pos_interval[3]*float(1u<<cascade);
             const float interval_min=cascade
                 ? p.light_pos_interval[3]*float(1u<<(cascade-1u))
