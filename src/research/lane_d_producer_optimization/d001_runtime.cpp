@@ -39,6 +39,16 @@ VkBufferMemoryBarrier buffer_barrier(
 
 } // namespace
 
+const char* allocation_mode_name(ProducerAllocationMode mode) {
+    switch (mode) {
+    case ProducerAllocationMode::PerOwnerAtomic:
+        return "per-owner-atomic";
+    case ProducerAllocationMode::WorkgroupPrefix:
+        return "workgroup-prefix";
+    }
+    return "unknown";
+}
+
 const char* emission_domain_name(ProducerEmissionDomain domain) {
     switch (domain) {
     case ProducerEmissionDomain::SurfaceScan:
@@ -72,12 +82,14 @@ struct D001Runtime::Impl {
         Resolve = 6,
         ProducerOwnerReuse = 7,
         ProducerVisibleTile = 8,
+        ProducerWorkgroupAlloc = 9,
     };
 
     VulkanContext& ctx;
     lane_a::A001ParamsGpu params{};
     D001Mode mode{};
     ProducerEmissionDomain emission_domain{};
+    ProducerAllocationMode allocation_mode{};
     std::uint32_t tile_count{};
     std::uint32_t max_work{};
     std::uint32_t max_outputs{};
@@ -97,7 +109,7 @@ struct D001Runtime::Impl {
     VkPipelineLayout pipeline_layout{VK_NULL_HANDLE};
     VkDescriptorPool descriptor_pool{VK_NULL_HANDLE};
     VkDescriptorSet descriptor_set{VK_NULL_HANDLE};
-    std::array<VkPipeline, 9> pipelines{};
+    std::array<VkPipeline, 10> pipelines{};
     VkCommandPool command_pool{VK_NULL_HANDLE};
     VkCommandBuffer command_buffer{VK_NULL_HANDLE};
     VkQueryPool query_pool{VK_NULL_HANDLE};
@@ -108,8 +120,17 @@ struct D001Runtime::Impl {
         const lane_a::SceneSurfaceSet& scene,
         const lane_a::A001ParamsGpu& p,
         D001Mode m,
-        ProducerEmissionDomain domain)
-        : ctx(context), params(p), mode(m), emission_domain(domain) {
+        ProducerEmissionDomain domain,
+        ProducerAllocationMode allocation)
+        : ctx(context),
+          params(p),
+          mode(m),
+          emission_domain(domain),
+          allocation_mode(allocation) {
+        if (emission_domain == ProducerEmissionDomain::VisibleTileScan &&
+            allocation_mode == ProducerAllocationMode::WorkgroupPrefix) {
+            fail("D004 workgroup allocation requires surface-scan emission");
+        }
         tile_count = params.counts[1] * params.counts[2];
         max_work = params.limits[1];
         max_outputs = params.limits[2];
@@ -158,7 +179,7 @@ struct D001Runtime::Impl {
 
         init_descriptors();
 
-        const std::array<const char*, 9> names{{
+        const std::array<const char*, 10> names{{
             "lane_a_visibility_depth.spv",
             "lane_a_visibility_owner.spv",
             "lane_a_producer.spv",
@@ -168,6 +189,7 @@ struct D001Runtime::Impl {
             "lane_a_resolve.spv",
             "lane_d_d001_producer_owner_reuse.spv",
             "lane_d_d002_producer_visible_tile.spv",
+            "lane_d_d004_producer_workgroup_alloc.spv",
         }};
         for (std::size_t i = 0; i < names.size(); ++i) {
             pipelines[i] = make_pipeline(names[i]);
@@ -654,9 +676,11 @@ struct D001Runtime::Impl {
         const auto producer_pipeline =
             tile_emission
                 ? pipelines[ProducerVisibleTile]
-                : (mode == D001Mode::OwnerReuse
-                       ? pipelines[ProducerOwnerReuse]
-                       : pipelines[Producer]);
+                : (allocation_mode == ProducerAllocationMode::WorkgroupPrefix
+                       ? pipelines[ProducerWorkgroupAlloc]
+                       : (mode == D001Mode::OwnerReuse
+                              ? pipelines[ProducerOwnerReuse]
+                              : pipelines[Producer]));
         const auto producer_invocations =
             tile_emission ? tile_count : params.counts[0];
         bind(producer_pipeline);
@@ -770,13 +794,15 @@ D001Runtime::D001Runtime(
     const lane_a::SceneSurfaceSet& scene,
     const lane_a::A001ParamsGpu& params,
     D001Mode mode,
-    ProducerEmissionDomain emission_domain)
+    ProducerEmissionDomain emission_domain,
+    ProducerAllocationMode allocation_mode)
     : impl_(std::make_unique<Impl>(
           context,
           scene,
           params,
           mode,
-          emission_domain)) {}
+          emission_domain,
+          allocation_mode)) {}
 
 D001Runtime::~D001Runtime() = default;
 
