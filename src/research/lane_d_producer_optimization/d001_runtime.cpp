@@ -45,6 +45,8 @@ const char* allocation_mode_name(ProducerAllocationMode mode) {
         return "per-owner-atomic";
     case ProducerAllocationMode::WorkgroupPrefix:
         return "workgroup-prefix";
+    case ProducerAllocationMode::OwnerSlotBounded:
+        return "owner-slot-bounded";
     }
     return "unknown";
 }
@@ -83,6 +85,8 @@ struct D001Runtime::Impl {
         ProducerOwnerReuse = 7,
         ProducerVisibleTile = 8,
         ProducerWorkgroupAlloc = 9,
+        ProducerOwnerSlot = 10,
+        FinalizeBounded = 11,
     };
 
     VulkanContext& ctx;
@@ -93,6 +97,7 @@ struct D001Runtime::Impl {
     std::uint32_t tile_count{};
     std::uint32_t max_work{};
     std::uint32_t max_outputs{};
+    std::uint32_t owner_capacity{};
 
     GpuBuffer surfaces;
     GpuBuffer depth;
@@ -109,7 +114,7 @@ struct D001Runtime::Impl {
     VkPipelineLayout pipeline_layout{VK_NULL_HANDLE};
     VkDescriptorPool descriptor_pool{VK_NULL_HANDLE};
     VkDescriptorSet descriptor_set{VK_NULL_HANDLE};
-    std::array<VkPipeline, 10> pipelines{};
+    std::array<VkPipeline, 12> pipelines{};
     VkCommandPool command_pool{VK_NULL_HANDLE};
     VkCommandBuffer command_buffer{VK_NULL_HANDLE};
     VkQueryPool query_pool{VK_NULL_HANDLE};
@@ -121,17 +126,35 @@ struct D001Runtime::Impl {
         const lane_a::A001ParamsGpu& p,
         D001Mode m,
         ProducerEmissionDomain domain,
-        ProducerAllocationMode allocation)
+        ProducerAllocationMode allocation,
+        std::uint32_t requested_owner_capacity)
         : ctx(context),
           params(p),
           mode(m),
           emission_domain(domain),
           allocation_mode(allocation) {
         if (emission_domain == ProducerEmissionDomain::VisibleTileScan &&
-            allocation_mode == ProducerAllocationMode::WorkgroupPrefix) {
-            fail("D004 workgroup allocation requires surface-scan emission");
+            allocation_mode != ProducerAllocationMode::PerOwnerAtomic) {
+            fail("Lane D alternate allocation modes require surface-scan emission");
         }
         tile_count = params.counts[1] * params.counts[2];
+        owner_capacity = requested_owner_capacity == 0
+            ? tile_count
+            : requested_owner_capacity;
+        if (owner_capacity == 0 || owner_capacity > tile_count) {
+            fail("D005 owner capacity must be in [1, tile_count]");
+        }
+        if (allocation_mode == ProducerAllocationMode::OwnerSlotBounded) {
+            const auto outputs =
+                std::uint64_t(owner_capacity) * params.counts[3];
+            const auto work_items = outputs * params.limits[0];
+            if (outputs > std::numeric_limits<std::uint32_t>::max() ||
+                work_items > std::numeric_limits<std::uint32_t>::max()) {
+                fail("D005 bounded capacity exceeds 32-bit limits");
+            }
+            params.limits[1] = static_cast<std::uint32_t>(work_items);
+            params.limits[2] = static_cast<std::uint32_t>(outputs);
+        }
         max_work = params.limits[1];
         max_outputs = params.limits[2];
 
@@ -179,7 +202,7 @@ struct D001Runtime::Impl {
 
         init_descriptors();
 
-        const std::array<const char*, 10> names{{
+        const std::array<const char*, 12> names{{
             "lane_a_visibility_depth.spv",
             "lane_a_visibility_owner.spv",
             "lane_a_producer.spv",
@@ -190,6 +213,8 @@ struct D001Runtime::Impl {
             "lane_d_d001_producer_owner_reuse.spv",
             "lane_d_d002_producer_visible_tile.spv",
             "lane_d_d004_producer_workgroup_alloc.spv",
+            "lane_d_d005_producer_owner_slot.spv",
+            "lane_d_d005_finalize_bounded.spv",
         }};
         for (std::size_t i = 0; i < names.size(); ++i) {
             pipelines[i] = make_pipeline(names[i]);
@@ -678,9 +703,11 @@ struct D001Runtime::Impl {
                 ? pipelines[ProducerVisibleTile]
                 : (allocation_mode == ProducerAllocationMode::WorkgroupPrefix
                        ? pipelines[ProducerWorkgroupAlloc]
-                       : (mode == D001Mode::OwnerReuse
-                              ? pipelines[ProducerOwnerReuse]
-                              : pipelines[Producer]));
+                       : (allocation_mode == ProducerAllocationMode::OwnerSlotBounded
+                              ? pipelines[ProducerOwnerSlot]
+                              : (mode == D001Mode::OwnerReuse
+                                     ? pipelines[ProducerOwnerReuse]
+                                     : pipelines[Producer])));
         const auto producer_invocations =
             tile_emission ? tile_count : params.counts[0];
         bind(producer_pipeline);
@@ -697,7 +724,10 @@ struct D001Runtime::Impl {
             query_pool,
             6);
 
-        bind(pipelines[Finalize]);
+        bind(
+            allocation_mode == ProducerAllocationMode::OwnerSlotBounded
+                ? pipelines[FinalizeBounded]
+                : pipelines[Finalize]);
         ctx.vk().cmdDispatch(command_buffer, 1, 1, 1);
         auto indirect_ready = buffer_barrier(
             indirect,
@@ -795,14 +825,16 @@ D001Runtime::D001Runtime(
     const lane_a::A001ParamsGpu& params,
     D001Mode mode,
     ProducerEmissionDomain emission_domain,
-    ProducerAllocationMode allocation_mode)
+    ProducerAllocationMode allocation_mode,
+    std::uint32_t owner_capacity)
     : impl_(std::make_unique<Impl>(
           context,
           scene,
           params,
           mode,
           emission_domain,
-          allocation_mode)) {}
+          allocation_mode,
+          owner_capacity)) {}
 
 D001Runtime::~D001Runtime() = default;
 
