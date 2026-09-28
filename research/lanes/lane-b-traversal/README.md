@@ -45,3 +45,33 @@ The formal result is
    memory, and correctness in the end-to-end decision;
 5. document regime-specific winners instead of forcing one universal
    architecture if the evidence differs by scene regime.
+
+
+## B002 target-ready checkpoint
+
+B002 implementation is now target-ready on this branch. It does not conclude
+Lane B until target measurements are recorded.
+
+Implemented evidence paths:
+
+- exact replay reader for the accepted Lane A schema v1, including byte-size and
+  workload-id validation with natural producer order preserved;
+- actual Sponza triangle geometry aligned with Lane A `surface_id` ordering;
+- GPU software-BVH traversal under the B001 shared Hit contract;
+- hierarchical StrataBrick-derived traversal with coarse segment occupancy,
+  per-segment BVHs, deterministic GPU flattening, membership/refit/rebuild
+  accounting, and localized buffer updates when membership is unchanged;
+- explicit physical-device Vulkan selection for
+  `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- HWRT logical-device feature enablement, BLAS/TLAS creation, ray-query
+  candidate traversal, and BLAS/TLAS UPDATE for controlled moving geometry;
+- full-ray correctness comparison against a CPU software-BVH reference, with a
+  brute-force sample guard;
+- controlled rigid-mesh translation evidence split into bounds-only/refit and
+  topology-changing/rebuild regimes.
+
+The controlled moving-geometry rows are mechanism-isolation evidence. Final
+representative traversal evidence remains the three exact A001 streams.
+
+Target execution is documented in
+`scripts/research/lane_b_traversal/README.md`.

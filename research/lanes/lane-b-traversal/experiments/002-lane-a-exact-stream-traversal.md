@@ -1,6 +1,6 @@
 # Experiment B002 — Lane A exact-stream traversal comparison
 
-Status: active
+Status: target-ready; target measurement pending
 
 ## Question
 
@@ -192,3 +192,22 @@ The final accepted result is written only after target evidence exists at:
 `research/lanes/lane-b-traversal/results/002-lane-a-exact-stream-traversal.md`
 
 and is then added to `results/index.json`, the Lane B README, and Issue #11.
+
+
+## Implementation checkpoint
+
+The target-ready harness now produces, inside the same
+`research:record` artifact:
+
+- `b002-results.csv` — exact A001 static/camera-motion/light-motion candidate
+  comparison;
+- `b002-correctness.json` — shared-Hit correctness gate and exact workload
+  identities;
+- `b002-device.json` — exact selected Vulkan device and HWRT bring-up status;
+- `b002-config.json` — segment/hash/candidate configuration;
+- `b002-maintenance.csv` — controlled moving-geometry refit/rebuild/update
+  costs and post-update trace correctness;
+- `b002-maintenance.json` — controlled-regime identity and movement parameters.
+
+No result document or result-index entry is created until the target artifact
+exists and passes the decision gate.
