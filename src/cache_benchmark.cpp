@@ -439,10 +439,15 @@ CacheBenchmark::LookupMeasurement CacheBenchmark::measure_lookup(
         static_cast<VkDeviceSize>(downloaded.size()) * sizeof(std::uint32_t));
 
     std::uint64_t checksum = 0;
-    for (const auto value : downloaded) checksum += value;
+    std::uint64_t sequence_fingerprint = 1469598103934665603ull;
+    for (const auto value : downloaded) {
+        checksum += value;
+        sequence_fingerprint ^= static_cast<std::uint64_t>(value);
+        sequence_fingerprint *= 1099511628211ull;
+    }
     ctx_.destroy_buffer(output);
 
-    return {gpu_us, checksum};
+    return {gpu_us, checksum, sequence_fingerprint};
 }
 
 double CacheBenchmark::measure_scheduler(
@@ -545,7 +550,7 @@ CacheBenchmark::LookupMeasurement CacheBenchmark::measure_end_to_end(
     for (const auto value : downloaded) checksum += value;
 
     ctx_.destroy_buffer(output);
-    return {gpu_us, checksum};
+    return {gpu_us, checksum, 0};
 }
 
 bool CacheBenchmark::validate_gpu_grouping(
@@ -644,6 +649,7 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
 
     std::vector<BenchmarkResult> out;
     out.reserve(9);
+    std::optional<std::uint64_t> hash_source_sequence_fingerprint;
 
     for (const auto& ordering : orderings) {
         for (const auto* cache : caches) {
@@ -653,6 +659,12 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
                 std::string(ordering.name) == "source"
                     ? std::string(cache->name)
                     : std::string(cache->name) + "-" + ordering.name;
+
+            if (std::string(cache->name) == "hash" &&
+                std::string(ordering.name) == "source") {
+                hash_source_sequence_fingerprint =
+                    measurement.sequence_fingerprint;
+            }
 
             out.push_back({
                 variant,
@@ -689,6 +701,9 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
     };
     const auto wg_bin16 =
         measure_lookup(source_queries, query_count, hash_wg_bin16, iterations);
+    if (!hash_source_sequence_fingerprint.has_value()) {
+        throw std::runtime_error("hash/source fingerprint was not measured");
+    }
     out.push_back({
         "hash-wg-bin16",
         w.source.size(),
@@ -697,7 +712,8 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
         wg_bin16.gpu_us_per_dispatch,
         wg_bin16.checksum,
         w.expected_checksum,
-        wg_bin16.checksum == w.expected_checksum,
+        wg_bin16.checksum == w.expected_checksum &&
+            wg_bin16.sequence_fingerprint == *hash_source_sequence_fingerprint,
         "hash",
         "wg-hash-bin16",
         0,
