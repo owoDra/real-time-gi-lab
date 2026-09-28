@@ -1886,7 +1886,7 @@ int run_transition_streams(
             dispatch(target_set, pair.to.header.item_count, 13u),
             dispatch(
                 target_set,
-                static_cast<std::uint32_t>(state.keys.size()),
+                static_cast<std::uint32_t>(state.keys.size),
                 14u),
         };
         if (rep == Rep::Clipmap) {
