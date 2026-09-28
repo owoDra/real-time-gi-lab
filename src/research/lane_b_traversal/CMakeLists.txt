@@ -139,6 +139,26 @@ else()
 endif()
 
 
+# GPU-independent B003 structural gate for the Macro BVH8 builder.
+add_executable(phos-lane-b-b003-smoke
+  b003_contract_smoke.cpp
+  b003_macro_bvh8.hpp
+  hierarchical_stratabrick.hpp
+  traversal_contract.hpp
+  traversal_common.hpp
+)
+target_include_directories(phos-lane-b-b003-smoke PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}")
+target_compile_features(phos-lane-b-b003-smoke PRIVATE cxx_std_20)
+set_target_properties(phos-lane-b-b003-smoke PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+if(MSVC)
+  target_compile_options(phos-lane-b-b003-smoke PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-b-b003-smoke PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
 # B003 Stage A: replace the hierarchical segment DDA/hash front end with a
 # deterministic Macro BVH8 while retaining B002's binary per-segment micro BVH.
 add_compute_shader(

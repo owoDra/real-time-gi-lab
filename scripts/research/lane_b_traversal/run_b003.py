@@ -89,9 +89,10 @@ def main() -> int:
     commit = validate_checkout()
     print(f"b003_git_commit={commit}", flush=True)
 
-    smoke = Path(args.build_dir) / "phos-lane-b-b002-smoke"
+    semantic_smoke = Path(args.build_dir) / "phos-lane-b-b002-smoke"
+    structural_smoke = Path(args.build_dir) / "phos-lane-b-b003-smoke"
     executable = Path(args.build_dir) / "phos-lane-b-b003"
-    for required in (smoke, executable):
+    for required in (semantic_smoke, structural_smoke, executable):
         if not required.exists():
             raise SystemExit(
                 f"B003 executable not found: {required}; run 'mise run build'"
@@ -106,15 +107,16 @@ def main() -> int:
     lane_a_root = Path(args.lane_a_artifact)
     validate_lane_a_artifact(lane_a_root)
 
-    smoke_command = [str(smoke)]
-    print("+", " ".join(smoke_command), flush=True)
-    smoke_result = subprocess.run(
-        smoke_command,
-        env=os.environ.copy(),
-        check=False,
-    )
-    if smoke_result.returncode:
-        return smoke_result.returncode
+    for smoke in (semantic_smoke, structural_smoke):
+        smoke_command = [str(smoke)]
+        print("+", " ".join(smoke_command), flush=True)
+        smoke_result = subprocess.run(
+            smoke_command,
+            env=os.environ.copy(),
+            check=False,
+        )
+        if smoke_result.returncode:
+            return smoke_result.returncode
 
     command = [
         "bash",

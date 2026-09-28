@@ -167,7 +167,12 @@ void trace_segment(
     while (stack_size != 0u) {
         uint node_id = stack[--stack_size];
         BvhNode node = nodes[node_id];
-        if (!ray_node(
+        // The Macro BVH child bound is exactly this segment-root bound, so
+        // repeating the root AABB test would charge the candidate twice for
+        // the same culling decision. Descendants still require their normal
+        // binary-BVH AABB tests.
+        if (node_id != root &&
+            !ray_node(
                 origin,
                 direction,
                 has_best ? best_t : ray_tmax,
@@ -276,10 +281,11 @@ void main() {
     while (macro_stack_size != 0u) {
         uint macro_id =
             macro_stack[--macro_stack_size];
-        MacroNode node = macro_nodes[macro_id];
-
         for (uint slot = 0u; slot < 8u; ++slot) {
-            MacroChild child = node.children[slot];
+            // Read only the current 48-byte child instead of copying the full
+            // 384-byte node into invocation-local storage.
+            MacroChild child =
+                macro_nodes[macro_id].children[slot];
             if (child.data.x == INVALID_ID) {
                 continue;
             }
