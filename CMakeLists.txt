@@ -7,8 +7,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 include(FetchContent)
 
+# Keep build-time Vulkan dependencies self-contained. The host still needs a
+# working Vulkan loader/driver at runtime, but not a Vulkan SDK installation.
 set(VK_BOOTSTRAP_TEST OFF CACHE BOOL "" FORCE)
 set(VK_BOOTSTRAP_INSTALL OFF CACHE BOOL "" FORCE)
+set(VK_BOOTSTRAP_FORCE_FETCH_CONTENT ON CACHE BOOL "" FORCE)
 FetchContent_Declare(
   vk_bootstrap
   GIT_REPOSITORY https://github.com/charles-lunarg/vk-bootstrap.git
@@ -35,6 +38,11 @@ add_executable(phos-gi-lab
 
 target_include_directories(phos-gi-lab PRIVATE src)
 target_link_libraries(phos-gi-lab PRIVATE vk-bootstrap::vk-bootstrap fastgltf::fastgltf ${CMAKE_DL_LIBS})
+set_target_properties(phos-gi-lab PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
 
 target_compile_definitions(phos-gi-lab PRIVATE PHOS_GI_LAB_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders")
 
@@ -44,8 +52,24 @@ else()
   target_compile_options(phos-gi-lab PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
+# Prefer an already-installed shader compiler, but do not require the Vulkan SDK.
 find_program(GLSLC glslc HINTS "$ENV{VULKAN_SDK}/Bin" "$ENV{VULKAN_SDK}/bin")
 find_program(GLSLANG_VALIDATOR glslangValidator HINTS "$ENV{VULKAN_SDK}/Bin" "$ENV{VULKAN_SDK}/bin")
+
+if(NOT GLSLC AND NOT GLSLANG_VALIDATOR)
+  message(STATUS "No system GLSL compiler found; building bundled glslang 16.6.0")
+  set(GLSLANG_TESTS OFF CACHE BOOL "" FORCE)
+  set(GLSLANG_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+  set(ENABLE_GLSLANG_BINARIES ON CACHE BOOL "" FORCE)
+  set(ENABLE_HLSL OFF CACHE BOOL "" FORCE)
+  set(ENABLE_OPT OFF CACHE BOOL "" FORCE)
+  FetchContent_Declare(
+    glslang
+    GIT_REPOSITORY https://github.com/KhronosGroup/glslang.git
+    GIT_TAG 16.6.0
+  )
+  FetchContent_MakeAvailable(glslang)
+endif()
 
 function(add_compute_shader NAME SOURCE)
   set(OUTPUT "${CMAKE_BINARY_DIR}/shaders/${NAME}.spv")
@@ -63,8 +87,15 @@ function(add_compute_shader NAME SOURCE)
       COMMAND ${GLSLANG_VALIDATOR} -V --target-env vulkan1.3 -S comp "${CMAKE_SOURCE_DIR}/${SOURCE}" -o "${OUTPUT}"
       DEPENDS "${CMAKE_SOURCE_DIR}/${SOURCE}"
       VERBATIM)
+  elseif(TARGET glslang-standalone)
+    add_custom_command(
+      OUTPUT "${OUTPUT}"
+      COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_BINARY_DIR}/shaders"
+      COMMAND $<TARGET_FILE:glslang-standalone> -V --target-env vulkan1.3 -S comp "${CMAKE_SOURCE_DIR}/${SOURCE}" -o "${OUTPUT}"
+      DEPENDS glslang-standalone "${CMAKE_SOURCE_DIR}/${SOURCE}"
+      VERBATIM)
   else()
-    message(FATAL_ERROR "glslc or glslangValidator is required. Install the Vulkan SDK or glslang.")
+    message(FATAL_ERROR "No GLSL compiler is available")
   endif()
   set_property(GLOBAL APPEND PROPERTY PHOS_GI_SHADER_OUTPUTS "${OUTPUT}")
 endfunction()
