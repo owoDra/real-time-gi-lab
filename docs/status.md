@@ -249,3 +249,24 @@ Experiment 000 therefore resolves Issue #4 as follows:
    reusing ordering rather than globally reordering every lookup batch.
 5. RGP profiling is still required before attributing the ordering effect to a
    specific cache/memory microarchitectural mechanism.
+
+
+### 2026-09-28 — Experiment 001 validation sweep
+
+Hardware: AMD Radeon 8060S Graphics / RADV STRIX_HALO  
+Scene: Sponza, 262,241 surface samples  
+Queries: 100k / 500k / 1M / 4M / 8M  
+Iterations: 100  
+Repeats: 3  
+Validation: enabled
+
+The validation sweep completed successfully and every benchmark row passed the
+existing semantic checksum guard. The new `hash-wg-bin16` row also passed the
+source-order fingerprint guard, so its shared-memory regrouping preserved the
+original result-index semantics.
+
+Validation timings are diagnostic only and are not accepted as performance
+evidence. They currently show `hash-wg-bin16` approximately equal to
+`hash/source` at 100k and slower at 500k–8M, so the exact mechanism has not
+shown an encouraging signal yet. The required non-validation sweep remains the
+decision input.
