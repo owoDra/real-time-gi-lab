@@ -4,7 +4,7 @@ Last updated: 2026-09-28
 
 ## Current stage
 
-**M0 — cache representation resolved; investigate cheaper query coherence.**
+**M0 concluded — transition to end-to-end Split RC research with parallel producer, traversal, and storage/locality lanes.**
 
 The repository is isolating whether page-local contiguous storage has an
 independent lookup advantage, or whether the observed gain is primarily caused
@@ -57,6 +57,28 @@ The target-system correctness sweep and non-validation timing sweep have now
 completed on AMD Radeon 8060S / RADV STRIX_HALO. Issue #4 has enough evidence
 to resolve the representation-vs-scheduling question and the current explicit
 GPU-grouping viability gate.
+
+## M0 conclusion
+
+Experiments 000–002 resolve the standalone cache/scheduler investigation:
+
+- matched-order hash remains the baseline; paged representation has not shown an
+  independent medium/large-workload advantage;
+- useful query coherence is real and can improve hash lookup substantially;
+- the tested global histogram/prefix/scatter scheduler is too expensive when paid
+  per batch;
+- fused 16-bin workgroup-local regrouping is rejected;
+- reusing one global schedule becomes competitive only conditionally: the first
+  tested wins occur at reuse 6 for 1M queries and reuse 5 for 4M/8M, while 100k
+  and 500k still lose at reuse 8;
+- this reuse threshold is retained as a fallback constraint, not adopted as the
+  primary GI architecture.
+
+The next program must use a representative Split Radiance Cascades producer.
+Storage and traversal alternatives are to be compared on that real access stream,
+with producer cost, allocation/update/invalidation cost, memory, correctness, and
+end-to-end GPU time included. Synthetic ordering that bakes the desired locality
+into the workload is not accepted as architectural evidence.
 
 ## Accepted facts
 
@@ -300,3 +322,23 @@ Validation-enabled timings are diagnostic only and are not used for the
 performance decision. They independently show the same qualitative direction as
 the accepted non-validation sweep: `hash-wg-bin16` is slower than
 `hash/source` at every tested query count.
+
+
+### 2026-09-28 — Experiment 002 accepted non-validation sweep
+
+Artifact: `out/benchmarks/20260928T120143Z`  
+Hardware: AMD Radeon 8060S Graphics / RADV STRIX_HALO  
+Scene: Sponza, 262,241 surface samples  
+Iterations: 100  
+Repeats: 3  
+Vulkan validation layers: disabled
+
+The smallest tested reuse counts beating `hash/source` were:
+
+- 1M queries: reuse 6 (180.494 us amortized vs 198.000 us source);
+- 4M queries: reuse 5 (864.097 us vs 894.490 us);
+- 8M queries: reuse 5 (1649.870 us vs 1801.480 us).
+
+100k and 500k did not break even even at reuse 8. The 4M reuse-5 margin is
+small (~3.5%), so the current scheduler is not promoted. M0 is considered
+complete enough to move the research question into an actual GI producer.
