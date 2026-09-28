@@ -8,6 +8,13 @@
       "result": "research/lanes/lane-d-producer-optimization/results/001-visibility-reuse.md",
       "measurement_commit": "c083db8925d362c8c8df3cebc046fb2ff62fc2c9",
       "decision": "retain depth reuse for composition; owner reuse not retained; no final producer promotion"
+    },
+    {
+      "id": "002-visible-tile-emission",
+      "status": "rejected",
+      "result": "research/lanes/lane-d-producer-optimization/results/002-visible-tile-emission.md",
+      "measurement_commit": "844123281ff72b5c3b6dea38ca69732b5ca2e00b",
+      "decision": "do not retain visible-tile emission; static misses fixed promotion gate"
     }
   ]
 }
