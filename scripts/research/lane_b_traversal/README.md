@@ -69,3 +69,35 @@ Expected additional artifacts:
 If the accepted A001 artifact is no longer present locally, restore or rerun
 A001 on its own branch first; do not merge Lane A into Lane B merely to
 regenerate the stream.
+
+
+## B003 Stage A target execution
+
+B003 first tests the cheapest structural change: replace B002's segment-grid
+DDA/hash traversal with a Macro BVH8 while retaining the same binary
+per-segment micro BVHs.
+
+Run from a clean `research-lane-b-traversal` checkout:
+
+```bash
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-b-traversal \
+  --experiment 003-wide-software-traversal \
+  --command "python scripts/research/lane_b_traversal/run_b003.py --build-dir build/release --lane-a-artifact out/research/lane-a-split-rc/001-representative-producer/20260928T143212Z --iterations 30 --build-repeats 3"
+```
+
+Expected additional artifacts:
+
+- `b003-stage-a.csv`;
+- `b003-stage-a-summary.json`;
+- `b003-correctness.json`;
+- `b003-device.json`;
+- `b003-config.json`.
+
+`advance_to_stage_b=true` requires at least 20% same-run mean traversal
+improvement, no more than 1.15x persistent memory, and zero correctness/runtime
+errors. A false value is a valid rejected Stage A result, not a harness failure.

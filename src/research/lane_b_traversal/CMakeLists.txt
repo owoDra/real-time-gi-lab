@@ -137,3 +137,57 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-b-b002-maintenance PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+
+# B003 Stage A: replace the hierarchical segment DDA/hash front end with a
+# deterministic Macro BVH8 while retaining B002's binary per-segment micro BVH.
+add_compute_shader(
+  lane_b_b003_macro_bvh8
+  shaders/research/lane_b_traversal/b003_macro_bvh8.comp.glsl)
+
+add_custom_target(phos-lane-b-b003-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_macro_bvh8.spv"
+)
+
+add_executable(phos-lane-b-b003
+  b003_benchmark.cpp
+  b002_scene.cpp
+  b002_vulkan.cpp
+  b002_compute.cpp
+  b003_macro_bvh8.hpp
+  b002_scene.hpp
+  b002_replay.hpp
+  b002_vulkan.hpp
+  b002_compute.hpp
+  b002_gpu_layout.hpp
+  hierarchical_stratabrick.hpp
+  lane_a_stream_v1.hpp
+  software_bvh.hpp
+  traversal_contract.hpp
+  traversal_common.hpp
+)
+target_include_directories(phos-lane-b-b003 PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${CMAKE_SOURCE_DIR}/src"
+)
+target_link_libraries(phos-lane-b-b003 PRIVATE
+  vk-bootstrap::vk-bootstrap
+  fastgltf::fastgltf
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-b-b003 PRIVATE cxx_std_20)
+target_compile_definitions(phos-lane-b-b003 PRIVATE
+  PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-b-b003 PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+add_dependencies(phos-lane-b-b003
+  phos-lane-b-b002-shaders
+  phos-lane-b-b003-shaders)
+if(MSVC)
+  target_compile_options(phos-lane-b-b003 PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-b-b003 PRIVATE -Wall -Wextra -Wpedantic)
+endif()
