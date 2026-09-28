@@ -28,6 +28,13 @@ struct HwrtTraceResult {
     std::vector<GpuHit> hits;
 };
 
+struct HwrtUpdateStats {
+    std::size_t moved_primitives{};
+    double geometry_upload_us{};
+    double blas_update_us{};
+    double tlas_update_us{};
+};
+
 class B002HwrtTraversal {
 public:
     B002HwrtTraversal(
@@ -47,6 +54,10 @@ public:
         std::span<const GpuRay> rays,
         std::uint32_t iterations);
 
+    [[nodiscard]] HwrtUpdateStats update_geometry(
+        const std::vector<Triangle>& triangles,
+        std::span<const std::uint32_t> moved_primitives);
+
 private:
     struct AccelerationStructure {
         B002Buffer storage{};
@@ -58,6 +69,8 @@ private:
     [[nodiscard]] double build_blas(
         const std::vector<Triangle>& triangles);
     [[nodiscard]] double build_tlas();
+    [[nodiscard]] double update_blas(std::size_t triangle_count);
+    [[nodiscard]] double update_tlas();
     [[nodiscard]] double submit_build(
         VkAccelerationStructureBuildGeometryInfoKHR& build_info,
         const VkAccelerationStructureBuildRangeInfoKHR& range,
@@ -88,6 +101,7 @@ private:
     VkFence fence_{VK_NULL_HANDLE};
 
     HwrtSetupStats setup_stats_{};
+    std::size_t triangle_count_{};
 };
 
 } // namespace phos::gi::research::lane_b
