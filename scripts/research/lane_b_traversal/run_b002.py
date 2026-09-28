@@ -2,9 +2,44 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 from pathlib import Path
 import subprocess
+
+
+ACCEPTED_A001_COMMIT = "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f"
+CASES = ("static", "camera-motion", "light-motion")
+
+
+def validate_lane_a_artifact(root: Path) -> None:
+    for case in CASES:
+        case_root = root / case
+        stream = case_root / "stream-v1.bin"
+        manifest = case_root / "stream-v1.json"
+        if not stream.exists():
+            raise SystemExit(
+                f"Accepted A001 replay stream not found: {stream}"
+            )
+        if not manifest.exists():
+            raise SystemExit(
+                f"Accepted A001 replay manifest not found: {manifest}"
+            )
+
+        payload = json.loads(manifest.read_text(encoding="utf-8"))
+        if payload.get("schema_version") != 1:
+            raise SystemExit(
+                f"{manifest}: expected schema_version=1"
+            )
+        if payload.get("case") != case:
+            raise SystemExit(
+                f"{manifest}: case mismatch, expected {case!r}"
+            )
+        if payload.get("git_commit") != ACCEPTED_A001_COMMIT:
+            raise SystemExit(
+                f"{manifest}: expected accepted A001 commit "
+                f"{ACCEPTED_A001_COMMIT}, got {payload.get('git_commit')!r}"
+            )
 
 
 def main() -> int:
@@ -43,12 +78,7 @@ def main() -> int:
         )
 
     lane_a_root = Path(args.lane_a_artifact)
-    for case in ("static", "camera-motion", "light-motion"):
-        stream = lane_a_root / case / "stream-v1.bin"
-        if not stream.exists():
-            raise SystemExit(
-                f"Accepted A001 replay stream not found: {stream}"
-            )
+    validate_lane_a_artifact(lane_a_root)
 
     smoke_command = [str(smoke)]
     print("+", " ".join(smoke_command), flush=True)
