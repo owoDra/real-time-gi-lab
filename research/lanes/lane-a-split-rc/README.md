@@ -1,7 +1,7 @@
 # Lane A — Split RC producer and transport
 
 Issue: #10
-Branch: `research/lane-a-split-rc`
+Branch: `research-lane-a-split-rc`
 
 Mission: create the minimum representative Split Radiance Cascades producer and
 transport pipeline needed to expose the real GPU query/update stream.
