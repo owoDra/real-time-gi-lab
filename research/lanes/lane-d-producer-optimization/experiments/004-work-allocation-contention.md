@@ -122,3 +122,47 @@ workgroup mechanism that fails the full-path gate.
 - accepted timing with validation disabled;
 - 3 process-level repeats;
 - 50 timed iterations per case.
+
+
+## Implementation / measurement readiness
+
+D004 is implemented by extending the staged Lane D runtime with an explicit
+producer allocation mode. Existing call sites default to A001's per-owner
+atomics.
+
+The workgroup candidate:
+
+- uses the unchanged surface-source visibility predicate;
+- keeps all 64 invocations alive through the shared prefix barriers, including
+  out-of-range/non-visible lanes;
+- reserves output/work/count blocks once per active 64-surface workgroup;
+- uses the inclusive shared prefix only to derive per-visible-owner offsets;
+- adds no global buffer, dispatch, compaction, or CPU pass;
+- declares 268 bytes of workgroup shared scratch (64 uint scan entries plus
+  three shared allocation values).
+
+The repeated runner now embeds the measurement git commit in each CSV row in
+addition to summary/metrics identity.
+
+Target-system diagnostic command:
+
+```bash
+mise run build
+mise run assets
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 004-work-allocation-contention \
+  --command "python scripts/research/lane_d_producer_optimization/run_d004.py --repeats 1 --iterations 1 --validation"
+```
+
+If diagnostic correctness passes, accepted timing candidate:
+
+```bash
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 004-work-allocation-contention \
+  --command "python scripts/research/lane_d_producer_optimization/run_d004.py --repeats 3 --iterations 50"
+```
+
+The runner writes `d004.csv`, `summary.json`, and one `metrics.json` per
+repeat/case. Any semantic mismatch or overflow aborts the run.
