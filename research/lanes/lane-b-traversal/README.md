@@ -75,3 +75,16 @@ representative traversal evidence remains the three exact A001 streams.
 
 Target execution is documented in
 `scripts/research/lane_b_traversal/README.md`.
+
+
+## B002 target rerun required
+
+An earlier pair of target CSVs showed clean correctness and a strong HWRT lead,
+but they are diagnostic only. They were not accompanied by the complete
+`research:record` provenance set, and several measurement-relevant HWRT and
+maintenance-boundary fixes landed afterward.
+
+The next accepted evidence must be one fresh artifact recorded from the current
+`research-lane-b-traversal` HEAD. Do not promote a candidate, write B002 result
+metadata, update `results/index.json`, or close Issue #11 from the earlier CSV
+checkpoint.
