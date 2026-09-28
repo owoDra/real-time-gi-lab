@@ -59,6 +59,10 @@ struct HierarchicalUpdateStats {
     std::size_t refit_segments{};
     std::size_t rebuilt_segments{};
     std::size_t removed_segments{};
+    double membership_dirty_us{};
+    double refit_us{};
+    double rebuild_us{};
+    double occupancy_us{};
 };
 
 struct HierarchicalFlatNode {
@@ -233,6 +237,12 @@ public:
         if (triangles.size() != membership_.size()) {
             throw std::runtime_error("hierarchical update requires stable primitive count");
         }
+        using Clock = std::chrono::steady_clock;
+        const auto elapsed_us = [](Clock::time_point start) {
+            return std::chrono::duration<double, std::micro>(
+                Clock::now() - start).count();
+        };
+
         triangles_ = &triangles;
 
         std::unordered_set<SegmentCoord, SegmentCoordHash> rebuild;
@@ -240,6 +250,7 @@ public:
         HierarchicalUpdateStats stats{};
         stats.moved_primitives = moved.size();
 
+        auto phase_start = Clock::now();
         for (const auto primitive : moved) {
             if (primitive >= triangles.size()) {
                 throw std::runtime_error("moved primitive id is out of range");
@@ -272,10 +283,16 @@ public:
         }
 
         for (const auto key : rebuild) refit.erase(key);
+        stats.membership_dirty_us = elapsed_us(phase_start);
+
+        phase_start = Clock::now();
         for (const auto key : refit) {
             auto found = segments_.find(key);
             if (found != segments_.end()) refit_segment(found->second);
         }
+        stats.refit_us = elapsed_us(phase_start);
+
+        phase_start = Clock::now();
         for (const auto key : rebuild) {
             auto found = segments_.find(key);
             if (found == segments_.end()) continue;
@@ -286,10 +303,14 @@ public:
                 build_segment(segments_.at(key));
             }
         }
+        stats.rebuild_us = elapsed_us(phase_start);
 
         stats.refit_segments = refit.size();
         stats.rebuilt_segments = rebuild.size() - stats.removed_segments;
+
+        phase_start = Clock::now();
         recompute_occupied_bounds();
+        stats.occupancy_us = elapsed_us(phase_start);
         return stats;
     }
 

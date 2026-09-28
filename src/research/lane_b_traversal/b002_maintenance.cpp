@@ -60,6 +60,10 @@ struct Row {
     std::size_t removed_segments{};
     double geometry_transform_us{};
     double accel_cpu_us{};
+    double membership_dirty_us{};
+    double refit_cpu_us{};
+    double rebuild_cpu_us{};
+    double occupancy_update_us{};
     double pack_cpu_us{};
     double geometry_upload_us{};
     double accel_upload_us{};
@@ -594,6 +598,10 @@ struct MovingSelection {
         0,
         geometry_us,
         accel_us,
+        0.0,
+        accel_us,
+        0.0,
+        0.0,
         pack_us,
         geometry_upload_us,
         accel_upload_us,
@@ -838,6 +846,10 @@ struct MovingSelection {
         stats.removed_segments,
         geometry_us,
         accel_us,
+        stats.membership_dirty_us,
+        stats.refit_us,
+        stats.rebuild_us,
+        stats.occupancy_us,
         pack_us,
         geometry_upload_us,
         accel_upload_us,
@@ -904,6 +916,10 @@ struct MovingSelection {
         geometry_us,
         0.0,
         0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
         update.geometry_upload_us,
         0.0,
         moved.size() *
@@ -932,7 +948,8 @@ void write_csv(
     output
         << "regime,candidate,moved_instance,moved_primitives,delta_x,"
            "membership_changes,refit_segments,rebuilt_segments,removed_segments,"
-           "geometry_transform_us,accel_cpu_us,pack_cpu_us,geometry_upload_us,"
+           "geometry_transform_us,accel_cpu_us,membership_dirty_us,refit_cpu_us,"
+           "rebuild_cpu_us,occupancy_update_us,pack_cpu_us,geometry_upload_us,"
            "accel_upload_us,geometry_update_bytes,accel_update_bytes,"
            "blas_update_us,tlas_update_us,trace_us,mismatches,"
            "runtime_errors,persistent_bytes,transient_bytes,explicit_scratch_bytes\n";
@@ -950,6 +967,10 @@ void write_csv(
             << row.removed_segments << ','
             << row.geometry_transform_us << ','
             << row.accel_cpu_us << ','
+            << row.membership_dirty_us << ','
+            << row.refit_cpu_us << ','
+            << row.rebuild_cpu_us << ','
+            << row.occupancy_update_us << ','
             << row.pack_cpu_us << ','
             << row.geometry_upload_us << ','
             << row.accel_upload_us << ','
