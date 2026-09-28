@@ -9,11 +9,14 @@ end-to-end than representative alternatives.
 
 ## Branch topology
 
+Git cannot store both a `research` ref and refs below `research/...`, so lane branches use the `research-lane-*` prefix while `research` remains the future default/integration branch.
+
+
 ```text
 research
-├── research/lane-a-split-rc          # Issue #10
-├── research/lane-b-traversal         # Issue #11
-└── research/lane-c-storage-locality  # Issue #12
+├── research-lane-a-split-rc          # Issue #10
+├── research-lane-b-traversal         # Issue #11
+└── research-lane-c-storage-locality  # Issue #12
 ```
 
 Normal iterations are committed and pushed directly to the active lane branch.
