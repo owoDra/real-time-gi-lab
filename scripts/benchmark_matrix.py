@@ -168,9 +168,28 @@ def add_speedups(rows: list[dict[str, str]]) -> None:
         )
 
         source_same_rep = by_axis.get((representation, "source"))
-        row["ordering_speedup_vs_source"] = (
-            f"{float(source_same_rep['gpu_us_per_dispatch']) / us:.6f}"
+        ordering_speedup = (
+            float(source_same_rep["gpu_us_per_dispatch"]) / us
             if source_same_rep is not None
+            else None
+        )
+        row["ordering_speedup_vs_source"] = (
+            f"{ordering_speedup:.6f}" if ordering_speedup is not None else ""
+        )
+
+        hash_source = by_axis.get(("hash", "source"))
+        hash_same_order = by_axis.get(("hash", ordering))
+        hash_ordering_speedup = (
+            float(hash_source["gpu_us_per_dispatch"])
+            / float(hash_same_order["gpu_us_per_dispatch"])
+            if hash_source is not None and hash_same_order is not None
+            else None
+        )
+        row["ordering_interaction_ratio_vs_hash"] = (
+            f"{ordering_speedup / hash_ordering_speedup:.6f}"
+            if ordering_speedup is not None
+            and hash_ordering_speedup is not None
+            and hash_ordering_speedup != 0
             else ""
         )
 
@@ -235,6 +254,13 @@ def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
         ordering = str(values[0]["ordering"])
         same_order_hash = axis_medians.get((query_count, "hash", ordering))
         source_same_rep = axis_medians.get((query_count, representation, "source"))
+        hash_same_order = axis_medians.get((query_count, "hash", ordering))
+        hash_ordering_speedup = (
+            hash_us / hash_same_order if hash_same_order is not None else None
+        )
+        ordering_speedup = (
+            source_same_rep / median_us if source_same_rep is not None else None
+        )
 
         median_schedule = _median_optional(
             values, "scheduling_gpu_us_per_dispatch"
@@ -258,8 +284,13 @@ def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
                     else ""
                 ),
                 "ordering_speedup_vs_source": (
-                    f"{source_same_rep / median_us:.6f}"
-                    if source_same_rep is not None
+                    f"{ordering_speedup:.6f}" if ordering_speedup is not None else ""
+                ),
+                "ordering_interaction_ratio_vs_hash": (
+                    f"{ordering_speedup / hash_ordering_speedup:.6f}"
+                    if ordering_speedup is not None
+                    and hash_ordering_speedup is not None
+                    and hash_ordering_speedup != 0
                     else ""
                 ),
                 "bytes": next(iter(bytes_values)),
@@ -341,6 +372,7 @@ def main() -> int:
         "speedup_vs_hash",
         "speedup_vs_same_order_hash",
         "ordering_speedup_vs_source",
+        "ordering_interaction_ratio_vs_hash",
         "end_to_end_speedup_vs_hash",
         "checksum",
         "expected_checksum",
@@ -367,6 +399,7 @@ def main() -> int:
             "speedup_vs_hash",
             "speedup_vs_same_order_hash",
             "ordering_speedup_vs_source",
+            "ordering_interaction_ratio_vs_hash",
             "bytes",
             "scheduling_bytes",
             "median_scheduling_gpu_us_per_dispatch",
