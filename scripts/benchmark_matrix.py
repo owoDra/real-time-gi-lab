@@ -345,7 +345,7 @@ def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Run the reproducible M0 cheap-query-coherence benchmark matrix."
+        description="Run the reproducible M0 amortized-query-coherence benchmark matrix."
     )
     parser.add_argument(
         "--query-counts",
@@ -446,7 +446,7 @@ def main() -> int:
 
     metadata = {
         "schema_version": 2,
-        "experiment": "001-cheap-query-coherence",
+        "experiment": "002-amortized-query-coherence",
         "started_at_utc": started.isoformat(),
         "finished_at_utc": datetime.now(timezone.utc).isoformat(),
         "git_commit": git_commit(),
@@ -466,9 +466,16 @@ def main() -> int:
             "randomized",
             "page-grouped",
             "gpu-page-grouped",
+            "gpu-page-grouped-reuse2",
+            "gpu-page-grouped-reuse4",
+            "gpu-page-grouped-reuse5",
+            "gpu-page-grouped-reuse6",
+            "gpu-page-grouped-reuse8",
             "wg-hash-bin16",
         ],
         "gpu_scheduling": "dense-page histogram + single-workgroup prefix + scatter",
+        "schedule_reuse_counts": [1, 2, 4, 5, 6, 8],
+        "reused_schedule_timing": "one GPU grouping pass followed by N grouped hash lookups per timed batch; end-to-end reported amortized per consumer",
         "workgroup_local_coherence": "fused 16-bin grouping by initial hash slot; shared memory only",
         "commands": commands,
         "environment": {
