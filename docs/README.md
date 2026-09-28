@@ -20,3 +20,16 @@ code alone.
 README files should link to these documents rather than duplicate their
 contents. Implementation details that are obvious from code must not be copied
 into docs.
+
+## Branch policy
+
+- `exp/*` branches are the workspace for hypotheses, measurements, and
+  implementations that have not passed their decision gate.
+- `main` is for the consolidated research baseline after an experimental
+  direction is considered stable enough to keep.
+- Failed or invalidated experiments are not erased; their conclusion is kept in
+  the evidence ledger so the same path is not accidentally rediscovered as an
+  untested idea.
+
+The active page-local cache work therefore remains based on
+`exp/page-local-radiance-cache` until its M0/M1 gates are resolved.
