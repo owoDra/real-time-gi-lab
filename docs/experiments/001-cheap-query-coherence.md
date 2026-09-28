@@ -115,3 +115,28 @@ medium/large query counts that motivated Issue #7.
 
 This rejects only this exact local-binning mechanism. It does not reject
 producer-side coherence, schedule reuse/amortization, or other local keys.
+
+
+## Validation sweep — 2026-09-28
+
+Artifact: `out/benchmarks/20260928T103947Z`
+
+The full target-system validation matrix completed successfully on AMD Radeon
+8060S Graphics / RADV STRIX_HALO.
+
+All benchmark rows passed checksum correctness. `hash-wg-bin16` additionally
+passed the order-sensitive fingerprint against `hash/source`, so the fused
+shared-memory regrouping preserves source-index result semantics.
+
+Validation-enabled medians were:
+
+| Queries | hash/source us | hash-wg-bin16 us | Relative |
+| ---: | ---: | ---: | ---: |
+| 100k | 16.685 | 17.228 | 0.968x |
+| 500k | 102.844 | 108.126 | 0.951x |
+| 1M | 200.728 | 217.735 | 0.922x |
+| 4M | 860.216 | 911.517 | 0.944x |
+| 8M | 1687.670 | 1777.120 | 0.950x |
+
+These timings are diagnostic only. The accepted performance decision is based
+on the non-validation artifact `out/benchmarks/20260928T104108Z`.
