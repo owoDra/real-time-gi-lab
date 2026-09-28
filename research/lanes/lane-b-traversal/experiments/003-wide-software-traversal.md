@@ -306,3 +306,18 @@ BVH8 when:
 This is intentionally not the final B003 success criterion. Compression is
 expected to be part of the wide-BVH hypothesis; Stage B1 only rejects variants
 that are already too far behind for compression to plausibly rescue.
+
+
+### Stage B1 self-review hardening
+
+Before target measurement, the wide-micro traversal was hardened in two ways:
+
+- each queued wide child now carries its already-computed AABB entry distance;
+  after a nearer hit is found, queued children beyond the new best distance are
+  discarded without retesting their AABB;
+- the GPU-independent structural smoke now compares the complete set of binary
+  leaf primitive ranges against the collapsed wide hierarchy for every segment,
+  including a multi-level synthetic dense scene. This catches lost, duplicated,
+  or mis-encoded leaves before GPU timing.
+
+These changes do not alter the B001 Hit contract or the DDA/hash top level.

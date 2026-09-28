@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <iostream>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace phos::gi::research::lane_b {
@@ -146,6 +147,126 @@ void verify_wide_payload(
     }
 }
 
+
+[[nodiscard]] std::uint32_t lookup_wide_root(
+    const B003WideMicroPayload& payload,
+    SegmentCoord coord) {
+    std::uint32_t slot =
+        segment_hash(coord) & payload.hash_mask;
+    for (std::uint32_t probe = 0U;
+         probe < payload.hash_max_probe;
+         ++probe) {
+        const auto& entry =
+            payload.hash_table.at(slot);
+        if (entry.metadata[0] == kInvalidId) {
+            return kInvalidId;
+        }
+        if (entry.coord[0] == coord.x &&
+            entry.coord[1] == coord.y &&
+            entry.coord[2] == coord.z) {
+            return entry.metadata[0];
+        }
+        slot =
+            (slot + 1U) & payload.hash_mask;
+    }
+    return kInvalidId;
+}
+
+void collect_binary_leaves(
+    const HierarchicalFlatPayload& flat,
+    std::uint32_t root,
+    std::vector<std::pair<
+        std::uint32_t,
+        std::uint32_t>>& leaves) {
+    std::vector<std::uint32_t> stack{root};
+    while (!stack.empty()) {
+        const auto index = stack.back();
+        stack.pop_back();
+        if (index >= flat.nodes.size()) {
+            throw std::runtime_error(
+                "B003 smoke binary root is invalid");
+        }
+        const auto& node = flat.nodes[index];
+        if (node.left == kInvalidId) {
+            leaves.emplace_back(
+                node.begin,
+                node.count);
+        } else {
+            stack.push_back(node.left);
+            stack.push_back(node.right);
+        }
+    }
+}
+
+void collect_wide_leaves(
+    const B003WideMicroPayload& payload,
+    std::uint32_t root,
+    std::vector<std::pair<
+        std::uint32_t,
+        std::uint32_t>>& leaves) {
+    std::vector<std::uint32_t> stack{root};
+    while (!stack.empty()) {
+        const auto token = stack.back();
+        stack.pop_back();
+        if (b003_wide_is_leaf(token)) {
+            leaves.emplace_back(
+                b003_wide_leaf_begin(token),
+                b003_wide_leaf_count(token));
+            continue;
+        }
+        if (token >= payload.nodes.size()) {
+            throw std::runtime_error(
+                "B003 smoke wide token is invalid");
+        }
+        for (const auto& child :
+             payload.nodes[token].children) {
+            if (child.data[0] != kInvalidId) {
+                stack.push_back(child.data[0]);
+            }
+        }
+    }
+}
+
+void verify_wide_leaf_equivalence(
+    const HierarchicalFlatPayload& flat,
+    const B003WideMicroPayload& payload) {
+    for (const auto& segment : flat.segments) {
+        const auto wide_root =
+            lookup_wide_root(
+                payload,
+                segment.coord);
+        if (wide_root == kInvalidId) {
+            throw std::runtime_error(
+                "B003 wide payload lost a segment root");
+        }
+
+        std::vector<std::pair<
+            std::uint32_t,
+            std::uint32_t>> binary_leaves;
+        std::vector<std::pair<
+            std::uint32_t,
+            std::uint32_t>> wide_leaves;
+        collect_binary_leaves(
+            flat,
+            segment.root,
+            binary_leaves);
+        collect_wide_leaves(
+            payload,
+            wide_root,
+            wide_leaves);
+        std::sort(
+            binary_leaves.begin(),
+            binary_leaves.end());
+        std::sort(
+            wide_leaves.begin(),
+            wide_leaves.end());
+        if (binary_leaves != wide_leaves) {
+            throw std::runtime_error(
+                "B003 wide collapse changed binary leaf ranges");
+        }
+    }
+}
+
 [[nodiscard]] HierarchicalFlatPayload
 make_control(std::uint32_t segments) {
     HierarchicalFlatPayload flat;
@@ -212,7 +333,29 @@ int main() {
             const auto wide =
                 make_b003_wide_micro_payload(flat);
             verify_wide_payload(flat, wide);
+            verify_wide_leaf_equivalence(
+                flat,
+                wide);
         }
+
+        // Exercise recursive collapse on real multi-level per-segment BVHs,
+        // not only the one-leaf synthetic payloads above.
+        const auto dense =
+            make_scene("dense");
+        const HierarchicalStrataBrick hierarchy(
+            dense.triangles,
+            12.0F);
+        const auto dense_flat =
+            hierarchy.flatten();
+        const auto dense_wide =
+            make_b003_wide_micro_payload(
+                dense_flat);
+        verify_wide_payload(
+            dense_flat,
+            dense_wide);
+        verify_wide_leaf_equivalence(
+            dense_flat,
+            dense_wide);
 
         std::cout
             << "B003 macro/wide BVH8 structural smoke: PASS\n";

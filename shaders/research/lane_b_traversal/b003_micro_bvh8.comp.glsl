@@ -279,13 +279,33 @@ void trace_segment(
     inout float best_t,
     inout uint best_primitive,
     inout bool has_best) {
-    uint stack[64];
+    uint stack_token[64];
+    float stack_enter[64];
     uint stack_size = 0u;
-    stack[stack_size++] = root;
+    stack_token[stack_size] = root;
+    stack_enter[stack_size] = RAY_T_MIN;
+    ++stack_size;
 
     while (stack_size != 0u) {
+        --stack_size;
         uint token =
-            stack[--stack_size];
+            stack_token[stack_size];
+        float token_enter =
+            stack_enter[stack_size];
+
+        // Child AABBs are tested before push. Re-check only their saved entry
+        // distance against the latest best hit so a near hit can prune nodes
+        // that were already queued by an earlier wide-node visit.
+        if (has_best) {
+            float tolerance =
+                max(
+                    HIT_ABS_TOL,
+                    abs(best_t) * HIT_REL_TOL);
+            if (token_enter >
+                best_t + tolerance) {
+                continue;
+            }
+        }
 
         if ((token & WIDE_LEAF_BIT) != 0u) {
             trace_leaf(
@@ -340,8 +360,11 @@ void trace_segment(
                 output_hit.metadata.w = 2u;
                 return;
             }
-            stack[stack_size++] =
+            stack_token[stack_size] =
                 child.data.x;
+            stack_enter[stack_size] =
+                enter;
+            ++stack_size;
         }
     }
 }
