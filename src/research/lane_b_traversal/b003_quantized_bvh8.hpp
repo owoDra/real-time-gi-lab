@@ -170,12 +170,22 @@ quantize_node(
     output.origin[0] = bounds.min.x;
     output.origin[1] = bounds.min.y;
     output.origin[2] = bounds.min.z;
+    const auto conservative_scale =
+        [](float value) noexcept {
+            if (!(value > 0.0F) ||
+                !std::isfinite(value)) {
+                return 0.0F;
+            }
+            return std::nextafter(
+                value / kQuantMax,
+                std::numeric_limits<float>::infinity());
+        };
     output.scale[0] =
-        extent.x / kQuantMax;
+        conservative_scale(extent.x);
     output.scale[1] =
-        extent.y / kQuantMax;
+        conservative_scale(extent.y);
     output.scale[2] =
-        extent.z / kQuantMax;
+        conservative_scale(extent.z);
 
     std::uint32_t axis = 0U;
     bool have_axis = false;
