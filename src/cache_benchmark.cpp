@@ -553,6 +553,89 @@ CacheBenchmark::LookupMeasurement CacheBenchmark::measure_end_to_end(
     return {gpu_us, checksum, 0};
 }
 
+CacheBenchmark::LookupMeasurement CacheBenchmark::measure_reused_end_to_end(
+    const GpuBuffer& source_queries,
+    SchedulerGpuData& scheduler,
+    const CacheGpuData& cache,
+    std::uint32_t iterations,
+    std::uint32_t reuse_count) {
+    if (reuse_count < 2u) {
+        throw std::runtime_error("Reused scheduling requires at least two consumers");
+    }
+
+    auto output = ctx_.create_device_buffer(
+        static_cast<VkDeviceSize>(scheduler.query_count) * sizeof(std::uint32_t),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+
+    ctx_.vk().resetDescriptorPool(descriptor_pool_, 0);
+    const auto sets = create_scheduler_sets(source_queries, scheduler);
+    const auto lookup_set = create_descriptor_set({
+        &scheduler.grouped_queries, &cache.table, &cache.payload, &output});
+
+    ctx_.vk().resetCommandBuffer(command_buffer_, 0);
+    auto bi = detail::make_vk_info<VkCommandBufferBeginInfo>(
+        VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+    bi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    ctx_.vk().beginCommandBuffer(command_buffer_, &bi);
+    ctx_.vk().cmdResetQueryPool(command_buffer_, query_pool_, 0, 2);
+
+    // Warm up with the same schedule-once / consume-many shape used by the
+    // timed region. Reuse is measured as an end-to-end batch, not inferred by
+    // adding separately timed scheduler and lookup numbers.
+    for (std::uint32_t warmup = 0; warmup < 3u; ++warmup) {
+        record_schedule_pass(command_buffer_, scheduler, sets);
+        for (std::uint32_t consumer = 0; consumer < reuse_count; ++consumer) {
+            record_lookup_pass(
+                command_buffer_, cache, lookup_set, output, scheduler.query_count);
+        }
+    }
+
+    auto warmup_done = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    warmup_done.srcAccessMask =
+        VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+    warmup_done.dstAccessMask =
+        VK_ACCESS_TRANSFER_WRITE_BIT | VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+    ctx_.vk().cmdPipelineBarrier(
+        command_buffer_,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        0, 1, &warmup_done, 0, nullptr, 0, nullptr);
+
+    ctx_.vk().cmdWriteTimestamp(
+        command_buffer_, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, query_pool_, 0);
+    for (std::uint32_t i = 0; i < iterations; ++i) {
+        record_schedule_pass(command_buffer_, scheduler, sets);
+        for (std::uint32_t consumer = 0; consumer < reuse_count; ++consumer) {
+            record_lookup_pass(
+                command_buffer_, cache, lookup_set, output, scheduler.query_count);
+        }
+    }
+    ctx_.vk().cmdWriteTimestamp(
+        command_buffer_, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, query_pool_, 1);
+
+    const double batch_gpu_us = finish_timed_submission(iterations);
+
+    std::vector<std::uint32_t> downloaded(scheduler.query_count);
+    ctx_.download_device_buffer(
+        output, downloaded.data(),
+        static_cast<VkDeviceSize>(downloaded.size()) * sizeof(std::uint32_t));
+
+    std::uint64_t checksum = 0;
+    for (const auto value : downloaded) checksum += value;
+
+    ctx_.destroy_buffer(output);
+
+    // Report the end-to-end cost amortized per consumer. This makes the direct
+    // comparison hash/source vs schedule-once+N-consumers equivalent to
+    // comparing N*hash/source against the measured batch total.
+    return {
+        batch_gpu_us / static_cast<double>(reuse_count),
+        checksum,
+        0,
+    };
+}
+
 bool CacheBenchmark::validate_gpu_grouping(
     const Workload& workload,
     const GpuBuffer& grouped_queries) {
@@ -648,7 +731,7 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
     }};
 
     std::vector<BenchmarkResult> out;
-    out.reserve(9);
+    out.reserve(14);
     std::optional<std::uint64_t> hash_source_sequence_fingerprint;
 
     for (const auto& ordering : orderings) {
@@ -745,6 +828,7 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
         measure_scheduler(source_queries, scheduler, iterations);
     const bool grouping_correct = validate_gpu_grouping(w, scheduler.grouped_queries);
 
+    std::optional<LookupMeasurement> grouped_hash_lookup;
     for (auto* cache : caches) {
         const auto lookup =
             measure_lookup(
@@ -752,6 +836,8 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
         const auto end_to_end =
             measure_end_to_end(
                 source_queries, scheduler, *cache, iterations);
+
+        if (cache == &hash) grouped_hash_lookup = lookup;
 
         out.push_back({
             std::string(cache->name) + "-gpu-page-grouped",
@@ -769,6 +855,40 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
             scheduler.transient_bytes,
             scheduling_us,
             end_to_end.gpu_us_per_dispatch,
+        });
+    }
+
+    if (!grouped_hash_lookup.has_value()) {
+        throw std::runtime_error("Grouped hash lookup was not measured");
+    }
+
+    // Experiment 002: reuse one valid GPU-produced ordering across multiple
+    // consumers. This deliberately does not assume that future GI queries
+    // actually live this long; it measures the minimum reuse count that would
+    // be required before the existing scheduler can amortize its own cost.
+    constexpr std::array<std::uint32_t, 5> reuse_counts{{2u, 4u, 5u, 6u, 8u}};
+    for (const auto reuse_count : reuse_counts) {
+        const auto reused = measure_reused_end_to_end(
+            source_queries, scheduler, hash, iterations, reuse_count);
+        const auto ordering =
+            "gpu-page-grouped-reuse" + std::to_string(reuse_count);
+
+        out.push_back({
+            "hash-" + ordering,
+            w.source.size(),
+            hash.pages,
+            hash.logical_bytes,
+            grouped_hash_lookup->gpu_us_per_dispatch,
+            reused.checksum,
+            w.expected_checksum,
+            grouping_correct &&
+                grouped_hash_lookup->checksum == w.expected_checksum &&
+                reused.checksum == w.expected_checksum,
+            "hash",
+            ordering,
+            scheduler.transient_bytes,
+            scheduling_us,
+            reused.gpu_us_per_dispatch,
         });
     }
 
