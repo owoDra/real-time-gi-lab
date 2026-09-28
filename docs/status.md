@@ -38,9 +38,10 @@ decision:
   fields without removing the original CSV columns;
 - a reproducible RADV/RGP profiling procedure is documented.
 
-**No new target-GPU benchmark result from this implementation has been accepted
-yet.** The next evidence step is to run the matrix on AMD Radeon 8060S / RADV
-and record the results below.
+The target-system correctness sweep and non-validation timing sweep have now
+completed on AMD Radeon 8060S / RADV STRIX_HALO. Issue #4 has enough evidence
+to resolve the representation-vs-scheduling question and the current explicit
+GPU-grouping viability gate.
 
 ## Accepted facts
 
@@ -166,24 +167,23 @@ behavior, memory traffic/stalls, and occupancy support the interpretation.
 
 ## Next measurements
 
-1. Run `mise run bench:sweep` on the target AMD Radeon 8060S / RADV system.
-2. Confirm all rows pass semantic and GPU-grouping correctness.
-3. Compare hash vs paged at source, randomized, and page-grouped order.
-4. Compare page-grouped lookup-only gains against GPU grouping + lookup
-   end-to-end cost.
-5. Repeat representative cases under RADV/RGP and inspect memory/cache/wave
-   behavior.
-6. Record the accepted or invalidated matrix in this Evidence ledger.
-7. Only after Issue #4 is resolved, decide whether M1 should prioritize paged
-   storage, hash + coherent scheduling, a cheaper grouping method, or a
-   different direction.
+1. Keep the hash representation as the baseline; do not promote paged storage
+   from Experiment 000.
+2. Investigate coherence that is produced cheaply or naturally rather than a
+   full post-generation histogram/prefix/scatter pass.
+3. Prefer producer-side locality, coarse/workgroup-local binning, or reuse of a
+   schedule across multiple consumers/frames before another global reorder.
+4. Require any replacement scheduler to beat hash/source **end-to-end**, not
+   only after excluding its own scheduling cost.
+5. Use RADV/RGP on representative source vs grouped cases before making a
+   microarchitectural cache-locality claim.
 
 ## Not yet established
 
-- that page-local storage is faster than hash under matched ordering;
-- that coherent scheduling is worthwhile after GPU grouping cost;
-- that the dense-page GPU grouping implementation is the best scheduling
-  mechanism;
+- the exact cache/memory mechanism behind the observed ordering effect;
+- that any practical low-cost coherence strategy beats hash/source end-to-end;
+- that the dense-page GPU grouping implementation is useful outside this
+  diagnostic experiment;
 - that a surface cache improves GI quality;
 - that this architecture is better than DDGI, SHaRC-like, Split RC, or ReSTIR
   end-to-end;
@@ -193,5 +193,53 @@ behavior, memory traffic/stalls, and occupancy support the interpretation.
 
 - **2026-09-28 validation sweep passed** on AMD Radeon 8060S Graphics / RADV STRIX_HALO for 100k, 500k, 1M, 4M, and 8M queries, 3 repeats each.
 - All representation × ordering rows and GPU page-grouping rows completed with the benchmark correctness guards intact; the sweep produced artifacts successfully.
-- This run used `--validation`, so its timings are **not accepted as performance evidence**. They are diagnostic only.
-- Diagnostic trend: from 500k upward, page grouping strongly improves both representations, while hash + page grouping remains faster than paged + page grouping. GPU-produced grouping yields lookup timings close to CPU-preordered page grouping. This is provisional until the non-validation sweep records scheduling and end-to-end cost.
+- Validation timings remain diagnostic only; the accepted performance evidence is the non-validation sweep below.
+
+### 2026-09-28 — accepted representation × ordering + GPU scheduling sweep
+
+Hardware: AMD Radeon 8060S Graphics, RADV STRIX_HALO  
+Scene: Sponza, 262,241 surface samples  
+Iterations: 100  
+Repeats: 3 per query count  
+Validation: disabled for timing run
+
+| Queries | hash/source us | hash/page-grouped us | paged/source us | paged/page-grouped us | GPU scheduling us | hash GPU-grouped end-to-end us |
+| ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| 100k | 16.080 | 24.022 | 23.907 | 15.362 | 181.947 | 205.106 |
+| 500k | 96.117 | 62.727 | 203.899 | 167.810 | 526.509 | 575.499 |
+| 1M | 198.459 | 68.855 | 403.669 | 253.938 | 674.715 | 801.189 |
+| 4M | 822.638 | 376.244 | 1749.210 | 514.496 | 2521.140 | 2858.350 |
+| 8M | 1806.870 | 733.350 | 3521.690 | 886.843 | 4868.560 | 5531.450 |
+
+**Status: accepted for the Experiment 000 decision gates.**
+
+Observed relationships:
+
+- At 500k, 1M, 4M, and 8M, page grouping improves hash lookup by about
+  **1.53x, 2.88x, 2.19x, and 2.46x** respectively.
+- At those same sizes, hash/page-grouped is faster than paged/page-grouped.
+  The paged lookup therefore does not show an independent matched-order
+  advantage at the practically relevant medium/large query counts.
+- The 100k case is overhead-dominated and differs: paged/page-grouped is the
+  fastest lookup-only row there, while hash/page-grouped regresses relative to
+  hash/source. This does not reverse the medium/large-workload result.
+- GPU-produced page grouping yields lookup timings close to CPU-preordered
+  grouping at larger sizes, so the grouping operation successfully creates the
+  intended useful ordering.
+- The scheduler cost dominates the saved lookup time. Hash GPU-grouped
+  end-to-end is about **12.76x, 5.99x, 4.04x, 3.47x, and 3.06x slower** than
+  hash/source from 100k through 8M.
+
+Experiment 000 therefore resolves Issue #4 as follows:
+
+1. **Query ordering/coherence is the leading observed effect.**
+2. **Page-local contiguous storage is not promoted**; matched-order hash is the
+   better baseline for medium/large workloads and uses far less representation
+   memory.
+3. **The current global GPU histogram/prefix/scatter scheduler fails the
+   end-to-end viability gate.**
+4. The next research direction is not a faster paged cache. It is a cheaper way
+   to obtain coherence, preferably at query production time or by amortizing /
+   reusing ordering rather than globally reordering every lookup batch.
+5. RGP profiling is still required before attributing the ordering effect to a
+   specific cache/memory microarchitectural mechanism.
