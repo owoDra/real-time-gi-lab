@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: target-ready; Stage B3 triangle-packet target measurement pending
+Status: target-ready; Stage B3.1 compact-packet target measurement pending
 
 ## Question
 
@@ -416,3 +416,32 @@ Stage B3 is target-ready. It keeps DDA/hash and the conservative quantized BVH8,
 The structural smoke checks packet geometry, primitive/material/instance identity, two-sided policy, leaf count, internal tokens, and packet slot accounting against the source quantized hierarchy.
 
 The formal run now emits `b003-stage-b3-summary.json`. Retain triangle packets only with zero correctness errors, at least 5% lower mean traversal time than the quantized non-packet candidate, and no more than 1.25x its persistent memory. A failed packet gate does not reject the quantized BVH8 result.
+
+
+## Stage B3 target result — packet concept useful, original layout narrowly rejected
+
+The submitted Stage B3 summary is fully correct but narrowly misses both packet-retention thresholds:
+
+- quantized non-packet mean: 231.720271 us;
+- packet mean: 220.231776 us;
+- trace ratio: 0.950421;
+- quantized persistent bytes: 22,833,584;
+- packet persistent bytes: 28,872,096;
+- memory ratio: 1.264457;
+- correctness errors: 0;
+- retain_triangle_packets: false.
+
+The speed result is close enough to the fixed 5% gate, and correctness is clean, that B003 does not reject packetization yet. The original 256-byte packet stores 16 bytes of metadata per triangle even though material/instance/two-sided identity fits a smaller validated encoding on this workload.
+
+## Stage B3.1 implementation checkpoint — compact packet metadata
+
+B3.1 is target-ready. It preserves packet geometry and all traversal behavior, but compresses per-triangle metadata from 16 bytes to 8 bytes:
+
+- primitive id remains a full 32-bit value;
+- material id uses 12 bits with an explicit invalid sentinel;
+- instance id uses 19 bits;
+- two-sided uses the remaining high bit;
+- builder rejects scenes that cannot be represented losslessly;
+- packet size falls from 256 bytes to 224 bytes.
+
+The structural smoke decodes every compact metadata record back to the source triangle and checks primitive/material/instance/two-sided identity plus geometry exactly. The formal run now emits `b003-stage-b31-summary.json` and keeps the original fixed B3 thresholds: compact packet mean must be <=0.95x quantized non-packet mean, persistent memory <=1.25x, and correctness/runtime errors zero.
