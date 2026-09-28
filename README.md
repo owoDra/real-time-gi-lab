@@ -1,131 +1,83 @@
 # phos-gi-lab
 
-Research sandbox for a GPU-locality-first real-time global illumination architecture.
+Measurement-driven research sandbox for a GPU-locality-aware real-time global
+illumination architecture.
 
-This repository does not assume that page-local caches, surfels, Radiance
-Cascades, or any other current idea must survive. Each architectural premise is
-isolated, measured, and either promoted or discarded.
+## Current program
 
-## Research source of truth
+The standalone M0 cache/scheduler investigation is concluded. It established
+that coherent access can materially improve hash lookup, but the tested
+post-generation global reorder is too expensive and only becomes conditionally
+competitive when a large query population is naturally reused roughly five to
+six or more times.
 
-- [Research charter](docs/research.md) — final research question, constraints,
-  and long-term architecture hypotheses.
-- [Current status](docs/status.md) — current milestone, accepted/invalidated
-  evidence, open questions, and next decision gate.
-- [Experiment 000](docs/experiments/000-page-local-cache.md) — current M0
-  protocol for page-local cache locality.
-- [Documentation policy](docs/README.md) — what belongs in code vs docs.
+Research now moves to a representative **Split Radiance Cascades** workload and
+runs three parallel lanes:
 
-Implementation behavior remains authoritative in source code and executable
-correctness guards; docs record goals, rationale, protocols, and evidence that
-cannot be reconstructed from code alone.
+- **Lane A — Split RC producer/transport**: generate the real GPU query/update
+  stream and implement the minimum gather/merge/resolve semantics.
+- **Lane B — traversal**: compare StrataBrick, hardware RT/TLAS where practical,
+  and simpler software traversal under dynamic GI-like rays.
+- **Lane C — radiance storage/locality**: compare sparse hash, hashed brick
+  pools, virtual/clipmap storage, and justified StrataBrick-inspired layouts on
+  the real producer stream.
 
-## Current experiment
+See [research/README.md](research/README.md) for branch topology, issues,
+dependencies, and the experiment lifecycle.
 
-M0 asks one narrow question before building a GI renderer:
+## Source of truth
 
-> Can page-local contiguous storage and locality-aware scheduling reduce GPU
-> cache lookup cost relative to a fair open-addressed hash baseline?
+- [Research program](research/README.md)
+- [Research protocol](research/protocol.md)
+- [Historical charter](docs/research.md)
+- [M0 status/evidence](docs/status.md)
+- [Codex instructions](AGENTS.md)
 
-The executable treats cache representation and query ordering as independent
-experimental axes:
-
-- representations: `hash`, `paged`;
-- CPU ordering regimes: `source`, `randomized`, `page-grouped`;
-- GPU ordering control: dense-page histogram/prefix/scatter grouping, measured
-  both separately and together with lookup.
-
-All variants must return the same semantic payload. GPU grouping additionally
-must preserve the exact query multiset and produce monotonic page groups.
-A correctness failure makes the benchmark exit instead of producing usable
-performance evidence.
+Implementation behavior remains authoritative in source code, doc comments, and
+executable correctness guards. Research documents preserve hypotheses,
+protocols, evidence, limitations, and architectural decisions.
 
 ## Environment
 
-The workflow is managed by mise. The repository pins CMake, Ninja, and Python.
-A host C++20 compiler and working Vulkan 1.3 driver/loader are required.
-
-A Vulkan SDK installation is not required:
-
-- Vulkan headers are fetched by `vk-bootstrap`;
-- an installed `glslc` / `glslangValidator` is reused when present;
-- otherwise pinned glslang is built automatically;
-- NixOS benchmark tasks resolve the host Vulkan loader/ICD environment through
-  `scripts/run_with_vulkan.sh`.
-
-## Quick start
+The workflow is managed by mise. A host C++20 compiler and Vulkan 1.3
+driver/loader are required.
 
 ```bash
 mise install
-mise run bench
-```
-
-A successful single run emits:
-
-```text
-variant,queries,pages,bytes,gpu_us_per_dispatch,checksum,expected_checksum,correct,...
-hash,...
-paged,...
-hash-randomized,...
-paged-randomized,...
-hash-page-grouped,...
-paged-page-grouped,...
-hash-gpu-page-grouped,...
-paged-gpu-page-grouped,...
-```
-
-For research evidence, prefer the matrix harness:
-
-```bash
-mise run bench:sweep
-```
-
-It runs the standard M0 query-count matrix with repeated processes and writes:
-
-```text
-out/benchmarks/<timestamp>/
-  metadata.json
-  results.csv
-  summary.csv
-  logs/
-```
-
-Generated artifacts are intentionally ignored by Git. The CSV schema keeps the
-original fields and adds representation/ordering plus GPU scheduling and
-end-to-end timing fields. After review, accepted or invalidated evidence is
-summarized in `docs/status.md`.
-
-For RADV memory/cache investigation, follow
-[`docs/profiling/radv-rgp.md`](docs/profiling/radv-rgp.md). Profiling captures
-are diagnostic evidence and are kept separate from normal benchmark timings.
-
-Useful commands:
-
-```bash
 mise run build
-mise run bench
-mise run bench --queries 8000000 --iterations 200
-mise run bench --validation
-mise run bench:synthetic
-mise run bench:sweep
-mise run bench:sweep --query-counts 100000,1000000,4000000 --repeats 5
-mise run bench:sweep:synthetic
-mise run clean
+mise run research:check
 ```
 
-## Scene
-
-The default workload uses the classic Sponza scene fetched from
-`KhronosGroup/Vulkan-Samples-Assets`. The asset is not committed to this
-repository and retains its upstream license.
+Run a lane experiment through the artifact recorder when practical:
 
 ```bash
-mise run assets
+mise run research:record \
+  --lane lane-a-split-rc \
+  --experiment 001-producer-stream \
+  --command "build/release/<lane-executable> ..."
 ```
 
-## Why C++20
+The command receives `PHOS_RESEARCH_ARTIFACT_DIR` and may write structured
+CSV/JSON data there. The harness always records command/stdout/stderr, Git
+commit/branch/dirty state, host metadata, and timestamps.
 
-The research target is low-level Vulkan behavior: explicit memory placement,
-GPU cache behavior, ray-query integration, vendor profiling, and extension
-experiments. C++ keeps the path to Vulkan tooling and reference implementations
-short while the hot path remains explicit Vulkan.
+Raw artifacts are intentionally ignored by Git:
+
+```text
+out/research/<lane>/<experiment>/<timestamp>/
+  metadata.json
+  stdout.log
+  stderr.log
+  ... lane-specific CSV/JSON
+```
+
+Accepted/rejected/invalidated conclusions are committed in the corresponding
+`research/lanes/<lane>/results/` directory and indexed by that lane's
+`results/index.json`.
+
+The existing M0 commands remain available for historical controls:
+
+```bash
+mise run bench
+mise run bench:sweep
+```
