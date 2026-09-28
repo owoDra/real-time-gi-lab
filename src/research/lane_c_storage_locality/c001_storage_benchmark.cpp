@@ -817,6 +817,72 @@ HostState make_exact_state(
     return state;
 }
 
+HostState make_transition_state(
+    Rep rep,
+    const TransitionPair& pair,
+    const std::vector<Address>& from_addresses) {
+    HostState state{};
+    if (rep == Rep::ProbeHash) {
+        const auto capacity =
+            next_pow2(std::max(2u, pair.union_unique_probes * 2u));
+        state.keys.assign(capacity, 0u);
+        state.values.assign(1, 0u);
+        state.payloads.assign(capacity, 0u);
+        state.free_list.assign(1, 0u);
+        state.mask = capacity - 1u;
+        state.max_probe = capacity;
+        std::uint32_t observed_probe = 1u;
+        for (const auto& address : from_addresses) {
+            if (address.payload == 0u) continue;
+            const auto slot = insert_linear(
+                state.keys, state.mask, address.probe_key, observed_probe);
+            state.payloads[slot] = address.payload;
+        }
+        state.persistent_bytes =
+            (state.keys.size() + state.payloads.size()) * sizeof(std::uint32_t);
+        return state;
+    }
+    if (rep != Rep::Clipmap) {
+        throw std::runtime_error("C001d supports probe hash and virtual clipmap only");
+    }
+
+    const auto page_count =
+        static_cast<std::size_t>(pair.from.header.cascade_count) *
+        pair.clip_x * pair.clip_y * pair.clip_z;
+    state.keys.assign(page_count, 0u);
+    state.values.assign(page_count, 0u);
+    state.payloads.assign(
+        static_cast<std::size_t>(pair.union_unique_bricks) * kCellsPerBrick, 0u);
+    state.free_list.assign(pair.union_unique_bricks, 0u);
+    state.max_probe = pair.union_unique_bricks;
+
+    std::uint32_t physical_count = 0u;
+    for (const auto& address : from_addresses) {
+        if (address.payload == 0u) continue;
+        const auto slot = address.brick_key - 1u;
+        const auto tag = ((address.probe_key - 1u) / kCellsPerBrick) + 1u;
+        if (state.values[slot] == 0u) {
+            state.values[slot] = tag;
+            state.keys[slot] = ++physical_count;
+        } else if (state.values[slot] != tag) {
+            throw std::runtime_error("C001d seed clip slot alias");
+        }
+        const auto physical = state.keys[slot] - 1u;
+        state.payloads[
+            static_cast<std::size_t>(physical) * kCellsPerBrick +
+            address.local_index] = address.payload;
+    }
+    if (physical_count != pair.from_unique_bricks) {
+        throw std::runtime_error("C001d seed brick count mismatch");
+    }
+    state.counters[0] = physical_count;
+    state.persistent_bytes =
+        (state.keys.size() + state.values.size() + state.payloads.size() +
+            state.counters.size() + state.free_list.size()) *
+        sizeof(std::uint32_t);
+    return state;
+}
+
 HostState make_empty_like(const HostState& seeded, Rep rep) {
     HostState e = seeded;
     std::fill(e.keys.begin(), e.keys.end(), 0u);
@@ -1637,6 +1703,311 @@ int run_exact_stream(
     return 0;
 }
 
+struct TransitionRow {
+    std::string representation;
+    std::uint64_t from_workload_id{};
+    std::uint64_t to_workload_id{};
+    std::string phase;
+    std::uint32_t target_items{};
+    std::uint32_t from_probes{};
+    std::uint32_t to_probes{};
+    std::uint32_t entering_probes{};
+    std::uint32_t leaving_probes{};
+    std::uint32_t from_bricks{};
+    std::uint32_t to_bricks{};
+    std::uint32_t entering_bricks{};
+    std::uint32_t leaving_bricks{};
+    std::size_t persistent_bytes{};
+    std::size_t scratch_bytes{};
+    std::size_t producer_input_bytes{};
+    double gpu_us{};
+    std::uint64_t checksum{};
+    bool correct{};
+};
+
+void write_transition_rows(const std::vector<TransitionRow>& rows) {
+    std::ostream* out = &std::cout;
+    std::ofstream file;
+    if (const char* dir = std::getenv("PHOS_RESEARCH_ARTIFACT_DIR")) {
+        const auto path = std::filesystem::path(dir) / "c001d.csv";
+        file.open(path);
+        if (!file) throw std::runtime_error("cannot create c001d.csv");
+    }
+    auto emit = [&](std::ostream& stream) {
+        stream
+            << "representation,from_workload_id,to_workload_id,phase,target_items,"
+               "from_probes,to_probes,entering_probes,leaving_probes,"
+               "from_bricks,to_bricks,entering_bricks,leaving_bricks,"
+               "persistent_bytes,scratch_bytes,producer_input_bytes,"
+               "gpu_us,checksum,correct\n";
+        for (const auto& row : rows) {
+            stream << row.representation << ','
+                   << row.from_workload_id << ','
+                   << row.to_workload_id << ','
+                   << row.phase << ','
+                   << row.target_items << ','
+                   << row.from_probes << ','
+                   << row.to_probes << ','
+                   << row.entering_probes << ','
+                   << row.leaving_probes << ','
+                   << row.from_bricks << ','
+                   << row.to_bricks << ','
+                   << row.entering_bricks << ','
+                   << row.leaving_bricks << ','
+                   << row.persistent_bytes << ','
+                   << row.scratch_bytes << ','
+                   << row.producer_input_bytes << ','
+                   << row.gpu_us << ','
+                   << row.checksum << ','
+                   << (row.correct ? "true" : "false") << '\n';
+        }
+    };
+    emit(*out);
+    if (file) emit(file);
+}
+
+int run_transition_streams(
+    const Config& base_cfg,
+    VulkanBench& bench,
+    const std::filesystem::path& from_path,
+    const std::filesystem::path& to_path) {
+    const auto pair = load_transition_pair(from_path, to_path);
+    Config cfg = base_cfg;
+    cfg.cascades = pair.from.header.cascade_count;
+    cfg.clip_x = pair.clip_x;
+    cfg.clip_y = pair.clip_y;
+    cfg.clip_z = pair.clip_z;
+
+    std::cerr
+        << "Transition: " << pair.from.header.workload_id
+        << " -> " << pair.to.header.workload_id
+        << ", probes " << pair.from_unique_probes << " -> " << pair.to_unique_probes
+        << " (+" << pair.entering_probes << "/-" << pair.leaving_probes << ')'
+        << ", bricks " << pair.from_unique_bricks << " -> " << pair.to_unique_bricks
+        << " (+" << pair.entering_bricks << "/-" << pair.leaving_bricks << ')'
+        << ", clip=" << pair.clip_x << 'x' << pair.clip_y << 'x' << pair.clip_z
+        << '\n';
+
+    auto to_items = bench.upload_vector(pair.to.items);
+    auto layouts = bench.upload_vector(pair.layouts);
+    std::vector<TransitionRow> rows;
+    bool all_correct = true;
+
+    for (const auto rep : {Rep::ProbeHash, Rep::Clipmap}) {
+        std::vector<Address> from_addresses;
+        from_addresses.reserve(pair.from.items.size());
+        std::vector<Address> to_addresses;
+        to_addresses.reserve(pair.to.items.size());
+        std::unordered_set<std::uint32_t> target_keys;
+        std::vector<std::uint32_t> expected_target;
+        expected_target.reserve(pair.to.items.size());
+
+        for (const auto& item : pair.from.items) {
+            from_addresses.push_back(make_transition_address(item, rep, pair));
+        }
+        for (const auto& item : pair.to.items) {
+            const auto address = make_transition_address(item, rep, pair);
+            to_addresses.push_back(address);
+            expected_target.push_back(address.payload);
+            if (address.payload != 0u) target_keys.insert(address.probe_key);
+        }
+        std::vector<std::uint32_t> expected_old_after;
+        expected_old_after.reserve(from_addresses.size());
+        for (const auto& address : from_addresses) {
+            expected_old_after.push_back(
+                address.payload != 0u && target_keys.contains(address.probe_key)
+                    ? address.payload
+                    : 0u);
+        }
+
+        const auto seeded = make_transition_state(rep, pair, from_addresses);
+        const auto empty = make_empty_like(seeded, rep);
+        auto state = upload_state(bench, seeded, empty);
+
+        auto dynamic_to =
+            bench.make_zero(to_addresses.size() * sizeof(Address));
+        auto static_from = bench.upload_vector(from_addresses);
+        auto output_to =
+            bench.make_zero(pair.to.items.size() * sizeof(std::uint32_t));
+        auto output_from =
+            bench.make_zero(pair.from.items.size() * sizeof(std::uint32_t));
+
+        auto address_set = bench.create_set({
+            &to_items,
+            &dynamic_to,
+            &layouts,
+            &layouts,
+            &layouts,
+            &output_to,
+            &state.counters,
+            &state.free_list,
+        });
+        auto target_set = bench.create_set({
+            &to_items,
+            &dynamic_to,
+            &state.keys,
+            &state.values,
+            &state.payloads,
+            &output_to,
+            &state.counters,
+            &state.free_list,
+        });
+        auto old_set = bench.create_set({
+            &to_items,
+            &static_from,
+            &state.keys,
+            &state.values,
+            &state.payloads,
+            &output_from,
+            &state.counters,
+            &state.free_list,
+        });
+
+        auto push = [&](std::uint32_t count, std::uint32_t op) {
+            return make_push(count, op, state, cfg);
+        };
+        const Dispatch address{
+            bench.transition_address_pipeline(),
+            address_set,
+            push(pair.to.header.item_count, rep_mode(rep)),
+        };
+        auto dispatch = [&](VkDescriptorSet set, std::uint32_t count, std::uint32_t op) {
+            return Dispatch{
+                bench.transition_storage_pipeline(rep),
+                set,
+                push(count, op),
+            };
+        };
+
+        std::vector<Dispatch> transition{
+            address,
+            dispatch(target_set, pair.to.header.item_count, 13u),
+            dispatch(
+                target_set,
+                static_cast<std::uint32_t>(state.keys.size()),
+                14u),
+        };
+        if (rep == Rep::Clipmap) {
+            transition.push_back(
+                dispatch(target_set, pair.to.header.item_count, 15u));
+            transition.push_back(dispatch(target_set, 1u, 16u));
+            transition.push_back(
+                dispatch(target_set, pair.to.header.item_count, 17u));
+        } else {
+            transition.push_back(
+                dispatch(target_set, pair.to.header.item_count, 15u));
+        }
+
+        const auto target_lookup = dispatch(
+            target_set,
+            pair.to.header.item_count,
+            rep == Rep::ProbeHash ? 16u : 18u);
+        const auto old_lookup = dispatch(
+            old_set,
+            pair.from.header.item_count,
+            rep == Rep::ProbeHash ? 16u : 18u);
+
+        const auto scratch_bytes =
+            dynamic_to.size + output_to.size + output_from.size;
+        const auto producer_input_bytes = to_items.size + layouts.size;
+
+        const auto producer_us =
+            bench.measure({address}, {}, cfg.iterations);
+        const auto gpu_addresses =
+            download_addresses(bench, dynamic_to, to_addresses.size());
+        const bool producer_ok = addresses_equal(to_addresses, gpu_addresses);
+        rows.push_back({
+            rep_name(rep),
+            pair.from.header.workload_id,
+            pair.to.header.workload_id,
+            "producer-address",
+            pair.to.header.item_count,
+            pair.from_unique_probes,
+            pair.to_unique_probes,
+            pair.entering_probes,
+            pair.leaving_probes,
+            pair.from_unique_bricks,
+            pair.to_unique_bricks,
+            pair.entering_bricks,
+            pair.leaving_bricks,
+            state.persistent_bytes,
+            scratch_bytes,
+            producer_input_bytes,
+            producer_us,
+            0u,
+            producer_ok,
+        });
+        all_correct = all_correct && producer_ok;
+
+        const auto transition_us =
+            bench.measure(transition, baseline_reset(state), cfg.iterations);
+        bench.execute({target_lookup});
+        const auto target_values =
+            download_u32(bench, output_to, pair.to.items.size());
+        const auto counters_after_target =
+            download_counters(bench, state.counters);
+        const bool target_ok = target_values == expected_target;
+
+        bench.execute({old_lookup});
+        const auto old_values =
+            download_u32(bench, output_from, pair.from.items.size());
+        const auto counters = download_counters(bench, state.counters);
+        bool allocator_ok = counters[1] == 0u && counters[3] == 0u;
+        if (rep == Rep::Clipmap) {
+            allocator_ok =
+                allocator_ok &&
+                counters[0] >= counters[2] &&
+                counters[0] - counters[2] == pair.to_unique_bricks &&
+                counters[0] <= pair.union_unique_bricks;
+        } else {
+            allocator_ok =
+                allocator_ok &&
+                counters_after_target[2] == pair.leaving_probes;
+        }
+        const bool transition_ok =
+            target_ok &&
+            old_values == expected_old_after &&
+            allocator_ok;
+        rows.push_back({
+            rep_name(rep),
+            pair.from.header.workload_id,
+            pair.to.header.workload_id,
+            "transition-e2e",
+            pair.to.header.item_count,
+            pair.from_unique_probes,
+            pair.to_unique_probes,
+            pair.entering_probes,
+            pair.leaving_probes,
+            pair.from_unique_bricks,
+            pair.to_unique_bricks,
+            pair.entering_bricks,
+            pair.leaving_bricks,
+            state.persistent_bytes,
+            scratch_bytes,
+            producer_input_bytes,
+            transition_us,
+            checksum(target_values),
+            transition_ok,
+        });
+        all_correct = all_correct && transition_ok;
+
+        bench.context().destroy_buffer(output_from);
+        bench.context().destroy_buffer(output_to);
+        bench.context().destroy_buffer(static_from);
+        bench.context().destroy_buffer(dynamic_to);
+        destroy_state(bench, state);
+    }
+
+    bench.context().destroy_buffer(layouts);
+    bench.context().destroy_buffer(to_items);
+    write_transition_rows(rows);
+    if (!all_correct) {
+        std::cerr << "fatal: C001d transition correctness gate failed\n";
+        return 2;
+    }
+    return 0;
+}
+
 Config parse_args(int argc, char** argv) {
     Config cfg{};
     for (int i = 1; i < argc; ++i) {
@@ -1647,6 +2018,10 @@ Config parse_args(int argc, char** argv) {
             cfg.validation = true;
         } else if (arg == "--stream" && i + 1 < argc) {
             cfg.stream = std::filesystem::path(argv[++i]);
+        } else if (arg == "--stream-from" && i + 1 < argc) {
+            cfg.stream_from = std::filesystem::path(argv[++i]);
+        } else if (arg == "--stream-to" && i + 1 < argc) {
+            cfg.stream_to = std::filesystem::path(argv[++i]);
         } else if (arg == "--occupancies" && i + 1 < argc) {
             cfg.occupancies.clear();
             std::string text = argv[++i];
@@ -1661,14 +2036,22 @@ Config parse_args(int argc, char** argv) {
         } else if (arg == "--help") {
             std::cout
                 << "phos-c001-storage [--iterations N] [--occupancies 4,16,48] "
-                   "[--stream stream-v1.bin] [--validation]\n";
+                   "[--stream stream-v1.bin] "
+                   "[--stream-from stream-v1.bin --stream-to stream-v1.bin] "
+                   "[--validation]\n";
             std::exit(0);
         } else {
             throw std::runtime_error("unknown argument: " + arg);
         }
     }
     if (cfg.iterations == 0u) throw std::runtime_error("iterations must be positive");
-    if (!cfg.stream) {
+    if (cfg.stream_from.has_value() != cfg.stream_to.has_value()) {
+        throw std::runtime_error("--stream-from and --stream-to must be supplied together");
+    }
+    if (cfg.stream && cfg.stream_from) {
+        throw std::runtime_error("--stream cannot be combined with transition streams");
+    }
+    if (!cfg.stream && !cfg.stream_from) {
         for (const auto occ : cfg.occupancies) {
             if (occ == 0u || occ > kCellsPerBrick) {
                 throw std::runtime_error("occupancy must be in [1,64]");
@@ -1690,6 +2073,10 @@ int run(int argc, char** argv) {
     const auto cfg = parse_args(argc, argv);
     VulkanBench bench(cfg.validation);
     std::cerr << "GPU: " << bench.device_name() << '\n';
+    if (cfg.stream_from) {
+        return run_transition_streams(
+            cfg, bench, *cfg.stream_from, *cfg.stream_to);
+    }
     if (cfg.stream) {
         return run_exact_stream(cfg, bench, *cfg.stream);
     }
