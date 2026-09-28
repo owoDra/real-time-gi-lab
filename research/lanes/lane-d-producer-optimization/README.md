@@ -157,3 +157,30 @@ Decision:
 
 Final cross-lane selection remains pending the Lane B/C replay gates required by
 Issue #14.
+
+
+## Final Lane D decision — complete (2026-09-29)
+
+Lane B's original B001/B002 gate is complete; B003 is explicitly optional and
+non-blocking. Lane C C001 is also complete and accepted.
+
+The final Lane D cross-lane decision is recorded in:
+
+`results/006-final-cross-lane-decision.md`
+
+Final handoff:
+
+- keep accepted A001 as the standalone producer/schema-v1 contract;
+- retain D001 renderer depth reuse only as a conditional integration
+  optimization when equivalent renderer depth already exists;
+- do not promote D002 visible-tile emission;
+- do not promote D003 packed atomic64 visibility;
+- do not promote D004 workgroup-prefix allocation;
+- do not promote the tested D005 owner-slot implementation, but carry its
+  bounded-capacity/safe-overflow policy into Integration #13 as a memory-policy
+  candidate;
+- combine with Lane B HWRT/TLAS primary traversal (hierarchical software
+  fallback) and Lane C per-probe sparse-hash storage for Integration #13.
+
+Lane D does not claim the combined GI architecture wins until Integration #13
+passes its complete dynamic end-to-end gate.
