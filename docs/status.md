@@ -28,6 +28,14 @@ scheduling dispatch, or global scheduling scratch. Both validation and accepted
 non-validation matrices completed; the fused variant was slower than
 `hash/source` at every tested query count.
 
+Experiment 002, **amortized query coherence**, is now implemented and awaiting
+target-system measurements. It reuses one correctness-checked GPU page grouping
+across 2 / 4 / 5 / 6 / 8 hash consumers and measures the combined
+`schedule once + N lookups` command-buffer cost. This is a sensitivity test
+only: it does not assume that a future GI query population actually survives for
+that many consumers. Producer-side coherence remains preferred, but a
+representative GPU GI producer does not yet exist in this harness.
+
 The Issue #4 branch implements the measurements that produced that decision:
 
 - representation and ordering are independent benchmark axes;
