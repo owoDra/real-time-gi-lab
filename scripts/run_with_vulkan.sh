@@ -16,8 +16,14 @@ fi
 if [[ "$is_nixos" == "true" ]]; then
   loader_root=""
 
-  if [[ -e /run/current-system/sw/lib/libvulkan.so.1 ]]; then
+  if [[ -n "${NIX_LD_LIBRARY_PATH:-}" && -e "${NIX_LD_LIBRARY_PATH%%:*}/libvulkan.so.1" ]]; then
+    export LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH:/run/opengl-driver/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    export XDG_DATA_DIRS="/run/opengl-driver/share${XDG_DATA_DIRS:+:$XDG_DATA_DIRS}"
+    exec "$@"
+  elif [[ -e /run/current-system/sw/lib/libvulkan.so.1 ]]; then
     loader_root="/run/current-system/sw"
+  elif [[ -e /run/current-system/sw/share/nix-ld/lib/libvulkan.so.1 ]]; then
+    loader_root="/run/current-system/sw/share/nix-ld"
   elif command -v nix >/dev/null 2>&1; then
     loader_root="$(nix build --no-link --print-out-paths nixpkgs#vulkan-loader 2>/dev/null || true)"
   fi
