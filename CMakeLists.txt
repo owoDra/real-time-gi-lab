@@ -69,6 +69,13 @@ if(NOT GLSLC AND NOT GLSLANG_VALIDATOR)
     GIT_TAG 16.6.0
   )
   FetchContent_MakeAvailable(glslang)
+
+  # glslang 16.6.0 triggers GCC -Wmaybe-uninitialized warnings in its own
+  # parser sources. Keep our warnings enabled, but do not let vendored code
+  # drown out project diagnostics.
+  if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND TARGET glslang)
+    target_compile_options(glslang PRIVATE -Wno-maybe-uninitialized)
+  endif()
 endif()
 
 function(add_compute_shader NAME SOURCE)
