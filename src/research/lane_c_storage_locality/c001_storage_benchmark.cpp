@@ -784,6 +784,24 @@ std::vector<Address> download_addresses(
     return out;
 }
 
+std::array<std::uint32_t, 4> download_counters(
+    VulkanBench& bench, const GpuBuffer& buffer) {
+    std::array<std::uint32_t, 4> out{};
+    bench.context().download_device_buffer(buffer, out.data(), sizeof(out));
+    return out;
+}
+
+bool allocator_ok(
+    Rep rep,
+    const std::array<std::uint32_t, 4>& counters,
+    std::uint32_t expected_active_bricks,
+    bool require_empty_free_list) {
+    if (counters[1] != 0u) return false;
+    if (rep == Rep::ProbeHash) return true;
+    if (counters[0] != expected_active_bricks) return false;
+    return !require_empty_free_list || counters[2] == 0u;
+}
+
 struct Row {
     std::string representation;
     std::uint32_t occupancy{};
@@ -1070,7 +1088,12 @@ int run(int argc, char** argv) {
                 bench.measure({update_static}, baseline_reset(state), cfg.iterations);
             bench.execute({lookup_static});
             auto update_values = download_u32(bench, output, workload.probes.size());
-            const bool update_ok = update_values == expected_updated;
+            const auto update_counters = download_counters(bench, state.counters);
+            const bool update_ok =
+                update_values == expected_updated &&
+                allocator_ok(
+                    rep, update_counters,
+                    static_cast<std::uint32_t>(workload.active_bricks.size()), true);
             rows.push_back({
                 rep_name(rep), occupancy, "update",
                 static_cast<std::uint32_t>(workload.update_probes.size()),
@@ -1083,7 +1106,12 @@ int run(int argc, char** argv) {
                 bench.measure({address_update, update_dynamic}, baseline_reset(state), cfg.iterations);
             bench.execute({lookup_static});
             auto e2e_update_values = download_u32(bench, output, workload.probes.size());
-            const bool e2e_update_ok = e2e_update_values == expected_updated;
+            const auto e2e_update_counters = download_counters(bench, state.counters);
+            const bool e2e_update_ok =
+                e2e_update_values == expected_updated &&
+                allocator_ok(
+                    rep, e2e_update_counters,
+                    static_cast<std::uint32_t>(workload.active_bricks.size()), true);
             rows.push_back({
                 rep_name(rep), occupancy, "producer+update",
                 static_cast<std::uint32_t>(workload.update_probes.size()),
@@ -1102,7 +1130,12 @@ int run(int argc, char** argv) {
                 bench.measure({invalidate}, baseline_reset(state), cfg.iterations);
             bench.execute({lookup_static});
             auto invalid_values = download_u32(bench, output, workload.probes.size());
-            const bool invalidate_ok = invalid_values == expected_invalidated;
+            const auto invalidate_counters = download_counters(bench, state.counters);
+            const bool invalidate_ok =
+                invalid_values == expected_invalidated &&
+                allocator_ok(
+                    rep, invalidate_counters,
+                    static_cast<std::uint32_t>(workload.active_bricks.size()), true);
             rows.push_back({
                 rep_name(rep), occupancy, "invalidation",
                 static_cast<std::uint32_t>(workload.invalidate_probes.size()),
@@ -1121,7 +1154,12 @@ int run(int argc, char** argv) {
                 bench.measure({evict}, baseline_reset(state), cfg.iterations);
             bench.execute({lookup_static});
             auto evicted_values = download_u32(bench, output, workload.probes.size());
-            const bool evict_ok = evicted_values == expected_evicted;
+            const auto evict_counters = download_counters(bench, state.counters);
+            const bool evict_ok =
+                evicted_values == expected_evicted &&
+                evict_counters[1] == 0u &&
+                (rep == Rep::ProbeHash ||
+                    evict_counters[2] == workload.leaving_bricks.size());
             rows.push_back({
                 rep_name(rep), occupancy, "eviction",
                 rep == Rep::ProbeHash
@@ -1148,9 +1186,13 @@ int run(int argc, char** argv) {
             std::vector<std::uint32_t> expected_entering;
             expected_entering.reserve(entering_addr.size());
             for (const auto& a : entering_addr) expected_entering.push_back(a.payload);
+            const auto churn_counters = download_counters(bench, state.counters);
             const bool churn_ok =
                 churn_old_values == expected_evicted &&
-                churn_new_values == expected_entering;
+                churn_new_values == expected_entering &&
+                allocator_ok(
+                    rep, churn_counters,
+                    static_cast<std::uint32_t>(workload.active_bricks.size()), true);
             rows.push_back({
                 rep_name(rep), occupancy, "residency-churn-e2e",
                 static_cast<std::uint32_t>(workload.entering_probes.size()),
@@ -1173,7 +1215,12 @@ int run(int argc, char** argv) {
             // Populate outside the measured allocation region, then verify every probe resolves.
             bench.execute({populate_static, lookup_static});
             auto allocation_values = download_u32(bench, output, workload.probes.size());
-            const bool allocation_ok = allocation_values == expected_base;
+            const auto allocation_counters = download_counters(bench, state.counters);
+            const bool allocation_ok =
+                allocation_values == expected_base &&
+                allocator_ok(
+                    rep, allocation_counters,
+                    static_cast<std::uint32_t>(workload.active_bricks.size()), true);
             rows.push_back({
                 rep_name(rep), occupancy, "allocation-residency",
                 rep == Rep::ProbeHash
@@ -1195,7 +1242,12 @@ int run(int argc, char** argv) {
                 bench.measure(build_sequence, empty_reset(state), cfg.iterations);
             bench.execute({lookup_static});
             auto build_values = download_u32(bench, output, workload.probes.size());
-            const bool build_ok = build_values == expected_base;
+            const auto build_counters = download_counters(bench, state.counters);
+            const bool build_ok =
+                build_values == expected_base &&
+                allocator_ok(
+                    rep, build_counters,
+                    static_cast<std::uint32_t>(workload.active_bricks.size()), true);
             rows.push_back({
                 rep_name(rep), occupancy, "initial-build-e2e",
                 static_cast<std::uint32_t>(workload.probes.size()),
