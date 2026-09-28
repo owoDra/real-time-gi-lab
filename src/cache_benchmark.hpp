@@ -85,7 +85,7 @@ private:
         SchedulerGpuData& scheduler,
         std::uint32_t iterations);
 
-    double measure_end_to_end(
+    LookupMeasurement measure_end_to_end(
         const GpuBuffer& source_queries,
         SchedulerGpuData& scheduler,
         const CacheGpuData& cache,
@@ -100,10 +100,11 @@ private:
         const SchedulerGpuData& scheduler,
         const SchedulerSets& sets);
 
-    void record_lookup_dispatch(
+    void record_lookup_pass(
         VkCommandBuffer command_buffer,
         const CacheGpuData& cache,
         VkDescriptorSet set,
+        const GpuBuffer& output,
         std::uint32_t query_count);
 
     [[nodiscard]] bool validate_gpu_grouping(
