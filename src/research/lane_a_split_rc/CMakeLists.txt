@@ -22,8 +22,10 @@ add_custom_target(phos-lane-a-split-rc-shaders DEPENDS ${LANE_A_SHADER_OUTPUTS})
 
 add_executable(phos-lane-a-split-rc
   producer_benchmark.cpp
+  a001_scene.cpp
+  a001_runtime.cpp
+  a001_analysis.cpp
   ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
-  ${PROJECT_SOURCE_DIR}/src/scene_workload.cpp
 )
 add_dependencies(phos-lane-a-split-rc phos-lane-a-split-rc-shaders)
 

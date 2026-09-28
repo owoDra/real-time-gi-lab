@@ -1,6 +1,6 @@
 # Experiment A001 — representative Split RC producer stream
 
-Status: planned
+Status: implemented; target-GPU evidence pending
 
 ## Question
 
@@ -13,26 +13,44 @@ for traversal and storage experiments without manufacturing a favorable order?
 A visibility-driven Split RC producer will exhibit measurable natural spatial
 and cascade locality even before any explicit global reordering.
 
-## Protocol
+## Implemented protocol
 
-- Use actual scene/visibility inputs rather than a preconstructed sorted query list.
-- Generate work on GPU.
-- Preserve the natural emission order.
-- Record stable per-work-item fields sufficient for replay: frame/workload id,
-  cascade, spatial/probe identity, ray direction/interval, and output identity.
-- Add a reference path that establishes semantic correctness independently of
-  the optimized implementation.
-- Measure producer time, item count, persistent/scratch bytes, and natural
-  locality distributions.
-- Include at least static camera and camera-motion cases.
+- Load actual scene triangles and derive centroid + geometric-normal samples.
+- Project those samples on GPU and select one nearest visible surface per screen tile using depth + deterministic owner tie-breaking.
+- Run one GPU producer invocation per source surface. Visible owners atomically reserve output/work blocks; the resulting inter-block append order is not sorted on CPU or reordered globally afterward.
+- Derive probe identity from scene-relative cascade spacing.
+- Emit versioned replay items containing probe, cascade, ray interval/direction, output, scene surface, and visibility tile identity.
+- Run GPU `producer -> gather -> merge -> resolve`.
+- Gather intentionally uses a simple analytic direct-light control rather than selecting a traversal architecture; traversal remains Lane B's question.
+- Resolve is checked against an independent CPU semantic reference before any timing is accepted.
+- Measure visibility, producer emit/finalize, gather, merge, resolve, producer-total, end-to-end, persistent/transient bytes, per-cascade work counts, and natural adjacent locality.
+- Run static camera, camera-motion, and changing-light cases.
+- Export each passing observed stream using `stream-schema-v1.md`.
+
+Synthetic input remains available only for bring-up and is not acceptable as
+A001 architectural evidence.
 
 ## Correctness gate
 
-The produced work and minimum gather semantics must match the defined reference
-within the experiment's explicit numerical tolerance.
+All three must pass:
+
+1. GPU visibility owner corresponds to the CPU nearest-depth reference for each visible tile.
+2. Every GPU work block matches the expected visible surface, probe identity, cascade, ray, interval, direction, and unique output range; no overflow or output holes are allowed.
+3. GPU gather/merge/resolve matches the CPU reference within the explicit resolve tolerance.
+
+A failed correctness gate invalidates the performance measurements and prevents
+stream export.
 
 ## Decision gate
 
-Advance the stream as the shared Lane B/C workload only if its semantics are
-representative of the intended Split RC design and its ordering has not been
-introduced solely to benefit a storage/traversal candidate.
+Advance schema v1 as the shared Lane B/C workload only after target-GPU runs
+show that:
+
+- the real Sponza static, camera-motion, and changing-light cases all pass correctness;
+- producer cost is reported rather than excluded;
+- stream artifacts are replayable;
+- measured locality is from the natural GPU append order;
+- no CPU sort/global reorder was introduced to improve locality.
+
+The implementation is ready for that measurement gate. No target-GPU timing is
+recorded in Git until it has actually been run.

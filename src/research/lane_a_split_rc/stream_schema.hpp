@@ -1,12 +1,14 @@
 #pragma once
 #include <array>
+#include <cstddef>
 #include <cstdint>
 #include <type_traits>
 
 namespace phos::gi::lane_a {
 
 inline constexpr std::uint32_t kSplitRcStreamSchemaVersion = 1;
-inline constexpr std::array<char, 8> kSplitRcStreamMagic{'P', 'H', 'O', 'S', 'R', 'C', '1', '\0'};
+inline constexpr std::array<char, 8> kSplitRcStreamMagic{
+    'P', 'H', 'O', 'S', 'R', 'C', '1', '\0'};
 
 struct SplitRcStreamHeaderV1 {
     std::array<char, 8> magic{kSplitRcStreamMagic};
@@ -46,8 +48,14 @@ struct SplitRcWorkItemV1 {
 static_assert(std::is_standard_layout_v<SplitRcStreamHeaderV1>);
 static_assert(std::is_trivially_copyable_v<SplitRcStreamHeaderV1>);
 static_assert(sizeof(SplitRcStreamHeaderV1) == 64);
+static_assert(offsetof(SplitRcStreamHeaderV1, workload_id) == 56);
 static_assert(std::is_standard_layout_v<SplitRcWorkItemV1>);
 static_assert(std::is_trivially_copyable_v<SplitRcWorkItemV1>);
 static_assert(sizeof(SplitRcWorkItemV1) == 64);
+static_assert(offsetof(SplitRcWorkItemV1, cascade) == 12);
+static_assert(offsetof(SplitRcWorkItemV1, output_id) == 20);
+static_assert(offsetof(SplitRcWorkItemV1, interval_min) == 32);
+static_assert(offsetof(SplitRcWorkItemV1, dir_x) == 40);
+static_assert(offsetof(SplitRcWorkItemV1, probe_px) == 52);
 
 } // namespace phos::gi::lane_a
