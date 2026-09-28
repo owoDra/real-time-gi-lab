@@ -123,6 +123,23 @@ struct Validation {
     return cli;
 }
 
+[[nodiscard]] std::string json_escape(std::string_view value) {
+    std::string output;
+    output.reserve(value.size());
+    for (const char ch : value) {
+        switch (ch) {
+        case '\\': output += "\\\\"; break;
+        case '"': output += "\\\""; break;
+        case '\n': output += "\\n"; break;
+        case '\r': output += "\\r"; break;
+        case '\t': output += "\\t"; break;
+        default:
+            output += static_cast<unsigned char>(ch) < 0x20U ? '?' : ch;
+        }
+    }
+    return output;
+}
+
 [[nodiscard]] std::filesystem::path output_root() {
     if (const char* value =
             std::getenv("PHOS_RESEARCH_ARTIFACT_DIR");
@@ -945,6 +962,8 @@ int main(int argc, char** argv) {
                 segment_size);
 
         std::vector<Row> rows;
+        std::size_t hwrt_rows = 0;
+        std::string hwrt_error;
         for (const auto& regime :
              {bounds_regime, topology_regime}) {
             const auto moved_geometry =
@@ -987,7 +1006,9 @@ int main(int argc, char** argv) {
                     replay_gpu,
                     expected,
                     cli));
+                ++hwrt_rows;
             } catch (const std::exception& error) {
+                hwrt_error = error.what();
                 std::cerr
                     << "B002 maintenance HWRT unavailable: "
                     << error.what() << '\n';
@@ -1024,7 +1045,10 @@ int main(int argc, char** argv) {
                 << topology_regime.delta_x << ",\n"
                 << "  \"topology_probe_membership_changes\": "
                 << topology_regime.expected_membership_changes
-                << "\n"
+                << ",\n"
+                << "  \"hwrt_rows\": " << hwrt_rows << ",\n"
+                << "  \"hwrt_error\": \""
+                << json_escape(hwrt_error) << "\"\n"
                 << "}\n";
         }
 
