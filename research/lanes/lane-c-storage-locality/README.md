@@ -17,3 +17,19 @@ Initial order:
 
 The M0 global scheduler remains diagnostic/fallback only. Its measured
 large-workload reuse threshold was roughly five to six consumers.
+
+## Current C001 decision
+
+C001a structural/correctness bring-up retains the probe hash, hashed contiguous
+brick pool, and virtual/clipmap representation for C001b GPU comparison.
+
+The sparse occupancy control makes the brick representations consume about
+twice the modeled persistent bytes of the probe hash, so brick storage has not
+been treated as an automatic win. Medium/dense occupancy keeps the two brick
+representations structurally plausible.
+
+No StrataBrick-inspired fourth variant has been added because no concretely
+distinct structure/update contract has yet been identified.
+
+No storage representation is promoted. Target-GPU end-to-end measurements and
+the exact Lane A producer stream remain mandatory before a final decision.

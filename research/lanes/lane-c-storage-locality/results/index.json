@@ -1,5 +1,12 @@
 {
   "schema_version": 1,
   "lane": "lane-c-storage-locality",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-storage-baselines",
+      "status": "accepted",
+      "scope": "synthetic structural/correctness candidate retention only",
+      "result": "research/lanes/lane-c-storage-locality/results/001-storage-baselines.md"
+    }
+  ]
 }
