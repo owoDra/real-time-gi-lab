@@ -190,8 +190,9 @@ Derived comparisons:
 
 - same-order paged vs hash isolates the representation effect;
 - page-grouped vs source within one representation isolates the ordering effect;
-- the difference in ordering benefit between representations exposes
-  interaction;
+- `ordering_interaction_ratio_vs_hash` reports the ordering speedup for a
+  representation divided by the hash ordering speedup (1.0 means equal
+  sensitivity to ordering);
 - GPU end-to-end vs hash/source determines whether scheduling survives its own
   cost.
 
