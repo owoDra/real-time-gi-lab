@@ -282,6 +282,19 @@ void B002VulkanContext::copy_buffer(
     VkBuffer source,
     VkBuffer destination,
     VkDeviceSize size) {
+    const VkBufferCopy region{0, 0, size};
+    copy_buffer_regions(
+        source,
+        destination,
+        std::span<const VkBufferCopy>(&region, 1));
+}
+
+void B002VulkanContext::copy_buffer_regions(
+    VkBuffer source,
+    VkBuffer destination,
+    std::span<const VkBufferCopy> regions) {
+    if (regions.empty()) return;
+
     VkCommandPool pool{};
     auto pool_info = detail::make_vk_info<VkCommandPoolCreateInfo>(
         VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
@@ -333,13 +346,12 @@ void B002VulkanContext::copy_buffer(
         0,
         nullptr);
 
-    VkBufferCopy region{0, 0, size};
     dispatch_.cmdCopyBuffer(
         command,
         source,
         destination,
-        1,
-        &region);
+        static_cast<std::uint32_t>(regions.size()),
+        regions.data());
 
     auto barrier = detail::make_vk_info<VkMemoryBarrier>(
         VK_STRUCTURE_TYPE_MEMORY_BARRIER);
@@ -434,6 +446,47 @@ void B002VulkanContext::replace_device_buffer(
     auto replacement = upload_device_buffer(data, size, usage);
     destroy_buffer(destination);
     destination = replacement;
+}
+
+void B002VulkanContext::update_device_buffer(
+    B002Buffer& destination,
+    std::span<const B002BufferUpdate> updates) {
+    if (updates.empty()) return;
+
+    VkDeviceSize staging_size = 0;
+    for (const auto& update : updates) {
+        if (update.data == nullptr || update.size == 0 ||
+            update.destination_offset + update.size > destination.size) {
+            fail("B002 invalid partial buffer update");
+        }
+        staging_size += update.size;
+    }
+
+    auto staging = create_host_buffer(
+        staging_size,
+        VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+    std::vector<VkBufferCopy> regions;
+    regions.reserve(updates.size());
+
+    VkDeviceSize source_offset = 0;
+    for (const auto& update : updates) {
+        std::memcpy(
+            static_cast<std::byte*>(staging.mapped) + source_offset,
+            update.data,
+            static_cast<std::size_t>(update.size));
+        regions.push_back({
+            source_offset,
+            update.destination_offset,
+            update.size,
+        });
+        source_offset += update.size;
+    }
+
+    copy_buffer_regions(
+        staging.buffer,
+        destination.buffer,
+        regions);
+    destroy_buffer(staging);
 }
 
 void B002VulkanContext::download_device_buffer(

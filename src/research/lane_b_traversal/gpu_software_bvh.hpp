@@ -45,6 +45,46 @@ public:
         if (root_ != kInvalidId) refit_node(root_);
     }
 
+    [[nodiscard]] Hit trace(Ray ray) const {
+        if (root_ == kInvalidId || !normalize_ray(ray)) return {};
+
+        Hit best{};
+        std::vector<std::uint32_t> stack;
+        stack.reserve(64);
+        stack.push_back(root_);
+        while (!stack.empty()) {
+            const auto index = stack.back();
+            stack.pop_back();
+            const auto& node = nodes_.at(index);
+            if (!ray_aabb(
+                    ray,
+                    node.bounds,
+                    best.hit ? best.t : ray.t_max)) {
+                continue;
+            }
+
+            if (node.left == kInvalidId) {
+                for (std::uint32_t offset = 0;
+                     offset < node.count;
+                     ++offset) {
+                    const auto primitive =
+                        ordered_.at(node.begin + offset);
+                    if (auto hit = intersect_triangle(
+                            triangles_->at(primitive),
+                            ray,
+                            best.hit ? best.t : ray.t_max);
+                        hit && prefer_hit(*hit, best)) {
+                        best = *hit;
+                    }
+                }
+            } else {
+                stack.push_back(node.left);
+                stack.push_back(node.right);
+            }
+        }
+        return best;
+    }
+
     [[nodiscard]] std::uint32_t root() const noexcept { return root_; }
     [[nodiscard]] const std::vector<std::uint32_t>& ordered_primitives() const noexcept {
         return ordered_;

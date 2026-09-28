@@ -4,6 +4,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <span>
 #include <string>
 #include <vector>
 
@@ -11,6 +12,12 @@ namespace phos::gi::research::lane_b {
 
 inline constexpr const char* kB002TargetDeviceName =
     "AMD Radeon 8060S Graphics (RADV STRIX_HALO)";
+
+struct B002BufferUpdate {
+    VkDeviceSize destination_offset{};
+    const void* data{};
+    VkDeviceSize size{};
+};
 
 struct B002Buffer {
     VkBuffer buffer{VK_NULL_HANDLE};
@@ -82,6 +89,9 @@ public:
         const void* data,
         VkDeviceSize size,
         VkBufferUsageFlags usage);
+    void update_device_buffer(
+        B002Buffer& destination,
+        std::span<const B002BufferUpdate> updates);
     void download_device_buffer(
         const B002Buffer& source,
         void* destination,
@@ -99,6 +109,10 @@ private:
         VkBuffer source,
         VkBuffer destination,
         VkDeviceSize size);
+    void copy_buffer_regions(
+        VkBuffer source,
+        VkBuffer destination,
+        std::span<const VkBufferCopy> regions);
     [[nodiscard]] std::uint32_t find_memory_type(
         std::uint32_t bits,
         VkMemoryPropertyFlags required) const;
