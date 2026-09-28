@@ -9,6 +9,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <numeric>
 #include <optional>
 #include <stdexcept>
@@ -39,6 +40,51 @@ struct Address {
     std::uint32_t payload{};
 };
 static_assert(sizeof(Address) == 16);
+
+struct SplitRcStreamHeaderV1 {
+    std::array<char, 8> magic{};
+    std::uint32_t schema_version{};
+    std::uint32_t header_bytes{};
+    std::uint32_t item_bytes{};
+    std::uint32_t frame_id{};
+    std::uint32_t item_count{};
+    std::uint32_t output_count{};
+    std::uint32_t cascade_count{};
+    std::uint32_t rays_per_probe{};
+    std::uint32_t tile_width{};
+    std::uint32_t tile_height{};
+    std::uint32_t reserved0{};
+    std::uint64_t workload_id{};
+};
+static_assert(sizeof(SplitRcStreamHeaderV1) == 64);
+
+struct SplitRcWorkItemV1 {
+    std::int32_t probe_x{};
+    std::int32_t probe_y{};
+    std::int32_t probe_z{};
+    std::uint32_t cascade{};
+    std::uint32_t ray_index{};
+    std::uint32_t output_id{};
+    std::uint32_t surface_id{};
+    std::uint32_t tile_id{};
+    float interval_min{};
+    float interval_max{};
+    float dir_x{};
+    float dir_y{};
+    float dir_z{};
+    float probe_px{};
+    float probe_py{};
+    float probe_pz{};
+};
+static_assert(sizeof(SplitRcWorkItemV1) == 64);
+
+struct CascadeLayout {
+    std::int32_t min_bx{};
+    std::int32_t min_by{};
+    std::int32_t min_bz{};
+    std::int32_t pad{};
+};
+static_assert(sizeof(CascadeLayout) == 16);
 
 struct Push {
     std::uint32_t count{};
@@ -97,6 +143,7 @@ struct Config {
     std::uint32_t clip_z{16};
     std::uint32_t iterations{50};
     bool validation{false};
+    std::optional<std::filesystem::path> stream;
     std::vector<std::uint32_t> occupancies{4, 16, 48};
 };
 
@@ -123,6 +170,187 @@ Address make_address(const Unit& p, Rep rep, const Config& cfg) {
         a.local_index = local;
     }
     return a;
+}
+
+std::int32_t floor_div(std::int32_t value, std::int32_t divisor) {
+    const auto q = value / divisor;
+    const auto r = value % divisor;
+    return r < 0 ? q - 1 : q;
+}
+
+std::uint64_t fnv1a(const void* data, std::size_t bytes) {
+    const auto* p = static_cast<const unsigned char*>(data);
+    std::uint64_t hash = 1469598103934665603ull;
+    for (std::size_t i = 0; i < bytes; ++i) {
+        hash ^= p[i];
+        hash *= 1099511628211ull;
+    }
+    return hash;
+}
+
+struct ExactStream {
+    SplitRcStreamHeaderV1 header{};
+    std::vector<SplitRcWorkItemV1> items;
+    std::vector<CascadeLayout> layouts;
+    std::uint32_t clip_x{};
+    std::uint32_t clip_y{};
+    std::uint32_t clip_z{};
+    std::uint32_t unique_probes{};
+    std::uint32_t unique_bricks{};
+};
+
+ExactStream load_exact_stream(const std::filesystem::path& path) {
+    std::ifstream in(path, std::ios::binary);
+    if (!in) throw std::runtime_error("cannot open Split RC stream: " + path.string());
+
+    ExactStream stream{};
+    in.read(reinterpret_cast<char*>(&stream.header), sizeof(stream.header));
+    if (!in) throw std::runtime_error("truncated Split RC stream header");
+
+    constexpr std::array<char, 8> magic{'P', 'H', 'O', 'S', 'R', 'C', '1', '\0'};
+    if (stream.header.magic != magic ||
+        stream.header.schema_version != 1u ||
+        stream.header.header_bytes != sizeof(SplitRcStreamHeaderV1) ||
+        stream.header.item_bytes != sizeof(SplitRcWorkItemV1)) {
+        throw std::runtime_error("unsupported Split RC stream schema");
+    }
+    if (stream.header.item_count == 0u ||
+        stream.header.cascade_count == 0u ||
+        stream.header.rays_per_probe == 0u) {
+        throw std::runtime_error("invalid empty Split RC stream");
+    }
+
+    const auto expected_bytes =
+        static_cast<std::uintmax_t>(stream.header.header_bytes) +
+        static_cast<std::uintmax_t>(stream.header.item_count) * stream.header.item_bytes;
+    if (std::filesystem::file_size(path) != expected_bytes) {
+        throw std::runtime_error("Split RC stream file size does not match header");
+    }
+
+    stream.items.resize(stream.header.item_count);
+    in.read(
+        reinterpret_cast<char*>(stream.items.data()),
+        static_cast<std::streamsize>(stream.items.size() * sizeof(SplitRcWorkItemV1)));
+    if (!in) throw std::runtime_error("truncated Split RC stream items");
+
+    if (fnv1a(stream.items.data(), stream.items.size() * sizeof(SplitRcWorkItemV1)) !=
+        stream.header.workload_id) {
+        throw std::runtime_error("Split RC workload_id mismatch");
+    }
+
+    struct Bounds {
+        std::int32_t min_x{std::numeric_limits<std::int32_t>::max()};
+        std::int32_t min_y{std::numeric_limits<std::int32_t>::max()};
+        std::int32_t min_z{std::numeric_limits<std::int32_t>::max()};
+        std::int32_t max_x{std::numeric_limits<std::int32_t>::min()};
+        std::int32_t max_y{std::numeric_limits<std::int32_t>::min()};
+        std::int32_t max_z{std::numeric_limits<std::int32_t>::min()};
+        bool seen{false};
+    };
+    std::vector<Bounds> bounds(stream.header.cascade_count);
+    std::uint32_t write_count = 0u;
+    for (const auto& item : stream.items) {
+        if (item.cascade >= stream.header.cascade_count ||
+            item.ray_index >= stream.header.rays_per_probe) {
+            throw std::runtime_error("Split RC item exceeds header dimensions");
+        }
+        if (item.ray_index != 0u) continue;
+        ++write_count;
+        auto& b = bounds[item.cascade];
+        const auto bx = floor_div(item.probe_x, static_cast<std::int32_t>(kBrickEdge));
+        const auto by = floor_div(item.probe_y, static_cast<std::int32_t>(kBrickEdge));
+        const auto bz = floor_div(item.probe_z, static_cast<std::int32_t>(kBrickEdge));
+        b.min_x = std::min(b.min_x, bx);
+        b.min_y = std::min(b.min_y, by);
+        b.min_z = std::min(b.min_z, bz);
+        b.max_x = std::max(b.max_x, bx);
+        b.max_y = std::max(b.max_y, by);
+        b.max_z = std::max(b.max_z, bz);
+        b.seen = true;
+    }
+    if (write_count != stream.header.output_count) {
+        throw std::runtime_error("Split RC ray-0 count does not match output_count");
+    }
+
+    stream.layouts.resize(stream.header.cascade_count);
+    for (std::uint32_t cascade = 0; cascade < stream.header.cascade_count; ++cascade) {
+        const auto& b = bounds[cascade];
+        if (!b.seen) throw std::runtime_error("Split RC cascade has no ray-0 item");
+        stream.layouts[cascade] = {b.min_x, b.min_y, b.min_z, 0};
+        stream.clip_x = std::max(
+            stream.clip_x, static_cast<std::uint32_t>(b.max_x - b.min_x + 1));
+        stream.clip_y = std::max(
+            stream.clip_y, static_cast<std::uint32_t>(b.max_y - b.min_y + 1));
+        stream.clip_z = std::max(
+            stream.clip_z, static_cast<std::uint32_t>(b.max_z - b.min_z + 1));
+    }
+
+    std::unordered_set<std::uint32_t> probes;
+    std::unordered_set<std::uint32_t> bricks;
+    for (const auto& item : stream.items) {
+        if (item.ray_index != 0u) continue;
+        const auto bx = floor_div(item.probe_x, static_cast<std::int32_t>(kBrickEdge));
+        const auto by = floor_div(item.probe_y, static_cast<std::int32_t>(kBrickEdge));
+        const auto bz = floor_div(item.probe_z, static_cast<std::int32_t>(kBrickEdge));
+        const auto& origin = stream.layouts[item.cascade];
+        const auto nbx = static_cast<std::uint32_t>(bx - origin.min_bx);
+        const auto nby = static_cast<std::uint32_t>(by - origin.min_by);
+        const auto nbz = static_cast<std::uint32_t>(bz - origin.min_bz);
+        const std::uint64_t page =
+            ((static_cast<std::uint64_t>(item.cascade) * stream.clip_z + nbz) *
+                stream.clip_y + nby) *
+                stream.clip_x + nbx;
+        const auto lx = item.probe_x - bx * static_cast<std::int32_t>(kBrickEdge);
+        const auto ly = item.probe_y - by * static_cast<std::int32_t>(kBrickEdge);
+        const auto lz = item.probe_z - bz * static_cast<std::int32_t>(kBrickEdge);
+        const auto local = static_cast<std::uint32_t>(
+            lx + static_cast<std::int32_t>(kBrickEdge) *
+                (ly + static_cast<std::int32_t>(kBrickEdge) * lz));
+        const std::uint64_t key = page * kCellsPerBrick + local + 1u;
+        if (key > std::numeric_limits<std::uint32_t>::max()) {
+            throw std::runtime_error("Split RC exact storage key exceeds uint32");
+        }
+        probes.insert(static_cast<std::uint32_t>(key));
+        bricks.insert(static_cast<std::uint32_t>(page));
+    }
+    stream.unique_probes = static_cast<std::uint32_t>(probes.size());
+    stream.unique_bricks = static_cast<std::uint32_t>(bricks.size());
+    if (stream.unique_probes == 0u || stream.unique_bricks == 0u) {
+        throw std::runtime_error("Split RC stream produced no storage units");
+    }
+    return stream;
+}
+
+Address make_exact_address(
+    const SplitRcWorkItemV1& item,
+    Rep rep,
+    const ExactStream& stream) {
+    const auto bx = floor_div(item.probe_x, static_cast<std::int32_t>(kBrickEdge));
+    const auto by = floor_div(item.probe_y, static_cast<std::int32_t>(kBrickEdge));
+    const auto bz = floor_div(item.probe_z, static_cast<std::int32_t>(kBrickEdge));
+    const auto& origin = stream.layouts[item.cascade];
+    const auto nbx = static_cast<std::uint32_t>(bx - origin.min_bx);
+    const auto nby = static_cast<std::uint32_t>(by - origin.min_by);
+    const auto nbz = static_cast<std::uint32_t>(bz - origin.min_bz);
+    const auto lx = item.probe_x - bx * static_cast<std::int32_t>(kBrickEdge);
+    const auto ly = item.probe_y - by * static_cast<std::int32_t>(kBrickEdge);
+    const auto lz = item.probe_z - bz * static_cast<std::int32_t>(kBrickEdge);
+    const auto local = static_cast<std::uint32_t>(
+        lx + static_cast<std::int32_t>(kBrickEdge) *
+            (ly + static_cast<std::int32_t>(kBrickEdge) * lz));
+    const auto page = static_cast<std::uint32_t>(
+        ((static_cast<std::uint64_t>(item.cascade) * stream.clip_z + nbz) *
+            stream.clip_y + nby) *
+            stream.clip_x + nbx);
+    const auto key = page * kCellsPerBrick + local + 1u;
+    Address address{};
+    address.probe_key = key;
+    address.payload = item.ray_index == 0u ? mix32(key ^ 0x9e3779b9u) : 0u;
+    if (rep != Rep::ProbeHash) {
+        address.brick_key = page + 1u;
+        address.local_index = local;
+    }
+    return address;
 }
 
 struct Workload {
@@ -301,6 +529,68 @@ HostState make_state(
     return s;
 }
 
+HostState make_exact_state(
+    Rep rep,
+    const ExactStream& stream,
+    const std::vector<Address>& addresses,
+    bool populated) {
+    HostState state{};
+    if (rep == Rep::ProbeHash) {
+        const auto capacity = next_pow2(std::max(2u, stream.unique_probes * 2u));
+        state.keys.assign(capacity, 0u);
+        state.values.assign(1, 0u);
+        state.payloads.assign(capacity, 0u);
+        state.free_list.assign(1, 0u);
+        state.mask = capacity - 1u;
+        state.max_probe = capacity;
+        std::uint32_t observed_probe = 1u;
+        for (const auto& address : addresses) {
+            if (address.payload == 0u) continue;
+            const auto slot = insert_linear(
+                state.keys, state.mask, address.probe_key, observed_probe);
+            if (populated) state.payloads[slot] = address.payload;
+        }
+        state.persistent_bytes =
+            (state.keys.size() + state.payloads.size()) * sizeof(std::uint32_t);
+        return state;
+    }
+    if (rep != Rep::Clipmap) {
+        throw std::runtime_error("exact replay supports probe hash and virtual clipmap only");
+    }
+
+    const auto page_count =
+        static_cast<std::size_t>(stream.header.cascade_count) *
+        stream.clip_x * stream.clip_y * stream.clip_z;
+    state.keys.assign(page_count, 0u);
+    state.values.assign(1, 0u);
+    state.payloads.assign(
+        static_cast<std::size_t>(stream.unique_bricks) * kCellsPerBrick, 0u);
+    state.free_list.assign(stream.unique_bricks, 0u);
+    state.max_probe = stream.unique_bricks;
+
+    std::uint32_t next_physical = 0u;
+    for (const auto& address : addresses) {
+        if (address.payload == 0u) continue;
+        const auto page = address.brick_key - 1u;
+        if (state.keys[page] == 0u) state.keys[page] = ++next_physical;
+        if (populated) {
+            const auto physical = state.keys[page] - 1u;
+            state.payloads[
+                static_cast<std::size_t>(physical) * kCellsPerBrick +
+                address.local_index] = address.payload;
+        }
+    }
+    if (next_physical != stream.unique_bricks) {
+        throw std::runtime_error("exact replay brick count mismatch");
+    }
+    state.counters[0] = stream.unique_bricks;
+    state.persistent_bytes =
+        (state.keys.size() + state.payloads.size() +
+            state.counters.size() + state.free_list.size()) *
+        sizeof(std::uint32_t);
+    return state;
+}
+
 HostState make_empty_like(const HostState& seeded, Rep rep) {
     HostState e = seeded;
     std::fill(e.keys.begin(), e.keys.end(), 0u);
@@ -363,6 +653,7 @@ public:
         check(ctx_.vk().createCommandPool(&cpi, nullptr, &command_pool_), "command pool");
 
         address_ = create_pipeline("c001_address.spv");
+        exact_address_ = create_pipeline("c001_exact_address.spv");
         probe_hash_ = create_pipeline("c001_probe_hash.spv");
         brick_hash_ = create_pipeline("c001_brick_hash.spv");
         clipmap_ = create_pipeline("c001_clipmap.spv");
@@ -377,6 +668,7 @@ public:
         if (clipmap_) ctx_.vk().destroyPipeline(clipmap_, nullptr);
         if (brick_hash_) ctx_.vk().destroyPipeline(brick_hash_, nullptr);
         if (probe_hash_) ctx_.vk().destroyPipeline(probe_hash_, nullptr);
+        if (exact_address_) ctx_.vk().destroyPipeline(exact_address_, nullptr);
         if (address_) ctx_.vk().destroyPipeline(address_, nullptr);
         if (command_pool_) ctx_.vk().destroyCommandPool(command_pool_, nullptr);
         if (descriptor_pool_) ctx_.vk().destroyDescriptorPool(descriptor_pool_, nullptr);
@@ -387,6 +679,7 @@ public:
     VulkanContext& context() { return ctx_; }
     const std::string& device_name() const { return ctx_.device_name(); }
     VkPipeline address_pipeline() const { return address_; }
+    VkPipeline exact_address_pipeline() const { return exact_address_; }
     VkPipeline storage_pipeline(Rep rep) const {
         if (rep == Rep::ProbeHash) return probe_hash_;
         if (rep == Rep::BrickHash) return brick_hash_;
@@ -636,6 +929,7 @@ private:
     VkDescriptorPool descriptor_pool_{VK_NULL_HANDLE};
     VkCommandPool command_pool_{VK_NULL_HANDLE};
     VkPipeline address_{VK_NULL_HANDLE};
+    VkPipeline exact_address_{VK_NULL_HANDLE};
     VkPipeline probe_hash_{VK_NULL_HANDLE};
     VkPipeline brick_hash_{VK_NULL_HANDLE};
     VkPipeline clipmap_{VK_NULL_HANDLE};
@@ -844,6 +1138,266 @@ void write_rows(const std::vector<Row>& rows) {
     if (file) emit(file);
 }
 
+struct ExactRow {
+    std::string representation;
+    std::uint64_t workload_id{};
+    std::string phase;
+    std::uint32_t items{};
+    std::uint32_t writes{};
+    std::uint32_t bricks{};
+    std::size_t persistent_bytes{};
+    std::size_t scratch_bytes{};
+    std::size_t producer_input_bytes{};
+    double gpu_us{};
+    std::uint64_t checksum{};
+    bool correct{};
+};
+
+void write_exact_rows(const std::vector<ExactRow>& rows) {
+    std::ostream* out = &std::cout;
+    std::ofstream file;
+    if (const char* dir = std::getenv("PHOS_RESEARCH_ARTIFACT_DIR")) {
+        const auto path = std::filesystem::path(dir) / "c001c.csv";
+        file.open(path);
+        if (!file) throw std::runtime_error("cannot create c001c.csv");
+    }
+    auto emit = [&](std::ostream& stream) {
+        stream << "representation,workload_id,phase,items,writes,bricks,"
+                  "persistent_bytes,scratch_bytes,producer_input_bytes,"
+                  "gpu_us,checksum,correct\n";
+        for (const auto& row : rows) {
+            stream << row.representation << ','
+                   << row.workload_id << ','
+                   << row.phase << ','
+                   << row.items << ','
+                   << row.writes << ','
+                   << row.bricks << ','
+                   << row.persistent_bytes << ','
+                   << row.scratch_bytes << ','
+                   << row.producer_input_bytes << ','
+                   << row.gpu_us << ','
+                   << row.checksum << ','
+                   << (row.correct ? "true" : "false") << '\n';
+        }
+    };
+    emit(*out);
+    if (file) emit(file);
+}
+
+bool exact_allocator_ok(
+    Rep rep,
+    const std::array<std::uint32_t, 4>& counters,
+    const ExactStream& stream) {
+    if (counters[1] != 0u) return false;
+    return rep == Rep::ProbeHash || counters[0] == stream.unique_bricks;
+}
+
+int run_exact_stream(
+    const Config& base_cfg,
+    VulkanBench& bench,
+    const std::filesystem::path& path) {
+    const auto stream = load_exact_stream(path);
+    Config cfg = base_cfg;
+    cfg.cascades = stream.header.cascade_count;
+    cfg.clip_x = stream.clip_x;
+    cfg.clip_y = stream.clip_y;
+    cfg.clip_z = stream.clip_z;
+
+    std::cerr
+        << "Exact stream: workload_id=" << stream.header.workload_id
+        << ", items=" << stream.header.item_count
+        << ", outputs=" << stream.header.output_count
+        << ", unique_probes=" << stream.unique_probes
+        << ", unique_bricks=" << stream.unique_bricks
+        << ", clip=" << stream.clip_x << 'x' << stream.clip_y << 'x' << stream.clip_z
+        << '\n';
+
+    auto work_items = bench.upload_vector(stream.items);
+    auto layouts = bench.upload_vector(stream.layouts);
+    std::vector<ExactRow> rows;
+    bool all_correct = true;
+
+    for (const auto rep : {Rep::ProbeHash, Rep::Clipmap}) {
+        std::vector<Address> expected_addresses;
+        expected_addresses.reserve(stream.items.size());
+        std::vector<std::uint32_t> expected_base;
+        expected_base.reserve(stream.items.size());
+        std::vector<std::uint32_t> expected_updated;
+        expected_updated.reserve(stream.items.size());
+        for (const auto& item : stream.items) {
+            const auto address = make_exact_address(item, rep, stream);
+            expected_addresses.push_back(address);
+            expected_base.push_back(address.payload);
+            expected_updated.push_back(
+                address.payload == 0u ? 0u : (address.payload ^ kUpdateXor));
+        }
+
+        const auto seeded = make_exact_state(rep, stream, expected_addresses, true);
+        const auto empty = make_empty_like(seeded, rep);
+        auto state = upload_state(bench, seeded, empty);
+        auto dynamic_addresses =
+            bench.make_zero(expected_addresses.size() * sizeof(Address));
+        auto output =
+            bench.make_zero(stream.items.size() * sizeof(std::uint32_t));
+
+        auto address_set = bench.create_set({
+            &work_items,
+            &dynamic_addresses,
+            &layouts,
+            &layouts,
+            &layouts,
+            &output,
+            &state.counters,
+            &state.free_list,
+        });
+        auto storage_set = bench.create_set({
+            &work_items,
+            &dynamic_addresses,
+            &state.keys,
+            &state.values,
+            &state.payloads,
+            &output,
+            &state.counters,
+            &state.free_list,
+        });
+
+        const auto count = stream.header.item_count;
+        auto exact_push = [&](std::uint32_t op) {
+            auto p = make_push(count, op, state, cfg);
+            return p;
+        };
+        const Dispatch address{
+            bench.exact_address_pipeline(),
+            address_set,
+            exact_push(rep_mode(rep)),
+        };
+        auto storage = [&](std::uint32_t op) {
+            return Dispatch{
+                bench.storage_pipeline(rep),
+                storage_set,
+                exact_push(op),
+            };
+        };
+        const auto reserve = storage(8u);
+        const auto populate = storage(9u);
+        const auto update = storage(10u);
+        const auto invalidate = storage(11u);
+        const auto lookup = storage(12u);
+
+        const auto scratch_bytes =
+            dynamic_addresses.size + output.size;
+        const auto producer_input_bytes =
+            work_items.size + layouts.size;
+
+        const auto producer_us =
+            bench.measure({address}, {}, cfg.iterations);
+        const auto gpu_addresses =
+            download_addresses(bench, dynamic_addresses, expected_addresses.size());
+        const bool producer_ok = addresses_equal(expected_addresses, gpu_addresses);
+        rows.push_back({
+            rep_name(rep), stream.header.workload_id, "producer-address",
+            count, stream.header.output_count, stream.unique_bricks,
+            state.persistent_bytes, scratch_bytes, producer_input_bytes,
+            producer_us, 0u, producer_ok});
+        all_correct = all_correct && producer_ok;
+
+        bench.copy_once(baseline_reset(state));
+        const auto lookup_us =
+            bench.measure({address, lookup}, {}, cfg.iterations);
+        const auto lookup_values =
+            download_u32(bench, output, stream.items.size());
+        const bool lookup_ok = lookup_values == expected_base;
+        rows.push_back({
+            rep_name(rep), stream.header.workload_id, "producer+lookup",
+            count, stream.header.output_count, stream.unique_bricks,
+            state.persistent_bytes, scratch_bytes, producer_input_bytes,
+            lookup_us, checksum(lookup_values), lookup_ok});
+        all_correct = all_correct && lookup_ok;
+
+        const auto update_us =
+            bench.measure({address, update}, baseline_reset(state), cfg.iterations);
+        bench.execute({lookup});
+        const auto updated_values =
+            download_u32(bench, output, stream.items.size());
+        const auto update_counters = download_counters(bench, state.counters);
+        const bool update_ok =
+            updated_values == expected_updated &&
+            exact_allocator_ok(rep, update_counters, stream);
+        rows.push_back({
+            rep_name(rep), stream.header.workload_id, "producer+update",
+            count, stream.header.output_count, stream.unique_bricks,
+            state.persistent_bytes, scratch_bytes, producer_input_bytes,
+            update_us, checksum(updated_values), update_ok});
+        all_correct = all_correct && update_ok;
+
+        const auto invalidation_us =
+            bench.measure({address, invalidate}, baseline_reset(state), cfg.iterations);
+        bench.execute({lookup});
+        const auto invalidated_values =
+            download_u32(bench, output, stream.items.size());
+        const auto invalidation_counters = download_counters(bench, state.counters);
+        const bool invalidation_ok =
+            std::all_of(
+                invalidated_values.begin(), invalidated_values.end(),
+                [](std::uint32_t value) { return value == 0u; }) &&
+            exact_allocator_ok(rep, invalidation_counters, stream);
+        rows.push_back({
+            rep_name(rep), stream.header.workload_id, "producer+invalidation",
+            count, stream.header.output_count, stream.unique_bricks,
+            state.persistent_bytes, scratch_bytes, producer_input_bytes,
+            invalidation_us, checksum(invalidated_values), invalidation_ok});
+        all_correct = all_correct && invalidation_ok;
+
+        const auto allocation_us =
+            bench.measure({address, reserve}, empty_reset(state), cfg.iterations);
+        bench.execute({populate, lookup});
+        const auto allocation_values =
+            download_u32(bench, output, stream.items.size());
+        const auto allocation_counters = download_counters(bench, state.counters);
+        const bool allocation_ok =
+            allocation_values == expected_base &&
+            exact_allocator_ok(rep, allocation_counters, stream);
+        rows.push_back({
+            rep_name(rep), stream.header.workload_id, "producer+allocation-residency",
+            count, stream.header.output_count, stream.unique_bricks,
+            state.persistent_bytes, scratch_bytes, producer_input_bytes,
+            allocation_us, checksum(allocation_values), allocation_ok});
+        all_correct = all_correct && allocation_ok;
+
+        const auto build_us =
+            bench.measure(
+                {address, reserve, populate},
+                empty_reset(state),
+                cfg.iterations);
+        bench.execute({lookup});
+        const auto build_values =
+            download_u32(bench, output, stream.items.size());
+        const auto build_counters = download_counters(bench, state.counters);
+        const bool build_ok =
+            build_values == expected_base &&
+            exact_allocator_ok(rep, build_counters, stream);
+        rows.push_back({
+            rep_name(rep), stream.header.workload_id, "initial-build-e2e",
+            count, stream.header.output_count, stream.unique_bricks,
+            state.persistent_bytes, scratch_bytes, producer_input_bytes,
+            build_us, checksum(build_values), build_ok});
+        all_correct = all_correct && build_ok;
+
+        bench.context().destroy_buffer(output);
+        bench.context().destroy_buffer(dynamic_addresses);
+        destroy_state(bench, state);
+    }
+
+    bench.context().destroy_buffer(layouts);
+    bench.context().destroy_buffer(work_items);
+    write_exact_rows(rows);
+    if (!all_correct) {
+        std::cerr << "fatal: C001c exact-stream correctness gate failed\n";
+        return 2;
+    }
+    return 0;
+}
+
 Config parse_args(int argc, char** argv) {
     Config cfg{};
     for (int i = 1; i < argc; ++i) {
@@ -852,6 +1406,8 @@ Config parse_args(int argc, char** argv) {
             cfg.iterations = static_cast<std::uint32_t>(std::stoul(argv[++i]));
         } else if (arg == "--validation") {
             cfg.validation = true;
+        } else if (arg == "--stream" && i + 1 < argc) {
+            cfg.stream = std::filesystem::path(argv[++i]);
         } else if (arg == "--occupancies" && i + 1 < argc) {
             cfg.occupancies.clear();
             std::string text = argv[++i];
@@ -865,20 +1421,26 @@ Config parse_args(int argc, char** argv) {
             }
         } else if (arg == "--help") {
             std::cout
-                << "phos-c001-storage [--iterations N] [--occupancies 4,16,48] [--validation]\n";
+                << "phos-c001-storage [--iterations N] [--occupancies 4,16,48] "
+                   "[--stream stream-v1.bin] [--validation]\n";
             std::exit(0);
         } else {
             throw std::runtime_error("unknown argument: " + arg);
         }
     }
     if (cfg.iterations == 0u) throw std::runtime_error("iterations must be positive");
-    for (const auto occ : cfg.occupancies) {
-        if (occ == 0u || occ > kCellsPerBrick) {
-            throw std::runtime_error("occupancy must be in [1,64]");
+    if (!cfg.stream) {
+        for (const auto occ : cfg.occupancies) {
+            if (occ == 0u || occ > kCellsPerBrick) {
+                throw std::runtime_error("occupancy must be in [1,64]");
+            }
         }
-    }
-    if (cfg.clip_x <= cfg.bricks_x || cfg.clip_y < cfg.bricks_y || cfg.clip_z < cfg.bricks_z) {
-        throw std::runtime_error("clipmap extent must contain the active window and one X shift");
+        if (cfg.clip_x <= cfg.bricks_x ||
+            cfg.clip_y < cfg.bricks_y ||
+            cfg.clip_z < cfg.bricks_z) {
+            throw std::runtime_error(
+                "clipmap extent must contain the active window and one X shift");
+        }
     }
     return cfg;
 }
@@ -889,6 +1451,9 @@ int run(int argc, char** argv) {
     const auto cfg = parse_args(argc, argv);
     VulkanBench bench(cfg.validation);
     std::cerr << "GPU: " << bench.device_name() << '\n';
+    if (cfg.stream) {
+        return run_exact_stream(cfg, bench, *cfg.stream);
+    }
 
     std::vector<Row> rows;
     bool all_correct = true;
