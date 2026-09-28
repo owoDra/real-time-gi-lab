@@ -1350,7 +1350,8 @@ int main(int argc, char** argv) {
                     wide_hit_buffer
                         .allocation_size),
                 64U *
-                    sizeof(std::uint32_t),
+                    (sizeof(std::uint32_t) +
+                     sizeof(float)),
                 wide_payload.nodes.size(),
                 wide_payload.max_depth,
             });

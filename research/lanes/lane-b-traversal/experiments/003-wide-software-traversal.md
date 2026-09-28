@@ -321,3 +321,8 @@ Before target measurement, the wide-micro traversal was hardened in two ways:
   or mis-encoded leaves before GPU timing.
 
 These changes do not alter the B001 Hit contract or the DDA/hash top level.
+
+
+The Stage B1 logical stack accounting records both the 64-entry token stack and
+the 64-entry saved entry-distance stack (512 bytes per ray invocation total).
+The saved distances are traversal-local scratch, not persistent GPU allocation.
