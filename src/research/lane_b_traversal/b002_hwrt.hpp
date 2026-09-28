@@ -59,6 +59,15 @@ public:
         const std::vector<Triangle>& triangles,
         std::span<const std::uint32_t> moved_primitives);
 
+    // Integration #13 reuses the accepted B002 AS build/update ownership while
+    // recording traversal in a larger end-to-end command stream.
+    [[nodiscard]] VkAccelerationStructureKHR top_level() const noexcept {
+        return tlas_.handle;
+    }
+    [[nodiscard]] const B002Buffer& triangle_buffer() const noexcept {
+        return triangle_buffer_;
+    }
+
 private:
     struct AccelerationStructure {
         B002Buffer storage{};
