@@ -459,7 +459,7 @@ public:
                     VK_ACCESS_TRANSFER_WRITE_BIT);
                 for (const auto& pair : resets) {
                     VkBufferCopy region{0u, 0u, pair.dst->size};
-                    ctx_.vk().cmdCopyBuffer(pair.src->buffer, pair.dst->buffer, 1u, &region);
+                    ctx_.vk().cmdCopyBuffer(cmd, pair.src->buffer, pair.dst->buffer, 1u, &region);
                 }
                 memory_barrier(
                     cmd,
@@ -513,7 +513,7 @@ public:
                 VK_ACCESS_TRANSFER_WRITE_BIT);
             for (const auto& pair : resets) {
                 VkBufferCopy region{0u, 0u, pair.dst->size};
-                ctx_.vk().cmdCopyBuffer(pair.src->buffer, pair.dst->buffer, 1u, &region);
+                ctx_.vk().cmdCopyBuffer(cmd, pair.src->buffer, pair.dst->buffer, 1u, &region);
             }
             memory_barrier(
                 cmd,
