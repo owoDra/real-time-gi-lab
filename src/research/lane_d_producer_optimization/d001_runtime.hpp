@@ -23,6 +23,13 @@ enum class ProducerEmissionDomain {
 
 const char* emission_domain_name(ProducerEmissionDomain domain);
 
+enum class ProducerAllocationMode {
+    PerOwnerAtomic,
+    WorkgroupPrefix,
+};
+
+const char* allocation_mode_name(ProducerAllocationMode mode);
+
 struct D001StageTimings {
     double visibility_reset_us{};
     double visibility_depth_us{};
@@ -76,7 +83,9 @@ public:
         const lane_a::A001ParamsGpu& params,
         D001Mode mode,
         ProducerEmissionDomain emission_domain =
-            ProducerEmissionDomain::SurfaceScan);
+            ProducerEmissionDomain::SurfaceScan,
+        ProducerAllocationMode allocation_mode =
+            ProducerAllocationMode::PerOwnerAtomic);
     ~D001Runtime();
 
     D001Runtime(const D001Runtime&) = delete;
