@@ -1,113 +1,116 @@
 # phos-gi-lab
 
-Vulkan research sandbox for testing whether a **page-local surface radiance cache** can beat hash-based world-space caches on real GPU memory behavior before implementing a full GI system.
+Research sandbox for a GPU-locality-first real-time global illumination architecture.
 
-The project intentionally starts with a cache microbenchmark instead of a renderer. The central claim is about memory locality, so the first experiment isolates that claim from ray tracing, denoising, temporal reuse, and shading complexity.
+This repository does not assume that page-local caches, surfels, Radiance
+Cascades, or any other current idea must survive. Each architectural premise is
+isolated, measured, and either promoted or discarded.
 
-## First experiment
+## Research source of truth
 
-The executable loads Sponza, samples triangle centroids, turns them into spatial cache queries, then compares three GPU lookup layouts:
+- [Research charter](docs/research.md) — final research question, constraints,
+  and long-term architecture hypotheses.
+- [Current status](docs/status.md) — current milestone, accepted/invalidated
+  evidence, open questions, and next decision gate.
+- [Experiment 000](docs/experiments/000-page-local-cache.md) — current M0
+  protocol for page-local cache locality.
+- [Documentation policy](docs/README.md) — what belongs in code vs docs.
 
-1. `hash` — open-addressed hash table, intentionally similar to sparse radiance-cache access.
-2. `paged` — direct page table + contiguous 64-entry pages.
-3. `paged-sorted` — the same paged layout, but queries are grouped by page before dispatch to improve wave/L2 locality.
+Implementation behavior remains authoritative in source code and executable
+correctness guards; docs record goals, rationale, protocols, and evidence that
+cannot be reconstructed from code alone.
 
-The result is emitted as CSV-compatible rows with GPU timestamp time per dispatch. This is not a GI quality benchmark yet; it answers whether the memory-layout hypothesis is worth pursuing.
+## Current experiment
 
-## Development environment
+M0 asks one narrow question before building a GI renderer:
 
-The research workflow is managed by [mise](https://mise.jdx.dev/). The repository pins CMake and Ninja; the host supplies a C++20 compiler and the Vulkan loader/driver.
+> Can page-local contiguous storage and locality-aware scheduling reduce GPU
+> cache lookup cost relative to a fair open-addressed hash baseline?
 
-A Vulkan SDK installation is **not required**. On NixOS, `mise run bench` resolves `vulkan-loader` automatically while keeping the host GPU ICD/driver from `/run/opengl-driver`:
+The executable compares:
 
+- `hash` — open-addressed global table sized from actual active cells;
+- `paged` — direct page table + contiguous 64-entry pages;
+- `paged-sorted` — the same page storage with queries grouped by page.
 
-- Vulkan headers are fetched by `vk-bootstrap`.
-- If `glslc` / `glslangValidator` is already installed it is reused.
-- Otherwise CMake builds pinned `glslang 16.6.0` automatically.
+All variants must return the same semantic payload. A checksum mismatch makes
+the benchmark fail instead of producing usable performance evidence.
 
-Host requirements:
+## Environment
 
-- Git
-- a C++20 compiler (`clang++` or `g++`)
-- a Vulkan 1.3-capable GPU and working Vulkan loader/driver
-- Bash for the Sponza fetch/benchmark tasks
+The workflow is managed by mise. The repository pins CMake, Ninja, and Python.
+A host C++20 compiler and working Vulkan 1.3 driver/loader are required.
 
-If Vulkan startup still fails on NixOS, verify the host driver independently with:
+A Vulkan SDK installation is not required:
 
-```bash
-nix shell nixpkgs#vulkan-tools -c vulkaninfo --summary
-```
+- Vulkan headers are fetched by `vk-bootstrap`;
+- an installed `glslc` / `glslangValidator` is reused when present;
+- otherwise pinned glslang is built automatically;
+- NixOS benchmark tasks resolve the host Vulkan loader/ICD environment through
+  `scripts/run_with_vulkan.sh`.
 
-### Quick start
+## Quick start
 
 ```bash
 mise install
 mise run bench
 ```
 
-The first configure downloads the pinned CMake dependencies and may therefore take longer than later builds.
+A successful single run emits:
+
+```text
+variant,queries,pages,bytes,gpu_us_per_dispatch,checksum,expected_checksum,correct
+hash,...
+paged,...
+paged-sorted,...
+```
+
+For research evidence, prefer the matrix harness:
+
+```bash
+mise run bench:sweep
+```
+
+It runs the standard M0 query-count matrix with repeated processes and writes:
+
+```text
+out/benchmarks/<timestamp>/
+  metadata.json
+  results.csv
+  summary.csv
+  logs/
+```
+
+Generated artifacts are intentionally ignored by Git. After review, accepted or
+invalidated evidence is summarized in `docs/status.md`.
 
 Useful commands:
 
 ```bash
-# Build only
 mise run build
-
-# Run the default Sponza benchmark
 mise run bench
-
-# Change workload size / timing iterations
 mise run bench --queries 8000000 --iterations 200
-
-# Enable Vulkan validation
 mise run bench --validation
-
-# Verify the compute path without downloading Sponza
 mise run bench:synthetic
-
-# Remove generated build state
+mise run bench:sweep
+mise run bench:sweep --query-counts 100000,1000000,4000000 --repeats 5
+mise run bench:sweep:synthetic
 mise run clean
 ```
 
-Equivalent manual invocation after building:
-
-```bash
-./build/release/phos-gi-lab \
-  --scene assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf \
-  --queries 4000000 \
-  --iterations 100
-```
-
-## Why C++20
-
-This repository is C++20 rather than Rust because the research target is low-level Vulkan behavior: ray-query integration, memory placement, extension experiments, RenderDoc/Nsight inspection, and vendor counters. C++ keeps the path from Vulkan SDK samples and GPU tooling to the experiment shorter. `vk-bootstrap` is only used for instance/device setup; hot-path code stays explicit Vulkan.
-
 ## Scene
 
-The default dataset is the classic **Sponza** scene. The fetch task uses Khronos' `Vulkan-Samples-Assets` repository rather than committing the asset into this repository. Khronos lists its Sponza variant as CC BY 3.0. The asset remains external and keeps its own license.
+The default workload uses the classic Sponza scene fetched from
+`KhronosGroup/Vulkan-Samples-Assets`. The asset is not committed to this
+repository and retains its upstream license.
 
 ```bash
 mise run assets
 ```
 
-## Expected output
+## Why C++20
 
-```text
-variant,queries,pages,bytes,gpu_us_per_dispatch,checksum
-hash,4000000,...
-paged,4000000,...
-paged-sorted,4000000,...
-```
-
-Do **not** compare absolute numbers across machines. Compare the variants on the same GPU and build. Nsight/RenderDoc should be used afterwards to inspect cache behavior and memory transactions.
-
-## Research progression
-
-- M0: cache-layout microbenchmark on Sponza-derived surface queries — this repository starts here.
-- M1: GPU radix/binning by page ID; remove CPU sorting from `paged-sorted`.
-- M2: persistent surfel allocation/deallocation and dirty-page updates.
-- M3: Vulkan `VK_KHR_ray_query` geometry backend and one-bounce indirect lighting.
-- M4: directional payload LOD and confidence-driven exact tracing.
-- M5: temporal reuse / ReSTIR path guiding and visual Sponza comparison against DDGI, SHaRC-like hash cache, and Split RC.
-
-The experiment should be stopped or redesigned if M0/M1 do not show a repeatable locality advantage. A novel architecture is not valuable merely because it is different.
+The research target is low-level Vulkan behavior: explicit memory placement,
+GPU cache behavior, ray-query integration, vendor profiling, and extension
+experiments. C++ keeps the path to Vulkan tooling and reference implementations
+short while the hot path remains explicit Vulkan.

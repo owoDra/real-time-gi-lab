@@ -1,0 +1,293 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import csv
+import io
+import json
+import os
+import platform
+import re
+import statistics
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_BINARY = ROOT / "build" / "release" / "phos-gi-lab"
+DEFAULT_SCENE = ROOT / "assets" / "Vulkan-Samples-Assets" / "scenes" / "sponza" / "Sponza01.gltf"
+GPU_RE = re.compile(r"^GPU:\s*(.+)$", re.MULTILINE)
+
+
+def parse_counts(value: str) -> list[int]:
+    counts = [int(part.strip()) for part in value.split(",") if part.strip()]
+    if not counts or any(count <= 0 for count in counts):
+        raise argparse.ArgumentTypeError("query counts must be positive comma-separated integers")
+    return counts
+
+
+def git_commit() -> str:
+    result = subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+    return result.stdout.strip() if result.returncode == 0 else "unknown"
+
+
+def parse_rows(stdout: str) -> list[dict[str, str]]:
+    rows = list(csv.DictReader(io.StringIO(stdout)))
+    if not rows:
+        raise RuntimeError("benchmark produced no CSV rows")
+
+    required = {
+        "variant",
+        "queries",
+        "pages",
+        "bytes",
+        "gpu_us_per_dispatch",
+        "checksum",
+        "expected_checksum",
+        "correct",
+    }
+    missing = required.difference(rows[0])
+    if missing:
+        raise RuntimeError(f"benchmark CSV is missing columns: {sorted(missing)}")
+
+    for row in rows:
+        if row["correct"].lower() != "true":
+            raise RuntimeError(
+                f"correctness guard failed for {row['variant']}: "
+                f"{row['checksum']} != {row['expected_checksum']}"
+            )
+
+    checksums = {row["checksum"] for row in rows}
+    expected = {row["expected_checksum"] for row in rows}
+    if len(checksums) != 1 or len(expected) != 1 or checksums != expected:
+        raise RuntimeError("variants did not produce one shared semantic checksum")
+
+    return rows
+
+
+def run_once(
+    binary: Path,
+    scene: Path,
+    query_count: int,
+    iterations: int,
+    synthetic: bool,
+    validation: bool,
+) -> tuple[list[dict[str, str]], str, list[str], str]:
+    command = [
+        "bash",
+        str(ROOT / "scripts" / "run_with_vulkan.sh"),
+        str(binary),
+    ]
+    if synthetic:
+        command.append("--synthetic")
+    else:
+        command.extend(["--scene", str(scene)])
+    command.extend(["--queries", str(query_count), "--iterations", str(iterations)])
+    if validation:
+        command.append("--validation")
+
+    proc = subprocess.run(
+        command,
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    if proc.stderr:
+        sys.stderr.write(proc.stderr)
+
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"benchmark failed with exit code {proc.returncode}: {' '.join(command)}"
+        )
+
+    rows = parse_rows(proc.stdout)
+    match = GPU_RE.search(proc.stderr)
+    gpu = match.group(1).strip() if match else "unknown"
+    return rows, gpu, command, proc.stderr
+
+
+def add_speedups(rows: list[dict[str, str]]) -> None:
+    hash_rows = [row for row in rows if row["variant"] == "hash"]
+    if len(hash_rows) != 1:
+        raise RuntimeError("each run must contain exactly one hash baseline")
+    hash_us = float(hash_rows[0]["gpu_us_per_dispatch"])
+    for row in rows:
+        us = float(row["gpu_us_per_dispatch"])
+        row["speedup_vs_hash"] = f"{hash_us / us:.6f}"
+
+
+def write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> None:
+    with path.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
+    grouped: dict[tuple[int, str], list[dict[str, object]]] = {}
+    for row in rows:
+        key = (int(row["query_count"]), str(row["variant"]))
+        grouped.setdefault(key, []).append(row)
+
+    medians: dict[tuple[int, str], float] = {}
+    for key, values in grouped.items():
+        medians[key] = statistics.median(
+            float(value["gpu_us_per_dispatch"]) for value in values
+        )
+
+    summary: list[dict[str, object]] = []
+    for (query_count, variant), values in sorted(grouped.items()):
+        median_us = medians[(query_count, variant)]
+        hash_us = medians[(query_count, "hash")]
+        bytes_values = {int(value["bytes"]) for value in values}
+        if len(bytes_values) != 1:
+            raise RuntimeError("representation byte count changed between repeats")
+
+        summary.append(
+            {
+                "query_count": query_count,
+                "variant": variant,
+                "repeats": len(values),
+                "median_gpu_us_per_dispatch": f"{median_us:.6f}",
+                "speedup_vs_hash": f"{hash_us / median_us:.6f}",
+                "bytes": next(iter(bytes_values)),
+            }
+        )
+    return summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(
+        description="Run the reproducible M0 page-local cache benchmark matrix."
+    )
+    parser.add_argument(
+        "--query-counts",
+        type=parse_counts,
+        default=parse_counts("100000,500000,1000000,4000000,8000000"),
+    )
+    parser.add_argument("--iterations", type=int, default=100)
+    parser.add_argument("--repeats", type=int, default=3)
+    parser.add_argument("--binary", type=Path, default=DEFAULT_BINARY)
+    parser.add_argument("--scene", type=Path, default=DEFAULT_SCENE)
+    parser.add_argument("--synthetic", action="store_true")
+    parser.add_argument("--validation", action="store_true")
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+
+    if args.iterations <= 0 or args.repeats <= 0:
+        parser.error("--iterations and --repeats must be positive")
+
+    started = datetime.now(timezone.utc)
+    stamp = started.strftime("%Y%m%dT%H%M%SZ")
+    output = args.output or (ROOT / "out" / "benchmarks" / stamp)
+    output = output if output.is_absolute() else ROOT / output
+    logs_dir = output / "logs"
+    logs_dir.mkdir(parents=True, exist_ok=True)
+
+    all_rows: list[dict[str, object]] = []
+    commands: list[list[str]] = []
+    gpus: set[str] = set()
+
+    for query_count in args.query_counts:
+        for repeat in range(1, args.repeats + 1):
+            rows, gpu, command, stderr = run_once(
+                args.binary,
+                args.scene,
+                query_count,
+                args.iterations,
+                args.synthetic,
+                args.validation,
+            )
+            add_speedups(rows)
+            commands.append(command)
+            gpus.add(gpu)
+
+            log_path = logs_dir / f"q{query_count}-r{repeat}.log"
+            log_path.write_text(stderr, encoding="utf-8")
+
+            for row in rows:
+                row["query_count"] = query_count
+                row["repeat"] = repeat
+                all_rows.append(row)
+
+    raw_fields = [
+        "query_count",
+        "repeat",
+        "variant",
+        "queries",
+        "pages",
+        "bytes",
+        "gpu_us_per_dispatch",
+        "speedup_vs_hash",
+        "checksum",
+        "expected_checksum",
+        "correct",
+    ]
+    write_csv(output / "results.csv", all_rows, raw_fields)
+
+    summary_rows = summarize(all_rows)
+    write_csv(
+        output / "summary.csv",
+        summary_rows,
+        [
+            "query_count",
+            "variant",
+            "repeats",
+            "median_gpu_us_per_dispatch",
+            "speedup_vs_hash",
+            "bytes",
+        ],
+    )
+
+    metadata = {
+        "schema_version": 1,
+        "experiment": "000-page-local-cache",
+        "started_at_utc": started.isoformat(),
+        "finished_at_utc": datetime.now(timezone.utc).isoformat(),
+        "git_commit": git_commit(),
+        "gpu": sorted(gpus),
+        "hostname": platform.node(),
+        "platform": platform.platform(),
+        "python": platform.python_version(),
+        "query_counts": args.query_counts,
+        "iterations": args.iterations,
+        "repeats": args.repeats,
+        "synthetic": args.synthetic,
+        "validation": args.validation,
+        "scene": str(args.scene),
+        "binary": str(args.binary),
+        "commands": commands,
+        "environment": {
+            "VK_DRIVER_FILES": os.environ.get("VK_DRIVER_FILES"),
+            "AMD_VULKAN_ICD": os.environ.get("AMD_VULKAN_ICD"),
+        },
+    }
+    (output / "metadata.json").write_text(
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    print(f"Benchmark artifacts: {output}")
+    print("query_count,variant,median_gpu_us_per_dispatch,speedup_vs_hash,bytes")
+    for row in summary_rows:
+        print(
+            f"{row['query_count']},{row['variant']},"
+            f"{row['median_gpu_us_per_dispatch']},"
+            f"{row['speedup_vs_hash']},{row['bytes']}"
+        )
+
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
