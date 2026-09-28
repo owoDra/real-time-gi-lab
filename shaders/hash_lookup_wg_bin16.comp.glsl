@@ -57,7 +57,7 @@ void main() {
     uint remaining =
         group_begin < pc.query_count ? pc.query_count - group_begin : 0u;
     uint group_count = min(remaining, WORKGROUP_SIZE);
-    bool active = lane < group_count;
+    bool is_active = lane < group_count;
     uint source_index = group_begin + lane;
 
     if (lane < BIN_COUNT) {
@@ -68,7 +68,7 @@ void main() {
 
     Query query;
     uint bin = 0u;
-    if (active) {
+    if (is_active) {
         query = queries.q[source_index];
         uint initial_slot = mix32(query.key) & pc.table_mask;
         bin = coarse_bin(initial_slot);
@@ -85,14 +85,14 @@ void main() {
     }
     barrier();
 
-    if (active) {
+    if (is_active) {
         uint destination = atomicAdd(bin_cursors[bin], 1u);
         staged_queries[destination] = query;
         staged_indices[destination] = source_index;
     }
     barrier();
 
-    if (active) {
+    if (is_active) {
         Query grouped = staged_queries[lane];
         uint original_index = staged_indices[lane];
         output_data.v[original_index] = lookup(grouped.key);
