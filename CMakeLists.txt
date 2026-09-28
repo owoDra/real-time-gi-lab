@@ -113,6 +113,14 @@ add_compute_shader(paged_lookup shaders/paged_lookup.comp.glsl)
 add_compute_shader(page_histogram shaders/page_histogram.comp.glsl)
 add_compute_shader(page_prefix shaders/page_prefix.comp.glsl)
 add_compute_shader(page_scatter shaders/page_scatter.comp.glsl)
+
+# Research lanes own disjoint subtrees so parallel branches can integrate with
+# minimal conflicts. Lane-specific targets/shaders are registered only from
+# their own CMakeLists.txt.
+add_subdirectory(src/research/lane_a_split_rc)
+add_subdirectory(src/research/lane_b_traversal)
+add_subdirectory(src/research/lane_c_storage_locality)
+
 get_property(SHADER_OUTPUTS GLOBAL PROPERTY PHOS_GI_SHADER_OUTPUTS)
 add_custom_target(phos-gi-shaders ALL DEPENDS ${SHADER_OUTPUTS})
 add_dependencies(phos-gi-lab phos-gi-shaders)
