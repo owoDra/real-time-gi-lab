@@ -38,7 +38,7 @@ args=(
 if [ "${usage_validation:-false}" = "true" ]; then
   args+=(--validation)
 fi
-exec "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
+exec bash ./scripts/run_with_vulkan.sh "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
 '''
 
 [tasks."bench:synthetic"]
@@ -60,7 +60,7 @@ args=(
 if [ "${usage_validation:-false}" = "true" ]; then
   args+=(--validation)
 fi
-exec "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
+exec bash ./scripts/run_with_vulkan.sh "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
 '''
 
 [tasks.clean]
