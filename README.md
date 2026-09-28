@@ -14,32 +14,74 @@ The executable loads Sponza, samples triangle centroids, turns them into spatial
 
 The result is emitted as CSV-compatible rows with GPU timestamp time per dispatch. This is not a GI quality benchmark yet; it answers whether the memory-layout hypothesis is worth pursuing.
 
+## Development environment
+
+The research workflow is managed by [mise](https://mise.jdx.dev/). The repository pins CMake and Ninja; the host supplies a C++20 compiler and the Vulkan loader/driver.
+
+A Vulkan SDK installation is **not required**:
+
+- Vulkan headers are fetched by `vk-bootstrap`.
+- If `glslc` / `glslangValidator` is already installed it is reused.
+- Otherwise CMake builds pinned `glslang 16.6.0` automatically.
+
+Host requirements:
+
+- Git
+- a C++20 compiler (`clang++` or `g++`)
+- a Vulkan 1.3-capable GPU and working Vulkan loader/driver
+- Bash for the Sponza fetch/benchmark tasks
+
+### Quick start
+
+```bash
+mise install
+mise run bench
+```
+
+The first configure downloads the pinned CMake dependencies and may therefore take longer than later builds.
+
+Useful commands:
+
+```bash
+# Build only
+mise run build
+
+# Run the default Sponza benchmark
+mise run bench
+
+# Change workload size / timing iterations
+mise run bench --queries 8000000 --iterations 200
+
+# Enable Vulkan validation
+mise run bench --validation
+
+# Verify the compute path without downloading Sponza
+mise run bench:synthetic
+
+# Remove generated build state
+mise run clean
+```
+
+Equivalent manual invocation after building:
+
+```bash
+./build/release/phos-gi-lab \
+  --scene assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf \
+  --queries 4000000 \
+  --iterations 100
+```
+
 ## Why C++20
 
 This repository is C++20 rather than Rust because the research target is low-level Vulkan behavior: ray-query integration, memory placement, extension experiments, RenderDoc/Nsight inspection, and vendor counters. C++ keeps the path from Vulkan SDK samples and GPU tooling to the experiment shorter. `vk-bootstrap` is only used for instance/device setup; hot-path code stays explicit Vulkan.
 
 ## Scene
 
-The default dataset is the classic **Sponza** scene. The fetch script uses Khronos' `Vulkan-Samples-Assets` repository rather than committing the asset into this repository. Khronos lists its Sponza variant as CC BY 3.0. The asset remains external and keeps its own license. See `scripts/fetch_sponza.sh`.
-
-## Build
-
-Requirements:
-
-- CMake 3.27+
-- C++20 compiler
-- Vulkan-capable driver
-- `glslc` or `glslangValidator` (normally from Vulkan SDK)
-- Git (CMake FetchContent)
+The default dataset is the classic **Sponza** scene. The fetch task uses Khronos' `Vulkan-Samples-Assets` repository rather than committing the asset into this repository. Khronos lists its Sponza variant as CC BY 3.0. The asset remains external and keeps its own license.
 
 ```bash
-./scripts/fetch_sponza.sh
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j
-./build/phos-gi-lab --scene assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf --queries 4000000 --iterations 100
+mise run assets
 ```
-
-Use `--synthetic` if Sponza is not downloaded.
 
 ## Expected output
 
