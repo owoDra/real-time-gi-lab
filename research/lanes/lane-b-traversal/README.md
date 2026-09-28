@@ -7,40 +7,41 @@ Mission: determine which traversal architecture best serves Split RC gather rays
 under realistic dynamic-scene maintenance costs. StrataBrick is a candidate, not
 a requirement.
 
-## Current checkpoint — B001 target CSV inspected; hardened rerun required
+## Current checkpoint — B001 accepted
 
-The shared `traceRay(origin, direction, tMax) -> Hit` contract and brute-force
-reference are implemented. A target-system CSV covering sparse, dense and
-vertical scenes, static/moving geometry, static/shifted camera, and 50 m / 200 m
-finite GI ranges completed **48 candidate rows × 65,536 rays/row with zero
-mismatches**.
+B001 is concluded as the Lane B semantic/correctness and candidate-retention
+checkpoint.
 
-The trace direction strengthens the provisional retention gate:
+Accepted target rerun:
+
+- artifact:
+  `out/research/lane-b-traversal/001-traversal-contract-and-controls/20260928T150111Z/`;
+- measurement commit: `52710fcbd372369fe58e68f6c29b39aa9924a3db`;
+- 48 rows × 65,536 rays/row × 5 repeats;
+- zero correctness mismatches.
+
+Retention decision:
 
 - **software BVH:** retain as the simple software baseline;
-- **raw sparse-grid DDA:** do not promote as a standalone final candidate;
+- **raw sparse-grid DDA:** do not promote as a standalone final architecture;
 - **hierarchical StrataBrick-derived:** retain because segment/BVH pruning +
-  localized rebuild/refit is a materially different hypothesis from raw DDA;
-- **HWRT/TLAS:** retain only if the hardened target Vulkan probe reports
-  unambiguous support, then validate the same Hit semantics before timing.
+  localized rebuild/refit remains a distinct hypothesis;
+- **HWRT/TLAS:** retain for explicit physical-device bring-up. The current probe
+  is `ambiguous` because both RADV hardware and llvmpipe were enumerated; this
+  is not an HWRT rejection.
 
-The received CSV is diagnostic rather than the formal B001 result. Final
-self-review hardened repeat/provenance capture, dynamic-update boundaries,
-build/rebuild boundaries, contract smoke tests, and multi-device HWRT probing.
-GPU-independent `-Werror` and ASan+UBSan controls still pass with zero
-correctness mismatches.
-
-CPU control timings and historical StrataBrick results remain bring-up evidence
-only. Final promotion still requires GPU candidate implementation and replay
-against Lane A's representative producer stream.
+The formal result is
+`results/001-traversal-contract-and-controls.md`.
 
 ## Next decision gate
 
-1. rerun B001 through `mise run research:record` with the current hardened harness;
-2. ingest corrected `b001-controls.csv`, `metadata.json`, and
-   `hwrt-probe.json`;
-3. conclude B001 and update its result/index/Issue #11;
-4. bring up the surviving GPU candidates with full build/refit/rebuild/update,
-   traversal, persistent-memory and scratch-memory accounting;
-5. repeat the architectural decision on Lane A's producer stream before
-   selecting any final traversal approach.
+1. bring up the surviving GPU candidates under the shared Hit contract;
+2. explicitly select/identify the target Vulkan physical device for HWRT and
+   validate feature enablement before timing;
+3. replay software BVH, hierarchical StrataBrick-derived traversal, and HWRT
+   where proven available against Lane A's accepted representative producer
+   stream;
+4. include build/refit/rebuild/update, traversal, persistent memory, scratch
+   memory, and correctness in the end-to-end decision;
+5. document regime-specific winners instead of forcing one universal
+   architecture if the evidence differs by scene regime.

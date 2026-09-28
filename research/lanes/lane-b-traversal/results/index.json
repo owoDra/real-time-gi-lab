@@ -1,5 +1,19 @@
 {
   "schema_version": 1,
   "lane": "lane-b-traversal",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-traversal-contract-and-controls",
+      "status": "accepted",
+      "result": "001-traversal-contract-and-controls.md",
+      "artifact": "out/research/lane-b-traversal/001-traversal-contract-and-controls/20260928T150111Z",
+      "git_commit": "52710fcbd372369fe58e68f6c29b39aa9924a3db",
+      "cpu": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S",
+      "vulkan_devices": [
+        "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "llvmpipe (LLVM 21.1.8, 256 bits)"
+      ],
+      "hwrt_probe_status": "ambiguous"
+    }
+  ]
 }
