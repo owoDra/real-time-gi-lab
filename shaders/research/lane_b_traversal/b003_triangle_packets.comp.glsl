@@ -165,14 +165,15 @@ bool intersect_packet_lane(
     float ray_tmax,
     float best_t,
     out float t,
-    out vec3 normal) {
+    out vec3 normal,
+    out uvec4 metadata) {
     vec3 v0 =
         packets[packet_index].v0[lane].xyz;
     vec3 e1 =
         packets[packet_index].e1[lane].xyz;
     vec3 e2 =
         packets[packet_index].e2[lane].xyz;
-    uvec4 metadata =
+    metadata =
         packets[packet_index].metadata[lane];
     vec3 p = cross(direction, e2);
     float det = dot(e1, p);
@@ -226,6 +227,7 @@ void trace_packet_leaf(
     for (uint lane = 0u; lane < count; ++lane) {
         float candidate_t;
         vec3 candidate_normal;
+        uvec4 candidate_metadata;
         if (intersect_packet_lane(
                 packet_index,
                 lane,
@@ -234,29 +236,25 @@ void trace_packet_leaf(
                 ray_tmax,
                 has_best ? best_t : ray_tmax,
                 candidate_t,
-                candidate_normal) &&
+                candidate_normal,
+                candidate_metadata) &&
             prefer_hit(
                 candidate_t,
-                packets[packet_index]
-                    .metadata[lane].x,
+                candidate_metadata.x,
                 best_t,
                 best_primitive,
                 has_best)) {
             has_best = true;
             best_t = candidate_t;
             best_primitive =
-                packets[packet_index]
-                    .metadata[lane].x;
+                candidate_metadata.x;
             output_hit.normal_t =
                 vec4(candidate_normal, candidate_t);
             output_hit.metadata =
                 uvec4(
-                    packets[packet_index]
-                        .metadata[lane].x,
-                    packets[packet_index]
-                        .metadata[lane].y,
-                    packets[packet_index]
-                        .metadata[lane].z,
+                    candidate_metadata.x,
+                    candidate_metadata.y,
+                    candidate_metadata.z,
                     1u);
         }
     }
