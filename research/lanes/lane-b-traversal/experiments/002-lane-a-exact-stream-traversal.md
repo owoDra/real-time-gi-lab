@@ -271,3 +271,43 @@ A fresh artifact must include all of:
 
 Only after that artifact passes the decision gate should B002 be marked accepted,
 `results/index.json` be updated, and Issue #11 be concluded.
+
+
+## Full provenance set received — rejected as formal evidence
+
+The complete provenance/config/correctness set corresponding to the diagnostic
+CSV checkpoint was later received. It confirms that the run itself was clean
+and internally valid:
+
+- artifact:
+  `out/research/lane-b-traversal/002-lane-a-exact-stream-traversal/20260928T163124Z/`;
+- measurement commit:
+  `8b66e07629c5c6fd968c65d1a0c04b595145ab79`;
+- branch: `research-lane-b-traversal`;
+- dirty: false;
+- runner return code: 0;
+- exact selected device:
+  `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- RADV / Mesa 26.1.2;
+- HWRT status: usable;
+- required HWRT extensions/features enabled;
+- BLAS/TLAS creation succeeded;
+- ray-query correctness succeeded;
+- B001 shared-Hit reference: zero mismatches and zero runtime errors;
+- all three exact A001 workloads match the pinned accepted A001 artifact.
+
+However, this artifact is still **not accepted as B002 final evidence** because
+its measurement commit predates measurement-relevant fixes that are now part of
+the branch:
+
+- `c4dd4d37` — split hierarchical maintenance CPU phase timing;
+- `dcd6853f` — pin replay to accepted A001 provenance in the runner;
+- `234ed1b8` — synchronize HWRT builds before ray-query traversal;
+- `09f23893` — repeat HWRT setup/build measurements under the shared
+  `build_repeats` policy;
+- `5e41bd95` — require a clean checkout for the formal B002 run.
+
+The old artifact therefore remains diagnostic despite its clean correctness and
+device provenance. A fresh `research:record` run from current HEAD is required.
+Do not write the accepted B002 result, update `results/index.json`, close Issue
+#11, or hand off a Lane B winner to Integration #13 until that rerun passes.
