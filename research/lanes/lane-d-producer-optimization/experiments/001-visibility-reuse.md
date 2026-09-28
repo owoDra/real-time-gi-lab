@@ -121,3 +121,46 @@ not promote a mechanism without a follow-up explaining the uncertainty.
 
 D001 does not decide the final Lane D producer. It decides which renderer
 visibility contract, if any, is worth carrying into D002+.
+
+
+## Implementation / measurement readiness
+
+The D001 benchmark keeps the accepted A001 implementation unchanged and runs an
+accepted A001 control plus the three D001 regimes in the same Vulkan process.
+All candidates reuse the existing A001 CPU semantic analyzer.
+
+Per-frame allocation/compaction work is zero in D001 because it deliberately
+retains A001's fixed-capacity stream buffers. The current A001 overflow flag is
+still a hard correctness failure; D001 does not claim a fallback strategy.
+Bounded capacity and a real overflow/fallback path are D005's question.
+
+Timing attribution is explicit: barriers needed to make a stage's writes
+visible are charged to that stage. In particular, producer emit includes its
+counter/work visibility synchronization, and finalize includes the indirect
+dispatch readiness synchronization. These costs are not excluded from producer
+total.
+
+Target-system diagnostic command:
+
+```bash
+mise run build
+mise run assets
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 001-visibility-reuse \
+  --command "python scripts/research/lane_d_producer_optimization/run_d001.py --repeats 1 --iterations 1 --validation"
+```
+
+If that passes, accepted timing candidate command:
+
+```bash
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 001-visibility-reuse \
+  --command "python scripts/research/lane_d_producer_optimization/run_d001.py --repeats 3 --iterations 50"
+```
+
+The repeated runner writes `d001.csv`, `summary.json`, and one
+`metrics.json` per repeat/case under the shared research artifact directory.
+Any baseline or candidate semantic mismatch terminates the run before timing can
+be considered evidence.
