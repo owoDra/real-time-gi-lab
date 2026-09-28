@@ -245,9 +245,9 @@ void main() {
 
     float direction_length = length(ray.direction_pad.xyz);
     float segment_size = pc.occupied_min_segment_size.w;
-    if (!isfinite(direction_length) || direction_length <= 1.0e-8 ||
-        !isfinite(ray.origin_tmax.w) || ray.origin_tmax.w <= RAY_T_MIN ||
-        !isfinite(segment_size) || segment_size <= 0.0) {
+    if ((isnan(direction_length) || isinf(direction_length)) || direction_length <= 1.0e-8 ||
+        (isnan(ray.origin_tmax.w) || isinf(ray.origin_tmax.w)) || ray.origin_tmax.w <= RAY_T_MIN ||
+        (isnan(segment_size) || isinf(segment_size)) || segment_size <= 0.0) {
         hits[ray_id] = output_hit;
         return;
     }

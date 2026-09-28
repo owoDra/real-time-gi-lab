@@ -113,8 +113,8 @@ void main() {
     output_hit.normal_t = vec4(0.0, 0.0, 0.0, uintBitsToFloat(0x7f800000u));
     output_hit.metadata = uvec4(INVALID_ID, INVALID_ID, INVALID_ID, 0u);
 
-    if (!isfinite(direction_length) || direction_length <= 1.0e-8 ||
-        !isfinite(ray.origin_tmax.w) || ray.origin_tmax.w <= RAY_T_MIN ||
+    if ((isnan(direction_length) || isinf(direction_length)) || direction_length <= 1.0e-8 ||
+        (isnan(ray.origin_tmax.w) || isinf(ray.origin_tmax.w)) || ray.origin_tmax.w <= RAY_T_MIN ||
         pc.root == INVALID_ID) {
         hits[ray_id] = output_hit;
         return;

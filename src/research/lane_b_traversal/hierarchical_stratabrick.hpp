@@ -3,6 +3,7 @@
 #include "traversal_common.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cmath>
 #include <cstddef>
 #include <cstdint>
@@ -44,6 +45,12 @@ struct SegmentCoordHash {
         const auto z = static_cast<std::uint64_t>(static_cast<std::uint32_t>(key.z));
         return static_cast<std::size_t>(mix(x) ^ (mix(y) << 1U) ^ (mix(z) << 2U));
     }
+};
+
+struct HierarchicalBuildStats {
+    double membership_generation_us{};
+    double segment_construction_us{};
+    double occupancy_bounds_us{};
 };
 
 struct HierarchicalUpdateStats {
@@ -104,6 +111,9 @@ public:
     }
 
     [[nodiscard]] float segment_size() const noexcept { return segment_size_; }
+    [[nodiscard]] const HierarchicalBuildStats& build_stats() const noexcept {
+        return build_stats_;
+    }
     [[nodiscard]] std::size_t segment_count() const noexcept { return segments_.size(); }
     [[nodiscard]] std::size_t membership_count() const noexcept {
         std::size_t count = 0;
@@ -315,19 +325,34 @@ private:
     }
 
     void rebuild_all(const std::vector<Triangle>& triangles) {
+        using Clock = std::chrono::steady_clock;
+        const auto elapsed_us = [](Clock::time_point start) {
+            return std::chrono::duration<double, std::micro>(
+                Clock::now() - start).count();
+        };
+
         triangles_ = &triangles;
         segments_.clear();
         membership_.assign(triangles.size(), {});
+
+        auto start = Clock::now();
         for (std::uint32_t primitive = 0; primitive < triangles.size(); ++primitive) {
             auto keys = memberships_for(triangles[primitive]);
             for (const auto key : keys) segments_[key].primitives.push_back(primitive);
             membership_[primitive] = std::move(keys);
         }
+        build_stats_.membership_generation_us = elapsed_us(start);
+
+        start = Clock::now();
         for (auto& [key, segment] : segments_) {
             (void)key;
             build_segment(segment);
         }
+        build_stats_.segment_construction_us = elapsed_us(start);
+
+        start = Clock::now();
         recompute_occupied_bounds();
+        build_stats_.occupancy_bounds_us = elapsed_us(start);
     }
 
     void build_segment(Segment& segment) {
@@ -498,6 +523,7 @@ private:
     std::unordered_map<SegmentCoord, Segment, SegmentCoordHash> segments_;
     std::vector<std::vector<SegmentCoord>> membership_;
     Aabb occupied_bounds_{};
+    HierarchicalBuildStats build_stats_{};
 };
 
 } // namespace phos::gi::research::lane_b

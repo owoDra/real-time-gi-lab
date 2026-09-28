@@ -1,5 +1,6 @@
 #include "b002_hwrt.hpp"
 
+#include "b002_compute.hpp"
 #include "vk_init.hpp"
 
 #include <algorithm>
