@@ -67,3 +67,26 @@ saved more incremental work, but camera-motion standalone E2E regressed 6.47%
 and therefore missed the predeclared gate.
 
 Next gate: D002 visible-tile-driven emission.
+
+
+## Progress — D002 visible-tile emission rejected (2026-09-29)
+
+D002 target-GPU evidence at measurement commit
+`844123281ff72b5c3b6dea38ca69732b5ca2e00b` passed semantic correctness but did
+not pass the predeclared promotion gate.
+
+The tile source reduced dispatch invocations from 262,241 surfaces to 9,216
+tiles and materially reduced emit cost. Camera-motion and light-motion improved
+strongly, but static median producer-total improvement versus the matched
+surface control was only 7.37% (<10%), and direct accepted-A001 static E2E
+regressed 1.59%.
+
+Decision:
+
+- do not retain visible-tile emission for later composition;
+- keep D001 depth reuse as the only retained Lane D mechanism so far;
+- continue to D003 one-pass owner selection from the A001-style surface
+  producer path.
+
+The observed neighboring-tile locality improvement is recorded as a natural
+source-order effect only and is not used to override the performance gate.
