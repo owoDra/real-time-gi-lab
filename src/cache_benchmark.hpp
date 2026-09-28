@@ -118,6 +118,7 @@ private:
     VkPipelineLayout pipeline_layout_{VK_NULL_HANDLE};
 
     VkPipeline hash_pipeline_{VK_NULL_HANDLE};
+    VkPipeline hash_wg_bin16_pipeline_{VK_NULL_HANDLE};
     VkPipeline paged_pipeline_{VK_NULL_HANDLE};
     VkPipeline histogram_pipeline_{VK_NULL_HANDLE};
     VkPipeline prefix_pipeline_{VK_NULL_HANDLE};
