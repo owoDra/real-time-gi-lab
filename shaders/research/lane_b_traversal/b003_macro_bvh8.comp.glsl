@@ -270,22 +270,59 @@ void main() {
     uint best_primitive = INVALID_ID;
     bool has_best = false;
 
-    // With 682 B002 segments and fanout 8, the deterministic balanced
-    // builder's DFS frontier is well below 32 entries. Runtime overflow is
-    // still surfaced through metadata.w and invalidates the B003 row.
+    // Bit 31 tags a Macro BVH internal node. Segment-root indices and
+    // macro-node indices are both far below 2^31 in this experiment.
+    const uint MACRO_STACK_INTERNAL = 0x80000000u;
+    const uint MACRO_STACK_INDEX_MASK = 0x7fffffffu;
+
+    // The CPU builder computes the worst all-children DFS frontier and the
+    // harness rejects payloads that would exceed this fixed capacity.
     uint macro_stack[32];
     uint macro_stack_size = 0u;
     macro_stack[macro_stack_size++] =
-        pc.values.y;
+        pc.values.y | MACRO_STACK_INTERNAL;
 
     while (macro_stack_size != 0u) {
-        uint macro_id =
+        uint encoded =
             macro_stack[--macro_stack_size];
-        for (uint slot = 0u; slot < 8u; ++slot) {
-            // Read only the current 48-byte child instead of copying the full
-            // 384-byte node into invocation-local storage.
+        bool is_internal =
+            (encoded & MACRO_STACK_INTERNAL) != 0u;
+        uint reference =
+            encoded & MACRO_STACK_INDEX_MASK;
+
+        if (!is_internal) {
+            trace_segment(
+                reference,
+                origin,
+                direction,
+                ray.origin_tmax.w,
+                output_hit,
+                best_t,
+                best_primitive,
+                has_best);
+            if (output_hit.metadata.w == 2u) {
+                hits[ray_id] = output_hit;
+                return;
+            }
+            continue;
+        }
+
+        uint axis =
+            macro_nodes[reference].children[0].data.z;
+        bool positive =
+            direction[int(axis)] >= 0.0;
+
+        // Children are stored low-to-high along the builder's split axis.
+        // Push far-to-near so LIFO pops the approximate near child first.
+        for (uint ordinal = 0u;
+             ordinal < 8u;
+             ++ordinal) {
+            uint slot =
+                positive
+                ? 7u - ordinal
+                : ordinal;
             MacroChild child =
-                macro_nodes[macro_id].children[slot];
+                macro_nodes[reference].children[slot];
             if (child.data.x == INVALID_ID) {
                 continue;
             }
@@ -305,34 +342,27 @@ void main() {
                 continue;
             }
 
+            uint child_encoded;
             if (child.data.y == MACRO_SEGMENT) {
-                trace_segment(
-                    child.data.x,
-                    origin,
-                    direction,
-                    ray.origin_tmax.w,
-                    output_hit,
-                    best_t,
-                    best_primitive,
-                    has_best);
-                if (output_hit.metadata.w == 2u) {
-                    hits[ray_id] = output_hit;
-                    return;
-                }
+                child_encoded = child.data.x;
             } else if (
                 child.data.y == MACRO_INTERNAL) {
-                if (macro_stack_size + 1u > 32u) {
-                    output_hit.metadata.w = 3u;
-                    hits[ray_id] = output_hit;
-                    return;
-                }
-                macro_stack[macro_stack_size++] =
-                    child.data.x;
+                child_encoded =
+                    child.data.x |
+                    MACRO_STACK_INTERNAL;
             } else {
                 output_hit.metadata.w = 4u;
                 hits[ray_id] = output_hit;
                 return;
             }
+
+            if (macro_stack_size + 1u > 32u) {
+                output_hit.metadata.w = 3u;
+                hits[ray_id] = output_hit;
+                return;
+            }
+            macro_stack[macro_stack_size++] =
+                child_encoded;
         }
     }
 

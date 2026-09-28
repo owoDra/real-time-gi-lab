@@ -59,7 +59,8 @@ struct MacroItem {
 [[nodiscard]] inline B003GpuMacroChild make_child(
     const Aabb& bounds,
     std::uint32_t reference,
-    std::uint32_t kind) noexcept {
+    std::uint32_t kind,
+    std::uint32_t axis) noexcept {
     B003GpuMacroChild child;
     child.bounds_min[0] = bounds.min.x;
     child.bounds_min[1] = bounds.min.y;
@@ -69,6 +70,7 @@ struct MacroItem {
     child.bounds_max[2] = bounds.max.z;
     child.data[0] = reference;
     child.data[1] = kind;
+    child.data[2] = axis;
     return child;
 }
 
@@ -87,23 +89,38 @@ public:
 
     [[nodiscard]] B003MacroBvh8Payload finish() && {
         if (payload_.root != kInvalidId) {
-            std::vector<std::uint32_t> stack;
-            stack.push_back(payload_.root);
+            struct StackEntry {
+                std::uint32_t reference{};
+                std::uint32_t kind{};
+            };
+            std::vector<StackEntry> stack{
+                {payload_.root, kB003MacroInternal}};
             payload_.max_stack_entries = 1;
             while (!stack.empty()) {
-                const auto node_index = stack.back();
+                const auto entry = stack.back();
                 stack.pop_back();
-                if (node_index >= payload_.nodes.size()) {
+                if (entry.kind == kB003MacroSegment) {
+                    continue;
+                }
+                if (entry.kind != kB003MacroInternal ||
+                    entry.reference >= payload_.nodes.size()) {
                     throw std::runtime_error(
                         "B003 macro BVH contains an invalid internal reference");
                 }
                 for (const auto& child :
-                     payload_.nodes[node_index].children) {
-                    if (child.data[0] == kInvalidId ||
-                        child.data[1] != kB003MacroInternal) {
+                     payload_.nodes[entry.reference].children) {
+                    if (child.data[0] == kInvalidId) {
                         continue;
                     }
-                    stack.push_back(child.data[0]);
+                    if (child.data[1] != kB003MacroSegment &&
+                        child.data[1] != kB003MacroInternal) {
+                        throw std::runtime_error(
+                            "B003 macro BVH contains an invalid child kind");
+                    }
+                    stack.push_back({
+                        child.data[0],
+                        child.data[1],
+                    });
                 }
                 payload_.max_stack_entries =
                     std::max(
@@ -147,17 +164,6 @@ private:
             std::max(payload_.max_depth, depth);
 
         const auto count = end - begin;
-        if (count <= 8U) {
-            auto& node = payload_.nodes[node_index];
-            for (std::uint32_t slot = 0; slot < count; ++slot) {
-                const auto& item = items_[begin + slot];
-                node.children[slot] = make_child(
-                    item.bounds,
-                    item.segment_root,
-                    kB003MacroSegment);
-            }
-            return node_index;
-        }
 
         Aabb center_bounds{};
         for (auto cursor = begin; cursor < end; ++cursor) {
@@ -180,6 +186,19 @@ private:
                 if (ca != cb) return ca < cb;
                 return a.segment_root < b.segment_root;
             });
+
+        if (count <= 8U) {
+            auto& node = payload_.nodes[node_index];
+            for (std::uint32_t slot = 0; slot < count; ++slot) {
+                const auto& item = items_[begin + slot];
+                node.children[slot] = make_child(
+                    item.bounds,
+                    item.segment_root,
+                    kB003MacroSegment,
+                    static_cast<std::uint32_t>(axis));
+            }
+            return node_index;
+        }
 
         constexpr std::uint32_t kFanout = 8U;
         const auto group_count =
@@ -207,7 +226,8 @@ private:
                     make_child(
                         bounds,
                         item.segment_root,
-                        kB003MacroSegment);
+                        kB003MacroSegment,
+                        static_cast<std::uint32_t>(axis));
                 continue;
             }
 
@@ -217,7 +237,8 @@ private:
                 make_child(
                     bounds,
                     child_index,
-                    kB003MacroInternal);
+                    kB003MacroInternal,
+                    static_cast<std::uint32_t>(axis));
         }
 
         return node_index;
