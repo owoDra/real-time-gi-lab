@@ -108,6 +108,7 @@ function(add_compute_shader NAME SOURCE)
 endfunction()
 
 add_compute_shader(hash_lookup shaders/hash_lookup.comp.glsl)
+add_compute_shader(hash_lookup_wg_bin16 shaders/hash_lookup_wg_bin16.comp.glsl)
 add_compute_shader(paged_lookup shaders/paged_lookup.comp.glsl)
 add_compute_shader(page_histogram shaders/page_histogram.comp.glsl)
 add_compute_shader(page_prefix shaders/page_prefix.comp.glsl)
