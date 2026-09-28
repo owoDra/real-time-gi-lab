@@ -221,7 +221,7 @@ double B002HwrtTraversal::build_blas(
         &primitive_count,
         &size_info);
 
-    blas_.storage = context_.create_device_buffer(
+    blas_.storage = context_.create_device_address_buffer(
         size_info.accelerationStructureSize,
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR);
     auto create_info =
@@ -318,7 +318,7 @@ double B002HwrtTraversal::build_tlas() {
         &primitive_count,
         &size_info);
 
-    tlas_.storage = context_.create_device_buffer(
+    tlas_.storage = context_.create_device_address_buffer(
         size_info.accelerationStructureSize,
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR);
     auto create_info =
