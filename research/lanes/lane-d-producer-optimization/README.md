@@ -127,3 +127,33 @@ Decision:
 - keep A001 per-owner reservation;
 - D001 depth reuse remains the only retained Lane D composition mechanism;
 - continue to D005 stream capacity / overflow.
+
+
+## Progress — D005 bounded stream capacity complete (2026-09-29)
+
+D005 target-GPU evidence at measurement commit
+`d58d27af73335f17781be8143290b922afec4397` passed normal correctness,
+forced-overflow safety, and full fallback correctness.
+
+The 1,280-owner bound reduced work-stream capacity by 86.11% and resident
+producer memory by 71.94%. It also matched or improved the full-capacity
+owner-slot path in all three representative timing cases.
+
+The fixed final promotion gate nevertheless fails because light-motion bounded
+E2E is 6.31% slower than the unchanged accepted A001 control, exceeding the
+predeclared 5% ceiling. The threshold is not relaxed.
+
+Decision:
+
+- do not promote the current bounded owner-slot implementation into final Lane D
+  composition;
+- retain bounded capacity + safe overflow/fallback as strong memory-policy
+  evidence;
+- D001 renderer depth reuse remains the only retained Lane D integration
+  contract;
+- D002-D004 remain rejected;
+- no standalone Lane D producer architecture from D001-D005 replaces accepted
+  A001.
+
+Final cross-lane selection remains pending the Lane B/C replay gates required by
+Issue #14.
