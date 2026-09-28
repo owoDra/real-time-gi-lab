@@ -16,6 +16,13 @@ enum class D001Mode {
 
 const char* mode_name(D001Mode mode);
 
+enum class ProducerEmissionDomain {
+    SurfaceScan,
+    VisibleTileScan,
+};
+
+const char* emission_domain_name(ProducerEmissionDomain domain);
+
 struct D001StageTimings {
     double visibility_reset_us{};
     double visibility_depth_us{};
@@ -67,7 +74,9 @@ public:
         VulkanContext& context,
         const lane_a::SceneSurfaceSet& scene,
         const lane_a::A001ParamsGpu& params,
-        D001Mode mode);
+        D001Mode mode,
+        ProducerEmissionDomain emission_domain =
+            ProducerEmissionDomain::SurfaceScan);
     ~D001Runtime();
 
     D001Runtime(const D001Runtime&) = delete;
