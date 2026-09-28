@@ -71,14 +71,14 @@ void main() {
     }
     const uint slot = a.brick_key - 1u;
     const uint desired = brick_tag(a);
-    if (desired >= TARGET) {
+    if (desired >= TAG_MASK) {
         atomicAdd(counters[1], 1u);
         return;
     }
 
     if (pc.op == 13u) {
         for (;;) {
-            const uint current = tags[slot];
+            const uint current = atomicAdd(tags[slot], 0u);
             if (current == INIT) continue;
             if ((current & TAG_MASK) == desired && current != 0u) {
                 atomicOr(tags[slot], TARGET);
@@ -125,8 +125,11 @@ void main() {
 
     const uint mapped = pages[slot];
     if (mapped == 0u || mapped == INIT || (tags[slot] & TAG_MASK) != desired) {
+        if (pc.op == 18u) {
+            outputs[i] = 0u;
+            return;
+        }
         atomicAdd(counters[1], 1u);
-        if (pc.op == 18u) outputs[i] = 0u;
         return;
     }
     const uint physical = mapped - 1u;

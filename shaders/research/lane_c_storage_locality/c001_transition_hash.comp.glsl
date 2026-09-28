@@ -86,8 +86,11 @@ void main() {
 
     const uint slot = find_slot(a.probe_key);
     if (slot == 0xffffffffu) {
+        if (pc.op == 16u) {
+            outputs[i] = 0u;
+            return;
+        }
         atomicAdd(counters[1], 1u);
-        if (pc.op == 16u) outputs[i] = 0u;
         return;
     }
     if (pc.op == 15u) atomicExchange(payloads[slot], a.payload);
