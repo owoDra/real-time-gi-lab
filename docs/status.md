@@ -4,45 +4,55 @@ Last updated: 2026-09-28
 
 ## Current stage
 
-**M0 — validate the page-local cache premise.**
+**M0 — resolve cache representation vs scheduling, including GPU scheduling
+cost.**
 
-The repository is currently isolating one claim: whether page-local contiguous
-storage and locality-aware query ordering can materially reduce GPU lookup cost
-relative to an open-addressed global hash cache.
+The repository is isolating whether page-local contiguous storage has an
+independent lookup advantage, or whether the observed gain is primarily caused
+by coherent query scheduling.
 
 This is not yet a GI renderer. Lighting quality, ray-query cost, temporal reuse,
-surfel placement, and multi-bounce transport are intentionally excluded from M0.
+surfel placement, multi-bounce transport, denoising, and ReSTIR are intentionally
+excluded.
 
 ## Current work
-
-The corrected 4M-query run has passed the M0 semantic-correctness gate on one
-hardware/workload point. The next task is to separate **cache representation**
-from **query coherence / scheduling** before treating page-local storage as a
-winning architecture.
 
 Tracked work: [Issue #4 — isolate cache layout vs query coherence and include
 GPU scheduling cost](https://github.com/owoDra/phos-gi-lab/issues/4).
 
-The immediate controls are:
+The Issue #4 work branch now implements the measurements needed to make that
+decision:
 
-- add a `hash-sorted` variant using the same page-grouped order as
-  `paged-sorted`;
-- run source/random/page-grouped locality regimes for both representations;
-- run the standard query-count/repeat matrix;
-- move ordering to GPU-side binning/sorting and include that cost;
-- profile cache/memory behavior once timing trends are stable.
+- representation and ordering are independent benchmark axes;
+- both hash and paged representations run source, randomized, and page-grouped
+  workloads;
+- CPU page grouping is page-only, avoiding the previous intra-page sort
+  confound;
+- GPU page grouping uses dense-page counting binning rather than a general radix
+  sort;
+- GPU grouping, grouped lookup, and grouping + lookup end-to-end cost are
+  measured separately;
+- GPU grouping receives an exact multiset/order correctness check in addition to
+  lookup checksums;
+- the standard 100k/500k/1M/4M/8M repeat harness records the new axes and timing
+  fields without removing the original CSV columns;
+- a reproducible RADV/RGP profiling procedure is documented.
+
+**No new target-GPU benchmark result from this implementation has been accepted
+yet.** The next evidence step is to run the matrix on AMD Radeon 8060S / RADV
+and record the results below.
 
 ## Accepted facts
 
 - The Vulkan compute benchmark runs on **AMD Radeon 8060S Graphics (RADV
   STRIX_HALO)**.
-- The current Sponza loader produced **262,241 triangle-centroid surface
-  samples** in the first successful run.
+- The Sponza loader produced **262,241 triangle-centroid surface samples** in
+  the first successful run.
 - A 4,000,000-query workload produced **242,806 active pages** in that run.
-- The page-sorted access order was substantially faster than unsorted paged
-  access in the exploratory run, but the exact speedup is not yet accepted as
-  evidence because the baseline had correctness/fairness defects described
-  below.
+- A corrected single 4M run established semantic parity across the old hash,
+  paged, and paged-sorted variants.
+- That run shows a large ordering effect for the paged representation, but it
+  does not establish whether page-local storage itself is responsible.
 
 ## Evidence ledger
 
@@ -76,14 +86,18 @@ Observed relationships:
 - `paged-sorted` was about **1.63x faster** than `hash`;
 - sorting the paged workload improved the same representation by about
   **3.19x**;
-- the current paged representation used about **15.05x** the lookup-storage
-  bytes of the corrected hash baseline.
+- the paged representation used about **15.05x** the lookup-storage bytes of the
+  corrected hash baseline.
 
-The strongest current interpretation is therefore **not** that page-local
-storage alone wins. The evidence instead suggests that query coherence/work
-ordering may dominate lookup performance on this workload. A `hash-sorted`
-control is required before attributing the gain to the page-local
-representation.
+Protocol note: this historical `paged-sorted` implementation sorted by
+`(page_id, local_index)`. Issue #4 now uses stable page-only grouping to avoid
+mixing page scheduling with intra-page ordering. Therefore the 499.223 us value
+remains evidence that coherent ordering matters, but it is not a direct
+substitute for the new `paged/page-grouped` row.
+
+The strongest current interpretation is still **not** that page-local storage
+alone wins. The evidence motivates the layout-vs-scheduling controls now
+implemented.
 
 ### 2026-09-28 — first successful Sponza GPU run
 
@@ -113,43 +127,63 @@ used as research conclusions.
 
 ## Decision gates
 
-### M0 correctness gate
+### Correctness
 
-All variants must report `correct=true` against the same expected semantic
-checksum. Any mismatch invalidates the run.
+Every row must report `correct=true` against the same semantic checksum. GPU
+page grouping must also preserve the exact query multiset and produce monotonic
+page groups. Any mismatch invalidates performance results from that process.
 
-### M0 locality gate
+### Representation vs scheduling
 
-After correctness is established, page-local layouts must show a repeatable
-advantage across multiple query counts and at least two locality regimes. A
-single 4M-query result is insufficient.
+Compare representation under the **same ordering**.
 
-### M1 end-to-end scheduling gate
+- If hash/page-grouped is approximately equal to or faster than
+  paged/page-grouped, coherent scheduling is the leading result. Do not promote
+  the paged cache; prioritize hash + coherent scheduling.
+- If paged/page-grouped remains clearly faster than hash/page-grouped beyond
+  repeat-to-repeat variation across the matrix, page-local contiguous storage
+  has independent evidence.
 
-The advantage must survive **GPU-side** binning/sorting cost. CPU pre-sorting is
-only an M0 upper-bound experiment.
+Randomized rows are a second locality regime and help determine whether the
+representation difference is robust rather than an artifact of source order.
 
-If this gate fails, the project should investigate coherent scheduling on top of
-a hash cache instead of assuming a new cache representation is necessary.
+### GPU scheduling viability
+
+CPU page grouping is only an upper bound. The relevant practical comparison is
+GPU grouping + lookup end-to-end against hash/source.
+
+If the benefit disappears after histogram/prefix/scatter cost is included, the
+current explicit grouping strategy fails the scheduling viability gate. A
+cheaper grouping method may be tested, but the CPU-preordered gain alone is not
+enough to advance the architecture.
+
+### Memory-behavior evidence
+
+Timing is necessary but insufficient for a locality claim. Once timing trends
+are stable, inspect representative cases with the
+[RADV/RGP profiling procedure](profiling/radv-rgp.md) and record whether cache
+behavior, memory traffic/stalls, and occupancy support the interpretation.
 
 ## Next measurements
 
-The next research work is tracked in Issue #4.
-
-1. Add `hash-sorted` to isolate representation from ordering.
-2. Query-count sweep: 100k, 500k, 1M, 4M, 8M with repeated runs.
-3. Locality regimes: source order, randomized, page-grouped, and later
-   camera/temporal-coherent workloads.
-4. GPU-side binning/sorting with its full end-to-end cost included.
-5. GPU cache/memory counters to verify whether timing changes correspond to
-   cache misses, transactions, stalls, or occupancy.
-6. Only after layout/scheduling is resolved: read/write/update workloads,
-   including dirty-page ratios.
+1. Run `mise run bench:sweep` on the target AMD Radeon 8060S / RADV system.
+2. Confirm all rows pass semantic and GPU-grouping correctness.
+3. Compare hash vs paged at source, randomized, and page-grouped order.
+4. Compare page-grouped lookup-only gains against GPU grouping + lookup
+   end-to-end cost.
+5. Repeat representative cases under RADV/RGP and inspect memory/cache/wave
+   behavior.
+6. Record the accepted or invalidated matrix in this Evidence ledger.
+7. Only after Issue #4 is resolved, decide whether M1 should prioritize paged
+   storage, hash + coherent scheduling, a cheaper grouping method, or a
+   different direction.
 
 ## Not yet established
 
-- that page-local storage is faster after the corrected hash baseline;
-- that sorting remains worthwhile after GPU scheduling cost;
+- that page-local storage is faster than hash under matched ordering;
+- that coherent scheduling is worthwhile after GPU grouping cost;
+- that the dense-page GPU grouping implementation is the best scheduling
+  mechanism;
 - that a surface cache improves GI quality;
 - that this architecture is better than DDGI, SHaRC-like, Split RC, or ReSTIR
   end-to-end;
