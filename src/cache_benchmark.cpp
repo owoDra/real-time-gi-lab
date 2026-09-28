@@ -3,7 +3,6 @@
 #include <array>
 #include <cstring>
 #include <filesystem>
-#include <numeric>
 #include <stdexcept>
 
 namespace phos::gi {
@@ -12,7 +11,7 @@ namespace {
 struct PushConstants {
     std::uint32_t query_count;
     std::uint32_t mask_or_page_size;
-    std::uint32_t mode;
+    std::uint32_t lookup_limit;
     std::uint32_t pad;
 };
 
@@ -55,6 +54,7 @@ CacheBenchmark::CacheBenchmark(VulkanContext& context) : ctx_(context) {
     cpi.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     cpi.queueFamilyIndex = ctx_.queue_family();
     if (ctx_.vk().createCommandPool(&cpi, nullptr, &command_pool_) != VK_SUCCESS) fail("command pool");
+
     VkCommandBufferAllocateInfo cai{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
     cai.commandPool = command_pool_;
     cai.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
@@ -85,9 +85,11 @@ CacheBenchmark::~CacheBenchmark() {
 VkPipeline CacheBenchmark::create_pipeline(const std::string& filename) {
     const auto path = std::filesystem::path(PHOS_GI_LAB_SHADER_DIR) / filename;
     auto code = read_binary_file(path.string());
+
     VkShaderModuleCreateInfo smi{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
     smi.codeSize = code.size();
     smi.pCode = reinterpret_cast<const std::uint32_t*>(code.data());
+
     VkShaderModule module{};
     if (ctx_.vk().createShaderModule(&smi, nullptr, &module) != VK_SUCCESS) fail("shader module");
 
@@ -95,9 +97,11 @@ VkPipeline CacheBenchmark::create_pipeline(const std::string& filename) {
     stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
     stage.module = module;
     stage.pName = "main";
+
     VkComputePipelineCreateInfo ci{VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
     ci.stage = stage;
     ci.layout = pipeline_layout_;
+
     VkPipeline pipeline{};
     const auto result = ctx_.vk().createComputePipelines(VK_NULL_HANDLE, 1, &ci, nullptr, &pipeline);
     ctx_.vk().destroyShaderModule(module, nullptr);
@@ -110,26 +114,44 @@ GpuBuffer CacheBenchmark::upload(const void* data, std::size_t bytes) {
 }
 
 std::vector<BenchmarkResult> CacheBenchmark::run(const Workload& w, std::uint32_t iterations) {
-    const std::size_t hash_bytes = (w.hash_keys.size() + w.hash_payload.size()) * sizeof(std::uint32_t);
-    const std::size_t paged_bytes = (w.page_table.size() + w.paged_payload.size()) * sizeof(std::uint32_t);
+    const std::size_t hash_bytes =
+        (w.hash_keys.size() + w.hash_payload.size()) * sizeof(std::uint32_t);
+    const std::size_t paged_bytes =
+        (w.page_table.size() + w.paged_payload.size()) * sizeof(std::uint32_t);
+
     std::vector<BenchmarkResult> out;
-    out.push_back(run_variant("hash", w.original, w.hash_keys, w.hash_payload, 0, w.hash_mask, iterations, hash_bytes));
-    out.push_back(run_variant("paged", w.original, w.page_table, w.paged_payload, 1, w.page_size, iterations, paged_bytes));
-    out.push_back(run_variant("paged-sorted", w.page_sorted, w.page_table, w.paged_payload, 1, w.page_size, iterations, paged_bytes));
+    out.push_back(run_variant(
+        "hash", w.original, w.hash_keys, w.hash_payload, 0, w.hash_mask,
+        w.hash_max_probe, iterations, hash_bytes, w.expected_checksum));
+    out.push_back(run_variant(
+        "paged", w.original, w.page_table, w.paged_payload, 1, w.page_size,
+        1, iterations, paged_bytes, w.expected_checksum));
+    out.push_back(run_variant(
+        "paged-sorted", w.page_sorted, w.page_table, w.paged_payload, 1, w.page_size,
+        1, iterations, paged_bytes, w.expected_checksum));
     return out;
 }
 
-BenchmarkResult CacheBenchmark::run_variant(const char* name, const std::vector<Query>& queries,
-    const std::vector<std::uint32_t>& table0, const std::vector<std::uint32_t>& payload,
-    std::uint32_t mode_value, std::uint32_t mask_or_page_size, std::uint32_t iterations,
-    std::size_t logical_bytes) {
+BenchmarkResult CacheBenchmark::run_variant(
+    const char* name,
+    const std::vector<Query>& queries,
+    const std::vector<std::uint32_t>& table0,
+    const std::vector<std::uint32_t>& payload,
+    std::uint32_t mode_value,
+    std::uint32_t mask_or_page_size,
+    std::uint32_t lookup_limit,
+    std::uint32_t iterations,
+    std::size_t logical_bytes,
+    std::uint64_t expected_checksum) {
 
     auto qbuf = upload(queries.data(), queries.size() * sizeof(Query));
     auto tbuf = upload(table0.data(), table0.size() * sizeof(std::uint32_t));
     auto pbuf = upload(payload.data(), payload.size() * sizeof(std::uint32_t));
-    auto obuf = ctx_.create_device_buffer(queries.size() * sizeof(std::uint32_t), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    auto obuf = ctx_.create_device_buffer(
+        queries.size() * sizeof(std::uint32_t), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 
     ctx_.vk().resetDescriptorPool(descriptor_pool_, 0);
+
     VkDescriptorSet set{};
     VkDescriptorSetAllocateInfo ai{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO};
     ai.descriptorPool = descriptor_pool_;
@@ -138,7 +160,12 @@ BenchmarkResult CacheBenchmark::run_variant(const char* name, const std::vector<
     if (ctx_.vk().allocateDescriptorSets(&ai, &set) != VK_SUCCESS) fail("descriptor allocate");
 
     std::array<VkDescriptorBufferInfo, 4> infos{{
-        {qbuf.buffer, 0, qbuf.size}, {tbuf.buffer, 0, tbuf.size}, {pbuf.buffer, 0, pbuf.size}, {obuf.buffer, 0, obuf.size}}};
+        {qbuf.buffer, 0, qbuf.size},
+        {tbuf.buffer, 0, tbuf.size},
+        {pbuf.buffer, 0, pbuf.size},
+        {obuf.buffer, 0, obuf.size},
+    }};
+
     std::array<VkWriteDescriptorSet, 4> writes{};
     for (std::uint32_t i = 0; i < writes.size(); ++i) {
         writes[i] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
@@ -148,22 +175,48 @@ BenchmarkResult CacheBenchmark::run_variant(const char* name, const std::vector<
         writes[i].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
         writes[i].pBufferInfo = &infos[i];
     }
-    ctx_.vk().updateDescriptorSets(static_cast<std::uint32_t>(writes.size()), writes.data(), 0, nullptr);
+    ctx_.vk().updateDescriptorSets(
+        static_cast<std::uint32_t>(writes.size()), writes.data(), 0, nullptr);
 
     ctx_.vk().resetCommandBuffer(command_buffer_, 0);
+
     VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
     bi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     ctx_.vk().beginCommandBuffer(command_buffer_, &bi);
+
     ctx_.vk().cmdResetQueryPool(command_buffer_, query_pool_, 0, 2);
-    ctx_.vk().cmdBindPipeline(command_buffer_, VK_PIPELINE_BIND_POINT_COMPUTE, mode_value == 0 ? hash_pipeline_ : paged_pipeline_);
-    ctx_.vk().cmdBindDescriptorSets(command_buffer_, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline_layout_, 0, 1, &set, 0, nullptr);
-    PushConstants pc{static_cast<std::uint32_t>(queries.size()), mask_or_page_size, mode_value, 0};
-    ctx_.vk().cmdPushConstants(command_buffer_, pipeline_layout_, VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(pc), &pc);
+    ctx_.vk().cmdBindPipeline(
+        command_buffer_, VK_PIPELINE_BIND_POINT_COMPUTE,
+        mode_value == 0 ? hash_pipeline_ : paged_pipeline_);
+    ctx_.vk().cmdBindDescriptorSets(
+        command_buffer_, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline_layout_,
+        0, 1, &set, 0, nullptr);
+
+    PushConstants pc{
+        static_cast<std::uint32_t>(queries.size()),
+        mask_or_page_size,
+        lookup_limit,
+        0,
+    };
+    ctx_.vk().cmdPushConstants(
+        command_buffer_, pipeline_layout_, VK_SHADER_STAGE_COMPUTE_BIT,
+        0, sizeof(pc), &pc);
+
     const std::uint32_t groups = (pc.query_count + 255u) / 256u;
-    for (std::uint32_t i = 0; i < 5u; ++i) ctx_.vk().cmdDispatch(command_buffer_, groups, 1, 1);
-    ctx_.vk().cmdWriteTimestamp(command_buffer_, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, query_pool_, 0);
-    for (std::uint32_t i = 0; i < iterations; ++i) ctx_.vk().cmdDispatch(command_buffer_, groups, 1, 1);
-    ctx_.vk().cmdWriteTimestamp(command_buffer_, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, query_pool_, 1);
+
+    for (std::uint32_t i = 0; i < 5u; ++i) {
+        ctx_.vk().cmdDispatch(command_buffer_, groups, 1, 1);
+    }
+
+    ctx_.vk().cmdWriteTimestamp(
+        command_buffer_, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, query_pool_, 0);
+
+    for (std::uint32_t i = 0; i < iterations; ++i) {
+        ctx_.vk().cmdDispatch(command_buffer_, groups, 1, 1);
+    }
+
+    ctx_.vk().cmdWriteTimestamp(
+        command_buffer_, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, query_pool_, 1);
     ctx_.vk().endCommandBuffer(command_buffer_);
 
     ctx_.vk().resetFences(1, &fence_);
@@ -174,18 +227,32 @@ BenchmarkResult CacheBenchmark::run_variant(const char* name, const std::vector<
     ctx_.vk().waitForFences(1, &fence_, VK_TRUE, UINT64_MAX);
 
     std::array<std::uint64_t, 2> ts{};
-    if (ctx_.vk().getQueryPoolResults(query_pool_, 0, 2, sizeof(ts), ts.data(), sizeof(std::uint64_t),
-            VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT) != VK_SUCCESS) fail("timestamp results");
-    const double elapsed_ns = static_cast<double>(ts[1] - ts[0]) * ctx_.timestamp_period_ns();
+    if (ctx_.vk().getQueryPoolResults(
+            query_pool_, 0, 2, sizeof(ts), ts.data(), sizeof(std::uint64_t),
+            VK_QUERY_RESULT_64_BIT | VK_QUERY_RESULT_WAIT_BIT) != VK_SUCCESS) {
+        fail("timestamp results");
+    }
+    const double elapsed_ns =
+        static_cast<double>(ts[1] - ts[0]) * ctx_.timestamp_period_ns();
 
     std::vector<std::uint32_t> downloaded(queries.size());
-    ctx_.download_device_buffer(obuf, downloaded.data(), downloaded.size() * sizeof(std::uint32_t));
+    ctx_.download_device_buffer(
+        obuf, downloaded.data(), downloaded.size() * sizeof(std::uint32_t));
+
     std::uint64_t checksum = 0;
     for (const auto value : downloaded) checksum += value;
 
     const std::size_t pages = mode_value == 0 ? 0 : table0.size();
-    BenchmarkResult result{name, queries.size(), pages, logical_bytes,
-        elapsed_ns / 1000.0 / static_cast<double>(iterations), checksum};
+    BenchmarkResult result{
+        name,
+        queries.size(),
+        pages,
+        logical_bytes,
+        elapsed_ns / 1000.0 / static_cast<double>(iterations),
+        checksum,
+        expected_checksum,
+        checksum == expected_checksum,
+    };
 
     ctx_.destroy_buffer(obuf);
     ctx_.destroy_buffer(pbuf);
