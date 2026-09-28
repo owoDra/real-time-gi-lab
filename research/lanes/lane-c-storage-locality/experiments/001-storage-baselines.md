@@ -1,7 +1,7 @@
 # Experiment C001 — Split RC storage baselines
 
-Status: active — C001a and synthetic Vulkan C001b candidate pruning concluded;
-exact Lane A replay remains mandatory for final promotion.
+Status: accepted — C001a-d complete; per-probe sparse hash is the accepted
+storage baseline for the measured exact Split RC workload.
 
 ## Question
 
@@ -371,3 +371,20 @@ return physical bricks to the free list. The transition sequence is:
 The timestamp includes all five steps. CPU set analysis is used only for
 correctness expectations and reported entering/leaving counts; it does not
 reorder or replace the measured GPU transition path.
+
+
+### C001d outcome
+
+The 3-repeat, 100-iteration target-GPU run passed all correctness gates.
+
+Static -> camera-motion transition median:
+
+- probe hash: 11.702 us;
+- virtual clipmap: 14.267 us.
+
+The clipmap is about 21.9% slower for the complete dynamic transition and uses
+94,864 B persistent storage versus 32,768 B for the probe hash.
+
+Therefore C001 accepts the per-probe open-addressed sparse hash as the current
+Split RC radiance-storage baseline. Virtual clipmap remains a conditional
+future candidate for denser or more residency-stable workloads.

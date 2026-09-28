@@ -4,8 +4,8 @@
   "experiments": [
     {
       "id": "001-storage-baselines",
-      "status": "active",
-      "scope": "C001a/C001b synthetic pruning and C001c exact steady-state accepted; C001d exact static-to-camera transition implemented and target-GPU evidence pending",
+      "status": "accepted",
+      "scope": "C001a-d complete; per-probe open-addressed sparse hash accepted for representative exact Split RC workload; virtual clipmap retained as conditional future candidate",
       "result": "research/lanes/lane-c-storage-locality/results/001-storage-baselines.md"
     }
   ]

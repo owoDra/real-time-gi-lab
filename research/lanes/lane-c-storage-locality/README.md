@@ -50,6 +50,11 @@ clipmap reduces allocation/residency by about 14-18% and initial build by about
 19-21% on the three A001 cases, but uses about 2.5-2.6x the persistent memory
 of the sparse hash in this workload.
 
-No storage representation is promoted yet. C001d static -> camera-motion exact
-transition timing is the final gate because C001c does not charge dynamic
-virtual-window origin/residency maintenance.
+C001d target-GPU transition evidence is complete. The exact static ->
+camera-motion transition is 11.702 us for the probe hash and 14.267 us for the
+virtual clipmap, while persistent storage is 32,768 B vs 94,864 B.
+
+**Lane C therefore accepts the per-probe open-addressed sparse hash as the
+current Split RC storage baseline.** Virtual clipmap remains a conditional
+future candidate for denser or more residency-stable workloads, but is not the
+accepted baseline for the measured representative stream.

@@ -1,7 +1,7 @@
 # C001 result — storage baseline candidate pruning
 
-Status: **C001a structural gate and allocator-corrected C001b synthetic Vulkan
-candidate pruning accepted; exact Lane A replay pending**
+Status: **accepted — per-probe sparse hash promoted as the current Split RC
+radiance-storage foundation for the measured exact workload**
 
 Artifact: `out/research/lane-c-storage-locality/001-storage-baselines/20260928T132145Z`
 (assistant execution environment; target-system rerun required)  
@@ -391,3 +391,91 @@ The final C001 gate is therefore a real exact-stream transition measurement,
 starting with static -> camera-motion, that includes the storage residency
 changes required by the virtual window. A final promotion must account for this
 cost rather than treating per-frame origin selection as free.
+
+
+## C001d target-GPU exact transition result
+
+Status: **accepted; final C001 gate passed**
+
+The 3-repeat, 100-iteration static -> camera-motion transition passed
+correctness for all four summary rows.
+
+Exact transition shape:
+
+- probes: 1,537 -> 1,537;
+- entering probes: 446;
+- leaving probes: 446;
+- bricks: 278 -> 288;
+- entering bricks: 32;
+- leaving bricks: 22.
+
+### Transition timing
+
+| Representation | Producer address | Transition E2E | Repeat range |
+| --- | ---: | ---: | ---: |
+| probe hash | 5.130 us | 11.702 us | 10.740-11.823 us |
+| virtual clipmap | 5.370 us | 14.267 us | 13.906-15.109 us |
+
+The virtual clipmap transition is about **21.9% slower** than the probe hash
+when the required dynamic residency/window work is included.
+
+Producer-address cost is close: virtual clipmap is about 4.7% slower
+(5.370 vs 5.130 us). The deciding difference is therefore the complete
+transition path, not address generation alone.
+
+### Memory
+
+| Representation | Persistent bytes | Scratch bytes |
+| --- | ---: | ---: |
+| probe hash | 32,768 | 500,736 |
+| virtual clipmap | 94,864 | 500,736 |
+
+The clipmap uses about **2.90x** the persistent storage of the probe hash in the
+transition-capable implementation. Scratch is identical because both replay the
+same exact target stream and use the same address workspace.
+
+### Final C001 decision
+
+**Promote the per-probe open-addressed sparse hash as the current Lane C storage
+foundation for Split RC on the measured representative exact workload.**
+
+This decision is based on the complete evidence chain:
+
+1. C001a showed that sparse occupancy can strongly favor the packed probe hash
+   in memory and prevented brick storage from being treated as an automatic win.
+2. C001b showed that brick/clipmap layouts can outperform the hash at
+   medium/dense synthetic occupancy and justified carrying virtual clipmap
+   forward.
+3. C001c showed a real steady-state exact-stream performance advantage for
+   virtual clipmap: about 14-18% lower allocation/residency cost and about
+   19-21% lower initial-build cost on the three A001 cases.
+4. C001d then charged the missing static -> camera-motion residency/window
+   transition work. Under that complete dynamic path, the hash is about 18%
+   faster in absolute transition time (11.702 vs 14.267 us), while also using
+   roughly one third of the persistent memory.
+
+The clipmap is therefore **not rejected as universally inferior**. It remains a
+useful follow-up candidate if future representative workloads become
+materially denser, if residency persists over many frames with infrequent
+window transitions, or if a later producer can provide clip/page maintenance
+at lower incremental cost.
+
+The hashed contiguous brick pool remains diagnostic/fallback only.
+
+No post-generation sort or favorable global reorder was introduced in the
+accepted exact-stream evidence, and no microarchitectural cache mechanism is
+claimed from timestamps alone.
+
+## Lane C conclusion
+
+C001 is complete. The accepted storage baseline is:
+
+- **per-probe open-addressed sparse hash** for the current representative Split
+  RC workload;
+- preserve natural producer order;
+- do not add a global scheduler solely to compensate for storage locality;
+- keep virtual clipmap/brick approaches as conditional future candidates for a
+  demonstrably denser or more residency-stable workload.
+
+Further locality research should now build on this accepted baseline rather
+than reopening representation selection without new workload evidence.
