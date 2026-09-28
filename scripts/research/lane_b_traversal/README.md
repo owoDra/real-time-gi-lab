@@ -117,3 +117,8 @@ The same formal command is used. New artifacts include:
 15% of the same-run binary baseline, uses at most 1.5x persistent memory, and is
 fully correct. This is deliberately a viability gate for compression, not the
 final B003 success target.
+
+
+### B003 Stage B2 quantization
+
+The same formal B003 command now also measures conservative 16-bit quantized Micro BVH8. It emits `b003-stage-b2-summary.json`; `advance_to_triangle_packets=true` requires zero errors, <=1.10x float-BVH8 traversal, and <=0.90x float-BVH8 persistent memory.
