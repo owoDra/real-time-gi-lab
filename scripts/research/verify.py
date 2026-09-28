@@ -7,19 +7,28 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 LANES = {
     "lane-a-split-rc": {
+        "root": ROOT / "research" / "lanes" / "lane-a-split-rc",
         "src": "src/research/lane_a_split_rc/CMakeLists.txt",
         "shader": "shaders/research/lane_a_split_rc/README.md",
         "script": "scripts/research/lane_a_split_rc/README.md",
     },
     "lane-b-traversal": {
+        "root": ROOT / "research" / "lanes" / "lane-b-traversal",
         "src": "src/research/lane_b_traversal/CMakeLists.txt",
         "shader": "shaders/research/lane_b_traversal/README.md",
         "script": "scripts/research/lane_b_traversal/README.md",
     },
     "lane-c-storage-locality": {
+        "root": ROOT / "research" / "lanes" / "lane-c-storage-locality",
         "src": "src/research/lane_c_storage_locality/CMakeLists.txt",
         "shader": "shaders/research/lane_c_storage_locality/README.md",
         "script": "scripts/research/lane_c_storage_locality/README.md",
+    },
+    "integration-gate": {
+        "root": ROOT / "research" / "integration",
+        "src": "src/research/integration/CMakeLists.txt",
+        "shader": "shaders/research/integration/README.md",
+        "script": "scripts/research/integration/README.md",
     },
 }
 
@@ -36,13 +45,13 @@ def main() -> int:
     require(ROOT / "scripts" / "research" / "run_experiment.py")
 
     for lane, owned in LANES.items():
-        lane_root = ROOT / "research" / "lanes" / lane
+        lane_root = owned["root"]
         require(lane_root / "README.md")
         require(lane_root / "experiments" / "README.md")
         index_path = lane_root / "results" / "index.json"
         require(index_path)
-        for path in owned.values():
-            require(ROOT / path)
+        for key in ("src", "shader", "script"):
+            require(ROOT / owned[key])
 
         payload = json.loads(index_path.read_text(encoding="utf-8"))
         if payload.get("schema_version") != 1:

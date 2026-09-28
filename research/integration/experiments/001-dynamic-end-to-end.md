@@ -1,0 +1,194 @@
+# I001 — dynamic end-to-end GI integration gate
+
+Status: protocol frozen; implementation pending
+
+## Question
+
+Do the evidence-backed lane choices remain a better quality/performance/memory
+trade-off when executed as one complete dynamic GI pipeline rather than as
+isolated kernels?
+
+## Fixed architecture variants
+
+1. **vanilla-split-rc**
+   - A001 standalone visibility + producer semantics;
+   - natural append order;
+   - B002 software-BVH reference traversal;
+   - C001 per-probe sparse hash;
+   - full-capacity stream;
+   - no renderer reuse.
+
+2. **combined-hwrt**
+   - same producer/storage/order;
+   - HWRT / TLAS primary traversal;
+   - all BLAS/TLAS setup/update costs required by the scenario included.
+
+3. **combined-software**
+   - same producer/storage/order;
+   - B003 segment DDA/hash + conservative quantized Micro BVH8;
+   - required membership/build/refit/rebuild/upload costs included.
+
+4. **depth-reuse-hwrt**
+   - combined-hwrt with D001 depth reuse;
+   - report both renderer-integrated incremental GI time and a full standalone
+     boundary that includes the equivalent renderer depth prerequisite.
+
+5. **bounded-hwrt**
+   - optional only if bounded capacity can be integrated without the rejected
+     D005 owner-slot staging path;
+   - safe clamp/overflow detection and explicit full-capacity retry are
+     mandatory.
+
+The B002 binary-micro hierarchy remains a diagnostic control only. D002-D004
+and D005's standalone owner-slot implementation are not candidates.
+
+## Scenarios
+
+Accepted architectural evidence must cover:
+
+- Sponza static camera/static geometry;
+- Sponza camera motion/disocclusion;
+- Sponza changing direct light;
+- Sponza controlled moving rigid geometry;
+- sparse stress;
+- dense stress;
+- large-world stress;
+- vertical-world stress.
+
+Sponza cases are the representative evidence. Synthetic/stress cases isolate
+mechanisms and limits; they cannot by themselves select the final architecture.
+
+Moving geometry timing includes producer interaction, traversal maintenance,
+storage invalidation/update, temporal resolve and:
+- HWRT: BLAS update/rebuild + TLAS update + trace;
+- software: membership/update + refit/rebuild + upload + traversal.
+
+## Timing boundaries
+
+GPU timestamps must report at least:
+
+- renderer visibility prerequisite (when present);
+- GI visibility/reuse;
+- producer emit/finalize;
+- traversal maintenance;
+- traversal;
+- radiance lookup/update;
+- allocation/residency;
+- invalidation;
+- merge/resolve;
+- complete GI frame.
+
+CPU work required by an architecture is recorded separately and is never hidden
+from the end-to-end result. Setup, steady state and dynamic update are reported
+separately.
+
+Accepted timing uses validation disabled and process-level repeats. A diagnostic
+validation run precedes accepted timing.
+
+## Memory and churn
+
+Record persistent, transient, scratch, resident/peak bytes plus:
+
+- rays/queries/updates;
+- allocation/eviction/invalidation churn;
+- overflow count and requested/capacity items;
+- fallback/retry occurrence;
+- update latency.
+
+Resident fallback resources count when they remain allocated.
+
+## Quality/reference
+
+Performance rows are accepted only after quality parity.
+
+The independent reference path uses the software-BVH Hit contract to produce the
+same deterministic radiance payload from the same A001 rays. Integrated variants
+compare their resolved probe/tile field against that reference.
+
+Record:
+- RMS and max absolute radiance error;
+- temporal RMS/max error across transitions;
+- disocclusion stale-output count;
+- moving-geometry stale/ghost count;
+- changing-light convergence error after each measured frame;
+- invalid/missing/leaked probe count.
+
+Hard quality gate:
+- Hit-contract mismatches/runtime errors/OOB/validation errors: zero;
+- stale outputs after a required invalidation/update frame: zero;
+- max absolute deterministic radiance error <= 1e-4;
+- RMS deterministic radiance error <= 1e-5.
+
+If later production shading introduces stochastic sampling, that requires a new
+protocol rather than silently relaxing I001.
+
+## Correctness hard gate
+
+Before timing:
+- A001 visibility/producer semantics and counts pass;
+- schema/workload identity is preserved;
+- traversal Hit contract passes;
+- sparse-hash insert/lookup/update/invalidation passes;
+- moving geometry update is visible in the same frame contract;
+- overflow clamp/retry is safe where applicable;
+- no OOB or Vulkan validation errors in the diagnostic run;
+- deterministic contract fields match; natural append-order nondeterminism is
+  compared semantically, not byte-for-byte.
+
+A failed correctness row cannot contribute accepted timing.
+
+## Fixed decision gates
+
+### Target-GPU primary
+`combined-hwrt` is promotable for the measured target only if:
+- quality/correctness gates pass in every required scenario;
+- median complete GI GPU time is <= 0.90x vanilla in each representative
+  Sponza static/camera/light/moving scenario;
+- no required stress scenario regresses complete GI GPU time by >5%;
+- peak resident memory is reported and remains <=3.0x vanilla.
+
+A memory ratio above 1.5x prevents an unqualified universal-win claim even when
+the target-GPU primary passes; the result must be target/performance-conditional.
+
+### No-HWRT fallback
+`combined-software` is promoted over vanilla software traversal only if:
+- quality/correctness passes;
+- representative complete GI median is <=0.90x vanilla;
+- peak resident memory is <=1.15x vanilla;
+- moving-geometry complete maintenance does not regress by >5%.
+
+### Renderer depth reuse
+Retain as an integration optimization only if incremental GI GPU time improves
+by >=10% versus the otherwise identical combined-hwrt boundary. The standalone
+full boundary must still expose the renderer depth prerequisite.
+
+### Bounded capacity
+Retain only if:
+- producer resident/peak stream memory is <=0.60x full-capacity combined-hwrt;
+- normal-case complete GI GPU time is <=1.05x full-capacity;
+- forced-overflow clamp and full retry both pass correctness;
+- retry latency/memory is reported, not discarded.
+
+If regimes disagree, publish conditional decisions rather than changing these
+thresholds or averaging away the split.
+
+## Repeats and provenance
+
+Accepted artifact must record:
+- clean Git commit/branch;
+- exact command and artifact root;
+- scene/scenario/variant;
+- target GPU, driver and API;
+- validation state;
+- warmup/iteration/process-repeat counts;
+- raw rows and summary;
+- commit hash in CSV/JSON, not only metadata.
+
+Formal target runs use `mise run research:record --lane integration-gate
+--experiment 001-dynamic-end-to-end --command "..."`.
+
+## Result contract
+
+I001 concludes only after implementation, validation, repeated target timing,
+quality/reference evidence and a committed result/index entry. No PR or merge
+is part of this experiment.

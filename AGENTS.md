@@ -9,9 +9,14 @@ This repository is a measurement-driven GI research lab.
   - `research-lane-a-split-rc`
   - `research-lane-b-traversal`
   - `research-lane-c-storage-locality`
-- Push experiment commits directly to the active lane branch.
+  - `research-lane-d-producer-optimization`
+- Final Issue #13 integration work happens directly on
+  `research-integration-gate`.
+- Push experiment commits directly to the active lane/integration branch.
 - Do not create pull requests for normal research iterations.
 - Do not merge another lane or `research` without an explicit user request.
+- Integration may selectively carry evidence-backed lane files/contracts into
+  its owned branch; do not merge whole lane histories merely for convenience.
 - If a common harness change is required from a lane, prefer recording the need
   in that lane's result/issue instead of editing shared files. This keeps later
   integration conflict-free.
@@ -36,9 +41,22 @@ Lane C owns:
 - `scripts/research/lane_c_storage_locality/**`
 - `research/lanes/lane-c-storage-locality/**`
 
+Lane D owns:
+- `src/research/lane_d_producer_optimization/**`
+- `shaders/research/lane_d_producer_optimization/**`
+- `scripts/research/lane_d_producer_optimization/**`
+- `research/lanes/lane-d-producer-optimization/**`
+
+Integration owns:
+- `src/research/integration/**`
+- `shaders/research/integration/**`
+- `scripts/research/integration/**`
+- `research/integration/**`
+
 Shared roots such as `CMakeLists.txt`, `mise.toml`, `src/*.cpp`,
 `shaders/*.glsl`, and `research/protocol.md` are read-mostly from lane
-branches. Change them only when unavoidable and document why.
+branches. Integration may update shared registration/harness files when needed
+to compose accepted contracts; document the reason in the commit.
 
 ## Environment
 
@@ -59,7 +77,7 @@ performance timing. Semantic/correctness guards are always required.
 2. Preserve semantic parity before comparing performance.
 3. Include all costs required by the candidate architecture. Lookup-only wins
    do not promote an architecture if producer, allocation, update,
-   invalidation, scheduling, or maintenance costs erase the win.
+   invalidation, scheduling, maintenance, or resolve costs erase the win.
 4. Do not manufacture favorable ordering in synthetic producers. Synthetic
    distributions are allowed only for bring-up or isolated controls and must be
    labeled as such.
@@ -70,7 +88,7 @@ performance timing. Semantic/correctness guards are always required.
 
 ## Result lifecycle
 
-For every experiment:
+For every lane experiment:
 
 1. Create/update `research/lanes/<lane>/experiments/NNN-name.md` with question,
    hypothesis, protocol, correctness gate, and decision gate.
@@ -81,6 +99,9 @@ For every experiment:
 4. Add one entry to that lane's `results/index.json`.
 5. Update the lane README only when the lane-level conclusion/next decision gate
    changes.
+
+Integration follows the same lifecycle under `research/integration/**` with
+artifact lane slug `integration-gate`.
 
 Implementation behavior belongs in source/doc comments/tests. Research docs
 record rationale, protocols, evidence, limitations, and decisions that cannot
