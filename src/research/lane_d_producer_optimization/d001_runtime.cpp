@@ -39,6 +39,16 @@ VkBufferMemoryBarrier buffer_barrier(
 
 } // namespace
 
+const char* emission_domain_name(ProducerEmissionDomain domain) {
+    switch (domain) {
+    case ProducerEmissionDomain::SurfaceScan:
+        return "surface-scan";
+    case ProducerEmissionDomain::VisibleTileScan:
+        return "visible-tile-scan";
+    }
+    return "unknown";
+}
+
 const char* mode_name(D001Mode mode) {
     switch (mode) {
     case D001Mode::Full:
@@ -61,11 +71,13 @@ struct D001Runtime::Impl {
         Merge = 5,
         Resolve = 6,
         ProducerOwnerReuse = 7,
+        ProducerVisibleTile = 8,
     };
 
     VulkanContext& ctx;
     lane_a::A001ParamsGpu params{};
     D001Mode mode{};
+    ProducerEmissionDomain emission_domain{};
     std::uint32_t tile_count{};
     std::uint32_t max_work{};
     std::uint32_t max_outputs{};
@@ -85,7 +97,7 @@ struct D001Runtime::Impl {
     VkPipelineLayout pipeline_layout{VK_NULL_HANDLE};
     VkDescriptorPool descriptor_pool{VK_NULL_HANDLE};
     VkDescriptorSet descriptor_set{VK_NULL_HANDLE};
-    std::array<VkPipeline, 8> pipelines{};
+    std::array<VkPipeline, 9> pipelines{};
     VkCommandPool command_pool{VK_NULL_HANDLE};
     VkCommandBuffer command_buffer{VK_NULL_HANDLE};
     VkQueryPool query_pool{VK_NULL_HANDLE};
@@ -95,8 +107,9 @@ struct D001Runtime::Impl {
         VulkanContext& context,
         const lane_a::SceneSurfaceSet& scene,
         const lane_a::A001ParamsGpu& p,
-        D001Mode m)
-        : ctx(context), params(p), mode(m) {
+        D001Mode m,
+        ProducerEmissionDomain domain)
+        : ctx(context), params(p), mode(m), emission_domain(domain) {
         tile_count = params.counts[1] * params.counts[2];
         max_work = params.limits[1];
         max_outputs = params.limits[2];
@@ -145,7 +158,7 @@ struct D001Runtime::Impl {
 
         init_descriptors();
 
-        const std::array<const char*, 8> names{{
+        const std::array<const char*, 9> names{{
             "lane_a_visibility_depth.spv",
             "lane_a_visibility_owner.spv",
             "lane_a_producer.spv",
@@ -154,6 +167,7 @@ struct D001Runtime::Impl {
             "lane_a_merge.spv",
             "lane_a_resolve.spv",
             "lane_d_d001_producer_owner_reuse.spv",
+            "lane_d_d002_producer_visible_tile.spv",
         }};
         for (std::size_t i = 0; i < names.size(); ++i) {
             pipelines[i] = make_pipeline(names[i]);
@@ -635,14 +649,20 @@ struct D001Runtime::Impl {
             query_pool,
             5);
 
+        const bool tile_emission =
+            emission_domain == ProducerEmissionDomain::VisibleTileScan;
         const auto producer_pipeline =
-            mode == D001Mode::OwnerReuse
-                ? pipelines[ProducerOwnerReuse]
-                : pipelines[Producer];
+            tile_emission
+                ? pipelines[ProducerVisibleTile]
+                : (mode == D001Mode::OwnerReuse
+                       ? pipelines[ProducerOwnerReuse]
+                       : pipelines[Producer]);
+        const auto producer_invocations =
+            tile_emission ? tile_count : params.counts[0];
         bind(producer_pipeline);
         ctx.vk().cmdDispatch(
             command_buffer,
-            groups(params.counts[0]),
+            groups(producer_invocations),
             1,
             1);
         sync_compute(counters);
@@ -749,12 +769,14 @@ D001Runtime::D001Runtime(
     VulkanContext& context,
     const lane_a::SceneSurfaceSet& scene,
     const lane_a::A001ParamsGpu& params,
-    D001Mode mode)
+    D001Mode mode,
+    ProducerEmissionDomain emission_domain)
     : impl_(std::make_unique<Impl>(
           context,
           scene,
           params,
-          mode)) {}
+          mode,
+          emission_domain)) {}
 
 D001Runtime::~D001Runtime() = default;
 
