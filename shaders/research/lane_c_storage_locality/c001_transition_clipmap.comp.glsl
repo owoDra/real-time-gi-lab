@@ -81,7 +81,13 @@ void main() {
             const uint current = atomicAdd(tags[slot], 0u);
             if (current == INIT) continue;
             if ((current & TAG_MASK) == desired && current != 0u) {
-                atomicOr(tags[slot], TARGET);
+                const uint previous = atomicOr(tags[slot], TARGET);
+                if ((previous & TARGET) == 0u) {
+                    const uint mapped = pages[slot];
+                    if (mapped != 0u && mapped != INIT) {
+                        clear_physical(mapped - 1u);
+                    }
+                }
                 return;
             }
             if (current == 0u) {
