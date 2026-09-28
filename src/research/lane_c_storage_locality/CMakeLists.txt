@@ -33,6 +33,7 @@ function(lane_c_compile_shader NAME SOURCE)
 endfunction()
 
 lane_c_compile_shader(c001_address "${LANE_C_SHADER_DIR}/c001_address.comp.glsl")
+lane_c_compile_shader(c001_exact_address "${LANE_C_SHADER_DIR}/c001_exact_address.comp.glsl")
 lane_c_compile_shader(c001_probe_hash "${LANE_C_SHADER_DIR}/c001_probe_hash.comp.glsl")
 lane_c_compile_shader(c001_brick_hash "${LANE_C_SHADER_DIR}/c001_brick_hash.comp.glsl")
 lane_c_compile_shader(c001_clipmap "${LANE_C_SHADER_DIR}/c001_clipmap.comp.glsl")

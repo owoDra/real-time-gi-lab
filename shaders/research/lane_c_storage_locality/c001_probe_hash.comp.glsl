@@ -47,6 +47,11 @@ void main() {
     if (i >= pc.count) return;
     const Address a = addresses[i];
     if (pc.op == 0u) { reserve_slot(a.probe_key); return; }
+    if (pc.op == 8u) {
+        if (a.payload != 0u) reserve_slot(a.probe_key);
+        return;
+    }
+    if ((pc.op == 9u || pc.op == 10u || pc.op == 11u) && a.payload == 0u) return;
     const uint slot = find_slot(a.probe_key);
     if (pc.op == 2u) { outputs[i] = slot == 0xffffffffu ? 0u : payloads[slot]; return; }
     if (slot == 0xffffffffu) { atomicAdd(counters[1], 1u); return; }
@@ -54,4 +59,7 @@ void main() {
     else if (pc.op == 3u) payloads[slot] = a.payload ^ 0xa5a5a5a5u;
     else if (pc.op == 4u) payloads[slot] = 0u;
     else if (pc.op == 5u) { payloads[slot] = 0u; atomicExchange(keys[slot], TOMBSTONE); }
+    else if (pc.op == 9u) atomicExchange(payloads[slot], a.payload);
+    else if (pc.op == 10u) atomicExchange(payloads[slot], a.payload ^ 0xa5a5a5a5u);
+    else if (pc.op == 11u) atomicExchange(payloads[slot], 0u);
 }

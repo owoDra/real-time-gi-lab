@@ -47,6 +47,36 @@ uint page_of(Unit b) {
 void main() {
     const uint i = gl_GlobalInvocationID.x;
     if (i >= pc.count) return;
+    if (pc.op >= 8u && pc.op <= 11u) {
+        const Address a = addresses[i];
+        if (a.payload == 0u) return;
+        const uint page = a.brick_key - 1u;
+        if (pc.op == 8u) {
+            const uint old = atomicCompSwap(pages[page], 0u, 0xffffffffu);
+            if (old == 0u) {
+                const uint physical = atomicAdd(counters[0], 1u);
+                if (physical >= pc.max_probe) {
+                    atomicAdd(counters[1], 1u);
+                    atomicExchange(pages[page], 0u);
+                } else {
+                    atomicExchange(pages[page], physical + 1u);
+                }
+            }
+            return;
+        }
+        const uint mapped = pages[page];
+        if (mapped == 0u || mapped == 0xffffffffu) {
+            atomicAdd(counters[1], 1u);
+            return;
+        }
+        const uint physical = mapped - 1u;
+        const uint payload_index =
+            physical * pc.brick_edge * pc.brick_edge * pc.brick_edge + a.local_index;
+        if (pc.op == 9u) atomicExchange(payloads[payload_index], a.payload);
+        else if (pc.op == 10u) atomicExchange(payloads[payload_index], a.payload ^ 0xa5a5a5a5u);
+        else if (pc.op == 11u) atomicExchange(payloads[payload_index], 0u);
+        return;
+    }
     if (pc.op == 0u) {
         const uint page = page_of(inputs[i]);
         if (pages[page] == 0u) pages[page] = take_physical() + 1u;
