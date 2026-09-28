@@ -188,3 +188,10 @@ behavior, memory traffic/stalls, and occupancy support the interpretation.
 - that this architecture is better than DDGI, SHaRC-like, Split RC, or ReSTIR
   end-to-end;
 - that results generalize beyond RADV STRIX_HALO.
+
+## Target-system validation status
+
+- **2026-09-28 validation sweep passed** on AMD Radeon 8060S Graphics / RADV STRIX_HALO for 100k, 500k, 1M, 4M, and 8M queries, 3 repeats each.
+- All representation × ordering rows and GPU page-grouping rows completed with the benchmark correctness guards intact; the sweep produced artifacts successfully.
+- This run used `--validation`, so its timings are **not accepted as performance evidence**. They are diagnostic only.
+- Diagnostic trend: from 500k upward, page grouping strongly improves both representations, while hash + page grouping remains faster than paged + page grouping. GPU-produced grouping yields lookup timings close to CPU-preordered page grouping. This is provisional until the non-validation sweep records scheduling and end-to-end cost.
