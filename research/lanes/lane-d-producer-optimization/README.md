@@ -90,3 +90,23 @@ Decision:
 
 The observed neighboring-tile locality improvement is recorded as a natural
 source-order effect only and is not used to override the performance gate.
+
+
+## Progress — D003 packed one-pass owner selection rejected (2026-09-29)
+
+D003 preserved the A001 semantic counts and overflow stayed zero, but the exact
+64-bit packed `atomicMin` path was slower than both the matched staged two-pass
+control and accepted A001.
+
+Three-repeat medians showed packed producer-total regressions versus accepted
+A001 of 22.48% static, 10.37% camera-motion, and 11.05% light-motion.
+
+Decision:
+
+- do not retain packed 64-bit one-pass visibility selection;
+- keep A001 two-pass visibility semantics;
+- D001 depth reuse remains the only retained Lane D composition mechanism;
+- continue to D004 work-allocation contention.
+
+The uploaded CSV did not embed commit/artifact identity, so the D003 result
+record marks measurement identity as unverified rather than inventing it.
