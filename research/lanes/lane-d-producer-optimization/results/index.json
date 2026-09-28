@@ -15,6 +15,14 @@
       "result": "research/lanes/lane-d-producer-optimization/results/002-visible-tile-emission.md",
       "measurement_commit": "844123281ff72b5c3b6dea38ca69732b5ca2e00b",
       "decision": "do not retain visible-tile emission; static misses fixed promotion gate"
+    },
+    {
+      "id": "003-one-pass-owner-selection",
+      "status": "rejected",
+      "result": "research/lanes/lane-d-producer-optimization/results/003-one-pass-owner-selection.md",
+      "measurement_commit": null,
+      "expected_measurement_ready_commit": "6fee5a8c920da7e00ff7b29a61effe5a56dfedf1",
+      "decision": "do not retain packed 64-bit one-pass visibility selection"
     }
   ]
 }
