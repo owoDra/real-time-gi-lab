@@ -192,10 +192,11 @@ VkDescriptorSet CacheBenchmark::create_descriptor_set(
     return set;
 }
 
-void CacheBenchmark::record_lookup_dispatch(
+void CacheBenchmark::record_lookup_pass(
     VkCommandBuffer command_buffer,
     const CacheGpuData& cache,
     VkDescriptorSet set,
+    const GpuBuffer& output,
     std::uint32_t query_count) {
     ctx_.vk().cmdBindPipeline(
         command_buffer, VK_PIPELINE_BIND_POINT_COMPUTE, cache.pipeline);
@@ -215,6 +216,18 @@ void CacheBenchmark::record_lookup_dispatch(
 
     const std::uint32_t groups = (query_count + 255u) / 256u;
     ctx_.vk().cmdDispatch(command_buffer, groups, 1, 1);
+
+    // Every timed dispatch writes the same output buffer. Make the WAW
+    // dependency explicit rather than relying on queue submission order alone.
+    // The barrier is intentionally part of every lookup pass for every
+    // representation/ordering so the benchmark remains Vulkan-correct and fair.
+    auto output_ready = buffer_barrier(
+        output, VK_ACCESS_SHADER_WRITE_BIT, VK_ACCESS_SHADER_WRITE_BIT);
+    ctx_.vk().cmdPipelineBarrier(
+        command_buffer,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        0, 0, nullptr, 1, &output_ready, 0, nullptr);
 }
 
 CacheBenchmark::SchedulerSets CacheBenchmark::create_scheduler_sets(
@@ -391,7 +404,7 @@ CacheBenchmark::LookupMeasurement CacheBenchmark::measure_lookup(
     ctx_.vk().cmdResetQueryPool(command_buffer_, query_pool_, 0, 2);
 
     for (std::uint32_t i = 0; i < 5u; ++i) {
-        record_lookup_dispatch(command_buffer_, cache, set, query_count);
+        record_lookup_pass(command_buffer_, cache, set, output, query_count);
     }
 
     auto warmup_done = buffer_barrier(
@@ -405,7 +418,7 @@ CacheBenchmark::LookupMeasurement CacheBenchmark::measure_lookup(
     ctx_.vk().cmdWriteTimestamp(
         command_buffer_, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, query_pool_, 0);
     for (std::uint32_t i = 0; i < iterations; ++i) {
-        record_lookup_dispatch(command_buffer_, cache, set, query_count);
+        record_lookup_pass(command_buffer_, cache, set, output, query_count);
     }
     ctx_.vk().cmdWriteTimestamp(
         command_buffer_, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, query_pool_, 1);
@@ -465,7 +478,7 @@ double CacheBenchmark::measure_scheduler(
     return finish_timed_submission(iterations);
 }
 
-double CacheBenchmark::measure_end_to_end(
+CacheBenchmark::LookupMeasurement CacheBenchmark::measure_end_to_end(
     const GpuBuffer& source_queries,
     SchedulerGpuData& scheduler,
     const CacheGpuData& cache,
@@ -488,8 +501,8 @@ double CacheBenchmark::measure_end_to_end(
 
     for (std::uint32_t i = 0; i < 3u; ++i) {
         record_schedule_pass(command_buffer_, scheduler, sets);
-        record_lookup_dispatch(
-            command_buffer_, cache, lookup_set, scheduler.query_count);
+        record_lookup_pass(
+            command_buffer_, cache, lookup_set, output, scheduler.query_count);
     }
 
     auto warmup_done = detail::make_vk_info<VkMemoryBarrier>(
@@ -508,15 +521,23 @@ double CacheBenchmark::measure_end_to_end(
         command_buffer_, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, query_pool_, 0);
     for (std::uint32_t i = 0; i < iterations; ++i) {
         record_schedule_pass(command_buffer_, scheduler, sets);
-        record_lookup_dispatch(
-            command_buffer_, cache, lookup_set, scheduler.query_count);
+        record_lookup_pass(
+            command_buffer_, cache, lookup_set, output, scheduler.query_count);
     }
     ctx_.vk().cmdWriteTimestamp(
         command_buffer_, VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT, query_pool_, 1);
 
     const double gpu_us = finish_timed_submission(iterations);
+
+    std::vector<std::uint32_t> downloaded(scheduler.query_count);
+    ctx_.download_device_buffer(
+        output, downloaded.data(),
+        static_cast<VkDeviceSize>(downloaded.size()) * sizeof(std::uint32_t));
+    std::uint64_t checksum = 0;
+    for (const auto value : downloaded) checksum += value;
+
     ctx_.destroy_buffer(output);
-    return gpu_us;
+    return {gpu_us, checksum};
 }
 
 bool CacheBenchmark::validate_gpu_grouping(
@@ -671,7 +692,7 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
         const auto lookup =
             measure_lookup(
                 scheduler.grouped_queries, query_count, *cache, iterations);
-        const double end_to_end_us =
+        const auto end_to_end =
             measure_end_to_end(
                 source_queries, scheduler, *cache, iterations);
 
@@ -683,12 +704,14 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
             lookup.gpu_us_per_dispatch,
             lookup.checksum,
             w.expected_checksum,
-            grouping_correct && lookup.checksum == w.expected_checksum,
+            grouping_correct &&
+                lookup.checksum == w.expected_checksum &&
+                end_to_end.checksum == w.expected_checksum,
             cache->name,
             "gpu-page-grouped",
             scheduler.transient_bytes,
             scheduling_us,
-            end_to_end_us,
+            end_to_end.gpu_us_per_dispatch,
         });
     }
 
