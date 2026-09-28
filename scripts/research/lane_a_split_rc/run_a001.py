@@ -53,6 +53,8 @@ def main() -> int:
         output_dir.mkdir(parents=True, exist_ok=True)
 
         command = [
+            "bash",
+            "scripts/run_with_vulkan.sh",
             str(executable),
             "--scene",
             args.scene,
