@@ -1,6 +1,6 @@
 # Experiment 001 — cheap query coherence for hash cache
 
-Status: ready for target-GPU measurement  
+Status: concluded — exact fused 16-bin mechanism rejected  
 Milestone: M0 / Issue #7
 
 ## Question
