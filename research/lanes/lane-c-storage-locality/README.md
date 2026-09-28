@@ -45,6 +45,11 @@ virtual/clipmap candidates. It consumes A001 stream-v1 work in the recorded
 append order and measures producer-address plus storage phases without a CPU
 sort/grouping step.
 
-No storage representation is promoted yet. Target-GPU C001c timing on the
-three A001 cases is the next gate; virtual/clipmap promotion also remains
-conditional on accounting for dynamic origin/window maintenance.
+C001c target-GPU exact-stream steady-state evidence is complete. Virtual
+clipmap reduces allocation/residency by about 14-18% and initial build by about
+19-21% on the three A001 cases, but uses about 2.5-2.6x the persistent memory
+of the sparse hash in this workload.
+
+No storage representation is promoted yet. C001d static -> camera-motion exact
+transition timing is the final gate because C001c does not charge dynamic
+virtual-window origin/residency maintenance.

@@ -323,3 +323,71 @@ It:
 Target-GPU C001c evidence is still pending. C001 remains active until those
 three exact-stream cases pass correctness/repeatability and the remaining
 virtual-window maintenance boundary is resolved.
+
+
+## C001c target-GPU exact-stream result
+
+Status: **accepted for exact-stream steady-state comparison; dynamic window
+transition remains unresolved**
+
+The 3-repeat, 100-iteration target-GPU run passed correctness for all 36
+summary rows across static, camera-motion, and light-motion.
+
+All three cases replayed the recorded Lane A append order directly.
+
+### End-to-end medians
+
+| Case | Phase | probe hash | virtual clipmap | clipmap delta |
+| --- | --- | ---: | ---: | ---: |
+| static | producer+lookup | 8.135 us | 6.853 us | -15.8% |
+| static | producer+allocation-residency | 7.855 us | 6.693 us | -14.8% |
+| static | initial-build-e2e | 9.819 us | 7.935 us | -19.2% |
+| camera-motion | producer+lookup | 7.093 us | 6.773 us | -4.5% |
+| camera-motion | producer+allocation-residency | 7.895 us | 6.452 us | -18.3% |
+| camera-motion | initial-build-e2e | 9.899 us | 7.975 us | -19.4% |
+| light-motion | producer+lookup | 7.414 us | 6.773 us | -8.6% |
+| light-motion | producer+allocation-residency | 7.534 us | 6.452 us | -14.4% |
+| light-motion | initial-build-e2e | 10.059 us | 7.975 us | -20.7% |
+
+Update/invalidation differences were much smaller. Camera-motion invalidation
+slightly favored the hash (6.572 us vs 6.693 us); the other measured mutation
+medians slightly favored clipmap.
+
+### Persistent memory
+
+The exact streams contain 1,537 unique probes. The hash uses 32,768 bytes.
+Virtual clipmap uses:
+
+- 82,280 bytes for static;
+- 84,880 bytes for camera-motion;
+- 82,280 bytes for light-motion.
+
+Thus the exact-stream clipmap uses about 2.51-2.59x the persistent storage of
+the sparse hash for this sparse workload, despite its better measured GPU
+build/residency timing.
+
+### Repeatability
+
+Allocation/residency and initial-build results were repeatable enough to retain
+the clipmap performance advantage. Lookup had isolated high repeats:
+
+- static clipmap lookup: 6.733 / 6.853 / 9.218 us;
+- light-motion hash lookup: 7.134 / 7.414 / 10.139 us.
+
+Therefore C001c does not use lookup alone as promotion evidence. The stronger
+evidence is the repeatable ~14-18% allocation/residency reduction and ~19-21%
+initial-build reduction.
+
+### Decision after C001c
+
+Do not promote either representation yet.
+
+Virtual clipmap remains the performance candidate, while probe hash remains the
+memory-efficient baseline. C001c normalizes each frame to a replay-local
+clipmap origin outside GPU timing, so it does not measure the cost of
+maintaining/changing that bounded virtual window across camera motion.
+
+The final C001 gate is therefore a real exact-stream transition measurement,
+starting with static -> camera-motion, that includes the storage residency
+changes required by the virtual window. A final promotion must account for this
+cost rather than treating per-frame origin selection as free.

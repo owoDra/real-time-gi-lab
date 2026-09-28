@@ -323,3 +323,26 @@ mise run research:record \
     --lane-a-artifact <A001-artifact-root> \
     --repeats 3 --iterations 100"
 ```
+
+
+## C001d — exact camera-motion transition gate
+
+C001c establishes steady-state exact-stream evidence but intentionally does not
+claim that per-frame virtual-window origin selection is free.
+
+C001d is the final promotion gate. It must compare the retained probe hash and
+virtual clipmap across the recorded static -> camera-motion transition while
+preserving stable world-probe identity and including residency changes caused
+by the virtual-window movement.
+
+Required evidence:
+
+- semantic parity before and after the transition;
+- stable probe identity across both recorded frames;
+- entering/leaving probe and brick counts;
+- complete transition GPU time including virtual-window residency work;
+- persistent and scratch memory;
+- no CPU sort/grouping or post-generation favorable reorder;
+- repeatability across independent process runs.
+
+No final C001 representation is promoted before C001d.
