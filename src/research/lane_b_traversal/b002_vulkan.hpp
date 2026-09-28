@@ -17,6 +17,7 @@ struct B002Buffer {
     VkDeviceMemory memory{VK_NULL_HANDLE};
     VkDeviceSize size{};
     VkDeviceSize allocation_size{};
+    VkDeviceAddress address{};
     void* mapped{};
 };
 
@@ -24,7 +25,8 @@ class B002VulkanContext {
 public:
     explicit B002VulkanContext(
         bool validation,
-        std::string target_device = kB002TargetDeviceName);
+        std::string target_device = kB002TargetDeviceName,
+        bool require_hwrt = false);
     ~B002VulkanContext();
 
     B002VulkanContext(const B002VulkanContext&) = delete;
@@ -54,6 +56,9 @@ public:
     [[nodiscard]] std::uint32_t api_version() const noexcept {
         return api_version_;
     }
+    [[nodiscard]] bool hwrt_enabled() const noexcept {
+        return hwrt_enabled_;
+    }
 
     [[nodiscard]] B002Buffer create_host_buffer(
         VkDeviceSize size,
@@ -61,7 +66,14 @@ public:
     [[nodiscard]] B002Buffer create_device_buffer(
         VkDeviceSize size,
         VkBufferUsageFlags usage);
+    [[nodiscard]] B002Buffer create_device_address_buffer(
+        VkDeviceSize size,
+        VkBufferUsageFlags usage);
     [[nodiscard]] B002Buffer upload_device_buffer(
+        const void* data,
+        VkDeviceSize size,
+        VkBufferUsageFlags usage);
+    [[nodiscard]] B002Buffer upload_device_address_buffer(
         const void* data,
         VkDeviceSize size,
         VkBufferUsageFlags usage);
@@ -81,7 +93,8 @@ private:
         VkDeviceSize size,
         VkBufferUsageFlags usage,
         VkMemoryPropertyFlags properties,
-        bool map);
+        bool map,
+        bool device_address = false);
     void copy_buffer(
         VkBuffer source,
         VkBuffer destination,
@@ -101,6 +114,7 @@ private:
     std::string driver_name_;
     std::string driver_info_;
     std::uint32_t api_version_{};
+    bool hwrt_enabled_{};
 };
 
 [[nodiscard]] std::vector<std::byte> read_b002_binary(

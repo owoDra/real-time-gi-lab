@@ -18,7 +18,8 @@ namespace {
 
 B002VulkanContext::B002VulkanContext(
     bool validation,
-    std::string target_device) {
+    std::string target_device,
+    bool require_hwrt) {
     vkb::InstanceBuilder instance_builder;
     instance_builder
         .set_app_name("phos-lane-b-b002")
@@ -39,11 +40,38 @@ B002VulkanContext::B002VulkanContext(
     instance_dispatch_ = instance_.make_table();
 
     vkb::PhysicalDeviceSelector selector(instance_);
-    auto physical_result = selector
+    selector
         .set_minimum_version(1, 3)
         .require_present(false)
-        .set_name(target_device)
-        .select();
+        .set_name(target_device);
+
+    VkPhysicalDeviceVulkan12Features vulkan12_features{};
+    VkPhysicalDeviceAccelerationStructureFeaturesKHR acceleration_features{};
+    VkPhysicalDeviceRayQueryFeaturesKHR ray_query_features{};
+    if (require_hwrt) {
+        vulkan12_features.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES;
+        vulkan12_features.bufferDeviceAddress = VK_TRUE;
+        acceleration_features.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_FEATURES_KHR;
+        acceleration_features.accelerationStructure = VK_TRUE;
+        ray_query_features.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_RAY_QUERY_FEATURES_KHR;
+        ray_query_features.rayQuery = VK_TRUE;
+
+        selector
+            .add_required_extension(
+                VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME)
+            .add_required_extension(
+                VK_KHR_RAY_QUERY_EXTENSION_NAME)
+            .add_required_extension(
+                VK_KHR_DEFERRED_HOST_OPERATIONS_EXTENSION_NAME)
+            .set_required_features_12(vulkan12_features)
+            .add_required_extension_features(acceleration_features)
+            .add_required_extension_features(ray_query_features);
+    }
+
+    auto physical_result = selector.select();
     if (!physical_result) {
         fail(
             "B002 target physical device selection failed: " +
@@ -86,6 +114,7 @@ B002VulkanContext::B002VulkanContext(
     driver_info_ = driver.driverInfo;
     api_version_ = properties.properties.apiVersion;
     timestamp_period_ns_ = properties.properties.limits.timestampPeriod;
+    hwrt_enabled_ = require_hwrt;
 
     if (device_name_ != target_device) {
         fail(
@@ -129,7 +158,8 @@ B002Buffer B002VulkanContext::create_buffer(
     VkDeviceSize size,
     VkBufferUsageFlags usage,
     VkMemoryPropertyFlags properties,
-    bool map) {
+    bool map,
+    bool device_address) {
     if (size == 0) fail("B002 cannot allocate a zero-byte buffer");
 
     B002Buffer output{};
@@ -155,6 +185,18 @@ B002Buffer B002VulkanContext::create_buffer(
 
     auto allocation_info = detail::make_vk_info<VkMemoryAllocateInfo>(
         VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO);
+    VkMemoryAllocateFlagsInfo allocation_flags{};
+    if (device_address) {
+        if (!hwrt_enabled_) {
+            destroy_buffer(output);
+            fail("B002 device-address buffer requires HWRT-enabled context");
+        }
+        allocation_flags.sType =
+            VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_FLAGS_INFO;
+        allocation_flags.flags =
+            VK_MEMORY_ALLOCATE_DEVICE_ADDRESS_BIT;
+        allocation_info.pNext = &allocation_flags;
+    }
     allocation_info.allocationSize = requirements.size;
     allocation_info.memoryTypeIndex =
         find_memory_type(requirements.memoryTypeBits, properties);
@@ -184,6 +226,16 @@ B002Buffer B002VulkanContext::create_buffer(
         destroy_buffer(output);
         fail("B002 vkMapMemory failed");
     }
+    if (device_address) {
+        auto address_info = detail::make_vk_info<VkBufferDeviceAddressInfo>(
+            VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO);
+        address_info.buffer = output.buffer;
+        output.address = dispatch_.getBufferDeviceAddress(&address_info);
+        if (output.address == 0) {
+            destroy_buffer(output);
+            fail("B002 vkGetBufferDeviceAddress returned zero");
+        }
+    }
     return output;
 }
 
@@ -195,7 +247,8 @@ B002Buffer B002VulkanContext::create_host_buffer(
         usage,
         VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
             VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
-        true);
+        true,
+        false);
 }
 
 B002Buffer B002VulkanContext::create_device_buffer(
@@ -207,7 +260,22 @@ B002Buffer B002VulkanContext::create_device_buffer(
             VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
             VK_BUFFER_USAGE_TRANSFER_DST_BIT,
         VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        false,
         false);
+}
+
+B002Buffer B002VulkanContext::create_device_address_buffer(
+    VkDeviceSize size,
+    VkBufferUsageFlags usage) {
+    return create_buffer(
+        size,
+        usage |
+            VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT |
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+            VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        false,
+        true);
 }
 
 void B002VulkanContext::copy_buffer(
@@ -246,6 +314,24 @@ void B002VulkanContext::copy_buffer(
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy begin");
     }
+
+    auto before = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    before.srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT;
+    before.dstAccessMask =
+        VK_ACCESS_TRANSFER_READ_BIT |
+        VK_ACCESS_TRANSFER_WRITE_BIT;
+    dispatch_.cmdPipelineBarrier(
+        command,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        0,
+        1,
+        &before,
+        0,
+        nullptr,
+        0,
+        nullptr);
 
     VkBufferCopy region{0, 0, size};
     dispatch_.cmdCopyBuffer(
@@ -326,6 +412,19 @@ B002Buffer B002VulkanContext::upload_device_buffer(
         create_host_buffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
     std::memcpy(staging.mapped, data, static_cast<std::size_t>(size));
     auto device = create_device_buffer(size, usage);
+    copy_buffer(staging.buffer, device.buffer, size);
+    destroy_buffer(staging);
+    return device;
+}
+
+B002Buffer B002VulkanContext::upload_device_address_buffer(
+    const void* data,
+    VkDeviceSize size,
+    VkBufferUsageFlags usage) {
+    auto staging =
+        create_host_buffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+    std::memcpy(staging.mapped, data, static_cast<std::size_t>(size));
+    auto device = create_device_address_buffer(size, usage);
     copy_buffer(staging.buffer, device.buffer, size);
     destroy_buffer(staging);
     return device;
