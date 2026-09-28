@@ -1,6 +1,15 @@
 # Issue #13 Integration owns this directory.
 
 add_compute_shader(
+  i001_software_bvh
+  shaders/research/integration/i001_software_bvh.comp.glsl)
+add_compute_shader(
+  i001_hwrt
+  shaders/research/integration/i001_hwrt.comp.glsl)
+add_compute_shader(
+  i001_quantized_bvh8
+  shaders/research/integration/i001_quantized_bvh8.comp.glsl)
+add_compute_shader(
   i001_work_to_rays
   shaders/research/integration/i001_work_to_rays.comp.glsl)
 add_compute_shader(
@@ -20,6 +29,9 @@ add_compute_shader(
   shaders/research/integration/i001_clamp_counters.comp.glsl)
 
 set(I001_SHADER_OUTPUTS
+  "${CMAKE_BINARY_DIR}/shaders/i001_software_bvh.spv"
+  "${CMAKE_BINARY_DIR}/shaders/i001_hwrt.spv"
+  "${CMAKE_BINARY_DIR}/shaders/i001_quantized_bvh8.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_work_to_rays.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_radiance.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_storage_update.spv"

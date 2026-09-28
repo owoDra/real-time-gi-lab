@@ -309,4 +309,27 @@ void i001_transfer_to_compute_barrier(
         nullptr);
 }
 
+void i001_acceleration_to_compute_barrier(
+    B002VulkanContext& context,
+    VkCommandBuffer command) {
+    auto barrier =
+        detail::make_vk_info<VkMemoryBarrier>(
+            VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    barrier.srcAccessMask =
+        VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR;
+    barrier.dstAccessMask =
+        VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR;
+    context.vk().cmdPipelineBarrier(
+        command,
+        VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        0,
+        1,
+        &barrier,
+        0,
+        nullptr,
+        0,
+        nullptr);
+}
+
 } // namespace phos::gi::research::integration

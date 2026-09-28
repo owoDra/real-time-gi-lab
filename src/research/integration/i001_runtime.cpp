@@ -384,7 +384,7 @@ struct I001Runtime::Impl {
             hwrt = std::make_unique<B002HwrtTraversal>(
                 context,
                 b_scene.triangles,
-                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"));
+                shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"));
             return;
         }
 
@@ -530,37 +530,40 @@ struct I001Runtime::Impl {
 
     void create_traversal_stage() {
         if (uses_hwrt(options.variant)) {
-            const std::array<I001Binding, 4> bindings{{
+            const std::array<I001Binding, 5> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
                 {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
                 {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hwrt->triangle_buffer()},
                 {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hits},
+                {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
             }};
             traversal_stage = std::make_unique<I001ComputeStage>(
                 context, shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
                 bindings, sizeof(std::uint32_t));
         } else if (uses_quantized(options.variant)) {
-            const std::array<I001Binding, 6> bindings{{
+            const std::array<I001Binding, 7> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
                 {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &triangle_buffer},
                 {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &quant_nodes},
                 {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &quant_order},
                 {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &quant_hash},
                 {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hits},
+                {6, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
             }};
             traversal_stage = std::make_unique<I001ComputeStage>(
-                context, shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b003_quantized_bvh8.spv"),
+                context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_quantized_bvh8.spv"),
                 bindings, sizeof(HierarchicalTraversalPush));
         } else {
-            const std::array<I001Binding, 5> bindings{{
+            const std::array<I001Binding, 6> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
                 {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &triangle_buffer},
                 {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &software_nodes},
                 {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &software_order},
                 {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hits},
+                {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
             }};
             traversal_stage = std::make_unique<I001ComputeStage>(
-                context, shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_software_bvh.spv"),
+                context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_software_bvh.spv"),
                 bindings, sizeof(SoftwareTraversalPush));
         }
     }
@@ -726,6 +729,9 @@ struct I001Runtime::Impl {
         i001_compute_barrier(context, command);
         stamp(5);
 
+        if (uses_hwrt(options.variant)) {
+            i001_acceleration_to_compute_barrier(context, command);
+        }
         record_candidate_traversal(command);
         i001_compute_barrier(context, command);
         stamp(6);

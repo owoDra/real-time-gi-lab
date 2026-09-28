@@ -70,4 +70,8 @@ void i001_transfer_to_compute_barrier(
     B002VulkanContext& context,
     VkCommandBuffer command);
 
+void i001_acceleration_to_compute_barrier(
+    B002VulkanContext& context,
+    VkCommandBuffer command);
+
 } // namespace phos::gi::research::integration
