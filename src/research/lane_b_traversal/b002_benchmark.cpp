@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <chrono>
 #include <cstdint>
 #include <cstdlib>
@@ -50,7 +51,7 @@ struct PreparedCase {
     std::vector<Ray> rays;
     std::vector<GpuRay> gpu_rays;
     std::vector<Hit> reference_hits;
-    std::uint64_t reference_identity_checksum{};
+    std::uint64_t reference_semantic_checksum{};
     double stream_parse_us{};
     double replay_convert_us{};
 };
@@ -63,7 +64,7 @@ struct ResultRow {
     std::uint32_t iterations{};
     std::size_t mismatches{};
     std::size_t runtime_errors{};
-    std::uint64_t identity_checksum{};
+    std::uint64_t semantic_checksum{};
     double stream_parse_us{};
     double replay_convert_us{};
     double scene_load_us{};
@@ -87,7 +88,7 @@ struct ResultRow {
 struct ValidationResult {
     std::size_t mismatches{};
     std::size_t runtime_errors{};
-    std::uint64_t identity_checksum{};
+    std::uint64_t semantic_checksum{};
 };
 
 [[nodiscard]] double elapsed_us(Clock::time_point start) {
@@ -150,7 +151,7 @@ struct ValidationResult {
     return hash;
 }
 
-[[nodiscard]] std::uint64_t identity_checksum(
+[[nodiscard]] std::uint64_t semantic_checksum(
     std::span<const Hit> hits) noexcept {
     std::uint64_t hash = 14695981039346656037ULL;
     for (const auto& hit : hits) {
@@ -158,6 +159,12 @@ struct ValidationResult {
         hash = fnv_add(hash, hit.primitive_id);
         hash = fnv_add(hash, hit.material_id);
         hash = fnv_add(hash, hit.instance_id);
+        if (hit.hit) {
+            hash = fnv_add(hash, std::bit_cast<std::uint32_t>(hit.t));
+            hash = fnv_add(hash, std::bit_cast<std::uint32_t>(hit.normal.x));
+            hash = fnv_add(hash, std::bit_cast<std::uint32_t>(hit.normal.y));
+            hash = fnv_add(hash, std::bit_cast<std::uint32_t>(hit.normal.z));
+        }
     }
     return hash;
 }
@@ -171,22 +178,28 @@ struct ValidationResult {
     }
 
     ValidationResult result;
-    std::vector<Hit> converted;
-    converted.reserve(actual.size());
+    std::vector<Hit> canonical;
+    canonical.reserve(actual.size());
     for (std::size_t index = 0; index < actual.size(); ++index) {
         if (actual[index].metadata[3] > 1U) {
             ++result.runtime_errors;
             ++result.mismatches;
-            converted.push_back({});
+            canonical.push_back({});
             continue;
         }
         const auto hit = from_gpu_hit(actual[index]);
-        converted.push_back(hit);
         if (!equivalent_hit(expected[index], hit)) {
             ++result.mismatches;
+            canonical.push_back(hit);
+        } else {
+            // Hash the shared-contract canonical representative after proving
+            // that the candidate hit is equivalent within B001 tolerances.
+            // This makes equal checksums meaningful across architectures even
+            // when their floating-point hit values differ by allowed ulps.
+            canonical.push_back(expected[index]);
         }
     }
-    result.identity_checksum = identity_checksum(converted);
+    result.semantic_checksum = semantic_checksum(canonical);
     return result;
 }
 
@@ -244,7 +257,7 @@ void verify_reference_sample(
     for (const auto ray : rays) {
         reference_hits.push_back(reference.trace(ray));
     }
-    const auto checksum = identity_checksum(reference_hits);
+    const auto checksum = semantic_checksum(reference_hits);
 
     return {
         std::string(name),
@@ -355,7 +368,7 @@ void write_rows(
 
     output
         << "workload,candidate,workload_id,rays,iterations,mismatches,"
-           "runtime_errors,identity_checksum,stream_parse_us,replay_convert_us,"
+           "runtime_errors,semantic_checksum,stream_parse_us,replay_convert_us,"
            "scene_load_us,setup_wall_us,build_cpu_us,membership_us,"
            "segment_build_us,occupancy_us,pack_cpu_us,accel_upload_us,"
            "ray_upload_us,blas_build_us,tlas_build_us,trace_us,"
@@ -372,7 +385,7 @@ void write_rows(
             << row.iterations << ','
             << row.mismatches << ','
             << row.runtime_errors << ','
-            << row.identity_checksum << ','
+            << row.semantic_checksum << ','
             << row.stream_parse_us << ','
             << row.replay_convert_us << ','
             << row.scene_load_us << ','
@@ -424,8 +437,8 @@ void write_correctness_json(
             << "    \"" << current.name << "\": {"
             << "\"workload_id\": " << current.workload_id << ", "
             << "\"rays\": " << current.rays.size() << ", "
-            << "\"reference_identity_checksum\": "
-            << current.reference_identity_checksum
+            << "\"reference_semantic_checksum\": "
+            << current.reference_semantic_checksum
             << "}";
         if (index + 1 != cases.size()) output << ',';
         output << '\n';
@@ -690,7 +703,7 @@ int main(int argc, char** argv) {
                     cli.iterations,
                     software_validation.mismatches,
                     software_validation.runtime_errors,
-                    software_validation.identity_checksum,
+                    software_validation.semantic_checksum,
                     replay.stream_parse_us,
                     replay.replay_convert_us,
                     scene_load_us,
@@ -792,7 +805,7 @@ int main(int argc, char** argv) {
                     cli.iterations,
                     hierarchy_validation.mismatches,
                     hierarchy_validation.runtime_errors,
-                    hierarchy_validation.identity_checksum,
+                    hierarchy_validation.semantic_checksum,
                     replay.stream_parse_us,
                     replay.replay_convert_us,
                     scene_load_us,
@@ -879,7 +892,7 @@ int main(int argc, char** argv) {
                     cli.iterations,
                     validation.mismatches,
                     validation.runtime_errors,
-                    validation.identity_checksum,
+                    validation.semantic_checksum,
                     replay.stream_parse_us,
                     replay.replay_convert_us,
                     scene_load_us,
