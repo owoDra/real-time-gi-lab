@@ -346,3 +346,28 @@ Required evidence:
 - repeatability across independent process runs.
 
 No final C001 representation is promoted before C001d.
+
+
+### C001d implementation
+
+The transition benchmark uses one stable canonical probe key over the union of
+the two recorded frames. The target frame remains in its original append order.
+
+For the hash candidate, the high bit of the existing hash key is used as a
+temporary target-frame mark, avoiding an additional persistent mark buffer. A
+bounded table sweep removes unmarked leaving probes.
+
+For the virtual/clipmap candidate, the page table is toroidal. Each page slot
+has a stable world-brick tag so overlapping bricks survive an origin shift,
+aliased old slots can reuse their physical brick in place, and leaving slots
+return physical bricks to the free list. The transition sequence is:
+
+1. GPU target address generation;
+2. mark/prepare target residency;
+3. sweep leaving residency;
+4. allocate target bricks that still need physical storage;
+5. populate target values.
+
+The timestamp includes all five steps. CPU set analysis is used only for
+correctness expectations and reported entering/leaving counts; it does not
+reorder or replace the measured GPU transition path.

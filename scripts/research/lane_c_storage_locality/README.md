@@ -36,3 +36,26 @@ mise run research:record \
 ```
 
 Run `--repeats 1 --iterations 10 --validation` first for diagnostics.
+
+
+## C001d exact transition
+
+`c001d_matrix.py` measures the recorded frame-to-frame transition without
+sorting the target producer stream. By default it replays:
+
+`static/stream-v1.bin -> camera-motion/stream-v1.bin`
+
+from one A001 artifact root.
+
+Diagnostic validation:
+
+```bash
+mise run research:record \
+  --lane lane-c-storage-locality \
+  --experiment 001-storage-baselines \
+  --command "python scripts/research/lane_c_storage_locality/c001d_matrix.py \
+    --lane-a-artifact <A001-artifact-root> \
+    --repeats 1 --iterations 10 --validation"
+```
+
+Accepted timing uses `--repeats 3 --iterations 100`.
