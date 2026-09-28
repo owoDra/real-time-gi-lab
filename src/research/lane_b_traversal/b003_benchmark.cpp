@@ -7,6 +7,7 @@
 #include "b003_micro_bvh8.hpp"
 #include "b003_quantized_bvh8.hpp"
 #include "b003_triangle_packets.hpp"
+#include "b003_triangle_packets_compact.hpp"
 #include "hierarchical_stratabrick.hpp"
 #include "software_bvh.hpp"
 
@@ -857,6 +858,120 @@ void write_stage_b3_summary(
         << "}\n";
 }
 
+
+void write_stage_b31_summary(
+    const std::filesystem::path& path,
+    std::span<const ResultRow> rows) {
+    double quant_sum = 0.0;
+    double packet_sum = 0.0;
+    double compact_sum = 0.0;
+    std::size_t quant_count = 0;
+    std::size_t packet_count = 0;
+    std::size_t compact_count = 0;
+    std::size_t quant_memory = 0;
+    std::size_t packet_memory = 0;
+    std::size_t compact_memory = 0;
+    std::size_t errors = 0;
+
+    for (const auto& row : rows) {
+        if (row.candidate ==
+            "dda-quantized-micro-bvh8") {
+            errors += row.mismatches +
+                row.runtime_errors;
+            quant_sum += row.trace_us;
+            ++quant_count;
+            quant_memory = row.persistent_bytes;
+        } else if (row.candidate ==
+                   "dda-quantized-bvh8-triangle-packet4") {
+            packet_sum += row.trace_us;
+            ++packet_count;
+            packet_memory = row.persistent_bytes;
+        } else if (row.candidate ==
+                   "dda-quantized-bvh8-triangle-packet4-compactmeta") {
+            errors += row.mismatches +
+                row.runtime_errors;
+            compact_sum += row.trace_us;
+            ++compact_count;
+            compact_memory = row.persistent_bytes;
+        }
+    }
+
+    if (quant_count != kB002Cases.size() ||
+        packet_count != kB002Cases.size() ||
+        compact_count != kB002Cases.size()) {
+        throw std::runtime_error(
+            "B003 Stage B3.1 summary missing required candidate rows");
+    }
+
+    const auto quant_mean =
+        quant_sum /
+        static_cast<double>(quant_count);
+    const auto packet_mean =
+        packet_sum /
+        static_cast<double>(packet_count);
+    const auto compact_mean =
+        compact_sum /
+        static_cast<double>(compact_count);
+    const auto quant_trace_ratio =
+        quant_mean > 0.0
+        ? compact_mean / quant_mean
+        : std::numeric_limits<double>::infinity();
+    const auto packet_trace_ratio =
+        packet_mean > 0.0
+        ? compact_mean / packet_mean
+        : std::numeric_limits<double>::infinity();
+    const auto quant_memory_ratio =
+        quant_memory != 0
+        ? static_cast<double>(compact_memory) /
+            static_cast<double>(quant_memory)
+        : std::numeric_limits<double>::infinity();
+    const auto packet_memory_ratio =
+        packet_memory != 0
+        ? static_cast<double>(compact_memory) /
+            static_cast<double>(packet_memory)
+        : std::numeric_limits<double>::infinity();
+
+    const bool keep =
+        errors == 0 &&
+        quant_trace_ratio <= 0.95 &&
+        quant_memory_ratio <= 1.25;
+
+    std::ofstream output(path);
+    if (!output) {
+        throw std::runtime_error(
+            "Could not create B003 Stage B3.1 summary");
+    }
+    output
+        << std::fixed << std::setprecision(6)
+        << "{\n"
+        << "  \"quantized_mean_trace_us\": "
+        << quant_mean << ",\n"
+        << "  \"packet_mean_trace_us\": "
+        << packet_mean << ",\n"
+        << "  \"compact_packet_mean_trace_us\": "
+        << compact_mean << ",\n"
+        << "  \"compact_vs_quantized_trace_ratio\": "
+        << quant_trace_ratio << ",\n"
+        << "  \"compact_vs_packet_trace_ratio\": "
+        << packet_trace_ratio << ",\n"
+        << "  \"quantized_persistent_bytes\": "
+        << quant_memory << ",\n"
+        << "  \"packet_persistent_bytes\": "
+        << packet_memory << ",\n"
+        << "  \"compact_packet_persistent_bytes\": "
+        << compact_memory << ",\n"
+        << "  \"compact_vs_quantized_memory_ratio\": "
+        << quant_memory_ratio << ",\n"
+        << "  \"compact_vs_packet_memory_ratio\": "
+        << packet_memory_ratio << ",\n"
+        << "  \"correctness_errors\": "
+        << errors << ",\n"
+        << "  \"retain_compact_triangle_packets\": "
+        << (keep ? "true" : "false")
+        << "\n"
+        << "}\n";
+}
+
 } // namespace
 } // namespace phos::gi::research::lane_b
 
@@ -1018,6 +1133,41 @@ int main(int argc, char** argv) {
                 quant_payload,
                 scene);
 
+        std::vector<double> compact_packet_build_samples;
+        compact_packet_build_samples.reserve(
+            cli.build_repeats);
+        for (std::uint32_t repeat = 0;
+             repeat < cli.build_repeats;
+             ++repeat) {
+            start = Clock::now();
+            auto candidate =
+                make_b003_compact_packet_micro_payload(
+                    quant_payload,
+                    scene);
+            volatile auto packets =
+                candidate.packets.size();
+            (void)packets;
+            compact_packet_build_samples.push_back(
+                elapsed_us(start));
+        }
+        const auto compact_packet_build_us =
+            median_us(
+                std::move(compact_packet_build_samples));
+        const auto compact_packet_payload =
+            make_b003_compact_packet_micro_payload(
+                quant_payload,
+                scene);
+
+        if (compact_packet_payload.nodes.size() !=
+                quant_payload.nodes.size() ||
+            compact_packet_payload.segment_count !=
+                quant_payload.segment_count ||
+            compact_packet_payload.max_stack_entries > 64U ||
+            compact_packet_payload.source_leaf_count == 0U) {
+            throw std::runtime_error(
+                "B003 compact triangle packet payload failed structural gate");
+        }
+
         if (packet_payload.nodes.size() !=
                 quant_payload.nodes.size() ||
             packet_payload.segment_count !=
@@ -1070,7 +1220,7 @@ int main(int argc, char** argv) {
                 << "  \"schema_version\": 1,\n"
                 << "  \"experiment\": "
                    "\"003-wide-software-traversal\",\n"
-                << "  \"stage\": \"A+B1+B2+B3\",\n"
+                << "  \"stage\": \"A+B1+B2+B3+B3.1\",\n"
                 << "  \"lane_a_measurement_commit\": \""
                 << kAcceptedA001Commit << "\",\n"
                 << "  \"lane_a_artifact\": \""
@@ -1140,6 +1290,24 @@ int main(int argc, char** argv) {
                 << ",\n"
                 << "  \"packet_total_triangle_slots\": "
                 << packet_payload.packet_triangle_slots
+                << ",\n"
+                << "  \"compact_triangle_packet_bytes\": "
+                << sizeof(B003GpuCompactTrianglePacket4)
+                << ",\n"
+                << "  \"compact_triangle_packets\": "
+                << compact_packet_payload.packets.size()
+                << ",\n"
+                << "  \"compact_packet_live_triangle_slots\": "
+                << compact_packet_payload.live_triangle_slots
+                << ",\n"
+                << "  \"compact_packet_total_triangle_slots\": "
+                << compact_packet_payload.packet_triangle_slots
+                << ",\n"
+                << "  \"compact_material_bits\": "
+                << kB003CompactMaterialBits
+                << ",\n"
+                << "  \"compact_instance_bits\": "
+                << kB003CompactInstanceBits
                 << ",\n"
                 << "  \"iterations\": "
                 << cli.iterations << ",\n"
@@ -1325,6 +1493,28 @@ int main(int argc, char** argv) {
         const auto packet_upload_us =
             elapsed_us(start);
 
+        start = Clock::now();
+        auto compact_packet_node_buffer =
+            context.upload_device_buffer(
+                compact_packet_payload.nodes.data(),
+                compact_packet_payload.nodes.size() *
+                    sizeof(B003GpuQuantNode),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        auto compact_packet_data_buffer =
+            context.upload_device_buffer(
+                compact_packet_payload.packets.data(),
+                compact_packet_payload.packets.size() *
+                    sizeof(B003GpuCompactTrianglePacket4),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        auto compact_packet_hash_buffer =
+            context.upload_device_buffer(
+                compact_packet_payload.hash_table.data(),
+                compact_packet_payload.hash_table.size() *
+                    sizeof(GpuSegmentHashEntry),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        const auto compact_packet_upload_us =
+            elapsed_us(start);
+
         const auto baseline_persistent =
             static_cast<std::size_t>(
                 triangle_buffer.allocation_size +
@@ -1354,6 +1544,11 @@ int main(int argc, char** argv) {
                 packet_node_buffer.allocation_size +
                 packet_data_buffer.allocation_size +
                 packet_hash_buffer.allocation_size);
+        const auto compact_packet_persistent =
+            static_cast<std::size_t>(
+                compact_packet_node_buffer.allocation_size +
+                compact_packet_data_buffer.allocation_size +
+                compact_packet_hash_buffer.allocation_size);
 
         for (const auto& replay : cases) {
             const auto ray_bytes =
@@ -1865,6 +2060,102 @@ int main(int argc, char** argv) {
                 packet_payload.max_depth,
             });
 
+            auto compact_packet_hit_buffer =
+                context.create_device_buffer(
+                    hit_bytes,
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            std::array<const B002Buffer*, 5>
+                compact_packet_bindings{
+                    &ray_buffer,
+                    &compact_packet_data_buffer,
+                    &compact_packet_node_buffer,
+                    &compact_packet_hash_buffer,
+                    &compact_packet_hit_buffer,
+                };
+            B002ComputeTraversal compact_packet_runner(
+                context,
+                (std::filesystem::path(
+                    PHOS_GI_LANE_B_SHADER_DIR) /
+                    "lane_b_b003_triangle_packets_compact.spv")
+                    .string(),
+                compact_packet_bindings,
+                sizeof(HierarchicalTraversalPush));
+
+            HierarchicalTraversalPush compact_packet_push =
+                quant_push;
+            compact_packet_push.values[1] =
+                compact_packet_payload.hash_mask;
+            compact_packet_push.values[2] =
+                compact_packet_payload.hash_max_probe;
+            compact_packet_push
+                .occupied_min_segment_size[0] =
+                compact_packet_payload.occupied_bounds.min.x;
+            compact_packet_push
+                .occupied_min_segment_size[1] =
+                compact_packet_payload.occupied_bounds.min.y;
+            compact_packet_push
+                .occupied_min_segment_size[2] =
+                compact_packet_payload.occupied_bounds.min.z;
+            compact_packet_push
+                .occupied_max_pad[0] =
+                compact_packet_payload.occupied_bounds.max.x;
+            compact_packet_push
+                .occupied_max_pad[1] =
+                compact_packet_payload.occupied_bounds.max.y;
+            compact_packet_push
+                .occupied_max_pad[2] =
+                compact_packet_payload.occupied_bounds.max.z;
+
+            const auto compact_packet_trace_us =
+                compact_packet_runner.measure(
+                    compact_packet_push.values[0],
+                    cli.iterations,
+                    &compact_packet_push,
+                    sizeof(compact_packet_push));
+
+            std::vector<GpuHit> compact_packet_hits(
+                replay.gpu_rays.size());
+            context.download_device_buffer(
+                compact_packet_hit_buffer,
+                compact_packet_hits.data(),
+                hit_bytes);
+            const auto compact_packet_validation =
+                validate_gpu_hits(
+                    replay.reference_hits,
+                    compact_packet_hits);
+
+            rows.push_back({
+                replay.name,
+                "dda-quantized-bvh8-triangle-packet4-compactmeta",
+                replay.workload_id,
+                replay.rays.size(),
+                cli.iterations,
+                compact_packet_validation.mismatches,
+                compact_packet_validation.runtime_errors,
+                compact_packet_validation.semantic_checksum,
+                replay.stream_parse_us,
+                replay.replay_convert_us,
+                scene_load_us,
+                hierarchy_measurement.total_us,
+                0.0,
+                compact_packet_build_us,
+                compact_packet_upload_us,
+                ray_upload_us,
+                compact_packet_trace_us,
+                compact_packet_persistent,
+                static_cast<std::size_t>(
+                    ray_buffer.allocation_size +
+                    compact_packet_hit_buffer
+                        .allocation_size),
+                64U *
+                    (sizeof(std::uint32_t) +
+                     sizeof(float)),
+                compact_packet_payload.nodes.size(),
+                compact_packet_payload.max_depth,
+            });
+
+            context.destroy_buffer(
+                compact_packet_hit_buffer);
             context.destroy_buffer(
                 packet_hit_buffer);
             context.destroy_buffer(
@@ -1878,6 +2169,12 @@ int main(int argc, char** argv) {
             context.destroy_buffer(ray_buffer);
         }
 
+        context.destroy_buffer(
+            compact_packet_hash_buffer);
+        context.destroy_buffer(
+            compact_packet_data_buffer);
+        context.destroy_buffer(
+            compact_packet_node_buffer);
         context.destroy_buffer(
             packet_hash_buffer);
         context.destroy_buffer(
@@ -1935,6 +2232,10 @@ int main(int argc, char** argv) {
             output_root /
                 "b003-stage-b3-summary.json",
             rows);
+        write_stage_b31_summary(
+            output_root /
+                "b003-stage-b31-summary.json",
+            rows);
 
         std::size_t mismatches = 0;
         std::size_t runtime_errors = 0;
@@ -1958,7 +2259,7 @@ int main(int argc, char** argv) {
         }
 
         constexpr std::size_t kExpectedRows =
-            kB002Cases.size() * 5U;
+            kB002Cases.size() * 6U;
         if (rows.size() != kExpectedRows) {
             std::cerr
                 << "B003 candidate gate: FAIL rows="
@@ -1992,6 +2293,8 @@ int main(int argc, char** argv) {
             << sizeof(B003GpuQuantNode)
             << " triangle_packets="
             << packet_payload.packets.size()
+            << " compact_packet_bytes="
+            << sizeof(B003GpuCompactTrianglePacket4)
             << '\n';
         return 0;
     } catch (const std::exception& error) {
