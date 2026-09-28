@@ -118,9 +118,9 @@ run = "python scripts/research/verify.py"
 [tasks."research:record"]
 description = "Run one lane experiment and capture a reproducible raw artifact"
 usage = '''
-flag "--lane <lane>" help="lane-a-split-rc, lane-b-traversal, or lane-c-storage-locality" required=true
-flag "--experiment <experiment>" help="Stable experiment id, e.g. 001-producer-stream" required=true
-flag "--command <command>" help="Command to execute; quote it as one shell argument" required=true
+flag "--lane <lane>" help="lane-a-split-rc, lane-b-traversal, or lane-c-storage-locality" required=#true
+flag "--experiment <experiment>" help="Stable experiment id, e.g. 001-producer-stream" required=#true
+flag "--command <command>" help="Command to execute; quote it as one shell argument" required=#true
 '''
 run = '''
 exec python scripts/research/run_experiment.py \
