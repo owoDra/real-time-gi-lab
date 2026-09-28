@@ -28,9 +28,10 @@ def main() -> int:
     parser.add_argument("--validation", action="store_true")
     args = parser.parse_args()
 
+    smoke = Path(args.build_dir) / "phos-lane-b-b002-smoke"
     executable = Path(args.build_dir) / "phos-lane-b-b002"
     maintenance = Path(args.build_dir) / "phos-lane-b-b002-maintenance"
-    for required in (executable, maintenance):
+    for required in (smoke, executable, maintenance):
         if not required.exists():
             raise SystemExit(
                 f"B002 executable not found: {required}; run 'mise run build'"
@@ -48,6 +49,16 @@ def main() -> int:
             raise SystemExit(
                 f"Accepted A001 replay stream not found: {stream}"
             )
+
+    smoke_command = [str(smoke)]
+    print("+", " ".join(smoke_command), flush=True)
+    smoke_result = subprocess.run(
+        smoke_command,
+        env=os.environ.copy(),
+        check=False,
+    )
+    if smoke_result.returncode:
+        return smoke_result.returncode
 
     command = [
         "bash",
