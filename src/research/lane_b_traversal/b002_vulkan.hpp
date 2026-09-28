@@ -66,6 +66,9 @@ public:
     [[nodiscard]] bool hwrt_enabled() const noexcept {
         return hwrt_enabled_;
     }
+    [[nodiscard]] VkDeviceSize acceleration_scratch_alignment() const noexcept {
+        return acceleration_scratch_alignment_;
+    }
 
     [[nodiscard]] B002Buffer create_host_buffer(
         VkDeviceSize size,
@@ -128,6 +131,7 @@ private:
     std::string driver_name_;
     std::string driver_info_;
     std::uint32_t api_version_{};
+    VkDeviceSize acceleration_scratch_alignment_{1};
     bool hwrt_enabled_{};
 };
 

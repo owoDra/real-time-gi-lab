@@ -100,8 +100,18 @@ B002VulkanContext::B002VulkanContext(
     queue_ = queue_result.value();
     queue_family_ = family_result.value();
 
+    VkPhysicalDeviceAccelerationStructurePropertiesKHR acceleration_properties{};
+    if (require_hwrt) {
+        acceleration_properties.sType =
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_ACCELERATION_STRUCTURE_PROPERTIES_KHR;
+    }
+
     VkPhysicalDeviceDriverProperties driver{};
     driver.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES;
+    if (require_hwrt) {
+        driver.pNext = &acceleration_properties;
+    }
+
     VkPhysicalDeviceProperties2 properties{};
     properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
     properties.pNext = &driver;
@@ -115,6 +125,15 @@ B002VulkanContext::B002VulkanContext(
     api_version_ = properties.properties.apiVersion;
     timestamp_period_ns_ = properties.properties.limits.timestampPeriod;
     hwrt_enabled_ = require_hwrt;
+    if (require_hwrt) {
+        acceleration_scratch_alignment_ =
+            acceleration_properties.minAccelerationStructureScratchOffsetAlignment;
+        if (acceleration_scratch_alignment_ == 0 ||
+            (acceleration_scratch_alignment_ &
+             (acceleration_scratch_alignment_ - 1U)) != 0U) {
+            fail("B002 target reports invalid acceleration-structure scratch alignment");
+        }
+    }
 
     if (device_name_ != target_device) {
         fail(

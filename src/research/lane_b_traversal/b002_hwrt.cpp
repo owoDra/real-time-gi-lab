@@ -32,6 +32,14 @@ static_assert(sizeof(Vertex3) == 12);
     throw std::runtime_error(message);
 }
 
+[[nodiscard]] VkDeviceAddress align_device_address(
+    VkDeviceAddress address,
+    VkDeviceSize alignment) noexcept {
+    const auto mask =
+        static_cast<VkDeviceAddress>(alignment - 1U);
+    return (address + mask) & ~mask;
+}
+
 } // namespace
 
 B002HwrtTraversal::B002HwrtTraversal(
@@ -241,12 +249,16 @@ double B002HwrtTraversal::build_blas(
     const auto scratch_size = std::max(
         size_info.buildScratchSize,
         size_info.updateScratchSize);
+    const auto scratch_alignment =
+        context_.acceleration_scratch_alignment();
     blas_scratch_ = context_.create_device_address_buffer(
-        scratch_size,
+        scratch_size + scratch_alignment - 1U,
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     build_info.dstAccelerationStructure = blas_.handle;
     build_info.scratchData.deviceAddress =
-        blas_scratch_.address;
+        align_device_address(
+            blas_scratch_.address,
+            context_.acceleration_scratch_alignment());
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount = primitive_count;
@@ -338,12 +350,16 @@ double B002HwrtTraversal::build_tlas() {
     const auto scratch_size = std::max(
         size_info.buildScratchSize,
         size_info.updateScratchSize);
+    const auto scratch_alignment =
+        context_.acceleration_scratch_alignment();
     tlas_scratch_ = context_.create_device_address_buffer(
-        scratch_size,
+        scratch_size + scratch_alignment - 1U,
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     build_info.dstAccelerationStructure = tlas_.handle;
     build_info.scratchData.deviceAddress =
-        tlas_scratch_.address;
+        align_device_address(
+            tlas_scratch_.address,
+            context_.acceleration_scratch_alignment());
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount = primitive_count;
