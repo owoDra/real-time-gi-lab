@@ -108,6 +108,7 @@ int main(int argc,char**argv) {
 
         const auto params=build_a001_params(scene,cli.settings);
         VulkanContext vk(cli.validation);
+        std::cerr << "GPU: " << vk.device_name() << '\n';
         A001Runtime runtime(vk,scene,params);
 
         const auto timings=runtime.measure(cli.iterations);
