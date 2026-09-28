@@ -1,6 +1,6 @@
 # Experiment A001 — representative Split RC producer stream
 
-Status: planned
+Status: accepted
 
 ## Question
 
@@ -13,26 +13,61 @@ for traversal and storage experiments without manufacturing a favorable order?
 A visibility-driven Split RC producer will exhibit measurable natural spatial
 and cascade locality even before any explicit global reordering.
 
-## Protocol
+## Implemented protocol
 
-- Use actual scene/visibility inputs rather than a preconstructed sorted query list.
-- Generate work on GPU.
-- Preserve the natural emission order.
-- Record stable per-work-item fields sufficient for replay: frame/workload id,
-  cascade, spatial/probe identity, ray direction/interval, and output identity.
-- Add a reference path that establishes semantic correctness independently of
-  the optimized implementation.
-- Measure producer time, item count, persistent/scratch bytes, and natural
-  locality distributions.
-- Include at least static camera and camera-motion cases.
+- Load actual scene triangles and derive centroid + geometric-normal samples.
+- Project those samples on GPU and select one nearest visible surface per screen tile using depth + deterministic owner tie-breaking.
+- Run one GPU producer invocation per source surface. Visible owners atomically reserve output/work blocks; the resulting inter-block append order is not sorted on CPU or reordered globally afterward.
+- Derive probe identity from scene-relative cascade spacing.
+- Emit versioned replay items containing probe, cascade, ray interval/direction, output, scene surface, and visibility tile identity.
+- Run GPU `producer -> gather -> merge -> resolve`.
+- Gather intentionally uses a simple analytic direct-light control rather than selecting a traversal architecture; traversal remains Lane B's question.
+- Resolve is checked against an independent CPU semantic reference before any timing is accepted.
+- Measure visibility, producer emit/finalize, gather, merge, resolve, producer-total, end-to-end, persistent/transient bytes, per-cascade work counts, and natural adjacent locality.
+- Run static camera, camera-motion, and changing-light cases.
+- Export each passing observed stream using `stream-schema-v1.md`.
+
+Synthetic input remains available only for bring-up and is not acceptable as
+A001 architectural evidence.
 
 ## Correctness gate
 
-The produced work and minimum gather semantics must match the defined reference
-within the experiment's explicit numerical tolerance.
+All three must pass:
+
+1. GPU visibility owner corresponds to the CPU nearest-depth reference for each visible tile.
+2. Every GPU work block matches the expected visible surface, probe identity, cascade, ray, interval, direction, and unique output range; no overflow or output holes are allowed.
+3. GPU gather/merge/resolve matches the CPU reference within the explicit resolve tolerance.
+
+A failed correctness gate invalidates the performance measurements and prevents
+stream export.
 
 ## Decision gate
 
-Advance the stream as the shared Lane B/C workload only if its semantics are
-representative of the intended Split RC design and its ordering has not been
-introduced solely to benefit a storage/traversal candidate.
+Advance schema v1 as the shared Lane B/C workload only after target-GPU runs
+show that:
+
+- the real Sponza static, camera-motion, and changing-light cases all pass correctness;
+- producer cost is reported rather than excluded;
+- stream artifacts are replayable;
+- measured locality is from the natural GPU append order;
+- no CPU sort/global reorder was introduced to improve locality.
+
+Target-GPU diagnostic validation on AMD Radeon 8060S Graphics (RADV STRIX_HALO)
+at commit `c412ab047876967e81e1884b2abbb4f55a817a3f` passed visibility,
+producer semantics, and resolve correctness for static, camera-motion, and
+light-motion. This confirms the semantic gate and stream export path on the
+target GPU.
+
+A subsequent validation-disabled repeated run at commit
+`8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f` also passed all three
+correctness gates. Its uploaded summary records the representative timings and
+locality used by the provisional result.
+
+The accepted raw artifact was reconciled as
+`out/research/lane-a-split-rc/001-representative-producer/20260928T143212Z/`. The accepted run used validation-disabled repeated timing
+(50 iterations per case), while the semantic guards remained enabled.
+
+A001 therefore satisfies its decision gate and publishes stream schema v1 as
+the representative Lane A workload for Lane B/C. The runner now records run
+conditions directly in future `summary.json` files as an additional
+traceability safeguard.

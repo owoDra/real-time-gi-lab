@@ -1,5 +1,52 @@
 {
   "schema_version": 1,
   "lane": "lane-b-traversal",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-traversal-contract-and-controls",
+      "status": "accepted",
+      "result": "001-traversal-contract-and-controls.md",
+      "artifact": "out/research/lane-b-traversal/001-traversal-contract-and-controls/20260928T150111Z",
+      "git_commit": "52710fcbd372369fe58e68f6c29b39aa9924a3db",
+      "cpu": "AMD RYZEN AI MAX+ 395 w/ Radeon 8060S",
+      "vulkan_devices": [
+        "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "llvmpipe (LLVM 21.1.8, 256 bits)"
+      ],
+      "hwrt_probe_status": "ambiguous"
+    },
+    {
+      "id": "002-lane-a-exact-stream-traversal",
+      "status": "accepted",
+      "result": "002-lane-a-exact-stream-traversal.md",
+      "artifact": "out/research/lane-b-traversal/002-lane-a-exact-stream-traversal/20260928T164136Z",
+      "git_commit": "b4baf15c15331411690530a1f9e7388d4e7d6fe8",
+      "lane_a_measurement_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+      "driver": "RADV / Mesa 26.1.2",
+      "correctness_mismatches": 0,
+      "runtime_errors": 0,
+      "primary_candidate": "hwrt-tlas",
+      "fallback_candidate": "hierarchical-stratabrick",
+      "baseline_candidate": "software-bvh"
+    },
+    {
+      "id": "003-wide-software-traversal",
+      "status": "accepted",
+      "outcome": "fallback-improved-full-target-not-met",
+      "result": "003-wide-software-traversal.md",
+      "artifact": "out/research/lane-b-traversal/003-wide-software-traversal/20260928T175711Z",
+      "git_commit": "c3dffb80b4640abfc6fcf1d22608c883de537378",
+      "lane_a_measurement_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+      "driver": "RADV / Mesa 26.1.2",
+      "correctness_mismatches": 0,
+      "runtime_errors": 0,
+      "selected_fallback": "dda-quantized-micro-bvh8",
+      "mean_trace_us": 231.226,
+      "persistent_bytes": 22833584,
+      "full_success_target_us": 175,
+      "full_success_target_met": false
+    }
+  ]
 }

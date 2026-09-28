@@ -1,5 +1,12 @@
 {
   "schema_version": 1,
   "lane": "lane-c-storage-locality",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-storage-baselines",
+      "status": "accepted",
+      "scope": "C001a-d complete; per-probe open-addressed sparse hash accepted for representative exact Split RC workload; virtual clipmap retained as conditional future candidate",
+      "result": "research/lanes/lane-c-storage-locality/results/001-storage-baselines.md"
+    }
+  ]
 }
