@@ -7,9 +7,9 @@ Mission: determine which traversal architecture best serves Split RC gather rays
 under realistic dynamic-scene maintenance costs. StrataBrick is a candidate, not
 a requirement.
 
-## Status — B002 complete; B003 fallback optimization active
+## Status — B002 and B003 complete
 
-Lane B's primary decision from B002 remains complete and accepted. B003 is an optional software-fallback optimization follow-up and does not block Integration #13.
+Lane B's primary HWRT decision from B002 remains accepted. B003 is now complete and upgrades the software fallback to DDA/hash + conservative quantized Micro BVH8. Integration #13 is not blocked by Lane B.
 
 Lane B B001/B002 established the final primary decision. B001 established the shared Hit contract and candidate
 retention. B002 completed the final comparison on Lane A's accepted exact
@@ -107,3 +107,29 @@ Protocol:
 ### B003 candidate selection checkpoint
 
 Stage B3.1 rejected packet retention under the unchanged gate. The current best software-fallback candidate is **DDA/hash + conservative quantized Micro BVH8**. It is materially faster and smaller than the B002 binary-micro hierarchy, but does not meet B003's <=175 us full gap-closing success target. Formal B003 result publication is pending verification of the complete final-run provenance/config/correctness artifact set.
+
+
+## B003 final fallback update
+
+Formal result:
+
+`results/003-wide-software-traversal.md`
+
+Accepted B003 artifact:
+
+`out/research/lane-b-traversal/003-wide-software-traversal/20260928T175711Z/`
+
+B003 final fallback:
+
+- **DDA/hash + conservative quantized Micro BVH8**;
+- representative mean traversal: **231.226 us**;
+- persistent allocation: **22,833,584 bytes / 21.78 MiB**;
+- zero B001 Hit mismatches/runtime errors.
+
+Relative to the same-run B002-style hierarchical fallback, this is about 18.6%
+lower traversal time and 15.3% lower persistent allocation.
+
+B003 did **not** meet its <=175 us full HWRT-gap-closing target. HWRT/TLAS
+therefore remains the primary architecture by a large margin. Integration #13
+should use the quantized Micro BVH8 candidate as the software fallback rather
+than the older binary-micro hierarchy.

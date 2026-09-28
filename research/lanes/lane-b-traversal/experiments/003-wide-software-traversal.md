@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: candidate selection complete; formal B003 provenance set pending
+Status: accepted evidence; complete
 
 ## Question
 
@@ -477,3 +477,27 @@ The compact layout solves the original packet memory failure but loses about 2% 
 The quantized candidate improves the original hierarchical fallback materially, but its roughly 231 us representative mean is still above B003's <=175 us full success target. Therefore B003 has not closed at least half of the B002 hierarchy-to-HWRT traversal gap. The result is an improved fallback, not HWRT-equivalent software traversal.
 
 Do not write the accepted/rejected B003 result or update `results/index.json` until the complete final-run provenance/config/correctness set from the same artifact is checked.
+
+
+## Formal B003 closeout
+
+Formal accepted artifact:
+
+`out/research/lane-b-traversal/003-wide-software-traversal/20260928T175711Z/`
+
+Measurement commit:
+
+`c3dffb80b4640abfc6fcf1d22608c883de537378`
+
+The checkout was clean, the runner returned 0, the exact intended RADV physical
+device was selected, and all 18 interpreted candidate rows completed with zero
+B001 Hit mismatches and zero runtime errors.
+
+Final result:
+
+`../results/003-wide-software-traversal.md`
+
+B003 promotes DDA/hash + conservative quantized Micro BVH8 as the new software
+fallback. It improves the fallback materially but does not meet the <=175 us
+full HWRT-gap-closing target. Packet variants are not retained under their
+predefined gates.
