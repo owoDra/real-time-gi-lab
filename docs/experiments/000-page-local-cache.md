@@ -1,19 +1,30 @@
 # Experiment 000 — page-local cache locality
 
 Status: active  
-Milestone: M0
+Milestone: M0 / scheduling viability gate
 
 ## Question
 
-Does a page-local contiguous cache reduce GPU lookup cost relative to a fair
-open-addressed global hash baseline, and how much additional benefit comes from
-grouping queries by page?
+How much of the GPU lookup result is caused by:
 
-## Hypothesis
+1. cache representation;
+2. query ordering / locality;
+3. their interaction;
+4. the GPU cost required to create a coherent order?
 
-A radiance cache organized as directly-addressable coarse pages with contiguous
-local payload should execute more coherently than a global open-addressed hash
-cache. Grouping work by page should further improve wave/L2 locality.
+The experiment must distinguish those effects before page-local storage is
+promoted as an architecture premise.
+
+## Hypotheses
+
+Two hypotheses are intentionally tested independently:
+
+- **representation hypothesis:** under the same query order, a page-local
+  contiguous cache is faster than the open-addressed hash baseline;
+- **scheduling hypothesis:** grouping otherwise identical queries by page
+  improves either representation enough to justify the ordering cost.
+
+Neither hypothesis is assumed true.
 
 ## Scope
 
@@ -21,106 +32,218 @@ This experiment deliberately excludes:
 
 - lighting quality;
 - radiance interpolation;
-- temporal stability;
+- temporal reuse;
 - ray-query cost;
 - surface-placement quality;
 - multi-bounce transport;
-- GPU cost of sorting/binning in M0.
+- denoising or ReSTIR-style reuse.
 
-Those would hide the memory-layout signal. GPU scheduling cost enters in M1.
+Those features would hide the layout/scheduling signal.
 
 ## Workload
 
 Sponza triangle centroids are quantized into 0.25 m cells. A page is 4 x 4 x 4
-cells (64 local slots). Pages are assigned dense IDs for the M0 benchmark.
+cells (64 local slots). Pages are assigned dense IDs for this experiment.
 
 Every active logical cell receives one non-zero unique experiment key and one
-semantic payload value. Both cache variants must return that same value.
+semantic payload value. All representation/ordering combinations operate on the
+same multiset of queries and must return that same value.
 
-### Hash baseline
+### Representations
+
+#### Hash
 
 - open addressing with linear probing;
-- table capacity is the next power of two large enough for at most 0.5 load,
-  based on **actual active cells**;
+- capacity is the next power of two large enough for at most 0.5 load;
+- sizing is based on **actual active cells**, not page capacity;
 - the shader probe limit is the maximum probe depth observed while constructing
-  the table;
-- input queries remain in original workload order.
+  the table.
 
-The M0 key is intentionally a unique logical-cell ID. Key construction is
-outside the timed lookup so hash collisions in world-coordinate encoding cannot
-silently invalidate semantic parity.
+The key is a unique logical-cell ID. Key construction is outside the timed
+lookup so coordinate-key collisions cannot silently invalidate semantic parity.
 
-### Paged
+#### Paged
 
-- direct page table;
-- contiguous 64-entry payload per page;
-- original query order.
+- dense direct page table;
+- contiguous 64-entry payload per page.
 
-### Paged-sorted
+Representation bytes are reported separately from scheduling scratch memory.
 
-Same storage as `paged`, but queries are stable-sorted by
-`(page_id, local_index)` before dispatch.
+### Ordering regimes
 
-CPU sorting is deliberately outside the timed region in M0. It measures the
-upper bound of locality benefit. M1 must reproduce the ordering on GPU and count
-its cost.
+Ordering is an independent axis from representation.
+
+- **source** — query order produced by the workload generator;
+- **randomized** — deterministic shuffle of exactly the same queries;
+- **page-grouped** — CPU stable-sort by `page_id` only.
+
+The page-grouped control deliberately does **not** additionally sort by
+`local_index`. The previous exploratory `paged-sorted` implementation sorted
+by `(page_id, local_index)`, which mixed page scheduling with intra-page
+ordering. Its historical timing remains valid as an observation, but new
+layout-vs-scheduling comparisons use page-only grouping.
+
+Every CPU ordering is run against both hash and paged representations. This
+creates the primary factorial comparison:
+
+| Representation | source | randomized | page-grouped |
+| --- | --- | --- | --- |
+| hash | yes | yes | yes |
+| paged | yes | yes | yes |
+
+CPU ordering construction is outside the timed lookup and therefore remains an
+upper-bound control rather than an end-to-end result.
+
+## GPU page grouping
+
+A general-purpose GPU radix sort is not required to answer this experiment.
+Page IDs are already dense, so the first GPU scheduling implementation uses a
+targeted counting-binning pipeline:
+
+1. clear per-page counts and cursors;
+2. histogram queries by `page_id`;
+3. compute exclusive offsets for dense page bins;
+4. scatter queries into contiguous page ranges.
+
+The prefix pass uses one 256-thread workgroup. Each lane scans a contiguous
+chunk of the dense page-count array after a shared-memory scan of chunk totals.
+This intentionally trades generality for a small experiment-specific
+implementation. If page count grows enough for this pass to become dominant,
+that is evidence to replace the prefix implementation, not a reason to hide its
+cost.
+
+GPU scatter is not required to preserve source order within each page. The
+correctness contract is page grouping plus exact query-multiset preservation.
+
+### Timed regions
+
+Timing boundaries are part of the protocol:
+
+- **CPU-preordered lookup:** lookup dispatch plus the synchronization required
+  between repeated writes to the validation output buffer. CPU ordering,
+  uploads, downloads, and checksum calculation are excluded.
+- **GPU scheduling:** counter/cursor clears + histogram + prefix + scatter,
+  including required barriers. Uploads and CPU validation are excluded.
+- **GPU-grouped lookup:** lookup on the already GPU-grouped buffer, with
+  scheduling excluded.
+- **GPU end-to-end:** GPU scheduling + grouped lookup for each measured
+  iteration, including required synchronization.
+
+The benchmark reports scheduling and end-to-end timings separately so a fast
+lookup cannot hide an impractical grouping cost.
 
 ## Correctness contract
 
-The CPU workload builder first verifies that hash and paged lookup resolve the
-same value for every generated query.
+Correctness gates performance evidence.
 
-After GPU execution, every variant reports:
+Before GPU execution:
 
-- `checksum`;
-- `expected_checksum`;
-- `correct`.
+- hash and paged CPU lookup must resolve the same value for every source query;
+- source, randomized, and page-grouped orderings must preserve the same semantic
+  checksum;
+- CPU page-grouped order must be monotonic by page.
 
-A benchmark process exits non-zero when any variant is incorrect. Performance
-numbers from an incorrect run are invalid.
+After GPU execution:
 
-## Required M0 matrix
+- every lookup row reports `checksum`, `expected_checksum`, and `correct`;
+- all representation/ordering rows must share one semantic checksum;
+- GPU grouping is downloaded once outside timed regions and checked for:
+  - monotonic `page_id`;
+  - valid logical-cell key relation;
+  - exact key multiplicity, so missing/duplicated queries cannot pass via a
+    checksum collision;
+- the GPU end-to-end lookup output must also match the expected checksum.
 
-The standard harness runs:
+The process exits non-zero when any row fails. Performance numbers from an
+incorrect run are invalid evidence.
+
+## Required matrix
+
+The standard harness remains:
 
 - query counts: 100k, 500k, 1M, 4M, 8M;
 - three process-level repeats per query count;
-- 100 timed dispatches per process by default.
+- 100 timed iterations per process by default.
 
-Generated artifacts include raw rows, summarized medians, run logs, GPU name,
-Git commit, workload parameters, and host metadata.
+Run:
+
+```bash
+mise run bench:sweep
+```
+
+Generated artifacts retain the existing metadata/raw CSV/summary/log layout.
+The original CSV fields remain present; representation, ordering, scheduling
+memory, scheduling time, and end-to-end time are additive fields.
 
 ## Metrics
 
-Primary:
+Primary timing/memory metrics:
 
-- GPU microseconds per dispatch;
-- speedup relative to corrected hash baseline;
+- lookup GPU microseconds per dispatch;
 - representation bytes;
-- correctness checksum;
-- active pages/cells and hash probe depth from logs.
+- GPU scheduling scratch bytes;
+- GPU scheduling microseconds;
+- GPU scheduling + lookup end-to-end microseconds;
+- correctness checksum.
 
-Later profiling:
+Derived comparisons:
 
-- L2 hit/miss behavior;
-- device-memory transactions;
-- wave occupancy;
-- memory-stall percentage.
+- same-order paged vs hash isolates the representation effect;
+- page-grouped vs source within one representation isolates the ordering effect;
+- the difference in ordering benefit between representations exposes
+  interaction;
+- GPU end-to-end vs hash/source determines whether scheduling survives its own
+  cost.
 
-## Pass condition
+Once timestamp trends are stable, use the reproducible
+[RADV/RGP profiling procedure](../profiling/radv-rgp.md) to inspect cache
+behavior, memory traffic/stalls, and occupancy. Profiling captures are
+diagnostic evidence and are not mixed with normal benchmark timestamps.
 
-M0 does not pass from one GPU number.
+## Decision gates
 
-Proceed toward M1 only if:
+### Representation vs scheduling
 
-1. all variants satisfy semantic parity;
-2. page-local or page-sorted access shows a repeatable advantage across multiple
-   query counts;
-3. the effect remains under more than one locality regime.
+If hash/page-grouped is approximately equal to or faster than
+paged/page-grouped, coherent scheduling is the leading explanation. Do not
+promote paged storage; prioritize the simpler hash representation with coherent
+scheduling.
 
-M1 passes only if the advantage remains after GPU-side binning/sorting cost is
-included.
+If paged/page-grouped remains materially faster than hash/page-grouped across
+the matrix, query coherence alone cannot explain the result. Page-local
+contiguous representation then retains independent value for the next
+milestone.
 
-If only sorted ordering wins while paged storage itself does not, prefer
-investigating coherent scheduling on the simpler hash representation rather
-than forcing a page-local architecture.
+No fixed percentage is declared "material" before measurement. The difference
+must be larger than repeat-to-repeat variation and persist across multiple query
+counts/locality regimes.
+
+### GPU scheduling viability
+
+CPU-preordered results are only an upper bound.
+
+If GPU scheduling + lookup loses the relevant advantage over hash/source, the
+current scheduling strategy does not pass the end-to-end gate. Investigate a
+cheaper grouping strategy or stop treating explicit sorting/binning as a viable
+frame-time technique.
+
+If the advantage survives GPU scheduling cost, scheduling can advance to the
+next experiment.
+
+### Memory-behavior evidence
+
+Timing alone is insufficient for a locality claim. Before attributing a win to
+cache locality, representative profiles must show a compatible change in cache
+behavior, memory transactions/bandwidth, stalls, occupancy, or wave execution.
+
+## Not answered by Experiment 000
+
+This experiment does not establish:
+
+- GI image quality;
+- temporal behavior under camera motion;
+- write/update cost or dirty-page maintenance;
+- behavior with dynamic geometry;
+- generalization beyond the tested GPU/driver/workload;
+- superiority to DDGI, SHaRC-like caches, Split RC, ReSTIR, or other complete
+  GI systems.
