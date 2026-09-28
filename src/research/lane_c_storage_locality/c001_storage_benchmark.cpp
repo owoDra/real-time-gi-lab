@@ -851,10 +851,12 @@ HostState make_transition_state(
         pair.clip_x * pair.clip_y * pair.clip_z;
     state.keys.assign(page_count, 0u);
     state.values.assign(page_count, 0u);
+    const auto physical_capacity =
+        std::max(pair.from_unique_bricks, pair.to_unique_bricks);
     state.payloads.assign(
-        static_cast<std::size_t>(pair.union_unique_bricks) * kCellsPerBrick, 0u);
-    state.free_list.assign(pair.union_unique_bricks, 0u);
-    state.max_probe = pair.union_unique_bricks;
+        static_cast<std::size_t>(physical_capacity) * kCellsPerBrick, 0u);
+    state.free_list.assign(physical_capacity, 0u);
+    state.max_probe = physical_capacity;
 
     std::uint32_t physical_count = 0u;
     for (const auto& address : from_addresses) {
@@ -1908,7 +1910,7 @@ int run_transition_streams(
             rep == Rep::ProbeHash ? 16u : 18u);
 
         const auto scratch_bytes =
-            dynamic_to.size + output_to.size + output_from.size;
+            static_cast<std::size_t>(dynamic_to.size);
         const auto producer_input_bytes = to_items.size + layouts.size;
 
         const auto producer_us =
@@ -1958,7 +1960,8 @@ int run_transition_streams(
                 allocator_ok &&
                 counters[0] >= counters[2] &&
                 counters[0] - counters[2] == pair.to_unique_bricks &&
-                counters[0] <= pair.union_unique_bricks;
+                counters[0] <=
+                    std::max(pair.from_unique_bricks, pair.to_unique_bricks);
         } else {
             allocator_ok =
                 allocator_ok &&
