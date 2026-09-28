@@ -7,20 +7,20 @@ add_compute_shader(
 )
 
 set(LANE_D_SHADER_OUTPUTS
-  "\${CMAKE_BINARY_DIR}/shaders/lane_d_d001_producer_owner_reuse.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_d_d001_producer_owner_reuse.spv"
 )
 add_custom_target(
   phos-lane-d-producer-optimization-shaders
-  DEPENDS \${LANE_D_SHADER_OUTPUTS}
+  DEPENDS ${LANE_D_SHADER_OUTPUTS}
 )
 
 add_executable(phos-lane-d-producer-optimization
   d001_benchmark.cpp
   d001_runtime.cpp
-  \${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_scene.cpp
-  \${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_runtime.cpp
-  \${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_analysis.cpp
-  \${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_scene.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_runtime.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_analysis.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
 )
 
 add_dependencies(
@@ -30,20 +30,20 @@ add_dependencies(
 )
 
 target_include_directories(phos-lane-d-producer-optimization PRIVATE
-  \${PROJECT_SOURCE_DIR}/src
-  \${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc
-  \${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc
+  ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(phos-lane-d-producer-optimization PRIVATE
   vk-bootstrap::vk-bootstrap
   fastgltf::fastgltf
-  \${CMAKE_DL_LIBS}
+  ${CMAKE_DL_LIBS}
 )
 
 target_compile_definitions(phos-lane-d-producer-optimization PRIVATE
-  PHOS_GI_LANE_A_SHADER_DIR="\${CMAKE_BINARY_DIR}/shaders"
-  PHOS_GI_LANE_D_SHADER_DIR="\${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_D_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
 )
 
 set_target_properties(phos-lane-d-producer-optimization PROPERTIES
