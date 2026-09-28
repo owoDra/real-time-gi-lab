@@ -9,11 +9,19 @@ layout(std430, binding = 3) buffer B3 { uint b3[]; };
 layout(std430, binding = 4) buffer Payloads { uint payloads[]; };
 layout(std430, binding = 5) writeonly buffer Outputs { uint outputs[]; };
 layout(std430, binding = 6) buffer Counters { uint counters[]; };
-layout(std430, binding = 7) buffer B7 { uint b7[]; };
+layout(std430, binding = 7) buffer FreeList { uint free_list[]; };
 layout(push_constant) uniform Push {
     uint count; uint op; uint mask; uint max_probe;
     uint brick_edge; uint clip_x; uint clip_y; uint clip_z;
 } pc;
+uint take_physical() {
+    for (;;) {
+        const uint count = counters[2];
+        if (count == 0u) return atomicAdd(counters[0], 1u);
+        const uint old = atomicCompSwap(counters[2], count, count - 1u);
+        if (old == count) return free_list[count - 1u];
+    }
+}
 uint page_of(Unit b) {
     return (((b.cascade * pc.clip_z + b.z) * pc.clip_y + b.y) * pc.clip_x + b.x);
 }
@@ -22,10 +30,19 @@ void main() {
     if (i >= pc.count) return;
     if (pc.op == 0u) {
         const uint page = page_of(inputs[i]);
-        if (pages[page] == 0u) pages[page] = atomicAdd(counters[0], 1u) + 1u;
+        if (pages[page] == 0u) pages[page] = take_physical() + 1u;
         return;
     }
-    if (pc.op == 5u) { pages[page_of(inputs[i])] = 0u; return; }
+    if (pc.op == 5u) {
+        const uint page = page_of(inputs[i]);
+        const uint mapped = pages[page];
+        if (mapped != 0u) {
+            const uint free_index = atomicAdd(counters[2], 1u);
+            free_list[free_index] = mapped - 1u;
+            pages[page] = 0u;
+        }
+        return;
+    }
     const Address a = addresses[i];
     const uint mapped = pages[a.brick_key - 1u];
     if (mapped == 0u) {

@@ -185,7 +185,8 @@ struct HostState {
     std::vector<std::uint32_t> keys;
     std::vector<std::uint32_t> values;
     std::vector<std::uint32_t> payloads;
-    std::array<std::uint32_t, 2> counters{};
+    std::array<std::uint32_t, 4> counters{};
+    std::vector<std::uint32_t> free_list;
     std::uint32_t mask{};
     std::uint32_t max_probe{512};
     std::size_t persistent_bytes{};
@@ -220,6 +221,7 @@ HostState make_state(
             next_pow2(std::max<std::uint32_t>(2u, static_cast<std::uint32_t>(w.probes.size() * 2u)));
         s.keys.assign(capacity, 0u);
         s.values.assign(1, 0u);
+        s.free_list.assign(1, 0u);
         s.payloads.assign(capacity, 0u);
         s.mask = capacity - 1u;
         std::uint32_t observed_probe = 1u;
@@ -236,6 +238,7 @@ HostState make_state(
 
     const auto brick_count = static_cast<std::uint32_t>(w.active_bricks.size());
     s.payloads.assign(static_cast<std::size_t>(brick_count) * kCellsPerBrick, 0u);
+    s.free_list.assign(brick_count, 0u);
     s.counters[0] = brick_count;
 
     if (rep == Rep::BrickHash) {
@@ -260,7 +263,7 @@ HostState make_state(
             }
         }
         s.persistent_bytes =
-            (s.keys.size() + s.values.size() + s.payloads.size() + s.counters.size()) *
+            (s.keys.size() + s.values.size() + s.payloads.size() + s.counters.size() + s.free_list.size()) *
             sizeof(std::uint32_t);
         return s;
     }
@@ -279,7 +282,7 @@ HostState make_state(
         }
     }
     s.persistent_bytes =
-        (s.keys.size() + s.payloads.size() + s.counters.size()) * sizeof(std::uint32_t);
+        (s.keys.size() + s.payloads.size() + s.counters.size() + s.free_list.size()) * sizeof(std::uint32_t);
     return s;
 }
 
@@ -288,7 +291,8 @@ HostState make_empty_like(const HostState& seeded, Rep rep) {
     std::fill(e.keys.begin(), e.keys.end(), 0u);
     std::fill(e.values.begin(), e.values.end(), 0u);
     std::fill(e.payloads.begin(), e.payloads.end(), 0u);
-    e.counters = {0u, 0u};
+    std::fill(e.free_list.begin(), e.free_list.end(), 0u);
+    e.counters = {0u, 0u, 0u, 0u};
     if (rep == Rep::ProbeHash) e.persistent_bytes = seeded.persistent_bytes;
     return e;
 }
@@ -616,14 +620,17 @@ struct GpuState {
     GpuBuffer values;
     GpuBuffer payloads;
     GpuBuffer counters;
+    GpuBuffer free_list;
     GpuBuffer seed_keys;
     GpuBuffer seed_values;
     GpuBuffer seed_payloads;
     GpuBuffer seed_counters;
+    GpuBuffer seed_free_list;
     GpuBuffer empty_keys;
     GpuBuffer empty_values;
     GpuBuffer empty_payloads;
     GpuBuffer empty_counters;
+    GpuBuffer empty_free_list;
     std::size_t persistent_bytes{};
     std::uint32_t mask{};
     std::uint32_t max_probe{};
@@ -636,7 +643,7 @@ GpuState upload_state(
     auto upload_u32 = [&](const std::vector<std::uint32_t>& v) {
         return bench.upload(v.data(), v.size() * sizeof(std::uint32_t));
     };
-    auto upload_counter = [&](const std::array<std::uint32_t, 2>& v) {
+    auto upload_counter = [&](const std::array<std::uint32_t, 4>& v) {
         return bench.upload(v.data(), sizeof(v));
     };
 
@@ -645,16 +652,19 @@ GpuState upload_state(
     g.values = upload_u32(seeded.values);
     g.payloads = upload_u32(seeded.payloads);
     g.counters = upload_counter(seeded.counters);
+    g.free_list = upload_u32(seeded.free_list);
 
     g.seed_keys = upload_u32(seeded.keys);
     g.seed_values = upload_u32(seeded.values);
     g.seed_payloads = upload_u32(seeded.payloads);
     g.seed_counters = upload_counter(seeded.counters);
+    g.seed_free_list = upload_u32(seeded.free_list);
 
     g.empty_keys = upload_u32(empty.keys);
     g.empty_values = upload_u32(empty.values);
     g.empty_payloads = upload_u32(empty.payloads);
     g.empty_counters = upload_counter(empty.counters);
+    g.empty_free_list = upload_u32(empty.free_list);
 
     g.persistent_bytes = seeded.persistent_bytes;
     g.mask = seeded.mask;
@@ -664,14 +674,17 @@ GpuState upload_state(
 
 void destroy_state(VulkanBench& bench, GpuState& g) {
     auto& ctx = bench.context();
+    ctx.destroy_buffer(g.empty_free_list);
     ctx.destroy_buffer(g.empty_counters);
     ctx.destroy_buffer(g.empty_payloads);
     ctx.destroy_buffer(g.empty_values);
     ctx.destroy_buffer(g.empty_keys);
+    ctx.destroy_buffer(g.seed_free_list);
     ctx.destroy_buffer(g.seed_counters);
     ctx.destroy_buffer(g.seed_payloads);
     ctx.destroy_buffer(g.seed_values);
     ctx.destroy_buffer(g.seed_keys);
+    ctx.destroy_buffer(g.free_list);
     ctx.destroy_buffer(g.counters);
     ctx.destroy_buffer(g.payloads);
     ctx.destroy_buffer(g.values);
@@ -684,6 +697,7 @@ std::vector<CopyPair> baseline_reset(const GpuState& g) {
         {&g.seed_values, &g.values},
         {&g.seed_payloads, &g.payloads},
         {&g.seed_counters, &g.counters},
+        {&g.seed_free_list, &g.free_list},
     };
 }
 
@@ -693,6 +707,7 @@ std::vector<CopyPair> empty_reset(const GpuState& g) {
         {&g.empty_values, &g.values},
         {&g.empty_payloads, &g.payloads},
         {&g.empty_counters, &g.counters},
+        {&g.empty_free_list, &g.free_list},
     };
 }
 
@@ -875,7 +890,7 @@ int run(int argc, char** argv) {
                     &state.payloads,
                     &output,
                     &state.counters,
-                    &state.values,
+                    &state.free_list,
                 });
             };
 

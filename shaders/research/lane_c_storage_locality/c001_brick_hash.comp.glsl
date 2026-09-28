@@ -9,7 +9,7 @@ layout(std430, binding = 3) buffer DirectoryValues { uint values[]; };
 layout(std430, binding = 4) buffer Payloads { uint payloads[]; };
 layout(std430, binding = 5) writeonly buffer Outputs { uint outputs[]; };
 layout(std430, binding = 6) buffer Counters { uint counters[]; };
-layout(std430, binding = 7) buffer B7 { uint b7[]; };
+layout(std430, binding = 7) buffer FreeList { uint free_list[]; };
 layout(push_constant) uniform Push {
     uint count; uint op; uint mask; uint max_probe;
     uint brick_edge; uint clip_x; uint clip_y; uint clip_z;
@@ -32,6 +32,14 @@ uint find_slot(uint key) {
     }
     return 0xffffffffu;
 }
+uint take_physical() {
+    for (;;) {
+        const uint count = counters[2];
+        if (count == 0u) return atomicAdd(counters[0], 1u);
+        const uint old = atomicCompSwap(counters[2], count, count - 1u);
+        if (old == count) return free_list[count - 1u];
+    }
+}
 uint reserve_slot(uint key) {
     uint slot = mix32(key) & pc.mask;
     for (uint probe = 0u; probe < pc.max_probe; ++probe) {
@@ -52,12 +60,18 @@ void main() {
     if (pc.op == 0u) {
         const uint slot = reserve_slot(brick_key(inputs[i]));
         if (slot == 0xffffffffu) return;
-        if (values[slot] == 0u) values[slot] = atomicAdd(counters[0], 1u) + 1u;
+        if (values[slot] == 0u) values[slot] = take_physical() + 1u;
         return;
     }
     if (pc.op == 5u) {
         const uint slot = find_slot(brick_key(inputs[i]));
-        if (slot != 0xffffffffu) { values[slot] = 0u; atomicExchange(keys[slot], TOMBSTONE); }
+        if (slot != 0xffffffffu && values[slot] != 0u) {
+            const uint physical = values[slot] - 1u;
+            const uint free_index = atomicAdd(counters[2], 1u);
+            free_list[free_index] = physical;
+            values[slot] = 0u;
+            atomicExchange(keys[slot], TOMBSTONE);
+        }
         return;
     }
     const Address a = addresses[i];
