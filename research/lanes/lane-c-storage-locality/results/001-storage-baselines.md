@@ -1,7 +1,7 @@
-# C001a result — storage structural/correctness bring-up
+# C001 result — storage baseline candidate pruning
 
-Status: **accepted for synthetic structural/correctness candidate retention
-only; GPU performance unresolved**
+Status: **C001a structural gate and allocator-corrected C001b synthetic Vulkan
+candidate pruning accepted; exact Lane A replay pending**
 
 Artifact: `out/research/lane-c-storage-locality/001-storage-baselines/20260928T132145Z`
 (assistant execution environment; target-system rerun required)  
@@ -126,17 +126,19 @@ Lane A's exact producer stream.
 
 ## Next gate
 
-On the target system:
+Synthetic C001b is complete. The remaining promotion gate is the exact Lane A
+producer stream:
 
-1. run `mise install`, `mise run research:check`, and
-   `mise run build`;
-2. rerun C001 through `mise run research:record`;
-3. run the implemented Vulkan C001b validation matrix;
-4. run the non-validation 3-repeat C001b timing matrix and record/analyze the
-   resulting `c001b_summary.csv`;
-5. keep producer locality separate from representation;
-6. repeat the final comparison on Lane A's exact producer stream before any
-   architectural promotion.
+1. obtain passing A001 target-GPU exports for static, camera-motion, and
+   light-motion;
+2. consume each recorded `stream-v1.bin` in its observed append order;
+3. compare the retained probe-hash and virtual/clipmap candidates without a
+   post-generation sort/grouping;
+4. include any producer work needed to derive storage address/residency units;
+5. keep hashed-brick-pool only as a fallback diagnostic if bounded virtual
+   addressing does not fit the actual stream;
+6. make no final storage promotion until all exact-stream cases pass correctness
+   and repeatability gates.
 
 
 ## C001b target-GPU run v1 — 2026-09-28
