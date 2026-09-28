@@ -5,9 +5,14 @@ add_compute_shader(
   lane_d_d001_producer_owner_reuse
   shaders/research/lane_d_producer_optimization/d001_producer_owner_reuse.comp.glsl
 )
+add_compute_shader(
+  lane_d_d002_producer_visible_tile
+  shaders/research/lane_d_producer_optimization/d002_producer_visible_tile.comp.glsl
+)
 
 set(LANE_D_SHADER_OUTPUTS
   "${CMAKE_BINARY_DIR}/shaders/lane_d_d001_producer_owner_reuse.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_d_d002_producer_visible_tile.spv"
 )
 add_custom_target(
   phos-lane-d-producer-optimization-shaders
