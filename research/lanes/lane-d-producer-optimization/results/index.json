@@ -1,5 +1,13 @@
 {
   "schema_version": 1,
   "lane": "lane-d-producer-optimization",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-visibility-reuse",
+      "status": "accepted",
+      "result": "research/lanes/lane-d-producer-optimization/results/001-visibility-reuse.md",
+      "measurement_commit": "c083db8925d362c8c8df3cebc046fb2ff62fc2c9",
+      "decision": "retain depth reuse for composition; owner reuse not retained; no final producer promotion"
+    }
+  ]
 }
