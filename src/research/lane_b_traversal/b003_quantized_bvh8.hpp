@@ -65,8 +65,14 @@ inline constexpr float kQuantMax = 65535.0F;
             (value - origin) / extent,
             0.0F,
             1.0F);
-    const auto quantized =
+    auto quantized =
         std::floor(normalized * kQuantMax);
+    // Expand one additional quantization unit outward. This makes the decoded
+    // AABB conservative even if float normalization/multiplication rounds at
+    // the child/parent boundary.
+    if (quantized > 0.0F) {
+        quantized -= 1.0F;
+    }
     return static_cast<std::uint16_t>(
         std::clamp(
             quantized,
@@ -87,8 +93,11 @@ inline constexpr float kQuantMax = 65535.0F;
             (value - origin) / extent,
             0.0F,
             1.0F);
-    const auto quantized =
+    auto quantized =
         std::ceil(normalized * kQuantMax);
+    if (quantized < kQuantMax) {
+        quantized += 1.0F;
+    }
     return static_cast<std::uint16_t>(
         std::clamp(
             quantized,

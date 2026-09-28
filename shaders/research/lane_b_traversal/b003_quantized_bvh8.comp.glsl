@@ -125,7 +125,8 @@ bool ray_aabb_bounds(
 }
 
 void decode_child(
-    QuantNode node,
+    vec3 node_origin,
+    vec3 node_scale,
     QuantChild child,
     out vec3 bounds_min,
     out vec3 bounds_max) {
@@ -138,11 +139,11 @@ void decode_child(
         child.packed.y >> 16u,
         child.packed.z >> 16u);
     bounds_min =
-        node.origin.xyz +
-        node.scale.xyz * vec3(qmin);
+        node_origin +
+        node_scale * vec3(qmin);
     bounds_max =
-        node.origin.xyz +
-        node.scale.xyz * vec3(qmax);
+        node_origin +
+        node_scale * vec3(qmax);
 }
 
 bool prefer_hit(
@@ -275,14 +276,19 @@ void trace_segment(
             continue;
         }
 
-        QuantNode node = nodes[token];
-        uint axis = node.metadata.x;
+        vec3 node_origin =
+            nodes[token].origin.xyz;
+        vec3 node_scale =
+            nodes[token].scale.xyz;
+        uint axis =
+            nodes[token].metadata.x;
         bool positive = direction[int(axis)] >= 0.0;
 
         for (uint ordinal = 0u; ordinal < 8u; ++ordinal) {
             uint slot =
                 positive ? 7u - ordinal : ordinal;
-            QuantChild child = node.children[slot];
+            QuantChild child =
+                nodes[token].children[slot];
             uint child_token = child.packed.w;
             if (child_token == INVALID_ID) {
                 continue;
@@ -291,7 +297,8 @@ void trace_segment(
             vec3 child_min;
             vec3 child_max;
             decode_child(
-                node,
+                node_origin,
+                node_scale,
                 child,
                 child_min,
                 child_max);
