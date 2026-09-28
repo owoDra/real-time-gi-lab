@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: target-ready; Stage B1 wide-micro target measurement pending
+Status: target-ready; Stage B2 quantized-wide target measurement pending
 
 ## Question
 
@@ -368,3 +368,20 @@ Stage B2 will therefore keep:
 
 and change only child-bound representation to conservative parent-relative
 quantization.
+
+
+## Stage B2 implementation checkpoint — conservative 16-bit child bounds
+
+Stage B2 is target-ready. It keeps the Stage B1 DDA/hash, topology, leaf ranges, near-first order, and tNear pruning; only child-bound representation changes.
+
+- float BVH8 node: 384 bytes;
+- quantized BVH8 node: 176 bytes;
+- parent-relative 16-bit min/max per axis;
+- min/max and parent scale are rounded outward conservatively;
+- child tokens and ordering axis are unchanged.
+
+For 27,406 nodes, raw node storage falls from 10,523,904 bytes to 4,823,456 bytes (about 5.44 MiB saved before allocator alignment).
+
+The structural smoke verifies topology preservation and that every decoded quantized child AABB conservatively contains its source float AABB.
+
+The formal run adds `b003-stage-b2-summary.json`. Advance to triangle packets only with zero errors, quantized traversal <=1.10x float BVH8, and persistent memory <=0.90x float BVH8.
