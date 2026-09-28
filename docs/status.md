@@ -4,8 +4,7 @@ Last updated: 2026-09-28
 
 ## Current stage
 
-**M0 — resolve cache representation vs scheduling, including GPU scheduling
-cost.**
+**M0 — cache representation resolved; investigate cheaper query coherence.**
 
 The repository is isolating whether page-local contiguous storage has an
 independent lookup advantage, or whether the observed gain is primarily caused
@@ -17,11 +16,10 @@ excluded.
 
 ## Current work
 
-Tracked work: [Issue #4 — isolate cache layout vs query coherence and include
-GPU scheduling cost](https://github.com/owoDra/phos-gi-lab/issues/4).
+Issue #4 resolved the representation-vs-ordering experiment. Follow-up work is
+tracked in [Issue #7 — Research cheaper query coherence for hash cache](https://github.com/owoDra/phos-gi-lab/issues/7).
 
-The Issue #4 work branch now implements the measurements needed to make that
-decision:
+The Issue #4 branch implements the measurements that produced that decision:
 
 - representation and ordering are independent benchmark axes;
 - both hash and paged representations run source, randomized, and page-grouped
