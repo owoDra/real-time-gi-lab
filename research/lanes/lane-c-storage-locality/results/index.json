@@ -5,7 +5,7 @@
     {
       "id": "001-storage-baselines",
       "status": "active",
-      "scope": "C001a/C001b accepted for synthetic pruning; C001c exact Lane A replay implemented and target-GPU evidence pending",
+      "scope": "C001a/C001b synthetic pruning and C001c exact steady-state accepted; C001d exact static-to-camera transition implemented and target-GPU evidence pending",
       "result": "research/lanes/lane-c-storage-locality/results/001-storage-baselines.md"
     }
   ]
