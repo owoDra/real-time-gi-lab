@@ -384,7 +384,7 @@ struct I001Runtime::Impl {
             hwrt = std::make_unique<B002HwrtTraversal>(
                 context,
                 b_scene.triangles,
-                shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"));
+                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"));
             return;
         }
 
@@ -538,7 +538,7 @@ struct I001Runtime::Impl {
                 {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
             }};
             traversal_stage = std::make_unique<I001ComputeStage>(
-                context, shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
+                context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"),
                 bindings, sizeof(std::uint32_t));
         } else if (uses_quantized(options.variant)) {
             const std::array<I001Binding, 7> bindings{{
