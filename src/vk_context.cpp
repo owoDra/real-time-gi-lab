@@ -11,7 +11,11 @@ namespace {
 [[noreturn]] void fail(const std::string& message) { throw std::runtime_error(message); }
 }
 
-VulkanContext::VulkanContext(bool validation) {
+VulkanContext::VulkanContext(bool validation)
+    : VulkanContext(VulkanContextOptions{validation, false}) {}
+
+VulkanContext::VulkanContext(VulkanContextOptions options) {
+    const bool validation = options.validation;
     vkb::InstanceBuilder builder;
     builder.set_app_name("phos-gi-lab")
         .set_engine_name("research")
@@ -26,7 +30,13 @@ VulkanContext::VulkanContext(bool validation) {
     instance_dispatch_ = instance_.make_table();
 
     vkb::PhysicalDeviceSelector selector(instance_);
-    auto physical_ret = selector.set_minimum_version(1, 3).select();
+    selector.set_minimum_version(1, 3);
+    if (options.require_shader_buffer_int64_atomics) {
+        VkPhysicalDeviceVulkan12Features required12{};
+        required12.shaderBufferInt64Atomics = VK_TRUE;
+        selector.set_required_features_12(required12);
+    }
+    auto physical_ret = selector.select();
     if (!physical_ret) fail("Physical device: " + physical_ret.error().message());
 
     vkb::DeviceBuilder device_builder(physical_ret.value());
