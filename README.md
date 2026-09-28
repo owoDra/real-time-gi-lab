@@ -27,14 +27,18 @@ M0 asks one narrow question before building a GI renderer:
 > Can page-local contiguous storage and locality-aware scheduling reduce GPU
 > cache lookup cost relative to a fair open-addressed hash baseline?
 
-The executable compares:
+The executable treats cache representation and query ordering as independent
+experimental axes:
 
-- `hash` — open-addressed global table sized from actual active cells;
-- `paged` — direct page table + contiguous 64-entry pages;
-- `paged-sorted` — the same page storage with queries grouped by page.
+- representations: `hash`, `paged`;
+- CPU ordering regimes: `source`, `randomized`, `page-grouped`;
+- GPU ordering control: dense-page histogram/prefix/scatter grouping, measured
+  both separately and together with lookup.
 
-All variants must return the same semantic payload. A checksum mismatch makes
-the benchmark fail instead of producing usable performance evidence.
+All variants must return the same semantic payload. GPU grouping additionally
+must preserve the exact query multiset and produce monotonic page groups.
+A correctness failure makes the benchmark exit instead of producing usable
+performance evidence.
 
 ## Environment
 
@@ -59,10 +63,15 @@ mise run bench
 A successful single run emits:
 
 ```text
-variant,queries,pages,bytes,gpu_us_per_dispatch,checksum,expected_checksum,correct
+variant,queries,pages,bytes,gpu_us_per_dispatch,checksum,expected_checksum,correct,...
 hash,...
 paged,...
-paged-sorted,...
+hash-randomized,...
+paged-randomized,...
+hash-page-grouped,...
+paged-page-grouped,...
+hash-gpu-page-grouped,...
+paged-gpu-page-grouped,...
 ```
 
 For research evidence, prefer the matrix harness:
@@ -81,8 +90,14 @@ out/benchmarks/<timestamp>/
   logs/
 ```
 
-Generated artifacts are intentionally ignored by Git. After review, accepted or
-invalidated evidence is summarized in `docs/status.md`.
+Generated artifacts are intentionally ignored by Git. The CSV schema keeps the
+original fields and adds representation/ordering plus GPU scheduling and
+end-to-end timing fields. After review, accepted or invalidated evidence is
+summarized in `docs/status.md`.
+
+For RADV memory/cache investigation, follow
+[`docs/profiling/radv-rgp.md`](docs/profiling/radv-rgp.md). Profiling captures
+are diagnostic evidence and are kept separate from normal benchmark timings.
 
 Useful commands:
 

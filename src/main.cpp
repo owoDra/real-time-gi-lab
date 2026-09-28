@@ -38,6 +38,10 @@ int main(int argc, char** argv) {
             }
         }
 
+        if (query_count == 0 || iterations == 0) {
+            throw std::runtime_error("--queries and --iterations must be positive");
+        }
+
         std::vector<Vec3> points;
         if (!synthetic && std::filesystem::exists(scene)) {
             std::cerr << "Loading Sponza surface workload: " << scene << "\n";
@@ -50,7 +54,7 @@ int main(int argc, char** argv) {
 
         auto workload = build_workload(points, query_count);
         std::cerr
-            << "Queries: " << workload.original.size()
+            << "Queries: " << workload.source.size()
             << ", pages: " << workload.page_table.size()
             << ", active cells: " << workload.active_cells
             << ", hash slots: " << workload.hash_keys.size()
@@ -63,9 +67,14 @@ int main(int argc, char** argv) {
         CacheBenchmark bench(vk);
         auto results = bench.run(workload, iterations);
 
+        // Preserve the original columns in their original order. New
+        // representation/scheduling metadata is appended so existing CSV
+        // consumers remain compatible.
         std::cout
             << "variant,queries,pages,bytes,gpu_us_per_dispatch,"
-               "checksum,expected_checksum,correct\n";
+               "checksum,expected_checksum,correct,"
+               "representation,ordering,scheduling_bytes,"
+               "scheduling_gpu_us_per_dispatch,end_to_end_gpu_us_per_dispatch\n";
 
         bool all_correct = true;
         for (const auto& r : results) {
@@ -77,15 +86,27 @@ int main(int argc, char** argv) {
                 << r.gpu_us_per_dispatch << ','
                 << r.checksum << ','
                 << r.expected_checksum << ','
-                << (r.correct ? "true" : "false")
-                << '\n';
+                << (r.correct ? "true" : "false") << ','
+                << r.representation << ','
+                << r.ordering << ','
+                << r.scheduling_bytes << ',';
+
+            if (r.scheduling_gpu_us_per_dispatch.has_value()) {
+                std::cout << *r.scheduling_gpu_us_per_dispatch;
+            }
+            std::cout << ',';
+            if (r.end_to_end_gpu_us_per_dispatch.has_value()) {
+                std::cout << *r.end_to_end_gpu_us_per_dispatch;
+            }
+            std::cout << '\n';
+
             all_correct = all_correct && r.correct;
         }
 
         if (!all_correct) {
             std::cerr
                 << "fatal: benchmark correctness guard failed; "
-                   "cache variants returned different semantic payloads\n";
+                   "cache lookup or GPU query grouping violated semantic parity\n";
             return 2;
         }
 

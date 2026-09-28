@@ -40,10 +40,33 @@ def git_commit() -> str:
 
 
 def parse_rows(stdout: str) -> list[dict[str, str]]:
-    rows = list(csv.DictReader(io.StringIO(stdout)))
-    if not rows:
-        raise RuntimeError("benchmark produced no CSV rows")
+    # Vulkan validation/debug output is allowed to write to stdout before the
+    # benchmark CSV header. Locate the benchmark protocol explicitly instead
+    # of assuming stdout starts with CSV.
+    lines = stdout.splitlines()
+    header_index = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.startswith("variant,queries,pages,bytes,gpu_us_per_dispatch,")
+        ),
+        None,
+    )
+    if header_index is None:
+        preview = "\n".join(lines[:20])
+        raise RuntimeError(
+            "benchmark stdout did not contain the CSV header"
+            + (f":\n{preview}" if preview else "")
+        )
 
+    csv_text = "\n".join(lines[header_index:]) + "\n"
+    rows = list(csv.DictReader(io.StringIO(csv_text)))
+    if not rows:
+        raise RuntimeError("benchmark produced a CSV header but no data rows")
+
+    # These are the original artifact columns and remain mandatory. New
+    # scheduling metadata is additive so older downstream readers can continue
+    # consuming the same core schema.
     required = {
         "variant",
         "queries",
@@ -111,19 +134,105 @@ def run_once(
         )
 
     rows = parse_rows(proc.stdout)
+
+    # Preserve any stdout diagnostics that preceded the CSV protocol in the
+    # per-run log. This is especially useful with Vulkan validation enabled.
+    csv_header = "variant,queries,pages,bytes,gpu_us_per_dispatch,"
+    stdout_prelude = proc.stdout.partition(csv_header)[0].strip()
+    if stdout_prelude:
+        proc_stderr = (
+            proc.stderr
+            + ("\n" if proc.stderr and not proc.stderr.endswith("\n") else "")
+            + "[stdout before benchmark CSV]\n"
+            + stdout_prelude
+            + "\n"
+        )
+    else:
+        proc_stderr = proc.stderr
+
     match = GPU_RE.search(proc.stderr)
     gpu = match.group(1).strip() if match else "unknown"
-    return rows, gpu, command, proc.stderr
+    return rows, gpu, command, proc_stderr
+
+
+def _ordering(row: dict[str, str]) -> str:
+    if row.get("ordering"):
+        return row["ordering"]
+    variant = row["variant"]
+    if variant in {"hash", "paged"}:
+        return "source"
+    if variant == "paged-sorted":
+        return "page-grouped"
+    return "unknown"
+
+
+def _representation(row: dict[str, str]) -> str:
+    if row.get("representation"):
+        return row["representation"]
+    return "hash" if row["variant"].startswith("hash") else "paged"
 
 
 def add_speedups(rows: list[dict[str, str]]) -> None:
-    hash_rows = [row for row in rows if row["variant"] == "hash"]
+    hash_rows = [
+        row
+        for row in rows
+        if _representation(row) == "hash" and _ordering(row) == "source"
+    ]
     if len(hash_rows) != 1:
-        raise RuntimeError("each run must contain exactly one hash baseline")
+        raise RuntimeError("each run must contain exactly one hash/source baseline")
+
     hash_us = float(hash_rows[0]["gpu_us_per_dispatch"])
+    by_axis = {
+        (_representation(row), _ordering(row)): row
+        for row in rows
+    }
+
     for row in rows:
         us = float(row["gpu_us_per_dispatch"])
+        representation = _representation(row)
+        ordering = _ordering(row)
+
+        row["representation"] = representation
+        row["ordering"] = ordering
         row["speedup_vs_hash"] = f"{hash_us / us:.6f}"
+
+        same_order_hash = by_axis.get(("hash", ordering))
+        row["speedup_vs_same_order_hash"] = (
+            f"{float(same_order_hash['gpu_us_per_dispatch']) / us:.6f}"
+            if same_order_hash is not None
+            else ""
+        )
+
+        source_same_rep = by_axis.get((representation, "source"))
+        ordering_speedup = (
+            float(source_same_rep["gpu_us_per_dispatch"]) / us
+            if source_same_rep is not None
+            else None
+        )
+        row["ordering_speedup_vs_source"] = (
+            f"{ordering_speedup:.6f}" if ordering_speedup is not None else ""
+        )
+
+        hash_source = by_axis.get(("hash", "source"))
+        hash_same_order = by_axis.get(("hash", ordering))
+        hash_ordering_speedup = (
+            float(hash_source["gpu_us_per_dispatch"])
+            / float(hash_same_order["gpu_us_per_dispatch"])
+            if hash_source is not None and hash_same_order is not None
+            else None
+        )
+        row["ordering_interaction_ratio_vs_hash"] = (
+            f"{ordering_speedup / hash_ordering_speedup:.6f}"
+            if ordering_speedup is not None
+            and hash_ordering_speedup is not None
+            and hash_ordering_speedup != 0
+            else ""
+        )
+
+        end_to_end = row.get("end_to_end_gpu_us_per_dispatch", "")
+        row["end_to_end_speedup_vs_hash"] = (
+            f"{hash_us / float(end_to_end):.6f}" if end_to_end else ""
+        )
 
 
 def write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> None:
@@ -133,6 +242,17 @@ def write_csv(path: Path, rows: list[dict[str, object]], fields: list[str]) -> N
         writer.writerows(rows)
 
 
+def _median_optional(values: list[dict[str, object]], field: str) -> str:
+    samples = [
+        float(value[field])
+        for value in values
+        if str(value.get(field, "")).strip()
+    ]
+    if not samples:
+        return ""
+    return f"{statistics.median(samples):.6f}"
+
+
 def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
     grouped: dict[tuple[int, str], list[dict[str, object]]] = {}
     for row in rows:
@@ -140,27 +260,84 @@ def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
         grouped.setdefault(key, []).append(row)
 
     medians: dict[tuple[int, str], float] = {}
+    axis_medians: dict[tuple[int, str, str], float] = {}
     for key, values in grouped.items():
-        medians[key] = statistics.median(
+        median = statistics.median(
             float(value["gpu_us_per_dispatch"]) for value in values
         )
+        medians[key] = median
+        first = values[0]
+        axis_medians[
+            (
+                int(first["query_count"]),
+                str(first["representation"]),
+                str(first["ordering"]),
+            )
+        ] = median
 
     summary: list[dict[str, object]] = []
     for (query_count, variant), values in sorted(grouped.items()):
         median_us = medians[(query_count, variant)]
-        hash_us = medians[(query_count, "hash")]
+        hash_us = axis_medians[(query_count, "hash", "source")]
         bytes_values = {int(value["bytes"]) for value in values}
-        if len(bytes_values) != 1:
-            raise RuntimeError("representation byte count changed between repeats")
+        scheduling_bytes_values = {
+            int(value.get("scheduling_bytes", 0) or 0) for value in values
+        }
+        if len(bytes_values) != 1 or len(scheduling_bytes_values) != 1:
+            raise RuntimeError("memory byte counts changed between repeats")
+
+        representation = str(values[0]["representation"])
+        ordering = str(values[0]["ordering"])
+        same_order_hash = axis_medians.get((query_count, "hash", ordering))
+        source_same_rep = axis_medians.get((query_count, representation, "source"))
+        hash_same_order = axis_medians.get((query_count, "hash", ordering))
+        hash_ordering_speedup = (
+            hash_us / hash_same_order if hash_same_order is not None else None
+        )
+        ordering_speedup = (
+            source_same_rep / median_us if source_same_rep is not None else None
+        )
+
+        median_schedule = _median_optional(
+            values, "scheduling_gpu_us_per_dispatch"
+        )
+        median_end_to_end = _median_optional(
+            values, "end_to_end_gpu_us_per_dispatch"
+        )
 
         summary.append(
             {
                 "query_count": query_count,
                 "variant": variant,
+                "representation": representation,
+                "ordering": ordering,
                 "repeats": len(values),
                 "median_gpu_us_per_dispatch": f"{median_us:.6f}",
                 "speedup_vs_hash": f"{hash_us / median_us:.6f}",
+                "speedup_vs_same_order_hash": (
+                    f"{same_order_hash / median_us:.6f}"
+                    if same_order_hash is not None
+                    else ""
+                ),
+                "ordering_speedup_vs_source": (
+                    f"{ordering_speedup:.6f}" if ordering_speedup is not None else ""
+                ),
+                "ordering_interaction_ratio_vs_hash": (
+                    f"{ordering_speedup / hash_ordering_speedup:.6f}"
+                    if ordering_speedup is not None
+                    and hash_ordering_speedup is not None
+                    and hash_ordering_speedup != 0
+                    else ""
+                ),
                 "bytes": next(iter(bytes_values)),
+                "scheduling_bytes": next(iter(scheduling_bytes_values)),
+                "median_scheduling_gpu_us_per_dispatch": median_schedule,
+                "median_end_to_end_gpu_us_per_dispatch": median_end_to_end,
+                "end_to_end_speedup_vs_hash": (
+                    f"{hash_us / float(median_end_to_end):.6f}"
+                    if median_end_to_end
+                    else ""
+                ),
             }
         )
     return summary
@@ -168,7 +345,7 @@ def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Run the reproducible M0 page-local cache benchmark matrix."
+        description="Run the reproducible M0 layout-vs-scheduling benchmark matrix."
     )
     parser.add_argument(
         "--query-counts",
@@ -229,9 +406,18 @@ def main() -> int:
         "bytes",
         "gpu_us_per_dispatch",
         "speedup_vs_hash",
+        "speedup_vs_same_order_hash",
+        "ordering_speedup_vs_source",
+        "ordering_interaction_ratio_vs_hash",
+        "end_to_end_speedup_vs_hash",
         "checksum",
         "expected_checksum",
         "correct",
+        "representation",
+        "ordering",
+        "scheduling_bytes",
+        "scheduling_gpu_us_per_dispatch",
+        "end_to_end_gpu_us_per_dispatch",
     ]
     write_csv(output / "results.csv", all_rows, raw_fields)
 
@@ -242,15 +428,24 @@ def main() -> int:
         [
             "query_count",
             "variant",
+            "representation",
+            "ordering",
             "repeats",
             "median_gpu_us_per_dispatch",
             "speedup_vs_hash",
+            "speedup_vs_same_order_hash",
+            "ordering_speedup_vs_source",
+            "ordering_interaction_ratio_vs_hash",
             "bytes",
+            "scheduling_bytes",
+            "median_scheduling_gpu_us_per_dispatch",
+            "median_end_to_end_gpu_us_per_dispatch",
+            "end_to_end_speedup_vs_hash",
         ],
     )
 
     metadata = {
-        "schema_version": 1,
+        "schema_version": 2,
         "experiment": "000-page-local-cache",
         "started_at_utc": started.isoformat(),
         "finished_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -266,6 +461,13 @@ def main() -> int:
         "validation": args.validation,
         "scene": str(args.scene),
         "binary": str(args.binary),
+        "ordering_regimes": [
+            "source",
+            "randomized",
+            "page-grouped",
+            "gpu-page-grouped",
+        ],
+        "gpu_scheduling": "dense-page histogram + single-workgroup prefix + scatter",
         "commands": commands,
         "environment": {
             "VK_DRIVER_FILES": os.environ.get("VK_DRIVER_FILES"),
@@ -278,12 +480,19 @@ def main() -> int:
     )
 
     print(f"Benchmark artifacts: {output}")
-    print("query_count,variant,median_gpu_us_per_dispatch,speedup_vs_hash,bytes")
+    print(
+        "query_count,variant,median_gpu_us_per_dispatch,speedup_vs_hash,bytes,"
+        "median_scheduling_gpu_us_per_dispatch,"
+        "median_end_to_end_gpu_us_per_dispatch,end_to_end_speedup_vs_hash"
+    )
     for row in summary_rows:
         print(
             f"{row['query_count']},{row['variant']},"
             f"{row['median_gpu_us_per_dispatch']},"
-            f"{row['speedup_vs_hash']},{row['bytes']}"
+            f"{row['speedup_vs_hash']},{row['bytes']},"
+            f"{row['median_scheduling_gpu_us_per_dispatch']},"
+            f"{row['median_end_to_end_gpu_us_per_dispatch']},"
+            f"{row['end_to_end_speedup_vs_hash']}"
         )
 
     return 0

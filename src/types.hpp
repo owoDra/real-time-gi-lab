@@ -21,8 +21,12 @@ struct Query {
 static_assert(sizeof(Query) == 16);
 
 struct Workload {
-    std::vector<Query> original;
-    std::vector<Query> page_sorted;
+    // Query locality is an independent experimental axis from cache
+    // representation. Every vector contains exactly the same logical queries.
+    std::vector<Query> source;
+    std::vector<Query> randomized;
+    std::vector<Query> page_grouped;
+
     std::vector<std::uint32_t> hash_keys;
     std::vector<std::uint32_t> hash_payload;
     std::vector<std::uint32_t> page_table;

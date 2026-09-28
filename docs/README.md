@@ -13,6 +13,8 @@ code alone.
   evidence, invalidated evidence, open questions, and next decision gate.
 - **`experiments/*.md`** define reproducible experiment protocols and their
   pass/fail criteria.
+- **`profiling/*.md`** define reproducible diagnostic/profiling procedures
+  that support an experiment without becoming benchmark results themselves.
 - **`out/benchmarks/`** contains generated raw benchmark artifacts and is not
   committed. Results become project evidence only after they are reviewed and
   summarized in `status.md`.
