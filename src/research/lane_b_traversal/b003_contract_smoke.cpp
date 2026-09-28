@@ -1,6 +1,7 @@
 #include "b003_macro_bvh8.hpp"
 #include "b003_micro_bvh8.hpp"
 #include "b003_quantized_bvh8.hpp"
+#include "b003_triangle_packets.hpp"
 
 #include <cmath>
 #include <cstdint>
@@ -369,6 +370,124 @@ void verify_quantized_payload(
     }
 }
 
+
+void verify_packet_payload(
+    const B003QuantizedMicroPayload& quantized,
+    const B003PacketMicroPayload& packetized,
+    const std::vector<Triangle>& triangles) {
+    if (packetized.nodes.size() != quantized.nodes.size() ||
+        packetized.hash_table.size() != quantized.hash_table.size() ||
+        packetized.hash_mask != quantized.hash_mask ||
+        packetized.hash_max_probe != quantized.hash_max_probe ||
+        packetized.segment_count != quantized.segment_count ||
+        packetized.source_leaf_count != packetized.packets.size()) {
+        throw std::runtime_error(
+            "B003 packetization changed non-leaf topology");
+    }
+
+    std::size_t observed_live = 0;
+    for (std::size_t node_index = 0;
+         node_index < quantized.nodes.size();
+         ++node_index) {
+        for (std::size_t slot = 0; slot < 8U; ++slot) {
+            const auto source_token =
+                quantized.nodes[node_index].children[slot].packed[3];
+            const auto packet_token =
+                packetized.nodes[node_index].children[slot].packed[3];
+
+            if (source_token == kInvalidId) {
+                if (packet_token != kInvalidId) {
+                    throw std::runtime_error(
+                        "B003 packetization materialized an empty child");
+                }
+                continue;
+            }
+
+            if (!b003_wide_is_leaf(source_token)) {
+                if (packet_token != source_token) {
+                    throw std::runtime_error(
+                        "B003 packetization changed an internal token");
+                }
+                continue;
+            }
+
+            if (!b003_wide_is_leaf(packet_token) ||
+                b003_wide_leaf_count(packet_token) !=
+                    b003_wide_leaf_count(source_token)) {
+                throw std::runtime_error(
+                    "B003 packetization changed leaf count");
+            }
+
+            const auto begin =
+                b003_wide_leaf_begin(source_token);
+            const auto count =
+                b003_wide_leaf_count(source_token);
+            const auto packet_index =
+                b003_wide_leaf_begin(packet_token);
+            if (packet_index >= packetized.packets.size()) {
+                throw std::runtime_error(
+                    "B003 packet leaf references invalid packet");
+            }
+
+            const auto& packet =
+                packetized.packets[packet_index];
+            for (std::uint32_t lane = 0; lane < count; ++lane) {
+                const auto primitive =
+                    quantized.ordered_primitives.at(begin + lane);
+                const auto& triangle =
+                    triangles.at(primitive);
+
+                const float expected_v0[3]{
+                    triangle.v0.x,
+                    triangle.v0.y,
+                    triangle.v0.z,
+                };
+                const auto edge1 =
+                    triangle.v1 - triangle.v0;
+                const auto edge2 =
+                    triangle.v2 - triangle.v0;
+                const float expected_e1[3]{
+                    edge1.x,
+                    edge1.y,
+                    edge1.z,
+                };
+                const float expected_e2[3]{
+                    edge2.x,
+                    edge2.y,
+                    edge2.z,
+                };
+
+                for (int axis = 0; axis < 3; ++axis) {
+                    if (packet.v0[lane][axis] != expected_v0[axis] ||
+                        packet.e1[lane][axis] != expected_e1[axis] ||
+                        packet.e2[lane][axis] != expected_e2[axis]) {
+                        throw std::runtime_error(
+                            "B003 packet geometry changed source triangle");
+                    }
+                }
+                if (packet.metadata[lane][0] != triangle.primitive_id ||
+                    packet.metadata[lane][1] != triangle.material_id ||
+                    packet.metadata[lane][2] != triangle.instance_id ||
+                    packet.metadata[lane][3] !=
+                        (triangle.two_sided ? 1U : 0U)) {
+                    throw std::runtime_error(
+                        "B003 packet metadata changed source triangle");
+                }
+                ++observed_live;
+            }
+        }
+    }
+
+    if (observed_live != packetized.live_triangle_slots ||
+        packetized.packet_triangle_slots !=
+            packetized.packets.size() * 4U ||
+        packetized.live_triangle_slots >
+            packetized.packet_triangle_slots) {
+        throw std::runtime_error(
+            "B003 packet slot accounting is inconsistent");
+    }
+}
+
 [[nodiscard]] HierarchicalFlatPayload
 make_control(std::uint32_t segments) {
     HierarchicalFlatPayload flat;
@@ -444,6 +563,36 @@ int main() {
             verify_quantized_payload(
                 wide,
                 quantized);
+            B002Scene packet_scene;
+            packet_scene.triangles =
+                flat.ordered_primitives.empty()
+                ? std::vector<Triangle>{}
+                : std::vector<Triangle>(
+                    count,
+                    Triangle{});
+            if (!flat.ordered_primitives.empty()) {
+                for (std::uint32_t primitive = 0;
+                     primitive < count;
+                     ++primitive) {
+                    packet_scene.triangles[primitive] = {
+                        {float(primitive), 0.0F, 0.0F},
+                        {float(primitive), 1.0F, 0.0F},
+                        {float(primitive), 0.0F, 1.0F},
+                        primitive,
+                        primitive + 10U,
+                        primitive + 20U,
+                        (primitive & 1U) != 0U,
+                    };
+                }
+                const auto packetized =
+                    make_b003_packet_micro_payload(
+                        quantized,
+                        packet_scene);
+                verify_packet_payload(
+                    quantized,
+                    packetized,
+                    packet_scene.triangles);
+            }
         }
 
         // Exercise recursive collapse on real multi-level per-segment BVHs,
@@ -470,13 +619,24 @@ int main() {
         verify_quantized_payload(
             dense_wide,
             dense_quantized);
+        B002Scene dense_scene;
+        dense_scene.triangles =
+            dense.triangles;
+        const auto dense_packetized =
+            make_b003_packet_micro_payload(
+                dense_quantized,
+                dense_scene);
+        verify_packet_payload(
+            dense_quantized,
+            dense_packetized,
+            dense_scene.triangles);
 
         std::cout
-            << "B003 macro/wide/quantized BVH8 structural smoke: PASS\n";
+            << "B003 macro/wide/quantized/packet BVH8 structural smoke: PASS\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr
-            << "B003 macro/wide/quantized BVH8 structural smoke: FAIL: "
+            << "B003 macro/wide/quantized/packet BVH8 structural smoke: FAIL: "
             << error.what()
             << '\n';
         return 1;
