@@ -19,13 +19,14 @@ excluded.
 Issue #4 resolved the representation-vs-ordering experiment. Follow-up work is
 tracked in [Issue #7 — Research cheaper query coherence for hash cache](https://github.com/owoDra/phos-gi-lab/issues/7).
 
-The first Issue #7 sub-experiment is now **Experiment 001: fused workgroup-local
-hash-slot binning**. It tests whether a 256-thread lookup workgroup can recover
-useful coherence by grouping only its own queries into 16 coarse initial-hash-slot
-bins in shared memory. The grouping work is fused into the lookup dispatch, so
-there is no global reorder buffer, separate scheduling dispatch, or global
-scheduling scratch. Results are not accepted until the target-GPU validation and
-non-validation matrix completes.
+The first Issue #7 sub-experiment, **Experiment 001: fused workgroup-local
+hash-slot binning**, is concluded and rejected. It tested whether a 256-thread
+lookup workgroup could recover useful coherence by grouping only its own queries
+into 16 coarse initial-hash-slot bins in shared memory. The grouping work was
+fused into the lookup dispatch, with no global reorder buffer, separate
+scheduling dispatch, or global scheduling scratch. Both validation and accepted
+non-validation matrices completed; the fused variant was slower than
+`hash/source` at every tested query count.
 
 The Issue #4 branch implements the measurements that produced that decision:
 
