@@ -26,6 +26,7 @@ const char* emission_domain_name(ProducerEmissionDomain domain);
 enum class ProducerAllocationMode {
     PerOwnerAtomic,
     WorkgroupPrefix,
+    OwnerSlotBounded,
 };
 
 const char* allocation_mode_name(ProducerAllocationMode mode);
@@ -85,7 +86,8 @@ public:
         ProducerEmissionDomain emission_domain =
             ProducerEmissionDomain::SurfaceScan,
         ProducerAllocationMode allocation_mode =
-            ProducerAllocationMode::PerOwnerAtomic);
+            ProducerAllocationMode::PerOwnerAtomic,
+        std::uint32_t owner_capacity = 0);
     ~D001Runtime();
 
     D001Runtime(const D001Runtime&) = delete;
