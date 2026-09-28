@@ -25,7 +25,7 @@ A single `atomicMin` over that packed value selects:
 This is the same tie-break rule as A001's depth pass followed by owner
 `atomicMin`.
 
-The candidate requires Vulkan 1.2
+The candidate requires both core `shaderInt64` and Vulkan 1.2
 `shaderBufferInt64Atomics` / 64-bit buffer atomics. That requirement is part
 of the architecture cost/compatibility result, not assumed to be free or
 universal.
