@@ -1,51 +1,410 @@
 #include "software_bvh.hpp"
 #include "sparse_grid.hpp"
+
+#include <algorithm>
 #include <chrono>
+#include <cmath>
+#include <cstdint>
 #include <cstdlib>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
 #include <optional>
+#include <span>
+#include <stdexcept>
+#include <string>
 #include <string_view>
+#include <vector>
 
 namespace lane = phos::gi::research::lane_b;
-using Clock=std::chrono::steady_clock;
+using Clock = std::chrono::steady_clock;
 
 namespace {
-struct Row{std::string scene,dynamic,camera,candidate;float tmax{};std::size_t triangles{},rays{};int repeats{};std::size_t mismatches{},persistent{},scratch{};double build{},refit{},rebuild{},update{},trace{};};
-struct Args{std::size_t rays{2048};int repeats{3};};
 
-double us(Clock::time_point t){return std::chrono::duration<double,std::micro>(Clock::now()-t).count();}
-double median(std::vector<double> v){std::sort(v.begin(),v.end());auto m=v.size()/2;return v.size()%2?v[m]:(v[m-1]+v[m])*.5;}
-template<class F>double measure(int n,F&& f){std::vector<double> v;for(int i=0;i<n;++i){auto t=Clock::now();f();v.push_back(us(t));}return median(std::move(v));}
-void consume(const lane::Hit& h){static volatile std::uint64_t sink=0;sink=sink^std::uint64_t(h.primitive_id)^std::uint64_t(h.hit);}
-template<class A>std::size_t validate(const std::vector<lane::Triangle>& t,const A& a,std::span<const lane::Ray> rays){std::size_t bad=0;for(auto r:rays)if(!lane::equivalent_hit(lane::trace_reference(t,r),a.trace(r)))++bad;return bad;}
-template<class A>double trace_time(const A& a,std::span<const lane::Ray> rays,int n){return measure(n,[&]{for(auto r:rays)consume(a.trace(r));});}
+constexpr lane::Vec3 kDynamicDelta{1.25F, 0.65F, -0.8F};
 
-double common_update_time(const lane::Scene& src,int n){std::vector<double> v;v.reserve(static_cast<std::size_t>(n));for(int i=0;i<n;++i){auto moved=src.triangles;auto t=Clock::now();lane::translate(moved,src.moving,{1.25F,.65F,-.8F});v.push_back(us(t));}return median(std::move(v));}
+struct Row {
+    std::string scene;
+    std::string dynamic;
+    std::string camera;
+    std::string candidate;
+    float tmax{};
+    std::size_t triangles{};
+    std::size_t rays{};
+    int repeats{};
+    std::size_t mismatches{};
+    std::size_t persistent{};
+    std::size_t scratch{};
+    double build{};
+    double refit{};
+    double rebuild{};
+    double update{};
+    double trace{};
+};
 
-Row run_bvh(const lane::Scene& src,std::span<const lane::Ray> rays,bool dyn,bool cam,float tmax,int repeats){
-    auto t=src.triangles;std::optional<lane::SoftwareBvh> tmp;double build=measure(repeats,[&]{tmp.emplace(t);});lane::SoftwareBvh bvh(t);double update=0,refit=0;
-    if(dyn){update=common_update_time(src,repeats);lane::translate(t,src.moving,{1.25F,.65F,-.8F});refit=measure(repeats,[&]{bvh.refit(t);});bvh.refit(t);}
-    double rebuild=measure(repeats,[&]{lane::SoftwareBvh x(t);volatile auto bytes=x.persistent_bytes();(void)bytes;});
-    return {src.name,dyn?"moving":"static",cam?"shifted":"static","software-bvh",tmax,t.size(),rays.size(),repeats,validate(t,bvh,rays),bvh.persistent_bytes(),bvh.scratch_bytes(),build,refit,rebuild,update,trace_time(bvh,rays,repeats)};
-}
-Row run_grid(const lane::Scene& src,std::span<const lane::Ray> rays,bool dyn,bool cam,float tmax,int repeats){
-    auto t=src.triangles;std::optional<lane::SparseGrid> tmp;double build=measure(repeats,[&]{tmp.emplace(t);});lane::SparseGrid grid(t);double update=0;
-    if(dyn){double common_update=common_update_time(src,repeats);lane::translate(t,src.moving,{1.25F,.65F,-.8F});std::vector<double> samples;samples.reserve(static_cast<std::size_t>(repeats));for(int i=0;i<repeats;++i){lane::SparseGrid x(src.triangles);auto start=Clock::now();x.update(t,src.moving);samples.push_back(us(start));}update=common_update+median(std::move(samples));grid.update(t,src.moving);}
-    double rebuild=measure(repeats,[&]{lane::SparseGrid x(t);volatile auto bytes=x.persistent_bytes();(void)bytes;});
-    return {src.name,dyn?"moving":"static",cam?"shifted":"static","stratabrick-grid-control",tmax,t.size(),rays.size(),repeats,validate(t,grid,rays),grid.persistent_bytes(),grid.scratch_bytes(),build,0,rebuild,update,trace_time(grid,rays,repeats)};
-}
-void csv(std::ostream& o,const std::vector<Row>& rows){
-    o<<"scene,dynamic,camera,t_max,candidate,triangles,rays,repeats,mismatches,build_us,refit_us,rebuild_us,dynamic_update_us,trace_us,persistent_bytes,scratch_bytes\n"<<std::fixed<<std::setprecision(3);
-    for(auto&r:rows)o<<r.scene<<','<<r.dynamic<<','<<r.camera<<','<<r.tmax<<','<<r.candidate<<','<<r.triangles<<','<<r.rays<<','<<r.repeats<<','<<r.mismatches<<','<<r.build<<','<<r.refit<<','<<r.rebuild<<','<<r.update<<','<<r.trace<<','<<r.persistent<<','<<r.scratch<<'\n';
-}
-Args args(int argc,char**argv){Args a;for(int i=1;i<argc;++i){std::string_view s=argv[i];if(++i>=argc)throw std::runtime_error("option requires value");if(s=="--rays")a.rays=std::stoull(argv[i]);else if(s=="--repeats")a.repeats=std::stoi(argv[i]);else throw std::runtime_error("unknown option");}if(!a.rays||a.repeats<=0)throw std::runtime_error("rays/repeats must be positive");return a;}
+struct Args {
+    std::size_t rays{2048};
+    int repeats{3};
+};
+
+[[nodiscard]] double elapsed_us(Clock::time_point start) {
+    return std::chrono::duration<double, std::micro>(Clock::now() - start).count();
 }
 
-int main(int argc,char**argv){try{
-    auto a=args(argc,argv);std::vector<Row> rows;
-    for(std::string_view name:{"sparse","dense","vertical"}){auto scene=lane::make_scene(name);for(bool dyn:{false,true})for(bool cam:{false,true})for(float t:{50.F,200.F}){auto rays=lane::make_rays(name,a.rays,t,cam);rows.push_back(run_bvh(scene,rays,dyn,cam,t,a.repeats));rows.push_back(run_grid(scene,rays,dyn,cam,t,a.repeats));}}
-    csv(std::cout,rows);if(const char*d=std::getenv("PHOS_RESEARCH_ARTIFACT_DIR");d&&*d){std::ofstream f(std::string(d)+"/b001-controls.csv");if(!f)throw std::runtime_error("artifact open failed");csv(f,rows);}auto bad=std::accumulate(rows.begin(),rows.end(),std::size_t{},[](auto n,const Row&r){return n+r.mismatches;});if(bad){std::cerr<<"correctness mismatches: "<<bad<<'\n';return 2;}std::cerr<<"B001 correctness: PASS ("<<rows.size()<<" candidate rows)\n";return 0;
-}catch(const std::exception&e){std::cerr<<"B001 error: "<<e.what()<<'\n';return 1;}}
+[[nodiscard]] double median(std::vector<double> values) {
+    std::sort(values.begin(), values.end());
+    const auto middle = values.size() / 2;
+    return values.size() % 2 != 0
+        ? values[middle]
+        : (values[middle - 1] + values[middle]) * 0.5;
+}
+
+template <class Fn>
+[[nodiscard]] double measure(int repeats, Fn&& fn) {
+    std::vector<double> samples;
+    samples.reserve(static_cast<std::size_t>(repeats));
+    for (int repeat = 0; repeat < repeats; ++repeat) {
+        const auto start = Clock::now();
+        fn();
+        samples.push_back(elapsed_us(start));
+    }
+    return median(std::move(samples));
+}
+
+template <class Acceleration>
+[[nodiscard]] double measure_construction(
+    const std::vector<lane::Triangle>& geometry,
+    int repeats) {
+    std::vector<double> samples;
+    samples.reserve(static_cast<std::size_t>(repeats));
+    for (int repeat = 0; repeat < repeats; ++repeat) {
+        std::optional<Acceleration> candidate;
+        const auto start = Clock::now();
+        candidate.emplace(geometry);
+        samples.push_back(elapsed_us(start));
+
+        // Keep construction observable without charging destruction to build/rebuild.
+        volatile auto bytes = candidate->persistent_bytes();
+        (void)bytes;
+    }
+    return median(std::move(samples));
+}
+
+void consume(const lane::Hit& hit) {
+    static volatile std::uint64_t sink = 0;
+    sink = sink ^ std::uint64_t(hit.primitive_id) ^ std::uint64_t(hit.hit);
+}
+
+void contract_smoke_tests() {
+    std::vector<lane::Triangle> triangles{
+        {{-1, -1, 5}, {1, -1, 5}, {0, 1, 5}, 3, 7, 11, true},
+    };
+
+    const auto normalized = lane::trace_reference(
+        triangles,
+        {{0, 0, 0}, {0, 0, 2}, 10});
+    if (!normalized.hit ||
+        std::abs(normalized.t - 5.0F) > lane::kHitDistanceAbsTolerance ||
+        normalized.primitive_id != 3) {
+        throw std::runtime_error("contract normalization failed");
+    }
+
+    if (lane::trace_reference(
+            triangles,
+            {{0, 0, 0}, {0, 0, 1}, 4.9F})
+            .hit) {
+        throw std::runtime_error("contract tMax failed");
+    }
+
+    triangles[0].two_sided = false;
+    if (lane::trace_reference(
+            triangles,
+            {{0, 0, 0}, {0, 0, 1}, 10})
+            .hit) {
+        throw std::runtime_error("contract face policy failed");
+    }
+
+    triangles[0].two_sided = true;
+    triangles.push_back(triangles[0]);
+    triangles.back().primitive_id = 1;
+    if (lane::trace_reference(
+            triangles,
+            {{0, 0, 0}, {0, 0, 1}, 10})
+            .primitive_id != 1) {
+        throw std::runtime_error("contract tie break failed");
+    }
+}
+
+template <class Acceleration>
+[[nodiscard]] std::size_t validate(
+    const std::vector<lane::Triangle>& triangles,
+    const Acceleration& acceleration,
+    std::span<const lane::Ray> rays) {
+    std::size_t mismatches = 0;
+    for (const auto ray : rays) {
+        const auto expected = lane::trace_reference(triangles, ray);
+        const auto actual = acceleration.trace(ray);
+        if (!lane::equivalent_hit(expected, actual)) {
+            ++mismatches;
+        }
+    }
+    return mismatches;
+}
+
+template <class Acceleration>
+[[nodiscard]] double trace_time(
+    const Acceleration& acceleration,
+    std::span<const lane::Ray> rays,
+    int repeats) {
+    return measure(repeats, [&] {
+        for (const auto ray : rays) {
+            consume(acceleration.trace(ray));
+        }
+    });
+}
+
+[[nodiscard]] double measure_common_geometry_update(
+    const lane::Scene& source,
+    int repeats) {
+    std::vector<double> samples;
+    samples.reserve(static_cast<std::size_t>(repeats));
+    for (int repeat = 0; repeat < repeats; ++repeat) {
+        auto geometry = source.triangles;
+        const auto start = Clock::now();
+        lane::translate(geometry, source.moving, kDynamicDelta);
+        samples.push_back(elapsed_us(start));
+    }
+    return median(std::move(samples));
+}
+
+[[nodiscard]] double measure_bvh_refit(
+    const lane::Scene& source,
+    const std::vector<lane::Triangle>& final_geometry,
+    int repeats) {
+    std::vector<double> samples;
+    samples.reserve(static_cast<std::size_t>(repeats));
+    for (int repeat = 0; repeat < repeats; ++repeat) {
+        lane::SoftwareBvh candidate(source.triangles);
+        const auto start = Clock::now();
+        candidate.refit(final_geometry);
+        samples.push_back(elapsed_us(start));
+    }
+    return median(std::move(samples));
+}
+
+[[nodiscard]] double measure_grid_update(
+    const lane::Scene& source,
+    const std::vector<lane::Triangle>& final_geometry,
+    int repeats) {
+    std::vector<double> samples;
+    samples.reserve(static_cast<std::size_t>(repeats));
+    for (int repeat = 0; repeat < repeats; ++repeat) {
+        lane::SparseGrid candidate(source.triangles);
+        const auto start = Clock::now();
+        candidate.update(final_geometry, source.moving);
+        samples.push_back(elapsed_us(start));
+    }
+    return median(std::move(samples));
+}
+
+[[nodiscard]] Row run_bvh(
+    const lane::Scene& source,
+    std::span<const lane::Ray> rays,
+    bool dynamic,
+    bool shifted_camera,
+    float tmax,
+    int repeats) {
+    const double build =
+        measure_construction<lane::SoftwareBvh>(source.triangles, repeats);
+
+    auto final_geometry = source.triangles;
+    lane::SoftwareBvh final_bvh(final_geometry);
+
+    double refit = 0.0;
+    double update = 0.0;
+    if (dynamic) {
+        update = measure_common_geometry_update(source, repeats);
+        lane::translate(final_geometry, source.moving, kDynamicDelta);
+        refit = measure_bvh_refit(source, final_geometry, repeats);
+        final_bvh.refit(final_geometry);
+    }
+
+    const double rebuild =
+        measure_construction<lane::SoftwareBvh>(final_geometry, repeats);
+
+    return {
+        source.name,
+        dynamic ? "moving" : "static",
+        shifted_camera ? "shifted" : "static",
+        "software-bvh",
+        tmax,
+        final_geometry.size(),
+        rays.size(),
+        repeats,
+        validate(final_geometry, final_bvh, rays),
+        final_bvh.persistent_bytes(),
+        final_bvh.scratch_bytes(),
+        build,
+        refit,
+        rebuild,
+        update,
+        trace_time(final_bvh, rays, repeats),
+    };
+}
+
+[[nodiscard]] Row run_grid(
+    const lane::Scene& source,
+    std::span<const lane::Ray> rays,
+    bool dynamic,
+    bool shifted_camera,
+    float tmax,
+    int repeats) {
+    const double build =
+        measure_construction<lane::SparseGrid>(source.triangles, repeats);
+
+    auto final_geometry = source.triangles;
+    lane::SparseGrid final_grid(final_geometry);
+
+    double membership_update = 0.0;
+    double common_update = 0.0;
+    if (dynamic) {
+        common_update = measure_common_geometry_update(source, repeats);
+        lane::translate(final_geometry, source.moving, kDynamicDelta);
+        membership_update =
+            measure_grid_update(source, final_geometry, repeats);
+        final_grid.update(final_geometry, source.moving);
+    }
+
+    const double rebuild =
+        measure_construction<lane::SparseGrid>(final_geometry, repeats);
+
+    // dynamic_update_us is the common moved-geometry update plus candidate-specific
+    // membership maintenance. Refit remains a separate field for BVH-style candidates.
+    const double dynamic_update = common_update + membership_update;
+
+    return {
+        source.name,
+        dynamic ? "moving" : "static",
+        shifted_camera ? "shifted" : "static",
+        "stratabrick-grid-control",
+        tmax,
+        final_geometry.size(),
+        rays.size(),
+        repeats,
+        validate(final_geometry, final_grid, rays),
+        final_grid.persistent_bytes(),
+        final_grid.scratch_bytes(),
+        build,
+        0.0,
+        rebuild,
+        dynamic_update,
+        trace_time(final_grid, rays, repeats),
+    };
+}
+
+void write_csv(std::ostream& output, const std::vector<Row>& rows) {
+    output
+        << "scene,dynamic,camera,t_max,candidate,triangles,rays,repeats,mismatches,"
+           "build_us,refit_us,rebuild_us,dynamic_update_us,trace_us,"
+           "persistent_bytes,scratch_bytes\n";
+    output << std::fixed << std::setprecision(3);
+
+    for (const auto& row : rows) {
+        output << row.scene << ',' << row.dynamic << ',' << row.camera << ','
+               << row.tmax << ',' << row.candidate << ',' << row.triangles << ','
+               << row.rays << ',' << row.repeats << ',' << row.mismatches << ','
+               << row.build << ',' << row.refit << ',' << row.rebuild << ','
+               << row.update << ',' << row.trace << ',' << row.persistent << ','
+               << row.scratch << '\n';
+    }
+}
+
+[[nodiscard]] Args parse_args(int argc, char** argv) {
+    Args parsed;
+    for (int index = 1; index < argc; ++index) {
+        const std::string_view option = argv[index];
+        if (++index >= argc) {
+            throw std::runtime_error("option requires value");
+        }
+        if (option == "--rays") {
+            parsed.rays = std::stoull(argv[index]);
+        } else if (option == "--repeats") {
+            parsed.repeats = std::stoi(argv[index]);
+        } else {
+            throw std::runtime_error("unknown option");
+        }
+    }
+    if (parsed.rays == 0 || parsed.repeats <= 0) {
+        throw std::runtime_error("rays/repeats must be positive");
+    }
+    return parsed;
+}
+
+} // namespace
+
+int main(int argc, char** argv) {
+    try {
+        contract_smoke_tests();
+        const auto args = parse_args(argc, argv);
+        std::vector<Row> rows;
+
+        for (const std::string_view scene_name : {"sparse", "dense", "vertical"}) {
+            const auto scene = lane::make_scene(scene_name);
+            for (const bool dynamic : {false, true}) {
+                for (const bool shifted_camera : {false, true}) {
+                    for (const float tmax : {50.0F, 200.0F}) {
+                        const auto rays = lane::make_rays(
+                            scene_name,
+                            args.rays,
+                            tmax,
+                            shifted_camera);
+                        rows.push_back(run_bvh(
+                            scene,
+                            rays,
+                            dynamic,
+                            shifted_camera,
+                            tmax,
+                            args.repeats));
+                        rows.push_back(run_grid(
+                            scene,
+                            rays,
+                            dynamic,
+                            shifted_camera,
+                            tmax,
+                            args.repeats));
+                    }
+                }
+            }
+        }
+
+        write_csv(std::cout, rows);
+        if (const char* artifact_dir = std::getenv("PHOS_RESEARCH_ARTIFACT_DIR");
+            artifact_dir != nullptr && *artifact_dir != '\0') {
+            std::ofstream artifact(std::string(artifact_dir) + "/b001-controls.csv");
+            if (!artifact) {
+                throw std::runtime_error("artifact open failed");
+            }
+            write_csv(artifact, rows);
+        }
+
+        const auto mismatches = std::accumulate(
+            rows.begin(),
+            rows.end(),
+            std::size_t{},
+            [](std::size_t total, const Row& row) {
+                return total + row.mismatches;
+            });
+        if (mismatches != 0) {
+            std::cerr << "correctness mismatches: " << mismatches << '\n';
+            return 2;
+        }
+
+        std::cerr << "B001 correctness: PASS (" << rows.size()
+                  << " candidate rows)\n";
+        return 0;
+    } catch (const std::exception& error) {
+        std::cerr << "B001 error: " << error.what() << '\n';
+        return 1;
+    }
+}
