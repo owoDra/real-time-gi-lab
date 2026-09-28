@@ -160,8 +160,8 @@ else()
   target_compile_options(phos-lane-b-b003-smoke PRIVATE -Wall -Wextra -Wpedantic)
 endif()
 
-# B003 Stage A: replace the hierarchical segment DDA/hash front end with a
-# deterministic Macro BVH8 while retaining B002's binary per-segment micro BVH.
+# B003 Stage A/B: compare the rejected Macro-BVH8 top-level replacement and
+# the DDA-preserving wide micro-BVH8 candidate against the B002 hierarchy.
 add_compute_shader(
   lane_b_b003_macro_bvh8
   shaders/research/lane_b_traversal/b003_macro_bvh8.comp.glsl)

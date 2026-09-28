@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: target-ready; Stage A target measurement pending
+Status: target-ready; Stage B1 wide-micro target measurement pending
 
 ## Question
 
@@ -272,3 +272,37 @@ this evidence-driven pivot because the result identified the top-level
 replacement as the wrong optimization target while leaving the micro-level
 hypothesis untested. Stage B must still independently earn further compression
 or packet work.
+
+
+## Stage B1 implementation checkpoint — DDA + float Micro BVH8
+
+Stage B1 is target-ready.
+
+The new candidate keeps the B002 segment DDA/hash traversal unchanged and
+collapses only each segment's binary micro BVH into an uncompressed 8-wide
+hierarchy. Binary leaves remain the same primitive ranges; only internal
+traversal shape changes.
+
+The same B003 formal run now produces:
+
+- `b003-results.csv` with three candidates per A001 case:
+  - `hierarchical-stratabrick`;
+  - `macro-bvh8-binary-micro` (the rejected Stage A control);
+  - `dda-wide-micro-bvh8` (Stage B1);
+- `b003-stage-a-summary.json`;
+- `b003-stage-b-summary.json`;
+- `b003-correctness.json`;
+- `b003-device.json`;
+- `b003-config.json`.
+
+Stage B1 is a viability gate for compression. Advance to quantized/compressed
+BVH8 when:
+
+- correctness/runtime errors remain zero;
+- the uncompressed wide-micro mean is no worse than 1.15x the same-run binary
+  hierarchy;
+- persistent memory is no more than 1.5x the same-run binary hierarchy.
+
+This is intentionally not the final B003 success criterion. Compression is
+expected to be part of the wide-BVH hypothesis; Stage B1 only rejects variants
+that are already too far behind for compression to plausibly rescue.

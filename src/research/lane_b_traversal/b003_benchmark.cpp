@@ -831,7 +831,7 @@ int main(int argc, char** argv) {
                 << "  \"schema_version\": 1,\n"
                 << "  \"experiment\": "
                    "\"003-wide-software-traversal\",\n"
-                << "  \"stage\": \"A\",\n"
+                << "  \"stage\": \"A+B1\",\n"
                 << "  \"lane_a_measurement_commit\": \""
                 << kAcceptedA001Commit << "\",\n"
                 << "  \"lane_a_artifact\": \""
@@ -1386,7 +1386,7 @@ int main(int argc, char** argv) {
             triangle_buffer);
 
         write_rows(
-            output_root / "b003-stage-a.csv",
+            output_root / "b003-results.csv",
             rows);
         write_correctness_json(
             output_root /

@@ -73,9 +73,8 @@ regenerate the stream.
 
 ## B003 Stage A target execution
 
-B003 first tests the cheapest structural change: replace B002's segment-grid
-DDA/hash traversal with a Macro BVH8 while retaining the same binary
-per-segment micro BVHs.
+B003 records the rejected Macro-BVH8 top-level control and now also tests a
+DDA/hash-preserving wide micro-BVH8 candidate in the same exact-stream run.
 
 Run from a clean `research-lane-b-traversal` checkout:
 
@@ -92,7 +91,7 @@ mise run research:record --lane lane-b-traversal \
 
 Expected additional artifacts:
 
-- `b003-stage-a.csv`;
+- `b003-results.csv`;
 - `b003-stage-a-summary.json`;
 - `b003-correctness.json`;
 - `b003-device.json`;
