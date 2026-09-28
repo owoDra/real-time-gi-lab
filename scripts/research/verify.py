@@ -21,6 +21,11 @@ LANES = {
         "shader": "shaders/research/lane_c_storage_locality/README.md",
         "script": "scripts/research/lane_c_storage_locality/README.md",
     },
+    "lane-d-producer-optimization": {
+        "src": "src/research/lane_d_producer_optimization/CMakeLists.txt",
+        "shader": "shaders/research/lane_d_producer_optimization/README.md",
+        "script": "scripts/research/lane_d_producer_optimization/README.md",
+    },
 }
 
 
