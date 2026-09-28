@@ -1,4 +1,5 @@
 #include "vk_context.hpp"
+#include "vk_init.hpp"
 
 #include <cstring>
 #include <fstream>
@@ -75,7 +76,7 @@ GpuBuffer VulkanContext::create_buffer(VkDeviceSize size, VkBufferUsageFlags usa
     GpuBuffer out{};
     out.size = size;
 
-    VkBufferCreateInfo bi{VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO};
+    auto bi = detail::make_vk_info<VkBufferCreateInfo>(VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO);
     bi.size = size;
     bi.usage = usage;
     bi.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
@@ -83,7 +84,7 @@ GpuBuffer VulkanContext::create_buffer(VkDeviceSize size, VkBufferUsageFlags usa
 
     VkMemoryRequirements req{};
     dispatch_.getBufferMemoryRequirements(out.buffer, &req);
-    VkMemoryAllocateInfo ai{VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO};
+    auto ai = detail::make_vk_info<VkMemoryAllocateInfo>(VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO);
     ai.allocationSize = req.size;
     ai.memoryTypeIndex = find_memory_type(req.memoryTypeBits, properties);
     if (dispatch_.allocateMemory(&ai, nullptr, &out.memory) != VK_SUCCESS) fail("vkAllocateMemory failed");
@@ -104,19 +105,19 @@ GpuBuffer VulkanContext::create_device_buffer(VkDeviceSize size, VkBufferUsageFl
 
 void VulkanContext::copy_buffer(VkBuffer source, VkBuffer destination, VkDeviceSize size) {
     VkCommandPool pool{};
-    VkCommandPoolCreateInfo pci{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+    auto pci = detail::make_vk_info<VkCommandPoolCreateInfo>(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
     pci.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
     pci.queueFamilyIndex = queue_family_;
     if (dispatch_.createCommandPool(&pci, nullptr, &pool) != VK_SUCCESS) fail("upload command pool");
 
     VkCommandBuffer cmd{};
-    VkCommandBufferAllocateInfo cai{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
+    auto cai = detail::make_vk_info<VkCommandBufferAllocateInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
     cai.commandPool = pool;
     cai.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     cai.commandBufferCount = 1;
     if (dispatch_.allocateCommandBuffers(&cai, &cmd) != VK_SUCCESS) fail("upload command buffer");
 
-    VkCommandBufferBeginInfo cbi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
+    auto cbi = detail::make_vk_info<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
     cbi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     dispatch_.beginCommandBuffer(cmd, &cbi);
     VkBufferCopy region{0, 0, size};
@@ -124,9 +125,9 @@ void VulkanContext::copy_buffer(VkBuffer source, VkBuffer destination, VkDeviceS
     dispatch_.endCommandBuffer(cmd);
 
     VkFence fence{};
-    VkFenceCreateInfo fi{VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+    auto fi = detail::make_vk_info<VkFenceCreateInfo>(VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
     dispatch_.createFence(&fi, nullptr, &fence);
-    VkSubmitInfo si{VK_STRUCTURE_TYPE_SUBMIT_INFO};
+    auto si = detail::make_vk_info<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
     si.commandBufferCount = 1;
     si.pCommandBuffers = &cmd;
     if (dispatch_.queueSubmit(queue_, 1, &si, fence) != VK_SUCCESS) fail("upload submit");
