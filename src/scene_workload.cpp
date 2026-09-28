@@ -9,7 +9,6 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
-#include <random>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
@@ -76,6 +75,22 @@ std::uint32_t table_size_for(std::size_t active_cells) {
 
 std::uint32_t semantic_payload(std::uint32_t page, std::uint32_t local) {
     return mix32(page * 1315423911u ^ local);
+}
+
+std::uint64_t splitmix64(std::uint64_t& state) {
+    state += 0x9e3779b97f4a7c15ull;
+    std::uint64_t z = state;
+    z = (z ^ (z >> 30u)) * 0xbf58476d1ce4e5b9ull;
+    z = (z ^ (z >> 27u)) * 0x94d049bb133111ebull;
+    return z ^ (z >> 31u);
+}
+
+void deterministic_shuffle(std::vector<Query>& queries) {
+    std::uint64_t state = 0x50484f535f4d3030ull;
+    for (std::size_t i = queries.size(); i > 1; --i) {
+        const auto j = static_cast<std::size_t>(splitmix64(state) % i);
+        std::swap(queries[i - 1], queries[j]);
+    }
 }
 
 std::uint32_t hash_lookup_cpu(const Workload& w, std::uint32_t key) {
@@ -235,11 +250,10 @@ Workload build_workload(const std::vector<Vec3>& points, std::size_t query_count
 
     w.active_cells = static_cast<std::uint32_t>(active_keys.size());
 
-    // Randomized is deterministic so process-level repeats change timing, not
-    // the logical query permutation.
+    // Use a fixed shuffle algorithm rather than std::shuffle so the exact
+    // randomized workload is reproducible across standard-library versions.
     w.randomized = w.source;
-    std::mt19937 random_engine(0x50484f53u);
-    std::shuffle(w.randomized.begin(), w.randomized.end(), random_engine);
+    deterministic_shuffle(w.randomized);
 
     // M0 isolates page-level work scheduling. Do not additionally sort by
     // local_index: that would conflate page grouping with intra-page ordering.
