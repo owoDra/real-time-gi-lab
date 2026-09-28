@@ -2,6 +2,7 @@
 
 #include "vk_init.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cstring>
 #include <filesystem>
