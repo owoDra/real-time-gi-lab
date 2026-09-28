@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstdint>
 #include <limits>
+#include <random>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
@@ -88,9 +89,37 @@ std::uint32_t hash_lookup_cpu(const Workload& w, std::uint32_t key) {
     return 0u;
 }
 
+void validate_ordering(const Workload& w, const std::vector<Query>& queries, bool require_page_grouped) {
+    if (queries.size() != w.source.size()) {
+        throw std::runtime_error("Query ordering changed the query count");
+    }
+
+    std::uint64_t checksum = 0;
+    std::uint32_t previous_page = 0;
+    bool first = true;
+    for (const auto& q : queries) {
+        const std::uint64_t logical_cell =
+            static_cast<std::uint64_t>(q.page_id) * w.page_size + q.local_index;
+        if (logical_cell + 1u != q.key) {
+            throw std::runtime_error("Query ordering corrupted the logical-cell key");
+        }
+
+        if (require_page_grouped && !first && q.page_id < previous_page) {
+            throw std::runtime_error("Page-grouped ordering is not monotonic by page");
+        }
+        previous_page = q.page_id;
+        first = false;
+        checksum += semantic_payload(q.page_id, q.local_index);
+    }
+
+    if (checksum != w.expected_checksum) {
+        throw std::runtime_error("Query ordering changed the semantic workload");
+    }
+}
+
 void validate_semantic_equivalence(Workload& w) {
     std::uint64_t checksum = 0;
-    for (const auto& q : w.original) {
+    for (const auto& q : w.source) {
         const auto base = w.page_table.at(q.page_id);
         const auto expected = w.paged_payload.at(static_cast<std::size_t>(base) + q.local_index);
         const auto hashed = hash_lookup_cpu(w, q.key);
@@ -100,6 +129,10 @@ void validate_semantic_equivalence(Workload& w) {
         checksum += expected;
     }
     w.expected_checksum = checksum;
+
+    validate_ordering(w, w.source, false);
+    validate_ordering(w, w.randomized, false);
+    validate_ordering(w, w.page_grouped, true);
 }
 
 } // namespace
@@ -166,9 +199,12 @@ Workload build_workload(const std::vector<Vec3>& points, std::size_t query_count
     if (points.empty() || query_count == 0) {
         throw std::runtime_error("Workload requires points and queries");
     }
+    if (query_count > std::numeric_limits<std::uint32_t>::max()) {
+        throw std::runtime_error("M0 workload exceeds 32-bit query count");
+    }
 
     Workload w;
-    w.original.reserve(query_count);
+    w.source.reserve(query_count);
 
     std::unordered_map<std::uint64_t, std::uint32_t> page_ids;
     page_ids.reserve(points.size() / 8 + 1);
@@ -193,17 +229,24 @@ Workload build_workload(const std::vector<Vec3>& points, std::size_t query_count
 
         // Zero is reserved as the empty hash-table sentinel.
         const auto key = static_cast<std::uint32_t>(logical_cell + 1u);
-        w.original.push_back({key, page, local, 0});
+        w.source.push_back({key, page, local, 0});
         active_keys.insert(key);
     }
 
     w.active_cells = static_cast<std::uint32_t>(active_keys.size());
 
-    w.page_sorted = w.original;
-    std::stable_sort(w.page_sorted.begin(), w.page_sorted.end(), [](const Query& a, const Query& b) {
-        return a.page_id < b.page_id ||
-               (a.page_id == b.page_id && a.local_index < b.local_index);
-    });
+    // Randomized is deterministic so process-level repeats change timing, not
+    // the logical query permutation.
+    w.randomized = w.source;
+    std::mt19937 random_engine(0x50484f53u);
+    std::shuffle(w.randomized.begin(), w.randomized.end(), random_engine);
+
+    // M0 isolates page-level work scheduling. Do not additionally sort by
+    // local_index: that would conflate page grouping with intra-page ordering.
+    w.page_grouped = w.source;
+    std::stable_sort(
+        w.page_grouped.begin(), w.page_grouped.end(),
+        [](const Query& a, const Query& b) { return a.page_id < b.page_id; });
 
     const std::uint32_t page_count = static_cast<std::uint32_t>(page_ids.size());
     w.page_table.resize(page_count);
@@ -221,7 +264,7 @@ Workload build_workload(const std::vector<Vec3>& points, std::size_t query_count
     w.hash_keys.assign(table_size, 0u);
     w.hash_payload.assign(table_size, 0u);
 
-    for (const auto& q : w.original) {
+    for (const auto& q : w.source) {
         std::uint32_t slot = mix32(q.key) & w.hash_mask;
         std::uint32_t probes = 1;
         while (w.hash_keys[slot] != 0u && w.hash_keys[slot] != q.key) {
