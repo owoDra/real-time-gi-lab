@@ -15,16 +15,22 @@ surfel placement, and multi-bounce transport are intentionally excluded from M0.
 
 ## Current work
 
-The current work item is to establish a trustworthy M0 baseline:
+The corrected 4M-query run has passed the M0 semantic-correctness gate on one
+hardware/workload point. The next task is to separate **cache representation**
+from **query coherence / scheduling** before treating page-local storage as a
+winning architecture.
 
-- require hash/paged variants to return the same semantic payload;
-- size the hash table from actual active cells rather than unused page capacity;
-- make the GPU hash probe bound match the constructed table;
-- sweep multiple query counts and repeated runs with a reproducible harness;
-- record hardware, commit, workload, raw rows, and summarized medians.
+Tracked work: [Issue #4 — isolate cache layout vs query coherence and include
+GPU scheduling cost](https://github.com/owoDra/phos-gi-lab/issues/4).
 
-After that, M0 expands to multiple locality regimes. M1 then moves page
-binning/sorting onto the GPU and includes its cost.
+The immediate controls are:
+
+- add a `hash-sorted` variant using the same page-grouped order as
+  `paged-sorted`;
+- run source/random/page-grouped locality regimes for both representations;
+- run the standard query-count/repeat matrix;
+- move ordering to GPU-side binning/sorting and include that cost;
+- profile cache/memory behavior once timing trends are stable.
 
 ## Accepted facts
 
@@ -39,6 +45,45 @@ binning/sorting onto the GPU and includes its cost.
   below.
 
 ## Evidence ledger
+
+### 2026-09-28 — corrected 4M Sponza lookup run
+
+Hardware: AMD Radeon 8060S Graphics, RADV STRIX_HALO  
+Queries: 4,000,000  
+Iterations: 100  
+Surface samples: 262,241  
+Active pages: 242,806  
+Active cells: 261,659  
+Hash slots: 524,288  
+Hash maximum probe depth: 34  
+Shared checksum: 8587727892303652
+
+| Variant | GPU us/dispatch | Representation bytes | Correct |
+| --- | ---: | ---: | --- |
+| hash | 813.455 | 4194304 | true |
+| paged | 1592.06 | 63129560 | true |
+| paged-sorted | 499.223 | 63129560 | true |
+
+**Status: accepted as a corrected single-run observation; not sufficient to
+pass M0.**
+
+All variants returned the same expected semantic checksum, so the correctness
+gate passed for this run.
+
+Observed relationships:
+
+- unsorted `paged` was about **1.96x slower** than `hash`;
+- `paged-sorted` was about **1.63x faster** than `hash`;
+- sorting the paged workload improved the same representation by about
+  **3.19x**;
+- the current paged representation used about **15.05x** the lookup-storage
+  bytes of the corrected hash baseline.
+
+The strongest current interpretation is therefore **not** that page-local
+storage alone wins. The evidence instead suggests that query coherence/work
+ordering may dominate lookup performance on this workload. A `hash-sorted`
+control is required before attributing the gain to the page-local
+representation.
 
 ### 2026-09-28 — first successful Sponza GPU run
 
@@ -89,13 +134,17 @@ a hash cache instead of assuming a new cache representation is necessary.
 
 ## Next measurements
 
-1. Query-count sweep: 100k, 500k, 1M, 4M, 8M.
-2. Repeated runs to establish variance/median.
+The next research work is tracked in Issue #4.
+
+1. Add `hash-sorted` to isolate representation from ordering.
+2. Query-count sweep: 100k, 500k, 1M, 4M, 8M with repeated runs.
 3. Locality regimes: source order, randomized, page-grouped, and later
    camera/temporal-coherent workloads.
-4. Read/write/update workloads, including dirty-page ratios.
-5. GPU cache/memory counters to confirm whether gains come from reduced misses
-   and stalls rather than unrelated effects.
+4. GPU-side binning/sorting with its full end-to-end cost included.
+5. GPU cache/memory counters to verify whether timing changes correspond to
+   cache misses, transactions, stalls, or occupancy.
+6. Only after layout/scheduling is resolved: read/write/update workloads,
+   including dirty-page ratios.
 
 ## Not yet established
 
