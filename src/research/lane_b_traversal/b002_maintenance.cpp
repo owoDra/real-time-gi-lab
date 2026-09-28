@@ -63,6 +63,8 @@ struct Row {
     double pack_cpu_us{};
     double geometry_upload_us{};
     double accel_upload_us{};
+    std::size_t geometry_update_bytes{};
+    std::size_t accel_update_bytes{};
     double blas_update_us{};
     double tlas_update_us{};
     double trace_us{};
@@ -505,16 +507,16 @@ struct Validation {
     const auto validation =
         validate_hits(expected, hits);
 
-    const std::array<const B002Buffer*, 4> persistent{
+    const std::array<const B002Buffer*, 3> persistent{
         &triangle_buffer,
         &node_buffer,
         &order_buffer,
-        &ray_buffer,
     };
     const auto persistent_bytes =
         allocations(persistent);
     const auto transient_bytes =
         static_cast<std::size_t>(
+            ray_buffer.allocation_size +
             hit_buffer.allocation_size);
 
     context.destroy_buffer(hit_buffer);
@@ -538,6 +540,8 @@ struct Validation {
         pack_us,
         geometry_upload_us,
         accel_upload_us,
+        moved.size() * sizeof(GpuTriangle),
+        after_nodes.size() * sizeof(GpuBvhNode),
         0.0,
         0.0,
         trace_us,
@@ -635,6 +639,7 @@ struct Validation {
     const auto geometry_upload_us =
         elapsed_us(upload_start);
 
+    std::size_t accel_update_bytes = 0;
     upload_start = Clock::now();
     if (stats.membership_changes == 0) {
         if (before_payload.ordered_primitives !=
@@ -648,10 +653,20 @@ struct Validation {
             node_diff_updates(
                 before_payload.nodes,
                 after_payload.nodes);
+        for (const auto& update : node_updates) {
+            accel_update_bytes +=
+                static_cast<std::size_t>(update.size);
+        }
         context.update_device_buffer(
             node_buffer,
             node_updates);
     } else {
+        accel_update_bytes =
+            after_payload.nodes.size() * sizeof(GpuBvhNode) +
+            after_payload.ordered_primitives.size() *
+                sizeof(std::uint32_t) +
+            after_payload.hash_table.size() *
+                sizeof(GpuSegmentHashEntry);
         context.replace_device_buffer(
             node_buffer,
             after_payload.nodes.data(),
@@ -734,17 +749,17 @@ struct Validation {
     const auto validation =
         validate_hits(expected, hits);
 
-    const std::array<const B002Buffer*, 5> persistent{
+    const std::array<const B002Buffer*, 4> persistent{
         &triangle_buffer,
         &node_buffer,
         &order_buffer,
         &hash_buffer,
-        &ray_buffer,
     };
     const auto persistent_bytes =
         allocations(persistent);
     const auto transient_bytes =
         static_cast<std::size_t>(
+            ray_buffer.allocation_size +
             hit_buffer.allocation_size);
 
     context.destroy_buffer(hit_buffer);
@@ -769,6 +784,8 @@ struct Validation {
         pack_us,
         geometry_upload_us,
         accel_upload_us,
+        moved.size() * sizeof(GpuTriangle),
+        accel_update_bytes,
         0.0,
         0.0,
         trace_us,
@@ -832,14 +849,17 @@ struct Validation {
         0.0,
         update.geometry_upload_us,
         0.0,
+        moved.size() *
+            (3U * sizeof(float) * 3U + sizeof(GpuTriangle)),
+        0,
         update.blas_update_us,
         update.tlas_update_us,
         trace.trace_us,
         validation.mismatches,
         validation.runtime_errors,
-        acceleration.setup_stats().persistent_bytes +
-            trace.ray_allocation_bytes,
-        trace.hits.size() * sizeof(GpuHit),
+        acceleration.setup_stats().persistent_bytes,
+        trace.ray_allocation_bytes +
+            trace.hits.size() * sizeof(GpuHit),
         acceleration.setup_stats().scratch_bytes,
     };
 }
@@ -856,7 +876,8 @@ void write_csv(
         << "regime,candidate,moved_instance,moved_primitives,delta_x,"
            "membership_changes,refit_segments,rebuilt_segments,removed_segments,"
            "geometry_transform_us,accel_cpu_us,pack_cpu_us,geometry_upload_us,"
-           "accel_upload_us,blas_update_us,tlas_update_us,trace_us,mismatches,"
+           "accel_upload_us,geometry_update_bytes,accel_update_bytes,"
+           "blas_update_us,tlas_update_us,trace_us,mismatches,"
            "runtime_errors,persistent_bytes,transient_bytes,explicit_scratch_bytes\n";
     output << std::fixed << std::setprecision(3);
     for (const auto& row : rows) {
@@ -875,6 +896,8 @@ void write_csv(
             << row.pack_cpu_us << ','
             << row.geometry_upload_us << ','
             << row.accel_upload_us << ','
+            << row.geometry_update_bytes << ','
+            << row.accel_update_bytes << ','
             << row.blas_update_us << ','
             << row.tlas_update_us << ','
             << row.trace_us << ','
