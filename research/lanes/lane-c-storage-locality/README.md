@@ -1,7 +1,7 @@
 # Lane C — radiance storage and locality
 
 Issue: #12
-Branch: `research/lane-c-storage-locality`
+Branch: `research-lane-c-storage-locality`
 
 Mission: find a Split RC radiance representation and producer-side work
 organization that preserves useful GPU locality without paying a full global
