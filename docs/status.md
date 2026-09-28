@@ -251,22 +251,22 @@ Experiment 000 therefore resolves Issue #4 as follows:
    specific cache/memory microarchitectural mechanism.
 
 
-### 2026-09-28 — Experiment 001 validation sweep
+### 2026-09-28 — Experiment 001 accepted non-validation sweep
 
 Hardware: AMD Radeon 8060S Graphics / RADV STRIX_HALO  
 Scene: Sponza, 262,241 surface samples  
 Queries: 100k / 500k / 1M / 4M / 8M  
 Iterations: 100  
 Repeats: 3  
-Validation: enabled
+Validation: disabled
 
-The validation sweep completed successfully and every benchmark row passed the
-existing semantic checksum guard. The new `hash-wg-bin16` row also passed the
+The non-validation sweep completed successfully and every benchmark row passed
+the semantic checksum guard. The new `hash-wg-bin16` row also passed the
 source-order fingerprint guard, so its shared-memory regrouping preserved the
 original result-index semantics.
 
-Validation timings are diagnostic only and are not accepted as performance
-evidence. They currently show `hash-wg-bin16` approximately equal to
-`hash/source` at 100k and slower at 500k–8M, so the exact mechanism has not
-shown an encouraging signal yet. The required non-validation sweep remains the
-decision input.
+This run is accepted as Experiment 001 performance evidence. The fused 16-bin
+workgroup-local mechanism did not beat `hash/source`: it was approximately
+0.7% slower at 100k, 8.1% slower at 500k, 5.0% slower at 1M, 7.4% slower at 4M,
+and 7.3% slower at 8M. The exact mechanism therefore fails the end-to-end
+decision gate and should not be advanced.
