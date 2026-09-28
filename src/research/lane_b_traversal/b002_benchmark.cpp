@@ -846,6 +846,7 @@ int main(int argc, char** argv) {
         std::string hwrt_status{"feature-gate-failed"};
         std::string hwrt_reason;
         bool hwrt_correct = false;
+        VkDeviceSize hwrt_scratch_alignment{};
         std::unique_ptr<B002VulkanContext> hwrt_context;
         try {
             hwrt_context =
@@ -858,6 +859,8 @@ int main(int argc, char** argv) {
         }
 
         if (hwrt_context) {
+            hwrt_scratch_alignment =
+                hwrt_context->acceleration_scratch_alignment();
             hwrt_status = "features-enabled";
             const auto hwrt_shader =
                 (std::filesystem::path(
@@ -1015,6 +1018,8 @@ int main(int argc, char** argv) {
                    "\"VK_KHR_ray_query\", "
                    "\"VK_KHR_deferred_host_operations\"],\n"
                 << "    \"buffer_device_address_required\": true,\n"
+                << "    \"scratch_alignment\": "
+                << hwrt_scratch_alignment << ",\n"
                 << "    \"blas_tlas_created\": "
                 << (hwrt_status == "usable"
                         ? "true"
