@@ -126,3 +126,43 @@ Failing either group prevents composition promotion. A performance loss from
 - accepted timing validation disabled;
 - 3 process repeats;
 - 50 timed iterations per case.
+
+
+## Implementation / measurement readiness
+
+D003 is implemented as an exact packed selection path:
+
+- `shaderInt64` and `shaderBufferInt64Atomics` are explicitly required when
+  creating the D003 Vulkan context;
+- the packed buffer is cleared to all-ones and selected with one 64-bit
+  `atomicMin` per projected surface;
+- the surface producer reads the packed low 32-bit owner directly;
+- there is no unpack/conversion pass;
+- accepted A001 and the staged two-pass control run in the same Vulkan process.
+
+The shared `VulkanContext` change is an opt-in feature requirement only. All
+existing bool-constructor call sites keep the previous feature set.
+
+Target-system diagnostic command:
+
+```bash
+mise run build
+mise run assets
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 003-one-pass-owner-selection \
+  --command "python scripts/research/lane_d_producer_optimization/run_d003.py --repeats 1 --iterations 1 --validation"
+```
+
+If diagnostic correctness passes, accepted timing candidate:
+
+```bash
+mise run research:record \
+  --lane lane-d-producer-optimization \
+  --experiment 003-one-pass-owner-selection \
+  --command "python scripts/research/lane_d_producer_optimization/run_d003.py --repeats 3 --iterations 50"
+```
+
+A target without the required integer/atomic64 features should fail physical
+device selection and is recorded as unsupported rather than falling back to a
+semantically weaker representation.
