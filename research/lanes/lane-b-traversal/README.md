@@ -21,14 +21,14 @@ The trace direction strengthens the provisional retention gate:
 - **raw sparse-grid DDA:** do not promote as a standalone final candidate;
 - **hierarchical StrataBrick-derived:** retain because segment/BVH pruning +
   localized rebuild/refit is a materially different hypothesis from raw DDA;
-- **HWRT/TLAS:** retain only if the hardened target Vulkan probe reports support,
-  then validate the same Hit semantics before timing.
+- **HWRT/TLAS:** retain only if the hardened target Vulkan probe reports
+  unambiguous support, then validate the same Hit semantics before timing.
 
-The received CSV is diagnostic rather than the formal B001 result. Reviewing it
-found four harness provenance/boundary gaps: repeat count was not recorded,
-device/driver/API identity was not persisted by the probe, common dynamic-update
-timing included benchmark-reset copying, and rebuild timing included one extra
-trace. Those issues are corrected on this branch.
+The received CSV is diagnostic rather than the formal B001 result. Final
+self-review hardened repeat/provenance capture, dynamic-update boundaries,
+build/rebuild boundaries, contract smoke tests, and multi-device HWRT probing.
+GPU-independent `-Werror` and ASan+UBSan controls still pass with zero
+correctness mismatches.
 
 CPU control timings and historical StrataBrick results remain bring-up evidence
 only. Final promotion still requires GPU candidate implementation and replay
@@ -36,7 +36,7 @@ against Lane A's representative producer stream.
 
 ## Next decision gate
 
-1. rerun B001 through `mise run research:record` with the hardened harness;
+1. rerun B001 through `mise run research:record` with the current hardened harness;
 2. ingest corrected `b001-controls.csv`, `metadata.json`, and
    `hwrt-probe.json`;
 3. conclude B001 and update its result/index/Issue #11;

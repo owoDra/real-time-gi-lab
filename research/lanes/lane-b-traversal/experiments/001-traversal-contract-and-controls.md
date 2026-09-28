@@ -37,7 +37,9 @@ mechanism currently justifies the implementation cost.
 - miss is `t=+INF` with all IDs set to `UINT32_MAX`.
 
 The brute-force triangle path is the reference. Hit/miss, distance, normal, and
-all IDs must match before timing is usable.
+all IDs must match before timing is usable. The executable also runs contract
+smoke tests for direction normalization, `tMax`, face policy, and deterministic
+tie-breaking before the matrix.
 
 ## Implemented controls
 
@@ -78,12 +80,18 @@ Each candidate row reports:
 - `trace_us`;
 - `persistent_bytes`;
 - `scratch_bytes`;
-- correctness mismatches.
+- correctness mismatches;
+- ray count and repeat count.
 
 `dynamic_update_us` includes the common moved-geometry update. The grid adds
 candidate-specific cell-membership maintenance; BVH structural maintenance stays
 separate in `refit_us`. CPU timings are diagnostic only and cannot select the
 GPU winner.
+
+Construction timing uses a fresh acceleration object per sample and stops the
+timer before destroying it, so build/rebuild do not silently include teardown.
+Refit/update samples likewise begin from a freshly prepared pre-update structure;
+setup/reset work stays outside the candidate-specific timed boundary.
 
 ## Sandbox correctness checkpoint
 
@@ -94,8 +102,8 @@ GPU-independent checks were run without mise, per the target-environment rule:
 - ASan + UBSan: PASS;
 - lane-local CMake/Ninja Release build: PASS.
 
-Self-review found and fixed two correctness/accounting issues before this
-checkpoint:
+Self-review found and fixed correctness/accounting issues before the target
+rerun gate:
 
 1. DDA early-exit used only absolute hit tolerance while the Hit tie-break used
    absolute/relative tolerance, allowing a vertical edge ray to depend on
@@ -103,6 +111,9 @@ checkpoint:
 2. the grid's persistent deduplication array was initially counted as per-ray
    scratch; it is now persistent memory, while scratch reports only per-trace
    local state.
+3. common dynamic-update timing included benchmark-reset copying.
+4. rebuild timing included an extra trace used only as an optimization guard.
+5. build/rebuild timing could include acceleration-object destruction.
 
 The sandbox CPU timing direction is intentionally not accepted as target-GPU
 performance evidence. It is sufficient only to show that raw DDA is strongly
@@ -128,25 +139,22 @@ A ratio below 1 means the raw grid was faster; the only material control regime
 where that happened was the finite 50 m vertical case. These are CPU control
 timings, not final GPU architectural evidence.
 
-The received CSV also exposed provenance/timing-boundary gaps in the first
-target harness, so it is **diagnostic rather than the formal B001 artifact**:
+The received CSV is **diagnostic rather than the formal B001 artifact** because
+it predates the hardened provenance/timing boundaries. In addition to the timing
+fixes above, the current runner records repeats and resolved run configuration,
+and the HWRT probe records CPU/Vulkan device/driver/API information. If
+`vulkaninfo` exposes zero or multiple physical devices, the probe reports HWRT
+support as `ambiguous` rather than incorrectly attributing global extension text
+to one device.
 
-- the CSV did not record the repeat count;
-- the HWRT probe did not persist device/driver/API identity or emit the `GPU:`
-  line consumed by the standard research metadata recorder;
-- `dynamic_update_us` included benchmark-reset copying in the timed boundary;
-- rebuild timing included an extra trace call used only as an optimization guard.
-
-The harness now records repeats, logs the resolved run configuration, captures
-CPU/Vulkan device/driver/API information, excludes reset copying from the common
-geometry-update boundary, and removes the extra rebuild trace. The formal B001
-result therefore requires one rerun with this hardened harness.
+The formal B001 result therefore requires one rerun with the current branch.
 
 ## Target execution
 
 After pulling this branch on the target system:
 
 ```bash
+git pull
 mise install
 mise run research:check
 mise run build
@@ -155,8 +163,8 @@ mise run research:record --lane lane-b-traversal \
   --command "scripts/research/lane_b_traversal/run_b001.sh build/release/phos-lane-b-b001"
 ```
 
-The artifact contains `b001-controls.csv`, the standard research logs/metadata,
-and `hwrt-probe.json`.
+Retain the generated `b001-controls.csv`, `metadata.json`, and
+`hwrt-probe.json`.
 
 ## Provisional retention decision
 
@@ -165,8 +173,8 @@ and `hwrt-probe.json`.
 - **retain one hierarchical StrataBrick-derived candidate** because raw DDA is
   regime-sensitive and the historical candidate's segment/BVH pruning is a
   materially different hypothesis that B001's raw grid does not test;
-- **retain HWRT/TLAS iff the target probe reports support**, then validate
-  feature enablement and shared Hit semantics before timing.
+- **retain HWRT/TLAS iff the target probe reports unambiguous support**, then
+  validate feature enablement and shared Hit semantics before timing.
 
 No B001 control-ray result may select the final Lane B winner. Final promotion
 requires Lane A producer replay and all maintenance + memory costs.
