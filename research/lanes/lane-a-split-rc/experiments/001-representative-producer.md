@@ -1,6 +1,6 @@
 # Experiment A001 — representative Split RC producer stream
 
-Status: implemented; target-GPU evidence pending
+Status: target-GPU correctness validated; accepted timing evidence pending
 
 ## Question
 
@@ -52,5 +52,13 @@ show that:
 - measured locality is from the natural GPU append order;
 - no CPU sort/global reorder was introduced to improve locality.
 
-The implementation is ready for that measurement gate. No target-GPU timing is
-recorded in Git until it has actually been run.
+Target-GPU diagnostic validation on AMD Radeon 8060S Graphics (RADV STRIX_HALO)
+at commit `c412ab047876967e81e1884b2abbb4f55a817a3f` passed visibility,
+producer semantics, and resolve correctness for static, camera-motion, and
+light-motion. This confirms the semantic gate and stream export path on the
+target GPU.
+
+The diagnostic run used Vulkan validation and a single timed iteration, so its
+timings are not accepted performance evidence. The remaining A001 gate is the
+validation-disabled repeated measurement run with its research artifact path
+recorded.
