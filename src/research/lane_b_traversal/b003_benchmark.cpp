@@ -286,13 +286,15 @@ void verify_reference_sample(
             reference.trace(ray));
     }
 
+    const auto checksum =
+        semantic_checksum(reference_hits);
     return {
         std::string(name),
         stream.header.workload_id,
         std::move(rays),
         std::move(gpu_rays),
         std::move(reference_hits),
-        semantic_checksum(reference_hits),
+        checksum,
         parse_us,
         convert_us,
     };
@@ -682,6 +684,10 @@ int main(int argc, char** argv) {
             throw std::runtime_error(
                 "B003 macro BVH did not retain every occupied segment");
         }
+        if (macro_payload.max_stack_entries > 32U) {
+            throw std::runtime_error(
+                "B003 macro BVH exceeds the shader macro stack capacity");
+        }
 
         const auto gpu_triangles =
             make_gpu_triangles(scene);
@@ -726,6 +732,9 @@ int main(int argc, char** argv) {
                 << ",\n"
                 << "  \"macro_depth\": "
                 << macro_payload.max_depth
+                << ",\n"
+                << "  \"macro_max_stack_entries\": "
+                << macro_payload.max_stack_entries
                 << ",\n"
                 << "  \"macro_fanout\": 8,\n"
                 << "  \"iterations\": "

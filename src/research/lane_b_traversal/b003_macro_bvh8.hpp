@@ -38,6 +38,7 @@ struct B003MacroBvh8Payload {
     std::uint32_t root{kInvalidId};
     std::size_t segment_count{};
     std::size_t max_depth{};
+    std::size_t max_stack_entries{};
 };
 
 namespace b003_detail {
@@ -85,6 +86,31 @@ public:
     }
 
     [[nodiscard]] B003MacroBvh8Payload finish() && {
+        if (payload_.root != kInvalidId) {
+            std::vector<std::uint32_t> stack;
+            stack.push_back(payload_.root);
+            payload_.max_stack_entries = 1;
+            while (!stack.empty()) {
+                const auto node_index = stack.back();
+                stack.pop_back();
+                if (node_index >= payload_.nodes.size()) {
+                    throw std::runtime_error(
+                        "B003 macro BVH contains an invalid internal reference");
+                }
+                for (const auto& child :
+                     payload_.nodes[node_index].children) {
+                    if (child.data[0] == kInvalidId ||
+                        child.data[1] != kB003MacroInternal) {
+                        continue;
+                    }
+                    stack.push_back(child.data[0]);
+                }
+                payload_.max_stack_entries =
+                    std::max(
+                        payload_.max_stack_entries,
+                        stack.size());
+            }
+        }
         return std::move(payload_);
     }
 
