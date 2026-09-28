@@ -40,9 +40,29 @@ def git_commit() -> str:
 
 
 def parse_rows(stdout: str) -> list[dict[str, str]]:
-    rows = list(csv.DictReader(io.StringIO(stdout)))
+    # Vulkan validation/debug output is allowed to write to stdout before the
+    # benchmark CSV header. Locate the benchmark protocol explicitly instead
+    # of assuming stdout starts with CSV.
+    lines = stdout.splitlines()
+    header_index = next(
+        (
+            index
+            for index, line in enumerate(lines)
+            if line.startswith("variant,queries,pages,bytes,gpu_us_per_dispatch,")
+        ),
+        None,
+    )
+    if header_index is None:
+        preview = "\n".join(lines[:20])
+        raise RuntimeError(
+            "benchmark stdout did not contain the CSV header"
+            + (f":\n{preview}" if preview else "")
+        )
+
+    csv_text = "\n".join(lines[header_index:]) + "\n"
+    rows = list(csv.DictReader(io.StringIO(csv_text)))
     if not rows:
-        raise RuntimeError("benchmark produced no CSV rows")
+        raise RuntimeError("benchmark produced a CSV header but no data rows")
 
     # These are the original artifact columns and remain mandatory. New
     # scheduling metadata is additive so older downstream readers can continue
@@ -114,9 +134,25 @@ def run_once(
         )
 
     rows = parse_rows(proc.stdout)
+
+    # Preserve any stdout diagnostics that preceded the CSV protocol in the
+    # per-run log. This is especially useful with Vulkan validation enabled.
+    csv_header = "variant,queries,pages,bytes,gpu_us_per_dispatch,"
+    stdout_prelude = proc.stdout.partition(csv_header)[0].strip()
+    if stdout_prelude:
+        proc_stderr = (
+            proc.stderr
+            + ("\n" if proc.stderr and not proc.stderr.endswith("\n") else "")
+            + "[stdout before benchmark CSV]\n"
+            + stdout_prelude
+            + "\n"
+        )
+    else:
+        proc_stderr = proc.stderr
+
     match = GPU_RE.search(proc.stderr)
     gpu = match.group(1).strip() if match else "unknown"
-    return rows, gpu, command, proc.stderr
+    return rows, gpu, command, proc_stderr
 
 
 def _ordering(row: dict[str, str]) -> str:
