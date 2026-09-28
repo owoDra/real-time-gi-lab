@@ -1,6 +1,6 @@
 # A001 — representative Split RC producer stream
 
-Status: provisional — measurement passes, artifact path reconciliation pending
+Status: accepted
 
 ## Question
 
@@ -18,6 +18,8 @@ CPU sorting or post-producer global reordering?
   storage architecture is selected in Lane A.
 - GPU: AMD Radeon 8060S Graphics (RADV STRIX_HALO).
 - Measurement commit: `8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f`.
+- Raw artifact: `out/research/lane-a-split-rc/001-representative-producer/20260928T143212Z/`.
+- Accepted run: validation disabled, repeated measurement (50 iterations per case).
 
 ## Correctness
 
@@ -76,26 +78,24 @@ Schema v1 is therefore technically suitable as the Lane B/C replay workload:
 downstream lanes can compare traversal and storage choices against the observed
 stream without manufacturing an ordering in Lane A.
 
-## Limitation / traceability hold
+## Limitations
 
-The uploaded `summary.json` identifies the GPU and commit but does not encode
-the harness artifact root, iteration count, or validation flag. The operator
-identified this as the requested validation-disabled repeated measurement, but
-the shared protocol also requires the raw artifact path.
-
-Do not delete the existing raw artifact. Once its
-`out/research/lane-a-split-rc/001-representative-producer/<timestamp>/` path is
-recorded, this result can move from provisional to accepted without changing
-the measured conclusion.
-
-The A001 runner was updated afterward to record `iterations`, `validation`,
-`artifact_root`, and `scene` in future summaries.
+- A001 intentionally uses an analytic direct-light gather control; it does not
+  establish a traversal or radiance-storage winner.
+- The stream captures the representative Sponza producer regimes required by
+  this experiment, not every later dynamic-scene regime in the shared protocol.
+- Raw artifacts are machine-specific and remain outside Git; the accepted
+  artifact directory above is the audit anchor.
+- The runner was updated after this measurement to embed `iterations`,
+  `validation`, `artifact_root`, and `scene` directly in future summaries.
 
 ## Decision and next question
 
-Provisional decision: promote stream schema v1 as the representative Lane A
-interface for Lane B/C, subject only to restoring the raw artifact path required
-by the research protocol.
+Decision: promote stream schema v1 as the representative Lane A interface for
+Lane B/C. The A001 decision gate is satisfied: correctness passes on all three
+required real-scene cases, producer cost is included, replay streams are
+exported, and locality is measured from the natural GPU append order without a
+CPU sort or post-producer global reorder.
 
 Next question: replay this exact natural stream in Lane B and Lane C to compare
 traversal and radiance-storage mechanisms without adding synthetic ordering.
