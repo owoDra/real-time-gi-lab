@@ -23,6 +23,13 @@
       "measurement_commit": null,
       "expected_measurement_ready_commit": "6fee5a8c920da7e00ff7b29a61effe5a56dfedf1",
       "decision": "do not retain packed 64-bit one-pass visibility selection"
+    },
+    {
+      "id": "004-work-allocation-contention",
+      "status": "rejected",
+      "result": "research/lanes/lane-d-producer-optimization/results/004-work-allocation-contention.md",
+      "measurement_commit": "e2ecb35bcf5579a48460a425bf2ef905a536bbae",
+      "decision": "do not retain workgroup-prefix allocation; atomic count reduction did not improve producer cost"
     }
   ]
 }
