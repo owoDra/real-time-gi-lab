@@ -47,10 +47,10 @@ void main() {
     const int lx = item.probe_x - bx * edge;
     const int ly = item.probe_y - by * edge;
     const int lz = item.probe_z - bz * edge;
-    const CascadeLayout layout = layouts[item.cascade];
-    const uint nbx = uint(bx - layout.min_bx);
-    const uint nby = uint(by - layout.min_by);
-    const uint nbz = uint(bz - layout.min_bz);
+    const CascadeLayout cascade_layout = layouts[item.cascade];
+    const uint nbx = uint(bx - cascade_layout.min_bx);
+    const uint nby = uint(by - cascade_layout.min_by);
+    const uint nbz = uint(bz - cascade_layout.min_bz);
     const uint local = uint(lx + edge * (ly + edge * lz));
     const uint page =
         (((item.cascade * pc.clip_z + nbz) * pc.clip_y + nby) * pc.clip_x + nbx);
