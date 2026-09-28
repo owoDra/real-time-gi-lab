@@ -16,7 +16,7 @@ layout(push_constant) uniform Push {
 } pc;
 uint take_physical() {
     for (;;) {
-        const uint count = counters[2];
+        const uint count = atomicAdd(counters[2], 0u);
         if (count == 0u) return atomicAdd(counters[0], 1u);
         const uint old = atomicCompSwap(counters[2], count, count - 1u);
         if (old == count) return free_list[count - 1u];

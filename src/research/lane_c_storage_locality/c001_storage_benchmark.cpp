@@ -436,6 +436,12 @@ public:
         ctx_.vk().cmdResetQueryPool(cmd, query, 0u, iterations * 2u);
         for (std::uint32_t i = 0; i < iterations; ++i) {
             if (!resets.empty()) {
+                memory_barrier(
+                    cmd,
+                    VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+                    VK_PIPELINE_STAGE_TRANSFER_BIT,
+                    VK_ACCESS_SHADER_WRITE_BIT,
+                    VK_ACCESS_TRANSFER_WRITE_BIT);
                 for (const auto& pair : resets) {
                     VkBufferCopy region{0u, 0u, pair.dst->size};
                     ctx_.vk().cmdCopyBuffer(pair.src->buffer, pair.dst->buffer, 1u, &region);
@@ -484,6 +490,12 @@ public:
         VkCommandBuffer cmd = allocate_command_buffer();
         begin(cmd);
         if (!resets.empty()) {
+            memory_barrier(
+                cmd,
+                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                VK_PIPELINE_STAGE_TRANSFER_BIT,
+                VK_ACCESS_MEMORY_WRITE_BIT,
+                VK_ACCESS_TRANSFER_WRITE_BIT);
             for (const auto& pair : resets) {
                 VkBufferCopy region{0u, 0u, pair.dst->size};
                 ctx_.vk().cmdCopyBuffer(pair.src->buffer, pair.dst->buffer, 1u, &region);
