@@ -96,6 +96,10 @@ def main() -> int:
             {
                 "experiment": "001-representative-producer",
                 "git_commit": commit,
+                "iterations": args.iterations,
+                "validation": args.validation,
+                "artifact_root": str(artifact_root.resolve()),
+                "scene": args.scene,
                 "cases": summary,
             },
             indent=2,
