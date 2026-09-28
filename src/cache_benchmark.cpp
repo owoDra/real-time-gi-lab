@@ -65,6 +65,7 @@ CacheBenchmark::CacheBenchmark(VulkanContext& context) : ctx_(context) {
     }
 
     hash_pipeline_ = create_pipeline("hash_lookup.spv");
+    hash_wg_bin16_pipeline_ = create_pipeline("hash_lookup_wg_bin16.spv");
     paged_pipeline_ = create_pipeline("paged_lookup.spv");
     histogram_pipeline_ = create_pipeline("page_histogram.spv");
     prefix_pipeline_ = create_pipeline("page_prefix.spv");
@@ -121,6 +122,9 @@ CacheBenchmark::~CacheBenchmark() {
     if (prefix_pipeline_) ctx_.vk().destroyPipeline(prefix_pipeline_, nullptr);
     if (histogram_pipeline_) ctx_.vk().destroyPipeline(histogram_pipeline_, nullptr);
     if (paged_pipeline_) ctx_.vk().destroyPipeline(paged_pipeline_, nullptr);
+    if (hash_wg_bin16_pipeline_) {
+        ctx_.vk().destroyPipeline(hash_wg_bin16_pipeline_, nullptr);
+    }
     if (hash_pipeline_) ctx_.vk().destroyPipeline(hash_pipeline_, nullptr);
     if (pipeline_layout_) ctx_.vk().destroyPipelineLayout(pipeline_layout_, nullptr);
     if (descriptor_layout_) ctx_.vk().destroyDescriptorSetLayout(descriptor_layout_, nullptr);
@@ -639,7 +643,7 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
     }};
 
     std::vector<BenchmarkResult> out;
-    out.reserve(8);
+    out.reserve(9);
 
     for (const auto& ordering : orderings) {
         for (const auto* cache : caches) {
@@ -667,6 +671,39 @@ std::vector<BenchmarkResult> CacheBenchmark::run(
             });
         }
     }
+
+    // Issue #7 sub-experiment: recover only workgroup-local coherence and fuse
+    // its cost into the hash lookup dispatch. The shader uses shared memory to
+    // bin each 256-query workgroup by the high bits of its initial hash slot,
+    // then writes results back to the original query indices. There is no
+    // global reorder buffer, scheduler dispatch, or global scheduling scratch.
+    CacheGpuData hash_wg_bin16{
+        "hash-wg-bin16",
+        hash_wg_bin16_pipeline_,
+        hash.table,
+        hash.payload,
+        hash.mask_or_page_size,
+        hash.lookup_limit,
+        hash.logical_bytes,
+        hash.pages,
+    };
+    const auto wg_bin16 =
+        measure_lookup(source_queries, query_count, hash_wg_bin16, iterations);
+    out.push_back({
+        "hash-wg-bin16",
+        w.source.size(),
+        hash.pages,
+        hash.logical_bytes,
+        wg_bin16.gpu_us_per_dispatch,
+        wg_bin16.checksum,
+        w.expected_checksum,
+        wg_bin16.checksum == w.expected_checksum,
+        "hash",
+        "wg-hash-bin16",
+        0,
+        std::nullopt,
+        wg_bin16.gpu_us_per_dispatch,
+    });
 
     SchedulerGpuData scheduler;
     scheduler.query_count = query_count;
