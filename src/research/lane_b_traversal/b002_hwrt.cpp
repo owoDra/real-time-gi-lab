@@ -133,9 +133,8 @@ B002HwrtTraversal::B002HwrtTraversal(
             blas_.storage.allocation_size +
             tlas_.storage.allocation_size);
     setup_stats_.scratch_bytes =
-        static_cast<std::size_t>(std::max(
-            blas_scratch_.allocation_size,
-            tlas_scratch_.allocation_size));
+        static_cast<std::size_t>(
+            scratch_.allocation_size);
 
     create_trace_pipeline(shader_path);
 }
@@ -156,8 +155,7 @@ B002HwrtTraversal::~B002HwrtTraversal() {
 
     destroy_acceleration_structure(tlas_);
     destroy_acceleration_structure(blas_);
-    context_.destroy_buffer(tlas_scratch_);
-    context_.destroy_buffer(blas_scratch_);
+    context_.destroy_buffer(scratch_);
     context_.destroy_buffer(instance_buffer_);
     context_.destroy_buffer(triangle_buffer_);
     context_.destroy_buffer(vertex_buffer_);
@@ -249,16 +247,10 @@ double B002HwrtTraversal::build_blas(
     const auto scratch_size = std::max(
         size_info.buildScratchSize,
         size_info.updateScratchSize);
-    const auto scratch_alignment =
-        context_.acceleration_scratch_alignment();
-    blas_scratch_ = context_.create_device_address_buffer(
-        scratch_size + scratch_alignment - 1U,
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    ensure_scratch_capacity(scratch_size);
     build_info.dstAccelerationStructure = blas_.handle;
     build_info.scratchData.deviceAddress =
-        align_device_address(
-            blas_scratch_.address,
-            context_.acceleration_scratch_alignment());
+        scratch_address();
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount = primitive_count;
@@ -350,16 +342,10 @@ double B002HwrtTraversal::build_tlas() {
     const auto scratch_size = std::max(
         size_info.buildScratchSize,
         size_info.updateScratchSize);
-    const auto scratch_alignment =
-        context_.acceleration_scratch_alignment();
-    tlas_scratch_ = context_.create_device_address_buffer(
-        scratch_size + scratch_alignment - 1U,
-        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    ensure_scratch_capacity(scratch_size);
     build_info.dstAccelerationStructure = tlas_.handle;
     build_info.scratchData.deviceAddress =
-        align_device_address(
-            tlas_scratch_.address,
-            context_.acceleration_scratch_alignment());
+        scratch_address();
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount = primitive_count;
@@ -469,9 +455,7 @@ double B002HwrtTraversal::update_blas(
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
     build_info.scratchData.deviceAddress =
-        align_device_address(
-            blas_scratch_.address,
-            context_.acceleration_scratch_alignment());
+        scratch_address();
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount =
@@ -505,13 +489,36 @@ double B002HwrtTraversal::update_tlas() {
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
     build_info.scratchData.deviceAddress =
-        align_device_address(
-            tlas_scratch_.address,
-            context_.acceleration_scratch_alignment());
+        scratch_address();
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount = 1;
     return submit_build(build_info, range, true);
+}
+
+void B002HwrtTraversal::ensure_scratch_capacity(
+    VkDeviceSize required_bytes) {
+    const auto alignment =
+        context_.acceleration_scratch_alignment();
+    const auto requested =
+        required_bytes + alignment - 1U;
+    if (scratch_.buffer != VK_NULL_HANDLE &&
+        scratch_.size >= requested) {
+        return;
+    }
+
+    // BUILD/UPDATE submissions are synchronously fenced by submit_build(), so
+    // a larger shared scratch buffer can safely replace the old one here.
+    context_.destroy_buffer(scratch_);
+    scratch_ = context_.create_device_address_buffer(
+        requested,
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+}
+
+VkDeviceAddress B002HwrtTraversal::scratch_address() const noexcept {
+    return align_device_address(
+        scratch_.address,
+        context_.acceleration_scratch_alignment());
 }
 
 double B002HwrtTraversal::submit_build(

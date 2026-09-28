@@ -72,6 +72,8 @@ private:
     [[nodiscard]] double build_tlas();
     [[nodiscard]] double update_blas(std::size_t triangle_count);
     [[nodiscard]] double update_tlas();
+    void ensure_scratch_capacity(VkDeviceSize required_bytes);
+    [[nodiscard]] VkDeviceAddress scratch_address() const noexcept;
     [[nodiscard]] double submit_build(
         VkAccelerationStructureBuildGeometryInfoKHR& build_info,
         const VkAccelerationStructureBuildRangeInfoKHR& range,
@@ -87,8 +89,7 @@ private:
     B002Buffer vertex_buffer_{};
     B002Buffer triangle_buffer_{};
     B002Buffer instance_buffer_{};
-    B002Buffer blas_scratch_{};
-    B002Buffer tlas_scratch_{};
+    B002Buffer scratch_{};
     AccelerationStructure blas_{};
     AccelerationStructure tlas_{};
 
