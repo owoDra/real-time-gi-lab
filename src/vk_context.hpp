@@ -7,6 +7,11 @@
 
 namespace phos::gi {
 
+struct VulkanContextOptions {
+    bool validation{};
+    bool require_shader_buffer_int64_atomics{};
+};
+
 struct GpuBuffer {
     VkBuffer buffer{VK_NULL_HANDLE};
     VkDeviceMemory memory{VK_NULL_HANDLE};
@@ -17,6 +22,7 @@ struct GpuBuffer {
 class VulkanContext {
 public:
     explicit VulkanContext(bool validation);
+    explicit VulkanContext(VulkanContextOptions options);
     ~VulkanContext();
     VulkanContext(const VulkanContext&) = delete;
     VulkanContext& operator=(const VulkanContext&) = delete;
