@@ -1,0 +1,384 @@
+#include "b002_vulkan.hpp"
+
+#include "vk_init.hpp"
+
+#include <cstring>
+#include <fstream>
+#include <stdexcept>
+#include <utility>
+
+namespace phos::gi::research::lane_b {
+namespace {
+
+[[noreturn]] void fail(const std::string& message) {
+    throw std::runtime_error(message);
+}
+
+} // namespace
+
+B002VulkanContext::B002VulkanContext(
+    bool validation,
+    std::string target_device) {
+    vkb::InstanceBuilder instance_builder;
+    instance_builder
+        .set_app_name("phos-lane-b-b002")
+        .set_engine_name("research")
+        .set_headless()
+        .require_api_version(1, 3);
+    if (validation) {
+        instance_builder
+            .request_validation_layers()
+            .use_default_debug_messenger();
+    }
+
+    auto instance_result = instance_builder.build();
+    if (!instance_result) {
+        fail("B002 Vulkan instance: " + instance_result.error().message());
+    }
+    instance_ = instance_result.value();
+    instance_dispatch_ = instance_.make_table();
+
+    vkb::PhysicalDeviceSelector selector(instance_);
+    auto physical_result = selector
+        .set_minimum_version(1, 3)
+        .require_present(false)
+        .set_name(target_device)
+        .select();
+    if (!physical_result) {
+        fail(
+            "B002 target physical device selection failed: " +
+            physical_result.error().message());
+    }
+    auto physical = physical_result.value();
+    if (physical.name != target_device) {
+        fail(
+            "B002 refused fallback physical device '" + physical.name +
+            "'; expected exact target '" + target_device + "'");
+    }
+
+    vkb::DeviceBuilder device_builder(physical);
+    auto device_result = device_builder.build();
+    if (!device_result) {
+        fail("B002 logical device: " + device_result.error().message());
+    }
+    device_ = device_result.value();
+    dispatch_ = device_.make_table();
+
+    auto queue_result = device_.get_queue(vkb::QueueType::compute);
+    auto family_result = device_.get_queue_index(vkb::QueueType::compute);
+    if (!queue_result || !family_result) {
+        fail("B002 target device has no compute-capable queue");
+    }
+    queue_ = queue_result.value();
+    queue_family_ = family_result.value();
+
+    VkPhysicalDeviceDriverProperties driver{};
+    driver.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES;
+    VkPhysicalDeviceProperties2 properties{};
+    properties.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+    properties.pNext = &driver;
+    instance_dispatch_.getPhysicalDeviceProperties2(
+        device_.physical_device.physical_device,
+        &properties);
+
+    device_name_ = properties.properties.deviceName;
+    driver_name_ = driver.driverName;
+    driver_info_ = driver.driverInfo;
+    api_version_ = properties.properties.apiVersion;
+    timestamp_period_ns_ = properties.properties.limits.timestampPeriod;
+
+    if (device_name_ != target_device) {
+        fail(
+            "B002 created unexpected physical device '" + device_name_ +
+            "' after exact selection");
+    }
+
+    const auto& queue = device_.queue_families.at(queue_family_);
+    if (queue.timestampValidBits == 0) {
+        fail("B002 selected compute queue does not support timestamps");
+    }
+}
+
+B002VulkanContext::~B002VulkanContext() {
+    if (device_.device != VK_NULL_HANDLE) {
+        dispatch_.deviceWaitIdle();
+        vkb::destroy_device(device_);
+    }
+    if (instance_.instance != VK_NULL_HANDLE) {
+        vkb::destroy_instance(instance_);
+    }
+}
+
+std::uint32_t B002VulkanContext::find_memory_type(
+    std::uint32_t bits,
+    VkMemoryPropertyFlags required) const {
+    VkPhysicalDeviceMemoryProperties properties{};
+    instance_dispatch_.getPhysicalDeviceMemoryProperties(
+        device_.physical_device.physical_device,
+        &properties);
+    for (std::uint32_t index = 0; index < properties.memoryTypeCount; ++index) {
+        if ((bits & (1U << index)) != 0U &&
+            (properties.memoryTypes[index].propertyFlags & required) == required) {
+            return index;
+        }
+    }
+    fail("B002 could not find a compatible Vulkan memory type");
+}
+
+B002Buffer B002VulkanContext::create_buffer(
+    VkDeviceSize size,
+    VkBufferUsageFlags usage,
+    VkMemoryPropertyFlags properties,
+    bool map) {
+    if (size == 0) fail("B002 cannot allocate a zero-byte buffer");
+
+    B002Buffer output{};
+    output.size = size;
+
+    auto buffer_info = detail::make_vk_info<VkBufferCreateInfo>(
+        VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO);
+    buffer_info.size = size;
+    buffer_info.usage = usage;
+    buffer_info.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+    if (dispatch_.createBuffer(
+            &buffer_info,
+            nullptr,
+            &output.buffer) != VK_SUCCESS) {
+        fail("B002 vkCreateBuffer failed");
+    }
+
+    VkMemoryRequirements requirements{};
+    dispatch_.getBufferMemoryRequirements(
+        output.buffer,
+        &requirements);
+    output.allocation_size = requirements.size;
+
+    auto allocation_info = detail::make_vk_info<VkMemoryAllocateInfo>(
+        VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO);
+    allocation_info.allocationSize = requirements.size;
+    allocation_info.memoryTypeIndex =
+        find_memory_type(requirements.memoryTypeBits, properties);
+    if (dispatch_.allocateMemory(
+            &allocation_info,
+            nullptr,
+            &output.memory) != VK_SUCCESS) {
+        dispatch_.destroyBuffer(output.buffer, nullptr);
+        output.buffer = VK_NULL_HANDLE;
+        fail("B002 vkAllocateMemory failed");
+    }
+    if (dispatch_.bindBufferMemory(
+            output.buffer,
+            output.memory,
+            0) != VK_SUCCESS) {
+        destroy_buffer(output);
+        fail("B002 vkBindBufferMemory failed");
+    }
+
+    if (map &&
+        dispatch_.mapMemory(
+            output.memory,
+            0,
+            size,
+            0,
+            &output.mapped) != VK_SUCCESS) {
+        destroy_buffer(output);
+        fail("B002 vkMapMemory failed");
+    }
+    return output;
+}
+
+B002Buffer B002VulkanContext::create_host_buffer(
+    VkDeviceSize size,
+    VkBufferUsageFlags usage) {
+    return create_buffer(
+        size,
+        usage,
+        VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
+            VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
+        true);
+}
+
+B002Buffer B002VulkanContext::create_device_buffer(
+    VkDeviceSize size,
+    VkBufferUsageFlags usage) {
+    return create_buffer(
+        size,
+        usage |
+            VK_BUFFER_USAGE_TRANSFER_SRC_BIT |
+            VK_BUFFER_USAGE_TRANSFER_DST_BIT,
+        VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
+        false);
+}
+
+void B002VulkanContext::copy_buffer(
+    VkBuffer source,
+    VkBuffer destination,
+    VkDeviceSize size) {
+    VkCommandPool pool{};
+    auto pool_info = detail::make_vk_info<VkCommandPoolCreateInfo>(
+        VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
+    pool_info.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    pool_info.queueFamilyIndex = queue_family_;
+    if (dispatch_.createCommandPool(
+            &pool_info,
+            nullptr,
+            &pool) != VK_SUCCESS) {
+        fail("B002 copy command pool");
+    }
+
+    VkCommandBuffer command{};
+    auto allocate_info = detail::make_vk_info<VkCommandBufferAllocateInfo>(
+        VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+    allocate_info.commandPool = pool;
+    allocate_info.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocate_info.commandBufferCount = 1;
+    if (dispatch_.allocateCommandBuffers(
+            &allocate_info,
+            &command) != VK_SUCCESS) {
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy command buffer");
+    }
+
+    auto begin_info = detail::make_vk_info<VkCommandBufferBeginInfo>(
+        VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+    begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    if (dispatch_.beginCommandBuffer(command, &begin_info) != VK_SUCCESS) {
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy begin");
+    }
+
+    VkBufferCopy region{0, 0, size};
+    dispatch_.cmdCopyBuffer(
+        command,
+        source,
+        destination,
+        1,
+        &region);
+
+    auto barrier = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    barrier.dstAccessMask =
+        VK_ACCESS_SHADER_READ_BIT |
+        VK_ACCESS_SHADER_WRITE_BIT |
+        VK_ACCESS_TRANSFER_READ_BIT;
+    dispatch_.cmdPipelineBarrier(
+        command,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT |
+            VK_PIPELINE_STAGE_TRANSFER_BIT,
+        0,
+        1,
+        &barrier,
+        0,
+        nullptr,
+        0,
+        nullptr);
+
+    if (dispatch_.endCommandBuffer(command) != VK_SUCCESS) {
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy end");
+    }
+
+    VkFence fence{};
+    auto fence_info = detail::make_vk_info<VkFenceCreateInfo>(
+        VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
+    if (dispatch_.createFence(
+            &fence_info,
+            nullptr,
+            &fence) != VK_SUCCESS) {
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy fence");
+    }
+
+    auto submit_info = detail::make_vk_info<VkSubmitInfo>(
+        VK_STRUCTURE_TYPE_SUBMIT_INFO);
+    submit_info.commandBufferCount = 1;
+    submit_info.pCommandBuffers = &command;
+    if (dispatch_.queueSubmit(
+            queue_,
+            1,
+            &submit_info,
+            fence) != VK_SUCCESS) {
+        dispatch_.destroyFence(fence, nullptr);
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy submit");
+    }
+    if (dispatch_.waitForFences(
+            1,
+            &fence,
+            VK_TRUE,
+            UINT64_MAX) != VK_SUCCESS) {
+        dispatch_.destroyFence(fence, nullptr);
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy wait");
+    }
+
+    dispatch_.destroyFence(fence, nullptr);
+    dispatch_.destroyCommandPool(pool, nullptr);
+}
+
+B002Buffer B002VulkanContext::upload_device_buffer(
+    const void* data,
+    VkDeviceSize size,
+    VkBufferUsageFlags usage) {
+    auto staging =
+        create_host_buffer(size, VK_BUFFER_USAGE_TRANSFER_SRC_BIT);
+    std::memcpy(staging.mapped, data, static_cast<std::size_t>(size));
+    auto device = create_device_buffer(size, usage);
+    copy_buffer(staging.buffer, device.buffer, size);
+    destroy_buffer(staging);
+    return device;
+}
+
+void B002VulkanContext::replace_device_buffer(
+    B002Buffer& destination,
+    const void* data,
+    VkDeviceSize size,
+    VkBufferUsageFlags usage) {
+    auto replacement = upload_device_buffer(data, size, usage);
+    destroy_buffer(destination);
+    destination = replacement;
+}
+
+void B002VulkanContext::download_device_buffer(
+    const B002Buffer& source,
+    void* destination,
+    VkDeviceSize size) {
+    if (size > source.size) {
+        fail("B002 readback exceeds source buffer");
+    }
+    auto staging =
+        create_host_buffer(size, VK_BUFFER_USAGE_TRANSFER_DST_BIT);
+    copy_buffer(source.buffer, staging.buffer, size);
+    std::memcpy(destination, staging.mapped, static_cast<std::size_t>(size));
+    destroy_buffer(staging);
+}
+
+void B002VulkanContext::destroy_buffer(B002Buffer& buffer) {
+    if (buffer.mapped != nullptr) {
+        dispatch_.unmapMemory(buffer.memory);
+    }
+    if (buffer.buffer != VK_NULL_HANDLE) {
+        dispatch_.destroyBuffer(buffer.buffer, nullptr);
+    }
+    if (buffer.memory != VK_NULL_HANDLE) {
+        dispatch_.freeMemory(buffer.memory, nullptr);
+    }
+    buffer = {};
+}
+
+std::vector<std::byte> read_b002_binary(const std::string& path) {
+    std::ifstream input(path, std::ios::binary | std::ios::ate);
+    if (!input) fail("Cannot open B002 binary file: " + path);
+    const auto size = static_cast<std::size_t>(input.tellg());
+    std::vector<std::byte> data(size);
+    input.seekg(0);
+    input.read(
+        reinterpret_cast<char*>(data.data()),
+        static_cast<std::streamsize>(size));
+    if (!input) fail("Could not read B002 binary file: " + path);
+    return data;
+}
+
+} // namespace phos::gi::research::lane_b
