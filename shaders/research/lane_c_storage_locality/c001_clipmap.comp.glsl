@@ -47,9 +47,12 @@ uint page_of(Unit b) {
 void main() {
     const uint i = gl_GlobalInvocationID.x;
     if (i >= pc.count) return;
-    if (pc.op >= 8u && pc.op <= 11u) {
+    if (pc.op >= 8u && pc.op <= 12u) {
         const Address a = addresses[i];
-        if (a.payload == 0u) return;
+        if (a.payload == 0u) {
+            if (pc.op == 12u) outputs[i] = 0u;
+            return;
+        }
         const uint page = a.brick_key - 1u;
         if (pc.op == 8u) {
             const uint old = atomicCompSwap(pages[page], 0u, 0xffffffffu);
@@ -75,6 +78,7 @@ void main() {
         if (pc.op == 9u) atomicExchange(payloads[payload_index], a.payload);
         else if (pc.op == 10u) atomicExchange(payloads[payload_index], a.payload ^ 0xa5a5a5a5u);
         else if (pc.op == 11u) atomicExchange(payloads[payload_index], 0u);
+        else if (pc.op == 12u) outputs[i] = payloads[payload_index];
         return;
     }
     if (pc.op == 0u) {

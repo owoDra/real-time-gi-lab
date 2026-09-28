@@ -51,9 +51,15 @@ void main() {
         if (a.payload != 0u) reserve_slot(a.probe_key);
         return;
     }
-    if ((pc.op == 9u || pc.op == 10u || pc.op == 11u) && a.payload == 0u) return;
+    if (pc.op >= 9u && pc.op <= 12u && a.payload == 0u) {
+        if (pc.op == 12u) outputs[i] = 0u;
+        return;
+    }
     const uint slot = find_slot(a.probe_key);
-    if (pc.op == 2u) { outputs[i] = slot == 0xffffffffu ? 0u : payloads[slot]; return; }
+    if (pc.op == 2u || pc.op == 12u) {
+        outputs[i] = slot == 0xffffffffu ? 0u : payloads[slot];
+        return;
+    }
     if (slot == 0xffffffffu) { atomicAdd(counters[1], 1u); return; }
     if (pc.op == 1u) payloads[slot] = a.payload;
     else if (pc.op == 3u) payloads[slot] = a.payload ^ 0xa5a5a5a5u;
