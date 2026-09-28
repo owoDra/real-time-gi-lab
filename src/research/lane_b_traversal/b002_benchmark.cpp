@@ -991,6 +991,19 @@ int main(int argc, char** argv) {
                 << '\n';
         }
 
+        constexpr std::size_t kRequiredCandidateRows =
+            kB002Cases.size() * 3U;
+        if (rows.size() != kRequiredCandidateRows) {
+            std::cerr
+                << "B002 candidate gate: FAIL rows="
+                << rows.size()
+                << " expected=" << kRequiredCandidateRows
+                << " hwrt_status=" << hwrt_status
+                << " reason=" << hwrt_reason
+                << '\n';
+            return 3;
+        }
+
         if (total_mismatches != 0 ||
             total_runtime_errors != 0) {
             std::cerr

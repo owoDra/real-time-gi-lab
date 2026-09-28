@@ -1100,6 +1100,19 @@ int main(int argc, char** argv) {
                 << '\n';
         }
 
+        constexpr std::size_t kRequiredMaintenanceRows = 6;
+        if (rows.size() != kRequiredMaintenanceRows ||
+            hwrt_rows != 2) {
+            std::cerr
+                << "B002 maintenance candidate gate: FAIL rows="
+                << rows.size()
+                << " expected=" << kRequiredMaintenanceRows
+                << " hwrt_rows=" << hwrt_rows
+                << " hwrt_error=" << hwrt_error
+                << '\n';
+            return 3;
+        }
+
         if (mismatches != 0 ||
             runtime_errors != 0) {
             std::cerr
