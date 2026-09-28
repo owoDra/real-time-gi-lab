@@ -1,6 +1,7 @@
 [tools]
 cmake = "4.4.3"
 ninja = "1.13.2"
+python = "3.13"
 
 [env]
 CMAKE_GENERATOR = "Ninja"
@@ -61,6 +62,48 @@ if [ "${usage_validation:-false}" = "true" ]; then
   args+=(--validation)
 fi
 exec bash ./scripts/run_with_vulkan.sh "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
+'''
+
+
+[tasks."bench:sweep"]
+description = "Run the reproducible M0 benchmark matrix and save artifacts"
+depends = ["build", "assets"]
+usage = '''
+flag "--query-counts <query_counts>" help="Comma-separated query counts" default="100000,500000,1000000,4000000,8000000"
+flag "--iterations <iterations>" help="Timed dispatch iterations per process" default="100"
+flag "--repeats <repeats>" help="Process-level repeats per query count" default="3"
+flag "--validation" help="Enable Vulkan validation layers"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+args=(
+  --query-counts "${usage_query_counts?}"
+  --iterations "${usage_iterations?}"
+  --repeats "${usage_repeats?}"
+)
+if [ "${usage_validation:-false}" = "true" ]; then
+  args+=(--validation)
+fi
+exec python scripts/benchmark_matrix.py "${args[@]}"
+'''
+
+[tasks."bench:sweep:synthetic"]
+description = "Run the reproducible M0 matrix with the synthetic workload"
+depends = ["build"]
+usage = '''
+flag "--query-counts <query_counts>" help="Comma-separated query counts" default="100000,500000,1000000,4000000,8000000"
+flag "--iterations <iterations>" help="Timed dispatch iterations per process" default="100"
+flag "--repeats <repeats>" help="Process-level repeats per query count" default="3"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+exec python scripts/benchmark_matrix.py \
+  --synthetic \
+  --query-counts "${usage_query_counts?}" \
+  --iterations "${usage_iterations?}" \
+  --repeats "${usage_repeats?}"
 '''
 
 [tasks.clean]
