@@ -54,6 +54,26 @@ struct HierarchicalUpdateStats {
     std::size_t removed_segments{};
 };
 
+struct HierarchicalFlatNode {
+    Aabb bounds{};
+    std::uint32_t left{kInvalidId};
+    std::uint32_t right{kInvalidId};
+    std::uint32_t begin{};
+    std::uint32_t count{};
+};
+
+struct HierarchicalFlatSegment {
+    SegmentCoord coord{};
+    std::uint32_t root{kInvalidId};
+};
+
+struct HierarchicalFlatPayload {
+    std::vector<HierarchicalFlatNode> nodes;
+    std::vector<std::uint32_t> ordered_primitives;
+    std::vector<HierarchicalFlatSegment> segments;
+    Aabb occupied_bounds{};
+};
+
 class HierarchicalStrataBrick {
     struct Node {
         Aabb bounds{};
@@ -92,6 +112,48 @@ public:
             count += segment.primitives.size();
         }
         return count;
+    }
+
+    [[nodiscard]] HierarchicalFlatPayload flatten() const {
+        HierarchicalFlatPayload payload;
+        payload.occupied_bounds = occupied_bounds_;
+
+        std::vector<SegmentCoord> keys;
+        keys.reserve(segments_.size());
+        for (const auto& [key, segment] : segments_) {
+            (void)segment;
+            keys.push_back(key);
+        }
+        std::sort(keys.begin(), keys.end());
+
+        for (const auto key : keys) {
+            const auto& segment = segments_.at(key);
+            const auto node_base = static_cast<std::uint32_t>(payload.nodes.size());
+            const auto ordered_base =
+                static_cast<std::uint32_t>(payload.ordered_primitives.size());
+
+            payload.ordered_primitives.insert(
+                payload.ordered_primitives.end(),
+                segment.ordered.begin(),
+                segment.ordered.end());
+
+            for (const auto& node : segment.nodes) {
+                payload.nodes.push_back({
+                    node.bounds,
+                    node.leaf ? kInvalidId : node_base + node.left,
+                    node.leaf ? kInvalidId : node_base + node.right,
+                    node.leaf ? ordered_base + node.begin : 0U,
+                    node.leaf ? node.count : 0U,
+                });
+            }
+
+            payload.segments.push_back({
+                key,
+                segment.nodes.empty() ? kInvalidId : node_base + segment.root,
+            });
+        }
+
+        return payload;
     }
 
     [[nodiscard]] Hit trace(Ray ray) const {
