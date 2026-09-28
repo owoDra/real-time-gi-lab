@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: target-ready; Stage B2 quantized-wide target measurement pending
+Status: target-ready; Stage B3 triangle-packet target measurement pending
 
 ## Question
 
@@ -385,3 +385,34 @@ For 27,406 nodes, raw node storage falls from 10,523,904 bytes to 4,823,456 byte
 The structural smoke verifies topology preservation and that every decoded quantized child AABB conservatively contains its source float AABB.
 
 The formal run adds `b003-stage-b2-summary.json`. Advance to triangle packets only with zero errors, quantized traversal <=1.10x float BVH8, and persistent memory <=0.90x float BVH8.
+
+
+## Stage B2 target result — quantized wide improves both speed and memory
+
+The submitted Stage B2 summary passes its gate:
+
+- float Micro BVH8 mean: 251.978763 us;
+- quantized Micro BVH8 mean: 231.392983 us;
+- trace ratio: 0.918304 (about 8.17% faster);
+- float-wide persistent bytes: 28,534,032;
+- quantized persistent bytes: 22,833,584;
+- memory ratio: 0.800223 (about 20.0% lower);
+- correctness errors: 0;
+- advance_to_triangle_packets: true.
+
+This is evidence that compression helps the current software fallback on both bandwidth-sensitive traversal and residency, rather than being a memory-only trade.
+
+## Stage B3 implementation checkpoint — direct four-triangle packets
+
+Stage B3 is target-ready. It keeps DDA/hash and the conservative quantized BVH8, but replaces the leaf `ordered index -> global triangle` indirection with one direct four-triangle packet per unique binary leaf.
+
+- binary leaves already contain at most four triangles;
+- packet layout is 256 bytes: four `v0`, four `e1`, four `e2`, four metadata records;
+- leaf token count is preserved while its begin field is remapped to packet index;
+- internal tokens, quantized AABBs, ordering axes, segment hash roots, and stack behavior are unchanged;
+- packet candidate does not allocate the global triangle buffer or ordered-index buffer;
+- packet geometry is duplicated across segment leaves when StrataBrick membership duplicates a primitive, so the resulting memory cost is measured rather than assumed beneficial.
+
+The structural smoke checks packet geometry, primitive/material/instance identity, two-sided policy, leaf count, internal tokens, and packet slot accounting against the source quantized hierarchy.
+
+The formal run now emits `b003-stage-b3-summary.json`. Retain triangle packets only with zero correctness errors, at least 5% lower mean traversal time than the quantized non-packet candidate, and no more than 1.25x its persistent memory. A failed packet gate does not reject the quantized BVH8 result.
