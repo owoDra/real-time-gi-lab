@@ -1,6 +1,6 @@
 # Experiment B001 — traversal contract and comparable controls
 
-Status: ready for target run — CPU correctness/control checkpoint complete; target-GPU/HWRT availability pending.
+Status: target control CSV inspected — correctness passes; hardened reproducible rerun and HWRT metadata pending.
 
 ## Question
 
@@ -107,6 +107,40 @@ checkpoint:
 The sandbox CPU timing direction is intentionally not accepted as target-GPU
 performance evidence. It is sufficient only to show that raw DDA is strongly
 range/regime sensitive and therefore must not be promoted by lookup timing alone.
+
+## Target-system CSV checkpoint
+
+A target-system control CSV was inspected with **48 candidate rows × 65,536
+rays/row**. All rows reported **zero correctness mismatches** against the shared
+brute-force reference.
+
+The raw grid remains strongly range/regime-sensitive. Median
+`stratabrick-grid-control / software-bvh` trace-time ratios across
+static/moving geometry and static/shifted camera were:
+
+| Scene | 50 m | 200 m |
+| --- | ---: | ---: |
+| sparse | 4.37x | 22.35x |
+| dense | 1.03x | 3.30x |
+| vertical | 0.91x | 1.73x |
+
+A ratio below 1 means the raw grid was faster; the only material control regime
+where that happened was the finite 50 m vertical case. These are CPU control
+timings, not final GPU architectural evidence.
+
+The received CSV also exposed provenance/timing-boundary gaps in the first
+target harness, so it is **diagnostic rather than the formal B001 artifact**:
+
+- the CSV did not record the repeat count;
+- the HWRT probe did not persist device/driver/API identity or emit the `GPU:`
+  line consumed by the standard research metadata recorder;
+- `dynamic_update_us` included benchmark-reset copying in the timed boundary;
+- rebuild timing included an extra trace call used only as an optimization guard.
+
+The harness now records repeats, logs the resolved run configuration, captures
+CPU/Vulkan device/driver/API information, excludes reset copying from the common
+geometry-update boundary, and removes the extra rebuild trace. The formal B001
+result therefore requires one rerun with this hardened harness.
 
 ## Target execution
 

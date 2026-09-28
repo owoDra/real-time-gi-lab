@@ -13,7 +13,7 @@ namespace lane = phos::gi::research::lane_b;
 using Clock=std::chrono::steady_clock;
 
 namespace {
-struct Row{std::string scene,dynamic,camera,candidate;float tmax{};std::size_t triangles{},rays{},mismatches{},persistent{},scratch{};double build{},refit{},rebuild{},update{},trace{};};
+struct Row{std::string scene,dynamic,camera,candidate;float tmax{};std::size_t triangles{},rays{};int repeats{};std::size_t mismatches{},persistent{},scratch{};double build{},refit{},rebuild{},update{},trace{};};
 struct Args{std::size_t rays{2048};int repeats{3};};
 
 double us(Clock::time_point t){return std::chrono::duration<double,std::micro>(Clock::now()-t).count();}
@@ -23,21 +23,23 @@ void consume(const lane::Hit& h){static volatile std::uint64_t sink=0;sink=sink^
 template<class A>std::size_t validate(const std::vector<lane::Triangle>& t,const A& a,std::span<const lane::Ray> rays){std::size_t bad=0;for(auto r:rays)if(!lane::equivalent_hit(lane::trace_reference(t,r),a.trace(r)))++bad;return bad;}
 template<class A>double trace_time(const A& a,std::span<const lane::Ray> rays,int n){return measure(n,[&]{for(auto r:rays)consume(a.trace(r));});}
 
+double common_update_time(const lane::Scene& src,int n){std::vector<double> v;v.reserve(static_cast<std::size_t>(n));for(int i=0;i<n;++i){auto moved=src.triangles;auto t=Clock::now();lane::translate(moved,src.moving,{1.25F,.65F,-.8F});v.push_back(us(t));}return median(std::move(v));}
+
 Row run_bvh(const lane::Scene& src,std::span<const lane::Ray> rays,bool dyn,bool cam,float tmax,int repeats){
     auto t=src.triangles;std::optional<lane::SoftwareBvh> tmp;double build=measure(repeats,[&]{tmp.emplace(t);});lane::SoftwareBvh bvh(t);double update=0,refit=0;
-    if(dyn){update=measure(repeats,[&]{auto moved=src.triangles;lane::translate(moved,src.moving,{1.25F,.65F,-.8F});volatile auto n=moved.size();(void)n;});lane::translate(t,src.moving,{1.25F,.65F,-.8F});refit=measure(repeats,[&]{bvh.refit(t);});bvh.refit(t);}
-    double rebuild=measure(repeats,[&]{lane::SoftwareBvh x(t);if(!rays.empty())consume(x.trace(rays.front()));});
-    return {src.name,dyn?"moving":"static",cam?"shifted":"static","software-bvh",tmax,t.size(),rays.size(),validate(t,bvh,rays),bvh.persistent_bytes(),bvh.scratch_bytes(),build,refit,rebuild,update,trace_time(bvh,rays,repeats)};
+    if(dyn){update=common_update_time(src,repeats);lane::translate(t,src.moving,{1.25F,.65F,-.8F});refit=measure(repeats,[&]{bvh.refit(t);});bvh.refit(t);}
+    double rebuild=measure(repeats,[&]{lane::SoftwareBvh x(t);volatile auto bytes=x.persistent_bytes();(void)bytes;});
+    return {src.name,dyn?"moving":"static",cam?"shifted":"static","software-bvh",tmax,t.size(),rays.size(),repeats,validate(t,bvh,rays),bvh.persistent_bytes(),bvh.scratch_bytes(),build,refit,rebuild,update,trace_time(bvh,rays,repeats)};
 }
 Row run_grid(const lane::Scene& src,std::span<const lane::Ray> rays,bool dyn,bool cam,float tmax,int repeats){
     auto t=src.triangles;std::optional<lane::SparseGrid> tmp;double build=measure(repeats,[&]{tmp.emplace(t);});lane::SparseGrid grid(t);double update=0;
-    if(dyn){double common_update=measure(repeats,[&]{auto moved=src.triangles;lane::translate(moved,src.moving,{1.25F,.65F,-.8F});volatile auto n=moved.size();(void)n;});lane::translate(t,src.moving,{1.25F,.65F,-.8F});std::vector<double> samples;samples.reserve(static_cast<std::size_t>(repeats));for(int i=0;i<repeats;++i){lane::SparseGrid x(src.triangles);auto start=Clock::now();x.update(t,src.moving);samples.push_back(us(start));}update=common_update+median(std::move(samples));grid.update(t,src.moving);}
-    double rebuild=measure(repeats,[&]{lane::SparseGrid x(t);if(!rays.empty())consume(x.trace(rays.front()));});
-    return {src.name,dyn?"moving":"static",cam?"shifted":"static","stratabrick-grid-control",tmax,t.size(),rays.size(),validate(t,grid,rays),grid.persistent_bytes(),grid.scratch_bytes(),build,0,rebuild,update,trace_time(grid,rays,repeats)};
+    if(dyn){double common_update=common_update_time(src,repeats);lane::translate(t,src.moving,{1.25F,.65F,-.8F});std::vector<double> samples;samples.reserve(static_cast<std::size_t>(repeats));for(int i=0;i<repeats;++i){lane::SparseGrid x(src.triangles);auto start=Clock::now();x.update(t,src.moving);samples.push_back(us(start));}update=common_update+median(std::move(samples));grid.update(t,src.moving);}
+    double rebuild=measure(repeats,[&]{lane::SparseGrid x(t);volatile auto bytes=x.persistent_bytes();(void)bytes;});
+    return {src.name,dyn?"moving":"static",cam?"shifted":"static","stratabrick-grid-control",tmax,t.size(),rays.size(),repeats,validate(t,grid,rays),grid.persistent_bytes(),grid.scratch_bytes(),build,0,rebuild,update,trace_time(grid,rays,repeats)};
 }
 void csv(std::ostream& o,const std::vector<Row>& rows){
-    o<<"scene,dynamic,camera,t_max,candidate,triangles,rays,mismatches,build_us,refit_us,rebuild_us,dynamic_update_us,trace_us,persistent_bytes,scratch_bytes\n"<<std::fixed<<std::setprecision(3);
-    for(auto&r:rows)o<<r.scene<<','<<r.dynamic<<','<<r.camera<<','<<r.tmax<<','<<r.candidate<<','<<r.triangles<<','<<r.rays<<','<<r.mismatches<<','<<r.build<<','<<r.refit<<','<<r.rebuild<<','<<r.update<<','<<r.trace<<','<<r.persistent<<','<<r.scratch<<'\n';
+    o<<"scene,dynamic,camera,t_max,candidate,triangles,rays,repeats,mismatches,build_us,refit_us,rebuild_us,dynamic_update_us,trace_us,persistent_bytes,scratch_bytes\n"<<std::fixed<<std::setprecision(3);
+    for(auto&r:rows)o<<r.scene<<','<<r.dynamic<<','<<r.camera<<','<<r.tmax<<','<<r.candidate<<','<<r.triangles<<','<<r.rays<<','<<r.repeats<<','<<r.mismatches<<','<<r.build<<','<<r.refit<<','<<r.rebuild<<','<<r.update<<','<<r.trace<<','<<r.persistent<<','<<r.scratch<<'\n';
 }
 Args args(int argc,char**argv){Args a;for(int i=1;i<argc;++i){std::string_view s=argv[i];if(++i>=argc)throw std::runtime_error("option requires value");if(s=="--rays")a.rays=std::stoull(argv[i]);else if(s=="--repeats")a.repeats=std::stoi(argv[i]);else throw std::runtime_error("unknown option");}if(!a.rays||a.repeats<=0)throw std::runtime_error("rays/repeats must be positive");return a;}
 }
