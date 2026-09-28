@@ -16,7 +16,8 @@ Git cannot store both a `research` ref and refs below `research/...`, so lane br
 research
 ├── research-lane-a-split-rc          # Issue #10
 ├── research-lane-b-traversal         # Issue #11
-└── research-lane-c-storage-locality  # Issue #12
+├── research-lane-c-storage-locality  # Issue #12
+└── research-lane-d-producer-optimization # Issue #14
 ```
 
 Normal iterations are committed and pushed directly to the active lane branch.
@@ -34,6 +35,11 @@ stream.
 Lane C can independently implement storage candidates and correctness tests,
 then must repeat final locality/performance comparisons against Lane A's real
 stream.
+
+Lane D starts from Lane A's accepted representative producer and isolates
+producer construction cost and memory. It may reuse renderer visibility or
+change the natural source-emission mechanism, but it does not own traversal,
+radiance storage, or post-generation global reordering.
 
 The branch/file ownership rules in the root `AGENTS.md` keep each lane's
 source, shaders, scripts, experiment protocols, and results in disjoint paths so
@@ -72,7 +78,9 @@ conclusion.
    architectural decisions must use the Lane A stream.
 3. Producer-side locality is evaluated only after the producer exists; do not
    replace it with a producer invented solely to emit favorable ordering.
-4. Integration (#13) starts only after each lane has a documented decision gate
+4. Lane D may investigate producer mechanisms while Lane B/C finish replay
+   gates, but its final decision must not move or rewrite accepted A001.
+5. Integration (#13) starts only after each lane has a documented decision gate
    result.
 
 See [protocol.md](protocol.md) for the rules shared by all lanes.
