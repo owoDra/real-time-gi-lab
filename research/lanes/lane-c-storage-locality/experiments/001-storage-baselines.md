@@ -163,6 +163,19 @@ counters, and the brick free list where applicable. Scratch accounting records
 the address/output workspace used by the measured producer/storage sequence.
 Benchmark-only seed copies are excluded from architecture memory accounting.
 
+### Synthetic residency-unit boundary
+
+For the hashed-brick and virtual/clipmap candidates, C001b's synthetic control
+provides the active/entering **brick units** directly from the regular synthetic
+brick grid. This is a natural producer domain, not a post-generation sort or
+global regrouping, but the cost of discovering/emitting those brick units is not
+claimed as representative Split RC producer evidence.
+
+Therefore C001b may reject a candidate or keep it for further study, but an
+allocation/residency win cannot by itself promote a brick representation. The
+final Lane A replay must account for any extra producer work required to emit
+brick/page residency units from the exact producer stream.
+
 ### Timing boundary
 
 Mutating phases must begin from the same semantic state every iteration. C001b
