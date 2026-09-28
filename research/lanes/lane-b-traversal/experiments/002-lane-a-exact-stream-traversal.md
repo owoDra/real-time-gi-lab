@@ -1,6 +1,6 @@
 # Experiment B002 — Lane A exact-stream traversal comparison
 
-Status: target-ready; target measurement pending
+Status: accepted
 
 ## Question
 
@@ -311,3 +311,27 @@ The old artifact therefore remains diagnostic despite its clean correctness and
 device provenance. A fresh `research:record` run from current HEAD is required.
 Do not write the accepted B002 result, update `results/index.json`, close Issue
 #11, or hand off a Lane B winner to Integration #13 until that rerun passes.
+
+
+## Accepted final target run
+
+A fresh formal run after the measurement-relevant harness fixes passed the B002
+decision gate:
+
+- artifact:
+  `out/research/lane-b-traversal/002-lane-a-exact-stream-traversal/20260928T164136Z/`;
+- measurement commit:
+  `b4baf15c15331411690530a1f9e7388d4e7d6fe8`;
+- clean tree;
+- return code 0;
+- exact AMD Radeon 8060S / RADV target selected;
+- HWRT feature gate, BLAS/TLAS creation, and ray-query correctness passed;
+- representative mismatches/runtime errors: 0/0;
+- controlled maintenance mismatches/runtime errors: 0/0.
+
+The post-measurement branch commit `2d9cbc3e` only adds reporting of the
+already-used HWRT scratch-alignment property to provenance JSON and does not
+change measurement behavior. No additional rerun is required.
+
+The accepted interpretation and Lane B decision are recorded in
+`results/002-lane-a-exact-stream-traversal.md`.

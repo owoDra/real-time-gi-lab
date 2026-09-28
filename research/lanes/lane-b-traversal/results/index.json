@@ -14,6 +14,21 @@
         "llvmpipe (LLVM 21.1.8, 256 bits)"
       ],
       "hwrt_probe_status": "ambiguous"
+    },
+    {
+      "id": "002-lane-a-exact-stream-traversal",
+      "status": "accepted",
+      "result": "002-lane-a-exact-stream-traversal.md",
+      "artifact": "out/research/lane-b-traversal/002-lane-a-exact-stream-traversal/20260928T164136Z",
+      "git_commit": "b4baf15c15331411690530a1f9e7388d4e7d6fe8",
+      "lane_a_measurement_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+      "driver": "RADV / Mesa 26.1.2",
+      "correctness_mismatches": 0,
+      "runtime_errors": 0,
+      "primary_candidate": "hwrt-tlas",
+      "fallback_candidate": "hierarchical-stratabrick",
+      "baseline_candidate": "software-bvh"
     }
   ]
 }

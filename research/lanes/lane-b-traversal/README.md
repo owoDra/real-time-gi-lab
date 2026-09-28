@@ -7,84 +7,77 @@ Mission: determine which traversal architecture best serves Split RC gather rays
 under realistic dynamic-scene maintenance costs. StrataBrick is a candidate, not
 a requirement.
 
-## Current checkpoint — B001 accepted
+## Status — complete
 
-B001 is concluded as the Lane B semantic/correctness and candidate-retention
-checkpoint.
+Lane B is complete. B001 established the shared Hit contract and candidate
+retention. B002 completed the final comparison on Lane A's accepted exact
+producer streams and controlled moving geometry.
 
-Accepted target rerun:
+Accepted B002 target artifact:
 
-- artifact:
-  `out/research/lane-b-traversal/001-traversal-contract-and-controls/20260928T150111Z/`;
-- measurement commit: `52710fcbd372369fe58e68f6c29b39aa9924a3db`;
-- 48 rows × 65,536 rays/row × 5 repeats;
-- zero correctness mismatches.
+- `out/research/lane-b-traversal/002-lane-a-exact-stream-traversal/20260928T164136Z/`;
+- measurement commit: `b4baf15c15331411690530a1f9e7388d4e7d6fe8`;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- RADV / Mesa 26.1.2;
+- clean tree, return code 0;
+- representative correctness mismatches: 0;
+- representative runtime errors: 0.
 
-Retention decision:
+Formal result:
 
-- **software BVH:** retain as the simple software baseline;
-- **raw sparse-grid DDA:** do not promote as a standalone final architecture;
-- **hierarchical StrataBrick-derived:** retain because segment/BVH pruning +
-  localized rebuild/refit remains a distinct hypothesis;
-- **HWRT/TLAS:** retain for explicit physical-device bring-up. The current probe
-  is `ambiguous` because both RADV hardware and llvmpipe were enumerated; this
-  is not an HWRT rejection.
+`results/002-lane-a-exact-stream-traversal.md`
 
-The formal result is
-`results/001-traversal-contract-and-controls.md`.
+## Final Lane B decision
 
-## Next decision gate
+- **Primary: HWRT / TLAS**
+  - fastest on all three exact A001 streams;
+  - fastest on both controlled moving-geometry maintenance regimes;
+  - actual required Vulkan features, BLAS/TLAS creation, and ray-query
+    correctness are proven on the intended physical GPU;
+  - trade-off: about 64.69 MiB persistent allocation plus 35.06 MiB reusable
+    explicit AS scratch in this benchmark.
 
-1. bring up the surviving GPU candidates under the shared Hit contract;
-2. explicitly select/identify the target Vulkan physical device for HWRT and
-   validate feature enablement before timing;
-3. replay software BVH, hierarchical StrataBrick-derived traversal, and HWRT
-   where proven available against Lane A's accepted representative producer
-   stream;
-4. include build/refit/rebuild/update, traversal, persistent memory, scratch
-   memory, and correctness in the end-to-end decision;
-5. document regime-specific winners instead of forcing one universal
-   architecture if the evidence differs by scene regime.
+- **Software fallback: hierarchical StrataBrick-derived traversal**
+  - consistently faster than the simple software BVH;
+  - localized refit/rebuild behavior works;
+  - about 25.72 MiB persistent allocation;
+  - retained for portability / HWRT-unavailable or memory-sensitive regimes.
 
+- **Baseline/reference only: software BVH**
+  - correct and simplest, but not competitive enough to promote.
 
-## B002 target-ready checkpoint
+- **Rejected: raw sparse-grid DDA**
+  - B001 already rejected it as a standalone final architecture.
 
-B002 implementation is now target-ready on this branch. It does not conclude
-Lane B until target measurements are recorded.
+B002 representative traversal medians:
 
-Implemented evidence paths:
+| workload | software BVH us | hierarchical us | HWRT/TLAS us |
+| --- | ---: | ---: | ---: |
+| static | 382.767 | 281.415 | 66.066 |
+| camera-motion | 376.155 | 276.305 | 63.982 |
+| light-motion | 383.469 | 295.281 | 67.128 |
 
-- exact replay reader for the accepted Lane A schema v1, including byte-size and
-  workload-id validation with natural producer order preserved;
-- actual Sponza triangle geometry aligned with Lane A `surface_id` ordering;
-- GPU software-BVH traversal under the B001 shared Hit contract;
-- hierarchical StrataBrick-derived traversal with coarse segment occupancy,
-  per-segment BVHs, deterministic GPU flattening, membership/refit/rebuild
-  accounting, and localized buffer updates when membership is unchanged;
-- explicit physical-device Vulkan selection for
-  `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
-- HWRT logical-device feature enablement, BLAS/TLAS creation, ray-query
-  candidate traversal, and BLAS/TLAS UPDATE for controlled moving geometry;
-- full-ray correctness comparison against a CPU software-BVH reference, with a
-  brute-force sample guard;
-- controlled rigid-mesh translation evidence split into bounds-only/refit and
-  topology-changing/rebuild regimes.
+Controlled update + post-update trace:
 
-The controlled moving-geometry rows are mechanism-isolation evidence. Final
-representative traversal evidence remains the three exact A001 streams.
+| regime | software BVH us | hierarchical us | HWRT/TLAS us |
+| --- | ---: | ---: | ---: |
+| bounds-only | 19,933.237 | 11,081.034 | 3,253.467 |
+| topology-change | 17,979.975 | 10,105.977 | 3,247.523 |
 
-Target execution is documented in
-`scripts/research/lane_b_traversal/README.md`.
+## Integration handoff
 
+Integration #13 should use HWRT/TLAS as Lane B's evidence-backed primary
+candidate on the measured target.
 
-## B002 target rerun required
+Carry these caveats into integration:
 
-An earlier pair of target CSVs showed clean correctness and a strong HWRT lead,
-but they are diagnostic only. They were not accompanied by the complete
-`research:record` provenance set, and several measurement-relevant HWRT and
-maintenance-boundary fixes landed afterward.
+- HWRT has a substantially larger memory footprint than the software paths;
+- keep the hierarchical candidate available as fallback rather than treating the
+  simple software BVH as the fallback architecture;
+- A001 has no moving geometry, so B002 movement evidence is controlled
+  mechanism-isolation evidence;
+- final large/vertical/dynamic stress and complete GI frame-time/quality evidence
+  remain Integration responsibilities.
 
-The next accepted evidence must be one fresh artifact recorded from the current
-`research-lane-b-traversal` HEAD. Do not promote a candidate, write B002 result
-metadata, update `results/index.json`, or close Issue #11 from the earlier CSV
-checkpoint.
+Do not interpret Lane B's traversal winner as proof that the combined GI
+architecture is superior before Integration #13 passes its end-to-end gate.
