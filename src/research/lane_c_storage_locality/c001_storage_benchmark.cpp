@@ -86,6 +86,18 @@ struct CascadeLayout {
 };
 static_assert(sizeof(CascadeLayout) == 16);
 
+struct TransitionLayout {
+    std::int32_t min_bx{};
+    std::int32_t min_by{};
+    std::int32_t min_bz{};
+    std::uint32_t page_base{};
+    std::uint32_t union_x{};
+    std::uint32_t union_y{};
+    std::uint32_t union_z{};
+    std::uint32_t pad{};
+};
+static_assert(sizeof(TransitionLayout) == 32);
+
 struct Push {
     std::uint32_t count{};
     std::uint32_t op{};
@@ -144,6 +156,8 @@ struct Config {
     std::uint32_t iterations{50};
     bool validation{false};
     std::optional<std::filesystem::path> stream;
+    std::optional<std::filesystem::path> stream_from;
+    std::optional<std::filesystem::path> stream_to;
     std::vector<std::uint32_t> occupancies{4, 16, 48};
 };
 
@@ -351,6 +365,218 @@ Address make_exact_address(
         address.local_index = local;
     }
     return address;
+}
+
+
+struct TransitionPair {
+    ExactStream from;
+    ExactStream to;
+    std::vector<TransitionLayout> layouts;
+    std::uint32_t clip_x{};
+    std::uint32_t clip_y{};
+    std::uint32_t clip_z{};
+    std::uint32_t union_unique_probes{};
+    std::uint32_t union_unique_bricks{};
+    std::uint32_t from_unique_probes{};
+    std::uint32_t to_unique_probes{};
+    std::uint32_t from_unique_bricks{};
+    std::uint32_t to_unique_bricks{};
+    std::uint32_t entering_probes{};
+    std::uint32_t leaving_probes{};
+    std::uint32_t entering_bricks{};
+    std::uint32_t leaving_bricks{};
+};
+
+struct BrickBounds {
+    std::int32_t min_x{std::numeric_limits<std::int32_t>::max()};
+    std::int32_t min_y{std::numeric_limits<std::int32_t>::max()};
+    std::int32_t min_z{std::numeric_limits<std::int32_t>::max()};
+    std::int32_t max_x{std::numeric_limits<std::int32_t>::min()};
+    std::int32_t max_y{std::numeric_limits<std::int32_t>::min()};
+    std::int32_t max_z{std::numeric_limits<std::int32_t>::min()};
+    bool seen{false};
+};
+
+std::vector<BrickBounds> stream_brick_bounds(
+    const ExactStream& stream) {
+    std::vector<BrickBounds> bounds(stream.header.cascade_count);
+    for (const auto& item : stream.items) {
+        if (item.ray_index != 0u) continue;
+        auto& b = bounds[item.cascade];
+        const auto bx = floor_div(item.probe_x, static_cast<std::int32_t>(kBrickEdge));
+        const auto by = floor_div(item.probe_y, static_cast<std::int32_t>(kBrickEdge));
+        const auto bz = floor_div(item.probe_z, static_cast<std::int32_t>(kBrickEdge));
+        b.min_x = std::min(b.min_x, bx);
+        b.min_y = std::min(b.min_y, by);
+        b.min_z = std::min(b.min_z, bz);
+        b.max_x = std::max(b.max_x, bx);
+        b.max_y = std::max(b.max_y, by);
+        b.max_z = std::max(b.max_z, bz);
+        b.seen = true;
+    }
+    return bounds;
+}
+
+Address make_transition_address(
+    const SplitRcWorkItemV1& item,
+    Rep rep,
+    const TransitionPair& pair) {
+    const auto bx = floor_div(item.probe_x, static_cast<std::int32_t>(kBrickEdge));
+    const auto by = floor_div(item.probe_y, static_cast<std::int32_t>(kBrickEdge));
+    const auto bz = floor_div(item.probe_z, static_cast<std::int32_t>(kBrickEdge));
+    const auto& dims = pair.layouts[item.cascade];
+    const auto ubx = static_cast<std::uint32_t>(bx - dims.min_bx);
+    const auto uby = static_cast<std::uint32_t>(by - dims.min_by);
+    const auto ubz = static_cast<std::uint32_t>(bz - dims.min_bz);
+    const auto lx = item.probe_x - bx * static_cast<std::int32_t>(kBrickEdge);
+    const auto ly = item.probe_y - by * static_cast<std::int32_t>(kBrickEdge);
+    const auto lz = item.probe_z - bz * static_cast<std::int32_t>(kBrickEdge);
+    const auto local = static_cast<std::uint32_t>(
+        lx + static_cast<std::int32_t>(kBrickEdge) *
+            (ly + static_cast<std::int32_t>(kBrickEdge) * lz));
+    const std::uint64_t canonical_page =
+        static_cast<std::uint64_t>(dims.page_base) +
+        (static_cast<std::uint64_t>(ubz) * dims.union_y + uby) *
+            dims.union_x + ubx;
+    const std::uint64_t key64 = canonical_page * kCellsPerBrick + local + 1u;
+    if (key64 >= 0x80000000ull || canonical_page + 1u >= 0x80000000ull) {
+        throw std::runtime_error("C001d canonical key exceeds tagged uint32 range");
+    }
+
+    Address address{};
+    address.probe_key = static_cast<std::uint32_t>(key64);
+    address.payload =
+        item.ray_index == 0u ? mix32(address.probe_key ^ 0x9e3779b9u) : 0u;
+    if (rep != Rep::ProbeHash) {
+        const auto sx = ubx % pair.clip_x;
+        const auto sy = uby % pair.clip_y;
+        const auto sz = ubz % pair.clip_z;
+        const auto slot =
+            ((item.cascade * pair.clip_z + sz) * pair.clip_y + sy) *
+                pair.clip_x + sx;
+        address.brick_key = slot + 1u;
+        address.local_index = local;
+    }
+    return address;
+}
+
+TransitionPair load_transition_pair(
+    const std::filesystem::path& from_path,
+    const std::filesystem::path& to_path) {
+    TransitionPair pair{};
+    pair.from = load_exact_stream(from_path);
+    pair.to = load_exact_stream(to_path);
+    if (pair.from.header.cascade_count != pair.to.header.cascade_count ||
+        pair.from.header.rays_per_probe != pair.to.header.rays_per_probe) {
+        throw std::runtime_error("C001d stream dimensions are incompatible");
+    }
+
+    const auto from_bounds = stream_brick_bounds(pair.from);
+    const auto to_bounds = stream_brick_bounds(pair.to);
+    pair.layouts.resize(pair.from.header.cascade_count);
+
+    std::uint64_t page_base = 0u;
+    for (std::uint32_t cascade = 0; cascade < pair.layouts.size(); ++cascade) {
+        const auto& a = from_bounds[cascade];
+        const auto& b = to_bounds[cascade];
+        if (!a.seen || !b.seen) {
+            throw std::runtime_error("C001d cascade missing from one frame");
+        }
+        const auto min_x = std::min(a.min_x, b.min_x);
+        const auto min_y = std::min(a.min_y, b.min_y);
+        const auto min_z = std::min(a.min_z, b.min_z);
+        const auto max_x = std::max(a.max_x, b.max_x);
+        const auto max_y = std::max(a.max_y, b.max_y);
+        const auto max_z = std::max(a.max_z, b.max_z);
+        const auto ux = static_cast<std::uint32_t>(max_x - min_x + 1);
+        const auto uy = static_cast<std::uint32_t>(max_y - min_y + 1);
+        const auto uz = static_cast<std::uint32_t>(max_z - min_z + 1);
+        if (page_base > std::numeric_limits<std::uint32_t>::max()) {
+            throw std::runtime_error("C001d page base overflow");
+        }
+        pair.layouts[cascade] = {
+            min_x, min_y, min_z, static_cast<std::uint32_t>(page_base),
+            ux, uy, uz, 0u};
+        page_base += static_cast<std::uint64_t>(ux) * uy * uz;
+
+        pair.clip_x = std::max(
+            pair.clip_x,
+            std::max(
+                static_cast<std::uint32_t>(a.max_x - a.min_x + 1),
+                static_cast<std::uint32_t>(b.max_x - b.min_x + 1)));
+        pair.clip_y = std::max(
+            pair.clip_y,
+            std::max(
+                static_cast<std::uint32_t>(a.max_y - a.min_y + 1),
+                static_cast<std::uint32_t>(b.max_y - b.min_y + 1)));
+        pair.clip_z = std::max(
+            pair.clip_z,
+            std::max(
+                static_cast<std::uint32_t>(a.max_z - a.min_z + 1),
+                static_cast<std::uint32_t>(b.max_z - b.min_z + 1)));
+    }
+
+    std::unordered_set<std::uint32_t> from_probes, to_probes;
+    std::unordered_set<std::uint32_t> from_bricks, to_bricks;
+    std::unordered_set<std::uint64_t> from_slots, to_slots;
+    auto collect = [&](const ExactStream& stream,
+                       std::unordered_set<std::uint32_t>& probes,
+                       std::unordered_set<std::uint32_t>& bricks,
+                       std::unordered_set<std::uint64_t>& slots) {
+        for (const auto& item : stream.items) {
+            if (item.ray_index != 0u) continue;
+            const auto address = make_transition_address(item, Rep::Clipmap, pair);
+            probes.insert(address.probe_key);
+            const auto tag = ((address.probe_key - 1u) / kCellsPerBrick) + 1u;
+            bricks.insert(tag);
+            const auto slot_tag =
+                (static_cast<std::uint64_t>(address.brick_key) << 32u) | tag;
+            slots.insert(slot_tag);
+        }
+    };
+    collect(pair.from, from_probes, from_bricks, from_slots);
+    collect(pair.to, to_probes, to_bricks, to_slots);
+
+    auto verify_slots = [&](const auto& slots, std::size_t expected_bricks) {
+        std::unordered_set<std::uint32_t> seen;
+        for (const auto packed : slots) {
+            const auto slot = static_cast<std::uint32_t>(packed >> 32u);
+            if (!seen.insert(slot).second) {
+                throw std::runtime_error(
+                    "C001d toroidal clip extent aliases active bricks");
+            }
+        }
+        if (seen.size() != expected_bricks) {
+            throw std::runtime_error("C001d clip slot accounting mismatch");
+        }
+    };
+    verify_slots(from_slots, from_bricks.size());
+    verify_slots(to_slots, to_bricks.size());
+
+    std::unordered_set<std::uint32_t> union_probes = from_probes;
+    union_probes.insert(to_probes.begin(), to_probes.end());
+    std::unordered_set<std::uint32_t> union_bricks = from_bricks;
+    union_bricks.insert(to_bricks.begin(), to_bricks.end());
+
+    auto count_difference = [](const auto& lhs, const auto& rhs) {
+        std::uint32_t count = 0u;
+        for (const auto value : lhs) {
+            if (!rhs.contains(value)) ++count;
+        }
+        return count;
+    };
+
+    pair.union_unique_probes = static_cast<std::uint32_t>(union_probes.size());
+    pair.union_unique_bricks = static_cast<std::uint32_t>(union_bricks.size());
+    pair.from_unique_probes = static_cast<std::uint32_t>(from_probes.size());
+    pair.to_unique_probes = static_cast<std::uint32_t>(to_probes.size());
+    pair.from_unique_bricks = static_cast<std::uint32_t>(from_bricks.size());
+    pair.to_unique_bricks = static_cast<std::uint32_t>(to_bricks.size());
+    pair.entering_probes = count_difference(to_probes, from_probes);
+    pair.leaving_probes = count_difference(from_probes, to_probes);
+    pair.entering_bricks = count_difference(to_bricks, from_bricks);
+    pair.leaving_bricks = count_difference(from_bricks, to_bricks);
+    return pair;
 }
 
 struct Workload {
@@ -654,6 +880,9 @@ public:
 
         address_ = create_pipeline("c001_address.spv");
         exact_address_ = create_pipeline("c001_exact_address.spv");
+        transition_address_ = create_pipeline("c001_transition_address.spv");
+        transition_hash_ = create_pipeline("c001_transition_hash.spv");
+        transition_clipmap_ = create_pipeline("c001_transition_clipmap.spv");
         probe_hash_ = create_pipeline("c001_probe_hash.spv");
         brick_hash_ = create_pipeline("c001_brick_hash.spv");
         clipmap_ = create_pipeline("c001_clipmap.spv");
@@ -668,6 +897,9 @@ public:
         if (clipmap_) ctx_.vk().destroyPipeline(clipmap_, nullptr);
         if (brick_hash_) ctx_.vk().destroyPipeline(brick_hash_, nullptr);
         if (probe_hash_) ctx_.vk().destroyPipeline(probe_hash_, nullptr);
+        if (transition_clipmap_) ctx_.vk().destroyPipeline(transition_clipmap_, nullptr);
+        if (transition_hash_) ctx_.vk().destroyPipeline(transition_hash_, nullptr);
+        if (transition_address_) ctx_.vk().destroyPipeline(transition_address_, nullptr);
         if (exact_address_) ctx_.vk().destroyPipeline(exact_address_, nullptr);
         if (address_) ctx_.vk().destroyPipeline(address_, nullptr);
         if (command_pool_) ctx_.vk().destroyCommandPool(command_pool_, nullptr);
@@ -680,6 +912,10 @@ public:
     const std::string& device_name() const { return ctx_.device_name(); }
     VkPipeline address_pipeline() const { return address_; }
     VkPipeline exact_address_pipeline() const { return exact_address_; }
+    VkPipeline transition_address_pipeline() const { return transition_address_; }
+    VkPipeline transition_storage_pipeline(Rep rep) const {
+        return rep == Rep::ProbeHash ? transition_hash_ : transition_clipmap_;
+    }
     VkPipeline storage_pipeline(Rep rep) const {
         if (rep == Rep::ProbeHash) return probe_hash_;
         if (rep == Rep::BrickHash) return brick_hash_;
@@ -930,6 +1166,9 @@ private:
     VkCommandPool command_pool_{VK_NULL_HANDLE};
     VkPipeline address_{VK_NULL_HANDLE};
     VkPipeline exact_address_{VK_NULL_HANDLE};
+    VkPipeline transition_address_{VK_NULL_HANDLE};
+    VkPipeline transition_hash_{VK_NULL_HANDLE};
+    VkPipeline transition_clipmap_{VK_NULL_HANDLE};
     VkPipeline probe_hash_{VK_NULL_HANDLE};
     VkPipeline brick_hash_{VK_NULL_HANDLE};
     VkPipeline clipmap_{VK_NULL_HANDLE};
