@@ -244,7 +244,7 @@ HostState make_state(
             const auto slot = insert_linear(s.keys, s.mask, a.probe_key, observed_probe);
             if (populated) s.payloads[slot] = a.payload;
         }
-        s.max_probe = std::max<std::uint32_t>(64u, observed_probe + 8u);
+        s.max_probe = capacity;
         s.persistent_bytes =
             s.keys.size() * sizeof(std::uint32_t) +
             s.payloads.size() * sizeof(std::uint32_t);
@@ -267,7 +267,7 @@ HostState make_state(
             const auto slot = insert_linear(s.keys, s.mask, key, observed_probe);
             s.values[slot] = physical + 1u;
         }
-        s.max_probe = std::max<std::uint32_t>(64u, observed_probe + 8u);
+        s.max_probe = capacity;
         if (populated) {
             for (const auto& a : all_addresses) {
                 std::uint32_t slot = mix32(a.brick_key) & s.mask;
