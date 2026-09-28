@@ -90,6 +90,17 @@ double ratio(std::uint64_t n,std::uint64_t d){
     return d?double(n)/double(d):0.0;
 }
 
+bool within_float_ulps(float actual,float expected,int ulps){
+    if(!std::isfinite(actual)||!std::isfinite(expected)) return actual==expected;
+    float lo=expected;
+    float hi=expected;
+    for(int i=0;i<ulps;++i){
+        lo=std::nextafter(lo,-std::numeric_limits<float>::infinity());
+        hi=std::nextafter(hi, std::numeric_limits<float>::infinity());
+    }
+    return actual>=lo&&actual<=hi;
+}
+
 } // namespace
 
 A001Analysis analyze_a001(
@@ -214,9 +225,9 @@ A001Analysis analyze_a001(
                     std::abs(i.dir_x-rd.x)<1e-6f &&
                     std::abs(i.dir_y-rd.y)<1e-6f &&
                     std::abs(i.dir_z-rd.z)<1e-6f &&
-                    std::abs(i.probe_px-ppx)<1e-4f &&
-                    std::abs(i.probe_py-ppy)<1e-4f &&
-                    std::abs(i.probe_pz-ppz)<1e-4f;
+                    within_float_ulps(i.probe_px,ppx,2) &&
+                    within_float_ulps(i.probe_py,ppy,2) &&
+                    within_float_ulps(i.probe_pz,ppz,2);
                 ++semantic_checks;
                 if(!ok){
                     a.producer_correct=false;
