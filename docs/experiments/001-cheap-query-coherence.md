@@ -87,21 +87,20 @@ Do not attribute any timing difference to a specific cache/memory mechanism
 without representative RADV/RGP evidence.
 
 
-## Validation result — 2026-09-28
+## Accepted non-validation result — 2026-09-28
 
-The target-system validation sweep completed successfully on AMD Radeon 8060S
-Graphics / RADV STRIX_HALO for the full 100k / 500k / 1M / 4M / 8M matrix,
-3 repeats and 100 iterations.
+The target-system non-validation sweep completed successfully on AMD Radeon
+8060S Graphics / RADV STRIX_HALO for the full 100k / 500k / 1M / 4M / 8M
+matrix, 3 repeats and 100 iterations.
 
 All rows passed checksum correctness. `hash-wg-bin16` additionally passed the
 order-sensitive fingerprint comparison against `hash/source`, confirming that
 the fused workgroup-local regrouping wrote each lookup result back to the
 correct source-query index.
 
-The validation-enabled median timings for `hash-wg-bin16` versus
-`hash/source` were:
+Accepted median timings:
 
-| Queries | hash/source us | hash-wg-bin16 us | Relative |
+| Queries | hash/source us | hash-wg-bin16 us | Speedup vs hash |
 | ---: | ---: | ---: | ---: |
 | 100k | 16.347 | 16.470 | 0.993x |
 | 500k | 103.183 | 112.247 | 0.919x |
@@ -109,6 +108,10 @@ The validation-enabled median timings for `hash-wg-bin16` versus
 | 4M | 869.071 | 933.529 | 0.931x |
 | 8M | 1888.290 | 2026.480 | 0.932x |
 
-These numbers are **not accepted performance evidence** because Vulkan
-validation was enabled. They are retained only as a diagnostic signal. The
-experiment decision remains pending the non-validation sweep.
+The fused 16-bin workgroup-local mechanism is rejected. Its grouping work is
+already included in the timed lookup dispatch and it fails to beat
+`hash/source` at every query count. The regression is material at the
+medium/large query counts that motivated Issue #7.
+
+This rejects only this exact local-binning mechanism. It does not reject
+producer-side coherence, schedule reuse/amortization, or other local keys.
