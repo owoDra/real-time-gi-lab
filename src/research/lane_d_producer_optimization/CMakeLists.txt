@@ -9,10 +9,20 @@ add_compute_shader(
   lane_d_d002_producer_visible_tile
   shaders/research/lane_d_producer_optimization/d002_producer_visible_tile.comp.glsl
 )
+add_compute_shader(
+  lane_d_d003_visibility_packed
+  shaders/research/lane_d_producer_optimization/d003_visibility_packed.comp.glsl
+)
+add_compute_shader(
+  lane_d_d003_producer_packed_owner
+  shaders/research/lane_d_producer_optimization/d003_producer_packed_owner.comp.glsl
+)
 
 set(LANE_D_SHADER_OUTPUTS
   "${CMAKE_BINARY_DIR}/shaders/lane_d_d001_producer_owner_reuse.spv"
   "${CMAKE_BINARY_DIR}/shaders/lane_d_d002_producer_visible_tile.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_d_d003_visibility_packed.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_d_d003_producer_packed_owner.spv"
 )
 add_custom_target(
   phos-lane-d-producer-optimization-shaders
@@ -106,4 +116,44 @@ if(MSVC)
   target_compile_options(phos-lane-d-d002 PRIVATE /W4 /permissive-)
 else()
   target_compile_options(phos-lane-d-d002 PRIVATE -Wall -Wextra -Wpedantic)
+endif()
+
+
+add_executable(phos-lane-d-d003
+  d003_benchmark.cpp
+  d003_runtime.cpp
+  d001_runtime.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_scene.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_runtime.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc/a001_analysis.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+add_dependencies(
+  phos-lane-d-d003
+  phos-lane-a-split-rc-shaders
+  phos-lane-d-producer-optimization-shaders
+)
+target_include_directories(phos-lane-d-d003 PRIVATE
+  ${PROJECT_SOURCE_DIR}/src
+  ${PROJECT_SOURCE_DIR}/src/research/lane_a_split_rc
+  ${CMAKE_CURRENT_SOURCE_DIR}
+)
+target_link_libraries(phos-lane-d-d003 PRIVATE
+  vk-bootstrap::vk-bootstrap
+  fastgltf::fastgltf
+  ${CMAKE_DL_LIBS}
+)
+target_compile_definitions(phos-lane-d-d003 PRIVATE
+  PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_D_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-d-d003 PROPERTIES
+  CXX_STANDARD 20
+  CXX_STANDARD_REQUIRED ON
+  CXX_EXTENSIONS OFF
+)
+if(MSVC)
+  target_compile_options(phos-lane-d-d003 PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-d-d003 PRIVATE -Wall -Wextra -Wpedantic)
 endif()
