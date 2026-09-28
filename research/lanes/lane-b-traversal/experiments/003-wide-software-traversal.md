@@ -326,3 +326,45 @@ These changes do not alter the B001 Hit contract or the DDA/hash top level.
 The Stage B1 logical stack accounting records both the 64-entry token stack and
 the 64-entry saved entry-distance stack (512 bytes per ray invocation total).
 The saved distances are traversal-local scratch, not persistent GPU allocation.
+
+
+## Stage B1 target result — wide micro viable
+
+The first DDA-preserving wide-micro target run passed the B1 viability gate.
+
+Evidence:
+
+- exact target: AMD Radeon 8060S Graphics (RADV STRIX_HALO), Mesa 26.1.2;
+- accepted A001 provenance retained;
+- B001 shared-Hit mismatches/runtime errors: 0/0;
+- wide-micro nodes: 27,406;
+- wide-micro depth: 7;
+- maximum structural stack frontier: 40;
+- baseline mean traversal: 283.845978 us;
+- DDA + float Micro BVH8 mean traversal: 253.134292 us;
+- traversal improvement: 10.8198%;
+- baseline persistent bytes: 26,971,056;
+- wide-micro persistent bytes: 28,534,032;
+- persistent-memory ratio: 1.057950;
+- advance_to_quantization: true.
+
+Per-case float BVH8 traversal:
+
+- static: 247.390 us;
+- camera-motion: 254.604 us;
+- light-motion: 257.409 us.
+
+The gain is consistent across all three exact A001 streams. The uncompressed
+wide representation also increases acceleration upload cost because each wide
+node stores eight full float child AABBs. This makes child-bound compression the
+next isolated mechanism to test rather than immediately changing DDA or leaf
+intersection semantics.
+
+Stage B2 will therefore keep:
+
+- segment DDA/hash;
+- the same wide-tree topology and leaf primitive ranges;
+- the same near-first ordering and tNear pruning;
+
+and change only child-bound representation to conservative parent-relative
+quantization.
