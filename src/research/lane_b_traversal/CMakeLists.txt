@@ -144,6 +144,7 @@ add_executable(phos-lane-b-b003-smoke
   b003_contract_smoke.cpp
   b003_macro_bvh8.hpp
   b003_micro_bvh8.hpp
+  b003_quantized_bvh8.hpp
   hierarchical_stratabrick.hpp
   traversal_contract.hpp
   traversal_common.hpp
@@ -168,10 +169,14 @@ add_compute_shader(
 add_compute_shader(
   lane_b_b003_micro_bvh8
   shaders/research/lane_b_traversal/b003_micro_bvh8.comp.glsl)
+add_compute_shader(
+  lane_b_b003_quantized_bvh8
+  shaders/research/lane_b_traversal/b003_quantized_bvh8.comp.glsl)
 
 add_custom_target(phos-lane-b-b003-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_macro_bvh8.spv"
   "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_micro_bvh8.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_quantized_bvh8.spv"
 )
 
 add_executable(phos-lane-b-b003
@@ -181,6 +186,7 @@ add_executable(phos-lane-b-b003
   b002_compute.cpp
   b003_macro_bvh8.hpp
   b003_micro_bvh8.hpp
+  b003_quantized_bvh8.hpp
   b002_scene.hpp
   b002_replay.hpp
   b002_vulkan.hpp

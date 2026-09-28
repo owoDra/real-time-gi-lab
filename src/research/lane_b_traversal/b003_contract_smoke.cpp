@@ -1,5 +1,6 @@
 #include "b003_macro_bvh8.hpp"
 #include "b003_micro_bvh8.hpp"
+#include "b003_quantized_bvh8.hpp"
 
 #include <cmath>
 #include <cstdint>
@@ -267,6 +268,97 @@ void verify_wide_leaf_equivalence(
     }
 }
 
+
+void verify_quantized_payload(
+    const B003WideMicroPayload& wide,
+    const B003QuantizedMicroPayload& quantized) {
+    if (quantized.nodes.size() != wide.nodes.size() ||
+        quantized.ordered_primitives !=
+            wide.ordered_primitives ||
+        quantized.hash_table.size() !=
+            wide.hash_table.size() ||
+        quantized.hash_mask != wide.hash_mask ||
+        quantized.hash_max_probe !=
+            wide.hash_max_probe ||
+        quantized.segment_count !=
+            wide.segment_count) {
+        throw std::runtime_error(
+            "B003 quantization changed non-bound traversal topology");
+    }
+
+    constexpr float kTolerance = 1.0e-5F;
+    for (std::size_t node_index = 0;
+         node_index < wide.nodes.size();
+         ++node_index) {
+        const auto& source =
+            wide.nodes[node_index];
+        const auto& packed =
+            quantized.nodes[node_index];
+
+        std::uint32_t axis = 0U;
+        bool have_axis = false;
+        for (std::size_t slot = 0;
+             slot < 8U;
+             ++slot) {
+            const auto& source_child =
+                source.children[slot];
+            const auto& packed_child =
+                packed.children[slot];
+
+            if (source_child.data[0] ==
+                kInvalidId) {
+                if (packed_child.packed[3] !=
+                    kInvalidId) {
+                    throw std::runtime_error(
+                        "B003 quantization materialized an empty child");
+                }
+                continue;
+            }
+
+            if (packed_child.packed[3] !=
+                source_child.data[0]) {
+                throw std::runtime_error(
+                    "B003 quantization changed child token");
+            }
+
+            if (!have_axis) {
+                axis = source_child.data[1];
+                have_axis = true;
+            } else if (axis !=
+                       source_child.data[1]) {
+                throw std::runtime_error(
+                    "B003 source wide node has inconsistent axis");
+            }
+
+            const auto decoded =
+                b003_decode_quant_child(
+                    packed,
+                    packed_child);
+            for (int component = 0;
+                 component < 3;
+                 ++component) {
+                if (decoded.min[component] >
+                        source_child
+                            .bounds_min[component] +
+                            kTolerance ||
+                    decoded.max[component] <
+                        source_child
+                            .bounds_max[component] -
+                            kTolerance) {
+                    throw std::runtime_error(
+                        "B003 quantized child is not conservative");
+                }
+            }
+        }
+
+        if (have_axis &&
+            packed.metadata[0] != axis) {
+            throw std::runtime_error(
+                "B003 quantization changed node ordering axis");
+        }
+    }
+}
+
 [[nodiscard]] HierarchicalFlatPayload
 make_control(std::uint32_t segments) {
     HierarchicalFlatPayload flat;
@@ -336,6 +428,12 @@ int main() {
             verify_wide_leaf_equivalence(
                 flat,
                 wide);
+            const auto quantized =
+                make_b003_quantized_micro_payload(
+                    wide);
+            verify_quantized_payload(
+                wide,
+                quantized);
         }
 
         // Exercise recursive collapse on real multi-level per-segment BVHs,
@@ -356,13 +454,19 @@ int main() {
         verify_wide_leaf_equivalence(
             dense_flat,
             dense_wide);
+        const auto dense_quantized =
+            make_b003_quantized_micro_payload(
+                dense_wide);
+        verify_quantized_payload(
+            dense_wide,
+            dense_quantized);
 
         std::cout
-            << "B003 macro/wide BVH8 structural smoke: PASS\n";
+            << "B003 macro/wide/quantized BVH8 structural smoke: PASS\n";
         return 0;
     } catch (const std::exception& error) {
         std::cerr
-            << "B003 macro/wide BVH8 structural smoke: FAIL: "
+            << "B003 macro/wide/quantized BVH8 structural smoke: FAIL: "
             << error.what()
             << '\n';
         return 1;
