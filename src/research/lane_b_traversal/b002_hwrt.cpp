@@ -917,6 +917,28 @@ double B002HwrtTraversal::measure_trace(
         0,
         iterations * 2U);
 
+    // BLAS/TLAS build or update is submitted before this trace command buffer.
+    // Same-queue ordering guarantees execution order, but the AS writes still
+    // need an explicit memory dependency before ray-query reads them.
+    auto acceleration_barrier =
+        detail::make_vk_info<VkMemoryBarrier>(
+            VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    acceleration_barrier.srcAccessMask =
+        VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR;
+    acceleration_barrier.dstAccessMask =
+        VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR;
+    context_.vk().cmdPipelineBarrier(
+        command,
+        VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        0,
+        1,
+        &acceleration_barrier,
+        0,
+        nullptr,
+        0,
+        nullptr);
+
     const auto dispatch = [&] {
         context_.vk().cmdBindPipeline(
             command,
