@@ -10,6 +10,35 @@ import subprocess
 
 ACCEPTED_A001_COMMIT = "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f"
 CASES = ("static", "camera-motion", "light-motion")
+EXPECTED_BRANCH = "research-lane-b-traversal"
+
+
+def git_output(*args: str) -> str:
+    completed = subprocess.run(
+        ["git", *args],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    if completed.returncode:
+        raise SystemExit(
+            f"git {' '.join(args)} failed: {completed.stderr.strip()}"
+        )
+    return completed.stdout.strip()
+
+
+def validate_checkout() -> str:
+    branch = git_output("branch", "--show-current")
+    if branch != EXPECTED_BRANCH:
+        raise SystemExit(
+            f"B002 formal run requires branch {EXPECTED_BRANCH!r}, got {branch!r}"
+        )
+    dirty = git_output("status", "--porcelain")
+    if dirty:
+        raise SystemExit(
+            "B002 formal run requires a clean Git tree; commit/stash local changes first"
+        )
+    return git_output("rev-parse", "HEAD")
 
 
 def validate_lane_a_artifact(root: Path) -> None:
@@ -62,6 +91,9 @@ def main() -> int:
     parser.add_argument("--build-repeats", type=int, default=3)
     parser.add_argument("--validation", action="store_true")
     args = parser.parse_args()
+
+    commit = validate_checkout()
+    print(f"b002_git_commit={commit}", flush=True)
 
     smoke = Path(args.build_dir) / "phos-lane-b-b002-smoke"
     executable = Path(args.build_dir) / "phos-lane-b-b002"
