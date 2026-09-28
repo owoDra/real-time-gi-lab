@@ -345,7 +345,7 @@ def summarize(rows: list[dict[str, object]]) -> list[dict[str, object]]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Run the reproducible M0 layout-vs-scheduling benchmark matrix."
+        description="Run the reproducible M0 cheap-query-coherence benchmark matrix."
     )
     parser.add_argument(
         "--query-counts",
@@ -446,7 +446,7 @@ def main() -> int:
 
     metadata = {
         "schema_version": 2,
-        "experiment": "000-page-local-cache",
+        "experiment": "001-cheap-query-coherence",
         "started_at_utc": started.isoformat(),
         "finished_at_utc": datetime.now(timezone.utc).isoformat(),
         "git_commit": git_commit(),
@@ -466,8 +466,10 @@ def main() -> int:
             "randomized",
             "page-grouped",
             "gpu-page-grouped",
+            "wg-hash-bin16",
         ],
         "gpu_scheduling": "dense-page histogram + single-workgroup prefix + scatter",
+        "workgroup_local_coherence": "fused 16-bin grouping by initial hash slot; shared memory only",
         "commands": commands,
         "environment": {
             "VK_DRIVER_FILES": os.environ.get("VK_DRIVER_FILES"),

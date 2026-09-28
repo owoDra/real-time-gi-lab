@@ -19,6 +19,15 @@ excluded.
 Issue #4 resolved the representation-vs-ordering experiment. Follow-up work is
 tracked in [Issue #7 — Research cheaper query coherence for hash cache](https://github.com/owoDra/phos-gi-lab/issues/7).
 
+The first Issue #7 sub-experiment, **Experiment 001: fused workgroup-local
+hash-slot binning**, is concluded and rejected. It tested whether a 256-thread
+lookup workgroup could recover useful coherence by grouping only its own queries
+into 16 coarse initial-hash-slot bins in shared memory. The grouping work was
+fused into the lookup dispatch, with no global reorder buffer, separate
+scheduling dispatch, or global scheduling scratch. Both validation and accepted
+non-validation matrices completed; the fused variant was slower than
+`hash/source` at every tested query count.
+
 The Issue #4 branch implements the measurements that produced that decision:
 
 - representation and ordering are independent benchmark axes;
@@ -241,3 +250,45 @@ Experiment 000 therefore resolves Issue #4 as follows:
    reusing ordering rather than globally reordering every lookup batch.
 5. RGP profiling is still required before attributing the ordering effect to a
    specific cache/memory microarchitectural mechanism.
+
+
+### 2026-09-28 — Experiment 001 accepted non-validation sweep
+
+Hardware: AMD Radeon 8060S Graphics / RADV STRIX_HALO  
+Scene: Sponza, 262,241 surface samples  
+Queries: 100k / 500k / 1M / 4M / 8M  
+Iterations: 100  
+Repeats: 3  
+Validation: disabled
+
+The non-validation sweep completed successfully and every benchmark row passed
+the semantic checksum guard. The new `hash-wg-bin16` row also passed the
+source-order fingerprint guard, so its shared-memory regrouping preserved the
+original result-index semantics.
+
+This run is accepted as Experiment 001 performance evidence. The fused 16-bin
+workgroup-local mechanism did not beat `hash/source`: it was approximately
+0.7% slower at 100k, 8.1% slower at 500k, 5.0% slower at 1M, 7.4% slower at 4M,
+and 7.3% slower at 8M. The exact mechanism therefore fails the end-to-end
+decision gate and should not be advanced.
+
+
+### 2026-09-28 — Experiment 001 validation sweep
+
+Artifact: `out/benchmarks/20260928T103947Z`  
+Hardware: AMD Radeon 8060S Graphics / RADV STRIX_HALO  
+Scene: Sponza, 262,241 surface samples  
+Queries: 100k / 500k / 1M / 4M / 8M  
+Iterations: 100  
+Repeats: 3  
+Validation: enabled
+
+The full validation matrix completed successfully. Every row passed the shared
+semantic checksum guard, and `hash-wg-bin16` also passed the source-order
+fingerprint guard. This establishes correctness for the fused workgroup-local
+regrouping implementation.
+
+Validation-enabled timings are diagnostic only and are not used for the
+performance decision. They independently show the same qualitative direction as
+the accepted non-validation sweep: `hash-wg-bin16` is slower than
+`hash/source` at every tested query count.
