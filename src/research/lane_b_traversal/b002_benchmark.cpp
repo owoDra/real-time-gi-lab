@@ -859,20 +859,74 @@ int main(int argc, char** argv) {
 
         if (hwrt_context) {
             hwrt_status = "features-enabled";
-            start = Clock::now();
-            B002HwrtTraversal hwrt(
-                *hwrt_context,
-                scene.triangles,
+            const auto hwrt_shader =
                 (std::filesystem::path(
                     PHOS_GI_LANE_B_SHADER_DIR) /
-                    "lane_b_b002_hwrt.spv").string());
-            const auto hwrt_setup_wall_us = elapsed_us(start);
+                    "lane_b_b002_hwrt.spv").string();
+
+            std::vector<double> setup_wall_samples;
+            std::vector<double> vertex_upload_samples;
+            std::vector<double> metadata_upload_samples;
+            std::vector<double> blas_build_samples;
+            std::vector<double> tlas_build_samples;
+            setup_wall_samples.reserve(cli.build_repeats);
+            vertex_upload_samples.reserve(cli.build_repeats);
+            metadata_upload_samples.reserve(cli.build_repeats);
+            blas_build_samples.reserve(cli.build_repeats);
+            tlas_build_samples.reserve(cli.build_repeats);
+
+            std::unique_ptr<B002HwrtTraversal> hwrt;
+            for (std::uint32_t repeat = 0;
+                 repeat < cli.build_repeats;
+                 ++repeat) {
+                start = Clock::now();
+                auto candidate =
+                    std::make_unique<B002HwrtTraversal>(
+                        *hwrt_context,
+                        scene.triangles,
+                        hwrt_shader);
+                setup_wall_samples.push_back(
+                    elapsed_us(start));
+                const auto& setup =
+                    candidate->setup_stats();
+                vertex_upload_samples.push_back(
+                    setup.vertex_upload_us);
+                metadata_upload_samples.push_back(
+                    setup.metadata_upload_us);
+                blas_build_samples.push_back(
+                    setup.blas_build_us);
+                tlas_build_samples.push_back(
+                    setup.tlas_build_us);
+
+                if (repeat + 1U == cli.build_repeats) {
+                    hwrt = std::move(candidate);
+                }
+            }
+
+            if (!hwrt) {
+                throw std::runtime_error(
+                    "B002 HWRT setup repetition produced no candidate");
+            }
+
+            const auto hwrt_setup_wall_us =
+                median_us(std::move(setup_wall_samples));
+            HwrtSetupStats hwrt_setup =
+                hwrt->setup_stats();
+            hwrt_setup.vertex_upload_us =
+                median_us(std::move(vertex_upload_samples));
+            hwrt_setup.metadata_upload_us =
+                median_us(std::move(metadata_upload_samples));
+            hwrt_setup.blas_build_us =
+                median_us(std::move(blas_build_samples));
+            hwrt_setup.tlas_build_us =
+                median_us(std::move(tlas_build_samples));
+
             hwrt_status = "usable";
             hwrt_correct = true;
 
             for (const auto& replay : cases) {
                 const auto result =
-                    hwrt.trace(
+                    hwrt->trace(
                         replay.gpu_rays,
                         cli.iterations);
                 const auto validation =
@@ -902,16 +956,16 @@ int main(int argc, char** argv) {
                     0.0,
                     0.0,
                     0.0,
-                    hwrt.setup_stats().vertex_upload_us +
-                        hwrt.setup_stats().metadata_upload_us,
+                    hwrt_setup.vertex_upload_us +
+                        hwrt_setup.metadata_upload_us,
                     result.ray_upload_us,
-                    hwrt.setup_stats().blas_build_us,
-                    hwrt.setup_stats().tlas_build_us,
+                    hwrt_setup.blas_build_us,
+                    hwrt_setup.tlas_build_us,
                     result.trace_us,
-                    hwrt.setup_stats().persistent_bytes,
+                    hwrt_setup.persistent_bytes,
                     result.ray_allocation_bytes +
                         result.hit_allocation_bytes,
-                    hwrt.setup_stats().scratch_bytes,
+                    hwrt_setup.scratch_bytes,
                     0,
                 });
             }
