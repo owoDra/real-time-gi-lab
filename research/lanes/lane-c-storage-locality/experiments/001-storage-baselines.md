@@ -252,3 +252,74 @@ is not a primary candidate unless Lane A demonstrates that the bounded virtual
 addressing contract is unsuitable for the actual producer stream.
 
 No representation is promoted until the exact Lane A replay is complete.
+
+
+## C001c — exact Lane A producer-stream replay
+
+C001c consumes A001 `stream-v1.bin` directly. The binary's FNV-1a
+`workload_id` is verified before any timing is accepted, and work items are
+uploaded in the recorded GPU append order without CPU sorting or grouping.
+
+The retained candidates are:
+
+- per-probe open-addressed sparse hash;
+- virtual/clipmap sparse storage.
+
+Every raw 64-byte Lane A work item is processed by the GPU address stage.
+A001 emits eight ray records for each probe/cascade output. Storage mutation is
+therefore selected by `ray_index == 0`, yielding exactly one storage event per
+A001 `output_id`. The selection happens in the measured GPU address/storage
+path; C001c does not CPU-deduplicate the performance stream.
+
+Measured exact-stream phases:
+
+- `producer-address`;
+- `producer+lookup`;
+- `producer+update`;
+- `producer+invalidation`;
+- `producer+allocation-residency`;
+- `initial-build-e2e`.
+
+CPU parsing scans the stream only to validate schema/workload identity, build
+the independent correctness reference, and size benchmark buffers. Those setup
+steps are outside GPU timing and are not claimed as architecture work.
+
+For virtual/clipmap replay, the observed per-cascade brick bounds define a
+replay-local virtual origin and bounded page-table extent. This normalization
+does not reorder work, but its origin/window selection cost is not represented
+by the v1 stream schema. Therefore C001c can establish exact-stream steady-state
+storage evidence, but a final dynamic clipmap promotion must also account for
+real origin/window maintenance or show that it is supplied by the producer
+without additional global work.
+
+Correctness requires:
+
+- stream schema and FNV workload identity match;
+- GPU addresses equal the host semantic reference for every raw item;
+- ray-0 count equals A001 `output_count`;
+- exact lookup/update/invalidation values match element-by-element;
+- allocation error counters remain zero;
+- virtual physical-brick allocation equals the number of unique referenced
+  virtual bricks.
+
+Diagnostic validation:
+
+```bash
+mise run research:record \
+  --lane lane-c-storage-locality \
+  --experiment 001-storage-baselines \
+  --command "python scripts/research/lane_c_storage_locality/c001c_matrix.py \
+    --lane-a-artifact <A001-artifact-root> \
+    --repeats 1 --iterations 10 --validation"
+```
+
+Accepted timing:
+
+```bash
+mise run research:record \
+  --lane lane-c-storage-locality \
+  --experiment 001-storage-baselines \
+  --command "python scripts/research/lane_c_storage_locality/c001c_matrix.py \
+    --lane-a-artifact <A001-artifact-root> \
+    --repeats 3 --iterations 100"
+```

@@ -14,3 +14,25 @@ Lane-specific storage/locality benchmark and analysis helpers live here.
 Accepted C001b timing should use the matrix runner with validation disabled;
 validation runs are diagnostics. Raw artifacts must be created through
 `mise run research:record`.
+
+
+## C001c exact Lane A replay
+
+- `run_c001c.sh` launches the same Vulkan storage executable in exact-stream
+  mode with `--stream <stream-v1.bin>`.
+- `c001c_matrix.py` consumes the `static`, `camera-motion`, and
+  `light-motion` A001 exports from one Lane A artifact root and writes
+  `c001c_summary.csv`.
+
+Example:
+
+```bash
+mise run research:record \
+  --lane lane-c-storage-locality \
+  --experiment 001-storage-baselines \
+  --command "python scripts/research/lane_c_storage_locality/c001c_matrix.py \
+    --lane-a-artifact out/research/lane-a-split-rc/001-representative-producer/<timestamp> \
+    --repeats 3 --iterations 100"
+```
+
+Run `--repeats 1 --iterations 10 --validation` first for diagnostics.

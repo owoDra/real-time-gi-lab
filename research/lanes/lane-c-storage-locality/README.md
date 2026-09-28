@@ -40,5 +40,11 @@ The hashed contiguous brick pool remains implemented as a fallback diagnostic
 control, but is not a primary candidate because virtual clipmap was lower in
 persistent memory and stronger in the relevant end-to-end synthetic phases.
 
-No storage representation is promoted. The exact Lane A producer stream remains
-mandatory before a final decision.
+C001c exact-stream replay is implemented for the retained probe-hash and
+virtual/clipmap candidates. It consumes A001 stream-v1 work in the recorded
+append order and measures producer-address plus storage phases without a CPU
+sort/grouping step.
+
+No storage representation is promoted yet. Target-GPU C001c timing on the
+three A001 cases is the next gate; virtual/clipmap promotion also remains
+conditional on accounting for dynamic origin/window maintenance.
