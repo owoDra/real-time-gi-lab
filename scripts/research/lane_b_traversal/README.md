@@ -122,3 +122,8 @@ final B003 success target.
 ### B003 Stage B2 quantization
 
 The same formal B003 command now also measures conservative 16-bit quantized Micro BVH8. It emits `b003-stage-b2-summary.json`; `advance_to_triangle_packets=true` requires zero errors, <=1.10x float-BVH8 traversal, and <=0.90x float-BVH8 persistent memory.
+
+
+### B003 Stage B3 triangle packets
+
+The same formal B003 command now also measures direct four-triangle leaf packets on top of the quantized BVH8. It emits `b003-stage-b3-summary.json`. `retain_triangle_packets=true` requires zero errors, packet traversal <=0.95x the quantized non-packet traversal, and packet persistent memory <=1.25x.
