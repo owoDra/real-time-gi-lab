@@ -25,6 +25,7 @@ struct HwrtTraceResult {
     double ray_upload_us{};
     double trace_us{};
     std::size_t ray_allocation_bytes{};
+    std::size_t hit_allocation_bytes{};
     std::vector<GpuHit> hits;
 };
 

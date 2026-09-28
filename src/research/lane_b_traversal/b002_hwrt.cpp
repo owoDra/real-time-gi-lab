@@ -847,6 +847,7 @@ HwrtTraceResult B002HwrtTraversal::trace(
         ray_upload_us,
         trace_us,
         static_cast<std::size_t>(ray_buffer.allocation_size),
+        static_cast<std::size_t>(hit_buffer.allocation_size),
         std::move(hits),
     };
     context_.destroy_buffer(hit_buffer);

@@ -859,7 +859,7 @@ struct Validation {
         validation.runtime_errors,
         acceleration.setup_stats().persistent_bytes,
         trace.ray_allocation_bytes +
-            trace.hits.size() * sizeof(GpuHit),
+            trace.hit_allocation_bytes,
         acceleration.setup_stats().scratch_bytes,
     };
 }

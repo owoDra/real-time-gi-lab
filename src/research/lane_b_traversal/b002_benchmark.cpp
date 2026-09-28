@@ -910,7 +910,7 @@ int main(int argc, char** argv) {
                     result.trace_us,
                     hwrt.setup_stats().persistent_bytes,
                     result.ray_allocation_bytes +
-                        replay.gpu_rays.size() * sizeof(GpuHit),
+                        result.hit_allocation_bytes,
                     hwrt.setup_stats().scratch_bytes,
                     0,
                 });
