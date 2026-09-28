@@ -40,6 +40,25 @@ uint take_physical() {
         if (old == count) return free_list[count - 1u];
     }
 }
+uint claim_reclaimed_physical() {
+    const uint claim = atomicAdd(counters[3], 1u);
+    const uint available = atomicAdd(counters[2], 0u);
+    if (claim >= available) {
+        atomicAdd(counters[1], 1u);
+        return 0xffffffffu;
+    }
+    return free_list[available - 1u - claim];
+}
+void finalize_reclaimed_batch() {
+    const uint available = atomicAdd(counters[2], 0u);
+    const uint claimed = atomicAdd(counters[3], 0u);
+    if (claimed > available) {
+        atomicAdd(counters[1], 1u);
+        return;
+    }
+    counters[2] = available - claimed;
+    counters[3] = 0u;
+}
 uint reserve_slot(uint key) {
     uint slot = mix32(key) & pc.mask;
     for (uint probe = 0u; probe < pc.max_probe; ++probe) {
@@ -61,6 +80,19 @@ void main() {
         const uint slot = reserve_slot(brick_key(inputs[i]));
         if (slot == 0xffffffffu) return;
         if (values[slot] == 0u) values[slot] = take_physical() + 1u;
+        return;
+    }
+    if (pc.op == 6u) {
+        const uint slot = reserve_slot(brick_key(inputs[i]));
+        if (slot == 0xffffffffu) return;
+        if (values[slot] == 0u) {
+            const uint physical = claim_reclaimed_physical();
+            if (physical != 0xffffffffu) values[slot] = physical + 1u;
+        }
+        return;
+    }
+    if (pc.op == 7u) {
+        if (i == 0u) finalize_reclaimed_batch();
         return;
     }
     if (pc.op == 5u) {

@@ -22,6 +22,25 @@ uint take_physical() {
         if (old == count) return free_list[count - 1u];
     }
 }
+uint claim_reclaimed_physical() {
+    const uint claim = atomicAdd(counters[3], 1u);
+    const uint available = atomicAdd(counters[2], 0u);
+    if (claim >= available) {
+        atomicAdd(counters[1], 1u);
+        return 0xffffffffu;
+    }
+    return free_list[available - 1u - claim];
+}
+void finalize_reclaimed_batch() {
+    const uint available = atomicAdd(counters[2], 0u);
+    const uint claimed = atomicAdd(counters[3], 0u);
+    if (claimed > available) {
+        atomicAdd(counters[1], 1u);
+        return;
+    }
+    counters[2] = available - claimed;
+    counters[3] = 0u;
+}
 uint page_of(Unit b) {
     return (((b.cascade * pc.clip_z + b.z) * pc.clip_y + b.y) * pc.clip_x + b.x);
 }
@@ -31,6 +50,18 @@ void main() {
     if (pc.op == 0u) {
         const uint page = page_of(inputs[i]);
         if (pages[page] == 0u) pages[page] = take_physical() + 1u;
+        return;
+    }
+    if (pc.op == 6u) {
+        const uint page = page_of(inputs[i]);
+        if (pages[page] == 0u) {
+            const uint physical = claim_reclaimed_physical();
+            if (physical != 0xffffffffu) pages[page] = physical + 1u;
+        }
+        return;
+    }
+    if (pc.op == 7u) {
+        if (i == 0u) finalize_reclaimed_batch();
         return;
     }
     if (pc.op == 5u) {

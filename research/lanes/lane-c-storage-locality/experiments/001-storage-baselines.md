@@ -155,7 +155,11 @@ Measured Vulkan phases:
 The hashed-brick and virtual/clipmap candidates use a GPU physical-brick free
 list. Eviction returns the physical slot to the free list, and the dynamic
 churn sequence must reuse those slots when the entering plane becomes resident.
-The probe hash reuses tombstoned hash slots instead.
+After the first target-GPU run exposed a highly repeatable allocator bottleneck,
+the entering-plane batch was changed from a shared compare-and-swap retrying pop
+to one bounded atomic claim per brick plus a one-invocation finalize step. The
+generic empty-to-resident path remains unchanged. The probe hash reuses
+tombstoned hash slots instead.
 
 Persistent-byte accounting uses the actual modeled GPU buffers required by each
 candidate: hash/directory/page-table storage, physical payload pool, allocator

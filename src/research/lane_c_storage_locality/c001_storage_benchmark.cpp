@@ -1025,7 +1025,9 @@ int run(int argc, char** argv) {
                     static_cast<std::uint32_t>(workload.entering_probes.size()), 0u)
                 : storage_dispatch(
                     reserve_entering_brick_set,
-                    static_cast<std::uint32_t>(workload.entering_bricks.size()), 0u);
+                    static_cast<std::uint32_t>(workload.entering_bricks.size()), 6u);
+            const auto finalize_reclaimed = storage_dispatch(
+                reserve_entering_brick_set, 1u, 7u);
             const auto populate_entering = storage_dispatch(
                 populate_entering_dynamic_set,
                 static_cast<std::uint32_t>(workload.entering_probes.size()), 1u);
@@ -1174,9 +1176,17 @@ int run(int argc, char** argv) {
 
             // Dynamic one-brick X shift: evict the leaving plane, generate the
             // entering probe addresses, reuse residency capacity, and repopulate.
+            std::vector<Dispatch> churn_sequence{
+                evict,
+                address_entering,
+                reserve_entering,
+            };
+            if (rep != Rep::ProbeHash) {
+                churn_sequence.push_back(finalize_reclaimed);
+            }
+            churn_sequence.push_back(populate_entering);
             const auto churn_us = bench.measure(
-                {evict, address_entering, reserve_entering, populate_entering},
-                baseline_reset(state), cfg.iterations);
+                churn_sequence, baseline_reset(state), cfg.iterations);
             bench.execute({lookup_static});
             const auto churn_old_values =
                 download_u32(bench, output, workload.probes.size());
