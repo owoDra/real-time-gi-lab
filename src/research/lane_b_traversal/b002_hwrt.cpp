@@ -468,7 +468,10 @@ double B002HwrtTraversal::update_blas(
     build_info.dstAccelerationStructure = blas_.handle;
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
-    build_info.scratchData.deviceAddress = blas_scratch_.address;
+    build_info.scratchData.deviceAddress =
+        align_device_address(
+            blas_scratch_.address,
+            context_.acceleration_scratch_alignment());
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount =
@@ -501,7 +504,10 @@ double B002HwrtTraversal::update_tlas() {
     build_info.dstAccelerationStructure = tlas_.handle;
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
-    build_info.scratchData.deviceAddress = tlas_scratch_.address;
+    build_info.scratchData.deviceAddress =
+        align_device_address(
+            tlas_scratch_.address,
+            context_.acceleration_scratch_alignment());
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount = 1;
