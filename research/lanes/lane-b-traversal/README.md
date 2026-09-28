@@ -1,7 +1,7 @@
 # Lane B — geometry traversal
 
 Issue: #11
-Branch: `research/lane-b-traversal`
+Branch: `research-lane-b-traversal`
 
 Mission: determine which traversal architecture best serves Split RC gather rays
 under realistic dynamic-scene maintenance costs. StrataBrick is a candidate, not
