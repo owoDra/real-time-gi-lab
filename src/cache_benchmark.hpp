@@ -94,6 +94,13 @@ private:
         const CacheGpuData& cache,
         std::uint32_t iterations);
 
+    LookupMeasurement measure_reused_end_to_end(
+        const GpuBuffer& source_queries,
+        SchedulerGpuData& scheduler,
+        const CacheGpuData& cache,
+        std::uint32_t iterations,
+        std::uint32_t reuse_count);
+
     SchedulerSets create_scheduler_sets(
         const GpuBuffer& source_queries,
         const SchedulerGpuData& scheduler);
