@@ -110,3 +110,20 @@ Decision:
 
 The uploaded CSV did not embed commit/artifact identity, so the D003 result
 record marks measurement identity as unverified rather than inventing it.
+
+
+## Progress — D004 workgroup allocation rejected (2026-09-29)
+
+D004 preserved semantics and reduced global reservation atomics by roughly 59%,
+but the shared prefix/barrier overhead outweighed the saved contention.
+
+Static regressed producer total by 9.90% and E2E by 10.81% versus the matched
+per-owner control. Camera-motion was approximately neutral and light-motion
+also failed the fixed producer-emit/producer-total gate.
+
+Decision:
+
+- do not retain workgroup-prefix allocation;
+- keep A001 per-owner reservation;
+- D001 depth reuse remains the only retained Lane D composition mechanism;
+- continue to D005 stream capacity / overflow.
