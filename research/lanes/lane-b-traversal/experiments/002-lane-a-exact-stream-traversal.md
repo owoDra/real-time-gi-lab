@@ -216,23 +216,23 @@ No result document or result-index entry is created until the target artifact
 exists and passes the decision gate.
 
 
-## Target CSV checkpoint received — formal gate still pending
+## Target CSV checkpoint received — diagnostic only; rerun required
 
-Two target outputs have been inspected:
+Two target CSV outputs were received and inspected:
 
 - `b002-results.csv`;
 - `b002-maintenance.csv`.
 
-Representative replay correctness in the supplied CSV is clean:
+They are useful diagnostic evidence:
 
-- 9/9 candidate rows have zero semantic mismatches and zero runtime errors;
-- all three candidates produce the same full semantic checksum for each A001
-  workload;
-- static = 31,392 rays, camera-motion = 31,296 rays, light-motion = 31,392
-  rays;
-- each representative row records 30 traversal iterations.
+- representative replay: 9/9 candidate rows, zero semantic mismatches and zero
+  runtime errors;
+- controlled maintenance: 6/6 rows, zero mismatches/runtime errors;
+- the measured ordering was HWRT/TLAS fastest, hierarchical second, software BVH
+  baseline third in all three exact A001 streams and both controlled maintenance
+  regimes.
 
-Representative traversal time on the supplied target CSV:
+The measured traversal medians were:
 
 | Workload | Software BVH (us) | Hierarchical (us) | HWRT/TLAS (us) |
 | --- | ---: | ---: | ---: |
@@ -240,40 +240,34 @@ Representative traversal time on the supplied target CSV:
 | camera-motion | 431.099 | 281.876 | 62.960 |
 | light-motion | 408.937 | 307.905 | 67.087 |
 
-This is approximately:
+However these CSVs are **not accepted B002 evidence**. They were received without
+the matching `metadata.json` / device / config provenance, and measurement-relevant
+harness fixes landed afterward, including:
 
-- hierarchical: 1.33x–1.53x faster than software BVH traversal;
-- HWRT: 6.10x–6.85x faster than software BVH traversal;
-- HWRT: 4.48x–4.64x faster than hierarchical traversal.
+- explicit AS scratch-address alignment;
+- HWRT BUILD/UPDATE synchronization fixes;
+- explicit build-to-ray-query memory dependency;
+- strict all-candidate row gates;
+- accepted-A001 provenance pinning;
+- separated hierarchical maintenance phase timings;
+- repeated HWRT setup/build measurement using the same `build_repeats` policy as
+  the software candidates.
 
-The controlled moving-geometry CSV is also clean (6/6 rows with zero
-mismatches/runtime errors). Maintenance plus post-update trace totals are:
+Therefore the formal Lane B decision must use one fresh
+`research:record` artifact from the current branch HEAD. The earlier CSV values
+remain diagnostic only and must not be copied into
+`results/002-lane-a-exact-stream-traversal.md`.
 
-| Regime | Software BVH (us) | Hierarchical (us) | HWRT/TLAS (us) |
-| --- | ---: | ---: | ---: |
-| bounds-only | 18,530.035 | 11,699.808 | 4,089.505 |
-| topology-change | 17,787.545 | 11,391.823 | 3,276.812 |
-
-Recorded persistent memory:
-
-- software BVH: 24,133,120 B;
-- hierarchical: 26,971,056 B;
-- HWRT/TLAS: 67,833,776 B plus 36,761,648 B explicit scratch.
-
-These two CSVs strongly favor HWRT on the measured representative traversal and
-controlled maintenance regimes, while the hierarchical candidate is a
-materially better software fallback than the baseline software BVH. This is not
-yet the formal Lane B promotion decision.
-
-The accepted B002 result must not be written until provenance/device/config
-artifacts from the same `research:record` run are checked:
+A fresh artifact must include all of:
 
 - `metadata.json`;
-- `b002-device.json`;
+- `b002-results.csv`;
 - `b002-correctness.json`;
+- `b002-device.json`;
 - `b002-config.json`;
-- `b002-maintenance.json`.
+- `b002-maintenance.csv`;
+- `b002-maintenance.json`;
+- stdout/stderr from the same run.
 
-Those are required to bind the CSV values to the measurement commit and exact
-physical device, and to verify recorded HWRT feature enablement / BLAS-TLAS
-creation and the finalized candidate configuration.
+Only after that artifact passes the decision gate should B002 be marked accepted,
+`results/index.json` be updated, and Issue #11 be concluded.
