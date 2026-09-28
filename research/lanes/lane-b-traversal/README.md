@@ -102,3 +102,8 @@ packets / GPU-side maintenance.
 
 Protocol:
 `experiments/003-wide-software-traversal.md`.
+
+
+### B003 candidate selection checkpoint
+
+Stage B3.1 rejected packet retention under the unchanged gate. The current best software-fallback candidate is **DDA/hash + conservative quantized Micro BVH8**. It is materially faster and smaller than the B002 binary-micro hierarchy, but does not meet B003's <=175 us full gap-closing success target. Formal B003 result publication is pending verification of the complete final-run provenance/config/correctness artifact set.

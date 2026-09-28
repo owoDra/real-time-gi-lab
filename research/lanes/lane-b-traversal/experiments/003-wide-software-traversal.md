@@ -1,6 +1,6 @@
 # Experiment B003 — wide software traversal toward the HWRT gap
 
-Status: target-ready; Stage B3.1 compact-packet target measurement pending
+Status: candidate selection complete; formal B003 provenance set pending
 
 ## Question
 
@@ -445,3 +445,35 @@ B3.1 is target-ready. It preserves packet geometry and all traversal behavior, b
 - packet size falls from 256 bytes to 224 bytes.
 
 The structural smoke decodes every compact metadata record back to the source triangle and checks primitive/material/instance/two-sided identity plus geometry exactly. The formal run now emits `b003-stage-b31-summary.json` and keeps the original fixed B3 thresholds: compact packet mean must be <=0.95x quantized non-packet mean, persistent memory <=1.25x, and correctness/runtime errors zero.
+
+
+## Stage B3.1 target result — compact packets rejected
+
+The submitted B3.1 summary remains fully correct, but the compact packet layout still misses the fixed speed-retention gate:
+
+- quantized non-packet mean: 231.225999 us;
+- original packet mean: 216.658320 us;
+- compact packet mean: 221.060017 us;
+- compact versus quantized trace ratio: 0.956034;
+- compact versus original-packet trace ratio: 1.020316;
+- quantized persistent bytes: 22,833,584;
+- original packet persistent bytes: 28,872,096;
+- compact packet persistent bytes: 25,874,208;
+- compact versus quantized memory ratio: 1.133165;
+- compact versus original-packet memory ratio: 0.896167;
+- correctness errors: 0;
+- retain_compact_triangle_packets: false.
+
+The compact layout solves the original packet memory failure but loses about 2% traversal performance relative to the 256-byte packet and remains at only about 4.4% improvement over the quantized non-packet candidate. The fixed 5% speed threshold is therefore not met. B003 stops packet iteration here rather than relaxing the gate.
+
+### Provisional B003 candidate disposition
+
+- reject Macro BVH8 as top-level replacement;
+- retain DDA/hash top level;
+- retain float Micro BVH8 as positive mechanism evidence;
+- **select conservative quantized Micro BVH8 as the best balanced B003 software-fallback candidate**;
+- reject both tested triangle-packet layouts for this B003 decision gate.
+
+The quantized candidate improves the original hierarchical fallback materially, but its roughly 231 us representative mean is still above B003's <=175 us full success target. Therefore B003 has not closed at least half of the B002 hierarchy-to-HWRT traversal gap. The result is an improved fallback, not HWRT-equivalent software traversal.
+
+Do not write the accepted/rejected B003 result or update `results/index.json` until the complete final-run provenance/config/correctness set from the same artifact is checked.
