@@ -530,7 +530,8 @@ double B002HwrtTraversal::submit_build(
         barrier.srcAccessMask =
             VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR;
         barrier.dstAccessMask =
-            VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR;
+            VK_ACCESS_ACCELERATION_STRUCTURE_READ_BIT_KHR |
+            VK_ACCESS_ACCELERATION_STRUCTURE_WRITE_BIT_KHR;
         context_.vk().cmdPipelineBarrier(
             command,
             VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR,
