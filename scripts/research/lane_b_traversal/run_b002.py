@@ -29,10 +29,12 @@ def main() -> int:
     args = parser.parse_args()
 
     executable = Path(args.build_dir) / "phos-lane-b-b002"
-    if not executable.exists():
-        raise SystemExit(
-            f"B002 executable not found: {executable}; run 'mise run build'"
-        )
+    maintenance = Path(args.build_dir) / "phos-lane-b-b002-maintenance"
+    for required in (executable, maintenance):
+        if not required.exists():
+            raise SystemExit(
+                f"B002 executable not found: {required}; run 'mise run build'"
+            )
     scene = Path(args.scene)
     if not scene.exists():
         raise SystemExit(
@@ -66,7 +68,28 @@ def main() -> int:
     env = os.environ.copy()
     print("+", " ".join(command), flush=True)
     completed = subprocess.run(command, env=env, check=False)
-    return completed.returncode
+    if completed.returncode:
+        return completed.returncode
+
+    maintenance_command = [
+        "bash",
+        "scripts/run_with_vulkan.sh",
+        str(maintenance),
+        "--scene",
+        str(scene),
+        "--lane-a-artifact",
+        str(lane_a_root),
+        "--iterations",
+        str(max(10, args.iterations // 2)),
+    ]
+    if args.validation:
+        maintenance_command.append("--validation")
+    print("+", " ".join(maintenance_command), flush=True)
+    return subprocess.run(
+        maintenance_command,
+        env=env,
+        check=False,
+    ).returncode
 
 
 if __name__ == "__main__":

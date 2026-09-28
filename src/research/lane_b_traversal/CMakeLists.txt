@@ -94,3 +94,46 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-b-b002 PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+add_executable(phos-lane-b-b002-maintenance
+  b002_maintenance.cpp
+  b002_scene.cpp
+  b002_vulkan.cpp
+  b002_compute.cpp
+  b002_hwrt.cpp
+  b002_scene.hpp
+  b002_replay.hpp
+  b002_vulkan.hpp
+  b002_compute.hpp
+  b002_hwrt.hpp
+  b002_gpu_layout.hpp
+  gpu_software_bvh.hpp
+  hierarchical_stratabrick.hpp
+  lane_a_stream_v1.hpp
+  software_bvh.hpp
+  traversal_contract.hpp
+  traversal_common.hpp
+)
+target_include_directories(phos-lane-b-b002-maintenance PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${CMAKE_SOURCE_DIR}/src"
+)
+target_link_libraries(phos-lane-b-b002-maintenance PRIVATE
+  vk-bootstrap::vk-bootstrap
+  fastgltf::fastgltf
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-b-b002-maintenance PRIVATE cxx_std_20)
+target_compile_definitions(phos-lane-b-b002-maintenance PRIVATE
+  PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-b-b002-maintenance PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+add_dependencies(phos-lane-b-b002-maintenance phos-lane-b-b002-shaders)
+if(MSVC)
+  target_compile_options(phos-lane-b-b002-maintenance PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-b-b002-maintenance PRIVATE -Wall -Wextra -Wpedantic)
+endif()
