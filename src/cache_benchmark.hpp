@@ -15,6 +15,8 @@ struct BenchmarkResult {
     std::size_t bytes{};
     double gpu_us_per_dispatch{};
     std::uint64_t checksum{};
+    std::uint64_t expected_checksum{};
+    bool correct{};
 };
 
 class CacheBenchmark {
@@ -26,8 +28,8 @@ public:
 private:
     BenchmarkResult run_variant(const char* name, const std::vector<Query>& queries,
         const std::vector<std::uint32_t>& table0, const std::vector<std::uint32_t>& payload,
-        std::uint32_t mode_value, std::uint32_t mask_or_page_size, std::uint32_t iterations,
-        std::size_t logical_bytes);
+        std::uint32_t mode_value, std::uint32_t mask_or_page_size, std::uint32_t lookup_limit,
+        std::uint32_t iterations, std::size_t logical_bytes, std::uint64_t expected_checksum);
 
     VkPipeline create_pipeline(const std::string& filename);
     GpuBuffer upload(const void* data, std::size_t bytes);
