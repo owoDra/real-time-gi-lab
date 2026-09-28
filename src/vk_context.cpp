@@ -120,8 +120,33 @@ void VulkanContext::copy_buffer(VkBuffer source, VkBuffer destination, VkDeviceS
     auto cbi = detail::make_vk_info<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
     cbi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     dispatch_.beginCommandBuffer(cmd, &cbi);
+
+    // Copies are setup/validation work, not part of benchmark timestamps.
+    // Make dependencies across sequential queue submissions explicit so upload
+    // and readback correctness never relies on implicit cache visibility.
+    auto before = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    before.srcAccessMask = VK_ACCESS_MEMORY_WRITE_BIT;
+    before.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT | VK_ACCESS_TRANSFER_WRITE_BIT;
+    dispatch_.cmdPipelineBarrier(
+        cmd,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        0, 1, &before, 0, nullptr, 0, nullptr);
+
     VkBufferCopy region{0, 0, size};
     dispatch_.cmdCopyBuffer(cmd, source, destination, 1, &region);
+
+    auto after = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    after.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    after.dstAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+    dispatch_.cmdPipelineBarrier(
+        cmd,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+        0, 1, &after, 0, nullptr, 0, nullptr);
+
     dispatch_.endCommandBuffer(cmd);
 
     VkFence fence{};
