@@ -278,7 +278,7 @@ def main() -> int:
 
     summary = {
         "experiment": "003-one-pass-owner-selection",
-        "required_feature": "shaderBufferInt64Atomics",
+        "required_features": ["shaderInt64", "shaderBufferInt64Atomics"],
         "git_commit": commit,
         "scene": args.scene,
         "iterations": args.iterations,
