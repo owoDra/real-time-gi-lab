@@ -1,6 +1,6 @@
 # Experiment A001 — representative Split RC producer stream
 
-Status: target-GPU correctness and repeated timing measured; result artifact path reconciliation pending
+Status: accepted
 
 ## Question
 
@@ -63,9 +63,11 @@ A subsequent validation-disabled repeated run at commit
 correctness gates. Its uploaded summary records the representative timings and
 locality used by the provisional result.
 
-The uploaded summary did not contain the harness artifact root, iteration count,
-or validation flag, so the result cannot satisfy the shared protocol's raw
-artifact traceability requirement from the file alone. The runner now records
-those fields in `summary.json`; once the original artifact path is reconciled,
-A001 can be marked fully accepted without rerunning if the operator confirms the
-recorded run conditions.
+The accepted raw artifact was reconciled as
+`out/research/lane-a-split-rc/001-representative-producer/20260928T143212Z/`. The accepted run used validation-disabled repeated timing
+(50 iterations per case), while the semantic guards remained enabled.
+
+A001 therefore satisfies its decision gate and publishes stream schema v1 as
+the representative Lane A workload for Lane B/C. The runner now records run
+conditions directly in future `summary.json` files as an additional
+traceability safeguard.
