@@ -1,4 +1,5 @@
 #include "cache_benchmark.hpp"
+#include "vk_init.hpp"
 
 #include <array>
 #include <cstring>
@@ -27,13 +28,13 @@ CacheBenchmark::CacheBenchmark(VulkanContext& context) : ctx_(context) {
         bindings[i].descriptorCount = 1;
         bindings[i].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
     }
-    VkDescriptorSetLayoutCreateInfo dli{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO};
+    auto dli = detail::make_vk_info<VkDescriptorSetLayoutCreateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO);
     dli.bindingCount = static_cast<std::uint32_t>(bindings.size());
     dli.pBindings = bindings.data();
     if (ctx_.vk().createDescriptorSetLayout(&dli, nullptr, &descriptor_layout_) != VK_SUCCESS) fail("descriptor layout");
 
     VkPushConstantRange pcr{VK_SHADER_STAGE_COMPUTE_BIT, 0, sizeof(PushConstants)};
-    VkPipelineLayoutCreateInfo pli{VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO};
+    auto pli = detail::make_vk_info<VkPipelineLayoutCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO);
     pli.setLayoutCount = 1;
     pli.pSetLayouts = &descriptor_layout_;
     pli.pushConstantRangeCount = 1;
@@ -44,29 +45,29 @@ CacheBenchmark::CacheBenchmark(VulkanContext& context) : ctx_(context) {
     paged_pipeline_ = create_pipeline("paged_lookup.spv");
 
     VkDescriptorPoolSize ps{VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 4};
-    VkDescriptorPoolCreateInfo dpi{VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO};
+    auto dpi = detail::make_vk_info<VkDescriptorPoolCreateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO);
     dpi.maxSets = 1;
     dpi.poolSizeCount = 1;
     dpi.pPoolSizes = &ps;
     if (ctx_.vk().createDescriptorPool(&dpi, nullptr, &descriptor_pool_) != VK_SUCCESS) fail("descriptor pool");
 
-    VkCommandPoolCreateInfo cpi{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};
+    auto cpi = detail::make_vk_info<VkCommandPoolCreateInfo>(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
     cpi.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
     cpi.queueFamilyIndex = ctx_.queue_family();
     if (ctx_.vk().createCommandPool(&cpi, nullptr, &command_pool_) != VK_SUCCESS) fail("command pool");
 
-    VkCommandBufferAllocateInfo cai{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};
+    auto cai = detail::make_vk_info<VkCommandBufferAllocateInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
     cai.commandPool = command_pool_;
     cai.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
     cai.commandBufferCount = 1;
     if (ctx_.vk().allocateCommandBuffers(&cai, &command_buffer_) != VK_SUCCESS) fail("command buffer");
 
-    VkQueryPoolCreateInfo qpi{VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO};
+    auto qpi = detail::make_vk_info<VkQueryPoolCreateInfo>(VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO);
     qpi.queryType = VK_QUERY_TYPE_TIMESTAMP;
     qpi.queryCount = 2;
     if (ctx_.vk().createQueryPool(&qpi, nullptr, &query_pool_) != VK_SUCCESS) fail("query pool");
 
-    VkFenceCreateInfo fi{VK_STRUCTURE_TYPE_FENCE_CREATE_INFO};
+    auto fi = detail::make_vk_info<VkFenceCreateInfo>(VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
     if (ctx_.vk().createFence(&fi, nullptr, &fence_) != VK_SUCCESS) fail("fence");
 }
 
@@ -86,19 +87,19 @@ VkPipeline CacheBenchmark::create_pipeline(const std::string& filename) {
     const auto path = std::filesystem::path(PHOS_GI_LAB_SHADER_DIR) / filename;
     auto code = read_binary_file(path.string());
 
-    VkShaderModuleCreateInfo smi{VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO};
+    auto smi = detail::make_vk_info<VkShaderModuleCreateInfo>(VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO);
     smi.codeSize = code.size();
     smi.pCode = reinterpret_cast<const std::uint32_t*>(code.data());
 
     VkShaderModule module{};
     if (ctx_.vk().createShaderModule(&smi, nullptr, &module) != VK_SUCCESS) fail("shader module");
 
-    VkPipelineShaderStageCreateInfo stage{VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO};
+    auto stage = detail::make_vk_info<VkPipelineShaderStageCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO);
     stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
     stage.module = module;
     stage.pName = "main";
 
-    VkComputePipelineCreateInfo ci{VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO};
+    auto ci = detail::make_vk_info<VkComputePipelineCreateInfo>(VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO);
     ci.stage = stage;
     ci.layout = pipeline_layout_;
 
@@ -153,7 +154,7 @@ BenchmarkResult CacheBenchmark::run_variant(
     ctx_.vk().resetDescriptorPool(descriptor_pool_, 0);
 
     VkDescriptorSet set{};
-    VkDescriptorSetAllocateInfo ai{VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO};
+    auto ai = detail::make_vk_info<VkDescriptorSetAllocateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO);
     ai.descriptorPool = descriptor_pool_;
     ai.descriptorSetCount = 1;
     ai.pSetLayouts = &descriptor_layout_;
@@ -168,7 +169,7 @@ BenchmarkResult CacheBenchmark::run_variant(
 
     std::array<VkWriteDescriptorSet, 4> writes{};
     for (std::uint32_t i = 0; i < writes.size(); ++i) {
-        writes[i] = {VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET};
+        writes[i] = detail::make_vk_info<VkWriteDescriptorSet>(VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
         writes[i].dstSet = set;
         writes[i].dstBinding = i;
         writes[i].descriptorCount = 1;
@@ -180,7 +181,7 @@ BenchmarkResult CacheBenchmark::run_variant(
 
     ctx_.vk().resetCommandBuffer(command_buffer_, 0);
 
-    VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};
+    auto bi = detail::make_vk_info<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
     bi.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     ctx_.vk().beginCommandBuffer(command_buffer_, &bi);
 
@@ -220,7 +221,7 @@ BenchmarkResult CacheBenchmark::run_variant(
     ctx_.vk().endCommandBuffer(command_buffer_);
 
     ctx_.vk().resetFences(1, &fence_);
-    VkSubmitInfo si{VK_STRUCTURE_TYPE_SUBMIT_INFO};
+    auto si = detail::make_vk_info<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
     si.commandBufferCount = 1;
     si.pCommandBuffers = &command_buffer_;
     if (ctx_.vk().queueSubmit(ctx_.queue(), 1, &si, fence_) != VK_SUCCESS) fail("queue submit");
