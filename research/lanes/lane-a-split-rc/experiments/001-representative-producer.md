@@ -1,6 +1,6 @@
 # Experiment A001 — representative Split RC producer stream
 
-Status: target-GPU correctness validated; accepted timing evidence pending
+Status: target-GPU correctness and repeated timing measured; result artifact path reconciliation pending
 
 ## Question
 
@@ -58,7 +58,14 @@ producer semantics, and resolve correctness for static, camera-motion, and
 light-motion. This confirms the semantic gate and stream export path on the
 target GPU.
 
-The diagnostic run used Vulkan validation and a single timed iteration, so its
-timings are not accepted performance evidence. The remaining A001 gate is the
-validation-disabled repeated measurement run with its research artifact path
-recorded.
+A subsequent validation-disabled repeated run at commit
+`8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f` also passed all three
+correctness gates. Its uploaded summary records the representative timings and
+locality used by the provisional result.
+
+The uploaded summary did not contain the harness artifact root, iteration count,
+or validation flag, so the result cannot satisfy the shared protocol's raw
+artifact traceability requirement from the file alone. The runner now records
+those fields in `summary.json`; once the original artifact path is reconciled,
+A001 can be marked fully accepted without rerunning if the operator confirms the
+recorded run conditions.
