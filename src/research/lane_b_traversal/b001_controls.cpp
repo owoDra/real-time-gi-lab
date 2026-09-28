@@ -31,7 +31,7 @@ Row run_bvh(const lane::Scene& src,std::span<const lane::Ray> rays,bool dyn,bool
 }
 Row run_grid(const lane::Scene& src,std::span<const lane::Ray> rays,bool dyn,bool cam,float tmax,int repeats){
     auto t=src.triangles;std::optional<lane::SparseGrid> tmp;double build=measure(repeats,[&]{tmp.emplace(t);});lane::SparseGrid grid(t);double update=0;
-    if(dyn){lane::translate(t,src.moving,{1.25F,.65F,-.8F});update=measure(repeats,[&]{lane::SparseGrid x(src.triangles);auto moved=src.triangles;lane::translate(moved,src.moving,{1.25F,.65F,-.8F});x.update(moved,src.moving);});grid.update(t,src.moving);}
+    if(dyn){double common_update=measure(repeats,[&]{auto moved=src.triangles;lane::translate(moved,src.moving,{1.25F,.65F,-.8F});volatile auto n=moved.size();(void)n;});lane::translate(t,src.moving,{1.25F,.65F,-.8F});std::vector<double> samples;samples.reserve(static_cast<std::size_t>(repeats));for(int i=0;i<repeats;++i){lane::SparseGrid x(src.triangles);auto start=Clock::now();x.update(t,src.moving);samples.push_back(us(start));}update=common_update+median(std::move(samples));grid.update(t,src.moving);}
     double rebuild=measure(repeats,[&]{lane::SparseGrid x(t);if(!rays.empty())consume(x.trace(rays.front()));});
     return {src.name,dyn?"moving":"static",cam?"shifted":"static","stratabrick-grid-control",tmax,t.size(),rays.size(),validate(t,grid,rays),grid.persistent_bytes(),grid.scratch_bytes(),build,0,rebuild,update,trace_time(grid,rays,repeats)};
 }
