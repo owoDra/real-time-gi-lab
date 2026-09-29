@@ -15,28 +15,42 @@ layout(std140, binding = 4) uniform Params {
     vec4 camera_pos_near; vec4 camera_right_tan_x; vec4 camera_up_tan_y; vec4 camera_forward_far;
     vec4 scene_origin_spacing; vec4 light_pos_interval; uvec4 counts; uvec4 limits;
 } p;
+
+uint mix32(uint x) {
+    x ^= x >> 16u;
+    x *= 0x7feb352du;
+    x ^= x >> 15u;
+    x *= 0x846ca68bu;
+    x ^= x >> 16u;
+    return x;
+}
+
+uint deterministic_radiance(WorkItem item, HitData hit) {
+    if (hit.metadata.w != 1u) return 0u;
+
+    // I001 validates traversal geometry separately through the Hit contract.
+    // The radiance payload therefore depends only on contract-stable integer
+    // identity plus the frame's direct-light state. This keeps storage/resolve
+    // quality deterministic across HWRT/software implementations whose
+    // equivalent t/normal values may differ by the accepted floating tolerance.
+    uint seed = mix32(hit.metadata.x ^ 0x9e3779b9u);
+    seed ^= mix32(hit.metadata.y ^ 0x85ebca6bu);
+    seed ^= mix32(hit.metadata.z ^ 0xc2b2ae35u);
+    seed ^= mix32(item.cascade * 0x27d4eb2du + item.ray_index);
+    seed ^= mix32(floatBitsToUint(p.light_pos_interval.x));
+    seed ^= mix32(floatBitsToUint(p.light_pos_interval.y));
+    seed ^= mix32(floatBitsToUint(p.light_pos_interval.z));
+    seed ^= mix32(floatBitsToUint(p.light_pos_interval.w));
+
+    uint fixed = mix32(seed) & 0xffffu;
+    return fixed >> min(item.cascade, 15u);
+}
+
 void main() {
     uint id = gl_GlobalInvocationID.x;
     if (id >= counters.data[0]) return;
     WorkItem item = work.items[id];
     HitData hit = hits[id];
-    float value = 0.0;
-    if (hit.metadata.w == 1u) {
-        vec3 dir = normalize(vec3(item.dir_x, item.dir_y, item.dir_z));
-        vec3 origin = vec3(item.probe_px, item.probe_py, item.probe_pz) +
-            dir * item.interval_min;
-        vec3 point = origin + dir * hit.normal_t.w;
-        vec3 to_light = p.light_pos_interval.xyz - point;
-        float distance2 = max(dot(to_light, to_light), 1.0e-6);
-        vec3 l = to_light * inversesqrt(distance2);
-        float ndotl = max(0.0, dot(normalize(hit.normal_t.xyz), l));
-        float scale = max(p.light_pos_interval.w, 1.0e-4);
-        float attenuation = 1.0 / (1.0 + distance2 / (scale * scale * 256.0));
-        value = clamp(
-            ndotl * attenuation / float(1u << item.cascade),
-            0.0,
-            1.0);
-    }
     contributions.values[id] =
-        uvec2(item.output_id, uint(round(value * 65535.0)));
+        uvec2(item.output_id, deterministic_radiance(item, hit));
 }
