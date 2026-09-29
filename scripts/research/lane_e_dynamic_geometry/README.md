@@ -13,6 +13,8 @@ Entrypoints:
   binary/quantized StrataBrick instance ownership.
 - E004: `run_e004.py` — current versus object-local stable-topology deforming
   maintenance for HWRT and quantized software fallback.
+- E005: `run_e005.py` — integrated five-regime replay of the final Lane E
+  HWRT/software ownership policies against the accepted Integration controls.
 
 Formal runs require the exact Lane E branch, a clean tree, and the target
 `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`. Each experiment runs its
