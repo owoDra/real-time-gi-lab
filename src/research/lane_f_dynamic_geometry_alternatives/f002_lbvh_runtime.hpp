@@ -26,12 +26,18 @@ struct F002BuildSample {
 struct F002Validation {
     std::size_t sort_mismatches{};
     std::size_t root_count_mismatches{};
+    std::size_t root_index_mismatches{};
     std::size_t root_bounds_mismatches{};
+    std::size_t leaf_mapping_mismatches{};
+    std::size_t topology_mismatches{};
 
     [[nodiscard]] bool passed() const noexcept {
         return sort_mismatches == 0 &&
                root_count_mismatches == 0 &&
-               root_bounds_mismatches == 0;
+               root_index_mismatches == 0 &&
+               root_bounds_mismatches == 0 &&
+               leaf_mapping_mismatches == 0 &&
+               topology_mismatches == 0;
     }
 };
 
