@@ -417,6 +417,28 @@ struct ProbeKey {
     };
 }
 
+
+[[nodiscard]] std::uint32_t probe_token(
+    const ProbeKey& key) noexcept {
+    constexpr auto tombstone =
+        std::numeric_limits<std::uint32_t>::max();
+    if (key.x < 0 || key.x > 1023 ||
+        key.y < 0 || key.y > 1023 ||
+        key.z < 0 || key.z > 1023 ||
+        key.cascade > 3U) {
+        return tombstone;
+    }
+    const auto packed =
+        static_cast<std::uint32_t>(key.x) |
+        (static_cast<std::uint32_t>(key.y) << 10U) |
+        (static_cast<std::uint32_t>(key.z) << 20U) |
+        (key.cascade << 30U);
+    if (packed >= 0xfffffffeU) {
+        return tombstone;
+    }
+    return packed + 1U;
+}
+
 [[nodiscard]] double slot_value(const HashSlotCpu& slot) noexcept {
     return slot.data[2] == 0U
         ? 0.0
@@ -1841,7 +1863,13 @@ struct I001Runtime::Impl {
                 continue;
             }
             if (!occupied || slot.data[3] != frame_id) continue;
-            candidate_probe[slot_key(slot)] = slot_value(slot);
+            const auto key = slot_key(slot);
+            if (probe_token(key) != slot.data[0] ||
+                candidate_probe.contains(key)) {
+                ++quality.leaked_probes;
+                continue;
+            }
+            candidate_probe.emplace(key, slot_value(slot));
         }
 
         std::vector<float> candidate_resolved(last.stats.outputs);
