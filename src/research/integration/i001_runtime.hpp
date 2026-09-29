@@ -21,6 +21,10 @@ enum class I001Scenario {
     CameraMotion,
     LightMotion,
     MovingRigid,
+    SparseStress,
+    DenseStress,
+    LargeWorldStress,
+    VerticalWorldStress,
 };
 
 [[nodiscard]] const char* i001_variant_name(I001Variant value) noexcept;
