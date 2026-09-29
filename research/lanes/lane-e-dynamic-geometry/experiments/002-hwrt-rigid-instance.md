@@ -1,6 +1,6 @@
 # E002 — HWRT rigid instance architecture
 
-Status: target validation passed; accepted timing ready
+Status: complete; rigid instance architecture promoted with TLAS UPDATE
 
 ## Question
 
@@ -229,3 +229,25 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 The timing runner repeats the validation matrix before validation-disabled
 timing. Do not alter the frozen E002 gates after observing timing.
+
+
+## Accepted timing result
+
+Accepted measurement provenance:
+
+- commit: `40f0f1c04f4109cc04a0f6015241518946f9291a`;
+- clean checkout;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- 3 process repeats.
+
+Frozen-gate result:
+
+- current HWRT complete dynamic boundary: 5989.474 us;
+- rigid-instance UPDATE: 1952.891 us, 67.39% improvement, 4.21% traversal regression;
+- rigid-instance BUILD: 2011.499 us, 66.42% improvement, 7.45% traversal regression;
+- both policies pass the fixed promotion gate;
+- their boundary medians are within the fixed 5% tie band;
+- therefore the fixed selection rule chooses **TLAS UPDATE**.
+
+Final result:
+`research/lanes/lane-e-dynamic-geometry/results/002-hwrt-rigid-instance.md`.
