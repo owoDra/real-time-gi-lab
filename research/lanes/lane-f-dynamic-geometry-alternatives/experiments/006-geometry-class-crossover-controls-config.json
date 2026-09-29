@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-f-plan-v1",
+  "experiment": "F006",
+  "name": "geometry-class-crossover-controls",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "candidates": [
+    "transient-lbvh",
+    "transient-grid"
+  ],
+  "control": "vanilla-software",
+  "representative_dynamic_count": 796,
+  "geometry_classes": {
+    "rigid-large-few": {
+      "groups": 1,
+      "transition": "all Nrep selected primitives receive the frozen F001 moving.delta_x translation"
+    },
+    "rigid-small-many32": {
+      "groups": 32,
+      "partition": "contiguous deterministic partition group=floor(local_index*32/Nrep)",
+      "transform": "group-unique translation; x=moving.delta_x*(0.35+0.65*(group+1)/32), y/z deterministic +/- segment_size*0.05 offsets"
+    },
+    "deforming": {
+      "topology": "unchanged",
+      "identities": "unchanged",
+      "transform": "deterministic per-vertex non-affine hash displacement",
+      "amplitude_rule": "B002 segment_size * 0.05"
+    },
+    "topology-replace25": {
+      "replacement_count_rule": "floor(Nrep/4); Nrep=796 => 199",
+      "replaced_subset": "first 199 primitives in frozen moving-selection local order",
+      "inserted_id_rule": "scene max primitive_id + 1 + local_index",
+      "geometry": "deterministic translation plus per-vertex hash displacement",
+      "total_dynamic_count_constant": true
+    }
+  },
+  "frame_boundary": {
+    "cpu_generation": "inside measured target run_frame wall boundary for candidate and control",
+    "candidate_upload": "exact dynamic current-frame triangles uploaded to candidate source template and charged to traversal_maintenance_gpu_us/complete_gpu_us",
+    "vanilla_upload": "matching changed full-scene triangle entries uploaded and software BVH rebuild/upload charged in same frame",
+    "builder": "unchanged F003 LBVH or F005 grid layout/structure; controlled classes rebuild with builder delta=0"
+  },
+  "gates": {
+    "per_geometry_class_complete_gpu_max_ratio_vs_extended_vanilla": 1.05,
+    "peak_resident_max_ratio_vs_extended_vanilla": 3,
+    "correctness_required": true
+  },
+  "claim_rule": "F006 all-class pass permits a generalization mechanism result only; general-dynamic architecture claim additionally requires the candidate to already be rigid-primary under F003/F005/F007",
+  "accepted_timing": {
+    "process_repeats": 5,
+    "warmup_frames_per_process": 1,
+    "measured_frames_per_process": 1,
+    "decision_statistic": "median of process-level measured target frames",
+    "instability_rule": "complete_gpu_us max/min > 1.20",
+    "identical_full_reruns_allowed": 1,
+    "outlier_deletion": false,
+    "correctness_source": "prior same-commit target-GPU validation artifact"
+  }
+}
