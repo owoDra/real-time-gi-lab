@@ -28,8 +28,8 @@
       "id": "G004",
       "name": "integration-hardening",
       "result": "004-integration-hardening.md",
-      "status": "pending-target-gpu-evidence",
-      "decision": "semantic-hardening-in-progress"
+      "status": "accepted-semantic-hardening",
+      "decision": "all-16-semantic-cases-pass-proceed-g005-deterministic"
     }
   ]
 }
