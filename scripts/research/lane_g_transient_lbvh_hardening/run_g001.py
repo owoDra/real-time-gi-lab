@@ -78,6 +78,10 @@ def classify(
         classification = "unavoidable baseline"
         reason = "run-local software comparator ownership"
 
+    if row["allocation_lifetime"] == "runtime" and row["use_lifetime"] == "setup-only":
+        classification = "duplicative/non-overlapping lifetime"
+        reason = "allocation remains resident for runtime although this path uses it only during setup"
+
     if scenario in {"sparse-stress", "sparse-moving"}:
         dense = dense_reference.get((row["variant"], name))
         if dense and row["logical_size_known"] == "1" and dense["logical_size_known"] == "1":
@@ -140,6 +144,10 @@ def run_case(
         raise RuntimeError(f"wrong target GPU for {variant}/{scenario}: {device['device']}")
     if frame["quality_passed"] != "1" or int(frame["storage_failures"]) != 0:
         raise RuntimeError(f"correctness failed for {variant}/{scenario}")
+
+    names = [row["name"] for row in allocations if row["vulkan_allocation"] == "1"]
+    if len(names) != len(set(names)):
+        raise RuntimeError(f"duplicate Vulkan allocation census name for {variant}/{scenario}")
 
     counted = sum(
         int(row["allocation_bytes"])
@@ -213,6 +221,8 @@ def main() -> int:
 
     owner_totals: dict[tuple[str, str, str], int] = defaultdict(int)
     role_totals: dict[tuple[str, str, str], int] = defaultdict(int)
+    capacity_totals: dict[tuple[str, str, str], int] = defaultdict(int)
+    lifetime_totals: dict[tuple[str, str, str], int] = defaultdict(int)
     classified: list[dict[str, object]] = []
     for row in allocations:
         classification, reason = classify(row, row["scenario"], dense_reference)
@@ -228,6 +238,8 @@ def main() -> int:
         if row["counted_in_f007_peak"] == "1":
             owner_totals[(row["variant"], row["scenario"], row["owner"])] += allocation
             role_totals[(row["variant"], row["scenario"], row["role"])] += allocation
+            capacity_totals[(row["variant"], row["scenario"], row["capacity_kind"])] += allocation
+            lifetime_totals[(row["variant"], row["scenario"], row["use_lifetime"])] += allocation
 
     ownership_rows: list[dict[str, object]] = []
     for (variant, scenario, owner), bytes_ in sorted(owner_totals.items()):
@@ -244,6 +256,22 @@ def main() -> int:
             "scenario": scenario,
             "group_kind": "role",
             "group": role,
+            "bytes": bytes_,
+        })
+    for (variant, scenario, capacity), bytes_ in sorted(capacity_totals.items()):
+        ownership_rows.append({
+            "variant": variant,
+            "scenario": scenario,
+            "group_kind": "capacity-kind",
+            "group": capacity,
+            "bytes": bytes_,
+        })
+    for (variant, scenario, lifetime), bytes_ in sorted(lifetime_totals.items()):
+        ownership_rows.append({
+            "variant": variant,
+            "scenario": scenario,
+            "group_kind": "use-lifetime",
+            "group": lifetime,
             "bytes": bytes_,
         })
 
@@ -275,6 +303,7 @@ def main() -> int:
         "case_count": len(frames),
         "allocation_row_count": len(allocations),
         "accounting_identity_passed": True,
+        "double_counting_detected": False,
         "candidate_peak_ratio_vs_vanilla": ratios,
         "f007_anchor_checks": anchor_checks,
         "g001_conclusion_ready": all(x["passed"] for x in anchor_checks.values()),
@@ -290,6 +319,7 @@ def main() -> int:
         "all_quality_passed": all(r["quality_passed"] == "1" for r in frames),
         "all_storage_failures_zero": all(int(r["storage_failures"]) == 0 for r in frames),
         "all_accounting_identities_exact": True,
+        "duplicate_vulkan_allocation_names_detected": False,
         "all_devices_exact": all(d["device"] == EXPECTED_GPU for d in devices),
         "f007_sparse_anchor_reproduced": all(x["passed"] for x in anchor_checks.values()),
     }

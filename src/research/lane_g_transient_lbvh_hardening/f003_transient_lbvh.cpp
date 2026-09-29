@@ -225,26 +225,26 @@ std::vector<F003LbvhAllocation> F003TransientLbvh::allocation_census() const {
             static_cast<std::size_t>(buffer.allocation_size),
         });
     };
-    add("lbvh.template", "dynamic-lbvh-persistent", "single", "runtime", template_buffer_);
+    add("lbvh.template", "dynamic-lbvh-persistent", "single", "frame-build:input", template_buffer_);
     add("lbvh.current-frame-geometry", "current-frame-geometry", "single",
-        "frame-build-and-traversal", working_buffer_);
-    add("lbvh.aabb-min", "node-topology-bounds-scratch", "single", "frame-build",
+        "frame-build:input-through-frame-traversal", working_buffer_);
+    add("lbvh.aabb-min", "node-topology-bounds-scratch", "single", "frame-build:aabb-through-bounds",
         aabb_min_buffer_);
-    add("lbvh.aabb-max", "node-topology-bounds-scratch", "single", "frame-build",
+    add("lbvh.aabb-max", "node-topology-bounds-scratch", "single", "frame-build:aabb-through-bounds",
         aabb_max_buffer_);
-    add("lbvh.keys-a", "radix-sort-scratch", "double-buffer-a", "frame-build",
+    add("lbvh.keys-a", "radix-sort-scratch", "double-buffer-a", "frame-build:morton-through-topology",
         keys_a_buffer_);
-    add("lbvh.keys-b", "radix-sort-scratch", "double-buffer-b", "frame-build",
+    add("lbvh.keys-b", "radix-sort-scratch", "double-buffer-b", "frame-build:morton-through-topology",
         keys_b_buffer_);
-    add("lbvh.histogram", "radix-sort-scratch", "single", "frame-build",
+    add("lbvh.histogram", "radix-sort-scratch", "single", "frame-build:radix-sort",
         histogram_buffer_);
-    add("lbvh.offsets", "radix-sort-scratch", "single", "frame-build",
+    add("lbvh.offsets", "radix-sort-scratch", "single", "frame-build:radix-sort",
         offsets_buffer_);
-    add("lbvh.digit-base", "radix-sort-scratch", "single", "frame-build",
+    add("lbvh.digit-base", "radix-sort-scratch", "single", "frame-build:radix-sort",
         digit_base_buffer_);
     add("lbvh.nodes", "node-topology-bounds-scratch", "single",
-        "frame-build-and-traversal", nodes_buffer_);
-    add("lbvh.ready", "node-topology-bounds-scratch", "single", "frame-build",
+        "frame-build:topology-through-frame-traversal", nodes_buffer_);
+    add("lbvh.ready", "node-topology-bounds-scratch", "single", "frame-build:bounds",
         ready_buffer_);
     return rows;
 }

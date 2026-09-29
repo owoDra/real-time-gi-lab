@@ -1590,13 +1590,21 @@ struct I001Runtime::Impl {
         if (uses_transient_candidate(options.variant) || uses_hwrt(options.variant)) {
             if (hwrt) {
                 for (const auto& entry : hwrt->allocation_census()) {
+                    const bool immutable_hwrt =
+                        uses_transient_candidate(options.variant) ||
+                        !has_dynamic_transition(options.scenario);
+                    const bool setup_only =
+                        immutable_hwrt &&
+                        (std::strcmp(entry.name, "static-hwrt.vertices") == 0 ||
+                         std::strcmp(entry.name, "static-hwrt.instance") == 0 ||
+                         std::strcmp(entry.name, "static-hwrt.scratch") == 0);
                     rows.push_back({
                         entry.name,
                         "static-hwrt",
                         entry.scratch ? "static-hwrt-scratch" : "static-hwrt-persistent",
                         "scenario-sized",
                         "runtime",
-                        "runtime",
+                        setup_only ? "setup-only" : "runtime",
                         entry.logical_bytes,
                         entry.allocation_bytes,
                         true,

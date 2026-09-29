@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import unittest
 from pathlib import Path
 
 MODULE_PATH = Path(__file__).with_name("run_g001.py")
@@ -17,6 +18,9 @@ def row(**overrides: str) -> dict[str, str]:
         "name": "stream.rays",
         "owner": "shared-integration",
         "role": "producer-stream",
+        "capacity_kind": "scenario-sized",
+        "allocation_lifetime": "runtime",
+        "use_lifetime": "frame",
         "logical_size_known": "1",
         "logical_bytes": "1024",
         "allocation_bytes": "2048",
@@ -25,38 +29,58 @@ def row(**overrides: str) -> dict[str, str]:
     return base
 
 
-def test_candidate_specific_classification() -> None:
-    value = row(owner="transient-lbvh", role="radix-sort-scratch")
-    classification, _ = g001.classify(value, "sparse-moving", {})
-    assert classification == "candidate-specific"
+class G001ClassificationTests(unittest.TestCase):
+    def test_candidate_specific(self) -> None:
+        classification, _ = g001.classify(
+            row(owner="transient-lbvh", role="radix-sort-scratch"),
+            "sparse-moving",
+            {},
+        )
+        self.assertEqual(classification, "candidate-specific")
+
+    def test_shared_integration(self) -> None:
+        classification, _ = g001.classify(row(), "moving-rigid", {})
+        self.assertEqual(classification, "shared integration")
+
+    def test_setup_only_retention(self) -> None:
+        value = row(
+            owner="static-hwrt",
+            allocation_lifetime="runtime",
+            use_lifetime="setup-only",
+        )
+        classification, _ = g001.classify(value, "moving-rigid", {})
+        self.assertEqual(classification, "duplicative/non-overlapping lifetime")
+
+    def test_dense_retention(self) -> None:
+        sparse = row()
+        dense = row(
+            scenario="dense-moving",
+            logical_bytes="1536",
+            allocation_bytes="2048",
+        )
+        classification, _ = g001.classify(
+            sparse,
+            "sparse-moving",
+            {("transient-lbvh", "stream.rays"): dense},
+        )
+        self.assertEqual(
+            classification, "dense-only capacity retained in sparse workload"
+        )
+
+    def test_equal_logical_payload_is_not_dense_retention(self) -> None:
+        sparse = row()
+        dense = row(
+            scenario="dense-moving",
+            logical_bytes="1024",
+            allocation_bytes="2048",
+        )
+        classification, _ = g001.classify(
+            sparse,
+            "sparse-moving",
+            {("transient-lbvh", "stream.rays"): dense},
+        )
+        self.assertEqual(classification, "shared integration")
 
 
-def test_shared_classification() -> None:
-    classification, _ = g001.classify(row(), "moving-rigid", {})
-    assert classification == "shared integration"
-
-
-def test_dense_retention_is_only_marked_with_smaller_sparse_logical_payload() -> None:
-    sparse = row()
-    dense = row(
-        scenario="dense-moving",
-        logical_bytes="4096",
-        allocation_bytes="2048",
-    )
-    classification, _ = g001.classify(
-        sparse, "sparse-moving", {("transient-lbvh", "stream.rays"): dense}
-    )
-    assert classification == "dense-only capacity retained in sparse workload"
-
-
-def test_equal_logical_payload_is_not_called_dense_retention() -> None:
-    sparse = row()
-    dense = row(
-        scenario="dense-moving",
-        logical_bytes="1024",
-        allocation_bytes="2048",
-    )
-    classification, _ = g001.classify(
-        sparse, "sparse-moving", {("transient-lbvh", "stream.rays"): dense}
-    )
-    assert classification == "shared integration"
+if __name__ == "__main__":
+    unittest.main()
