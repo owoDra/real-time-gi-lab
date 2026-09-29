@@ -1,6 +1,6 @@
 # E004 — deforming geometry boundary
 
-Status: protocol frozen before implementation and target timing
+Status: protocol frozen; implementation complete; target validation ready
 
 ## Question
 
@@ -158,7 +158,7 @@ must match the same total/tolerance.
 6. Only then run 3 validation-disabled process repeats.
 
 Target:
-`AMD Radeon 8060S Graphics (RADV_STRIX_HALO)`.
+`AMD Radeon 8060S Graphics (RADV STRIX_HALO)`.
 
 ## Topology-changing boundary
 
@@ -187,3 +187,41 @@ E004 may independently promote:
 One may pass while the other fails. Do not average them.
 
 E002/E003 rigid decisions remain accepted regardless of the E004 outcome.
+
+
+## Implementation checkpoint
+
+E004 is implemented without changing the frozen gates:
+
+- partitioned HWRT can now opt into UPDATE support for the deforming object's
+  BLAS while E002 rigid partitions remain immutable by default;
+- stable-topology deformation uploads only the selected object's contiguous
+  partition range, updates only that object's BLAS, then refreshes the TLAS;
+- software local deformation reserves fixed GPU ranges for the dynamic object's
+  triangle, node, order and hash payloads while the static-world payload remains
+  untouched;
+- only the dynamic object's local StrataBrick is maintained and repacked;
+- E003's quantized instance traversal is reused for the local software candidate;
+- the dynamic instance bounds/hash metadata are updated after local deformation;
+- `run_e004.py` enforces validation-first execution, same-workload identity,
+  architecture/accounting checks, independent HWRT/software promotion gates,
+  and clean target provenance.
+
+No target GPU timing has been run or inferred from this implementation.
+
+Target validation command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 004-deforming-boundary \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e004.py --build-dir build/release --validation-only"
+```
+
+Do not start accepted E004 timing until the validation artifact has been
+inspected. The formal timing runner repeats the validation matrix.
