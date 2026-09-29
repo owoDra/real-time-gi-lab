@@ -1369,9 +1369,19 @@ struct I001Runtime::Impl {
 
         std::map<ProbeKey, double> candidate_probe;
         for (const auto& slot : candidate_slots) {
+            if (slot.data[0] == 2U && slot.data[3] != frame_id) {
+                ++quality.stale_storage_slots;
+                continue;
+            }
             if (slot.data[0] != 2U || slot.data[3] != frame_id) continue;
             candidate_probe[slot_key(slot)] = slot_value(slot);
         }
+
+        std::vector<float> candidate_resolved(last.stats.outputs);
+        context.download_device_buffer(
+            resolved,
+            candidate_resolved.data(),
+            candidate_resolved.size() * sizeof(float));
 
         double squared = 0.0;
         std::size_t compared = 0;
@@ -1396,6 +1406,37 @@ struct I001Runtime::Impl {
             (void)value;
             if (!reference_probe.contains(key)) ++quality.leaked_probes;
         }
+
+        for (const auto& item : work_items) {
+            if (item.ray_index != 0U ||
+                item.output_id >= candidate_resolved.size()) {
+                continue;
+            }
+            const ProbeKey key{
+                item.probe_x,
+                item.probe_y,
+                item.probe_z,
+                item.cascade,
+            };
+            const auto found = reference_probe.find(key);
+            if (found == reference_probe.end() || found->second.second == 0U) {
+                ++quality.resolved_output_mismatches;
+                continue;
+            }
+            const double expected =
+                double(found->second.first) /
+                (double(found->second.second) * 65535.0);
+            const auto error =
+                std::abs(double(candidate_resolved[item.output_id]) - expected);
+            if (error > 1.0e-4) {
+                ++quality.resolved_output_mismatches;
+            }
+            quality.radiance_max_abs_error =
+                std::max(quality.radiance_max_abs_error, error);
+            squared += error * error;
+            ++compared;
+        }
+
         quality.radiance_rms_error =
             compared == 0U
             ? std::numeric_limits<double>::infinity()
@@ -1407,6 +1448,8 @@ struct I001Runtime::Impl {
             quality.traversal_runtime_errors == 0U &&
             quality.missing_probes == 0U &&
             quality.leaked_probes == 0U &&
+            quality.stale_storage_slots == 0U &&
+            quality.resolved_output_mismatches == 0U &&
             quality.radiance_max_abs_error <= 1.0e-4 &&
             quality.radiance_rms_error <= 1.0e-5 &&
             last.stats.storage_failures == 0U;
