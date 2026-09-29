@@ -13,10 +13,14 @@
     {
       "id": "E002",
       "experiment": "002-hwrt-rigid-instance",
-      "status": "accepted-timing-ready",
+      "status": "complete",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/002-hwrt-rigid-instance.md",
       "validation_commit": "7c191fca1b7049fd377597d0e369de36f0a54b93",
-      "validation_protocol_commit": "cb1c4339056a92ed0434be0fab3bb58066fb3a99"
+      "validation_protocol_commit": "cb1c4339056a92ed0434be0fab3bb58066fb3a99",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/002-hwrt-rigid-instance.md",
+      "measurement_commit": "40f0f1c04f4109cc04a0f6015241518946f9291a",
+      "selected_policy": "rigid-instance-hwrt-update",
+      "result_commit": "d2d8a7a4a7c52da79c8b82ac4e4e0eec1cd33ede"
     }
   ]
 }
