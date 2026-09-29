@@ -49,6 +49,7 @@ add_executable(phos-i001
   i001_benchmark.cpp
   i001_runtime.cpp
   i001_compute.cpp
+  ../lane_f_dynamic_geometry_alternatives/f003_transient_lbvh.cpp
   ../lane_a_split_rc/a001_scene.cpp
   ../lane_a_split_rc/a001_runtime.cpp
   ../lane_a_split_rc/a001_analysis.cpp
@@ -75,6 +76,7 @@ target_compile_definitions(phos-i001 PRIVATE
   PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
   PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
   PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_F_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
 )
 set_target_properties(phos-i001 PROPERTIES
   CXX_EXTENSIONS OFF
