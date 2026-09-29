@@ -141,8 +141,8 @@ void main() {
 
     if (pc.mode == MODE_MORTON) {
         if (id >= pc.count) return;
-        vec3 centroid = 0.5 * (aabb_min[id].xyz + aabb_max[id].xyz);
-        vec3 page_pos = (centroid - pc.origin_page_extent.xyz) / pc.origin_page_extent.w;
+        vec3 tri_center = 0.5 * (aabb_min[id].xyz + aabb_max[id].xyz);
+        vec3 page_pos = (tri_center - pc.origin_page_extent.xyz) / pc.origin_page_extent.w;
         ivec3 page_i = ivec3(floor(page_pos));
         page_i = clamp(page_i, ivec3(0), ivec3(1023));
         vec3 local = clamp(fract(page_pos), vec3(0.0), vec3(0.999999));
