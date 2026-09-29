@@ -246,6 +246,9 @@ def main() -> int:
                 "peak_resident_bytes": statistics.median(
                     int(row["peak_resident_bytes"]) for row in rows
                 ),
+                "stream_capacity_bytes": statistics.median(
+                    int(row["stream_capacity_bytes"]) for row in rows
+                ),
                 "dynamic_update_wall_us": statistics.median(
                     float(row["dynamic_update_wall_us"]) for row in rows
                 ),
@@ -373,8 +376,8 @@ def main() -> int:
     )
 
     bounded_memory_ratio = max(
-        medians["bounded-hwrt"][scenario]["peak_resident_bytes"] /
-        medians["combined-hwrt"][scenario]["peak_resident_bytes"]
+        medians["bounded-hwrt"][scenario]["stream_capacity_bytes"] /
+        medians["combined-hwrt"][scenario]["stream_capacity_bytes"]
         for scenario in SCENARIOS
     )
     bounded_timing_pass = all(
@@ -430,7 +433,7 @@ def main() -> int:
                 "pass": depth_reuse_pass,
             },
             "bounded_capacity": {
-                "peak_memory_ratio": bounded_memory_ratio,
+                "stream_memory_ratio": bounded_memory_ratio,
                 "memory_pass": bounded_memory_ratio <= 0.60,
                 "normal_timing_pass": bounded_timing_pass,
                 "overflow_retry_pass": overflow_retry_pass,
