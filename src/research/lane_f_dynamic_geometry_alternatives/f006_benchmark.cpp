@@ -74,7 +74,7 @@ std::filesystem::path artifact_root() {
         return value;
     }
     return "out/research/lane-f-dynamic-geometry-alternatives/"
-           "005-end-to-end-sorted-two-level-grid/manual-candidate";
+           "006-geometry-class-crossover-controls/manual";
 }
 
 void print_quality(
@@ -265,7 +265,7 @@ int main(int argc, char** argv) {
         std::filesystem::create_directories(root);
         {
             std::ofstream csv(root / "f006-frame.csv");
-            if (!csv) throw std::runtime_error("cannot create F006 candidate CSV");
+            if (!csv) throw std::runtime_error("cannot create F006 frame CSV");
             write_csv(csv, cli, runtime, result, setup_wall_us, complete_frame_wall_us);
         }
         write_device(root / "f006-device.json", cli, runtime);
@@ -280,7 +280,7 @@ int main(int argc, char** argv) {
         std::cerr << "F006 geometry-class correctness/quality: PASS\n";
         return 0;
     } catch (const std::exception& error) {
-        std::cerr << "F006 candidate error: " << error.what() << '\n';
+        std::cerr << "F006 error: " << error.what() << '\n';
         return 1;
     }
 }
