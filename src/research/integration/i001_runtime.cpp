@@ -130,6 +130,10 @@ static_assert(sizeof(InvalidationPush) == 16);
     case I001Scenario::LightMotion:
         return lane_a::A001Case::LightMotion;
     case I001Scenario::MovingRigid:
+    case I001Scenario::SparseStress:
+    case I001Scenario::DenseStress:
+    case I001Scenario::LargeWorldStress:
+    case I001Scenario::VerticalWorldStress:
         return lane_a::A001Case::Static;
     }
     return lane_a::A001Case::Static;
@@ -236,6 +240,63 @@ struct MovingSelection {
     fail("I001 could not select a bounds-only moving-rigid regime");
 }
 
+void apply_scene_stress(
+    I001Scenario scenario,
+    lane_a::SceneSurfaceSet& a_scene,
+    lane_b::B002Scene& b_scene) {
+    if (scenario != I001Scenario::LargeWorldStress &&
+        scenario != I001Scenario::VerticalWorldStress) {
+        return;
+    }
+
+    const bool large = scenario == I001Scenario::LargeWorldStress;
+    const float offset_x = large ? 1.0e6F : 0.0F;
+    const float offset_z = large ? -1.0e6F : 0.0F;
+    const float scale_y = large ? 1.0F : 16.0F;
+
+    for (auto& sample : a_scene.samples) {
+        sample.position[0] += offset_x;
+        sample.position[1] *= scale_y;
+        sample.position[2] += offset_z;
+    }
+
+    for (auto& triangle : b_scene.triangles) {
+        auto transform = [&](lane_b::Vec3 value) {
+            return lane_b::Vec3{
+                value.x + offset_x,
+                value.y * scale_y,
+                value.z + offset_z,
+            };
+        };
+        triangle.v0 = transform(triangle.v0);
+        triangle.v1 = transform(triangle.v1);
+        triangle.v2 = transform(triangle.v2);
+    }
+
+    for (int axis = 0; axis < 3; ++axis) {
+        a_scene.min_position[axis] = std::numeric_limits<float>::infinity();
+        a_scene.max_position[axis] = -std::numeric_limits<float>::infinity();
+    }
+    b_scene.bounds = {};
+    for (std::size_t index = 0; index < a_scene.samples.size(); ++index) {
+        for (int axis = 0; axis < 3; ++axis) {
+            const auto value = a_scene.samples[index].position[axis];
+            a_scene.min_position[axis] =
+                std::min(a_scene.min_position[axis], value);
+            a_scene.max_position[axis] =
+                std::max(a_scene.max_position[axis], value);
+        }
+        b_scene.bounds = lane_b::merge(
+            b_scene.bounds,
+            lane_b::triangle_bounds(b_scene.triangles[index]));
+    }
+    b_scene.diagonal = lane_b::length(
+        b_scene.bounds.max - b_scene.bounds.min);
+    if (!std::isfinite(b_scene.diagonal) || b_scene.diagonal <= 0.0F) {
+        fail("I001 stress transform produced invalid scene bounds");
+    }
+}
+
 [[nodiscard]] double timestamp_us(
     std::uint64_t begin,
     std::uint64_t end,
@@ -286,6 +347,10 @@ const char* i001_scenario_name(I001Scenario value) noexcept {
     case I001Scenario::CameraMotion: return "camera-motion";
     case I001Scenario::LightMotion: return "light-motion";
     case I001Scenario::MovingRigid: return "moving-rigid";
+    case I001Scenario::SparseStress: return "sparse-stress";
+    case I001Scenario::DenseStress: return "dense-stress";
+    case I001Scenario::LargeWorldStress: return "large-world-stress";
+    case I001Scenario::VerticalWorldStress: return "vertical-world-stress";
     }
     return "unknown";
 }
@@ -304,6 +369,10 @@ I001Scenario i001_parse_scenario(const std::string& value) {
     if (value == "camera-motion") return I001Scenario::CameraMotion;
     if (value == "light-motion") return I001Scenario::LightMotion;
     if (value == "moving-rigid") return I001Scenario::MovingRigid;
+    if (value == "sparse-stress") return I001Scenario::SparseStress;
+    if (value == "dense-stress") return I001Scenario::DenseStress;
+    if (value == "large-world-stress") return I001Scenario::LargeWorldStress;
+    if (value == "vertical-world-stress") return I001Scenario::VerticalWorldStress;
     throw std::runtime_error("unknown I001 scenario: " + value);
 }
 
@@ -354,10 +423,17 @@ struct I001Runtime::Impl {
         if (a_scene.samples.size() != b_scene.triangles.size()) {
             fail("I001 A001/B002 scene primitive identity diverged");
         }
+        apply_scene_stress(options.scenario, a_scene, b_scene);
 
         settings.case_id = lane_a::A001Case::Static;
-        settings.tile_width = 128;
-        settings.tile_height = 72;
+        settings.tile_width =
+            options.scenario == I001Scenario::SparseStress
+            ? 64U
+            : (options.scenario == I001Scenario::DenseStress ? 256U : 128U);
+        settings.tile_height =
+            options.scenario == I001Scenario::SparseStress
+            ? 36U
+            : (options.scenario == I001Scenario::DenseStress ? 144U : 72U);
         settings.cascade_count = 4;
         settings.rays_per_probe = 8;
         params = lane_a::build_a001_params(a_scene, settings);
