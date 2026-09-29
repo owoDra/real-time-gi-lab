@@ -16,6 +16,7 @@
 #include "../lane_b_traversal/lane_a_stream_v1.hpp"
 #include "../lane_b_traversal/hierarchical_stratabrick.hpp"
 #include "../lane_b_traversal/traversal_common.hpp"
+#include "../lane_e_dynamic_geometry/e003_instance_payload.hpp"
 #include "vk_init.hpp"
 
 #include <algorithm>
@@ -40,6 +41,7 @@ namespace {
 
 namespace lane_a = phos::gi::lane_a;
 namespace lane_b = phos::gi::research::lane_b;
+namespace lane_e = phos::gi::research::lane_e;
 
 using lane_b::B002Buffer;
 using lane_b::B002HwrtTraversal;
@@ -213,6 +215,22 @@ static_assert(sizeof(InvalidationPush) == 16);
     return value == I001Variant::RigidInstanceHwrtBuild
         ? lane_b::HwrtTlasPolicy::Build
         : lane_b::HwrtTlasPolicy::Update;
+}
+
+[[nodiscard]] bool uses_rigid_instance_software(
+    I001Variant value) noexcept {
+    return value == I001Variant::RigidInstanceSoftwareBinary ||
+           value == I001Variant::RigidInstanceSoftwareQuantized;
+}
+
+[[nodiscard]] bool uses_rigid_instance_software_binary(
+    I001Variant value) noexcept {
+    return value == I001Variant::RigidInstanceSoftwareBinary;
+}
+
+[[nodiscard]] bool uses_rigid_instance_software_quantized(
+    I001Variant value) noexcept {
+    return value == I001Variant::RigidInstanceSoftwareQuantized;
 }
 
 [[nodiscard]] bool uses_quantized(I001Variant value) noexcept {
@@ -567,6 +585,10 @@ const char* i001_variant_name(I001Variant value) noexcept {
         return "rigid-instance-hwrt-update";
     case I001Variant::RigidInstanceHwrtBuild:
         return "rigid-instance-hwrt-build";
+    case I001Variant::RigidInstanceSoftwareBinary:
+        return "rigid-instance-software-binary";
+    case I001Variant::RigidInstanceSoftwareQuantized:
+        return "rigid-instance-software-quantized";
     case I001Variant::CombinedSoftware: return "combined-software";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
@@ -596,6 +618,10 @@ I001Variant i001_parse_variant(const std::string& value) {
         return I001Variant::RigidInstanceHwrtUpdate;
     if (value == "rigid-instance-hwrt-build")
         return I001Variant::RigidInstanceHwrtBuild;
+    if (value == "rigid-instance-software-binary")
+        return I001Variant::RigidInstanceSoftwareBinary;
+    if (value == "rigid-instance-software-quantized")
+        return I001Variant::RigidInstanceSoftwareQuantized;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
@@ -628,7 +654,10 @@ struct I001Runtime::Impl {
     B002Buffer storage_slots{}, storage_stats{};
     B002Buffer triangle_buffer{}, software_nodes{}, software_order{};
     B002Buffer quant_nodes{}, quant_order{}, quant_hash{};
+    B002Buffer instance_nodes{}, instance_order{}, instance_hash{}, instance_table{};
 
+    lane_e::E003BinaryPayload instance_binary_payload;
+    lane_e::E003QuantizedPayload instance_quantized_payload;
     std::unique_ptr<GpuSoftwareBvhData> software_cpu;
     std::unique_ptr<HierarchicalStrataBrick> hierarchy_cpu;
     lane_b::B003QuantizedMicroPayload quant_payload;
