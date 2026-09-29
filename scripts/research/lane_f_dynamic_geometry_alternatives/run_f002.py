@@ -507,10 +507,8 @@ def main() -> int:
             "peak_resident_bytes": nrep_summary["peak_builder_bytes"],
         },
         "correctness": {
-            "validation_errors": 0,
-            "sort_mismatches": 0,
-            "root_count_mismatches": 0,
-            "root_bounds_mismatches": 0,
+            "validation_errors": validation_payload.get("validation_errors", 0),
+            **validation_payload.get("structural_checks", {}),
         },
         "historical_ceiling_us_reference_only": HISTORICAL_CEILING_US,
         "historical_reference_ratio": nrep_builder / HISTORICAL_CEILING_US,
