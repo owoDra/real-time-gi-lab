@@ -17,6 +17,7 @@
 #include "../lane_b_traversal/hierarchical_stratabrick.hpp"
 #include "../lane_b_traversal/traversal_common.hpp"
 #include "../lane_f_dynamic_geometry_alternatives/f003_transient_lbvh.hpp"
+#include "../lane_f_dynamic_geometry_alternatives/f005_transient_grid.hpp"
 #include "vk_init.hpp"
 
 #include <algorithm>
@@ -199,9 +200,17 @@ static_assert(sizeof(InvalidationPush) == 16);
     return value == I001Variant::TransientLbvh;
 }
 
+[[nodiscard]] bool uses_transient_grid(I001Variant value) noexcept {
+    return value == I001Variant::TransientGrid;
+}
+
+[[nodiscard]] bool uses_transient_candidate(I001Variant value) noexcept {
+    return uses_transient_lbvh(value) || uses_transient_grid(value);
+}
+
 [[nodiscard]] bool uses_hwrt(I001Variant value) noexcept {
     return value == I001Variant::CombinedHwrt ||
-           value == I001Variant::TransientLbvh ||
+           uses_transient_candidate(value) ||
            value == I001Variant::DepthReuseHwrt ||
            value == I001Variant::BoundedHwrt;
 }
@@ -491,6 +500,7 @@ const char* i001_variant_name(I001Variant value) noexcept {
     case I001Variant::CombinedHwrt: return "combined-hwrt";
     case I001Variant::CombinedSoftware: return "combined-software";
     case I001Variant::TransientLbvh: return "transient-lbvh";
+    case I001Variant::TransientGrid: return "transient-grid";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
     }
@@ -516,6 +526,7 @@ I001Variant i001_parse_variant(const std::string& value) {
     if (value == "combined-hwrt") return I001Variant::CombinedHwrt;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
     if (value == "transient-lbvh") return I001Variant::TransientLbvh;
+    if (value == "transient-grid") return I001Variant::TransientGrid;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
     throw std::runtime_error("unknown I001 variant: " + value);
@@ -553,6 +564,7 @@ struct I001Runtime::Impl {
     lane_b::B003QuantizedMicroPayload quant_payload;
     std::unique_ptr<B002HwrtTraversal> hwrt;
     std::unique_ptr<phos::gi::research::lane_f::F003TransientLbvh> transient_lbvh;
+    std::unique_ptr<phos::gi::research::lane_f::F005TransientGrid> transient_grid;
 
     std::unique_ptr<I001ComputeStage> depth_stage, owner_stage, producer_stage;
     std::unique_ptr<I001ComputeStage> clamp_stage, finalize_stage, ray_stage;
@@ -648,7 +660,7 @@ struct I001Runtime::Impl {
         hits = context.create_device_buffer(
             VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-        if (uses_transient_lbvh(options.variant) &&
+        if (uses_transient_candidate(options.variant) &&
             options.scenario == I001Scenario::MovingRigid) {
             static_hits = context.create_device_buffer(
                 VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
@@ -722,6 +734,7 @@ struct I001Runtime::Impl {
         hit_merge_stage.reset();
         dynamic_traversal_stage.reset();
         traversal_stage.reset();
+        transient_grid.reset();
         transient_lbvh.reset();
         ray_stage.reset();
         finalize_stage.reset();
@@ -746,7 +759,7 @@ struct I001Runtime::Impl {
     }
 
     void prepare_candidate_traversal() {
-        if (uses_transient_lbvh(options.variant)) {
+        if (uses_transient_candidate(options.variant)) {
             std::vector<lane_b::Triangle> static_triangles;
             if (options.scenario == I001Scenario::MovingRigid) {
                 std::vector<std::uint8_t> dynamic_mask(
@@ -787,15 +800,27 @@ struct I001Runtime::Impl {
                     dynamic_bounds.min.y - 2.0F * page_extent,
                     dynamic_bounds.min.z - 2.0F * page_extent,
                 };
-                transient_lbvh = std::make_unique<
-                    phos::gi::research::lane_f::F003TransientLbvh>(
-                        context,
-                        dynamic_template,
-                        origin,
-                        page_extent,
-                        shader_path(
-                            PHOS_GI_LANE_F_SHADER_DIR,
-                            "lane_f_f003_lbvh_builder.spv"));
+                if (uses_transient_lbvh(options.variant)) {
+                    transient_lbvh = std::make_unique<
+                        phos::gi::research::lane_f::F003TransientLbvh>(
+                            context,
+                            dynamic_template,
+                            origin,
+                            page_extent,
+                            shader_path(
+                                PHOS_GI_LANE_F_SHADER_DIR,
+                                "lane_f_f003_lbvh_builder.spv"));
+                } else {
+                    transient_grid = std::make_unique<
+                        phos::gi::research::lane_f::F005TransientGrid>(
+                            context,
+                            dynamic_template,
+                            origin,
+                            page_extent,
+                            shader_path(
+                                PHOS_GI_LANE_F_SHADER_DIR,
+                                "lane_f_f005_grid_builder.spv"));
+                }
             }
             return;
         }
@@ -1027,7 +1052,7 @@ struct I001Runtime::Impl {
     }
 
     void create_traversal_stage() {
-        if (uses_transient_lbvh(options.variant)) {
+        if (uses_transient_candidate(options.variant)) {
             const bool split =
                 options.scenario == I001Scenario::MovingRigid;
             const auto* static_output = split ? &static_hits : &hits;
@@ -1045,19 +1070,40 @@ struct I001Runtime::Impl {
                 sizeof(std::uint32_t));
 
             if (split) {
-                const std::array<I001Binding, 5> dynamic_bindings{{
-                    {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
-                    {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_lbvh->triangles()},
-                    {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_lbvh->nodes()},
-                    {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &dynamic_hits},
-                    {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
-                }};
-                dynamic_traversal_stage = std::make_unique<I001ComputeStage>(
-                    context,
-                    shader_path(
-                        PHOS_GI_LANE_F_SHADER_DIR,
-                        "lane_f_f003_dynamic_traversal.spv"),
-                    dynamic_bindings);
+                if (uses_transient_lbvh(options.variant)) {
+                    const std::array<I001Binding, 5> dynamic_bindings{{
+                        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
+                        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_lbvh->triangles()},
+                        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_lbvh->nodes()},
+                        {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &dynamic_hits},
+                        {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+                    }};
+                    dynamic_traversal_stage = std::make_unique<I001ComputeStage>(
+                        context,
+                        shader_path(
+                            PHOS_GI_LANE_F_SHADER_DIR,
+                            "lane_f_f003_dynamic_traversal.spv"),
+                        dynamic_bindings);
+                } else {
+                    const std::array<I001Binding, 9> dynamic_bindings{{
+                        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
+                        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_grid->triangles()},
+                        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_grid->pairs()},
+                        {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_grid->cell_ranges()},
+                        {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_grid->macro_ranges()},
+                        {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_grid->build_counters()},
+                        {6, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &dynamic_hits},
+                        {7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+                        {8, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_grid->stats_buffer()},
+                    }};
+                    dynamic_traversal_stage = std::make_unique<I001ComputeStage>(
+                        context,
+                        shader_path(
+                            PHOS_GI_LANE_F_SHADER_DIR,
+                            "lane_f_f005_grid_traversal.spv"),
+                        dynamic_bindings,
+                        sizeof(phos::gi::research::lane_f::F005GridTraversalPush));
+                }
 
                 const std::array<I001Binding, 4> hit_merge_bindings{{
                     {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &static_hits},
@@ -1145,7 +1191,7 @@ struct I001Runtime::Impl {
         memory_stats.persistent_bytes =
             memory_stats.shared_persistent_bytes;
 
-        if (uses_transient_lbvh(options.variant)) {
+        if (uses_transient_candidate(options.variant)) {
             memory_stats.static_hwrt_persistent_bytes =
                 hwrt->setup_stats().persistent_bytes;
             memory_stats.persistent_bytes +=
@@ -1161,6 +1207,24 @@ struct I001Runtime::Impl {
                     dynamic_memory.scratch_bytes;
                 memory_stats.current_frame_geometry_bytes =
                     dynamic_memory.input_geometry_bytes;
+                memory_stats.persistent_bytes +=
+                    dynamic_memory.persistent_bytes;
+                memory_stats.scratch_bytes +=
+                    dynamic_memory.scratch_bytes;
+            } else if (transient_grid) {
+                const auto& dynamic_memory = transient_grid->memory();
+                memory_stats.dynamic_candidate_persistent_bytes =
+                    dynamic_memory.persistent_bytes;
+                memory_stats.dynamic_candidate_transient_bytes =
+                    dynamic_memory.transient_bytes;
+                memory_stats.dynamic_candidate_scratch_bytes =
+                    dynamic_memory.scratch_bytes;
+                memory_stats.current_frame_geometry_bytes =
+                    dynamic_memory.input_geometry_bytes;
+                memory_stats.grid_pair_stream_bytes =
+                    dynamic_memory.pair_stream_bytes;
+                memory_stats.grid_sort_scratch_bytes =
+                    dynamic_memory.sort_scratch_bytes;
                 memory_stats.persistent_bytes +=
                     dynamic_memory.persistent_bytes;
                 memory_stats.scratch_bytes +=
@@ -1252,7 +1316,7 @@ struct I001Runtime::Impl {
 
         using Clock = std::chrono::steady_clock;
         const auto start = Clock::now();
-        if (uses_transient_lbvh(options.variant)) {
+        if (uses_transient_candidate(options.variant)) {
             // The transient candidate does not require a full-scene CPU copy.
             // Keep only the selected reference geometry current for the
             // post-frame correctness replay.
@@ -1297,7 +1361,7 @@ struct I001Runtime::Impl {
             context.update_device_buffer_timed(
                 surfaces,
                 surface_updates);
-        if (uses_transient_lbvh(options.variant)) {
+        if (uses_transient_candidate(options.variant)) {
             // Fixed classification: the selected primitives stay out of the
             // persistent static HWRT in both source and target frames. Their
             // current-frame world transform is generated by the transient
@@ -1537,13 +1601,21 @@ struct I001Runtime::Impl {
         i001_compute_barrier(context, command);
         stamp(5);
 
-        if (uses_transient_lbvh(options.variant) &&
+        if (uses_transient_candidate(options.variant) &&
             options.scenario == I001Scenario::MovingRigid) {
-            transient_lbvh->record_build(
-                command,
-                geometry_is_target ? moving.delta_x : 0.0F,
-                query_pool,
-                12U);
+            if (transient_lbvh) {
+                transient_lbvh->record_build(
+                    command,
+                    geometry_is_target ? moving.delta_x : 0.0F,
+                    query_pool,
+                    12U);
+            } else {
+                transient_grid->record_build(
+                    command,
+                    geometry_is_target ? moving.delta_x : 0.0F,
+                    query_pool,
+                    12U);
+            }
             i001_acceleration_to_compute_barrier(context, command);
 
             stamp(20);
@@ -1551,8 +1623,15 @@ struct I001Runtime::Impl {
             i001_compute_barrier(context, command);
             stamp(21);
 
-            dynamic_traversal_stage->record_indirect(
-                command, indirect.buffer, 0);
+            if (transient_grid) {
+                const auto push = transient_grid->traversal_push();
+                dynamic_traversal_stage->record_indirect(
+                    command, indirect.buffer, 0,
+                    &push, sizeof(push));
+            } else {
+                dynamic_traversal_stage->record_indirect(
+                    command, indirect.buffer, 0);
+            }
             i001_compute_barrier(context, command);
             stamp(22);
 
@@ -1564,10 +1643,10 @@ struct I001Runtime::Impl {
             if (uses_hwrt(options.variant)) {
                 i001_acceleration_to_compute_barrier(context, command);
             }
-            if (uses_transient_lbvh(options.variant)) stamp(20);
+            if (uses_transient_candidate(options.variant)) stamp(20);
             record_candidate_traversal(command);
             i001_compute_barrier(context, command);
-            if (uses_transient_lbvh(options.variant)) stamp(21);
+            if (uses_transient_candidate(options.variant)) stamp(21);
         }
         stamp(6);
 
@@ -1621,8 +1700,8 @@ struct I001Runtime::Impl {
 
         // kQueryCount is read back with WAIT_BIT. Every slot must therefore
         // be written exactly once in every variant/scenario, including
-        // controls and stable transient-LBVH cases that do not run a builder.
-        if (!uses_transient_lbvh(options.variant)) {
+        // controls and stable transient-candidate cases that do not run a builder.
+        if (!uses_transient_candidate(options.variant)) {
             for (std::uint32_t slot = 12U; slot < kQueryCount; ++slot) {
                 stamp(slot);
             }
@@ -1670,7 +1749,7 @@ struct I001Runtime::Impl {
         result.timings.ray_prepare_us = timestamp_us(timestamps[4], timestamps[5], period);
         result.timings.traversal_maintenance_gpu_us = dynamic_update.gpu_us;
         result.timings.dynamic_update_wall_us = dynamic_update.wall_us;
-        if (uses_transient_lbvh(options.variant)) {
+        if (uses_transient_candidate(options.variant)) {
             result.timings.static_traversal_us =
                 timestamp_us(timestamps[20], timestamps[21], period);
             if (options.scenario == I001Scenario::MovingRigid) {
@@ -1678,16 +1757,29 @@ struct I001Runtime::Impl {
                     timestamp_us(timestamps[12], timestamps[13], period);
                 result.timings.dynamic_builder_input_us =
                     timestamp_us(timestamps[13], timestamps[14], period);
-                result.timings.dynamic_builder_aabb_us =
-                    timestamp_us(timestamps[14], timestamps[15], period);
-                result.timings.dynamic_builder_morton_us =
-                    timestamp_us(timestamps[15], timestamps[16], period);
-                result.timings.dynamic_builder_sort_us =
-                    timestamp_us(timestamps[16], timestamps[17], period);
-                result.timings.dynamic_builder_topology_us =
-                    timestamp_us(timestamps[17], timestamps[18], period);
-                result.timings.dynamic_builder_bounds_us =
-                    timestamp_us(timestamps[18], timestamps[19], period);
+                if (uses_transient_lbvh(options.variant)) {
+                    result.timings.dynamic_builder_aabb_us =
+                        timestamp_us(timestamps[14], timestamps[15], period);
+                    result.timings.dynamic_builder_morton_us =
+                        timestamp_us(timestamps[15], timestamps[16], period);
+                    result.timings.dynamic_builder_sort_us =
+                        timestamp_us(timestamps[16], timestamps[17], period);
+                    result.timings.dynamic_builder_topology_us =
+                        timestamp_us(timestamps[17], timestamps[18], period);
+                    result.timings.dynamic_builder_bounds_us =
+                        timestamp_us(timestamps[18], timestamps[19], period);
+                } else {
+                    result.timings.dynamic_builder_overlap_us =
+                        timestamp_us(timestamps[14], timestamps[15], period);
+                    result.timings.dynamic_builder_prefix_us =
+                        timestamp_us(timestamps[15], timestamps[16], period);
+                    result.timings.dynamic_builder_emit_us =
+                        timestamp_us(timestamps[16], timestamps[17], period);
+                    result.timings.dynamic_builder_sort_us =
+                        timestamp_us(timestamps[17], timestamps[18], period);
+                    result.timings.dynamic_builder_ranges_us =
+                        timestamp_us(timestamps[18], timestamps[19], period);
+                }
                 result.timings.dynamic_builder_us =
                     timestamp_us(timestamps[12], timestamps[19], period);
                 result.timings.dynamic_traversal_us =
@@ -1733,6 +1825,27 @@ struct I001Runtime::Impl {
         result.stats.storage_updates = storage_values[1];
         result.stats.storage_invalidations = storage_values[2];
         result.stats.storage_failures = storage_values[3];
+        if (transient_grid) {
+            const auto grid_stats = transient_grid->stats();
+            result.stats.grid_emitted_references =
+                grid_stats.emitted_references;
+            result.stats.grid_max_references_per_triangle =
+                grid_stats.max_references_per_triangle;
+            result.stats.grid_visited_macro_cells =
+                grid_stats.visited_macro_cells;
+            result.stats.grid_visited_local_cells =
+                grid_stats.visited_local_cells;
+            result.stats.grid_empty_cell_steps =
+                grid_stats.empty_cell_steps;
+            result.stats.grid_tested_primitive_references =
+                grid_stats.tested_primitive_references;
+            result.stats.grid_cell_ranges =
+                grid_stats.cell_ranges;
+            result.stats.grid_macro_ranges =
+                grid_stats.macro_ranges;
+            result.stats.grid_overflow =
+                grid_stats.overflow;
+        }
         result.memory = memory_stats;
 
         last = result;
