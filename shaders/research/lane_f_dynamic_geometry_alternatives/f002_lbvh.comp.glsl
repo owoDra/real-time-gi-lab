@@ -48,7 +48,7 @@ const uint MODE_TOPOLOGY = 6u;
 const uint MODE_BOUNDS = 7u;
 
 shared uint histogram_shared[16];
-shared uint subgroup_counts[32 * 16];
+shared uint subgroup_counts[64 * 16];
 
 uint expand10(uint v) {
     v &= 0x000003ffu;
@@ -145,8 +145,8 @@ void main() {
         vec3 page_pos = (tri_center - pc.origin_page_extent.xyz) / pc.origin_page_extent.w;
         ivec3 page_i = ivec3(floor(page_pos));
         page_i = clamp(page_i, ivec3(0), ivec3(1023));
-        vec3 local = clamp(fract(page_pos), vec3(0.0), vec3(0.999999));
-        uvec3 local_q = uvec3(local * 1024.0);
+        vec3 local_pos = clamp(fract(page_pos), vec3(0.0), vec3(0.999999));
+        uvec3 local_q = uvec3(local_pos * 1024.0);
         keys_a[id] = uvec4(
             morton3d10(uvec3(page_i)),
             morton3d10(local_q),
@@ -194,27 +194,27 @@ void main() {
 
     if (pc.mode == MODE_SCATTER) {
         uint digit = 0u;
-        bool active = id < pc.count;
+        bool is_active = id < pc.count;
         uvec4 key = uvec4(0u);
-        if (active) {
+        if (is_active) {
             key = read_key(id);
             digit = digit_of(key);
         }
 
         uint rank_in_subgroup = 0u;
         for (uint d = 0u; d < 16u; ++d) {
-            uvec4 mask = subgroupBallot(active && digit == d);
+            uvec4 mask = subgroupBallot(is_active && digit == d);
             if (subgroupElect()) {
                 subgroup_counts[gl_SubgroupID * 16u + d] =
                     subgroupBallotBitCount(mask);
             }
-            if (active && digit == d) {
+            if (is_active && digit == d) {
                 rank_in_subgroup = subgroupBallotExclusiveBitCount(mask);
             }
         }
         barrier();
 
-        if (active) {
+        if (is_active) {
             uint local_rank = rank_in_subgroup;
             for (uint sg = 0u; sg < gl_SubgroupID; ++sg) {
                 local_rank += subgroup_counts[sg * 16u + digit];
