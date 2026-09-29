@@ -11,6 +11,8 @@ namespace phos::gi::research::integration {
 enum class I001Variant {
     VanillaSoftware,
     CombinedHwrt,
+    RigidInstanceHwrtUpdate,
+    RigidInstanceHwrtBuild,
     CombinedSoftware,
     DepthReuseHwrt,
     BoundedHwrt,
@@ -45,6 +47,8 @@ struct I001FrameTimings {
     double surface_update_gpu_us{};
     double geometry_transfer_wall_us{};
     double geometry_transfer_gpu_us{};
+    double instance_transfer_wall_us{};
+    double instance_transfer_gpu_us{};
     double blas_update_us{};
     double tlas_update_us{};
     double membership_update_cpu_us{};
