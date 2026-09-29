@@ -43,3 +43,32 @@ per-process rows. The formal F002 feasibility gate remains pending because
 F001's run-local vanilla moving-rigid comparator was unstable in both allowed
 attempts; neither unstable median nor the historical ceiling may be silently
 substituted.
+
+
+## F003
+
+F003 integrates the persistent-static-HWRT + frame-local-dynamic-LBVH
+candidate into the unchanged I001 A001-producer / sparse-hash-storage frame.
+
+Validation must pass first:
+
+```bash
+mise run research:record \
+  --lane lane-f-dynamic-geometry-alternatives \
+  --experiment 003-end-to-end-transient-lbvh \
+  --command "python scripts/research/lane_f_dynamic_geometry_alternatives/run_f003.py --build-dir build/release --validation-only"
+```
+
+Accepted timing is then the frozen 5-process campaign:
+
+```bash
+mise run research:record \
+  --lane lane-f-dynamic-geometry-alternatives \
+  --experiment 003-end-to-end-transient-lbvh \
+  --command "python scripts/research/lane_f_dynamic_geometry_alternatives/run_f003.py --build-dir build/release --repeats 5 --skip-validation"
+```
+
+The campaign reruns transient-LBVH plus all three unchanged I001 controls for
+all eight F003 scenarios. Do not run accepted timing after changing
+`003-end-to-end-transient-lbvh-config.json` or candidate structure without a
+new pre-timing plan revision.
