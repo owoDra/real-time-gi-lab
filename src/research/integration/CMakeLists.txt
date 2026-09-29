@@ -10,6 +10,12 @@ add_compute_shader(
   i001_quantized_bvh8
   shaders/research/integration/i001_quantized_bvh8.comp.glsl)
 add_compute_shader(
+  e003_instance_binary
+  shaders/research/lane_e_dynamic_geometry/e003_instance_binary.comp.glsl)
+add_compute_shader(
+  e003_instance_quantized
+  shaders/research/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl)
+add_compute_shader(
   i001_work_to_rays
   shaders/research/integration/i001_work_to_rays.comp.glsl)
 add_compute_shader(
@@ -35,6 +41,8 @@ set(I001_SHADER_OUTPUTS
   "${CMAKE_BINARY_DIR}/shaders/i001_software_bvh.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_hwrt.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_quantized_bvh8.spv"
+  "${CMAKE_BINARY_DIR}/shaders/e003_instance_binary.spv"
+  "${CMAKE_BINARY_DIR}/shaders/e003_instance_quantized.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_work_to_rays.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_bounded_producer.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_radiance.spv"
@@ -63,6 +71,7 @@ target_include_directories(phos-i001 PRIVATE
   "${CMAKE_SOURCE_DIR}/src"
   "${CMAKE_SOURCE_DIR}/src/research/lane_a_split_rc"
   "${CMAKE_SOURCE_DIR}/src/research/lane_b_traversal"
+  "${CMAKE_SOURCE_DIR}/src/research/lane_e_dynamic_geometry"
   "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 target_link_libraries(phos-i001 PRIVATE
