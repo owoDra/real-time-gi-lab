@@ -20,6 +20,7 @@
 
 #include <algorithm>
 #include <array>
+#include <bit>
 #include <cmath>
 #include <chrono>
 #include <compare>
@@ -1476,10 +1477,16 @@ struct I001Runtime::Impl {
         producer_readback.work_items.resize(work_items.size());
         static_assert(
             sizeof(lane_a::SplitRcWorkItemV1) == sizeof(LaneAWorkItemV1));
-        std::memcpy(
-            producer_readback.work_items.data(),
-            work_items.data(),
-            work_items.size() * sizeof(LaneAWorkItemV1));
+        static_assert(
+            std::is_trivially_copyable_v<lane_a::SplitRcWorkItemV1>);
+        static_assert(std::is_trivially_copyable_v<LaneAWorkItemV1>);
+        std::transform(
+            work_items.begin(),
+            work_items.end(),
+            producer_readback.work_items.begin(),
+            [](const LaneAWorkItemV1& item) {
+                return std::bit_cast<lane_a::SplitRcWorkItemV1>(item);
+            });
         producer_readback.resolved.assign(last.stats.outputs, 0.0F);
 
         const auto producer_analysis = lane_a::analyze_a001(
