@@ -1,6 +1,6 @@
 # E001 — dynamic ownership decomposition
 
-Status: implementation in progress; target timing not yet run
+Status: target validation ready; target timing not yet run
 
 ## Question
 
@@ -120,3 +120,27 @@ The next experiment should attack the measured ownership cost, not whichever
 mechanism appears easiest to optimize.
 
 No architecture is promoted from E001 alone.
+
+
+## Target validation checkpoint
+
+Implementation and static review are complete enough for the first target gate.
+No target GPU timing has been run or inferred.
+
+Run from the target machine:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 001-dynamic-ownership-decomposition \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e001.py --build-dir build/release --validation-only"
+```
+
+Do not start accepted timing until this validation artifact has been inspected.
+The timing runner will repeat the same validation matrix before timing as an
+additional guard.
