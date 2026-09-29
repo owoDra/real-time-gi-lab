@@ -17,7 +17,8 @@ research
 ├── research-lane-b-traversal                # Issue #11
 ├── research-lane-c-storage-locality         # Issue #12
 ├── research-lane-d-producer-optimization    # Issue #14
-└── research-integration-gate                # Issue #13
+├── research-integration-gate                # Issue #13
+└── research-lane-e-dynamic-geometry         # Issue #15
 ```
 
 Routine lane iterations are committed directly to the owning lane branch.
@@ -36,6 +37,11 @@ onto `research-integration-gate`; it does not merge entire lane histories.
 - D002/D003/D004 are rejected and are not Integration candidates.
 
 These are inputs, not proof that the combined architecture wins.
+
+Issue #15 / Lane E follows the completed I001 integration gate and isolates the
+remaining dynamic-geometry ownership/maintenance problem. It reuses the accepted
+integration runtime as its baseline instead of duplicating the integration
+implementation.
 
 ## Evidence flow
 
