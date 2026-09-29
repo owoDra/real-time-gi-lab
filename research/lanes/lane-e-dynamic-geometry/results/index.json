@@ -1,5 +1,14 @@
 {
   "schema_version": 1,
   "lane": "lane-e-dynamic-geometry",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "E001",
+      "experiment": "001-dynamic-ownership-decomposition",
+      "status": "complete",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/001-dynamic-ownership-decomposition.md",
+      "measurement_commit": "1fa902d48a8d6e693384f5911033683ebd342a00",
+      "result_commit": "1c05f3553245528164937c0a9ae9bd0cbf2ef2f4"
+    }
+  ]
 }
