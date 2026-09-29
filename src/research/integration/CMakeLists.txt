@@ -13,6 +13,9 @@ add_compute_shader(
   i001_work_to_rays
   shaders/research/integration/i001_work_to_rays.comp.glsl)
 add_compute_shader(
+  i001_bounded_producer
+  shaders/research/integration/i001_bounded_producer.comp.glsl)
+add_compute_shader(
   i001_radiance
   shaders/research/integration/i001_radiance.comp.glsl)
 add_compute_shader(
@@ -33,6 +36,7 @@ set(I001_SHADER_OUTPUTS
   "${CMAKE_BINARY_DIR}/shaders/i001_hwrt.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_quantized_bvh8.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_work_to_rays.spv"
+  "${CMAKE_BINARY_DIR}/shaders/i001_bounded_producer.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_radiance.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_storage_update.spv"
   "${CMAKE_BINARY_DIR}/shaders/i001_storage_invalidate.spv"
