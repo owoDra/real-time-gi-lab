@@ -14,8 +14,8 @@
       "id": "G002",
       "name": "timing-repeatability-diagnosis",
       "result": "002-timing-repeatability-diagnosis.md",
-      "status": "pending-target-gpu-evidence",
-      "decision": "g003-timing-blocked-until-protocol-freeze"
+      "status": "diagnostic-extension-pending",
+      "decision": "f007-protocol-rejected-g002b-paired-validation-pending"
     }
   ]
 }
