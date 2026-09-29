@@ -13,9 +13,16 @@ Current checkpoint:
 - F001: correctness PASS; moving-rigid baseline repeatability INCONCLUSIVE.
 - F002: structural correctness/repeatability PASS; formal feasibility gate
   remains pending because its required F001 run-local comparator is inconclusive.
-- F003: implementation frozen for first target validation; no accepted F003
-  timing artifact exists yet.
+- F003: correctness PASS; accepted timing INCONCLUSIVE after the one permitted
+  identical full rerun also remained unstable.
+- F004: not activated because the frozen F002 formal-PASS prerequisite is not
+  available; F003 moving dynamic traversal was also below builder time.
+- F005: sorted two-level grid implementation/config/runner are frozen before
+  first accepted timing; target validation is the next checkpoint.
 
-F003 preserves the fixed dynamic classification: the F001/I001 selected
-moving-rigid primitive set is excluded from persistent static HWRT before the
-warmup frame and remains frame-local dynamic data through the measured frame.
+F003 and F005 preserve the same fixed dynamic classification: the F001/I001
+selected moving-rigid primitive set is excluded from persistent static HWRT
+before warmup and remains frame-local dynamic data through warmup + measured
+target frame. F005 changes only the transient dynamic representation/traversal:
+AABB cell overlap -> prefix -> sorted macro/local cell pairs -> RLE ranges ->
+two-level DDA + exact triangle tests.
