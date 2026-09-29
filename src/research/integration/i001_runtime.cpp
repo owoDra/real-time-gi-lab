@@ -1355,7 +1355,8 @@ struct I001Runtime::Impl {
                 context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"),
                 bindings, sizeof(std::uint32_t));
         } else if (uses_rigid_instance_software(options.variant) ||
-                   uses_deforming_local_software(options.variant)) {
+                   uses_deforming_local_software(options.variant) ||
+                   uses_lane_e_final_software(options.variant)) {
             const std::array<I001Binding, 8> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
                 {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &triangle_buffer},
@@ -1441,7 +1442,8 @@ struct I001Runtime::Impl {
         } else {
             memory_stats.persistent_bytes += allocation(triangle_buffer);
             if (uses_rigid_instance_software(options.variant) ||
-                uses_deforming_local_software(options.variant)) {
+                uses_deforming_local_software(options.variant) ||
+                uses_lane_e_final_software(options.variant)) {
                 memory_stats.persistent_bytes +=
                     allocation(instance_nodes) +
                     allocation(instance_order) +
@@ -2024,11 +2026,16 @@ struct I001Runtime::Impl {
             traversal_stage->record_indirect(
                 command, indirect.buffer, 0, &max_rays, sizeof(max_rays));
         } else if (uses_rigid_instance_software(options.variant) ||
-                   uses_deforming_local_software(options.variant)) {
+                   uses_deforming_local_software(options.variant) ||
+                   uses_lane_e_final_software(options.variant)) {
             lane_e::E003TraversalPush push{};
             push.values[0] = params.limits[1];
+            const bool deforming_instance_path =
+                uses_deforming_local_software(options.variant) ||
+                (uses_lane_e_final_software(options.variant) &&
+                 options.scenario == I001Scenario::DeformingControl);
             push.values[1] = static_cast<std::uint32_t>(
-                uses_deforming_local_software(options.variant)
+                deforming_instance_path
                     ? deforming_local_setup.instances.size()
                     : (uses_rigid_instance_software_binary(options.variant)
                         ? instance_binary_payload.instances.size()
