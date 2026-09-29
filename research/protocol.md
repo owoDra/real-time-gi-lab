@@ -139,6 +139,23 @@ A later methodology change is allowed only when diagnostics justify it. Freeze
 the new protocol before the next accepted campaign and do not silently mix old
 and new timing evidence.
 
+### Measurement host safety
+
+Timing methodology must not depend on privileged GPU power/clock manipulation
+as a prerequisite for accepted evidence. Such controls may be considered only
+as an explicitly isolated diagnostic with a separate safety justification.
+
+If a diagnostic causes host instability or a crash:
+
+- stop that diagnostic immediately;
+- do not treat the failed run as performance evidence;
+- do not infer a clock/DVFS root cause from the crash alone;
+- do not require the same unsafe diagnostic again to continue deterministic
+  correctness or memory research.
+
+Lane G G002c is the current precedent: its forced performance-state diagnostic
+was abandoned after host instability and is not an accepted timing protocol.
+
 ## Decision-gate discipline
 
 Freeze correctness, performance, memory, workload, and repeatability gates
