@@ -68,7 +68,7 @@ void write_csv(
     const integration::I001Runtime& runtime,
     const integration::I001FrameResult& result) {
     output
-        << "variant,scenario,device,validation,"
+        << "variant,scenario,device,validation,bounded_owner_capacity,"
            "renderer_depth_us,frame_init_us,visibility_reuse_us,"
            "producer_us,ray_prepare_us,traversal_maintenance_gpu_us,dynamic_update_wall_us,"
            "traversal_us,radiance_us,"
@@ -87,6 +87,7 @@ void write_csv(
         << integration::i001_scenario_name(cli.options.scenario) << ','
         << '"' << runtime.device_name() << '"' << ','
         << (cli.options.validation ? 1 : 0) << ','
+        << cli.options.bounded_owner_capacity << ','
         << result.timings.renderer_depth_us << ','
         << result.timings.frame_init_us << ','
         << result.timings.visibility_reuse_us << ','
@@ -143,6 +144,8 @@ void write_metadata(
         << "  \"driver_info\": \"" << runtime.driver_info() << "\",\n"
         << "  \"api_version\": " << runtime.api_version() << ",\n"
         << "  \"validation\": " << (cli.options.validation ? "true" : "false") << ",\n"
+        << "  \"bounded_owner_capacity\": "
+        << cli.options.bounded_owner_capacity << ",\n"
         << "  \"quality_passed\": " << (result.quality.passed ? "true" : "false") << ",\n"
         << "  \"overflow\": " << result.stats.overflow << ",\n"
         << "  \"traversal_maintenance_gpu_us\": "
