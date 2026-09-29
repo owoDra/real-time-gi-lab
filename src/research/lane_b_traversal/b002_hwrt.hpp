@@ -34,6 +34,7 @@ struct HwrtUpdateStats {
     double geometry_upload_us{};
     double blas_update_us{};
     double tlas_update_us{};
+    double geometry_upload_gpu_us{};
 };
 
 class B002HwrtTraversal {
