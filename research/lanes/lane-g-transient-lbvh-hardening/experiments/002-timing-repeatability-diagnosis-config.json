@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g002-v1",
+  "experiment": "G002",
+  "name": "timing-repeatability-diagnosis",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "architecture_changes_forbidden": true,
+  "outlier_deletion": false,
+  "variants": [
+    "transient-lbvh",
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "anchor_scenarios": [
+    "static",
+    "moving-rigid",
+    "sparse-stress",
+    "sparse-moving"
+  ],
+  "full_scenarios": [
+    "static",
+    "camera-motion",
+    "light-motion",
+    "moving-rigid",
+    "sparse-stress",
+    "dense-stress",
+    "large-world-stress",
+    "vertical-world-stress",
+    "sparse-moving",
+    "dense-moving",
+    "large-world-moving",
+    "vertical-world-moving"
+  ],
+  "phases": {
+    "same-process": {
+      "warmup_frames": 8,
+      "measured_frames": 24,
+      "note": "dynamic scenario row 0 is the transition; later rows are post-transition rebuild/steady-target diagnostics"
+    },
+    "fresh-process": {
+      "process_repeats": 7,
+      "warmup_frames": 1,
+      "measured_frames": 1,
+      "note": "matches the F007 one-warmup/one-measured fresh-process boundary"
+    },
+    "warmup-sweep": {
+      "warmup_frames": [
+        0,
+        1,
+        4,
+        16
+      ],
+      "process_repeats": 3,
+      "measured_frames": 1
+    },
+    "full-matrix-order": {
+      "orders": [
+        "canonical",
+        "reverse"
+      ],
+      "campaign_repeats": 3,
+      "warmup_frames": 1,
+      "measured_frames": 1
+    }
+  },
+  "diagnostic_flags": {
+    "max_min_warning_ratio": 1.2,
+    "candidate_protocol_max_min_ratio": 1.1,
+    "candidate_protocol_mad_over_median": 0.05,
+    "order_sensitivity_ratio": 1.1
+  },
+  "freeze_rule": "G003 timing remains blocked until G002 evidence identifies a protocol satisfying repeatability criteria for candidate and controls, and that protocol is recorded in Issue #17/result before any decision-valid G003 timing."
+}

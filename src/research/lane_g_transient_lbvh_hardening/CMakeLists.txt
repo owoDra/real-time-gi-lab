@@ -119,3 +119,47 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-g-g001 PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+add_executable(phos-lane-g-g002
+  g002_benchmark.cpp
+  i001_runtime.cpp
+  i001_compute.cpp
+  f003_transient_lbvh.cpp
+  f005_transient_grid.cpp
+  baseline/lane_a_split_rc/a001_scene.cpp
+  baseline/lane_a_split_rc/a001_runtime.cpp
+  baseline/lane_a_split_rc/a001_analysis.cpp
+  baseline/lane_b_traversal/b002_scene.cpp
+  baseline/lane_b_traversal/b002_vulkan.cpp
+  baseline/lane_b_traversal/b002_compute.cpp
+  baseline/lane_b_traversal/b002_hwrt.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+target_include_directories(phos-lane-g-g002 PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/baseline/lane_a_split_rc"
+  "${CMAKE_CURRENT_SOURCE_DIR}/baseline/lane_b_traversal"
+)
+target_link_libraries(phos-lane-g-g002 PRIVATE
+  vk-bootstrap::vk-bootstrap
+  fastgltf::fastgltf
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-g-g002 PRIVATE cxx_std_20)
+target_compile_definitions(phos-lane-g-g002 PRIVATE
+  PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_F_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-g-g002 PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+add_dependencies(phos-lane-g-g002 phos-lane-g-g001-shaders)
+if(MSVC)
+  target_compile_options(phos-lane-g-g002 PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-g-g002 PRIVATE -Wall -Wextra -Wpedantic)
+endif()
