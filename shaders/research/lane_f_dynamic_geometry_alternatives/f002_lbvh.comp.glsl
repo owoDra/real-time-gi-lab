@@ -258,7 +258,11 @@ void main() {
             ? leaf_base + uint(split + 1)
             : uint(split + 1);
 
-        nodes[id].data = uvec4(left, right, INVALID_ID, INVALID_ID);
+        // Do not overwrite data.z here: the parent invocation may already
+        // have published this internal node's parent concurrently.
+        nodes[id].data.x = left;
+        nodes[id].data.y = right;
+        nodes[id].data.w = INVALID_ID;
         nodes[left].data.z = id;
         nodes[right].data.z = id;
         return;
