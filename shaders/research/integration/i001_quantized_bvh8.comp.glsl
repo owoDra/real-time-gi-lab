@@ -57,6 +57,9 @@ layout(std430, binding = 4) readonly buffer SegmentHash {
 layout(std430, binding = 5) writeonly buffer Hits {
     HitData hits[];
 };
+layout(std430, binding = 6) readonly buffer Counters {
+    uint data[];
+} counters;
 
 layout(push_constant) uniform Push {
     uvec4 values;
