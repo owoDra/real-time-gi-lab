@@ -27,6 +27,15 @@
       "correctness": "pass",
       "repeatability": "inconclusive-after-permitted-rerun",
       "decision": "f005-next-f004-not-activated"
+    },
+    {
+      "id": "F005",
+      "name": "end-to-end-sorted-two-level-grid",
+      "result": "005-end-to-end-sorted-two-level-grid.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "f006-controlled-generalization-next"
     }
   ]
 }
