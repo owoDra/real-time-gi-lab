@@ -104,10 +104,19 @@ Performance rows are accepted only after quality parity.
 The independent reference path uses the software-BVH Hit contract from the same
 A001 rays. Those independently generated hits are then evaluated by the same
 canonical deterministic radiance shader used by candidates before merge/storage.
-This avoids treating CPU-vs-GPU floating-point implementation differences as GI
-quality failures while keeping traversal independent and keeping the fixed final
-radiance thresholds unchanged. Integrated variants compare their resolved
-probe/tile field against that reference.
+
+The I001 radiance value is intentionally a synthetic contract payload rather
+than a production shading model. A hit's primitive/material/instance identity,
+cascade/ray identity, and the current direct-light state are hashed into a
+16-bit contribution. Hit distance and normal are not re-used for this payload
+because they are already checked by the independent Hit gate with an explicit
+floating tolerance. This separation makes equivalent HWRT/software hits produce
+bit-identical radiance while light-motion still changes the payload, so the
+fixed final radiance thresholds remain meaningful for merge/storage/temporal
+integration rather than becoming a second, inconsistent traversal tolerance.
+
+Integrated variants compare their resolved probe/tile field against that
+reference.
 
 Record:
 - RMS and max absolute radiance error;
