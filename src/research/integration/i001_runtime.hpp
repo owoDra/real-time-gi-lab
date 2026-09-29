@@ -27,6 +27,10 @@ enum class I001Scenario {
     DenseStress,
     LargeWorldStress,
     VerticalWorldStress,
+    SparseMovingStress,
+    DenseMovingStress,
+    LargeWorldMovingStress,
+    VerticalWorldMovingStress,
 };
 
 enum class I001GeometryClass {
