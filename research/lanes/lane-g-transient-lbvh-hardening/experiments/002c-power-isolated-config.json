@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g002c-v1",
+  "experiment": "G002",
+  "phase": "power-isolated-paired-counterbalanced",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "architecture_changes_forbidden": true,
+  "outlier_deletion": false,
+  "required_power_dpm_force_performance_level": "profile_peak",
+  "sysfs_mutation_by_runner": false,
+  "warmup_frames": 4,
+  "measured_frames": 1,
+  "settle_seconds": 0.5,
+  "blocks": 5,
+  "block_orders": [
+    "ABBA",
+    "BAAB",
+    "ABBA",
+    "BAAB",
+    "ABBA"
+  ],
+  "comparisons": [
+    {
+      "scenario": "static",
+      "a": "transient-lbvh",
+      "b": "combined-hwrt",
+      "kind": "candidate"
+    },
+    {
+      "scenario": "static",
+      "a": "combined-software",
+      "b": "combined-hwrt",
+      "kind": "control"
+    },
+    {
+      "scenario": "sparse-stress",
+      "a": "transient-lbvh",
+      "b": "combined-hwrt",
+      "kind": "candidate"
+    },
+    {
+      "scenario": "sparse-stress",
+      "a": "combined-software",
+      "b": "combined-hwrt",
+      "kind": "control"
+    },
+    {
+      "scenario": "moving-rigid",
+      "a": "transient-lbvh",
+      "b": "vanilla-software",
+      "kind": "candidate"
+    },
+    {
+      "scenario": "moving-rigid",
+      "a": "combined-software",
+      "b": "vanilla-software",
+      "kind": "control"
+    },
+    {
+      "scenario": "sparse-moving",
+      "a": "transient-lbvh",
+      "b": "vanilla-software",
+      "kind": "candidate"
+    },
+    {
+      "scenario": "sparse-moving",
+      "a": "combined-software",
+      "b": "vanilla-software",
+      "kind": "control"
+    }
+  ],
+  "ratio_estimator": "per block geometric_mean(A1,A2) / geometric_mean(B1,B2)",
+  "repeatability_criteria": {
+    "block_ratio_max_min": 1.1,
+    "block_ratio_mad_over_median": 0.05,
+    "orientation_median_ratio": 1.1
+  },
+  "freeze_rule": "All candidate and control comparisons must satisfy all repeatability criteria with every planned run retained while profile_peak is verified before and after every child process. If so, G002 freezes the power-isolated paired protocol for G003/G005 relative timing gates; otherwise G002 remains open and system/background-load isolation is required."
+}
