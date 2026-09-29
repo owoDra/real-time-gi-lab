@@ -27,4 +27,17 @@ added only before accepted timing if its complete semantics and cost boundary
 can be matched; otherwise the final result records that comparison as
 unavailable.
 
-See `experiments/001-dynamic-end-to-end.md` for the fixed protocol.
+## Current state
+
+I001 is **target-run-ready** on this branch. Implementation-only work does not
+count as accepted performance evidence. The next gate is a clean target-GPU
+build plus the recorded matrix described in
+`experiments/001-dynamic-end-to-end.md`.
+
+The matrix covers the four representative Sponza regimes, topology-changing
+moving geometry, sparse/dense and large/vertical stresses, renderer depth reuse,
+the B003 software fallback, and D005-style bounded overflow with explicit
+full-capacity retry. Fixed thresholds remain unchanged from the frozen protocol.
+
+See `experiments/001-dynamic-end-to-end.md` for the protocol and exact target
+command.
