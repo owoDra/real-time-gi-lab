@@ -384,7 +384,8 @@ struct I001Runtime::Impl {
             hwrt = std::make_unique<B002HwrtTraversal>(
                 context,
                 b_scene.triangles,
-                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"));
+                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
+                false);
             return;
         }
 
