@@ -60,9 +60,10 @@
     {
       "id": "E005",
       "experiment": "005-integration-replay",
-      "status": "protocol-frozen",
+      "status": "target-validation-ready",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/005-integration-replay.md",
-      "protocol_commit": "a18730afa4aa293713e513783fbaf6b683057abe"
+      "protocol_commit": "a18730afa4aa293713e513783fbaf6b683057abe",
+      "implementation_checkpoint": "156707f751ffddec64546c98d2aa28f4476ee280"
     }
   ]
 }
