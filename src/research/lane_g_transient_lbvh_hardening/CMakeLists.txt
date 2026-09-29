@@ -1,6 +1,6 @@
 # Issue #17 Lane G owns this directory.
 # G001 snapshots F007 dependencies below Lane G. No other lane source is merged.
-# No memory optimization is permitted before G001 concludes.
+# G001 has concluded; G003 candidates must remain directly attributable to its census.
 
 foreach(shader
   i001_bounded_producer

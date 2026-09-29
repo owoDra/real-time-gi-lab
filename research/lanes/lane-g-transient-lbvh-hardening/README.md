@@ -4,10 +4,14 @@ Issue: #17
 
 This lane starts from `research@1ab3c09f62fc6778aa598a791c4c1a6f720d75f9`.
 
-The first experiment is **G001 memory ownership and lifetime census**. Until
-G001 concludes, changes in this lane may add instrumentation and validation only;
-they must not shrink buffers, alias scratch, change capacities, or otherwise
-optimize the F007 transient-LBVH architecture.
+G001 completed the memory ownership/lifetime census. G002 then diagnosed
+program-level timing instability but closed without a safe decision-valid timing
+protocol after the power-isolation experiment was abandoned for host safety.
+
+G003 is now active. Memory candidates must be directly attributable to G001,
+must retain the unchanged `transient-lbvh` run-local control, and must not use
+GPU power/clock sysfs manipulation. Timing remains non-decision-valid until a
+separately accepted safe protocol exists.
 
 The copied integration/LBVH/grid sources in
 `src/research/lane_g_transient_lbvh_hardening/` are an auditable snapshot of
