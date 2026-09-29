@@ -94,6 +94,7 @@ private:
         std::uint32_t pass,
         std::uint32_t groups) const;
     void compute_barrier(VkCommandBuffer command) const;
+    void compute_to_transfer_barrier(VkCommandBuffer command) const;
     void transfer_to_compute_barrier(VkCommandBuffer command) const;
     void submit_and_wait(VkCommandBuffer command) const;
 
