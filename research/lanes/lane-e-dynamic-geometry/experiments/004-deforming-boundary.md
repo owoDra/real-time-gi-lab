@@ -225,3 +225,27 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 Do not start accepted E004 timing until the validation artifact has been
 inspected. The formal timing runner repeats the validation matrix.
+
+
+## Pre-validation self-review correction
+
+Before target validation, the implementation was tightened without changing any
+frozen gate or workload:
+
+- partitioned HWRT deformation now uploads the selected object's contiguous
+  vertex range and contiguous metadata range as one update each, rather than
+  issuing one update record per primitive;
+- local deforming candidates now generate and write only the selected 796
+  deformed primitives on CPU instead of copying the entire scene merely to
+  construct the correctness target.
+
+These changes make the implementation match the already-frozen object-local
+ownership claim more closely. They do not change deformation math, primitive
+identity, producer/storage semantics, or promotion thresholds.
+
+Correction commits:
+
+- `aeb43b31c8bbe1e157d61f375d5eb73f72ab5b7b` — contiguous HWRT partition upload;
+- `cc4cb05743ee6d78de1671f871e7e38bebb8a29e` — object-local CPU deformation preparation.
+
+Target validation must be run at or after these corrections.
