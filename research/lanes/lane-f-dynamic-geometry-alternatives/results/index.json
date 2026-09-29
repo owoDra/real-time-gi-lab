@@ -36,6 +36,15 @@
       "correctness": "pass",
       "repeatability": "inconclusive-after-permitted-rerun",
       "decision": "f006-controlled-generalization-next"
+    },
+    {
+      "id": "F006",
+      "name": "geometry-class-crossover-controls",
+      "result": "006-geometry-class-crossover-controls.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "f007-final-integration-next"
     }
   ]
 }
