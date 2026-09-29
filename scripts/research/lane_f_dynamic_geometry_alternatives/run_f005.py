@@ -266,6 +266,32 @@ def find_prior_validation(root: Path, branch: str, commit: str) -> str | None:
     return None
 
 
+def prior_unstable_timing_count(root: Path, branch: str, commit: str) -> int:
+    parent = root.parent
+    if not parent.is_dir():
+        return 0
+    count = 0
+    for candidate in parent.iterdir():
+        if candidate == root or not candidate.is_dir():
+            continue
+        path = candidate / "f005-summary.json"
+        if not path.is_file():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if (
+            payload.get("plan_version") == PLAN_VERSION
+            and payload.get("branch") == branch
+            and payload.get("git_commit") == commit
+            and payload.get("target_gpu") == EXPECTED_GPU
+            and payload.get("unstable") is True
+        ):
+            count += 1
+    return count
+
+
 def normalize_row(
     row: dict[str, str],
     device: dict[str, object],
@@ -633,10 +659,15 @@ def main() -> int:
         summary, "transient-grid", "moving-rigid", "dynamic_traversal_us"
     )
 
-    status = "unstable-rerun-required" if any_unstable else "target-run-complete"
+    prior_unstable = prior_unstable_timing_count(root, branch, commit)
+    rerun_exhausted = any_unstable and prior_unstable >= 1
+    status = (
+        "timing-inconclusive-unstable"
+        if rerun_exhausted
+        else ("unstable-rerun-required" if any_unstable else "target-run-complete")
+    )
     # Gate ratios are retained for diagnosis, but an unstable campaign is not
-    # decision-valid under lane-f-plan-v1. The rerun budget is tracked by the
-    # experiment record/Issue, not inferred from a single artifact.
+    # decision-valid under lane-f-plan-v1.
     formal = (
         "timing-inconclusive-unstable"
         if any_unstable
@@ -672,13 +703,21 @@ def main() -> int:
         "moving_dynamic_builder_us": moving_builder,
         "moving_dynamic_traversal_us": moving_dynamic_traversal,
         "unstable": any_unstable,
+        "prior_identical_unstable_campaigns": prior_unstable,
+        "identical_rerun_exhausted": rerun_exhausted,
     }
     write_json(root / "f005-summary.json", payload)
     write_json(root / "f005-device.json", identity or {})
 
     if any_unstable:
+        if rerun_exhausted:
+            print(
+                "F005 timing remains unstable after the one permitted identical "
+                "full rerun; timing is INCONCLUSIVE under lane-f-plan-v1."
+            )
+            return 5
         print(
-            "F005 timing contains complete_gpu max/min > 1.20; "
+            "F005 timing contains complete_gpu max/min >1.20; "
             "one identical full rerun is allowed by lane-f-plan-v1."
         )
         return 4
