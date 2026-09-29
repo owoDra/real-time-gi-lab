@@ -1,5 +1,6 @@
 #include "i001_runtime.hpp"
 
+#include <chrono>
 #include <cstdlib>
 #include <filesystem>
 #include <fstream>
@@ -66,9 +67,11 @@ void write_csv(
     std::ostream& output,
     const Cli& cli,
     const integration::I001Runtime& runtime,
-    const integration::I001FrameResult& result) {
+    const integration::I001FrameResult& result,
+    double setup_wall_us) {
     output
         << "variant,scenario,device,validation,bounded_owner_capacity,"
+           "warmup_frames,measured_frames,setup_wall_us,"
            "renderer_depth_us,frame_init_us,visibility_reuse_us,"
            "producer_us,ray_prepare_us,traversal_maintenance_gpu_us,dynamic_update_wall_us,"
            "traversal_us,radiance_us,"
@@ -82,7 +85,8 @@ void write_csv(
            "visibility_mismatches,producer_semantic_errors,"
            "hit_mismatches,traversal_runtime_errors,missing_probes,leaked_probes,"
            "stale_storage_slots,resolved_output_mismatches,"
-           "radiance_rms_error,radiance_max_abs_error,quality_passed\n";
+           "radiance_rms_error,radiance_max_abs_error,"
+           "temporal_rms_error,temporal_max_abs_error,quality_passed\n";
 
     output << std::fixed << std::setprecision(6)
         << integration::i001_variant_name(cli.options.variant) << ','
@@ -90,6 +94,9 @@ void write_csv(
         << '"' << runtime.device_name() << '"' << ','
         << (cli.options.validation ? 1 : 0) << ','
         << cli.options.bounded_owner_capacity << ','
+        << 1 << ','
+        << 1 << ','
+        << setup_wall_us << ','
         << result.timings.renderer_depth_us << ','
         << result.timings.frame_init_us << ','
         << result.timings.visibility_reuse_us << ','
@@ -131,6 +138,8 @@ void write_csv(
         << result.quality.resolved_output_mismatches << ','
         << result.quality.radiance_rms_error << ','
         << result.quality.radiance_max_abs_error << ','
+        << result.quality.temporal_rms_error << ','
+        << result.quality.temporal_max_abs_error << ','
         << (result.quality.passed ? 1 : 0) << '\n';
 }
 
@@ -138,7 +147,8 @@ void write_metadata(
     const std::filesystem::path& path,
     const Cli& cli,
     const integration::I001Runtime& runtime,
-    const integration::I001FrameResult& result) {
+    const integration::I001FrameResult& result,
+    double setup_wall_us) {
     std::ofstream output(path);
     if (!output) throw std::runtime_error("cannot create I001 metadata");
     output << std::fixed << std::setprecision(6)
@@ -152,6 +162,9 @@ void write_metadata(
         << "  \"validation\": " << (cli.options.validation ? "true" : "false") << ",\n"
         << "  \"bounded_owner_capacity\": "
         << cli.options.bounded_owner_capacity << ",\n"
+        << "  \"warmup_frames\": 1,\n"
+        << "  \"measured_frames\": 1,\n"
+        << "  \"setup_wall_us\": " << setup_wall_us << ",\n"
         << "  \"quality_passed\": " << (result.quality.passed ? "true" : "false") << ",\n"
         << "  \"overflow\": " << result.stats.overflow << ",\n"
         << "  \"traversal_maintenance_gpu_us\": "
@@ -167,10 +180,22 @@ void write_metadata(
 int main(int argc, char** argv) {
     try {
         const auto cli = parse_cli(argc, argv);
+        const auto setup_start = std::chrono::steady_clock::now();
         integration::I001Runtime runtime(cli.options);
+        const auto setup_wall_us =
+            std::chrono::duration<double, std::micro>(
+                std::chrono::steady_clock::now() - setup_start).count();
         std::cout << "GPU: " << runtime.device_name() << '\n';
 
-        (void)runtime.run_frame(false);
+        auto warmup = runtime.run_frame(false);
+        if (cli.quality) {
+            warmup.quality = runtime.validate_last_frame();
+            if (!warmup.quality.passed) {
+                std::cerr << "I001 warmup correctness/quality gate failed\n";
+                return 2;
+            }
+        }
+
         auto result = runtime.run_frame(true);
         if (cli.quality) {
             result.quality = runtime.validate_last_frame();
@@ -183,10 +208,20 @@ int main(int argc, char** argv) {
         {
             std::ofstream csv(root / "i001-frame.csv");
             if (!csv) throw std::runtime_error("cannot create I001 CSV artifact");
-            write_csv(csv, cli, runtime, result);
+            write_csv(csv, cli, runtime, result, setup_wall_us);
         }
-        write_metadata(root / "i001-device.json", cli, runtime, result);
-        write_csv(std::cout, cli, runtime, result);
+        write_metadata(
+            root / "i001-device.json",
+            cli,
+            runtime,
+            result,
+            setup_wall_us);
+        write_csv(
+            std::cout,
+            cli,
+            runtime,
+            result,
+            setup_wall_us);
 
         if (!result.quality.passed) {
             std::cerr << "I001 correctness/quality gate failed\n";
