@@ -130,6 +130,14 @@ def run_one(
                 f"{field}={row.get(field, 'missing')}"
                 for field in quality_fields
             )
+        elif "I001 quality diagnostics [" in proc.stderr:
+            diagnostic_lines = [
+                line.strip()
+                for line in proc.stderr.splitlines()
+                if line.startswith("I001 quality diagnostics [")
+            ]
+            if diagnostic_lines:
+                detail = diagnostic_lines[-1]
         raise RuntimeError(
             f"I001 {variant}/{scenario} "
             f"{'validation' if validation else 'timing'} failed with "
@@ -432,10 +440,18 @@ def main() -> int:
         medians["combined-hwrt"][scenario]["stream_capacity_bytes"]
         for scenario in SCENARIOS
     )
-    bounded_timing_pass = all(
-        medians["bounded-hwrt"][scenario]["complete_gpu_us"] <=
-        1.05 * medians["combined-hwrt"][scenario]["complete_gpu_us"]
-        for scenario in SCENARIOS
+    bounded_normal_no_overflow = all(
+        int(row["overflow"]) == 0
+        for row in accepted
+        if row["variant"] == "bounded-hwrt"
+    )
+    bounded_timing_pass = (
+        bounded_normal_no_overflow and
+        all(
+            medians["bounded-hwrt"][scenario]["complete_gpu_us"] <=
+            1.05 * medians["combined-hwrt"][scenario]["complete_gpu_us"]
+            for scenario in SCENARIOS
+        )
     )
     overflow_retry_pass = all(
         row["retry_quality_passed"] == 1 for row in overflow_rows
@@ -487,10 +503,12 @@ def main() -> int:
             "bounded_capacity": {
                 "stream_memory_ratio": bounded_memory_ratio,
                 "memory_pass": bounded_memory_ratio <= 0.60,
+                "normal_no_overflow_pass": bounded_normal_no_overflow,
                 "normal_timing_pass": bounded_timing_pass,
                 "overflow_retry_pass": overflow_retry_pass,
                 "pass":
                     bounded_memory_ratio <= 0.60 and
+                    bounded_normal_no_overflow and
                     bounded_timing_pass and
                     overflow_retry_pass,
             },
