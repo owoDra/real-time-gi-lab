@@ -28,5 +28,24 @@
   },
   "correctness": "exact validation required",
   "timing": "recording is non-decision-valid because G002 closed without a safe repeatable timing protocol",
-  "outlier_deletion": false
+  "outlier_deletion": false,
+  "g001_sparse_anchors": {
+    "sparse-stress": {
+      "baseline_peak_bytes": 119078592,
+      "vanilla_peak_bytes": 38616288,
+      "released_setup_only_bytes": 46202400,
+      "expected_hardened_peak_bytes": 72876192,
+      "expected_hardened_ratio_vs_vanilla": 1.8871879140739782,
+      "expected_improvement_vs_unchanged_lbvh": 0.3879992131583148
+    },
+    "sparse-moving": {
+      "baseline_peak_bytes": 123668160,
+      "vanilla_peak_bytes": 38616288,
+      "released_setup_only_bytes": 46017696,
+      "expected_hardened_peak_bytes": 77650464,
+      "expected_hardened_ratio_vs_vanilla": 2.010821547632957,
+      "expected_improvement_vs_unchanged_lbvh": 0.3721062559675829
+    }
+  },
+  "anchor_rule": "The G001 sparse baseline, vanilla, released setup-only bytes, and resulting hardened peak must reproduce exactly; otherwise G003a evidence is invalidated rather than re-baselined."
 }

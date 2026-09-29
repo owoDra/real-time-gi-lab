@@ -45,6 +45,19 @@ and all three are absent from the hardened allocation census.
 
 This prevents unrelated memory changes from being credited to G003a.
 
+## Predeclared G001-derived expectation
+
+Before the G003a target run, the deterministic G001 census predicts exactly:
+
+| scenario | unchanged LBVH | setup-only bytes released | expected hardened | expected ratio vs vanilla | expected improvement |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| sparse-stress | 119,078,592 B | 46,202,400 B | **72,876,192 B** | **1.887188x** | **38.80%** |
+| sparse-moving | 123,668,160 B | 46,017,696 B | **77,650,464 B** | **2.010822x** | **37.21%** |
+
+These are frozen before measurement. If the run-local unchanged/vanilla anchors or
+the byte-exact hardened result differ, the evidence is invalidated for
+investigation rather than re-baselined after seeing the result.
+
 ## Frozen replay
 
 Variants:
