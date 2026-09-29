@@ -259,6 +259,7 @@ struct MovingSelection {
     std::uint32_t instance_id{};
     std::vector<std::uint32_t> primitives;
     float delta_x{};
+    std::uint32_t membership_changes{};
 };
 
 [[nodiscard]] std::vector<lane_b::Triangle> translated_geometry(
@@ -322,7 +323,12 @@ struct MovingSelection {
                 scene.triangles, segment_size);
             const auto stats = probe.update(target, groups[instance]);
             if (stats.membership_changes != 0U) {
-                return {instance, groups[instance], delta};
+                return {
+                    instance,
+                    groups[instance],
+                    delta,
+                    static_cast<std::uint32_t>(stats.membership_changes),
+                };
             }
         }
     }
@@ -1345,6 +1351,12 @@ struct I001Runtime::Impl {
         result.stats.outputs = counter_values[1];
         result.stats.overflow = counter_values[2];
         result.stats.visible_owners = counter_values[3];
+        if (options.scenario == I001Scenario::MovingRigid && target_state) {
+            result.stats.moved_primitives =
+                static_cast<std::uint32_t>(moving.primitives.size());
+            result.stats.segment_membership_changes =
+                moving.membership_changes;
+        }
         result.stats.requested_work_items = counter_values[4];
         result.stats.requested_outputs = counter_values[5];
         result.stats.storage_allocations = storage_values[0];
