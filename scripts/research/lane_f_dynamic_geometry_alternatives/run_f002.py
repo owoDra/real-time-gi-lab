@@ -217,6 +217,15 @@ def summarize_process_rows(
         summary["unstable"] = unstable
         summary["process_repeats"] = len(group)
         summary["is_nrep"] = any(int(row["is_nrep"]) == 1 for row in group)
+        summary["persistent_bytes"] = max(
+            int(row["persistent_bytes"]) for row in group
+        )
+        summary["transient_bytes"] = max(
+            int(row["transient_bytes"]) for row in group
+        )
+        summary["scratch_bytes"] = max(
+            int(row["scratch_bytes"]) for row in group
+        )
         summary["peak_builder_bytes"] = max(
             int(row["peak_resident_bytes"]) for row in group
         )
@@ -483,6 +492,9 @@ def main() -> int:
             )
         },
         "memory": {
+            "persistent_bytes": nrep_summary["persistent_bytes"],
+            "transient_bytes": nrep_summary["transient_bytes"],
+            "scratch_bytes": nrep_summary["scratch_bytes"],
             "peak_resident_bytes": nrep_summary["peak_builder_bytes"],
         },
         "correctness": {
