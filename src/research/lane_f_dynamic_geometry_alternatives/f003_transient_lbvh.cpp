@@ -69,7 +69,9 @@ F003TransientLbvh::F003TransientLbvh(
         return static_cast<std::size_t>(b.allocation_size);
     };
     memory_.persistent_bytes = alloc(template_buffer_);
-    memory_.input_geometry_bytes = alloc(template_buffer_) + alloc(working_buffer_);
+    // The immutable source template is persistent candidate state; the
+    // working buffer is the current-frame world-space geometry.
+    memory_.input_geometry_bytes = alloc(working_buffer_);
     memory_.transient_bytes =
         alloc(working_buffer_) + alloc(aabb_min_buffer_) + alloc(aabb_max_buffer_) +
         alloc(keys_a_buffer_) + alloc(keys_b_buffer_) + alloc(nodes_buffer_);
