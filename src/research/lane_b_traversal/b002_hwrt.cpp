@@ -205,7 +205,8 @@ B002HwrtTraversal::B002HwrtTraversal(
     setup_stats_.blas_build_us = build_blas_range(
         vertex_buffer_.address,
         static_triangle_count_,
-        blas_);
+        blas_,
+        !rigid_partitioned_);
     if (rigid_partitioned_) {
         const auto dynamic_vertex_address =
             vertex_buffer_.address +
@@ -214,7 +215,8 @@ B002HwrtTraversal::B002HwrtTraversal(
         setup_stats_.blas_build_us += build_blas_range(
             dynamic_vertex_address,
             dynamic_triangle_count_,
-            dynamic_blas_);
+            dynamic_blas_,
+            false);
     }
     setup_stats_.tlas_build_us = build_tlas();
 
@@ -279,7 +281,8 @@ void B002HwrtTraversal::destroy_acceleration_structure(
 double B002HwrtTraversal::build_blas_range(
     VkDeviceAddress vertex_address,
     std::size_t triangle_count,
-    AccelerationStructure& target) {
+    AccelerationStructure& target,
+    bool allow_update) {
     if (triangle_count == 0U) {
         fail("B002 HWRT cannot build an empty BLAS");
     }
@@ -313,7 +316,9 @@ double B002HwrtTraversal::build_blas_range(
         VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
     build_info.flags =
         VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR |
-        VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
+        (allow_update
+            ? VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR
+            : 0U);
     build_info.mode =
         VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     build_info.geometryCount = 1;
