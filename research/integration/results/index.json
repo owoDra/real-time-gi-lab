@@ -1,5 +1,18 @@
 {
   "schema_version": 1,
   "lane": "integration-gate",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-dynamic-end-to-end",
+      "status": "complete",
+      "outcome": "no-universal-promotion",
+      "result": "research/integration/results/001-dynamic-end-to-end.md",
+      "artifact": "out/research/integration-gate/001-dynamic-end-to-end/20260929T060025Z",
+      "git_commit": "3a1aa9c25ffcec583459409aca4c526b17b53e3c",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+      "validation_cases": 33,
+      "validation_failures": 0,
+      "decision": "no universal composed architecture passes all frozen gates; retain conditional lane choices and focus next research on moving-geometry maintenance"
+    }
+  ]
 }
