@@ -318,6 +318,26 @@ void F002LbvhBuilder::compute_barrier(VkCommandBuffer command) const {
         nullptr);
 }
 
+void F002LbvhBuilder::compute_to_transfer_barrier(
+    VkCommandBuffer command) const {
+    auto barrier = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    barrier.srcAccessMask =
+        VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT;
+    barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+    context_.vk().cmdPipelineBarrier(
+        command,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        0,
+        1,
+        &barrier,
+        0,
+        nullptr,
+        0,
+        nullptr);
+}
+
 void F002LbvhBuilder::transfer_to_compute_barrier(
     VkCommandBuffer command) const {
     auto barrier = detail::make_vk_info<VkMemoryBarrier>(
@@ -379,6 +399,10 @@ void F002LbvhBuilder::record_build(
     };
 
     timestamp(0U);
+
+    // Consecutive builds reuse the same scratch/node buffers. Make the
+    // previous build's shader accesses complete before transfer-stage reset.
+    compute_to_transfer_barrier(command);
 
     context_.vk().cmdFillBuffer(
         command, ready_buffer_.buffer, 0, ready_buffer_.size, 0U);
