@@ -45,7 +45,8 @@ static_assert(sizeof(Vertex3) == 12);
 B002HwrtTraversal::B002HwrtTraversal(
     B002VulkanContext& context,
     const std::vector<Triangle>& triangles,
-    std::string shader_path)
+    std::string shader_path,
+    bool create_trace_runtime)
     : context_(context) {
     if (!context_.hwrt_enabled()) {
         fail("B002 HWRT traversal requires an HWRT-enabled context");
@@ -136,7 +137,9 @@ B002HwrtTraversal::B002HwrtTraversal(
         static_cast<std::size_t>(
             scratch_.allocation_size);
 
-    create_trace_pipeline(shader_path);
+    if (create_trace_runtime) {
+        create_trace_pipeline(shader_path);
+    }
 }
 
 B002HwrtTraversal::~B002HwrtTraversal() {
@@ -811,6 +814,9 @@ void B002HwrtTraversal::create_trace_pipeline(
 HwrtTraceResult B002HwrtTraversal::trace(
     std::span<const GpuRay> rays,
     std::uint32_t iterations) {
+    if (pipeline_ == VK_NULL_HANDLE) {
+        fail("B002 HWRT trace runtime was not created");
+    }
     if (rays.empty()) fail("B002 HWRT cannot trace zero rays");
 
     const auto ray_bytes =
