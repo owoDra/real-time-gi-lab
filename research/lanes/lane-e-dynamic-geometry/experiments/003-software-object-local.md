@@ -1,6 +1,6 @@
 # E003 — software object-local rigid ownership
 
-Status: protocol frozen; implementation complete; target validation ready
+Status: target validation passed; accepted timing ready
 
 ## Question
 
@@ -253,3 +253,41 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 Do not start accepted E003 timing until the validation artifact has been
 inspected. The formal timing runner repeats the validation matrix.
+
+
+## Target validation result
+
+Accepted validation provenance:
+
+- measurement commit: `2a48b944d33b56e69947e9f437bba7ff0d445e30`;
+- branch: `research-lane-e-dynamic-geometry`;
+- tree: clean;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- validation pairs: 3;
+- same moving-rigid workload across all variants;
+- moved primitives: 796;
+- segment membership changes: 796;
+- all quality gates passed;
+- all storage-failure counts were zero;
+- frozen GPU accounting gate passed;
+- frozen object-local architecture-integrity gate passed.
+
+The E003 validation gate is satisfied. Accepted timing may begin without changing
+the frozen architecture, accounting, boundary, traversal, or memory thresholds.
+
+Formal timing command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 003-software-object-local \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e003.py --build-dir build/release --repeats 3"
+```
+
+The timing runner repeats the validation matrix before validation-disabled timing.
+Do not alter the frozen E003 gates after observing timing.
