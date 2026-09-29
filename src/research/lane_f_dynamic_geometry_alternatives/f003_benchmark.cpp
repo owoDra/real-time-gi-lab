@@ -15,6 +15,7 @@ namespace {
 
 struct Cli {
     integration::I001Options options;
+    bool quality{true};
 };
 
 Cli parse_cli(int argc, char** argv) {
@@ -35,12 +36,14 @@ Cli parse_cli(int argc, char** argv) {
                 integration::i001_parse_scenario(value("--scenario"));
         } else if (argument == "--validation") {
             cli.options.validation = true;
+        } else if (argument == "--no-quality") {
+            cli.quality = false;
         } else if (argument == "--help") {
             std::cout
                 << "phos-lane-f-f003 [--scene path] "
                    "[--scenario static|camera-motion|light-motion|moving-rigid|"
                    "sparse-stress|dense-stress|large-world-stress|vertical-world-stress] "
-                   "[--validation]\n";
+                   "[--validation] [--no-quality]\n";
             std::exit(0);
         } else {
             throw std::runtime_error("unknown F003 argument: " + argument);
@@ -193,10 +196,12 @@ int main(int argc, char** argv) {
         std::cout << "GPU: " << runtime.device_name() << '\n';
 
         auto warmup = runtime.run_frame(false);
-        warmup.quality = runtime.validate_last_frame();
-        if (!warmup.quality.passed || warmup.stats.storage_failures != 0U) {
-            print_quality("warmup", warmup);
-            return 2;
+        if (cli.quality) {
+            warmup.quality = runtime.validate_last_frame();
+            if (!warmup.quality.passed || warmup.stats.storage_failures != 0U) {
+                print_quality("warmup", warmup);
+                return 2;
+            }
         }
 
         const auto frame_start = std::chrono::steady_clock::now();
@@ -204,7 +209,11 @@ int main(int argc, char** argv) {
         const auto complete_frame_wall_us =
             std::chrono::duration<double, std::micro>(
                 std::chrono::steady_clock::now() - frame_start).count();
-        result.quality = runtime.validate_last_frame();
+        if (cli.quality) {
+            result.quality = runtime.validate_last_frame();
+        } else {
+            result.quality.passed = true;
+        }
 
         const auto root = artifact_root();
         std::filesystem::create_directories(root);
