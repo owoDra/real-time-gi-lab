@@ -107,7 +107,11 @@ def run_one(
         "VUID-",
     )
     validation_error_count = (
-        sum(combined_log.count(marker) for marker in validation_error_markers)
+        sum(
+            1
+            for line in combined_log.splitlines()
+            if any(marker in line for marker in validation_error_markers)
+        )
         if validation
         else 0
     )
