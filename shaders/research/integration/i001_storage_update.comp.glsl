@@ -13,85 +13,127 @@ layout(std430, binding = 2) readonly buffer Accum { uvec2 values[]; } accum;
 layout(std430, binding = 3) buffer Slots { Slot values[]; } slots;
 layout(std430, binding = 4) buffer StorageCounters { uint data[]; } stats;
 layout(push_constant) uniform Push {
-    uint mask; uint max_probe; uint frame_id; uint reserved;
+    uint mask; uint max_probe; uint frame_id; uint phase;
 } pc;
-const uint EMPTY = 0u;
-const uint LOCKED = 1u;
-const uint FULL = 2u;
-const uint TOMBSTONE = 3u;
-uint mix32(uint x) {
-    x ^= x >> 16u; x *= 0x7feb352du;
-    x ^= x >> 15u; x *= 0x846ca68bu;
-    x ^= x >> 16u; return x;
-}
-uint hash_key(ivec4 key) {
-    uint h = mix32(uint(key.x));
-    h ^= mix32(uint(key.y) ^ 0x9e3779b9u);
-    h ^= mix32(uint(key.z) ^ 0x85ebca6bu);
-    h ^= mix32(uint(key.w) ^ 0xc2b2ae35u);
-    return mix32(h);
-}
-bool same_key(ivec4 a, ivec4 b) { return all(equal(a, b)); }
 
-uint acquire_slot(ivec4 key) {
-    uint slot = hash_key(key) & pc.mask;
+const uint EMPTY = 0u;
+const uint TOMBSTONE = 0xffffffffu;
+
+uint pack_key(ivec4 key) {
+    if (key.x < 0 || key.x > 1023 ||
+        key.y < 0 || key.y > 1023 ||
+        key.z < 0 || key.z > 1023 ||
+        key.w < 0 || key.w > 3) {
+        return TOMBSTONE;
+    }
+
+    uint packed =
+        uint(key.x) |
+        (uint(key.y) << 10u) |
+        (uint(key.z) << 20u) |
+        (uint(key.w) << 30u);
+
+    // 0 is EMPTY and 0xffffffff is TOMBSTONE. I001's producer contract keeps
+    // coordinates far below the only packed values that would alias these
+    // sentinels; reject them explicitly instead of silently colliding.
+    if (packed >= 0xfffffffeu) return TOMBSTONE;
+    return packed + 1u;
+}
+
+uint reserve_slot(ivec4 key, uint token) {
+    uint slot = token * 0x9e3779b9u;
+    slot ^= slot >> 16u;
+    slot &= pc.mask;
+
     for (uint probe = 0u; probe < pc.max_probe; ++probe) {
-        for (uint spin = 0u; spin < 64u; ++spin) {
-            uint state = slots.values[slot].data.x;
-            if (state == LOCKED) continue;
-            if (state == FULL) {
-                if (!same_key(slots.values[slot].key, key)) break;
-                if (slots.values[slot].data.w != pc.frame_id) {
-                    if (atomicCompSwap(
-                            slots.values[slot].data.x,
-                            FULL,
-                            LOCKED) != FULL) {
-                        continue;
-                    }
-                    slots.values[slot].data.y = 0u;
-                    slots.values[slot].data.z = 0u;
-                    slots.values[slot].data.w = pc.frame_id;
-                    memoryBarrierBuffer();
-                    atomicExchange(slots.values[slot].data.x, FULL);
-                }
-                return slot;
-            }
-            if (state == EMPTY || state == TOMBSTONE) {
-                if (atomicCompSwap(
-                        slots.values[slot].data.x,
-                        state,
-                        LOCKED) != state) {
-                    continue;
-                }
+        uint candidate = slots.values[slot].data.x;
+        if (candidate == token) return slot;
+
+        if (candidate == EMPTY || candidate == TOMBSTONE) {
+            uint old = atomicCompSwap(
+                slots.values[slot].data.x,
+                candidate,
+                token);
+            if (old == candidate) {
                 slots.values[slot].key = key;
-                slots.values[slot].data.y = 0u;
-                slots.values[slot].data.z = 0u;
-                slots.values[slot].data.w = pc.frame_id;
-                memoryBarrierBuffer();
-                atomicExchange(slots.values[slot].data.x, FULL);
                 atomicAdd(stats.data[0], 1u);
                 return slot;
             }
-            break;
+            if (old == token) return slot;
         }
         slot = (slot + 1u) & pc.mask;
     }
-    atomicAdd(stats.data[3], 1u);
-    return 0xffffffffu;
+    return TOMBSTONE;
+}
+
+uint find_slot(ivec4 key, uint token) {
+    uint slot = token * 0x9e3779b9u;
+    slot ^= slot >> 16u;
+    slot &= pc.mask;
+
+    for (uint probe = 0u; probe < pc.max_probe; ++probe) {
+        uint candidate = slots.values[slot].data.x;
+        if (candidate == EMPTY) break;
+        if (candidate == token && all(equal(slots.values[slot].key, key))) {
+            return slot;
+        }
+        slot = (slot + 1u) & pc.mask;
+    }
+    return TOMBSTONE;
 }
 
 void main() {
     uint id = gl_GlobalInvocationID.x;
     if (id >= counters.data[0]) return;
+
     WorkItem item = work.items[id];
     if (item.ray_index != 0u) return;
+
+    ivec4 key = ivec4(
+        item.probe_x, item.probe_y, item.probe_z, int(item.cascade));
+    uint token = pack_key(key);
+    if (token == TOMBSTONE) {
+        atomicAdd(stats.data[3], 1u);
+        return;
+    }
+
+    if (pc.phase == 0u) {
+        uint slot = reserve_slot(key, token);
+        if (slot == TOMBSTONE) {
+            atomicAdd(stats.data[3], 1u);
+            return;
+        }
+
+        // Reservation and accumulation are separate dispatches. Exactly one
+        // invocation advances the frame tag and resets the accumulator, while
+        // the dispatch barrier guarantees the reset completes before phase 1.
+        uint previous = atomicCompSwap(
+            slots.values[slot].data.w,
+            slots.values[slot].data.w,
+            pc.frame_id);
+        if (previous != pc.frame_id) {
+            // If another invocation won the frame transition, its exchange has
+            // already published frame_id and it owns the reset.
+            if (atomicCompSwap(
+                    slots.values[slot].data.w,
+                    previous,
+                    pc.frame_id) == previous) {
+                atomicExchange(slots.values[slot].data.y, 0u);
+                atomicExchange(slots.values[slot].data.z, 0u);
+            }
+        }
+        return;
+    }
+
+    uint slot = find_slot(key, token);
+    if (slot == TOMBSTONE || slots.values[slot].data.w != pc.frame_id) {
+        atomicAdd(stats.data[3], 1u);
+        return;
+    }
+
     uvec2 merged = accum.values[item.output_id];
     if (merged.y == 0u) return;
     uint sample_value = (merged.x + merged.y / 2u) / merged.y;
-    ivec4 key = ivec4(
-        item.probe_x, item.probe_y, item.probe_z, int(item.cascade));
-    uint slot = acquire_slot(key);
-    if (slot == 0xffffffffu) return;
     atomicAdd(slots.values[slot].data.y, sample_value);
     atomicAdd(slots.values[slot].data.z, 1u);
     atomicAdd(stats.data[1], 1u);
