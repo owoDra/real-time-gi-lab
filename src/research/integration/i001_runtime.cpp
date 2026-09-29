@@ -31,6 +31,7 @@
 #include <limits>
 #include <map>
 #include <memory>
+#include <numeric>
 #include <span>
 #include <stdexcept>
 #include <tuple>
