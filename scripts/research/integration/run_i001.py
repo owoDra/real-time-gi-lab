@@ -363,6 +363,13 @@ def main() -> int:
             "git_commit": commit,
             "repeat": repeat + 1,
             "bounded_owner_capacity": 512,
+            "failed_attempt_setup_wall_us":
+                float(failed["setup_wall_us"]),
+            "retry_setup_wall_us":
+                float(retry["setup_wall_us"]),
+            "total_retry_setup_wall_us":
+                float(failed["setup_wall_us"]) +
+                float(retry["setup_wall_us"]),
             "failed_attempt_gpu_us": float(failed["complete_gpu_us"]),
             "retry_gpu_us": float(retry["complete_gpu_us"]),
             "total_retry_gpu_us":
@@ -515,6 +522,9 @@ def main() -> int:
         },
         "overflow_retry": {
             "bounded_owner_capacity": 512,
+            "median_total_retry_setup_wall_us": statistics.median(
+                row["total_retry_setup_wall_us"] for row in overflow_rows
+            ),
             "median_total_retry_gpu_us": statistics.median(
                 row["total_retry_gpu_us"] for row in overflow_rows
             ),
