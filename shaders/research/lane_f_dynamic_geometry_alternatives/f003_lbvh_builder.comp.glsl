@@ -268,11 +268,16 @@ void main() {
     if (pc.mode == MODE_BOUNDS) {
         if (id >= pc.count) return;
         uint leaf = (pc.count - 1u) + id;
-        nodes[leaf].bounds_min = aabb_min[id];
-        nodes[leaf].bounds_max = aabb_max[id];
+        // Leaf id is the sorted position; its primitive is the stable
+        // primitive id carried by the sorted key. Bounds must follow that
+        // primitive too, otherwise traversal prunes against a different
+        // triangle even though the root union still looks correct.
+        uint primitive = keys_a[id].z;
+        nodes[leaf].bounds_min = aabb_min[primitive];
+        nodes[leaf].bounds_max = aabb_max[primitive];
         nodes[leaf].data.x = INVALID_ID;
         nodes[leaf].data.y = INVALID_ID;
-        nodes[leaf].data.w = keys_a[id].z;
+        nodes[leaf].data.w = primitive;
         memoryBarrierBuffer();
 
         uint current = leaf;
