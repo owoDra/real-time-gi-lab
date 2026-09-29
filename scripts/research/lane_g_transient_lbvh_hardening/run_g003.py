@@ -25,13 +25,17 @@ G001_SPARSE_ANCHORS = {
         "baseline_peak_bytes": 119_078_592,
         "vanilla_peak_bytes": 38_616_288,
         "released_setup_only_bytes": 46_202_400,
-        "expected_hardened_peak_bytes": 72_876_192,
+        "expected_hardened_runtime_resident_bytes": 72_876_192,
+        "expected_hardened_setup_peak_bytes": 104_595_424,
+        "expected_hardened_peak_bytes": 104_595_424,
     },
     "sparse-moving": {
         "baseline_peak_bytes": 123_668_160,
         "vanilla_peak_bytes": 38_616_288,
         "released_setup_only_bytes": 46_017_696,
-        "expected_hardened_peak_bytes": 77_650_464,
+        "expected_hardened_runtime_resident_bytes": 77_650_464,
+        "expected_hardened_setup_peak_bytes": 104_233_440,
+        "expected_hardened_peak_bytes": 104_233_440,
     },
 }
 
@@ -100,16 +104,23 @@ def run_case(
     if frame["quality_passed"] != "1" or int(frame["storage_failures"]) != 0:
         raise RuntimeError(f"correctness failed for {variant}/{scenario}")
 
-    counted = sum(
+    counted_runtime = sum(
         int(row["allocation_bytes"])
         for row in allocation_rows
         if row["counted_in_f007_peak"] == "1"
     )
+    runtime_resident = int(frame["runtime_resident_bytes"])
+    setup_peak = int(frame["setup_peak_bytes"])
     peak = int(frame["peak_resident_bytes"])
-    if counted != peak:
+    if counted_runtime != runtime_resident:
         raise RuntimeError(
-            f"G003 accounting mismatch for {variant}/{scenario}: "
-            f"census={counted}, peak={peak}"
+            f"G003 runtime accounting mismatch for {variant}/{scenario}: "
+            f"census={counted_runtime}, runtime={runtime_resident}"
+        )
+    if peak != max(runtime_resident, setup_peak):
+        raise RuntimeError(
+            f"G003 lifetime peak mismatch for {variant}/{scenario}: "
+            f"runtime={runtime_resident}, setup={setup_peak}, peak={peak}"
         )
     return frame, allocation_rows, device
 
@@ -177,11 +188,16 @@ def main() -> int:
     g001_sparse_anchor_reproduced = True
 
     for scenario in SCENARIOS:
-        baseline = int(frame_by_key[("transient-lbvh", scenario)]["peak_resident_bytes"])
-        hardened = int(
-            frame_by_key[("hardened-transient-lbvh", scenario)]["peak_resident_bytes"]
-        )
-        vanilla = int(frame_by_key[("vanilla-software", scenario)]["peak_resident_bytes"])
+        baseline_frame = frame_by_key[("transient-lbvh", scenario)]
+        hardened_frame = frame_by_key[("hardened-transient-lbvh", scenario)]
+        vanilla_frame = frame_by_key[("vanilla-software", scenario)]
+
+        baseline = int(baseline_frame["peak_resident_bytes"])
+        hardened = int(hardened_frame["peak_resident_bytes"])
+        vanilla = int(vanilla_frame["peak_resident_bytes"])
+        baseline_runtime = int(baseline_frame["runtime_resident_bytes"])
+        hardened_runtime = int(hardened_frame["runtime_resident_bytes"])
+        hardened_setup = int(hardened_frame["setup_peak_bytes"])
 
         baseline_rows = alloc_by_key[("transient-lbvh", scenario)]
         hardened_rows = alloc_by_key[("hardened-transient-lbvh", scenario)]
@@ -190,10 +206,29 @@ def main() -> int:
             for row in baseline_rows
             if row["name"] in RELEASED_NAMES and row["use_lifetime"] == "setup-only"
         )
-        observed_released = baseline - hardened
-        remaining_hardened_names = {row["name"] for row in hardened_rows}
-        released_absent = not (RELEASED_NAMES & remaining_hardened_names)
-        attributable = observed_released == expected_released and released_absent
+        released_rows = [
+            row for row in hardened_rows
+            if row["name"] in RELEASED_NAMES
+            and row["allocation_lifetime"] == "setup"
+            and row["counted_in_f007_peak"] == "0"
+        ]
+        released_lifecycle_bytes = sum(
+            int(row["allocation_bytes"]) for row in released_rows
+        )
+        active_hardened_names = {
+            row["name"] for row in hardened_rows
+            if row["counted_in_f007_peak"] == "1"
+        }
+        released_absent_from_runtime = not (
+            RELEASED_NAMES & active_hardened_names
+        )
+        runtime_delta = baseline_runtime - hardened_runtime
+        attributable = (
+            runtime_delta == expected_released
+            and released_lifecycle_bytes == expected_released
+            and {row["name"] for row in released_rows} == RELEASED_NAMES
+            and released_absent_from_runtime
+        )
         exact_delta_pass = exact_delta_pass and attributable
 
         improvement = (baseline - hardened) / baseline
@@ -207,6 +242,10 @@ def main() -> int:
                 baseline == anchor["baseline_peak_bytes"]
                 and vanilla == anchor["vanilla_peak_bytes"]
                 and expected_released == anchor["released_setup_only_bytes"]
+                and hardened_runtime
+                    == anchor["expected_hardened_runtime_resident_bytes"]
+                and hardened_setup
+                    == anchor["expected_hardened_setup_peak_bytes"]
                 and hardened == anchor["expected_hardened_peak_bytes"]
             )
             g001_sparse_anchor_reproduced = (
@@ -223,9 +262,14 @@ def main() -> int:
             "baseline_peak_bytes": baseline,
             "hardened_peak_bytes": hardened,
             "vanilla_peak_bytes": vanilla,
+            "baseline_runtime_resident_bytes": baseline_runtime,
+            "hardened_runtime_resident_bytes": hardened_runtime,
+            "hardened_setup_peak_bytes": hardened_setup,
             "expected_released_setup_only_bytes": expected_released,
-            "observed_peak_delta_bytes": observed_released,
-            "released_allocations_absent": released_absent,
+            "released_lifecycle_bytes": released_lifecycle_bytes,
+            "observed_runtime_resident_delta_bytes": runtime_delta,
+            "observed_peak_delta_bytes": baseline - hardened,
+            "released_allocations_absent_from_runtime": released_absent_from_runtime,
             "attribution_exact": attributable,
             "memory_improvement_fraction": improvement,
             "hardened_ratio_vs_vanilla": ratio_vs_vanilla,

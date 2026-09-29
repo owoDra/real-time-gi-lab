@@ -100,7 +100,8 @@ void write_frame(
     const auto& m = result.memory;
     out
         << "variant,scenario,device,quality_passed,storage_failures,"
-           "persistent_bytes,transient_bytes,scratch_bytes,peak_resident_bytes,"
+           "persistent_bytes,transient_bytes,scratch_bytes,runtime_resident_bytes,"
+           "setup_peak_bytes,peak_resident_bytes,"
            "shared_persistent_bytes,static_hwrt_persistent_bytes,"
            "dynamic_candidate_persistent_bytes,dynamic_candidate_transient_bytes,"
            "dynamic_candidate_scratch_bytes,current_frame_geometry_bytes\n";
@@ -113,6 +114,8 @@ void write_frame(
         << m.persistent_bytes << ','
         << m.transient_bytes << ','
         << m.scratch_bytes << ','
+        << m.runtime_resident_bytes << ','
+        << m.setup_peak_bytes << ','
         << m.peak_resident_bytes << ','
         << m.shared_persistent_bytes << ','
         << m.static_hwrt_persistent_bytes << ','
