@@ -8,3 +8,7 @@
 *.spv
 *.csv
 mise.local.toml
+
+# Python local test/import artifacts
+__pycache__/
+*.py[cod]
