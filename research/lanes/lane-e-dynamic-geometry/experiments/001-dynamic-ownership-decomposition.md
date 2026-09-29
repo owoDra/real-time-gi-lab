@@ -1,6 +1,6 @@
 # E001 — dynamic ownership decomposition
 
-Status: target validation passed; accepted timing ready
+Status: complete
 
 ## Question
 
@@ -182,3 +182,20 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 The timing runner repeats the validation matrix before validation-disabled
 timing. Do not alter the E001 accounting/dominance gates after observing timing.
+
+
+## Accepted timing result
+
+Accepted timing completed at measurement commit
+`1fa902d48a8d6e693384f5911033683ebd342a00` with 3 process repeats for each
+of the six variant/workload groups. All validation, storage and frozen GPU
+accounting gates passed.
+
+Result:
+`research/lanes/lane-e-dynamic-geometry/results/001-dynamic-ownership-decomposition.md`
+
+E001 classifies rigid HWRT geometry transfer as dominant (58.61% of median GPU
+maintenance), while the B003 rigid path is dominated by world-space hierarchy
+rebuild (79999.349 us) and packing (15867.764 us). E002 therefore targets
+immutable rigid BLAS + TLAS instance motion; E003 targets object-local software
+ownership. Deforming remains separate for E004.
