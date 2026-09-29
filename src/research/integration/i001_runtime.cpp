@@ -726,7 +726,7 @@ struct I001Runtime::Impl {
 
         using Clock = std::chrono::steady_clock;
         const auto start = Clock::now();
-        auto target_triangles = translated_geometry(
+        b_scene.triangles = translated_geometry(
             b_scene.triangles,
             moving.primitives,
             moving.delta_x);
@@ -747,12 +747,12 @@ struct I001Runtime::Impl {
         double maintenance_gpu_us = 0.0;
         if (uses_hwrt(options.variant)) {
             const auto stats = hwrt->update_geometry(
-                target_triangles,
+                b_scene.triangles,
                 moving.primitives);
             maintenance_gpu_us =
                 stats.blas_update_us + stats.tlas_update_us;
         } else {
-            const auto next_triangles = gpu_triangles(target_triangles);
+            const auto next_triangles = gpu_triangles(b_scene.triangles);
             const lane_b::B002BufferUpdate triangle_update{
                 0U,
                 next_triangles.data(),
@@ -764,7 +764,7 @@ struct I001Runtime::Impl {
 
             if (uses_quantized(options.variant)) {
                 const auto stats = hierarchy_cpu->update(
-                    target_triangles,
+                    b_scene.triangles,
                     moving.primitives);
                 if (stats.membership_changes != 0U) {
                     fail("I001 moving-rigid regime changed quantized segment membership");
@@ -813,7 +813,7 @@ struct I001Runtime::Impl {
                     std::span<const lane_b::B002BufferUpdate>(&updates[2], 1));
                 quant_payload = std::move(next_quant);
             } else {
-                software_cpu->refit(target_triangles);
+                software_cpu->refit(b_scene.triangles);
                 const auto next_nodes = software_cpu->gpu_nodes();
                 const lane_b::B002BufferUpdate node_update{
                     0U,
@@ -831,7 +831,6 @@ struct I001Runtime::Impl {
         for (const auto primitive : moving.primitives) {
             a_scene.samples.at(primitive).position[0] += moving.delta_x;
         }
-        b_scene.triangles = std::move(target_triangles);
         geometry_is_target = true;
 
         const auto wall_us =
