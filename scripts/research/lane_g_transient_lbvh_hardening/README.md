@@ -125,3 +125,24 @@ mise exec -- python \
 
 No GPU power/clock sysfs manipulation is required or permitted.
 G003a timing is not decision-valid because G002 closed without a safe accepted timing protocol.
+
+## G004 integration hardening
+
+GPU-independent checks:
+
+```bash
+mise exec -- python -m unittest \
+  scripts/research/lane_g_transient_lbvh_hardening/test_run_g004.py
+mise run research:check
+mise run build
+```
+
+Target semantic replay:
+
+```bash
+mise exec -- python \
+  scripts/research/lane_g_transient_lbvh_hardening/run_g004.py
+```
+
+This run uses Vulkan validation but does not modify GPU power/clock state.
+Timing fields are diagnostic-only.

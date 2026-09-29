@@ -23,6 +23,13 @@
       "result": "003-memory-reduction-candidates.md",
       "status": "memory-correctness-retained-timing-inconclusive",
       "decision": "retain-g003a-for-g004-semantic-hardening-no-formal-timing-promotion"
+    },
+    {
+      "id": "G004",
+      "name": "integration-hardening",
+      "result": "004-integration-hardening.md",
+      "status": "pending-target-gpu-evidence",
+      "decision": "semantic-hardening-in-progress"
     }
   ]
 }
