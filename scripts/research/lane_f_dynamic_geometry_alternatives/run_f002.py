@@ -306,8 +306,17 @@ def main() -> int:
                 "root_count_mismatches": sum(
                     int(row["root_count_mismatches"]) for row in rows
                 ),
+                "root_index_mismatches": sum(
+                    int(row["root_index_mismatches"]) for row in rows
+                ),
                 "root_bounds_mismatches": sum(
                     int(row["root_bounds_mismatches"]) for row in rows
+                ),
+                "leaf_mapping_mismatches": sum(
+                    int(row["leaf_mapping_mismatches"]) for row in rows
+                ),
+                "topology_mismatches": sum(
+                    int(row["topology_mismatches"]) for row in rows
                 ),
             },
         }
