@@ -66,7 +66,7 @@ struct alignas(16) StoragePush {
     std::uint32_t mask{};
     std::uint32_t max_probe{};
     std::uint32_t frame_id{};
-    std::uint32_t reserved{};
+    std::uint32_t phase{};
 };
 static_assert(sizeof(StoragePush) == 16);
 
@@ -1277,10 +1277,24 @@ struct I001Runtime::Impl {
         i001_compute_barrier(context, command);
         stamp(8);
 
-        const StoragePush storage_push{
+        const StoragePush storage_reserve_push{
             storage_capacity - 1U, kHashMaxProbe, frame_id, 0U};
         storage_update_stage->record_indirect(
-            command, indirect.buffer, 0, &storage_push, sizeof(storage_push));
+            command,
+            indirect.buffer,
+            0,
+            &storage_reserve_push,
+            sizeof(storage_reserve_push));
+        i001_compute_barrier(context, command);
+
+        const StoragePush storage_accumulate_push{
+            storage_capacity - 1U, kHashMaxProbe, frame_id, 1U};
+        storage_update_stage->record_indirect(
+            command,
+            indirect.buffer,
+            0,
+            &storage_accumulate_push,
+            sizeof(storage_accumulate_push));
         i001_compute_barrier(context, command);
         stamp(9);
 
@@ -1626,11 +1640,14 @@ struct I001Runtime::Impl {
 
         std::map<ProbeKey, double> candidate_probe;
         for (const auto& slot : candidate_slots) {
-            if (slot.data[0] == 2U && slot.data[3] != frame_id) {
+            const bool occupied =
+                slot.data[0] != 0U &&
+                slot.data[0] != 0xffffffffU;
+            if (occupied && slot.data[3] != frame_id) {
                 ++quality.stale_storage_slots;
                 continue;
             }
-            if (slot.data[0] != 2U || slot.data[3] != frame_id) continue;
+            if (!occupied || slot.data[3] != frame_id) continue;
             candidate_probe[slot_key(slot)] = slot_value(slot);
         }
 
