@@ -464,7 +464,6 @@ struct MovingSelection {
     const Regime& regime,
     std::uint32_t moved_instance,
     std::span<const std::uint32_t> moved,
-    std::span<const Ray> rays,
     std::span<const GpuRay> replay_rays,
     std::span<const Hit> expected,
     const Cli& cli) {
@@ -1056,7 +1055,6 @@ int main(int argc, char** argv) {
                     regime,
                     moved_instance,
                     moved,
-                    replay.rays,
                     replay_gpu,
                     expected,
                     cli));
