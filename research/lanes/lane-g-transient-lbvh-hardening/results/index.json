@@ -35,8 +35,8 @@
       "id": "G005",
       "name": "final-deterministic-replay",
       "result": "005-final-deterministic-replay.md",
-      "status": "pending-target-gpu-evidence",
-      "decision": "deterministic-final-replay-in-progress"
+      "status": "complete-deterministic-pass-timing-measurement-limited",
+      "decision": "mechanism-retained-memory-correctness-pass-production-promotion-measurement-limited"
     }
   ]
 }
