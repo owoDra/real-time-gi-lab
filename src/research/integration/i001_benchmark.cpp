@@ -78,7 +78,8 @@ void write_csv(
            "merge_us,storage_update_us,invalidation_us,resolve_us,"
            "complete_gpu_us,incremental_gi_us,"
            "work_items,outputs,requested_work_items,requested_outputs,"
-           "overflow,visible_owners,storage_allocations,storage_updates,"
+           "overflow,visible_owners,moved_primitives,segment_membership_changes,"
+           "storage_allocations,storage_updates,"
            "storage_invalidations,storage_failures,"
            "persistent_bytes,transient_bytes,scratch_bytes,peak_resident_bytes,"
            "stream_capacity_bytes,storage_capacity_bytes,"
@@ -118,6 +119,8 @@ void write_csv(
         << result.stats.requested_outputs << ','
         << result.stats.overflow << ','
         << result.stats.visible_owners << ','
+        << result.stats.moved_primitives << ','
+        << result.stats.segment_membership_changes << ','
         << result.stats.storage_allocations << ','
         << result.stats.storage_updates << ','
         << result.stats.storage_invalidations << ','
