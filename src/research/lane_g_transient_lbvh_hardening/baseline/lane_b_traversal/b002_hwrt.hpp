@@ -12,6 +12,11 @@
 
 namespace phos::gi::research::lane_b {
 
+enum class HwrtBuildInputRetention {
+    RetainForUpdates,
+    ReleaseAfterBuild,
+};
+
 struct HwrtSetupStats {
     double vertex_upload_us{};
     double metadata_upload_us{};
@@ -19,6 +24,7 @@ struct HwrtSetupStats {
     double tlas_build_us{};
     std::size_t persistent_bytes{};
     std::size_t scratch_bytes{};
+    std::size_t released_build_only_bytes{};
 };
 
 struct HwrtAllocationRecord {
@@ -50,7 +56,9 @@ public:
         B002VulkanContext& context,
         const std::vector<Triangle>& triangles,
         std::string shader_path,
-        bool create_trace_runtime = true);
+        bool create_trace_runtime = true,
+        HwrtBuildInputRetention build_input_retention =
+            HwrtBuildInputRetention::RetainForUpdates);
     ~B002HwrtTraversal();
 
     B002HwrtTraversal(const B002HwrtTraversal&) = delete;
@@ -123,6 +131,8 @@ private:
 
     HwrtSetupStats setup_stats_{};
     std::size_t triangle_count_{};
+    HwrtBuildInputRetention build_input_retention_{
+        HwrtBuildInputRetention::RetainForUpdates};
 };
 
 } // namespace phos::gi::research::lane_b

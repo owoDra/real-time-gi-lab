@@ -14,6 +14,7 @@ enum class I001Variant {
     CombinedHwrt,
     CombinedSoftware,
     TransientLbvh,
+    HardenedTransientLbvh,
     TransientGrid,
     DepthReuseHwrt,
     BoundedHwrt,

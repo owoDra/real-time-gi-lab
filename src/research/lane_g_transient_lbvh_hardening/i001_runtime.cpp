@@ -197,7 +197,13 @@ static_assert(sizeof(InvalidationPush) == 16);
 }
 
 [[nodiscard]] bool uses_transient_lbvh(I001Variant value) noexcept {
-    return value == I001Variant::TransientLbvh;
+    return value == I001Variant::TransientLbvh ||
+           value == I001Variant::HardenedTransientLbvh;
+}
+
+[[nodiscard]] bool uses_hardened_transient_lbvh(
+    I001Variant value) noexcept {
+    return value == I001Variant::HardenedTransientLbvh;
 }
 
 [[nodiscard]] bool uses_transient_grid(I001Variant value) noexcept {
@@ -694,6 +700,7 @@ const char* i001_variant_name(I001Variant value) noexcept {
     case I001Variant::CombinedHwrt: return "combined-hwrt";
     case I001Variant::CombinedSoftware: return "combined-software";
     case I001Variant::TransientLbvh: return "transient-lbvh";
+    case I001Variant::HardenedTransientLbvh: return "hardened-transient-lbvh";
     case I001Variant::TransientGrid: return "transient-grid";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
@@ -724,6 +731,9 @@ I001Variant i001_parse_variant(const std::string& value) {
     if (value == "combined-hwrt") return I001Variant::CombinedHwrt;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
     if (value == "transient-lbvh") return I001Variant::TransientLbvh;
+    if (value == "hardened-transient-lbvh") {
+        return I001Variant::HardenedTransientLbvh;
+    }
     if (value == "transient-grid") return I001Variant::TransientGrid;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
@@ -1022,7 +1032,10 @@ struct I001Runtime::Impl {
                 context,
                 static_triangles,
                 shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
-                false);
+                false,
+                uses_hardened_transient_lbvh(options.variant)
+                    ? lane_b::HwrtBuildInputRetention::ReleaseAfterBuild
+                    : lane_b::HwrtBuildInputRetention::RetainForUpdates);
 
             if (has_dynamic_transition(options.scenario)) {
                 std::vector<GpuTriangle> dynamic_template;
