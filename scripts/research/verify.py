@@ -21,6 +21,11 @@ LANES = {
         "shader": "shaders/research/lane_c_storage_locality/README.md",
         "script": "scripts/research/lane_c_storage_locality/README.md",
     },
+    "lane-g-transient-lbvh-hardening": {
+        "src": "src/research/lane_g_transient_lbvh_hardening/CMakeLists.txt",
+        "shader": "shaders/research/lane_g_transient_lbvh_hardening/README.md",
+        "script": "scripts/research/lane_g_transient_lbvh_hardening/README.md",
+    },
 }
 
 

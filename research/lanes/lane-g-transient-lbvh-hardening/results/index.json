@@ -1,1 +1,13 @@
-{"schema_version":1,"lane":"lane-g-transient-lbvh-hardening","results":[]}
+{
+  "schema_version": 1,
+  "lane": "lane-g-transient-lbvh-hardening",
+  "experiments": [
+    {
+      "id": "G001",
+      "name": "memory-ownership-lifetime-census",
+      "result": "001-memory-ownership-lifetime-census.md",
+      "status": "pending-target-gpu-evidence",
+      "decision": "no-memory-optimization-before-g001-concludes"
+    }
+  ]
+}
