@@ -1,6 +1,6 @@
 # Research program status
 
-As of 2026-09-30, Lane A-F and Integration #13 are concluded. This document is the
+As of 2026-09-30, Lane A-G and Integration #13 are concluded. This document is the
 program-level synthesis on the `research` branch. Detailed experiment results,
 raw-artifact provenance, and lane-local decisions remain canonical in each lane's
 `results/` documents and are not duplicated here.
@@ -39,18 +39,19 @@ the completed lanes:
 5. Keep A001 as the standalone producer contract. Renderer depth reuse is a
    conditional integration optimization; bounded-capacity/safe-overflow is
    retained as a memory-policy result, not as a promoted producer.
-6. Lane F does not replace Lane E. The sorted two-level grid is not a viable
-   follow-up under the measured workload. Transient LBVH remains promising, but
-   its sparse-memory failure and unresolved timing repeatability prevent formal
-   promotion.
+6. Lane G hardens the Lane-F transient LBVH mechanism enough to remove its
+   deterministic sparse-memory blocker without changing A001/Hit/C001 semantics.
+   The hardened path passed final correctness and memory replay, but Lane G did
+   not establish a safe decision-valid timing protocol. It therefore does not
+   replace Lane E or change the primary traversal/ownership decisions.
 
 The main architectural blocker found by Integration #13 — world-space
-moving-geometry maintenance — is solved by Lane E for rigid and
-stable-topology-deforming geometry under its frozen gates. The main unresolved
-question is now whether a transient LBVH can become a useful **conditional
-object-local rebuild backend**, especially for high-churn/topology-changing
-geometry, while fitting the memory boundary and producing repeatable timing
-evidence.
+moving-geometry maintenance — remains solved by Lane E for rigid and
+stable-topology-deforming geometry under its frozen gates. Lane G establishes
+that transient LBVH can fit the memory/correctness boundary after lifetime
+hardening, but whether it is preferable as an object-local rebuild backend for
+high-churn/topology-changing geometry remains a **performance question**, not a
+correctness or sparse-memory question.
 
 ## Major findings
 
@@ -62,7 +63,8 @@ evidence.
 | Integration / #13 | Complete, no universal promotion | Static/camera/light strongly favored HWRT, while the old world-space moving-rigid path regressed. This isolated dynamic geometry ownership/maintenance as the next problem. |
 | Lane D / #14 | Accepted final decision | No standalone producer replacement beat A001. D001 depth reuse is conditional integration evidence. D005 bounded-capacity/safe-overflow is retained policy evidence only. |
 | Lane E / #15 | Accepted | Object-local ownership by update semantics passed final integrated stable, rigid, deforming and memory gates for both HWRT and software fallback. This is the current incumbent dynamic-geometry architecture. |
-| Lane F / #16 | Complete, no promotion | Sorted grid is dominated by reference amplification/sort. Transient LBVH has strong mechanism evidence, but sparse peak memory exceeds 3.0x vanilla and final timing remains inconclusive after the permitted rerun. |
+| Lane F / #16 | Complete, no promotion | Sorted grid is dominated by reference amplification/sort. Transient LBVH established mechanism evidence but exposed sparse-memory and timing-repeatability blockers. |
+| Lane G / #17 | Complete, measurement-limited | Hardened transient LBVH resolves the sparse-memory blocker and passes deterministic correctness/integration replay. Decision-valid timing remains unresolved, so Lane E stays incumbent and no production promotion is made. |
 
 Representative values above are anchors only. Exact per-case numbers and raw
 artifact provenance remain in the lane result documents.
@@ -106,8 +108,9 @@ costs pass a new integrated gate.
 - segment DDA/hash top level;
 - conservative quantized Micro BVH8 per segment.
 
-Lane E changes ownership/update semantics, not this traversal decision. Lane F
-produced no formal replacement, so the Lane B disposition remains current.
+Lane E changes ownership/update semantics, not this traversal decision. Lane G
+also produces no formal replacement because timing remains inconclusive, so the
+Lane B disposition remains current.
 
 ### Radiance storage
 
@@ -160,7 +163,9 @@ accepted topology-changing performance result.
 - D001 renderer-depth reuse.
 - D005 bounded-capacity/safe-overflow policy.
 - virtual/clipmap storage in dense/residency-stable regimes.
-- transient LBVH as a future mechanism candidate.
+- hardened transient LBVH as a retained mechanism candidate whose deterministic
+  memory/correctness blocker is resolved but whose production timing case is
+  still unproven.
 
 ### Rejected or not retained
 
@@ -173,38 +178,38 @@ accepted topology-changing performance result.
 
 ### Unresolved
 
-- whether transient LBVH can pass sparse-memory and repeatability gates;
-- whether transient LBVH is useful specifically for topology-changing/high-churn
-  object-local rebuilds;
-- same-boundary crossover between the accepted Lane E incumbent and hardened
-  transient LBVH;
+- a safe decision-valid timing protocol for transient-LBVH/control comparisons;
+- whether hardened transient LBVH is performant specifically for
+  topology-changing/high-churn object-local rebuilds;
+- same-boundary timing crossover between the accepted Lane E incumbent and
+  hardened transient LBVH;
 - topology-changing performance under the Lane E ownership model;
 - whether a future representative dense workload justifies reopening clipmap
   storage;
 - cross-GPU generality beyond the measured AMD Radeon 8060S target;
 - final renderer integration of D001 and any future D005-style capacity policy.
 
-## Lane E and Lane F are not mutually exclusive
+## Lane E and hardened transient LBVH are not mutually exclusive
 
-Lane E answers **who owns geometry and which update semantics apply**. Lane F
-tests **how a dynamic subset can be rebuilt/traversed each frame**. Those are
-different architectural axes.
+Lane E answers **who owns geometry and which update semantics apply**. Lane G
+hardens **how a transient dynamic subset can be rebuilt/traversed and kept
+within the memory boundary**. Those remain different architectural axes.
 
-The current evidence supports Lane E as the ownership architecture. A hardened
-transient LBVH could still fit *inside* that architecture, for example as the
-object-local rebuild mechanism for topology-changing/high-churn objects.
+The current evidence continues to support Lane E as the ownership architecture.
+Lane G shows that hardened transient LBVH is semantically valid across rigid,
+stable-topology deforming and topology-changing test classes and no longer fails
+the frozen sparse-memory ceiling.
 
-That composition is only a hypothesis today. F006's topology/deformation
-mechanism evidence is diagnostic because its formal timing campaign remained
-inconclusive. F007 also cannot be compared numerically to E005 as a promotion
-gate: the campaigns use different measurement boundaries/controls and F007 has
-unstable required rows.
+A composition in which transient LBVH becomes an object-local rebuild backend
+is therefore technically plausible, but it is not a promoted architecture.
+G002 never produced a safe decision-valid timing protocol and G005 deliberately
+made no Lane-E replacement claim.
 
 Therefore the program does **not** adopt transient LBVH into Lane E yet.
 
-## Lane F interpretation
+## Lane F → Lane G interpretation
 
-The important Lane F conclusion is not "LBVH was too slow".
+The important Lane F conclusion was not "LBVH was too slow".
 
 - Corrected F002 Nrep=796 builder median is about 0.10 ms and repeatable.
 - F006/F007 provide favorable mechanism-level LBVH evidence across multiple
@@ -217,10 +222,17 @@ The important Lane F conclusion is not "LBVH was too slow".
 - F007 still contains 23 unstable variant/scenario rows after the one permitted
   identical rerun.
 
-The formal conclusion is therefore: **correctness established, architecture not
-promoted; memory integration and measurement repeatability are the blockers**.
+Lane G resolves the memory half of that conclusion. G001 showed that the sparse
+failure was dominated by static-HWRT setup lifetime overlap rather than LBVH
+payload itself. G003a/G005 then reduced true peak memory enough to pass the
+frozen 3.0x ceiling: sparse-stress is 2.708583x vanilla and sparse-moving is
+2.699209x vanilla.
 
-The sorted grid has a stronger negative disposition because reference
+The remaining blocker is decision-valid timing repeatability. G002 showed the
+instability also affects controls, rejected warmup-only and auto-DPM paired
+protocols, and closed without an accepted safe timing protocol.
+
+The sorted grid keeps its stronger negative disposition because reference
 amplification and sorting dominate the dynamic builder and a decision-valid
 large-world-moving gate also fails.
 
@@ -239,8 +251,10 @@ transient candidates. Consequently:
 - when controls are unstable, architecture-specific causal claims are not
   justified.
 
-The shared protocol records these rules. Lane G's timing diagnosis should
-produce the evidence needed to freeze the next accepted timing protocol.
+Lane G confirmed these rules rather than resolving them: G002 could not freeze a
+safe accepted timing protocol. Any future timing-based promotion study must
+first establish a new protocol without GPU power/clock manipulation that risks
+host stability.
 
 ## Evidence chain
 
@@ -253,66 +267,56 @@ Detailed source-of-truth documents:
 - Lane D: [final cross-lane producer decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-d-producer-optimization/research/lanes/lane-d-producer-optimization/results/006-final-cross-lane-decision.md)
 - Lane E: [E005 final ownership replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-e-dynamic-geometry/research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md)
 - Lane F: [F002 builder](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/002-pure-gpu-transient-lbvh-builder.md), [F006 geometry-class controls](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/006-geometry-class-crossover-controls.md), [F007 final replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/007-final-integration-replay.md)
+- Lane G: [G001 memory census](research/lanes/lane-g-transient-lbvh-hardening/results/001-memory-ownership-lifetime-census.md), [G002 timing diagnosis](research/lanes/lane-g-transient-lbvh-hardening/results/002-timing-repeatability-diagnosis.md), [G003 memory hardening](research/lanes/lane-g-transient-lbvh-hardening/results/003-memory-reduction-candidates.md), [G004 integration hardening](research/lanes/lane-g-transient-lbvh-hardening/results/004-integration-hardening.md), [G005 final deterministic replay](research/lanes/lane-g-transient-lbvh-hardening/results/005-final-deterministic-replay.md)
 
 Issues #9-#17 provide the frozen plans and later cross-lane context; lane result
 documents take precedence for concluded experiment outcomes.
 
-## Next research priority
+## Post-Lane-G research priorities
 
-Issue #17 / Lane G is the next research lane. The post-synthesis plan is now
-frozen around two blockers that Lane F actually demonstrated:
+Lane G is complete. There is no mandatory follow-on lane required to validate
+its deterministic result.
 
-1. **G001 memory ownership/lifetime census first**. Explain the deterministic
-   sparse 3.0836x/3.2025x failures before optimizing.
-2. **G002 timing-repeatability diagnosis second**. Architecture remains
-   unchanged while isolating process/warmup/order/clock/allocator/driver/query
-   effects.
-3. Freeze any revised accepted timing protocol from G002 **before** using it for
-   decision-valid optimization timing.
-4. Only then implement memory changes justified by G001.
+The remaining high-value questions are:
 
-Lane G must evaluate transient LBVH against the accepted Lane E architecture,
-not treat Lane F as though no incumbent exists. If Lane E participates in a
-formal performance gate, its comparator must be ported/rerun in the same
-run-local campaign and measurement boundary. Historical E005 values remain
-context only.
+1. **Timing methodology** — only if production promotion of transient LBVH is
+   still desired, establish a safe repeatable same-boundary timing protocol
+   first. Do not reuse the abandoned G002c power-state experiment.
+2. **Topology-changing object-local crossover** — after a safe timing protocol
+   exists, compare hardened transient LBVH against a run-local Lane E
+   object-local rebuild implementation for topology-changing/high-churn
+   geometry. This is the most direct unresolved architectural comparison.
+3. **Renderer integration** — independently evaluate D001 depth reuse and any
+   future D005-style capacity policy in a real renderer boundary.
+4. **Cross-GPU generality** — all current primary decisions remain measured on
+   the AMD Radeon 8060S target and should not be generalized without new
+   evidence.
 
-The valid outcomes are deliberately broader than a universal rigid-primary
-replacement. Lane G may establish a **conditional object-local transient rebuild
-backend** for topology-changing/high-churn geometry if that class passes its own
-frozen correctness, memory and timing gates. Rigid, stable-topology deforming,
-and topology-changing classes must remain separately reported; success in one
-class must not be generalized to another.
+The evidence-backed production architecture remains:
 
-The Lane G plan also preserves the existing program contracts:
+- A001 natural-order producer;
+- HWRT/TLAS primary traversal;
+- B003 software fallback;
+- C001 per-probe sparse hash;
+- Lane E geometry-class-specific object-local ownership/update model.
 
-- A001 producer semantics and natural append order;
-- HWRT primary / B003 software fallback disposition unless new decision-valid
-  evidence supersedes it;
-- C001 sparse storage semantics;
-- shared exact Hit semantics;
-- no candidate-specific workload or hidden measurement-boundary changes.
+Hardened transient LBVH is retained as research mechanism evidence, not as a
+replacement for that incumbent architecture.
 
-No different research lane needs to precede Lane G. Lower-priority follow-ups —
-dense-regime storage, D001 renderer integration, and D005 capacity policy —
-should wait unless new evidence shows they are the dominant blocker.
+## Lane G final outcome
 
-## Lane G start readiness
+Issue #17 completed its frozen G001-G005 sequence.
 
-Lane G is ready to start once Issue #17 contains the post-synthesis comparison
-and outcome rules above and the lane branch is created from this research
-checkpoint.
+- G001: explained the sparse-memory failure.
+- G002: timing diagnosis completed; no safe decision-valid protocol accepted.
+- G003: immutable-static-HWRT lifetime hardening retained.
+- G004: 16/16 semantic/integration cases passed.
+- G005: 60/60 deterministic same-boundary rows passed correctness/workload and
+  frozen memory gates.
 
-Execution order is frozen:
+Final status: **mechanism retained; deterministic memory/correctness hardening
+accepted; production promotion measurement-limited**.
 
-1. G001 census with **no optimization**.
-2. G002 repeatability diagnosis with **unchanged architecture**.
-3. Document and freeze any accepted methodology revision.
-4. G003 memory candidates justified by G001 only.
-5. G004 integration hardening.
-6. G005 final same-boundary replay, including Lane E run-local comparison where
-   practical and required for a formal promotion claim.
-
-No heuristic buffer tuning may precede G001. No accepted timing from a revised
-methodology may be used before that methodology is documented and frozen. No
-historical and run-local timing values may be mixed into one promotion gate.
+No historical and run-local timing values are mixed into a promotion gate, no
+Lane E replacement claim is made, and the abandoned GPU power-state experiment
+must not be rerun.
