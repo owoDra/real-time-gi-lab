@@ -13,6 +13,7 @@ enum class I001Variant {
     CombinedHwrt,
     CombinedSoftware,
     TransientLbvh,
+    TransientGrid,
     DepthReuseHwrt,
     BoundedHwrt,
 };
@@ -44,10 +45,14 @@ struct I001FrameTimings {
     double dynamic_builder_reset_us{};
     double dynamic_builder_input_us{};
     double dynamic_builder_aabb_us{};
+    double dynamic_builder_overlap_us{};
+    double dynamic_builder_prefix_us{};
+    double dynamic_builder_emit_us{};
     double dynamic_builder_morton_us{};
     double dynamic_builder_sort_us{};
     double dynamic_builder_topology_us{};
     double dynamic_builder_bounds_us{};
+    double dynamic_builder_ranges_us{};
     double dynamic_builder_us{};
     double static_traversal_us{};
     double dynamic_traversal_us{};
@@ -75,6 +80,15 @@ struct I001FrameStats {
     std::uint32_t storage_updates{};
     std::uint32_t storage_invalidations{};
     std::uint32_t storage_failures{};
+    std::uint32_t grid_emitted_references{};
+    std::uint32_t grid_max_references_per_triangle{};
+    std::uint32_t grid_visited_macro_cells{};
+    std::uint32_t grid_visited_local_cells{};
+    std::uint32_t grid_empty_cell_steps{};
+    std::uint32_t grid_tested_primitive_references{};
+    std::uint32_t grid_cell_ranges{};
+    std::uint32_t grid_macro_ranges{};
+    std::uint32_t grid_overflow{};
 };
 
 struct I001Memory {
@@ -90,6 +104,8 @@ struct I001Memory {
     std::size_t dynamic_candidate_transient_bytes{};
     std::size_t dynamic_candidate_scratch_bytes{};
     std::size_t current_frame_geometry_bytes{};
+    std::size_t grid_pair_stream_bytes{};
+    std::size_t grid_sort_scratch_bytes{};
     std::size_t host_persistent_bytes{};
     std::size_t host_transient_bytes{};
 };
