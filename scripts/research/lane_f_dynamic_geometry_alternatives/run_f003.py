@@ -592,10 +592,17 @@ def main() -> int:
     )
 
     status = "unstable-rerun-required" if any_unstable else "target-run-complete"
+    # Gate ratios are retained for diagnosis, but an unstable campaign is not
+    # decision-valid under lane-f-plan-v1. The rerun budget is tracked by the
+    # experiment record/Issue, not inferred from a single artifact.
     formal = (
-        "f003-gates-pass-f002-prerequisite-pending"
-        if gates["all_f003_required_gates_pass"]
-        else "f003-gates-fail"
+        "timing-inconclusive-unstable"
+        if any_unstable
+        else (
+            "f003-gates-pass-f002-prerequisite-pending"
+            if gates["all_f003_required_gates_pass"]
+            else "f003-gates-fail"
+        )
     )
     payload = {
         "schema_version": 1,
