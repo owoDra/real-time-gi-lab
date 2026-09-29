@@ -94,6 +94,7 @@ NUMERIC_FIELDS = (
     "grid_pair_stream_bytes",
     "grid_sort_scratch_bytes",
     "grid_emitted_references",
+    "grid_references_per_dynamic_triangle",
     "grid_max_references_per_triangle",
     "grid_visited_macro_cells",
     "grid_visited_local_cells",
@@ -309,6 +310,12 @@ def normalize_row(
             "topology_delta_count": 0,
         }
     )
+    dynamic_count = int(output["dynamic_primitive_count"])
+    emitted_references = int(row.get("grid_emitted_references", "0") or "0")
+    output["grid_references_per_dynamic_triangle"] = (
+        emitted_references / dynamic_count if dynamic_count > 0 else 0.0
+    )
+
     # Old unchanged I001 controls do not expose the Lane-F-specific phase
     # columns. Fill explicit N/A zeros so one frozen schema can hold all rows.
     for field in (
