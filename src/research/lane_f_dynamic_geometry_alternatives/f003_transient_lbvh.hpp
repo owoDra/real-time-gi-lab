@@ -40,6 +40,11 @@ public:
         VkQueryPool query_pool,
         std::uint32_t query_base) const;
 
+    // F006 controlled geometry-class adapter: replace the immutable source
+    // template before the measured build without changing LBVH structure/layout.
+    [[nodiscard]] double update_template(
+        std::span<const lane_b::GpuTriangle> triangles);
+
     [[nodiscard]] const lane_b::B002Buffer& triangles() const noexcept {
         return working_buffer_;
     }
