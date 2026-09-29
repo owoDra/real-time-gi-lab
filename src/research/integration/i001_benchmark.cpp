@@ -152,6 +152,7 @@ int main(int argc, char** argv) {
     try {
         const auto cli = parse_cli(argc, argv);
         integration::I001Runtime runtime(cli.options);
+        std::cout << "GPU: " << runtime.device_name() << '\n';
 
         (void)runtime.run_frame(false);
         auto result = runtime.run_frame(true);
