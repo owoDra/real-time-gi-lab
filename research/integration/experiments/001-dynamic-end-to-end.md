@@ -243,25 +243,39 @@ These are mechanism/stability stresses only; they do not replace the
 representative Sponza static/camera/light/moving evidence.
 
 The bounded variant uses the integrated clamp/overflow path rather than D005's
-rejected owner-slot staging implementation. The formal matrix also forces a
-512-owner overflow and then runs an explicit full-capacity HWRT retry. Retry
-latency and memory are retained as evidence.
+rejected staged owner-slot implementation. A single natural owner append index
+derives both output and work ranges and writes directly into the bounded stream;
+requested counters are tracked separately and clamped only after emission. This
+prevents overflow from leaving holes in the dispatchable prefix. The formal
+matrix also forces a 512-owner overflow and then runs an explicit full-capacity
+HWRT retry. Failed-attempt setup wall time, retry setup wall time, GPU retry
+time, and peak memory are retained as evidence.
 
 Quality validation now covers:
 
 - A001 visibility and producer semantic parity;
 - bounded partial-block owner/order/range safety under forced overflow;
 - shared Hit-contract parity against the software-BVH reference;
-- sparse-hash insert/update/invalidate/resolve behavior;
+- sparse-hash reserve/reset and accumulate phases;
+- token/key consistency and duplicate current-frame sparse slots;
+- insert/update/invalidate/resolve behavior;
 - missing/leaked/stale probes;
 - final resolved-output parity;
 - frame-to-frame temporal RMS/max parity.
 
 The diagnostic validation matrix runs before validation-disabled accepted
-timing. Each accepted process records one warmup frame, one measured
-static/transition frame, setup wall time, exact device/driver/API, memory,
-churn, quality, and Git provenance. Process-level repeats are aggregated by the
-formal runner.
+timing. All 33 validation cases are attempted before failures are reported, and
+the runner persists `i001-validation-summary.json`. Validation-layer error
+markers are a hard failure even when the child process exits successfully. A
+`--validation-only` preflight is available to exercise the complete
+correctness matrix without starting repeated timing.
+
+Each accepted process records one warmup frame, one measured static/transition
+frame, setup wall time, exact device/driver/API, memory, churn, quality, and Git
+provenance. Storage capacity is reserved for the maximum of the warmup and
+target transition endpoints. Moving-frame `complete_gpu_us` includes timed
+surface/traversal-buffer transfers plus HWRT/software traversal maintenance.
+Process-level repeats are aggregated by the formal runner.
 
 Formal target sequence:
 
@@ -279,6 +293,7 @@ mise run research:record --lane integration-gate \
 
 Expected top-level I001 artifacts include:
 
+- `i001-validation-summary.json`;
 - `i001-representative.csv`;
 - `i001-stress.csv`;
 - `i001-overflow-retry.csv`;
