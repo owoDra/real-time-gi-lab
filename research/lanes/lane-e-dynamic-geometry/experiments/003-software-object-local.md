@@ -1,6 +1,6 @@
 # E003 — software object-local rigid ownership
 
-Status: target validation passed; accepted timing ready
+Status: complete; object-local quantized software ownership promoted
 
 ## Question
 
@@ -291,3 +291,30 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 The timing runner repeats the validation matrix before validation-disabled timing.
 Do not alter the frozen E003 gates after observing timing.
+
+
+## Accepted timing result
+
+Accepted measurement provenance:
+
+- commit: `09944ee0b580cd67911d3c0a13b87821d8c939dc`;
+- clean checkout;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- 3 process repeats.
+
+Frozen-gate result:
+
+- current software boundary: 100378.753 us;
+- object-local quantized boundary: 1862.834 us;
+- boundary improvement: 98.14%;
+- traversal regression: 9.48%;
+- persistent-memory ratio: 1.0049x;
+- promotion gate: pass.
+
+The binary object-local mechanism control measured 371.947 us traversal versus
+281.455 us for the quantized row, and 1.146x the quantized persistent memory.
+The accepted B003 quantized representation therefore remains the retained
+object-local fallback representation.
+
+Final result:
+`research/lanes/lane-e-dynamic-geometry/results/003-software-object-local.md`.
