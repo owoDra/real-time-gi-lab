@@ -496,6 +496,9 @@ struct I001Runtime::Impl {
     I001Memory memory_stats{};
     MovingSelection moving{};
     bool geometry_is_target{};
+    bool have_quality_history{};
+    std::map<ProbeKey, double> previous_reference_probe;
+    std::map<ProbeKey, double> previous_candidate_probe;
     std::uint32_t storage_capacity{};
     std::uint32_t frame_id{};
     I001FrameResult last{};
@@ -1605,14 +1608,19 @@ struct I001Runtime::Impl {
             candidate_resolved.data(),
             candidate_resolved.size() * sizeof(float));
 
-        double squared = 0.0;
-        std::size_t compared = 0;
+        std::map<ProbeKey, double> reference_values;
         for (const auto& [key, reference_accum] : reference_probe) {
-            const double reference_value =
+            reference_values[key] =
                 reference_accum.second == 0U
                 ? 0.0
                 : double(reference_accum.first) /
                     (double(reference_accum.second) * 65535.0);
+        }
+
+        double squared = 0.0;
+        std::size_t compared = 0;
+        for (const auto& [key, reference_accum] : reference_probe) {
+            const double reference_value = reference_values.at(key);
             const auto found = candidate_probe.find(key);
             if (found == candidate_probe.end()) {
                 ++quality.missing_probes;
@@ -1663,6 +1671,56 @@ struct I001Runtime::Impl {
             compared == 0U
             ? std::numeric_limits<double>::infinity()
             : std::sqrt(squared / double(compared));
+
+        if (have_quality_history) {
+            std::map<ProbeKey, bool> temporal_keys;
+            for (const auto& [key, value] : previous_reference_probe) {
+                (void)value;
+                temporal_keys[key] = true;
+            }
+            for (const auto& [key, value] : reference_values) {
+                (void)value;
+                temporal_keys[key] = true;
+            }
+            for (const auto& [key, value] : previous_candidate_probe) {
+                (void)value;
+                temporal_keys[key] = true;
+            }
+            for (const auto& [key, value] : candidate_probe) {
+                (void)value;
+                temporal_keys[key] = true;
+            }
+
+            double temporal_squared = 0.0;
+            std::size_t temporal_count = 0U;
+            const auto value_or_zero =
+                [](const std::map<ProbeKey, double>& values,
+                   const ProbeKey& key) {
+                    const auto found = values.find(key);
+                    return found == values.end() ? 0.0 : found->second;
+                };
+            for (const auto& [key, present] : temporal_keys) {
+                (void)present;
+                const auto reference_delta =
+                    value_or_zero(reference_values, key) -
+                    value_or_zero(previous_reference_probe, key);
+                const auto candidate_delta =
+                    value_or_zero(candidate_probe, key) -
+                    value_or_zero(previous_candidate_probe, key);
+                const auto error =
+                    std::abs(candidate_delta - reference_delta);
+                quality.temporal_max_abs_error =
+                    std::max(quality.temporal_max_abs_error, error);
+                temporal_squared += error * error;
+                ++temporal_count;
+            }
+            quality.temporal_rms_error =
+                temporal_count == 0U
+                ? 0.0
+                : std::sqrt(
+                    temporal_squared / double(temporal_count));
+        }
+
         quality.passed =
             quality.visibility_mismatches == 0U &&
             quality.producer_semantic_errors == 0U &&
@@ -1674,7 +1732,13 @@ struct I001Runtime::Impl {
             quality.resolved_output_mismatches == 0U &&
             quality.radiance_max_abs_error <= 1.0e-4 &&
             quality.radiance_rms_error <= 1.0e-5 &&
+            quality.temporal_max_abs_error <= 1.0e-4 &&
+            quality.temporal_rms_error <= 1.0e-5 &&
             last.stats.storage_failures == 0U;
+
+        previous_reference_probe = std::move(reference_values);
+        previous_candidate_probe = candidate_probe;
+        have_quality_history = true;
 
         context.destroy_buffer(reference_hits);
         context.destroy_buffer(ordered);
