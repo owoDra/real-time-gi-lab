@@ -203,6 +203,7 @@ static_assert(sizeof(InvalidationPush) == 16);
            value == I001Variant::RigidInstanceHwrtUpdate ||
            value == I001Variant::RigidInstanceHwrtBuild ||
            value == I001Variant::DeformingLocalHwrt ||
+           value == I001Variant::LaneEFinalHwrt ||
            value == I001Variant::DepthReuseHwrt ||
            value == I001Variant::BoundedHwrt;
 }
@@ -244,6 +245,31 @@ static_assert(sizeof(InvalidationPush) == 16);
 [[nodiscard]] bool uses_deforming_local_software(
     I001Variant value) noexcept {
     return value == I001Variant::DeformingLocalSoftwareQuantized;
+}
+
+[[nodiscard]] bool uses_lane_e_final_hwrt(
+    I001Variant value) noexcept {
+    return value == I001Variant::LaneEFinalHwrt;
+}
+
+[[nodiscard]] bool uses_lane_e_final_software(
+    I001Variant value) noexcept {
+    return value == I001Variant::LaneEFinalSoftware;
+}
+
+[[nodiscard]] bool uses_lane_e_final(
+    I001Variant value) noexcept {
+    return uses_lane_e_final_hwrt(value) ||
+           uses_lane_e_final_software(value);
+}
+
+[[nodiscard]] bool lane_e_final_supported_scenario(
+    I001Scenario scenario) noexcept {
+    return scenario == I001Scenario::Static ||
+           scenario == I001Scenario::CameraMotion ||
+           scenario == I001Scenario::LightMotion ||
+           scenario == I001Scenario::MovingRigid ||
+           scenario == I001Scenario::DeformingControl;
 }
 
 [[nodiscard]] bool uses_quantized(I001Variant value) noexcept {
@@ -622,6 +648,10 @@ const char* i001_variant_name(I001Variant value) noexcept {
         return "deforming-local-hwrt";
     case I001Variant::DeformingLocalSoftwareQuantized:
         return "deforming-local-software-quantized";
+    case I001Variant::LaneEFinalHwrt:
+        return "lane-e-final-hwrt";
+    case I001Variant::LaneEFinalSoftware:
+        return "lane-e-final-software";
     case I001Variant::CombinedSoftware: return "combined-software";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
@@ -659,6 +689,10 @@ I001Variant i001_parse_variant(const std::string& value) {
         return I001Variant::DeformingLocalHwrt;
     if (value == "deforming-local-software-quantized")
         return I001Variant::DeformingLocalSoftwareQuantized;
+    if (value == "lane-e-final-hwrt")
+        return I001Variant::LaneEFinalHwrt;
+    if (value == "lane-e-final-software")
+        return I001Variant::LaneEFinalSoftware;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
