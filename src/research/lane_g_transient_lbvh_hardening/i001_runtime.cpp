@@ -837,20 +837,20 @@ struct I001Runtime::Impl {
     bool have_last{};
 
     [[nodiscard]] VkAccelerationStructureKHR static_hwrt_top_level() const {
-        if (immutable_hwrt) return immutable_static_hwrt_top_level();
-        if (hwrt) return static_hwrt_top_level();
+        if (immutable_hwrt) return immutable_hwrt->top_level();
+        if (hwrt) return hwrt->top_level();
         fail("I001 static HWRT owner is missing");
     }
 
     [[nodiscard]] const B002Buffer& static_hwrt_triangle_buffer() const {
-        if (immutable_hwrt) return immutable_static_hwrt_triangle_buffer();
-        if (hwrt) return static_hwrt_triangle_buffer();
+        if (immutable_hwrt) return immutable_hwrt->triangle_buffer();
+        if (hwrt) return hwrt->triangle_buffer();
         fail("I001 static HWRT triangle buffer is missing");
     }
 
     [[nodiscard]] const lane_b::HwrtSetupStats& static_hwrt_setup_stats() const {
-        if (immutable_hwrt) return immutable_static_hwrt_setup_stats();
-        if (hwrt) return static_hwrt_setup_stats();
+        if (immutable_hwrt) return immutable_hwrt->setup_stats();
+        if (hwrt) return hwrt->setup_stats();
         fail("I001 static HWRT setup stats are missing");
     }
 
