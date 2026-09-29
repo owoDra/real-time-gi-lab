@@ -47,6 +47,7 @@ add_executable(phos-i001
   i001_compute.cpp
   ../lane_a_split_rc/a001_scene.cpp
   ../lane_a_split_rc/a001_runtime.cpp
+  ../lane_a_split_rc/a001_analysis.cpp
   ../lane_b_traversal/b002_scene.cpp
   ../lane_b_traversal/b002_vulkan.cpp
   ../lane_b_traversal/b002_compute.cpp
