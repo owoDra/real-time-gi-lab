@@ -53,8 +53,11 @@ recorded as null rather than invalidating the timing campaign.
 First identify the AMDGPU device exposing the performance-level control:
 
 ```bash
-find -L /sys/class/drm/card*/device \
-  -name power_dpm_force_performance_level -print
+for device in /sys/class/drm/card[0-9]*/device; do
+  if [ -e "$device/power_dpm_force_performance_level" ]; then
+    printf '%s\n' "$device/power_dpm_force_performance_level"
+  fi
+done
 ```
 
 Set that file to `profile_peak` before running the experiment. Example, after
