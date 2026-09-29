@@ -6,7 +6,32 @@ Target: AMD Radeon 8060S Graphics (RADV STRIX_HALO), RADV / Mesa 26.1.2
 
 ## Outcome
 
-**Correctness/structural validation passed and accepted builder timing is stable.**
+## Supersession note — F003 correctness failure
+
+During F003 validation on the same candidate family, the moving-rigid warmup
+reported 2,259 Hit mismatches. Investigation found a builder correctness bug
+that the original F002 structural validation did not cover:
+
+- the leaf node represented sorted primitive `keys_a[id].z`;
+- but its AABB was populated from unsorted `aabb[id]`;
+- therefore root bounds remained correct as a union while per-leaf/internal
+  traversal bounds could belong to different triangles.
+
+The implementation is corrected by indexing leaf bounds with the sorted
+primitive id. F002 validation is also strengthened to require:
+
+- root index/count correctness;
+- sorted primitive -> leaf identity and AABB correspondence;
+- parent/child consistency;
+- full tree reachability.
+
+Accordingly, the validation artifact `20260929T092619Z` and timing artifact
+`20260929T092838Z` are retained as historical evidence but are
+**superseded for formal F002 correctness/performance decisions**. A corrected
+same-plan validation and timing campaign is required. This is a correctness
+repair, not post-result threshold/tuning changes.
+
+**Original timing was stable, but its correctness evidence is superseded pending a corrected rerun.**
 
 The representative F001/I001 dynamic subset is `Nrep = 796` triangles
 (instance 5, displacement 362.264). The accepted 5-process timing median at
@@ -84,9 +109,9 @@ For Nrep:
 
 F002 is concluded as:
 
-- structural correctness: **PASS**
-- repeatability: **PASS**
-- builder measurement: **COMPLETE**
+- structural correctness: **SUPERSEDED — corrected rerun required**
+- original repeatability: **PASS**, but not decision-valid until corrected rerun
+- builder measurement: **SUPERSEDED — corrected rerun required**
 - formal feasibility gate: **PENDING** because the frozen run-local vanilla
   moving comparator remains inconclusive
 - architecture promotion: **none at F002**
