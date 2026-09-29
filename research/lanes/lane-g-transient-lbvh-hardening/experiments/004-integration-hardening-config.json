@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g004-v1",
+  "experiment": "G004",
+  "candidate": "hardened-transient-lbvh",
+  "purpose": "semantic and integration hardening only; no decision-valid timing claim",
+  "power_clock_manipulation": false,
+  "validation_required": true,
+  "cases": [
+    {
+      "scenario": "static",
+      "geometry_class": "representative-rigid",
+      "class": "stable"
+    },
+    {
+      "scenario": "camera-motion",
+      "geometry_class": "representative-rigid",
+      "class": "stable"
+    },
+    {
+      "scenario": "light-motion",
+      "geometry_class": "representative-rigid",
+      "class": "stable"
+    },
+    {
+      "scenario": "moving-rigid",
+      "geometry_class": "representative-rigid",
+      "class": "rigid-transform"
+    },
+    {
+      "scenario": "moving-rigid",
+      "geometry_class": "rigid-large-few",
+      "class": "rigid-transform"
+    },
+    {
+      "scenario": "moving-rigid",
+      "geometry_class": "rigid-small-many32",
+      "class": "rigid-transform"
+    },
+    {
+      "scenario": "moving-rigid",
+      "geometry_class": "deforming",
+      "class": "stable-topology-deforming"
+    },
+    {
+      "scenario": "moving-rigid",
+      "geometry_class": "topology-replace25",
+      "class": "topology-changing-high-churn"
+    },
+    {
+      "scenario": "sparse-stress",
+      "geometry_class": "representative-rigid",
+      "class": "stable-stress"
+    },
+    {
+      "scenario": "dense-stress",
+      "geometry_class": "representative-rigid",
+      "class": "stable-stress"
+    },
+    {
+      "scenario": "large-world-stress",
+      "geometry_class": "representative-rigid",
+      "class": "stable-stress"
+    },
+    {
+      "scenario": "vertical-world-stress",
+      "geometry_class": "representative-rigid",
+      "class": "stable-stress"
+    },
+    {
+      "scenario": "sparse-moving",
+      "geometry_class": "representative-rigid",
+      "class": "moving-stress"
+    },
+    {
+      "scenario": "dense-moving",
+      "geometry_class": "representative-rigid",
+      "class": "moving-stress"
+    },
+    {
+      "scenario": "large-world-moving",
+      "geometry_class": "representative-rigid",
+      "class": "moving-stress"
+    },
+    {
+      "scenario": "vertical-world-moving",
+      "geometry_class": "representative-rigid",
+      "class": "moving-stress"
+    }
+  ],
+  "correctness_gates": {
+    "quality_passed": true,
+    "visibility_mismatches": 0,
+    "producer_semantic_errors": 0,
+    "hit_mismatches": 0,
+    "traversal_runtime_errors": 0,
+    "missing_probes": 0,
+    "leaked_probes": 0,
+    "stale_storage_slots": 0,
+    "resolved_output_mismatches": 0,
+    "storage_failures": 0,
+    "overflow": 0
+  },
+  "geometry_class_gates": {
+    "dynamic_cases_require_moved_primitives": true,
+    "deforming_requires_deformed_primitives": true,
+    "topology_replace25_requires_topology_replaced_primitives": true,
+    "non_deforming_classes_require_zero_deformed_primitives": true,
+    "non_topology_classes_require_zero_topology_replaced_primitives": true
+  },
+  "timing": "diagnostic-only; G002 closed without a safe accepted protocol",
+  "decision": "All 16 cases must satisfy exact semantic/correctness gates. Any failure blocks G005 deterministic replay."
+}
