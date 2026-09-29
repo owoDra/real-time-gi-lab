@@ -9,6 +9,13 @@
       "status": "complete",
       "correctness": "pass",
       "decision": "static-hwrt-lifetime-dominates-sparse-memory-failure-lbvh-not-primary-cause"
+    },
+    {
+      "id": "G002",
+      "name": "timing-repeatability-diagnosis",
+      "result": "002-timing-repeatability-diagnosis.md",
+      "status": "pending-target-gpu-evidence",
+      "decision": "g003-timing-blocked-until-protocol-freeze"
     }
   ]
 }
