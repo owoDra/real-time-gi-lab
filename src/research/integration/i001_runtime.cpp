@@ -996,7 +996,12 @@ struct I001Runtime::Impl {
             memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
     }
 
-    [[nodiscard]] bool write_storage_buffer(
+    struct BufferWriteStats {
+        bool rebound{};
+        double gpu_us{};
+    };
+
+    [[nodiscard]] BufferWriteStats write_storage_buffer(
         B002Buffer& buffer,
         const void* data,
         VkDeviceSize size) {
@@ -1009,17 +1014,18 @@ struct I001Runtime::Impl {
                 data,
                 size,
             };
-            context.update_device_buffer(
-                buffer,
-                std::span<const lane_b::B002BufferUpdate>(&update, 1));
-            return false;
+            const auto gpu_us =
+                context.update_device_buffer_timed(
+                    buffer,
+                    std::span<const lane_b::B002BufferUpdate>(&update, 1));
+            return {false, gpu_us};
         }
         context.replace_device_buffer(
             buffer,
             data,
             size,
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-        return true;
+        return {true, 0.0};
     }
 
     struct DynamicUpdateStats {
@@ -1064,17 +1070,18 @@ struct I001Runtime::Impl {
                 VkDeviceSize(sizeof(std::array<float, 4>)),
             });
         }
-        context.update_device_buffer(
-            surfaces,
-            surface_updates);
-
-        double maintenance_gpu_us = 0.0;
+        double maintenance_gpu_us =
+            context.update_device_buffer_timed(
+                surfaces,
+                surface_updates);
         if (uses_hwrt(options.variant)) {
             const auto stats = hwrt->update_geometry(
                 b_scene.triangles,
                 moving.primitives);
-            maintenance_gpu_us =
-                stats.blas_update_us + stats.tlas_update_us;
+            maintenance_gpu_us +=
+                stats.geometry_upload_gpu_us +
+                stats.blas_update_us +
+                stats.tlas_update_us;
         } else {
             std::vector<GpuTriangle> moved_triangles;
             moved_triangles.reserve(moving.primitives.size());
@@ -1095,9 +1102,10 @@ struct I001Runtime::Impl {
                     VkDeviceSize(sizeof(GpuTriangle)),
                 });
             }
-            context.update_device_buffer(
-                triangle_buffer,
-                triangle_updates);
+            maintenance_gpu_us +=
+                context.update_device_buffer_timed(
+                    triangle_buffer,
+                    triangle_updates);
 
             if (uses_quantized(options.variant)) {
                 const auto stats = hierarchy_cpu->update(
@@ -1127,18 +1135,22 @@ struct I001Runtime::Impl {
                 if (rebind) {
                     traversal_stage.reset();
                 }
-                (void)write_storage_buffer(
+                const auto node_write = write_storage_buffer(
                     quant_nodes,
                     next_quant.nodes.data(),
                     node_bytes);
-                (void)write_storage_buffer(
+                const auto order_write = write_storage_buffer(
                     quant_order,
                     next_quant.ordered_primitives.data(),
                     order_bytes);
-                (void)write_storage_buffer(
+                const auto hash_write = write_storage_buffer(
                     quant_hash,
                     next_quant.hash_table.data(),
                     hash_bytes);
+                maintenance_gpu_us +=
+                    node_write.gpu_us +
+                    order_write.gpu_us +
+                    hash_write.gpu_us;
                 quant_payload = std::move(next_quant);
                 if (rebind) {
                     create_traversal_stage();
@@ -1160,14 +1172,17 @@ struct I001Runtime::Impl {
                 if (rebind) {
                     traversal_stage.reset();
                 }
-                (void)write_storage_buffer(
+                const auto node_write = write_storage_buffer(
                     software_nodes,
                     next_nodes.data(),
                     node_bytes);
-                (void)write_storage_buffer(
+                const auto order_write = write_storage_buffer(
                     software_order,
                     next_order.data(),
                     order_bytes);
+                maintenance_gpu_us +=
+                    node_write.gpu_us +
+                    order_write.gpu_us;
                 if (rebind) {
                     create_traversal_stage();
                 }
