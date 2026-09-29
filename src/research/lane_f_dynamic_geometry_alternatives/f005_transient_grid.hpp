@@ -65,6 +65,11 @@ public:
         VkQueryPool query_pool,
         std::uint32_t query_base) const;
 
+    // F006 controlled geometry-class adapter: replace the immutable source
+    // template before the measured build without changing grid structure/layout.
+    [[nodiscard]] double update_template(
+        std::span<const lane_b::GpuTriangle> triangles);
+
     [[nodiscard]] F005GridTraversalPush traversal_push() const noexcept;
     [[nodiscard]] F005GridStats stats() const noexcept;
     [[nodiscard]] const F005GridMemory& memory() const noexcept {
