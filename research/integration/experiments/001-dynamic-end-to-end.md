@@ -101,9 +101,13 @@ Resident fallback resources count when they remain allocated.
 
 Performance rows are accepted only after quality parity.
 
-The independent reference path uses the software-BVH Hit contract to produce the
-same deterministic radiance payload from the same A001 rays. Integrated variants
-compare their resolved probe/tile field against that reference.
+The independent reference path uses the software-BVH Hit contract from the same
+A001 rays. Those independently generated hits are then evaluated by the same
+canonical deterministic radiance shader used by candidates before merge/storage.
+This avoids treating CPU-vs-GPU floating-point implementation differences as GI
+quality failures while keeping traversal independent and keeping the fixed final
+radiance thresholds unchanged. Integrated variants compare their resolved
+probe/tile field against that reference.
 
 Record:
 - RMS and max absolute radiance error;
