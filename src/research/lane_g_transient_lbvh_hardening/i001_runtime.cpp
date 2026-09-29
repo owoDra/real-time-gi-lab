@@ -1510,6 +1510,162 @@ struct I001Runtime::Impl {
             memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
     }
 
+
+    [[nodiscard]] std::vector<I001AllocationRecord> allocation_census() const {
+        std::vector<I001AllocationRecord> rows;
+        rows.reserve(48U);
+
+        const auto add_buffer = [&](const char* name,
+                                    const char* owner,
+                                    const char* role,
+                                    const char* capacity_kind,
+                                    const char* use_lifetime,
+                                    const B002Buffer& buffer) {
+            if (buffer.buffer == VK_NULL_HANDLE) return;
+            rows.push_back({
+                name,
+                owner,
+                role,
+                capacity_kind,
+                "runtime",
+                use_lifetime,
+                static_cast<std::size_t>(buffer.size),
+                static_cast<std::size_t>(buffer.allocation_size),
+                true,
+                true,
+                true,
+            });
+        };
+        const auto add_aggregate = [&](const char* name,
+                                       const char* owner,
+                                       const char* role,
+                                       const char* use_lifetime,
+                                       std::size_t bytes) {
+            if (bytes == 0U) return;
+            rows.push_back({
+                name,
+                owner,
+                role,
+                "aggregate",
+                "runtime",
+                use_lifetime,
+                0U,
+                bytes,
+                false,
+                true,
+                true,
+            });
+        };
+        const auto add_host = [&](const char* name, std::size_t bytes) {
+            if (bytes == 0U) return;
+            rows.push_back({
+                name,
+                "host-mirror",
+                "host-mirror",
+                "capacity",
+                "runtime",
+                "runtime",
+                bytes,
+                bytes,
+                true,
+                false,
+                false,
+            });
+        };
+
+        add_buffer("shared.surfaces", "shared-integration", "shared-persistent",
+                   "scenario-sized", "runtime", surfaces);
+        add_buffer("shared.uniform", "shared-integration", "shared-persistent",
+                   "fixed", "runtime", uniform);
+        add_buffer("c001.storage-slots", "shared-integration", "c001-storage",
+                   "scenario-sized", "runtime", storage_slots);
+
+        add_buffer("producer.depth", "shared-integration", "producer-infrastructure",
+                   "scenario-sized", "frame", depth);
+        add_buffer("producer.owners", "shared-integration", "producer-infrastructure",
+                   "scenario-sized", "frame", owners);
+        add_buffer("producer.counters", "shared-integration", "producer-infrastructure",
+                   "fixed", "frame", counters);
+        add_buffer("producer.work", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", work);
+        add_buffer("producer.indirect", "shared-integration", "producer-infrastructure",
+                   "fixed", "frame", indirect);
+        add_buffer("stream.rays", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", rays);
+        add_buffer("stream.hits", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", hits);
+        add_buffer("stream.static-hits", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", static_hits);
+        add_buffer("stream.dynamic-hits", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", dynamic_hits);
+        add_buffer("stream.contributions", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", contributions);
+        add_buffer("stream.accum", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", accum);
+        add_buffer("stream.resolved", "shared-integration", "producer-stream",
+                   "scenario-sized", "frame", resolved);
+        add_buffer("c001.storage-stats", "shared-integration", "c001-storage",
+                   "fixed", "frame", storage_stats);
+
+        if (uses_transient_candidate(options.variant) || uses_hwrt(options.variant)) {
+            add_aggregate("static-hwrt.persistent", "static-hwrt",
+                          "static-hwrt-persistent", "runtime",
+                          hwrt ? hwrt->setup_stats().persistent_bytes : 0U);
+            add_aggregate("static-hwrt.scratch", "static-hwrt",
+                          "static-hwrt-scratch", "runtime",
+                          hwrt ? hwrt->setup_stats().scratch_bytes : 0U);
+        } else {
+            add_buffer("software.triangles", "software-control",
+                       "software-persistent", "scenario-sized", "runtime",
+                       triangle_buffer);
+            add_buffer("software.nodes", "software-control",
+                       "software-persistent", "scenario-sized", "runtime",
+                       software_nodes);
+            add_buffer("software.order", "software-control",
+                       "software-persistent", "scenario-sized", "runtime",
+                       software_order);
+            add_buffer("software.quant-nodes", "software-control",
+                       "software-persistent", "scenario-sized", "runtime",
+                       quant_nodes);
+            add_buffer("software.quant-order", "software-control",
+                       "software-persistent", "scenario-sized", "runtime",
+                       quant_order);
+            add_buffer("software.quant-hash", "software-control",
+                       "software-persistent", "scenario-sized", "runtime",
+                       quant_hash);
+        }
+
+        if (transient_lbvh) {
+            for (const auto& entry : transient_lbvh->allocation_census()) {
+                rows.push_back({
+                    entry.name,
+                    "transient-lbvh",
+                    entry.role,
+                    entry.capacity_kind,
+                    "runtime",
+                    entry.use_lifetime,
+                    entry.logical_bytes,
+                    entry.allocation_bytes,
+                    true,
+                    true,
+                    true,
+                });
+            }
+        }
+
+        add_host(
+            "host.scene-triangles",
+            b_scene.triangles.capacity() * sizeof(lane_b::Triangle));
+        add_host(
+            "host.scene-samples",
+            a_scene.samples.capacity() * sizeof(a_scene.samples[0]));
+        add_host(
+            "host.moving-selection",
+            moving.primitives.capacity() * sizeof(std::uint32_t));
+
+        return rows;
+    }
+
     struct BufferWriteStats {
         bool rebound{};
         double gpu_us{};
@@ -2690,6 +2846,9 @@ I001Quality I001Runtime::validate_last_frame() {
 }
 const I001Memory& I001Runtime::memory() const noexcept {
     return impl_->memory_stats;
+}
+std::vector<I001AllocationRecord> I001Runtime::allocation_census() const {
+    return impl_->allocation_census();
 }
 const std::string& I001Runtime::device_name() const noexcept {
     return impl_->context.device_name();
