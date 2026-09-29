@@ -29,10 +29,20 @@ enum class I001Scenario {
     VerticalWorldStress,
 };
 
+enum class I001GeometryClass {
+    RepresentativeRigid,
+    RigidLargeFew,
+    RigidSmallMany32,
+    Deforming,
+    TopologyReplace25,
+};
+
 [[nodiscard]] const char* i001_variant_name(I001Variant value) noexcept;
 [[nodiscard]] const char* i001_scenario_name(I001Scenario value) noexcept;
 [[nodiscard]] I001Variant i001_parse_variant(const std::string& value);
 [[nodiscard]] I001Scenario i001_parse_scenario(const std::string& value);
+[[nodiscard]] const char* i001_geometry_class_name(I001GeometryClass value) noexcept;
+[[nodiscard]] I001GeometryClass i001_parse_geometry_class(const std::string& value);
 
 struct I001FrameTimings {
     double renderer_depth_us{};
@@ -89,6 +99,9 @@ struct I001FrameStats {
     std::uint32_t grid_cell_ranges{};
     std::uint32_t grid_macro_ranges{};
     std::uint32_t grid_overflow{};
+    std::uint32_t dynamic_groups{};
+    std::uint32_t deformed_primitives{};
+    std::uint32_t topology_replaced_primitives{};
 };
 
 struct I001Memory {
@@ -138,6 +151,7 @@ struct I001Options {
         "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf"};
     I001Variant variant{I001Variant::VanillaSoftware};
     I001Scenario scenario{I001Scenario::Static};
+    I001GeometryClass geometry_class{I001GeometryClass::RepresentativeRigid};
     bool validation{};
     std::uint32_t bounded_owner_capacity{1280};
 };
