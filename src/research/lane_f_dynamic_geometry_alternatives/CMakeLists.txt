@@ -33,6 +33,7 @@ add_executable(phos-lane-f-i001-control
   f001_control_benchmark.cpp
   ../integration/i001_runtime.cpp
   ../integration/i001_compute.cpp
+  f003_transient_lbvh.cpp
   ../lane_a_split_rc/a001_scene.cpp
   ../lane_a_split_rc/a001_runtime.cpp
   ../lane_a_split_rc/a001_analysis.cpp
@@ -59,6 +60,7 @@ target_compile_definitions(phos-lane-f-i001-control PRIVATE
   PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
   PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
   PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_F_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
 )
 set_target_properties(phos-lane-f-i001-control PROPERTIES
   CXX_EXTENSIONS OFF
@@ -72,6 +74,72 @@ add_dependencies(
   phos-lane-b-b003-shaders
 )
 
+
+# F003 end-to-end transient LBVH shaders.
+add_compute_shader(
+  lane_f_f003_lbvh_builder
+  shaders/research/lane_f_dynamic_geometry_alternatives/f003_lbvh_builder.comp.glsl
+)
+add_compute_shader(
+  lane_f_f003_dynamic_traversal
+  shaders/research/lane_f_dynamic_geometry_alternatives/f003_dynamic_traversal.comp.glsl
+)
+add_compute_shader(
+  lane_f_f003_hit_merge
+  shaders/research/lane_f_dynamic_geometry_alternatives/f003_hit_merge.comp.glsl
+)
+add_custom_target(phos-lane-f-f003-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/lane_f_f003_lbvh_builder.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_f_f003_dynamic_traversal.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_f_f003_hit_merge.spv"
+)
+
+add_executable(phos-lane-f-f003
+  f003_benchmark.cpp
+  f003_transient_lbvh.cpp
+  f003_transient_lbvh.hpp
+  ../integration/i001_runtime.cpp
+  ../integration/i001_compute.cpp
+  ../lane_a_split_rc/a001_scene.cpp
+  ../lane_a_split_rc/a001_runtime.cpp
+  ../lane_a_split_rc/a001_analysis.cpp
+  ../lane_b_traversal/b002_scene.cpp
+  ../lane_b_traversal/b002_vulkan.cpp
+  ../lane_b_traversal/b002_compute.cpp
+  ../lane_b_traversal/b002_hwrt.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+target_include_directories(phos-lane-f-f003 PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_SOURCE_DIR}/src/research/lane_a_split_rc"
+  "${CMAKE_SOURCE_DIR}/src/research/lane_b_traversal"
+  "${CMAKE_SOURCE_DIR}/src/research/integration"
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+target_link_libraries(phos-lane-f-f003 PRIVATE
+  vk-bootstrap::vk-bootstrap
+  fastgltf::fastgltf
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-f-f003 PRIVATE cxx_std_20)
+target_compile_definitions(phos-lane-f-f003 PRIVATE
+  PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_F_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-f-f003 PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+add_dependencies(
+  phos-lane-f-f003
+  phos-lane-f-f003-shaders
+  phos-i001-shaders
+  phos-lane-a-split-rc-shaders
+  phos-lane-b-b002-shaders
+  phos-lane-b-b003-shaders
+)
 
 # F002 pure-GPU transient LBVH builder. The shader deliberately owns all
 # frame-local builder phases so no CPU sort/topology work can escape timing.
@@ -116,7 +184,7 @@ set_target_properties(phos-lane-f-f002-lbvh PROPERTIES
 )
 add_dependencies(phos-lane-f-f002-lbvh phos-lane-f-f002-shaders)
 
-foreach(target phos-lane-f-f001-census phos-lane-f-i001-control phos-lane-f-f002-lbvh)
+foreach(target phos-lane-f-f001-census phos-lane-f-i001-control phos-lane-f-f002-lbvh phos-lane-f-f003)
   if(MSVC)
     target_compile_options(${target} PRIVATE /W4 /permissive-)
   else()
