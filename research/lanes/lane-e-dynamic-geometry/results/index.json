@@ -25,9 +25,10 @@
     {
       "id": "E003",
       "experiment": "003-software-object-local",
-      "status": "protocol-frozen",
+      "status": "target-validation-ready",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/003-software-object-local.md",
-      "protocol_commit": "8d19c909f78a2733043b58dca839fde092b905b4"
+      "protocol_commit": "8d19c909f78a2733043b58dca839fde092b905b4",
+      "implementation_checkpoint": "4ff3688e21f1c892832a7212b7b82318a769ee60"
     }
   ]
 }
