@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g005-deterministic-v1",
+  "experiment": "G005",
+  "evidence_class": "deterministic-correctness-memory-only",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "variants": [
+    "transient-lbvh",
+    "hardened-transient-lbvh",
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "scenarios": [
+    "static",
+    "camera-motion",
+    "light-motion",
+    "moving-rigid",
+    "sparse-stress",
+    "dense-stress",
+    "large-world-stress",
+    "vertical-world-stress",
+    "sparse-moving",
+    "dense-moving",
+    "large-world-moving",
+    "vertical-world-moving"
+  ],
+  "geometry_class": "representative-rigid",
+  "lane_e_comparator": {
+    "included": false,
+    "reason": "Lane E final comparator lives in a divergent integration runtime. With G002 timing unresolved, porting it would create a new integration implementation but still could not support a formal replacement/superiority claim.",
+    "consequence": "No Lane E superiority or replacement claim is permitted. Historical E005 remains context only."
+  },
+  "correctness_gates": {
+    "quality_passed": true,
+    "visibility_mismatches": 0,
+    "producer_semantic_errors": 0,
+    "hit_mismatches": 0,
+    "traversal_runtime_errors": 0,
+    "missing_probes": 0,
+    "leaked_probes": 0,
+    "stale_storage_slots": 0,
+    "resolved_output_mismatches": 0,
+    "storage_failures": 0,
+    "overflow": 0,
+    "same_workload_across_variants": true
+  },
+  "memory_gates": {
+    "hardened_peak_ratio_vs_run_local_vanilla_lte": 3,
+    "sparse_stress_and_sparse_moving_must_pass": true,
+    "hardened_peak_regression_vs_unchanged_lbvh_lte": 0.1
+  },
+  "timing": {
+    "used_for_decision": false,
+    "formal_gate": "inconclusive-g002-no-safe-decision-valid-protocol",
+    "power_clock_manipulation": false
+  },
+  "final_outcome_rule": "If correctness and memory gates pass, retain the hardened mechanism but do not promote it as Lane E replacement. Lane G final disposition remains measurement-limited for timing-based production promotion."
+}
