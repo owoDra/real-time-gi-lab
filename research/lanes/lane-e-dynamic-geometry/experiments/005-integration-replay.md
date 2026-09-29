@@ -1,6 +1,6 @@
 # E005 — integrated ownership replay and final Lane E decision
 
-Status: protocol frozen; implementation complete; target validation ready
+Status: target validation passed; accepted timing ready
 
 ## Question
 
@@ -262,3 +262,42 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 Do not start accepted E005 timing until the validation artifact has been
 inspected. The formal timing runner repeats the validation matrix.
+
+
+## Target validation result
+
+Accepted validation provenance:
+
+- measurement commit: `5f1de18c031f7590c1514c9d262ea34f6bb1b58c`;
+- branch: `research-lane-e-dynamic-geometry`;
+- tree: clean;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- validation pairs: 20;
+- scenarios: static, camera-motion, light-motion, moving-rigid,
+  deforming-control;
+- all quality gates passed;
+- all storage-failure counts were zero;
+- same-workload checks passed;
+- frozen GPU accounting gate passed;
+- frozen architecture-integrity gate passed.
+
+The E005 validation gate is satisfied. Accepted final timing may begin without
+changing any frozen stable-regime, dynamic-gain, traversal or memory threshold.
+
+Formal timing command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 005-integration-replay \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e005.py --build-dir build/release --repeats 3"
+```
+
+The timing runner repeats the complete 20-pair validation matrix before
+validation-disabled timing. Do not alter the frozen E005 gates after observing
+timing.
