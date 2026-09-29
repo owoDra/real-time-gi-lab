@@ -1538,6 +1538,23 @@ struct I001Runtime::Impl {
                 out.gpu_us +=
                     out.instance_transfer_gpu_us +
                     out.tlas_update_us;
+            } else if (uses_deforming_local_hwrt(options.variant)) {
+                const auto stats =
+                    hwrt->update_partition_geometry(
+                        b_scene.triangles,
+                        moving.primitives);
+                out.geometry_transfer_wall_us =
+                    stats.geometry_upload_us;
+                out.geometry_transfer_gpu_us =
+                    stats.geometry_upload_gpu_us;
+                out.blas_update_us =
+                    stats.blas_update_us;
+                out.tlas_update_us =
+                    stats.tlas_update_us;
+                out.gpu_us +=
+                    out.geometry_transfer_gpu_us +
+                    out.blas_update_us +
+                    out.tlas_update_us;
             } else {
                 const auto stats = hwrt->update_geometry(
                     b_scene.triangles,
@@ -1553,6 +1570,145 @@ struct I001Runtime::Impl {
                     out.blas_update_us +
                     out.tlas_update_us;
             }
+        } else if (uses_deforming_local_software(options.variant)) {
+            phase_start = Clock::now();
+            for (std::size_t local = 0;
+                 local < deforming_local_setup.dynamic_global_primitives.size();
+                 ++local) {
+                deforming_local_setup.dynamic_triangles[local] =
+                    b_scene.triangles.at(
+                        deforming_local_setup
+                            .dynamic_global_primitives[local]);
+            }
+            out.geometry_prepare_cpu_us +=
+                elapsed_us(phase_start);
+
+            std::vector<GpuTriangle> dynamic_gpu;
+            dynamic_gpu.reserve(
+                deforming_local_setup.dynamic_triangles.size());
+            for (const auto& triangle :
+                 deforming_local_setup.dynamic_triangles) {
+                dynamic_gpu.push_back(
+                    lane_b::to_gpu_triangle(triangle));
+            }
+            const lane_b::B002BufferUpdate triangle_update{
+                VkDeviceSize(
+                    deforming_local_setup.dynamic_triangle_base) *
+                    VkDeviceSize(sizeof(GpuTriangle)),
+                dynamic_gpu.data(),
+                VkDeviceSize(
+                    dynamic_gpu.size() *
+                    sizeof(GpuTriangle)),
+            };
+            phase_start = Clock::now();
+            out.geometry_transfer_gpu_us =
+                context.update_device_buffer_timed(
+                    triangle_buffer,
+                    std::span<const lane_b::B002BufferUpdate>(
+                        &triangle_update,
+                        1));
+            out.geometry_transfer_wall_us =
+                elapsed_us(phase_start);
+            out.gpu_us +=
+                out.geometry_transfer_gpu_us;
+
+            const auto stats =
+                deforming_local_hierarchy->update(
+                    deforming_local_setup.dynamic_triangles,
+                    deforming_local_indices);
+            out.membership_update_cpu_us =
+                stats.membership_dirty_us;
+            out.hierarchy_refit_cpu_us =
+                stats.refit_us;
+            out.hierarchy_rebuild_cpu_us =
+                stats.rebuild_us;
+            out.hierarchy_occupancy_cpu_us =
+                stats.occupancy_us;
+            out.refit_segments =
+                static_cast<std::uint32_t>(
+                    stats.refit_segments);
+            out.rebuilt_segments =
+                static_cast<std::uint32_t>(
+                    stats.rebuilt_segments);
+
+            phase_start = Clock::now();
+            auto next_partition =
+                lane_e::make_e004_dynamic_partition(
+                    *deforming_local_hierarchy,
+                    deforming_local_setup);
+            out.packing_cpu_us =
+                elapsed_us(phase_start);
+
+            const lane_b::B002BufferUpdate node_update{
+                VkDeviceSize(
+                    deforming_local_setup.dynamic_node_base) *
+                    VkDeviceSize(
+                        sizeof(lane_b::B003GpuQuantNode)),
+                next_partition.nodes.data(),
+                VkDeviceSize(
+                    next_partition.nodes.size() *
+                    sizeof(lane_b::B003GpuQuantNode)),
+            };
+            const lane_b::B002BufferUpdate order_update{
+                VkDeviceSize(
+                    deforming_local_setup.dynamic_order_base) *
+                    VkDeviceSize(sizeof(std::uint32_t)),
+                next_partition.ordered_primitives.data(),
+                VkDeviceSize(
+                    next_partition.ordered_primitives.size() *
+                    sizeof(std::uint32_t)),
+            };
+            const lane_b::B002BufferUpdate hash_update{
+                VkDeviceSize(
+                    deforming_local_setup.dynamic_hash_base) *
+                    VkDeviceSize(
+                        sizeof(lane_b::GpuSegmentHashEntry)),
+                next_partition.hash_table.data(),
+                VkDeviceSize(
+                    next_partition.hash_table.size() *
+                    sizeof(lane_b::GpuSegmentHashEntry)),
+            };
+            out.hierarchy_upload_gpu_us =
+                context.update_device_buffer_timed(
+                    instance_nodes,
+                    std::span<const lane_b::B002BufferUpdate>(
+                        &node_update,
+                        1)) +
+                context.update_device_buffer_timed(
+                    instance_order,
+                    std::span<const lane_b::B002BufferUpdate>(
+                        &order_update,
+                        1)) +
+                context.update_device_buffer_timed(
+                    instance_hash,
+                    std::span<const lane_b::B002BufferUpdate>(
+                        &hash_update,
+                        1));
+            out.gpu_us +=
+                out.hierarchy_upload_gpu_us;
+
+            const auto dynamic_instance =
+                lane_e::make_e004_instance(
+                    next_partition,
+                    lane_b::b002_segment_size(b_scene),
+                    static_cast<std::uint32_t>(
+                        deforming_local_setup.dynamic_hash_base));
+            const lane_b::B002BufferUpdate instance_update{
+                VkDeviceSize(sizeof(lane_e::E003GpuInstance)),
+                &dynamic_instance,
+                VkDeviceSize(sizeof(lane_e::E003GpuInstance)),
+            };
+            phase_start = Clock::now();
+            out.instance_transfer_gpu_us =
+                context.update_device_buffer_timed(
+                    instance_table,
+                    std::span<const lane_b::B002BufferUpdate>(
+                        &instance_update,
+                        1));
+            out.instance_transfer_wall_us =
+                elapsed_us(phase_start);
+            out.gpu_us +=
+                out.instance_transfer_gpu_us;
         } else if (uses_rigid_instance_software(options.variant)) {
             const bool binary =
                 uses_rigid_instance_software_binary(options.variant);
@@ -1774,13 +1930,16 @@ struct I001Runtime::Impl {
             const auto max_rays = params.limits[1];
             traversal_stage->record_indirect(
                 command, indirect.buffer, 0, &max_rays, sizeof(max_rays));
-        } else if (uses_rigid_instance_software(options.variant)) {
+        } else if (uses_rigid_instance_software(options.variant) ||
+                   uses_deforming_local_software(options.variant)) {
             lane_e::E003TraversalPush push{};
             push.values[0] = params.limits[1];
             push.values[1] = static_cast<std::uint32_t>(
-                uses_rigid_instance_software_binary(options.variant)
-                    ? instance_binary_payload.instances.size()
-                    : instance_quantized_payload.instances.size());
+                uses_deforming_local_software(options.variant)
+                    ? deforming_local_setup.instances.size()
+                    : (uses_rigid_instance_software_binary(options.variant)
+                        ? instance_binary_payload.instances.size()
+                        : instance_quantized_payload.instances.size()));
             traversal_stage->record_indirect(
                 command, indirect.buffer, 0, &push, sizeof(push));
         } else if (uses_quantized(options.variant)) {
