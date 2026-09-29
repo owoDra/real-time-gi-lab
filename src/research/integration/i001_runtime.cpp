@@ -1252,10 +1252,23 @@ struct I001Runtime::Impl {
 
         using Clock = std::chrono::steady_clock;
         const auto start = Clock::now();
-        b_scene.triangles = translated_geometry(
-            b_scene.triangles,
-            moving.primitives,
-            moving.delta_x);
+        if (uses_transient_lbvh(options.variant)) {
+            // The transient candidate does not require a full-scene CPU copy.
+            // Keep only the selected reference geometry current for the
+            // post-frame correctness replay.
+            const lane_b::Vec3 delta{moving.delta_x, 0.0F, 0.0F};
+            for (const auto primitive : moving.primitives) {
+                auto& triangle = b_scene.triangles.at(primitive);
+                triangle.v0 = triangle.v0 + delta;
+                triangle.v1 = triangle.v1 + delta;
+                triangle.v2 = triangle.v2 + delta;
+            }
+        } else {
+            b_scene.triangles = translated_geometry(
+                b_scene.triangles,
+                moving.primitives,
+                moving.delta_x);
+        }
 
         std::vector<std::array<float, 4>> moved_positions;
         moved_positions.reserve(moving.primitives.size());
@@ -1605,6 +1618,21 @@ struct I001Runtime::Impl {
             sizeof(storage_resolve_push));
         i001_compute_barrier(context, command);
         stamp(11);
+
+        // kQueryCount is read back with WAIT_BIT. Every slot must therefore
+        // be written exactly once in every variant/scenario, including
+        // controls and stable transient-LBVH cases that do not run a builder.
+        if (!uses_transient_lbvh(options.variant)) {
+            for (std::uint32_t slot = 12U; slot < kQueryCount; ++slot) {
+                stamp(slot);
+            }
+        } else if (options.scenario != I001Scenario::MovingRigid) {
+            for (std::uint32_t slot = 12U; slot <= 19U; ++slot) {
+                stamp(slot);
+            }
+            stamp(22U);
+            stamp(23U);
+        }
 
         if (context.vk().endCommandBuffer(command) != VK_SUCCESS) {
             fail("I001 command end");
