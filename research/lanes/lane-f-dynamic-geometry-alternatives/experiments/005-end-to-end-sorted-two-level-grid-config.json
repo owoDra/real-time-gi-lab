@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-f-plan-v1",
+  "experiment": "F005",
+  "name": "end-to-end-sorted-two-level-grid",
+  "candidate": "persistent-static-hwrt-plus-frame-local-sorted-two-level-grid",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "run_local_controls": [
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "scenarios": [
+    "static",
+    "camera-motion",
+    "light-motion",
+    "moving-rigid",
+    "sparse-stress",
+    "dense-stress",
+    "large-world-stress",
+    "vertical-world-stress"
+  ],
+  "dynamic_classification": {
+    "moving_rigid": "exact F001/I001 selected instance, fixed before warmup and unchanged through measured target frame",
+    "stable_cases": "no dynamic subset; full scene remains persistent static HWRT"
+  },
+  "builder": {
+    "current_frame_generation": "GPU translation inside measured builder input phase",
+    "page_extent_rule": "B002/I001 scene diagonal divided by 16",
+    "local_cells_per_axis": 8,
+    "local_cell_extent_rule": "page_extent / 8",
+    "macro_key": "Morton 10 bits per axis, 30 bits total",
+    "local_key": "Morton of 0..7 local coordinates, 9 significant bits",
+    "radix_digit_bits": 4,
+    "radix_passes": 11,
+    "radix_order": "3 local-key passes then 8 macro-key passes; stable LSD",
+    "overlap_representation": "triangle AABB overlaps local cells",
+    "pair_record": "uvec4(macro_key, local_key, primitive_id, reserved), 16 bytes",
+    "pair_capacity_rule": "sum over frozen dynamic source triangles of product(ceil(axis_aabb_extent/local_cell_extent)+2); translation preserves extents; overflow is correctness failure",
+    "prefix": "GPU serial exact exclusive scan for Nrep control architecture",
+    "ranges": "GPU RLE after sort into cell ranges and macro ranges",
+    "persistent_dynamic_nodes": false,
+    "refit_or_update": false
+  },
+  "dynamic_traversal": {
+    "hierarchy": "macro-page DDA then local-cell DDA",
+    "lookup": "binary search sorted macro ranges and local cell ranges",
+    "primitive_intersection": "exact shared B001 triangle contract",
+    "duplicate_references": "allowed across overlapped cells; nearest/tie contract resolves repeated primitive tests",
+    "dda_guard_steps": 4096
+  },
+  "merge": {
+    "policy": "nearest static/dynamic Hit with shared absolute/relative tolerance and lower primitive_id tie break"
+  },
+  "mandatory_metrics": [
+    "emitted cell references",
+    "references per dynamic triangle",
+    "maximum references for one triangle",
+    "pair-stream bytes",
+    "sort scratch bytes",
+    "visited macro cells",
+    "visited local cells",
+    "empty-cell steps",
+    "tested primitive references"
+  ],
+  "gates": {
+    "static_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "camera_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "light_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "stable_stress_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "moving_gpu_max_ratio_vs_vanilla": 0.9,
+    "moving_wall_max_ratio_vs_vanilla": 0.9,
+    "peak_resident_max_ratio_vs_vanilla": 3
+  },
+  "accepted_timing": {
+    "process_repeats": 5,
+    "warmup_frames_per_process": 1,
+    "measured_frames_per_process": 1,
+    "decision_statistic": "median of process-level measured target frames",
+    "instability_rule": "complete_gpu_us max/min > 1.20",
+    "identical_full_reruns_allowed": 1,
+    "outlier_deletion": false,
+    "quality_replay_inside_timing_process": false,
+    "correctness_source": "prior same-commit target-GPU validation artifact"
+  }
+}
