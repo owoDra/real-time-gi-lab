@@ -58,7 +58,7 @@ std::filesystem::path artifact_root() {
         return value;
     }
     return "out/research/lane-f-dynamic-geometry-alternatives/"
-           "003-end-to-end-transient-lbvh/manual-candidate";
+           "005-end-to-end-sorted-two-level-grid/manual-candidate";
 }
 
 void print_quality(
@@ -80,6 +80,7 @@ void print_quality(
         << ", temporal_rms_error=" << q.temporal_rms_error
         << ", temporal_max_abs_error=" << q.temporal_max_abs_error
         << ", storage_failures=" << result.stats.storage_failures
+        << ", grid_overflow=" << result.stats.grid_overflow
         << '\n';
 }
 
@@ -217,7 +218,9 @@ int main(int argc, char** argv) {
         auto warmup = runtime.run_frame(false);
         if (cli.quality) {
             warmup.quality = runtime.validate_last_frame();
-            if (!warmup.quality.passed || warmup.stats.storage_failures != 0U) {
+            if (!warmup.quality.passed ||
+                warmup.stats.storage_failures != 0U ||
+                warmup.stats.grid_overflow != 0U) {
                 print_quality("warmup", warmup);
                 return 2;
             }
@@ -244,7 +247,9 @@ int main(int argc, char** argv) {
         write_device(root / "f005-candidate-device.json", cli, runtime);
         write_csv(std::cout, cli, runtime, result, setup_wall_us, complete_frame_wall_us);
 
-        if (!result.quality.passed || result.stats.storage_failures != 0U) {
+        if (!result.quality.passed ||
+            result.stats.storage_failures != 0U ||
+            result.stats.grid_overflow != 0U) {
             print_quality("measured", result);
             return 2;
         }
