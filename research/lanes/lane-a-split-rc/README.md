@@ -1,17 +1,16 @@
 # Lane A — Split RC producer and transport
 
-Issue: #10
-Branch: `research-lane-a-split-rc`
+Issue: #10  
+Canonical branch: `research-lane-a-split-rc`  
+Status: completed / accepted
 
-Mission: create the minimum representative Split Radiance Cascades producer and
-transport pipeline needed to expose the real GPU query/update stream.
+This directory on `research` is the original lane seed used to fork the Lane A
+branch. It is intentionally **not** a mirror of the concluded lane.
 
-Initial order:
-1. lock minimal diffuse Split RC semantics and a correctness reference;
-2. generate probe/ray/cascade work on GPU from actual scene/visibility inputs;
-3. record natural ordering/locality without sorting it;
-4. add minimum gather, merge, and resolve for a meaningful workload;
-5. version a replay/export schema Lane B/C can consume after an integration checkpoint;
-6. measure producer and per-stage costs separately and end-to-end.
+Canonical detailed evidence and the final result index live on
+`research-lane-a-split-rc`, including
+`research/lanes/lane-a-split-rc/results/001-representative-producer.md`.
 
-Do not select traversal or radiance-storage winners in this lane.
+Program-level interpretation belongs in
+[`research/status.md`](../../status.md). Do not infer current Lane A status
+from the seed experiment/index files present on this branch.

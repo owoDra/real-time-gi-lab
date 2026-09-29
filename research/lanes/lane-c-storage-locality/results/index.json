@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
   "lane": "lane-c-storage-locality",
+  "note": "Seed index on research only; canonical concluded index lives on research-lane-c-storage-locality.",
   "experiments": []
 }

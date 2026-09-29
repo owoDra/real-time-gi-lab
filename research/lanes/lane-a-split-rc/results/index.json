@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
   "lane": "lane-a-split-rc",
+  "note": "Seed index on research only; canonical concluded index lives on research-lane-a-split-rc.",
   "experiments": []
 }
