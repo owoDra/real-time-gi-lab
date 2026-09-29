@@ -40,11 +40,45 @@ static_assert(sizeof(Vertex3) == 12);
     return (address + mask) & ~mask;
 }
 
+[[nodiscard]] VkAccelerationStructureInstanceKHR make_instance(
+    VkDeviceAddress blas_address,
+    std::uint32_t custom_index,
+    float translation_x = 0.0F) {
+    if (custom_index > 0x00ffffffU) {
+        fail("B002 HWRT instance custom index exceeds 24-bit range");
+    }
+    VkAccelerationStructureInstanceKHR instance{};
+    instance.transform.matrix[0][0] = 1.0F;
+    instance.transform.matrix[1][1] = 1.0F;
+    instance.transform.matrix[2][2] = 1.0F;
+    instance.transform.matrix[0][3] = translation_x;
+    instance.instanceCustomIndex = custom_index;
+    instance.mask = 0xff;
+    instance.instanceShaderBindingTableRecordOffset = 0;
+    instance.flags =
+        VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
+    instance.accelerationStructureReference = blas_address;
+    return instance;
+}
+
 } // namespace
 
 B002HwrtTraversal::B002HwrtTraversal(
     B002VulkanContext& context,
     const std::vector<Triangle>& triangles,
+    std::string shader_path,
+    bool create_trace_runtime)
+    : B002HwrtTraversal(
+          context,
+          triangles,
+          std::span<const std::uint32_t>{},
+          std::move(shader_path),
+          create_trace_runtime) {}
+
+B002HwrtTraversal::B002HwrtTraversal(
+    B002VulkanContext& context,
+    const std::vector<Triangle>& triangles,
+    std::span<const std::uint32_t> rigid_primitives,
     std::string shader_path,
     bool create_trace_runtime)
     : context_(context) {
@@ -55,6 +89,51 @@ B002HwrtTraversal::B002HwrtTraversal(
         fail("B002 HWRT requires non-empty geometry");
     }
     triangle_count_ = triangles.size();
+
+    std::vector<Triangle> ordered_triangles;
+    ordered_triangles.reserve(triangles.size());
+    if (!rigid_primitives.empty()) {
+        if (rigid_primitives.size() >= triangles.size()) {
+            fail("B002 rigid partition must leave non-empty static geometry");
+        }
+        rigid_partitioned_ = true;
+        std::vector<bool> dynamic_mask(triangles.size(), false);
+        std::uint32_t rigid_instance = kInvalidId;
+        for (const auto primitive : rigid_primitives) {
+            if (primitive >= triangles.size()) {
+                fail("B002 rigid partition primitive is out of range");
+            }
+            if (dynamic_mask[primitive]) {
+                fail("B002 rigid partition contains duplicate primitive");
+            }
+            const auto instance = triangles[primitive].instance_id;
+            if (instance == kInvalidId) {
+                fail("B002 rigid partition requires valid instance identity");
+            }
+            if (rigid_instance == kInvalidId) {
+                rigid_instance = instance;
+            } else if (instance != rigid_instance) {
+                fail("B002 rigid partition spans multiple source instances");
+            }
+            dynamic_mask[primitive] = true;
+        }
+        for (std::size_t primitive = 0; primitive < triangles.size(); ++primitive) {
+            if (!dynamic_mask[primitive]) {
+                ordered_triangles.push_back(triangles[primitive]);
+            }
+        }
+        static_triangle_count_ = ordered_triangles.size();
+        for (const auto primitive : rigid_primitives) {
+            ordered_triangles.push_back(triangles[primitive]);
+        }
+        dynamic_triangle_count_ = rigid_primitives.size();
+        if (static_triangle_count_ > 0x00ffffffU) {
+            fail("B002 rigid partition metadata base exceeds instance custom-index range");
+        }
+    } else {
+        ordered_triangles = triangles;
+        static_triangle_count_ = triangles.size();
+    }
 
     auto command_pool_info =
         detail::make_vk_info<VkCommandPoolCreateInfo>(
@@ -90,10 +169,10 @@ B002HwrtTraversal::B002HwrtTraversal(
     }
 
     std::vector<Vertex3> vertices;
-    vertices.reserve(triangles.size() * 3U);
+    vertices.reserve(ordered_triangles.size() * 3U);
     std::vector<GpuTriangle> gpu_triangles;
-    gpu_triangles.reserve(triangles.size());
-    for (const auto& triangle : triangles) {
+    gpu_triangles.reserve(ordered_triangles.size());
+    for (const auto& triangle : ordered_triangles) {
         vertices.push_back({
             triangle.v0.x,
             triangle.v0.y,
@@ -123,7 +202,20 @@ B002HwrtTraversal::B002HwrtTraversal(
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     setup_stats_.metadata_upload_us = elapsed_us(start);
 
-    setup_stats_.blas_build_us = build_blas(triangles);
+    setup_stats_.blas_build_us = build_blas_range(
+        vertex_buffer_.address,
+        static_triangle_count_,
+        blas_);
+    if (rigid_partitioned_) {
+        const auto dynamic_vertex_address =
+            vertex_buffer_.address +
+            VkDeviceAddress(static_triangle_count_) *
+                VkDeviceAddress(3U * sizeof(Vertex3));
+        setup_stats_.blas_build_us += build_blas_range(
+            dynamic_vertex_address,
+            dynamic_triangle_count_,
+            dynamic_blas_);
+    }
     setup_stats_.tlas_build_us = build_tlas();
 
     setup_stats_.persistent_bytes =
@@ -132,6 +224,7 @@ B002HwrtTraversal::B002HwrtTraversal(
             triangle_buffer_.allocation_size +
             instance_buffer_.allocation_size +
             blas_.storage.allocation_size +
+            dynamic_blas_.storage.allocation_size +
             tlas_.storage.allocation_size);
     setup_stats_.scratch_bytes =
         static_cast<std::size_t>(
@@ -157,6 +250,7 @@ B002HwrtTraversal::~B002HwrtTraversal() {
             nullptr);
 
     destroy_acceleration_structure(tlas_);
+    destroy_acceleration_structure(dynamic_blas_);
     destroy_acceleration_structure(blas_);
     context_.destroy_buffer(scratch_);
     context_.destroy_buffer(instance_buffer_);
@@ -182,19 +276,25 @@ void B002HwrtTraversal::destroy_acceleration_structure(
     acceleration = {};
 }
 
-double B002HwrtTraversal::build_blas(
-    const std::vector<Triangle>& triangles) {
+double B002HwrtTraversal::build_blas_range(
+    VkDeviceAddress vertex_address,
+    std::size_t triangle_count,
+    AccelerationStructure& target) {
+    if (triangle_count == 0U) {
+        fail("B002 HWRT cannot build an empty BLAS");
+    }
+
     auto triangle_geometry =
         detail::make_vk_info<VkAccelerationStructureGeometryTrianglesDataKHR>(
             VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR);
     triangle_geometry.vertexFormat =
         VK_FORMAT_R32G32B32_SFLOAT;
     triangle_geometry.vertexData.deviceAddress =
-        vertex_buffer_.address;
+        vertex_address;
     triangle_geometry.vertexStride = sizeof(Vertex3);
     triangle_geometry.maxVertex =
         static_cast<std::uint32_t>(
-            triangles.size() * 3U - 1U);
+            triangle_count * 3U - 1U);
     triangle_geometry.indexType = VK_INDEX_TYPE_NONE_KHR;
 
     auto geometry =
@@ -219,8 +319,8 @@ double B002HwrtTraversal::build_blas(
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
 
-    const std::uint32_t primitive_count =
-        static_cast<std::uint32_t>(triangles.size());
+    const auto primitive_count =
+        static_cast<std::uint32_t>(triangle_count);
     auto size_info =
         detail::make_vk_info<VkAccelerationStructureBuildSizesInfoKHR>(
             VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR);
@@ -230,20 +330,20 @@ double B002HwrtTraversal::build_blas(
         &primitive_count,
         &size_info);
 
-    blas_.storage = context_.create_device_address_buffer(
+    target.storage = context_.create_device_address_buffer(
         size_info.accelerationStructureSize,
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_STORAGE_BIT_KHR);
     auto create_info =
         detail::make_vk_info<VkAccelerationStructureCreateInfoKHR>(
             VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_CREATE_INFO_KHR);
-    create_info.buffer = blas_.storage.buffer;
+    create_info.buffer = target.storage.buffer;
     create_info.size = size_info.accelerationStructureSize;
     create_info.type =
         VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
     if (context_.vk().createAccelerationStructureKHR(
             &create_info,
             nullptr,
-            &blas_.handle) != VK_SUCCESS) {
+            &target.handle) != VK_SUCCESS) {
         fail("B002 HWRT BLAS creation failed");
     }
 
@@ -251,7 +351,7 @@ double B002HwrtTraversal::build_blas(
         size_info.buildScratchSize,
         size_info.updateScratchSize);
     ensure_scratch_capacity(scratch_size);
-    build_info.dstAccelerationStructure = blas_.handle;
+    build_info.dstAccelerationStructure = target.handle;
     build_info.scratchData.deviceAddress =
         scratch_address();
 
@@ -263,31 +363,30 @@ double B002HwrtTraversal::build_blas(
     auto address_info =
         detail::make_vk_info<VkAccelerationStructureDeviceAddressInfoKHR>(
             VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_DEVICE_ADDRESS_INFO_KHR);
-    address_info.accelerationStructure = blas_.handle;
-    blas_.address =
+    address_info.accelerationStructure = target.handle;
+    target.address =
         context_.vk().getAccelerationStructureDeviceAddressKHR(
             &address_info);
-    if (blas_.address == 0) {
+    if (target.address == 0) {
         fail("B002 HWRT BLAS address is zero");
     }
     return build_us;
 }
 
 double B002HwrtTraversal::build_tlas() {
-    VkAccelerationStructureInstanceKHR instance{};
-    instance.transform.matrix[0][0] = 1.0F;
-    instance.transform.matrix[1][1] = 1.0F;
-    instance.transform.matrix[2][2] = 1.0F;
-    instance.instanceCustomIndex = 0;
-    instance.mask = 0xff;
-    instance.instanceShaderBindingTableRecordOffset = 0;
-    instance.flags =
-        VK_GEOMETRY_INSTANCE_TRIANGLE_FACING_CULL_DISABLE_BIT_KHR;
-    instance.accelerationStructureReference = blas_.address;
+    std::array<VkAccelerationStructureInstanceKHR, 2> instance_records{};
+    std::uint32_t instance_count = 1U;
+    instance_records[0] = make_instance(blas_.address, 0U);
+    if (rigid_partitioned_) {
+        instance_records[1] = make_instance(
+            dynamic_blas_.address,
+            static_cast<std::uint32_t>(static_triangle_count_));
+        instance_count = 2U;
+    }
 
     instance_buffer_ = context_.upload_device_address_buffer(
-        &instance,
-        sizeof(instance),
+        instance_records.data(),
+        VkDeviceSize(instance_count) * sizeof(instance_records[0]),
         VK_BUFFER_USAGE_ACCELERATION_STRUCTURE_BUILD_INPUT_READ_ONLY_BIT_KHR);
 
     auto instances =
@@ -315,7 +414,7 @@ double B002HwrtTraversal::build_tlas() {
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
 
-    constexpr std::uint32_t primitive_count = 1;
+    const auto primitive_count = instance_count;
     auto size_info =
         detail::make_vk_info<VkAccelerationStructureBuildSizesInfoKHR>(
             VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_SIZES_INFO_KHR);
@@ -359,6 +458,9 @@ double B002HwrtTraversal::build_tlas() {
 HwrtUpdateStats B002HwrtTraversal::update_geometry(
     const std::vector<Triangle>& triangles,
     std::span<const std::uint32_t> moved_primitives) {
+    if (rigid_partitioned_) {
+        fail("B002 rigid partition forbids geometry updates");
+    }
     if (triangles.size() != triangle_count_) {
         fail("B002 HWRT update requires stable primitive count");
     }
@@ -429,6 +531,39 @@ HwrtUpdateStats B002HwrtTraversal::update_geometry(
     };
 }
 
+HwrtRigidUpdateStats B002HwrtTraversal::update_rigid_transform(
+    float translation_x,
+    HwrtTlasPolicy policy) {
+    if (!rigid_partitioned_) {
+        fail("B002 rigid transform update requires a rigid partition");
+    }
+
+    const auto instance = make_instance(
+        dynamic_blas_.address,
+        static_cast<std::uint32_t>(static_triangle_count_),
+        translation_x);
+    const B002BufferUpdate update{
+        VkDeviceSize(sizeof(VkAccelerationStructureInstanceKHR)),
+        &instance,
+        VkDeviceSize(sizeof(VkAccelerationStructureInstanceKHR)),
+    };
+
+    const auto upload_start = Clock::now();
+    const auto instance_upload_gpu_us =
+        context_.update_device_buffer_timed(
+            instance_buffer_,
+            std::span<const B002BufferUpdate>(&update, 1));
+    const auto instance_upload_us = elapsed_us(upload_start);
+    const auto tlas_us = maintain_tlas(policy);
+
+    return {
+        dynamic_triangle_count_,
+        instance_upload_us,
+        instance_upload_gpu_us,
+        tlas_us,
+    };
+}
+
 double B002HwrtTraversal::update_blas(
     std::size_t triangle_count) {
     auto triangle_geometry =
@@ -470,6 +605,11 @@ double B002HwrtTraversal::update_blas(
 }
 
 double B002HwrtTraversal::update_tlas() {
+    return maintain_tlas(HwrtTlasPolicy::Update);
+}
+
+double B002HwrtTraversal::maintain_tlas(
+    HwrtTlasPolicy policy) {
     auto instances =
         detail::make_vk_info<VkAccelerationStructureGeometryInstancesDataKHR>(
             VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_INSTANCES_DATA_KHR);
@@ -489,8 +629,14 @@ double B002HwrtTraversal::update_tlas() {
     build_info.flags =
         VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR |
         VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
-    build_info.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR;
-    build_info.srcAccelerationStructure = tlas_.handle;
+    build_info.mode =
+        policy == HwrtTlasPolicy::Update
+        ? VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR
+        : VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
+    build_info.srcAccelerationStructure =
+        policy == HwrtTlasPolicy::Update
+        ? tlas_.handle
+        : VK_NULL_HANDLE;
     build_info.dstAccelerationStructure = tlas_.handle;
     build_info.geometryCount = 1;
     build_info.pGeometries = &geometry;
@@ -498,7 +644,7 @@ double B002HwrtTraversal::update_tlas() {
         scratch_address();
 
     VkAccelerationStructureBuildRangeInfoKHR range{};
-    range.primitiveCount = 1;
+    range.primitiveCount = rigid_partitioned_ ? 2U : 1U;
     return submit_build(build_info, range, true);
 }
 
