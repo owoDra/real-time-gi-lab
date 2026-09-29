@@ -79,6 +79,7 @@ void write_csv(
            "storage_invalidations,storage_failures,"
            "persistent_bytes,transient_bytes,scratch_bytes,peak_resident_bytes,"
            "stream_capacity_bytes,storage_capacity_bytes,"
+           "visibility_mismatches,producer_semantic_errors,"
            "hit_mismatches,traversal_runtime_errors,missing_probes,leaked_probes,"
            "radiance_rms_error,radiance_max_abs_error,quality_passed\n";
 
@@ -119,6 +120,8 @@ void write_csv(
         << result.memory.peak_resident_bytes << ','
         << result.memory.stream_capacity_bytes << ','
         << result.memory.storage_capacity_bytes << ','
+        << result.quality.visibility_mismatches << ','
+        << result.quality.producer_semantic_errors << ','
         << result.quality.hit_mismatches << ','
         << result.quality.traversal_runtime_errors << ','
         << result.quality.missing_probes << ','
