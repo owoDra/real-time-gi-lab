@@ -20,6 +20,17 @@ VARIANTS = (
     "bounded-hwrt",
 )
 SCENARIOS = ("static", "camera-motion", "light-motion", "moving-rigid")
+STRESS_VARIANTS = (
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software",
+)
+STRESS_SCENARIOS = (
+    "sparse-stress",
+    "dense-stress",
+    "large-world-stress",
+    "vertical-world-stress",
+)
 
 
 def git(*args: str) -> str:
@@ -150,6 +161,17 @@ def main() -> int:
                     True,
                     1280,
                 )
+        for variant in STRESS_VARIANTS:
+            for scenario in STRESS_SCENARIOS:
+                run_one(
+                    executable,
+                    scene,
+                    variant,
+                    scenario,
+                    root / "validation-stress" / variant / scenario,
+                    True,
+                    1280,
+                )
 
     accepted: list[dict[str, str]] = []
     for repeat in range(args.repeats):
@@ -169,6 +191,24 @@ def main() -> int:
                 row["git_commit"] = commit
                 accepted.append(row)
 
+    stress_rows: list[dict[str, str]] = []
+    for repeat in range(args.repeats):
+        for variant in STRESS_VARIANTS:
+            for scenario in STRESS_SCENARIOS:
+                row = run_one(
+                    executable,
+                    scene,
+                    variant,
+                    scenario,
+                    root / "stress" / f"repeat-{repeat + 1}" / variant / scenario,
+                    False,
+                    1280,
+                )
+                row = dict(row)
+                row["repeat"] = str(repeat + 1)
+                row["git_commit"] = commit
+                stress_rows.append(row)
+
     columns = ["git_commit", "repeat", *accepted[0].keys()]
     # git_commit/repeat were appended after the binary's native columns.
     columns = list(dict.fromkeys(columns))
@@ -178,6 +218,15 @@ def main() -> int:
         writer = csv.DictWriter(handle, fieldnames=columns)
         writer.writeheader()
         writer.writerows(accepted)
+
+    stress_columns = ["git_commit", "repeat", *stress_rows[0].keys()]
+    stress_columns = list(dict.fromkeys(stress_columns))
+    with (root / "i001-stress.csv").open(
+        "w", newline="", encoding="utf-8"
+    ) as handle:
+        writer = csv.DictWriter(handle, fieldnames=stress_columns)
+        writer.writeheader()
+        writer.writerows(stress_rows)
 
     medians: dict[str, dict[str, dict[str, float]]] = {}
     for variant in VARIANTS:
@@ -193,6 +242,29 @@ def main() -> int:
                 ),
                 "incremental_gi_us": statistics.median(
                     float(row["incremental_gi_us"]) for row in rows
+                ),
+                "peak_resident_bytes": statistics.median(
+                    int(row["peak_resident_bytes"]) for row in rows
+                ),
+                "dynamic_update_wall_us": statistics.median(
+                    float(row["dynamic_update_wall_us"]) for row in rows
+                ),
+                "traversal_maintenance_gpu_us": statistics.median(
+                    float(row["traversal_maintenance_gpu_us"]) for row in rows
+                ),
+            }
+
+    stress_medians: dict[str, dict[str, dict[str, float]]] = {}
+    for variant in STRESS_VARIANTS:
+        stress_medians[variant] = {}
+        for scenario in STRESS_SCENARIOS:
+            rows = [
+                row for row in stress_rows
+                if row["variant"] == variant and row["scenario"] == scenario
+            ]
+            stress_medians[variant][scenario] = {
+                "complete_gpu_us": statistics.median(
+                    float(row["complete_gpu_us"]) for row in rows
                 ),
                 "peak_resident_bytes": statistics.median(
                     int(row["peak_resident_bytes"]) for row in rows
@@ -255,9 +327,68 @@ def main() -> int:
         writer.writeheader()
         writer.writerows(overflow_rows)
 
+    representative_primary_pass = all(
+        medians["combined-hwrt"][scenario]["complete_gpu_us"] <=
+        0.90 * medians["vanilla-software"][scenario]["complete_gpu_us"]
+        for scenario in SCENARIOS
+    )
+    primary_stress_pass = all(
+        stress_medians["combined-hwrt"][scenario]["complete_gpu_us"] <=
+        1.05 * stress_medians["vanilla-software"][scenario]["complete_gpu_us"]
+        for scenario in STRESS_SCENARIOS
+    )
+    primary_memory_ratio = max(
+        medians["combined-hwrt"][scenario]["peak_resident_bytes"] /
+        medians["vanilla-software"][scenario]["peak_resident_bytes"]
+        for scenario in SCENARIOS
+    )
+
+    fallback_representative_ratio = statistics.mean(
+        medians["combined-software"][scenario]["complete_gpu_us"]
+        for scenario in SCENARIOS
+    ) / statistics.mean(
+        medians["vanilla-software"][scenario]["complete_gpu_us"]
+        for scenario in SCENARIOS
+    )
+    fallback_memory_ratio = max(
+        medians["combined-software"][scenario]["peak_resident_bytes"] /
+        medians["vanilla-software"][scenario]["peak_resident_bytes"]
+        for scenario in SCENARIOS
+    )
+    vanilla_moving_update = medians["vanilla-software"]["moving-rigid"][
+        "dynamic_update_wall_us"
+    ]
+    fallback_moving_update = medians["combined-software"]["moving-rigid"][
+        "dynamic_update_wall_us"
+    ]
+    fallback_moving_pass = (
+        vanilla_moving_update > 0.0 and
+        fallback_moving_update <= 1.05 * vanilla_moving_update
+    )
+
+    depth_reuse_pass = all(
+        medians["depth-reuse-hwrt"][scenario]["incremental_gi_us"] <=
+        0.90 * medians["combined-hwrt"][scenario]["incremental_gi_us"]
+        for scenario in SCENARIOS
+    )
+
+    bounded_memory_ratio = max(
+        medians["bounded-hwrt"][scenario]["peak_resident_bytes"] /
+        medians["combined-hwrt"][scenario]["peak_resident_bytes"]
+        for scenario in SCENARIOS
+    )
+    bounded_timing_pass = all(
+        medians["bounded-hwrt"][scenario]["complete_gpu_us"] <=
+        1.05 * medians["combined-hwrt"][scenario]["complete_gpu_us"]
+        for scenario in SCENARIOS
+    )
+    overflow_retry_pass = all(
+        row["retry_quality_passed"] == 1 for row in overflow_rows
+    )
+
     summary = {
         "schema_version": 1,
-        "status": "representative-sponza-ready",
+        "status": "target-run-ready",
         "branch": branch,
         "git_commit": commit,
         "dirty": dirty,
@@ -266,7 +397,49 @@ def main() -> int:
         "scene": str(scene),
         "variants": list(VARIANTS),
         "scenarios": list(SCENARIOS),
+        "stress_scenarios": list(STRESS_SCENARIOS),
         "medians": medians,
+        "stress_medians": stress_medians,
+        "fixed_gates": {
+            "target_gpu_primary": {
+                "representative_timing_pass": representative_primary_pass,
+                "stress_timing_pass": primary_stress_pass,
+                "peak_memory_ratio": primary_memory_ratio,
+                "memory_le_3x_pass": primary_memory_ratio <= 3.0,
+                "unqualified_memory_le_1_5x":
+                    primary_memory_ratio <= 1.5,
+                "pass":
+                    representative_primary_pass and
+                    primary_stress_pass and
+                    primary_memory_ratio <= 3.0,
+            },
+            "software_fallback": {
+                "representative_timing_ratio":
+                    fallback_representative_ratio,
+                "representative_timing_pass":
+                    fallback_representative_ratio <= 0.90,
+                "peak_memory_ratio": fallback_memory_ratio,
+                "memory_pass": fallback_memory_ratio <= 1.15,
+                "moving_update_pass": fallback_moving_pass,
+                "pass":
+                    fallback_representative_ratio <= 0.90 and
+                    fallback_memory_ratio <= 1.15 and
+                    fallback_moving_pass,
+            },
+            "renderer_depth_reuse": {
+                "pass": depth_reuse_pass,
+            },
+            "bounded_capacity": {
+                "peak_memory_ratio": bounded_memory_ratio,
+                "memory_pass": bounded_memory_ratio <= 0.60,
+                "normal_timing_pass": bounded_timing_pass,
+                "overflow_retry_pass": overflow_retry_pass,
+                "pass":
+                    bounded_memory_ratio <= 0.60 and
+                    bounded_timing_pass and
+                    overflow_retry_pass,
+            },
+        },
         "overflow_retry": {
             "bounded_owner_capacity": 512,
             "median_total_retry_gpu_us": statistics.median(
@@ -280,11 +453,8 @@ def main() -> int:
             ),
         },
         "pending_before_i001_closeout": [
-            "sparse stress",
-            "dense stress",
-            "large-world stress",
-            "vertical-world stress",
-            "final fixed-gate decision",
+            "target-GPU execution and artifact inspection",
+            "final result publication",
         ],
     }
     (root / "i001-representative-summary.json").write_text(
@@ -292,8 +462,7 @@ def main() -> int:
         encoding="utf-8",
     )
     print(
-        "I001 representative matrix complete; "
-        "dynamic/stress/overflow gates remain pending."
+        "I001 full target matrix complete; inspect fixed gates and publish result."
     )
     return 0
 
