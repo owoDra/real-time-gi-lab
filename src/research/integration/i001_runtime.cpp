@@ -1197,6 +1197,11 @@ struct I001Runtime::Impl {
             allocation(accum) +
             allocation(resolved);
         memory_stats.storage_capacity_bytes = allocation(storage_slots);
+        memory_stats.host_persistent_bytes =
+            b_scene.triangles.capacity() * sizeof(lane_b::Triangle) +
+            a_scene.samples.capacity() * sizeof(a_scene.samples[0]) +
+            moving.primitives.capacity() * sizeof(std::uint32_t);
+        memory_stats.host_transient_bytes = 0U;
         memory_stats.peak_resident_bytes =
             memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
     }
