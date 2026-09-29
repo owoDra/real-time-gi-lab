@@ -30,6 +30,33 @@ GEOMETRY_CLASSES = (
     "topology-replace25",
 )
 
+EXPECTED_GEOMETRY_COUNTS = {
+    "rigid-large-few": {
+        "dynamic_primitives": 796,
+        "dynamic_groups": 1,
+        "deformed_primitives": 0,
+        "topology_replaced_primitives": 0,
+    },
+    "rigid-small-many32": {
+        "dynamic_primitives": 796,
+        "dynamic_groups": 32,
+        "deformed_primitives": 0,
+        "topology_replaced_primitives": 0,
+    },
+    "deforming": {
+        "dynamic_primitives": 796,
+        "dynamic_groups": 1,
+        "deformed_primitives": 796,
+        "topology_replaced_primitives": 0,
+    },
+    "topology-replace25": {
+        "dynamic_primitives": 796,
+        "dynamic_groups": 1,
+        "deformed_primitives": 0,
+        "topology_replaced_primitives": 199,
+    },
+}
+
 NUMERIC_FIELDS = (
     "setup_wall_us",
     "complete_frame_wall_us",
@@ -230,6 +257,20 @@ def run_case(
     if device.get("device") != EXPECTED_GPU:
         raise RuntimeError(
             f"F006 target GPU mismatch: {device.get('device')!r}"
+        )
+    expected = EXPECTED_GEOMETRY_COUNTS[geometry_class]
+    actual = {
+        "dynamic_primitives": int(row.get("moved_primitives", "0")),
+        "dynamic_groups": int(row.get("dynamic_groups", "0")),
+        "deformed_primitives": int(row.get("deformed_primitives", "0")),
+        "topology_replaced_primitives": int(
+            row.get("topology_replaced_primitives", "0")
+        ),
+    }
+    if actual != expected:
+        raise RuntimeError(
+            f"F006 workload identity mismatch for {variant}/{geometry_class}: "
+            f"{actual!r} != {expected!r}"
         )
     return row, device, errors
 
