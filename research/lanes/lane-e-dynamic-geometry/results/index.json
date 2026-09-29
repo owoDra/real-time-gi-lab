@@ -21,6 +21,13 @@
       "measurement_commit": "40f0f1c04f4109cc04a0f6015241518946f9291a",
       "selected_policy": "rigid-instance-hwrt-update",
       "result_commit": "d2d8a7a4a7c52da79c8b82ac4e4e0eec1cd33ede"
+    },
+    {
+      "id": "E003",
+      "experiment": "003-software-object-local",
+      "status": "protocol-frozen",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/003-software-object-local.md",
+      "protocol_commit": "8d19c909f78a2733043b58dca839fde092b905b4"
     }
   ]
 }
