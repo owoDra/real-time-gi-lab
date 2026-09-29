@@ -61,7 +61,8 @@ public:
         const std::vector<Triangle>& triangles,
         std::span<const std::uint32_t> rigid_primitives,
         std::string shader_path,
-        bool create_trace_runtime = true);
+        bool create_trace_runtime = true,
+        bool allow_partition_updates = false);
     ~B002HwrtTraversal();
 
     B002HwrtTraversal(const B002HwrtTraversal&) = delete;
@@ -76,6 +77,12 @@ public:
         std::uint32_t iterations);
 
     [[nodiscard]] HwrtUpdateStats update_geometry(
+        const std::vector<Triangle>& triangles,
+        std::span<const std::uint32_t> moved_primitives);
+
+    // Lane E E004: stable-topology deformation in a partitioned object updates
+    // only that object's contiguous vertex/metadata range and local BLAS.
+    [[nodiscard]] HwrtUpdateStats update_partition_geometry(
         const std::vector<Triangle>& triangles,
         std::span<const std::uint32_t> moved_primitives);
 
@@ -110,6 +117,7 @@ private:
         bool allow_update);
     [[nodiscard]] double build_tlas();
     [[nodiscard]] double update_blas(std::size_t triangle_count);
+    [[nodiscard]] double update_dynamic_blas();
     [[nodiscard]] double update_tlas();
     [[nodiscard]] double maintain_tlas(HwrtTlasPolicy policy);
     void ensure_scratch_capacity(VkDeviceSize required_bytes);
@@ -147,7 +155,9 @@ private:
     std::size_t triangle_count_{};
     std::size_t static_triangle_count_{};
     std::size_t dynamic_triangle_count_{};
+    std::vector<std::uint32_t> dynamic_primitives_;
     bool rigid_partitioned_{};
+    bool dynamic_partition_updates_{};
 };
 
 } // namespace phos::gi::research::lane_b
