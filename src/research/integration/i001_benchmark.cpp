@@ -44,7 +44,7 @@ Cli parse_cli(int argc, char** argv) {
         } else if (argument == "--help") {
             std::cout
                 << "phos-i001 [--scene path] "
-                   "[--variant vanilla-software|combined-hwrt|combined-software|depth-reuse-hwrt|bounded-hwrt] "
+                   "[--variant vanilla-software|combined-hwrt|rigid-instance-hwrt-update|rigid-instance-hwrt-build|combined-software|depth-reuse-hwrt|bounded-hwrt] "
                    "[--scenario static|camera-motion|light-motion|moving-rigid|deforming-control|sparse-stress|dense-stress|large-world-stress|vertical-world-stress] "
                    "[--bounded-owner-capacity N] [--validation] [--no-quality]\n";
             std::exit(0);
@@ -104,6 +104,7 @@ void write_csv(
            "producer_us,ray_prepare_us,traversal_maintenance_gpu_us,dynamic_update_wall_us,"
            "geometry_prepare_cpu_us,surface_update_gpu_us,"
            "geometry_transfer_wall_us,geometry_transfer_gpu_us,"
+           "instance_transfer_wall_us,instance_transfer_gpu_us,"
            "blas_update_us,tlas_update_us,membership_update_cpu_us,"
            "hierarchy_refit_cpu_us,hierarchy_rebuild_cpu_us,hierarchy_occupancy_cpu_us,"
            "packing_cpu_us,hierarchy_upload_gpu_us,software_bvh_rebuild_cpu_us,"
@@ -143,6 +144,8 @@ void write_csv(
         << result.timings.surface_update_gpu_us << ','
         << result.timings.geometry_transfer_wall_us << ','
         << result.timings.geometry_transfer_gpu_us << ','
+        << result.timings.instance_transfer_wall_us << ','
+        << result.timings.instance_transfer_gpu_us << ','
         << result.timings.blas_update_us << ','
         << result.timings.tlas_update_us << ','
         << result.timings.membership_update_cpu_us << ','
@@ -231,6 +234,10 @@ void write_metadata(
         << result.timings.geometry_transfer_wall_us << ",\n"
         << "  \"geometry_transfer_gpu_us\": "
         << result.timings.geometry_transfer_gpu_us << ",\n"
+        << "  \"instance_transfer_wall_us\": "
+        << result.timings.instance_transfer_wall_us << ",\n"
+        << "  \"instance_transfer_gpu_us\": "
+        << result.timings.instance_transfer_gpu_us << ",\n"
         << "  \"blas_update_us\": "
         << result.timings.blas_update_us << ",\n"
         << "  \"tlas_update_us\": "
