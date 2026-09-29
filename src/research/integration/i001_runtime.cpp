@@ -325,11 +325,10 @@ struct MovingSelection {
     return output;
 }
 
-[[nodiscard]] std::vector<lane_b::Triangle> deformed_geometry(
+[[nodiscard]] std::vector<lane_b::Triangle> deformed_primitives(
     const std::vector<lane_b::Triangle>& source,
     std::span<const std::uint32_t> moved,
     float amplitude) {
-    auto output = source;
     float min_x = std::numeric_limits<float>::infinity();
     float max_x = -std::numeric_limits<float>::infinity();
     for (const auto primitive : moved) {
@@ -347,11 +346,28 @@ struct MovingSelection {
         vertex.z += amplitude * 0.25F * std::sin(2.0F * pi * t);
         return vertex;
     };
+
+    std::vector<lane_b::Triangle> output;
+    output.reserve(moved.size());
     for (const auto primitive : moved) {
-        auto& triangle = output.at(primitive);
+        auto triangle = source.at(primitive);
         triangle.v0 = deform(triangle.v0);
         triangle.v1 = deform(triangle.v1);
         triangle.v2 = deform(triangle.v2);
+        output.push_back(triangle);
+    }
+    return output;
+}
+
+[[nodiscard]] std::vector<lane_b::Triangle> deformed_geometry(
+    const std::vector<lane_b::Triangle>& source,
+    std::span<const std::uint32_t> moved,
+    float amplitude) {
+    auto output = source;
+    const auto deformed =
+        deformed_primitives(source, moved, amplitude);
+    for (std::size_t index = 0; index < moved.size(); ++index) {
+        output.at(moved[index]) = deformed[index];
     }
     return output;
 }
@@ -1470,7 +1486,24 @@ struct I001Runtime::Impl {
             uses_rigid_instance_hwrt(options.variant) ||
             uses_rigid_instance_software(options.variant);
         auto phase_start = Clock::now();
-        if (!rigid_instance_candidate) {
+        if (uses_deforming_local_hwrt(options.variant) ||
+            uses_deforming_local_software(options.variant)) {
+            if (options.scenario != I001Scenario::DeformingControl) {
+                fail("I001 local deformation reached a non-deforming scenario");
+            }
+            const auto deformed =
+                deformed_primitives(
+                    b_scene.triangles,
+                    moving.primitives,
+                    moving.delta_x);
+            for (std::size_t index = 0;
+                 index < moving.primitives.size();
+                 ++index) {
+                b_scene.triangles.at(moving.primitives[index]) =
+                    deformed[index];
+            }
+            out.geometry_prepare_cpu_us = elapsed_us(phase_start);
+        } else if (!rigid_instance_candidate) {
             auto target_geometry =
                 options.scenario == I001Scenario::MovingRigid
                 ? translated_geometry(
