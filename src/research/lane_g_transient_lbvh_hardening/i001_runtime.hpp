@@ -5,6 +5,7 @@
 #include <filesystem>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace phos::gi::research::integration {
 
@@ -127,6 +128,20 @@ struct I001Memory {
     std::size_t host_transient_bytes{};
 };
 
+struct I001AllocationRecord {
+    std::string name;
+    std::string owner;
+    std::string role;
+    std::string capacity_kind;
+    std::string allocation_lifetime;
+    std::string use_lifetime;
+    std::size_t logical_bytes{};
+    std::size_t allocation_bytes{};
+    bool logical_size_known{true};
+    bool vulkan_allocation{true};
+    bool counted_in_f007_peak{true};
+};
+
 struct I001Quality {
     std::size_t visibility_mismatches{};
     std::size_t producer_semantic_errors{};
@@ -172,6 +187,7 @@ public:
     [[nodiscard]] I001Quality validate_last_frame();
 
     [[nodiscard]] const I001Memory& memory() const noexcept;
+    [[nodiscard]] std::vector<I001AllocationRecord> allocation_census() const;
     [[nodiscard]] const std::string& device_name() const noexcept;
     [[nodiscard]] const std::string& driver_name() const noexcept;
     [[nodiscard]] const std::string& driver_info() const noexcept;

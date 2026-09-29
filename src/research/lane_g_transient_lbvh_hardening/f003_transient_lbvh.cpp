@@ -208,6 +208,47 @@ F003TransientLbvh::~F003TransientLbvh() {
     context_.destroy_buffer(template_buffer_);
 }
 
+std::vector<F003LbvhAllocation> F003TransientLbvh::allocation_census() const {
+    std::vector<F003LbvhAllocation> rows;
+    rows.reserve(11U);
+    const auto add = [&](const char* name,
+                         const char* role,
+                         const char* capacity_kind,
+                         const char* use_lifetime,
+                         const lane_b::B002Buffer& buffer) {
+        rows.push_back({
+            name,
+            role,
+            capacity_kind,
+            use_lifetime,
+            static_cast<std::size_t>(buffer.size),
+            static_cast<std::size_t>(buffer.allocation_size),
+        });
+    };
+    add("lbvh.template", "dynamic-lbvh-persistent", "single", "runtime", template_buffer_);
+    add("lbvh.current-frame-geometry", "current-frame-geometry", "single",
+        "frame-build-and-traversal", working_buffer_);
+    add("lbvh.aabb-min", "node-topology-bounds-scratch", "single", "frame-build",
+        aabb_min_buffer_);
+    add("lbvh.aabb-max", "node-topology-bounds-scratch", "single", "frame-build",
+        aabb_max_buffer_);
+    add("lbvh.keys-a", "radix-sort-scratch", "double-buffer-a", "frame-build",
+        keys_a_buffer_);
+    add("lbvh.keys-b", "radix-sort-scratch", "double-buffer-b", "frame-build",
+        keys_b_buffer_);
+    add("lbvh.histogram", "radix-sort-scratch", "single", "frame-build",
+        histogram_buffer_);
+    add("lbvh.offsets", "radix-sort-scratch", "single", "frame-build",
+        offsets_buffer_);
+    add("lbvh.digit-base", "radix-sort-scratch", "single", "frame-build",
+        digit_base_buffer_);
+    add("lbvh.nodes", "node-topology-bounds-scratch", "single",
+        "frame-build-and-traversal", nodes_buffer_);
+    add("lbvh.ready", "node-topology-bounds-scratch", "single", "frame-build",
+        ready_buffer_);
+    return rows;
+}
+
 void F003TransientLbvh::compute_barrier(VkCommandBuffer command) const {
     auto barrier = detail::make_vk_info<VkMemoryBarrier>(
         VK_STRUCTURE_TYPE_MEMORY_BARRIER);

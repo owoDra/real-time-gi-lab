@@ -19,6 +19,15 @@ struct F003LbvhMemory {
     std::size_t input_geometry_bytes{};
 };
 
+struct F003LbvhAllocation {
+    const char* name{};
+    const char* role{};
+    const char* capacity_kind{};
+    const char* use_lifetime{};
+    std::size_t logical_bytes{};
+    std::size_t allocation_bytes{};
+};
+
 class F003TransientLbvh {
 public:
     F003TransientLbvh(
@@ -60,6 +69,7 @@ public:
     [[nodiscard]] const F003LbvhMemory& memory() const noexcept {
         return memory_;
     }
+    [[nodiscard]] std::vector<F003LbvhAllocation> allocation_census() const;
 
 private:
     struct Push {
