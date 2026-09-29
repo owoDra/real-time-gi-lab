@@ -63,6 +63,34 @@ std::filesystem::path artifact_root() {
     return "out/research/integration-gate/001-dynamic-end-to-end/manual";
 }
 
+
+void print_quality_diagnostics(
+    const char* phase,
+    const integration::I001FrameResult& result) {
+    const auto& q = result.quality;
+    std::cerr
+        << "I001 quality diagnostics [" << phase << "]: "
+        << "visibility_mismatches=" << q.visibility_mismatches
+        << ", producer_semantic_errors=" << q.producer_semantic_errors
+        << ", hit_mismatches=" << q.hit_mismatches
+        << ", traversal_runtime_errors=" << q.traversal_runtime_errors
+        << ", missing_probes=" << q.missing_probes
+        << ", leaked_probes=" << q.leaked_probes
+        << ", stale_storage_slots=" << q.stale_storage_slots
+        << ", resolved_output_mismatches=" << q.resolved_output_mismatches
+        << ", radiance_rms_error=" << q.radiance_rms_error
+        << ", radiance_max_abs_error=" << q.radiance_max_abs_error
+        << ", temporal_rms_error=" << q.temporal_rms_error
+        << ", temporal_max_abs_error=" << q.temporal_max_abs_error
+        << ", storage_failures=" << result.stats.storage_failures
+        << ", work_items=" << result.stats.work_items
+        << ", outputs=" << result.stats.outputs
+        << ", requested_work_items=" << result.stats.requested_work_items
+        << ", requested_outputs=" << result.stats.requested_outputs
+        << ", overflow=" << result.stats.overflow
+        << '\n';
+}
+
 void write_csv(
     std::ostream& output,
     const Cli& cli,
@@ -194,6 +222,7 @@ int main(int argc, char** argv) {
         if (cli.quality) {
             warmup.quality = runtime.validate_last_frame();
             if (!warmup.quality.passed) {
+                print_quality_diagnostics("warmup", warmup);
                 std::cerr << "I001 warmup correctness/quality gate failed\n";
                 return 2;
             }
@@ -227,6 +256,7 @@ int main(int argc, char** argv) {
             setup_wall_us);
 
         if (!result.quality.passed) {
+            print_quality_diagnostics("measured", result);
             std::cerr << "I001 correctness/quality gate failed\n";
             return 2;
         }
