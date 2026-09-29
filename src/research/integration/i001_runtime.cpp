@@ -196,8 +196,23 @@ static_assert(sizeof(InvalidationPush) == 16);
 
 [[nodiscard]] bool uses_hwrt(I001Variant value) noexcept {
     return value == I001Variant::CombinedHwrt ||
+           value == I001Variant::RigidInstanceHwrtUpdate ||
+           value == I001Variant::RigidInstanceHwrtBuild ||
            value == I001Variant::DepthReuseHwrt ||
            value == I001Variant::BoundedHwrt;
+}
+
+[[nodiscard]] bool uses_rigid_instance_hwrt(
+    I001Variant value) noexcept {
+    return value == I001Variant::RigidInstanceHwrtUpdate ||
+           value == I001Variant::RigidInstanceHwrtBuild;
+}
+
+[[nodiscard]] lane_b::HwrtTlasPolicy rigid_tlas_policy(
+    I001Variant value) noexcept {
+    return value == I001Variant::RigidInstanceHwrtBuild
+        ? lane_b::HwrtTlasPolicy::Build
+        : lane_b::HwrtTlasPolicy::Update;
 }
 
 [[nodiscard]] bool uses_quantized(I001Variant value) noexcept {
@@ -548,6 +563,10 @@ const char* i001_variant_name(I001Variant value) noexcept {
     switch (value) {
     case I001Variant::VanillaSoftware: return "vanilla-software";
     case I001Variant::CombinedHwrt: return "combined-hwrt";
+    case I001Variant::RigidInstanceHwrtUpdate:
+        return "rigid-instance-hwrt-update";
+    case I001Variant::RigidInstanceHwrtBuild:
+        return "rigid-instance-hwrt-build";
     case I001Variant::CombinedSoftware: return "combined-software";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
@@ -573,6 +592,10 @@ const char* i001_scenario_name(I001Scenario value) noexcept {
 I001Variant i001_parse_variant(const std::string& value) {
     if (value == "vanilla-software") return I001Variant::VanillaSoftware;
     if (value == "combined-hwrt") return I001Variant::CombinedHwrt;
+    if (value == "rigid-instance-hwrt-update")
+        return I001Variant::RigidInstanceHwrtUpdate;
+    if (value == "rigid-instance-hwrt-build")
+        return I001Variant::RigidInstanceHwrtBuild;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
@@ -801,11 +824,27 @@ struct I001Runtime::Impl {
 
     void prepare_candidate_traversal() {
         if (uses_hwrt(options.variant)) {
-            hwrt = std::make_unique<B002HwrtTraversal>(
-                context,
-                b_scene.triangles,
-                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
-                false);
+            if (uses_rigid_instance_hwrt(options.variant)) {
+                if (options.scenario != I001Scenario::MovingRigid) {
+                    fail("I001 rigid-instance HWRT variants require moving-rigid");
+                }
+                hwrt = std::make_unique<B002HwrtTraversal>(
+                    context,
+                    b_scene.triangles,
+                    moving.primitives,
+                    shader_path(
+                        PHOS_GI_LANE_B_SHADER_DIR,
+                        "lane_b_b002_hwrt.spv"),
+                    false);
+            } else {
+                hwrt = std::make_unique<B002HwrtTraversal>(
+                    context,
+                    b_scene.triangles,
+                    shader_path(
+                        PHOS_GI_LANE_B_SHADER_DIR,
+                        "lane_b_b002_hwrt.spv"),
+                    false);
+            }
             return;
         }
 
@@ -1173,6 +1212,8 @@ struct I001Runtime::Impl {
         double surface_update_gpu_us{};
         double geometry_transfer_wall_us{};
         double geometry_transfer_gpu_us{};
+        double instance_transfer_wall_us{};
+        double instance_transfer_gpu_us{};
         double blas_update_us{};
         double tlas_update_us{};
         double membership_update_cpu_us{};
@@ -1202,19 +1243,25 @@ struct I001Runtime::Impl {
         const auto start = Clock::now();
         DynamicUpdateStats out{};
 
+        const bool rigid_instance_candidate =
+            uses_rigid_instance_hwrt(options.variant);
         auto phase_start = Clock::now();
-        auto target_geometry =
-            options.scenario == I001Scenario::MovingRigid
-            ? translated_geometry(
-                b_scene.triangles,
-                moving.primitives,
-                moving.delta_x)
-            : deformed_geometry(
-                b_scene.triangles,
-                moving.primitives,
-                moving.delta_x);
-        out.geometry_prepare_cpu_us = elapsed_us(phase_start);
-        b_scene.triangles = std::move(target_geometry);
+        if (!rigid_instance_candidate) {
+            auto target_geometry =
+                options.scenario == I001Scenario::MovingRigid
+                ? translated_geometry(
+                    b_scene.triangles,
+                    moving.primitives,
+                    moving.delta_x)
+                : deformed_geometry(
+                    b_scene.triangles,
+                    moving.primitives,
+                    moving.delta_x);
+            out.geometry_prepare_cpu_us = elapsed_us(phase_start);
+            b_scene.triangles = std::move(target_geometry);
+        } else if (options.scenario != I001Scenario::MovingRigid) {
+            fail("I001 rigid-instance update reached a non-rigid scenario");
+        }
 
         std::vector<std::array<float, 4>> moved_positions;
         moved_positions.reserve(moving.primitives.size());
@@ -1256,17 +1303,33 @@ struct I001Runtime::Impl {
         out.gpu_us += out.surface_update_gpu_us;
 
         if (uses_hwrt(options.variant)) {
-            const auto stats = hwrt->update_geometry(
-                b_scene.triangles,
-                moving.primitives);
-            out.geometry_transfer_wall_us = stats.geometry_upload_us;
-            out.geometry_transfer_gpu_us = stats.geometry_upload_gpu_us;
-            out.blas_update_us = stats.blas_update_us;
-            out.tlas_update_us = stats.tlas_update_us;
-            out.gpu_us +=
-                out.geometry_transfer_gpu_us +
-                out.blas_update_us +
-                out.tlas_update_us;
+            if (rigid_instance_candidate) {
+                const auto stats = hwrt->update_rigid_transform(
+                    moving.delta_x,
+                    rigid_tlas_policy(options.variant));
+                out.instance_transfer_wall_us =
+                    stats.instance_upload_us;
+                out.instance_transfer_gpu_us =
+                    stats.instance_upload_gpu_us;
+                out.tlas_update_us = stats.tlas_update_us;
+                out.gpu_us +=
+                    out.instance_transfer_gpu_us +
+                    out.tlas_update_us;
+            } else {
+                const auto stats = hwrt->update_geometry(
+                    b_scene.triangles,
+                    moving.primitives);
+                out.geometry_transfer_wall_us =
+                    stats.geometry_upload_us;
+                out.geometry_transfer_gpu_us =
+                    stats.geometry_upload_gpu_us;
+                out.blas_update_us = stats.blas_update_us;
+                out.tlas_update_us = stats.tlas_update_us;
+                out.gpu_us +=
+                    out.geometry_transfer_gpu_us +
+                    out.blas_update_us +
+                    out.tlas_update_us;
+            }
         } else {
             std::vector<GpuTriangle> moved_triangles;
             moved_triangles.reserve(moving.primitives.size());
@@ -1406,6 +1469,16 @@ struct I001Runtime::Impl {
         }
         geometry_is_target = true;
         out.wall_us = elapsed_us(start);
+
+        // The rigid-instance candidate does not mutate traversal geometry.
+        // Keep the translated CPU scene only as an out-of-band correctness
+        // reference after the measured maintenance boundary has closed.
+        if (rigid_instance_candidate) {
+            b_scene.triangles = translated_geometry(
+                b_scene.triangles,
+                moving.primitives,
+                moving.delta_x);
+        }
         return out;
     }
 
@@ -1616,6 +1689,10 @@ struct I001Runtime::Impl {
             dynamic_update.geometry_transfer_wall_us;
         result.timings.geometry_transfer_gpu_us =
             dynamic_update.geometry_transfer_gpu_us;
+        result.timings.instance_transfer_wall_us =
+            dynamic_update.instance_transfer_wall_us;
+        result.timings.instance_transfer_gpu_us =
+            dynamic_update.instance_transfer_gpu_us;
         result.timings.blas_update_us = dynamic_update.blas_update_us;
         result.timings.tlas_update_us = dynamic_update.tlas_update_us;
         result.timings.membership_update_cpu_us =
