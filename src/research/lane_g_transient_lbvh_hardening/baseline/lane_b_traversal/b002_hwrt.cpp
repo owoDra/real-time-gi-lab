@@ -46,10 +46,8 @@ B002HwrtTraversal::B002HwrtTraversal(
     B002VulkanContext& context,
     const std::vector<Triangle>& triangles,
     std::string shader_path,
-    bool create_trace_runtime,
-    HwrtBuildInputRetention build_input_retention)
-    : context_(context),
-      build_input_retention_(build_input_retention) {
+    bool create_trace_runtime)
+    : context_(context) {
     if (!context_.hwrt_enabled()) {
         fail("B002 HWRT traversal requires an HWRT-enabled context");
     }
@@ -127,20 +125,6 @@ B002HwrtTraversal::B002HwrtTraversal(
 
     setup_stats_.blas_build_us = build_blas(triangles);
     setup_stats_.tlas_build_us = build_tlas();
-
-    if (build_input_retention_ ==
-        HwrtBuildInputRetention::ReleaseAfterBuild) {
-        setup_stats_.released_build_only_bytes =
-            static_cast<std::size_t>(
-                vertex_buffer_.allocation_size +
-                instance_buffer_.allocation_size +
-                scratch_.allocation_size);
-        // submit_build() synchronously fences every AS build. Once the BLAS
-        // and TLAS are complete these buffers are not referenced by traversal.
-        context_.destroy_buffer(scratch_);
-        context_.destroy_buffer(instance_buffer_);
-        context_.destroy_buffer(vertex_buffer_);
-    }
 
     setup_stats_.persistent_bytes =
         static_cast<std::size_t>(
@@ -396,10 +380,6 @@ double B002HwrtTraversal::build_tlas() {
 HwrtUpdateStats B002HwrtTraversal::update_geometry(
     const std::vector<Triangle>& triangles,
     std::span<const std::uint32_t> moved_primitives) {
-    if (build_input_retention_ ==
-        HwrtBuildInputRetention::ReleaseAfterBuild) {
-        fail("B002 HWRT immutable instance cannot update released build inputs");
-    }
     if (triangles.size() != triangle_count_) {
         fail("B002 HWRT update requires stable primitive count");
     }
