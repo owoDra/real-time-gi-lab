@@ -1680,6 +1680,15 @@ struct I001Runtime::Impl {
             const auto max_rays = params.limits[1];
             traversal_stage->record_indirect(
                 command, indirect.buffer, 0, &max_rays, sizeof(max_rays));
+        } else if (uses_rigid_instance_software(options.variant)) {
+            lane_e::E003TraversalPush push{};
+            push.values[0] = params.limits[1];
+            push.values[1] = static_cast<std::uint32_t>(
+                uses_rigid_instance_software_binary(options.variant)
+                    ? instance_binary_payload.instances.size()
+                    : instance_quantized_payload.instances.size());
+            traversal_stage->record_indirect(
+                command, indirect.buffer, 0, &push, sizeof(push));
         } else if (uses_quantized(options.variant)) {
             const auto push = quant_push();
             traversal_stage->record_indirect(
