@@ -14,10 +14,10 @@
       "id": "F002",
       "name": "pure-gpu-transient-lbvh-builder",
       "result": "002-pure-gpu-transient-lbvh-builder.md",
-      "status": "superseded-corrected-rerun-required",
-      "correctness": "superseded",
-      "repeatability": "historical-stable",
-      "decision": "rerun-f002-after-leaf-bounds-correctness-fix-before-f003"
+      "status": "complete-gate-pending",
+      "correctness": "pass",
+      "repeatability": "pass",
+      "decision": "f003-may-proceed-formal-f002-gate-pending"
     }
   ]
 }
