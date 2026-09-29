@@ -782,7 +782,13 @@ struct I001Runtime::Impl {
             allocation(depth) + allocation(owners) + allocation(counters) + allocation(work) +
             allocation(indirect) + allocation(rays) + allocation(hits) + allocation(contributions) +
             allocation(accum) + allocation(resolved) + allocation(storage_stats);
-        memory_stats.stream_capacity_bytes = allocation(work);
+        memory_stats.stream_capacity_bytes =
+            allocation(work) +
+            allocation(rays) +
+            allocation(hits) +
+            allocation(contributions) +
+            allocation(accum) +
+            allocation(resolved);
         memory_stats.storage_capacity_bytes = allocation(storage_slots);
         memory_stats.peak_resident_bytes =
             memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
