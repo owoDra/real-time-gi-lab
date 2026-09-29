@@ -1536,26 +1536,6 @@ struct I001Runtime::Impl {
                 true,
             });
         };
-        const auto add_aggregate = [&](const char* name,
-                                       const char* owner,
-                                       const char* role,
-                                       const char* use_lifetime,
-                                       std::size_t bytes) {
-            if (bytes == 0U) return;
-            rows.push_back({
-                name,
-                owner,
-                role,
-                "aggregate",
-                "runtime",
-                use_lifetime,
-                0U,
-                bytes,
-                false,
-                true,
-                true,
-            });
-        };
         const auto add_host = [&](const char* name, std::size_t bytes) {
             if (bytes == 0U) return;
             rows.push_back({
@@ -1608,12 +1588,23 @@ struct I001Runtime::Impl {
                    "fixed", "frame", storage_stats);
 
         if (uses_transient_candidate(options.variant) || uses_hwrt(options.variant)) {
-            add_aggregate("static-hwrt.persistent", "static-hwrt",
-                          "static-hwrt-persistent", "runtime",
-                          hwrt ? hwrt->setup_stats().persistent_bytes : 0U);
-            add_aggregate("static-hwrt.scratch", "static-hwrt",
-                          "static-hwrt-scratch", "runtime",
-                          hwrt ? hwrt->setup_stats().scratch_bytes : 0U);
+            if (hwrt) {
+                for (const auto& entry : hwrt->allocation_census()) {
+                    rows.push_back({
+                        entry.name,
+                        "static-hwrt",
+                        entry.scratch ? "static-hwrt-scratch" : "static-hwrt-persistent",
+                        "scenario-sized",
+                        "runtime",
+                        "runtime",
+                        entry.logical_bytes,
+                        entry.allocation_bytes,
+                        true,
+                        true,
+                        true,
+                    });
+                }
+            }
         } else {
             add_buffer("software.triangles", "software-control",
                        "software-persistent", "scenario-sized", "runtime",

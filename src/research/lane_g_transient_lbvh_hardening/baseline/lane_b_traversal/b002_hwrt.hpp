@@ -21,6 +21,13 @@ struct HwrtSetupStats {
     std::size_t scratch_bytes{};
 };
 
+struct HwrtAllocationRecord {
+    const char* name{};
+    std::size_t logical_bytes{};
+    std::size_t allocation_bytes{};
+    bool scratch{};
+};
+
 struct HwrtTraceResult {
     double ray_upload_us{};
     double trace_us{};
@@ -52,6 +59,7 @@ public:
     [[nodiscard]] const HwrtSetupStats& setup_stats() const noexcept {
         return setup_stats_;
     }
+    [[nodiscard]] std::vector<HwrtAllocationRecord> allocation_census() const;
 
     [[nodiscard]] HwrtTraceResult trace(
         std::span<const GpuRay> rays,

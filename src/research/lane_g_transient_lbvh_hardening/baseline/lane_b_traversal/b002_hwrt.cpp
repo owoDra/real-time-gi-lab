@@ -171,6 +171,27 @@ B002HwrtTraversal::~B002HwrtTraversal() {
         context_.vk().destroyCommandPool(command_pool_, nullptr);
 }
 
+std::vector<HwrtAllocationRecord> B002HwrtTraversal::allocation_census() const {
+    std::vector<HwrtAllocationRecord> rows;
+    rows.reserve(6U);
+    const auto add = [&](const char* name, const B002Buffer& buffer, bool scratch) {
+        if (buffer.buffer == VK_NULL_HANDLE) return;
+        rows.push_back({
+            name,
+            static_cast<std::size_t>(buffer.size),
+            static_cast<std::size_t>(buffer.allocation_size),
+            scratch,
+        });
+    };
+    add("static-hwrt.vertices", vertex_buffer_, false);
+    add("static-hwrt.triangle-metadata", triangle_buffer_, false);
+    add("static-hwrt.instance", instance_buffer_, false);
+    add("static-hwrt.blas-storage", blas_.storage, false);
+    add("static-hwrt.tlas-storage", tlas_.storage, false);
+    add("static-hwrt.scratch", scratch_, true);
+    return rows;
+}
+
 void B002HwrtTraversal::destroy_acceleration_structure(
     AccelerationStructure& acceleration) {
     if (acceleration.handle != VK_NULL_HANDLE) {
