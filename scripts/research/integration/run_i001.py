@@ -172,6 +172,19 @@ def main() -> int:
                     True,
                     1280,
                 )
+        overflow_validation = run_one(
+            executable,
+            scene,
+            "bounded-hwrt",
+            "static",
+            root / "validation-overflow" / "bounded-512",
+            True,
+            512,
+        )
+        if int(overflow_validation["overflow"]) != 1:
+            raise RuntimeError(
+                "validation 512-owner bounded run did not force overflow"
+            )
 
     accepted: list[dict[str, str]] = []
     for repeat in range(args.repeats):
@@ -391,7 +404,7 @@ def main() -> int:
 
     summary = {
         "schema_version": 1,
-        "status": "target-run-ready",
+        "status": "target-run-complete",
         "branch": branch,
         "git_commit": commit,
         "dirty": dirty,
@@ -456,7 +469,7 @@ def main() -> int:
             ),
         },
         "pending_before_i001_closeout": [
-            "target-GPU execution and artifact inspection",
+            "artifact inspection",
             "final result publication",
         ],
     }
