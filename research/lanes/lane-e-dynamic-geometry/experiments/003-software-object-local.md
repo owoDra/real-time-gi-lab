@@ -1,6 +1,6 @@
 # E003 — software object-local rigid ownership
 
-Status: protocol frozen before implementation and target timing
+Status: protocol frozen; implementation complete; target validation ready
 
 ## Question
 
@@ -205,3 +205,51 @@ local hierarchy maintenance. That boundary is E004.
 
 E002's HWRT rigid result remains independent and already selected immutable
 object-local BLAS + TLAS UPDATE. E003 must not change that decision.
+
+
+## Implementation checkpoint
+
+E003 is implemented without changing the frozen gates:
+
+- Lane E owns a header-only payload builder that partitions the selected rigid
+  source instance from the static world while preserving original primitive,
+  material and instance metadata.
+- Both partitions retain immutable source-frame triangles.
+- The binary mechanism control uses object-local StrataBrick with the existing
+  binary per-segment hierarchy.
+- The promotion candidate uses object-local StrataBrick with the accepted B003
+  conservative quantized Micro BVH8.
+- Partition payloads are merged with explicit node/order/hash offsets while an
+  instance table carries local bounds, world bounds, translation and per-instance
+  hash metadata.
+- The target rigid update uploads only the moving instance record. Candidate
+  geometry, membership, refit/rebuild, packing and hierarchy-upload paths are not
+  invoked.
+- The traversal shaders first cull against instance world bounds, translate the
+  ray into the immutable source frame, traverse the local DDA/hash hierarchy,
+  and preserve the shared primitive/material/instance/tie-breaking Hit contract.
+- The translated CPU scene used by the existing correctness reference is updated
+  only after the measured dynamic-maintenance wall closes.
+- `run_e003.py` enforces validation-first execution, clean-tree provenance,
+  same-workload identity, immutable-ownership zero-work fields, GPU accounting,
+  the fixed 50% boundary gate, 15% traversal limit and 1.25x persistent-memory
+  limit.
+
+No target GPU timing has been run or inferred from this implementation.
+
+Target validation command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 003-software-object-local \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e003.py --build-dir build/release --validation-only"
+```
+
+Do not start accepted E003 timing until the validation artifact has been
+inspected. The formal timing runner repeats the validation matrix.
