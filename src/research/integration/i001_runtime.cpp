@@ -724,18 +724,16 @@ struct I001Runtime::Impl {
             estimated_storage_capacity(a_scene, params);
         {
             auto target_scene = a_scene;
-            if (options.scenario == I001Scenario::MovingRigid ||
-                options.scenario == I001Scenario::DeformingControl) {
-                const auto target_geometry =
-                    options.scenario == I001Scenario::MovingRigid
-                    ? translated_geometry(
-                        b_scene.triangles,
-                        moving.primitives,
-                        moving.delta_x)
-                    : deformed_geometry(
-                        b_scene.triangles,
-                        moving.primitives,
-                        moving.delta_x);
+            if (options.scenario == I001Scenario::MovingRigid) {
+                for (const auto primitive : moving.primitives) {
+                    target_scene.samples.at(primitive).position[0] +=
+                        moving.delta_x;
+                }
+            } else if (options.scenario == I001Scenario::DeformingControl) {
+                const auto target_geometry = deformed_geometry(
+                    b_scene.triangles,
+                    moving.primitives,
+                    moving.delta_x);
                 sync_surface_positions(
                     target_scene,
                     target_geometry,
@@ -1221,14 +1219,23 @@ struct I001Runtime::Impl {
         std::vector<std::array<float, 4>> moved_positions;
         moved_positions.reserve(moving.primitives.size());
         for (const auto primitive : moving.primitives) {
-            const auto& triangle = b_scene.triangles.at(primitive);
-            std::array<float, 4> position{
-                (triangle.v0.x + triangle.v1.x + triangle.v2.x) / 3.0F,
-                (triangle.v0.y + triangle.v1.y + triangle.v2.y) / 3.0F,
-                (triangle.v0.z + triangle.v1.z + triangle.v2.z) / 3.0F,
-                a_scene.samples.at(primitive).position[3],
-            };
-            moved_positions.push_back(position);
+            if (options.scenario == I001Scenario::MovingRigid) {
+                std::array<float, 4> position{};
+                std::copy_n(
+                    a_scene.samples.at(primitive).position,
+                    4,
+                    position.data());
+                position[0] += moving.delta_x;
+                moved_positions.push_back(position);
+            } else {
+                const auto& triangle = b_scene.triangles.at(primitive);
+                moved_positions.push_back({
+                    (triangle.v0.x + triangle.v1.x + triangle.v2.x) / 3.0F,
+                    (triangle.v0.y + triangle.v1.y + triangle.v2.y) / 3.0F,
+                    (triangle.v0.z + triangle.v1.z + triangle.v2.z) / 3.0F,
+                    a_scene.samples.at(primitive).position[3],
+                });
+            }
         }
         std::vector<lane_b::B002BufferUpdate> surface_updates;
         surface_updates.reserve(moving.primitives.size());
@@ -1387,10 +1394,16 @@ struct I001Runtime::Impl {
             calculate_memory();
         }
 
-        sync_surface_positions(
-            a_scene,
-            b_scene.triangles,
-            moving.primitives);
+        if (options.scenario == I001Scenario::MovingRigid) {
+            for (const auto primitive : moving.primitives) {
+                a_scene.samples.at(primitive).position[0] += moving.delta_x;
+            }
+        } else {
+            sync_surface_positions(
+                a_scene,
+                b_scene.triangles,
+                moving.primitives);
+        }
         geometry_is_target = true;
         out.wall_us = elapsed_us(start);
         return out;
