@@ -1,6 +1,6 @@
 # I001 — dynamic end-to-end GI integration gate
 
-Status: protocol frozen; implementation target-run-ready; target evidence pending
+Status: complete; target evidence recorded; no candidate passes all frozen promotion gates
 
 ## Question
 
@@ -307,3 +307,15 @@ No DDGI or representative sparse-radiance-cache implementation existed in this
 repository when the protocol was frozen. I001 therefore does not manufacture a
 weaker namesake baseline. That comparison remains unavailable unless a
 semantically comparable implementation is introduced before accepted timing.
+
+
+## Completion
+
+Target measurement completed at commit
+`3a1aa9c25ffcec583459409aca4c526b17b53e3c` on AMD Radeon 8060S Graphics
+(RADV STRIX_HALO). All 33 diagnostic validation cases passed and the repeated
+target matrix completed successfully.
+
+The frozen promotion gates did not select a universal final architecture.
+See `../results/001-dynamic-end-to-end.md` for the recorded evidence,
+per-regime decisions, and closeout.
