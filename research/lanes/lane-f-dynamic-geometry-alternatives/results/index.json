@@ -18,6 +18,15 @@
       "correctness": "pass",
       "repeatability": "pass",
       "decision": "f003-may-proceed-formal-f002-gate-pending"
+    },
+    {
+      "id": "F003",
+      "name": "end-to-end-transient-lbvh",
+      "result": "003-end-to-end-transient-lbvh.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "f005-next-f004-not-activated"
     }
   ]
 }
