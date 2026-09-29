@@ -226,6 +226,7 @@ def main() -> int:
 
     root = artifact_root()
     root.mkdir(parents=True, exist_ok=True)
+    print(f"GPU: {TARGET_DEVICE}")
 
     validation_rows: list[dict[str, str]] = []
     for variant in VARIANTS:
