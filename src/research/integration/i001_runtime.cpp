@@ -325,6 +325,10 @@ struct GeometryTransition {
 
     const auto segment_size = lane_b::b002_segment_size(scene);
     const auto count = static_cast<std::uint32_t>(moving.primitives.size());
+    if (geometry_class == I001GeometryClass::TopologyReplace25 &&
+        count % 4U != 0U) {
+        fail("F006 topology-replace25 requires Nrep divisible by four");
+    }
     const auto replacement_count = count / 4U;
     const float deform_amplitude = segment_size * 0.05F;
 
