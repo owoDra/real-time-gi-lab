@@ -41,7 +41,8 @@ public:
     B002HwrtTraversal(
         B002VulkanContext& context,
         const std::vector<Triangle>& triangles,
-        std::string shader_path);
+        std::string shader_path,
+        bool create_trace_runtime = true);
     ~B002HwrtTraversal();
 
     B002HwrtTraversal(const B002HwrtTraversal&) = delete;
