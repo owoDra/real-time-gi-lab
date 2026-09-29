@@ -113,12 +113,15 @@ run = 'cmake -E remove_directory build'
 
 [tasks."research:check"]
 description = "Validate the research harness layout and result indexes"
-run = "python scripts/research/verify.py"
+run = '''
+python scripts/research/verify.py
+python -m unittest discover -s scripts/research/lane_f_dynamic_geometry_alternatives -p 'test_*.py'
+'''
 
 [tasks."research:record"]
 description = "Run one lane experiment and capture a reproducible raw artifact"
 usage = '''
-flag "--lane <lane>" help="lane-a-split-rc, lane-b-traversal, lane-c-storage-locality, or integration-gate" required=#true
+flag "--lane <lane>" help="research lane id (including lane-f-dynamic-geometry-alternatives)" required=#true
 flag "--experiment <experiment>" help="Stable experiment id, e.g. 001-producer-stream" required=#true
 flag "--command <command>" help="Command to execute; quote it as one shell argument" required=#true
 '''

@@ -30,6 +30,12 @@ LANES = {
         "shader": "shaders/research/integration/README.md",
         "script": "scripts/research/integration/README.md",
     },
+    "lane-f-dynamic-geometry-alternatives": {
+        "root": ROOT / "research" / "lanes" / "lane-f-dynamic-geometry-alternatives",
+        "src": "src/research/lane_f_dynamic_geometry_alternatives/CMakeLists.txt",
+        "shader": "shaders/research/lane_f_dynamic_geometry_alternatives/README.md",
+        "script": "scripts/research/lane_f_dynamic_geometry_alternatives/README.md",
+    },
 }
 
 
