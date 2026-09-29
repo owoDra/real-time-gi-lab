@@ -30,6 +30,13 @@
       "result": "004-integration-hardening.md",
       "status": "accepted-semantic-hardening",
       "decision": "all-16-semantic-cases-pass-proceed-g005-deterministic"
+    },
+    {
+      "id": "G005",
+      "name": "final-deterministic-replay",
+      "result": "005-final-deterministic-replay.md",
+      "status": "pending-target-gpu-evidence",
+      "decision": "deterministic-final-replay-in-progress"
     }
   ]
 }
