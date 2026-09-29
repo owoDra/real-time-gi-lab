@@ -20,6 +20,7 @@
 #include <algorithm>
 #include <array>
 #include <cmath>
+#include <chrono>
 #include <compare>
 #include <cstring>
 #include <filesystem>
@@ -128,6 +129,8 @@ static_assert(sizeof(InvalidationPush) == 16);
         return lane_a::A001Case::CameraMotion;
     case I001Scenario::LightMotion:
         return lane_a::A001Case::LightMotion;
+    case I001Scenario::MovingRigid:
+        return lane_a::A001Case::Static;
     }
     return lane_a::A001Case::Static;
 }
@@ -145,13 +148,92 @@ static_assert(sizeof(InvalidationPush) == 16);
 }
 
 [[nodiscard]] std::vector<GpuTriangle> gpu_triangles(
-    const lane_b::B002Scene& scene) {
+    const std::vector<lane_b::Triangle>& triangles) {
     std::vector<GpuTriangle> output;
-    output.reserve(scene.triangles.size());
-    for (const auto& triangle : scene.triangles) {
+    output.reserve(triangles.size());
+    for (const auto& triangle : triangles) {
         output.push_back(lane_b::to_gpu_triangle(triangle));
     }
     return output;
+}
+
+[[nodiscard]] std::vector<GpuTriangle> gpu_triangles(
+    const lane_b::B002Scene& scene) {
+    return gpu_triangles(scene.triangles);
+}
+
+struct MovingSelection {
+    std::uint32_t instance_id{};
+    std::vector<std::uint32_t> primitives;
+    float delta_x{};
+};
+
+[[nodiscard]] std::vector<lane_b::Triangle> translated_geometry(
+    const std::vector<lane_b::Triangle>& source,
+    std::span<const std::uint32_t> moved,
+    float delta_x) {
+    auto output = source;
+    const lane_b::Vec3 delta{delta_x, 0.0F, 0.0F};
+    for (const auto primitive : moved) {
+        auto& triangle = output.at(primitive);
+        triangle.v0 = triangle.v0 + delta;
+        triangle.v1 = triangle.v1 + delta;
+        triangle.v2 = triangle.v2 + delta;
+    }
+    return output;
+}
+
+[[nodiscard]] MovingSelection choose_moving_selection(
+    const lane_b::B002Scene& scene) {
+    std::uint32_t max_instance = 0U;
+    for (const auto& triangle : scene.triangles) {
+        if (triangle.instance_id != lane_b::kInvalidId) {
+            max_instance = std::max(max_instance, triangle.instance_id);
+        }
+    }
+    std::vector<std::vector<std::uint32_t>> groups(
+        std::size_t(max_instance) + 1U);
+    for (std::uint32_t primitive = 0U;
+         primitive < scene.triangles.size();
+         ++primitive) {
+        const auto instance = scene.triangles[primitive].instance_id;
+        if (instance != lane_b::kInvalidId) {
+            groups.at(instance).push_back(primitive);
+        }
+    }
+
+    std::vector<std::uint32_t> candidates;
+    for (std::uint32_t instance = 0U; instance < groups.size(); ++instance) {
+        const auto count = groups[instance].size();
+        if (count >= 32U && count <= 2048U) {
+            candidates.push_back(instance);
+        }
+    }
+    for (std::uint32_t instance = 0U; instance < groups.size(); ++instance) {
+        if (!groups[instance].empty() &&
+            std::find(candidates.begin(), candidates.end(), instance) ==
+                candidates.end()) {
+            candidates.push_back(instance);
+        }
+    }
+
+    const auto segment_size = lane_b::b002_segment_size(scene);
+    constexpr std::array<float, 6> divisors{
+        32.0F, 64.0F, 128.0F, 256.0F, 512.0F, 1024.0F};
+    for (const auto instance : candidates) {
+        for (const auto divisor : divisors) {
+            const auto delta = segment_size / divisor;
+            auto target = translated_geometry(
+                scene.triangles, groups[instance], delta);
+            lane_b::HierarchicalStrataBrick probe(
+                scene.triangles, segment_size);
+            const auto stats = probe.update(target, groups[instance]);
+            if (stats.membership_changes == 0U) {
+                return {instance, groups[instance], delta};
+            }
+        }
+    }
+    fail("I001 could not select a bounds-only moving-rigid regime");
 }
 
 [[nodiscard]] double timestamp_us(
@@ -203,6 +285,7 @@ const char* i001_scenario_name(I001Scenario value) noexcept {
     case I001Scenario::Static: return "static";
     case I001Scenario::CameraMotion: return "camera-motion";
     case I001Scenario::LightMotion: return "light-motion";
+    case I001Scenario::MovingRigid: return "moving-rigid";
     }
     return "unknown";
 }
@@ -220,6 +303,7 @@ I001Scenario i001_parse_scenario(const std::string& value) {
     if (value == "static") return I001Scenario::Static;
     if (value == "camera-motion") return I001Scenario::CameraMotion;
     if (value == "light-motion") return I001Scenario::LightMotion;
+    if (value == "moving-rigid") return I001Scenario::MovingRigid;
     throw std::runtime_error("unknown I001 scenario: " + value);
 }
 
@@ -252,6 +336,8 @@ struct I001Runtime::Impl {
     VkFence fence{VK_NULL_HANDLE};
 
     I001Memory memory_stats{};
+    MovingSelection moving{};
+    bool geometry_is_target{};
     std::uint32_t storage_capacity{};
     std::uint32_t frame_id{};
     I001FrameResult last{};
@@ -275,6 +361,9 @@ struct I001Runtime::Impl {
         settings.cascade_count = 4;
         settings.rays_per_probe = 8;
         params = lane_a::build_a001_params(a_scene, settings);
+        if (options.scenario == I001Scenario::MovingRigid) {
+            moving = choose_moving_selection(b_scene);
+        }
 
         if (uses_bounded(options.variant)) {
             if (options.bounded_owner_capacity == 0U) {
@@ -623,6 +712,134 @@ struct I001Runtime::Impl {
             memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
     }
 
+    struct DynamicUpdateStats {
+        double wall_us{};
+        double gpu_us{};
+    };
+
+    [[nodiscard]] DynamicUpdateStats update_dynamic_geometry(bool target_state) {
+        if (options.scenario != I001Scenario::MovingRigid ||
+            !target_state ||
+            geometry_is_target) {
+            return {};
+        }
+
+        using Clock = std::chrono::steady_clock;
+        const auto start = Clock::now();
+        auto target_triangles = translated_geometry(
+            b_scene.triangles,
+            moving.primitives,
+            moving.delta_x);
+
+        auto positions = surface_positions(a_scene);
+        for (const auto primitive : moving.primitives) {
+            positions.at(primitive)[0] += moving.delta_x;
+        }
+        const lane_b::B002BufferUpdate surface_update{
+            0U,
+            positions.data(),
+            VkDeviceSize(positions.size() * sizeof(positions[0])),
+        };
+        context.update_device_buffer(
+            surfaces,
+            std::span<const lane_b::B002BufferUpdate>(&surface_update, 1));
+
+        double maintenance_gpu_us = 0.0;
+        if (uses_hwrt(options.variant)) {
+            const auto stats = hwrt->update_geometry(
+                target_triangles,
+                moving.primitives);
+            maintenance_gpu_us =
+                stats.blas_update_us + stats.tlas_update_us;
+        } else {
+            const auto next_triangles = gpu_triangles(target_triangles);
+            const lane_b::B002BufferUpdate triangle_update{
+                0U,
+                next_triangles.data(),
+                VkDeviceSize(next_triangles.size() * sizeof(GpuTriangle)),
+            };
+            context.update_device_buffer(
+                triangle_buffer,
+                std::span<const lane_b::B002BufferUpdate>(&triangle_update, 1));
+
+            if (uses_quantized(options.variant)) {
+                const auto stats = hierarchy_cpu->update(
+                    target_triangles,
+                    moving.primitives);
+                if (stats.membership_changes != 0U) {
+                    fail("I001 moving-rigid regime changed quantized segment membership");
+                }
+                auto wide = lane_b::make_b003_wide_micro_payload(
+                    hierarchy_cpu->flatten());
+                auto next_quant =
+                    lane_b::make_b003_quantized_micro_payload(wide);
+                if (next_quant.nodes.size() != quant_payload.nodes.size() ||
+                    next_quant.ordered_primitives.size() !=
+                        quant_payload.ordered_primitives.size() ||
+                    next_quant.hash_table.size() != quant_payload.hash_table.size()) {
+                    fail("I001 bounds-only quantized update changed buffer shape");
+                }
+                const std::array<lane_b::B002BufferUpdate, 3> updates{{
+                    {
+                        0U,
+                        next_quant.nodes.data(),
+                        VkDeviceSize(
+                            next_quant.nodes.size() *
+                            sizeof(lane_b::B003GpuQuantNode)),
+                    },
+                    {
+                        0U,
+                        next_quant.ordered_primitives.data(),
+                        VkDeviceSize(
+                            next_quant.ordered_primitives.size() *
+                            sizeof(std::uint32_t)),
+                    },
+                    {
+                        0U,
+                        next_quant.hash_table.data(),
+                        VkDeviceSize(
+                            next_quant.hash_table.size() *
+                            sizeof(lane_b::GpuSegmentHashEntry)),
+                    },
+                }};
+                context.update_device_buffer(
+                    quant_nodes,
+                    std::span<const lane_b::B002BufferUpdate>(&updates[0], 1));
+                context.update_device_buffer(
+                    quant_order,
+                    std::span<const lane_b::B002BufferUpdate>(&updates[1], 1));
+                context.update_device_buffer(
+                    quant_hash,
+                    std::span<const lane_b::B002BufferUpdate>(&updates[2], 1));
+                quant_payload = std::move(next_quant);
+            } else {
+                software_cpu->refit(target_triangles);
+                const auto next_nodes = software_cpu->gpu_nodes();
+                const lane_b::B002BufferUpdate node_update{
+                    0U,
+                    next_nodes.data(),
+                    VkDeviceSize(
+                        next_nodes.size() *
+                        sizeof(lane_b::GpuBvhNode)),
+                };
+                context.update_device_buffer(
+                    software_nodes,
+                    std::span<const lane_b::B002BufferUpdate>(&node_update, 1));
+            }
+        }
+
+        for (const auto primitive : moving.primitives) {
+            a_scene.samples.at(primitive).position[0] += moving.delta_x;
+        }
+        b_scene.triangles = std::move(target_triangles);
+        geometry_is_target = true;
+
+        const auto wall_us =
+            std::chrono::duration<double, std::micro>(
+                Clock::now() - start).count();
+        return {wall_us, maintenance_gpu_us};
+    }
+
     void update_params(bool target_state) {
         settings.case_id = a001_case(options.scenario, target_state);
         settings.frame_id = frame_id;
@@ -671,6 +888,7 @@ struct I001Runtime::Impl {
 
     [[nodiscard]] I001FrameResult run_frame(bool target_state) {
         ++frame_id;
+        const auto dynamic_update = update_dynamic_geometry(target_state);
         update_params(target_state);
 
         context.vk().resetFences(1, &fence);
@@ -799,17 +1017,22 @@ struct I001Runtime::Impl {
         result.timings.visibility_reuse_us = timestamp_us(timestamps[2], timestamps[3], period);
         result.timings.producer_us = timestamp_us(timestamps[3], timestamps[4], period);
         result.timings.ray_prepare_us = timestamp_us(timestamps[4], timestamps[5], period);
+        result.timings.traversal_maintenance_gpu_us = dynamic_update.gpu_us;
+        result.timings.dynamic_update_wall_us = dynamic_update.wall_us;
         result.timings.traversal_us = timestamp_us(timestamps[5], timestamps[6], period);
         result.timings.radiance_us = timestamp_us(timestamps[6], timestamps[7], period);
         result.timings.merge_us = timestamp_us(timestamps[7], timestamps[8], period);
         result.timings.storage_update_us = timestamp_us(timestamps[8], timestamps[9], period);
         result.timings.invalidation_us = timestamp_us(timestamps[9], timestamps[10], period);
         result.timings.resolve_us = timestamp_us(timestamps[10], timestamps[11], period);
-        result.timings.complete_gpu_us = timestamp_us(timestamps[0], timestamps[11], period);
+        result.timings.complete_gpu_us =
+            timestamp_us(timestamps[0], timestamps[11], period) +
+            dynamic_update.gpu_us;
         result.timings.incremental_gi_us =
-            options.variant == I001Variant::DepthReuseHwrt
-            ? timestamp_us(timestamps[1], timestamps[11], period)
-            : result.timings.complete_gpu_us;
+            (options.variant == I001Variant::DepthReuseHwrt
+             ? timestamp_us(timestamps[1], timestamps[11], period)
+             : timestamp_us(timestamps[0], timestamps[11], period)) +
+            dynamic_update.gpu_us;
 
         result.stats.work_items = counter_values[0];
         result.stats.outputs = counter_values[1];
