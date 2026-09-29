@@ -1,6 +1,6 @@
 # E005 — integrated ownership replay and final Lane E decision
 
-Status: protocol frozen before implementation and target timing
+Status: protocol frozen; implementation complete; target validation ready
 
 ## Question
 
@@ -211,3 +211,54 @@ object-local rebuild boundary:
 
 This is a design boundary supported by E004's stable-topology contract checks,
 not a measured topology-changing performance claim.
+
+
+## Implementation checkpoint
+
+E005 is implemented without changing the frozen gates.
+
+Integrated runtime variants:
+
+- `lane-e-final-hwrt`;
+- `lane-e-final-software`.
+
+Implementation behavior:
+
+- static/camera/light keep one deterministic idle dynamic object partitioned so
+  ownership traversal and memory overhead remain measurable while all frame
+  dynamic-maintenance timings stay zero;
+- moving-rigid routes final HWRT through E002 immutable BLAS + TLAS UPDATE and
+  final software through E003 instance-only quantized ownership;
+- deforming-control routes final HWRT through E004 object-local BLAS UPDATE and
+  final software through E004 local StrataBrick/quantized maintenance;
+- existing Integration controls remain unchanged;
+- `run_e005.py` executes 20 validation pairs and a 5-scenario x 4-variant x
+  repeat timing matrix;
+- the runner independently enforces stable complete-GPU guards, prior frozen
+  dynamic-gain thresholds, persistent and peak memory guards, architecture
+  integrity, accounting, workload identity, quality and storage correctness.
+
+Static self-review confirmed variant naming/parsing, setup, traversal bindings,
+memory accounting, scenario-specific maintenance and dispatch are connected.
+The assistant sandbox could not clone GitHub for a local build because external
+DNS is unavailable; target `mise run build` remains the authoritative compile
+check before validation.
+
+No E005 target GPU result has been run or inferred.
+
+Target validation command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 005-integration-replay \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e005.py --build-dir build/release --validation-only"
+```
+
+Do not start accepted E005 timing until the validation artifact has been
+inspected. The formal timing runner repeats the validation matrix.
