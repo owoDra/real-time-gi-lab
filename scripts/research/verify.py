@@ -43,6 +43,7 @@ def main() -> int:
     require(ROOT / "research" / "README.md")
     require(ROOT / "research" / "protocol.md")
     require(ROOT / "scripts" / "research" / "run_experiment.py")
+    require(ROOT / "scripts" / "research" / "integration" / "run_i001.py")
 
     for lane, owned in LANES.items():
         lane_root = owned["root"]
