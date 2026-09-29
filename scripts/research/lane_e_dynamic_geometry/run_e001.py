@@ -149,6 +149,15 @@ def summarize_group(rows: list[dict[str, str]]) -> dict[str, object]:
         + medians["invalidation_us"]
         + medians["resolve_us"]
     )
+    medians["producer_storage_gpu_us"] = (
+        medians["producer_us"] + medians["storage_pipeline_gpu_us"]
+    )
+    medians["complete_dynamic_boundary_us"] = statistics.median(
+        f(row, "dynamic_update_wall_us")
+        + f(row, "complete_gpu_us")
+        - f(row, "traversal_maintenance_gpu_us")
+        for row in rows
+    )
     maintenance = medians["traversal_maintenance_gpu_us"]
     component_ratios: dict[str, float] = {}
     if maintenance > 0.0:
