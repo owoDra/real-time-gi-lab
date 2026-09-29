@@ -25,12 +25,16 @@
     {
       "id": "E003",
       "experiment": "003-software-object-local",
-      "status": "accepted-timing-ready",
+      "status": "complete",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/003-software-object-local.md",
       "protocol_commit": "8d19c909f78a2733043b58dca839fde092b905b4",
       "implementation_checkpoint": "4ff3688e21f1c892832a7212b7b82318a769ee60",
       "validation_commit": "2a48b944d33b56e69947e9f437bba7ff0d445e30",
-      "validation_protocol_commit": "411a888199dc73800e22e47e23d790e3a753dff7"
+      "validation_protocol_commit": "411a888199dc73800e22e47e23d790e3a753dff7",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/003-software-object-local.md",
+      "measurement_commit": "09944ee0b580cd67911d3c0a13b87821d8c939dc",
+      "selected_policy": "rigid-instance-software-quantized",
+      "result_commit": "e8ff5bcb90852103736b5c1326d0999be0e34225"
     }
   ]
 }
