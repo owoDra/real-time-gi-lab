@@ -172,6 +172,8 @@ def run_case(
         raise RuntimeError(f"missing executable: {executable}")
     if validation:
         command.append("--validation")
+    else:
+        command.append("--no-quality")
 
     env = os.environ.copy()
     env["PHOS_RESEARCH_ARTIFACT_DIR"] = str(output_dir)
@@ -481,6 +483,9 @@ def main() -> int:
             "git_commit": commit,
             "dirty": dirty,
             "target_gpu": EXPECTED_GPU,
+            "driver_name": device_identity.get("driver_name") if device_identity else None,
+            "driver_info": device_identity.get("driver_info") if device_identity else None,
+            "api_version": device_identity.get("api_version") if device_identity else None,
             "passed": passed,
             "cases": results,
         }
