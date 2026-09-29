@@ -16,6 +16,7 @@
 #include "../lane_b_traversal/lane_a_stream_v1.hpp"
 #include "../lane_b_traversal/hierarchical_stratabrick.hpp"
 #include "../lane_b_traversal/traversal_common.hpp"
+#include "../lane_f_dynamic_geometry_alternatives/f003_transient_lbvh.hpp"
 #include "vk_init.hpp"
 
 #include <algorithm>
@@ -194,8 +195,13 @@ static_assert(sizeof(InvalidationPush) == 16);
     return (std::filesystem::path(directory) / filename).string();
 }
 
+[[nodiscard]] bool uses_transient_lbvh(I001Variant value) noexcept {
+    return value == I001Variant::TransientLbvh;
+}
+
 [[nodiscard]] bool uses_hwrt(I001Variant value) noexcept {
     return value == I001Variant::CombinedHwrt ||
+           value == I001Variant::TransientLbvh ||
            value == I001Variant::DepthReuseHwrt ||
            value == I001Variant::BoundedHwrt;
 }
@@ -484,6 +490,7 @@ const char* i001_variant_name(I001Variant value) noexcept {
     case I001Variant::VanillaSoftware: return "vanilla-software";
     case I001Variant::CombinedHwrt: return "combined-hwrt";
     case I001Variant::CombinedSoftware: return "combined-software";
+    case I001Variant::TransientLbvh: return "transient-lbvh";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
     }
@@ -508,6 +515,7 @@ I001Variant i001_parse_variant(const std::string& value) {
     if (value == "vanilla-software") return I001Variant::VanillaSoftware;
     if (value == "combined-hwrt") return I001Variant::CombinedHwrt;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
+    if (value == "transient-lbvh") return I001Variant::TransientLbvh;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
     throw std::runtime_error("unknown I001 variant: " + value);
@@ -534,7 +542,8 @@ struct I001Runtime::Impl {
     lane_a::A001ParamsGpu params{};
 
     B002Buffer surfaces{}, depth{}, owners{}, counters{}, work{}, indirect{};
-    B002Buffer rays{}, hits{}, contributions{}, accum{}, resolved{}, uniform{};
+    B002Buffer rays{}, hits{}, static_hits{}, dynamic_hits{};
+    B002Buffer contributions{}, accum{}, resolved{}, uniform{};
     B002Buffer storage_slots{}, storage_stats{};
     B002Buffer triangle_buffer{}, software_nodes{}, software_order{};
     B002Buffer quant_nodes{}, quant_order{}, quant_hash{};
@@ -543,10 +552,12 @@ struct I001Runtime::Impl {
     std::unique_ptr<HierarchicalStrataBrick> hierarchy_cpu;
     lane_b::B003QuantizedMicroPayload quant_payload;
     std::unique_ptr<B002HwrtTraversal> hwrt;
+    std::unique_ptr<phos::gi::research::lane_f::F003TransientLbvh> transient_lbvh;
 
     std::unique_ptr<I001ComputeStage> depth_stage, owner_stage, producer_stage;
     std::unique_ptr<I001ComputeStage> clamp_stage, finalize_stage, ray_stage;
-    std::unique_ptr<I001ComputeStage> traversal_stage, radiance_stage, merge_stage;
+    std::unique_ptr<I001ComputeStage> traversal_stage, dynamic_traversal_stage;
+    std::unique_ptr<I001ComputeStage> hit_merge_stage, radiance_stage, merge_stage;
     std::unique_ptr<I001ComputeStage> storage_update_stage, invalidation_stage, resolve_stage;
 
     VkCommandPool command_pool{VK_NULL_HANDLE};
@@ -637,6 +648,15 @@ struct I001Runtime::Impl {
         hits = context.create_device_buffer(
             VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        if (uses_transient_lbvh(options.variant) &&
+            options.scenario == I001Scenario::MovingRigid) {
+            static_hits = context.create_device_buffer(
+                VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            dynamic_hits = context.create_device_buffer(
+                VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        }
         contributions = context.create_device_buffer(
             VkDeviceSize(params.limits[1]) * sizeof(std::uint32_t) * 2U,
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
@@ -699,7 +719,10 @@ struct I001Runtime::Impl {
         storage_update_stage.reset();
         merge_stage.reset();
         radiance_stage.reset();
+        hit_merge_stage.reset();
+        dynamic_traversal_stage.reset();
         traversal_stage.reset();
+        transient_lbvh.reset();
         ray_stage.reset();
         finalize_stage.reset();
         clamp_stage.reset();
@@ -714,7 +737,8 @@ struct I001Runtime::Impl {
 
         for (auto* buffer : {
                  &storage_stats, &storage_slots, &uniform, &resolved, &accum,
-                 &contributions, &hits, &rays, &indirect, &work, &counters,
+                 &contributions, &dynamic_hits, &static_hits, &hits, &rays,
+                 &indirect, &work, &counters,
                  &owners, &depth, &surfaces, &quant_hash, &quant_order,
                  &quant_nodes, &software_order, &software_nodes, &triangle_buffer}) {
             context.destroy_buffer(*buffer);
@@ -722,6 +746,60 @@ struct I001Runtime::Impl {
     }
 
     void prepare_candidate_traversal() {
+        if (uses_transient_lbvh(options.variant)) {
+            std::vector<lane_b::Triangle> static_triangles;
+            if (options.scenario == I001Scenario::MovingRigid) {
+                std::vector<std::uint8_t> dynamic_mask(
+                    b_scene.triangles.size(), 0U);
+                for (const auto primitive : moving.primitives) {
+                    dynamic_mask.at(primitive) = 1U;
+                }
+                static_triangles.reserve(
+                    b_scene.triangles.size() - moving.primitives.size());
+                for (std::size_t index = 0; index < b_scene.triangles.size(); ++index) {
+                    if (dynamic_mask[index] == 0U) {
+                        static_triangles.push_back(b_scene.triangles[index]);
+                    }
+                }
+            } else {
+                static_triangles = b_scene.triangles;
+            }
+
+            hwrt = std::make_unique<B002HwrtTraversal>(
+                context,
+                static_triangles,
+                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
+                false);
+
+            if (options.scenario == I001Scenario::MovingRigid) {
+                std::vector<GpuTriangle> dynamic_template;
+                dynamic_template.reserve(moving.primitives.size());
+                lane_b::Aabb dynamic_bounds{};
+                for (const auto primitive : moving.primitives) {
+                    const auto& triangle = b_scene.triangles.at(primitive);
+                    dynamic_template.push_back(lane_b::to_gpu_triangle(triangle));
+                    dynamic_bounds = lane_b::merge(
+                        dynamic_bounds, lane_b::triangle_bounds(triangle));
+                }
+                const auto page_extent = lane_b::b002_segment_size(b_scene);
+                const lane_b::Vec3 origin{
+                    dynamic_bounds.min.x - 2.0F * page_extent,
+                    dynamic_bounds.min.y - 2.0F * page_extent,
+                    dynamic_bounds.min.z - 2.0F * page_extent,
+                };
+                transient_lbvh = std::make_unique<
+                    phos::gi::research::lane_f::F003TransientLbvh>(
+                        context,
+                        dynamic_template,
+                        origin,
+                        page_extent,
+                        shader_path(
+                            PHOS_GI_LANE_F_SHADER_DIR,
+                            "lane_f_f003_lbvh_builder.spv"));
+            }
+            return;
+        }
+
         if (uses_hwrt(options.variant)) {
             hwrt = std::make_unique<B002HwrtTraversal>(
                 context,
@@ -949,7 +1027,52 @@ struct I001Runtime::Impl {
     }
 
     void create_traversal_stage() {
-        if (uses_hwrt(options.variant)) {
+        if (uses_transient_lbvh(options.variant)) {
+            const bool split =
+                options.scenario == I001Scenario::MovingRigid;
+            const auto* static_output = split ? &static_hits : &hits;
+            const std::array<I001Binding, 5> static_bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
+                {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hwrt->triangle_buffer()},
+                {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, static_output},
+                {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+            }};
+            traversal_stage = std::make_unique<I001ComputeStage>(
+                context,
+                shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"),
+                static_bindings,
+                sizeof(std::uint32_t));
+
+            if (split) {
+                const std::array<I001Binding, 5> dynamic_bindings{{
+                    {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
+                    {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_lbvh->triangles()},
+                    {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &transient_lbvh->nodes()},
+                    {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &dynamic_hits},
+                    {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+                }};
+                dynamic_traversal_stage = std::make_unique<I001ComputeStage>(
+                    context,
+                    shader_path(
+                        PHOS_GI_LANE_F_SHADER_DIR,
+                        "lane_f_f003_dynamic_traversal.spv"),
+                    dynamic_bindings);
+
+                const std::array<I001Binding, 4> hit_merge_bindings{{
+                    {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &static_hits},
+                    {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &dynamic_hits},
+                    {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hits},
+                    {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+                }};
+                hit_merge_stage = std::make_unique<I001ComputeStage>(
+                    context,
+                    shader_path(
+                        PHOS_GI_LANE_F_SHADER_DIR,
+                        "lane_f_f003_hit_merge.spv"),
+                    hit_merge_bindings);
+            }
+        } else if (uses_hwrt(options.variant)) {
             const std::array<I001Binding, 5> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
                 {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
@@ -1017,10 +1140,35 @@ struct I001Runtime::Impl {
         const auto allocation = [](const B002Buffer& buffer) {
             return static_cast<std::size_t>(buffer.allocation_size);
         };
-        memory_stats.persistent_bytes =
+        memory_stats.shared_persistent_bytes =
             allocation(surfaces) + allocation(uniform) + allocation(storage_slots);
+        memory_stats.persistent_bytes =
+            memory_stats.shared_persistent_bytes;
 
-        if (uses_hwrt(options.variant)) {
+        if (uses_transient_lbvh(options.variant)) {
+            memory_stats.static_hwrt_persistent_bytes =
+                hwrt->setup_stats().persistent_bytes;
+            memory_stats.persistent_bytes +=
+                memory_stats.static_hwrt_persistent_bytes;
+            memory_stats.scratch_bytes = hwrt->setup_stats().scratch_bytes;
+            if (transient_lbvh) {
+                const auto& dynamic_memory = transient_lbvh->memory();
+                memory_stats.dynamic_candidate_persistent_bytes =
+                    dynamic_memory.persistent_bytes;
+                memory_stats.dynamic_candidate_transient_bytes =
+                    dynamic_memory.transient_bytes;
+                memory_stats.dynamic_candidate_scratch_bytes =
+                    dynamic_memory.scratch_bytes;
+                memory_stats.current_frame_geometry_bytes =
+                    dynamic_memory.input_geometry_bytes;
+                memory_stats.persistent_bytes +=
+                    dynamic_memory.persistent_bytes;
+                memory_stats.scratch_bytes +=
+                    dynamic_memory.scratch_bytes;
+            }
+        } else if (uses_hwrt(options.variant)) {
+            memory_stats.static_hwrt_persistent_bytes =
+                hwrt->setup_stats().persistent_bytes;
             memory_stats.persistent_bytes += hwrt->setup_stats().persistent_bytes;
             memory_stats.scratch_bytes = hwrt->setup_stats().scratch_bytes;
         } else {
@@ -1035,12 +1183,16 @@ struct I001Runtime::Impl {
 
         memory_stats.transient_bytes =
             allocation(depth) + allocation(owners) + allocation(counters) + allocation(work) +
-            allocation(indirect) + allocation(rays) + allocation(hits) + allocation(contributions) +
-            allocation(accum) + allocation(resolved) + allocation(storage_stats);
+            allocation(indirect) + allocation(rays) + allocation(hits) +
+            allocation(static_hits) + allocation(dynamic_hits) +
+            allocation(contributions) + allocation(accum) + allocation(resolved) +
+            allocation(storage_stats) + memory_stats.dynamic_candidate_transient_bytes;
         memory_stats.stream_capacity_bytes =
             allocation(work) +
             allocation(rays) +
             allocation(hits) +
+            allocation(static_hits) +
+            allocation(dynamic_hits) +
             allocation(contributions) +
             allocation(accum) +
             allocation(resolved);
@@ -1127,7 +1279,12 @@ struct I001Runtime::Impl {
             context.update_device_buffer_timed(
                 surfaces,
                 surface_updates);
-        if (uses_hwrt(options.variant)) {
+        if (uses_transient_lbvh(options.variant)) {
+            // Fixed classification: the selected primitives stay out of the
+            // persistent static HWRT in both source and target frames. Their
+            // current-frame world transform is generated by the transient
+            // builder inside the measured GPU command stream.
+        } else if (uses_hwrt(options.variant)) {
             const auto stats = hwrt->update_geometry(
                 b_scene.triangles,
                 moving.primitives);
@@ -1362,11 +1519,38 @@ struct I001Runtime::Impl {
         i001_compute_barrier(context, command);
         stamp(5);
 
-        if (uses_hwrt(options.variant)) {
+        if (uses_transient_lbvh(options.variant) &&
+            options.scenario == I001Scenario::MovingRigid) {
+            transient_lbvh->record_build(
+                command,
+                geometry_is_target ? moving.delta_x : 0.0F,
+                query_pool,
+                12U);
             i001_acceleration_to_compute_barrier(context, command);
+
+            stamp(20);
+            record_candidate_traversal(command);
+            i001_compute_barrier(context, command);
+            stamp(21);
+
+            dynamic_traversal_stage->record_indirect(
+                command, indirect.buffer, 0);
+            i001_compute_barrier(context, command);
+            stamp(22);
+
+            hit_merge_stage->record_indirect(
+                command, indirect.buffer, 0);
+            i001_compute_barrier(context, command);
+            stamp(23);
+        } else {
+            if (uses_hwrt(options.variant)) {
+                i001_acceleration_to_compute_barrier(context, command);
+            }
+            if (uses_transient_lbvh(options.variant)) stamp(20);
+            record_candidate_traversal(command);
+            i001_compute_barrier(context, command);
+            if (uses_transient_lbvh(options.variant)) stamp(21);
         }
-        record_candidate_traversal(command);
-        i001_compute_barrier(context, command);
         stamp(6);
 
         radiance_stage->record_indirect(command, indirect.buffer, 0);
@@ -1431,7 +1615,7 @@ struct I001Runtime::Impl {
             fail("I001 fence wait");
         }
 
-        std::array<std::uint64_t, 12> timestamps{};
+        std::array<std::uint64_t, kQueryCount> timestamps{};
         if (context.vk().getQueryPoolResults(
                 query_pool, 0, static_cast<std::uint32_t>(timestamps.size()),
                 sizeof(timestamps), timestamps.data(), sizeof(std::uint64_t),
@@ -1453,7 +1637,39 @@ struct I001Runtime::Impl {
         result.timings.ray_prepare_us = timestamp_us(timestamps[4], timestamps[5], period);
         result.timings.traversal_maintenance_gpu_us = dynamic_update.gpu_us;
         result.timings.dynamic_update_wall_us = dynamic_update.wall_us;
-        result.timings.traversal_us = timestamp_us(timestamps[5], timestamps[6], period);
+        if (uses_transient_lbvh(options.variant)) {
+            result.timings.static_traversal_us =
+                timestamp_us(timestamps[20], timestamps[21], period);
+            if (options.scenario == I001Scenario::MovingRigid) {
+                result.timings.dynamic_builder_reset_us =
+                    timestamp_us(timestamps[12], timestamps[13], period);
+                result.timings.dynamic_builder_input_us =
+                    timestamp_us(timestamps[13], timestamps[14], period);
+                result.timings.dynamic_builder_aabb_us =
+                    timestamp_us(timestamps[14], timestamps[15], period);
+                result.timings.dynamic_builder_morton_us =
+                    timestamp_us(timestamps[15], timestamps[16], period);
+                result.timings.dynamic_builder_sort_us =
+                    timestamp_us(timestamps[16], timestamps[17], period);
+                result.timings.dynamic_builder_topology_us =
+                    timestamp_us(timestamps[17], timestamps[18], period);
+                result.timings.dynamic_builder_bounds_us =
+                    timestamp_us(timestamps[18], timestamps[19], period);
+                result.timings.dynamic_builder_us =
+                    timestamp_us(timestamps[12], timestamps[19], period);
+                result.timings.dynamic_traversal_us =
+                    timestamp_us(timestamps[21], timestamps[22], period);
+                result.timings.cross_structure_merge_us =
+                    timestamp_us(timestamps[22], timestamps[23], period);
+            }
+            result.timings.traversal_us =
+                result.timings.static_traversal_us +
+                result.timings.dynamic_traversal_us +
+                result.timings.cross_structure_merge_us;
+        } else {
+            result.timings.traversal_us =
+                timestamp_us(timestamps[5], timestamps[6], period);
+        }
         result.timings.radiance_us = timestamp_us(timestamps[6], timestamps[7], period);
         result.timings.merge_us = timestamp_us(timestamps[7], timestamps[8], period);
         result.timings.storage_update_us = timestamp_us(timestamps[8], timestamps[9], period);
