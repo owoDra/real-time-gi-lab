@@ -62,4 +62,55 @@ add_custom_target(phos-lane-g-g001-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/lane_f_f005_grid_traversal.spv"
 )
 
-# The G001 executable is added by the instrumentation checkpoint.
+
+add_executable(phos-lane-g-g001
+  g001_benchmark.cpp
+  i001_runtime.cpp
+  i001_compute.cpp
+  f003_transient_lbvh.cpp
+  f003_transient_lbvh.hpp
+  f005_transient_grid.cpp
+  f005_transient_grid.hpp
+  ../lane_a_split_rc/a001_scene.cpp
+  ../lane_a_split_rc/a001_runtime.cpp
+  ../lane_a_split_rc/a001_analysis.cpp
+  ../lane_b_traversal/b002_scene.cpp
+  ../lane_b_traversal/b002_vulkan.cpp
+  ../lane_b_traversal/b002_compute.cpp
+  ../lane_b_traversal/b002_hwrt.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+target_include_directories(phos-lane-g-g001 PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_SOURCE_DIR}/src/research/lane_a_split_rc"
+  "${CMAKE_SOURCE_DIR}/src/research/lane_b_traversal"
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+target_link_libraries(phos-lane-g-g001 PRIVATE
+  vk-bootstrap::vk-bootstrap
+  fastgltf::fastgltf
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-g-g001 PRIVATE cxx_std_20)
+target_compile_definitions(phos-lane-g-g001 PRIVATE
+  PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_LANE_F_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-g-g001 PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+add_dependencies(
+  phos-lane-g-g001
+  phos-lane-g-g001-shaders
+  phos-lane-a-split-rc-shaders
+  phos-lane-b-b002-shaders
+  phos-lane-b-b003-shaders
+)
+if(MSVC)
+  target_compile_options(phos-lane-g-g001 PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-g-g001 PRIVATE -Wall -Wextra -Wpedantic)
+endif()
