@@ -36,7 +36,9 @@
       "name": "final-deterministic-replay",
       "result": "005-final-deterministic-replay.md",
       "status": "complete-deterministic-pass-timing-measurement-limited",
-      "decision": "mechanism-retained-memory-correctness-pass-production-promotion-measurement-limited"
+      "decision": "mechanism-retained-memory-correctness-pass-production-promotion-measurement-limited",
+      "measurement_commit": "81ca547fa7c1541db15cef3ad3ac83609a34d716",
+      "result_commit": "1fe3492652e37c938b3e02efbe58ed94604f3295"
     }
   ]
 }
