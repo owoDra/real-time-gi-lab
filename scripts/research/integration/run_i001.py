@@ -99,15 +99,46 @@ def run_one(
     sys.stderr.flush()
     (output_dir / "process.stdout.log").write_text(proc.stdout, encoding="utf-8")
     (output_dir / "process.stderr.log").write_text(proc.stderr, encoding="utf-8")
-    if proc.returncode != 0:
-        raise RuntimeError(
-            f"I001 {variant}/{scenario} "
-            f"{'validation' if validation else 'timing'} failed with {proc.returncode}"
-        )
 
     csv_path = output_dir / "i001-frame.csv"
-    with csv_path.open(newline="", encoding="utf-8") as handle:
-        rows = list(csv.DictReader(handle))
+    rows: list[dict[str, str]] = []
+    if csv_path.is_file():
+        with csv_path.open(newline="", encoding="utf-8") as handle:
+            rows = list(csv.DictReader(handle))
+
+    if proc.returncode != 0:
+        detail = ""
+        if len(rows) == 1:
+            row = rows[0]
+            quality_fields = (
+                "visibility_mismatches",
+                "producer_semantic_errors",
+                "hit_mismatches",
+                "traversal_runtime_errors",
+                "missing_probes",
+                "leaked_probes",
+                "stale_storage_slots",
+                "resolved_output_mismatches",
+                "radiance_rms_error",
+                "radiance_max_abs_error",
+                "temporal_rms_error",
+                "temporal_max_abs_error",
+                "storage_failures",
+                "overflow",
+            )
+            detail = ", ".join(
+                f"{field}={row.get(field, 'missing')}"
+                for field in quality_fields
+            )
+        raise RuntimeError(
+            f"I001 {variant}/{scenario} "
+            f"{'validation' if validation else 'timing'} failed with "
+            f"{proc.returncode}"
+            + (f": {detail}" if detail else "")
+        )
+
+    if not csv_path.is_file():
+        raise RuntimeError(f"missing I001 artifact after successful run: {csv_path}")
     if len(rows) != 1:
         raise RuntimeError(f"{csv_path} must contain exactly one data row")
     row = rows[0]
