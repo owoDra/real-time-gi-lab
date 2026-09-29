@@ -861,6 +861,18 @@ struct I001Runtime::Impl {
         fail("I001 static HWRT allocation census is missing");
     }
 
+    [[nodiscard]] std::size_t static_hwrt_setup_peak_bytes() const noexcept {
+        return immutable_hwrt ? immutable_hwrt->setup_peak_bytes() : 0U;
+    }
+
+    [[nodiscard]] const std::vector<lane_b::HwrtAllocationRecord>&
+    static_hwrt_released_allocation_census() const noexcept {
+        static const std::vector<lane_b::HwrtAllocationRecord> empty;
+        return immutable_hwrt
+            ? immutable_hwrt->released_allocation_census()
+            : empty;
+    }
+
     explicit Impl(I001Options value)
         : options(std::move(value)),
           context(
@@ -892,6 +904,14 @@ struct I001Runtime::Impl {
         }
         if (has_dynamic_transition(options.scenario)) {
             moving = choose_moving_selection(b_scene);
+        }
+
+        if (uses_hardened_transient_lbvh(options.variant)) {
+            // Build the immutable static acceleration structure before shared
+            // frame/stream/storage allocations. G001 showed these lifetimes do
+            // not need to overlap; moving the build earlier makes the released
+            // setup-only bytes a true peak-residency reduction.
+            prepare_candidate_traversal();
         }
 
         if (uses_bounded(options.variant)) {
@@ -996,7 +1016,9 @@ struct I001Runtime::Impl {
             4U * sizeof(std::uint32_t),
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 
-        prepare_candidate_traversal();
+        if (!uses_hardened_transient_lbvh(options.variant)) {
+            prepare_candidate_traversal();
+        }
         create_stages();
         create_command_resources();
         calculate_memory();
@@ -1554,8 +1576,16 @@ struct I001Runtime::Impl {
             a_scene.samples.capacity() * sizeof(a_scene.samples[0]) +
             moving.primitives.capacity() * sizeof(std::uint32_t);
         memory_stats.host_transient_bytes = 0U;
+        memory_stats.runtime_resident_bytes =
+            memory_stats.persistent_bytes +
+            memory_stats.transient_bytes +
+            memory_stats.scratch_bytes;
+        memory_stats.setup_peak_bytes =
+            static_hwrt_setup_peak_bytes();
         memory_stats.peak_resident_bytes =
-            memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
+            std::max(
+                memory_stats.runtime_resident_bytes,
+                memory_stats.setup_peak_bytes);
     }
 
 
@@ -1659,7 +1689,25 @@ struct I001Runtime::Impl {
                         true,
                         true,
                     });
+                    for (const auto& entry :
+                     static_hwrt_released_allocation_census()) {
+                    rows.push_back({
+                        entry.name,
+                        "static-hwrt",
+                        entry.scratch
+                            ? "static-hwrt-scratch"
+                            : "static-hwrt-persistent",
+                        "scenario-sized",
+                        "setup",
+                        "setup-only",
+                        entry.logical_bytes,
+                        entry.allocation_bytes,
+                        true,
+                        true,
+                        false,
+                    });
                 }
+            }
             }
         } else {
             add_buffer("software.triangles", "software-control",
