@@ -19,6 +19,16 @@ public:
     }
     [[nodiscard]] std::vector<lane_b::HwrtAllocationRecord>
     allocation_census() const;
+    [[nodiscard]] const std::vector<lane_b::HwrtAllocationRecord>&
+    released_allocation_census() const noexcept {
+        return released_allocations_;
+    }
+    [[nodiscard]] std::size_t setup_peak_bytes() const noexcept {
+        return setup_peak_bytes_;
+    }
+    [[nodiscard]] std::size_t released_build_only_bytes() const noexcept {
+        return released_build_only_bytes_;
+    }
 
     [[nodiscard]] VkAccelerationStructureKHR top_level() const noexcept {
         return tlas_.handle;
@@ -59,6 +69,9 @@ private:
     VkFence fence_{VK_NULL_HANDLE};
 
     lane_b::HwrtSetupStats setup_stats_{};
+    std::vector<lane_b::HwrtAllocationRecord> released_allocations_;
+    std::size_t setup_peak_bytes_{};
+    std::size_t released_build_only_bytes_{};
 };
 
 } // namespace phos::gi::research::lane_g

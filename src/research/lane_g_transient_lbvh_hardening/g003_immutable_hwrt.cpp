@@ -113,6 +113,30 @@ G003ImmutableHwrtTraversal::G003ImmutableHwrtTraversal(
     setup_stats_.blas_build_us = build_blas(triangles);
     setup_stats_.tlas_build_us = build_tlas();
 
+    const auto capture_released =
+        [&](const char* name, const lane_b::B002Buffer& buffer, bool scratch) {
+            released_allocations_.push_back({
+                name,
+                static_cast<std::size_t>(buffer.size),
+                static_cast<std::size_t>(buffer.allocation_size),
+                scratch,
+            });
+            released_build_only_bytes_ +=
+                static_cast<std::size_t>(buffer.allocation_size);
+        };
+    capture_released("static-hwrt.vertices", vertex_buffer_, false);
+    capture_released("static-hwrt.instance", instance_buffer_, false);
+    capture_released("static-hwrt.scratch", scratch_, true);
+
+    setup_peak_bytes_ =
+        static_cast<std::size_t>(
+            vertex_buffer_.allocation_size +
+            triangle_buffer_.allocation_size +
+            instance_buffer_.allocation_size +
+            blas_.storage.allocation_size +
+            tlas_.storage.allocation_size +
+            scratch_.allocation_size);
+
     // submit_build() waits its fence. After both AS builds complete, traversal
     // references only BLAS/TLAS storage and triangle metadata.
     context_.destroy_buffer(scratch_);
