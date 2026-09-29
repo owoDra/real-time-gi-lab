@@ -13,8 +13,10 @@
     {
       "id": "E002",
       "experiment": "002-hwrt-rigid-instance",
-      "status": "target-validation-ready",
-      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/002-hwrt-rigid-instance.md"
+      "status": "accepted-timing-ready",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/002-hwrt-rigid-instance.md",
+      "validation_commit": "7c191fca1b7049fd377597d0e369de36f0a54b93",
+      "validation_protocol_commit": "cb1c4339056a92ed0434be0fab3bb58066fb3a99"
     }
   ]
 }
