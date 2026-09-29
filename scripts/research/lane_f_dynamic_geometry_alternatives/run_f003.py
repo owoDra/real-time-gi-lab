@@ -248,6 +248,7 @@ def normalize_row(
     scenario: str,
     repeat: int,
     validation_state: str,
+    scene: Path,
 ) -> dict[str, object]:
     output: dict[str, object] = dict(row)
     output.update(
@@ -271,7 +272,7 @@ def normalize_row(
             "api_version": device["api_version"],
             "validation_state": validation_state,
             "validation_errors": 0,
-            "scene": str(DEFAULT_SCENE),
+            "scene": str(scene),
             "dynamic_primitive_count": (
                 int(row.get("moved_primitives", "0"))
                 if scenario == "moving-rigid" else 0
@@ -567,6 +568,7 @@ def main() -> int:
                         branch=branch, commit=commit, root=root,
                         variant=variant, scenario=scenario, repeat=repeat,
                         validation_state="passed-prior-same-commit-gpu",
+                        scene=args.scene,
                     )
                 )
 
