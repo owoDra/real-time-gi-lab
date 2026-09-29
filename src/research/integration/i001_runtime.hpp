@@ -13,6 +13,8 @@ enum class I001Variant {
     CombinedHwrt,
     RigidInstanceHwrtUpdate,
     RigidInstanceHwrtBuild,
+    RigidInstanceSoftwareBinary,
+    RigidInstanceSoftwareQuantized,
     CombinedSoftware,
     DepthReuseHwrt,
     BoundedHwrt,
