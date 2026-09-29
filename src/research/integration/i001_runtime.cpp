@@ -930,18 +930,32 @@ struct I001Runtime::Impl {
             moving.primitives,
             moving.delta_x);
 
-        auto positions = surface_positions(a_scene);
+        std::vector<std::array<float, 4>> moved_positions;
+        moved_positions.reserve(moving.primitives.size());
         for (const auto primitive : moving.primitives) {
-            positions.at(primitive)[0] += moving.delta_x;
+            std::array<float, 4> position{};
+            std::copy_n(
+                a_scene.samples.at(primitive).position,
+                4,
+                position.data());
+            position[0] += moving.delta_x;
+            moved_positions.push_back(position);
         }
-        const lane_b::B002BufferUpdate surface_update{
-            0U,
-            positions.data(),
-            VkDeviceSize(positions.size() * sizeof(positions[0])),
-        };
+        std::vector<lane_b::B002BufferUpdate> surface_updates;
+        surface_updates.reserve(moving.primitives.size());
+        for (std::size_t index = 0;
+             index < moving.primitives.size();
+             ++index) {
+            surface_updates.push_back({
+                VkDeviceSize(moving.primitives[index]) *
+                    VkDeviceSize(sizeof(std::array<float, 4>)),
+                moved_positions[index].data(),
+                VkDeviceSize(sizeof(std::array<float, 4>)),
+            });
+        }
         context.update_device_buffer(
             surfaces,
-            std::span<const lane_b::B002BufferUpdate>(&surface_update, 1));
+            surface_updates);
 
         double maintenance_gpu_us = 0.0;
         if (uses_hwrt(options.variant)) {
@@ -951,15 +965,28 @@ struct I001Runtime::Impl {
             maintenance_gpu_us =
                 stats.blas_update_us + stats.tlas_update_us;
         } else {
-            const auto next_triangles = gpu_triangles(b_scene.triangles);
-            const lane_b::B002BufferUpdate triangle_update{
-                0U,
-                next_triangles.data(),
-                VkDeviceSize(next_triangles.size() * sizeof(GpuTriangle)),
-            };
+            std::vector<GpuTriangle> moved_triangles;
+            moved_triangles.reserve(moving.primitives.size());
+            for (const auto primitive : moving.primitives) {
+                moved_triangles.push_back(
+                    lane_b::to_gpu_triangle(
+                        b_scene.triangles.at(primitive)));
+            }
+            std::vector<lane_b::B002BufferUpdate> triangle_updates;
+            triangle_updates.reserve(moving.primitives.size());
+            for (std::size_t index = 0;
+                 index < moving.primitives.size();
+                 ++index) {
+                triangle_updates.push_back({
+                    VkDeviceSize(moving.primitives[index]) *
+                        VkDeviceSize(sizeof(GpuTriangle)),
+                    &moved_triangles[index],
+                    VkDeviceSize(sizeof(GpuTriangle)),
+                });
+            }
             context.update_device_buffer(
                 triangle_buffer,
-                std::span<const lane_b::B002BufferUpdate>(&triangle_update, 1));
+                triangle_updates);
 
             if (uses_quantized(options.variant)) {
                 const auto stats = hierarchy_cpu->update(
