@@ -20,7 +20,8 @@ Current checkpoint:
 - F005: correctness PASS; accepted timing INCONCLUSIVE after the one permitted
   identical full rerun also remained unstable. Grid mechanism evidence shows
   strong cell-reference amplification and radix-sort-dominated rebuild cost.
-- F006: geometry-class crossover controls are the next frozen experiment.
+- F006: geometry-class crossover implementation/config/runner are frozen
+  before first accepted timing; target validation is the next checkpoint.
 
 F003 and F005 preserve the same fixed dynamic classification: the F001/I001
 selected moving-rigid primitive set is excluded from persistent static HWRT
