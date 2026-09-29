@@ -250,6 +250,9 @@ def main() -> int:
                 if row["variant"] == variant and row["scenario"] == scenario
             ]
             medians[variant][scenario] = {
+                "setup_wall_us": statistics.median(
+                    float(row["setup_wall_us"]) for row in rows
+                ),
                 "complete_gpu_us": statistics.median(
                     float(row["complete_gpu_us"]) for row in rows
                 ),
@@ -279,6 +282,9 @@ def main() -> int:
                 if row["variant"] == variant and row["scenario"] == scenario
             ]
             stress_medians[variant][scenario] = {
+                "setup_wall_us": statistics.median(
+                    float(row["setup_wall_us"]) for row in rows
+                ),
                 "complete_gpu_us": statistics.median(
                     float(row["complete_gpu_us"]) for row in rows
                 ),
