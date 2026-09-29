@@ -270,6 +270,14 @@ def normalize_row(
             "driver_info": device["driver_info"],
             "api_version": device["api_version"],
             "validation_state": validation_state,
+            "validation_errors": 0,
+            "scene": str(DEFAULT_SCENE),
+            "dynamic_primitive_count": (
+                int(row.get("moved_primitives", "0"))
+                if scenario == "moving-rigid" else 0
+            ),
+            "dynamic_object_count": 1 if scenario == "moving-rigid" else 0,
+            "topology_delta_count": 0,
         }
     )
     # Old unchanged I001 controls do not expose the Lane-F-specific phase
@@ -460,6 +468,15 @@ def main() -> int:
                 )
                 if device_identity is None:
                     device_identity = device
+                elif (
+                    device.get("device") != device_identity.get("device")
+                    or device.get("driver_name") != device_identity.get("driver_name")
+                    or device.get("driver_info") != device_identity.get("driver_info")
+                    or device.get("api_version") != device_identity.get("api_version")
+                ):
+                    raise RuntimeError(
+                        "F003 validation device/driver/API changed inside campaign"
+                    )
                 results.append(
                     {
                         "variant": variant,
