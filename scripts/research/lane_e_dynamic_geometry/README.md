@@ -11,6 +11,8 @@ Entrypoints:
   BLAS + TLAS UPDATE/BUILD policies.
 - E003: `run_e003.py` — current software control versus immutable object-local
   binary/quantized StrataBrick instance ownership.
+- E004: `run_e004.py` — current versus object-local stable-topology deforming
+  maintenance for HWRT and quantized software fallback.
 
 Formal runs require the exact Lane E branch, a clean tree, and the target
 `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`. Each experiment runs its
