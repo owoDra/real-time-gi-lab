@@ -30,6 +30,10 @@ LANES = {
         "shader": "shaders/research/integration/README.md",
         "script": "scripts/research/integration/README.md",
     },
+    "lane-e-dynamic-geometry": {
+        "root": ROOT / "research" / "lanes" / "lane-e-dynamic-geometry",
+        "script": "scripts/research/lane_e_dynamic_geometry/README.md",
+    },
 }
 
 
@@ -52,7 +56,8 @@ def main() -> int:
         index_path = lane_root / "results" / "index.json"
         require(index_path)
         for key in ("src", "shader", "script"):
-            require(ROOT / owned[key])
+            if key in owned:
+                require(ROOT / owned[key])
 
         payload = json.loads(index_path.read_text(encoding="utf-8"))
         if payload.get("schema_version") != 1:
