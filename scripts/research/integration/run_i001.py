@@ -100,6 +100,18 @@ def run_one(
     (output_dir / "process.stdout.log").write_text(proc.stdout, encoding="utf-8")
     (output_dir / "process.stderr.log").write_text(proc.stderr, encoding="utf-8")
 
+    combined_log = proc.stdout + "\n" + proc.stderr
+    validation_error_markers = (
+        "Validation Error",
+        "[Vulkan Validation] ERROR",
+        "VUID-",
+    )
+    validation_error_count = (
+        sum(combined_log.count(marker) for marker in validation_error_markers)
+        if validation
+        else 0
+    )
+
     csv_path = output_dir / "i001-frame.csv"
     rows: list[dict[str, str]] = []
     if csv_path.is_file():
@@ -145,11 +157,18 @@ def run_one(
             + (f": {detail}" if detail else "")
         )
 
+    if validation_error_count != 0:
+        raise RuntimeError(
+            f"I001 Vulkan validation emitted {validation_error_count} "
+            f"error marker(s) for {variant}/{scenario}"
+        )
+
     if not csv_path.is_file():
         raise RuntimeError(f"missing I001 artifact after successful run: {csv_path}")
     if len(rows) != 1:
         raise RuntimeError(f"{csv_path} must contain exactly one data row")
     row = rows[0]
+    row["validation_errors"] = str(validation_error_count)
     if row.get("quality_passed") != "1":
         raise RuntimeError(f"I001 quality gate failed for {variant}/{scenario}")
     if int(row.get("storage_failures", "0")) != 0:
