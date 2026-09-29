@@ -73,6 +73,8 @@ struct I001Memory {
 };
 
 struct I001Quality {
+    std::size_t visibility_mismatches{};
+    std::size_t producer_semantic_errors{};
     std::size_t hit_mismatches{};
     std::size_t traversal_runtime_errors{};
     std::size_t missing_probes{};
