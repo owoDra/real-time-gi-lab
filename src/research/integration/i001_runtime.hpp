@@ -90,6 +90,8 @@ struct I001Memory {
     std::size_t dynamic_candidate_transient_bytes{};
     std::size_t dynamic_candidate_scratch_bytes{};
     std::size_t current_frame_geometry_bytes{};
+    std::size_t host_persistent_bytes{};
+    std::size_t host_transient_bytes{};
 };
 
 struct I001Quality {
