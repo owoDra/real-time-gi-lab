@@ -424,6 +424,37 @@ struct ProbeKey {
               (double(slot.data[2]) * 65535.0);
 }
 
+
+[[nodiscard]] lane_b::Vec3 i001_ray_direction(
+    std::uint32_t ray) noexcept {
+    constexpr float v = 0.5773502691896258F;
+    return {
+        (ray & 1U) != 0U ? v : -v,
+        (ray & 2U) != 0U ? v : -v,
+        (ray & 4U) != 0U ? v : -v,
+    };
+}
+
+[[nodiscard]] bool within_float_ulps(
+    float actual,
+    float expected,
+    int ulps) noexcept {
+    if (!std::isfinite(actual) || !std::isfinite(expected)) {
+        return actual == expected;
+    }
+    float lower = expected;
+    float upper = expected;
+    for (int index = 0; index < ulps; ++index) {
+        lower = std::nextafter(
+            lower,
+            -std::numeric_limits<float>::infinity());
+        upper = std::nextafter(
+            upper,
+            std::numeric_limits<float>::infinity());
+    }
+    return actual >= lower && actual <= upper;
+}
+
 } // namespace
 
 const char* i001_variant_name(I001Variant value) noexcept {
@@ -1612,32 +1643,108 @@ struct I001Runtime::Impl {
                 ++quality.producer_semantic_errors;
             }
         } else {
-            bool bounded_ok =
-                last.stats.requested_work_items > last.stats.work_items &&
-                last.stats.requested_outputs > last.stats.outputs &&
-                last.stats.work_items == params.limits[1] &&
-                last.stats.outputs == params.limits[2];
-
             const auto block =
                 settings.cascade_count * settings.rays_per_probe;
-            if (block == 0U || work_items.size() % block != 0U) {
-                bounded_ok = false;
-            }
+            const auto expected_requested_work =
+                std::uint64_t(last.stats.visible_owners) * block;
+            const auto expected_requested_outputs =
+                std::uint64_t(last.stats.visible_owners) *
+                settings.cascade_count;
+            bool bounded_ok =
+                last.stats.requested_work_items ==
+                    expected_requested_work &&
+                last.stats.requested_outputs ==
+                    expected_requested_outputs &&
+                last.stats.requested_work_items >
+                    last.stats.work_items &&
+                last.stats.requested_outputs >
+                    last.stats.outputs &&
+                last.stats.work_items == params.limits[1] &&
+                last.stats.outputs == params.limits[2] &&
+                block != 0U &&
+                work_items.size() % block == 0U;
+
+            std::vector<bool> seen_tile(
+                tile_owners.size(),
+                false);
             for (std::size_t base = 0;
                  bounded_ok && base + block <= work_items.size();
                  base += block) {
                 const auto& first = work_items[base];
+                const auto owner_index =
+                    base / block;
+                const auto expected_output_base =
+                    owner_index * settings.cascade_count;
                 if (first.tile_id >= tile_owners.size() ||
                     first.surface_id >= a_scene.samples.size() ||
                     tile_owners[first.tile_id] != first.surface_id ||
+                    seen_tile[first.tile_id] ||
+                    first.output_id != expected_output_base ||
                     first.output_id + settings.cascade_count >
                         last.stats.outputs) {
                     bounded_ok = false;
                     break;
                 }
+                seen_tile[first.tile_id] = true;
+
+                const auto& sample =
+                    a_scene.samples[first.surface_id];
+                const lane_b::Vec3 position{
+                    sample.position[0],
+                    sample.position[1],
+                    sample.position[2],
+                };
+                const lane_b::Vec3 origin{
+                    params.scene_origin_spacing[0],
+                    params.scene_origin_spacing[1],
+                    params.scene_origin_spacing[2],
+                };
+
                 for (std::uint32_t cascade = 0U;
                      cascade < settings.cascade_count && bounded_ok;
                      ++cascade) {
+                    const auto spacing =
+                        params.scene_origin_spacing[3] *
+                        float(1U << cascade);
+                    const auto probe_x =
+                        static_cast<std::int32_t>(
+                            std::floor(
+                                (position.x - origin.x) /
+                                spacing));
+                    const auto probe_y =
+                        static_cast<std::int32_t>(
+                            std::floor(
+                                (position.y - origin.y) /
+                                spacing));
+                    const auto probe_z =
+                        static_cast<std::int32_t>(
+                            std::floor(
+                                (position.z - origin.z) /
+                                spacing));
+                    const auto probe_px =
+                        std::fma(
+                            float(probe_x) + 0.5F,
+                            spacing,
+                            origin.x);
+                    const auto probe_py =
+                        std::fma(
+                            float(probe_y) + 0.5F,
+                            spacing,
+                            origin.y);
+                    const auto probe_pz =
+                        std::fma(
+                            float(probe_z) + 0.5F,
+                            spacing,
+                            origin.z);
+                    const auto interval_max =
+                        params.light_pos_interval[3] *
+                        float(1U << cascade);
+                    const auto interval_min =
+                        cascade == 0U
+                        ? 0.0F
+                        : params.light_pos_interval[3] *
+                            float(1U << (cascade - 1U));
+
                     for (std::uint32_t ray = 0U;
                          ray < settings.rays_per_probe;
                          ++ray) {
@@ -1646,11 +1753,44 @@ struct I001Runtime::Impl {
                                 base +
                                 cascade * settings.rays_per_probe +
                                 ray];
+                        const auto direction =
+                            i001_ray_direction(ray);
                         if (item.surface_id != first.surface_id ||
                             item.tile_id != first.tile_id ||
                             item.cascade != cascade ||
                             item.ray_index != ray ||
-                            item.output_id != first.output_id + cascade) {
+                            item.output_id !=
+                                first.output_id + cascade ||
+                            item.probe_x != probe_x ||
+                            item.probe_y != probe_y ||
+                            item.probe_z != probe_z ||
+                            std::abs(
+                                item.interval_min -
+                                interval_min) >= 1.0e-5F ||
+                            std::abs(
+                                item.interval_max -
+                                interval_max) >= 1.0e-5F ||
+                            std::abs(
+                                item.dir_x -
+                                direction.x) >= 1.0e-6F ||
+                            std::abs(
+                                item.dir_y -
+                                direction.y) >= 1.0e-6F ||
+                            std::abs(
+                                item.dir_z -
+                                direction.z) >= 1.0e-6F ||
+                            !within_float_ulps(
+                                item.probe_px,
+                                probe_px,
+                                2) ||
+                            !within_float_ulps(
+                                item.probe_py,
+                                probe_py,
+                                2) ||
+                            !within_float_ulps(
+                                item.probe_pz,
+                                probe_pz,
+                                2)) {
                             bounded_ok = false;
                             break;
                         }
