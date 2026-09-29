@@ -17,6 +17,7 @@
 #include "../lane_b_traversal/hierarchical_stratabrick.hpp"
 #include "../lane_b_traversal/traversal_common.hpp"
 #include "../lane_e_dynamic_geometry/e003_instance_payload.hpp"
+#include "../lane_e_dynamic_geometry/e004_deforming_payload.hpp"
 #include "vk_init.hpp"
 
 #include <algorithm>
@@ -200,6 +201,7 @@ static_assert(sizeof(InvalidationPush) == 16);
     return value == I001Variant::CombinedHwrt ||
            value == I001Variant::RigidInstanceHwrtUpdate ||
            value == I001Variant::RigidInstanceHwrtBuild ||
+           value == I001Variant::DeformingLocalHwrt ||
            value == I001Variant::DepthReuseHwrt ||
            value == I001Variant::BoundedHwrt;
 }
@@ -231,6 +233,16 @@ static_assert(sizeof(InvalidationPush) == 16);
 [[nodiscard]] bool uses_rigid_instance_software_quantized(
     I001Variant value) noexcept {
     return value == I001Variant::RigidInstanceSoftwareQuantized;
+}
+
+[[nodiscard]] bool uses_deforming_local_hwrt(
+    I001Variant value) noexcept {
+    return value == I001Variant::DeformingLocalHwrt;
+}
+
+[[nodiscard]] bool uses_deforming_local_software(
+    I001Variant value) noexcept {
+    return value == I001Variant::DeformingLocalSoftwareQuantized;
 }
 
 [[nodiscard]] bool uses_quantized(I001Variant value) noexcept {
@@ -589,6 +601,10 @@ const char* i001_variant_name(I001Variant value) noexcept {
         return "rigid-instance-software-binary";
     case I001Variant::RigidInstanceSoftwareQuantized:
         return "rigid-instance-software-quantized";
+    case I001Variant::DeformingLocalHwrt:
+        return "deforming-local-hwrt";
+    case I001Variant::DeformingLocalSoftwareQuantized:
+        return "deforming-local-software-quantized";
     case I001Variant::CombinedSoftware: return "combined-software";
     case I001Variant::DepthReuseHwrt: return "depth-reuse-hwrt";
     case I001Variant::BoundedHwrt: return "bounded-hwrt";
@@ -622,6 +638,10 @@ I001Variant i001_parse_variant(const std::string& value) {
         return I001Variant::RigidInstanceSoftwareBinary;
     if (value == "rigid-instance-software-quantized")
         return I001Variant::RigidInstanceSoftwareQuantized;
+    if (value == "deforming-local-hwrt")
+        return I001Variant::DeformingLocalHwrt;
+    if (value == "deforming-local-software-quantized")
+        return I001Variant::DeformingLocalSoftwareQuantized;
     if (value == "combined-software") return I001Variant::CombinedSoftware;
     if (value == "depth-reuse-hwrt") return I001Variant::DepthReuseHwrt;
     if (value == "bounded-hwrt") return I001Variant::BoundedHwrt;
@@ -658,6 +678,9 @@ struct I001Runtime::Impl {
 
     lane_e::E003BinaryPayload instance_binary_payload;
     lane_e::E003QuantizedPayload instance_quantized_payload;
+    lane_e::E004QuantizedSetup deforming_local_setup;
+    std::unique_ptr<HierarchicalStrataBrick> deforming_local_hierarchy;
+    std::vector<std::uint32_t> deforming_local_indices;
     std::unique_ptr<GpuSoftwareBvhData> software_cpu;
     std::unique_ptr<HierarchicalStrataBrick> hierarchy_cpu;
     lane_b::B003QuantizedMicroPayload quant_payload;
