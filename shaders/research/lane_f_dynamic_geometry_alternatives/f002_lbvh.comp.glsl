@@ -95,13 +95,13 @@ int common_prefix(int i, int j) {
 }
 
 int find_split(int first, int last) {
-    int common = common_prefix(first, last);
+    int common_bits = common_prefix(first, last);
     int split = first;
     int step = last - first;
     do {
         step = (step + 1) >> 1;
         int candidate = split + step;
-        if (candidate < last && common_prefix(first, candidate) > common) {
+        if (candidate < last && common_prefix(first, candidate) > common_bits) {
             split = candidate;
         }
     } while (step > 1);
