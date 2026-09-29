@@ -87,12 +87,12 @@ void main() {
     if (item.ray_index != 0u) return;
     uvec2 merged = accum.values[item.output_id];
     if (merged.y == 0u) return;
-    uint sample = (merged.x + merged.y / 2u) / merged.y;
+    uint sample_value = (merged.x + merged.y / 2u) / merged.y;
     ivec4 key = ivec4(
         item.probe_x, item.probe_y, item.probe_z, int(item.cascade));
     uint slot = acquire_slot(key);
     if (slot == 0xffffffffu) return;
-    atomicAdd(slots.values[slot].data.y, sample);
+    atomicAdd(slots.values[slot].data.y, sample_value);
     atomicAdd(slots.values[slot].data.z, 1u);
     atomicAdd(stats.data[1], 1u);
 }
