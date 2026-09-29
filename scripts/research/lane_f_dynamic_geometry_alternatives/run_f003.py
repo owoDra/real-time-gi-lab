@@ -529,6 +529,14 @@ def main() -> int:
                 )
                 if identity is None:
                     identity = device
+                    if (
+                        validation_payload.get("driver_name") != device.get("driver_name")
+                        or validation_payload.get("driver_info") != device.get("driver_info")
+                        or validation_payload.get("api_version") != device.get("api_version")
+                    ):
+                        raise RuntimeError(
+                            "F003 timing driver/API differs from the passing validation artifact"
+                        )
                 elif (
                     device.get("device") != identity.get("device")
                     or device.get("driver_name") != identity.get("driver_name")
