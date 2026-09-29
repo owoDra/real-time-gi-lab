@@ -17,6 +17,8 @@ enum class I001Variant {
     RigidInstanceSoftwareQuantized,
     DeformingLocalHwrt,
     DeformingLocalSoftwareQuantized,
+    LaneEFinalHwrt,
+    LaneEFinalSoftware,
     CombinedSoftware,
     DepthReuseHwrt,
     BoundedHwrt,
