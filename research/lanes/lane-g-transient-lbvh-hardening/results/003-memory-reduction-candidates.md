@@ -113,4 +113,33 @@ but cannot by itself authorize G004/G005 promotion timing or a Lane E replacemen
 
 ## Result
 
-Pending target-GPU artifacts.
+Measurement commit: `381f68c2ce47c1593678f858c905b7607cdf231f`.
+
+Target evidence passed every deterministic G003a gate:
+
+- exact target GPU and validation for all 15 rows;
+- correctness PASS and zero storage failures for all rows;
+- byte-exact allocation attribution;
+- G001 sparse anchors reproduced exactly;
+- sparse-stress true lifetime peak: **104,595,424 B / 2.708583x vanilla**;
+- sparse-moving true lifetime peak: **104,233,440 B / 2.699209x vanilla**;
+- sparse peak improvements vs unchanged LBVH: **12.16%** and **15.72%**;
+- no required memory regression >10%.
+
+The released setup-only bytes are absent from runtime residency but remain in
+the lifecycle census, and the final peak remains
+`max(setup_peak_bytes, runtime_resident_bytes)`.
+
+### Disposition
+
+**Retained for G004 semantic/integration hardening on deterministic
+correctness+memory evidence.**
+
+This is not a formal timing promotion. G002 did not establish a safe
+decision-valid timing protocol, so the G003 moving-rigid <=5% complete-GPU
+retention gate remains **INCONCLUSIVE / UNEVALUATED**, not PASS.
+
+G004 may revalidate semantics with this single retained memory candidate. G005
+may run deterministic correctness/memory replay, but no timing superiority or
+Lane-E replacement claim is allowed unless a later safe accepted timing
+protocol is separately frozen.

@@ -21,8 +21,8 @@
       "id": "G003",
       "name": "memory-reduction-candidates",
       "result": "003-memory-reduction-candidates.md",
-      "status": "g003a-pending-target-gpu-evidence",
-      "decision": "immutable-static-hwrt-build-input-release-under-test"
+      "status": "memory-correctness-retained-timing-inconclusive",
+      "decision": "retain-g003a-for-g004-semantic-hardening-no-formal-timing-promotion"
     }
   ]
 }
