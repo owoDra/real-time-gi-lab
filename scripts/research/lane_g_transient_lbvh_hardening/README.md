@@ -146,3 +146,25 @@ mise exec -- python \
 
 This run uses Vulkan validation but does not modify GPU power/clock state.
 Timing fields are diagnostic-only.
+
+
+## G005 final deterministic replay
+
+GPU-independent checks:
+
+```bash
+mise exec -- python -m unittest \
+  scripts/research/lane_g_transient_lbvh_hardening/test_run_g005.py
+mise run research:check
+mise run build
+```
+
+Target replay:
+
+```bash
+mise exec -- python \
+  scripts/research/lane_g_transient_lbvh_hardening/run_g005.py
+```
+
+This executes 60 validation rows (5 run-local variants x 12 scenarios).
+Timing is diagnostic-only; no GPU power/clock manipulation is used.
