@@ -889,6 +889,19 @@ struct I001Runtime::Impl {
                         PHOS_GI_LANE_B_SHADER_DIR,
                         "lane_b_b002_hwrt.spv"),
                     false);
+            } else if (uses_deforming_local_hwrt(options.variant)) {
+                if (options.scenario != I001Scenario::DeformingControl) {
+                    fail("I001 deforming-local HWRT requires deforming-control");
+                }
+                hwrt = std::make_unique<B002HwrtTraversal>(
+                    context,
+                    b_scene.triangles,
+                    moving.primitives,
+                    shader_path(
+                        PHOS_GI_LANE_B_SHADER_DIR,
+                        "lane_b_b002_hwrt.spv"),
+                    false,
+                    true);
             } else {
                 hwrt = std::make_unique<B002HwrtTraversal>(
                     context,
@@ -898,6 +911,62 @@ struct I001Runtime::Impl {
                         "lane_b_b002_hwrt.spv"),
                     false);
             }
+            return;
+        }
+
+        if (uses_deforming_local_software(options.variant)) {
+            if (options.scenario != I001Scenario::DeformingControl) {
+                fail("I001 deforming-local software requires deforming-control");
+            }
+            const auto segment_size =
+                lane_b::b002_segment_size(b_scene);
+            const auto target_geometry =
+                deformed_geometry(
+                    b_scene.triangles,
+                    moving.primitives,
+                    moving.delta_x);
+            deforming_local_setup =
+                lane_e::make_e004_quantized_setup(
+                    b_scene.triangles,
+                    moving.primitives,
+                    target_geometry,
+                    segment_size);
+            deforming_local_hierarchy =
+                std::make_unique<HierarchicalStrataBrick>(
+                    deforming_local_setup.dynamic_triangles,
+                    segment_size);
+            deforming_local_indices.resize(
+                deforming_local_setup.dynamic_triangles.size());
+            std::iota(
+                deforming_local_indices.begin(),
+                deforming_local_indices.end(),
+                0U);
+
+            triangle_buffer = context.upload_device_buffer(
+                deforming_local_setup.triangles.data(),
+                deforming_local_setup.triangles.size() *
+                    sizeof(GpuTriangle),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            instance_nodes = context.upload_device_buffer(
+                deforming_local_setup.nodes.data(),
+                deforming_local_setup.nodes.size() *
+                    sizeof(lane_b::B003GpuQuantNode),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            instance_order = context.upload_device_buffer(
+                deforming_local_setup.ordered_primitives.data(),
+                deforming_local_setup.ordered_primitives.size() *
+                    sizeof(std::uint32_t),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            instance_hash = context.upload_device_buffer(
+                deforming_local_setup.hash_table.data(),
+                deforming_local_setup.hash_table.size() *
+                    sizeof(lane_b::GpuSegmentHashEntry),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            instance_table = context.upload_device_buffer(
+                deforming_local_setup.instances.data(),
+                deforming_local_setup.instances.size() *
+                    sizeof(lane_e::E003GpuInstance),
+                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
             return;
         }
 
@@ -1209,7 +1278,8 @@ struct I001Runtime::Impl {
             traversal_stage = std::make_unique<I001ComputeStage>(
                 context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"),
                 bindings, sizeof(std::uint32_t));
-        } else if (uses_rigid_instance_software(options.variant)) {
+        } else if (uses_rigid_instance_software(options.variant) ||
+                   uses_deforming_local_software(options.variant)) {
             const std::array<I001Binding, 8> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
                 {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &triangle_buffer},
@@ -1294,7 +1364,8 @@ struct I001Runtime::Impl {
             memory_stats.scratch_bytes = hwrt->setup_stats().scratch_bytes;
         } else {
             memory_stats.persistent_bytes += allocation(triangle_buffer);
-            if (uses_rigid_instance_software(options.variant)) {
+            if (uses_rigid_instance_software(options.variant) ||
+                uses_deforming_local_software(options.variant)) {
                 memory_stats.persistent_bytes +=
                     allocation(instance_nodes) +
                     allocation(instance_order) +
