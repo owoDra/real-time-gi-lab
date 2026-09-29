@@ -18,7 +18,7 @@ VARIANTS = (
     "combined-software",
     "depth-reuse-hwrt",
 )
-SCENARIOS = ("static", "camera-motion", "light-motion")
+SCENARIOS = ("static", "camera-motion", "light-motion", "moving-rigid")
 
 
 def git(*args: str) -> str:
@@ -203,7 +203,6 @@ def main() -> int:
         "scenarios": list(SCENARIOS),
         "medians": medians,
         "pending_before_i001_closeout": [
-            "moving-rigid-geometry integrated maintenance",
             "sparse stress",
             "dense stress",
             "large-world stress",
