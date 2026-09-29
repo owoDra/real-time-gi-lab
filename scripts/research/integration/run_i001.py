@@ -275,6 +275,22 @@ def main() -> int:
                 "validation run did not force overflow"
             )
 
+        validation_summary = {
+            "schema_version": 1,
+            "branch": branch,
+            "git_commit": commit,
+            "case_count":
+                len(VARIANTS) * len(SCENARIOS)
+                + len(STRESS_VARIANTS) * len(STRESS_SCENARIOS)
+                + 1,
+            "passed": not validation_failures,
+            "failures": validation_failures,
+        }
+        (root / "i001-validation-summary.json").write_text(
+            json.dumps(validation_summary, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
         if validation_failures:
             raise RuntimeError(
                 "I001 validation matrix failed:\n  - "
