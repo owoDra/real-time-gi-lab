@@ -23,9 +23,13 @@ Current checkpoint:
 - F006: correctness PASS; timing INCONCLUSIVE after the one permitted full
   rerun still had an unstable extended-vanilla class. Diagnostic-only evidence
   strongly favors LBVH over grid for all four controlled update classes.
-- F007: final representative + stable-stress + dynamic-stress implementation,
-  frozen config, runner and gate tests are committed before first accepted
-  timing; target validation is the next and final pre-timing checkpoint.
+- F007: correctness PASS; timing repeatability INCONCLUSIVE after the permitted
+  identical rerun also remained unstable. No candidate is promoted: both
+  transient candidates exceed the frozen sparse-regime hard memory ceiling,
+  and Grid additionally has a decision-valid dynamic-stress timing failure.
+- Lane F v1: COMPLETE. Selected architecture: none. Transient LBVH remains the
+  strongest follow-up direction, but requires a new pre-timing plan revision
+  focused on sparse-regime memory/integration before another promotion attempt.
 
 F003 and F005 preserve the same fixed dynamic classification: the F001/I001
 selected moving-rigid primitive set is excluded from persistent static HWRT
