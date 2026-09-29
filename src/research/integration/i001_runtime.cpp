@@ -1306,8 +1306,14 @@ struct I001Runtime::Impl {
         i001_compute_barrier(context, command);
         stamp(10);
 
+        const StoragePush storage_resolve_push{
+            storage_capacity - 1U, kHashMaxProbe, frame_id, 0U};
         resolve_stage->record_indirect(
-            command, indirect.buffer, 0, &storage_push, sizeof(storage_push));
+            command,
+            indirect.buffer,
+            0,
+            &storage_resolve_push,
+            sizeof(storage_resolve_push));
         i001_compute_barrier(context, command);
         stamp(11);
 
