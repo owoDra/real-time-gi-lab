@@ -1,5 +1,14 @@
 {
   "schema_version": 1,
   "lane": "lane-f-dynamic-geometry-alternatives",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "F001",
+      "name": "workload-census-baseline-replay",
+      "result": "001-workload-census-baseline-replay.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "decision": "baseline-repeatability-inconclusive"
+    }
+  ]
 }
