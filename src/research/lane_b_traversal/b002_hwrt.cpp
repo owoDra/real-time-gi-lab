@@ -560,56 +560,53 @@ HwrtUpdateStats B002HwrtTraversal::update_partition_geometry(
         fail("B002 partition geometry update must match the partition primitive order");
     }
 
-    struct UploadRecord {
-        std::array<Vertex3, 3> vertices{};
-        GpuTriangle triangle{};
-        std::size_t ordered_index{};
-    };
-
-    std::vector<UploadRecord> records;
-    records.reserve(moved_primitives.size());
-    for (std::size_t local = 0; local < moved_primitives.size(); ++local) {
-        const auto primitive = moved_primitives[local];
+    std::vector<Vertex3> vertices;
+    vertices.reserve(moved_primitives.size() * 3U);
+    std::vector<GpuTriangle> metadata;
+    metadata.reserve(moved_primitives.size());
+    for (const auto primitive : moved_primitives) {
         const auto& triangle = triangles.at(primitive);
-        records.push_back({
-            {{
-                {triangle.v0.x, triangle.v0.y, triangle.v0.z},
-                {triangle.v1.x, triangle.v1.y, triangle.v1.z},
-                {triangle.v2.x, triangle.v2.y, triangle.v2.z},
-            }},
-            to_gpu_triangle(triangle),
-            static_triangle_count_ + local,
-        });
+        vertices.push_back({
+            triangle.v0.x,
+            triangle.v0.y,
+            triangle.v0.z});
+        vertices.push_back({
+            triangle.v1.x,
+            triangle.v1.y,
+            triangle.v1.z});
+        vertices.push_back({
+            triangle.v2.x,
+            triangle.v2.y,
+            triangle.v2.z});
+        metadata.push_back(to_gpu_triangle(triangle));
     }
 
-    std::vector<B002BufferUpdate> vertex_updates;
-    std::vector<B002BufferUpdate> metadata_updates;
-    vertex_updates.reserve(records.size());
-    metadata_updates.reserve(records.size());
-    for (const auto& record : records) {
-        vertex_updates.push_back({
-            VkDeviceSize(record.ordered_index) *
-                VkDeviceSize(3U * sizeof(Vertex3)),
-            record.vertices.data(),
-            VkDeviceSize(record.vertices.size() * sizeof(Vertex3)),
-        });
-        metadata_updates.push_back({
-            VkDeviceSize(record.ordered_index) *
-                VkDeviceSize(sizeof(GpuTriangle)),
-            &record.triangle,
+    const B002BufferUpdate vertex_update{
+        VkDeviceSize(static_triangle_count_) *
+            VkDeviceSize(3U * sizeof(Vertex3)),
+        vertices.data(),
+        VkDeviceSize(vertices.size() * sizeof(Vertex3)),
+    };
+    const B002BufferUpdate metadata_update{
+        VkDeviceSize(static_triangle_count_) *
             VkDeviceSize(sizeof(GpuTriangle)),
-        });
-    }
+        metadata.data(),
+        VkDeviceSize(metadata.size() * sizeof(GpuTriangle)),
+    };
 
     const auto upload_start = Clock::now();
     const auto vertex_upload_gpu_us =
         context_.update_device_buffer_timed(
             vertex_buffer_,
-            vertex_updates);
+            std::span<const B002BufferUpdate>(
+                &vertex_update,
+                1));
     const auto metadata_upload_gpu_us =
         context_.update_device_buffer_timed(
             triangle_buffer_,
-            metadata_updates);
+            std::span<const B002BufferUpdate>(
+                &metadata_update,
+                1));
     const auto upload_us = elapsed_us(upload_start);
 
     const auto blas_us = update_dynamic_blas();
