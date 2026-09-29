@@ -68,6 +68,12 @@ Record as separate fields wherever applicable:
 - complete moving frame;
 - complete dynamic-update wall time.
 
+For E001 summaries, the serial complete dynamic-frame boundary is
+`dynamic_update_wall_us + complete_gpu_us - traversal_maintenance_gpu_us`.
+The subtraction avoids counting the separately timed dynamic-maintenance GPU
+work twice because it is already included in both the synchronous update wall
+and I001's `complete_gpu_us`.
+
 Setup remains separate from per-frame maintenance.
 
 ## Correctness and timing order
