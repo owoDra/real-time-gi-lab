@@ -49,6 +49,26 @@ class G003RunnerTests(unittest.TestCase):
             },
         )
 
+    def test_g001_sparse_anchors_are_frozen(self) -> None:
+        self.assertEqual(
+            mod.G001_SPARSE_ANCHORS["sparse-stress"],
+            {
+                "baseline_peak_bytes": 119_078_592,
+                "vanilla_peak_bytes": 38_616_288,
+                "released_setup_only_bytes": 46_202_400,
+                "expected_hardened_peak_bytes": 72_876_192,
+            },
+        )
+        self.assertEqual(
+            mod.G001_SPARSE_ANCHORS["sparse-moving"],
+            {
+                "baseline_peak_bytes": 123_668_160,
+                "vanilla_peak_bytes": 38_616_288,
+                "released_setup_only_bytes": 46_017_696,
+                "expected_hardened_peak_bytes": 77_650_464,
+            },
+        )
+
     def test_f007_hwrt_baseline_snapshot_is_byte_exact(self) -> None:
         self.assertEqual(
             git_blob_sha(BASELINE / "b002_hwrt.hpp"),
