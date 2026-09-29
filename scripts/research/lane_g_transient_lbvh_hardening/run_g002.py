@@ -5,7 +5,6 @@ import argparse
 import csv
 import glob
 import json
-import math
 import os
 import statistics
 import subprocess
@@ -201,6 +200,28 @@ def run_process(
     if len(rows) != measured_frames:
         raise RuntimeError(
             f"G002 measured frame count mismatch: {len(rows)} != {measured_frames}"
+        )
+
+    dynamic = scenario in {
+        "moving-rigid", "sparse-moving", "dense-moving",
+        "large-world-moving", "vertical-world-moving",
+    }
+    first = rows[0]
+    if dynamic:
+        if int(first["moved_primitives"]) != 796:
+            raise RuntimeError(
+                f"G002 dynamic transition identity mismatch for {variant}/{scenario}: "
+                f"moved={first['moved_primitives']}"
+            )
+        if int(first["segment_membership_changes"]) <= 0:
+            raise RuntimeError(
+                f"G002 dynamic transition did not change segment membership for "
+                f"{variant}/{scenario}"
+            )
+    elif int(first["moved_primitives"]) != 0:
+        raise RuntimeError(
+            f"G002 stable scenario unexpectedly moved primitives for "
+            f"{variant}/{scenario}"
         )
 
     enriched: list[dict[str, object]] = []

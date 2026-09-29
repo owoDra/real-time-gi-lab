@@ -26,3 +26,24 @@ worktree and exact device
 allocation census differs from the F007 peak accounting by one byte, if a
 required ownership role is missing, or if a Vulkan allocation lacks logical
 payload size.
+
+## G002
+
+GPU-independent checks:
+
+```bash
+mise exec -- python -m unittest scripts/research/lane_g_transient_lbvh_hardening/test_run_g002.py
+mise run research:check
+mise run build
+```
+
+Target diagnostic campaign:
+
+```bash
+mise exec -- python scripts/research/lane_g_transient_lbvh_hardening/run_g002.py --phase all
+```
+
+G002 timing runs intentionally disable validation/quality readback, matching the
+F007 timing boundary. G001 already established correctness on the same runtime
+architecture. System telemetry is best-effort: unavailable sysfs probes are
+recorded as null rather than invalidating the timing campaign.
