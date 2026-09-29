@@ -56,7 +56,9 @@ class G003RunnerTests(unittest.TestCase):
                 "baseline_peak_bytes": 119_078_592,
                 "vanilla_peak_bytes": 38_616_288,
                 "released_setup_only_bytes": 46_202_400,
-                "expected_hardened_peak_bytes": 72_876_192,
+                "expected_hardened_runtime_resident_bytes": 72_876_192,
+                "expected_hardened_setup_peak_bytes": 104_595_424,
+                "expected_hardened_peak_bytes": 104_595_424,
             },
         )
         self.assertEqual(
@@ -65,7 +67,9 @@ class G003RunnerTests(unittest.TestCase):
                 "baseline_peak_bytes": 123_668_160,
                 "vanilla_peak_bytes": 38_616_288,
                 "released_setup_only_bytes": 46_017_696,
-                "expected_hardened_peak_bytes": 77_650_464,
+                "expected_hardened_runtime_resident_bytes": 77_650_464,
+                "expected_hardened_setup_peak_bytes": 104_233_440,
+                "expected_hardened_peak_bytes": 104_233_440,
             },
         )
 
@@ -98,6 +102,18 @@ class G003RunnerTests(unittest.TestCase):
             source,
         )
         self.assertNotIn("HwrtBuildInputRetention", source)
+
+    def test_immutable_setup_precedes_shared_allocations(self) -> None:
+        source = RUNTIME_CPP.read_text(encoding="utf-8")
+        early = source.index(
+            "if (uses_hardened_transient_lbvh(options.variant))"
+        )
+        shared = source.index("surfaces = context.upload_device_buffer(")
+        self.assertLess(early, shared)
+        self.assertIn(
+            "peak_resident_bytes =\n            std::max(",
+            source,
+        )
 
     def test_g003_does_not_require_power_state_manipulation(self) -> None:
         runner = PATH.with_name("run_g003.py").read_text(encoding="utf-8")
