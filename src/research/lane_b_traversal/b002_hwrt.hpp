@@ -106,7 +106,8 @@ private:
     [[nodiscard]] double build_blas_range(
         VkDeviceAddress vertex_address,
         std::size_t triangle_count,
-        AccelerationStructure& target);
+        AccelerationStructure& target,
+        bool allow_update);
     [[nodiscard]] double build_tlas();
     [[nodiscard]] double update_blas(std::size_t triangle_count);
     [[nodiscard]] double update_tlas();
