@@ -113,12 +113,6 @@ G003ImmutableHwrtTraversal::G003ImmutableHwrtTraversal(
     setup_stats_.blas_build_us = build_blas(triangles);
     setup_stats_.tlas_build_us = build_tlas();
 
-    setup_stats_.released_build_only_bytes =
-        static_cast<std::size_t>(
-            vertex_buffer_.allocation_size +
-            instance_buffer_.allocation_size +
-            scratch_.allocation_size);
-
     // submit_build() waits its fence. After both AS builds complete, traversal
     // references only BLAS/TLAS storage and triangle metadata.
     context_.destroy_buffer(scratch_);

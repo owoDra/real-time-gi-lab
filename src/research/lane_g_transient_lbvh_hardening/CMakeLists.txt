@@ -79,6 +79,7 @@ add_custom_target(phos-lane-g-g001-shaders DEPENDS
 add_executable(phos-lane-g-g001
   g001_benchmark.cpp
   i001_runtime.cpp
+  g003_immutable_hwrt.cpp
   i001_compute.cpp
   f003_transient_lbvh.cpp
   f005_transient_grid.cpp
@@ -123,6 +124,7 @@ endif()
 add_executable(phos-lane-g-g002
   g002_benchmark.cpp
   i001_runtime.cpp
+  g003_immutable_hwrt.cpp
   i001_compute.cpp
   f003_transient_lbvh.cpp
   f005_transient_grid.cpp
@@ -168,6 +170,7 @@ endif()
 add_executable(phos-lane-g-g003
   g003_benchmark.cpp
   i001_runtime.cpp
+  g003_immutable_hwrt.cpp
   i001_compute.cpp
   f003_transient_lbvh.cpp
   f005_transient_grid.cpp
