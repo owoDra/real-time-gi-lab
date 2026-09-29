@@ -782,10 +782,18 @@ struct I001Runtime::Impl {
         settings.cascade_count = 4;
         settings.rays_per_probe = 8;
         params = lane_a::build_a001_params(a_scene, settings);
+        if (uses_lane_e_final(options.variant) &&
+            !lane_e_final_supported_scenario(options.scenario)) {
+            fail("I001 Lane E final variants only support the E005 replay scenarios");
+        }
         if (options.scenario == I001Scenario::MovingRigid) {
             moving = choose_moving_selection(b_scene);
         } else if (options.scenario == I001Scenario::DeformingControl) {
             moving = choose_deforming_selection(b_scene);
+        } else if (uses_lane_e_final(options.variant)) {
+            // E005 keeps one idle dynamic object partitioned in stable regimes
+            // so ownership/traversal/memory overhead remains visible.
+            moving = choose_moving_selection(b_scene);
         }
 
         if (uses_bounded(options.variant)) {
