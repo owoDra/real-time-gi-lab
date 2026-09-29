@@ -79,6 +79,8 @@ struct I001Quality {
     std::size_t traversal_runtime_errors{};
     std::size_t missing_probes{};
     std::size_t leaked_probes{};
+    std::size_t stale_storage_slots{};
+    std::size_t resolved_output_mismatches{};
     double radiance_rms_error{};
     double radiance_max_abs_error{};
     bool passed{};
