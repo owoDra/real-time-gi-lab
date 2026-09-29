@@ -789,7 +789,15 @@ struct I001Runtime::Impl {
             {9, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
         }};
         producer_stage = std::make_unique<I001ComputeStage>(
-            context, shader_path(PHOS_GI_LANE_A_SHADER_DIR, "lane_a_producer.spv"), producer_bindings);
+            context,
+            shader_path(
+                uses_bounded(options.variant)
+                    ? PHOS_GI_INTEGRATION_SHADER_DIR
+                    : PHOS_GI_LANE_A_SHADER_DIR,
+                uses_bounded(options.variant)
+                    ? "i001_bounded_producer.spv"
+                    : "lane_a_producer.spv"),
+            producer_bindings);
 
         const std::array<I001Binding, 2> clamp_bindings{{
             {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
