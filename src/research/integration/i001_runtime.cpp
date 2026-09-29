@@ -845,7 +845,8 @@ struct I001Runtime::Impl {
         for (auto* buffer : {
                  &storage_stats, &storage_slots, &uniform, &resolved, &accum,
                  &contributions, &hits, &rays, &indirect, &work, &counters,
-                 &owners, &depth, &surfaces, &quant_hash, &quant_order,
+                 &owners, &depth, &surfaces, &instance_table, &instance_hash,
+                 &instance_order, &instance_nodes, &quant_hash, &quant_order,
                  &quant_nodes, &software_order, &software_nodes, &triangle_buffer}) {
             context.destroy_buffer(*buffer);
         }
@@ -873,6 +874,78 @@ struct I001Runtime::Impl {
                         PHOS_GI_LANE_B_SHADER_DIR,
                         "lane_b_b002_hwrt.spv"),
                     false);
+            }
+            return;
+        }
+
+        if (uses_rigid_instance_software(options.variant)) {
+            if (options.scenario != I001Scenario::MovingRigid) {
+                fail("I001 rigid-instance software variants require moving-rigid");
+            }
+            const auto segment_size =
+                lane_b::b002_segment_size(b_scene);
+            if (uses_rigid_instance_software_binary(options.variant)) {
+                instance_binary_payload =
+                    lane_e::make_e003_binary_payload(
+                        b_scene.triangles,
+                        moving.primitives,
+                        segment_size);
+                triangle_buffer = context.upload_device_buffer(
+                    instance_binary_payload.triangles.data(),
+                    instance_binary_payload.triangles.size() *
+                        sizeof(GpuTriangle),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_nodes = context.upload_device_buffer(
+                    instance_binary_payload.nodes.data(),
+                    instance_binary_payload.nodes.size() *
+                        sizeof(lane_b::GpuBvhNode),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_order = context.upload_device_buffer(
+                    instance_binary_payload.ordered_primitives.data(),
+                    instance_binary_payload.ordered_primitives.size() *
+                        sizeof(std::uint32_t),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_hash = context.upload_device_buffer(
+                    instance_binary_payload.hash_table.data(),
+                    instance_binary_payload.hash_table.size() *
+                        sizeof(lane_b::GpuSegmentHashEntry),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_table = context.upload_device_buffer(
+                    instance_binary_payload.instances.data(),
+                    instance_binary_payload.instances.size() *
+                        sizeof(lane_e::E003GpuInstance),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            } else {
+                instance_quantized_payload =
+                    lane_e::make_e003_quantized_payload(
+                        b_scene.triangles,
+                        moving.primitives,
+                        segment_size);
+                triangle_buffer = context.upload_device_buffer(
+                    instance_quantized_payload.triangles.data(),
+                    instance_quantized_payload.triangles.size() *
+                        sizeof(GpuTriangle),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_nodes = context.upload_device_buffer(
+                    instance_quantized_payload.nodes.data(),
+                    instance_quantized_payload.nodes.size() *
+                        sizeof(lane_b::B003GpuQuantNode),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_order = context.upload_device_buffer(
+                    instance_quantized_payload.ordered_primitives.data(),
+                    instance_quantized_payload.ordered_primitives.size() *
+                        sizeof(std::uint32_t),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_hash = context.upload_device_buffer(
+                    instance_quantized_payload.hash_table.data(),
+                    instance_quantized_payload.hash_table.size() *
+                        sizeof(lane_b::GpuSegmentHashEntry),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                instance_table = context.upload_device_buffer(
+                    instance_quantized_payload.instances.data(),
+                    instance_quantized_payload.instances.size() *
+                        sizeof(lane_e::E003GpuInstance),
+                    VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
             }
             return;
         }
@@ -1113,6 +1186,26 @@ struct I001Runtime::Impl {
             traversal_stage = std::make_unique<I001ComputeStage>(
                 context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_hwrt.spv"),
                 bindings, sizeof(std::uint32_t));
+        } else if (uses_rigid_instance_software(options.variant)) {
+            const std::array<I001Binding, 8> bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
+                {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &triangle_buffer},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &instance_nodes},
+                {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &instance_order},
+                {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &instance_hash},
+                {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &instance_table},
+                {6, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hits},
+                {7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+            }};
+            traversal_stage = std::make_unique<I001ComputeStage>(
+                context,
+                shader_path(
+                    PHOS_GI_INTEGRATION_SHADER_DIR,
+                    uses_rigid_instance_software_binary(options.variant)
+                        ? "e003_instance_binary.spv"
+                        : "e003_instance_quantized.spv"),
+                bindings,
+                sizeof(lane_e::E003TraversalPush));
         } else if (uses_quantized(options.variant)) {
             const std::array<I001Binding, 7> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
@@ -1178,7 +1271,13 @@ struct I001Runtime::Impl {
             memory_stats.scratch_bytes = hwrt->setup_stats().scratch_bytes;
         } else {
             memory_stats.persistent_bytes += allocation(triangle_buffer);
-            if (uses_quantized(options.variant)) {
+            if (uses_rigid_instance_software(options.variant)) {
+                memory_stats.persistent_bytes +=
+                    allocation(instance_nodes) +
+                    allocation(instance_order) +
+                    allocation(instance_hash) +
+                    allocation(instance_table);
+            } else if (uses_quantized(options.variant)) {
                 memory_stats.persistent_bytes +=
                     allocation(quant_nodes) + allocation(quant_order) + allocation(quant_hash);
             } else {
