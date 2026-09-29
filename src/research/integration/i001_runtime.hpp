@@ -20,6 +20,7 @@ enum class I001Scenario {
     Static,
     CameraMotion,
     LightMotion,
+    MovingRigid,
 };
 
 [[nodiscard]] const char* i001_variant_name(I001Variant value) noexcept;
@@ -33,6 +34,8 @@ struct I001FrameTimings {
     double visibility_reuse_us{};
     double producer_us{};
     double ray_prepare_us{};
+    double traversal_maintenance_gpu_us{};
+    double dynamic_update_wall_us{};
     double traversal_us{};
     double radiance_us{};
     double merge_us{};
