@@ -1,6 +1,6 @@
 # I001 — dynamic end-to-end GI integration gate
 
-Status: protocol frozen; implementation pending
+Status: protocol frozen; implementation target-run-ready; target evidence pending
 
 ## Question
 
@@ -192,3 +192,90 @@ Formal target runs use `mise run research:record --lane integration-gate
 I001 concludes only after implementation, validation, repeated target timing,
 quality/reference evidence and a committed result/index entry. No PR or merge
 is part of this experiment.
+
+
+## Target-ready implementation checkpoint
+
+The implementation is complete enough for the first formal target run. No
+performance conclusion has been drawn from implementation-only evidence.
+
+The composed runtime uses one Vulkan device/queue and records the measured frame
+as a connected GPU pipeline:
+
+1. A001 visibility/depth or the D001 depth-reuse boundary;
+2. A001 natural owner/producer emission with no global reorder;
+3. GPU work-item to ray conversion;
+4. selected traversal path;
+5. deterministic hit-derived radiance;
+6. merge;
+7. per-probe open-addressed sparse-hash update;
+8. stale-entry invalidation;
+9. resolved probe output.
+
+The moving-rigid Sponza case deliberately selects a real mesh instance and a
+translation that changes StrataBrick segment membership. HWRT measures the
+accepted BLAS/TLAS update path. The vanilla software control rebuilds its BVH.
+The B003 fallback performs membership update, affected hierarchy rebuild,
+quantized Micro BVH8 regeneration/upload, and traversal. Moving primitive count
+and segment-membership-change count are written into every target row.
+
+Stress definitions were fixed before target timing:
+
+- sparse: Sponza at 64 x 36 visibility tiles;
+- dense: Sponza at 256 x 144 visibility tiles;
+- large-world: identical Sponza geometry translated by +1e6 X / -1e6 Z;
+- vertical-world: identical Sponza geometry scaled 16x on Y.
+
+These are mechanism/stability stresses only; they do not replace the
+representative Sponza static/camera/light/moving evidence.
+
+The bounded variant uses the integrated clamp/overflow path rather than D005's
+rejected owner-slot staging implementation. The formal matrix also forces a
+512-owner overflow and then runs an explicit full-capacity HWRT retry. Retry
+latency and memory are retained as evidence.
+
+Quality validation now covers:
+
+- A001 visibility and producer semantic parity;
+- bounded partial-block owner/order/range safety under forced overflow;
+- shared Hit-contract parity against the software-BVH reference;
+- sparse-hash insert/update/invalidate/resolve behavior;
+- missing/leaked/stale probes;
+- final resolved-output parity;
+- frame-to-frame temporal RMS/max parity.
+
+The diagnostic validation matrix runs before validation-disabled accepted
+timing. Each accepted process records one warmup frame, one measured
+static/transition frame, setup wall time, exact device/driver/API, memory,
+churn, quality, and Git provenance. Process-level repeats are aggregated by the
+formal runner.
+
+Formal target sequence:
+
+```bash
+git checkout research-integration-gate
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane integration-gate \
+  --experiment 001-dynamic-end-to-end \
+  --command "python scripts/research/integration/run_i001.py --build-dir build/release --repeats 3"
+```
+
+Expected top-level I001 artifacts include:
+
+- `i001-representative.csv`;
+- `i001-stress.csv`;
+- `i001-overflow-retry.csv`;
+- `i001-representative-summary.json`;
+- normal `metadata.json`, stdout and stderr from `research:record`.
+
+The summary evaluates the already-frozen decision gates mechanically. It does
+not alter a threshold after observing timing.
+
+No DDGI or representative sparse-radiance-cache implementation existed in this
+repository when the protocol was frozen. I001 therefore does not manufacture a
+weaker namesake baseline. That comparison remains unavailable unless a
+semantically comparable implementation is introduced before accepted timing.
