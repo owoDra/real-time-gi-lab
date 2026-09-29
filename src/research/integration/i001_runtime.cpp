@@ -85,6 +85,94 @@ static_assert(sizeof(InvalidationPush) == 16);
     return (count + 63U) / 64U;
 }
 
+[[nodiscard]] std::uint32_t estimated_storage_capacity(
+    const lane_a::SceneSurfaceSet& scene,
+    const lane_a::A001ParamsGpu& params) {
+    const auto tile_count = params.counts[1] * params.counts[2];
+    std::vector<float> depth(
+        tile_count,
+        std::numeric_limits<float>::infinity());
+
+    for (const auto& sample : scene.samples) {
+        const lane_b::Vec3 position{
+            sample.position[0],
+            sample.position[1],
+            sample.position[2],
+        };
+        const lane_b::Vec3 eye{
+            params.camera_pos_near[0],
+            params.camera_pos_near[1],
+            params.camera_pos_near[2],
+        };
+        const auto rel = position - eye;
+        const lane_b::Vec3 forward{
+            params.camera_forward_far[0],
+            params.camera_forward_far[1],
+            params.camera_forward_far[2],
+        };
+        const auto distance = lane_b::dot(rel, forward);
+        if (distance < params.camera_pos_near[3] ||
+            distance > params.camera_forward_far[3]) {
+            continue;
+        }
+
+        const lane_b::Vec3 right{
+            params.camera_right_tan_x[0],
+            params.camera_right_tan_x[1],
+            params.camera_right_tan_x[2],
+        };
+        const lane_b::Vec3 up{
+            params.camera_up_tan_y[0],
+            params.camera_up_tan_y[1],
+            params.camera_up_tan_y[2],
+        };
+        const auto nx =
+            lane_b::dot(rel, right) /
+            (distance * params.camera_right_tan_x[3]);
+        const auto ny =
+            lane_b::dot(rel, up) /
+            (distance * params.camera_up_tan_y[3]);
+        if (std::abs(nx) > 1.0F || std::abs(ny) > 1.0F) {
+            continue;
+        }
+
+        const auto x = std::min(
+            params.counts[1] - 1U,
+            static_cast<std::uint32_t>(
+                std::max(
+                    0.0F,
+                    (nx * 0.5F + 0.5F) *
+                        float(params.counts[1]))));
+        const auto y = std::min(
+            params.counts[2] - 1U,
+            static_cast<std::uint32_t>(
+                std::max(
+                    0.0F,
+                    (ny * 0.5F + 0.5F) *
+                        float(params.counts[2]))));
+        const auto tile = y * params.counts[1] + x;
+        depth[tile] = std::min(depth[tile], distance);
+    }
+
+    const auto visible = static_cast<std::uint64_t>(
+        std::count_if(
+            depth.begin(),
+            depth.end(),
+            [](float value) { return std::isfinite(value); }));
+    const auto expected_outputs =
+        visible * params.counts[3];
+    const auto capped_outputs =
+        std::min<std::uint64_t>(
+            params.limits[2],
+            expected_outputs + expected_outputs / 4U + 16U);
+    const auto requested_slots =
+        std::max<std::uint64_t>(2U, capped_outputs * 2U);
+    if (requested_slots > std::numeric_limits<std::uint32_t>::max()) {
+        fail("I001 estimated storage capacity exceeds 32-bit range");
+    }
+    return static_cast<std::uint32_t>(requested_slots);
+}
+
 [[nodiscard]] std::uint32_t next_pow2(std::uint32_t value) {
     if (value <= 1U) return 1U;
     --value;
@@ -500,7 +588,8 @@ struct I001Runtime::Impl {
             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
         std::memcpy(uniform.mapped, &params, sizeof(params));
 
-        storage_capacity = next_pow2(std::max(2U, params.limits[2] * 2U));
+        storage_capacity = next_pow2(
+            estimated_storage_capacity(a_scene, params));
         std::vector<HashSlotCpu> empty_slots(storage_capacity);
         storage_slots = context.upload_device_buffer(
             empty_slots.data(),
