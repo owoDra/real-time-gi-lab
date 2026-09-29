@@ -220,6 +220,7 @@ static_assert(sizeof(InvalidationPush) == 16);
     case I001Scenario::LightMotion:
         return lane_a::A001Case::LightMotion;
     case I001Scenario::MovingRigid:
+    case I001Scenario::DeformingControl:
     case I001Scenario::SparseStress:
     case I001Scenario::DenseStress:
     case I001Scenario::LargeWorldStress:
@@ -278,6 +279,53 @@ struct MovingSelection {
     return output;
 }
 
+[[nodiscard]] std::vector<lane_b::Triangle> deformed_geometry(
+    const std::vector<lane_b::Triangle>& source,
+    std::span<const std::uint32_t> moved,
+    float amplitude) {
+    auto output = source;
+    float min_x = std::numeric_limits<float>::infinity();
+    float max_x = -std::numeric_limits<float>::infinity();
+    for (const auto primitive : moved) {
+        const auto& triangle = source.at(primitive);
+        for (const auto& vertex : {triangle.v0, triangle.v1, triangle.v2}) {
+            min_x = std::min(min_x, vertex.x);
+            max_x = std::max(max_x, vertex.x);
+        }
+    }
+    const float extent = std::max(max_x - min_x, 1.0e-4F);
+    constexpr float pi = 3.14159265358979323846F;
+    const auto deform = [&](lane_b::Vec3 vertex) {
+        const float t = std::clamp((vertex.x - min_x) / extent, 0.0F, 1.0F);
+        vertex.y += amplitude * std::sin(pi * t);
+        vertex.z += amplitude * 0.25F * std::sin(2.0F * pi * t);
+        return vertex;
+    };
+    for (const auto primitive : moved) {
+        auto& triangle = output.at(primitive);
+        triangle.v0 = deform(triangle.v0);
+        triangle.v1 = deform(triangle.v1);
+        triangle.v2 = deform(triangle.v2);
+    }
+    return output;
+}
+
+void sync_surface_positions(
+    lane_a::SceneSurfaceSet& surfaces,
+    const std::vector<lane_b::Triangle>& triangles,
+    std::span<const std::uint32_t> primitives) {
+    for (const auto primitive : primitives) {
+        const auto& triangle = triangles.at(primitive);
+        auto& sample = surfaces.samples.at(primitive);
+        sample.position[0] =
+            (triangle.v0.x + triangle.v1.x + triangle.v2.x) / 3.0F;
+        sample.position[1] =
+            (triangle.v0.y + triangle.v1.y + triangle.v2.y) / 3.0F;
+        sample.position[2] =
+            (triangle.v0.z + triangle.v1.z + triangle.v2.z) / 3.0F;
+    }
+}
+
 [[nodiscard]] MovingSelection choose_moving_selection(
     const lane_b::B002Scene& scene) {
     std::uint32_t max_instance = 0U;
@@ -334,6 +382,23 @@ struct MovingSelection {
         }
     }
     fail("I001 could not select a topology-changing moving-rigid regime");
+}
+
+[[nodiscard]] MovingSelection choose_deforming_selection(
+    const lane_b::B002Scene& scene) {
+    auto selection = choose_moving_selection(scene);
+    selection.delta_x = lane_b::b002_segment_size(scene) * 0.08F;
+    auto target = deformed_geometry(
+        scene.triangles,
+        selection.primitives,
+        selection.delta_x);
+    lane_b::HierarchicalStrataBrick probe(
+        scene.triangles,
+        lane_b::b002_segment_size(scene));
+    const auto stats = probe.update(target, selection.primitives);
+    selection.membership_changes =
+        static_cast<std::uint32_t>(stats.membership_changes);
+    return selection;
 }
 
 void apply_scene_stress(
@@ -496,6 +561,7 @@ const char* i001_scenario_name(I001Scenario value) noexcept {
     case I001Scenario::CameraMotion: return "camera-motion";
     case I001Scenario::LightMotion: return "light-motion";
     case I001Scenario::MovingRigid: return "moving-rigid";
+    case I001Scenario::DeformingControl: return "deforming-control";
     case I001Scenario::SparseStress: return "sparse-stress";
     case I001Scenario::DenseStress: return "dense-stress";
     case I001Scenario::LargeWorldStress: return "large-world-stress";
@@ -518,6 +584,7 @@ I001Scenario i001_parse_scenario(const std::string& value) {
     if (value == "camera-motion") return I001Scenario::CameraMotion;
     if (value == "light-motion") return I001Scenario::LightMotion;
     if (value == "moving-rigid") return I001Scenario::MovingRigid;
+    if (value == "deforming-control") return I001Scenario::DeformingControl;
     if (value == "sparse-stress") return I001Scenario::SparseStress;
     if (value == "dense-stress") return I001Scenario::DenseStress;
     if (value == "large-world-stress") return I001Scenario::LargeWorldStress;
@@ -591,6 +658,8 @@ struct I001Runtime::Impl {
         params = lane_a::build_a001_params(a_scene, settings);
         if (options.scenario == I001Scenario::MovingRigid) {
             moving = choose_moving_selection(b_scene);
+        } else if (options.scenario == I001Scenario::DeformingControl) {
+            moving = choose_deforming_selection(b_scene);
         }
 
         if (uses_bounded(options.variant)) {
@@ -655,11 +724,22 @@ struct I001Runtime::Impl {
             estimated_storage_capacity(a_scene, params);
         {
             auto target_scene = a_scene;
-            if (options.scenario == I001Scenario::MovingRigid) {
-                for (const auto primitive : moving.primitives) {
-                    target_scene.samples.at(primitive).position[0] +=
-                        moving.delta_x;
-                }
+            if (options.scenario == I001Scenario::MovingRigid ||
+                options.scenario == I001Scenario::DeformingControl) {
+                const auto target_geometry =
+                    options.scenario == I001Scenario::MovingRigid
+                    ? translated_geometry(
+                        b_scene.triangles,
+                        moving.primitives,
+                        moving.delta_x)
+                    : deformed_geometry(
+                        b_scene.triangles,
+                        moving.primitives,
+                        moving.delta_x);
+                sync_surface_positions(
+                    target_scene,
+                    target_geometry,
+                    moving.primitives);
             }
             auto target_settings = settings;
             target_settings.case_id =
@@ -754,11 +834,18 @@ struct I001Runtime::Impl {
                 quant_payload.hash_table.size() *
                 sizeof(lane_b::GpuSegmentHashEntry));
 
-            if (options.scenario == I001Scenario::MovingRigid) {
-                auto target_geometry = translated_geometry(
-                    b_scene.triangles,
-                    moving.primitives,
-                    moving.delta_x);
+            if (options.scenario == I001Scenario::MovingRigid ||
+                options.scenario == I001Scenario::DeformingControl) {
+                auto target_geometry =
+                    options.scenario == I001Scenario::MovingRigid
+                    ? translated_geometry(
+                        b_scene.triangles,
+                        moving.primitives,
+                        moving.delta_x)
+                    : deformed_geometry(
+                        b_scene.triangles,
+                        moving.primitives,
+                        moving.delta_x);
                 HierarchicalStrataBrick target_hierarchy(
                     target_geometry,
                     lane_b::b002_segment_size(b_scene));
@@ -1084,31 +1171,63 @@ struct I001Runtime::Impl {
     struct DynamicUpdateStats {
         double wall_us{};
         double gpu_us{};
+        double geometry_prepare_cpu_us{};
+        double surface_update_gpu_us{};
+        double geometry_transfer_wall_us{};
+        double geometry_transfer_gpu_us{};
+        double blas_update_us{};
+        double tlas_update_us{};
+        double membership_update_cpu_us{};
+        double hierarchy_refit_cpu_us{};
+        double hierarchy_rebuild_cpu_us{};
+        double hierarchy_occupancy_cpu_us{};
+        double packing_cpu_us{};
+        double hierarchy_upload_gpu_us{};
+        double software_bvh_rebuild_cpu_us{};
+        std::uint32_t refit_segments{};
+        std::uint32_t rebuilt_segments{};
     };
 
     [[nodiscard]] DynamicUpdateStats update_dynamic_geometry(bool target_state) {
-        if (options.scenario != I001Scenario::MovingRigid ||
-            !target_state ||
-            geometry_is_target) {
+        const bool dynamic_scenario =
+            options.scenario == I001Scenario::MovingRigid ||
+            options.scenario == I001Scenario::DeformingControl;
+        if (!dynamic_scenario || !target_state || geometry_is_target) {
             return {};
         }
 
         using Clock = std::chrono::steady_clock;
+        const auto elapsed_us = [](Clock::time_point start) {
+            return std::chrono::duration<double, std::micro>(
+                Clock::now() - start).count();
+        };
         const auto start = Clock::now();
-        b_scene.triangles = translated_geometry(
-            b_scene.triangles,
-            moving.primitives,
-            moving.delta_x);
+        DynamicUpdateStats out{};
+
+        auto phase_start = Clock::now();
+        auto target_geometry =
+            options.scenario == I001Scenario::MovingRigid
+            ? translated_geometry(
+                b_scene.triangles,
+                moving.primitives,
+                moving.delta_x)
+            : deformed_geometry(
+                b_scene.triangles,
+                moving.primitives,
+                moving.delta_x);
+        out.geometry_prepare_cpu_us = elapsed_us(phase_start);
+        b_scene.triangles = std::move(target_geometry);
 
         std::vector<std::array<float, 4>> moved_positions;
         moved_positions.reserve(moving.primitives.size());
         for (const auto primitive : moving.primitives) {
-            std::array<float, 4> position{};
-            std::copy_n(
-                a_scene.samples.at(primitive).position,
-                4,
-                position.data());
-            position[0] += moving.delta_x;
+            const auto& triangle = b_scene.triangles.at(primitive);
+            std::array<float, 4> position{
+                (triangle.v0.x + triangle.v1.x + triangle.v2.x) / 3.0F,
+                (triangle.v0.y + triangle.v1.y + triangle.v2.y) / 3.0F,
+                (triangle.v0.z + triangle.v1.z + triangle.v2.z) / 3.0F,
+                a_scene.samples.at(primitive).position[3],
+            };
             moved_positions.push_back(position);
         }
         std::vector<lane_b::B002BufferUpdate> surface_updates;
@@ -1123,18 +1242,24 @@ struct I001Runtime::Impl {
                 VkDeviceSize(sizeof(std::array<float, 4>)),
             });
         }
-        double maintenance_gpu_us =
+        out.surface_update_gpu_us =
             context.update_device_buffer_timed(
                 surfaces,
                 surface_updates);
+        out.gpu_us += out.surface_update_gpu_us;
+
         if (uses_hwrt(options.variant)) {
             const auto stats = hwrt->update_geometry(
                 b_scene.triangles,
                 moving.primitives);
-            maintenance_gpu_us +=
-                stats.geometry_upload_gpu_us +
-                stats.blas_update_us +
-                stats.tlas_update_us;
+            out.geometry_transfer_wall_us = stats.geometry_upload_us;
+            out.geometry_transfer_gpu_us = stats.geometry_upload_gpu_us;
+            out.blas_update_us = stats.blas_update_us;
+            out.tlas_update_us = stats.tlas_update_us;
+            out.gpu_us +=
+                out.geometry_transfer_gpu_us +
+                out.blas_update_us +
+                out.tlas_update_us;
         } else {
             std::vector<GpuTriangle> moved_triangles;
             moved_triangles.reserve(moving.primitives.size());
@@ -1155,22 +1280,37 @@ struct I001Runtime::Impl {
                     VkDeviceSize(sizeof(GpuTriangle)),
                 });
             }
-            maintenance_gpu_us +=
+            phase_start = Clock::now();
+            out.geometry_transfer_gpu_us =
                 context.update_device_buffer_timed(
                     triangle_buffer,
                     triangle_updates);
+            out.geometry_transfer_wall_us = elapsed_us(phase_start);
+            out.gpu_us += out.geometry_transfer_gpu_us;
 
             if (uses_quantized(options.variant)) {
                 const auto stats = hierarchy_cpu->update(
                     b_scene.triangles,
                     moving.primitives);
-                if (stats.membership_changes == 0U) {
+                out.membership_update_cpu_us = stats.membership_dirty_us;
+                out.hierarchy_refit_cpu_us = stats.refit_us;
+                out.hierarchy_rebuild_cpu_us = stats.rebuild_us;
+                out.hierarchy_occupancy_cpu_us = stats.occupancy_us;
+                out.refit_segments =
+                    static_cast<std::uint32_t>(stats.refit_segments);
+                out.rebuilt_segments =
+                    static_cast<std::uint32_t>(stats.rebuilt_segments);
+                if (options.scenario == I001Scenario::MovingRigid &&
+                    stats.membership_changes == 0U) {
                     fail("I001 moving-rigid regime did not exercise hierarchy rebuild");
                 }
+
+                phase_start = Clock::now();
                 auto wide = lane_b::make_b003_wide_micro_payload(
                     hierarchy_cpu->flatten());
                 auto next_quant =
                     lane_b::make_b003_quantized_micro_payload(wide);
+                out.packing_cpu_us = elapsed_us(phase_start);
 
                 const auto node_bytes = VkDeviceSize(
                     next_quant.nodes.size() *
@@ -1200,16 +1340,19 @@ struct I001Runtime::Impl {
                     quant_hash,
                     next_quant.hash_table.data(),
                     hash_bytes);
-                maintenance_gpu_us +=
+                out.hierarchy_upload_gpu_us =
                     node_write.gpu_us +
                     order_write.gpu_us +
                     hash_write.gpu_us;
+                out.gpu_us += out.hierarchy_upload_gpu_us;
                 quant_payload = std::move(next_quant);
                 if (rebind) {
                     create_traversal_stage();
                 }
             } else {
+                phase_start = Clock::now();
                 software_cpu->rebuild(b_scene.triangles);
+                out.software_bvh_rebuild_cpu_us = elapsed_us(phase_start);
                 const auto next_nodes = software_cpu->gpu_nodes();
                 const auto& next_order =
                     software_cpu->ordered_primitives();
@@ -1233,9 +1376,10 @@ struct I001Runtime::Impl {
                     software_order,
                     next_order.data(),
                     order_bytes);
-                maintenance_gpu_us +=
+                out.hierarchy_upload_gpu_us =
                     node_write.gpu_us +
                     order_write.gpu_us;
+                out.gpu_us += out.hierarchy_upload_gpu_us;
                 if (rebind) {
                     create_traversal_stage();
                 }
@@ -1243,15 +1387,13 @@ struct I001Runtime::Impl {
             calculate_memory();
         }
 
-        for (const auto primitive : moving.primitives) {
-            a_scene.samples.at(primitive).position[0] += moving.delta_x;
-        }
+        sync_surface_positions(
+            a_scene,
+            b_scene.triangles,
+            moving.primitives);
         geometry_is_target = true;
-
-        const auto wall_us =
-            std::chrono::duration<double, std::micro>(
-                Clock::now() - start).count();
-        return {wall_us, maintenance_gpu_us};
+        out.wall_us = elapsed_us(start);
+        return out;
     }
 
     void update_params(bool target_state) {
@@ -1453,6 +1595,30 @@ struct I001Runtime::Impl {
         result.timings.ray_prepare_us = timestamp_us(timestamps[4], timestamps[5], period);
         result.timings.traversal_maintenance_gpu_us = dynamic_update.gpu_us;
         result.timings.dynamic_update_wall_us = dynamic_update.wall_us;
+        result.timings.geometry_prepare_cpu_us =
+            dynamic_update.geometry_prepare_cpu_us;
+        result.timings.surface_update_gpu_us =
+            dynamic_update.surface_update_gpu_us;
+        result.timings.geometry_transfer_wall_us =
+            dynamic_update.geometry_transfer_wall_us;
+        result.timings.geometry_transfer_gpu_us =
+            dynamic_update.geometry_transfer_gpu_us;
+        result.timings.blas_update_us = dynamic_update.blas_update_us;
+        result.timings.tlas_update_us = dynamic_update.tlas_update_us;
+        result.timings.membership_update_cpu_us =
+            dynamic_update.membership_update_cpu_us;
+        result.timings.hierarchy_refit_cpu_us =
+            dynamic_update.hierarchy_refit_cpu_us;
+        result.timings.hierarchy_rebuild_cpu_us =
+            dynamic_update.hierarchy_rebuild_cpu_us;
+        result.timings.hierarchy_occupancy_cpu_us =
+            dynamic_update.hierarchy_occupancy_cpu_us;
+        result.timings.packing_cpu_us =
+            dynamic_update.packing_cpu_us;
+        result.timings.hierarchy_upload_gpu_us =
+            dynamic_update.hierarchy_upload_gpu_us;
+        result.timings.software_bvh_rebuild_cpu_us =
+            dynamic_update.software_bvh_rebuild_cpu_us;
         result.timings.traversal_us = timestamp_us(timestamps[5], timestamps[6], period);
         result.timings.radiance_us = timestamp_us(timestamps[6], timestamps[7], period);
         result.timings.merge_us = timestamp_us(timestamps[7], timestamps[8], period);
@@ -1472,11 +1638,17 @@ struct I001Runtime::Impl {
         result.stats.outputs = counter_values[1];
         result.stats.overflow = counter_values[2];
         result.stats.visible_owners = counter_values[3];
-        if (options.scenario == I001Scenario::MovingRigid && target_state) {
+        if ((options.scenario == I001Scenario::MovingRigid ||
+             options.scenario == I001Scenario::DeformingControl) &&
+            target_state) {
             result.stats.moved_primitives =
                 static_cast<std::uint32_t>(moving.primitives.size());
             result.stats.segment_membership_changes =
                 moving.membership_changes;
+            result.stats.hierarchy_refit_segments =
+                dynamic_update.refit_segments;
+            result.stats.hierarchy_rebuilt_segments =
+                dynamic_update.rebuilt_segments;
         }
         result.stats.requested_work_items = counter_values[4];
         result.stats.requested_outputs = counter_values[5];
