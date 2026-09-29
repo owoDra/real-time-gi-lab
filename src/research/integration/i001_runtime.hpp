@@ -12,6 +12,7 @@ enum class I001Variant {
     VanillaSoftware,
     CombinedHwrt,
     CombinedSoftware,
+    TransientLbvh,
     DepthReuseHwrt,
     BoundedHwrt,
 };
@@ -40,6 +41,17 @@ struct I001FrameTimings {
     double ray_prepare_us{};
     double traversal_maintenance_gpu_us{};
     double dynamic_update_wall_us{};
+    double dynamic_builder_reset_us{};
+    double dynamic_builder_input_us{};
+    double dynamic_builder_aabb_us{};
+    double dynamic_builder_morton_us{};
+    double dynamic_builder_sort_us{};
+    double dynamic_builder_topology_us{};
+    double dynamic_builder_bounds_us{};
+    double dynamic_builder_us{};
+    double static_traversal_us{};
+    double dynamic_traversal_us{};
+    double cross_structure_merge_us{};
     double traversal_us{};
     double radiance_us{};
     double merge_us{};
@@ -72,6 +84,12 @@ struct I001Memory {
     std::size_t peak_resident_bytes{};
     std::size_t stream_capacity_bytes{};
     std::size_t storage_capacity_bytes{};
+    std::size_t shared_persistent_bytes{};
+    std::size_t static_hwrt_persistent_bytes{};
+    std::size_t dynamic_candidate_persistent_bytes{};
+    std::size_t dynamic_candidate_transient_bytes{};
+    std::size_t dynamic_candidate_scratch_bytes{};
+    std::size_t current_frame_geometry_bytes{};
 };
 
 struct I001Quality {
