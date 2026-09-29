@@ -107,20 +107,12 @@ void main() {
         // Reservation and accumulation are separate dispatches. Exactly one
         // invocation advances the frame tag and resets the accumulator, while
         // the dispatch barrier guarantees the reset completes before phase 1.
-        uint previous = atomicCompSwap(
-            slots.values[slot].data.w,
+        uint previous = atomicExchange(
             slots.values[slot].data.w,
             pc.frame_id);
         if (previous != pc.frame_id) {
-            // If another invocation won the frame transition, its exchange has
-            // already published frame_id and it owns the reset.
-            if (atomicCompSwap(
-                    slots.values[slot].data.w,
-                    previous,
-                    pc.frame_id) == previous) {
-                atomicExchange(slots.values[slot].data.y, 0u);
-                atomicExchange(slots.values[slot].data.z, 0u);
-            }
+            atomicExchange(slots.values[slot].data.y, 0u);
+            atomicExchange(slots.values[slot].data.z, 0u);
         }
         return;
     }
