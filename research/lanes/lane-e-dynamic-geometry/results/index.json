@@ -39,7 +39,7 @@
     {
       "id": "E004",
       "experiment": "004-deforming-boundary",
-      "status": "accepted-timing-ready",
+      "status": "complete",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/004-deforming-boundary.md",
       "protocol_commit": "b28fa0cd31fc2cc565f49a0f101bda8f08b39a7d",
       "implementation_checkpoint": "ca62af2b9ca20a042990e68ec987d88ddbee9d43",
@@ -48,7 +48,14 @@
         "cc4cb05743ee6d78de1671f871e7e38bebb8a29e"
       ],
       "validation_commit": "0e1377f67e140d2e783c25a3e0a89d8e934260d1",
-      "validation_protocol_commit": "927f62c4827c5e922c0b43a019e02a00c606101d"
+      "validation_protocol_commit": "927f62c4827c5e922c0b43a019e02a00c606101d",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/004-deforming-boundary.md",
+      "measurement_commit": "6a401247f91d3cb1b843a2c9c8cf0819414b9cc2",
+      "selected_policies": [
+        "deforming-local-hwrt",
+        "deforming-local-software-quantized"
+      ],
+      "result_commit": "4a0fdae208c81d4624d790862f88709622c003be"
     }
   ]
 }
