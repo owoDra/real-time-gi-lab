@@ -4,6 +4,7 @@
 
 #include "../lane_a_split_rc/a001_runtime.hpp"
 #include "../lane_a_split_rc/a001_scene.hpp"
+#include "../lane_a_split_rc/a001_analysis.hpp"
 #include "../lane_b_traversal/b002_compute.hpp"
 #include "../lane_b_traversal/b002_gpu_layout.hpp"
 #include "../lane_b_traversal/b002_hwrt.hpp"
@@ -1219,6 +1220,95 @@ struct I001Runtime::Impl {
         std::vector<LaneAWorkItemV1> work_items(work_count);
         context.download_device_buffer(
             work, work_items.data(), work_items.size() * sizeof(LaneAWorkItemV1));
+
+        const auto tile_count = params.counts[1] * params.counts[2];
+        std::vector<std::uint32_t> tile_owners(tile_count);
+        context.download_device_buffer(
+            owners,
+            tile_owners.data(),
+            tile_owners.size() * sizeof(std::uint32_t));
+
+        lane_a::A001Readback producer_readback{};
+        producer_readback.counters = {
+            last.stats.work_items,
+            last.stats.outputs,
+            last.stats.overflow,
+            last.stats.visible_owners,
+        };
+        producer_readback.tile_owner = tile_owners;
+        producer_readback.work_items.resize(work_items.size());
+        static_assert(
+            sizeof(lane_a::SplitRcWorkItemV1) == sizeof(LaneAWorkItemV1));
+        std::memcpy(
+            producer_readback.work_items.data(),
+            work_items.data(),
+            work_items.size() * sizeof(LaneAWorkItemV1));
+        producer_readback.resolved.assign(last.stats.outputs, 0.0F);
+
+        const auto producer_analysis = lane_a::analyze_a001(
+            a_scene,
+            settings,
+            params,
+            producer_readback);
+        if (!producer_analysis.visibility_correct) {
+            ++quality.visibility_mismatches;
+        }
+
+        if (last.stats.overflow == 0U) {
+            if (!producer_analysis.producer_correct) {
+                ++quality.producer_semantic_errors;
+            }
+        } else {
+            bool bounded_ok =
+                last.stats.requested_work_items > last.stats.work_items &&
+                last.stats.requested_outputs > last.stats.outputs &&
+                last.stats.work_items == params.limits[1] &&
+                last.stats.outputs == params.limits[2];
+
+            const auto block =
+                settings.cascade_count * settings.rays_per_probe;
+            if (block == 0U || work_items.size() % block != 0U) {
+                bounded_ok = false;
+            }
+            for (std::size_t base = 0;
+                 bounded_ok && base + block <= work_items.size();
+                 base += block) {
+                const auto& first = work_items[base];
+                if (first.tile_id >= tile_owners.size() ||
+                    first.surface_id >= a_scene.samples.size() ||
+                    tile_owners[first.tile_id] != first.surface_id ||
+                    first.output_id + settings.cascade_count >
+                        last.stats.outputs) {
+                    bounded_ok = false;
+                    break;
+                }
+                for (std::uint32_t cascade = 0U;
+                     cascade < settings.cascade_count && bounded_ok;
+                     ++cascade) {
+                    for (std::uint32_t ray = 0U;
+                         ray < settings.rays_per_probe;
+                         ++ray) {
+                        const auto& item =
+                            work_items[
+                                base +
+                                cascade * settings.rays_per_probe +
+                                ray];
+                        if (item.surface_id != first.surface_id ||
+                            item.tile_id != first.tile_id ||
+                            item.cascade != cascade ||
+                            item.ray_index != ray ||
+                            item.output_id != first.output_id + cascade) {
+                            bounded_ok = false;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!bounded_ok) {
+                ++quality.producer_semantic_errors;
+            }
+        }
+
         std::vector<HashSlotCpu> candidate_slots(storage_capacity);
         context.download_device_buffer(
             storage_slots, candidate_slots.data(), candidate_slots.size() * sizeof(HashSlotCpu));
@@ -1311,6 +1401,8 @@ struct I001Runtime::Impl {
             ? std::numeric_limits<double>::infinity()
             : std::sqrt(squared / double(compared));
         quality.passed =
+            quality.visibility_mismatches == 0U &&
+            quality.producer_semantic_errors == 0U &&
             quality.hit_mismatches == 0U &&
             quality.traversal_runtime_errors == 0U &&
             quality.missing_probes == 0U &&
