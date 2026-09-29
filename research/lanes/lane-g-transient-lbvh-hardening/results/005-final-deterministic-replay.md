@@ -8,6 +8,7 @@ Evidence class: deterministic correctness+memory only.
 
 ## Provenance
 
+- artifact: `out/research/lane-g-transient-lbvh-hardening/005-final-deterministic-replay/20260929T174627Z`;
 - target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
 - plan: `lane-g-g005-deterministic-v1`;
 - validation: enabled;
