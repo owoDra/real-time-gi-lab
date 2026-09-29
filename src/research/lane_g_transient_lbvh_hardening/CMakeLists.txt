@@ -1,8 +1,6 @@
 # Issue #17 Lane G owns this directory.
-#
-# G001 intentionally snapshots the F007 runtime/candidate implementation inside
-# Lane G. No memory optimization is permitted here; only instrumentation may
-# change before G001 concludes.
+# G001 snapshots F007 dependencies below Lane G. No other lane source is merged.
+# No memory optimization is permitted before G001 concludes.
 
 foreach(shader
   i001_bounded_producer
@@ -22,27 +20,28 @@ foreach(shader
   )
 endforeach()
 
-# Preserve the filenames expected by the F007-derived runtime.
-add_compute_shader(
-  lane_f_f003_lbvh_builder
-  shaders/research/lane_g_transient_lbvh_hardening/f003_lbvh_builder.comp.glsl
-)
-add_compute_shader(
-  lane_f_f003_dynamic_traversal
-  shaders/research/lane_g_transient_lbvh_hardening/f003_dynamic_traversal.comp.glsl
-)
-add_compute_shader(
-  lane_f_f003_hit_merge
-  shaders/research/lane_g_transient_lbvh_hardening/f003_hit_merge.comp.glsl
-)
-add_compute_shader(
-  lane_f_f005_grid_builder
-  shaders/research/lane_g_transient_lbvh_hardening/f005_grid_builder.comp.glsl
-)
-add_compute_shader(
-  lane_f_f005_grid_traversal
-  shaders/research/lane_g_transient_lbvh_hardening/f005_grid_traversal.comp.glsl
-)
+add_compute_shader(lane_f_f003_lbvh_builder shaders/research/lane_g_transient_lbvh_hardening/f003_lbvh_builder.comp.glsl)
+add_compute_shader(lane_f_f003_dynamic_traversal shaders/research/lane_g_transient_lbvh_hardening/f003_dynamic_traversal.comp.glsl)
+add_compute_shader(lane_f_f003_hit_merge shaders/research/lane_g_transient_lbvh_hardening/f003_hit_merge.comp.glsl)
+add_compute_shader(lane_f_f005_grid_builder shaders/research/lane_g_transient_lbvh_hardening/f005_grid_builder.comp.glsl)
+add_compute_shader(lane_f_f005_grid_traversal shaders/research/lane_g_transient_lbvh_hardening/f005_grid_traversal.comp.glsl)
+
+add_compute_shader(lane_a_visibility_depth shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/visibility_depth.comp.glsl)
+add_compute_shader(lane_a_visibility_owner shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/visibility_owner.comp.glsl)
+add_compute_shader(lane_a_producer shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/producer.comp.glsl)
+add_compute_shader(lane_a_finalize shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/finalize.comp.glsl)
+add_compute_shader(lane_a_gather shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/gather.comp.glsl)
+add_compute_shader(lane_a_merge shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/merge.comp.glsl)
+add_compute_shader(lane_a_resolve shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_a_split_rc/resolve.comp.glsl)
+
+add_compute_shader(lane_b_b002_software_bvh shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b002_software_bvh.comp.glsl)
+add_compute_shader(lane_b_b002_hierarchical shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b002_hierarchical.comp.glsl)
+add_compute_shader(lane_b_b002_hwrt shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b002_hwrt.comp.glsl)
+add_compute_shader(lane_b_b003_macro_bvh8 shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b003_macro_bvh8.comp.glsl)
+add_compute_shader(lane_b_b003_micro_bvh8 shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b003_micro_bvh8.comp.glsl)
+add_compute_shader(lane_b_b003_quantized_bvh8 shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b003_quantized_bvh8.comp.glsl)
+add_compute_shader(lane_b_b003_triangle_packets shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b003_triangle_packets.comp.glsl)
+add_compute_shader(lane_b_b003_triangle_packets_compact shaders/research/lane_g_transient_lbvh_hardening/baseline/lane_b_traversal/b003_triangle_packets_compact.comp.glsl)
 
 add_custom_target(phos-lane-g-g001-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/i001_bounded_producer.spv"
@@ -60,31 +59,43 @@ add_custom_target(phos-lane-g-g001-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/lane_f_f003_hit_merge.spv"
   "${CMAKE_BINARY_DIR}/shaders/lane_f_f005_grid_builder.spv"
   "${CMAKE_BINARY_DIR}/shaders/lane_f_f005_grid_traversal.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_visibility_depth.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_visibility_owner.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_producer.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_finalize.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_gather.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_merge.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_a_resolve.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b002_software_bvh.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b002_hierarchical.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b002_hwrt.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_macro_bvh8.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_micro_bvh8.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_quantized_bvh8.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_triangle_packets.spv"
+  "${CMAKE_BINARY_DIR}/shaders/lane_b_b003_triangle_packets_compact.spv"
 )
-
 
 add_executable(phos-lane-g-g001
   g001_benchmark.cpp
   i001_runtime.cpp
   i001_compute.cpp
   f003_transient_lbvh.cpp
-  f003_transient_lbvh.hpp
   f005_transient_grid.cpp
-  f005_transient_grid.hpp
-  ../lane_a_split_rc/a001_scene.cpp
-  ../lane_a_split_rc/a001_runtime.cpp
-  ../lane_a_split_rc/a001_analysis.cpp
-  ../lane_b_traversal/b002_scene.cpp
-  ../lane_b_traversal/b002_vulkan.cpp
-  ../lane_b_traversal/b002_compute.cpp
-  ../lane_b_traversal/b002_hwrt.cpp
+  baseline/lane_a_split_rc/a001_scene.cpp
+  baseline/lane_a_split_rc/a001_runtime.cpp
+  baseline/lane_a_split_rc/a001_analysis.cpp
+  baseline/lane_b_traversal/b002_scene.cpp
+  baseline/lane_b_traversal/b002_vulkan.cpp
+  baseline/lane_b_traversal/b002_compute.cpp
+  baseline/lane_b_traversal/b002_hwrt.cpp
   ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
 )
 target_include_directories(phos-lane-g-g001 PRIVATE
   "${CMAKE_SOURCE_DIR}/src"
-  "${CMAKE_SOURCE_DIR}/src/research/lane_a_split_rc"
-  "${CMAKE_SOURCE_DIR}/src/research/lane_b_traversal"
   "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/baseline/lane_a_split_rc"
+  "${CMAKE_CURRENT_SOURCE_DIR}/baseline/lane_b_traversal"
 )
 target_link_libraries(phos-lane-g-g001 PRIVATE
   vk-bootstrap::vk-bootstrap
@@ -102,13 +113,7 @@ set_target_properties(phos-lane-g-g001 PROPERTIES
   CXX_EXTENSIONS OFF
   RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
 )
-add_dependencies(
-  phos-lane-g-g001
-  phos-lane-g-g001-shaders
-  phos-lane-a-split-rc-shaders
-  phos-lane-b-b002-shaders
-  phos-lane-b-b003-shaders
-)
+add_dependencies(phos-lane-g-g001 phos-lane-g-g001-shaders)
 if(MSVC)
   target_compile_options(phos-lane-g-g001 PRIVATE /W4 /permissive-)
 else()

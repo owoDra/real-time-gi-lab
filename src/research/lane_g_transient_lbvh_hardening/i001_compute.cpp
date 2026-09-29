@@ -1,6 +1,6 @@
 #include "i001_compute.hpp"
 
-#include "../lane_b_traversal/b002_vulkan.hpp"
+#include "baseline/lane_b_traversal/b002_vulkan.hpp"
 #include "vk_init.hpp"
 
 #include <array>

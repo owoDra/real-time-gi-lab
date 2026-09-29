@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../lane_b_traversal/b002_vulkan.hpp"
+#include "baseline/lane_b_traversal/b002_vulkan.hpp"
 
 #include <cstddef>
 #include <cstdint>
