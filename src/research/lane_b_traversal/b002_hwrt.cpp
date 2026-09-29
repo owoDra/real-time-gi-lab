@@ -73,15 +73,18 @@ B002HwrtTraversal::B002HwrtTraversal(
           triangles,
           std::span<const std::uint32_t>{},
           std::move(shader_path),
-          create_trace_runtime) {}
+          create_trace_runtime,
+          false) {}
 
 B002HwrtTraversal::B002HwrtTraversal(
     B002VulkanContext& context,
     const std::vector<Triangle>& triangles,
     std::span<const std::uint32_t> rigid_primitives,
     std::string shader_path,
-    bool create_trace_runtime)
-    : context_(context) {
+    bool create_trace_runtime,
+    bool allow_partition_updates)
+    : context_(context),
+      dynamic_partition_updates_(allow_partition_updates) {
     if (!context_.hwrt_enabled()) {
         fail("B002 HWRT traversal requires an HWRT-enabled context");
     }
@@ -127,6 +130,9 @@ B002HwrtTraversal::B002HwrtTraversal(
             ordered_triangles.push_back(triangles[primitive]);
         }
         dynamic_triangle_count_ = rigid_primitives.size();
+        dynamic_primitives_.assign(
+            rigid_primitives.begin(),
+            rigid_primitives.end());
         if (static_triangle_count_ > 0x00ffffffU) {
             fail("B002 rigid partition metadata base exceeds instance custom-index range");
         }
@@ -216,7 +222,7 @@ B002HwrtTraversal::B002HwrtTraversal(
             dynamic_vertex_address,
             dynamic_triangle_count_,
             dynamic_blas_,
-            false);
+            dynamic_partition_updates_);
     }
     setup_stats_.tlas_build_us = build_tlas();
 
@@ -537,6 +543,87 @@ HwrtUpdateStats B002HwrtTraversal::update_geometry(
     };
 }
 
+HwrtUpdateStats B002HwrtTraversal::update_partition_geometry(
+    const std::vector<Triangle>& triangles,
+    std::span<const std::uint32_t> moved_primitives) {
+    if (!rigid_partitioned_ || !dynamic_partition_updates_) {
+        fail("B002 partition geometry update requires an update-enabled partition");
+    }
+    if (triangles.size() != triangle_count_) {
+        fail("B002 partition geometry update requires stable primitive count");
+    }
+    if (moved_primitives.size() != dynamic_primitives_.size() ||
+        !std::equal(
+            moved_primitives.begin(),
+            moved_primitives.end(),
+            dynamic_primitives_.begin())) {
+        fail("B002 partition geometry update must match the partition primitive order");
+    }
+
+    struct UploadRecord {
+        std::array<Vertex3, 3> vertices{};
+        GpuTriangle triangle{};
+        std::size_t ordered_index{};
+    };
+
+    std::vector<UploadRecord> records;
+    records.reserve(moved_primitives.size());
+    for (std::size_t local = 0; local < moved_primitives.size(); ++local) {
+        const auto primitive = moved_primitives[local];
+        const auto& triangle = triangles.at(primitive);
+        records.push_back({
+            {{
+                {triangle.v0.x, triangle.v0.y, triangle.v0.z},
+                {triangle.v1.x, triangle.v1.y, triangle.v1.z},
+                {triangle.v2.x, triangle.v2.y, triangle.v2.z},
+            }},
+            to_gpu_triangle(triangle),
+            static_triangle_count_ + local,
+        });
+    }
+
+    std::vector<B002BufferUpdate> vertex_updates;
+    std::vector<B002BufferUpdate> metadata_updates;
+    vertex_updates.reserve(records.size());
+    metadata_updates.reserve(records.size());
+    for (const auto& record : records) {
+        vertex_updates.push_back({
+            VkDeviceSize(record.ordered_index) *
+                VkDeviceSize(3U * sizeof(Vertex3)),
+            record.vertices.data(),
+            VkDeviceSize(record.vertices.size() * sizeof(Vertex3)),
+        });
+        metadata_updates.push_back({
+            VkDeviceSize(record.ordered_index) *
+                VkDeviceSize(sizeof(GpuTriangle)),
+            &record.triangle,
+            VkDeviceSize(sizeof(GpuTriangle)),
+        });
+    }
+
+    const auto upload_start = Clock::now();
+    const auto vertex_upload_gpu_us =
+        context_.update_device_buffer_timed(
+            vertex_buffer_,
+            vertex_updates);
+    const auto metadata_upload_gpu_us =
+        context_.update_device_buffer_timed(
+            triangle_buffer_,
+            metadata_updates);
+    const auto upload_us = elapsed_us(upload_start);
+
+    const auto blas_us = update_dynamic_blas();
+    const auto tlas_us = update_tlas();
+
+    return {
+        moved_primitives.size(),
+        upload_us,
+        blas_us,
+        tlas_us,
+        vertex_upload_gpu_us + metadata_upload_gpu_us,
+    };
+}
+
 HwrtRigidUpdateStats B002HwrtTraversal::update_rigid_transform(
     float translation_x,
     HwrtTlasPolicy policy) {
@@ -607,6 +694,52 @@ double B002HwrtTraversal::update_blas(
     VkAccelerationStructureBuildRangeInfoKHR range{};
     range.primitiveCount =
         static_cast<std::uint32_t>(triangle_count);
+    return submit_build(build_info, range, true);
+}
+
+double B002HwrtTraversal::update_dynamic_blas() {
+    if (!rigid_partitioned_ || !dynamic_partition_updates_) {
+        fail("B002 dynamic BLAS update requires an update-enabled partition");
+    }
+
+    auto triangle_geometry =
+        detail::make_vk_info<VkAccelerationStructureGeometryTrianglesDataKHR>(
+            VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_TRIANGLES_DATA_KHR);
+    triangle_geometry.vertexFormat = VK_FORMAT_R32G32B32_SFLOAT;
+    triangle_geometry.vertexData.deviceAddress =
+        vertex_buffer_.address +
+        VkDeviceAddress(static_triangle_count_) *
+            VkDeviceAddress(3U * sizeof(Vertex3));
+    triangle_geometry.vertexStride = sizeof(Vertex3);
+    triangle_geometry.maxVertex =
+        static_cast<std::uint32_t>(
+            dynamic_triangle_count_ * 3U - 1U);
+    triangle_geometry.indexType = VK_INDEX_TYPE_NONE_KHR;
+
+    auto geometry =
+        detail::make_vk_info<VkAccelerationStructureGeometryKHR>(
+            VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_GEOMETRY_KHR);
+    geometry.geometryType = VK_GEOMETRY_TYPE_TRIANGLES_KHR;
+    geometry.geometry.triangles = triangle_geometry;
+    geometry.flags = 0;
+
+    auto build_info =
+        detail::make_vk_info<VkAccelerationStructureBuildGeometryInfoKHR>(
+            VK_STRUCTURE_TYPE_ACCELERATION_STRUCTURE_BUILD_GEOMETRY_INFO_KHR);
+    build_info.type = VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
+    build_info.flags =
+        VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR |
+        VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
+    build_info.mode = VK_BUILD_ACCELERATION_STRUCTURE_MODE_UPDATE_KHR;
+    build_info.srcAccelerationStructure = dynamic_blas_.handle;
+    build_info.dstAccelerationStructure = dynamic_blas_.handle;
+    build_info.geometryCount = 1;
+    build_info.pGeometries = &geometry;
+    build_info.scratchData.deviceAddress = scratch_address();
+
+    VkAccelerationStructureBuildRangeInfoKHR range{};
+    range.primitiveCount =
+        static_cast<std::uint32_t>(dynamic_triangle_count_);
     return submit_build(build_info, range, true);
 }
 
