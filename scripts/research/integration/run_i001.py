@@ -165,7 +165,15 @@ def main() -> int:
     parser.add_argument("--scene", type=Path, default=DEFAULT_SCENE)
     parser.add_argument("--repeats", type=int, default=3)
     parser.add_argument("--skip-validation", action="store_true")
+    parser.add_argument(
+        "--validation-only",
+        action="store_true",
+        help="Run the complete diagnostic validation matrix and stop before timing.",
+    )
     args = parser.parse_args()
+
+    if args.validation_only and args.skip_validation:
+        parser.error("--validation-only cannot be combined with --skip-validation")
 
     if args.repeats < 3:
         parser.error("--repeats must be >= 3 for accepted representative timing")
@@ -191,41 +199,72 @@ def main() -> int:
     root.mkdir(parents=True, exist_ok=True)
 
     if not args.skip_validation:
-        for variant in VARIANTS:
-            for scenario in SCENARIOS:
-                run_one(
+        validation_failures: list[str] = []
+
+        def validate_case(
+            variant: str,
+            scenario: str,
+            output_dir: Path,
+            bounded_owner_capacity: int,
+        ) -> dict[str, str] | None:
+            try:
+                return run_one(
                     executable,
                     scene,
                     variant,
                     scenario,
-                    root / "validation" / variant / scenario,
+                    output_dir,
                     True,
+                    bounded_owner_capacity,
+                )
+            except Exception as error:
+                validation_failures.append(
+                    f"{variant}/{scenario}"
+                    f" (capacity={bounded_owner_capacity}): {error}"
+                )
+                return None
+
+        for variant in VARIANTS:
+            for scenario in SCENARIOS:
+                validate_case(
+                    variant,
+                    scenario,
+                    root / "validation" / variant / scenario,
                     1280,
                 )
         for variant in STRESS_VARIANTS:
             for scenario in STRESS_SCENARIOS:
-                run_one(
-                    executable,
-                    scene,
+                validate_case(
                     variant,
                     scenario,
                     root / "validation-stress" / variant / scenario,
-                    True,
                     1280,
                 )
-        overflow_validation = run_one(
-            executable,
-            scene,
+
+        overflow_validation = validate_case(
             "bounded-hwrt",
             "static",
             root / "validation-overflow" / "bounded-512",
-            True,
             512,
         )
-        if int(overflow_validation["overflow"]) != 1:
-            raise RuntimeError(
-                "validation 512-owner bounded run did not force overflow"
+        if (
+            overflow_validation is not None
+            and int(overflow_validation["overflow"]) != 1
+        ):
+            validation_failures.append(
+                "bounded-hwrt/static (capacity=512): "
+                "validation run did not force overflow"
             )
+
+        if validation_failures:
+            raise RuntimeError(
+                "I001 validation matrix failed:\n  - "
+                + "\n  - ".join(validation_failures)
+            )
+
+        if args.validation_only:
+            print("I001 complete validation matrix: PASS")
+            return 0
 
     accepted: list[dict[str, str]] = []
     for repeat in range(args.repeats):
