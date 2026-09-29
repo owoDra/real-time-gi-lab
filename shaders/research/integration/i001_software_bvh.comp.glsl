@@ -31,7 +31,8 @@ layout(std430, binding = 0) readonly buffer Rays { RayData rays[]; };
 layout(std430, binding = 1) readonly buffer Triangles { TriangleData triangles[]; };
 layout(std430, binding = 2) readonly buffer Nodes { BvhNode nodes[]; };
 layout(std430, binding = 3) readonly buffer Ordered { uint ordered[]; };
-layout(std430, binding = 4) writeonly buffer Hits { HitData hits[]; };\nlayout(std430, binding = 5) readonly buffer Counters { uint data[]; } counters;
+layout(std430, binding = 4) writeonly buffer Hits { HitData hits[]; };
+layout(std430, binding = 5) readonly buffer Counters { uint data[]; } counters;
 
 layout(push_constant) uniform Push {
     uint ray_count;
