@@ -50,6 +50,7 @@ add_executable(phos-i001
   i001_runtime.cpp
   i001_compute.cpp
   ../lane_f_dynamic_geometry_alternatives/f003_transient_lbvh.cpp
+  ../lane_f_dynamic_geometry_alternatives/f005_transient_grid.cpp
   ../lane_a_split_rc/a001_scene.cpp
   ../lane_a_split_rc/a001_runtime.cpp
   ../lane_a_split_rc/a001_analysis.cpp
