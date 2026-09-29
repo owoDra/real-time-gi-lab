@@ -39,9 +39,10 @@
     {
       "id": "E004",
       "experiment": "004-deforming-boundary",
-      "status": "protocol-frozen",
+      "status": "target-validation-ready",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/004-deforming-boundary.md",
-      "protocol_commit": "b28fa0cd31fc2cc565f49a0f101bda8f08b39a7d"
+      "protocol_commit": "b28fa0cd31fc2cc565f49a0f101bda8f08b39a7d",
+      "implementation_checkpoint": "fe4f783e100151b1e8f68a1334532aa50eb53d77"
     }
   ]
 }
