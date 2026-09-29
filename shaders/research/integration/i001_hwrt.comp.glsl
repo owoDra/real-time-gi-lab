@@ -26,7 +26,8 @@ struct HitData {
 layout(std430, binding = 0) readonly buffer Rays { RayData rays[]; };
 layout(binding = 1) uniform accelerationStructureEXT top_level;
 layout(std430, binding = 2) readonly buffer Triangles { TriangleData triangles[]; };
-layout(std430, binding = 3) writeonly buffer Hits { HitData hits[]; };\nlayout(std430, binding = 4) readonly buffer Counters { uint data[]; } counters;
+layout(std430, binding = 3) writeonly buffer Hits { HitData hits[]; };
+layout(std430, binding = 4) readonly buffer Counters { uint data[]; } counters;
 
 layout(push_constant) uniform Push {
     uint ray_count;
