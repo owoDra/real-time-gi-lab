@@ -1543,12 +1543,30 @@ struct I001Runtime::Impl {
         const auto start = Clock::now();
         DynamicUpdateStats out{};
 
+        const bool final_hwrt_rigid =
+            uses_lane_e_final_hwrt(options.variant) &&
+            options.scenario == I001Scenario::MovingRigid;
+        const bool final_software_rigid =
+            uses_lane_e_final_software(options.variant) &&
+            options.scenario == I001Scenario::MovingRigid;
+        const bool final_hwrt_deforming =
+            uses_lane_e_final_hwrt(options.variant) &&
+            options.scenario == I001Scenario::DeformingControl;
+        const bool final_software_deforming =
+            uses_lane_e_final_software(options.variant) &&
+            options.scenario == I001Scenario::DeformingControl;
         const bool rigid_instance_candidate =
             uses_rigid_instance_hwrt(options.variant) ||
-            uses_rigid_instance_software(options.variant);
+            uses_rigid_instance_software(options.variant) ||
+            final_hwrt_rigid ||
+            final_software_rigid;
+        const bool deforming_local_candidate =
+            uses_deforming_local_hwrt(options.variant) ||
+            uses_deforming_local_software(options.variant) ||
+            final_hwrt_deforming ||
+            final_software_deforming;
         auto phase_start = Clock::now();
-        if (uses_deforming_local_hwrt(options.variant) ||
-            uses_deforming_local_software(options.variant)) {
+        if (deforming_local_candidate) {
             if (options.scenario != I001Scenario::DeformingControl) {
                 fail("I001 local deformation reached a non-deforming scenario");
             }
@@ -1633,7 +1651,8 @@ struct I001Runtime::Impl {
                 out.gpu_us +=
                     out.instance_transfer_gpu_us +
                     out.tlas_update_us;
-            } else if (uses_deforming_local_hwrt(options.variant)) {
+            } else if (uses_deforming_local_hwrt(options.variant) ||
+                       final_hwrt_deforming) {
                 const auto stats =
                     hwrt->update_partition_geometry(
                         b_scene.triangles,
@@ -1665,7 +1684,8 @@ struct I001Runtime::Impl {
                     out.blas_update_us +
                     out.tlas_update_us;
             }
-        } else if (uses_deforming_local_software(options.variant)) {
+        } else if (uses_deforming_local_software(options.variant) ||
+                   final_software_deforming) {
             phase_start = Clock::now();
             for (std::size_t local = 0;
                  local < deforming_local_setup.dynamic_global_primitives.size();
@@ -1804,7 +1824,8 @@ struct I001Runtime::Impl {
                 elapsed_us(phase_start);
             out.gpu_us +=
                 out.instance_transfer_gpu_us;
-        } else if (uses_rigid_instance_software(options.variant)) {
+        } else if (uses_rigid_instance_software(options.variant) ||
+                   final_software_rigid) {
             const bool binary =
                 uses_rigid_instance_software_binary(options.variant);
             const auto instance_index =
