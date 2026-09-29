@@ -94,3 +94,13 @@ echo auto | sudo tee "$POWER_LEVEL"
 Expected retained artifacts include `g002c-summary.json`,
 `g002c-block-ratios.csv`, `g002c-raw.csv`, `g002c-config.json`, and
 `metadata.json`.
+
+## G002c RETIRED — do not run
+
+The `profile_peak` power-isolation experiment caused a host crash and has been
+abandoned for safety. Do not ask the user to run `run_g002c.py`, do not require
+`profile_peak`, and do not manipulate AMDGPU performance-state sysfs as part
+of Lane G.
+
+The runner/config remain only as historical diagnostic material. G002 closes
+without a decision-valid timing protocol.

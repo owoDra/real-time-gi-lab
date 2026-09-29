@@ -14,8 +14,8 @@
       "id": "G002",
       "name": "timing-repeatability-diagnosis",
       "result": "002-timing-repeatability-diagnosis.md",
-      "status": "power-isolation-pending",
-      "decision": "g002b-auto-dpm-rejected-g002c-profile-peak-pending"
+      "status": "closed-diagnostic-inconclusive",
+      "decision": "no-decision-valid-timing-protocol-g002c-abandoned-for-host-safety"
     }
   ]
 }

@@ -1,6 +1,6 @@
 # G002 — Timing-repeatability diagnosis
 
-Status: **power-isolation extension in progress; G003 timing still blocked**
+Status: **closed diagnostic / timing protocol unresolved**
 
 ## Phase A — target-GPU diagnosis
 
@@ -24,71 +24,62 @@ All 160 planned measurements were retained.
 
 Only **1 of 8** frozen candidate/control comparisons met all three repeatability
 criteria. Therefore the paired protocol under automatic DPM is rejected and
-cannot be frozen for G003.
+cannot be frozen for decision-valid G003/G005 timing.
 
-| comparison | result | block max/min | MAD/median | orientation ratio |
-| --- | --- | ---: | ---: | ---: |
-| LBVH / HWRT, static | FAIL | 1.2393 | 0.0875 | 1.1887 |
-| B003 / HWRT, static | FAIL | 1.2934 | 0.0472 | 1.0046 |
-| LBVH / HWRT, sparse-stress | FAIL | 1.1077 | 0.0108 | 1.0708 |
-| B003 / HWRT, sparse-stress | PASS | 1.0790 | 0.0174 | 1.0310 |
-| LBVH / vanilla, moving-rigid | FAIL | 1.1260 | 0.0054 | 1.0486 |
-| B003 / vanilla, moving-rigid | FAIL | 1.2559 | 0.0422 | 1.0893 |
-| LBVH / vanilla, sparse-moving | FAIL | 1.4171 | 0.1103 | 1.0428 |
-| B003 / vanilla, sparse-moving | FAIL | 1.6689 | 0.1025 | 1.3160 |
+The LBVH moving paths themselves were comparatively repeatable:
 
-### Stronger localization from raw timings
+- moving-rigid LBVH: 1.431–1.488 ms, max/min **1.039**;
+- sparse-moving LBVH: 1.383–1.430 ms, max/min **1.034**.
 
-The LBVH moving paths themselves are repeatable:
-
-- moving-rigid LBVH: 1.431–1.488 ms, max/min **1.039**, MAD/median ~0.77%;
-- sparse-moving LBVH: 1.383–1.430 ms, max/min **1.034**, MAD/median ~0.47%.
-
-The matching vanilla comparator is not:
+The matching vanilla comparators were not:
 
 - moving-rigid vanilla: max/min **1.487**;
 - sparse-moving vanilla: max/min **1.571**.
 
-Its measured traversal-maintenance time repeatedly falls into two broad bands:
-roughly **2.35–2.45 ms** and **3.1–3.25 ms**. Similar multi-stage excursions
-also occur in software/HWRT controls and in occasional stable/static processes.
+The comparator traversal-maintenance timing repeatedly occupied distinct timing
+bands, while other unrelated GPU stages could also move together. This rejects
+an intrinsic transient-LBVH builder instability explanation but does not
+establish a unique external cause.
 
-This strongly localizes the remaining repeatability problem to GPU/system
-performance state or external interference around process-level measurements,
-rather than transient-LBVH builder variance.
+## Phase C — G002c safety stop
 
-It is still not valid to name DVFS as the unique cause because the previous
-endpoint telemetry did not sample clocks throughout each measured GPU workload.
+Plan `lane-g-g002c-v1` proposed repeating the paired experiment while the AMDGPU
+performance level was externally set to `profile_peak`.
 
-## Phase C — frozen power-isolation diagnostic G002c
+The host crashed after attempting this power-state experiment. The user
+explicitly declined any further execution of this experiment.
 
-Plan: `lane-g-g002c-v1`.
+**G002c is therefore abandoned for host-safety reasons and must not be requested
+again.**
 
-The G002b matrix, estimator, block orders, warmup, and thresholds remain
-unchanged. The only new diagnostic condition is:
+No G002c result is accepted and no conclusion about `profile_peak`, DVFS, or
+clock/power isolation is drawn from the crash.
 
-- AMDGPU `power_dpm_force_performance_level` must be `profile_peak`;
-- the runner verifies that condition before and after every child process;
-- the runner never writes sysfs;
-- every measurement remains retained.
+The repository may retain the runner/config as historical diagnostic material,
+but they are not an active execution requirement.
 
-Frozen criteria remain:
+## Final G002 disposition
 
-- block-ratio max/min <= 1.10;
-- block-ratio MAD/median <= 0.05;
-- ABBA-vs-BAAB orientation-median ratio <= 1.10.
+Accepted findings:
 
-If every candidate and control comparison passes under the pre-frozen
-`profile_peak` condition, G002 may freeze the power-isolated paired protocol
-for G003/G005 relative timing gates. If not, G002 remains open and the next
-diagnostic is explicit background/system-load isolation.
+- F007 one-shot fresh-process timing is not decision-valid on this host.
+- longer warmup alone does not fix repeatability;
+- automatic-DPM paired timing is still insufficient;
+- the instability is not specific to the transient-LBVH moving builder;
+- timing excursions also affect control implementations.
 
-## Current disposition
+Rejected / not established:
 
-- F007 one-shot fresh-process protocol: **Rejected**.
-- warmup-only fix: **Rejected**.
-- automatic-DPM paired protocol: **Rejected**.
-- LBVH moving-path intrinsic instability: **Rejected by G002b evidence**.
-- GPU/system performance-state involvement: **Supported hypothesis**.
-- DVFS as unique root cause: **Inconclusive pending G002c**.
-- G003 decision-valid timing: **Blocked**.
+- no stable decision-valid timing protocol was established;
+- DVFS is not established as the unique root cause;
+- `profile_peak` is not an accepted measurement requirement;
+- G002c must not be rerun.
+
+Therefore **G002 closes as diagnostic/inconclusive for formal timing**.
+
+This does not invalidate deterministic G001 memory evidence. It does mean that
+future Lane-G work must not use current timing runs as formal promotion evidence
+unless a later, safe measurement protocol is separately planned and accepted.
+
+No forced GPU performance-state manipulation is permitted as a prerequisite for
+continuing Lane G.
