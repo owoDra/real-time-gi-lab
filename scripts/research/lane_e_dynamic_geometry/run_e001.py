@@ -226,7 +226,6 @@ def main() -> int:
 
     root = artifact_root()
     root.mkdir(parents=True, exist_ok=True)
-    print(f"GPU: {TARGET_DEVICE}")
 
     validation_rows: list[dict[str, str]] = []
     for variant in VARIANTS:
@@ -240,6 +239,8 @@ def main() -> int:
                 True,
             )
             row = dict(row)
+            if not validation_rows:
+                print(f"GPU: {row['device']}")
             row["phase"] = "validation"
             row["repeat"] = "0"
             validation_rows.append(row)
