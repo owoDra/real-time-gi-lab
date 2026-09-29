@@ -44,7 +44,7 @@ Cli parse_cli(int argc, char** argv) {
             std::cout
                 << "phos-i001 [--scene path] "
                    "[--variant vanilla-software|combined-hwrt|combined-software|depth-reuse-hwrt|bounded-hwrt] "
-                   "[--scenario static|camera-motion|light-motion] "
+                   "[--scenario static|camera-motion|light-motion|moving-rigid] "
                    "[--bounded-owner-capacity N] [--validation] [--no-quality]\n";
             std::exit(0);
         } else {
@@ -70,7 +70,8 @@ void write_csv(
     output
         << "variant,scenario,device,validation,"
            "renderer_depth_us,frame_init_us,visibility_reuse_us,"
-           "producer_us,ray_prepare_us,traversal_us,radiance_us,"
+           "producer_us,ray_prepare_us,traversal_maintenance_gpu_us,dynamic_update_wall_us,"
+           "traversal_us,radiance_us,"
            "merge_us,storage_update_us,invalidation_us,resolve_us,"
            "complete_gpu_us,incremental_gi_us,"
            "work_items,outputs,requested_work_items,requested_outputs,"
@@ -91,6 +92,8 @@ void write_csv(
         << result.timings.visibility_reuse_us << ','
         << result.timings.producer_us << ','
         << result.timings.ray_prepare_us << ','
+        << result.timings.traversal_maintenance_gpu_us << ','
+        << result.timings.dynamic_update_wall_us << ','
         << result.timings.traversal_us << ','
         << result.timings.radiance_us << ','
         << result.timings.merge_us << ','
@@ -142,6 +145,10 @@ void write_metadata(
         << "  \"validation\": " << (cli.options.validation ? "true" : "false") << ",\n"
         << "  \"quality_passed\": " << (result.quality.passed ? "true" : "false") << ",\n"
         << "  \"overflow\": " << result.stats.overflow << ",\n"
+        << "  \"traversal_maintenance_gpu_us\": "
+        << result.timings.traversal_maintenance_gpu_us << ",\n"
+        << "  \"dynamic_update_wall_us\": "
+        << result.timings.dynamic_update_wall_us << ",\n"
         << "  \"complete_gpu_us\": " << result.timings.complete_gpu_us << "\n"
         << "}\n";
 }
