@@ -35,6 +35,13 @@
       "measurement_commit": "09944ee0b580cd67911d3c0a13b87821d8c939dc",
       "selected_policy": "rigid-instance-software-quantized",
       "result_commit": "e8ff5bcb90852103736b5c1326d0999be0e34225"
+    },
+    {
+      "id": "E004",
+      "experiment": "004-deforming-boundary",
+      "status": "protocol-frozen",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/004-deforming-boundary.md",
+      "protocol_commit": "b28fa0cd31fc2cc565f49a0f101bda8f08b39a7d"
     }
   ]
 }
