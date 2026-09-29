@@ -44,7 +44,7 @@ Cli parse_cli(int argc, char** argv) {
         } else if (argument == "--help") {
             std::cout
                 << "phos-i001 [--scene path] "
-                   "[--variant vanilla-software|combined-hwrt|rigid-instance-hwrt-update|rigid-instance-hwrt-build|rigid-instance-software-binary|rigid-instance-software-quantized|deforming-local-hwrt|deforming-local-software-quantized|combined-software|depth-reuse-hwrt|bounded-hwrt] "
+                   "[--variant vanilla-software|combined-hwrt|rigid-instance-hwrt-update|rigid-instance-hwrt-build|rigid-instance-software-binary|rigid-instance-software-quantized|deforming-local-hwrt|deforming-local-software-quantized|lane-e-final-hwrt|lane-e-final-software|combined-software|depth-reuse-hwrt|bounded-hwrt] "
                    "[--scenario static|camera-motion|light-motion|moving-rigid|deforming-control|sparse-stress|dense-stress|large-world-stress|vertical-world-stress] "
                    "[--bounded-owner-capacity N] [--validation] [--no-quality]\n";
             std::exit(0);
