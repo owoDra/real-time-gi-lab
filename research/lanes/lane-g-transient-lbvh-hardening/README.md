@@ -4,14 +4,30 @@ Issue: #17
 
 This lane starts from `research@1ab3c09f62fc6778aa598a791c4c1a6f720d75f9`.
 
-G001 completed the memory ownership/lifetime census. G002 then diagnosed
-program-level timing instability but closed without a safe decision-valid timing
-protocol after the power-isolation experiment was abandoned for host safety.
+Lane G is complete.
 
-G003 is now active. Memory candidates must be directly attributable to G001,
-must retain the unchanged `transient-lbvh` run-local control, and must not use
-GPU power/clock sysfs manipulation. Timing remains non-decision-valid until a
-separately accepted safe protocol exists.
+G001 identified the F007 sparse-memory failure as static-HWRT lifetime overlap,
+not an LBVH-capacity problem. G002 diagnosed program-level timing instability
+but closed without a safe decision-valid timing protocol after the power-state
+isolation experiment was abandoned for host safety.
+
+G003 retained one attributable hardening candidate: build immutable static HWRT
+before shared integration allocations, then release its setup-only vertex,
+instance and scratch allocations after the fenced build. G004 passed the frozen
+16-case semantic matrix. G005 passed all 60 deterministic correctness/memory
+rows.
+
+Final disposition:
+
+- sparse-memory blocker: **resolved**;
+- correctness / integration semantics: **pass**;
+- decision-valid timing: **inconclusive**;
+- Lane E replacement: **not claimed**;
+- production promotion: **measurement-limited**;
+- hardened transient LBVH: **retained research mechanism**.
+
+GPU power/clock sysfs manipulation is not an accepted Lane-G measurement
+requirement and the abandoned G002c experiment must not be rerun.
 
 The copied integration/LBVH/grid sources in
 `src/research/lane_g_transient_lbvh_hardening/` are an auditable snapshot of
