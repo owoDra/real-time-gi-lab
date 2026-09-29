@@ -223,6 +223,39 @@ static_assert(sizeof(InvalidationPush) == 16);
     return value == I001Variant::BoundedHwrt;
 }
 
+[[nodiscard]] bool has_dynamic_transition(
+    I001Scenario scenario) noexcept {
+    return scenario == I001Scenario::MovingRigid ||
+           scenario == I001Scenario::SparseMovingStress ||
+           scenario == I001Scenario::DenseMovingStress ||
+           scenario == I001Scenario::LargeWorldMovingStress ||
+           scenario == I001Scenario::VerticalWorldMovingStress;
+}
+
+[[nodiscard]] bool is_sparse_stress(
+    I001Scenario scenario) noexcept {
+    return scenario == I001Scenario::SparseStress ||
+           scenario == I001Scenario::SparseMovingStress;
+}
+
+[[nodiscard]] bool is_dense_stress(
+    I001Scenario scenario) noexcept {
+    return scenario == I001Scenario::DenseStress ||
+           scenario == I001Scenario::DenseMovingStress;
+}
+
+[[nodiscard]] bool is_large_world_stress(
+    I001Scenario scenario) noexcept {
+    return scenario == I001Scenario::LargeWorldStress ||
+           scenario == I001Scenario::LargeWorldMovingStress;
+}
+
+[[nodiscard]] bool is_vertical_world_stress(
+    I001Scenario scenario) noexcept {
+    return scenario == I001Scenario::VerticalWorldStress ||
+           scenario == I001Scenario::VerticalWorldMovingStress;
+}
+
 [[nodiscard]] lane_a::A001Case a001_case(
     I001Scenario scenario,
     bool target_state) noexcept {
@@ -239,6 +272,10 @@ static_assert(sizeof(InvalidationPush) == 16);
     case I001Scenario::DenseStress:
     case I001Scenario::LargeWorldStress:
     case I001Scenario::VerticalWorldStress:
+    case I001Scenario::SparseMovingStress:
+    case I001Scenario::DenseMovingStress:
+    case I001Scenario::LargeWorldMovingStress:
+    case I001Scenario::VerticalWorldMovingStress:
         return lane_a::A001Case::Static;
     }
     return lane_a::A001Case::Static;
@@ -512,12 +549,12 @@ void apply_scene_stress(
     I001Scenario scenario,
     lane_a::SceneSurfaceSet& a_scene,
     lane_b::B002Scene& b_scene) {
-    if (scenario != I001Scenario::LargeWorldStress &&
-        scenario != I001Scenario::VerticalWorldStress) {
+    if (!is_large_world_stress(scenario) &&
+        !is_vertical_world_stress(scenario)) {
         return;
     }
 
-    const bool large = scenario == I001Scenario::LargeWorldStress;
+    const bool large = is_large_world_stress(scenario);
     const float offset_x = large ? 1.0e6F : 0.0F;
     const float offset_z = large ? -1.0e6F : 0.0F;
     const float scale_y = large ? 1.0F : 16.0F;
@@ -674,6 +711,10 @@ const char* i001_scenario_name(I001Scenario value) noexcept {
     case I001Scenario::DenseStress: return "dense-stress";
     case I001Scenario::LargeWorldStress: return "large-world-stress";
     case I001Scenario::VerticalWorldStress: return "vertical-world-stress";
+    case I001Scenario::SparseMovingStress: return "sparse-moving";
+    case I001Scenario::DenseMovingStress: return "dense-moving";
+    case I001Scenario::LargeWorldMovingStress: return "large-world-moving";
+    case I001Scenario::VerticalWorldMovingStress: return "vertical-world-moving";
     }
     return "unknown";
 }
@@ -698,6 +739,10 @@ I001Scenario i001_parse_scenario(const std::string& value) {
     if (value == "dense-stress") return I001Scenario::DenseStress;
     if (value == "large-world-stress") return I001Scenario::LargeWorldStress;
     if (value == "vertical-world-stress") return I001Scenario::VerticalWorldStress;
+    if (value == "sparse-moving") return I001Scenario::SparseMovingStress;
+    if (value == "dense-moving") return I001Scenario::DenseMovingStress;
+    if (value == "large-world-moving") return I001Scenario::LargeWorldMovingStress;
+    if (value == "vertical-world-moving") return I001Scenario::VerticalWorldMovingStress;
     throw std::runtime_error("unknown I001 scenario: " + value);
 }
 
@@ -793,13 +838,13 @@ struct I001Runtime::Impl {
 
         settings.case_id = lane_a::A001Case::Static;
         settings.tile_width =
-            options.scenario == I001Scenario::SparseStress
+            is_sparse_stress(options.scenario)
             ? 64U
-            : (options.scenario == I001Scenario::DenseStress ? 256U : 128U);
+            : (is_dense_stress(options.scenario) ? 256U : 128U);
         settings.tile_height =
-            options.scenario == I001Scenario::SparseStress
+            is_sparse_stress(options.scenario)
             ? 36U
-            : (options.scenario == I001Scenario::DenseStress ? 144U : 72U);
+            : (is_dense_stress(options.scenario) ? 144U : 72U);
         settings.cascade_count = 4;
         settings.rays_per_probe = 8;
         params = lane_a::build_a001_params(a_scene, settings);
@@ -807,7 +852,7 @@ struct I001Runtime::Impl {
             options.scenario != I001Scenario::MovingRigid) {
             fail("F006 geometry classes require moving-rigid I001 scenario");
         }
-        if (options.scenario == I001Scenario::MovingRigid) {
+        if (has_dynamic_transition(options.scenario)) {
             moving = choose_moving_selection(b_scene);
         }
 
@@ -856,7 +901,7 @@ struct I001Runtime::Impl {
             VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
         if (uses_transient_candidate(options.variant) &&
-            options.scenario == I001Scenario::MovingRigid) {
+            has_dynamic_transition(options.scenario)) {
             static_hits = context.create_device_buffer(
                 VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
                 VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
@@ -882,7 +927,7 @@ struct I001Runtime::Impl {
             estimated_storage_capacity(a_scene, params);
         {
             auto target_scene = a_scene;
-            if (options.scenario == I001Scenario::MovingRigid) {
+            if (has_dynamic_transition(options.scenario)) {
                 for (const auto primitive : moving.primitives) {
                     target_scene.samples.at(primitive).position[0] +=
                         moving.delta_x;
@@ -956,7 +1001,7 @@ struct I001Runtime::Impl {
     void prepare_candidate_traversal() {
         if (uses_transient_candidate(options.variant)) {
             std::vector<lane_b::Triangle> static_triangles;
-            if (options.scenario == I001Scenario::MovingRigid) {
+            if (has_dynamic_transition(options.scenario)) {
                 std::vector<std::uint8_t> dynamic_mask(
                     b_scene.triangles.size(), 0U);
                 for (const auto primitive : moving.primitives) {
@@ -979,7 +1024,7 @@ struct I001Runtime::Impl {
                 shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
                 false);
 
-            if (options.scenario == I001Scenario::MovingRigid) {
+            if (has_dynamic_transition(options.scenario)) {
                 std::vector<GpuTriangle> dynamic_template;
                 dynamic_template.reserve(moving.primitives.size());
                 lane_b::Aabb dynamic_bounds{};
@@ -1052,7 +1097,7 @@ struct I001Runtime::Impl {
                 quant_payload.hash_table.size() *
                 sizeof(lane_b::GpuSegmentHashEntry));
 
-            if (options.scenario == I001Scenario::MovingRigid) {
+            if (has_dynamic_transition(options.scenario)) {
                 auto target_geometry = translated_geometry(
                     b_scene.triangles,
                     moving.primitives,
@@ -1249,7 +1294,7 @@ struct I001Runtime::Impl {
     void create_traversal_stage() {
         if (uses_transient_candidate(options.variant)) {
             const bool split =
-                options.scenario == I001Scenario::MovingRigid;
+                has_dynamic_transition(options.scenario);
             const auto* static_output = split ? &static_hits : &hits;
             const std::array<I001Binding, 5> static_bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
@@ -1503,7 +1548,7 @@ struct I001Runtime::Impl {
     };
 
     [[nodiscard]] DynamicUpdateStats update_dynamic_geometry(bool target_state) {
-        if (options.scenario != I001Scenario::MovingRigid ||
+        if (!has_dynamic_transition(options.scenario) ||
             !target_state ||
             geometry_is_target) {
             return {};
@@ -1841,7 +1886,7 @@ struct I001Runtime::Impl {
         stamp(5);
 
         if (uses_transient_candidate(options.variant) &&
-            options.scenario == I001Scenario::MovingRigid) {
+            has_dynamic_transition(options.scenario)) {
             const float builder_delta =
                 options.geometry_class == I001GeometryClass::RepresentativeRigid &&
                 geometry_is_target
@@ -1949,7 +1994,7 @@ struct I001Runtime::Impl {
             for (std::uint32_t slot = 12U; slot < kQueryCount; ++slot) {
                 stamp(slot);
             }
-        } else if (options.scenario != I001Scenario::MovingRigid) {
+        } else if (!has_dynamic_transition(options.scenario)) {
             for (std::uint32_t slot = 12U; slot <= 19U; ++slot) {
                 stamp(slot);
             }
@@ -1996,7 +2041,7 @@ struct I001Runtime::Impl {
         if (uses_transient_candidate(options.variant)) {
             result.timings.static_traversal_us =
                 timestamp_us(timestamps[20], timestamps[21], period);
-            if (options.scenario == I001Scenario::MovingRigid) {
+            if (has_dynamic_transition(options.scenario)) {
                 result.timings.dynamic_builder_reset_us =
                     timestamp_us(timestamps[12], timestamps[13], period);
                 result.timings.dynamic_builder_input_us =
@@ -2057,7 +2102,7 @@ struct I001Runtime::Impl {
         result.stats.outputs = counter_values[1];
         result.stats.overflow = counter_values[2];
         result.stats.visible_owners = counter_values[3];
-        if (options.scenario == I001Scenario::MovingRigid && target_state) {
+        if (has_dynamic_transition(options.scenario) && target_state) {
             result.stats.moved_primitives =
                 static_cast<std::uint32_t>(moving.primitives.size());
             result.stats.segment_membership_changes =
