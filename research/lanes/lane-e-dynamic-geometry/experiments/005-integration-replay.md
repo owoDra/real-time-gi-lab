@@ -1,6 +1,6 @@
 # E005 — integrated ownership replay and final Lane E decision
 
-Status: target validation passed; accepted timing ready
+Status: complete; final Lane E HWRT and software ownership architectures accepted
 
 ## Question
 
@@ -301,3 +301,28 @@ mise run research:record --lane lane-e-dynamic-geometry \
 The timing runner repeats the complete 20-pair validation matrix before
 validation-disabled timing. Do not alter the frozen E005 gates after observing
 timing.
+
+
+## Accepted timing result
+
+Accepted measurement provenance:
+
+- commit: `2911790d8fd1716615a59dc86034e4fea783c9ec`;
+- clean checkout;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- 3 process repeats;
+- 5 scenarios x 4 variants = 60 timing rows.
+
+Final frozen-gate result:
+
+- all stable-regime guards pass independently;
+- moving-rigid HWRT boundary improvement: 69.17%, traversal change -3.67%;
+- moving-rigid software boundary improvement: 98.20%, traversal regression 7.30%;
+- deforming HWRT boundary improvement: 62.58%, traversal regression 2.03%;
+- deforming software boundary improvement: 90.91%, traversal regression 2.96%;
+- all persistent and peak-resident memory guards pass;
+- final HWRT accepted: true;
+- final software accepted: true.
+
+Final result:
+`research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md`.
