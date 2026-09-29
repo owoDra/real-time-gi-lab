@@ -259,48 +259,60 @@ documents take precedence for concluded experiment outcomes.
 
 ## Next research priority
 
-Issue #17 / Lane G remains the highest-value next lane, but it should be
-**amended before implementation** rather than executed unchanged.
-
-The core G001/G002 ordering is correct:
+Issue #17 / Lane G is the next research lane. The post-synthesis plan is now
+frozen around two blockers that Lane F actually demonstrated:
 
 1. **G001 memory ownership/lifetime census first**. Explain the deterministic
    sparse 3.0836x/3.2025x failures before optimizing.
 2. **G002 timing-repeatability diagnosis second**. Architecture remains
    unchanged while isolating process/warmup/order/clock/allocator/driver/query
    effects.
-3. Freeze a new accepted timing protocol from G002 **before** any decision-valid
-   optimization timing.
+3. Freeze any revised accepted timing protocol from G002 **before** using it for
+   decision-valid optimization timing.
 4. Only then implement memory changes justified by G001.
 
-Before Lane G implementation starts, amend #17 so that its final decision also:
+Lane G must evaluate transient LBVH against the accepted Lane E architecture,
+not treat Lane F as though no incumbent exists. If Lane E participates in a
+formal performance gate, its comparator must be ported/rerun in the same
+run-local campaign and measurement boundary. Historical E005 values remain
+context only.
 
-- includes the accepted **Lane E incumbent as a run-local comparator** where
-  practical, not only historical E005 numbers;
-- allows a **conditional object-local transient rebuild** result for
-  topology-changing/high-churn geometry instead of requiring the only useful
-  outcome to be rigid-primary replacement;
-- preserves the distinction between rigid, stable-topology deforming and
-  topology-changing classes;
-- freezes any revised memory/timing gates before accepted target timing.
+The valid outcomes are deliberately broader than a universal rigid-primary
+replacement. Lane G may establish a **conditional object-local transient rebuild
+backend** for topology-changing/high-churn geometry if that class passes its own
+frozen correctness, memory and timing gates. Rigid, stable-topology deforming,
+and topology-changing classes must remain separately reported; success in one
+class must not be generalized to another.
 
-This does not require a different lane before G. It changes Lane G from
-"retry Lane F until it promotes" into "explain the two real blockers, then test
-whether transient LBVH adds value beyond the accepted Lane E architecture".
+The Lane G plan also preserves the existing program contracts:
 
-## Conditions to start Issue #17
+- A001 producer semantics and natural append order;
+- HWRT primary / B003 software fallback disposition unless new decision-valid
+  evidence supersedes it;
+- C001 sparse storage semantics;
+- shared exact Hit semantics;
+- no candidate-specific workload or hidden measurement-boundary changes.
 
-Lane G implementation should start only after:
+No different research lane needs to precede Lane G. Lower-priority follow-ups —
+dense-regime storage, D001 renderer integration, and D005 capacity policy —
+should wait unless new evidence shows they are the dominant blocker.
 
-1. #17 is amended with the post-synthesis incumbent/comparison rules above.
-2. Its branch is created from the post-synthesis `research` checkpoint.
-3. G001/G002 remain diagnostic-first; no memory tuning is performed before the
-   byte-accurate census.
-4. The accepted timing protocol is frozen from G002 before performance-driven
-   G003/G005 decisions.
-5. Any Lane E comparison uses the same run-local boundary if it participates in
-   a formal promotion gate.
+## Lane G start readiness
 
-Lower-priority follow-ups — dense-regime storage, D001 renderer integration, and
-D005 capacity policy — should wait unless new evidence shows they are the next
-dominant blocker.
+Lane G is ready to start once Issue #17 contains the post-synthesis comparison
+and outcome rules above and the lane branch is created from this research
+checkpoint.
+
+Execution order is frozen:
+
+1. G001 census with **no optimization**.
+2. G002 repeatability diagnosis with **unchanged architecture**.
+3. Document and freeze any accepted methodology revision.
+4. G003 memory candidates justified by G001 only.
+5. G004 integration hardening.
+6. G005 final same-boundary replay, including Lane E run-local comparison where
+   practical and required for a formal promotion claim.
+
+No heuristic buffer tuning may precede G001. No accepted timing from a revised
+methodology may be used before that methodology is documented and frozen. No
+historical and run-local timing values may be mixed into one promotion gate.
