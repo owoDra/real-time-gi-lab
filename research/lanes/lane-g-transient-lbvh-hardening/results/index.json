@@ -16,6 +16,13 @@
       "result": "002-timing-repeatability-diagnosis.md",
       "status": "closed-diagnostic-inconclusive",
       "decision": "no-decision-valid-timing-protocol-g002c-abandoned-for-host-safety"
+    },
+    {
+      "id": "G003",
+      "name": "memory-reduction-candidates",
+      "result": "003-memory-reduction-candidates.md",
+      "status": "g003a-pending-target-gpu-evidence",
+      "decision": "immutable-static-hwrt-build-input-release-under-test"
     }
   ]
 }
