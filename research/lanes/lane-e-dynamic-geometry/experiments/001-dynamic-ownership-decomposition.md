@@ -1,6 +1,6 @@
 # E001 — dynamic ownership decomposition
 
-Status: target validation ready; target timing not yet run
+Status: target validation passed; accepted timing ready
 
 ## Question
 
@@ -144,3 +144,41 @@ mise run research:record --lane lane-e-dynamic-geometry \
 Do not start accepted timing until this validation artifact has been inspected.
 The timing runner will repeat the same validation matrix before timing as an
 additional guard.
+
+
+## Target validation result
+
+Accepted validation artifact:
+
+`out/research/lane-e-dynamic-geometry/001-dynamic-ownership-decomposition/20260929T075511Z`
+
+Validation provenance:
+
+- measurement commit: `be6eec379889228075e28836bbcf05aa210f6047`;
+- branch: `research-lane-e-dynamic-geometry`;
+- tree: clean;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- validation pairs: 6;
+- all quality gates passed;
+- all storage-failure counts were zero;
+- research runner return code: 0.
+
+The validation gate is satisfied. Accepted timing may now begin without changing
+the frozen E001 thresholds.
+
+Formal timing command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 001-dynamic-ownership-decomposition \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e001.py --build-dir build/release --repeats 3"
+```
+
+The timing runner repeats the validation matrix before validation-disabled
+timing. Do not alter the E001 accounting/dominance gates after observing timing.
