@@ -29,10 +29,15 @@ unavailable.
 
 ## Current state
 
-I001 is **target-run-ready** on this branch. Implementation-only work does not
-count as accepted performance evidence. The next gate is a clean target-GPU
-build plus the recorded matrix described in
-`experiments/001-dynamic-end-to-end.md`.
+I001 is **complete** on this branch. The full 33-case correctness matrix passed
+and the three-repeat target-GPU matrix was recorded at commit
+`3a1aa9c25ffcec583459409aca4c526b17b53e3c`.
+
+No universal composed architecture passed every frozen promotion gate. HWRT and
+the B003 fallback are strong in stable-geometry regimes but both lose their
+required moving-rigid comparison; renderer depth reuse and bounded capacity are
+also workload-conditional rather than universally promoted. See
+`results/001-dynamic-end-to-end.md` for the final evidence and decision.
 
 The matrix covers the four representative Sponza regimes, topology-changing
 moving geometry, sparse/dense and large/vertical stresses, renderer depth reuse,
