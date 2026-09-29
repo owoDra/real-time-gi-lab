@@ -315,10 +315,11 @@ double B002HwrtTraversal::build_blas_range(
     build_info.type =
         VK_ACCELERATION_STRUCTURE_TYPE_BOTTOM_LEVEL_KHR;
     build_info.flags =
-        VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR |
-        (allow_update
-            ? VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR
-            : 0U);
+        VK_BUILD_ACCELERATION_STRUCTURE_PREFER_FAST_TRACE_BIT_KHR;
+    if (allow_update) {
+        build_info.flags |=
+            VK_BUILD_ACCELERATION_STRUCTURE_ALLOW_UPDATE_BIT_KHR;
+    }
     build_info.mode =
         VK_BUILD_ACCELERATION_STRUCTURE_MODE_BUILD_KHR;
     build_info.geometryCount = 1;
