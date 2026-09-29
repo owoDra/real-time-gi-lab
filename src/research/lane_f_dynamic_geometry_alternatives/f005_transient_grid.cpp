@@ -379,6 +379,21 @@ void F005TransientGrid::dispatch(
     context_.vk().cmdDispatch(command, groups, 1U, 1U);
 }
 
+
+double F005TransientGrid::update_template(
+    std::span<const lane_b::GpuTriangle> triangles) {
+    if (triangles.size() != count_) {
+        fail("F005 template update count mismatch");
+    }
+    const lane_b::B002BufferUpdate update{
+        0U,
+        triangles.data(),
+        VkDeviceSize(triangles.size()) * sizeof(lane_b::GpuTriangle),
+    };
+    return context_.update_device_buffer_timed(
+        template_buffer_, std::span<const lane_b::B002BufferUpdate>(&update, 1U));
+}
+
 void F005TransientGrid::record_build(
     VkCommandBuffer command,
     float delta_x,
