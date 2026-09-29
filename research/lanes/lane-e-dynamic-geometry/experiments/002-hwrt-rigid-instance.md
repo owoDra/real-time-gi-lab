@@ -1,6 +1,6 @@
 # E002 — HWRT rigid instance architecture
 
-Status: protocol frozen; implementation in progress
+Status: protocol frozen; target validation ready
 
 ## Question
 
@@ -151,3 +151,43 @@ that deforming/skinned geometry is solved. E004 remains responsible for the
 geometry-changing boundary.
 
 A001 natural append semantics and C001 sparse storage remain unchanged.
+
+
+## Implementation checkpoint
+
+E002 is implemented as an explicit branch of the accepted B002/I001 HWRT path:
+
+- the current `combined-hwrt` control retains the original one-scene-BLAS
+  ownership and geometry/BLAS/TLAS update path;
+- candidate setup partitions the selected rigid source instance from the static
+  world, builds immutable static and rigid BLAS objects, and creates a
+  two-instance TLAS;
+- candidate target frames update only the rigid TLAS instance record and then
+  maintain the TLAS using the selected UPDATE or BUILD policy;
+- candidate geometry upload and BLAS update paths are structurally forbidden;
+- the integration HWRT ray-query shader uses the TLAS instance custom index as
+  the per-BLAS metadata base and applies the shared Hit semantics in object
+  space while returning world-space normals;
+- the CPU-translated target geometry used by the existing correctness reference
+  is prepared only after the measured dynamic-maintenance wall closes;
+- E002's runner enforces the frozen accounting, architecture-integrity,
+  validation, repeat and promotion gates.
+
+No target timing has been run or inferred from this implementation.
+
+Target validation command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 002-hwrt-rigid-instance \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e002.py --build-dir build/release --validation-only"
+```
+
+Do not start accepted E002 timing until the validation artifact has been
+inspected. The timing runner will repeat the validation matrix before timing.
