@@ -117,10 +117,21 @@ def write_json(path: Path, payload: object) -> None:
 
 def read_single_csv(path: Path) -> dict[str, str]:
     with path.open(newline="", encoding="utf-8") as handle:
-        rows = list(csv.DictReader(handle))
+        reader = csv.DictReader(handle)
+        rows = list(reader)
     if len(rows) != 1:
         raise RuntimeError(f"{path} must contain exactly one row")
-    return rows[0]
+    row = rows[0]
+    if None in row:
+        raise RuntimeError(
+            f"{path} CSV schema mismatch: data contains extra columns "
+            f"not present in header: {row[None]}"
+        )
+    if not reader.fieldnames or "quality_passed" not in reader.fieldnames:
+        raise RuntimeError(
+            f"{path} CSV schema mismatch: quality_passed column is missing"
+        )
+    return row
 
 
 def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
