@@ -9,6 +9,8 @@ Entrypoints:
 - E001: `run_e001.py` — current dynamic-ownership decomposition.
 - E002: `run_e002.py` — current HWRT control versus immutable rigid-object
   BLAS + TLAS UPDATE/BUILD policies.
+- E003: `run_e003.py` — current software control versus immutable object-local
+  binary/quantized StrataBrick instance ownership.
 
 Formal runs require the exact Lane E branch, a clean tree, and the target
 `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`. Each experiment runs its
