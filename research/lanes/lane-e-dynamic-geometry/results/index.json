@@ -60,12 +60,17 @@
     {
       "id": "E005",
       "experiment": "005-integration-replay",
-      "status": "accepted-timing-ready",
+      "status": "complete",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/005-integration-replay.md",
       "protocol_commit": "a18730afa4aa293713e513783fbaf6b683057abe",
       "implementation_checkpoint": "156707f751ffddec64546c98d2aa28f4476ee280",
       "validation_commit": "5f1de18c031f7590c1514c9d262ea34f6bb1b58c",
-      "validation_protocol_commit": "e0c83ba48e52d2bd03c546ef28503f22431616fa"
+      "validation_protocol_commit": "e0c83ba48e52d2bd03c546ef28503f22431616fa",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md",
+      "measurement_commit": "2911790d8fd1716615a59dc86034e4fea783c9ec",
+      "final_hwrt_accepted": true,
+      "final_software_accepted": true,
+      "result_commit": "33872b4874cdee746fadfa07935023d0589d255d"
     }
   ]
 }
