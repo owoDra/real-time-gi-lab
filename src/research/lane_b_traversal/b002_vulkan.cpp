@@ -437,6 +437,7 @@ double B002VulkanContext::copy_buffer_regions_timed(
             &fence_info,
             nullptr,
             &fence) != VK_SUCCESS) {
+        dispatch_.destroyQueryPool(query_pool, nullptr);
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy fence");
     }
