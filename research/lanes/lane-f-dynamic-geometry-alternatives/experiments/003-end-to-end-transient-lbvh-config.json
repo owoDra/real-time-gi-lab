@@ -54,16 +54,18 @@
     "decision_statistic": "median of process-level measured target frames",
     "outlier_deletion": false,
     "instability_rule": "complete_gpu_us max/min > 1.20",
-    "identical_full_reruns_allowed": 1
+    "identical_full_reruns_allowed": 1,
+    "quality_replay_inside_timing_process": false,
+    "correctness_source": "prior same-commit target-GPU validation artifact; timing executable runs exactly one warmup frame plus one measured frame"
   },
   "gates": {
     "static_gpu_max_ratio_vs_combined_hwrt": 1.05,
     "camera_gpu_max_ratio_vs_combined_hwrt": 1.05,
     "light_gpu_max_ratio_vs_combined_hwrt": 1.05,
     "stable_stress_gpu_max_ratio_vs_combined_hwrt": 1.05,
-    "moving_gpu_max_ratio_vs_vanilla": 0.90,
-    "moving_wall_max_ratio_vs_vanilla": 0.90,
-    "peak_resident_max_ratio_vs_vanilla": 3.0
+    "moving_gpu_max_ratio_vs_vanilla": 0.9,
+    "moving_wall_max_ratio_vs_vanilla": 0.9,
+    "peak_resident_max_ratio_vs_vanilla": 3
   },
   "f002_prerequisite_status": "formal-gate-pending-because-f001-run-local-moving-baseline-was-inconclusive",
   "f004_note": "F004 cannot activate unless F002 obtains a formal PASS under the frozen prerequisite"
