@@ -311,22 +311,22 @@ struct MovingSelection {
     }
 
     const auto segment_size = lane_b::b002_segment_size(scene);
-    constexpr std::array<float, 6> divisors{
-        32.0F, 64.0F, 128.0F, 256.0F, 512.0F, 1024.0F};
+    constexpr std::array<float, 5> multipliers{
+        1.25F, 2.5F, 5.0F, 10.0F, 20.0F};
     for (const auto instance : candidates) {
-        for (const auto divisor : divisors) {
-            const auto delta = segment_size / divisor;
+        for (const auto multiplier : multipliers) {
+            const auto delta = segment_size * multiplier;
             auto target = translated_geometry(
                 scene.triangles, groups[instance], delta);
             lane_b::HierarchicalStrataBrick probe(
                 scene.triangles, segment_size);
             const auto stats = probe.update(target, groups[instance]);
-            if (stats.membership_changes == 0U) {
+            if (stats.membership_changes != 0U) {
                 return {instance, groups[instance], delta};
             }
         }
     }
-    fail("I001 could not select a bounds-only moving-rigid regime");
+    fail("I001 could not select a topology-changing moving-rigid regime");
 }
 
 void apply_scene_stress(
@@ -849,6 +849,7 @@ struct I001Runtime::Impl {
     }
 
     void calculate_memory() {
+        memory_stats = {};
         const auto allocation = [](const B002Buffer& buffer) {
             return static_cast<std::size_t>(buffer.allocation_size);
         };
@@ -882,6 +883,32 @@ struct I001Runtime::Impl {
         memory_stats.storage_capacity_bytes = allocation(storage_slots);
         memory_stats.peak_resident_bytes =
             memory_stats.persistent_bytes + memory_stats.transient_bytes + memory_stats.scratch_bytes;
+    }
+
+    [[nodiscard]] bool write_storage_buffer(
+        B002Buffer& buffer,
+        const void* data,
+        VkDeviceSize size) {
+        if (data == nullptr || size == 0U) {
+            fail("I001 cannot write an empty traversal buffer");
+        }
+        if (buffer.size == size) {
+            const lane_b::B002BufferUpdate update{
+                0U,
+                data,
+                size,
+            };
+            context.update_device_buffer(
+                buffer,
+                std::span<const lane_b::B002BufferUpdate>(&update, 1));
+            return false;
+        }
+        context.replace_device_buffer(
+            buffer,
+            data,
+            size,
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        return true;
     }
 
     struct DynamicUpdateStats {
@@ -938,66 +965,76 @@ struct I001Runtime::Impl {
                 const auto stats = hierarchy_cpu->update(
                     b_scene.triangles,
                     moving.primitives);
-                if (stats.membership_changes != 0U) {
-                    fail("I001 moving-rigid regime changed quantized segment membership");
+                if (stats.membership_changes == 0U) {
+                    fail("I001 moving-rigid regime did not exercise hierarchy rebuild");
                 }
                 auto wide = lane_b::make_b003_wide_micro_payload(
                     hierarchy_cpu->flatten());
                 auto next_quant =
                     lane_b::make_b003_quantized_micro_payload(wide);
-                if (next_quant.nodes.size() != quant_payload.nodes.size() ||
-                    next_quant.ordered_primitives.size() !=
-                        quant_payload.ordered_primitives.size() ||
-                    next_quant.hash_table.size() != quant_payload.hash_table.size()) {
-                    fail("I001 bounds-only quantized update changed buffer shape");
+
+                const auto node_bytes = VkDeviceSize(
+                    next_quant.nodes.size() *
+                    sizeof(lane_b::B003GpuQuantNode));
+                const auto order_bytes = VkDeviceSize(
+                    next_quant.ordered_primitives.size() *
+                    sizeof(std::uint32_t));
+                const auto hash_bytes = VkDeviceSize(
+                    next_quant.hash_table.size() *
+                    sizeof(lane_b::GpuSegmentHashEntry));
+                const bool rebind =
+                    quant_nodes.size != node_bytes ||
+                    quant_order.size != order_bytes ||
+                    quant_hash.size != hash_bytes;
+                if (rebind) {
+                    traversal_stage.reset();
                 }
-                const std::array<lane_b::B002BufferUpdate, 3> updates{{
-                    {
-                        0U,
-                        next_quant.nodes.data(),
-                        VkDeviceSize(
-                            next_quant.nodes.size() *
-                            sizeof(lane_b::B003GpuQuantNode)),
-                    },
-                    {
-                        0U,
-                        next_quant.ordered_primitives.data(),
-                        VkDeviceSize(
-                            next_quant.ordered_primitives.size() *
-                            sizeof(std::uint32_t)),
-                    },
-                    {
-                        0U,
-                        next_quant.hash_table.data(),
-                        VkDeviceSize(
-                            next_quant.hash_table.size() *
-                            sizeof(lane_b::GpuSegmentHashEntry)),
-                    },
-                }};
-                context.update_device_buffer(
+                (void)write_storage_buffer(
                     quant_nodes,
-                    std::span<const lane_b::B002BufferUpdate>(&updates[0], 1));
-                context.update_device_buffer(
+                    next_quant.nodes.data(),
+                    node_bytes);
+                (void)write_storage_buffer(
                     quant_order,
-                    std::span<const lane_b::B002BufferUpdate>(&updates[1], 1));
-                context.update_device_buffer(
+                    next_quant.ordered_primitives.data(),
+                    order_bytes);
+                (void)write_storage_buffer(
                     quant_hash,
-                    std::span<const lane_b::B002BufferUpdate>(&updates[2], 1));
+                    next_quant.hash_table.data(),
+                    hash_bytes);
                 quant_payload = std::move(next_quant);
+                if (rebind) {
+                    create_traversal_stage();
+                }
             } else {
-                software_cpu->refit(b_scene.triangles);
+                software_cpu->rebuild(b_scene.triangles);
                 const auto next_nodes = software_cpu->gpu_nodes();
-                const lane_b::B002BufferUpdate node_update{
-                    0U,
-                    next_nodes.data(),
-                    VkDeviceSize(
-                        next_nodes.size() *
-                        sizeof(lane_b::GpuBvhNode)),
-                };
-                context.update_device_buffer(
+                const auto& next_order =
+                    software_cpu->ordered_primitives();
+                const auto node_bytes = VkDeviceSize(
+                    next_nodes.size() *
+                    sizeof(lane_b::GpuBvhNode));
+                const auto order_bytes = VkDeviceSize(
+                    next_order.size() *
+                    sizeof(std::uint32_t));
+                const bool rebind =
+                    software_nodes.size != node_bytes ||
+                    software_order.size != order_bytes;
+                if (rebind) {
+                    traversal_stage.reset();
+                }
+                (void)write_storage_buffer(
                     software_nodes,
-                    std::span<const lane_b::B002BufferUpdate>(&node_update, 1));
+                    next_nodes.data(),
+                    node_bytes);
+                (void)write_storage_buffer(
+                    software_order,
+                    next_order.data(),
+                    order_bytes);
+                if (rebind) {
+                    create_traversal_stage();
+                }
             }
+            calculate_memory();
         }
 
         for (const auto primitive : moving.primitives) {
