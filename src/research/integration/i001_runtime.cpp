@@ -598,8 +598,32 @@ struct I001Runtime::Impl {
             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
         std::memcpy(uniform.mapped, &params, sizeof(params));
 
-        storage_capacity = next_pow2(
-            estimated_storage_capacity(a_scene, params));
+        auto storage_capacity_estimate =
+            estimated_storage_capacity(a_scene, params);
+        {
+            auto target_scene = a_scene;
+            if (options.scenario == I001Scenario::MovingRigid) {
+                for (const auto primitive : moving.primitives) {
+                    target_scene.samples.at(primitive).position[0] +=
+                        moving.delta_x;
+                }
+            }
+            auto target_settings = settings;
+            target_settings.case_id =
+                a001_case(options.scenario, true);
+            auto target_params =
+                lane_a::build_a001_params(
+                    target_scene,
+                    target_settings);
+            target_params.limits[1] = params.limits[1];
+            target_params.limits[2] = params.limits[2];
+            storage_capacity_estimate = std::max(
+                storage_capacity_estimate,
+                estimated_storage_capacity(
+                    target_scene,
+                    target_params));
+        }
+        storage_capacity = next_pow2(storage_capacity_estimate);
         std::vector<HashSlotCpu> empty_slots(storage_capacity);
         storage_slots = context.upload_device_buffer(
             empty_slots.data(),
