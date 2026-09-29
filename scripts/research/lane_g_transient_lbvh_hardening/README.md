@@ -53,7 +53,7 @@ recorded as null rather than invalidating the timing campaign.
 First identify the AMDGPU device exposing the performance-level control:
 
 ```bash
-find /sys/class/drm/card*/device \
+find -L /sys/class/drm/card*/device \
   -name power_dpm_force_performance_level -print
 ```
 
