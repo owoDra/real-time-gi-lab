@@ -34,18 +34,22 @@
       "baseline_peak_bytes": 119078592,
       "vanilla_peak_bytes": 38616288,
       "released_setup_only_bytes": 46202400,
-      "expected_hardened_peak_bytes": 72876192,
-      "expected_hardened_ratio_vs_vanilla": 1.8871879140739782,
-      "expected_improvement_vs_unchanged_lbvh": 0.3879992131583148
+      "expected_hardened_runtime_resident_bytes": 72876192,
+      "expected_hardened_setup_peak_bytes": 104595424,
+      "expected_hardened_peak_bytes": 104595424,
+      "expected_hardened_peak_ratio_vs_vanilla": 2.70858307251075,
+      "expected_peak_improvement_vs_unchanged_lbvh": 0.12162696717139551
     },
     "sparse-moving": {
       "baseline_peak_bytes": 123668160,
       "vanilla_peak_bytes": 38616288,
       "released_setup_only_bytes": 46017696,
-      "expected_hardened_peak_bytes": 77650464,
-      "expected_hardened_ratio_vs_vanilla": 2.010821547632957,
-      "expected_improvement_vs_unchanged_lbvh": 0.3721062559675829
+      "expected_hardened_runtime_resident_bytes": 77650464,
+      "expected_hardened_setup_peak_bytes": 104233440,
+      "expected_hardened_peak_bytes": 104233440,
+      "expected_hardened_peak_ratio_vs_vanilla": 2.6992092041575826,
+      "expected_peak_improvement_vs_unchanged_lbvh": 0.1571521723942525
     }
   },
-  "anchor_rule": "The G001 sparse baseline, vanilla, released setup-only bytes, and resulting hardened peak must reproduce exactly; otherwise G003a evidence is invalidated rather than re-baselined."
+  "anchor_rule": "The G001 sparse baseline, vanilla and released bytes, plus both hardened runtime-resident and setup-peak values, must reproduce exactly. peak_resident_bytes is max(runtime_resident_bytes, setup_peak_bytes). Any mismatch invalidates the evidence for investigation rather than permitting post-hoc re-baselining."
 }

@@ -47,16 +47,34 @@ This prevents unrelated memory changes from being credited to G003a.
 
 ## Predeclared G001-derived expectation
 
-Before the G003a target run, the deterministic G001 census predicts exactly:
+A first implementation review caught an important distinction: releasing setup-only
+buffers reduces steady/runtime residency, but does not reduce the true lifetime peak
+unless their setup lifetime is also scheduled before shared frame/stream/storage
+allocations.
 
-| scenario | unchanged LBVH | setup-only bytes released | expected hardened | expected ratio vs vanilla | expected improvement |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| sparse-stress | 119,078,592 B | 46,202,400 B | **72,876,192 B** | **1.887188x** | **38.80%** |
-| sparse-moving | 123,668,160 B | 46,017,696 B | **77,650,464 B** | **2.010822x** | **37.21%** |
+G003a therefore moves the immutable HWRT build earlier and freezes two phases:
 
-These are frozen before measurement. If the run-local unchanged/vanilla anchors or
-the byte-exact hardened result differ, the evidence is invalidated for
-investigation rather than re-baselined after seeing the result.
+- **setup peak** — immutable static HWRT BLAS/TLAS construction before shared
+  integration allocations;
+- **runtime resident** — post-setup static HWRT + shared integration + dynamic
+  LBVH allocations.
+
+The reported peak is `max(setup peak, runtime resident)`.
+
+Before the target run, G001 predicts exactly:
+
+| scenario | unchanged peak | runtime resident after release | setup peak | expected true peak | ratio vs vanilla | peak improvement |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| sparse-stress | 119,078,592 B | 72,876,192 B | 104,595,424 B | **104,595,424 B** | **2.708583x** | **12.16%** |
+| sparse-moving | 123,668,160 B | 77,650,464 B | 104,233,440 B | **104,233,440 B** | **2.699209x** | **15.72%** |
+
+Thus the candidate is still predicted to clear the <=3.0x sparse gate and the
+>=10% improvement gate, but by much less than the naive post-setup subtraction
+would imply.
+
+These values are frozen before measurement. If the run-local anchors, released
+lifecycle bytes, runtime residency, setup peak, or final peak differ, the evidence
+is invalidated for investigation rather than re-baselined after seeing the result.
 
 ## Frozen replay
 
