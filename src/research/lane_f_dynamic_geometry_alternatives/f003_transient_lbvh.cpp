@@ -264,6 +264,21 @@ void F003TransientLbvh::dispatch(
     context_.vk().cmdDispatch(command, groups, 1, 1);
 }
 
+
+double F003TransientLbvh::update_template(
+    std::span<const lane_b::GpuTriangle> triangles) {
+    if (triangles.size() != count_) {
+        fail("F003 template update count mismatch");
+    }
+    const lane_b::B002BufferUpdate update{
+        0U,
+        triangles.data(),
+        VkDeviceSize(triangles.size()) * sizeof(lane_b::GpuTriangle),
+    };
+    return context_.update_device_buffer_timed(
+        template_buffer_, std::span<const lane_b::B002BufferUpdate>(&update, 1U));
+}
+
 void F003TransientLbvh::record_build(
     VkCommandBuffer command,
     float delta_x,
