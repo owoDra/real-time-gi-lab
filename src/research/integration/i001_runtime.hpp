@@ -21,6 +21,7 @@ enum class I001Scenario {
     CameraMotion,
     LightMotion,
     MovingRigid,
+    DeformingControl,
     SparseStress,
     DenseStress,
     LargeWorldStress,
@@ -40,6 +41,19 @@ struct I001FrameTimings {
     double ray_prepare_us{};
     double traversal_maintenance_gpu_us{};
     double dynamic_update_wall_us{};
+    double geometry_prepare_cpu_us{};
+    double surface_update_gpu_us{};
+    double geometry_transfer_wall_us{};
+    double geometry_transfer_gpu_us{};
+    double blas_update_us{};
+    double tlas_update_us{};
+    double membership_update_cpu_us{};
+    double hierarchy_refit_cpu_us{};
+    double hierarchy_rebuild_cpu_us{};
+    double hierarchy_occupancy_cpu_us{};
+    double packing_cpu_us{};
+    double hierarchy_upload_gpu_us{};
+    double software_bvh_rebuild_cpu_us{};
     double traversal_us{};
     double radiance_us{};
     double merge_us{};
@@ -59,6 +73,8 @@ struct I001FrameStats {
     std::uint32_t visible_owners{};
     std::uint32_t moved_primitives{};
     std::uint32_t segment_membership_changes{};
+    std::uint32_t hierarchy_refit_segments{};
+    std::uint32_t hierarchy_rebuilt_segments{};
     std::uint32_t storage_allocations{};
     std::uint32_t storage_updates{};
     std::uint32_t storage_invalidations{};
