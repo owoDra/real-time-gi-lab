@@ -20,6 +20,20 @@ RELEASED_NAMES = {
     "static-hwrt.instance",
     "static-hwrt.scratch",
 }
+G001_SPARSE_ANCHORS = {
+    "sparse-stress": {
+        "baseline_peak_bytes": 119_078_592,
+        "vanilla_peak_bytes": 38_616_288,
+        "released_setup_only_bytes": 46_202_400,
+        "expected_hardened_peak_bytes": 72_876_192,
+    },
+    "sparse-moving": {
+        "baseline_peak_bytes": 123_668_160,
+        "vanilla_peak_bytes": 38_616_288,
+        "released_setup_only_bytes": 46_017_696,
+        "expected_hardened_peak_bytes": 77_650_464,
+    },
+}
 
 
 def git(*args: str) -> str:
@@ -160,6 +174,7 @@ def main() -> int:
     no_memory_regression = True
     sparse_gate_pass = True
     at_least_one_sparse_improvement = False
+    g001_sparse_anchor_reproduced = True
 
     for scenario in SCENARIOS:
         baseline = int(frame_by_key[("transient-lbvh", scenario)]["peak_resident_bytes"])
@@ -187,10 +202,22 @@ def main() -> int:
         no_memory_regression = no_memory_regression and no_regression
 
         if scenario in {"sparse-stress", "sparse-moving"}:
+            anchor = G001_SPARSE_ANCHORS[scenario]
+            anchor_ok = (
+                baseline == anchor["baseline_peak_bytes"]
+                and vanilla == anchor["vanilla_peak_bytes"]
+                and expected_released == anchor["released_setup_only_bytes"]
+                and hardened == anchor["expected_hardened_peak_bytes"]
+            )
+            g001_sparse_anchor_reproduced = (
+                g001_sparse_anchor_reproduced and anchor_ok
+            )
             sparse_gate_pass = sparse_gate_pass and ratio_vs_vanilla <= 3.0
             at_least_one_sparse_improvement = (
                 at_least_one_sparse_improvement or improvement >= 0.10
             )
+        else:
+            anchor_ok = True
 
         scenarios[scenario] = {
             "baseline_peak_bytes": baseline,
@@ -203,6 +230,7 @@ def main() -> int:
             "memory_improvement_fraction": improvement,
             "hardened_ratio_vs_vanilla": ratio_vs_vanilla,
             "no_gt_10pct_memory_regression": no_regression,
+            "g001_sparse_anchor_reproduced": anchor_ok,
         }
 
     correctness = all(
@@ -214,6 +242,7 @@ def main() -> int:
         correctness
         and all_devices
         and exact_delta_pass
+        and g001_sparse_anchor_reproduced
         and sparse_gate_pass
         and at_least_one_sparse_improvement
         and no_memory_regression
@@ -229,6 +258,7 @@ def main() -> int:
         "correctness_passed": correctness,
         "all_devices_exact": all_devices,
         "allocation_attribution_exact": exact_delta_pass,
+        "g001_sparse_anchor_reproduced": g001_sparse_anchor_reproduced,
         "sparse_memory_ceiling_passed": sparse_gate_pass,
         "at_least_one_sparse_improvement_ge_10pct": at_least_one_sparse_improvement,
         "no_required_memory_regression_gt_10pct": no_memory_regression,
