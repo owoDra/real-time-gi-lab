@@ -278,7 +278,9 @@ int main(int argc, char** argv) {
                "template_bytes,working_geometry_bytes,aabb_bytes,key_bytes,"
                "histogram_bytes,prefix_bytes,node_bytes,ready_bytes,"
                "peak_builder_bytes,sort_mismatches,root_count_mismatches,"
-               "root_bounds_mismatches,validation_passed\n";
+               "root_index_mismatches,root_bounds_mismatches,"
+               "leaf_mapping_mismatches,topology_mismatches,"
+               "validation_passed\n";
 
         bool all_valid = true;
         for (const auto size : sizes) {
@@ -332,7 +334,10 @@ int main(int argc, char** argv) {
                 << memory.total_bytes() << ','
                 << validation.sort_mismatches << ','
                 << validation.root_count_mismatches << ','
+                << validation.root_index_mismatches << ','
                 << validation.root_bounds_mismatches << ','
+                << validation.leaf_mapping_mismatches << ','
+                << validation.topology_mismatches << ','
                 << (validation.passed() ? 1 : 0)
                 << '\n';
 
