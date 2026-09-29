@@ -17,8 +17,10 @@ Current checkpoint:
   identical full rerun also remained unstable.
 - F004: not activated because the frozen F002 formal-PASS prerequisite is not
   available; F003 moving dynamic traversal was also below builder time.
-- F005: sorted two-level grid implementation/config/runner are frozen before
-  first accepted timing; target validation is the next checkpoint.
+- F005: correctness PASS; accepted timing INCONCLUSIVE after the one permitted
+  identical full rerun also remained unstable. Grid mechanism evidence shows
+  strong cell-reference amplification and radix-sort-dominated rebuild cost.
+- F006: geometry-class crossover controls are the next frozen experiment.
 
 F003 and F005 preserve the same fixed dynamic classification: the F001/I001
 selected moving-rigid primitive set is excluded from persistent static HWRT
