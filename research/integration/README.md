@@ -36,8 +36,16 @@ build plus the recorded matrix described in
 
 The matrix covers the four representative Sponza regimes, topology-changing
 moving geometry, sparse/dense and large/vertical stresses, renderer depth reuse,
-the B003 software fallback, and D005-style bounded overflow with explicit
-full-capacity retry. Fixed thresholds remain unchanged from the frozen protocol.
+the B003 software fallback, and bounded overflow with explicit full-capacity
+retry. The bounded implementation keeps D005's capacity policy but removes the
+rejected staged owner-slot path: one natural owner append index directly owns
+both output/work ranges, making clamp/overflow hole-free.
+
+The storage path uses two phases (reserve/reset, then accumulate) so concurrent
+updates to the same probe cannot split one key across live slots. Storage
+capacity is sized for both transition endpoints, and moving-frame complete GPU
+time includes measured transfer work as well as traversal maintenance. Fixed
+thresholds remain unchanged from the frozen protocol.
 
 See `experiments/001-dynamic-end-to-end.md` for the protocol and exact target
 command.
