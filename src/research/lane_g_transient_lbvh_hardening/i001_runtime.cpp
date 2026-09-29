@@ -18,6 +18,7 @@
 #include "baseline/lane_b_traversal/traversal_common.hpp"
 #include "f003_transient_lbvh.hpp"
 #include "f005_transient_grid.hpp"
+#include "g003_immutable_hwrt.hpp"
 #include "vk_init.hpp"
 
 #include <algorithm>
@@ -42,6 +43,7 @@ namespace {
 
 namespace lane_a = phos::gi::lane_a;
 namespace lane_b = phos::gi::research::lane_b;
+namespace lane_g = phos::gi::research::lane_g;
 
 using lane_b::B002Buffer;
 using lane_b::B002HwrtTraversal;
@@ -806,6 +808,7 @@ struct I001Runtime::Impl {
     std::unique_ptr<HierarchicalStrataBrick> hierarchy_cpu;
     lane_b::B003QuantizedMicroPayload quant_payload;
     std::unique_ptr<B002HwrtTraversal> hwrt;
+    std::unique_ptr<lane_g::G003ImmutableHwrtTraversal> immutable_hwrt;
     std::unique_ptr<phos::gi::research::lane_f::F003TransientLbvh> transient_lbvh;
     std::unique_ptr<phos::gi::research::lane_f::F005TransientGrid> transient_grid;
 
@@ -832,6 +835,31 @@ struct I001Runtime::Impl {
     std::uint32_t frame_id{};
     I001FrameResult last{};
     bool have_last{};
+
+    [[nodiscard]] VkAccelerationStructureKHR static_hwrt_top_level() const {
+        if (immutable_hwrt) return immutable_static_hwrt_top_level();
+        if (hwrt) return static_hwrt_top_level();
+        fail("I001 static HWRT owner is missing");
+    }
+
+    [[nodiscard]] const B002Buffer& static_hwrt_triangle_buffer() const {
+        if (immutable_hwrt) return immutable_static_hwrt_triangle_buffer();
+        if (hwrt) return static_hwrt_triangle_buffer();
+        fail("I001 static HWRT triangle buffer is missing");
+    }
+
+    [[nodiscard]] const lane_b::HwrtSetupStats& static_hwrt_setup_stats() const {
+        if (immutable_hwrt) return immutable_static_hwrt_setup_stats();
+        if (hwrt) return static_hwrt_setup_stats();
+        fail("I001 static HWRT setup stats are missing");
+    }
+
+    [[nodiscard]] std::vector<lane_b::HwrtAllocationRecord>
+    static_hwrt_allocation_census() const {
+        if (immutable_hwrt) return immutable_hwrt->allocation_census();
+        if (hwrt) return hwrt->allocation_census();
+        fail("I001 static HWRT allocation census is missing");
+    }
 
     explicit Impl(I001Options value)
         : options(std::move(value)),
@@ -992,6 +1020,7 @@ struct I001Runtime::Impl {
         producer_stage.reset();
         owner_stage.reset();
         depth_stage.reset();
+        immutable_hwrt.reset();
         hwrt.reset();
 
         if (fence != VK_NULL_HANDLE) context.vk().destroyFence(fence, nullptr);
@@ -1028,14 +1057,20 @@ struct I001Runtime::Impl {
                 static_triangles = b_scene.triangles;
             }
 
-            hwrt = std::make_unique<B002HwrtTraversal>(
-                context,
-                static_triangles,
-                shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_hwrt.spv"),
-                false,
-                uses_hardened_transient_lbvh(options.variant)
-                    ? lane_b::HwrtBuildInputRetention::ReleaseAfterBuild
-                    : lane_b::HwrtBuildInputRetention::RetainForUpdates);
+            if (uses_hardened_transient_lbvh(options.variant)) {
+                immutable_hwrt =
+                    std::make_unique<lane_g::G003ImmutableHwrtTraversal>(
+                        context,
+                        static_triangles);
+            } else {
+                hwrt = std::make_unique<B002HwrtTraversal>(
+                    context,
+                    static_triangles,
+                    shader_path(
+                        PHOS_GI_LANE_B_SHADER_DIR,
+                        "lane_b_b002_hwrt.spv"),
+                    false);
+            }
 
             if (has_dynamic_transition(options.scenario)) {
                 std::vector<GpuTriangle> dynamic_template;
@@ -1311,8 +1346,8 @@ struct I001Runtime::Impl {
             const auto* static_output = split ? &static_hits : &hits;
             const std::array<I001Binding, 5> static_bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
-                {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
-                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hwrt->triangle_buffer()},
+                {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, static_hwrt_top_level()},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &static_hwrt_triangle_buffer()},
                 {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, static_output},
                 {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
             }};
@@ -1374,8 +1409,8 @@ struct I001Runtime::Impl {
         } else if (uses_hwrt(options.variant)) {
             const std::array<I001Binding, 5> bindings{{
                 {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
-                {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
-                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hwrt->triangle_buffer()},
+                {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, static_hwrt_top_level()},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &static_hwrt_triangle_buffer()},
                 {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hits},
                 {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
             }};
@@ -1446,10 +1481,10 @@ struct I001Runtime::Impl {
 
         if (uses_transient_candidate(options.variant)) {
             memory_stats.static_hwrt_persistent_bytes =
-                hwrt->setup_stats().persistent_bytes;
+                static_hwrt_setup_stats().persistent_bytes;
             memory_stats.persistent_bytes +=
                 memory_stats.static_hwrt_persistent_bytes;
-            memory_stats.scratch_bytes = hwrt->setup_stats().scratch_bytes;
+            memory_stats.scratch_bytes = static_hwrt_setup_stats().scratch_bytes;
             if (transient_lbvh) {
                 const auto& dynamic_memory = transient_lbvh->memory();
                 memory_stats.dynamic_candidate_persistent_bytes =
@@ -1485,9 +1520,9 @@ struct I001Runtime::Impl {
             }
         } else if (uses_hwrt(options.variant)) {
             memory_stats.static_hwrt_persistent_bytes =
-                hwrt->setup_stats().persistent_bytes;
-            memory_stats.persistent_bytes += hwrt->setup_stats().persistent_bytes;
-            memory_stats.scratch_bytes = hwrt->setup_stats().scratch_bytes;
+                static_hwrt_setup_stats().persistent_bytes;
+            memory_stats.persistent_bytes += static_hwrt_setup_stats().persistent_bytes;
+            memory_stats.scratch_bytes = static_hwrt_setup_stats().scratch_bytes;
         } else {
             memory_stats.persistent_bytes += allocation(triangle_buffer);
             if (uses_quantized(options.variant)) {
@@ -1601,8 +1636,8 @@ struct I001Runtime::Impl {
                    "fixed", "frame", storage_stats);
 
         if (uses_transient_candidate(options.variant) || uses_hwrt(options.variant)) {
-            if (hwrt) {
-                for (const auto& entry : hwrt->allocation_census()) {
+            if (hwrt || immutable_hwrt) {
+                for (const auto& entry : static_hwrt_allocation_census()) {
                     const bool immutable_hwrt =
                         uses_transient_candidate(options.variant) ||
                         !has_dynamic_transition(options.scenario);
