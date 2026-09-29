@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g003a-v1",
+  "experiment": "G003",
+  "candidate": "immutable-static-hwrt-build-input-release",
+  "justification": "G001 identified static-hwrt.vertices, static-hwrt.instance, and static-hwrt.scratch as runtime-resident setup-only allocations on the transient candidate path.",
+  "variants": [
+    "transient-lbvh",
+    "hardened-transient-lbvh",
+    "vanilla-software"
+  ],
+  "scenarios": [
+    "static",
+    "moving-rigid",
+    "sparse-stress",
+    "sparse-moving",
+    "dense-moving"
+  ],
+  "released_allocations": [
+    "static-hwrt.vertices",
+    "static-hwrt.instance",
+    "static-hwrt.scratch"
+  ],
+  "memory_gates": {
+    "sparse_peak_ratio_vs_run_local_vanilla_lte": 3,
+    "sparse_improvement_vs_unchanged_lbvh_gte": 0.1,
+    "required_peak_regression_vs_unchanged_lbvh_lte": 0.1
+  },
+  "correctness": "exact validation required",
+  "timing": "recording is non-decision-valid because G002 closed without a safe repeatable timing protocol",
+  "outlier_deletion": false
+}
