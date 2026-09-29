@@ -9,6 +9,12 @@
       "result": "research/lanes/lane-e-dynamic-geometry/results/001-dynamic-ownership-decomposition.md",
       "measurement_commit": "1fa902d48a8d6e693384f5911033683ebd342a00",
       "result_commit": "1c05f3553245528164937c0a9ae9bd0cbf2ef2f4"
+    },
+    {
+      "id": "E002",
+      "experiment": "002-hwrt-rigid-instance",
+      "status": "target-validation-ready",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/002-hwrt-rigid-instance.md"
     }
   ]
 }
