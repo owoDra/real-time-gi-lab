@@ -31,3 +31,30 @@ Rigid and deforming results must never be averaged into one "dynamic" result.
 
 Normal research iterations commit directly to this branch. Other research
 branches are not merged into Lane E during measurement.
+
+
+## Final decision
+
+Lane E is complete.
+
+Accepted dynamic-geometry ownership model:
+
+- static world: immutable static-owned acceleration data;
+- rigid objects:
+  - HWRT: immutable object-local BLAS + TLAS instance transform/UPDATE;
+  - software: immutable object-local StrataBrick + conservative quantized
+    Micro BVH8 + explicit instance traversal;
+- stable-topology deforming/skinned-like objects:
+  - HWRT: update only the object's geometry and object-local BLAS, then TLAS
+    UPDATE;
+  - software: maintain/repack/upload only the object's local
+    StrataBrick/quantized Micro BVH8 and instance bounds;
+- topology-changing objects: object-local rebuild boundary; no measured
+  topology-changing performance claim.
+
+E005 integrated replay retained the dynamic wins while all stable-regime and
+memory guards passed. Both final HWRT and final software ownership candidates
+are accepted.
+
+Final evidence:
+`research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md`.
