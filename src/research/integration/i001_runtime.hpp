@@ -57,6 +57,8 @@ struct I001FrameStats {
     std::uint32_t requested_outputs{};
     std::uint32_t overflow{};
     std::uint32_t visible_owners{};
+    std::uint32_t moved_primitives{};
+    std::uint32_t segment_membership_changes{};
     std::uint32_t storage_allocations{};
     std::uint32_t storage_updates{};
     std::uint32_t storage_invalidations{};
