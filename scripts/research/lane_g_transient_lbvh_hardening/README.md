@@ -104,3 +104,24 @@ of Lane G.
 
 The runner/config remain only as historical diagnostic material. G002 closes
 without a decision-valid timing protocol.
+
+## G003a immutable static-HWRT lifetime candidate
+
+GPU-independent checks:
+
+```bash
+mise exec -- python -m unittest \
+  scripts/research/lane_g_transient_lbvh_hardening/test_run_g003.py
+mise run research:check
+mise run build
+```
+
+Target correctness/memory replay:
+
+```bash
+mise exec -- python \
+  scripts/research/lane_g_transient_lbvh_hardening/run_g003.py
+```
+
+No GPU power/clock sysfs manipulation is required or permitted.
+G003a timing is not decision-valid because G002 closed without a safe accepted timing protocol.
