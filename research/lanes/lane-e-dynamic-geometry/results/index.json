@@ -56,6 +56,13 @@
         "deforming-local-software-quantized"
       ],
       "result_commit": "4a0fdae208c81d4624d790862f88709622c003be"
+    },
+    {
+      "id": "E005",
+      "experiment": "005-integration-replay",
+      "status": "protocol-frozen",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/005-integration-replay.md",
+      "protocol_commit": "a18730afa4aa293713e513783fbaf6b683057abe"
     }
   ]
 }
