@@ -83,6 +83,8 @@ struct I001Quality {
     std::size_t resolved_output_mismatches{};
     double radiance_rms_error{};
     double radiance_max_abs_error{};
+    double temporal_rms_error{};
+    double temporal_max_abs_error{};
     bool passed{};
 };
 
