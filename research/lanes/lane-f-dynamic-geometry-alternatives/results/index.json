@@ -9,6 +9,15 @@
       "status": "inconclusive",
       "correctness": "pass",
       "decision": "baseline-repeatability-inconclusive"
+    },
+    {
+      "id": "F002",
+      "name": "pure-gpu-transient-lbvh-builder",
+      "result": "002-pure-gpu-transient-lbvh-builder.md",
+      "status": "complete-gate-pending",
+      "correctness": "pass",
+      "repeatability": "pass",
+      "decision": "f003-may-proceed-formal-f002-gate-pending"
     }
   ]
 }
