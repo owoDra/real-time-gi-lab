@@ -42,8 +42,8 @@ uint deterministic_radiance(WorkItem item, HitData hit) {
     seed ^= mix32(floatBitsToUint(p.light_pos_interval.z));
     seed ^= mix32(floatBitsToUint(p.light_pos_interval.w));
 
-    uint fixed = mix32(seed) & 0xffffu;
-    return fixed >> min(item.cascade, 15u);
+    uint fixed_value = mix32(seed) & 0xffffu;
+    return fixed_value >> min(item.cascade, 15u);
 }
 
 void main() {
