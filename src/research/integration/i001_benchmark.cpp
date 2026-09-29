@@ -81,6 +81,7 @@ void write_csv(
            "stream_capacity_bytes,storage_capacity_bytes,"
            "visibility_mismatches,producer_semantic_errors,"
            "hit_mismatches,traversal_runtime_errors,missing_probes,leaked_probes,"
+           "stale_storage_slots,resolved_output_mismatches,"
            "radiance_rms_error,radiance_max_abs_error,quality_passed\n";
 
     output << std::fixed << std::setprecision(6)
@@ -126,6 +127,8 @@ void write_csv(
         << result.quality.traversal_runtime_errors << ','
         << result.quality.missing_probes << ','
         << result.quality.leaked_probes << ','
+        << result.quality.stale_storage_slots << ','
+        << result.quality.resolved_output_mismatches << ','
         << result.quality.radiance_rms_error << ','
         << result.quality.radiance_max_abs_error << ','
         << (result.quality.passed ? 1 : 0) << '\n';
