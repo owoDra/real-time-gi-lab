@@ -1,6 +1,6 @@
 # E004 — deforming geometry boundary
 
-Status: target validation passed; accepted timing ready
+Status: complete; object-local stable-topology deformation promoted for HWRT and software
 
 ## Question
 
@@ -287,3 +287,27 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 The timing runner repeats the validation matrix before validation-disabled timing.
 Do not alter the frozen E004 gates after observing timing.
+
+
+## Accepted timing result
+
+Accepted measurement provenance:
+
+- commit: `6a401247f91d3cb1b843a2c9c8cf0819414b9cc2`;
+- clean checkout;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- 3 process repeats.
+
+Frozen-gate result:
+
+- local HWRT boundary improvement: 64.60%;
+- local HWRT traversal regression: 0.91%;
+- local HWRT persistent-memory ratio: 1.00001x;
+- local HWRT promotion gate: pass;
+- local software boundary improvement: 90.61%;
+- local software traversal change: -10.92%;
+- local software persistent-memory ratio: 1.00512x;
+- local software promotion gate: pass.
+
+Final result:
+`research/lanes/lane-e-dynamic-geometry/results/004-deforming-boundary.md`.
