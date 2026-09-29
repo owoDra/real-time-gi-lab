@@ -1392,6 +1392,12 @@ struct I001Runtime::Impl {
         auto reference_hits = context.create_device_buffer(
             VkDeviceSize(params.limits[1]) * sizeof(GpuHit),
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        auto reference_contributions = context.create_device_buffer(
+            VkDeviceSize(params.limits[1]) * sizeof(std::uint32_t) * 2U,
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        auto reference_accum = context.create_device_buffer(
+            VkDeviceSize(params.limits[2]) * sizeof(std::uint32_t) * 2U,
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 
         const std::array<I001Binding, 5> bindings{{
             {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &rays},
@@ -1403,6 +1409,28 @@ struct I001Runtime::Impl {
         I001ComputeStage reference_stage(
             context, shader_path(PHOS_GI_LANE_B_SHADER_DIR, "lane_b_b002_software_bvh.spv"),
             bindings, sizeof(SoftwareTraversalPush));
+
+        const std::array<I001Binding, 5> reference_radiance_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &reference_hits},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &reference_contributions},
+            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
+        }};
+        I001ComputeStage reference_radiance_stage(
+            context,
+            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_radiance.spv"),
+            reference_radiance_bindings);
+
+        const std::array<I001Binding, 3> reference_merge_bindings{{
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
+            {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &reference_contributions},
+            {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &reference_accum},
+        }};
+        I001ComputeStage reference_merge_stage(
+            context,
+            shader_path(PHOS_GI_LANE_A_SHADER_DIR, "lane_a_merge.spv"),
+            reference_merge_bindings);
 
         context.vk().resetFences(1, &fence);
         context.vk().resetCommandPool(command_pool, 0);
@@ -1421,10 +1449,24 @@ struct I001Runtime::Impl {
         if (context.vk().beginCommandBuffer(command, &begin) != VK_SUCCESS) {
             fail("I001 reference command begin");
         }
+        context.vk().cmdFillBuffer(
+            command,
+            reference_accum.buffer,
+            0,
+            reference_accum.size,
+            0U);
+        i001_transfer_to_compute_barrier(context, command);
+
         const SoftwareTraversalPush push{
             work_count, reference_cpu.root(), 0U, 0U};
         reference_stage.record(
             command, groups(work_count), 1, 1, &push, sizeof(push));
+        i001_compute_barrier(context, command);
+        reference_radiance_stage.record(
+            command, groups(work_count));
+        i001_compute_barrier(context, command);
+        reference_merge_stage.record(
+            command, groups(work_count));
         i001_compute_barrier(context, command);
         if (context.vk().endCommandBuffer(command) != VK_SUCCESS) {
             fail("I001 reference command end");
@@ -1557,54 +1599,25 @@ struct I001Runtime::Impl {
         context.download_device_buffer(
             storage_slots, candidate_slots.data(), candidate_slots.size() * sizeof(HashSlotCpu));
 
-        using OutputAccum = std::pair<std::uint64_t, std::uint32_t>;
-        std::map<std::uint32_t, OutputAccum> per_output;
+        std::vector<std::array<std::uint32_t, 2>> reference_accum_values(
+            last.stats.outputs);
+        context.download_device_buffer(
+            reference_accum,
+            reference_accum_values.data(),
+            reference_accum_values.size() *
+                sizeof(reference_accum_values[0]));
+
         std::map<ProbeKey, std::pair<std::uint64_t, std::uint32_t>> reference_probe;
-
-        for (std::size_t index = 0; index < work_items.size(); ++index) {
-            const auto& item = work_items[index];
-            const auto hit = lane_b::from_gpu_hit(reference[index]);
-            double value = 0.0;
-            if (hit.hit) {
-                const lane_b::Vec3 raw{item.dir_x, item.dir_y, item.dir_z};
-                const auto direction = lane_b::normalize(raw);
-                const lane_b::Vec3 origin{
-                    item.probe_px + direction.x * item.interval_min,
-                    item.probe_py + direction.y * item.interval_min,
-                    item.probe_pz + direction.z * item.interval_min,
-                };
-                const auto point = origin + direction * hit.t;
-                const lane_b::Vec3 light{
-                    params.light_pos_interval[0],
-                    params.light_pos_interval[1],
-                    params.light_pos_interval[2],
-                };
-                const auto to_light = light - point;
-                const auto distance2 = std::max(lane_b::dot(to_light, to_light), 1.0e-6F);
-                const auto light_dir = to_light / std::sqrt(distance2);
-                const auto normal = lane_b::normalize(hit.normal);
-                const auto ndotl = std::max(0.0F, lane_b::dot(normal, light_dir));
-                const auto scale = std::max(params.light_pos_interval[3], 1.0e-4F);
-                const auto attenuation =
-                    1.0F / (1.0F + distance2 / (scale * scale * 256.0F));
-                value = std::clamp(
-                    double(ndotl * attenuation) / double(1U << item.cascade),
-                    0.0, 1.0);
-            }
-            const auto fixed = static_cast<std::uint32_t>(
-                std::llround(value * 65535.0));
-            auto& output = per_output[item.output_id];
-            output.first += fixed;
-            ++output.second;
-        }
-
         for (const auto& item : work_items) {
-            if (item.ray_index != 0U) continue;
-            const auto found = per_output.find(item.output_id);
-            if (found == per_output.end() || found->second.second == 0U) continue;
+            if (item.ray_index != 0U ||
+                item.output_id >= reference_accum_values.size()) {
+                continue;
+            }
+            const auto merged = reference_accum_values[item.output_id];
+            if (merged[1] == 0U) continue;
             const auto sample = static_cast<std::uint32_t>(
-                (found->second.first + found->second.second / 2U) /
-                found->second.second);
+                (std::uint64_t(merged[0]) + merged[1] / 2U) /
+                merged[1]);
             auto& probe = reference_probe[{
                 item.probe_x, item.probe_y, item.probe_z, item.cascade}];
             probe.first += sample;
@@ -1759,6 +1772,8 @@ struct I001Runtime::Impl {
         previous_candidate_probe = candidate_probe;
         have_quality_history = true;
 
+        context.destroy_buffer(reference_accum);
+        context.destroy_buffer(reference_contributions);
         context.destroy_buffer(reference_hits);
         context.destroy_buffer(ordered);
         context.destroy_buffer(nodes);
