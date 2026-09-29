@@ -1372,7 +1372,8 @@ struct I001Runtime::Impl {
         DynamicUpdateStats out{};
 
         const bool rigid_instance_candidate =
-            uses_rigid_instance_hwrt(options.variant);
+            uses_rigid_instance_hwrt(options.variant) ||
+            uses_rigid_instance_software(options.variant);
         auto phase_start = Clock::now();
         if (!rigid_instance_candidate) {
             auto target_geometry =
@@ -1458,6 +1459,41 @@ struct I001Runtime::Impl {
                     out.blas_update_us +
                     out.tlas_update_us;
             }
+        } else if (uses_rigid_instance_software(options.variant)) {
+            const bool binary =
+                uses_rigid_instance_software_binary(options.variant);
+            const auto instance_index =
+                binary
+                ? instance_binary_payload.moving_instance_index
+                : instance_quantized_payload.moving_instance_index;
+            const auto& instances =
+                binary
+                ? instance_binary_payload.instances
+                : instance_quantized_payload.instances;
+            if (instance_index >= instances.size()) {
+                fail("I001 E003 moving instance index is invalid");
+            }
+            auto moved_instance =
+                lane_e::translated_instance(
+                    instances[instance_index],
+                    moving.delta_x);
+            const lane_b::B002BufferUpdate update{
+                VkDeviceSize(instance_index) *
+                    VkDeviceSize(sizeof(lane_e::E003GpuInstance)),
+                &moved_instance,
+                VkDeviceSize(sizeof(lane_e::E003GpuInstance)),
+            };
+            phase_start = Clock::now();
+            out.instance_transfer_gpu_us =
+                context.update_device_buffer_timed(
+                    instance_table,
+                    std::span<const lane_b::B002BufferUpdate>(
+                        &update,
+                        1));
+            out.instance_transfer_wall_us =
+                elapsed_us(phase_start);
+            out.gpu_us +=
+                out.instance_transfer_gpu_us;
         } else {
             std::vector<GpuTriangle> moved_triangles;
             moved_triangles.reserve(moving.primitives.size());
