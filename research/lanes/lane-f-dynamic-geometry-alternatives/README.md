@@ -23,8 +23,9 @@ Current checkpoint:
 - F006: correctness PASS; timing INCONCLUSIVE after the one permitted full
   rerun still had an unstable extended-vanilla class. Diagnostic-only evidence
   strongly favors LBVH over grid for all four controlled update classes.
-- F007: final representative + stable-stress + dynamic-stress integration
-  replay is the next and final frozen experiment.
+- F007: final representative + stable-stress + dynamic-stress implementation,
+  frozen config, runner and gate tests are committed before first accepted
+  timing; target validation is the next and final pre-timing checkpoint.
 
 F003 and F005 preserve the same fixed dynamic classification: the F001/I001
 selected moving-rigid primitive set is excluded from persistent static HWRT
