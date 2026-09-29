@@ -219,6 +219,41 @@ def main() -> int:
         if row["scenario"] == "dense-moving"
     }
 
+    candidate_sparse_moving = [
+        row for row in allocations
+        if row["variant"] == "transient-lbvh" and row["scenario"] == "sparse-moving"
+    ]
+    required_roles = {
+        "shared-persistent",
+        "static-hwrt-persistent",
+        "dynamic-lbvh-persistent",
+        "current-frame-geometry",
+        "radix-sort-scratch",
+        "node-topology-bounds-scratch",
+        "producer-stream",
+        "c001-storage",
+        "host-mirror",
+    }
+    observed_roles = {row["role"] for row in candidate_sparse_moving}
+    missing_roles = sorted(required_roles - observed_roles)
+    if missing_roles:
+        raise RuntimeError(f"G001 census is missing required roles: {missing_roles}")
+
+    observed_capacity_kinds = {row["capacity_kind"] for row in candidate_sparse_moving}
+    for required in ("double-buffer-a", "double-buffer-b"):
+        if required not in observed_capacity_kinds:
+            raise RuntimeError(f"G001 census is missing {required}")
+
+    unknown_vulkan_logical = [
+        row["name"] for row in allocations
+        if row["vulkan_allocation"] == "1" and row["logical_size_known"] != "1"
+    ]
+    if unknown_vulkan_logical:
+        raise RuntimeError(
+            "G001 requires logical bytes for every Vulkan allocation: "
+            + ", ".join(sorted(set(unknown_vulkan_logical)))
+        )
+
     owner_totals: dict[tuple[str, str, str], int] = defaultdict(int)
     role_totals: dict[tuple[str, str, str], int] = defaultdict(int)
     capacity_totals: dict[tuple[str, str, str], int] = defaultdict(int)
@@ -294,6 +329,28 @@ def main() -> int:
         for scenario, anchor in anchors.items()
     }
 
+    setup_only_retained_bytes: dict[str, int] = {}
+    for variant in VARIANTS:
+        for scenario in SCENARIOS:
+            key = f"{variant}/{scenario}"
+            setup_only_retained_bytes[key] = sum(
+                int(row["allocation_bytes"])
+                for row in allocations
+                if row["variant"] == variant
+                and row["scenario"] == scenario
+                and row["counted_in_f007_peak"] == "1"
+                and row["allocation_lifetime"] == "runtime"
+                and row["use_lifetime"] == "setup-only"
+            )
+
+    sparse_stress_lbvh_bytes = sum(
+        int(row["allocation_bytes"])
+        for row in allocations
+        if row["variant"] == "transient-lbvh"
+        and row["scenario"] == "sparse-stress"
+        and row["owner"] == "transient-lbvh"
+    )
+
     summary = {
         "schema_version": 1,
         "plan_version": "lane-g-g001-v1",
@@ -303,10 +360,16 @@ def main() -> int:
         "case_count": len(frames),
         "allocation_row_count": len(allocations),
         "accounting_identity_passed": True,
-        "double_counting_detected": False,
+        "duplicate_census_names_detected": False,
+        "setup_only_retained_bytes": setup_only_retained_bytes,
+        "sparse_stress_lbvh_allocation_bytes": sparse_stress_lbvh_bytes,
         "candidate_peak_ratio_vs_vanilla": ratios,
         "f007_anchor_checks": anchor_checks,
-        "g001_conclusion_ready": all(x["passed"] for x in anchor_checks.values()),
+        "g001_conclusion_ready": (
+            all(x["passed"] for x in anchor_checks.values())
+            and not missing_roles
+            and not unknown_vulkan_logical
+        ),
         "note": (
             "G001 is memory-only diagnosis. Timing from these executions is not "
             "decision-valid G002/G003 evidence."

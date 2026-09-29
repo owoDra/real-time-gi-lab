@@ -13,3 +13,15 @@ The copied integration/LBVH/grid sources in
 `src/research/lane_g_transient_lbvh_hardening/` are an auditable snapshot of
 the Lane-F F007 implementation used as the unchanged G001 baseline. Existing
 Lane A/B/C source remains shared and unmodified.
+
+## G001 baseline provenance
+
+The executable baseline is code-equivalent to F007 measurement commit
+`041bf0287e2095302b61d31b222de958dd3b6412`. Comparing that commit with the
+later Lane-F head used to source the snapshot shows only documentation changes;
+runtime/source/shader files are unchanged.
+
+Lane A/B dependencies are copied verbatim under
+`src/research/lane_g_transient_lbvh_hardening/baseline/` and
+`shaders/research/lane_g_transient_lbvh_hardening/baseline/`. No Lane A/B/F
+branch is merged and no source in another lane-owned directory is modified.
