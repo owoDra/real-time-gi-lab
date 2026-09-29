@@ -278,6 +278,159 @@ struct MovingSelection {
     std::uint32_t membership_changes{};
 };
 
+struct GeometryTransition {
+    std::vector<lane_b::Triangle> dynamic_triangles;
+    std::vector<std::array<float, 4>> surface_positions;
+    std::uint32_t groups{};
+    std::uint32_t deformed_primitives{};
+    std::uint32_t topology_replaced_primitives{};
+};
+
+[[nodiscard]] float deterministic_signed_unit(std::uint32_t seed) noexcept {
+    seed ^= seed >> 16U;
+    seed *= 0x7feb352dU;
+    seed ^= seed >> 15U;
+    seed *= 0x846ca68bU;
+    seed ^= seed >> 16U;
+    return (float(seed & 0xffffU) / 32767.5F) - 1.0F;
+}
+
+[[nodiscard]] lane_b::Vec3 deterministic_deform_offset(
+    std::uint32_t primitive,
+    std::uint32_t vertex,
+    float amplitude) noexcept {
+    const auto base = primitive * 0x9e3779b9U + vertex * 0x85ebca6bU;
+    return {
+        deterministic_signed_unit(base ^ 0x68bc21ebU) * amplitude,
+        deterministic_signed_unit(base ^ 0x02e5be93U) * amplitude,
+        deterministic_signed_unit(base ^ 0x967a889bU) * amplitude,
+    };
+}
+
+[[nodiscard]] GeometryTransition build_geometry_transition(
+    const lane_b::B002Scene& scene,
+    const lane_a::SceneSurfaceSet& surfaces,
+    const MovingSelection& moving,
+    I001GeometryClass geometry_class) {
+    GeometryTransition output;
+    output.dynamic_triangles.reserve(moving.primitives.size());
+    output.surface_positions.reserve(moving.primitives.size());
+
+    std::uint32_t max_primitive_id = 0U;
+    for (const auto& triangle : scene.triangles) {
+        if (triangle.primitive_id != lane_b::kInvalidId) {
+            max_primitive_id = std::max(max_primitive_id, triangle.primitive_id);
+        }
+    }
+
+    const auto segment_size = lane_b::b002_segment_size(scene);
+    const auto count = static_cast<std::uint32_t>(moving.primitives.size());
+    const auto replacement_count = count / 4U;
+    const float deform_amplitude = segment_size * 0.05F;
+
+    for (std::uint32_t local = 0U; local < count; ++local) {
+        const auto primitive_index = moving.primitives[local];
+        auto triangle = scene.triangles.at(primitive_index);
+
+        std::array<float, 4> surface{};
+        std::copy_n(
+            surfaces.samples.at(primitive_index).position,
+            4,
+            surface.data());
+
+        lane_b::Vec3 surface_delta{};
+        switch (geometry_class) {
+        case I001GeometryClass::RepresentativeRigid:
+        case I001GeometryClass::RigidLargeFew: {
+            const lane_b::Vec3 delta{moving.delta_x, 0.0F, 0.0F};
+            triangle.v0 = triangle.v0 + delta;
+            triangle.v1 = triangle.v1 + delta;
+            triangle.v2 = triangle.v2 + delta;
+            surface_delta = delta;
+            output.groups = 1U;
+            break;
+        }
+        case I001GeometryClass::RigidSmallMany32: {
+            constexpr std::uint32_t kGroupCount = 32U;
+            const auto group = std::min(
+                kGroupCount - 1U,
+                static_cast<std::uint32_t>(
+                    (std::uint64_t(local) * kGroupCount) /
+                    std::max<std::uint32_t>(1U, count)));
+            const float phase =
+                float(group + 1U) / float(kGroupCount);
+            const lane_b::Vec3 delta{
+                moving.delta_x * (0.35F + 0.65F * phase),
+                segment_size * 0.05F *
+                    (float(group % 4U) - 1.5F),
+                segment_size * 0.05F *
+                    (float((group / 4U) % 4U) - 1.5F),
+            };
+            triangle.v0 = triangle.v0 + delta;
+            triangle.v1 = triangle.v1 + delta;
+            triangle.v2 = triangle.v2 + delta;
+            surface_delta = delta;
+            output.groups = kGroupCount;
+            break;
+        }
+        case I001GeometryClass::Deforming: {
+            const auto d0 = deterministic_deform_offset(
+                triangle.primitive_id, 0U, deform_amplitude);
+            const auto d1 = deterministic_deform_offset(
+                triangle.primitive_id, 1U, deform_amplitude);
+            const auto d2 = deterministic_deform_offset(
+                triangle.primitive_id, 2U, deform_amplitude);
+            triangle.v0 = triangle.v0 + d0;
+            triangle.v1 = triangle.v1 + d1;
+            triangle.v2 = triangle.v2 + d2;
+            surface_delta = (d0 + d1 + d2) / 3.0F;
+            output.groups = 1U;
+            ++output.deformed_primitives;
+            break;
+        }
+        case I001GeometryClass::TopologyReplace25: {
+            output.groups = 1U;
+            if (local < replacement_count) {
+                const auto d0 = deterministic_deform_offset(
+                    triangle.primitive_id, 3U, deform_amplitude);
+                const auto d1 = deterministic_deform_offset(
+                    triangle.primitive_id, 4U, deform_amplitude);
+                const auto d2 = deterministic_deform_offset(
+                    triangle.primitive_id, 5U, deform_amplitude);
+                const lane_b::Vec3 translation{
+                    moving.delta_x * 0.5F,
+                    segment_size * 0.03F *
+                        (float(local % 7U) - 3.0F),
+                    segment_size * 0.02F *
+                        (float(local % 5U) - 2.0F),
+                };
+                triangle.v0 = triangle.v0 + translation + d0;
+                triangle.v1 = triangle.v1 + translation + d1;
+                triangle.v2 = triangle.v2 + translation + d2;
+                surface_delta =
+                    translation + (d0 + d1 + d2) / 3.0F;
+                triangle.primitive_id =
+                    max_primitive_id + 1U + local;
+                ++output.topology_replaced_primitives;
+            }
+            break;
+        }
+        }
+
+        surface[0] += surface_delta.x;
+        surface[1] += surface_delta.y;
+        surface[2] += surface_delta.z;
+        output.dynamic_triangles.push_back(triangle);
+        output.surface_positions.push_back(surface);
+    }
+
+    if (geometry_class == I001GeometryClass::TopologyReplace25 &&
+        output.topology_replaced_primitives != replacement_count) {
+        fail("F006 topology replacement count diverged");
+    }
+    return output;
+}
+
 [[nodiscard]] std::vector<lane_b::Triangle> translated_geometry(
     const std::vector<lane_b::Triangle>& source,
     std::span<const std::uint32_t> moved,
@@ -544,6 +697,37 @@ I001Scenario i001_parse_scenario(const std::string& value) {
     throw std::runtime_error("unknown I001 scenario: " + value);
 }
 
+
+const char* i001_geometry_class_name(I001GeometryClass value) noexcept {
+    switch (value) {
+    case I001GeometryClass::RepresentativeRigid: return "representative-rigid";
+    case I001GeometryClass::RigidLargeFew: return "rigid-large-few";
+    case I001GeometryClass::RigidSmallMany32: return "rigid-small-many32";
+    case I001GeometryClass::Deforming: return "deforming";
+    case I001GeometryClass::TopologyReplace25: return "topology-replace25";
+    }
+    return "unknown";
+}
+
+I001GeometryClass i001_parse_geometry_class(const std::string& value) {
+    if (value == "representative-rigid") {
+        return I001GeometryClass::RepresentativeRigid;
+    }
+    if (value == "rigid-large-few") {
+        return I001GeometryClass::RigidLargeFew;
+    }
+    if (value == "rigid-small-many32") {
+        return I001GeometryClass::RigidSmallMany32;
+    }
+    if (value == "deforming") {
+        return I001GeometryClass::Deforming;
+    }
+    if (value == "topology-replace25") {
+        return I001GeometryClass::TopologyReplace25;
+    }
+    throw std::runtime_error("unknown I001 geometry class: " + value);
+}
+
 struct I001Runtime::Impl {
     I001Options options;
     B002VulkanContext context;
@@ -578,6 +762,9 @@ struct I001Runtime::Impl {
 
     I001Memory memory_stats{};
     MovingSelection moving{};
+    std::uint32_t last_dynamic_groups{};
+    std::uint32_t last_deformed_primitives{};
+    std::uint32_t last_topology_replaced_primitives{};
     bool geometry_is_target{};
     bool have_quality_history{};
     std::map<ProbeKey, double> previous_reference_probe;
@@ -612,6 +799,10 @@ struct I001Runtime::Impl {
         settings.cascade_count = 4;
         settings.rays_per_probe = 8;
         params = lane_a::build_a001_params(a_scene, settings);
+        if (options.geometry_class != I001GeometryClass::RepresentativeRigid &&
+            options.scenario != I001Scenario::MovingRigid) {
+            fail("F006 geometry classes require moving-rigid I001 scenario");
+        }
         if (options.scenario == I001Scenario::MovingRigid) {
             moving = choose_moving_selection(b_scene);
         }
