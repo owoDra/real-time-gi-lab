@@ -936,8 +936,19 @@ struct I001Runtime::Impl {
 
     void prepare_candidate_traversal() {
         if (uses_hwrt(options.variant)) {
-            if (uses_rigid_instance_hwrt(options.variant)) {
-                if (options.scenario != I001Scenario::MovingRigid) {
+            const bool final_hwrt =
+                uses_lane_e_final_hwrt(options.variant);
+            const bool rigid_partition =
+                uses_rigid_instance_hwrt(options.variant) ||
+                (final_hwrt &&
+                 options.scenario != I001Scenario::DeformingControl);
+            const bool deforming_partition =
+                uses_deforming_local_hwrt(options.variant) ||
+                (final_hwrt &&
+                 options.scenario == I001Scenario::DeformingControl);
+            if (rigid_partition) {
+                if (uses_rigid_instance_hwrt(options.variant) &&
+                    options.scenario != I001Scenario::MovingRigid) {
                     fail("I001 rigid-instance HWRT variants require moving-rigid");
                 }
                 hwrt = std::make_unique<B002HwrtTraversal>(
@@ -948,8 +959,9 @@ struct I001Runtime::Impl {
                         PHOS_GI_LANE_B_SHADER_DIR,
                         "lane_b_b002_hwrt.spv"),
                     false);
-            } else if (uses_deforming_local_hwrt(options.variant)) {
-                if (options.scenario != I001Scenario::DeformingControl) {
+            } else if (deforming_partition) {
+                if (uses_deforming_local_hwrt(options.variant) &&
+                    options.scenario != I001Scenario::DeformingControl) {
                     fail("I001 deforming-local HWRT requires deforming-control");
                 }
                 hwrt = std::make_unique<B002HwrtTraversal>(
@@ -973,8 +985,11 @@ struct I001Runtime::Impl {
             return;
         }
 
-        if (uses_deforming_local_software(options.variant)) {
-            if (options.scenario != I001Scenario::DeformingControl) {
+        if (uses_deforming_local_software(options.variant) ||
+            (uses_lane_e_final_software(options.variant) &&
+             options.scenario == I001Scenario::DeformingControl)) {
+            if (uses_deforming_local_software(options.variant) &&
+                options.scenario != I001Scenario::DeformingControl) {
                 fail("I001 deforming-local software requires deforming-control");
             }
             const auto segment_size =
@@ -1029,8 +1044,10 @@ struct I001Runtime::Impl {
             return;
         }
 
-        if (uses_rigid_instance_software(options.variant)) {
-            if (options.scenario != I001Scenario::MovingRigid) {
+        if (uses_rigid_instance_software(options.variant) ||
+            uses_lane_e_final_software(options.variant)) {
+            if (uses_rigid_instance_software(options.variant) &&
+                options.scenario != I001Scenario::MovingRigid) {
                 fail("I001 rigid-instance software variants require moving-rigid");
             }
             const auto segment_size =
