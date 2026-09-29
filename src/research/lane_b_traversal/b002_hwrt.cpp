@@ -407,12 +407,14 @@ HwrtUpdateStats B002HwrtTraversal::update_geometry(
     }
 
     const auto upload_start = Clock::now();
-    context_.update_device_buffer(
-        vertex_buffer_,
-        vertex_updates);
-    context_.update_device_buffer(
-        triangle_buffer_,
-        metadata_updates);
+    const auto vertex_upload_gpu_us =
+        context_.update_device_buffer_timed(
+            vertex_buffer_,
+            vertex_updates);
+    const auto metadata_upload_gpu_us =
+        context_.update_device_buffer_timed(
+            triangle_buffer_,
+            metadata_updates);
     const auto upload_us = elapsed_us(upload_start);
 
     const auto blas_us = update_blas(triangles.size());
@@ -423,6 +425,7 @@ HwrtUpdateStats B002HwrtTraversal::update_geometry(
         upload_us,
         blas_us,
         tlas_us,
+        vertex_upload_gpu_us + metadata_upload_gpu_us,
     };
 }
 
