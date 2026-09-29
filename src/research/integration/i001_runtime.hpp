@@ -15,6 +15,8 @@ enum class I001Variant {
     RigidInstanceHwrtBuild,
     RigidInstanceSoftwareBinary,
     RigidInstanceSoftwareQuantized,
+    DeformingLocalHwrt,
+    DeformingLocalSoftwareQuantized,
     CombinedSoftware,
     DepthReuseHwrt,
     BoundedHwrt,
