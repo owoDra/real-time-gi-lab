@@ -42,7 +42,11 @@
       "status": "target-validation-ready",
       "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/004-deforming-boundary.md",
       "protocol_commit": "b28fa0cd31fc2cc565f49a0f101bda8f08b39a7d",
-      "implementation_checkpoint": "fe4f783e100151b1e8f68a1334532aa50eb53d77"
+      "implementation_checkpoint": "ca62af2b9ca20a042990e68ec987d88ddbee9d43",
+      "self_review_code_commits": [
+        "aeb43b31c8bbe1e157d61f375d5eb73f72ab5b7b",
+        "cc4cb05743ee6d78de1671f871e7e38bebb8a29e"
+      ]
     }
   ]
 }
