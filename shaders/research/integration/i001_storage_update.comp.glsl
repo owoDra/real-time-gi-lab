@@ -19,6 +19,15 @@ layout(push_constant) uniform Push {
 const uint EMPTY = 0u;
 const uint TOMBSTONE = 0xffffffffu;
 
+uint mix32(uint x) {
+    x ^= x >> 16u;
+    x *= 0x7feb352du;
+    x ^= x >> 15u;
+    x *= 0x846ca68bu;
+    x ^= x >> 16u;
+    return x;
+}
+
 uint pack_key(ivec4 key) {
     if (key.x < 0 || key.x > 1023 ||
         key.y < 0 || key.y > 1023 ||
@@ -41,9 +50,7 @@ uint pack_key(ivec4 key) {
 }
 
 uint reserve_slot(ivec4 key, uint token) {
-    uint slot = token * 0x9e3779b9u;
-    slot ^= slot >> 16u;
-    slot &= pc.mask;
+    uint slot = mix32(token) & pc.mask;
 
     for (uint probe = 0u; probe < pc.max_probe; ++probe) {
         uint candidate = slots.values[slot].data.x;
@@ -67,9 +74,7 @@ uint reserve_slot(ivec4 key, uint token) {
 }
 
 uint find_slot(ivec4 key, uint token) {
-    uint slot = token * 0x9e3779b9u;
-    slot ^= slot >> 16u;
-    slot &= pc.mask;
+    uint slot = mix32(token) & pc.mask;
 
     for (uint probe = 0u; probe < pc.max_probe; ++probe) {
         uint candidate = slots.values[slot].data.x;
