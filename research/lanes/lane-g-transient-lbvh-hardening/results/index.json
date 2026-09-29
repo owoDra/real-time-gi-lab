@@ -6,8 +6,9 @@
       "id": "G001",
       "name": "memory-ownership-lifetime-census",
       "result": "001-memory-ownership-lifetime-census.md",
-      "status": "pending-target-gpu-evidence",
-      "decision": "no-memory-optimization-before-g001-concludes"
+      "status": "complete",
+      "correctness": "pass",
+      "decision": "static-hwrt-lifetime-dominates-sparse-memory-failure-lbvh-not-primary-cause"
     }
   ]
 }

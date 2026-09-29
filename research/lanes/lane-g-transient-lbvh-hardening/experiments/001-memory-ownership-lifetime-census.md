@@ -1,25 +1,29 @@
 # G001 — Memory ownership and lifetime census
 
-Status: implementation in progress
+Status: **complete**
 
-## Frozen purpose
+## Frozen question
 
-Explain the F007 transient-LBVH sparse peak-memory failures (3.0836x and
-3.2025x run-local vanilla) before making any memory optimization.
+Explain the F007 transient-LBVH sparse peak-memory failures before making any
+memory optimization:
 
-Required replay scenarios:
+- sparse-stress: 3.0836x run-local vanilla;
+- sparse-moving: 3.2025x run-local vanilla.
 
-- static
-- moving-rigid
-- sparse-stress
-- sparse-moving
-- dense-moving
+## Outcome
 
-Required allocation classes include shared persistent, static HWRT persistent,
-dynamic LBVH persistent, current-frame geometry, radix/sort scratch,
-node/topology/bounds scratch, double-buffer capacity, producer stream, C001
-storage, host mirrors, Vulkan allocation size versus logical payload, and
-lifetime overlap.
+Accepted target-GPU evidence at
+`0fcd6bce9576be5fdc708e434991b811e88cc74c` reproduces both anchors
+byte-accurately.
 
-G001 is diagnostic. Timing is not a promotion gate and G002 must not start until
-this census has a result document and Issue #17 provenance update.
+The dominant cause is static HWRT ownership/lifetime, not the transient LBVH.
+The complete moving-set LBVH allocation is only 232,960 B. Static HWRT retains
+approximately 46 MiB of setup-only build input/scratch across runtime lifetime.
+
+No G001 memory optimization was performed.
+
+See `results/001-memory-ownership-lifetime-census.md` for the byte ownership
+and lifetime breakdown.
+
+G002 may now begin. G003 remains blocked until G002 freezes a decision-valid
+timing protocol.
