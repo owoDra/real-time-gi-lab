@@ -1,6 +1,6 @@
 # E002 — HWRT rigid instance architecture
 
-Status: protocol frozen; target validation ready
+Status: target validation passed; accepted timing ready
 
 ## Question
 
@@ -191,3 +191,41 @@ mise run research:record --lane lane-e-dynamic-geometry \
 
 Do not start accepted E002 timing until the validation artifact has been
 inspected. The timing runner will repeat the validation matrix before timing.
+
+
+## Target validation result
+
+Accepted validation provenance:
+
+- measurement commit: `7c191fca1b7049fd377597d0e369de36f0a54b93`;
+- branch: `research-lane-e-dynamic-geometry`;
+- tree: clean;
+- target: `AMD Radeon 8060S Graphics (RADV STRIX_HALO)`;
+- validation pairs: 3;
+- same rigid workload across all variants;
+- moved primitives: 796;
+- segment membership changes: 796;
+- all quality gates passed;
+- all storage-failure counts were zero;
+- frozen GPU accounting gate passed;
+- rigid-instance architecture-integrity gate passed.
+
+The E002 validation gate is satisfied. Accepted timing may begin without changing
+the frozen architecture, accounting, promotion or TLAS-policy thresholds.
+
+Formal timing command:
+
+```bash
+git checkout research-lane-e-dynamic-geometry
+git pull
+mise install
+mise run research:check
+mise run assets
+mise run build
+mise run research:record --lane lane-e-dynamic-geometry \
+  --experiment 002-hwrt-rigid-instance \
+  --command "python scripts/research/lane_e_dynamic_geometry/run_e002.py --build-dir build/release --repeats 3"
+```
+
+The timing runner repeats the validation matrix before validation-disabled
+timing. Do not alter the frozen E002 gates after observing timing.
