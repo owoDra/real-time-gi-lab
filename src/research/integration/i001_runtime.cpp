@@ -657,18 +657,87 @@ struct I001Runtime::Impl {
             auto wide = lane_b::make_b003_wide_micro_payload(hierarchy_cpu->flatten());
             quant_payload = lane_b::make_b003_quantized_micro_payload(wide);
 
-            quant_nodes = context.upload_device_buffer(
+            auto node_capacity = VkDeviceSize(
+                quant_payload.nodes.size() *
+                sizeof(lane_b::B003GpuQuantNode));
+            auto order_capacity = VkDeviceSize(
+                quant_payload.ordered_primitives.size() *
+                sizeof(std::uint32_t));
+            auto hash_capacity = VkDeviceSize(
+                quant_payload.hash_table.size() *
+                sizeof(lane_b::GpuSegmentHashEntry));
+
+            if (options.scenario == I001Scenario::MovingRigid) {
+                auto target_geometry = translated_geometry(
+                    b_scene.triangles,
+                    moving.primitives,
+                    moving.delta_x);
+                HierarchicalStrataBrick target_hierarchy(
+                    target_geometry,
+                    lane_b::b002_segment_size(b_scene));
+                auto target_wide =
+                    lane_b::make_b003_wide_micro_payload(
+                        target_hierarchy.flatten());
+                const auto target_quant =
+                    lane_b::make_b003_quantized_micro_payload(
+                        target_wide);
+                node_capacity = std::max(
+                    node_capacity,
+                    VkDeviceSize(
+                        target_quant.nodes.size() *
+                        sizeof(lane_b::B003GpuQuantNode)));
+                order_capacity = std::max(
+                    order_capacity,
+                    VkDeviceSize(
+                        target_quant.ordered_primitives.size() *
+                        sizeof(std::uint32_t)));
+                hash_capacity = std::max(
+                    hash_capacity,
+                    VkDeviceSize(
+                        target_quant.hash_table.size() *
+                        sizeof(lane_b::GpuSegmentHashEntry)));
+            }
+
+            const auto upload_with_capacity =
+                [&](B002Buffer& destination,
+                    const void* data,
+                    VkDeviceSize logical_bytes,
+                    VkDeviceSize capacity_bytes) {
+                    destination = context.create_device_buffer(
+                        capacity_bytes,
+                        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                    const lane_b::B002BufferUpdate update{
+                        0U,
+                        data,
+                        logical_bytes,
+                    };
+                    context.update_device_buffer(
+                        destination,
+                        std::span<const lane_b::B002BufferUpdate>(
+                            &update,
+                            1));
+                };
+            upload_with_capacity(
+                quant_nodes,
                 quant_payload.nodes.data(),
-                quant_payload.nodes.size() * sizeof(lane_b::B003GpuQuantNode),
-                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-            quant_order = context.upload_device_buffer(
+                VkDeviceSize(
+                    quant_payload.nodes.size() *
+                    sizeof(lane_b::B003GpuQuantNode)),
+                node_capacity);
+            upload_with_capacity(
+                quant_order,
                 quant_payload.ordered_primitives.data(),
-                quant_payload.ordered_primitives.size() * sizeof(std::uint32_t),
-                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-            quant_hash = context.upload_device_buffer(
+                VkDeviceSize(
+                    quant_payload.ordered_primitives.size() *
+                    sizeof(std::uint32_t)),
+                order_capacity);
+            upload_with_capacity(
+                quant_hash,
                 quant_payload.hash_table.data(),
-                quant_payload.hash_table.size() * sizeof(lane_b::GpuSegmentHashEntry),
-                VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+                VkDeviceSize(
+                    quant_payload.hash_table.size() *
+                    sizeof(lane_b::GpuSegmentHashEntry)),
+                hash_capacity);
         } else {
             software_cpu = std::make_unique<GpuSoftwareBvhData>(b_scene.triangles);
             const auto nodes = software_cpu->gpu_nodes();
@@ -892,7 +961,7 @@ struct I001Runtime::Impl {
         if (data == nullptr || size == 0U) {
             fail("I001 cannot write an empty traversal buffer");
         }
-        if (buffer.size == size) {
+        if (buffer.size >= size) {
             const lane_b::B002BufferUpdate update{
                 0U,
                 data,
@@ -1010,9 +1079,9 @@ struct I001Runtime::Impl {
                     next_quant.hash_table.size() *
                     sizeof(lane_b::GpuSegmentHashEntry));
                 const bool rebind =
-                    quant_nodes.size != node_bytes ||
-                    quant_order.size != order_bytes ||
-                    quant_hash.size != hash_bytes;
+                    quant_nodes.size < node_bytes ||
+                    quant_order.size < order_bytes ||
+                    quant_hash.size < hash_bytes;
                 if (rebind) {
                     traversal_stage.reset();
                 }
@@ -1044,8 +1113,8 @@ struct I001Runtime::Impl {
                     next_order.size() *
                     sizeof(std::uint32_t));
                 const bool rebind =
-                    software_nodes.size != node_bytes ||
-                    software_order.size != order_bytes;
+                    software_nodes.size < node_bytes ||
+                    software_order.size < order_bytes;
                 if (rebind) {
                     traversal_stage.reset();
                 }
