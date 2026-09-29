@@ -594,8 +594,7 @@ std::vector<F002BuildSample> F002LbvhBuilder::measure(
 F002Validation F002LbvhBuilder::validate() const {
     F002Validation result;
 
-    std::vector<std::uint32_t> keys(
-        std::size_t(count_) * 4U);
+    std::vector<std::uint32_t> keys(std::size_t(count_) * 4U);
     context_.download_device_buffer(
         keys_a_buffer_,
         keys.data(),
@@ -612,6 +611,17 @@ F002Validation F002LbvhBuilder::validate() const {
                keys[previous + 2U] <= keys[current + 2U])));
         if (!ordered) ++result.sort_mismatches;
     }
+
+    std::vector<std::array<float, 4>> aabb_min(count_);
+    std::vector<std::array<float, 4>> aabb_max(count_);
+    context_.download_device_buffer(
+        aabb_min_buffer_,
+        aabb_min.data(),
+        VkDeviceSize(aabb_min.size() * sizeof(aabb_min[0])));
+    context_.download_device_buffer(
+        aabb_max_buffer_,
+        aabb_max.data(),
+        VkDeviceSize(aabb_max.size() * sizeof(aabb_max[0])));
 
     std::vector<lane_b::GpuBvhNode> nodes(
         std::size_t(count_) * 2U - 1U);
@@ -631,6 +641,79 @@ F002Validation F002LbvhBuilder::validate() const {
     if (root_count != 1U) {
         result.root_count_mismatches = 1U;
         return result;
+    }
+    if (root != 0U) {
+        ++result.root_index_mismatches;
+    }
+
+    const auto leaf_base = count_ - 1U;
+    for (std::uint32_t sorted = 0U; sorted < count_; ++sorted) {
+        const auto key = std::size_t(sorted) * 4U;
+        const auto primitive = keys[key + 2U];
+        const auto& leaf = nodes[leaf_base + sorted];
+        if (primitive >= count_ ||
+            leaf.data[0] != kInvalidId ||
+            leaf.data[1] != kInvalidId ||
+            leaf.data[3] != primitive) {
+            ++result.leaf_mapping_mismatches;
+            continue;
+        }
+        for (std::size_t axis = 0; axis < 3U; ++axis) {
+            if (!close_bound(
+                    aabb_min[primitive][axis],
+                    leaf.bounds_min[axis]) ||
+                !close_bound(
+                    aabb_max[primitive][axis],
+                    leaf.bounds_max[axis])) {
+                ++result.leaf_mapping_mismatches;
+                break;
+            }
+        }
+    }
+
+    std::vector<std::uint8_t> visited(nodes.size(), 0U);
+    std::vector<std::uint32_t> stack{root};
+    while (!stack.empty()) {
+        const auto node_index = stack.back();
+        stack.pop_back();
+        if (node_index >= nodes.size()) {
+            ++result.topology_mismatches;
+            continue;
+        }
+        if (visited[node_index] != 0U) {
+            ++result.topology_mismatches;
+            continue;
+        }
+        visited[node_index] = 1U;
+        const auto& node = nodes[node_index];
+        const bool leaf =
+            node.data[0] == kInvalidId &&
+            node.data[1] == kInvalidId;
+        if (leaf) {
+            if (node_index < leaf_base) {
+                ++result.topology_mismatches;
+            }
+            continue;
+        }
+        if (node_index >= leaf_base ||
+            node.data[0] == kInvalidId ||
+            node.data[1] == kInvalidId ||
+            node.data[0] >= nodes.size() ||
+            node.data[1] >= nodes.size()) {
+            ++result.topology_mismatches;
+            continue;
+        }
+        if (nodes[node.data[0]].data[2] != node_index ||
+            nodes[node.data[1]].data[2] != node_index) {
+            ++result.topology_mismatches;
+        }
+        stack.push_back(node.data[0]);
+        stack.push_back(node.data[1]);
+    }
+    const auto visited_count = static_cast<std::size_t>(
+        std::count(visited.begin(), visited.end(), std::uint8_t{1U}));
+    if (visited_count != nodes.size()) {
+        result.topology_mismatches += nodes.size() - visited_count;
     }
 
     lane_b::Aabb expected{};
@@ -669,7 +752,8 @@ F002Validation F002LbvhBuilder::validate() const {
             source_triangle.metadata[2],
             source_triangle.metadata[3] != 0U,
         };
-        expected = lane_b::merge(expected, lane_b::triangle_bounds(triangle));
+        expected = lane_b::merge(
+            expected, lane_b::triangle_bounds(triangle));
     }
 
     const auto& actual = nodes[root];
