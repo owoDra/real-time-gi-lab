@@ -64,6 +64,8 @@ def run_one(
 ) -> dict[str, str]:
     output_dir.mkdir(parents=True, exist_ok=False)
     command = [
+        "bash",
+        str(ROOT / "scripts/run_with_vulkan.sh"),
         str(executable),
         "--scene",
         str(scene),
