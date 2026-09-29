@@ -45,6 +45,15 @@
       "correctness": "pass",
       "repeatability": "inconclusive-after-permitted-rerun",
       "decision": "f007-final-integration-next"
+    },
+    {
+      "id": "F007",
+      "name": "final-integration-replay",
+      "result": "007-final-integration-replay.md",
+      "status": "complete-no-promotion",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "no-rigid-primary-hard-memory-gate-failed"
     }
   ]
 }
