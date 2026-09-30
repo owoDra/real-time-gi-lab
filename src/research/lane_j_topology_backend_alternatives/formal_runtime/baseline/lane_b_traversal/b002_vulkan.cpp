@@ -124,6 +124,9 @@ B002VulkanContext::B002VulkanContext(
     driver_name_ = driver.driverName;
     driver_info_ = driver.driverInfo;
     api_version_ = properties.properties.apiVersion;
+    driver_version_ = properties.properties.driverVersion;
+    vendor_id_ = properties.properties.vendorID;
+    device_id_ = properties.properties.deviceID;
     timestamp_period_ns_ = properties.properties.limits.timestampPeriod;
     hwrt_enabled_ = require_hwrt;
     if (require_hwrt) {

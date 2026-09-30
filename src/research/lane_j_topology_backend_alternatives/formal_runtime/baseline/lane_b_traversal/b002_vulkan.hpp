@@ -63,6 +63,15 @@ public:
     [[nodiscard]] std::uint32_t api_version() const noexcept {
         return api_version_;
     }
+    [[nodiscard]] std::uint32_t driver_version() const noexcept {
+        return driver_version_;
+    }
+    [[nodiscard]] std::uint32_t vendor_id() const noexcept {
+        return vendor_id_;
+    }
+    [[nodiscard]] std::uint32_t device_id() const noexcept {
+        return device_id_;
+    }
     [[nodiscard]] bool hwrt_enabled() const noexcept {
         return hwrt_enabled_;
     }
@@ -153,6 +162,9 @@ private:
     std::string driver_name_;
     std::string driver_info_;
     std::uint32_t api_version_{};
+    std::uint32_t driver_version_{};
+    std::uint32_t vendor_id_{};
+    std::uint32_t device_id_{};
     VkDeviceSize acceleration_scratch_alignment_{1};
     bool hwrt_enabled_{};
     std::size_t live_allocation_bytes_{};
