@@ -1,7 +1,9 @@
 #include "j003_clustered_bvh.hpp"
 #include "j003_reference.hpp"
+#include "j003_persistent_layout.hpp"
 #include "j003_transition.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <iostream>
@@ -133,6 +135,56 @@ int main() {
             split_stats.occupancy_min == 0U ||
             split_stats.occupancy_max > lane_j::kClusterMaximum) {
             fail("split transition invariant drift");
+        }
+
+        // Persistent slot policy: initial 48-triangle state uses one physical
+        // slot, then a 248-triangle transition forces deterministic 1->4
+        // capacity growth. Resize accounting must include simultaneous old/new
+        // residency, and all active logical clusters must have unique slots.
+        const auto persistent_source = make_linear_triangles(48U, 10000U);
+        lane_j::ClusterTransitionState persistent_state(persistent_source);
+        lane_j::PersistentClusterLayout persistent_layout(persistent_state);
+        if (persistent_layout.slot_capacity() != 1U) {
+            fail("persistent initial power-of-two capacity drift");
+        }
+        auto persistent_next = persistent_source;
+        for (std::uint32_t i = 0U; i < 200U; ++i) {
+            const float x = 0.003F * float(i);
+            persistent_next.push_back({
+                {x, 0.2F, 0.0F},
+                {x + 0.001F, 0.2F, 0.0F},
+                {x, 0.2F, 0.001F},
+                20000U + i,
+                7U,
+                3U,
+                true,
+            });
+        }
+        const auto persistent_stats =
+            persistent_state.update(persistent_next);
+        const auto layout_update =
+            persistent_layout.synchronize(
+                persistent_state,
+                persistent_stats);
+        if (!layout_update.resized ||
+            layout_update.slot_capacity != 4U ||
+            layout_update.active_cluster_count != 4U) {
+            fail("persistent capacity growth contract drift");
+        }
+        if (layout_update.resize_old_new_overlap_logical_bytes <=
+            layout_update.candidate_persistent_logical_bytes) {
+            fail("persistent resize overlap was not accounted");
+        }
+        std::vector<std::uint32_t> physical_slots;
+        for (const auto& cluster : persistent_state.clusters()) {
+            physical_slots.push_back(
+                persistent_layout.physical_slot(cluster.cluster_id));
+        }
+        std::sort(physical_slots.begin(), physical_slots.end());
+        if (std::adjacent_find(
+                physical_slots.begin(),
+                physical_slots.end()) != physical_slots.end()) {
+            fail("persistent logical clusters share a physical slot");
         }
 
         std::cout << "J003 host contract PASS\n";
