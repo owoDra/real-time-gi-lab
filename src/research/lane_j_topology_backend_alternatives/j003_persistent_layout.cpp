@@ -1,6 +1,7 @@
 #include "j003_persistent_layout.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdint>
 #include <functional>
