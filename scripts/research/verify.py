@@ -21,6 +21,11 @@ LANES = {
         "shader": "shaders/research/lane_c_storage_locality/README.md",
         "script": "scripts/research/lane_c_storage_locality/README.md",
     },
+    "lane-j-topology-backend-alternatives": {
+        "src": "src/research/lane_j_topology_backend_alternatives/CMakeLists.txt",
+        "shader": "shaders/research/lane_j_topology_backend_alternatives/README.md",
+        "script": "scripts/research/lane_j_topology_backend_alternatives/README.md",
+    },
 }
 
 

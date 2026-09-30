@@ -1,16 +1,16 @@
 {
   "schema_version": 1,
   "lane": "lane-j-topology-backend-alternatives",
-  "results": [
+  "experiments": [
     {
-      "experiment": "J001",
+      "id": "J001",
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/001-deep-architecture-survey.md",
       "status": "complete",
       "evidence_class": "research-and-planning",
       "decision": "retain clustered-two-level-bvh as sole new structural candidate; retain Lane E HWRT rebuild and hardened transient LBVH as controls"
     },
     {
-      "experiment": "J002/J003-pre-gpu",
+      "id": "J002/J003-pre-gpu",
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/002-gpu-independent-preparation.md",
       "status": "implementation-complete-local-artifact-replay-pending",
       "evidence_class": "contract-reference-model-and-self-review",
