@@ -97,7 +97,7 @@ EXPECTED_FORMAL_HARNESS_BLOBS = {
     "merge.comp.glsl": "3e9547bc8c02ec0fa41445a8e60df4d2d23f4599",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "CMakeLists.txt": "dfca57f289579a92f769c38bd3207e8d98a36109",
-
+}
 
 
 def git(*args: str) -> str:
