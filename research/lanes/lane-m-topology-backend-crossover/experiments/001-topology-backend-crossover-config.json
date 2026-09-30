@@ -1,0 +1,308 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-m-m001-v1",
+  "experiment": "M001-topology-backend-crossover",
+  "formal_timing_decision": true,
+  "accepted_target_timing_started": false,
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "base_program_commit": "e1376fb000a73d4b8d5a9b900d4303421aedd68e",
+  "lane_entry_commit": "d2bcb942e91691ebf2561009392d48acee572a65",
+  "imported_capability": {
+    "lane_l": "heavy-complete-recurring-boundary",
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-health-provenance-only",
+    "demonstrated_effect_floor": 0.2,
+    "tighter_threshold_forbidden": true
+  },
+  "sources": {
+    "lane_a_accepted_stream_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+    "lane_e": "incumbent object-local rebuild via J004 qualified comparator snapshot",
+    "lane_g": "hardened transient LBVH via J004 F003 source",
+    "lane_j": "clustered two-level topology/layout source",
+    "historical_timing_decision_use": "forbidden"
+  },
+  "j002": {
+    "materialized_root": "out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized",
+    "frozen_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19",
+    "producer_contract": "A001-schema-v1-natural-append",
+    "hit_contract": "B001-exact-hit-v1",
+    "storage_contract": "C001-per-probe-sparse-hash",
+    "validation_ray_prefix_count": 0,
+    "profiles": [
+      {
+        "name": "medium-global-representative",
+        "expected_topology_digest": "3c7de01e9628d46d0b516dc0e3b7edd5a66f7e47c23e7cec8a89b4ca9a3cc358"
+      },
+      {
+        "name": "large-global-high",
+        "expected_topology_digest": "8d1473fb238de7f6281710eb4a493d6e558ec68339a090dc7b1fa15f1c782c87"
+      },
+      {
+        "name": "large-local-high",
+        "expected_topology_digest": "042896ddfc2ff2b928bf7ed9792c851f28803c24cb760a826e3495e0ebdfa69e"
+      }
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "topology-changing-object-local",
+      "profile": "medium-global-representative",
+      "base_primitive_count": 796,
+      "nominal_replacement_fraction": 0.25,
+      "locality": "global",
+      "transition_shape": "8-step primitive-count-changing J002 cycle",
+      "topology_mutation_required": true
+    },
+    {
+      "id": "high-churn-global",
+      "profile": "large-global-high",
+      "base_primitive_count": 8192,
+      "nominal_replacement_fraction": 0.5,
+      "locality": "global",
+      "transition_shape": "8-step primitive-count-changing J002 cycle",
+      "topology_mutation_required": true
+    },
+    {
+      "id": "high-churn-local",
+      "profile": "large-local-high",
+      "base_primitive_count": 8192,
+      "nominal_replacement_fraction": 0.5,
+      "locality": "local",
+      "transition_shape": "8-step primitive-count-changing J002 cycle",
+      "topology_mutation_required": true
+    },
+    {
+      "id": "stable-no-change-guard",
+      "profile": "medium-global-representative",
+      "base_primitive_count": 796,
+      "nominal_replacement_fraction": 0,
+      "locality": "none",
+      "transition_shape": "repeat frozen step-00; no backend update/rebuild",
+      "topology_mutation_required": false
+    }
+  ],
+  "tracks": {
+    "primary": {
+      "incumbent": "lane-e-object-local-hwrt-rebuild",
+      "static_backend": "HWRT"
+    },
+    "software": {
+      "incumbent": "lane-e-object-local-software-b003-rebuild",
+      "static_backend": "software-b003"
+    }
+  },
+  "candidates": {
+    "lbvh": "hardened-transient-lbvh",
+    "clustered": "clustered-two-level-object-local-bvh"
+  },
+  "recurrent_boundary": {
+    "batch_transitions": 16,
+    "required_components": [
+      "geometry/topology preparation",
+      "allocation/reallocation",
+      "upload",
+      "local structure rebuild/refit/update",
+      "traversal metadata",
+      "traversal",
+      "exact Hit merge",
+      "storage/update/resolve",
+      "synchronization",
+      "complete GPU time",
+      "complete CPU wall diagnostic",
+      "persistent/transient/scratch memory",
+      "old/new overlap",
+      "true lifetime peak"
+    ],
+    "future_state_prebuild_forbidden": true,
+    "recurrent_work_shift_to_setup_forbidden": true,
+    "required_boundary_fields": [
+      "geometry_prepare_wall_us",
+      "allocation_reallocation_wall_us",
+      "geometry_upload_gpu_us",
+      "candidate_preprocess_gpu_us",
+      "build_rebuild_gpu_us",
+      "refit_gpu_us",
+      "compaction_gpu_us",
+      "instance_tlas_update_gpu_us",
+      "traversal_gpu_us",
+      "synchronization_wall_us",
+      "merge_gpu_us",
+      "storage_gpu_us",
+      "resolve_gpu_us",
+      "complete_gpu_us",
+      "complete_update_wall_us",
+      "persistent_bytes",
+      "transient_bytes",
+      "scratch_bytes",
+      "old_new_overlap_bytes",
+      "true_peak_resident_bytes",
+      "max_resident_bytes",
+      "allocation_count",
+      "free_count",
+      "allocation_lifetime_complete"
+    ]
+  },
+  "correctness": {
+    "required_zero_fields": [
+      "hit_mismatch_count",
+      "nearest_hit_tie_mismatch_count",
+      "visibility_mismatch_count",
+      "producer_semantic_error_count",
+      "traversal_runtime_error_count",
+      "storage_failure_count",
+      "immutable_owner_mutation_count",
+      "unrelated_owner_mutation_count"
+    ],
+    "required_true_fields": [
+      "workload_identity_match",
+      "geometry_input_identity_match",
+      "resolved_output_identity_match",
+      "allocation_lifetime_accounting_complete",
+      "device_driver_api_timestamp_provenance_match"
+    ],
+    "exact_hit_contract": "B001 exact nearest-hit including primitive-id tie semantics",
+    "visibility_gate_derivation": "hit/no-hit is part of exact Hit equivalence",
+    "producer_gate_derivation": "accepted A001 stream parser and frozen stream identity"
+  },
+  "memory_gate": {
+    "persistent_ratio_max": 1.25,
+    "true_peak_ratio_max": 1.25,
+    "allocation_lifetime_accounting_complete": true,
+    "decision": "hard"
+  },
+  "timing": {
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "settle_seconds": 1,
+    "start_order_by_block": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "BA",
+      "AB",
+      "BA",
+      "AB"
+    ],
+    "first_stage_comparisons": [
+      "control",
+      "lbvh",
+      "clustered"
+    ],
+    "comparison_order_by_block": [
+      [
+        "control",
+        "lbvh",
+        "clustered"
+      ],
+      [
+        "clustered",
+        "lbvh",
+        "control"
+      ],
+      [
+        "lbvh",
+        "control",
+        "clustered"
+      ],
+      [
+        "clustered",
+        "control",
+        "lbvh"
+      ],
+      [
+        "control",
+        "clustered",
+        "lbvh"
+      ],
+      [
+        "lbvh",
+        "clustered",
+        "control"
+      ],
+      [
+        "control",
+        "lbvh",
+        "clustered"
+      ],
+      [
+        "clustered",
+        "lbvh",
+        "control"
+      ]
+    ],
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0,
+    "accepted_timing_validation": false
+  },
+  "performance_gate": {
+    "threshold": 0.2,
+    "promotion_ratio_max": 0.8,
+    "regression_ratio_min": 1.2,
+    "minimum_directional_pair_fraction": 0.75,
+    "all_fresh_process_medians_same_direction": true,
+    "ab_ba_strata_same_direction": true,
+    "effect_must_exceed_fresh_control_noise_envelope_strictly": true,
+    "middle_classification": "<20% difference / measurement-limited",
+    "sub20_ranking_forbidden": true
+  },
+  "stable_guard": {
+    "required_for_promotion": true,
+    "fail_if": "detected >=20% regression or memory hard-guard failure"
+  },
+  "conditional_direct_crossover": {
+    "trigger": "both lbvh and clustered satisfy incumbent-promotion gate for the same mutating scenario/track",
+    "control_comparison": "lbvh-control",
+    "candidate_comparison": "clustered-vs-lbvh",
+    "same_sample_shape_as_first_stage": true,
+    "same_20_percent_gate": true,
+    "interpretation": {
+      "improvement": "clustered is detectably >=20% faster than LBVH",
+      "regression": "clustered is detectably >=20% slower than LBVH",
+      "middle": "<20% difference / measurement-limited; do not rank"
+    },
+    "comparison_order_by_block": [
+      [
+        "lbvh-control",
+        "clustered-vs-lbvh"
+      ],
+      [
+        "clustered-vs-lbvh",
+        "lbvh-control"
+      ],
+      [
+        "lbvh-control",
+        "clustered-vs-lbvh"
+      ],
+      [
+        "clustered-vs-lbvh",
+        "lbvh-control"
+      ],
+      [
+        "clustered-vs-lbvh",
+        "lbvh-control"
+      ],
+      [
+        "lbvh-control",
+        "clustered-vs-lbvh"
+      ],
+      [
+        "clustered-vs-lbvh",
+        "lbvh-control"
+      ],
+      [
+        "lbvh-control",
+        "clustered-vs-lbvh"
+      ]
+    ]
+  },
+  "execution_freeze": {
+    "accepted_timing_requires_completed_validation": true,
+    "formal_runner_must_fail_closed_on_source_or_config_drift": true,
+    "formal_runner_must_fail_closed_on_provenance_drift": true,
+    "no_github_actions": true,
+    "no_pull_request": true
+  }
+}
