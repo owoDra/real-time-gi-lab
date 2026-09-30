@@ -154,6 +154,7 @@ struct Batch {
     std::size_t allocation_count{};
     std::size_t free_count{};
     std::size_t live_allocations{};
+    bool allocation_lifetime_complete{};
 };
 
 Batch run_batch(integration::I001Runtime& runtime, std::uint32_t transitions) {
@@ -185,6 +186,9 @@ Batch run_batch(integration::I001Runtime& runtime, std::uint32_t transitions) {
         out.storage_update_us += result.timings.storage_update_us;
         out.invalidation_us += result.timings.invalidation_us;
         out.resolve_us += result.timings.resolve_us;
+        out.old_new_overlap_bytes = std::max(
+            out.old_new_overlap_bytes,
+            result.memory.old_new_overlap_bytes);
     }
     out.complete_wall_us =
         std::chrono::duration<double, std::micro>(
@@ -195,14 +199,15 @@ Batch run_batch(integration::I001Runtime& runtime, std::uint32_t transitions) {
     out.transient_bytes = last.memory.transient_bytes;
     out.scratch_bytes = last.memory.scratch_bytes;
     out.true_peak_bytes = after.peak_bytes;
-    const auto resident_floor = std::max(before.current_bytes, after.current_bytes);
-    out.old_new_overlap_bytes =
-        after.peak_bytes > resident_floor
-        ? after.peak_bytes - resident_floor
-        : 0U;
     out.allocation_count = after.allocation_count;
     out.free_count = after.free_count;
     out.live_allocations = after.live_allocations;
+    const auto live_budget =
+        before.live_allocations + after.allocation_count;
+    out.allocation_lifetime_complete =
+        after.free_count <= live_budget &&
+        after.live_allocations ==
+            live_budget - after.free_count;
     return out;
 }
 
@@ -217,6 +222,7 @@ void write_timing_header(std::ofstream& output) {
         << "merge_us,storage_update_us,invalidation_us,resolve_us,"
         << "persistent_bytes,transient_bytes,scratch_bytes,old_new_overlap_bytes,"
         << "true_peak_bytes,allocation_count,free_count,live_allocations,"
+        << "allocation_lifetime_complete,"
         << "device_name,driver_name,driver_info,api_version,timestamp_period_ns\n";
 }
 
@@ -248,6 +254,7 @@ void write_timing_row(
         << batch.scratch_bytes << ',' << batch.old_new_overlap_bytes << ','
         << batch.true_peak_bytes << ',' << batch.allocation_count << ','
         << batch.free_count << ',' << batch.live_allocations << ','
+        << (batch.allocation_lifetime_complete ? 1 : 0) << ','
         << csv_string(runtime.device_name()) << ','
         << csv_string(runtime.driver_name()) << ','
         << csv_string(runtime.driver_info()) << ','
@@ -262,8 +269,9 @@ void write_validation_header(std::ofstream& output) {
         << "producer_semantic_error,traversal_runtime_error,storage_failure,"
         << "static_owner_mutation,unrelated_owner_mutation,"
         << "workload_digest,resolved_output_digest,geometry_input_digest,"
-        << "persistent_bytes,transient_bytes,scratch_bytes,current_bytes,"
-        << "peak_bytes,allocation_count,free_count,live_allocations,"
+        << "persistent_bytes,transient_bytes,scratch_bytes,old_new_overlap_bytes,"
+        << "current_bytes,true_peak_bytes,allocation_count,free_count,live_allocations,"
+        << "allocation_lifetime_complete,"
         << "device_name,driver_name,driver_info,api_version,timestamp_period_ns\n";
 }
 
@@ -274,8 +282,9 @@ void write_validation_row(
     const char* state,
     const integration::I001FrameResult& result,
     const integration::I001Quality& quality,
+    const integration::I001AllocationStats& allocations,
+    bool allocation_lifetime_complete,
     const integration::I001Runtime& runtime) {
-    const auto allocations = runtime.allocation_stats();
     output
         << role << ',' << state << ',' << cli.scenario << ',' << cli.track << ','
         << cli.comparison << ',' << (quality.passed ? 1 : 0) << ','
@@ -286,9 +295,11 @@ void write_validation_row(
         << quality.workload_digest << ',' << quality.resolved_output_digest << ','
         << quality.geometry_input_digest << ','
         << result.memory.persistent_bytes << ',' << result.memory.transient_bytes << ','
-        << result.memory.scratch_bytes << ',' << allocations.current_bytes << ','
-        << allocations.peak_bytes << ',' << allocations.allocation_count << ','
-        << allocations.free_count << ',' << allocations.live_allocations << ','
+        << result.memory.scratch_bytes << ',' << result.memory.old_new_overlap_bytes << ','
+        << allocations.current_bytes << ',' << allocations.peak_bytes << ','
+        << allocations.allocation_count << ',' << allocations.free_count << ','
+        << allocations.live_allocations << ','
+        << (allocation_lifetime_complete ? 1 : 0) << ','
         << csv_string(runtime.device_name()) << ','
         << csv_string(runtime.driver_name()) << ','
         << csv_string(runtime.driver_info()) << ','
@@ -309,15 +320,39 @@ int run_validation(const Cli& cli) {
 
     for (const auto [state_name, target] :
          std::vector<std::pair<const char*, bool>>{{"target", true}, {"base", false}}) {
+        runtime_a.reset_allocation_epoch();
+        const auto before_a = runtime_a.allocation_stats();
         const auto frame_a = runtime_a.run_frame(target);
+        const auto allocations_a = runtime_a.allocation_stats();
+        const auto live_budget_a =
+            before_a.live_allocations + allocations_a.allocation_count;
+        const bool lifetime_a =
+            allocations_a.free_count <= live_budget_a &&
+            allocations_a.live_allocations ==
+                live_budget_a - allocations_a.free_count;
         const auto quality_a = runtime_a.validate_last_frame();
+
+        runtime_b.reset_allocation_epoch();
+        const auto before_b = runtime_b.allocation_stats();
         const auto frame_b = runtime_b.run_frame(target);
+        const auto allocations_b = runtime_b.allocation_stats();
+        const auto live_budget_b =
+            before_b.live_allocations + allocations_b.allocation_count;
+        const bool lifetime_b =
+            allocations_b.free_count <= live_budget_b &&
+            allocations_b.live_allocations ==
+                live_budget_b - allocations_b.free_count;
         const auto quality_b = runtime_b.validate_last_frame();
 
-        write_validation_row(output, cli, "A", state_name, frame_a, quality_a, runtime_a);
-        write_validation_row(output, cli, "B", state_name, frame_b, quality_b, runtime_b);
+        write_validation_row(
+            output, cli, "A", state_name, frame_a, quality_a,
+            allocations_a, lifetime_a, runtime_a);
+        write_validation_row(
+            output, cli, "B", state_name, frame_b, quality_b,
+            allocations_b, lifetime_b, runtime_b);
 
-        if (!quality_a.passed || !quality_b.passed ||
+        if (!lifetime_a || !lifetime_b ||
+            !quality_a.passed || !quality_b.passed ||
             quality_a.workload_digest != quality_b.workload_digest ||
             quality_a.resolved_output_digest != quality_b.resolved_output_digest ||
             quality_a.geometry_input_digest != quality_b.geometry_input_digest) {
