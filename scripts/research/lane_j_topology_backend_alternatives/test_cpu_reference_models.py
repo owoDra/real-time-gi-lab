@@ -37,4 +37,15 @@ class ClusterTests(unittest.TestCase):
         for c in model.clusters:
             if c.cluster_id in before and 95 not in before[c.cluster_id]: self.assertEqual(tuple(c.primitive_ids),before[c.cluster_id])
 
+    def test_empty_clusters_are_retired_before_merge(self):
+        model=ClusterModel(self.source(144))
+        stats=model.update(self.source(20))
+        self.assertEqual(stats.retired_empty_cluster_count,2)
+        self.assertTrue(stats.cluster_set_changed)
+        self.assertTrue(all(c.primitive_ids for c in model.clusters))
+        self.assertEqual(
+            {pid for c in model.clusters for pid in c.primitive_ids},
+            set(range(20)),
+        )
+
 if __name__=="__main__": unittest.main()
