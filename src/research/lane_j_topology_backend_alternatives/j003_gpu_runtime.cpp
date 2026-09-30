@@ -72,8 +72,10 @@ struct Push {
     std::uint32_t micro_node_count{};
     std::uint32_t cluster_count{};
     std::uint32_t triangle_count{};
+    std::uint32_t debug_ray_index{kInvalidId};
+    std::uint32_t debug_primitive_id{kInvalidId};
 };
-static_assert(sizeof(Push) == 24);
+static_assert(sizeof(Push) == 32);
 
 } // namespace
 
@@ -321,6 +323,8 @@ GpuTraversalResult run_gpu_traversal_probe(
         static_cast<std::uint32_t>(bvh.micro_nodes.size()),
         static_cast<std::uint32_t>(bvh.clusters.size()),
         static_cast<std::uint32_t>(bvh.triangles.size()),
+        kInvalidId,
+        kInvalidId,
     };
     context.vk().cmdPushConstants(
         command,
