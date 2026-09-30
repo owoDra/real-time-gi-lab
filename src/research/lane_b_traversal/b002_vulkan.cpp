@@ -2,6 +2,7 @@
 
 #include "vk_init.hpp"
 
+#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
@@ -255,6 +256,14 @@ B002Buffer B002VulkanContext::create_buffer(
             fail("B002 vkGetBufferDeviceAddress returned zero");
         }
     }
+
+    output.allocation_tracked = true;
+    allocation_current_bytes_ +=
+        static_cast<std::size_t>(output.allocation_size);
+    allocation_peak_bytes_ =
+        std::max(allocation_peak_bytes_, allocation_current_bytes_);
+    ++allocation_count_;
+    ++live_allocation_count_;
     return output;
 }
 
@@ -602,6 +611,17 @@ void B002VulkanContext::destroy_buffer(B002Buffer& buffer) {
     }
     if (buffer.memory != VK_NULL_HANDLE) {
         dispatch_.freeMemory(buffer.memory, nullptr);
+    }
+    if (buffer.allocation_tracked) {
+        const auto bytes =
+            static_cast<std::size_t>(buffer.allocation_size);
+        if (bytes > allocation_current_bytes_ ||
+            live_allocation_count_ == 0U) {
+            fail("B002 allocation accounting underflow");
+        }
+        allocation_current_bytes_ -= bytes;
+        --live_allocation_count_;
+        ++free_count_;
     }
     buffer = {};
 }
