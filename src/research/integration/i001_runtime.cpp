@@ -449,16 +449,140 @@ inline void fnv1a_u32(
     return hash;
 }
 
-template <class T>
-[[nodiscard]] std::uint64_t hash_trivial_span(
-    std::span<const T> values) noexcept {
-    static_assert(std::is_trivially_copyable_v<T>);
-    constexpr std::uint64_t prime = 1099511628211ULL;
+[[nodiscard]] std::uint32_t signed_bits(std::int32_t value) noexcept {
+    return std::bit_cast<std::uint32_t>(value);
+}
+
+[[nodiscard]] auto work_item_semantic_key(
+    const LaneAWorkItemV1& item) noexcept {
+    return std::tuple{
+        item.tile_id,
+        item.surface_id,
+        item.cascade,
+        item.ray_index,
+        signed_bits(item.probe_x),
+        signed_bits(item.probe_y),
+        signed_bits(item.probe_z),
+        std::bit_cast<std::uint32_t>(item.interval_min),
+        std::bit_cast<std::uint32_t>(item.interval_max),
+        std::bit_cast<std::uint32_t>(item.dir_x),
+        std::bit_cast<std::uint32_t>(item.dir_y),
+        std::bit_cast<std::uint32_t>(item.dir_z),
+        std::bit_cast<std::uint32_t>(item.probe_px),
+        std::bit_cast<std::uint32_t>(item.probe_py),
+        std::bit_cast<std::uint32_t>(item.probe_pz)};
+}
+
+void hash_work_item_semantics(
+    std::uint64_t& hash,
+    const LaneAWorkItemV1& item) noexcept {
+    // output_id and append position are intentionally excluded. A001 assigns
+    // both through GPU atomics, so two correct independent executions may use
+    // different physical ordering while representing the same workload.
+    for (const auto value : {
+             item.tile_id,
+             item.surface_id,
+             item.cascade,
+             item.ray_index,
+             signed_bits(item.probe_x),
+             signed_bits(item.probe_y),
+             signed_bits(item.probe_z),
+             std::bit_cast<std::uint32_t>(item.interval_min),
+             std::bit_cast<std::uint32_t>(item.interval_max),
+             std::bit_cast<std::uint32_t>(item.dir_x),
+             std::bit_cast<std::uint32_t>(item.dir_y),
+             std::bit_cast<std::uint32_t>(item.dir_z),
+             std::bit_cast<std::uint32_t>(item.probe_px),
+             std::bit_cast<std::uint32_t>(item.probe_py),
+             std::bit_cast<std::uint32_t>(item.probe_pz)}) {
+        fnv1a_u32(hash, value);
+    }
+}
+
+[[nodiscard]] std::uint64_t hash_workload_semantics(
+    std::span<const LaneAWorkItemV1> values) {
+    std::vector<LaneAWorkItemV1> canonical(values.begin(), values.end());
+    std::sort(
+        canonical.begin(),
+        canonical.end(),
+        [](const auto& a, const auto& b) {
+            return work_item_semantic_key(a) < work_item_semantic_key(b);
+        });
+
     std::uint64_t hash = 1469598103934665603ULL;
-    const auto bytes = std::as_bytes(values);
-    for (const auto byte : bytes) {
-        hash ^= std::to_integer<std::uint8_t>(byte);
-        hash *= prime;
+    fnv1a_u32(hash, static_cast<std::uint32_t>(canonical.size()));
+    for (const auto& item : canonical) {
+        hash_work_item_semantics(hash, item);
+    }
+    return hash;
+}
+
+struct ResolvedSemanticRow {
+    bool populated{};
+    std::uint32_t tile_id{};
+    std::uint32_t surface_id{};
+    std::uint32_t cascade{};
+    std::int32_t probe_x{};
+    std::int32_t probe_y{};
+    std::int32_t probe_z{};
+    float value{};
+};
+
+[[nodiscard]] auto resolved_semantic_key(
+    const ResolvedSemanticRow& row) noexcept {
+    return std::tuple{
+        row.populated ? 1U : 0U,
+        row.tile_id,
+        row.surface_id,
+        row.cascade,
+        signed_bits(row.probe_x),
+        signed_bits(row.probe_y),
+        signed_bits(row.probe_z),
+        std::bit_cast<std::uint32_t>(row.value)};
+}
+
+[[nodiscard]] std::uint64_t hash_resolved_semantics(
+    std::span<const LaneAWorkItemV1> work_items,
+    std::span<const float> resolved) {
+    std::vector<ResolvedSemanticRow> canonical(resolved.size());
+    for (const auto& item : work_items) {
+        if (item.output_id >= canonical.size()) {
+            continue;
+        }
+        auto& row = canonical[item.output_id];
+        if (row.populated) {
+            continue;
+        }
+        row = {
+            true,
+            item.tile_id,
+            item.surface_id,
+            item.cascade,
+            item.probe_x,
+            item.probe_y,
+            item.probe_z,
+            resolved[item.output_id],
+        };
+    }
+
+    std::sort(
+        canonical.begin(),
+        canonical.end(),
+        [](const auto& a, const auto& b) {
+            return resolved_semantic_key(a) < resolved_semantic_key(b);
+        });
+
+    std::uint64_t hash = 1469598103934665603ULL;
+    fnv1a_u32(hash, static_cast<std::uint32_t>(canonical.size()));
+    for (const auto& row : canonical) {
+        fnv1a_u32(hash, row.populated ? 1U : 0U);
+        fnv1a_u32(hash, row.tile_id);
+        fnv1a_u32(hash, row.surface_id);
+        fnv1a_u32(hash, row.cascade);
+        fnv1a_u32(hash, signed_bits(row.probe_x));
+        fnv1a_u32(hash, signed_bits(row.probe_y));
+        fnv1a_u32(hash, signed_bits(row.probe_z));
+        fnv1a_u32(hash, std::bit_cast<std::uint32_t>(row.value));
     }
     return hash;
 }
@@ -2585,7 +2709,7 @@ struct I001Runtime::Impl {
             });
         producer_readback.resolved.assign(last.stats.outputs, 0.0F);
         quality.workload_digest =
-            hash_trivial_span<LaneAWorkItemV1>(work_items);
+            hash_workload_semantics(work_items);
         quality.geometry_input_digest =
             hash_geometry(b_scene.triangles);
 
@@ -2849,7 +2973,7 @@ struct I001Runtime::Impl {
             candidate_resolved.data(),
             candidate_resolved.size() * sizeof(float));
         quality.resolved_output_digest =
-            hash_trivial_span<float>(candidate_resolved);
+            hash_resolved_semantics(work_items, candidate_resolved);
 
         std::map<ProbeKey, double> reference_values;
         for (const auto& [key, reference_accum] : reference_probe) {
