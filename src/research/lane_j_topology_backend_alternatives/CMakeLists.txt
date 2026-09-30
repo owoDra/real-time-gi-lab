@@ -108,3 +108,37 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-j-j003-persistent-layout-replay PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+
+add_executable(phos-lane-j-j003-persistent-gpu-replay
+  j003_persistent_gpu_replay.cpp
+  j003_snapshot.cpp
+  j003_transition.cpp
+  j003_persistent_layout.cpp
+  j003_persistent_gpu.cpp
+  j003_reference.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+
+target_include_directories(phos-lane-j-j003-persistent-gpu-replay PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+target_link_libraries(phos-lane-j-j003-persistent-gpu-replay PRIVATE
+  vk-bootstrap::vk-bootstrap
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-j-j003-persistent-gpu-replay PRIVATE cxx_std_20)
+target_compile_definitions(phos-lane-j-j003-persistent-gpu-replay PRIVATE
+  PHOS_GI_LANE_J_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+set_target_properties(phos-lane-j-j003-persistent-gpu-replay PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+add_dependencies(phos-lane-j-j003-persistent-gpu-replay phos-lane-j-j003-shaders)
+if(MSVC)
+  target_compile_options(phos-lane-j-j003-persistent-gpu-replay PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-j-j003-persistent-gpu-replay PRIVATE -Wall -Wextra -Wpedantic)
+endif()
