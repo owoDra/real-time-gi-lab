@@ -1,0 +1,13 @@
+{
+  "lane": "lane-l-heavy-boundary-calibration",
+  "issue": 24,
+  "results": [
+    {
+      "id": "L001-pretarget-freeze",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/001-l001-pretarget-freeze.md",
+      "status": "ready-target-execution",
+      "evidence_class": "pre-target-measurement-environment-freeze",
+      "decision": "dual-context and single-context-independent-runtime same-variant heavy-boundary calibration frozen; no architecture ranking; target GPU execution required"
+    }
+  ]
+}
