@@ -2259,6 +2259,15 @@ void write_device(
         << "  \"api_version\": "
         << context.api_version()
         << ",\n"
+        << "  \"driver_version\": "
+        << context.driver_version()
+        << ",\n"
+        << "  \"vendor_id\": "
+        << context.vendor_id()
+        << ",\n"
+        << "  \"device_id\": "
+        << context.device_id()
+        << ",\n"
         << "  \"timestamp_period_ns\": "
         << context.timestamp_period_ns()
         << "\n"
@@ -2425,6 +2434,9 @@ int main(int argc, char** argv) {
             context_a.driver_name() != context_b.driver_name() ||
             context_a.driver_info() != context_b.driver_info() ||
             context_a.api_version() != context_b.api_version() ||
+            context_a.driver_version() != context_b.driver_version() ||
+            context_a.vendor_id() != context_b.vendor_id() ||
+            context_a.device_id() != context_b.device_id() ||
             context_a.timestamp_period_ns() !=
                 context_b.timestamp_period_ns()) {
             fail("J004 paired contexts have inconsistent device provenance");
