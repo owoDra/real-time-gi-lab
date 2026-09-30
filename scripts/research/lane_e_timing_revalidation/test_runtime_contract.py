@@ -30,6 +30,21 @@ class RuntimeContractTests(unittest.TestCase):
         )
         self.assertIn("geometry_is_target = target_state;", source)
 
+
+    def test_validation_digests_are_semantic_not_append_order_hashes(self) -> None:
+        source = RUNTIME.read_text(encoding="utf-8")
+        self.assertIn("hash_workload_semantics(work_items)", source)
+        self.assertIn(
+            "hash_resolved_semantics(work_items, candidate_resolved)",
+            source,
+        )
+        self.assertIn(
+            "output_id and append position are intentionally excluded",
+            source,
+        )
+        self.assertNotIn("hash_trivial_span<LaneAWorkItemV1>", source)
+        self.assertNotIn("hash_trivial_span<float>", source)
+
     def test_reallocation_reports_direct_old_new_overlap(self) -> None:
         source = RUNTIME.read_text(encoding="utf-8")
         self.assertIn(
