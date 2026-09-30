@@ -69,3 +69,24 @@ The v1.4/v1.5 AABB-pruning hypotheses are retained only as rejected research
 history; their shader changes were reverted. v1.6 is the retained
 exact-intersection correction.
 
+
+## Post-closure formal crossover follow-up
+
+Issue: #23  
+Branch: `research-lane-j-formal-crossover`
+
+Lane K / #21 subsequently accepted the reusable GPU-primary protocol with a
+5% demonstrated measurement floor. The historical #20 conclusion above is
+retained unchanged; #23 is a prospective follow-up rather than a rewrite.
+
+Current follow-up status:
+
+- J004 gate v1 is frozen before accepted candidate timing:
+  `experiments/004-formal-crossover-gate-v1.md`;
+- the previously pending same-run <=1.25x Lane-E HWRT relative-memory gate
+  is implemented but still requires target execution;
+- no formal architecture timing has run;
+- J005 remains forbidden unless J004 formally retains a candidate.
+
+Preparation checkpoint:
+`results/019-formal-crossover-preparation.md`.

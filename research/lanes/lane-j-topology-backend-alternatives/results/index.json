@@ -120,6 +120,13 @@
       "status": "complete-measurement-limited",
       "evidence_class": "lane-final-decision",
       "decision": "J003 candidate passed correctness and absolute/lifetime memory characterization; same-run <=1.25x Lane-E HWRT relative-memory eligibility remains pending; J004/J005 not run because Lane I I004 established no accepted formal ranking protocol"
+    },
+    {
+      "id": "J004-follow-up-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/019-formal-crossover-preparation.md",
+      "status": "target-relative-memory-preflight-pending",
+      "evidence_class": "prospective-formal-crossover-preparation",
+      "decision": "Lane K timing dependency resolved and J004 gate frozen; clustered candidate remains timing-ineligible until same-run <=1.25x Lane-E HWRT relative-memory preflight passes"
     }
   ]
 }
