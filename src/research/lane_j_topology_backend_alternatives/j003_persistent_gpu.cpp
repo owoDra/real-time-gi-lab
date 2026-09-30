@@ -30,8 +30,10 @@ struct TraversalPush {
     std::uint32_t micro_node_count{};
     std::uint32_t cluster_count{};
     std::uint32_t triangle_count{};
+    std::uint32_t debug_ray_index{kInvalidId};
+    std::uint32_t debug_primitive_id{kInvalidId};
 };
-static_assert(sizeof(TraversalPush) == 24);
+static_assert(sizeof(TraversalPush) == 32);
 
 struct ValidationRuntime {
     VulkanContext& context;
@@ -530,7 +532,8 @@ PersistentGpuSyncResult PersistentGpuState::synchronize(
 PersistentGpuTraversalResult PersistentGpuState::trace(
     const PersistentClusterLayout& layout,
     std::span<const GpuRay> rays,
-    const std::filesystem::path& shader_path) {
+    const std::filesystem::path& shader_path,
+    PersistentGpuDebugRequest debug) {
     if (rays.empty()) {
         fail("J003 persistent traversal requires rays");
     }
@@ -772,6 +775,8 @@ PersistentGpuTraversalResult PersistentGpuState::trace(
         static_cast<std::uint32_t>(layout.micro_nodes().size()),
         layout.slot_capacity(),
         static_cast<std::uint32_t>(layout.triangles().size()),
+        debug.ray_index,
+        debug.primitive_id,
     };
     context_.vk().cmdPushConstants(
         command,
