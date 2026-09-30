@@ -910,40 +910,17 @@ struct I001Runtime::Impl {
             VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
         std::memcpy(uniform.mapped, &params, sizeof(params));
 
-        auto storage_capacity_estimate =
-            estimated_storage_capacity(a_scene, params);
-        {
-            auto target_scene = a_scene;
-            if (options.scenario == I001Scenario::MovingRigid) {
-                for (const auto primitive : moving.primitives) {
-                    target_scene.samples.at(primitive).position[0] +=
-                        moving.delta_x;
-                }
-            } else if (options.scenario == I001Scenario::DeformingControl) {
-                const auto target_geometry = deformed_geometry(
-                    b_scene.triangles,
-                    moving.primitives,
-                    transition_delta);
-                sync_surface_positions(
-                    target_scene,
-                    target_geometry,
-                    moving.primitives);
-            }
-            auto target_settings = settings;
-            target_settings.case_id =
-                a001_case(options.scenario, true);
-            auto target_params =
-                lane_a::build_a001_params(
-                    target_scene,
-                    target_settings);
-            target_params.limits[1] = params.limits[1];
-            target_params.limits[2] = params.limits[2];
-            storage_capacity_estimate = std::max(
-                storage_capacity_estimate,
-                estimated_storage_capacity(
-                    target_scene,
-                    target_params));
+        // Do not prebuild or inspect a future frame to size C001 storage.
+        // Reserve from the frozen maximum producer output capacity instead.
+        const auto storage_bound =
+            std::uint64_t(params.limits[2]) * 2ULL;
+        if (storage_bound >
+            std::numeric_limits<std::uint32_t>::max()) {
+            fail("I001 storage capacity bound exceeds 32-bit range");
         }
+        const auto storage_capacity_estimate = std::max(
+            estimated_storage_capacity(a_scene, params),
+            static_cast<std::uint32_t>(storage_bound));
         storage_capacity = next_pow2(storage_capacity_estimate);
         std::vector<HashSlotCpu> empty_slots(storage_capacity);
         storage_slots = context.upload_device_buffer(
@@ -1600,7 +1577,7 @@ struct I001Runtime::Impl {
                 deformed_primitives(
                     b_scene.triangles,
                     moving.primitives,
-                    moving.delta_x);
+                    transition_delta);
             for (std::size_t index = 0;
                  index < moving.primitives.size();
                  ++index) {
