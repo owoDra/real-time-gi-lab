@@ -24,7 +24,7 @@ CONFIG = (
     / "research/lanes/lane-j-topology-backend-alternatives/experiments"
     / "005-formal-crossover-config.json"
 )
-EXPECTED_CONFIG_BLOB_SHA = "fca5efcaf2223f77c1ee9af78702cd5b22723bbd"
+EXPECTED_CONFIG_BLOB_SHA = "c72cd9d3e5843ab7605dd54fac855ea0f359624b"
 CAMPAIGN_ROOT = (
     ROOT
     / "out/research/lane-j-topology-backend-alternatives"
@@ -334,8 +334,13 @@ def run_timing_process(
         else "lane-e-object-local-software-b003-rebuild"
     )
     expected_b = (
-        expected_a if comparison == "control"
-        else "hardened-transient-lbvh"
+        expected_a
+        if comparison == "control"
+        else (
+            "vanilla-software-bvh-rebuild"
+            if comparison == "accounting"
+            else "hardened-transient-lbvh"
+        )
     )
 
     rows: list[dict[str, object]] = []
@@ -623,7 +628,8 @@ def main() -> int:
             for profile_entry in config["j002"]["profiles"]:
                 profile = str(profile_entry["name"])
                 profile_dir = materialized_root / profile
-                for comparison in ("control", "candidate"):
+                comparisons = tuple(config["timing"]["comparisons"][track])
+                for comparison in comparisons:
                     for block in range(int(config["timing"]["fresh_process_blocks"])):
                         progress["current"] = {
                             "phase": "timing",
@@ -691,6 +697,17 @@ def main() -> int:
 
     outcome, j005_eligible = final_outcome(profile_summaries, class_results)
 
+    accounting_processes: dict[str, list[dict[str, object]]] = {}
+    for profile_entry in config["j002"]["profiles"]:
+        profile = str(profile_entry["name"])
+        accounting_processes[profile] = [
+            row
+            for row in process_rows
+            if row["track"] == "software"
+            and row["profile"] == profile
+            and row["comparison"] == "accounting"
+        ]
+
     write_csv(root / "j004-raw.csv", raw_rows)
     write_csv(
         root / "j004-process-summary.csv",
@@ -723,6 +740,20 @@ def main() -> int:
         "axis_roles": config["axis_roles"],
         "profile_summaries": profile_summaries,
         "class_decisions": class_results,
+        "accounting_control": {
+            "decision_use": "diagnostic/attribution-only",
+            "process_counts": {
+                profile: len(rows)
+                for profile, rows in accounting_processes.items()
+            },
+            "process_median_gpu_ratios": {
+                profile: [
+                    float(row["gpu"]["median_ratio"])
+                    for row in rows
+                ]
+                for profile, rows in accounting_processes.items()
+            },
+        },
         "outcome": outcome,
         "j005_eligible": j005_eligible,
     }
