@@ -176,6 +176,27 @@ std::vector<Ray> make_validation_rays(
     return rays;
 }
 
+Hit trace_reference_triangle(
+    const Triangle& triangle,
+    const Ray& input_ray) {
+    const auto direction_length = length(input_ray.direction);
+    if (!std::isfinite(direction_length) ||
+        direction_length <= 1.0e-8F ||
+        !std::isfinite(input_ray.t_max) ||
+        input_ray.t_max <= kRayTMin) {
+        return {};
+    }
+    const Ray ray{
+        input_ray.origin,
+        mul(input_ray.direction, 1.0F / direction_length),
+        input_ray.t_max,
+    };
+    return intersect_triangle(
+        triangle,
+        ray,
+        ray.t_max);
+}
+
 Hit trace_reference(
     std::span<const Triangle> triangles,
     const Ray& input_ray) {
