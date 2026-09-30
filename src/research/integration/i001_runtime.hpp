@@ -98,6 +98,13 @@ struct I001Memory {
     std::size_t peak_resident_bytes{};
     std::size_t stream_capacity_bytes{};
     std::size_t storage_capacity_bytes{};
+    // Per-transition allocation evidence. These fields are populated from the
+    // Vulkan allocation tracker and are not produced by extra GPU work.
+    std::size_t old_new_overlap_bytes{};
+    std::size_t true_peak_bytes{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations{};
 };
 
 struct I001Quality {
