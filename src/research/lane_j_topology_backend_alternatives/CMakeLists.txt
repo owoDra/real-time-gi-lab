@@ -85,3 +85,26 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-j-j003-transition-replay PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+
+add_executable(phos-lane-j-j003-persistent-layout-replay
+  j003_persistent_layout_replay.cpp
+  j003_snapshot.cpp
+  j003_transition.cpp
+  j003_clustered_bvh.cpp
+  j003_persistent_layout.cpp
+)
+
+target_include_directories(phos-lane-j-j003-persistent-layout-replay PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+target_compile_features(phos-lane-j-j003-persistent-layout-replay PRIVATE cxx_std_20)
+set_target_properties(phos-lane-j-j003-persistent-layout-replay PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+if(MSVC)
+  target_compile_options(phos-lane-j-j003-persistent-layout-replay PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-j-j003-persistent-layout-replay PRIVATE -Wall -Wextra -Wpedantic)
+endif()
