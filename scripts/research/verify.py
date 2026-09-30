@@ -21,6 +21,11 @@ LANES = {
         "shader": "shaders/research/lane_c_storage_locality/README.md",
         "script": "scripts/research/lane_c_storage_locality/README.md",
     },
+    "lane-i-measurement-calibration": {
+        "src": "src/research/lane_i_measurement_calibration/CMakeLists.txt",
+        "shader": "shaders/research/lane_i_measurement_calibration/README.md",
+        "script": "scripts/research/lane_i_measurement_calibration/README.md",
+    },
 }
 
 
