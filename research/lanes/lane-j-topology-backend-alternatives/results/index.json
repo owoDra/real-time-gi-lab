@@ -119,7 +119,7 @@
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/018-final-decision.md",
       "status": "complete-measurement-limited",
       "evidence_class": "lane-final-decision",
-      "decision": "J003 candidate qualified by correctness/memory; J004/J005 not run because Lane I I004 established no accepted formal ranking protocol"
+      "decision": "J003 candidate passed correctness and absolute/lifetime memory characterization; same-run <=1.25x Lane-E HWRT relative-memory eligibility remains pending; J004/J005 not run because Lane I I004 established no accepted formal ranking protocol"
     }
   ]
 }
