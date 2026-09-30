@@ -477,6 +477,14 @@ public:
         return hash_;
     }
 
+    [[nodiscard]] std::size_t allocation_bytes() const noexcept {
+        return static_cast<std::size_t>(
+            triangle_.allocation_size +
+            nodes_.allocation_size +
+            order_.allocation_size +
+            hash_.allocation_size);
+    }
+
     [[nodiscard]] HierarchicalTraversalPush push(
         std::uint32_t max_rays) const {
         HierarchicalTraversalPush output{};
@@ -568,6 +576,12 @@ public:
     }
     [[nodiscard]] std::uint32_t root() const noexcept {
         return cpu_.root();
+    }
+    [[nodiscard]] std::size_t allocation_bytes() const noexcept {
+        return static_cast<std::size_t>(
+            triangle_.allocation_size +
+            nodes_.allocation_size +
+            order_.allocation_size);
     }
 
 private:
@@ -1521,6 +1535,55 @@ private:
                     3,
                     dynamic_vanilla_->order());
         }
+    }
+
+    [[nodiscard]] std::size_t dynamic_persistent_bytes() const noexcept {
+        if (dynamic_hwrt_) {
+            return dynamic_hwrt_->setup_stats().persistent_bytes;
+        }
+        if (dynamic_quant_) {
+            return dynamic_quant_->allocation_bytes();
+        }
+        if (dynamic_vanilla_) {
+            return dynamic_vanilla_->allocation_bytes();
+        }
+        if (dynamic_lbvh_) {
+            return dynamic_lbvh_->memory().persistent_bytes;
+        }
+        return 0U;
+    }
+
+    [[nodiscard]] std::size_t logical_scratch_bytes() const noexcept {
+        std::size_t bytes = 0U;
+        if (static_hwrt_) {
+            bytes += static_hwrt_->setup_stats().scratch_bytes;
+        }
+        if (dynamic_hwrt_) {
+            bytes += dynamic_hwrt_->setup_stats().scratch_bytes;
+        }
+        if (dynamic_lbvh_) {
+            bytes += dynamic_lbvh_->memory().scratch_bytes;
+        }
+        return bytes;
+    }
+
+    [[nodiscard]] std::size_t logical_transient_bytes() const noexcept {
+        const auto allocation = [](const B002Buffer& buffer) {
+            return static_cast<std::size_t>(buffer.allocation_size);
+        };
+        std::size_t bytes =
+            allocation(counters_) +
+            allocation(static_hits_) +
+            allocation(dynamic_hits_) +
+            allocation(hits_) +
+            allocation(contributions_) +
+            allocation(accum_) +
+            allocation(resolved_) +
+            allocation(storage_stats_);
+        if (dynamic_lbvh_) {
+            bytes += dynamic_lbvh_->memory().transient_bytes;
+        }
+        return bytes;
     }
 
     void create_command_resources() {
