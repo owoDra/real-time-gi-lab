@@ -77,6 +77,11 @@ def run_profile(
         raise RuntimeError(f"K001 validation profile {name} correctness failed")
 
     units = {row["variant"]: int(row["controlled_work_units"]) for row in rows}
+    checksums = {row["variant"]: int(row["gpu_checksum"]) for row in rows}
+    if any(value == 0 for value in checksums.values()):
+        raise RuntimeError(f"K001 validation profile {name} produced zero checksum")
+    if len(set(checksums.values())) != len(checksums):
+        raise RuntimeError(f"K001 validation profile {name} variant checksums are not distinct")
     base = units["baseline"]
     expected = {"plus5": 105, "plus10": 110, "plus20": 120}
     for variant, percent in expected.items():
@@ -137,6 +142,7 @@ def main() -> int:
         "validation_layers": args.validation,
         "all_profiles_correct": True,
         "controlled_work_ratios_verified": True,
+        "variant_gpu_checksums_nonzero_and_distinct": True,
         "profiles": profiles,
     }
     (root / "k001-validation-summary.json").write_text(

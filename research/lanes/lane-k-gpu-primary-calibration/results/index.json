@@ -1,5 +1,15 @@
 {
   "schema_version": 1,
   "lane": "lane-k-gpu-primary-calibration",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "002-gpu-primary-protocol",
+      "status": "accepted",
+      "evidence_class": "methodology-freeze",
+      "outcome": "frozen-before-target-timing",
+      "result": "002-gpu-primary-protocol.md",
+      "git_commit": "c886d0f33f63de131da9db3757f2c0b05c7c2634",
+      "plan_version": "lane-k-k002-v1"
+    }
+  ]
 }

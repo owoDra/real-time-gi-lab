@@ -218,8 +218,10 @@ def main() -> int:
         raise RuntimeError("K003 requires a clean worktree")
 
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
+    if config.get("plan_version") != "lane-k-k002-v1":
+        raise RuntimeError("K003 requires frozen plan lane-k-k002-v1")
     if config["accepted_timing_validation"]:
-        raise RuntimeError("frozen I002 accepted timing must disable validation layers")
+        raise RuntimeError("frozen K002 accepted timing must disable validation layers")
     if int(config["instability_rerun_budget"]) != 0:
         raise RuntimeError("Lane K v1 instability rerun budget must remain zero")
     if int(config["completed_campaign_rerun_budget"]) != 0:
@@ -229,7 +231,7 @@ def main() -> int:
     if config["axis_roles"]["cpu_wall"] != "diagnostic-health-provenance-only":
         raise RuntimeError("K002 CPU wall role changed")
 
-    executable = args.build_dir / "phos-lane-i-k001"
+    executable = args.build_dir / "phos-lane-k-k001"
     if not executable.is_file():
         raise RuntimeError(f"missing executable: {executable}")
 

@@ -112,10 +112,6 @@ class LaneKAnalysisTests(unittest.TestCase):
         )
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
 class LaneKRoleSeparationTests(unittest.TestCase):
     def test_cpu_wall_warning_does_not_veto_gpu_primary_resolution(self) -> None:
         cfg = {
@@ -165,3 +161,7 @@ class LaneKRoleSeparationTests(unittest.TestCase):
             mod.k004_outcome_from_gpu_resolution("baseline-control-failed"),
             "target timing unsuitable",
         )
+
+
+if __name__ == "__main__":
+    unittest.main()

@@ -70,10 +70,6 @@ class LaneKProtocolTests(unittest.TestCase):
             self.assertEqual(value["BA"], 4)
 
 
-if __name__ == "__main__":
-    unittest.main()
-
-
     def test_cpu_wall_can_only_invalidate_structural_health(self) -> None:
         health = self.cfg["cpu_wall_health"]
         self.assertEqual(
@@ -86,3 +82,7 @@ if __name__ == "__main__":
         self.assertEqual(
             health["repeatability_threshold_effect"], "annotation-only"
         )
+
+
+if __name__ == "__main__":
+    unittest.main()
