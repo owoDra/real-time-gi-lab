@@ -187,6 +187,39 @@ int main() {
             fail("persistent logical clusters share a physical slot");
         }
 
+        // Merge-source release regression: cluster 1 becomes underfilled and
+        // legally merges into the short third cluster. Its logical ID must lose
+        // physical ownership immediately.
+        const auto merge_source = make_linear_triangles(110U, 30000U);
+        lane_j::ClusterTransitionState merge_state(merge_source);
+        lane_j::PersistentClusterLayout merge_layout(merge_state);
+        std::vector<lane_j::Triangle> merge_next;
+        merge_next.insert(
+            merge_next.end(),
+            merge_source.begin(),
+            merge_source.begin() + 68);
+        merge_next.insert(
+            merge_next.end(),
+            merge_source.begin() + 96,
+            merge_source.end());
+        const auto merge_stats = merge_state.update(merge_next);
+        if (merge_stats.merge_count == 0U ||
+            merge_stats.released_cluster_ids.empty()) {
+            fail("merge-source release path was not exercised");
+        }
+        merge_layout.synchronize(merge_state, merge_stats);
+        for (const auto released : merge_stats.released_cluster_ids) {
+            bool still_owned = true;
+            try {
+                (void)merge_layout.physical_slot(released);
+            } catch (const std::runtime_error&) {
+                still_owned = false;
+            }
+            if (still_owned) {
+                fail("released logical cluster retained physical ownership");
+            }
+        }
+
         std::cout << "J003 host contract PASS\n";
         return 0;
     } catch (const std::exception& error) {
