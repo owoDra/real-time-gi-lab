@@ -16,6 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import j004_analysis as analysis
+import j002_geometry as geometry
 
 ROOT = Path(__file__).resolve().parents[3]
 EXPECTED_BRANCH = "research-lane-j-formal-crossover"
@@ -24,7 +25,7 @@ CONFIG = (
     / "research/lanes/lane-j-topology-backend-alternatives/experiments"
     / "005-formal-crossover-config.json"
 )
-EXPECTED_CONFIG_BLOB_SHA = "86a7a755f4f075d93b8c7f69c9991b8b311a996f"
+EXPECTED_CONFIG_BLOB_SHA = "08d8b140f3f56a9ea09ec7bb3b2d795dff307184"
 CAMPAIGN_ROOT = (
     ROOT
     / "out/research/lane-j-topology-backend-alternatives"
@@ -160,12 +161,60 @@ def load_materialized(
     if manifest_profiles != expected_profiles:
         raise RuntimeError("J002 materialized profile set drifted")
 
+    manifest_by_name = {
+        str(item["name"]): item
+        for item in manifest["profiles"]
+    }
     for profile in config["j002"]["profiles"]:
-        profile_dir = root / str(profile["name"])
+        name = str(profile["name"])
+        profile_dir = root / name
+        manifest_profile = manifest_by_name[name]
+        expected_topology = str(profile["expected_topology_digest"])
+        if str(manifest_profile.get("topology_digest")) != expected_topology:
+            raise RuntimeError(
+                f"J002 {name}: topology digest differs from frozen J004 input"
+            )
+        steps = manifest_profile.get("steps")
+        if not isinstance(steps, list) or len(steps) != 8:
+            raise RuntimeError(f"J002 {name}: expected exactly eight snapshots")
+        by_index = {int(item["index"]): item for item in steps}
+        if set(by_index) != set(range(8)):
+            raise RuntimeError(f"J002 {name}: snapshot indices drifted")
+
+        identities: list[dict[str, object]] = []
         for step in range(8):
-            snapshot = profile_dir / f"step-{step:02d}.bin"
+            record = by_index[step]
+            expected_file = f"{name}/step-{step:02d}.bin"
+            if str(record.get("file")) != expected_file:
+                raise RuntimeError(
+                    f"J002 {name}/step-{step:02d}: snapshot path drifted"
+                )
+            snapshot = root / expected_file
             if not snapshot.is_file():
                 raise RuntimeError(f"missing J002 snapshot: {snapshot}")
+            triangles = geometry.read_snapshot(snapshot)
+            actual_digest = geometry.snapshot_digest(triangles)
+            if len(triangles) != int(record["primitive_count"]):
+                raise RuntimeError(
+                    f"J002 {name}/step-{step:02d}: primitive count drifted"
+                )
+            if actual_digest != str(record["snapshot_digest"]):
+                raise RuntimeError(
+                    f"J002 {name}/step-{step:02d}: geometry digest drifted"
+                )
+            identities.append({
+                "primitive_count": len(triangles),
+                "snapshot_digest": actual_digest,
+            })
+        for previous, current in zip(identities, identities[1:]):
+            if previous["primitive_count"] == current["primitive_count"]:
+                raise RuntimeError(
+                    f"J002 {name}: adjacent primitive counts did not change"
+                )
+            if previous["snapshot_digest"] == current["snapshot_digest"]:
+                raise RuntimeError(
+                    f"J002 {name}: adjacent geometry snapshots did not change"
+                )
 
     return root, manifest, producer, scene
 
@@ -468,7 +517,7 @@ def main() -> int:
     verify_frozen_sources()
 
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
-    if config["plan_version"] != "lane-j-j004-formal-v1":
+    if config["plan_version"] != "lane-j-j004-formal-v2":
         raise RuntimeError("unexpected J004 plan version")
     if config["accepted_timing_validation"]:
         raise RuntimeError("accepted J004 timing must disable validation layers")
@@ -484,6 +533,12 @@ def main() -> int:
         raise RuntimeError("J004 sample exclusion policy drifted")
     if float(config["gpu_primary_criteria"]["promotion_ratio_max"]) > 0.95:
         raise RuntimeError("J004 promotion threshold is below Lane-K 5% floor")
+    if int(config["j002"]["validation_ray_prefix_count"]) != 0:
+        raise RuntimeError(
+            "J004 accepted validation must check every frozen A001 replay ray"
+        )
+    if config["cpu_wall_health"]["decision_use"] != "diagnostic-health-provenance-only":
+        raise RuntimeError("J004 CPU-wall decision role drifted")
 
     completed = [
         path
@@ -646,9 +701,20 @@ def main() -> int:
             for profile_entry in config["j002"]["profiles"]:
                 profile = str(profile_entry["name"])
                 profile_dir = materialized_root / profile
-                comparisons = tuple(config["timing"]["comparisons"][track])
-                for comparison in comparisons:
-                    for block in range(int(config["timing"]["fresh_process_blocks"])):
+                expected_comparisons = tuple(
+                    config["timing"]["comparisons"][track]
+                )
+                orders = config["timing"]["comparison_orders"][track]
+                if len(orders) != int(config["timing"]["fresh_process_blocks"]):
+                    raise RuntimeError(
+                        f"J004 {track}: comparison-order block count drifted"
+                    )
+                for block, order in enumerate(orders):
+                    if set(order) != set(expected_comparisons) or len(order) != len(expected_comparisons):
+                        raise RuntimeError(
+                            f"J004 {track}/block-{block}: comparison order drifted"
+                        )
+                    for comparison in order:
                         progress["current"] = {
                             "phase": "timing",
                             "profile": profile,
