@@ -113,6 +113,13 @@
       "status": "pass",
       "evidence_class": "all-profile-target-gpu-correctness-memory",
       "decision": "accept J003 correctness/memory gate; J004 formal ranking remains gated by Lane I measurement calibration"
+    },
+    {
+      "id": "J-FINAL",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/018-final-decision.md",
+      "status": "complete-measurement-limited",
+      "evidence_class": "lane-final-decision",
+      "decision": "J003 candidate qualified by correctness/memory; J004/J005 not run because Lane I I004 established no accepted formal ranking protocol"
     }
   ]
 }
