@@ -46,6 +46,7 @@ add_executable(phos-lane-j-contract-test
   j003_contract_test.cpp
   j003_clustered_bvh.cpp
   j003_reference.cpp
+  j003_transition.cpp
 )
 
 target_include_directories(phos-lane-j-contract-test PRIVATE
