@@ -137,9 +137,19 @@ run = "python -m unittest discover -s scripts/research/lane_e_timing_revalidatio
 [tasks."research:e001:validation"]
 description = "Run E001 correctness/memory/provenance validation only"
 depends = ["build", "assets", "research:e001:test", "research:check"]
-run = "python scripts/research/lane_e_timing_revalidation/run_e001.py --validation-only"
+run = '''
+python scripts/research/run_experiment.py \
+  --lane lane-e-timing-revalidation \
+  --experiment 001-timing-revalidation-validation \
+  --command "python scripts/research/lane_e_timing_revalidation/run_e001.py --validation-only"
+'''
 
 [tasks."research:e001:formal"]
 description = "Run the frozen Lane E timing revalidation campaign"
 depends = ["build", "assets", "research:e001:test", "research:check"]
-run = "python scripts/research/lane_e_timing_revalidation/run_e001.py"
+run = '''
+python scripts/research/run_experiment.py \
+  --lane lane-e-timing-revalidation \
+  --experiment 001-timing-revalidation \
+  --command "python scripts/research/lane_e_timing_revalidation/run_e001.py"
+'''
