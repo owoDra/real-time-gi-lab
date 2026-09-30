@@ -1465,6 +1465,7 @@ struct I001Runtime::Impl {
     struct BufferWriteStats {
         bool rebound{};
         double gpu_us{};
+        std::size_t old_new_overlap_bytes{};
     };
 
     [[nodiscard]] BufferWriteStats write_storage_buffer(
@@ -1484,11 +1485,16 @@ struct I001Runtime::Impl {
                 context.update_device_buffer_timed(
                     buffer,
                     std::span<const lane_b::B002BufferUpdate>(&update, 1));
-            return {false, gpu_us};
+            return {false, gpu_us, 0U};
         }
+        const auto old_bytes =
+            static_cast<std::size_t>(buffer.allocation_size);
         auto replacement = context.create_device_buffer(
             size,
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        const auto overlap_bytes =
+            old_bytes +
+            static_cast<std::size_t>(replacement.allocation_size);
         const lane_b::B002BufferUpdate update{
             0U,
             data,
@@ -1502,7 +1508,7 @@ struct I001Runtime::Impl {
                     1));
         context.destroy_buffer(buffer);
         buffer = replacement;
-        return {true, gpu_us};
+        return {true, gpu_us, overlap_bytes};
     }
 
     struct DynamicUpdateStats {
@@ -1523,6 +1529,7 @@ struct I001Runtime::Impl {
         double packing_cpu_us{};
         double hierarchy_upload_gpu_us{};
         double software_bvh_rebuild_cpu_us{};
+        std::size_t old_new_overlap_bytes{};
         std::uint32_t refit_segments{};
         std::uint32_t rebuilt_segments{};
     };
@@ -1838,6 +1845,12 @@ struct I001Runtime::Impl {
                     node_write.gpu_us +
                     order_write.gpu_us +
                     hash_write.gpu_us;
+                out.old_new_overlap_bytes = std::max({
+                    out.old_new_overlap_bytes,
+                    node_write.old_new_overlap_bytes,
+                    order_write.old_new_overlap_bytes,
+                    hash_write.old_new_overlap_bytes,
+                });
                 create_traversal_stage();
             } else {
                 const lane_b::B002BufferUpdate node_update{
@@ -2031,6 +2044,12 @@ struct I001Runtime::Impl {
                     node_write.gpu_us +
                     order_write.gpu_us +
                     hash_write.gpu_us;
+                out.old_new_overlap_bytes = std::max({
+                    out.old_new_overlap_bytes,
+                    node_write.old_new_overlap_bytes,
+                    order_write.old_new_overlap_bytes,
+                    hash_write.old_new_overlap_bytes,
+                });
                 out.gpu_us += out.hierarchy_upload_gpu_us;
                 quant_payload = std::move(next_quant);
                 if (rebind) {
@@ -2066,6 +2085,11 @@ struct I001Runtime::Impl {
                 out.hierarchy_upload_gpu_us =
                     node_write.gpu_us +
                     order_write.gpu_us;
+                out.old_new_overlap_bytes = std::max({
+                    out.old_new_overlap_bytes,
+                    node_write.old_new_overlap_bytes,
+                    order_write.old_new_overlap_bytes,
+                });
                 out.gpu_us += out.hierarchy_upload_gpu_us;
                 if (rebind) {
                     create_traversal_stage();
@@ -2363,9 +2387,8 @@ struct I001Runtime::Impl {
         result.stats.outputs = counter_values[1];
         result.stats.overflow = counter_values[2];
         result.stats.visible_owners = counter_values[3];
-        if ((options.scenario == I001Scenario::MovingRigid ||
-             options.scenario == I001Scenario::DeformingControl) &&
-            target_state) {
+        if (options.scenario == I001Scenario::MovingRigid ||
+            options.scenario == I001Scenario::DeformingControl) {
             result.stats.moved_primitives =
                 static_cast<std::uint32_t>(moving.primitives.size());
             result.stats.segment_membership_changes =
@@ -2382,6 +2405,13 @@ struct I001Runtime::Impl {
         result.stats.storage_invalidations = storage_values[2];
         result.stats.storage_failures = storage_values[3];
         result.memory = memory_stats;
+        const auto allocation = context.allocation_stats();
+        result.memory.old_new_overlap_bytes =
+            dynamic_update.old_new_overlap_bytes;
+        result.memory.true_peak_bytes = allocation.peak_bytes;
+        result.memory.allocation_count = allocation.allocation_count;
+        result.memory.free_count = allocation.free_count;
+        result.memory.live_allocations = allocation.live_allocations;
 
         last = result;
         have_last = true;
