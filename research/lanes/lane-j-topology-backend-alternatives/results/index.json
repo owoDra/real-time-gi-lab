@@ -106,6 +106,13 @@
       "status": "pass",
       "evidence_class": "target-gpu-persistent-resize-overlap",
       "decision": "promote to unchanged-build all-five-profile GPU correctness/memory campaign"
+    },
+    {
+      "id": "J003-persistent-vulkan-all-profiles-v1.6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/017-all-profile-persistent-vulkan-pass.md",
+      "status": "pass",
+      "evidence_class": "all-profile-target-gpu-correctness-memory",
+      "decision": "accept J003 correctness/memory gate; J004 formal ranking remains gated by Lane I measurement calibration"
     }
   ]
 }
