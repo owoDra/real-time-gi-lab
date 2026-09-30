@@ -1,6 +1,6 @@
 # E001 — Lane E timing revalidation gate
 
-Status: **v2 frozen before any target candidate timing**
+Status: **v3 frozen before any target candidate timing**
 
 This prospective gate revalidates the already accepted Lane E object-local ownership/update architecture; it does not redesign it.
 
@@ -100,3 +100,13 @@ A failure before the first measured row may be fixed and re-frozen. If a
 process has emitted any measured row and is then interrupted, the campaign is
 invalid and is not rerun. Completed processes and completed campaigns are never
 rerun.
+
+## Refreeze history
+
+- v1: initial prospective contract freeze.
+- v2: added the predeclared 4/4 control/candidate process-position counterbalance.
+- v3: fixed pre-target compile and allocation-lifetime evidence defects found by
+  self-review. No workload, control, threshold, 20% floor, sample shape,
+  environment, decision rule, or rerun policy changed.
+
+No accepted target timing existed before v3.
