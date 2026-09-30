@@ -243,6 +243,8 @@ B002Buffer B002VulkanContext::create_buffer(
     peak_allocation_bytes_ = std::max(
         peak_allocation_bytes_,
         live_allocation_bytes_);
+    tracked_allocations_.insert(output.memory);
+    ++allocation_count_;
 
     if (map &&
         dispatch_.mapMemory(
@@ -611,11 +613,17 @@ void B002VulkanContext::destroy_buffer(B002Buffer& buffer) {
         dispatch_.destroyBuffer(buffer.buffer, nullptr);
     }
     if (buffer.memory != VK_NULL_HANDLE) {
-        const auto bytes = static_cast<std::size_t>(buffer.allocation_size);
-        live_allocation_bytes_ =
-            bytes <= live_allocation_bytes_
-                ? live_allocation_bytes_ - bytes
-                : 0U;
+        const bool accounted =
+            tracked_allocations_.erase(buffer.memory) != 0U;
+        if (accounted) {
+            const auto bytes =
+                static_cast<std::size_t>(buffer.allocation_size);
+            live_allocation_bytes_ =
+                bytes <= live_allocation_bytes_
+                    ? live_allocation_bytes_ - bytes
+                    : 0U;
+            ++free_count_;
+        }
         dispatch_.freeMemory(buffer.memory, nullptr);
     }
     buffer = {};

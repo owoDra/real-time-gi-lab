@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <span>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace phos::gi::research::lane_b {
@@ -17,6 +18,14 @@ struct B002BufferUpdate {
     VkDeviceSize destination_offset{};
     const void* data{};
     VkDeviceSize size{};
+};
+
+struct B002AllocationStats {
+    std::size_t current_bytes{};
+    std::size_t peak_bytes{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations{};
 };
 
 struct B002Buffer {
@@ -87,6 +96,15 @@ public:
     }
     void reset_allocation_peak() noexcept {
         peak_allocation_bytes_ = live_allocation_bytes_;
+    }
+    [[nodiscard]] B002AllocationStats allocation_stats() const noexcept {
+        return {
+            live_allocation_bytes_,
+            peak_allocation_bytes_,
+            allocation_count_,
+            free_count_,
+            tracked_allocations_.size(),
+        };
     }
     [[nodiscard]] double consume_transfer_gpu_us() noexcept {
         const double value = transfer_gpu_us_;
@@ -169,6 +187,9 @@ private:
     bool hwrt_enabled_{};
     std::size_t live_allocation_bytes_{};
     std::size_t peak_allocation_bytes_{};
+    std::size_t allocation_count_{};
+    std::size_t free_count_{};
+    std::unordered_set<VkDeviceMemory> tracked_allocations_;
     double transfer_gpu_us_{};
 };
 
