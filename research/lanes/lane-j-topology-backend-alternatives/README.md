@@ -28,5 +28,7 @@ Formal timing is blocked on Issue #19 / Lane I.
   `results/001-deep-architecture-survey.md`
 - Frozen J002-J005 plan:
   `experiments/plan-v1.md`
+- Pre-evidence J003 correction:
+  `experiments/plan-v1.1-amendment.md`
 
 No production candidate implementation belongs in this first session.
