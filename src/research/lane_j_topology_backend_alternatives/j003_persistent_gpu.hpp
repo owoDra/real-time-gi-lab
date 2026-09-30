@@ -6,10 +6,17 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <filesystem>
 #include <span>
 #include <vector>
 
 namespace phos::gi::research::lane_j {
+
+struct PersistentGpuTraversalResult {
+    std::vector<GpuHit> hits;
+    double traversal_gpu_us{};
+    std::size_t validation_harness_allocation_bytes{};
+};
 
 struct PersistentGpuSyncResult {
     bool resized{};
@@ -34,6 +41,11 @@ public:
     [[nodiscard]] PersistentGpuSyncResult synchronize(
         const PersistentClusterLayout& layout,
         const PersistentLayoutUpdate& update);
+
+    [[nodiscard]] PersistentGpuTraversalResult trace(
+        const PersistentClusterLayout& layout,
+        std::span<const GpuRay> rays,
+        const std::filesystem::path& shader_path);
 
     [[nodiscard]] const GpuBuffer& triangle_buffer() const noexcept {
         return triangles_;
