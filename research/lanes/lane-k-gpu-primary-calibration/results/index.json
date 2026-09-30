@@ -3,6 +3,14 @@
   "lane": "lane-k-gpu-primary-calibration",
   "experiments": [
     {
+      "id": "001-calibration-workload",
+      "status": "accepted",
+      "evidence_class": "target-validation",
+      "outcome": "k003-precondition-satisfied",
+      "result": "001-calibration-workload.md",
+      "git_commit": "e4961e6227b25870331206b4d732e9ffdc8fd7d3"
+    },
+    {
       "id": "002-gpu-primary-protocol",
       "status": "accepted",
       "evidence_class": "methodology-freeze",
