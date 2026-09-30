@@ -700,26 +700,24 @@ public:
                 result.complete_gpu_us;
             batch.complete_wall_us +=
                 result.complete_wall_us;
-            batch.max_persistent_bytes =
-                std::max(
-                    batch.max_persistent_bytes,
-                    result.persistent_bytes);
-            batch.max_transient_bytes =
-                std::max(
-                    batch.max_transient_bytes,
-                    result.transient_bytes);
-            batch.max_scratch_bytes =
-                std::max(
-                    batch.max_scratch_bytes,
-                    result.scratch_bytes);
+            if (result.resident_bytes >
+                batch.max_resident_bytes) {
+                // Preserve one real lifetime classification. Independent
+                // per-class maxima could synthesize a memory state that never
+                // existed during the batch.
+                batch.max_resident_bytes =
+                    result.resident_bytes;
+                batch.max_persistent_bytes =
+                    result.persistent_bytes;
+                batch.max_transient_bytes =
+                    result.transient_bytes;
+                batch.max_scratch_bytes =
+                    result.scratch_bytes;
+            }
             batch.max_old_new_overlap_bytes =
                 std::max(
                     batch.max_old_new_overlap_bytes,
                     result.old_new_overlap_bytes);
-            batch.max_resident_bytes =
-                std::max(
-                    batch.max_resident_bytes,
-                    result.resident_bytes);
             batch.max_true_peak_resident_bytes =
                 std::max(
                     batch.max_true_peak_resident_bytes,
