@@ -79,14 +79,14 @@ decision-valid comparator evidence.
 J005 requires a candidate retained by J004. Since J004 is not legally run,
 J005 is also not run.
 
-The J003 clustered candidate is therefore **qualified for future crossover**,
-not integrated or promoted into the Lane E production architecture.
+The J003 clustered candidate is therefore **correctness- and absolute/lifetime-memory-qualified for future crossover**, not integrated or promoted into the Lane E production architecture.
+
+One frozen J003 eligibility item remains to be completed before formal J004 timing: plan-v1 requires candidate `persistent_bytes` and `true_peak_resident_bytes` to be <=1.25x a **same-run Lane-E HWRT rebuild comparator**. The all-profile J003 campaign established the candidate's own absolute/lifetime memory and resize overlap, but did not include that same-run comparator. A future J004 preflight must complete this relative memory gate; timing may not rescue a failure.
 
 ## Final architecture disposition
 
 - **Lane E object-local ownership/update semantics remain incumbent.**
-- **Clustered two-level BVH becomes a correctness/memory-qualified future
-  topology-changing backend candidate.**
+- **Clustered two-level BVH becomes a correctness- and absolute/lifetime-memory-qualified future topology-changing backend candidate; its frozen same-run <=1.25x Lane-E HWRT relative-memory eligibility remains pending.**
 - **Hardened transient LBVH remains a correctness/memory-qualified control.**
 - **No topology-changing backend performance winner is declared.**
 - **Lane J final outcome: measurement-limited.**
