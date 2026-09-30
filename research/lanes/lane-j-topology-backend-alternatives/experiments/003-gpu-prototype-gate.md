@@ -1,6 +1,6 @@
 # J003 — target-GPU prototype gate
 
-Status: **READY TO START after J002 local CPU preflight**
+Status: **READY TO START — J002/J003 CPU preflight satisfied**
 
 This document freezes the first GPU-required boundary. It does not implement or
 time the candidate.
