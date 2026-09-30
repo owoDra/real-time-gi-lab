@@ -18,6 +18,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
+#include <cstring>
 #include <filesystem>
 #include <fstream>
 #include <iomanip>
@@ -1980,13 +1981,12 @@ int main(int argc, char** argv) {
         const auto root = artifact_root();
         std::filesystem::create_directories(root);
 
-        B002VulkanContext context(
-            options.validation,
-            lane_b::kB002TargetDeviceName,
-            true);
-        write_device(root, context);
-
         if (options.validation_only) {
+            B002VulkanContext context(
+                options.validation,
+                lane_b::kB002TargetDeviceName,
+                true);
+            write_device(root, context);
             const auto kind =
                 validation_kind(options);
             FormalRuntime runtime(
@@ -2018,6 +2018,27 @@ int main(int argc, char** argv) {
             return passed ? 0 : 2;
         }
 
+        // One fresh host process owns two independent Vulkan contexts. This
+        // keeps A/B memory/lifetime accounting independent while preserving
+        // same-process, same-device and counterbalanced sequential execution.
+        B002VulkanContext context_a(
+            false,
+            lane_b::kB002TargetDeviceName,
+            true);
+        B002VulkanContext context_b(
+            false,
+            lane_b::kB002TargetDeviceName,
+            true);
+        if (context_a.device_name() != context_b.device_name() ||
+            context_a.driver_name() != context_b.driver_name() ||
+            context_a.driver_info() != context_b.driver_info() ||
+            context_a.api_version() != context_b.api_version() ||
+            context_a.timestamp_period_ns() !=
+                context_b.timestamp_period_ns()) {
+            fail("J004 paired contexts have inconsistent device provenance");
+        }
+        write_device(root, context_a);
+
         const auto a_kind =
             control_kind(options.track);
         const auto b_kind =
@@ -2026,11 +2047,11 @@ int main(int argc, char** argv) {
                 : DynamicKind::Lbvh;
 
         FormalRuntime runtime_a(
-            context,
+            context_a,
             options,
             a_kind);
         FormalRuntime runtime_b(
-            context,
+            context_b,
             options,
             b_kind);
 
