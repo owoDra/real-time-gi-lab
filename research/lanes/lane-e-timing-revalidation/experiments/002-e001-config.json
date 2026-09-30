@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "plan_version": "lane-e-timing-revalidation-e001-v3",
+  "plan_version": "lane-e-timing-revalidation-e001-v4",
   "issue": 22,
   "branch": "research-lane-e-timing-revalidation",
   "base_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
@@ -270,6 +270,10 @@
     {
       "version": "v3",
       "reason": "pre-target compile/lifetime-accounting defect fixes only; no threshold, workload, control, sample-shape, or decision-rule change"
+    },
+    {
+      "version": "v4",
+      "reason": "pre-target self-review aligned memory-classification implementation with the already frozen persistent/true-peak non-worse rule; no threshold, workload, control, sample-shape, or performance decision-rule change"
     }
   ]
 }
