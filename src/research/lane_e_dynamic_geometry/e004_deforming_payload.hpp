@@ -141,32 +141,17 @@ make_e004_instance(
 make_e004_quantized_setup(
     const std::vector<lane_b::Triangle>& source,
     std::span<const std::uint32_t> dynamic_primitives,
-    const std::vector<lane_b::Triangle>& target,
     float segment_size) {
-    if (source.size() != target.size()) {
-        throw std::runtime_error(
-            "E004 setup requires stable primitive count");
-    }
-
     const auto split =
         detail::partition_rigid(
             source,
             dynamic_primitives);
-
-    std::vector<lane_b::Triangle> target_dynamic;
-    target_dynamic.reserve(dynamic_primitives.size());
-    for (const auto primitive : dynamic_primitives) {
-        target_dynamic.push_back(target.at(primitive));
-    }
 
     lane_b::HierarchicalStrataBrick static_hierarchy(
         split.static_triangles,
         segment_size);
     lane_b::HierarchicalStrataBrick dynamic_hierarchy(
         split.rigid_triangles,
-        segment_size);
-    lane_b::HierarchicalStrataBrick target_hierarchy(
-        target_dynamic,
         segment_size);
 
     auto static_payload =
@@ -175,9 +160,6 @@ make_e004_quantized_setup(
     auto dynamic_payload =
         make_e004_quantized_partition(
             dynamic_hierarchy);
-    const auto target_payload =
-        make_e004_quantized_partition(
-            target_hierarchy);
 
     E004QuantizedSetup output;
     output.dynamic_triangles =
@@ -194,18 +176,15 @@ make_e004_quantized_setup(
         static_payload.ordered_primitives.size();
     output.dynamic_hash_base =
         static_payload.hash_table.size();
+    // Capacity starts from the current state only. Future-state payloads are
+    // deliberately not prebuilt; any growth is accounted as recurrent
+    // allocation/reallocation by the timing runtime.
     output.dynamic_node_capacity =
-        std::max(
-            dynamic_payload.nodes.size(),
-            target_payload.nodes.size());
+        dynamic_payload.nodes.size();
     output.dynamic_order_capacity =
-        std::max(
-            dynamic_payload.ordered_primitives.size(),
-            target_payload.ordered_primitives.size());
+        dynamic_payload.ordered_primitives.size();
     output.dynamic_hash_capacity =
-        std::max(
-            dynamic_payload.hash_table.size(),
-            target_payload.hash_table.size());
+        dynamic_payload.hash_table.size();
 
     output.triangles.reserve(source.size());
     for (const auto& triangle : split.static_triangles) {
@@ -295,16 +274,6 @@ make_e004_dynamic_partition(
     auto payload =
         make_e004_quantized_partition(
             hierarchy);
-    if (payload.nodes.size() >
-            setup.dynamic_node_capacity ||
-        payload.ordered_primitives.size() >
-            setup.dynamic_order_capacity ||
-        payload.hash_table.size() >
-            setup.dynamic_hash_capacity) {
-        throw std::runtime_error(
-            "E004 dynamic partition exceeded frozen setup capacity");
-    }
-
     rebase_e004_partition(
         payload,
         static_cast<std::uint32_t>(
