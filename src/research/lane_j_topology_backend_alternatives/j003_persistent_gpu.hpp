@@ -12,6 +12,11 @@
 
 namespace phos::gi::research::lane_j {
 
+struct PersistentGpuDebugRequest {
+    std::uint32_t ray_index{kInvalidId};
+    std::uint32_t primitive_id{kInvalidId};
+};
+
 struct PersistentGpuTraversalResult {
     std::vector<GpuHit> hits;
     double traversal_gpu_us{};
@@ -45,7 +50,8 @@ public:
     [[nodiscard]] PersistentGpuTraversalResult trace(
         const PersistentClusterLayout& layout,
         std::span<const GpuRay> rays,
-        const std::filesystem::path& shader_path);
+        const std::filesystem::path& shader_path,
+        PersistentGpuDebugRequest debug = {});
 
     [[nodiscard]] const GpuBuffer& triangle_buffer() const noexcept {
         return triangles_;
