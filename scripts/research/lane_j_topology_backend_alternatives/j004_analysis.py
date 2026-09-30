@@ -195,18 +195,17 @@ def summarize_profile(
         by_comparison["candidate"], "gpu", criteria, gpu_control
     )
 
-    # CPU wall is intentionally diagnostic only. Reuse relaxed numerical
-    # reporting without allowing it to veto a valid GPU-primary decision.
-    wall_control = evaluate_control(by_comparison["control"], "wall", {
-        "control_max_abs_process_median_ratio": 1.03,
-        "control_process_median_span_ratio": 1.05,
-        "control_max_within_process_order_bias_ratio": 1.03,
-    })
+    # CPU wall is intentionally diagnostic only. The annotation thresholds
+    # are frozen in the execution config and can never veto a GPU-primary
+    # decision.
+    wall_criteria = config["cpu_wall_health"]["annotation_criteria"]
+    wall_control = evaluate_control(
+        by_comparison["control"], "wall", wall_criteria
+    )
     wall_candidate = evaluate_candidate(
         by_comparison["candidate"], "wall", {
             **criteria,
-            "candidate_process_effect_span_ratio": 1.08,
-            "candidate_max_within_process_order_bias_ratio": 1.05,
+            **wall_criteria,
         }, wall_control
     )
 
