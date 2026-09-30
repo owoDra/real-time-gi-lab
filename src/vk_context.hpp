@@ -28,6 +28,12 @@ public:
     [[nodiscard]] std::uint32_t queue_family() const { return queue_family_; }
     [[nodiscard]] float timestamp_period_ns() const { return timestamp_period_ns_; }
     [[nodiscard]] const std::string& device_name() const { return device_name_; }
+    [[nodiscard]] const std::string& driver_name() const { return driver_name_; }
+    [[nodiscard]] const std::string& driver_info() const { return driver_info_; }
+    [[nodiscard]] std::uint32_t api_version() const { return api_version_; }
+    [[nodiscard]] std::uint32_t driver_version() const { return driver_version_; }
+    [[nodiscard]] std::uint32_t vendor_id() const { return vendor_id_; }
+    [[nodiscard]] std::uint32_t device_id() const { return device_id_; }
 
     GpuBuffer create_host_buffer(VkDeviceSize size, VkBufferUsageFlags usage);
     GpuBuffer create_device_buffer(VkDeviceSize size, VkBufferUsageFlags usage);
@@ -48,6 +54,12 @@ private:
     std::uint32_t queue_family_{};
     float timestamp_period_ns_{1.0f};
     std::string device_name_;
+    std::string driver_name_;
+    std::string driver_info_;
+    std::uint32_t api_version_{};
+    std::uint32_t driver_version_{};
+    std::uint32_t vendor_id_{};
+    std::uint32_t device_id_{};
 };
 
 std::vector<std::byte> read_binary_file(const std::string& path);

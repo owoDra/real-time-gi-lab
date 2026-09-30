@@ -100,12 +100,14 @@ void run_reference_dispatch(
     std::span<const std::uint32_t> input,
     std::span<std::uint32_t> state,
     std::uint32_t iterations) {
-    if (input.size() != state.size() || input.empty() ||
-        !is_power_of_two(static_cast<std::uint32_t>(input.size()))) {
-        throw std::runtime_error("Lane I reference buffers must be equal non-zero power-of-two sizes");
+    if (input.size() != state.size() || input.empty()) {
+        throw std::runtime_error("Lane I reference buffers must be equal and non-zero");
     }
     if (input.size() > std::numeric_limits<std::uint32_t>::max()) {
         throw std::runtime_error("Lane I reference buffer is too large");
+    }
+    if (!is_power_of_two(static_cast<std::uint32_t>(input.size()))) {
+        throw std::runtime_error("Lane I reference buffer size must be a power of two");
     }
     const auto mask = static_cast<std::uint32_t>(input.size() - 1U);
     for (std::uint32_t index = 0; index < state.size(); ++index) {

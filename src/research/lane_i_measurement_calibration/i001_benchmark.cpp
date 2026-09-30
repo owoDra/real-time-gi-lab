@@ -98,6 +98,12 @@ void write_device(const std::filesystem::path& root, const VulkanContext& vk, bo
     out << "{\n"
         << "  \"schema_version\": 1,\n"
         << "  \"device\": \"" << vk.device_name() << "\",\n"
+        << "  \"driver_name\": \"" << vk.driver_name() << "\",\n"
+        << "  \"driver_info\": \"" << vk.driver_info() << "\",\n"
+        << "  \"api_version\": " << vk.api_version() << ",\n"
+        << "  \"driver_version\": " << vk.driver_version() << ",\n"
+        << "  \"vendor_id\": " << vk.vendor_id() << ",\n"
+        << "  \"device_id\": " << vk.device_id() << ",\n"
         << "  \"timestamp_period_ns\": " << vk.timestamp_period_ns() << ",\n"
         << "  \"validation\": " << (validation ? "true" : "false") << "\n"
         << "}\n";

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-i-i002-v1",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "accepted_timing_validation": false,
+  "workload": {
+    "elements": 8192,
+    "baseline_iterations": 200,
+    "variant_iterations": {
+      "baseline": 200,
+      "plus5": 210,
+      "plus10": 220,
+      "plus20": 240
+    },
+    "accepted_batch_dispatches": 16,
+    "diagnostic_individual_dispatches": 1
+  },
+  "warmup_pairs": 4,
+  "measured_pairs": 12,
+  "fresh_process_blocks": 8,
+  "settle_seconds": 1.0,
+  "instability_rerun_budget": 0,
+  "comparisons": {
+    "control": "baseline",
+    "plus20": "plus20",
+    "plus10": "plus10",
+    "plus5": "plus5"
+  },
+  "comparison_orders": [
+    ["control", "plus20", "plus10", "plus5"],
+    ["plus20", "plus10", "plus5", "control"],
+    ["plus10", "plus5", "control", "plus20"],
+    ["plus5", "control", "plus20", "plus10"],
+    ["plus5", "plus10", "plus20", "control"],
+    ["control", "plus5", "plus10", "plus20"],
+    ["plus20", "control", "plus5", "plus10"],
+    ["plus10", "plus20", "control", "plus5"]
+  ],
+  "repeatability_criteria": {
+    "gpu": {
+      "control_max_abs_process_median_ratio": 1.02,
+      "control_process_median_span_ratio": 1.03,
+      "control_max_within_process_order_bias_ratio": 1.02,
+      "candidate_process_effect_span_ratio": 1.05,
+      "candidate_max_within_process_order_bias_ratio": 1.03,
+      "candidate_min_positive_pair_fraction": 0.75
+    },
+    "wall": {
+      "control_max_abs_process_median_ratio": 1.03,
+      "control_process_median_span_ratio": 1.05,
+      "control_max_within_process_order_bias_ratio": 1.03,
+      "candidate_process_effect_span_ratio": 1.08,
+      "candidate_max_within_process_order_bias_ratio": 1.05,
+      "candidate_min_positive_pair_fraction": 0.75
+    }
+  },
+  "diagnostic_individual": {
+    "enabled": true,
+    "comparisons": ["control", "plus20"],
+    "fresh_process_blocks": 4,
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "decision_use": "diagnostic-only"
+  },
+  "host_observations": "diagnostic-only",
+  "sample_exclusion": "forbidden"
+}
