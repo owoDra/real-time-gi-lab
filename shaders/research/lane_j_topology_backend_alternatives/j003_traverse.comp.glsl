@@ -73,6 +73,20 @@ float hit_tolerance(float t) {
     return max(HIT_ABS_TOL, abs(t) * HIT_REL_TOL);
 }
 
+vec3 precise_cross(vec3 a, vec3 b) {
+    precise float x = a.y * b.z - a.z * b.y;
+    precise float y = a.z * b.x - a.x * b.z;
+    precise float z = a.x * b.y - a.y * b.x;
+    return vec3(x, y, z);
+}
+
+float precise_dot(vec3 a, vec3 b) {
+    precise float xy = a.x * b.x + a.y * b.y;
+    precise float z = a.z * b.z;
+    precise float result = xy + z;
+    return result;
+}
+
 bool hit_aabb(
     vec3 origin,
     vec3 direction,
@@ -121,10 +135,10 @@ bool intersect_triangle(
     float best_t,
     out float distance,
     out vec3 normal) {
-    vec3 e1 = triangle.v1.xyz - triangle.v0.xyz;
-    vec3 e2 = triangle.v2.xyz - triangle.v0.xyz;
-    vec3 p = cross(direction, e2);
-    float determinant = dot(e1, p);
+    precise vec3 e1 = triangle.v1.xyz - triangle.v0.xyz;
+    precise vec3 e2 = triangle.v2.xyz - triangle.v0.xyz;
+    precise vec3 p = precise_cross(direction, e2);
+    precise float determinant = precise_dot(e1, p);
     bool two_sided = triangle.meta.w != 0u;
 
     if (two_sided) {
@@ -135,20 +149,21 @@ bool intersect_triangle(
         return false;
     }
 
-    float inverse = 1.0 / determinant;
-    vec3 tv = origin - triangle.v0.xyz;
-    float u = dot(tv, p) * inverse;
+    precise float inverse = 1.0 / determinant;
+    precise vec3 tv = origin - triangle.v0.xyz;
+    precise float u = precise_dot(tv, p) * inverse;
     if (u < 0.0 || u > 1.0) {
         return false;
     }
 
-    vec3 q = cross(tv, e1);
-    float v = dot(direction, q) * inverse;
+    precise vec3 q = precise_cross(tv, e1);
+    precise float v = precise_dot(direction, q) * inverse;
     if (v < 0.0 || u + v > 1.0) {
         return false;
     }
 
-    distance = dot(e2, q) * inverse;
+    precise float exact_t = precise_dot(e2, q) * inverse;
+    distance = exact_t;
     float tolerance = hit_tolerance(best_t);
     if (distance < RAY_T_MIN ||
         distance > ray_tmax ||
