@@ -2597,9 +2597,14 @@ struct I001Runtime::Impl {
         std::vector<bool> moved_mask(
             baseline_triangles.size(),
             false);
-        for (const auto primitive : moving.primitives) {
-            if (primitive < moved_mask.size()) {
-                moved_mask[primitive] = true;
+        const bool has_expected_dynamic_owner =
+            options.scenario == I001Scenario::MovingRigid ||
+            options.scenario == I001Scenario::DeformingControl;
+        if (has_expected_dynamic_owner) {
+            for (const auto primitive : moving.primitives) {
+                if (primitive < moved_mask.size()) {
+                    moved_mask[primitive] = true;
+                }
             }
         }
         for (std::size_t primitive = 0;
