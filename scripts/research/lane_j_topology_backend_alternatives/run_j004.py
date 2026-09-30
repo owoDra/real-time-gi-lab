@@ -56,6 +56,10 @@ EXPECTED_F003_BLOBS = {
 
 EXPECTED_FORMAL_HARNESS_BLOBS = {
     "scripts/research/lane_j_topology_backend_alternatives/"
+    "j002_geometry.py": "f0862c52c021255d71695a8196c9f8fdaa0847f7",
+    "scripts/research/lane_j_topology_backend_alternatives/"
+    "j002_contract.py": "7bf5e64130853128932e8cfa1c21757222ee49b8",
+    "scripts/research/lane_j_topology_backend_alternatives/"
     "j004_analysis.py": "9dd6e87d2f5ba807410297d11d9fba32790af2b9",
     "scripts/research/lane_j_topology_backend_alternatives/"
     "test_j004_analysis.py": "1153504f5713f0d3503b37ee173a4ce21876a80e",
