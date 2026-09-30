@@ -18,16 +18,29 @@ class RuntimeContractTests(unittest.TestCase):
         )
         self.assertIn("if (has_expected_dynamic_owner)", source)
 
-    def test_dynamic_update_is_reversible(self) -> None:
+    def test_dynamic_update_is_reversible_from_immutable_baseline(self) -> None:
         source = RUNTIME.read_text(encoding="utf-8")
         self.assertIn(
             "target_state == geometry_is_target",
             source,
         )
         self.assertIn(
-            "target_state ? moving.delta_x : -moving.delta_x",
+            "target_state ? moving.delta_x : 0.0F",
             source,
         )
+        self.assertIn(
+            "baseline_surface_positions = surface_positions(a_scene);",
+            source,
+        )
+        self.assertIn(
+            "translated_geometry(\n                baseline_triangles",
+            source,
+        )
+        self.assertIn(
+            "deformed_geometry(\n                    baseline_triangles",
+            source,
+        )
+        self.assertNotIn("transition_delta", source)
         self.assertIn("geometry_is_target = target_state;", source)
 
 
