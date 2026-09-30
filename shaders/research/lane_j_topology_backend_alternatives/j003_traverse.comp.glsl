@@ -6,6 +6,10 @@ const uint INVALID_ID = 0xffffffffu;
 const float RAY_T_MIN = 1.0e-4;
 const float HIT_ABS_TOL = 2.0e-4;
 const float HIT_REL_TOL = 2.0e-5;
+const float FP32_EPSILON = 1.1920928955078125e-7;
+const float FP32_GAMMA3 =
+    (3.0 * FP32_EPSILON) / (1.0 - 3.0 * FP32_EPSILON);
+const float AABB_PRUNE_DISTANCE_FACTOR = 1.0 + 2.0 * FP32_GAMMA3;
 const uint STACK_CAPACITY = 64u;
 
 struct Triangle {
@@ -68,6 +72,12 @@ layout(push_constant) uniform Push {
 
 float hit_tolerance(float t) {
     return max(HIT_ABS_TOL, abs(t) * HIT_REL_TOL);
+}
+
+float conservative_prune_limit(float limit) {
+    return limit > 0.0
+        ? limit * AABB_PRUNE_DISTANCE_FACTOR
+        : limit;
 }
 
 bool hit_aabb(
@@ -223,7 +233,8 @@ void main() {
                 direction,
                 node.bounds_min.xyz,
                 node.bounds_max.xyz,
-                best_t + hit_tolerance(best_t))) {
+                conservative_prune_limit(
+                    best_t + hit_tolerance(best_t)))) {
             continue;
         }
 
@@ -258,7 +269,8 @@ void main() {
                         direction,
                         micro.bounds_min.xyz,
                         micro.bounds_max.xyz,
-                        best_t + hit_tolerance(best_t))) {
+                        conservative_prune_limit(
+                            best_t + hit_tolerance(best_t)))) {
                     continue;
                 }
 
