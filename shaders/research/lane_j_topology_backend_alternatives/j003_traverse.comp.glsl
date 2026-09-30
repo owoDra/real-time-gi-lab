@@ -62,6 +62,8 @@ layout(push_constant) uniform Push {
     uint upper_root;
     uint upper_node_count;
     uint micro_node_count;
+    uint cluster_count;
+    uint triangle_count;
 } push_data;
 
 float hit_tolerance(float t) {
@@ -227,6 +229,10 @@ void main() {
 
         if (node.meta.w != 0u) {
             uint cluster_index = node.meta.z;
+            if (cluster_index >= push_data.cluster_count) {
+                result.stats.w = 1u;
+                break;
+            }
             Cluster cluster = clusters[cluster_index];
             uint micro_root = cluster.meta.x;
             if (micro_root >= push_data.micro_node_count) {
@@ -258,6 +264,12 @@ void main() {
 
                 if (micro.meta.w != 0u) {
                     uint triangle_index = micro.meta.z;
+                    if (triangle_index >= push_data.triangle_count) {
+                        result.stats.w = 1u;
+                        micro_size = 0u;
+                        upper_size = 0u;
+                        break;
+                    }
                     Triangle triangle = triangles[triangle_index];
                     result.stats.z += 1u;
                     float candidate_t = 0.0;
