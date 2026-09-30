@@ -1,8 +1,8 @@
 {
-  "schema_version": 4,
-  "plan_version": "lane-e-timing-revalidation-e001-v4",
+  "schema_version": 5,
+  "plan_version": "lane-e-timing-revalidation-e001-v5",
   "status": "frozen-before-target-candidate-timing",
-  "source_parent_commit": "3db4af2c24129855f6a4b30a7bfb9199204c8868",
+  "source_parent_commit": "07aaebab23046b8646778b87f726fbf7270e2dc9",
   "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
   "imported_lane_l_measurement_commit": "b8bb76f728ee329cf4daef5855a05972757072f6",
   "accepted_environment": "dual-context",
@@ -72,7 +72,7 @@
     "interrupted_partial_process": "not-evidence",
     "resume": "same-incomplete-artifact-root-missing-processes-only"
   },
-  "refreeze_reason": "pre-target self-review aligned memory classification implementation to the already frozen persistent/true-peak non-worse rule; no workload/control/20%-floor/timing-decision/sample-shape/environment/rerun-policy change",
+  "refreeze_reason": "pre-target compile-only fix: renamed local allocation stats variable to avoid collision with VkCommandBufferAllocateInfo; no workload/control/20%-floor/sample-shape/memory-rule/performance-decision/environment/rerun-policy change",
   "pretarget_fix_policy": {
     "compile_test_or_validation_failure_before_first_accepted_timing": "fix-and-versioned-refreeze-allowed",
     "after_first_accepted_timing": "workload-control-threshold-decision-rule-and-rerun-policy-immutable"
@@ -80,13 +80,13 @@
   "frozen_blobs": {
     "CMakeLists.txt": "039ce5215693d4b8df4778c05aa31cd150b2ae0e",
     "mise.toml": "3b089f9842dc5eacc5ced036989a9b76745f533b",
-    "research/lanes/lane-e-timing-revalidation/experiments/001-e001-timing-gate.md": "c06e782b88a415e63abb40b7fa66170e929aad11",
-    "research/lanes/lane-e-timing-revalidation/experiments/002-e001-config.json": "f15d3a88f836b6cce6b1e61cfd8fd800104ac878",
+    "research/lanes/lane-e-timing-revalidation/experiments/001-e001-timing-gate.md": "d8ca110016a33ab57d9091bca0a430703cf865dc",
+    "research/lanes/lane-e-timing-revalidation/experiments/002-e001-config.json": "fc434a72fb3b95c3974423dbbb81733f70121978",
     "scripts/research/lane_e_timing_revalidation/README.md": "3768b220d45415235dd65eb97d91ce59f1e09ce3",
     "scripts/research/lane_e_timing_revalidation/analysis.py": "2631951009cc606698538c148027269df9463b5a",
-    "scripts/research/lane_e_timing_revalidation/run_e001.py": "0a0a04910c8a25b30ce336cf34a4e3e9c7d32fb0",
+    "scripts/research/lane_e_timing_revalidation/run_e001.py": "9e923c47c583661e2b517748cfb8141f8197074b",
     "scripts/research/lane_e_timing_revalidation/test_analysis.py": "4cbd6b7f353e7a20f5416c22f9b7b3fa9375a085",
-    "scripts/research/lane_e_timing_revalidation/test_protocol.py": "f7df06fec8f6c6de8a21bfe0699e476df944c4fc",
+    "scripts/research/lane_e_timing_revalidation/test_protocol.py": "b2c5872e33b5318f0a5ee57fa5861507e919e721",
     "scripts/research/lane_e_timing_revalidation/test_runner_contract.py": "fa9c33f98fbbd9788c058613c23520a1086c1004",
     "scripts/research/lane_e_timing_revalidation/test_runtime_contract.py": "53113b45221f8eea241aefe8b8220737d2039bb9",
     "scripts/research/lane_e_timing_revalidation/test_shader_contract.py": "e02f4c8a6d50a5867293ce4c0d433ab2f616c66e",
@@ -126,7 +126,7 @@
     "src/research/integration/i001_benchmark.cpp": "dc4fd744118b427ed65d308e1038e08e31452946",
     "src/research/integration/i001_compute.cpp": "c602b6699d62ae87cfda8d43ea7389e6fae57953",
     "src/research/integration/i001_compute.hpp": "548f6c75d6c3f844dfb0e912b95ae5ca11c899dd",
-    "src/research/integration/i001_runtime.cpp": "0c442c9723b823a1cf6d5e0e22630a49ae3c473f",
+    "src/research/integration/i001_runtime.cpp": "73f61ffe2214cc64cfb09a9cbfca053c7f3d6d50",
     "src/research/integration/i001_runtime.hpp": "19247445bd9ab1bc0606b9100c90e69fa4d73879",
     "src/research/lane_a_split_rc/CMakeLists.txt": "ef6d79edce2a0392e1103e0c8f65d972997cf6f4",
     "src/research/lane_a_split_rc/a001_analysis.cpp": "7dbe01b6bc72d6ca9d6dd1e61a2fb9a6066ede00",
