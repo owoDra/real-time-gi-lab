@@ -69,6 +69,54 @@ class AnalysisTests(unittest.TestCase):
             "<20% difference / measurement-limited",
         )
 
+    def test_twenty_percent_regression_is_detected(self) -> None:
+        controls = [
+            summarize_process(process_rows(1.0, block, "control"))
+            for block in range(8)
+        ]
+        candidates = [
+            summarize_process(process_rows(1.25, block, "candidate"))
+            for block in range(8)
+        ]
+        result = classify_performance(candidates, control_envelope(controls))
+        self.assertEqual(result["classification"], "detected >=20% regression")
+
+    def test_large_effect_inside_control_noise_is_measurement_limited(self) -> None:
+        controls = [
+            summarize_process(
+                process_rows(1.30 if block == 0 else 1.0, block, "control")
+            )
+            for block in range(8)
+        ]
+        candidates = [
+            summarize_process(process_rows(0.75, block, "candidate"))
+            for block in range(8)
+        ]
+        result = classify_performance(candidates, control_envelope(controls))
+        self.assertEqual(
+            result["classification"],
+            "<20% difference / measurement-limited",
+        )
+
+    def test_incomplete_allocation_lifetime_is_memory_regression(self) -> None:
+        rows: list[dict[str, object]] = []
+        for block in range(8):
+            for pair in range(12):
+                for role in ("A", "B"):
+                    rows.append({
+                        "phase": "measured",
+                        "block": block,
+                        "pair_index": pair,
+                        "role": role,
+                        "persistent_bytes": 100,
+                        "true_peak_bytes": 100,
+                        "old_new_overlap_bytes": 0,
+                        "allocation_lifetime_complete":
+                            0 if (block, pair, role) == (7, 11, "B") else 1,
+                    })
+        result = classify_memory(rows)
+        self.assertEqual(result["classification"], "regression")
+
     def test_memory_hard_guard_uses_worst_pair(self) -> None:
         rows: list[dict[str, object]] = []
         for block in range(8):
