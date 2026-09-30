@@ -26,6 +26,7 @@ struct PersistentLayoutUpdate {
     std::size_t candidate_persistent_logical_bytes{};
     std::size_t resize_old_new_overlap_logical_bytes{};
     std::vector<std::uint32_t> dirty_physical_slots;
+    std::vector<std::uint32_t> dirty_upper_nodes;
 };
 
 class PersistentClusterLayout {
@@ -77,7 +78,7 @@ private:
         std::uint32_t physical_slot,
         const TransitionCluster& cluster);
     void rebuild_upper(const ClusterTransitionState& state);
-    [[nodiscard]] std::uint32_t refit_upper(
+    [[nodiscard]] std::vector<std::uint32_t> refit_upper(
         std::span<const std::uint32_t> dirty_physical_slots);
 
     std::uint32_t slot_capacity_{};
