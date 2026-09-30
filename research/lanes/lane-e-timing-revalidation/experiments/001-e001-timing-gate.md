@@ -68,3 +68,30 @@ Sub-20% differences are diagnostic only and cannot promote or falsify Lane E. A 
 ## Refreeze rule
 
 Compile/test/validation defects found before the first accepted target timing sample may be fixed and this gate may be versioned/refrozen. Once accepted target timing begins, workload, control, threshold, sample shape, decision mapping and rerun policy are immutable.
+
+
+## Frozen process and artifact contract
+
+The accepted campaign contains 160 fresh timing processes:
+5 scenarios × 2 traversal tracks × 8 blocks ×
+(same-variant control + architecture comparison).
+
+The runner must retain every raw row and emit:
+
+- `e001-config.json`
+- `e001-source-provenance.json`
+- `e001-input-provenance.json`
+- `e001-progress.json`
+- `e001-validation-summary.csv`
+- `e001-raw.csv`
+- `e001-process-summary.csv`
+- `e001-memory-summary.json`
+- `e001-host-observations.json`
+- `e001-devices.json`
+- `e001-summary.json`
+- `e001-vulkaninfo-summary.txt`
+
+A failure before the first measured row may be fixed and re-frozen. If a
+process has emitted any measured row and is then interrupted, the campaign is
+invalid and is not rerun. Completed processes and completed campaigns are never
+rerun.
