@@ -143,3 +143,39 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-j-j003-persistent-gpu-replay PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+
+# Issue #23 J004 preflight. The Lane-E HWRT source below is a selective
+# comparator snapshot from the accepted E005 measurement commit; Lane E is not
+# merged wholesale.
+add_executable(phos-lane-j-j004-memory-preflight
+  j004_relative_memory_preflight.cpp
+  j003_snapshot.cpp
+  j003_transition.cpp
+  j003_clustered_bvh.cpp
+  j003_persistent_layout.cpp
+  j003_persistent_gpu.cpp
+  baseline/lane_e_hwrt/b002_vulkan.cpp
+  baseline/lane_e_hwrt/b002_hwrt.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+
+target_include_directories(phos-lane-j-j004-memory-preflight PRIVATE
+  "${CMAKE_SOURCE_DIR}/src"
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  "${CMAKE_CURRENT_SOURCE_DIR}/baseline/lane_e_hwrt"
+)
+target_link_libraries(phos-lane-j-j004-memory-preflight PRIVATE
+  vk-bootstrap::vk-bootstrap
+  ${CMAKE_DL_LIBS}
+)
+target_compile_features(phos-lane-j-j004-memory-preflight PRIVATE cxx_std_20)
+set_target_properties(phos-lane-j-j004-memory-preflight PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+if(MSVC)
+  target_compile_options(phos-lane-j-j004-memory-preflight PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-j-j004-memory-preflight PRIVATE -Wall -Wextra -Wpedantic)
+endif()
