@@ -136,6 +136,28 @@ def load_materialized(
         raise RuntimeError(f"missing J002 materialized manifest: {manifest_path}")
 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    j002_contract = (
+        ROOT
+        / "research/lanes/lane-j-topology-backend-alternatives/experiments"
+        / "002-deterministic-topology-contract.json"
+    )
+    actual_contract_blob = git(
+        "hash-object",
+        str(j002_contract.relative_to(ROOT)),
+    )
+    if actual_contract_blob != str(config["j002"]["frozen_contract_blob"]):
+        raise RuntimeError(
+            "J002 frozen contract source changed before J004 timing"
+        )
+    if manifest.get("plan_version") != "lane-j-j002-v1":
+        raise RuntimeError("J002 materialized plan version drifted")
+    for field in ("producer_contract", "hit_contract", "storage_contract"):
+        if manifest.get(field) != config["j002"][field]:
+            raise RuntimeError(f"J002 materialized {field} drifted")
+    source = manifest.get("producer_source", {})
+    if source.get("accepted_git_commit") != config["sources"]["lane_a_accepted_stream_commit"]:
+        raise RuntimeError("J002 accepted A001 source commit drifted")
+
     producer = resolved_path(str(manifest["producer_stream_path"]))
     scene = resolved_path(str(manifest["scene"]))
     if not producer.is_file():
