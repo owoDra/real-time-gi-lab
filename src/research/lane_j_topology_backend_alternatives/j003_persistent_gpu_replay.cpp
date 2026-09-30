@@ -78,6 +78,7 @@ struct Options {
 
 struct MismatchDetail {
     std::size_t ray_index{};
+    lane_j::Ray ray{};
     lane_j::Hit expected{};
     lane_j::GpuHit actual{};
 };
@@ -92,9 +93,11 @@ struct ValidationSummary {
 };
 
 [[nodiscard]] ValidationSummary validate_hits(
+    std::span<const lane_j::Ray> rays,
     std::span<const lane_j::Hit> expected,
     std::span<const lane_j::GpuHit> actual) {
-    if (expected.size() != actual.size()) {
+    if (rays.size() != expected.size() ||
+        expected.size() != actual.size()) {
         throw std::runtime_error("persistent GPU hit count mismatch");
     }
     ValidationSummary result{};
@@ -104,6 +107,7 @@ struct ValidationSummary {
             if (result.mismatches.size() < 16U) {
                 result.mismatches.push_back({
                     index,
+                    rays[index],
                     expected[index],
                     actual[index],
                 });
@@ -181,7 +185,7 @@ int main(int argc, char** argv) {
             const auto traversal =
                 gpu.trace(layout, gpu_rays, shader_path);
             const auto validation =
-                validate_hits(expected, traversal.hits);
+                validate_hits(rays, expected, traversal.hits);
             total_mismatches += validation.hit_mismatches;
             total_runtime_errors += validation.runtime_errors;
 
@@ -191,6 +195,15 @@ int main(int argc, char** argv) {
                 std::cerr
                     << "J003 mismatch step=" << step
                     << " ray=" << mismatch.ray_index
+                    << " origin=("
+                    << mismatch.ray.origin.x << ","
+                    << mismatch.ray.origin.y << ","
+                    << mismatch.ray.origin.z << ")"
+                    << " direction=("
+                    << mismatch.ray.direction.x << ","
+                    << mismatch.ray.direction.y << ","
+                    << mismatch.ray.direction.z << ")"
+                    << " t_max=" << mismatch.ray.t_max
                     << " expected_hit=" << (expected_hit.hit ? 1 : 0)
                     << " expected_t=" << expected_hit.t
                     << " expected_primitive=" << expected_hit.primitive_id
@@ -259,9 +272,24 @@ int main(int argc, char** argv) {
                     json << ",";
                 }
                 json << "{\"ray_index\":" << mismatch.ray_index
+                     << ",\"origin\":["
+                     << mismatch.ray.origin.x << ","
+                     << mismatch.ray.origin.y << ","
+                     << mismatch.ray.origin.z << "]"
+                     << ",\"direction\":["
+                     << mismatch.ray.direction.x << ","
+                     << mismatch.ray.direction.y << ","
+                     << mismatch.ray.direction.z << "]"
+                     << ",\"t_max\":" << mismatch.ray.t_max
                      << ",\"expected_hit\":"
                      << (mismatch.expected.hit ? "true" : "false")
-                     << ",\"expected_t\":" << mismatch.expected.t
+                     << ",\"expected_t\":";
+                if (mismatch.expected.hit) {
+                    json << mismatch.expected.t;
+                } else {
+                    json << "null";
+                }
+                json
                      << ",\"expected_primitive\":"
                      << mismatch.expected.primitive_id
                      << ",\"expected_material\":"
@@ -270,7 +298,13 @@ int main(int argc, char** argv) {
                      << mismatch.expected.instance_id
                      << ",\"actual_hit\":"
                      << (mismatch.actual.ids[3] != 0U ? "true" : "false")
-                     << ",\"actual_t\":" << mismatch.actual.t_normal[0]
+                     << ",\"actual_t\":";
+                if (mismatch.actual.ids[3] != 0U) {
+                    json << mismatch.actual.t_normal[0];
+                } else {
+                    json << "null";
+                }
+                json
                      << ",\"actual_primitive\":"
                      << mismatch.actual.ids[0]
                      << ",\"actual_material\":"
