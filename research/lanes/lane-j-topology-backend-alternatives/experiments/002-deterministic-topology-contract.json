@@ -5,7 +5,7 @@
   "formal_timing_decision": false,
   "master_topology_seed": 1244672050,
   "primitive_count_factors": [
-    1.0,
+    1,
     1.25,
     0.75,
     1.1,
@@ -97,5 +97,11 @@
     "traversal_runtime_error_count",
     "storage_failure_count",
     "immutable_owner_mutation_count"
-  ]
+  ],
+  "producer_source": {
+    "case": "static",
+    "frame_id": 0,
+    "accepted_git_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+    "artifact_glob": "out/research/lane-a-split-rc/001-representative-producer/**/stream-v1.bin"
+  }
 }
