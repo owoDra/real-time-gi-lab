@@ -111,16 +111,50 @@ struct alignas(16) RadianceParams {
 static_assert(sizeof(RadianceParams) == 128);
 
 struct TransitionResult {
+    double geometry_prepare_wall_us{};
+    double allocation_reallocation_wall_us{};
+    double geometry_upload_gpu_us{};
+    double candidate_preprocess_gpu_us{};
+    double build_rebuild_gpu_us{};
+    double refit_gpu_us{};
+    double compaction_gpu_us{};
+    double instance_tlas_update_gpu_us{};
+    double traversal_gpu_us{};
+    double synchronization_wall_us{};
+    double merge_gpu_us{};
+    double storage_gpu_us{};
+    double resolve_gpu_us{};
     double complete_gpu_us{};
     double complete_wall_us{};
+    std::size_t persistent_bytes{};
+    std::size_t transient_bytes{};
+    std::size_t scratch_bytes{};
+    std::size_t old_new_overlap_bytes{};
     std::size_t resident_bytes{};
     std::size_t true_peak_resident_bytes{};
     std::size_t storage_failures{};
 };
 
 struct BatchResult {
+    double geometry_prepare_wall_us{};
+    double allocation_reallocation_wall_us{};
+    double geometry_upload_gpu_us{};
+    double candidate_preprocess_gpu_us{};
+    double build_rebuild_gpu_us{};
+    double refit_gpu_us{};
+    double compaction_gpu_us{};
+    double instance_tlas_update_gpu_us{};
+    double traversal_gpu_us{};
+    double synchronization_wall_us{};
+    double merge_gpu_us{};
+    double storage_gpu_us{};
+    double resolve_gpu_us{};
     double complete_gpu_us{};
     double complete_wall_us{};
+    std::size_t max_persistent_bytes{};
+    std::size_t max_transient_bytes{};
+    std::size_t max_scratch_bytes{};
+    std::size_t max_old_new_overlap_bytes{};
     std::size_t max_resident_bytes{};
     std::size_t max_true_peak_resident_bytes{};
     std::size_t storage_failures{};
@@ -622,10 +656,52 @@ public:
                     (current_step_ + 1U) % snapshots_.size());
             const auto result =
                 run_transition(next_step);
+            batch.geometry_prepare_wall_us +=
+                result.geometry_prepare_wall_us;
+            batch.allocation_reallocation_wall_us +=
+                result.allocation_reallocation_wall_us;
+            batch.geometry_upload_gpu_us +=
+                result.geometry_upload_gpu_us;
+            batch.candidate_preprocess_gpu_us +=
+                result.candidate_preprocess_gpu_us;
+            batch.build_rebuild_gpu_us +=
+                result.build_rebuild_gpu_us;
+            batch.refit_gpu_us +=
+                result.refit_gpu_us;
+            batch.compaction_gpu_us +=
+                result.compaction_gpu_us;
+            batch.instance_tlas_update_gpu_us +=
+                result.instance_tlas_update_gpu_us;
+            batch.traversal_gpu_us +=
+                result.traversal_gpu_us;
+            batch.synchronization_wall_us +=
+                result.synchronization_wall_us;
+            batch.merge_gpu_us +=
+                result.merge_gpu_us;
+            batch.storage_gpu_us +=
+                result.storage_gpu_us;
+            batch.resolve_gpu_us +=
+                result.resolve_gpu_us;
             batch.complete_gpu_us +=
                 result.complete_gpu_us;
             batch.complete_wall_us +=
                 result.complete_wall_us;
+            batch.max_persistent_bytes =
+                std::max(
+                    batch.max_persistent_bytes,
+                    result.persistent_bytes);
+            batch.max_transient_bytes =
+                std::max(
+                    batch.max_transient_bytes,
+                    result.transient_bytes);
+            batch.max_scratch_bytes =
+                std::max(
+                    batch.max_scratch_bytes,
+                    result.scratch_bytes);
+            batch.max_old_new_overlap_bytes =
+                std::max(
+                    batch.max_old_new_overlap_bytes,
+                    result.old_new_overlap_bytes);
             batch.max_resident_bytes =
                 std::max(
                     batch.max_resident_bytes,
