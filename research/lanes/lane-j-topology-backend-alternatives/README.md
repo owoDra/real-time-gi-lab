@@ -6,7 +6,7 @@ Base: `research@76f65f8944aba8405dce5d386161df2540957349`
 
 ## Current status
 
-**J001 complete / J002-J005 plan frozen / candidate implementation not started.**
+**J001 complete / J002-J003 GPU-independent preparation implemented / target-GPU J003 prototype next.**
 
 J001 retains one new structurally different candidate:
 
@@ -32,3 +32,8 @@ Formal timing is blocked on Issue #19 / Lane I.
   `experiments/plan-v1.1-amendment.md`
 
 No production candidate implementation belongs in this first session.
+
+- GPU-independent checkpoint:
+  `results/002-gpu-independent-preparation.md`
+- First GPU-required gate:
+  `experiments/003-gpu-prototype-gate.md`

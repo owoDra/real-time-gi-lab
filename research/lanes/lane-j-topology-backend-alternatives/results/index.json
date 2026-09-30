@@ -8,6 +8,13 @@
       "status": "complete",
       "evidence_class": "research-and-planning",
       "decision": "retain clustered-two-level-bvh as sole new structural candidate; retain Lane E HWRT rebuild and hardened transient LBVH as controls"
+    },
+    {
+      "experiment": "J002/J003-pre-gpu",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/002-gpu-independent-preparation.md",
+      "status": "implementation-complete-local-artifact-replay-pending",
+      "evidence_class": "contract-reference-model-and-self-review",
+      "decision": "next new research work is target-GPU J003 prototype validation; J004 remains Lane-I-gated"
     }
   ]
 }
