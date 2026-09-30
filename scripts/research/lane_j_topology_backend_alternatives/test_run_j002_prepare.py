@@ -13,6 +13,12 @@ class J002PrepareTests(unittest.TestCase):
             "master_topology_seed": 0x4A303032,
             "primitive_count_factors": [1.0, 1.25, 0.75],
             "producer_contract": "A001",
+            "producer_source": {
+                "case": "static",
+                "frame_id": 0,
+                "accepted_git_commit": "test-commit",
+                "artifact_glob": "out/test/**/stream-v1.bin",
+            },
             "hit_contract": "B001",
             "storage_contract": "C001",
             "changed_object_id": "topology-object-0",
@@ -42,6 +48,7 @@ class J002PrepareTests(unittest.TestCase):
         second = prepare.build_manifest(self.config())
         self.assertEqual(first, second)
         self.assertFalse(first["producer_stream_ready"])
+        self.assertEqual(first["producer_source"], self.config()["producer_source"])
         self.assertEqual(
             [
                 step["primitive_count"]
