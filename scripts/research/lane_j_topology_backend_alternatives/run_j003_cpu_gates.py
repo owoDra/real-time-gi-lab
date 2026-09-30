@@ -21,13 +21,14 @@ def main():
             "occupancy_min":min(len(c.primitive_ids) for c in model.clusters),
             "occupancy_max":max(len(c.primitive_ids) for c in model.clusters),
             "dirty_cluster_count":0,"rebuilt_triangle_count":0,"split_count":0,"merge_count":0,
-            "unaffected_cluster_rebuild_count":0
+            "retired_empty_cluster_count":0,"unaffected_cluster_rebuild_count":0
         }]
         for step in steps[1:]:
             triangles=geometry.read_snapshot(args.j002_artifact_dir/step["file"])
             stats=model.update(triangles)
             occupancy=[len(c.primitive_ids) for c in model.clusters]
             if stats.unaffected_cluster_rebuild_count!=0: raise RuntimeError("unaffected cluster mutation detected")
+            if not occupancy or min(occupancy)<=0: raise RuntimeError("empty cluster persisted")
             if max(occupancy)>64: raise RuntimeError("cluster maximum violated")
             rows.append({
                 "index":step["index"],"cluster_count":len(model.clusters),
@@ -35,6 +36,7 @@ def main():
                 "dirty_cluster_count":stats.dirty_cluster_count,
                 "rebuilt_triangle_count":stats.rebuilt_triangle_count,
                 "split_count":stats.split_count,"merge_count":stats.merge_count,
+                "retired_empty_cluster_count":stats.retired_empty_cluster_count,
                 "unaffected_cluster_rebuild_count":stats.unaffected_cluster_rebuild_count
             })
         profiles.append({"name":profile["name"],"rows":rows})
