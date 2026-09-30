@@ -40,3 +40,11 @@ No production candidate implementation belongs in this first session.
   `results/003-cpu-structural-gate.md`
 - First GPU-required gate:
   `experiments/003-gpu-prototype-gate.md`
+
+
+## Frozen correctness amendments
+
+- `experiments/plan-v1.4-amendment.md`: conservative fp32 BVH pruning.
+  This preserves the frozen B001 Hit/tie semantics while preventing broad-phase
+  AABB traversal from dropping candidates that are still eligible inside the
+  exact tie window.
