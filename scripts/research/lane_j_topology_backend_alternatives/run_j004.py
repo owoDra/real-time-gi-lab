@@ -54,6 +54,51 @@ EXPECTED_F003_BLOBS = {
     "baseline/lane_b_traversal/b003_micro_bvh8.hpp": "4ff5a5ee799c112e0f5542ac24645b1a0faabe96",
 }
 
+EXPECTED_FORMAL_HARNESS_BLOBS = {
+    "scripts/research/lane_j_topology_backend_alternatives/"
+    "j004_analysis.py": "9dd6e87d2f5ba807410297d11d9fba32790af2b9",
+    "scripts/research/lane_j_topology_backend_alternatives/"
+    "test_j004_analysis.py": "1153504f5713f0d3503b37ee173a4ce21876a80e",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "j004_formal_process.cpp": "e4d734a30a5dbb9378ebece3a46e4b06898cbf1b",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_compute.cpp": "5000f7178996bb2917fede7bf4d8202f1fbab8ee",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_compute.hpp": "16b1e209c8b63640b47e2a7d20d682ee40836602",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/b002_vulkan.cpp": "0e8381ac81eaa39d9c733c5df29e952a6c9fe592",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/b002_vulkan.hpp": "628a2dfcd0d60b5e565e6b2037c7c8beaf9e2790",
+    "src/research/lane_j_topology_backend_alternatives/"
+    "j003_snapshot.cpp": "aa3f671021251de36d9b8903695b1e223304f4ac",
+    "src/research/lane_j_topology_backend_alternatives/"
+    "j003_snapshot.hpp": "fb3461e821580b061b06f4829f2d2c94394ede02",
+    "src/research/lane_j_topology_backend_alternatives/"
+    "j003_reference.cpp": "c11535694b40b756dd188219f7064edb2361bca8",
+    "src/research/lane_j_topology_backend_alternatives/"
+    "j003_reference.hpp": "79dfdf0394cc0520784e66abccbedd2d5be90bc0",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "f003_hit_merge.comp.glsl": "de6f6a8f532cee579bb15dea80585cfca8455768",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_hwrt.comp.glsl": "17d3157ee86d26b53d10f84b47bc9cf2742a26af",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_quantized_bvh8.comp.glsl": "7ba2950e0c5bacb27051f600769da1af85e8c3b4",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_software_bvh.comp.glsl": "8384c44ca0ae3eb14386e74f272dc5351d6f7dd6",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_radiance.comp.glsl": "32599531c293f8042f8b2fdf63593e43a4b33ae3",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_storage_update.comp.glsl": "baa74b360a5077d56cd80a74c1fe0c71c2df181c",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_storage_invalidate.comp.glsl": "dabbcdcf866bc51b748a2d425f7179e783adf96b",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "i001_storage_resolve.comp.glsl": "f2335b5269e9dbae62c58e37b60507659319192c",
+    "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "merge.comp.glsl": "3e9547bc8c02ec0fa41445a8e60df4d2d23f4599",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "CMakeLists.txt": "dfca57f289579a92f769c38bd3207e8d98a36109",
+
+
 
 def git(*args: str) -> str:
     proc = subprocess.run(
@@ -118,11 +163,15 @@ def resolved_path(value: str | os.PathLike[str]) -> Path:
 
 
 def verify_frozen_sources() -> None:
-    for relative, expected in EXPECTED_F003_BLOBS.items():
+    frozen = {
+        **EXPECTED_F003_BLOBS,
+        **EXPECTED_FORMAL_HARNESS_BLOBS,
+    }
+    for relative, expected in frozen.items():
         actual = git("hash-object", relative)
         if actual != expected:
             raise RuntimeError(
-                f"J004 recurrent F003 source drift for {relative}: "
+                f"J004 frozen source drift for {relative}: "
                 f"{actual} != {expected}"
             )
 
