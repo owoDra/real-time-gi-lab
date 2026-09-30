@@ -78,6 +78,13 @@
       "status": "fail-diagnostic-pending",
       "evidence_class": "representative-persistent-vulkan-exact-replay",
       "decision": "zero-error gate failed at step 3 with one Hit mismatch; retain exact mismatch diagnostics before any correction"
+    },
+    {
+      "id": "J003-persistent-vulkan-pruning-diagnosis",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/012-pruning-hypotheses-rejected.md",
+      "status": "diagnostic",
+      "evidence_class": "retained-target-gpu-correctness-failure",
+      "decision": "reject v1.4/v1.5 pruning hypotheses; use explicit shader watched-primitive path before any further correction"
     }
   ]
 }
