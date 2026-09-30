@@ -60,6 +60,9 @@ J004_RUNNER = (
     ROOT
     / "scripts/research/lane_j_topology_backend_alternatives/run_j004.py"
 )
+J004_SCRIPT_DIR = str(J004_RUNNER.parent)
+if J004_SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, J004_SCRIPT_DIR)
 _spec = importlib.util.spec_from_file_location(
     "lane_j_run_j004_for_l001",
     J004_RUNNER,
