@@ -107,3 +107,20 @@ Preparation checkpoint:
 
 - v6 isolated the retained large-profile mismatch to dynamic exact ties; v7 found and repaired B001-incompatible `best_t` acceleration pruning across the CPU reference and formal software traversals before any timing:
   `results/026-b001-tie-pruning-correctness-repair.md`.
+
+## J004 formal target result
+
+The v7 target campaign completed all hard validation and all 200 formal
+processes with no sample exclusion or rerun. Correctness is clean, but every
+same-variant GPU control profile exceeds the frozen 2%/3% control-health
+envelope. The formal result is therefore **measurement-limited** rather than a
+performance ranking. No locality/track class retains the hardened transient
+LBVH, and `j005_eligible=false`; J005 must not run.
+
+Canonical result:
+`results/027-formal-crossover-final.md`.
+
+Diagnostic effect direction is consistently unfavorable to the retained LBVH
+candidate, but it is not upgraded into formal rejection because control health
+failed. A new prospective measurement experiment is required before any future
+ranking; J004 itself has zero rerun budget.
