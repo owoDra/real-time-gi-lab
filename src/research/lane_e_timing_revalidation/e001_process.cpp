@@ -8,6 +8,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <thread>
@@ -347,7 +348,25 @@ int run_validation(const Cli& cli) {
             quality_a.workload_digest != quality_b.workload_digest ||
             quality_a.resolved_output_digest != quality_b.resolved_output_digest ||
             quality_a.geometry_input_digest != quality_b.geometry_input_digest) {
-            fail("E001 validation identity/correctness gate failed");
+            output.flush();
+            std::ostringstream detail;
+            detail
+                << "E001 validation identity/correctness gate failed"
+                << " state=" << state_name
+                << " lifetime(A/B)=" << lifetime_a << '/' << lifetime_b
+                << " quality(A/B)=" << quality_a.passed << '/' << quality_b.passed
+                << " hit(A/B)=" << quality_a.hit_mismatches << '/' << quality_b.hit_mismatches
+                << " tie(A/B)=" << quality_a.nearest_hit_tie_mismatches << '/' << quality_b.nearest_hit_tie_mismatches
+                << " visibility(A/B)=" << quality_a.visibility_mismatches << '/' << quality_b.visibility_mismatches
+                << " producer(A/B)=" << quality_a.producer_semantic_errors << '/' << quality_b.producer_semantic_errors
+                << " traversal(A/B)=" << quality_a.traversal_runtime_errors << '/' << quality_b.traversal_runtime_errors
+                << " static-owner(A/B)=" << quality_a.static_owner_mutations << '/' << quality_b.static_owner_mutations
+                << " unrelated-owner(A/B)=" << quality_a.unrelated_owner_mutations << '/' << quality_b.unrelated_owner_mutations
+                << " storage(A/B)=" << frame_a.stats.storage_failures << '/' << frame_b.stats.storage_failures
+                << " workload(A/B)=" << quality_a.workload_digest << '/' << quality_b.workload_digest
+                << " resolved(A/B)=" << quality_a.resolved_output_digest << '/' << quality_b.resolved_output_digest
+                << " geometry(A/B)=" << quality_a.geometry_input_digest << '/' << quality_b.geometry_input_digest;
+            fail(detail.str());
         }
         if (runtime_a.device_name() != runtime_b.device_name() ||
             runtime_a.driver_name() != runtime_b.driver_name() ||
