@@ -128,3 +128,30 @@ exec python scripts/research/run_experiment.py \
   --experiment "${usage_experiment?}" \
   --command "${usage_command?}"
 '''
+
+
+[tasks."research:j003:probe"]
+description = "Run the Lane J J003 representative target-GPU traversal probe"
+depends = ["configure"]
+usage = '''
+flag "--snapshot <snapshot>" help="Frozen J002 snapshot" default="out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized/medium-global-representative/step-00.bin"
+flag "--output <output>" help="Probe JSON output" default="out/research/lane-j-topology-backend-alternatives/003-target-gpu-prototype/j003-traversal-probe.json"
+flag "--ray-count <ray_count>" help="Validation ray count" default="4096"
+flag "--validation" help="Enable Vulkan validation layers"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-j-j003-probe
+args=(
+  --snapshot "${usage_snapshot?}"
+  --output "${usage_output?}"
+  --ray-count "${usage_ray_count?}"
+)
+if [ "${usage_validation:-false}" = "true" ]; then
+  args+=(--validation)
+fi
+exec bash ./scripts/run_with_vulkan.sh \
+  "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-probe" \
+  "${args[@]}"
+'''
