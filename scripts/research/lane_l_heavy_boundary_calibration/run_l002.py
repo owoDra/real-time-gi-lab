@@ -31,7 +31,7 @@ L001_CONFIG = (
 EXPECTED_CONFIG_BLOB_SHA = "b7b20a53de965f198ac5b117645b07626204bbab"
 EXPECTED_SOURCE_BLOBS = {
     "scripts/research/lane_l_heavy_boundary_calibration/l002_analysis.py":
-        "65b927259a7eeb9a27d18d1ebf7724caf2208a1c",
+        "a4ed4c540ca7588c35491470e437b96696daf113",
     "scripts/research/lane_l_heavy_boundary_calibration/test_l002_analysis.py":
         "c81220db8f8dc01a50567762a21322de051d566a",
     "scripts/research/lane_l_heavy_boundary_calibration/test_l002_protocol.py":
