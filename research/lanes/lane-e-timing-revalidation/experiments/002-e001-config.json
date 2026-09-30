@@ -99,7 +99,8 @@
     "accepted_timing_validation_layers": false,
     "future_state_prebuild": false,
     "recurrent_work_moved_to_setup": false,
-    "historical_lane_e_timing_role": "context-only"
+    "historical_lane_e_timing_role": "context-only",
+    "expected_fresh_timing_processes": 160
   },
   "fresh_run_local_control": {
     "required": true,
@@ -175,7 +176,11 @@
     "require_all_process_medians_directional": true,
     "require_all_ab_stratum_medians_directional": true,
     "require_all_ba_stratum_medians_directional": true,
-    "lane_k_5_percent_floor_forbidden": true
+    "lane_k_5_percent_floor_forbidden": true,
+    "detected_improvement": "candidate/control <= 0.80 and fresh-control/direction gates pass",
+    "detected_regression": "candidate/control >= 1.20 and fresh-control/direction gates pass",
+    "middle_outcome": "<20% difference / measurement-limited",
+    "sub_20_percent_architecture_conclusion_forbidden": true
   },
   "provenance": {
     "required_fields": [
@@ -197,6 +202,26 @@
     "partial_process_is_not_evidence": true,
     "resume_may_only_continue_missing_predeclared_process_ids": true,
     "completed_campaign_may_not_resume_or_rerun": true,
-    "compile_or_test_failure_before_first_accepted_target_timing_allows_fix_and_refreeze": true
+    "compile_or_test_failure_before_first_accepted_target_timing_allows_fix_and_refreeze": true,
+    "partial_process_with_any_measured_row": "campaign-invalid-no-rerun",
+    "failure_before_first_measured_row": "fix-and-refreeze-allowed"
+  },
+  "artifact_schema": {
+    "version": 1,
+    "required": [
+      "e001-config.json",
+      "e001-source-provenance.json",
+      "e001-input-provenance.json",
+      "e001-progress.json",
+      "e001-validation-summary.csv",
+      "e001-raw.csv",
+      "e001-process-summary.csv",
+      "e001-memory-summary.json",
+      "e001-host-observations.json",
+      "e001-devices.json",
+      "e001-summary.json",
+      "e001-vulkaninfo-summary.txt"
+    ],
+    "all_raw_rows_retained": true
   }
 }
