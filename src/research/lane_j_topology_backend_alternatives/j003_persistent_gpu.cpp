@@ -23,6 +23,59 @@ template <typename T>
     return reinterpret_cast<const std::byte*>(values.data() + index);
 }
 
+struct TraversalPush {
+    std::uint32_t ray_count{};
+    std::uint32_t upper_root{};
+    std::uint32_t upper_node_count{};
+    std::uint32_t micro_node_count{};
+    std::uint32_t cluster_count{};
+    std::uint32_t triangle_count{};
+};
+static_assert(sizeof(TraversalPush) == 24);
+
+struct ValidationRuntime {
+    VulkanContext& context;
+    GpuBuffer rays{};
+    GpuBuffer hits{};
+    VkDescriptorSetLayout descriptor_layout{VK_NULL_HANDLE};
+    VkPipelineLayout pipeline_layout{VK_NULL_HANDLE};
+    VkDescriptorPool descriptor_pool{VK_NULL_HANDLE};
+    VkPipeline pipeline{VK_NULL_HANDLE};
+    VkCommandPool command_pool{VK_NULL_HANDLE};
+    VkQueryPool query_pool{VK_NULL_HANDLE};
+    VkFence fence{VK_NULL_HANDLE};
+
+    ~ValidationRuntime() {
+        auto& vk = context.vk();
+        if (context.device() != VK_NULL_HANDLE) {
+            vk.deviceWaitIdle();
+        }
+        if (fence != VK_NULL_HANDLE) {
+            vk.destroyFence(fence, nullptr);
+        }
+        if (query_pool != VK_NULL_HANDLE) {
+            vk.destroyQueryPool(query_pool, nullptr);
+        }
+        if (command_pool != VK_NULL_HANDLE) {
+            vk.destroyCommandPool(command_pool, nullptr);
+        }
+        if (pipeline != VK_NULL_HANDLE) {
+            vk.destroyPipeline(pipeline, nullptr);
+        }
+        if (descriptor_pool != VK_NULL_HANDLE) {
+            vk.destroyDescriptorPool(descriptor_pool, nullptr);
+        }
+        if (pipeline_layout != VK_NULL_HANDLE) {
+            vk.destroyPipelineLayout(pipeline_layout, nullptr);
+        }
+        if (descriptor_layout != VK_NULL_HANDLE) {
+            vk.destroyDescriptorSetLayout(descriptor_layout, nullptr);
+        }
+        context.destroy_buffer(rays);
+        context.destroy_buffer(hits);
+    }
+};
+
 } // namespace
 
 PersistentGpuState::PersistentGpuState(
@@ -470,6 +523,343 @@ PersistentGpuSyncResult PersistentGpuState::synchronize(
         : result.candidate_persistent_allocation_bytes;
     result.true_peak_resident_bytes =
         persistent_peak + result.max_staging_allocation_bytes;
+    return result;
+}
+
+
+PersistentGpuTraversalResult PersistentGpuState::trace(
+    const PersistentClusterLayout& layout,
+    std::span<const GpuRay> rays,
+    const std::filesystem::path& shader_path) {
+    if (rays.empty()) {
+        fail("J003 persistent traversal requires rays");
+    }
+    if (layout.upper_root() >= layout.upper_node_count()) {
+        fail("J003 persistent traversal upper root out of range");
+    }
+
+    ValidationRuntime runtime{context_};
+    constexpr auto storage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+    runtime.rays = context_.upload_device_buffer(
+        rays.data(),
+        VkDeviceSize(rays.size() * sizeof(GpuRay)),
+        storage);
+    runtime.hits = context_.create_device_buffer(
+        VkDeviceSize(rays.size() * sizeof(GpuHit)),
+        storage);
+
+    std::array<VkDescriptorSetLayoutBinding, 6> bindings{};
+    for (std::uint32_t index = 0U; index < bindings.size(); ++index) {
+        bindings[index].binding = index;
+        bindings[index].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        bindings[index].descriptorCount = 1U;
+        bindings[index].stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+    }
+
+    auto descriptor_layout_info =
+        detail::make_vk_info<VkDescriptorSetLayoutCreateInfo>(
+            VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO);
+    descriptor_layout_info.bindingCount =
+        static_cast<std::uint32_t>(bindings.size());
+    descriptor_layout_info.pBindings = bindings.data();
+    if (context_.vk().createDescriptorSetLayout(
+            &descriptor_layout_info,
+            nullptr,
+            &runtime.descriptor_layout) != VK_SUCCESS) {
+        fail("J003 persistent traversal descriptor layout");
+    }
+
+    VkPushConstantRange push_range{};
+    push_range.stageFlags = VK_SHADER_STAGE_COMPUTE_BIT;
+    push_range.offset = 0U;
+    push_range.size = sizeof(TraversalPush);
+
+    auto pipeline_layout_info =
+        detail::make_vk_info<VkPipelineLayoutCreateInfo>(
+            VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO);
+    pipeline_layout_info.setLayoutCount = 1U;
+    pipeline_layout_info.pSetLayouts = &runtime.descriptor_layout;
+    pipeline_layout_info.pushConstantRangeCount = 1U;
+    pipeline_layout_info.pPushConstantRanges = &push_range;
+    if (context_.vk().createPipelineLayout(
+            &pipeline_layout_info,
+            nullptr,
+            &runtime.pipeline_layout) != VK_SUCCESS) {
+        fail("J003 persistent traversal pipeline layout");
+    }
+
+    VkDescriptorPoolSize pool_size{
+        VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+        6U,
+    };
+    auto pool_info = detail::make_vk_info<VkDescriptorPoolCreateInfo>(
+        VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO);
+    pool_info.maxSets = 1U;
+    pool_info.poolSizeCount = 1U;
+    pool_info.pPoolSizes = &pool_size;
+    if (context_.vk().createDescriptorPool(
+            &pool_info,
+            nullptr,
+            &runtime.descriptor_pool) != VK_SUCCESS) {
+        fail("J003 persistent traversal descriptor pool");
+    }
+
+    VkDescriptorSet descriptor_set{VK_NULL_HANDLE};
+    auto allocate_info =
+        detail::make_vk_info<VkDescriptorSetAllocateInfo>(
+            VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO);
+    allocate_info.descriptorPool = runtime.descriptor_pool;
+    allocate_info.descriptorSetCount = 1U;
+    allocate_info.pSetLayouts = &runtime.descriptor_layout;
+    if (context_.vk().allocateDescriptorSets(
+            &allocate_info,
+            &descriptor_set) != VK_SUCCESS) {
+        fail("J003 persistent traversal descriptor set");
+    }
+
+    const std::array<GpuBuffer, 6> buffers{
+        triangles_,
+        upper_,
+        micro_,
+        clusters_,
+        runtime.rays,
+        runtime.hits,
+    };
+    std::array<VkDescriptorBufferInfo, 6> buffer_infos{};
+    std::array<VkWriteDescriptorSet, 6> writes{};
+    for (std::uint32_t index = 0U; index < buffers.size(); ++index) {
+        buffer_infos[index] = {
+            buffers[index].buffer,
+            0U,
+            buffers[index].size,
+        };
+        writes[index] = detail::make_vk_info<VkWriteDescriptorSet>(
+            VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
+        writes[index].dstSet = descriptor_set;
+        writes[index].dstBinding = index;
+        writes[index].descriptorCount = 1U;
+        writes[index].descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+        writes[index].pBufferInfo = &buffer_infos[index];
+    }
+    context_.vk().updateDescriptorSets(
+        static_cast<std::uint32_t>(writes.size()),
+        writes.data(),
+        0U,
+        nullptr);
+
+    const auto shader = read_binary_file(shader_path.string());
+    if (shader.empty() ||
+        shader.size() % sizeof(std::uint32_t) != 0U) {
+        fail("J003 persistent traversal invalid shader");
+    }
+
+    auto module_info =
+        detail::make_vk_info<VkShaderModuleCreateInfo>(
+            VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO);
+    module_info.codeSize = shader.size();
+    module_info.pCode =
+        reinterpret_cast<const std::uint32_t*>(shader.data());
+    VkShaderModule module{VK_NULL_HANDLE};
+    if (context_.vk().createShaderModule(
+            &module_info,
+            nullptr,
+            &module) != VK_SUCCESS) {
+        fail("J003 persistent traversal shader module");
+    }
+
+    auto stage =
+        detail::make_vk_info<VkPipelineShaderStageCreateInfo>(
+            VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO);
+    stage.stage = VK_SHADER_STAGE_COMPUTE_BIT;
+    stage.module = module;
+    stage.pName = "main";
+
+    auto pipeline_info =
+        detail::make_vk_info<VkComputePipelineCreateInfo>(
+            VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO);
+    pipeline_info.stage = stage;
+    pipeline_info.layout = runtime.pipeline_layout;
+    const auto pipeline_result = context_.vk().createComputePipelines(
+        VK_NULL_HANDLE,
+        1U,
+        &pipeline_info,
+        nullptr,
+        &runtime.pipeline);
+    context_.vk().destroyShaderModule(module, nullptr);
+    if (pipeline_result != VK_SUCCESS) {
+        fail("J003 persistent traversal compute pipeline");
+    }
+
+    auto command_pool_info =
+        detail::make_vk_info<VkCommandPoolCreateInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
+    command_pool_info.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
+    command_pool_info.queueFamilyIndex = context_.queue_family();
+    if (context_.vk().createCommandPool(
+            &command_pool_info,
+            nullptr,
+            &runtime.command_pool) != VK_SUCCESS) {
+        fail("J003 persistent traversal command pool");
+    }
+
+    VkCommandBuffer command{VK_NULL_HANDLE};
+    auto command_allocate =
+        detail::make_vk_info<VkCommandBufferAllocateInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+    command_allocate.commandPool = runtime.command_pool;
+    command_allocate.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    command_allocate.commandBufferCount = 1U;
+    if (context_.vk().allocateCommandBuffers(
+            &command_allocate,
+            &command) != VK_SUCCESS) {
+        fail("J003 persistent traversal command buffer");
+    }
+
+    auto query_info =
+        detail::make_vk_info<VkQueryPoolCreateInfo>(
+            VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO);
+    query_info.queryType = VK_QUERY_TYPE_TIMESTAMP;
+    query_info.queryCount = 2U;
+    if (context_.vk().createQueryPool(
+            &query_info,
+            nullptr,
+            &runtime.query_pool) != VK_SUCCESS) {
+        fail("J003 persistent traversal query pool");
+    }
+
+    auto fence_info = detail::make_vk_info<VkFenceCreateInfo>(
+        VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
+    if (context_.vk().createFence(
+            &fence_info,
+            nullptr,
+            &runtime.fence) != VK_SUCCESS) {
+        fail("J003 persistent traversal fence");
+    }
+
+    auto begin_info =
+        detail::make_vk_info<VkCommandBufferBeginInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+    begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+    if (context_.vk().beginCommandBuffer(
+            command,
+            &begin_info) != VK_SUCCESS) {
+        fail("J003 persistent traversal begin");
+    }
+
+    context_.vk().cmdResetQueryPool(
+        command,
+        runtime.query_pool,
+        0U,
+        2U);
+    context_.vk().cmdBindPipeline(
+        command,
+        VK_PIPELINE_BIND_POINT_COMPUTE,
+        runtime.pipeline);
+    context_.vk().cmdBindDescriptorSets(
+        command,
+        VK_PIPELINE_BIND_POINT_COMPUTE,
+        runtime.pipeline_layout,
+        0U,
+        1U,
+        &descriptor_set,
+        0U,
+        nullptr);
+
+    const TraversalPush push{
+        static_cast<std::uint32_t>(rays.size()),
+        layout.upper_root(),
+        layout.upper_node_count(),
+        static_cast<std::uint32_t>(layout.micro_nodes().size()),
+        layout.slot_capacity(),
+        static_cast<std::uint32_t>(layout.triangles().size()),
+    };
+    context_.vk().cmdPushConstants(
+        command,
+        runtime.pipeline_layout,
+        VK_SHADER_STAGE_COMPUTE_BIT,
+        0U,
+        sizeof(push),
+        &push);
+
+    context_.vk().cmdWriteTimestamp(
+        command,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        runtime.query_pool,
+        0U);
+    const auto groups =
+        (static_cast<std::uint32_t>(rays.size()) + 63U) / 64U;
+    context_.vk().cmdDispatch(command, groups, 1U, 1U);
+    context_.vk().cmdWriteTimestamp(
+        command,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        runtime.query_pool,
+        1U);
+
+    auto barrier = detail::make_vk_info<VkMemoryBarrier>(
+        VK_STRUCTURE_TYPE_MEMORY_BARRIER);
+    barrier.srcAccessMask = VK_ACCESS_SHADER_WRITE_BIT;
+    barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+    context_.vk().cmdPipelineBarrier(
+        command,
+        VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        0U,
+        1U,
+        &barrier,
+        0U,
+        nullptr,
+        0U,
+        nullptr);
+
+    if (context_.vk().endCommandBuffer(command) != VK_SUCCESS) {
+        fail("J003 persistent traversal end");
+    }
+
+    auto submit = detail::make_vk_info<VkSubmitInfo>(
+        VK_STRUCTURE_TYPE_SUBMIT_INFO);
+    submit.commandBufferCount = 1U;
+    submit.pCommandBuffers = &command;
+    if (context_.vk().queueSubmit(
+            context_.queue(),
+            1U,
+            &submit,
+            runtime.fence) != VK_SUCCESS) {
+        fail("J003 persistent traversal submit");
+    }
+    if (context_.vk().waitForFences(
+            1U,
+            &runtime.fence,
+            VK_TRUE,
+            UINT64_MAX) != VK_SUCCESS) {
+        fail("J003 persistent traversal wait");
+    }
+
+    std::array<std::uint64_t, 2> timestamps{};
+    if (context_.vk().getQueryPoolResults(
+            runtime.query_pool,
+            0U,
+            2U,
+            sizeof(timestamps),
+            timestamps.data(),
+            sizeof(std::uint64_t),
+            VK_QUERY_RESULT_64_BIT |
+                VK_QUERY_RESULT_WAIT_BIT) != VK_SUCCESS) {
+        fail("J003 persistent traversal timestamps");
+    }
+
+    PersistentGpuTraversalResult result{};
+    result.hits.resize(rays.size());
+    context_.download_device_buffer(
+        runtime.hits,
+        result.hits.data(),
+        VkDeviceSize(result.hits.size() * sizeof(GpuHit)));
+    result.traversal_gpu_us =
+        double(timestamps[1] - timestamps[0]) *
+        double(context_.timestamp_period_ns()) /
+        1000.0;
+    result.validation_harness_allocation_bytes =
+        allocation_bytes(runtime.rays) +
+        allocation_bytes(runtime.hits);
     return result;
 }
 
