@@ -135,6 +135,7 @@ Unchanged J004/Lane-K shape:
 - AB/BA alternation inside each process;
 - frozen start-order counterbalance:
   `AB, BA, AB, BA, BA, AB, BA, AB`;
+- dual/single fresh-process position is counterbalanced per block (4 first / 4 second for each environment) so campaign-time drift cannot be assigned systematically to one environment;
 - 1 second settle before each fresh process;
 - 16 complete transitions per sample;
 - all samples retained;
