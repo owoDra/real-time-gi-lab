@@ -311,11 +311,13 @@ TransitionStats ClusterTransitionState::update(
     }
 
     std::unordered_set<std::uint32_t> retired_ids;
+    std::unordered_set<std::uint32_t> released_ids;
     for (const auto& cluster : clusters_) {
         if (cluster.triangles.empty()) {
             retired_ids.insert(cluster.cluster_id);
         }
     }
+    released_ids.insert(retired_ids.begin(), retired_ids.end());
     if (!retired_ids.empty()) {
         clusters_.erase(
             std::remove_if(
@@ -487,6 +489,7 @@ TransitionStats ClusterTransitionState::update(
             const auto removed_id = source->cluster_id;
             clusters_.erase(source);
             dirty.erase(removed_id);
+            released_ids.insert(removed_id);
 
             ++merge_count;
             merged = true;
@@ -545,6 +548,11 @@ TransitionStats ClusterTransitionState::update(
         retired_ids.end());
     std::sort(retired_cluster_ids.begin(), retired_cluster_ids.end());
 
+    std::vector<std::uint32_t> released_cluster_ids(
+        released_ids.begin(),
+        released_ids.end());
+    std::sort(released_cluster_ids.begin(), released_cluster_ids.end());
+
     return {
         static_cast<std::uint32_t>(clusters_.size()),
         final_dirty_count,
@@ -562,6 +570,7 @@ TransitionStats ClusterTransitionState::update(
             !retired_ids.empty(),
         std::move(dirty_ids),
         std::move(retired_cluster_ids),
+        std::move(released_cluster_ids),
     };
 }
 
