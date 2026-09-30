@@ -43,8 +43,9 @@ struct Cli {
     if (!dynamic_case(scenario)) {
         return true;
     }
-    // Warmup frame zero is source-state false. Alternation continues through the
-    // measured phase, so every measured dynamic frame crosses the update boundary.
+    // Historical v1 sequence retained for exact reproduction of the measurement
+    // commit. I001Runtime's geometry transition is one-way, so this alternation
+    // does not imply a reversible geometry update on every dynamic frame.
     return (absolute_frame_index & 1U) != 0U;
 }
 
@@ -177,7 +178,7 @@ int main(int argc, char** argv) {
         const auto cli = parse_cli(argc, argv);
         const auto setup_start = std::chrono::steady_clock::now();
         integration::I001Runtime runtime(cli.options);
-        std::cout << "GPU: " << runtime.device_name() << '\\n';
+        std::cout << "GPU: " << runtime.device_name() << '\n';
         const double setup_wall_us = std::chrono::duration<double, std::micro>(
             std::chrono::steady_clock::now() - setup_start).count();
 

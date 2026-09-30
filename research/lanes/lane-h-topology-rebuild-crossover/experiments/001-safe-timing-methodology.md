@@ -1,6 +1,13 @@
 # H001 — safe timing methodology
 
-Status: **frozen before target execution**
+Status: **historical frozen v1 / closed INCONCLUSIVE**
+
+Result: `../results/001-safe-timing-methodology.md`
+
+This document records the exact pre-run v1 plan. Post-run review showed that the
+reused I001Runtime transition is one-way, so the dynamic alternation below did
+not actually cross the geometry-update boundary on every measured frame. The
+frozen config is intentionally unchanged for provenance.
 
 H001 changes the measurement harness only. It does not change the Lane G runtime,
 producer, traversal, storage, Hit semantics, or candidate architecture.
@@ -36,9 +43,11 @@ Variants:
 The eight block orders are position-balanced and include reversed orientation:
 `ABCD`, `BCDA`, `CDAB`, `DABC`, `DCBA`, `ADCB`, `BADC`, `CBAD`.
 
-For dynamic cases the runtime target state alternates on every warmup and measured
-frame. This avoids treating one transition followed by steady frames as repeated
-dynamic-update samples. Static remains in one state.
+For dynamic cases the v1 plan alternated the runtime target state on every warmup
+and measured frame. The plan intended this to avoid treating one transition
+followed by steady frames as repeated dynamic-update samples. Post-run review
+proved that assumption false for I001Runtime: only the first target transition
+updates geometry. Static remains in one state.
 
 ## Measurement boundaries
 
