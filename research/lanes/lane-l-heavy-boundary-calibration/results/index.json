@@ -19,9 +19,23 @@
     {
       "id": "L002-pretarget-freeze",
       "path": "research/lanes/lane-l-heavy-boundary-calibration/results/004-l002-pretarget-freeze.md",
-      "status": "ready-target-execution",
+      "status": "complete",
       "evidence_class": "pre-target-detectable-effect-floor-freeze",
       "decision": "fresh heavy-boundary +20/+10/+5 analysis-only multiplicative detection campaign frozen; no architecture ranking"
+    },
+    {
+      "id": "L002-target-result",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/005-l002-target-result.md",
+      "status": "complete",
+      "evidence_class": "target-heavy-boundary-detectable-effect-floor-calibration",
+      "decision": "measurement-floor-established; dual-context accepted; minimum demonstrated heavy-boundary effect 20%"
+    },
+    {
+      "id": "Lane-L-final",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/007-lane-l-final.md",
+      "status": "complete",
+      "evidence_class": "lane-final-decision",
+      "decision": "Lane L complete; downstream timing contract is dual-context with 20% promotion floor"
     }
   ]
 }
