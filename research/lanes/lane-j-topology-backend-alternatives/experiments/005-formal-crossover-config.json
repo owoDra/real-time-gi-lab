@@ -67,8 +67,8 @@
       "reason": "failed frozen <=1.25x same-run Lane-E HWRT relative-memory gate"
     },
     "unchanged_transient_lbvh": {
-      "status": "attribution-equivalent-within-j004-recurring-boundary",
-      "rule": "Lane-G hardening changes setup allocation lifetime; J004 uses common static setup and the same F003 recurrent dynamic builder/traversal source, so separate formal timing is not required unless source-equivalence check fails"
+      "status": "attribution-not-separately-timed",
+      "rule": "J004 topology adapter reserves the J002-frozen maximum primitive capacity once and changes only active count/template per transition; the Lane-G F003 builder/traversal shaders remain byte-identical. Separate unchanged timing would reintroduce recurrent pipeline/allocation setup and violate the frozen complete-boundary rule."
     }
   },
   "recurring_boundary": {
@@ -91,7 +91,8 @@
       "C001 storage reserve/accumulate GPU",
       "C001 invalidation GPU",
       "C001 resolve GPU"
-    ]
+    ],
+    "lbvh_capacity_policy": "reserve max primitive count across the already-frozen J002 profile before timing; per transition update only active template/count; builder/traversal shaders remain Lane-G exact blobs"
   },
   "timing": {
     "warmup_pairs": 4,

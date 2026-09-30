@@ -64,6 +64,9 @@ public:
         return keys_a_buffer_;
     }
     [[nodiscard]] std::uint32_t primitive_count() const noexcept {
+        return active_count_;
+    }
+    [[nodiscard]] std::uint32_t capacity_count() const noexcept {
         return count_;
     }
     [[nodiscard]] const F003LbvhMemory& memory() const noexcept {
@@ -93,7 +96,12 @@ private:
     void transfer_to_compute_barrier(VkCommandBuffer command) const;
 
     lane_b::B002VulkanContext& context_;
+    // count_ is the pre-timing frozen capacity; active_count_ changes only
+    // through update_template(). This keeps pipeline/layout/buffer allocation
+    // out of the recurrent topology-change boundary while preserving the
+    // exact Lane-G builder shader and active-count work.
     std::uint32_t count_{};
+    std::uint32_t active_count_{};
     lane_b::Vec3 origin_{};
     float page_extent_{};
 

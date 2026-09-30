@@ -31,6 +31,7 @@ F003TransientLbvh::F003TransientLbvh(
     std::filesystem::path shader_path)
     : context_(context),
       count_(static_cast<std::uint32_t>(template_triangles.size())),
+      active_count_(count_),
       origin_(origin),
       page_extent_(page_extent) {
     if (count_ < 2U || !(page_extent_ > 0.0F) || !std::isfinite(page_extent_)) {
@@ -290,8 +291,8 @@ void F003TransientLbvh::dispatch(
     float delta_x) const {
     Push push{};
     push.mode = mode;
-    push.count = count_;
-    push.template_count = count_;
+    push.count = active_count_;
+    push.template_count = active_count_;
     push.pass_index = pass;
     push.origin_page_extent[0] = origin_.x;
     push.origin_page_extent[1] = origin_.y;
@@ -308,16 +309,18 @@ void F003TransientLbvh::dispatch(
 
 double F003TransientLbvh::update_template(
     std::span<const lane_b::GpuTriangle> triangles) {
-    if (triangles.size() != count_) {
-        fail("F003 template update count mismatch");
+    if (triangles.size() < 2U || triangles.size() > count_) {
+        fail("F003 template update exceeds frozen capacity");
     }
     const lane_b::B002BufferUpdate update{
         0U,
         triangles.data(),
         VkDeviceSize(triangles.size()) * sizeof(lane_b::GpuTriangle),
     };
-    return context_.update_device_buffer_timed(
+    const auto gpu_us = context_.update_device_buffer_timed(
         template_buffer_, std::span<const lane_b::B002BufferUpdate>(&update, 1U));
+    active_count_ = static_cast<std::uint32_t>(triangles.size());
+    return gpu_us;
 }
 
 void F003TransientLbvh::record_build(
@@ -333,16 +336,24 @@ void F003TransientLbvh::record_build(
 
     stamp(0);
     compute_to_transfer_barrier(command);
+    const auto active_groups = groups_for(active_count_);
+    const auto ready_bytes =
+        VkDeviceSize(active_count_ - 1U) * sizeof(std::uint32_t);
+    const auto histogram_bytes =
+        VkDeviceSize(active_groups) * 16U * sizeof(std::uint32_t);
+    const auto node_bytes =
+        VkDeviceSize(std::size_t(active_count_) * 2U - 1U) *
+        sizeof(lane_b::GpuBvhNode);
     context_.vk().cmdFillBuffer(
-        command, ready_buffer_.buffer, 0, ready_buffer_.size, 0U);
+        command, ready_buffer_.buffer, 0, ready_bytes, 0U);
     context_.vk().cmdFillBuffer(
-        command, histogram_buffer_.buffer, 0, histogram_buffer_.size, 0U);
+        command, histogram_buffer_.buffer, 0, histogram_bytes, 0U);
     context_.vk().cmdFillBuffer(
-        command, offsets_buffer_.buffer, 0, offsets_buffer_.size, 0U);
+        command, offsets_buffer_.buffer, 0, histogram_bytes, 0U);
     context_.vk().cmdFillBuffer(
         command, digit_base_buffer_.buffer, 0, digit_base_buffer_.size, 0U);
     context_.vk().cmdFillBuffer(
-        command, nodes_buffer_.buffer, 0, nodes_buffer_.size, kInvalidId);
+        command, nodes_buffer_.buffer, 0, node_bytes, kInvalidId);
     transfer_to_compute_barrier(command);
     stamp(1);
 
@@ -351,7 +362,7 @@ void F003TransientLbvh::record_build(
         command, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline_layout_,
         0, 1, &descriptor_set_, 0, nullptr);
 
-    const auto groups = groups_for(count_);
+    const auto groups = groups_for(active_count_);
     dispatch(command, 0U, 0U, groups, delta_x);
     compute_barrier(command);
     stamp(2);
@@ -374,7 +385,7 @@ void F003TransientLbvh::record_build(
     }
     stamp(5);
 
-    dispatch(command, 6U, 0U, groups_for(count_ - 1U), delta_x);
+    dispatch(command, 6U, 0U, groups_for(active_count_ - 1U), delta_x);
     compute_barrier(command);
     stamp(6);
 

@@ -713,6 +713,15 @@ private:
             snapshots_.front().empty()) {
             fail("J004 requires eight non-empty J002 snapshots");
         }
+        lbvh_capacity_count_ = 0U;
+        for (const auto& snapshot : snapshots_) {
+            lbvh_capacity_count_ = std::max(
+                lbvh_capacity_count_,
+                static_cast<std::uint32_t>(snapshot.size()));
+        }
+        if (lbvh_capacity_count_ < 2U) {
+            fail("J004 frozen LBVH capacity is invalid");
+        }
 
         dynamic_instance_id_ =
             snapshots_.front().front().instance_id;
@@ -926,19 +935,23 @@ private:
                     segment_size_);
         } else if (dynamic_kind_ ==
                    DynamicKind::Lbvh) {
-            const auto gpu =
-                gpu_triangles(triangles);
-            dynamic_lbvh_ =
-                std::make_unique<
-                    lane_f::F003TransientLbvh>(
-                    context_,
-                    gpu,
-                    lbvh_origin(
-                        triangles,
-                        segment_size_),
-                    segment_size_,
-                    shader_path(
-                        "j004_f003_lbvh_builder.spv"));
+            if (!dynamic_lbvh_) {
+                std::vector<GpuTriangle> capacity_seed(
+                    lbvh_capacity_count_);
+                dynamic_lbvh_ =
+                    std::make_unique<
+                        lane_f::F003TransientLbvh>(
+                        context_,
+                        capacity_seed,
+                        lbvh_origin(
+                            triangles,
+                            segment_size_),
+                        segment_size_,
+                        shader_path(
+                            "j004_f003_lbvh_builder.spv"));
+            }
+            const auto gpu = gpu_triangles(triangles);
+            (void)dynamic_lbvh_->update_template(gpu);
         } else {
             dynamic_vanilla_ =
                 std::make_unique<VanillaState>(
@@ -1478,8 +1491,6 @@ private:
             std::move(dynamic_hwrt_);
         auto old_quant =
             std::move(dynamic_quant_);
-        auto old_lbvh =
-            std::move(dynamic_lbvh_);
         auto old_vanilla =
             std::move(dynamic_vanilla_);
 
@@ -1505,7 +1516,6 @@ private:
         // the replacement backend, the previous backend is no longer needed.
         old_hwrt.reset();
         old_quant.reset();
-        old_lbvh.reset();
         old_vanilla.reset();
 
         context_.vk().resetFences(
@@ -1792,6 +1802,7 @@ private:
     std::vector<lane_b::Ray> replay_rays_;
     std::uint32_t current_step_{};
     std::uint32_t frame_id_{};
+    std::uint32_t lbvh_capacity_count_{};
     std::uint32_t storage_capacity_{};
 
     std::unique_ptr<
