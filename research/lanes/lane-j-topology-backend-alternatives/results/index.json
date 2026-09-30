@@ -36,6 +36,13 @@
       "status": "pass",
       "evidence_class": "representative-target-gpu-exact-traversal",
       "decision": "GPU layout/exact Hit traversal validated on representative frozen snapshot; promote to transition-time persistent cluster validation"
+    },
+    {
+      "id": "J003-transition-state-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/006-transition-state-preparation.md",
+      "status": "implementation-ready-evidence-pending",
+      "evidence_class": "persistent-cluster-state-implementation",
+      "decision": "require exact canonical Python/C++ structural parity before persistent GPU transition updates"
     }
   ]
 }
