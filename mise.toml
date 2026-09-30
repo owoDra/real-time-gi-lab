@@ -184,3 +184,36 @@ python scripts/research/lane_j_topology_backend_alternatives/compare_j003_transi
   --cpp "$cpp_output" \
   --profile "$profile"
 '''
+
+
+[tasks."research:j003:persistent-layout"]
+description = "Replay the frozen J003 profiles through the persistent physical-slot layout"
+depends = ["configure"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+artifact_root="out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized"
+output_root="out/research/lane-j-topology-backend-alternatives/003-target-gpu-prototype/persistent-layout"
+
+cmake --build "$PHOS_GI_BUILD_DIR" \
+  --target phos-lane-j-contract-test phos-lane-j-j003-persistent-layout-replay
+
+"$PHOS_GI_BUILD_DIR/phos-lane-j-contract-test"
+
+profiles=(
+  small-global-high
+  medium-global-representative
+  medium-local-high
+  large-global-high
+  large-local-high
+)
+
+mkdir -p "$output_root"
+for profile in "${profiles[@]}"; do
+  echo "=== $profile ==="
+  "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-persistent-layout-replay" \
+    --profile-dir "$artifact_root/$profile" \
+    --output "$output_root/$profile.json"
+done
+'''
