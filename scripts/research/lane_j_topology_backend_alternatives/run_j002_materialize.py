@@ -1,0 +1,76 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse, hashlib, json, os, subprocess
+from pathlib import Path
+import j002_contract as contract
+import j002_geometry as geometry
+import run_j002_prepare as prepare
+
+ROOT=Path(__file__).resolve().parents[3]
+EXPECTED_BRANCH="research-lane-j-topology-backend-alternatives"
+CONFIG=ROOT/"research/lanes/lane-j-topology-backend-alternatives/experiments/002-deterministic-topology-contract.json"
+
+def git(*args):
+    p=subprocess.run(["git",*args],cwd=ROOT,text=True,capture_output=True,check=False)
+    if p.returncode: raise RuntimeError(p.stderr.strip())
+    return p.stdout.strip()
+
+def main():
+    ap=argparse.ArgumentParser(description="Materialize frozen J002 topology snapshots")
+    ap.add_argument("--scene",type=Path,required=True)
+    ap.add_argument("--producer-stream",type=Path,required=True)
+    ap.add_argument("--artifact-dir",type=Path)
+    ap.add_argument("--allow-dirty",action="store_true")
+    args=ap.parse_args()
+    if git("branch","--show-current")!=EXPECTED_BRANCH: raise RuntimeError(f"must run on {EXPECTED_BRANCH}")
+    if not args.allow_dirty and git("status","--porcelain"): raise RuntimeError("retained J002 preparation requires clean worktree")
+    cfg=json.loads(CONFIG.read_text())
+    producer=args.producer_stream.read_bytes()
+    manifest=prepare.build_manifest(cfg,producer)
+    scene=geometry.load_b002_compatible_gltf(args.scene)
+    representative=geometry.select_representative_object(scene,796)
+    selected_instance=representative[0].instance_id
+    global_next=max(t.primitive_id for t in scene)+1
+    root=args.artifact_dir or Path(os.environ.get("PHOS_RESEARCH_ARTIFACT_DIR","")) or ROOT/"out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialize"
+    root=Path(root); root.mkdir(parents=True,exist_ok=True)
+    result_profiles=[]
+    for profile_index,p in enumerate(cfg["profiles"]):
+        seed=contract.profile_seed(int(cfg["master_topology_seed"]),profile_index)
+        steps=contract.topology_sequence(int(p["base_primitive_count"]),[float(x) for x in cfg["primitive_count_factors"]],seed,float(p["replacement_fraction"]),str(p["locality"]))
+        digest=contract.topology_digest(str(p["name"]),steps)
+        if digest!=p["expected_topology_digest"]: raise RuntimeError(f"topology digest drift for {p['name']}")
+        base=geometry.derive_profile_base(representative,int(steps[0].primitive_count),seed,global_next)
+        snaps=geometry.materialize_profile(base,steps,global_next+max(0,len(base)-len(representative)))
+        identity=[{"primitive_count":s.primitive_count,"snapshot_digest":s.snapshot_digest} for s in snaps]
+        contract.validate_transition_identity(identity)
+        profile_dir=root/str(p["name"]); profile_dir.mkdir(parents=True,exist_ok=True)
+        rows=[]
+        for snap in snaps:
+            filename=f"step-{snap.index:02d}.bin"; geometry.write_snapshot(profile_dir/filename,snap)
+            rows.append({
+                "index":snap.index,"primitive_count":snap.primitive_count,"topology_seed":snap.topology_seed,
+                "replacement_count":snap.replacement_count,"locality":snap.locality,"snapshot_digest":snap.snapshot_digest,
+                "inserted_ids":list(snap.inserted_ids),"removed_ids":list(snap.removed_ids),
+                "replaced_old_ids":list(snap.replaced_old_ids),"replaced_new_ids":list(snap.replaced_new_ids),
+                "file":f"{p['name']}/{filename}"
+            })
+        result_profiles.append({"name":p["name"],"topology_digest":digest,"steps":rows})
+    output={
+        **manifest,
+        "scene":str(args.scene),
+        "scene_sha256":hashlib.sha256(args.scene.read_bytes()).hexdigest(),
+        "scene_triangle_count":len(scene),
+        "representative_instance_id":selected_instance,
+        "representative_primitive_count":len(representative),
+        "representative_primitive_ids":[t.primitive_id for t in representative],
+        "profiles":result_profiles,
+        "gpu_required":False
+    }
+    (root/"j002-materialized-manifest.json").write_text(json.dumps(output,indent=2,sort_keys=True)+"\n")
+    print(f"J002 materialized: {root}")
+    print(f"representative instance={selected_instance} triangles={len(representative)}")
+    for p in result_profiles: print(f"{p['name']}: {len(p['steps'])} snapshots")
+    return 0
+
+if __name__=="__main__": raise SystemExit(main())
