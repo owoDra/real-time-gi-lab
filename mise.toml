@@ -313,3 +313,20 @@ exec bash ./scripts/run_with_vulkan.sh \
   "$PHOS_GI_BUILD_DIR/phos-lane-j-j004-memory-preflight" \
   "${args[@]}"
 '''
+
+[tasks."research:j004:test"]
+description = "Run GPU-independent J004 analysis tests"
+run = '''
+python -m unittest scripts.research.lane_j_topology_backend_alternatives.test_j004_analysis
+'''
+
+[tasks."research:j004:formal"]
+description = "Build, validate, and run the frozen J004 formal same-run crossover campaign"
+depends = ["configure"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+python -m unittest scripts.research.lane_j_topology_backend_alternatives.test_j004_analysis
+cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-j-j004-formal-process
+exec python scripts/research/lane_j_topology_backend_alternatives/run_j004.py
+'''
