@@ -6,21 +6,30 @@ Base: `research@76f65f8944aba8405dce5d386161df2540957349`
 
 ## Current status
 
-**J001 complete / J002-J003 GPU-independent preflight PASS / target-GPU J003 prototype next.**
+**COMPLETE — J003 correctness/memory PASS; J004/J005 measurement-limited.**
 
-J001 retains one new structurally different candidate:
+J001 retained one new structurally different candidate:
 
 - object-local clustered two-level BVH with dirty-cluster rebuild,
   upper-level refit/rebuild, and exact triangle refinement.
 
-Controls remain:
+J003 now validates that candidate across all five frozen topology profiles on the
+target RADV GPU with zero exact-Hit mismatches and zero traversal runtime errors.
+The large-global profile also validates the frozen 256 -> 512 persistent-slot
+resize path and true-peak lifetime accounting.
 
-- Lane E object-local HWRT rebuild;
-- Lane E/B003 software rebuild where practical;
-- hardened transient LBVH;
-- unchanged LBVH/accounting controls as required.
+Lane I / Issue #19 concluded `target timing unsuitable` for its frozen
+dual-axis protocol. Therefore J004 formal performance ranking is not permitted,
+and J005 cannot run because it requires a J004-retained candidate.
 
-Formal timing is blocked on Issue #19 / Lane I.
+Final disposition:
+
+- Lane E ownership/update semantics remain incumbent;
+- clustered two-level BVH is correctness/memory-qualified for a future
+  topology-changing crossover;
+- hardened transient LBVH remains a qualified control;
+- no performance winner is declared;
+- Lane J closes **measurement-limited**.
 
 ## Source of truth
 
@@ -31,6 +40,13 @@ Formal timing is blocked on Issue #19 / Lane I.
 - Pre-evidence J003 corrections:
   `experiments/plan-v1.1-amendment.md`
   `experiments/plan-v1.2-amendment.md`
+- Persistent GPU layout policy:
+  `experiments/plan-v1.3-amendment.md`
+- Rejected pruning hypotheses:
+  `experiments/plan-v1.4-amendment.md`
+  `experiments/plan-v1.5-amendment.md`
+- Retained exact-intersection correction:
+  `experiments/plan-v1.6-amendment.md`
 
 No production candidate implementation belongs in this first session.
 
@@ -42,14 +58,14 @@ No production candidate implementation belongs in this first session.
   `experiments/003-gpu-prototype-gate.md`
 
 
-## Frozen correctness amendments
+## Final evidence
 
-- `experiments/plan-v1.4-amendment.md`: conservative fp32 BVH pruning.
-  This preserves the frozen B001 Hit/tie semantics while preventing broad-phase
-  AABB traversal from dropping candidates that are still eligible inside the
-  exact tie window.
+- All-profile persistent Vulkan PASS:
+  `results/017-all-profile-persistent-vulkan-pass.md`
+- Lane final decision:
+  `results/018-final-decision.md`
 
+The v1.4/v1.5 AABB-pruning hypotheses are retained only as rejected research
+history; their shader changes were reverted. v1.6 is the retained
+exact-intersection correction.
 
-- `experiments/plan-v1.5-amendment.md`: robust per-axis fp32 slab far-bound
-  expansion. This follows the unchanged v1.4 failure and addresses slab
-  interval roundoff rather than only the caller traversal limit.
