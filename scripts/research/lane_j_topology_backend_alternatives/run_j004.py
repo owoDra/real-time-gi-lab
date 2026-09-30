@@ -24,7 +24,7 @@ CONFIG = (
     / "research/lanes/lane-j-topology-backend-alternatives/experiments"
     / "005-formal-crossover-config.json"
 )
-EXPECTED_CONFIG_BLOB_SHA = "c72cd9d3e5843ab7605dd54fac855ea0f359624b"
+EXPECTED_CONFIG_BLOB_SHA = "86a7a755f4f075d93b8c7f69c9991b8b311a996f"
 CAMPAIGN_ROOT = (
     ROOT
     / "out/research/lane-j-topology-backend-alternatives"
@@ -36,9 +36,9 @@ CAMPAIGN_ROOT = (
 # hardening changed setup allocation lifetime; J004 holds static setup common.
 EXPECTED_F003_BLOBS = {
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "f003_transient_lbvh.cpp": "f4df12560a8dd381db2c93e2b142f8acf4f8a2fe",
+    "f003_transient_lbvh.cpp": "17f55f17a35aaa5373074591af552636b1dfe82d",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "f003_transient_lbvh.hpp": "61b73cd9652627b3f4b3a26aa5563b6660c2f35a",
+    "f003_transient_lbvh.hpp": "ded4856b0fcb268ef8ca984338c073b4dace74eb",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "f003_lbvh_builder.comp.glsl": "77db184be5fcee72fa6c4f5cf40cadf487dcedd4",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
