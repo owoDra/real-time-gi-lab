@@ -177,6 +177,7 @@ int main(int argc, char** argv) {
         const auto cli = parse_cli(argc, argv);
         const auto setup_start = std::chrono::steady_clock::now();
         integration::I001Runtime runtime(cli.options);
+        std::cout << "GPU: " << runtime.device_name() << '\\n';
         const double setup_wall_us = std::chrono::duration<double, std::micro>(
             std::chrono::steady_clock::now() - setup_start).count();
 
