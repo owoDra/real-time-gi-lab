@@ -1,5 +1,6 @@
 #include "j003_clustered_bvh.hpp"
 #include "j003_reference.hpp"
+#include "j003_transition.hpp"
 
 #include <cmath>
 #include <cstdint>
@@ -68,6 +69,41 @@ int main() {
             hit.primitive_id != 1000U ||
             std::abs(hit.t - 2.0F) > lane_j::kHitAbsTol) {
             fail("B001-compatible reference hit contract drift");
+        }
+
+        // Transition regression: create a second snapshot that removes most of
+        // the first population and inserts a concentrated replacement region.
+        lane_j::ClusterTransitionState transition(triangles);
+        std::vector<lane_j::Triangle> next;
+        next.reserve(80U);
+        for (std::uint32_t i = 0U; i < 20U; ++i) {
+            next.push_back(triangles[i]);
+        }
+        for (std::uint32_t i = 0U; i < 60U; ++i) {
+            const float x = 0.02F * float(i);
+            next.push_back({
+                {x, 0.0F, 0.0F},
+                {x + 0.01F, 0.0F, 0.0F},
+                {x, 0.0F, 0.01F},
+                5000U + i,
+                7U,
+                3U,
+                true,
+            });
+        }
+        const auto transition_stats = transition.update(next);
+        if (transition_stats.unaffected_cluster_rebuild_count != 0U) {
+            fail("transition mutated an unaffected cluster");
+        }
+        if (transition_stats.occupancy_min == 0U ||
+            transition_stats.occupancy_max > lane_j::kClusterMaximum) {
+            fail("transition occupancy contract drift");
+        }
+        if (transition_stats.split_count == 0U) {
+            fail("transition split path was not exercised");
+        }
+        if (transition_stats.retired_empty_cluster_count == 0U) {
+            fail("transition empty-cluster retirement was not exercised");
         }
 
         std::cout << "J003 host contract PASS\n";
