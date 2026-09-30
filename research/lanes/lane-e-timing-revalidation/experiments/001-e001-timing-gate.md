@@ -1,6 +1,6 @@
 # E001 — Lane E timing revalidation gate
 
-Status: **v7 frozen before any target candidate timing**
+Status: **v8 frozen before any target candidate timing**
 
 This prospective gate revalidates the already accepted Lane E object-local ownership/update architecture; it does not redesign it.
 
@@ -120,4 +120,6 @@ rerun.
 
 - v7: fixed the pre-target validation identity implementation so workload/resolved digests are canonicalized by stable semantic identity rather than nondeterministic A001 GPU atomic append/output allocation order. The workload itself, control, threshold, 20% floor, sample shape, memory rule, environment, performance decision rule, and rerun policy did not change.
 
-No accepted target timing existed before v7.
+- v8: fixed reversible-state correctness so target/base geometry and surface state are derived from the immutable baseline instead of cumulative `+delta/-delta` floating-point updates. This prevents round-trip drift between mutable controls/reference geometry and immutable rigid-instance candidates. The workload, control, threshold, 20% floor, sample shape, memory rule, environment, performance decision rule, and rerun policy did not change.
+
+No accepted target timing existed before v8.
