@@ -25,8 +25,8 @@ and J005 cannot run because it requires a J004-retained candidate.
 Final disposition:
 
 - Lane E ownership/update semantics remain incumbent;
-- clustered two-level BVH is correctness/memory-qualified for a future
-  topology-changing crossover;
+- clustered two-level BVH is correctness- and absolute/lifetime-memory-qualified for a future topology-changing crossover;
+- the frozen J003 same-run <=1.25x Lane-E HWRT relative-memory gate remains pending and must be completed before formal J004 timing;
 - hardened transient LBVH remains a qualified control;
 - no performance winner is declared;
 - Lane J closes **measurement-limited**.
