@@ -125,7 +125,7 @@ def classify_performance(
     )
 
     if improvement:
-        classification = "detected >=20% improvement"
+        classification = ">=20% detected improvement"
     elif regression:
         classification = "detected >=20% regression"
     else:
@@ -176,7 +176,15 @@ def classify_memory(rows: list[dict[str, object]]) -> dict[str, object]:
     peak_median = median(peak_ratios)
     persistent_max = max(persistent_ratios)
     peak_max = max(peak_ratios)
-    hard_regression = persistent_max > 1.25 or peak_max > 1.25
+    lifetime_complete = all(
+        int(row.get("allocation_lifetime_complete", 0)) == 1
+        for row in measured
+    )
+    hard_regression = (
+        persistent_max > 1.25
+        or peak_max > 1.25
+        or not lifetime_complete
+    )
     if hard_regression:
         classification = "regression"
     elif persistent_median <= 1.0 and peak_median <= 1.0 and (
@@ -192,6 +200,7 @@ def classify_memory(rows: list[dict[str, object]]) -> dict[str, object]:
         "true_peak_ratio_median": peak_median,
         "true_peak_ratio_max": peak_max,
         "old_new_overlap_ratio_median": median(overlap_ratios),
+        "allocation_lifetime_accounting_complete": lifetime_complete,
     }
 
 
