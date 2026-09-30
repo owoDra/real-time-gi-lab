@@ -2405,13 +2405,13 @@ struct I001Runtime::Impl {
         result.stats.storage_invalidations = storage_values[2];
         result.stats.storage_failures = storage_values[3];
         result.memory = memory_stats;
-        const auto allocation = context.allocation_stats();
+        const auto allocation_stats = context.allocation_stats();
         result.memory.old_new_overlap_bytes =
             dynamic_update.old_new_overlap_bytes;
-        result.memory.true_peak_bytes = allocation.peak_bytes;
-        result.memory.allocation_count = allocation.allocation_count;
-        result.memory.free_count = allocation.free_count;
-        result.memory.live_allocations = allocation.live_allocations;
+        result.memory.true_peak_bytes = allocation_stats.peak_bytes;
+        result.memory.allocation_count = allocation_stats.allocation_count;
+        result.memory.free_count = allocation_stats.free_count;
+        result.memory.live_allocations = allocation_stats.live_allocations;
 
         last = result;
         have_last = true;
