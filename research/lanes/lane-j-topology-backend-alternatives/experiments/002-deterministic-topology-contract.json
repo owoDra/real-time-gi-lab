@@ -102,6 +102,6 @@
     "case": "static",
     "frame_id": 0,
     "accepted_git_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
-    "artifact_glob": "out/research/lane-a-split-rc/001-representative-producer/**/stream-v1.bin"
+    "artifact_glob": "out/research/lane-a-split-rc/001-representative-producer/20260928T143212Z/**/stream-v1.bin"
   }
 }
