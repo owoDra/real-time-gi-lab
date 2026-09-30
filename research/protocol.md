@@ -226,6 +226,57 @@ If a different GPU, driver/environment, workload boundary, smaller effect size,
 or materially changed timing method is needed, calibrate that new method
 architecture-neutrally before promotion.
 
+### Post-Lane-L heavy-boundary capability
+
+Lane L / #24 applied the GPU-primary / CPU-wall-diagnostic role split to the
+heavier complete recurring boundary and accepted a demonstrated **20% minimum
+detectable effect** under the dual-context environment.
+
+For that boundary:
+
+- GPU timestamp is the primary decision axis;
+- complete CPU wall remains diagnostic / health / provenance only;
+- 4 warmup + 12 measured pairs per process are retained;
+- 8 fresh-process blocks are retained;
+- each timed role sample contains 16 complete reversible recurring-boundary
+  transitions;
+- exact AB/BA and comparison-position counterbalancing is frozen;
+- 1 second settle is retained;
+- sample exclusion, instability reruns, and completed-campaign reruns are
+  forbidden;
+- a downstream heavy-boundary claim must not use a promotion threshold tighter
+  than the demonstrated 20% capability without a new architecture-neutral
+  calibration.
+
+Lane K's 5% calibration-workload capability is therefore not automatically
+transferable to materially heavier recurring boundaries.
+
+### Provenance serialization and post-processing recovery
+
+Provenance fields that originate from one runtime value must be serialized with
+a consistent representation across validation and timing artifacts. In
+particular, floating-point hardware properties such as Vulkan
+`timestampPeriod` should use the same precision everywhere.
+
+A completed timing campaign must not be rerun merely because post-processing
+compares two different textual renderings of the same runtime numeric value.
+A post-processing-only recovery is allowed only when all of the following are
+demonstrated and committed:
+
+- the original measured source commit and frozen blob manifest match;
+- the input digest matches;
+- the complete frozen process-ID set and raw row counts are present;
+- all original per-process timing health checks pass;
+- device name, driver name/info, API version, and other non-affected provenance
+  fields match exactly;
+- the differing numeric strings are proven to be representations of the same
+  original runtime value, not merely close measurements;
+- no measurement process is rerun and no sample is excluded;
+- the recovery logic and reason are recorded in the final artifact/result.
+
+A real provenance change remains a campaign failure; this rule is not a
+tolerance for hardware, driver, API, or timestamp-period drift.
+
 ### GPU safety constraint
 
 The G002c forced-performance-state experiment caused host instability. Active
