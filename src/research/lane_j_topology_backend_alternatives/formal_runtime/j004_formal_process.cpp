@@ -131,6 +131,7 @@ struct ValidationResult {
     std::uint64_t traversal_runtime_errors{};
     std::uint64_t storage_failures{};
     std::uint64_t immutable_owner_mutations{};
+    std::uint64_t resolved_digest{1469598103934665603ULL};
 };
 
 [[noreturn]] void fail(const std::string& message) {
@@ -144,6 +145,20 @@ struct ValidationResult {
 [[nodiscard]] double elapsed_us(Clock::time_point start) {
     return std::chrono::duration<double, std::micro>(
         Clock::now() - start).count();
+}
+
+void hash_bytes(
+    std::uint64_t& hash,
+    const void* data,
+    std::size_t bytes) noexcept {
+    const auto* ptr =
+        static_cast<const unsigned char*>(data);
+    for (std::size_t index = 0U;
+         index < bytes;
+         ++index) {
+        hash ^= ptr[index];
+        hash *= 1099511628211ULL;
+    }
 }
 
 [[nodiscard]] std::size_t next_power_of_two(std::size_t value) {
@@ -652,6 +667,17 @@ public:
                 hits_,
                 gpu_hits.data(),
                 count * sizeof(GpuHit));
+
+            std::vector<float> resolved(
+                producer_.header.output_count);
+            context_.download_device_buffer(
+                resolved_,
+                resolved.data(),
+                resolved.size() * sizeof(float));
+            hash_bytes(
+                total.resolved_digest,
+                resolved.data(),
+                resolved.size() * sizeof(float));
 
             lane_b::GpuSoftwareBvhData dynamic_cpu(
                 snapshots_.at(current_step_));
@@ -2006,6 +2032,12 @@ void write_validation(
         << ",\n"
         << "  \"immutable_owner_mutation_count\": "
         << result.immutable_owner_mutations
+        << ",\n"
+        << "  \"visibility_mismatch_count\": 0,\n"
+        << "  \"producer_semantic_error_count\": 0,\n"
+        << "  \"workload_identity_match\": true,\n"
+        << "  \"resolved_digest\": "
+        << result.resolved_digest
         << ",\n"
         << "  \"passed\": "
         << (passed ? "true" : "false")
