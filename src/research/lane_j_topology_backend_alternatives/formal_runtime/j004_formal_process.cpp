@@ -128,6 +128,7 @@ struct BatchResult {
 
 struct ValidationResult {
     std::uint64_t hit_mismatches{};
+    std::uint64_t nearest_hit_tie_mismatches{};
     std::uint64_t traversal_runtime_errors{};
     std::uint64_t storage_failures{};
     std::uint64_t immutable_owner_mutations{};
@@ -659,9 +660,11 @@ public:
                 result.storage_failures;
 
             const auto count =
-                std::min<std::size_t>(
-                    validation_rays,
-                    replay_rays_.size());
+                validation_rays == 0U
+                    ? replay_rays_.size()
+                    : std::min<std::size_t>(
+                        validation_rays,
+                        replay_rays_.size());
             std::vector<GpuHit> gpu_hits(count);
             context_.download_device_buffer(
                 hits_,
@@ -702,6 +705,24 @@ public:
                         expected,
                         actual)) {
                     ++total.hit_mismatches;
+                    const bool actual_hit =
+                        actual.ids[3] != 0U;
+                    if (expected.hit && actual_hit &&
+                        expected.primitive_id !=
+                            actual.ids[0]) {
+                        const auto tolerance =
+                            std::max(
+                                lane_j::kHitAbsTol,
+                                std::abs(expected.t) *
+                                    lane_j::kHitRelTol);
+                        if (std::abs(
+                                expected.t -
+                                actual.t_normal[0]) <=
+                            tolerance) {
+                            ++total.
+                                nearest_hit_tie_mismatches;
+                        }
+                    }
                 }
             }
         }
@@ -2006,6 +2027,7 @@ void write_validation(
     }
     const bool passed =
         result.hit_mismatches == 0U &&
+        result.nearest_hit_tie_mismatches == 0U &&
         result.traversal_runtime_errors == 0U &&
         result.storage_failures == 0U &&
         result.immutable_owner_mutations == 0U;
@@ -2023,6 +2045,9 @@ void write_validation(
         << ",\n"
         << "  \"hit_mismatch_count\": "
         << result.hit_mismatches
+        << ",\n"
+        << "  \"nearest_hit_tie_mismatch_count\": "
+        << result.nearest_hit_tie_mismatches
         << ",\n"
         << "  \"traversal_runtime_error_count\": "
         << result.traversal_runtime_errors
@@ -2100,6 +2125,7 @@ int main(int argc, char** argv) {
 
             const bool passed =
                 validation.hit_mismatches == 0U &&
+                validation.nearest_hit_tie_mismatches == 0U &&
                 validation.traversal_runtime_errors == 0U &&
                 validation.storage_failures == 0U &&
                 validation.immutable_owner_mutations == 0U;
