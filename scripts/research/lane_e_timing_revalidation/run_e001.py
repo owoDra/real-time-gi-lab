@@ -614,7 +614,7 @@ def main() -> int:
                                 }
                                 save_progress()
                                 try:
-                                        run_process(
+                                    run_process(
                                         command_for(
                                             executable,
                                             scene,
