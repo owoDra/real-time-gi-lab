@@ -104,7 +104,10 @@ struct I001Quality {
     std::size_t visibility_mismatches{};
     std::size_t producer_semantic_errors{};
     std::size_t hit_mismatches{};
+    std::size_t nearest_hit_tie_mismatches{};
     std::size_t traversal_runtime_errors{};
+    std::size_t static_owner_mutations{};
+    std::size_t unrelated_owner_mutations{};
     std::size_t missing_probes{};
     std::size_t leaked_probes{};
     std::size_t stale_storage_slots{};
@@ -113,7 +116,18 @@ struct I001Quality {
     double radiance_max_abs_error{};
     double temporal_rms_error{};
     double temporal_max_abs_error{};
+    std::uint64_t workload_digest{};
+    std::uint64_t resolved_output_digest{};
+    std::uint64_t geometry_input_digest{};
     bool passed{};
+};
+
+struct I001AllocationStats {
+    std::size_t current_bytes{};
+    std::size_t peak_bytes{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations{};
 };
 
 struct I001FrameResult {
@@ -148,6 +162,9 @@ public:
     [[nodiscard]] const std::string& driver_name() const noexcept;
     [[nodiscard]] const std::string& driver_info() const noexcept;
     [[nodiscard]] std::uint32_t api_version() const noexcept;
+    [[nodiscard]] float timestamp_period_ns() const noexcept;
+    [[nodiscard]] I001AllocationStats allocation_stats() const noexcept;
+    void reset_allocation_epoch() noexcept;
 
 private:
     struct Impl;
