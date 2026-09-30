@@ -1,6 +1,6 @@
 # Lane J plan v1.4 amendment — conservative fp32 BVH pruning
 
-Status: **frozen after retained correctness diagnosis and before rerun evidence**
+Status: **REJECTED BY RERUN EVIDENCE — implementation reverted**
 
 The first persistent-Vulkan representative replay retained one exact-Hit
 mismatch. Diagnostic replay proved that the CPU reference intersects both
@@ -47,3 +47,14 @@ node/triangle visits slightly.
 If the unchanged exact-Hit gate still fails after this correction, the failure
 must be diagnosed in exact triangle arithmetic/tie evaluation rather than
 further widening AABB pruning ad hoc.
+
+
+## Rejection
+
+The unchanged representative target-GPU replay reproduced the same retained
+step-3 mismatch with the same watched ray outcome and unchanged aggregate
+traversal visit/test counts. This correction therefore did not explain or fix
+the failure and is not part of the retained candidate implementation.
+
+The shader changes from this amendment were reverted before explicit
+shader-side watched-primitive diagnosis.
