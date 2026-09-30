@@ -83,10 +83,10 @@ Current follow-up status:
 
 - J004 gate v1 is frozen before accepted candidate timing:
   `experiments/004-formal-crossover-gate-v1.md`;
-- the previously pending same-run <=1.25x Lane-E HWRT relative-memory gate
-  is implemented but still requires target execution;
-- no formal architecture timing has run;
-- J005 remains forbidden unless J004 formally retains a candidate.
-
+- the same-run <=1.25x Lane-E HWRT relative-memory preflight has now **FAILED**;
+- clustered two-level BVH is rejected before formal timing:
+  `results/020-relative-memory-preflight-fail.md`;
+- J004 may continue only with the remaining pre-frozen variants/controls;
+- J005 remains forbidden unless J004 formally retains another candidate.
 Preparation checkpoint:
 `results/019-formal-crossover-preparation.md`.
