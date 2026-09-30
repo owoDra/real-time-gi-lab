@@ -59,7 +59,7 @@ Bookkeeping that would add GPU work is kept outside the timed boundary. Persiste
 
 Lane L's 20% heavy-boundary floor is authoritative:
 
-- detected >=20% improvement;
+- >=20% detected improvement;
 - `<20% difference / measurement-limited`;
 - detected >=20% regression.
 
@@ -81,15 +81,20 @@ The runner must retain every raw row and emit:
 - `e001-config.json`
 - `e001-source-provenance.json`
 - `e001-input-provenance.json`
-- `e001-progress.json`
+- `e001-device-provenance.json`
 - `e001-validation-summary.csv`
+- `e001-validation-summary.json`
+- `e001-memory-summary.csv`
+- `e001-progress.json`
+- `e001-control-raw.csv`
+- `e001-candidate-raw.csv`
 - `e001-raw.csv`
 - `e001-process-summary.csv`
-- `e001-memory-summary.json`
-- `e001-host-observations.json`
-- `e001-devices.json`
 - `e001-summary.json`
-- `e001-vulkaninfo-summary.txt`
+
+The outer `research:record` wrapper additionally owns `metadata.json`,
+`stdout.log`, and `stderr.log`. Per-process validation/timing CSV and log
+files remain under the run-local artifact root and are not discarded.
 
 A failure before the first measured row may be fixed and re-frozen. If a
 process has emitted any measured row and is then interrupted, the campaign is
