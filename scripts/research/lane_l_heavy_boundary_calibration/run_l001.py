@@ -24,7 +24,7 @@ CONFIG = (
     / "research/lanes/lane-l-heavy-boundary-calibration/experiments"
     / "002-l001-config.json"
 )
-EXPECTED_CONFIG_BLOB_SHA = "b33043697222811910281164606c32baf317e377"
+EXPECTED_CONFIG_BLOB_SHA = "f3ec006e1e4c0b236463289af73b5405fdc4d5d3"
 J004_CONFIG = (
     ROOT
     / "research/lanes/lane-j-topology-backend-alternatives/experiments"
@@ -47,6 +47,8 @@ EXPECTED_SOURCE_BLOBS = {
         "3a86fa17dfde27f35df3348987bc2cf39c29752e",
     "scripts/research/lane_l_heavy_boundary_calibration/test_l001_protocol.py":
         "ef5febc94332dc200db689a2d7f221f27a8b4fed",
+    "scripts/research/lane_l_heavy_boundary_calibration/test_l001_runtime_contract.py":
+        "1b3a52cca7df954be35800d2f719c961698b5c73",
     "scripts/research/lane_j_topology_backend_alternatives/run_j004.py":
         "788153017adab4357e38e5cdaad57cef9471da45",
     "scripts/research/lane_j_topology_backend_alternatives/j004_analysis.py":
@@ -151,6 +153,11 @@ def verify_sources(config: dict[str, object]) -> None:
             "J004 imported config changed before L001 timing: "
             f"{actual_j004_config} != {expected_j004}"
         )
+    # Re-run the exact J004 v7 source/shader-tree freeze verification because
+    # L001 intentionally executes that heavy-boundary implementation rather
+    # than merely copying its top-level process source.
+    j004.verify_frozen_sources()
+
     for path, expected in EXPECTED_SOURCE_BLOBS.items():
         actual = git("hash-object", path)
         if actual != expected:
@@ -445,6 +452,35 @@ def main() -> int:
         raise RuntimeError("L001 architecture ranking must remain forbidden")
     verify_sources(config)
 
+    timing = config["timing"]
+    if bool(timing["accepted_timing_validation"]):
+        raise RuntimeError("accepted L001 timing must disable validation layers")
+    if config["axis_roles"]["primary_performance"] != "gpu_timestamp":
+        raise RuntimeError("L001 primary axis drifted")
+    if config["axis_roles"]["cpu_wall"] != "diagnostic-health-provenance-only":
+        raise RuntimeError("L001 CPU-wall role drifted")
+    if timing["sample_exclusion"] != "forbidden":
+        raise RuntimeError("L001 sample exclusion policy drifted")
+    if int(timing["instability_rerun_budget"]) != 0:
+        raise RuntimeError("L001 instability rerun budget must be zero")
+    if int(timing["completed_campaign_rerun_budget"]) != 0:
+        raise RuntimeError("L001 completed campaign rerun budget must be zero")
+    if int(timing["warmup_pairs"]) != 4 or int(timing["measured_pairs"]) != 12:
+        raise RuntimeError("L001 paired sample shape drifted")
+    if int(timing["fresh_process_blocks"]) != 8:
+        raise RuntimeError("L001 fresh-process block count drifted")
+    if int(config["recurring_boundary"]["batch_transitions"]) != 16:
+        raise RuntimeError("L001 recurring boundary drifted")
+    if bool(config["optional_single_runtime_diagnostic"]["enabled"]):
+        raise RuntimeError("L001 optional single-runtime diagnostic was not frozen in")
+    gate = config["gpu_control_health"]
+    if (
+        float(gate["control_max_abs_process_median_ratio"]) != 1.02
+        or float(gate["control_process_median_span_ratio"]) != 1.03
+        or float(gate["control_max_within_process_order_bias_ratio"]) != 1.02
+    ):
+        raise RuntimeError("L001 frozen J004 control-health gate drifted")
+
     completed = sorted(CAMPAIGN_ROOT.glob("*/l001-summary.json"))
     if completed:
         joined = ", ".join(
@@ -456,7 +492,7 @@ def main() -> int:
         )
 
     j004_config = json.loads(J004_CONFIG.read_text(encoding="utf-8"))
-    materialized_root, _manifest, producer, scene = j004.load_materialized(
+    materialized_root, manifest, producer, scene = j004.load_materialized(
         j004_config
     )
 
@@ -473,6 +509,46 @@ def main() -> int:
 
     (root / "l001-config.json").write_text(
         json.dumps(config, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    (root / "l001-input-provenance.json").write_text(
+        json.dumps(
+            {
+                "materialized_root": str(materialized_root),
+                "manifest_sha256": j004.sha256_file(
+                    materialized_root / "j002-materialized-manifest.json"
+                ),
+                "producer_stream": str(producer),
+                "producer_stream_sha256": j004.sha256_file(producer),
+                "scene": str(scene),
+                "scene_sha256": j004.sha256_file(scene),
+                "j002_manifest": manifest,
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (root / "l001-source-provenance.json").write_text(
+        json.dumps(
+            {
+                "git_commit": git("rev-parse", "HEAD"),
+                "l001_config_blob": EXPECTED_CONFIG_BLOB_SHA,
+                "l001_frozen_blobs": EXPECTED_SOURCE_BLOBS,
+                "j004_source_tree": git(
+                    "rev-parse",
+                    "HEAD:src/research/lane_j_topology_backend_alternatives",
+                ),
+                "j004_formal_shader_tree": git(
+                    "rev-parse",
+                    "HEAD:shaders/research/lane_j_topology_backend_alternatives/formal_runtime",
+                ),
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
         encoding="utf-8",
     )
     vulkaninfo = shutil.which("vulkaninfo")
@@ -566,13 +642,25 @@ def main() -> int:
         observations: list[dict[str, object]] = []
         timing_devices: list[dict[str, object]] = []
 
-        for environment in environments:
-            for profile in profiles:
-                profile_dir = materialized_root / profile
-                for track in tracks:
-                    for block in range(
-                        int(config["timing"]["fresh_process_blocks"])
+        for profile in profiles:
+            profile_dir = materialized_root / profile
+            for track in tracks:
+                environment_orders = config["timing"]["environment_order_by_block"]
+                if len(environment_orders) != int(
+                    config["timing"]["fresh_process_blocks"]
+                ):
+                    raise RuntimeError(
+                        "L001 environment-order block count drifted"
+                    )
+                for block, environment_order in enumerate(environment_orders):
+                    if (
+                        set(environment_order) != set(environments)
+                        or len(environment_order) != len(environments)
                     ):
+                        raise RuntimeError(
+                            f"L001 environment order drifted at block {block}"
+                        )
+                    for environment in environment_order:
                         process_id = (
                             f"{environment}-{profile}-{track}-b{block:02d}"
                         )
