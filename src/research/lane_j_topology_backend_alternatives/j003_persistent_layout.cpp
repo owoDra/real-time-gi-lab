@@ -517,7 +517,7 @@ PersistentLayoutUpdate PersistentClusterLayout::synchronize(
     const auto old_persistent_bytes =
         candidate_persistent_logical_bytes();
 
-    for (const auto logical_id : transition.retired_cluster_ids) {
+    for (const auto logical_id : transition.released_cluster_ids) {
         const auto found = logical_to_slot_.find(logical_id);
         if (found == logical_to_slot_.end()) {
             throw std::runtime_error("retired logical cluster has no slot");
@@ -595,6 +595,16 @@ PersistentLayoutUpdate PersistentClusterLayout::synchronize(
         result.upper_rebuild_node_count = upper_node_count_;
     } else {
         result.upper_refit_node_count = refit_upper(dirty_slots);
+    }
+
+    if (logical_to_slot_.size() != state.clusters().size()) {
+        throw std::runtime_error("persistent logical/physical ownership leak");
+    }
+    for (const auto& cluster : state.clusters()) {
+        const auto slot = physical_slot(cluster.cluster_id);
+        if (slot_to_logical_[slot] != cluster.cluster_id) {
+            throw std::runtime_error("persistent slot ownership mismatch");
+        }
     }
 
     result.candidate_persistent_logical_bytes =
