@@ -22,6 +22,10 @@ CONFIG = (
     ROOT / "research/lanes/lane-k-gpu-primary-calibration/experiments"
     / "002-gpu-primary-protocol-config.json"
 )
+EXPECTED_CONFIG_BLOB_SHA = "08657f3e176128a73c6f7f4d1769bab3f1eff7ad"
+CAMPAIGN_ROOT = (
+    ROOT / "out/research/lane-k-gpu-primary-calibration/003-target-calibration"
+)
 
 
 def git(*args: str) -> str:
@@ -217,6 +221,19 @@ def main() -> int:
     if git("status", "--porcelain"):
         raise RuntimeError("K003 requires a clean worktree")
 
+    config_blob = git("hash-object", str(CONFIG.relative_to(ROOT)))
+    if config_blob != EXPECTED_CONFIG_BLOB_SHA:
+        raise RuntimeError(
+            "K002 frozen config blob changed; K003 target timing is forbidden"
+        )
+    completed = sorted(CAMPAIGN_ROOT.glob("*/k003-summary.json"))
+    if completed:
+        joined = ", ".join(str(path.parent.relative_to(ROOT)) for path in completed)
+        raise RuntimeError(
+            "K003 completed-campaign rerun budget is zero; existing summary: "
+            + joined
+        )
+
     config = json.loads(CONFIG.read_text(encoding="utf-8"))
     if config.get("plan_version") != "lane-k-k002-v1":
         raise RuntimeError("K003 requires frozen plan lane-k-k002-v1")
@@ -245,7 +262,7 @@ def main() -> int:
     env_root = os.environ.get("PHOS_RESEARCH_ARTIFACT_DIR")
     root = args.artifact_dir or (Path(env_root) if env_root else None)
     if root is None:
-        root = ROOT / "out/research/lane-k-gpu-primary-calibration/003-target-calibration" / stamp
+        root = CAMPAIGN_ROOT / stamp
     root.mkdir(parents=True, exist_ok=bool(env_root))
     (root / "k003-config.json").write_text(
         json.dumps(config, indent=2, sort_keys=True) + "\n", encoding="utf-8"
