@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "plan_version": "lane-e-timing-revalidation-e001-v7",
+  "plan_version": "lane-e-timing-revalidation-e001-v8",
   "issue": 22,
   "branch": "research-lane-e-timing-revalidation",
   "base_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
@@ -286,6 +286,10 @@
     {
       "version": "v7",
       "reason": "pre-target validation identity defect fix: canonicalize workload/resolved digests by stable semantic identity because A001 GPU atomic append/output allocation order is intentionally nondeterministic across independent correct executions; workload/control/threshold/sample-shape/memory rule/performance decision/environment/rerun-policy unchanged"
+    },
+    {
+      "version": "v8",
+      "reason": "pre-target reversible-state correctness fix: derive target/base geometry and surface state from immutable baseline instead of cumulative +/- float deltas, preventing round-trip drift between mutable controls/reference geometry and immutable rigid-instance candidates; workload/control/threshold/sample-shape/memory rule/performance decision/environment/rerun-policy unchanged"
     }
   ]
 }
