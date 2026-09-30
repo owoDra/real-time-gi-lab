@@ -891,6 +891,7 @@ struct I001Runtime::Impl {
     lane_a::SceneSurfaceSet a_scene;
     lane_b::B002Scene b_scene;
     std::vector<lane_b::Triangle> baseline_triangles;
+    std::vector<std::array<float, 4>> baseline_surface_positions;
     lane_a::A001Settings settings;
     lane_a::A001ParamsGpu params{};
 
@@ -970,6 +971,7 @@ struct I001Runtime::Impl {
             moving = choose_moving_selection(b_scene);
         }
         baseline_triangles = b_scene.triangles;
+        baseline_surface_positions = surface_positions(a_scene);
 
         if (uses_bounded(options.variant)) {
             if (options.bounded_owner_capacity == 0U) {
@@ -1661,8 +1663,8 @@ struct I001Runtime::Impl {
             return {};
         }
 
-        const float transition_delta =
-            target_state ? moving.delta_x : -moving.delta_x;
+        const float state_delta =
+            target_state ? moving.delta_x : 0.0F;
 
         using Clock = std::chrono::steady_clock;
         const auto elapsed_us = [](Clock::time_point start) {
@@ -1701,9 +1703,9 @@ struct I001Runtime::Impl {
             }
             const auto deformed =
                 deformed_primitives(
-                    b_scene.triangles,
+                    baseline_triangles,
                     moving.primitives,
-                    transition_delta);
+                    state_delta);
             for (std::size_t index = 0;
                  index < moving.primitives.size();
                  ++index) {
@@ -1715,13 +1717,13 @@ struct I001Runtime::Impl {
             auto target_geometry =
                 options.scenario == I001Scenario::MovingRigid
                 ? translated_geometry(
-                    b_scene.triangles,
+                    baseline_triangles,
                     moving.primitives,
-                    transition_delta)
+                    state_delta)
                 : deformed_geometry(
-                    b_scene.triangles,
+                    baseline_triangles,
                     moving.primitives,
-                    transition_delta);
+                    state_delta);
             out.geometry_prepare_cpu_us = elapsed_us(phase_start);
             b_scene.triangles = std::move(target_geometry);
         } else if (options.scenario != I001Scenario::MovingRigid) {
@@ -1733,11 +1735,9 @@ struct I001Runtime::Impl {
         for (const auto primitive : moving.primitives) {
             if (options.scenario == I001Scenario::MovingRigid) {
                 std::array<float, 4> position{};
-                std::copy_n(
-                    a_scene.samples.at(primitive).position,
-                    4,
-                    position.data());
-                position[0] += transition_delta;
+                position =
+                    baseline_surface_positions.at(primitive);
+                position[0] += state_delta;
                 moved_positions.push_back(position);
             } else {
                 const auto& triangle = b_scene.triangles.at(primitive);
@@ -1770,7 +1770,7 @@ struct I001Runtime::Impl {
         if (uses_hwrt(options.variant)) {
             if (rigid_instance_candidate) {
                 const auto stats = hwrt->update_rigid_transform(
-                    target_state ? moving.delta_x : 0.0F,
+                    state_delta,
                     rigid_tlas_policy(options.variant));
                 out.instance_transfer_wall_us =
                     stats.instance_upload_us;
@@ -2221,7 +2221,14 @@ struct I001Runtime::Impl {
 
         if (options.scenario == I001Scenario::MovingRigid) {
             for (const auto primitive : moving.primitives) {
-                a_scene.samples.at(primitive).position[0] += transition_delta;
+                auto& sample = a_scene.samples.at(primitive);
+                const auto& baseline =
+                    baseline_surface_positions.at(primitive);
+                std::copy(
+                    baseline.begin(),
+                    baseline.end(),
+                    sample.position);
+                sample.position[0] += state_delta;
             }
         } else {
             sync_surface_positions(
@@ -2236,9 +2243,9 @@ struct I001Runtime::Impl {
         // CPU reference scene after the measured maintenance boundary closes.
         if (rigid_instance_candidate) {
             b_scene.triangles = translated_geometry(
-                b_scene.triangles,
+                baseline_triangles,
                 moving.primitives,
-                transition_delta);
+                state_delta);
         }
         return out;
     }
