@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "plan_version": "lane-e-timing-revalidation-e001-v1",
+  "plan_version": "lane-e-timing-revalidation-e001-v2",
   "issue": 22,
   "branch": "research-lane-e-timing-revalidation",
   "base_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
@@ -100,7 +100,41 @@
     "future_state_prebuild": false,
     "recurrent_work_moved_to_setup": false,
     "historical_lane_e_timing_role": "context-only",
-    "expected_fresh_timing_processes": 160
+    "expected_fresh_timing_processes": 160,
+    "comparison_order_by_block": [
+      [
+        "control",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "control",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "control",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "control",
+        "candidate"
+      ]
+    ]
   },
   "fresh_run_local_control": {
     "required": true,
@@ -207,21 +241,21 @@
     "failure_before_first_measured_row": "fix-and-refreeze-allowed"
   },
   "artifact_schema": {
-    "version": 1,
+    "version": 2,
     "required": [
       "e001-config.json",
       "e001-source-provenance.json",
       "e001-input-provenance.json",
-      "e001-progress.json",
+      "e001-device-provenance.json",
       "e001-validation-summary.csv",
+      "e001-validation-summary.json",
+      "e001-memory-summary.csv",
+      "e001-progress.json",
+      "e001-control-raw.csv",
+      "e001-candidate-raw.csv",
       "e001-raw.csv",
       "e001-process-summary.csv",
-      "e001-memory-summary.json",
-      "e001-host-observations.json",
-      "e001-devices.json",
-      "e001-summary.json",
-      "e001-vulkaninfo-summary.txt"
-    ],
-    "all_raw_rows_retained": true
+      "e001-summary.json"
+    ]
   }
 }
