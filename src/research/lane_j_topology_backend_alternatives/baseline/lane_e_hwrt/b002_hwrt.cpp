@@ -3,7 +3,6 @@
 #include "vk_init.hpp"
 
 #include <algorithm>
-#include <algorithm>
 #include <array>
 #include <chrono>
 #include <cstring>

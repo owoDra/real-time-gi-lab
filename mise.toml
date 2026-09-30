@@ -279,3 +279,37 @@ done
 
 echo "J003 persistent GPU all-profile campaign PASS"
 '''
+
+[tasks."research:j004:memory-preflight"]
+description = "Run the frozen J004 same-run Lane-E HWRT relative-memory eligibility gate"
+depends = ["configure"]
+usage = '''
+flag "--root <root>" help="Frozen J002 materialized root" default="out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized"
+flag "--output <output>" help="Optional JSON output path"
+flag "--validation" help="Enable Vulkan validation layers"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+cmake --build "$PHOS_GI_BUILD_DIR" \
+  --target phos-lane-j-j004-memory-preflight
+
+args=(--root "${usage_root?}")
+
+if [ -n "${usage_output:-}" ]; then
+  args+=(--output "${usage_output}")
+elif [ -z "${PHOS_RESEARCH_ARTIFACT_DIR:-}" ]; then
+  output="out/research/lane-j-topology-backend-alternatives/004-formal-crossover/j004-relative-memory-preflight.json"
+  mkdir -p "$(dirname "$output")"
+  args+=(--output "$output")
+fi
+
+if [ "${usage_validation:-false}" = "true" ]; then
+  args+=(--validation)
+fi
+
+exec bash ./scripts/run_with_vulkan.sh \
+  "$PHOS_GI_BUILD_DIR/phos-lane-j-j004-memory-preflight" \
+  "${args[@]}"
+'''
