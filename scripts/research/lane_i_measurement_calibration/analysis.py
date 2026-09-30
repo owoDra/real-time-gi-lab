@@ -175,12 +175,12 @@ def classify_resolution(
     p20 = bool(detections.get("plus20", False))
     p10 = bool(detections.get("plus10", False))
     p5 = bool(detections.get("plus5", False))
-    if not p20:
-        return "target-timing-unsuitable"
+    if (p10 or p5) and not p20:
+        return "inconclusive-nonmonotonic"
     if p5 and not p10:
         return "inconclusive-nonmonotonic"
-    if p10 and not p20:
-        return "inconclusive-nonmonotonic"
+    if not p20:
+        return "target-timing-unsuitable"
     if p5 and p10 and p20:
         return "5%"
     if p10 and p20:

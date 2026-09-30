@@ -93,7 +93,7 @@ BatchResult CalibrationGpu::run(
         &initial_ready, 0, nullptr);
 
     ctx_.vk().cmdWriteTimestamp(
-        command_buffer_, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT, query_pool_, 0);
+        command_buffer_, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT, query_pool_, 0);
     ctx_.vk().cmdBindPipeline(
         command_buffer_, VK_PIPELINE_BIND_POINT_COMPUTE, pipeline_);
     ctx_.vk().cmdBindDescriptorSets(

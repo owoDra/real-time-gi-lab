@@ -100,6 +100,12 @@ class LaneIAnalysisTests(unittest.TestCase):
         )
         self.assertEqual(
             mod.classify_resolution(
+                {"plus20": False, "plus10": True, "plus5": False}, True
+            ),
+            "inconclusive-nonmonotonic",
+        )
+        self.assertEqual(
+            mod.classify_resolution(
                 {"plus20": True, "plus10": False, "plus5": True}, True
             ),
             "inconclusive-nonmonotonic",
