@@ -12,17 +12,24 @@ Lane-G final commit:
 
 `9176cc1c175bcfec43fd28d993f88385b7a131d7`
 
-The recurrent F003 dynamic path is copied byte-for-byte from that result:
+The F003 GPU builder/traversal shaders are copied byte-for-byte from that result:
 
-- `f003_transient_lbvh.cpp`: `f4df12560a8dd381db2c93e2b142f8acf4f8a2fe`
-- `f003_transient_lbvh.hpp`: `61b73cd9652627b3f4b3a26aa5563b6660c2f35a`
 - `f003_lbvh_builder.comp.glsl`: `77db184be5fcee72fa6c4f5cf40cadf487dcedd4`
 - `f003_dynamic_traversal.comp.glsl`: `56c7e80d345cf890d0b73b16edb740c874ac8dff`
 
-`run_j004.py` fails closed if those blobs drift. This is also the attribution
-basis for not running a redundant "unchanged transient LBVH" timing variant:
-Lane-G hardening affected setup lifetime, while J004 holds static setup common
-and measures the same recurrent F003 implementation.
+The J004 host adapter reserves the maximum primitive capacity already frozen by
+the J002 profile before timing, then updates only the active template/count per
+transition. This avoids recurrent pipeline/layout/buffer creation without
+changing the Lane-G GPU build/traversal algorithm:
+
+- adapted `f003_transient_lbvh.cpp`: `17f55f17a35aaa5373074591af552636b1dfe82d`
+- adapted `f003_transient_lbvh.hpp`: `ded4856b0fcb268ef8ca984338c073b4dace74eb`
+
+`run_j004.py` fails closed if those frozen adapter/shader blobs drift. The
+separate unchanged-LBVH timing variant is therefore not used: recreating the
+fixed-count Lane-G runtime on every topology-count transition would introduce
+recurrent pipeline/allocation setup and violate the frozen complete-boundary
+rule.
 
 ## Selectively reused accepted contracts
 
