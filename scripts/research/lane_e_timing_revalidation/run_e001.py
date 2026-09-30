@@ -84,7 +84,7 @@ def verify_freeze(config: dict[str, object]) -> dict[str, object]:
 def validate_config(config: dict[str, object]) -> None:
     timing = config["timing"]
     gate = config["performance_gate"]
-    if config["plan_version"] != "lane-e-timing-revalidation-e001-v2":
+    if config["plan_version"] != "lane-e-timing-revalidation-e001-v3":
         raise RuntimeError("unexpected E001 plan version")
     if timing["environment"] != "dual-context":
         raise RuntimeError("E001 must use dual-context")
