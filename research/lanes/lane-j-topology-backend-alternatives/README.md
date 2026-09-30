@@ -101,3 +101,6 @@ Preparation checkpoint:
 
 - v4 built/linked but hard validation stopped at `large-global-high/primary/control` before timing; diagnostic visibility record:
   `results/024-formal-validation-diagnostic-visibility.md`.
+
+- component-level root-cause diagnostic for the retained large-global primary-control failure:
+  `results/025-primary-control-mismatch-decomposition.md`.

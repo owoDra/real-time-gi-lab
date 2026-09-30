@@ -162,6 +162,13 @@
       "status": "awaiting-retained-validation-counter-inspection",
       "evidence_class": "diagnostic-only-pre-timing",
       "decision": "large-global-high/primary/control hard validation failed before timing; retain failure and expose exact validation counters before any root-cause correction"
+    },
+    {
+      "id": "J004-validation-component-diagnostic-v6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/025-primary-control-mismatch-decomposition.md",
+      "status": "diagnostic-target-rerun-required",
+      "evidence_class": "validation-only-root-cause-decomposition",
+      "decision": "decompose retained 445 exact tie mismatches into static HWRT, dynamic HWRT, or merge-only origin before any behavioral correction or formal timing"
     }
   ]
 }
