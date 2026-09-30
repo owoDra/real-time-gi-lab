@@ -388,14 +388,28 @@ def run_validation(
     (process_root / "stderr.log").write_text(proc.stderr, encoding="utf-8")
     sys.stdout.write(proc.stdout)
     sys.stderr.write(proc.stderr)
+    validation_path = process_root / "j004-validation.json"
     if proc.returncode != 0:
+        diagnostic = None
+        if validation_path.is_file():
+            try:
+                diagnostic = json.loads(
+                    validation_path.read_text(encoding="utf-8")
+                )
+            except (OSError, json.JSONDecodeError):
+                diagnostic = None
+        detail = (
+            json.dumps(diagnostic, sort_keys=True)
+            if diagnostic is not None
+            else "validation artifact unavailable"
+        )
         raise RuntimeError(
             f"J004 validation failed for {profile}/{track}/{variant}; "
-            "formal timing is forbidden"
+            f"formal timing is forbidden; validation={detail}"
         )
 
     validation = json.loads(
-        (process_root / "j004-validation.json").read_text(encoding="utf-8")
+        validation_path.read_text(encoding="utf-8")
     )
     if not bool(validation.get("passed")):
         raise RuntimeError(
