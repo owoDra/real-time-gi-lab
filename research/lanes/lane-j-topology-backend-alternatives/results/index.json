@@ -64,6 +64,13 @@
       "status": "pass",
       "evidence_class": "all-profile-persistent-host-layout",
       "decision": "promote to persistent Vulkan buffers and per-transition exact GPU replay"
+    },
+    {
+      "id": "J003-persistent-vulkan-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/010-persistent-vulkan-preparation.md",
+      "status": "implementation-ready-evidence-pending",
+      "evidence_class": "persistent-vulkan-transition-runtime",
+      "decision": "run representative exact target-GPU transition replay before large resize/all-profile expansion"
     }
   ]
 }
