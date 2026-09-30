@@ -16,17 +16,47 @@ def git(*args):
     if p.returncode: raise RuntimeError(p.stderr.strip())
     return p.stdout.strip()
 
+def discover_accepted_producer_stream(root: Path, cfg: dict) -> Path:
+    source=cfg["producer_source"]
+    candidates=sorted(root.glob(str(source["artifact_glob"])))
+    accepted=[]
+    for stream in candidates:
+        meta=stream.with_name("stream-v1.json")
+        if not meta.exists():
+            continue
+        try:
+            record=json.loads(meta.read_text(encoding="utf-8"))
+        except (OSError,json.JSONDecodeError):
+            continue
+        if (
+            record.get("case")==source["case"]
+            and record.get("git_commit")==source["accepted_git_commit"]
+        ):
+            accepted.append(stream)
+    if len(accepted)!=1:
+        raise RuntimeError(
+            "expected exactly one accepted A001 producer stream; "
+            f"found {len(accepted)} matching {source['case']} @ "
+            f"{source['accepted_git_commit']}"
+        )
+    return accepted[0]
+
 def main():
     ap=argparse.ArgumentParser(description="Materialize frozen J002 topology snapshots")
-    ap.add_argument("--scene",type=Path,required=True)
-    ap.add_argument("--producer-stream",type=Path,required=True)
+    ap.add_argument(
+        "--scene",
+        type=Path,
+        default=Path("assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf"),
+    )
+    ap.add_argument("--producer-stream",type=Path)
     ap.add_argument("--artifact-dir",type=Path)
     ap.add_argument("--allow-dirty",action="store_true")
     args=ap.parse_args()
     if git("branch","--show-current")!=EXPECTED_BRANCH: raise RuntimeError(f"must run on {EXPECTED_BRANCH}")
     if not args.allow_dirty and git("status","--porcelain"): raise RuntimeError("retained J002 preparation requires clean worktree")
     cfg=json.loads(CONFIG.read_text())
-    producer=args.producer_stream.read_bytes()
+    producer_path=args.producer_stream or discover_accepted_producer_stream(ROOT,cfg)
+    producer=producer_path.read_bytes()
     manifest=prepare.build_manifest(cfg,producer)
     scene=geometry.load_b002_compatible_gltf(args.scene)
     representative=geometry.select_representative_object(scene,796)
@@ -62,6 +92,8 @@ def main():
     output={
         **manifest,
         "scene":str(args.scene),
+        "producer_stream_path":str(producer_path),
+        "producer_stream_file_sha256":hashlib.sha256(producer).hexdigest(),
         "scene_sha256":hashlib.sha256(args.scene.read_bytes()).hexdigest(),
         "scene_triangle_count":len(scene),
         "representative_instance_id":selected_instance,
