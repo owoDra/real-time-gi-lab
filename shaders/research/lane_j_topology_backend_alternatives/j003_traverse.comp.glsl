@@ -189,9 +189,9 @@ void main() {
     result.ids = uvec4(INVALID_ID, INVALID_ID, INVALID_ID, 0u);
     result.stats = uvec4(0u);
 
-    if (!isfinite(direction_length) ||
+    if (isnan(direction_length) || isinf(direction_length) ||
         direction_length <= 1.0e-8 ||
-        !isfinite(ray_tmax) ||
+        isnan(ray_tmax) || isinf(ray_tmax) ||
         ray_tmax <= RAY_T_MIN ||
         push_data.upper_root >= push_data.upper_node_count) {
         result.stats.w =
