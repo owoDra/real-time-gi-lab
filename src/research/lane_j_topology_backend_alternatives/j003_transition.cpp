@@ -218,6 +218,7 @@ TransitionStats ClusterTransitionState::update(
     }
 
     std::unordered_set<std::uint32_t> deleted;
+    std::unordered_set<std::uint32_t> inserted;
     std::unordered_set<std::uint32_t> changed;
     std::vector<Triangle> inserted_or_changed;
     for (const auto& [primitive_id, old_triangle] : previous) {
@@ -230,7 +231,258 @@ TransitionStats ClusterTransitionState::update(
     }
     for (const auto& [primitive_id, new_triangle] : next) {
         const auto found = previous.find(primitive_id);
-        if (found == previous.end() || changed.contains(primitive_id)) {
+        if (found == previous.end()) {
+            inserted.insert(primitive_id);
+            inserted_or_changed.push_back(new_triangle);
+        } else if (changed.contains(primitive_id)) {
+            inserted_or_changed.push_back(new_triangle);
+        }
+    }
+    std::sort(
+        inserted_or_changed.begin(),
+        inserted_or_changed.end(),
+        [](const Triangle& a, const Triangle& b) {
+            return a.primitive_id < b.primitive_id;
+        });
+
+    std::unordered_map<std::uint32_t, std::vector<std::uint32_t>>
+        original_membership;
+    for (const auto& cluster : clusters_) {
+        auto& ids = original_membership[cluster.cluster_id];
+        ids.reserve(cluster.triangles.size());
+        for (const auto& triangle : cluster.triangles) {
+            ids.push_back(triangle.primitive_id);
+        }
+    }
+
+    std::unordered_set<std::uint32_t> dirty;
+    for (auto& cluster : clusters_) {
+        const auto old_size = cluster.triangles.size();
+        cluster.triangles.erase(
+            std::remove_if(
+                cluster.triangles.begin(),
+                cluster.triangles.end(),
+                [&](const Triangle& triangle) {
+                    return deleted.contains(triangle.primitive_id) ||
+                           changed.contains(triangle.primitive_id);
+                }),
+            cluster.triangles.end());
+        if (cluster.triangles.size() != old_size) {
+            dirty.insert(cluster.cluster_id);
+        }
+    }
+
+    const auto before_retire = clusters_.size();
+    clusters_.erase(
+        std::remove_if(
+            clusters_.begin(),
+            clusters_.end(),
+            [](const TransitionCluster& cluster) {
+                return cluster.triangles.empty();
+            }),
+        clusters_.end());
+    const auto retired_empty =
+        static_cast<std::uint32_t>(before_retire - clusters_.size());
+    for (auto it = dirty.begin(); it != dirty.end();) {
+        const auto alive = std::any_of(
+            clusters_.begin(),
+            clusters_.end(),
+            [&](const TransitionCluster& cluster) {
+                return cluster.cluster_id == *it;
+            });
+        if (!alive) {
+            it = dirty.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
+    for (const auto& triangle : inserted_or_changed) {
+        if (clusters_.empty()) {
+            clusters_.push_back({next_id(), {}});
+        }
+
+        auto target = clusters_.begin();
+        if (!target->triangles.empty()) {
+            target = std::min_element(
+                clusters_.begin(),
+                clusters_.end(),
+                [&](const TransitionCluster& a, const TransitionCluster& b) {
+                    const auto key_a =
+                        std::tuple{expansion_cost(a, triangle), a.cluster_id};
+                    const auto key_b =
+                        std::tuple{expansion_cost(b, triangle), b.cluster_id};
+                    return key_a < key_b;
+                });
+        }
+
+        target->triangles.push_back(triangle);
+        dirty.insert(target->cluster_id);
+    }
+
+    std::uint32_t split_count = 0U;
+    std::vector<TransitionCluster> split_result;
+    for (auto& cluster : clusters_) {
+        if (!dirty.contains(cluster.cluster_id) ||
+            cluster.triangles.size() <= kClusterMaximum) {
+            split_result.push_back(std::move(cluster));
+            continue;
+        }
+
+        std::vector<std::vector<Triangle>> queue{
+            morton_order(cluster.triangles),
+        };
+        std::vector<std::vector<Triangle>> pieces;
+        while (!queue.empty()) {
+            auto current = std::move(queue.front());
+            queue.erase(queue.begin());
+            if (current.size() <= kClusterMaximum) {
+                pieces.push_back(std::move(current));
+                continue;
+            }
+            const auto cut = current.size() / 2U;
+            std::vector<Triangle> left(
+                current.begin(),
+                current.begin() + static_cast<std::ptrdiff_t>(cut));
+            std::vector<Triangle> right(
+                current.begin() + static_cast<std::ptrdiff_t>(cut),
+                current.end());
+            queue.push_back(std::move(left));
+            queue.push_back(std::move(right));
+        }
+
+        split_result.push_back({
+            cluster.cluster_id,
+            std::move(pieces.front()),
+        });
+        for (std::size_t index = 1U; index < pieces.size(); ++index) {
+            const auto id = next_id();
+            dirty.insert(id);
+            split_result.push_back({id, std::move(pieces[index])});
+            ++split_count;
+        }
+    }
+    clusters_ = std::move(split_result);
+
+    std::uint32_t merge_count = 0U;
+    for (;;) {
+        bool merged = false;
+        std::vector<std::uint32_t> ordered_ids;
+        ordered_ids.reserve(clusters_.size());
+        for (const auto& cluster : clusters_) {
+            ordered_ids.push_back(cluster.cluster_id);
+        }
+        std::sort(ordered_ids.begin(), ordered_ids.end());
+
+        for (const auto source_id : ordered_ids) {
+            auto source = std::find_if(
+                clusters_.begin(),
+                clusters_.end(),
+                [&](const TransitionCluster& cluster) {
+                    return cluster.cluster_id == source_id;
+                });
+            if (source == clusters_.end() ||
+                !dirty.contains(source->cluster_id) ||
+                source->triangles.size() >= kClusterMergeBelow) {
+                continue;
+            }
+
+            auto target = clusters_.end();
+            const auto source_center =
+                bounds_center(bounds_of(source->triangles));
+            for (auto candidate = clusters_.begin();
+                 candidate != clusters_.end();
+                 ++candidate) {
+                if (candidate == source ||
+                    candidate->triangles.size() + source->triangles.size() >
+                        kClusterTarget) {
+                    continue;
+                }
+
+                if (target == clusters_.end()) {
+                    target = candidate;
+                    continue;
+                }
+                const auto candidate_key = std::tuple{
+                    distance(
+                        source_center,
+                        bounds_center(bounds_of(candidate->triangles))),
+                    candidate->cluster_id,
+                };
+                const auto target_key = std::tuple{
+                    distance(
+                        source_center,
+                        bounds_center(bounds_of(target->triangles))),
+                    target->cluster_id,
+                };
+                if (candidate_key < target_key) {
+                    target = candidate;
+                }
+            }
+
+            if (target == clusters_.end()) {
+                continue;
+            }
+
+            target->triangles.insert(
+                target->triangles.end(),
+                source->triangles.begin(),
+                source->triangles.end());
+            target->triangles = morton_order(target->triangles);
+            dirty.insert(target->cluster_id);
+            const auto removed_id = source->cluster_id;
+            clusters_.erase(source);
+            dirty.erase(removed_id);
+            ++merge_count;
+            merged = true;
+            break;
+        }
+
+        if (!merged) {
+            break;
+        }
+    }
+
+    validate_clusters(clusters_, triangles);
+}
+
+TransitionStats ClusterTransitionState::update(
+    std::span<const Triangle> triangles) {
+    if (triangles.empty()) {
+        throw std::runtime_error("J003 transition cannot update to empty geometry");
+    }
+
+    std::unordered_map<std::uint32_t, Triangle> previous;
+    std::unordered_map<std::uint32_t, Triangle> next;
+    for (const auto& cluster : clusters_) {
+        for (const auto& triangle : cluster.triangles) {
+            previous.emplace(triangle.primitive_id, triangle);
+        }
+    }
+    for (const auto& triangle : triangles) {
+        if (!next.emplace(triangle.primitive_id, triangle).second) {
+            throw std::runtime_error("duplicate primitive ID in J003 next snapshot");
+        }
+    }
+
+    std::unordered_set<std::uint32_t> deleted;
+    std::unordered_set<std::uint32_t> inserted;
+    std::unordered_set<std::uint32_t> changed;
+    std::vector<Triangle> inserted_or_changed;
+    for (const auto& [primitive_id, old_triangle] : previous) {
+        const auto found = next.find(primitive_id);
+        if (found == next.end()) {
+            deleted.insert(primitive_id);
+        } else if (!same_triangle(old_triangle, found->second)) {
+            changed.insert(primitive_id);
+        }
+    }
+    for (const auto& [primitive_id, new_triangle] : next) {
+        const auto found = previous.find(primitive_id);
+        if (found == previous.end()) {
+            inserted.insert(primitive_id);
+            inserted_or_changed.push_back(new_triangle);
+        } else if (changed.contains(primitive_id)) {
             inserted_or_changed.push_back(new_triangle);
         }
     }
@@ -557,7 +809,7 @@ TransitionStats ClusterTransitionState::update(
         static_cast<std::uint32_t>(clusters_.size()),
         final_dirty,
         static_cast<std::uint32_t>(
-            deleted.size() + changed.size() + inserted_or_changed.size()),
+            deleted.size() + inserted.size() + changed.size()),
         rebuilt_triangles,
         unaffected_rebuild,
         split_count,
