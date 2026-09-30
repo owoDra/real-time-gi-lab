@@ -109,8 +109,11 @@ class AnalysisTests(unittest.TestCase):
                         "pair_index": pair,
                         "role": role,
                         "persistent_bytes": 100,
+                        "transient_bytes": 100,
+                        "scratch_bytes": 0,
                         "true_peak_bytes": 100,
                         "old_new_overlap_bytes": 0,
+                        "allocation_count": 1,
                         "allocation_lifetime_complete":
                             0 if (block, pair, role) == (7, 11, "B") else 1,
                     })
