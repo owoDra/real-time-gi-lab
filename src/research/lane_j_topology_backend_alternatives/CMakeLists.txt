@@ -40,3 +40,24 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-j-j003-probe PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+
+add_executable(phos-lane-j-contract-test
+  j003_contract_test.cpp
+  j003_clustered_bvh.cpp
+  j003_reference.cpp
+)
+
+target_include_directories(phos-lane-j-contract-test PRIVATE
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+)
+target_compile_features(phos-lane-j-contract-test PRIVATE cxx_std_20)
+set_target_properties(phos-lane-j-contract-test PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+)
+if(MSVC)
+  target_compile_options(phos-lane-j-contract-test PRIVATE /W4 /permissive-)
+else()
+  target_compile_options(phos-lane-j-contract-test PRIVATE -Wall -Wextra -Wpedantic)
+endif()
