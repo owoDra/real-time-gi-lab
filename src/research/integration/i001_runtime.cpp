@@ -2507,10 +2507,22 @@ struct I001Runtime::Impl {
             if (candidate[index].metadata[3] > 1U) {
                 ++quality.traversal_runtime_errors;
             }
-            if (!lane_b::equivalent_hit(
-                    lane_b::from_gpu_hit(reference[index]),
-                    lane_b::from_gpu_hit(candidate[index]))) {
+            const auto expected =
+                lane_b::from_gpu_hit(reference[index]);
+            const auto actual =
+                lane_b::from_gpu_hit(candidate[index]);
+            if (!lane_b::equivalent_hit(expected, actual)) {
                 ++quality.hit_mismatches;
+            }
+            if (expected.hit && actual.hit &&
+                expected.primitive_id != actual.primitive_id) {
+                const auto tolerance = std::max(
+                    lane_b::kHitDistanceAbsTolerance,
+                    std::abs(expected.t) *
+                        lane_b::kHitDistanceRelTolerance);
+                if (std::abs(expected.t - actual.t) <= tolerance) {
+                    ++quality.nearest_hit_tie_mismatches;
+                }
             }
         }
 
@@ -2547,6 +2559,38 @@ struct I001Runtime::Impl {
                 return std::bit_cast<lane_a::SplitRcWorkItemV1>(item);
             });
         producer_readback.resolved.assign(last.stats.outputs, 0.0F);
+        quality.workload_digest =
+            hash_trivial_span<LaneAWorkItemV1>(work_items);
+        quality.geometry_input_digest =
+            hash_geometry(b_scene.triangles);
+
+        std::vector<bool> moved_mask(
+            baseline_triangles.size(),
+            false);
+        for (const auto primitive : moving.primitives) {
+            if (primitive < moved_mask.size()) {
+                moved_mask[primitive] = true;
+            }
+        }
+        for (std::size_t primitive = 0;
+             primitive < baseline_triangles.size();
+             ++primitive) {
+            if (moved_mask[primitive]) {
+                continue;
+            }
+            const auto& baseline =
+                baseline_triangles[primitive];
+            const auto& current =
+                b_scene.triangles[primitive];
+            if (triangle_exact_equal(baseline, current)) {
+                continue;
+            }
+            if (baseline.instance_id == lane_b::kInvalidId) {
+                ++quality.static_owner_mutations;
+            } else {
+                ++quality.unrelated_owner_mutations;
+            }
+        }
 
         const auto producer_analysis = lane_a::analyze_a001(
             a_scene,
@@ -2774,6 +2818,8 @@ struct I001Runtime::Impl {
             resolved,
             candidate_resolved.data(),
             candidate_resolved.size() * sizeof(float));
+        quality.resolved_output_digest =
+            hash_trivial_span<float>(candidate_resolved);
 
         std::map<ProbeKey, double> reference_values;
         for (const auto& [key, reference_accum] : reference_probe) {
@@ -2892,7 +2938,10 @@ struct I001Runtime::Impl {
             quality.visibility_mismatches == 0U &&
             quality.producer_semantic_errors == 0U &&
             quality.hit_mismatches == 0U &&
+            quality.nearest_hit_tie_mismatches == 0U &&
             quality.traversal_runtime_errors == 0U &&
+            quality.static_owner_mutations == 0U &&
+            quality.unrelated_owner_mutations == 0U &&
             quality.missing_probes == 0U &&
             quality.leaked_probes == 0U &&
             quality.stale_storage_slots == 0U &&
@@ -2942,6 +2991,22 @@ const std::string& I001Runtime::driver_info() const noexcept {
 }
 std::uint32_t I001Runtime::api_version() const noexcept {
     return impl_->context.api_version();
+}
+float I001Runtime::timestamp_period_ns() const noexcept {
+    return impl_->context.timestamp_period_ns();
+}
+I001AllocationStats I001Runtime::allocation_stats() const noexcept {
+    const auto stats = impl_->context.allocation_stats();
+    return {
+        stats.current_bytes,
+        stats.peak_bytes,
+        stats.allocation_count,
+        stats.free_count,
+        stats.live_allocations,
+    };
+}
+void I001Runtime::reset_allocation_epoch() noexcept {
+    impl_->context.reset_allocation_epoch();
 }
 
 } // namespace phos::gi::research::integration
