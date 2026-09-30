@@ -6,10 +6,6 @@ const uint INVALID_ID = 0xffffffffu;
 const float RAY_T_MIN = 1.0e-4;
 const float HIT_ABS_TOL = 2.0e-4;
 const float HIT_REL_TOL = 2.0e-5;
-const float FP32_EPSILON = 1.1920928955078125e-7;
-const float FP32_GAMMA3 =
-    (3.0 * FP32_EPSILON) / (1.0 - 3.0 * FP32_EPSILON);
-const float AABB_PRUNE_DISTANCE_FACTOR = 1.0 + 2.0 * FP32_GAMMA3;
 const uint STACK_CAPACITY = 64u;
 
 struct Triangle {
@@ -77,12 +73,6 @@ float hit_tolerance(float t) {
     return max(HIT_ABS_TOL, abs(t) * HIT_REL_TOL);
 }
 
-float conservative_prune_limit(float limit) {
-    return limit > 0.0
-        ? limit * AABB_PRUNE_DISTANCE_FACTOR
-        : limit;
-}
-
 bool hit_aabb(
     vec3 origin,
     vec3 direction,
@@ -112,13 +102,6 @@ bool hit_aabb(
             float tmp = a;
             a = b;
             b = tmp;
-        }
-
-        // Conservative fp32 slab intersection: the mathematically far plane
-        // may round slightly inward. Expand only positive far distances; this
-        // does not alter exact triangle Hit/tie semantics.
-        if (b > 0.0) {
-            b *= AABB_PRUNE_DISTANCE_FACTOR;
         }
 
         near_t = max(near_t, a);
@@ -245,8 +228,7 @@ void main() {
                 direction,
                 node.bounds_min.xyz,
                 node.bounds_max.xyz,
-                conservative_prune_limit(
-                    best_t + hit_tolerance(best_t)))) {
+                best_t + hit_tolerance(best_t))) {
             continue;
         }
 
@@ -281,8 +263,7 @@ void main() {
                         direction,
                         micro.bounds_min.xyz,
                         micro.bounds_max.xyz,
-                        conservative_prune_limit(
-                            best_t + hit_tolerance(best_t)))) {
+                        best_t + hit_tolerance(best_t))) {
                     continue;
                 }
 
