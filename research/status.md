@@ -1,12 +1,50 @@
 # Research program status
 
-As of 2026-09-30, Lane A-K and Integration #13 are concluded. Lane J closed
-measurement-limited before an accepted timing methodology existed; Lane K now
-provides the accepted GPU-primary calibration required for a future
-J004-equivalent crossover. This document is the program-level synthesis on the
+As of 2026-10-01, Lane A-K, Lane L, Lane E timing revalidation, and Integration
+#13 are concluded. Lane J closed measurement-limited before an accepted timing
+methodology existed. Lane K provides the accepted GPU-primary calibration on its
+calibration workload; Lane L separately establishes a 20% detectable-effect
+floor for the heavier complete recurring boundary used by Lane E #22. This document is the program-level synthesis on the
 `research` branch. Detailed experiment results,
 raw-artifact provenance, and lane-local decisions remain canonical in each lane's
 `results/` documents and are not duplicated here.
+
+## 2026-10-01 Lane E heavy-boundary revalidation checkpoint
+
+Lane L / #24 accepted the dual-context heavy-boundary protocol with GPU timestamp
+primary, complete CPU wall diagnostic/health/provenance only, and a demonstrated
+**20% minimum detectable effect** for the complete recurring boundary. The
+Lane-K 5% calibration-workload floor was explicitly not transferred to this
+heavier boundary.
+
+Lane E follow-up / #22 then imported that protocol prospectively and retained all
+5,120 timing rows across 160 fresh timing processes after a 20-process
+correctness/identity validation gate.
+
+Formal candidate/control complete-GPU ratios:
+
+- moving-rigid HWRT: **0.330894x** (66.91% improvement);
+- moving-rigid software: **0.519178x** (48.08% improvement);
+- stable-topology-deforming HWRT: **0.331625x** (66.84% improvement);
+- stable-topology-deforming software: **0.525108x** (47.49% improvement).
+
+All four formal tracks pass the frozen >=20% improvement gate, exceed their
+fresh-control noise envelopes, and have fully directional measured pairs. Static,
+camera-motion, and light-motion guard tracks show no detected >=20% regression.
+All persistent/true-peak hard memory guards and allocation-lifetime checks pass.
+
+The campaign completed all 160 timing processes. Final post-processing initially
+stopped because validation and timing serialized the same Vulkan float
+`timestampPeriod` at different decimal precisions. The retained evidence was
+finalized without rerunning any measurement after verifying the original frozen
+source/blob manifest, scene digest, exact process/row counts, all timing health
+checks, exact device/driver/API provenance, and the precision-only timestamp
+rendering difference.
+
+**Program conclusion:** Lane E's object-local ownership/update architecture
+remains the evidence-backed incumbent for rigid and stable-topology-deforming
+geometry on the measured target and boundary. Topology-changing/high-churn
+backend selection remains a separate unresolved question.
 
 ## Status vocabulary
 
@@ -38,7 +76,8 @@ the completed lanes:
 4. Use Lane E's geometry-class-specific object-local ownership/update model:
    immutable static ownership; transform-only rigid instances; object-local
    UPDATE for stable-topology deformation; object-local rebuild boundaries for
-   topology changes.
+   topology changes. Lane E #22 revalidates the rigid and stable-topology
+   deforming performance claims under the Lane-L >=20% heavy-boundary protocol.
 5. Keep A001 as the standalone producer contract. Renderer depth reuse is a
    conditional integration optimization; bounded-capacity/safe-overflow is
    retained as a memory-policy result, not as a promoted producer.
@@ -92,7 +131,9 @@ required.
 | Lane H / #18 | Complete, measurement-limited | Safe timing methodology did not pass: even valid static controls failed frozen repeatability criteria. The topology-changing crossover was therefore not run and no backend was promoted. |
 | Lane I / #19 | Complete, target timing unsuitable | Frozen GPU timestamps detected +20%, +10%, and +5% known work deltas, but complete CPU wall failed the contiguous dual-axis criterion because +20% exceeded the frozen order-bias gate while +10%/+5% passed. GPU-only 5% resolution is mechanism evidence, not an accepted promotion protocol. |
 | Lane J / #20 | Complete, measurement-limited | Clustered two-level object-local BVH passed deterministic correctness and lifetime-memory work, but formal performance ranking did not run because no accepted timing protocol existed at closure. It remains qualified for a future J004-equivalent crossover. |
-| Lane K / #21 | Accepted | `lane-k-k002-v1` uses GPU timestamp as the primary axis and CPU wall as diagnostic/health/provenance only. K003 passed the frozen baseline and detected +20%, +10%, and +5% contiguously; K004 accepts a 5% minimum effect-size protocol on the measured target. |
+| Lane K / #21 | Accepted | `lane-k-k002-v1` uses GPU timestamp as the primary axis and CPU wall as diagnostic/health/provenance only. K003 passed the frozen baseline and detected +20%, +10%, and +5% contiguously; K004 accepts a 5% minimum effect-size protocol on its calibration workload. |
+| Lane L / #24 | Accepted | Dual-context heavy-boundary calibration accepts GPU timestamp primary / CPU wall diagnostic with a demonstrated 20% minimum detectable effect for the complete recurring boundary. |
+| Lane E timing revalidation / #22 | Accepted | Under Lane L's 20% floor, moving-rigid and stable-topology-deforming both revalidate on HWRT and software fallback; static/camera/light show no detected >=20% regression and hard memory guards pass. |
 
 Representative values above are anchors only. Exact per-case numbers and raw
 artifact provenance remain in the lane result documents.
@@ -172,7 +213,9 @@ Lane E is the current incumbent:
   remain untouched.
 
 The topology-changing rule is an accepted architectural boundary, **not** an
-accepted topology-changing performance result.
+accepted topology-changing performance result. Lane E #22 independently
+revalidates the non-topology-changing rigid and stable-topology-deforming timing
+claims under the heavier Lane-L protocol.
 
 ## Accepted, conditional, rejected, unresolved
 
@@ -183,7 +226,9 @@ accepted topology-changing performance result.
 - B003 conservative quantized software fallback.
 - C001 per-probe sparse hash.
 - Lane E object-local ownership/update semantics for static, rigid and
-  stable-topology deforming geometry.
+  stable-topology deforming geometry;
+- Lane E #22 heavy-boundary performance revalidation for rigid and
+  stable-topology-deforming geometry on both HWRT and software fallback.
 
 ### Conditional
 
@@ -347,12 +392,13 @@ Detailed source-of-truth documents:
 - Lane C: [C001 final storage decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-c-storage-locality/research/lanes/lane-c-storage-locality/results/001-storage-baselines.md)
 - Integration: [I001 dynamic end-to-end](https://github.com/owoDra/phos-gi-lab/blob/research-integration-gate/research/integration/results/001-dynamic-end-to-end.md)
 - Lane D: [final cross-lane producer decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-d-producer-optimization/research/lanes/lane-d-producer-optimization/results/006-final-cross-lane-decision.md)
-- Lane E: [E005 final ownership replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-e-dynamic-geometry/research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md)
+- Lane E: [E005 final ownership replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-e-dynamic-geometry/research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md), [E001 heavy-boundary revalidation](https://github.com/owoDra/phos-gi-lab/blob/research-lane-e-timing-revalidation/research/lanes/lane-e-timing-revalidation/results/001-e001-heavy-boundary-revalidation.md)
 - Lane F: [F002 builder](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/002-pure-gpu-transient-lbvh-builder.md), [F006 geometry-class controls](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/006-geometry-class-crossover-controls.md), [F007 final replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/007-final-integration-replay.md)
 - Lane G: [G002 repeatability diagnosis](https://github.com/owoDra/phos-gi-lab/blob/research-lane-g-transient-lbvh-hardening/research/lanes/lane-g-transient-lbvh-hardening/results/002-timing-repeatability-diagnosis.md), [G005 deterministic replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-g-transient-lbvh-hardening/research/lanes/lane-g-transient-lbvh-hardening/results/005-final-deterministic-replay.md)
 - Lane H: [H001 safe timing result](https://github.com/owoDra/phos-gi-lab/blob/research-lane-h-topology-rebuild-crossover/research/lanes/lane-h-topology-rebuild-crossover/results/001-safe-timing-methodology.md), [H004 final decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-h-topology-rebuild-crossover/research/lanes/lane-h-topology-rebuild-crossover/results/004-final-decision.md)
 - Lane I: [I003 target calibration](https://github.com/owoDra/phos-gi-lab/blob/research-lane-i-measurement-calibration/research/lanes/lane-i-measurement-calibration/results/003-target-calibration.md), [I004 timing capability](https://github.com/owoDra/phos-gi-lab/blob/research-lane-i-measurement-calibration/research/lanes/lane-i-measurement-calibration/results/004-program-timing-capability.md)
 - Lane K: [K003 target calibration](https://github.com/owoDra/phos-gi-lab/blob/research-lane-k-gpu-primary-calibration/research/lanes/lane-k-gpu-primary-calibration/results/003-target-calibration.md), [K004 timing capability](https://github.com/owoDra/phos-gi-lab/blob/research-lane-k-gpu-primary-calibration/research/lanes/lane-k-gpu-primary-calibration/results/004-program-timing-capability.md)
+- Lane L: [L002 target result](https://github.com/owoDra/phos-gi-lab/blob/research-lane-l-heavy-boundary-calibration/research/lanes/lane-l-heavy-boundary-calibration/results/005-l002-target-result.md), [Lane L final](https://github.com/owoDra/phos-gi-lab/blob/research-lane-l-heavy-boundary-calibration/research/lanes/lane-l-heavy-boundary-calibration/results/007-lane-l-final.md)
 
 Issues #9-#19 provide frozen plans and cross-lane context; lane result documents
 take precedence for concluded experiment outcomes.
@@ -393,6 +439,6 @@ correctness, relative-memory, timing, and integration gates.
 
 The measurement-calibration lane itself is complete. The highest-value next step
 is therefore the topology-backend crossover, not another timing-methodology lane.
-Lane-E timing revalidation may also use Lane K when needed, but it must likewise
-import the protocol before timing and use a threshold no smaller than 5%.
-Cross-GPU calibration remains separate future work.
+Lane-E timing revalidation is now complete: it prospectively imported Lane L's
+heavy-boundary protocol and used the stricter 20% floor appropriate to that
+boundary. Cross-GPU calibration remains separate future work.
