@@ -104,11 +104,14 @@ inserted into the recurring timing boundary.
 Execution freeze:
 `experiments/003-l001-execution-freeze.json`
 
-Implementation checkpoint:
+Harness checkpoint:
 `55a3f7dca308427206cc16691fc0b6f7c5b63293`
 
-Freeze ref update:
-`69641eddce3946b674701ac6cd8e304c4c5b9443`
+Final pre-target plan/config cleanup:
+`6b222595ef94d5de85fc854f384cfda16a6331dd`
+
+Current execution-freeze update:
+`9bcd74ae67cded57aff5cafbf9dbb03bfa4c0fa1`
 
 Key blobs after hardening:
 
