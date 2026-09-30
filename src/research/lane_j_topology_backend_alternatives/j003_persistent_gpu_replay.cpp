@@ -6,6 +6,7 @@
 #include "vk_context.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -322,6 +323,26 @@ int main(int argc, char** argv) {
                  ++mismatch_index) {
                 const auto& mismatch =
                     validation.mismatches[mismatch_index];
+                const auto* expected_triangle =
+                    find_triangle(
+                        triangles,
+                        mismatch.expected.primitive_id);
+                const auto* actual_triangle =
+                    find_triangle(
+                        triangles,
+                        mismatch.actual.ids[0]);
+                const auto expected_single =
+                    expected_triangle != nullptr
+                        ? lane_j::trace_reference_triangle(
+                              *expected_triangle,
+                              mismatch.ray)
+                        : lane_j::Hit{};
+                const auto actual_single =
+                    actual_triangle != nullptr
+                        ? lane_j::trace_reference_triangle(
+                              *actual_triangle,
+                              mismatch.ray)
+                        : lane_j::Hit{};
                 if (mismatch_index != 0U) {
                     json << ",";
                 }
