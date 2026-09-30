@@ -4,9 +4,9 @@
   "issue": 24,
   "status": "frozen-before-target-execution",
   "formal_timing_started": false,
-  "source_freeze_parent_commit": "55a3f7dca308427206cc16691fc0b6f7c5b63293",
+  "source_freeze_parent_commit": "6b222595ef94d5de85fc854f384cfda16a6331dd",
   "frozen_inputs": {
-    "plan_blob": "55e7b1f1617ab69f78acd0a969f5a59d2ba146e2",
+    "plan_blob": "f2378222c5c46abacb98857640641b0c2e368ade",
     "config_blob": "f3ec006e1e4c0b236463289af73b5405fdc4d5d3",
     "j004_config_blob": "22951382f8a510bf176c7a427a12d7a2ae24e5d9",
     "j002_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19"
@@ -112,5 +112,10 @@
     "l001-host-observations.json",
     "l001-devices.json",
     "l001-summary.json"
+  ],
+  "pre_target_amendments": [
+    "counterbalance dual-context and single-context-independent-runtime fresh-process position 4/4 per environment before any target timing",
+    "retain timed memory as diagnostic-only because single-context shares context-level allocation counters; use paired validation lifetime evidence instead",
+    "reuse J004 v7 runtime/source-tree verification rather than copying or weakening B001 tie semantics"
   ]
 }
