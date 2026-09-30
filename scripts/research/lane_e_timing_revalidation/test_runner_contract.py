@@ -7,6 +7,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 RUNNER = ROOT / "scripts/research/lane_e_timing_revalidation/run_e001.py"
 CONFIG = ROOT / "research/lanes/lane-e-timing-revalidation/experiments/002-e001-config.json"
+PROCESS = ROOT / "src/research/lane_e_timing_revalidation/e001_process.cpp"
 
 
 class RunnerContractTests(unittest.TestCase):
@@ -41,6 +42,14 @@ class RunnerContractTests(unittest.TestCase):
         self.assertEqual(config["timing"]["measured_pairs"], 12)
         self.assertEqual(config["timing"]["complete_transitions_per_sample"], 16)
         self.assertIn("len(raw_rows) != 5120", source)
+
+    def test_validation_timestamp_uses_exact_provenance_precision(self) -> None:
+        source = PROCESS.read_text(encoding="utf-8")
+        validation = source[source.index("void write_validation_row"):source.index("int run_validation")]
+        self.assertIn(
+            "std::setprecision(17) << runtime.timestamp_period_ns()",
+            validation,
+        )
 
     def test_allocation_lifetime_is_a_hard_gate(self) -> None:
         source = RUNNER.read_text(encoding="utf-8")
