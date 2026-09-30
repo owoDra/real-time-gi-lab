@@ -1,6 +1,6 @@
 # E001 — Lane E timing revalidation gate
 
-Status: **v3 frozen before any target candidate timing**
+Status: **v4 frozen before any target candidate timing**
 
 This prospective gate revalidates the already accepted Lane E object-local ownership/update architecture; it does not redesign it.
 
@@ -109,5 +109,9 @@ rerun.
 - v3: fixed pre-target compile and allocation-lifetime evidence defects found by
   self-review. No workload, control, threshold, 20% floor, sample shape,
   environment, decision rule, or rerun policy changed.
+- v4: aligned the memory-classification implementation with the already frozen
+  rule that persistent and true peak must both be non-worse for `improvement`.
+  The workload, control, 20% floor, timing decision rule, sample shape,
+  environment, and rerun policy are unchanged.
 
-No accepted target timing existed before v3.
+No accepted target timing existed before v4.
