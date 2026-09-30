@@ -230,6 +230,12 @@ def main() -> int:
         raise RuntimeError("K002 primary axis must remain GPU timestamp")
     if config["axis_roles"]["cpu_wall"] != "diagnostic-health-provenance-only":
         raise RuntimeError("K002 CPU wall role changed")
+    if config["sample_exclusion"] != "forbidden":
+        raise RuntimeError("K002 sample-exclusion policy changed")
+    if config["host_observations"] != "diagnostic-only":
+        raise RuntimeError("K002 host-observation role changed")
+    if bool(config["diagnostic_individual"]["enabled"]):
+        raise RuntimeError("K003 individual diagnostic campaign must remain disabled")
 
     executable = args.build_dir / "phos-lane-k-k001"
     if not executable.is_file():
@@ -293,31 +299,6 @@ def main() -> int:
                 progress["completed_processes"].append(obs["process_id"])
                 save_progress()
 
-        diagnostic = config["diagnostic_individual"]
-        if diagnostic["enabled"]:
-            diag_comparisons = diagnostic["comparisons"]
-            for block in range(int(diagnostic["fresh_process_blocks"])):
-                order = diag_comparisons if block % 2 == 0 else list(reversed(diag_comparisons))
-                for slot, comparison in enumerate(order):
-                    progress["current"] = {
-                        "suite": "individual-diagnostic",
-                        "block": block,
-                        "slot": slot,
-                        "comparison": comparison,
-                    }
-                    save_progress()
-                    rows, obs, device = run_process(
-                        executable, root, config, "individual-diagnostic",
-                        comparison, comparisons[comparison], block, slot,
-                        int(config["workload"]["diagnostic_individual_dispatches"]),
-                        int(diagnostic["warmup_pairs"]),
-                        int(diagnostic["measured_pairs"])
-                    )
-                    all_rows.extend(rows)
-                    observations.append(obs)
-                    devices.append(device)
-                    progress["completed_processes"].append(obs["process_id"])
-                    save_progress()
     except BaseException:
         progress["state"] = "invalid-or-interrupted"
         save_progress()
@@ -336,28 +317,6 @@ def main() -> int:
         if str(row["process_id"]).startswith("accepted-")
     ]
     accepted_summary = analysis.summarize_k003(accepted_process_rows, config)
-
-    diagnostic_process_rows = [
-        row for row in process_rows
-        if str(row["process_id"]).startswith("individual-diagnostic-")
-    ]
-    diagnostic_by_comparison: dict[str, list[dict[str, object]]] = defaultdict(list)
-    for row in diagnostic_process_rows:
-        diagnostic_by_comparison[str(row["comparison"])].append(row)
-    diagnostic_summary: dict[str, object] = {"decision_use": "diagnostic-only", "axes": {}}
-    if diagnostic_process_rows:
-        for axis in ("gpu", "wall"):
-            criteria = config["repeatability_criteria"][axis]
-            control = analysis.evaluate_control(
-                diagnostic_by_comparison["control"], axis, criteria
-            )
-            plus20 = analysis.evaluate_candidate(
-                diagnostic_by_comparison["plus20"], axis, criteria, control
-            )
-            diagnostic_summary["axes"][axis] = {
-                "control": control,
-                "plus20": plus20,
-            }
 
     write_csv(root / "k003-raw.csv", all_rows)
     write_csv(
@@ -383,10 +342,6 @@ def main() -> int:
         "device_provenance_consistent": True,
         "axis_roles": config["axis_roles"],
         "accepted": accepted_summary,
-        "individual_diagnostic": diagnostic_summary,
-        "individual_diagnostic_processes": [
-            flatten_process(row) for row in diagnostic_process_rows
-        ],
     }
     (root / "k003-summary.json").write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"

@@ -113,7 +113,7 @@ def main() -> int:
     if git("status", "--porcelain"):
         raise RuntimeError("K001 requires a clean worktree")
 
-    executable = args.build_dir / "phos-lane-i-k001"
+    executable = args.build_dir / "phos-lane-k-k001"
     if not executable.is_file():
         raise RuntimeError(f"missing executable: {executable}")
 
