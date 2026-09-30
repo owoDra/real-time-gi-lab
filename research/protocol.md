@@ -177,18 +177,54 @@ known work deltas. Under that exact protocol:
 - I004 classifies the tested target timing protocol as **target timing
   unsuitable**.
 
-The demonstrated 5% GPU-timestamp resolution is mechanism evidence, not an
-accepted architecture-ranking protocol.
+The demonstrated Lane-I 5% GPU-timestamp resolution remains mechanism evidence
+for that historical dual-axis campaign. It must not be retroactively reclassified
+by changing CPU-wall semantics after observing the result.
 
-A later methodology may explicitly define GPU timestamp as the primary
-performance boundary and complete CPU wall as diagnostic-only, but that role
-split must be declared and frozen **before** a new architecture-neutral
-known-delta calibration campaign. Lane I's accepted artifact must not be
-reinterpreted post hoc to satisfy that new contract.
+### Post-Lane-K accepted GPU-primary protocol
 
-Until such a follow-up calibration passes, formal architecture-performance
-promotion remains blocked on this target. Structural, correctness, and memory
-research may continue independently.
+Lane K prospectively froze the new role split before new target timing and
+completed a fresh architecture-neutral calibration. K004 accepts
+`lane-k-k002-v1` on AMD Radeon 8060S Graphics (RADV STRIX_HALO) with a
+demonstrated **5% minimum effect size**.
+
+The reusable protocol contract is:
+
+- GPU timestamp is the sole primary performance decision axis;
+- complete CPU wall is diagnostic / health / provenance only;
+- 8192 calibration elements and 16 accepted batch dispatches;
+- 4 warmup pairs and 12 measured pairs per process;
+- 8 fresh-process blocks;
+- paired AB/BA sampling with position-counterbalanced comparison order;
+- 1 second settle before each process;
+- primary statistic: fresh-process median of paired `log(B/A)`;
+- control max absolute process-median ratio <= 1.02;
+- control process-median span <= 1.03;
+- control max within-process order-bias ratio <= 1.02;
+- candidate process-effect span <= 1.05;
+- candidate max within-process order-bias ratio <= 1.03;
+- candidate minimum positive-pair fraction >= 0.75;
+- candidate minimum process effect must exceed the accepted control noise
+  envelope;
+- all raw samples retained;
+- sample exclusion forbidden;
+- instability rerun budget = 0;
+- completed-campaign rerun budget = 0;
+- consistent device/driver/API/timestamp provenance required.
+
+CPU-wall repeatability annotations do not veto the primary GPU decision.
+CPU wall invalidates a campaign only for the structural failures frozen in K002:
+non-positive/non-finite timings, incomplete pair structure, complete wall smaller
+than GPU timestamp, inconsistent device provenance, or process failure.
+
+A downstream architecture campaign may reuse Lane K only if it imports this
+protocol **before** its first accepted candidate timing and freezes a promotion
+threshold no smaller than 5%. Historical architecture timing remains diagnostic;
+new same-run comparator evidence is required.
+
+If a different GPU, driver/environment, workload boundary, smaller effect size,
+or materially changed timing method is needed, calibrate that new method
+architecture-neutrally before promotion.
 
 ### GPU safety constraint
 
