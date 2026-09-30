@@ -695,6 +695,12 @@ def main() -> int:
         progress["state"] = "complete"
         progress.pop("current", None)
         save_progress()
+
+        required = [str(name) for name in config["artifact_schema"]["required"]]
+        missing = [name for name in required if not (root / name).is_file()]
+        if missing:
+            raise RuntimeError(f"E001 required artifacts missing: {missing}")
+
         print("GPU:", provenance["device_name"])
         print(f"E001 artifacts: {root}")
         print(json.dumps(decisions, indent=2, sort_keys=True))
