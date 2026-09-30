@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "experiment": "L001",
+  "measurement_commit": "a542ea4f2cd8219b76f069f552435b492e163b9c",
+  "artifact_directory": "out/research/lane-l-heavy-boundary-calibration/001-heavy-boundary-same-variant-calibration/20260930T134952Z",
+  "campaign": {
+    "validation_rows": 20,
+    "timing_processes": 160,
+    "raw_rows": 5120,
+    "all_samples_retained": true,
+    "sample_exclusion": "none",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0,
+    "return_code": 0
+  },
+  "files": {
+    "l001-summary.json": {
+      "sha256": "871e661fcb0bd3d87a8984c243da18fc506f548a4e19c372e96152f4e9172963",
+      "size_bytes": 37462
+    },
+    "l001-progress.json": {
+      "sha256": "ca5c3c7eccb480c4c2bc420d02a750446ca4ebaa830847dd874cb7c5d0842381",
+      "size_bytes": 11536
+    },
+    "l001-raw.csv": {
+      "sha256": "101a27ad3b6d26ab523f792aeb0847114df1824a8da9c06c4932b76b26ccbfbc",
+      "size_bytes": 2117721,
+      "rows": 5120,
+      "repository_copy": false
+    },
+    "l001-process-summary.csv": {
+      "sha256": "263ab8408ccd6f08613ddcba034c4ceb45bdce6a5c01ed0ed67615ed8bf49427",
+      "size_bytes": 86917
+    },
+    "l001-validation-summary.csv": {
+      "sha256": "bb619ad7c7cb777fd33564eaab8d27c961e84a8864475bbe17116a24c2789377",
+      "size_bytes": 3080
+    },
+    "l001-source-provenance.json": {
+      "sha256": "faa713e805dd83c9a1121d8e114d97b92fd97a0abdef22097cb1a4fb0892f11b",
+      "size_bytes": 1410
+    },
+    "metadata.json": {
+      "sha256": "3af85b74946c029c012643d5d54d91d48faa1ab7881fa461bb0cc0e97e1f335c",
+      "size_bytes": 919
+    }
+  }
+}
