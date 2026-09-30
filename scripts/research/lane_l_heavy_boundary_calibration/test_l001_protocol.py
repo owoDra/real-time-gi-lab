@@ -50,6 +50,20 @@ class L001ProtocolTests(unittest.TestCase):
         self.assertFalse(boundary["future_snapshot_prebuild"])
         self.assertFalse(boundary["recurrent_work_moved_to_setup"])
 
+    def test_environment_order_is_counterbalanced(self) -> None:
+        orders = self.cfg["timing"]["environment_order_by_block"]
+        expected = {
+            "dual-context",
+            "single-context-independent-runtime",
+        }
+        self.assertEqual(len(orders), 8)
+        first_counts = {name: 0 for name in expected}
+        for order in orders:
+            self.assertEqual(set(order), expected)
+            self.assertEqual(len(order), 2)
+            first_counts[order[0]] += 1
+        self.assertEqual(set(first_counts.values()), {4})
+
     def test_control_gate_is_unchanged(self) -> None:
         gate = self.cfg["gpu_control_health"]
         self.assertEqual(
