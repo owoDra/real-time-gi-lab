@@ -43,6 +43,13 @@
       "status": "implementation-ready-evidence-pending",
       "evidence_class": "persistent-cluster-state-implementation",
       "decision": "require exact canonical Python/C++ structural parity before persistent GPU transition updates"
+    },
+    {
+      "id": "J003-transition-parity",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/007-transition-parity-pass.md",
+      "status": "pass",
+      "evidence_class": "canonical-python-cpp-structural-parity",
+      "decision": "promote transition state to persistent GPU slot implementation"
     }
   ]
 }
