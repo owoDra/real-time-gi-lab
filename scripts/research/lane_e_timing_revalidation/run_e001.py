@@ -137,6 +137,8 @@ def command_for(
 ) -> list[str]:
     timing = config["timing"]
     command = [
+        "bash",
+        str(ROOT / "scripts/run_with_vulkan.sh"),
         str(executable),
         "--scene",
         str(scene),
@@ -391,16 +393,39 @@ def main() -> int:
                 + ", ".join(str(path.relative_to(ROOT)) for path in completed)
             )
         incomplete = []
+        invalid = []
         for path in formal_root.glob("*/e001-progress.json"):
             if path.parent == root:
                 continue
             payload = json.loads(path.read_text(encoding="utf-8"))
-            if payload.get("state") not in {"complete"}:
-                incomplete.append(path.parent)
+            state = str(payload.get("state"))
+            if state in {"validation-complete", "validation-failed"}:
+                # These artifacts contain no accepted timing evidence.
+                continue
+            if state == "campaign-invalid-no-rerun":
+                invalid.append(path.parent)
+                continue
+            if state != "complete":
+                timing_rows = []
+                for csv_path in path.parent.glob("timing/*.csv"):
+                    if csv_path.stat().st_size > 0:
+                        timing_rows.extend(read_csv(csv_path))
+                if any(row.get("phase") == "measured" for row in timing_rows):
+                    invalid.append(path.parent)
+                elif payload.get("git_commit") == git("rev-parse", "HEAD"):
+                    incomplete.append(path.parent)
+                # A pre-measured interrupted artifact from an older source
+                # commit may be superseded only by the new prospective freeze.
+        if invalid:
+            raise RuntimeError(
+                "E001 contains measured rows from an invalid interrupted campaign; "
+                "zero-rerun policy forbids a new campaign: "
+                + ", ".join(str(path.relative_to(ROOT)) for path in invalid)
+            )
         if incomplete and not args.resume_root:
             raise RuntimeError(
-                "E001 has an interrupted campaign; resume exactly that artifact root "
-                "with --resume-root instead of starting fresh: "
+                "E001 has an interrupted same-source campaign; resume exactly that "
+                "artifact root with --resume-root instead of starting fresh: "
                 + ", ".join(str(path.relative_to(ROOT)) for path in incomplete)
             )
 
