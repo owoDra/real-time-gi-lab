@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "plan_version": "lane-e-timing-revalidation-e001-v2",
+  "plan_version": "lane-e-timing-revalidation-e001-v3",
   "issue": 22,
   "branch": "research-lane-e-timing-revalidation",
   "base_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
@@ -257,5 +257,19 @@
       "e001-process-summary.csv",
       "e001-summary.json"
     ]
-  }
+  },
+  "refreeze_history": [
+    {
+      "version": "v1",
+      "reason": "initial prospective freeze before implementation"
+    },
+    {
+      "version": "v2",
+      "reason": "added predeclared 4/4 control-candidate process-position counterbalance before target timing"
+    },
+    {
+      "version": "v3",
+      "reason": "pre-target compile/lifetime-accounting defect fixes only; no threshold, workload, control, sample-shape, or decision-rule change"
+    }
+  ]
 }
