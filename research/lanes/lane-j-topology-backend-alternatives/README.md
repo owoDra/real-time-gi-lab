@@ -48,3 +48,8 @@ No production candidate implementation belongs in this first session.
   This preserves the frozen B001 Hit/tie semantics while preventing broad-phase
   AABB traversal from dropping candidates that are still eligible inside the
   exact tie window.
+
+
+- `experiments/plan-v1.5-amendment.md`: robust per-axis fp32 slab far-bound
+  expansion. This follows the unchanged v1.4 failure and addresses slab
+  interval roundoff rather than only the caller traversal limit.
