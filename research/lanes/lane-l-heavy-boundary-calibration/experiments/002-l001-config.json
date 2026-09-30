@@ -150,40 +150,6 @@
         "dual-context",
         "single-context-independent-runtime"
       ]
-    ],
-    "environment_orders_by_block": [
-      [
-        "dual-context",
-        "single-context-independent-runtime"
-      ],
-      [
-        "single-context-independent-runtime",
-        "dual-context"
-      ],
-      [
-        "dual-context",
-        "single-context-independent-runtime"
-      ],
-      [
-        "single-context-independent-runtime",
-        "dual-context"
-      ],
-      [
-        "single-context-independent-runtime",
-        "dual-context"
-      ],
-      [
-        "dual-context",
-        "single-context-independent-runtime"
-      ],
-      [
-        "single-context-independent-runtime",
-        "dual-context"
-      ],
-      [
-        "dual-context",
-        "single-context-independent-runtime"
-      ]
     ]
   },
   "gpu_control_health": {
