@@ -575,6 +575,7 @@ def main() -> int:
                 ("software", "candidate"),
                 ("software", "accounting"),
             ]
+            profile_resolved_digests: list[int] = []
             for track, variant in validation_matrix:
                 progress["current"] = {
                     "phase": "validation",
@@ -601,11 +602,20 @@ def main() -> int:
                         **validation,
                     }
                 )
+                profile_resolved_digests.append(
+                    int(validation["resolved_digest"])
+                )
                 devices.append(device)
                 progress["completed_validations"].append(
                     f"{profile}/{track}/{variant}"
                 )
                 save_progress()
+
+            if len(set(profile_resolved_digests)) != 1:
+                raise RuntimeError(
+                    f"J004 {profile}: C001 resolved-output digest differs "
+                    "between same-workload variants; formal timing forbidden"
+                )
 
         if not same_device(devices):
             raise RuntimeError(
