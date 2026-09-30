@@ -52,7 +52,7 @@ class AnalysisTests(unittest.TestCase):
             for block in range(8)
         ]
         result = classify_performance(candidates, control_envelope(controls))
-        self.assertEqual(result["classification"], "detected >=20% improvement")
+        self.assertEqual(result["classification"], ">=20% detected improvement")
 
     def test_sub_twenty_percent_is_measurement_limited(self) -> None:
         controls = [
@@ -85,6 +85,7 @@ class AnalysisTests(unittest.TestCase):
                         "persistent_bytes": persistent,
                         "true_peak_bytes": peak,
                         "old_new_overlap_bytes": 0,
+                        "allocation_lifetime_complete": 1,
                     })
         result = classify_memory(rows)
         self.assertEqual(result["classification"], "regression")
