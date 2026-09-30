@@ -213,6 +213,20 @@ def validate_rows(rows: list[dict[str, object]]) -> None:
         for key in ["workload_digest", "resolved_output_digest", "geometry_input_digest"]:
             if a[key] != b[key]:
                 raise RuntimeError(f"{state} validation digest mismatch for {key}")
+        for row in state_rows:
+            allocated = int(row["allocation_count"])
+            freed = int(row["free_count"])
+            live = int(row["live_allocations"])
+            current = int(row["current_bytes"])
+            peak = int(row["peak_bytes"])
+            if allocated < freed or allocated - freed != live:
+                raise RuntimeError(
+                    f"{state} allocation lifetime count accounting is incomplete"
+                )
+            if current <= 0 or peak < current:
+                raise RuntimeError(
+                    f"{state} allocation byte accounting is invalid"
+                )
         for key in [
             "device_name",
             "driver_name",
