@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "plan_version": "lane-j-j004-formal-v1",
+  "plan_version": "lane-j-j004-formal-v2",
   "issue": 23,
   "gate_commit": "fc354b42ac3d526f879174740cf6c07ccd5dc648",
   "memory_preflight_decision_commit": "79505446ffabc013fe136b58f0d6c64990f4f563",
@@ -15,29 +15,36 @@
     "producer_contract": "A001-schema-v1-natural-append",
     "hit_contract": "B001-exact-hit-v1",
     "storage_contract": "C001-per-probe-sparse-hash",
-    "validation_ray_prefix_count": 4096,
+    "validation_ray_prefix_count": 0,
     "profiles": [
       {
         "name": "small-global-high",
-        "locality": "global"
+        "locality": "global",
+        "expected_topology_digest": "45819e4759e2cbe2ff90b617043a8baa5ed3242c5b648e447b43ef21853309c5"
       },
       {
         "name": "medium-global-representative",
-        "locality": "global"
+        "locality": "global",
+        "expected_topology_digest": "3c7de01e9628d46d0b516dc0e3b7edd5a66f7e47c23e7cec8a89b4ca9a3cc358"
       },
       {
         "name": "medium-local-high",
-        "locality": "local"
+        "locality": "local",
+        "expected_topology_digest": "b0e58dc496f5c8d5efb1e5ab549bd310e51f26fd5e5d65a4bd5cecdb712407bb"
       },
       {
         "name": "large-global-high",
-        "locality": "global"
+        "locality": "global",
+        "expected_topology_digest": "8d1473fb238de7f6281710eb4a493d6e558ec68339a090dc7b1fa15f1c782c87"
       },
       {
         "name": "large-local-high",
-        "locality": "local"
+        "locality": "local",
+        "expected_topology_digest": "042896ddfc2ff2b928bf7ed9792c851f28803c24cb760a826e3495e0ebdfa69e"
       }
-    ]
+    ],
+    "validation_ray_rule": "all accepted A001 replay rays; zero means all and a finite prefix is forbidden for accepted validation",
+    "frozen_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19"
   },
   "sources": {
     "lane_a_accepted_stream_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
@@ -122,6 +129,84 @@
         "candidate",
         "accounting"
       ]
+    },
+    "comparison_orders": {
+      "primary": [
+        [
+          "control",
+          "candidate"
+        ],
+        [
+          "candidate",
+          "control"
+        ],
+        [
+          "control",
+          "candidate"
+        ],
+        [
+          "candidate",
+          "control"
+        ],
+        [
+          "control",
+          "candidate"
+        ],
+        [
+          "candidate",
+          "control"
+        ],
+        [
+          "control",
+          "candidate"
+        ],
+        [
+          "candidate",
+          "control"
+        ]
+      ],
+      "software": [
+        [
+          "control",
+          "candidate",
+          "accounting"
+        ],
+        [
+          "candidate",
+          "control",
+          "accounting"
+        ],
+        [
+          "control",
+          "candidate",
+          "accounting"
+        ],
+        [
+          "candidate",
+          "control",
+          "accounting"
+        ],
+        [
+          "control",
+          "candidate",
+          "accounting"
+        ],
+        [
+          "candidate",
+          "control",
+          "accounting"
+        ],
+        [
+          "control",
+          "candidate",
+          "accounting"
+        ],
+        [
+          "candidate",
+          "control",
+          "accounting"
+        ]
+      ]
     }
   },
   "gpu_primary_criteria": {
@@ -148,5 +233,23 @@
       ]
     },
     "rule": "retain a backend for a class only when every profile in the class passes promotion/repeatability and no exercised profile in the other class regresses by >5%; no post-hoc size/dirty threshold"
-  }
+  },
+  "cpu_wall_health": {
+    "decision_use": "diagnostic-health-provenance-only",
+    "invalidates_gpu_decision": false,
+    "annotation_criteria": {
+      "control_max_abs_process_median_ratio": 1.03,
+      "control_process_median_span_ratio": 1.05,
+      "control_max_within_process_order_bias_ratio": 1.03,
+      "candidate_process_effect_span_ratio": 1.08,
+      "candidate_max_within_process_order_bias_ratio": 1.05,
+      "candidate_min_improving_pair_fraction": 0.75
+    }
+  },
+  "pre_timing_corrections": [
+    "accepted validation checks every frozen A001 replay ray rather than a diagnostic prefix",
+    "runner verifies every J002 snapshot primitive count and SHA-256 geometry digest against the materialized manifest and frozen topology digest",
+    "control/candidate process positions are counterbalanced by frozen block order before timing",
+    "CPU-wall annotation thresholds are explicit and remain diagnostic-only"
+  ]
 }
