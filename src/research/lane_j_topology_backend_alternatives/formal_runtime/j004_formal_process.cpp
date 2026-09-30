@@ -1019,18 +1019,20 @@ private:
                     sizeof(float),
                 storage);
 
-        storage_capacity_ =
-            static_cast<std::uint32_t>(
-                next_power_of_two(
-                    std::max<std::size_t>(
-                        2U,
-                        std::size_t(
-                            producer_.header.output_count) *
-                            2U)));
-        if (storage_capacity_ >
+        const auto storage_capacity =
+            next_power_of_two(
+                std::max<std::size_t>(
+                    2U,
+                    std::size_t(
+                        producer_.header.output_count) *
+                        2U));
+        if (storage_capacity >
             (std::numeric_limits<std::uint32_t>::max)()) {
             fail("J004 storage capacity exceeds uint32");
         }
+        storage_capacity_ =
+            static_cast<std::uint32_t>(
+                storage_capacity);
 
         struct Slot {
             std::int32_t key[4]{};
