@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
+#include <iomanip>
 #include <iostream>
 #include <limits>
 #include <span>
@@ -91,6 +92,18 @@ struct ValidationSummary {
     std::uint64_t triangle_tests{};
     std::vector<MismatchDetail> mismatches;
 };
+
+[[nodiscard]] const lane_j::Triangle* find_triangle(
+    std::span<const lane_j::Triangle> triangles,
+    std::uint32_t primitive_id) {
+    const auto found = std::find_if(
+        triangles.begin(),
+        triangles.end(),
+        [&](const lane_j::Triangle& triangle) {
+            return triangle.primitive_id == primitive_id;
+        });
+    return found == triangles.end() ? nullptr : &*found;
+}
 
 [[nodiscard]] ValidationSummary validate_hits(
     std::span<const lane_j::Ray> rays,
@@ -192,7 +205,35 @@ int main(int argc, char** argv) {
             for (const auto& mismatch : validation.mismatches) {
                 const auto& expected_hit = mismatch.expected;
                 const auto& actual_hit = mismatch.actual;
-                std::cerr
+                const auto* expected_triangle =
+                    find_triangle(triangles, expected_hit.primitive_id);
+                const auto* actual_triangle =
+                    find_triangle(triangles, actual_hit.ids[0]);
+                const auto expected_single =
+                    expected_triangle != nullptr
+                        ? lane_j::trace_reference_triangle(
+                              *expected_triangle,
+                              mismatch.ray)
+                        : lane_j::Hit{};
+                const auto actual_single =
+                    actual_triangle != nullptr
+                        ? lane_j::trace_reference_triangle(
+                              *actual_triangle,
+                              mismatch.ray)
+                        : lane_j::Hit{};
+                const auto reference_tolerance =
+                    expected_single.hit && actual_single.hit
+                        ? std::max(
+                              lane_j::kHitAbsTol,
+                              std::abs(actual_single.t) *
+                                  lane_j::kHitRelTol)
+                        : 0.0F;
+                const auto reference_delta =
+                    expected_single.hit && actual_single.hit
+                        ? expected_single.t - actual_single.t
+                        : std::numeric_limits<float>::quiet_NaN();
+
+                std::cerr << std::setprecision(9)
                     << "J003 mismatch step=" << step
                     << " ray=" << mismatch.ray_index
                     << " origin=("
@@ -227,6 +268,19 @@ int main(int argc, char** argv) {
                     << actual_hit.stats[1] << ","
                     << actual_hit.stats[2] << ")"
                     << " runtime_error=" << actual_hit.stats[3]
+                    << " expected_single_hit="
+                    << (expected_single.hit ? 1 : 0)
+                    << " expected_single_t=" << expected_single.t
+                    << " actual_single_hit="
+                    << (actual_single.hit ? 1 : 0)
+                    << " actual_single_t=" << actual_single.t
+                    << " reference_delta=" << reference_delta
+                    << " reference_tolerance=" << reference_tolerance
+                    << " reference_tie_window="
+                    << ((expected_single.hit && actual_single.hit &&
+                         std::abs(reference_delta) <= reference_tolerance)
+                            ? 1
+                            : 0)
                     << "\n";
             }
 
@@ -317,7 +371,42 @@ int main(int argc, char** argv) {
                      << mismatch.actual.stats[1]
                      << ",\"actual_triangle_tests\":"
                      << mismatch.actual.stats[2]
-                     << "}";
+                     << ",\"expected_single_hit\":"
+                     << (expected_single.hit ? "true" : "false")
+                     << ",\"expected_single_t\":";
+                if (expected_single.hit) {
+                    json << std::setprecision(9) << expected_single.t;
+                } else {
+                    json << "null";
+                }
+                json << ",\"actual_single_hit\":"
+                     << (actual_single.hit ? "true" : "false")
+                     << ",\"actual_single_t\":";
+                if (actual_single.hit) {
+                    json << std::setprecision(9) << actual_single.t;
+                } else {
+                    json << "null";
+                }
+                if (expected_single.hit && actual_single.hit) {
+                    const auto delta =
+                        expected_single.t - actual_single.t;
+                    const auto tolerance =
+                        std::max(
+                            lane_j::kHitAbsTol,
+                            std::abs(actual_single.t) *
+                                lane_j::kHitRelTol);
+                    json << ",\"reference_delta\":" << delta
+                         << ",\"reference_tolerance\":" << tolerance
+                         << ",\"reference_tie_window\":"
+                         << (std::abs(delta) <= tolerance
+                                 ? "true"
+                                 : "false");
+                } else {
+                    json << ",\"reference_delta\":null"
+                         << ",\"reference_tolerance\":null"
+                         << ",\"reference_tie_window\":false";
+                }
+                json << "}";
             }
             json << "]}";
         }
