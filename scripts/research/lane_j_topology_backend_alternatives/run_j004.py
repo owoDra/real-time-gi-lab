@@ -43,6 +43,14 @@ EXPECTED_F003_BLOBS = {
     "f003_lbvh_builder.comp.glsl": "77db184be5fcee72fa6c4f5cf40cadf487dcedd4",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "f003_dynamic_traversal.comp.glsl": "56c7e80d345cf890d0b73b16edb740c874ac8dff",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/b002_hwrt.cpp": "91456326f9d946aedec46ff479f5d68600ed14a2",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/b002_hwrt.hpp": "a00fbfbfd5b9b2fd3c36cd2ceed49c14d2c9f71c",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/b003_quantized_bvh8.hpp": "03ffe09f050f218cd18ffd6a22dfcfa5492000ed",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/b003_micro_bvh8.hpp": "4ff5a5ee799c112e0f5542ac24645b1a0faabe96",
 }
 
 
