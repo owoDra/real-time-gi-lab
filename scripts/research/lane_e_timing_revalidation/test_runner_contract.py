@@ -20,6 +20,12 @@ class RunnerContractTests(unittest.TestCase):
         self.assertIn('row.get("phase") == "measured"', source)
         self.assertIn("cannot be rerun", source)
 
+    def test_completed_child_is_recovered_without_rerun(self) -> None:
+        source = RUNNER.read_text(encoding="utf-8")
+        self.assertIn("recovered_complete = False", source)
+        self.assertIn("health_check_timing_rows(partial_rows)", source)
+        self.assertIn("do not\n                                    # rerun a completed process", source)
+
     def test_resume_is_source_commit_pinned(self) -> None:
         source = RUNNER.read_text(encoding="utf-8")
         self.assertIn(
