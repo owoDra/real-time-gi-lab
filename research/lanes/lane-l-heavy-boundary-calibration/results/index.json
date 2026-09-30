@@ -5,9 +5,23 @@
     {
       "id": "L001-pretarget-freeze",
       "path": "research/lanes/lane-l-heavy-boundary-calibration/results/001-l001-pretarget-freeze.md",
-      "status": "ready-target-execution",
+      "status": "complete",
       "evidence_class": "pre-target-measurement-environment-freeze",
-      "decision": "dual-context and single-context-independent-runtime same-variant heavy-boundary calibration frozen; no architecture ranking; target GPU execution required"
+      "decision": "L001 dual-context and single-context-independent-runtime calibration frozen before target execution"
+    },
+    {
+      "id": "L001-target-result",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/002-l001-target-result.md",
+      "status": "complete",
+      "evidence_class": "target-heavy-boundary-measurement-environment-calibration",
+      "decision": "measurement-limited; both environments fail all required same-variant GPU control gates; L002 required"
+    },
+    {
+      "id": "L002-pretarget-freeze",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/004-l002-pretarget-freeze.md",
+      "status": "ready-target-execution",
+      "evidence_class": "pre-target-detectable-effect-floor-freeze",
+      "decision": "fresh heavy-boundary +20/+10/+5 analysis-only multiplicative detection campaign frozen; no architecture ranking"
     }
   ]
 }
