@@ -1,12 +1,12 @@
 # H002 — same-boundary object-local topology comparator
 
-Status: **GPU-independent contract preparation**
+Status: **GPU-independent contract/harness complete; GPU backend implementation pending**
 
 H002 does not choose a winner. It creates the minimum Lane-H-owned comparator
 contract required for a later H003 same-boundary timing campaign.
 
 The machine-readable source of truth is
-`002-same-boundary-topology-comparator-config.json`.
+`002-same-boundary-topology-comparator-config.json`. `h002_contract.py` owns deterministic workload and lifetime-accounting rules; `run_h002_prepare.py` emits the canonical manifest and validates future candidate evidence before timing can be considered.
 
 ## Frozen workload identity
 
