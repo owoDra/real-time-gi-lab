@@ -227,6 +227,9 @@ def same_device(devices: list[dict[str, object]]) -> bool:
         "driver_name",
         "driver_info",
         "api_version",
+        "driver_version",
+        "vendor_id",
+        "device_id",
         "timestamp_period_ns",
     )
     first = devices[0]
