@@ -232,11 +232,6 @@ static_assert(sizeof(InvalidationPush) == 16);
     return value == I001Variant::RigidInstanceSoftwareBinary;
 }
 
-[[nodiscard]] bool uses_rigid_instance_software_quantized(
-    I001Variant value) noexcept {
-    return value == I001Variant::RigidInstanceSoftwareQuantized;
-}
-
 [[nodiscard]] bool uses_deforming_local_hwrt(
     I001Variant value) noexcept {
     return value == I001Variant::DeformingLocalHwrt;
