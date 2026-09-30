@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-k-k002-v1",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "accepted_timing_validation": false,
+  "axis_roles": {
+    "primary_performance": "gpu_timestamp",
+    "cpu_wall": "diagnostic-health-provenance-only"
+  },
+  "workload": {
+    "elements": 8192,
+    "baseline_iterations": 200,
+    "variant_iterations": {
+      "baseline": 200,
+      "plus5": 210,
+      "plus10": 220,
+      "plus20": 240
+    },
+    "accepted_batch_dispatches": 16,
+    "diagnostic_individual_dispatches": 1
+  },
+  "warmup_pairs": 4,
+  "measured_pairs": 12,
+  "fresh_process_blocks": 8,
+  "settle_seconds": 1.0,
+  "instability_rerun_budget": 0,
+  "completed_campaign_rerun_budget": 0,
+  "comparisons": {
+    "control": "baseline",
+    "plus20": "plus20",
+    "plus10": "plus10",
+    "plus5": "plus5"
+  },
+  "comparison_orders": [
+    ["control", "plus20", "plus10", "plus5"],
+    ["plus20", "plus10", "plus5", "control"],
+    ["plus10", "plus5", "control", "plus20"],
+    ["plus5", "control", "plus20", "plus10"],
+    ["plus5", "plus10", "plus20", "control"],
+    ["control", "plus5", "plus10", "plus20"],
+    ["plus20", "control", "plus5", "plus10"],
+    ["plus10", "plus20", "control", "plus5"]
+  ],
+  "gpu_primary_criteria": {
+    "control_max_abs_process_median_ratio": 1.02,
+    "control_process_median_span_ratio": 1.03,
+    "control_max_within_process_order_bias_ratio": 1.02,
+    "candidate_process_effect_span_ratio": 1.05,
+    "candidate_max_within_process_order_bias_ratio": 1.03,
+    "candidate_min_positive_pair_fraction": 0.75
+  },
+  "contiguous_resolution_order": ["plus20", "plus10", "plus5"],
+  "cpu_wall_health": {
+    "decision_use": "diagnostic-health-provenance-only",
+    "repeatability_threshold_effect": "annotation-only",
+    "invalidation_rules": {
+      "require_positive_finite_samples": true,
+      "require_complete_wall_ge_gpu_timestamp": true,
+      "require_complete_pair_structure": true,
+      "require_device_provenance_consistency": true,
+      "process_failure_invalidates_campaign": true
+    },
+    "annotation_criteria": {
+      "control_max_abs_process_median_ratio": 1.03,
+      "control_process_median_span_ratio": 1.05,
+      "control_max_within_process_order_bias_ratio": 1.03,
+      "candidate_process_effect_span_ratio": 1.08,
+      "candidate_max_within_process_order_bias_ratio": 1.05,
+      "candidate_min_positive_pair_fraction": 0.75
+    }
+  },
+  "diagnostic_individual": {
+    "enabled": false,
+    "comparisons": ["control", "plus20"],
+    "fresh_process_blocks": 0,
+    "warmup_pairs": 0,
+    "measured_pairs": 0,
+    "decision_use": "disabled-in-k003"
+  },
+  "uncertainty": {
+    "primary_statistic": "fresh-process median of paired log(B/A)",
+    "reported_repeatability": [
+      "control process-median span",
+      "within-process AB/BA order bias",
+      "candidate process-effect span",
+      "minimum positive-pair fraction"
+    ]
+  },
+  "interruption_resume": {
+    "in_place_resume": false,
+    "rule": "retain interrupted artifact; a fresh restart is allowed only before any complete K003 summary exists and must retain the interrupted artifact"
+  },
+  "artifact_schema": {
+    "version": 1,
+    "required": [
+      "k003-config.json",
+      "k003-progress.json",
+      "k003-raw.csv",
+      "k003-process-summary.csv",
+      "k003-host-observations.json",
+      "k003-devices.json",
+      "k003-summary.json"
+    ]
+  },
+  "host_observations": "diagnostic-only",
+  "sample_exclusion": "forbidden"
+}
