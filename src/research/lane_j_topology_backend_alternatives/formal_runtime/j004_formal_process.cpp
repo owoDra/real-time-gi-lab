@@ -50,7 +50,7 @@ using lane_b::SoftwareTraversalPush;
 using lane_i::I001Binding;
 using lane_i::I001ComputeStage;
 
-constexpr std::uint32_t kQueryCount = 10U;
+constexpr std::uint32_t kQueryCount = 20U;
 constexpr std::uint32_t kStorageMaxProbe = 128U;
 
 enum class Track {
@@ -1714,12 +1714,13 @@ private:
         }
 
         const auto wall_start = Clock::now();
-        // Discard transfers from diagnostic readback outside the previous
-        // complete recurrent boundary.
+        // Diagnostic readbacks are outside the recurring boundary. Discard
+        // their transfer accumulator before starting the next transition.
         (void)context_.consume_transfer_gpu_us();
         context_.reset_allocation_peak();
 
-        double external_build_gpu_us = 0.0;
+        const auto old_dynamic_persistent =
+            dynamic_persistent_bytes();
 
         auto old_hwrt =
             std::move(dynamic_hwrt_);
@@ -1728,8 +1729,14 @@ private:
         auto old_vanilla =
             std::move(dynamic_vanilla_);
 
+        const auto prepare_start = Clock::now();
         create_dynamic_backend(next_step);
+        const auto geometry_prepare_wall_us =
+            elapsed_us(prepare_start);
+        const auto new_dynamic_persistent =
+            dynamic_persistent_bytes();
 
+        double external_build_gpu_us = 0.0;
         if (dynamic_hwrt_) {
             external_build_gpu_us +=
                 dynamic_hwrt_->
@@ -1743,7 +1750,13 @@ private:
             context_.consume_transfer_gpu_us();
         const auto overlap_peak =
             context_.peak_allocation_bytes();
+        const auto old_new_overlap_bytes =
+            dynamic_kind_ == DynamicKind::Lbvh
+                ? 0U
+                : old_dynamic_persistent +
+                    new_dynamic_persistent;
 
+        const auto realloc_start = Clock::now();
         rebind_dynamic_stage();
 
         // The queue is idle before every transition. Once descriptors point at
@@ -1751,6 +1764,8 @@ private:
         old_hwrt.reset();
         old_quant.reset();
         old_vanilla.reset();
+        const auto allocation_reallocation_wall_us =
+            elapsed_us(realloc_start);
 
         context_.vk().resetFences(
             1,
@@ -1792,12 +1807,15 @@ private:
             query_pool_,
             0,
             kQueryCount);
-        context_.vk().cmdWriteTimestamp(
-            command,
-            VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
-            query_pool_,
-            0);
+        const auto stamp = [&](std::uint32_t slot) {
+            context_.vk().cmdWriteTimestamp(
+                command,
+                VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,
+                query_pool_,
+                slot);
+        };
 
+        stamp(0U);
         context_.vk().cmdFillBuffer(
             command,
             accum_.buffer,
@@ -1819,6 +1837,7 @@ private:
         lane_i::i001_transfer_to_compute_barrier(
             context_,
             command);
+        stamp(1U);
 
         if (dynamic_kind_ ==
             DynamicKind::Lbvh) {
@@ -1827,21 +1846,31 @@ private:
                 0.0F,
                 query_pool_,
                 2U);
-            lane_i::
-                i001_compute_barrier(
-                    context_,
-                    command);
+            lane_i::i001_compute_barrier(
+                context_,
+                command);
+        } else {
+            // Keep the fixed query layout complete without inventing builder
+            // time for controls that rebuild outside this command buffer.
+            for (std::uint32_t slot = 2U;
+                 slot <= 9U;
+                 ++slot) {
+                stamp(slot);
+            }
         }
+        stamp(10U);
 
         record_static_traversal(command);
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(11U);
 
         record_dynamic_traversal(command);
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(12U);
 
         hit_merge_stage_->record(
             command,
@@ -1850,6 +1879,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(13U);
 
         radiance_stage_->record(
             command,
@@ -1858,6 +1888,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(14U);
 
         merge_stage_->record(
             command,
@@ -1866,6 +1897,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(15U);
 
         ++frame_id_;
         const StoragePush reserve_push{
@@ -1885,6 +1917,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(16U);
 
         const StoragePush accumulate_push{
             storage_capacity_ - 1U,
@@ -1903,6 +1936,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(17U);
 
         const InvalidationPush invalidate_push{
             storage_capacity_,
@@ -1920,6 +1954,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
+        stamp(18U);
 
         const StoragePush resolve_push{
             storage_capacity_ - 1U,
@@ -1938,12 +1973,7 @@ private:
         lane_i::i001_compute_barrier(
             context_,
             command);
-
-        context_.vk().cmdWriteTimestamp(
-            command,
-            VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
-            query_pool_,
-            1);
+        stamp(19U);
 
         if (context_.vk().endCommandBuffer(
                 command) != VK_SUCCESS) {
@@ -1956,6 +1986,7 @@ private:
                 VK_STRUCTURE_TYPE_SUBMIT_INFO);
         submit.commandBufferCount = 1;
         submit.pCommandBuffers = &command;
+        const auto sync_start = Clock::now();
         if (context_.vk().queueSubmit(
                 context_.queue(),
                 1,
@@ -1970,13 +2001,15 @@ private:
                 UINT64_MAX) != VK_SUCCESS) {
             fail("J004 fence wait failed");
         }
+        const auto synchronization_wall_us =
+            elapsed_us(sync_start);
 
-        std::array<std::uint64_t, 2>
+        std::array<std::uint64_t, kQueryCount>
             timestamps{};
         if (context_.vk().getQueryPoolResults(
                 query_pool_,
                 0,
-                2,
+                kQueryCount,
                 sizeof(timestamps),
                 timestamps.data(),
                 sizeof(std::uint64_t),
@@ -1986,13 +2019,52 @@ private:
             fail("J004 timestamp readback failed");
         }
 
+        const auto gpu_us = [&](std::uint32_t first,
+                                std::uint32_t last) {
+            return double(
+                timestamps[last] -
+                timestamps[first]) *
+                double(
+                    context_.timestamp_period_ns()) /
+                1000.0;
+        };
         const double main_gpu_us =
-            double(
-                timestamps[1] -
-                timestamps[0]) *
-            double(
-                context_.timestamp_period_ns()) /
-            1000.0;
+            gpu_us(0U, 19U);
+        const double builder_gpu_us =
+            dynamic_kind_ == DynamicKind::Lbvh
+                ? gpu_us(2U, 9U)
+                : 0.0;
+        const double traversal_gpu_us =
+            gpu_us(10U, 12U);
+        const double merge_gpu_us =
+            gpu_us(12U, 15U);
+        const double storage_gpu_us =
+            gpu_us(0U, 1U) +
+            gpu_us(15U, 18U);
+        const double resolve_gpu_us =
+            gpu_us(18U, 19U);
+
+        // Capture the allocation peak before the diagnostic storage-stat
+        // readback allocates staging memory. Diagnostic readback must never
+        // inflate the formal true-peak residency.
+        const auto boundary_peak =
+            context_.peak_allocation_bytes();
+        const auto live_bytes =
+            context_.live_allocation_bytes();
+        const auto scratch_bytes =
+            logical_scratch_bytes();
+        const auto transient_bytes =
+            logical_transient_bytes();
+        if (scratch_bytes + transient_bytes >
+            live_bytes) {
+            fail(
+                "J004 allocation lifetime classes "
+                "exceed live residency");
+        }
+        const auto persistent_bytes =
+            live_bytes -
+            scratch_bytes -
+            transient_bytes;
 
         const auto wall_us =
             elapsed_us(wall_start);
@@ -2003,20 +2075,59 @@ private:
             storage_stats_,
             storage_stats.data(),
             sizeof(storage_stats));
+        // Explicitly discard diagnostic transfer timing. The next transition
+        // also resets the peak, but clearing here prevents accidental reuse.
+        (void)context_.consume_transfer_gpu_us();
 
         current_step_ = next_step;
 
-        return {
+        TransitionResult result{};
+        result.geometry_prepare_wall_us =
+            geometry_prepare_wall_us;
+        result.allocation_reallocation_wall_us =
+            allocation_reallocation_wall_us;
+        result.geometry_upload_gpu_us =
+            transfer_gpu_us;
+        result.candidate_preprocess_gpu_us = 0.0;
+        result.build_rebuild_gpu_us =
+            external_build_gpu_us +
+            builder_gpu_us;
+        result.refit_gpu_us = 0.0;
+        result.compaction_gpu_us = 0.0;
+        result.instance_tlas_update_gpu_us = 0.0;
+        result.traversal_gpu_us =
+            traversal_gpu_us;
+        result.synchronization_wall_us =
+            synchronization_wall_us;
+        result.merge_gpu_us =
+            merge_gpu_us;
+        result.storage_gpu_us =
+            storage_gpu_us;
+        result.resolve_gpu_us =
+            resolve_gpu_us;
+        result.complete_gpu_us =
             transfer_gpu_us +
-                external_build_gpu_us +
-                main_gpu_us,
-            wall_us,
-            context_.live_allocation_bytes(),
+            external_build_gpu_us +
+            main_gpu_us;
+        result.complete_wall_us =
+            wall_us;
+        result.persistent_bytes =
+            persistent_bytes;
+        result.transient_bytes =
+            transient_bytes;
+        result.scratch_bytes =
+            scratch_bytes;
+        result.old_new_overlap_bytes =
+            old_new_overlap_bytes;
+        result.resident_bytes =
+            live_bytes;
+        result.true_peak_resident_bytes =
             std::max(
                 overlap_peak,
-                context_.peak_allocation_bytes()),
-            storage_stats[3],
-        };
+                boundary_peak);
+        result.storage_failures =
+            storage_stats[3];
+        return result;
     }
 
     B002VulkanContext& context_;
