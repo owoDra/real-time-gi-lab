@@ -19,7 +19,9 @@ class GeometryTests(unittest.TestCase):
         base=geo.derive_profile_base(self.source(),8,1)
         snaps=geo.materialize_profile(base,[S(0,8,1,0,"global"),S(1,12,2,4,"global"),S(2,6,3,3,"local")],1000)
         self.assertEqual([s.primitive_count for s in snaps],[8,12,6]); self.assertEqual(len({s.snapshot_digest for s in snaps}),3)
-        self.assertTrue(all(pid>=100 for pid in snaps[0].triangles[0:1][0:1][0].primitive_id.to_bytes(1,"little",signed=False)) if False else True)
+        self.assertTrue(set(snaps[1].inserted_ids).isdisjoint(snaps[1].replaced_old_ids))
+        self.assertEqual(len(snaps[1].replaced_old_ids),4)
+        self.assertTrue(set(snaps[2].inserted_ids).isdisjoint(snaps[2].replaced_old_ids))
 
 class ClusterTests(unittest.TestCase):
     def source(self,n): return [Triangle((float(i),0,0),(float(i)+.2,0,0),(float(i),.2,0),i) for i in range(n)]
