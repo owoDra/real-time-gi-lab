@@ -4,10 +4,10 @@
   "issue": 24,
   "status": "frozen-before-target-execution",
   "formal_timing_started": false,
-  "source_freeze_parent_commit": "8e484b08914709207fbdd17c618d76ec462c8c6a",
+  "source_freeze_parent_commit": "55a3f7dca308427206cc16691fc0b6f7c5b63293",
   "frozen_inputs": {
     "plan_blob": "55e7b1f1617ab69f78acd0a969f5a59d2ba146e2",
-    "config_blob": "b33043697222811910281164606c32baf317e377",
+    "config_blob": "f3ec006e1e4c0b236463289af73b5405fdc4d5d3",
     "j004_config_blob": "22951382f8a510bf176c7a427a12d7a2ae24e5d9",
     "j002_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19"
   },
@@ -15,9 +15,9 @@
     "l001_runtime_blob": "f8803228893cd3cd20a788919758e203563810e2",
     "l001_cmake_blob": "dd605f90bc928718107ae9840ba69b128e3bb6d9",
     "l001_analysis_blob": "cb17b26073d9c256103064f3edd8236d9c51dbfd",
-    "l001_runner_blob": "d5da613ba82cea007691be814403d3efbdb47ca0",
+    "l001_runner_blob": "f5990abdb4225a469c7c48e807655a3d81647b1e",
     "l001_analysis_test_blob": "3a86fa17dfde27f35df3348987bc2cf39c29752e",
-    "l001_protocol_test_blob": "ef5febc94332dc200db689a2d7f221f27a8b4fed",
+    "l001_protocol_test_blob": "9a8f35e90f5b717244db0a20bf5c44435e3aa77e",
     "l001_runtime_contract_test_blob": "1b3a52cca7df954be35800d2f719c961698b5c73",
     "root_cmake_blob": "240bc46efb67ab7840a14afee17f4b498c052cc5",
     "mise_blob": "20b6bfefd44e8401b316069633766504e23ca563",
@@ -30,7 +30,9 @@
     "j004_analysis_blob": "9dd6e87d2f5ba807410297d11d9fba32790af2b9",
     "j004_formal_process_blob": "5d66a377779a76e226864965702cf7d402e0f236",
     "result_document": "research/lanes/lane-j-topology-backend-alternatives/results/027-formal-crossover-final.md",
-    "gate_v7": "research/lanes/lane-j-topology-backend-alternatives/experiments/011-formal-crossover-gate-v7-exact-tie-pruning.md"
+    "gate_v7": "research/lanes/lane-j-topology-backend-alternatives/experiments/011-formal-crossover-gate-v7-exact-tie-pruning.md",
+    "source_tree": "7b697d2e2b8151e85e0bb451794de0b64e5e842b",
+    "formal_shader_tree": "83e6f0f5286e7edb14b15a3e722dca379e126ce5"
   },
   "environments": [
     "dual-context",
@@ -49,7 +51,41 @@
     "settle_seconds": 1,
     "sample_exclusion": "forbidden",
     "instability_rerun_budget": 0,
-    "completed_campaign_rerun_budget": 0
+    "completed_campaign_rerun_budget": 0,
+    "environment_order_by_block": [
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ]
+    ]
   },
   "gate": {
     "max_abs_process_median_ratio": 1.02,
@@ -64,5 +100,17 @@
     "allocation_lifetime": "pre-timing-validation-evidence"
   },
   "architecture_ranking_allowed": false,
-  "l002_entry": "only-if-no-L001-environment-passes"
+  "l002_entry": "only-if-no-L001-environment-passes",
+  "artifact_schema": [
+    "l001-config.json",
+    "l001-input-provenance.json",
+    "l001-source-provenance.json",
+    "l001-progress.json",
+    "l001-validation-summary.csv",
+    "l001-raw.csv",
+    "l001-process-summary.csv",
+    "l001-host-observations.json",
+    "l001-devices.json",
+    "l001-summary.json"
+  ]
 }
