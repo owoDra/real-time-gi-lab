@@ -30,6 +30,10 @@ class ProtocolTests(unittest.TestCase):
         self.assertTrue(config["performance_gate"]["lane_k_5_percent_floor_forbidden"])
         self.assertFalse(config["timing"]["future_state_prebuild"])
         self.assertFalse(config["timing"]["recurrent_work_moved_to_setup"])
+        self.assertEqual(config["timing"]["expected_fresh_timing_processes"], 160)
+        self.assertEqual(config["artifact_schema"]["version"], 2)
+        self.assertIn("e001-raw.csv", config["artifact_schema"]["required"])
+        self.assertIn("e001-device-provenance.json", config["artifact_schema"]["required"])
 
 
 if __name__ == "__main__":
