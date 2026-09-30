@@ -268,6 +268,8 @@ void PersistentClusterLayout::resize_capacity(
     upper_nodes_.resize(
         std::size_t(slot_capacity_) * 2U - 1U,
         invalid_node());
+    upper_parent_.resize(upper_nodes_.size(), kInvalidId);
+    slot_to_upper_leaf_.resize(slot_capacity_, kInvalidId);
 }
 
 void PersistentClusterLayout::rebuild_cluster_slot(
@@ -392,6 +394,8 @@ void PersistentClusterLayout::rebuild_upper(
         });
 
     std::fill(upper_nodes_.begin(), upper_nodes_.end(), invalid_node());
+    std::fill(upper_parent_.begin(), upper_parent_.end(), kInvalidId);
+    std::fill(slot_to_upper_leaf_.begin(), slot_to_upper_leaf_.end(), kInvalidId);
     std::uint32_t next_node = 0U;
     std::function<std::pair<std::uint32_t, Bounds>(
         std::size_t, std::size_t)> build =
@@ -411,6 +415,7 @@ void PersistentClusterLayout::rebuild_upper(
                 kInvalidId,
                 slot,
                 1U);
+            slot_to_upper_leaf_[slot] = node;
             return {node, bounds};
         }
 
@@ -424,6 +429,8 @@ void PersistentClusterLayout::rebuild_upper(
             right,
             kInvalidId,
             0U);
+        upper_parent_[left] = node;
+        upper_parent_[right] = node;
         return {node, bounds};
     };
 
@@ -433,54 +440,75 @@ void PersistentClusterLayout::rebuild_upper(
     upper_node_count_ = next_node;
 }
 
-std::uint32_t PersistentClusterLayout::refit_upper_node(
-    std::uint32_t node_index) {
-    if (node_index >= upper_node_count_) {
-        throw std::runtime_error("upper refit node out of range");
+std::uint32_t PersistentClusterLayout::refit_upper(
+    std::span<const std::uint32_t> dirty_physical_slots) {
+    if (upper_root_ == kInvalidId || upper_root_ >= upper_node_count_) {
+        throw std::runtime_error("upper refit missing root");
     }
 
-    auto& node = upper_nodes_[node_index];
-    if (node.meta[3] != 0U) {
-        const auto slot = node.meta[2];
-        if (slot >= slot_capacity_ ||
-            slot_to_logical_[slot] == kInvalidId) {
-            throw std::runtime_error("upper leaf references inactive slot");
+    std::unordered_set<std::uint32_t> affected;
+    for (const auto slot : dirty_physical_slots) {
+        if (slot >= slot_to_upper_leaf_.size()) {
+            throw std::runtime_error("upper refit slot out of range");
         }
+        auto node = slot_to_upper_leaf_[slot];
+        if (node == kInvalidId) {
+            throw std::runtime_error("dirty slot has no upper leaf");
+        }
+
         const auto bounds = bounds_of(clusters_[slot]);
-        node.bounds_min = {
+        upper_nodes_[node].bounds_min = {
             static_cast<float>(bounds.min[0]),
             static_cast<float>(bounds.min[1]),
             static_cast<float>(bounds.min[2]),
             0.0F,
         };
-        node.bounds_max = {
+        upper_nodes_[node].bounds_max = {
             static_cast<float>(bounds.max[0]),
             static_cast<float>(bounds.max[1]),
             static_cast<float>(bounds.max[2]),
             0.0F,
         };
-        return 1U;
+
+        for (;;) {
+            affected.insert(node);
+            const auto parent = upper_parent_[node];
+            if (parent == kInvalidId) {
+                break;
+            }
+            node = parent;
+        }
     }
 
-    const auto left = node.meta[0];
-    const auto right = node.meta[1];
-    const auto count =
-        refit_upper_node(left) + refit_upper_node(right) + 1U;
-    const auto bounds =
-        merge(bounds_of(upper_nodes_[left]), bounds_of(upper_nodes_[right]));
-    node.bounds_min = {
-        static_cast<float>(bounds.min[0]),
-        static_cast<float>(bounds.min[1]),
-        static_cast<float>(bounds.min[2]),
-        0.0F,
-    };
-    node.bounds_max = {
-        static_cast<float>(bounds.max[0]),
-        static_cast<float>(bounds.max[1]),
-        static_cast<float>(bounds.max[2]),
-        0.0F,
-    };
-    return count;
+    std::vector<std::uint32_t> internal;
+    internal.reserve(affected.size());
+    for (const auto node : affected) {
+        if (upper_nodes_[node].meta[3] == 0U) {
+            internal.push_back(node);
+        }
+    }
+    std::sort(internal.begin(), internal.end(), std::greater<>());
+
+    for (const auto node : internal) {
+        const auto left = upper_nodes_[node].meta[0];
+        const auto right = upper_nodes_[node].meta[1];
+        const auto bounds =
+            merge(bounds_of(upper_nodes_[left]), bounds_of(upper_nodes_[right]));
+        upper_nodes_[node].bounds_min = {
+            static_cast<float>(bounds.min[0]),
+            static_cast<float>(bounds.min[1]),
+            static_cast<float>(bounds.min[2]),
+            0.0F,
+        };
+        upper_nodes_[node].bounds_max = {
+            static_cast<float>(bounds.max[0]),
+            static_cast<float>(bounds.max[1]),
+            static_cast<float>(bounds.max[2]),
+            0.0F,
+        };
+    }
+
+    return static_cast<std::uint32_t>(affected.size());
 }
 
 PersistentLayoutUpdate PersistentClusterLayout::synchronize(
@@ -566,10 +594,7 @@ PersistentLayoutUpdate PersistentClusterLayout::synchronize(
         result.upper_rebuilt = true;
         result.upper_rebuild_node_count = upper_node_count_;
     } else {
-        if (upper_root_ == kInvalidId) {
-            throw std::runtime_error("upper refit missing root");
-        }
-        result.upper_refit_node_count = refit_upper_node(upper_root_);
+        result.upper_refit_node_count = refit_upper(dirty_slots);
     }
 
     result.candidate_persistent_logical_bytes =
