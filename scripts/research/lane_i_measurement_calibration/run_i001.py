@@ -14,7 +14,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
 EXPECTED_BRANCH = "research-lane-i-measurement-calibration"
-TARGET_GPU = "AMD Radeon 8060S Graphics (RADV_STRIX_HALO)"
 TARGET_GPU_DISPLAY = "AMD Radeon 8060S Graphics (RADV STRIX_HALO)"
 
 
@@ -117,8 +116,8 @@ def main() -> int:
     root.mkdir(parents=True, exist_ok=bool(os.environ.get("PHOS_RESEARCH_ARTIFACT_DIR")))
 
     profiles = [
-        run_profile(executable, root, "accepted-shape-single-dispatch", 8192, 1, args.validation),
-        run_profile(executable, root, "dispatch-chain", 4096, 4, args.validation),
+        run_profile(executable, root, "accepted-shape", 8192, 16, args.validation),
+        run_profile(executable, root, "single-dispatch-control", 8192, 1, args.validation),
     ]
 
     vulkaninfo = shutil.which("vulkaninfo")

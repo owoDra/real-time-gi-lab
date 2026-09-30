@@ -25,8 +25,8 @@ struct WorkSpec {
 };
 
 inline constexpr std::uint32_t kBaselineIterations = 200;
-inline constexpr std::uint32_t kDefaultElementCount = 32768;
-inline constexpr std::uint32_t kDefaultBatchDispatches = 32;
+inline constexpr std::uint32_t kDefaultElementCount = 8192;
+inline constexpr std::uint32_t kDefaultBatchDispatches = 16;
 
 [[nodiscard]] const char* variant_name(CalibrationVariant variant) noexcept;
 [[nodiscard]] CalibrationVariant parse_variant(std::string_view value);

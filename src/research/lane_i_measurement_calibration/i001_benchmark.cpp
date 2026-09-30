@@ -32,6 +32,22 @@ struct Cli {
     throw std::runtime_error(message);
 }
 
+std::string json_escape(const std::string& value) {
+    std::string out;
+    out.reserve(value.size());
+    for (const char ch : value) {
+        switch (ch) {
+        case '\\': out += "\\\\"; break;
+        case '"': out += "\\\""; break;
+        case '\n': out += "\\n"; break;
+        case '\r': out += "\\r"; break;
+        case '\t': out += "\\t"; break;
+        default: out += ch; break;
+        }
+    }
+    return out;
+}
+
 std::filesystem::path artifact_root() {
     if (const char* value = std::getenv("PHOS_RESEARCH_ARTIFACT_DIR");
         value != nullptr && *value != '\0') {
@@ -97,9 +113,9 @@ void write_device(const std::filesystem::path& root, const VulkanContext& vk, bo
     if (!out) fail("cannot create Lane I device metadata");
     out << "{\n"
         << "  \"schema_version\": 1,\n"
-        << "  \"device\": \"" << vk.device_name() << "\",\n"
-        << "  \"driver_name\": \"" << vk.driver_name() << "\",\n"
-        << "  \"driver_info\": \"" << vk.driver_info() << "\",\n"
+        << "  \"device\": \"" << json_escape(vk.device_name()) << "\",\n"
+        << "  \"driver_name\": \"" << json_escape(vk.driver_name()) << "\",\n"
+        << "  \"driver_info\": \"" << json_escape(vk.driver_info()) << "\",\n"
         << "  \"api_version\": " << vk.api_version() << ",\n"
         << "  \"driver_version\": " << vk.driver_version() << ",\n"
         << "  \"vendor_id\": " << vk.vendor_id() << ",\n"

@@ -21,6 +21,7 @@ mise run configure
 mise exec -- cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-i-contract-test phos-lane-i-i001
 mise exec -- "$PHOS_GI_BUILD_DIR/phos-lane-i-contract-test"
 mise exec -- python scripts/research/lane_i_measurement_calibration/test_analysis.py
+mise exec -- python scripts/research/lane_i_measurement_calibration/test_protocol.py
 mise run research:check
 ```
 

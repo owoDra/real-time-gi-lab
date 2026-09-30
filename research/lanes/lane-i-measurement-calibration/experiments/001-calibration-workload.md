@@ -41,10 +41,15 @@ correctness.
 
 Warmup and measured rows are retained separately. Measurement mode supports
 adjacent baseline/candidate pairs, alternating AB/BA order, same-process batches,
-and fresh-process orchestration by the Lane I runner.
+and fresh-process orchestration by the Lane I runner. Device metadata records
+GPU name, Vulkan API version, driver version/name/info, vendor/device IDs, and
+timestamp period; the runner also retains `vulkaninfo --summary` when available.
 
 ## GPU-independent validation
 
 `phos-lane-i-contract-test` verifies exact 5/10/20% work ratios,
 input/state determinism, distinct reference checksums, and invalid-size
-rejection. The source contract is the source of truth for the work-count mapping.
+rejection. Target I001 validation additionally checks GPU output against the CPU
+reference for the exact accepted shape (`8192` elements, `16` dispatches) and a
+single-dispatch control. The source contract is the source of truth for the
+work-count mapping.

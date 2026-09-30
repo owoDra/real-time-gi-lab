@@ -186,6 +186,8 @@ def same_device(devices: list[dict[str, object]]) -> bool:
         "device", "api_version", "driver_version", "vendor_id", "device_id",
         "driver_name", "driver_info", "timestamp_period_ns"
     )
+    if any(first.get(key) in (None, "") for key in keys):
+        return False
     return all(all(device.get(key) == first.get(key) for key in keys) for device in devices)
 
 
