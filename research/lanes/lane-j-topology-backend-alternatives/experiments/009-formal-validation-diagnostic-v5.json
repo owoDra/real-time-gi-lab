@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-j-j004-formal-v2",
+  "harness_freeze_revision": "v5-diagnostic-only",
+  "issue": 23,
+  "formal_timing_started": false,
+  "freeze_reason": "diagnostic-only runner change after hard validation failure: expose retained j004-validation.json counters in the exception; no correctness rule, workload, candidate, timing boundary, threshold, selector, or rerun policy changed",
+  "parent_freeze": "research/lanes/lane-j-topology-backend-alternatives/experiments/008-formal-execution-freeze-v4.json",
+  "diagnostic_commit": "787f437c3e96b8572d3436a264c30d84d6866c12",
+  "frozen_harness": {
+    "runner_blob": "e29cb521495aea3b896b2e1986b67735d3bc830b",
+    "lane_j_source_tree": "40c42f30acfe99599d220352c392a95235d1159b",
+    "formal_shader_tree": "021faf5c71fc2bfed323887602148df0f7809dc9"
+  },
+  "decision_semantics": {
+    "changed": false
+  },
+  "retained_failed_artifact": {
+    "experiment": "004-formal-crossover",
+    "timestamp": "20260930T115408Z",
+    "failed_validation": "large-global-high/primary/control",
+    "timing_started": false
+  }
+}

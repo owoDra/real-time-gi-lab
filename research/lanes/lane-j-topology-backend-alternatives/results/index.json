@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "lane": "lane-j-topology-backend-alternatives",
+  "experiments": [
+    {
+      "id": "J001",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/001-deep-architecture-survey.md",
+      "status": "complete",
+      "evidence_class": "research-and-planning",
+      "decision": "retain clustered-two-level-bvh as sole new structural candidate; retain Lane E HWRT rebuild and hardened transient LBVH as controls"
+    },
+    {
+      "id": "J002/J003-pre-gpu",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/002-gpu-independent-preparation.md",
+      "status": "complete",
+      "evidence_class": "contract-reference-model-and-canonical-cpu-replay",
+      "decision": "GPU-independent preflight complete; promote to target-GPU J003 prototype validation; J004 remains Lane-I-gated"
+    },
+    {
+      "id": "J003-cpu-structural",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/003-cpu-structural-gate.md",
+      "status": "pass",
+      "evidence_class": "canonical-cpu-structural-replay",
+      "decision": "clustered CPU reference satisfies ownership/occupancy/locality invariants on all frozen profiles; target-GPU exact validation required"
+    },
+    {
+      "id": "J003-gpu-probe-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/004-target-gpu-probe-preparation.md",
+      "status": "implementation-ready-evidence-pending",
+      "evidence_class": "target-gpu-probe-implementation",
+      "decision": "run host contract then representative target-GPU exact traversal probe before transition integration"
+    },
+    {
+      "id": "J003-gpu-traversal-probe",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/005-target-gpu-traversal-pass.md",
+      "status": "pass",
+      "evidence_class": "representative-target-gpu-exact-traversal",
+      "decision": "GPU layout/exact Hit traversal validated on representative frozen snapshot; promote to transition-time persistent cluster validation"
+    },
+    {
+      "id": "J003-transition-state-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/006-transition-state-preparation.md",
+      "status": "implementation-ready-evidence-pending",
+      "evidence_class": "persistent-cluster-state-implementation",
+      "decision": "require exact canonical Python/C++ structural parity before persistent GPU transition updates"
+    },
+    {
+      "id": "J003-transition-parity",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/007-transition-parity-pass.md",
+      "status": "pass",
+      "evidence_class": "canonical-python-cpp-structural-parity",
+      "decision": "promote transition state to persistent GPU slot implementation"
+    },
+    {
+      "id": "J003-persistent-layout-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/008-persistent-layout-preparation.md",
+      "status": "implementation-ready-evidence-pending",
+      "evidence_class": "persistent-physical-slot-layout",
+      "decision": "require all-profile host replay before persistent Vulkan buffer implementation"
+    },
+    {
+      "id": "J003-persistent-layout",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/009-persistent-layout-pass.md",
+      "status": "pass",
+      "evidence_class": "all-profile-persistent-host-layout",
+      "decision": "promote to persistent Vulkan buffers and per-transition exact GPU replay"
+    },
+    {
+      "id": "J003-persistent-vulkan-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/010-persistent-vulkan-preparation.md",
+      "status": "implementation-ready-evidence-pending",
+      "evidence_class": "persistent-vulkan-transition-runtime",
+      "decision": "run representative exact target-GPU transition replay before large resize/all-profile expansion"
+    },
+    {
+      "id": "J003-persistent-vulkan-representative",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/011-persistent-vulkan-correctness-fail.md",
+      "status": "fail-diagnostic-pending",
+      "evidence_class": "representative-persistent-vulkan-exact-replay",
+      "decision": "zero-error gate failed at step 3 with one Hit mismatch; retain exact mismatch diagnostics before any correction"
+    },
+    {
+      "id": "J003-persistent-vulkan-pruning-diagnosis",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/012-pruning-hypotheses-rejected.md",
+      "status": "diagnostic",
+      "evidence_class": "retained-target-gpu-correctness-failure",
+      "decision": "reject v1.4/v1.5 pruning hypotheses; use explicit shader watched-primitive path before any further correction"
+    },
+    {
+      "id": "J003-persistent-vulkan-watched-primitive",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/013-watched-primitive-root-cause.md",
+      "status": "root-cause-layer-identified",
+      "evidence_class": "shader-watched-primitive-diagnostic",
+      "decision": "exact triangle fp32 reproducibility is active failure layer; rerun frozen v1.6 NoContraction correction"
+    },
+    {
+      "id": "J003-persistent-vulkan-representative-v1.6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/014-representative-persistent-vulkan-pass.md",
+      "status": "pass",
+      "evidence_class": "representative-persistent-vulkan-exact-replay",
+      "decision": "promote to large-global-high resize-path target-GPU gate"
+    },
+    {
+      "id": "J003-persistent-vulkan-large-global-resize-v1.6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/015-large-global-resize-vulkan-pass.md",
+      "status": "pass",
+      "evidence_class": "target-gpu-persistent-resize-overlap",
+      "decision": "promote to unchanged-build all-five-profile GPU correctness/memory campaign"
+    },
+    {
+      "id": "J003-persistent-vulkan-all-profiles-v1.6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/017-all-profile-persistent-vulkan-pass.md",
+      "status": "pass",
+      "evidence_class": "all-profile-target-gpu-correctness-memory",
+      "decision": "accept J003 correctness/memory gate; J004 formal ranking remains gated by Lane I measurement calibration"
+    },
+    {
+      "id": "J-FINAL",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/018-final-decision.md",
+      "status": "complete-measurement-limited",
+      "evidence_class": "lane-final-decision",
+      "decision": "J003 candidate passed correctness and absolute/lifetime memory characterization; same-run <=1.25x Lane-E HWRT relative-memory eligibility remains pending; J004/J005 not run because Lane I I004 established no accepted formal ranking protocol"
+    },
+    {
+      "id": "J004-follow-up-prep",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/019-formal-crossover-preparation.md",
+      "status": "target-relative-memory-preflight-pending",
+      "evidence_class": "prospective-formal-crossover-preparation",
+      "decision": "Lane K timing dependency resolved and J004 gate frozen; clustered candidate remains timing-ineligible until same-run <=1.25x Lane-E HWRT relative-memory preflight passes"
+    },
+    {
+      "id": "J004-relative-memory-preflight",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/020-relative-memory-preflight-fail.md",
+      "status": "fail-candidate-rejected-before-timing",
+      "evidence_class": "same-run-relative-memory-eligibility",
+      "decision": "clustered two-level BVH exceeds the frozen 1.25x persistent-memory limit on all five J002 profiles and also exceeds true-peak limit on large-global-high; reject it before formal timing"
+    },
+    {
+      "id": "J004-formal-execution-v2",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/021-formal-crossover-execution-freeze.md",
+      "status": "superseded-pre-execution-by-v3-compile-fix",
+      "evidence_class": "pre-timing-formal-harness-freeze",
+      "decision": "clustered candidate remains rejected; v2 formal harness is frozen before target timing with full workload/correctness/boundary/provenance gates; J005 remains blocked pending a valid formal campaign"
+    },
+    {
+      "id": "J004-formal-execution-v3",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/022-formal-crossover-compile-fix-freeze.md",
+      "status": "superseded-pre-execution-by-v4-link-fix",
+      "evidence_class": "compile-only-pre-timing-harness-refreeze",
+      "decision": "qualify phos::gi::detail helper namespace, refreeze source/runner identities, and rerun the unchanged J004 formal campaign; no accepted timing was observed"
+    },
+    {
+      "id": "J004-formal-execution-v4",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/023-formal-crossover-link-fix-freeze.md",
+      "status": "ready-target-execution",
+      "evidence_class": "link-only-pre-timing-harness-refreeze",
+      "decision": "link the existing j003_clustered_bvh.cpp required by j003_reference.cpp, refreeze source/runner identities, and rerun the unchanged J004 formal campaign; no accepted timing was observed"
+    },
+    {
+      "id": "J004-validation-diagnostic-v5",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/024-formal-validation-diagnostic-visibility.md",
+      "status": "awaiting-retained-validation-counter-inspection",
+      "evidence_class": "diagnostic-only-pre-timing",
+      "decision": "large-global-high/primary/control hard validation failed before timing; retain failure and expose exact validation counters before any root-cause correction"
+    },
+    {
+      "id": "J004-validation-component-diagnostic-v6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/025-primary-control-mismatch-decomposition.md",
+      "status": "root-cause-found-superseded-by-v7-correctness-repair",
+      "evidence_class": "validation-only-root-cause-decomposition",
+      "decision": "decompose retained 445 exact tie mismatches into static HWRT, dynamic HWRT, or merge-only origin before any behavioral correction or formal timing"
+    },
+    {
+      "id": "J004-formal-execution-v7",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/026-b001-tie-pruning-correctness-repair.md",
+      "status": "ready-full-target-revalidation",
+      "evidence_class": "pre-timing-correctness-repair",
+      "decision": "repair accelerated culling to preserve the already-frozen B001 best_t+tolerance tie domain; rerun all hard validation before timing"
+    },
+    {
+      "id": "J004-formal-final",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/027-formal-crossover-final.md",
+      "status": "complete-measurement-limited",
+      "evidence_class": "all-profile-formal-target-campaign",
+      "decision": "all correctness gates and 200-process campaign completed; every same-variant GPU control profile exceeded the frozen control-health envelope, so no backend/class is retained, outcome=measurement-limited, and J005 is ineligible"
+    }
+  ]
+}
