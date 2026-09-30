@@ -2,7 +2,7 @@
   "schema_version": 1,
   "plan_version": "lane-l-l002-v1",
   "status": "frozen-before-target-execution",
-  "source_parent_commit": "1d915abec678dd378e084e013136434696c3f424",
+  "source_parent_commit": "e136f840c3d8db0af0480057f722a8dafdc2066a",
   "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
   "architecture_ranking_allowed": false,
   "l001_outcome": "measurement-limited",
@@ -11,9 +11,9 @@
     "research/lanes/lane-l-heavy-boundary-calibration/experiments/004-l002-detectable-floor-plan.md": "85c741994efc8c82503e8e2a31f2e566290c3b3f",
     "research/lanes/lane-l-heavy-boundary-calibration/experiments/005-l002-config.json": "b7b20a53de965f198ac5b117645b07626204bbab",
     "scripts/research/lane_l_heavy_boundary_calibration/l002_analysis.py": "a4ed4c540ca7588c35491470e437b96696daf113",
-    "scripts/research/lane_l_heavy_boundary_calibration/test_l002_analysis.py": "c81220db8f8dc01a50567762a21322de051d566a",
+    "scripts/research/lane_l_heavy_boundary_calibration/test_l002_analysis.py": "9033d5a9c8d903a3f68873c726517e0f3a567b7a",
     "scripts/research/lane_l_heavy_boundary_calibration/test_l002_protocol.py": "1c846c80bdf3ebcb535a3dd4a729efad61d0db77",
-    "scripts/research/lane_l_heavy_boundary_calibration/run_l002.py": "db9a759ab874053eb0824f6d0eb8baaa17dff6b8",
+    "scripts/research/lane_l_heavy_boundary_calibration/run_l002.py": "fa6187fa820bdf28884143628f8e2f8b4756c8dd",
     "mise.toml": "962c5fc0c3fd0cc3f760310b4aaf25caf088d1fe"
   },
   "measurement": {
@@ -38,8 +38,8 @@
   "synthetic_injection": {
     "domain": "analysis-only-gpu-timestamp-b-role",
     "factors": [
-      1.20,
-      1.10,
+      1.2,
+      1.1,
       1.05
     ],
     "measured_gpu_work_modified": false,
