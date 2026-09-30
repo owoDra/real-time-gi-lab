@@ -26,7 +26,7 @@ CONFIG = (
     / "005-formal-crossover-config.json"
 )
 EXPECTED_CONFIG_BLOB_SHA = "22951382f8a510bf176c7a427a12d7a2ae24e5d9"
-EXPECTED_SOURCE_TREE_SHA = "6f494acf7d039b2c82be6ebf2a504dcafebc1cbd"
+EXPECTED_SOURCE_TREE_SHA = "cd7dae0c155ffdb7fc21405c8e84cac647e978d6"
 EXPECTED_FORMAL_SHADER_TREE_SHA = "021faf5c71fc2bfed323887602148df0f7809dc9"
 CAMPAIGN_ROOT = (
     ROOT
@@ -66,7 +66,7 @@ EXPECTED_FORMAL_HARNESS_BLOBS = {
     "scripts/research/lane_j_topology_backend_alternatives/"
     "test_j004_analysis.py": "1153504f5713f0d3503b37ee173a4ce21876a80e",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "j004_formal_process.cpp": "e4d734a30a5dbb9378ebece3a46e4b06898cbf1b",
+    "j004_formal_process.cpp": "fa26d3df0ed3b60a3442d329eb047f1d289b9202",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "i001_compute.cpp": "5000f7178996bb2917fede7bf4d8202f1fbab8ee",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"

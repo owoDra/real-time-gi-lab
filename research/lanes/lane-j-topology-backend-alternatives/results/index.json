@@ -138,9 +138,16 @@
     {
       "id": "J004-formal-execution-v2",
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/021-formal-crossover-execution-freeze.md",
-      "status": "ready-target-execution",
+      "status": "superseded-pre-execution-by-v3-compile-fix",
       "evidence_class": "pre-timing-formal-harness-freeze",
       "decision": "clustered candidate remains rejected; v2 formal harness is frozen before target timing with full workload/correctness/boundary/provenance gates; J005 remains blocked pending a valid formal campaign"
+    },
+    {
+      "id": "J004-formal-execution-v3",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/022-formal-crossover-compile-fix-freeze.md",
+      "status": "ready-target-execution",
+      "evidence_class": "compile-only-pre-timing-harness-refreeze",
+      "decision": "qualify phos::gi::detail helper namespace, refreeze source/runner identities, and rerun the unchanged J004 formal campaign; no accepted timing was observed"
     }
   ]
 }
