@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-import l002_analysis as analysis
+from scripts.research.lane_l_heavy_boundary_calibration import l002_analysis as analysis
 
 
 def make_rows(
