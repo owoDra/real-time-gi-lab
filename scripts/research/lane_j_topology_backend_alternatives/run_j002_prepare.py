@@ -87,11 +87,19 @@ def build_manifest(
         if producer_stream is None
         else contract.parse_lane_a_stream(producer_stream)
     )
+    if producer is not None:
+        expected_frame = int(cfg["producer_source"]["frame_id"])
+        if int(producer["frame_id"]) != expected_frame:
+            raise ValueError(
+                f"A001 producer frame mismatch: expected {expected_frame}, "
+                f"got {producer['frame_id']}"
+            )
     manifest = {
         "schema_version": 1,
         "plan_version": cfg["plan_version"],
         "formal_timing_decision": False,
         "producer_contract": cfg["producer_contract"],
+        "producer_source": cfg["producer_source"],
         "hit_contract": cfg["hit_contract"],
         "storage_contract": cfg["storage_contract"],
         "changed_object_id": cfg["changed_object_id"],
