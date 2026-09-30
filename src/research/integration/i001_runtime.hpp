@@ -95,6 +95,19 @@ struct I001Memory {
     std::size_t persistent_bytes{};
     std::size_t transient_bytes{};
     std::size_t scratch_bytes{};
+    std::size_t peak_resident_bytes{};
+    std::size_t stream_capacity_bytes{};
+    std::size_t storage_capacity_bytes{};
+    // Allocation/lifetime evidence is CPU-side bookkeeping only; it adds no
+    // GPU work to the measured recurring boundary.
+    std::size_t old_new_overlap_bytes{};
+    std::size_t true_peak_bytes{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations{};
+};
+    std::size_t transient_bytes{};
+    std::size_t scratch_bytes{};
     std::size_t old_new_overlap_bytes{};
     std::size_t peak_resident_bytes{};
     std::size_t stream_capacity_bytes{};
