@@ -179,3 +179,5 @@ if(MSVC)
 else()
   target_compile_options(phos-lane-j-j004-memory-preflight PRIVATE -Wall -Wextra -Wpedantic)
 endif()
+
+add_subdirectory(formal_runtime)
