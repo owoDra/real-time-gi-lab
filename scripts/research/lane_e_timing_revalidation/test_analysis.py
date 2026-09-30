@@ -117,6 +117,33 @@ class AnalysisTests(unittest.TestCase):
         result = classify_memory(rows)
         self.assertEqual(result["classification"], "regression")
 
+    def test_memory_improvement_requires_no_pair_regression(self) -> None:
+        rows: list[dict[str, object]] = []
+        for block in range(8):
+            for pair in range(12):
+                candidate_persistent = 90
+                if block == 7 and pair == 11:
+                    candidate_persistent = 110
+                for role, persistent, peak, transient, scratch, allocations in [
+                    ("A", 100, 100, 100, 0, 1),
+                    ("B", candidate_persistent, 95, 100, 0, 1),
+                ]:
+                    rows.append({
+                        "phase": "measured",
+                        "block": block,
+                        "pair_index": pair,
+                        "role": role,
+                        "persistent_bytes": persistent,
+                        "transient_bytes": transient,
+                        "scratch_bytes": scratch,
+                        "true_peak_bytes": peak,
+                        "old_new_overlap_bytes": 0,
+                        "allocation_count": allocations,
+                        "allocation_lifetime_complete": 1,
+                    })
+        result = classify_memory(rows)
+        self.assertEqual(result["classification"], "neutral")
+
     def test_memory_hard_guard_uses_worst_pair(self) -> None:
         rows: list[dict[str, object]] = []
         for block in range(8):
@@ -131,8 +158,11 @@ class AnalysisTests(unittest.TestCase):
                         "pair_index": pair,
                         "role": role,
                         "persistent_bytes": persistent,
+                        "transient_bytes": 100,
+                        "scratch_bytes": 0,
                         "true_peak_bytes": peak,
                         "old_new_overlap_bytes": 0,
+                        "allocation_count": 1,
                         "allocation_lifetime_complete": 1,
                     })
         result = classify_memory(rows)
