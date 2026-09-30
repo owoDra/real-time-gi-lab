@@ -362,8 +362,12 @@ Options parse_options(int argc, char** argv) {
 #ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
     if (options.comparison != "control" &&
         options.comparison != "lbvh" &&
-        options.comparison != "clustered") {
-        fail("Lane M comparison must be control, lbvh, or clustered");
+        options.comparison != "clustered" &&
+        options.comparison != "lbvh-control" &&
+        options.comparison != "clustered-vs-lbvh") {
+        fail(
+            "Lane M comparison must be control, lbvh, clustered, "
+            "lbvh-control, or clustered-vs-lbvh");
     }
     (void)lane_m::parse_m001_scenario(options.scenario);
 #else
@@ -2751,6 +2755,9 @@ void write_validation(
         << "  \"visibility_mismatch_count\": 0,\n"
         << "  \"producer_semantic_error_count\": 0,\n"
         << "  \"workload_identity_match\": true,\n"
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        << "  \"geometry_input_identity_match\": true,\n"
+#endif
         << "  \"resolved_digest\": "
         << result.resolved_digest
         << ",\n"
@@ -2888,16 +2895,27 @@ int main(int argc, char** argv) {
         }
         write_device(root, context_a);
 
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        const auto a_kind =
+            options.comparison == "lbvh-control" ||
+            options.comparison == "clustered-vs-lbvh"
+                ? DynamicKind::Lbvh
+                : control_kind(options.track);
+        const auto b_kind =
+            options.comparison == "control" ||
+            options.comparison == "lbvh-control"
+                ? a_kind
+                : (options.comparison == "clustered" ||
+                   options.comparison == "clustered-vs-lbvh"
+                    ? DynamicKind::Clustered
+                    : DynamicKind::Lbvh);
+#else
         const auto a_kind =
             control_kind(options.track);
         const auto b_kind =
             options.comparison == "control"
                 ? a_kind
-#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
-                : (options.comparison == "clustered"
-                    ? DynamicKind::Clustered
-                    : DynamicKind::Lbvh);
-#else
+
                 : (options.comparison == "accounting"
                     ? DynamicKind::Vanilla
                     : DynamicKind::Lbvh);
