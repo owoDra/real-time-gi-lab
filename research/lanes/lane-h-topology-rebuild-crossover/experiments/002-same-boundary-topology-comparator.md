@@ -18,7 +18,7 @@ explicit instead of treating Lane G's same-count `topology-replace25` case as a
 count-changing workload.
 
 All variants must receive the same generated sequence and canonical workload
-digest. A candidate-specific topology stream invalidates the comparison.
+digest. The frozen digest is `0b99617645b5d44762c7b293c6264954e43a8e3e913025690fd8720611c99579`. A candidate-specific topology stream or generator drift invalidates the comparison.
 
 ## Ownership contract
 

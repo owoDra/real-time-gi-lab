@@ -43,6 +43,12 @@ class H002PrepareTests(unittest.TestCase):
             [100, 125, 75],
         )
 
+    def test_manifest_rejects_frozen_digest_drift(self) -> None:
+        cfg = self.config()
+        cfg["expected_workload_digest"] = "not-the-real-digest"
+        with self.assertRaises(ValueError):
+            mod.build_manifest(cfg)
+
     def test_evidence_gate_accepts_complete_local_record(self) -> None:
         manifest = mod.build_manifest(self.config())
         record = {

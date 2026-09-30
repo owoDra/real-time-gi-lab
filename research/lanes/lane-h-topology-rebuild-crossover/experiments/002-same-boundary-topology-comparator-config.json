@@ -48,5 +48,6 @@
   ],
   "boundary_rule": "Every required field is reported by every variant; non-applicable stages are explicit zero, never omitted or moved outside the measured update/frame boundary.",
   "workload_rule": "All variants consume the identical primitive-count sequence, topology seed, generated geometry identity, producer stream identity, exact Hit semantics, and C001 storage identity.",
-  "ownership_rule": "Only topology-object-0 may mutate/reallocate/rebuild. static-world and unrelated-object-0 remain immutable across the sequence."
+  "ownership_rule": "Only topology-object-0 may mutate/reallocate/rebuild. static-world and unrelated-object-0 remain immutable across the sequence.",
+  "expected_workload_digest": "0b99617645b5d44762c7b293c6264954e43a8e3e913025690fd8720611c99579"
 }

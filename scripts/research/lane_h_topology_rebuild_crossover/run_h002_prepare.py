@@ -39,6 +39,11 @@ def build_manifest(cfg: dict[str, object]) -> dict[str, object]:
         hit_contract=str(cfg["hit_contract"]),
         storage_contract=str(cfg["storage_contract"]),
     )
+    expected_digest = cfg.get("expected_workload_digest")
+    if expected_digest is not None and digest != expected_digest:
+        raise ValueError(
+            f"H002 workload digest drift: expected {expected_digest}, got {digest}"
+        )
     return {
         "schema_version": 1,
         "plan_version": cfg["plan_version"],
