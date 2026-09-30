@@ -330,3 +330,24 @@ python -m unittest scripts.research.lane_j_topology_backend_alternatives.test_j0
 cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-j-j004-formal-process
 exec python scripts/research/lane_j_topology_backend_alternatives/run_j004.py
 '''
+
+
+[tasks."research:l001:test"]
+description = "Run GPU-independent Lane L L001 protocol and analysis tests"
+run = '''
+python -m unittest \
+  scripts.research.lane_l_heavy_boundary_calibration.test_l001_analysis \
+  scripts.research.lane_l_heavy_boundary_calibration.test_l001_protocol \
+  scripts.research.lane_l_heavy_boundary_calibration.test_l001_runtime_contract
+'''
+
+[tasks."research:l001:formal"]
+description = "Build, validate, and run frozen Lane L L001 heavy-boundary calibration"
+depends = ["configure"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+mise run research:l001:test
+cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-l-l001-formal-process
+exec python scripts/research/lane_l_heavy_boundary_calibration/run_l001.py
+'''
