@@ -99,6 +99,13 @@
       "status": "pass",
       "evidence_class": "representative-persistent-vulkan-exact-replay",
       "decision": "promote to large-global-high resize-path target-GPU gate"
+    },
+    {
+      "id": "J003-persistent-vulkan-large-global-resize-v1.6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/015-large-global-resize-vulkan-pass.md",
+      "status": "pass",
+      "evidence_class": "target-gpu-persistent-resize-overlap",
+      "decision": "promote to unchanged-build all-five-profile GPU correctness/memory campaign"
     }
   ]
 }
