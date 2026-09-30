@@ -378,6 +378,33 @@ def main() -> int:
     if summary_path.exists():
         raise RuntimeError("completed campaign rerun budget is zero")
 
+    if not args.validation_only:
+        formal_root = (
+            ROOT
+            / "out/research/lane-e-timing-revalidation"
+            / "001-timing-revalidation"
+        )
+        completed = sorted(formal_root.glob("*/e001-summary.json"))
+        completed = [path for path in completed if path.parent != root]
+        if completed:
+            raise RuntimeError(
+                "E001 completed-campaign rerun budget is zero; existing summary: "
+                + ", ".join(str(path.relative_to(ROOT)) for path in completed)
+            )
+        incomplete = []
+        for path in formal_root.glob("*/e001-progress.json"):
+            if path.parent == root:
+                continue
+            payload = json.loads(path.read_text(encoding="utf-8"))
+            if payload.get("state") not in {"complete"}:
+                incomplete.append(path.parent)
+        if incomplete and not args.resume_root:
+            raise RuntimeError(
+                "E001 has an interrupted campaign; resume exactly that artifact root "
+                "with --resume-root instead of starting fresh: "
+                + ", ".join(str(path.relative_to(ROOT)) for path in incomplete)
+            )
+
     progress_path = root / "e001-progress.json"
     if progress_path.exists():
         progress = json.loads(progress_path.read_text(encoding="utf-8"))
