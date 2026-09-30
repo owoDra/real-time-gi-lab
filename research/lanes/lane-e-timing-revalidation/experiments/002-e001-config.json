@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "plan_version": "lane-e-timing-revalidation-e001-v5",
+  "plan_version": "lane-e-timing-revalidation-e001-v6",
   "issue": 22,
   "branch": "research-lane-e-timing-revalidation",
   "base_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
@@ -278,6 +278,10 @@
     {
       "version": "v5",
       "reason": "pre-target compile-only fix: renamed a local allocation-stats variable to avoid collision with VkCommandBufferAllocateInfo; no workload, control, threshold, sample-shape, memory rule, performance decision rule, environment, or rerun-policy change"
+    },
+    {
+      "version": "v6",
+      "reason": "pre-target validation-diagnostic and warning-cleanup only: report exact correctness-gate failure fields and remove an unused helper; no workload, control, threshold, sample-shape, memory rule, performance decision rule, environment, or rerun-policy change"
     }
   ]
 }
