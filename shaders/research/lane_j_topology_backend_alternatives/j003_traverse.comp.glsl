@@ -110,6 +110,14 @@ bool hit_aabb(
             a = b;
             b = tmp;
         }
+
+        // Conservative fp32 slab intersection: the mathematically far plane
+        // may round slightly inward. Expand only positive far distances; this
+        // does not alter exact triangle Hit/tie semantics.
+        if (b > 0.0) {
+            b *= AABB_PRUNE_DISTANCE_FACTOR;
+        }
+
         near_t = max(near_t, a);
         far_t = min(far_t, b);
         if (near_t > far_t) {
