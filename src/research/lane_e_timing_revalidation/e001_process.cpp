@@ -202,12 +202,9 @@ Batch run_batch(integration::I001Runtime& runtime, std::uint32_t transitions) {
     out.allocation_count = after.allocation_count;
     out.free_count = after.free_count;
     out.live_allocations = after.live_allocations;
-    const auto live_budget =
-        before.live_allocations + after.allocation_count;
     out.allocation_lifetime_complete =
-        after.free_count <= live_budget &&
-        after.live_allocations ==
-            live_budget - after.free_count;
+        after.allocation_count == after.free_count &&
+        after.live_allocations == before.live_allocations;
     return out;
 }
 
@@ -324,24 +321,18 @@ int run_validation(const Cli& cli) {
         const auto before_a = runtime_a.allocation_stats();
         const auto frame_a = runtime_a.run_frame(target);
         const auto allocations_a = runtime_a.allocation_stats();
-        const auto live_budget_a =
-            before_a.live_allocations + allocations_a.allocation_count;
         const bool lifetime_a =
-            allocations_a.free_count <= live_budget_a &&
-            allocations_a.live_allocations ==
-                live_budget_a - allocations_a.free_count;
+            allocations_a.allocation_count == allocations_a.free_count &&
+            allocations_a.live_allocations == before_a.live_allocations;
         const auto quality_a = runtime_a.validate_last_frame();
 
         runtime_b.reset_allocation_epoch();
         const auto before_b = runtime_b.allocation_stats();
         const auto frame_b = runtime_b.run_frame(target);
         const auto allocations_b = runtime_b.allocation_stats();
-        const auto live_budget_b =
-            before_b.live_allocations + allocations_b.allocation_count;
         const bool lifetime_b =
-            allocations_b.free_count <= live_budget_b &&
-            allocations_b.live_allocations ==
-                live_budget_b - allocations_b.free_count;
+            allocations_b.allocation_count == allocations_b.free_count &&
+            allocations_b.live_allocations == before_b.live_allocations;
         const auto quality_b = runtime_b.validate_last_frame();
 
         write_validation_row(
