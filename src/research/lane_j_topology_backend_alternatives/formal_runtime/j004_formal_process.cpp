@@ -164,6 +164,12 @@ struct BatchResult {
 struct ValidationResult {
     std::uint64_t hit_mismatches{};
     std::uint64_t nearest_hit_tie_mismatches{};
+    std::uint64_t static_hit_mismatches{};
+    std::uint64_t static_nearest_hit_tie_mismatches{};
+    std::uint64_t dynamic_hit_mismatches{};
+    std::uint64_t dynamic_nearest_hit_tie_mismatches{};
+    std::uint64_t merge_only_hit_mismatches{};
+    std::uint64_t merge_only_nearest_hit_tie_mismatches{};
     std::uint64_t traversal_runtime_errors{};
     std::uint64_t storage_failures{};
     std::uint64_t immutable_owner_mutations{};
@@ -755,9 +761,19 @@ public:
                         validation_rays,
                         replay_rays_.size());
             std::vector<GpuHit> gpu_hits(count);
+            std::vector<GpuHit> gpu_static_hits(count);
+            std::vector<GpuHit> gpu_dynamic_hits(count);
             context_.download_device_buffer(
                 hits_,
                 gpu_hits.data(),
+                count * sizeof(GpuHit));
+            context_.download_device_buffer(
+                static_hits_,
+                gpu_static_hits.data(),
+                count * sizeof(GpuHit));
+            context_.download_device_buffer(
+                dynamic_hits_,
+                gpu_dynamic_hits.data(),
                 count * sizeof(GpuHit));
 
             std::vector<float> resolved(
@@ -771,6 +787,27 @@ public:
                 resolved.data(),
                 resolved.size() * sizeof(float));
 
+            const auto is_nearest_tie_mismatch =
+                [](const lane_j::Hit& expected,
+                   const lane_j::GpuHit& actual) {
+                    const bool actual_hit =
+                        actual.ids[3] != 0U;
+                    if (!expected.hit || !actual_hit ||
+                        expected.primitive_id ==
+                            actual.ids[0]) {
+                        return false;
+                    }
+                    const auto tolerance =
+                        std::max(
+                            lane_j::kHitAbsTol,
+                            std::abs(expected.t) *
+                                lane_j::kHitRelTol);
+                    return std::abs(
+                               expected.t -
+                               actual.t_normal[0]) <=
+                           tolerance;
+                };
+
             lane_b::GpuSoftwareBvhData dynamic_cpu(
                 snapshots_.at(current_step_));
             for (std::size_t index = 0U;
@@ -780,36 +817,75 @@ public:
                     static_cpu_->trace(replay_rays_[index]);
                 const auto dynamic_hit =
                     dynamic_cpu.trace(replay_rays_[index]);
+                const auto expected_static =
+                    to_lane_j_hit(static_hit);
+                const auto expected_dynamic =
+                    to_lane_j_hit(dynamic_hit);
                 const auto expected =
                     to_lane_j_hit(
                         merge_cpu_hits(
                             static_hit,
                             dynamic_hit));
+                const auto actual_static =
+                    to_lane_j_gpu_hit(
+                        gpu_static_hits[index]);
+                const auto actual_dynamic =
+                    to_lane_j_gpu_hit(
+                        gpu_dynamic_hits[index]);
                 const auto actual =
                     to_lane_j_gpu_hit(gpu_hits[index]);
-                if (gpu_hits[index].metadata[3] > 1U) {
+
+                if (gpu_hits[index].metadata[3] > 1U ||
+                    gpu_static_hits[index].metadata[3] > 1U ||
+                    gpu_dynamic_hits[index].metadata[3] > 1U) {
                     ++total.traversal_runtime_errors;
                 }
+
+                const bool static_matches =
+                    lane_j::equivalent_hit(
+                        expected_static,
+                        actual_static);
+                const bool dynamic_matches =
+                    lane_j::equivalent_hit(
+                        expected_dynamic,
+                        actual_dynamic);
+                if (!static_matches) {
+                    ++total.static_hit_mismatches;
+                    if (is_nearest_tie_mismatch(
+                            expected_static,
+                            actual_static)) {
+                        ++total.
+                            static_nearest_hit_tie_mismatches;
+                    }
+                }
+                if (!dynamic_matches) {
+                    ++total.dynamic_hit_mismatches;
+                    if (is_nearest_tie_mismatch(
+                            expected_dynamic,
+                            actual_dynamic)) {
+                        ++total.
+                            dynamic_nearest_hit_tie_mismatches;
+                    }
+                }
+
                 if (!lane_j::equivalent_hit(
                         expected,
                         actual)) {
                     ++total.hit_mismatches;
-                    const bool actual_hit =
-                        actual.ids[3] != 0U;
-                    if (expected.hit && actual_hit &&
-                        expected.primitive_id !=
-                            actual.ids[0]) {
-                        const auto tolerance =
-                            std::max(
-                                lane_j::kHitAbsTol,
-                                std::abs(expected.t) *
-                                    lane_j::kHitRelTol);
-                        if (std::abs(
-                                expected.t -
-                                actual.t_normal[0]) <=
-                            tolerance) {
+                    const bool tie_mismatch =
+                        is_nearest_tie_mismatch(
+                            expected,
+                            actual);
+                    if (tie_mismatch) {
+                        ++total.
+                            nearest_hit_tie_mismatches;
+                    }
+                    if (static_matches &&
+                        dynamic_matches) {
+                        ++total.merge_only_hit_mismatches;
+                        if (tie_mismatch) {
                             ++total.
-                                nearest_hit_tie_mismatches;
+                                merge_only_nearest_hit_tie_mismatches;
                         }
                     }
                 }
@@ -2308,6 +2384,24 @@ void write_validation(
         << ",\n"
         << "  \"nearest_hit_tie_mismatch_count\": "
         << result.nearest_hit_tie_mismatches
+        << ",\n"
+        << "  \"static_hit_mismatch_count\": "
+        << result.static_hit_mismatches
+        << ",\n"
+        << "  \"static_nearest_hit_tie_mismatch_count\": "
+        << result.static_nearest_hit_tie_mismatches
+        << ",\n"
+        << "  \"dynamic_hit_mismatch_count\": "
+        << result.dynamic_hit_mismatches
+        << ",\n"
+        << "  \"dynamic_nearest_hit_tie_mismatch_count\": "
+        << result.dynamic_nearest_hit_tie_mismatches
+        << ",\n"
+        << "  \"merge_only_hit_mismatch_count\": "
+        << result.merge_only_hit_mismatches
+        << ",\n"
+        << "  \"merge_only_nearest_hit_tie_mismatch_count\": "
+        << result.merge_only_nearest_hit_tie_mismatches
         << ",\n"
         << "  \"traversal_runtime_error_count\": "
         << result.traversal_runtime_errors
