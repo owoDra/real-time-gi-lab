@@ -87,6 +87,12 @@ Current follow-up status:
 - clustered two-level BVH is rejected before formal timing:
   `results/020-relative-memory-preflight-fail.md`;
 - J004 may continue only with the remaining pre-frozen variants/controls;
-- J005 remains forbidden unless J004 formally retains another candidate.
+- pre-timing self review produced a v2 executable-method amendment without
+  changing workload/threshold/selector:
+  `experiments/004-formal-crossover-gate-v2-amendment.md`;
+- the v2 harness is frozen and ready for target execution:
+  `results/021-formal-crossover-execution-freeze.md`;
+- J005 remains forbidden unless the formal target campaign retains another
+  candidate.
 Preparation checkpoint:
 `results/019-formal-crossover-preparation.md`.

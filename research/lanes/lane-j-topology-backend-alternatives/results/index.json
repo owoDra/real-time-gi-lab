@@ -134,6 +134,13 @@
       "status": "fail-candidate-rejected-before-timing",
       "evidence_class": "same-run-relative-memory-eligibility",
       "decision": "clustered two-level BVH exceeds the frozen 1.25x persistent-memory limit on all five J002 profiles and also exceeds true-peak limit on large-global-high; reject it before formal timing"
+    },
+    {
+      "id": "J004-formal-execution-v2",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/021-formal-crossover-execution-freeze.md",
+      "status": "ready-target-execution",
+      "evidence_class": "pre-timing-formal-harness-freeze",
+      "decision": "clustered candidate remains rejected; v2 formal harness is frozen before target timing with full workload/correctness/boundary/provenance gates; J005 remains blocked pending a valid formal campaign"
     }
   ]
 }
