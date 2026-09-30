@@ -31,7 +31,7 @@ Canonical pre-target records:
 - `experiments/001-l001-heavy-boundary-calibration-plan.md`
 - `experiments/002-l001-config.json`
 - `experiments/003-l001-execution-freeze.json`
-- `results/001-l001-target-execution-freeze.md`
+- `results/001-l001-pretarget-freeze.md`
 
 J004 remains immutable and J005 remains forbidden.
 
