@@ -71,6 +71,13 @@
       "status": "implementation-ready-evidence-pending",
       "evidence_class": "persistent-vulkan-transition-runtime",
       "decision": "run representative exact target-GPU transition replay before large resize/all-profile expansion"
+    },
+    {
+      "id": "J003-persistent-vulkan-representative",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/011-persistent-vulkan-correctness-fail.md",
+      "status": "fail-diagnostic-pending",
+      "evidence_class": "representative-persistent-vulkan-exact-replay",
+      "decision": "zero-error gate failed at step 3 with one Hit mismatch; retain exact mismatch diagnostics before any correction"
     }
   ]
 }
