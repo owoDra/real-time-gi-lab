@@ -33,7 +33,7 @@ EXPECTED_SOURCE_BLOBS = {
     "scripts/research/lane_l_heavy_boundary_calibration/l002_analysis.py":
         "a4ed4c540ca7588c35491470e437b96696daf113",
     "scripts/research/lane_l_heavy_boundary_calibration/test_l002_analysis.py":
-        "c81220db8f8dc01a50567762a21322de051d566a",
+        "9033d5a9c8d903a3f68873c726517e0f3a567b7a",
     "scripts/research/lane_l_heavy_boundary_calibration/test_l002_protocol.py":
         "1c846c80bdf3ebcb535a3dd4a729efad61d0db77",
     "scripts/research/lane_l_heavy_boundary_calibration/run_l001.py":
