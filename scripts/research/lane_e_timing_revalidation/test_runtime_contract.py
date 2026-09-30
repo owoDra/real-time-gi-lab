@@ -33,7 +33,7 @@ class RuntimeContractTests(unittest.TestCase):
             source,
         )
         self.assertIn(
-            "translated_geometry(\n                baseline_triangles",
+            "translated_geometry(\n                    baseline_triangles",
             source,
         )
         self.assertIn(
