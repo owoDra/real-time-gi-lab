@@ -301,7 +301,8 @@ void write_validation_row(
         << csv_string(runtime.device_name()) << ','
         << csv_string(runtime.driver_name()) << ','
         << csv_string(runtime.driver_info()) << ','
-        << runtime.api_version() << ',' << runtime.timestamp_period_ns() << '\n';
+        << runtime.api_version() << ','
+        << std::setprecision(17) << runtime.timestamp_period_ns() << '\n';
 }
 
 int run_validation(const Cli& cli) {
