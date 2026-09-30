@@ -155,3 +155,32 @@ exec bash ./scripts/run_with_vulkan.sh \
   "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-probe" \
   "${args[@]}"
 '''
+
+
+[tasks."research:j003:transition-parity"]
+description = "Replay J003 C++ transition state and compare with the canonical Python structural gate"
+depends = ["configure"]
+usage = '''
+flag "--profile <profile>" help="Frozen J002 profile" default="medium-global-representative"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+profile="${usage_profile?}"
+artifact_root="out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized"
+cpp_output="out/research/lane-j-topology-backend-alternatives/003-target-gpu-prototype/j003-cpp-transition-${profile}.json"
+
+cmake --build "$PHOS_GI_BUILD_DIR" \
+  --target phos-lane-j-contract-test phos-lane-j-j003-transition-replay
+
+"$PHOS_GI_BUILD_DIR/phos-lane-j-contract-test"
+
+"$PHOS_GI_BUILD_DIR/phos-lane-j-j003-transition-replay" \
+  --profile-dir "$artifact_root/$profile" \
+  --output "$cpp_output"
+
+python scripts/research/lane_j_topology_backend_alternatives/compare_j003_transition_replay.py \
+  --canonical "$artifact_root/j003-cpu-structural.json" \
+  --cpp "$cpp_output" \
+  --profile "$profile"
+'''
