@@ -26,17 +26,18 @@ CONFIG = (
     / "005-formal-crossover-config.json"
 )
 EXPECTED_CONFIG_BLOB_SHA = "22951382f8a510bf176c7a427a12d7a2ae24e5d9"
-EXPECTED_SOURCE_TREE_SHA = "ded9ba79a46193db8cd5e5f190afe35f5ded2a56"
-EXPECTED_FORMAL_SHADER_TREE_SHA = "021faf5c71fc2bfed323887602148df0f7809dc9"
+EXPECTED_SOURCE_TREE_SHA = "7b697d2e2b8151e85e0bb451794de0b64e5e842b"
+EXPECTED_FORMAL_SHADER_TREE_SHA = "83e6f0f5286e7edb14b15a3e722dca379e126ce5"
 CAMPAIGN_ROOT = (
     ROOT
     / "out/research/lane-j-topology-backend-alternatives"
     / "004-formal-crossover"
 )
 
-# Proves that "unchanged transient LBVH" and the retained hardened path use
-# exactly the same recurrent F003 dynamic implementation in J004. Lane-G's
-# hardening changed setup allocation lifetime; J004 holds static setup common.
+# Pins the formal F003 path. The builder remains the retained Lane-G code.
+# Before any formal timing, v7 corrected traversal AABB pruning so B001's
+# frozen nearest-hit/tie tolerance is preserved; therefore the traversal shader
+# is intentionally no longer byte-identical to the historical Lane-G blob.
 EXPECTED_F003_BLOBS = {
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "f003_transient_lbvh.cpp": "17f55f17a35aaa5373074591af552636b1dfe82d",
@@ -45,7 +46,7 @@ EXPECTED_F003_BLOBS = {
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "f003_lbvh_builder.comp.glsl": "77db184be5fcee72fa6c4f5cf40cadf487dcedd4",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "f003_dynamic_traversal.comp.glsl": "56c7e80d345cf890d0b73b16edb740c874ac8dff",
+    "f003_dynamic_traversal.comp.glsl": "c03a07dd9701c2ea8472481a5ad0acf0f12bb2a4",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "baseline/lane_b_traversal/b002_hwrt.cpp": "91456326f9d946aedec46ff479f5d68600ed14a2",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
@@ -75,6 +76,8 @@ EXPECTED_FORMAL_HARNESS_BLOBS = {
     "baseline/lane_b_traversal/b002_vulkan.cpp": "0e8381ac81eaa39d9c733c5df29e952a6c9fe592",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "baseline/lane_b_traversal/b002_vulkan.hpp": "628a2dfcd0d60b5e565e6b2037c7c8beaf9e2790",
+    "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
+    "baseline/lane_b_traversal/gpu_software_bvh.hpp": "7e009a84dc0dcd2936821ddb1acac9144fdd7cdc",
     "src/research/lane_j_topology_backend_alternatives/"
     "j003_snapshot.cpp": "aa3f671021251de36d9b8903695b1e223304f4ac",
     "src/research/lane_j_topology_backend_alternatives/"
@@ -92,9 +95,9 @@ EXPECTED_FORMAL_HARNESS_BLOBS = {
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "i001_hwrt.comp.glsl": "17d3157ee86d26b53d10f84b47bc9cf2742a26af",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "i001_quantized_bvh8.comp.glsl": "7ba2950e0c5bacb27051f600769da1af85e8c3b4",
+    "i001_quantized_bvh8.comp.glsl": "f8470110bf10b034739399e5f91671534860e02e",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "i001_software_bvh.comp.glsl": "8384c44ca0ae3eb14386e74f272dc5351d6f7dd6",
+    "i001_software_bvh.comp.glsl": "749589cddf7277202a11c4493fccb2e93b154bf9",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "i001_radiance.comp.glsl": "32599531c293f8042f8b2fdf63593e43a4b33ae3",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"

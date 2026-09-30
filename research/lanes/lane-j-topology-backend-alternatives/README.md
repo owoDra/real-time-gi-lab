@@ -104,3 +104,6 @@ Preparation checkpoint:
 
 - component-level root-cause diagnostic for the retained large-global primary-control failure:
   `results/025-primary-control-mismatch-decomposition.md`.
+
+- v6 isolated the retained large-profile mismatch to dynamic exact ties; v7 found and repaired B001-incompatible `best_t` acceleration pruning across the CPU reference and formal software traversals before any timing:
+  `results/026-b001-tie-pruning-correctness-repair.md`.

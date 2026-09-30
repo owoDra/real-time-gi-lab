@@ -166,9 +166,16 @@
     {
       "id": "J004-validation-component-diagnostic-v6",
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/025-primary-control-mismatch-decomposition.md",
-      "status": "diagnostic-target-rerun-required",
+      "status": "root-cause-found-superseded-by-v7-correctness-repair",
       "evidence_class": "validation-only-root-cause-decomposition",
       "decision": "decompose retained 445 exact tie mismatches into static HWRT, dynamic HWRT, or merge-only origin before any behavioral correction or formal timing"
+    },
+    {
+      "id": "J004-formal-execution-v7",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/026-b001-tie-pruning-correctness-repair.md",
+      "status": "ready-full-target-revalidation",
+      "evidence_class": "pre-timing-correctness-repair",
+      "decision": "repair accelerated culling to preserve the already-frozen B001 best_t+tolerance tie domain; rerun all hard validation before timing"
     }
   ]
 }
