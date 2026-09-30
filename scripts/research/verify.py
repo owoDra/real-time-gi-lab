@@ -26,6 +26,11 @@ LANES = {
         "shader": "shaders/research/lane_k_gpu_primary_calibration/README.md",
         "script": "scripts/research/lane_k_gpu_primary_calibration/README.md",
     },
+    "lane-e-timing-revalidation": {
+        "src": "src/research/lane_e_timing_revalidation/CMakeLists.txt",
+        "shader": "shaders/research/integration/README.md",
+        "script": "scripts/research/lane_e_timing_revalidation/README.md",
+    },
 }
 
 
