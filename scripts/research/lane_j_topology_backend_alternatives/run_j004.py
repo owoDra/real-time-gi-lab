@@ -25,7 +25,7 @@ CONFIG = (
     / "research/lanes/lane-j-topology-backend-alternatives/experiments"
     / "005-formal-crossover-config.json"
 )
-EXPECTED_CONFIG_BLOB_SHA = "08d8b140f3f56a9ea09ec7bb3b2d795dff307184"
+EXPECTED_CONFIG_BLOB_SHA = "22951382f8a510bf176c7a427a12d7a2ae24e5d9"
 CAMPAIGN_ROOT = (
     ROOT
     / "out/research/lane-j-topology-backend-alternatives"
@@ -300,6 +300,17 @@ def run_validation(
         raise RuntimeError(
             f"J004 validation artifact rejected {profile}/{track}/{variant}"
         )
+    for field in config["j002"]["required_correctness_zero_fields"]:
+        if int(validation.get(field, -1)) != 0:
+            raise RuntimeError(
+                f"J004 validation {profile}/{track}/{variant}: "
+                f"{field} is non-zero or missing"
+            )
+    if validation.get("workload_identity_match") is not True:
+        raise RuntimeError(
+            f"J004 validation {profile}/{track}/{variant}: "
+            "workload identity did not match"
+        )
     device = json.loads(
         (process_root / "j004-device.json").read_text(encoding="utf-8")
     )
@@ -409,6 +420,17 @@ def run_timing_process(
         if raw["variant"] != expected_variant:
             raise RuntimeError(f"{process_id}: role/variant mismatch")
 
+        for field in config["j002"]["required_boundary_fields"]:
+            if field not in raw or raw[field] == "":
+                raise RuntimeError(
+                    f"{process_id}: required boundary field missing: {field}"
+                )
+            value = float(raw[field])
+            if not math.isfinite(value) or value < 0.0:
+                raise RuntimeError(
+                    f"{process_id}: invalid boundary field {field}"
+                )
+
         gpu = float(raw["gpu_us"])
         wall = float(raw["complete_wall_us"])
         if not math.isfinite(gpu) or gpu <= 0:
@@ -425,6 +447,19 @@ def run_timing_process(
             raise RuntimeError(f"{process_id}: resident memory is zero")
         if int(raw["max_true_peak_resident_bytes"]) < int(raw["max_resident_bytes"]):
             raise RuntimeError(f"{process_id}: true peak is below live resident memory")
+        classified = (
+            int(raw["persistent_bytes"])
+            + int(raw["transient_bytes"])
+            + int(raw["scratch_bytes"])
+        )
+        if classified != int(raw["max_resident_bytes"]):
+            raise RuntimeError(
+                f"{process_id}: allocation lifetime classes do not sum to live residency"
+            )
+        if int(raw["old_new_overlap_bytes"]) > int(raw["true_peak_resident_bytes"]):
+            raise RuntimeError(
+                f"{process_id}: old/new overlap exceeds true peak residency"
+            )
 
         enriched: dict[str, object] = dict(raw)
         enriched.update(
