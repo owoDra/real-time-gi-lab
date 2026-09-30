@@ -249,3 +249,33 @@ fi
 
 exec bash ./scripts/run_with_vulkan.sh   "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-persistent-gpu-replay"   "${args[@]}"
 '''
+
+
+[tasks."research:j003:persistent-gpu-all"]
+description = "Replay all frozen J003 profiles through one persistent Vulkan build"
+depends = ["configure"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+artifact_root="out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized"
+output_root="out/research/lane-j-topology-backend-alternatives/003-target-gpu-prototype/persistent-gpu-all"
+mkdir -p "$output_root"
+
+cmake --build "$PHOS_GI_BUILD_DIR"   --target phos-lane-j-j003-persistent-gpu-replay
+
+profiles=(
+  small-global-high
+  medium-global-representative
+  medium-local-high
+  large-global-high
+  large-local-high
+)
+
+for profile in "${profiles[@]}"; do
+  echo "=== $profile ==="
+  bash ./scripts/run_with_vulkan.sh     "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-persistent-gpu-replay"     --profile-dir "$artifact_root/$profile"     --output "$output_root/$profile.json"     --ray-count 4096     --validation
+done
+
+echo "J003 persistent GPU all-profile campaign PASS"
+'''
