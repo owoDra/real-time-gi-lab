@@ -136,13 +136,21 @@ def materialize_profile(base,steps,first_new_id=None):
     for step in steps[1:]:
         seed=int(step.topology_seed); target=int(step.primitive_count); locality=str(step.locality)
         removed=[]; inserted=[]; rold=[]; rnew=[]
+        previous_ids={t.primitive_id for t in current}
         if target<len(current):
             idx=set(_selected_indices(current,len(current)-target,seed^0x51a7,locality)); removed=[current[i].primitive_id for i in sorted(idx)]; current=[t for i,t in enumerate(current) if i not in idx]
-        elif target>len(current):
+        retained_ids=previous_ids-set(removed)
+        if target>len(current):
             for ordinal in range(target-len(current)):
                 t=base[_mix32(seed+ordinal)%len(base)]; n=_mutated(t,next_id,seed^0x1a57,ordinal); next_id+=1; current.append(n); inserted.append(n.primitive_id)
-        for ordinal,index in enumerate(_selected_indices(current,min(int(step.replacement_count),len(current)),seed^0xbeef,locality)):
+        retained_positions=[i for i,t in enumerate(current) if t.primitive_id in retained_ids]
+        retained=[current[i] for i in retained_positions]
+        replacement_local=_selected_indices(retained,min(int(step.replacement_count),len(retained)),seed^0xbeef,locality)
+        for ordinal,local_index in enumerate(replacement_local):
+            index=retained_positions[local_index]
             old=current[index]; n=_mutated(old,next_id,seed^0xcafe,ordinal); next_id+=1; current[index]=n; rold.append(old.primitive_id); rnew.append(n.primitive_id)
+        if set(inserted)&set(rold):
+            raise AssertionError("inserted primitives must not be replacement sources in the same transition")
         if len(current)!=target: raise AssertionError("target count drift")
         out.append(Snapshot(int(step.index),target,seed,int(step.replacement_count),locality,tuple(current),tuple(inserted),tuple(removed),tuple(rold),tuple(rnew),snapshot_digest(current)))
     return out
