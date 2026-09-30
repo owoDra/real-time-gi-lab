@@ -26,6 +26,8 @@ struct TransitionStats {
     std::uint32_t occupancy_min{};
     std::uint32_t occupancy_max{};
     bool cluster_set_changed{};
+    std::vector<std::uint32_t> dirty_cluster_ids;
+    std::vector<std::uint32_t> retired_cluster_ids;
 };
 
 class ClusterTransitionState {
