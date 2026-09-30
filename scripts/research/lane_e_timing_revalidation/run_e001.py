@@ -214,14 +214,11 @@ def validate_rows(rows: list[dict[str, object]]) -> None:
             if a[key] != b[key]:
                 raise RuntimeError(f"{state} validation digest mismatch for {key}")
         for row in state_rows:
-            allocated = int(row["allocation_count"])
-            freed = int(row["free_count"])
-            live = int(row["live_allocations"])
             current = int(row["current_bytes"])
-            peak = int(row["peak_bytes"])
-            if allocated < freed or allocated - freed != live:
+            peak = int(row["true_peak_bytes"])
+            if row.get("allocation_lifetime_complete") != "1":
                 raise RuntimeError(
-                    f"{state} allocation lifetime count accounting is incomplete"
+                    f"{state} allocation lifetime accounting is incomplete"
                 )
             if current <= 0 or peak < current:
                 raise RuntimeError(
@@ -253,6 +250,8 @@ def health_check_timing_rows(rows: list[dict[str, object]]) -> None:
             raise RuntimeError("non-positive/non-finite timing")
         if wall < gpu:
             raise RuntimeError("complete CPU wall is smaller than GPU timestamp")
+        if row.get("allocation_lifetime_complete") != "1":
+            raise RuntimeError("timed allocation lifetime accounting is incomplete")
         key = (str(row["phase"]), int(row["pair_index"]))
         pairs.setdefault(key, set()).add(str(row["role"]))
     if any(roles != {"A", "B"} for roles in pairs.values()):
@@ -303,7 +302,7 @@ def final_class_outcomes(summary: dict[str, object]) -> dict[str, object]:
         if any(value == "detected >=20% regression" for value in classifications.values()):
             status = "fresh same-run evidence falsifies previous Lane E performance claim"
             falsified = True
-        elif all(value == "detected >=20% improvement" for value in classifications.values()):
+        elif all(value == ">=20% detected improvement" for value in classifications.values()):
             status = f"{scenario} timing revalidated"
         else:
             status = "measurement-limited"
@@ -410,6 +409,12 @@ def main() -> int:
         progress = json.loads(progress_path.read_text(encoding="utf-8"))
         if progress.get("plan_version") != config["plan_version"]:
             raise RuntimeError("resume root uses a different frozen plan")
+        if progress.get("git_commit") != git("rev-parse", "HEAD"):
+            raise RuntimeError("resume root was created by a different source commit")
+        if progress.get("state") == "campaign-invalid-no-rerun":
+            raise RuntimeError("invalid E001 campaign cannot be resumed")
+        if progress.get("state") == "complete":
+            raise RuntimeError("completed E001 campaign cannot be resumed")
     else:
         progress = {
             "schema_version": 1,
@@ -550,29 +555,61 @@ def main() -> int:
                         log = root / "timing" / f"{process_id}.log"
                         output.parent.mkdir(parents=True, exist_ok=True)
                         if process_id not in progress["completed_processes"]:
+                            if output.exists() and output.stat().st_size > 0:
+                                partial_rows = read_csv(output)
+                                if any(
+                                    row.get("phase") == "measured"
+                                    for row in partial_rows
+                                ):
+                                    progress["state"] = "campaign-invalid-no-rerun"
+                                    progress["invalid_process_id"] = process_id
+                                    save_progress()
+                                    raise RuntimeError(
+                                        "partial E001 process contains measured rows "
+                                        f"and cannot be rerun: {process_id}"
+                                    )
+                                output.unlink()
                             progress["current"] = {
                                 "phase": "timing",
                                 "process_id": process_id,
                             }
                             save_progress()
-                            run_process(
-                                command_for(
-                                    executable,
-                                    scene,
-                                    output,
-                                    scenario,
-                                    track,
-                                    comparison,
-                                    validation=False,
-                                    block=block,
-                                    start_order=start_orders[block],
-                                    config=config,
-                                ),
-                                log,
-                            )
+                            try:
+                                run_process(
+                                    command_for(
+                                        executable,
+                                        scene,
+                                        output,
+                                        scenario,
+                                        track,
+                                        comparison,
+                                        validation=False,
+                                        block=block,
+                                        start_order=start_orders[block],
+                                        config=config,
+                                    ),
+                                    log,
+                                )
+                            except BaseException:
+                                partial_rows = (
+                                    read_csv(output)
+                                    if output.exists() and output.stat().st_size > 0
+                                    else []
+                                )
+                                if any(
+                                    row.get("phase") == "measured"
+                                    for row in partial_rows
+                                ):
+                                    progress["state"] = "campaign-invalid-no-rerun"
+                                    progress["invalid_process_id"] = process_id
+                                else:
+                                    progress["state"] = "interrupted-resumable-missing-process"
+                                save_progress()
+                                raise
                             rows = read_csv(output)
                             health_check_timing_rows(rows)
                             progress["completed_processes"].append(process_id)
+                            progress["state"] = "timing"
                             save_progress()
                         rows = read_csv(output)
                         health_check_timing_rows(rows)
@@ -582,6 +619,10 @@ def main() -> int:
 
         if len(progress["completed_processes"]) != 160:
             raise RuntimeError("formal timing requires exactly 160 fresh processes")
+        if len(raw_rows) != 5120:
+            raise RuntimeError(
+                f"formal timing requires 5120 retained raw rows, got {len(raw_rows)}"
+            )
         timing_provenance = same_provenance(raw_rows)
         if timing_provenance != provenance:
             raise RuntimeError("validation/timing device provenance changed")
@@ -634,7 +675,15 @@ def main() -> int:
         print(json.dumps(decisions, indent=2, sort_keys=True))
         return 0
     except BaseException:
-        progress["state"] = "invalid-or-interrupted"
+        if progress.get("state") not in {
+            "campaign-invalid-no-rerun",
+            "interrupted-resumable-missing-process",
+        }:
+            progress["state"] = (
+                "validation-failed"
+                if progress.get("current", {}).get("phase") == "validation"
+                else "interrupted-resumable-missing-process"
+            )
         save_progress()
         raise
 
