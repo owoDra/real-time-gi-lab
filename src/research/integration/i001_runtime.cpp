@@ -1757,51 +1757,135 @@ struct I001Runtime::Impl {
             out.packing_cpu_us =
                 elapsed_us(phase_start);
 
-            const lane_b::B002BufferUpdate node_update{
-                VkDeviceSize(
-                    deforming_local_setup.dynamic_node_base) *
-                    VkDeviceSize(
-                        sizeof(lane_b::B003GpuQuantNode)),
-                next_partition.nodes.data(),
-                VkDeviceSize(
-                    next_partition.nodes.size() *
-                    sizeof(lane_b::B003GpuQuantNode)),
-            };
-            const lane_b::B002BufferUpdate order_update{
-                VkDeviceSize(
-                    deforming_local_setup.dynamic_order_base) *
-                    VkDeviceSize(sizeof(std::uint32_t)),
-                next_partition.ordered_primitives.data(),
-                VkDeviceSize(
-                    next_partition.ordered_primitives.size() *
-                    sizeof(std::uint32_t)),
-            };
-            const lane_b::B002BufferUpdate hash_update{
-                VkDeviceSize(
-                    deforming_local_setup.dynamic_hash_base) *
-                    VkDeviceSize(
-                        sizeof(lane_b::GpuSegmentHashEntry)),
-                next_partition.hash_table.data(),
-                VkDeviceSize(
-                    next_partition.hash_table.size() *
-                    sizeof(lane_b::GpuSegmentHashEntry)),
-            };
-            out.hierarchy_upload_gpu_us =
-                context.update_device_buffer_timed(
+            const bool grow_nodes =
+                next_partition.nodes.size() >
+                deforming_local_setup.dynamic_node_capacity;
+            const bool grow_order =
+                next_partition.ordered_primitives.size() >
+                deforming_local_setup.dynamic_order_capacity;
+            const bool grow_hash =
+                next_partition.hash_table.size() >
+                deforming_local_setup.dynamic_hash_capacity;
+            const bool rebind =
+                grow_nodes || grow_order || grow_hash;
+
+            if (rebind) {
+                // Growth is recurrent work. Reallocate only after the new
+                // state is known; no future-state payload is prepared in setup.
+                traversal_stage.reset();
+
+                deforming_local_setup.dynamic_node_capacity =
+                    std::max(
+                        deforming_local_setup.dynamic_node_capacity,
+                        next_partition.nodes.size());
+                deforming_local_setup.dynamic_order_capacity =
+                    std::max(
+                        deforming_local_setup.dynamic_order_capacity,
+                        next_partition.ordered_primitives.size());
+                deforming_local_setup.dynamic_hash_capacity =
+                    std::max(
+                        deforming_local_setup.dynamic_hash_capacity,
+                        next_partition.hash_table.size());
+
+                deforming_local_setup.nodes.resize(
+                    deforming_local_setup.dynamic_node_base +
+                    deforming_local_setup.dynamic_node_capacity);
+                deforming_local_setup.ordered_primitives.resize(
+                    deforming_local_setup.dynamic_order_base +
+                    deforming_local_setup.dynamic_order_capacity);
+                deforming_local_setup.hash_table.resize(
+                    deforming_local_setup.dynamic_hash_base +
+                    deforming_local_setup.dynamic_hash_capacity);
+
+                std::copy(
+                    next_partition.nodes.begin(),
+                    next_partition.nodes.end(),
+                    deforming_local_setup.nodes.begin() +
+                        static_cast<std::ptrdiff_t>(
+                            deforming_local_setup.dynamic_node_base));
+                std::copy(
+                    next_partition.ordered_primitives.begin(),
+                    next_partition.ordered_primitives.end(),
+                    deforming_local_setup.ordered_primitives.begin() +
+                        static_cast<std::ptrdiff_t>(
+                            deforming_local_setup.dynamic_order_base));
+                std::copy(
+                    next_partition.hash_table.begin(),
+                    next_partition.hash_table.end(),
+                    deforming_local_setup.hash_table.begin() +
+                        static_cast<std::ptrdiff_t>(
+                            deforming_local_setup.dynamic_hash_base));
+
+                const auto node_write = write_storage_buffer(
                     instance_nodes,
-                    std::span<const lane_b::B002BufferUpdate>(
-                        &node_update,
-                        1)) +
-                context.update_device_buffer_timed(
+                    deforming_local_setup.nodes.data(),
+                    VkDeviceSize(
+                        deforming_local_setup.nodes.size() *
+                        sizeof(lane_b::B003GpuQuantNode)));
+                const auto order_write = write_storage_buffer(
                     instance_order,
-                    std::span<const lane_b::B002BufferUpdate>(
-                        &order_update,
-                        1)) +
-                context.update_device_buffer_timed(
+                    deforming_local_setup.ordered_primitives.data(),
+                    VkDeviceSize(
+                        deforming_local_setup.ordered_primitives.size() *
+                        sizeof(std::uint32_t)));
+                const auto hash_write = write_storage_buffer(
                     instance_hash,
-                    std::span<const lane_b::B002BufferUpdate>(
-                        &hash_update,
-                        1));
+                    deforming_local_setup.hash_table.data(),
+                    VkDeviceSize(
+                        deforming_local_setup.hash_table.size() *
+                        sizeof(lane_b::GpuSegmentHashEntry)));
+                out.hierarchy_upload_gpu_us =
+                    node_write.gpu_us +
+                    order_write.gpu_us +
+                    hash_write.gpu_us;
+                create_traversal_stage();
+            } else {
+                const lane_b::B002BufferUpdate node_update{
+                    VkDeviceSize(
+                        deforming_local_setup.dynamic_node_base) *
+                        VkDeviceSize(
+                            sizeof(lane_b::B003GpuQuantNode)),
+                    next_partition.nodes.data(),
+                    VkDeviceSize(
+                        next_partition.nodes.size() *
+                        sizeof(lane_b::B003GpuQuantNode)),
+                };
+                const lane_b::B002BufferUpdate order_update{
+                    VkDeviceSize(
+                        deforming_local_setup.dynamic_order_base) *
+                        VkDeviceSize(sizeof(std::uint32_t)),
+                    next_partition.ordered_primitives.data(),
+                    VkDeviceSize(
+                        next_partition.ordered_primitives.size() *
+                        sizeof(std::uint32_t)),
+                };
+                const lane_b::B002BufferUpdate hash_update{
+                    VkDeviceSize(
+                        deforming_local_setup.dynamic_hash_base) *
+                        VkDeviceSize(
+                            sizeof(lane_b::GpuSegmentHashEntry)),
+                    next_partition.hash_table.data(),
+                    VkDeviceSize(
+                        next_partition.hash_table.size() *
+                        sizeof(lane_b::GpuSegmentHashEntry)),
+                };
+                out.hierarchy_upload_gpu_us =
+                    context.update_device_buffer_timed(
+                        instance_nodes,
+                        std::span<const lane_b::B002BufferUpdate>(
+                            &node_update,
+                            1)) +
+                    context.update_device_buffer_timed(
+                        instance_order,
+                        std::span<const lane_b::B002BufferUpdate>(
+                            &order_update,
+                            1)) +
+                    context.update_device_buffer_timed(
+                        instance_hash,
+                        std::span<const lane_b::B002BufferUpdate>(
+                            &hash_update,
+                            1));
+            }
             out.gpu_us +=
                 out.hierarchy_upload_gpu_us;
 
@@ -1989,6 +2073,8 @@ struct I001Runtime::Impl {
             }
             calculate_memory();
         }
+
+        calculate_memory();
 
         if (options.scenario == I001Scenario::MovingRigid) {
             for (const auto primitive : moving.primitives) {
