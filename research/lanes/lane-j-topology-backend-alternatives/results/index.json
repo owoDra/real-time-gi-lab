@@ -12,9 +12,16 @@
     {
       "id": "J002/J003-pre-gpu",
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/002-gpu-independent-preparation.md",
-      "status": "implementation-complete-local-artifact-replay-pending",
-      "evidence_class": "contract-reference-model-and-self-review",
-      "decision": "next new research work is target-GPU J003 prototype validation; J004 remains Lane-I-gated"
+      "status": "complete",
+      "evidence_class": "contract-reference-model-and-canonical-cpu-replay",
+      "decision": "GPU-independent preflight complete; promote to target-GPU J003 prototype validation; J004 remains Lane-I-gated"
+    },
+    {
+      "id": "J003-cpu-structural",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/003-cpu-structural-gate.md",
+      "status": "pass",
+      "evidence_class": "canonical-cpu-structural-replay",
+      "decision": "clustered CPU reference satisfies ownership/occupancy/locality invariants on all frozen profiles; target-GPU exact validation required"
     }
   ]
 }
