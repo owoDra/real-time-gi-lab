@@ -57,6 +57,13 @@
       "status": "implementation-ready-evidence-pending",
       "evidence_class": "persistent-physical-slot-layout",
       "decision": "require all-profile host replay before persistent Vulkan buffer implementation"
+    },
+    {
+      "id": "J003-persistent-layout",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/009-persistent-layout-pass.md",
+      "status": "pass",
+      "evidence_class": "all-profile-persistent-host-layout",
+      "decision": "promote to persistent Vulkan buffers and per-transition exact GPU replay"
     }
   ]
 }
