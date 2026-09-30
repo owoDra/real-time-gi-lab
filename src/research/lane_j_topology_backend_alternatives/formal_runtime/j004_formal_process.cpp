@@ -631,6 +631,7 @@ public:
     [[nodiscard]] ValidationResult validate_cycle(
         std::uint32_t validation_rays) {
         ValidationResult total{};
+        const auto static_before = capture_static_buffers();
         for (std::uint32_t offset = 0U;
              offset < snapshots_.size();
              ++offset) {
@@ -677,12 +678,24 @@ public:
                     ++total.hit_mismatches;
                 }
             }
-            // Static structures are never rebound or mutated after setup.
-            total.immutable_owner_mutations += 0U;
         }
         if (current_step_ != 0U) {
             fail("J004 validation cycle did not return to step-00");
         }
+
+        const auto static_after = capture_static_buffers();
+        if (static_before.size() != static_after.size()) {
+            ++total.immutable_owner_mutations;
+        } else {
+            for (std::size_t index = 0U;
+                 index < static_before.size();
+                 ++index) {
+                if (static_before[index] != static_after[index]) {
+                    ++total.immutable_owner_mutations;
+                }
+            }
+        }
+
         // Validation readbacks are diagnostics and must not contaminate a
         // later recurrent GPU sample if the caller reuses this instance.
         (void)context_.consume_transfer_gpu_us();
@@ -690,6 +703,41 @@ public:
     }
 
 private:
+    [[nodiscard]] std::vector<std::vector<std::byte>>
+    capture_static_buffers() {
+        std::vector<const B002Buffer*> buffers;
+        if (options_.track == Track::Primary) {
+            buffers.push_back(
+                &static_hwrt_->triangle_buffer());
+        } else {
+            buffers.push_back(
+                &static_quant_->triangle());
+            buffers.push_back(
+                &static_quant_->nodes());
+            buffers.push_back(
+                &static_quant_->order());
+            buffers.push_back(
+                &static_quant_->hash());
+        }
+
+        std::vector<std::vector<std::byte>> snapshots;
+        snapshots.reserve(buffers.size());
+        for (const auto* buffer : buffers) {
+            if (buffer == nullptr ||
+                buffer->buffer == VK_NULL_HANDLE ||
+                buffer->size == 0U) {
+                fail("J004 static ownership buffer is invalid");
+            }
+            std::vector<std::byte> bytes(
+                static_cast<std::size_t>(buffer->size));
+            context_.download_device_buffer(
+                *buffer,
+                bytes.data(),
+                buffer->size);
+            snapshots.push_back(std::move(bytes));
+        }
+        return snapshots;
+    }
     void load_inputs() {
         for (std::uint32_t step = 0U;
              step < 8U;
