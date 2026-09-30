@@ -26,6 +26,15 @@ struct B002Buffer {
     VkDeviceSize allocation_size{};
     VkDeviceAddress address{};
     void* mapped{};
+    bool allocation_tracked{};
+};
+
+struct B002AllocationStats {
+    std::size_t current_bytes{};
+    std::size_t peak_bytes{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations{};
 };
 
 class B002VulkanContext {
@@ -68,6 +77,20 @@ public:
     }
     [[nodiscard]] VkDeviceSize acceleration_scratch_alignment() const noexcept {
         return acceleration_scratch_alignment_;
+    }
+    [[nodiscard]] B002AllocationStats allocation_stats() const noexcept {
+        return {
+            allocation_current_bytes_,
+            allocation_peak_bytes_,
+            allocation_count_,
+            free_count_,
+            live_allocation_count_,
+        };
+    }
+    void reset_allocation_epoch() noexcept {
+        allocation_peak_bytes_ = allocation_current_bytes_;
+        allocation_count_ = 0;
+        free_count_ = 0;
     }
 
     [[nodiscard]] B002Buffer create_host_buffer(
@@ -140,6 +163,12 @@ private:
     std::uint32_t api_version_{};
     VkDeviceSize acceleration_scratch_alignment_{1};
     bool hwrt_enabled_{};
+
+    std::size_t allocation_current_bytes_{};
+    std::size_t allocation_peak_bytes_{};
+    std::size_t allocation_count_{};
+    std::size_t free_count_{};
+    std::size_t live_allocation_count_{};
 };
 
 [[nodiscard]] std::vector<std::byte> read_b002_binary(
