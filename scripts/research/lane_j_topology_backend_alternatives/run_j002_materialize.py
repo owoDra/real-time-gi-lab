@@ -32,7 +32,10 @@ def main():
     representative=geometry.select_representative_object(scene,796)
     selected_instance=representative[0].instance_id
     global_next=max(t.primitive_id for t in scene)+1
-    root=args.artifact_dir or Path(os.environ.get("PHOS_RESEARCH_ARTIFACT_DIR","")) or ROOT/"out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialize"
+    env_root=os.environ.get("PHOS_RESEARCH_ARTIFACT_DIR")
+    root=args.artifact_dir or (Path(env_root) if env_root else None)
+    if root is None:
+        root=ROOT/"out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialize"
     root=Path(root); root.mkdir(parents=True,exist_ok=True)
     result_profiles=[]
     for profile_index,p in enumerate(cfg["profiles"]):
