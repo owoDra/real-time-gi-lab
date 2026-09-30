@@ -162,7 +162,6 @@ def _effect_result(
         "all_ba_stratum_medians_above_unity": all_ba_positive,
         "minimum_positive_pair_fraction": min_positive,
         "positive_pair_fraction_pass": positive_fraction_pass,
-        "processes": synthetic_process_rows,
     }
 
 
@@ -231,7 +230,7 @@ def summarize_l002(
                                 "effect_percent": int(factor_spec["percent"]),
                                 "control_noise_envelope_ratio":
                                     control["combined_noise_envelope_ratio"],
-                                "control_pass": effect["passed"],
+                                "effect_pass": effect["passed"],
                             }
                         )
                 controls[profile][track] = {
