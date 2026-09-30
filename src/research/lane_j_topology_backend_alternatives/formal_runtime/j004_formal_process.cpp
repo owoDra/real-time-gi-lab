@@ -800,10 +800,22 @@ public:
                 result.topology_mutation_count;
             batch.backend_rebuild_count +=
                 result.backend_rebuild_count;
+            // Lane M's memory hard guard is axis-wise. Keep actual maxima for
+            // persistent/transient/scratch, while max_resident_bytes remains
+            // one real lifetime classification and true_peak remains the
+            // allocator-observed lifetime peak.
+            batch.max_persistent_bytes =
+                std::max(
+                    batch.max_persistent_bytes,
+                    result.persistent_bytes);
             batch.max_transient_bytes =
                 std::max(
                     batch.max_transient_bytes,
                     result.transient_bytes);
+            batch.max_scratch_bytes =
+                std::max(
+                    batch.max_scratch_bytes,
+                    result.scratch_bytes);
 #endif
         }
 #ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
