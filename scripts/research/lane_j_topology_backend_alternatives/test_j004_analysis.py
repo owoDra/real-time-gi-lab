@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import unittest
 
-import j004_analysis as analysis
+from scripts.research.lane_j_topology_backend_alternatives import j004_analysis as analysis
 
 
 def process(
