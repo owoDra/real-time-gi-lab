@@ -21,6 +21,11 @@ LANES = {
         "shader": "shaders/research/lane_c_storage_locality/README.md",
         "script": "scripts/research/lane_c_storage_locality/README.md",
     },
+    "lane-k-gpu-primary-calibration": {
+        "src": "src/research/lane_k_gpu_primary_calibration/CMakeLists.txt",
+        "shader": "shaders/research/lane_k_gpu_primary_calibration/README.md",
+        "script": "scripts/research/lane_k_gpu_primary_calibration/README.md",
+    },
 }
 
 

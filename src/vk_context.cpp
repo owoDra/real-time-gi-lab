@@ -41,10 +41,24 @@ VulkanContext::VulkanContext(bool validation) {
     queue_ = queue_ret.value();
     queue_family_ = family_ret.value();
 
-    VkPhysicalDeviceProperties properties{};
-    instance_dispatch_.getPhysicalDeviceProperties(device_.physical_device.physical_device, &properties);
+    auto driver_properties =
+        detail::make_vk_info<VkPhysicalDeviceDriverProperties>(
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES);
+    auto properties2 =
+        detail::make_vk_info<VkPhysicalDeviceProperties2>(
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2);
+    properties2.pNext = &driver_properties;
+    instance_dispatch_.getPhysicalDeviceProperties2(
+        device_.physical_device.physical_device, &properties2);
+    const auto& properties = properties2.properties;
     timestamp_period_ns_ = properties.limits.timestampPeriod;
     device_name_ = properties.deviceName;
+    driver_name_ = driver_properties.driverName;
+    driver_info_ = driver_properties.driverInfo;
+    api_version_ = properties.apiVersion;
+    driver_version_ = properties.driverVersion;
+    vendor_id_ = properties.vendorID;
+    device_id_ = properties.deviceID;
 
     const auto& q = device_.queue_families.at(queue_family_);
     if (q.timestampValidBits == 0) {
