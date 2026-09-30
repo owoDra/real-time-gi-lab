@@ -118,7 +118,7 @@ run = "python scripts/research/verify.py"
 [tasks."research:record"]
 description = "Run one lane experiment and capture a reproducible raw artifact"
 usage = '''
-flag "--lane <lane>" help="lane-a-split-rc, lane-b-traversal, or lane-c-storage-locality" required=#true
+flag "--lane <lane>" help="research lane slug" required=#true
 flag "--experiment <experiment>" help="Stable experiment id, e.g. 001-producer-stream" required=#true
 flag "--command <command>" help="Command to execute; quote it as one shell argument" required=#true
 '''
@@ -128,3 +128,18 @@ exec python scripts/research/run_experiment.py \
   --experiment "${usage_experiment?}" \
   --command "${usage_command?}"
 '''
+
+
+[tasks."research:e001:test"]
+description = "Run GPU-independent Lane E timing revalidation tests"
+run = "python -m unittest discover -s scripts/research/lane_e_timing_revalidation -p 'test_*.py'"
+
+[tasks."research:e001:validation"]
+description = "Run E001 correctness/memory/provenance validation only"
+depends = ["build", "assets", "research:e001:test", "research:check"]
+run = "python scripts/research/lane_e_timing_revalidation/run_e001.py --validation-only"
+
+[tasks."research:e001:formal"]
+description = "Run the frozen Lane E timing revalidation campaign"
+depends = ["build", "assets", "research:e001:test", "research:check"]
+run = "python scripts/research/lane_e_timing_revalidation/run_e001.py"
