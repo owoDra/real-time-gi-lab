@@ -139,6 +139,43 @@ A later methodology change is allowed only when diagnostics justify it. Freeze
 the new protocol before the next accepted campaign and do not silently mix old
 and new timing evidence.
 
+### Post-Lane-H calibration requirement
+
+After Lane G/H, a new timing methodology intended to support architecture
+promotion must first be calibrated against controlled workloads with known,
+predeclared work deltas. Candidate architectures are not the calibration source.
+
+The calibration plan must freeze before target execution:
+
+- controlled workload definition and exact work deltas;
+- same-process/fresh-process structure;
+- batching or aggregation boundary;
+- candidate/control ordering;
+- GPU timestamp and CPU wall accounting;
+- decision statistic and uncertainty/repeatability criterion;
+- minimum effect size the protocol claims it can resolve;
+- rerun budget.
+
+A protocol may claim only the effect-size resolution demonstrated by that
+calibration. If it can distinguish 20% but not 10%, later architecture gates
+must not use it to make a 10% superiority claim.
+
+Before timing a dynamic architecture, the harness must also prove that every
+measured sample actually exercises the intended update/rebuild transition.
+Alternating a logical target flag is not sufficient evidence by itself.
+
+### GPU safety constraint
+
+The G002c forced-performance-state experiment caused host instability. Active
+research must not require or request:
+
+- `power_dpm_force_performance_level` writes;
+- `profile_peak` or equivalent forced GPU performance states;
+- privileged GPU clock/power sysfs writes;
+- equivalent power/clock isolation experiments.
+
+No conclusion about DVFS as a unique root cause is established by the crash.
+
 ## Decision-gate discipline
 
 Freeze correctness, performance, memory, workload, and repeatability gates

@@ -1,6 +1,6 @@
 # Research program status
 
-As of 2026-09-30, Lane A-F and Integration #13 are concluded. This document is the
+As of 2026-09-30, Lane A-H and Integration #13 are concluded. This document is the
 program-level synthesis on the `research` branch. Detailed experiment results,
 raw-artifact provenance, and lane-local decisions remain canonical in each lane's
 `results/` documents and are not duplicated here.
@@ -39,18 +39,26 @@ the completed lanes:
 5. Keep A001 as the standalone producer contract. Renderer depth reuse is a
    conditional integration optimization; bounded-capacity/safe-overflow is
    retained as a memory-policy result, not as a promoted producer.
-6. Lane F does not replace Lane E. The sorted two-level grid is not a viable
-   follow-up under the measured workload. Transient LBVH remains promising, but
-   its sparse-memory failure and unresolved timing repeatability prevent formal
-   promotion.
+6. Lane G resolved the transient-LBVH sparse-memory blocker without weakening
+   correctness: hardened true-lifetime peak memory is below the frozen 3.0x
+   vanilla ceiling in every required row. Production promotion is still blocked
+   by timing repeatability.
+7. Lane H attempted to establish a safe same-boundary topology-rebuild crossover
+   protocol. Valid static controls failed the pre-frozen repeatability gate, so
+   formal topology timing never became decision-valid. Lane H closes
+   measurement-limited; no Lane E vs hardened-LBVH speed claim is made.
 
 The main architectural blocker found by Integration #13 — world-space
 moving-geometry maintenance — is solved by Lane E for rigid and
-stable-topology-deforming geometry under its frozen gates. The main unresolved
-question is now whether a transient LBVH can become a useful **conditional
-object-local rebuild backend**, especially for high-churn/topology-changing
-geometry, while fitting the memory boundary and producing repeatable timing
-evidence.
+stable-topology-deforming geometry under its frozen gates. Lane G also removed
+the deterministic sparse-memory blocker for hardened transient LBVH.
+
+The remaining architecture question is still the topology-changing/high-churn
+object-local rebuild backend, but the immediate program blocker is now
+**measurement validity**: the target host has not yet demonstrated a safe
+protocol capable of resolving the size of performance difference required by a
+promotion gate. The next program phase separates measurement calibration from
+architecture exploration so one cannot silently bias the other.
 
 ## Major findings
 
@@ -62,7 +70,9 @@ evidence.
 | Integration / #13 | Complete, no universal promotion | Static/camera/light strongly favored HWRT, while the old world-space moving-rigid path regressed. This isolated dynamic geometry ownership/maintenance as the next problem. |
 | Lane D / #14 | Accepted final decision | No standalone producer replacement beat A001. D001 depth reuse is conditional integration evidence. D005 bounded-capacity/safe-overflow is retained policy evidence only. |
 | Lane E / #15 | Accepted | Object-local ownership by update semantics passed final integrated stable, rigid, deforming and memory gates for both HWRT and software fallback. This is the current incumbent dynamic-geometry architecture. |
-| Lane F / #16 | Complete, no promotion | Sorted grid is dominated by reference amplification/sort. Transient LBVH has strong mechanism evidence, but sparse peak memory exceeds 3.0x vanilla and final timing remains inconclusive after the permitted rerun. |
+| Lane F / #16 | Complete, no promotion | Sorted grid is dominated by reference amplification/sort. Transient LBVH established strong mechanism evidence but exposed sparse-memory and repeatability blockers. |
+| Lane G / #17 | Complete, deterministic hardening accepted | Hardened transient LBVH passes 60/60 deterministic correctness/workload rows; sparse-stress peak is 2.708583x vanilla and sparse-moving 2.699209x, resolving the former >3.0x blocker. Timing remains measurement-limited. |
+| Lane H / #18 | Complete, measurement-limited | Safe timing methodology did not pass: even valid static controls failed frozen repeatability criteria. The topology-changing crossover was therefore not run and no backend was promoted. |
 
 Representative values above are anchors only. Exact per-case numbers and raw
 artifact provenance remain in the lane result documents.
@@ -160,7 +170,8 @@ accepted topology-changing performance result.
 - D001 renderer-depth reuse.
 - D005 bounded-capacity/safe-overflow policy.
 - virtual/clipmap storage in dense/residency-stable regimes.
-- transient LBVH as a future mechanism candidate.
+- hardened transient LBVH as a correctness/memory-qualified future mechanism
+  candidate; production performance remains unproven.
 
 ### Rejected or not retained
 
@@ -173,11 +184,11 @@ accepted topology-changing performance result.
 
 ### Unresolved
 
-- whether transient LBVH can pass sparse-memory and repeatability gates;
-- whether transient LBVH is useful specifically for topology-changing/high-churn
-  object-local rebuilds;
-- same-boundary crossover between the accepted Lane E incumbent and hardened
-  transient LBVH;
+- whether a safe protocol on the target host can reliably distinguish a
+  predeclared ~10% GPU-performance difference without power/clock forcing;
+- which object-local backend is best for topology-changing/high-churn geometry;
+- same-boundary crossover between Lane E object-local rebuild, hardened
+  transient LBVH, and any structurally different topology backend;
 - topology-changing performance under the Lane E ownership model;
 - whether a future representative dense workload justifies reopening clipmap
   storage;
@@ -224,23 +235,58 @@ The sorted grid has a stronger negative disposition because reference
 amplification and sorting dominate the dynamic builder and a decision-valid
 large-world-moving gate also fails.
 
+## Lane G/H interpretation
+
+Lane G changed the transient-LBVH conclusion materially:
+
+- G001 identified the former sparse peak as a lifetime/ownership problem rather
+  than unavoidable LBVH payload growth;
+- G003 retained immutable-static-HWRT lifetime scheduling/release;
+- G004 passed all 16 frozen semantic cases;
+- G005 passed all 60 deterministic same-boundary correctness/workload/memory
+  rows;
+- sparse-stress hardened peak is **2.708583x** run-local vanilla, **12.16%**
+  lower than unchanged LBVH;
+- sparse-moving hardened peak is **2.699209x** vanilla, **15.72%** lower than
+  unchanged LBVH.
+
+This resolves the deterministic memory blocker but does not promote LBVH because
+G002 established no safe decision-valid timing protocol.
+
+Lane H then isolated the remaining topology-changing question. H001 used a
+pre-frozen all-or-nothing repeatability gate. Valid static controls already
+failed that gate across all four implementations, independently of the later
+discovered dynamic-harness semantic defect. H003 was therefore forbidden and
+Lane H closed **measurement-limited**.
+
+The correct interpretation is not "Lane E is faster" and not "LBVH is faster".
+The target environment has not yet supported a decision-valid comparison at the
+required effect size.
+
 ## Measurement methodology issue
 
-Timing instability must now be treated as a **program-level methodology issue**,
-not an LBVH-specific defect.
+Timing repeatability is now a **program-level first-class research problem**.
 
-Lane F instability repeatedly appeared in run-local controls as well as
-transient candidates. Consequently:
+Evidence from Lane F, G and H shows:
 
-- unstable rows cannot be turned into PASS/FAIL by using their medians;
-- no outlier deletion or post-hoc threshold changes are allowed;
-- a methodology change must be frozen before the next accepted timing campaign;
-- old and new timing protocols must not be mixed silently;
-- when controls are unstable, architecture-specific causal claims are not
-  justified.
+- timing excursions affect controls as well as transient candidates;
+- longer warmup alone is insufficient;
+- paired/counterbalanced automatic-DPM timing was also insufficient in G002;
+- H001 static controls still failed tighter pre-frozen repeatability criteria;
+- architecture-specific conclusions must not be drawn from unstable medians.
 
-The shared protocol records these rules. Lane G's timing diagnosis should
-produce the evidence needed to freeze the next accepted timing protocol.
+The forced AMDGPU performance-state experiment attempted in G002c caused host
+instability and is permanently excluded from the active program. No future lane
+may require `profile_peak`, `power_dpm_force_performance_level` writes,
+privileged clock/power sysfs manipulation, or equivalent forced power-state
+controls.
+
+The next methodology lane must calibrate the measurement system against
+**known-delta controlled workloads before measuring competing architectures**.
+In particular it should test whether batched same-process paired measurements
+can reliably detect predeclared 5%, 10%, and 20% controlled GPU-work changes.
+A new architecture timing campaign may use the resulting protocol only if that
+calibration passes its frozen gate.
 
 ## Evidence chain
 
@@ -253,66 +299,71 @@ Detailed source-of-truth documents:
 - Lane D: [final cross-lane producer decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-d-producer-optimization/research/lanes/lane-d-producer-optimization/results/006-final-cross-lane-decision.md)
 - Lane E: [E005 final ownership replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-e-dynamic-geometry/research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md)
 - Lane F: [F002 builder](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/002-pure-gpu-transient-lbvh-builder.md), [F006 geometry-class controls](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/006-geometry-class-crossover-controls.md), [F007 final replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-f-dynamic-geometry-alternatives/research/lanes/lane-f-dynamic-geometry-alternatives/results/007-final-integration-replay.md)
+- Lane G: [G002 repeatability diagnosis](https://github.com/owoDra/phos-gi-lab/blob/research-lane-g-transient-lbvh-hardening/research/lanes/lane-g-transient-lbvh-hardening/results/002-timing-repeatability-diagnosis.md), [G005 deterministic replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-g-transient-lbvh-hardening/research/lanes/lane-g-transient-lbvh-hardening/results/005-final-deterministic-replay.md)
+- Lane H: [H001 safe timing result](https://github.com/owoDra/phos-gi-lab/blob/research-lane-h-topology-rebuild-crossover/research/lanes/lane-h-topology-rebuild-crossover/results/001-safe-timing-methodology.md), [H004 final decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-h-topology-rebuild-crossover/research/lanes/lane-h-topology-rebuild-crossover/results/004-final-decision.md)
 
-Issues #9-#17 provide the frozen plans and later cross-lane context; lane result
-documents take precedence for concluded experiment outcomes.
+Issues #9-#18 provide frozen plans and cross-lane context; lane result documents
+take precedence for concluded experiment outcomes.
 
 ## Next research priority
 
-Issue #17 / Lane G is the next research lane. The post-synthesis plan is now
-frozen around two blockers that Lane F actually demonstrated:
+Two new lanes should fork from this synthesis checkpoint and remain logically
+separate.
 
-1. **G001 memory ownership/lifetime census first**. Explain the deterministic
-   sparse 3.0836x/3.2025x failures before optimizing.
-2. **G002 timing-repeatability diagnosis second**. Architecture remains
-   unchanged while isolating process/warmup/order/clock/allocator/driver/query
-   effects.
-3. Freeze any revised accepted timing protocol from G002 **before** using it for
-   decision-valid optimization timing.
-4. Only then implement memory changes justified by G001.
+### Lane I — measurement calibration
 
-Lane G must evaluate transient LBVH against the accepted Lane E architecture,
-not treat Lane F as though no incumbent exists. If Lane E participates in a
-formal performance gate, its comparator must be ported/rerun in the same
-run-local campaign and measurement boundary. Historical E005 values remain
-context only.
+Lane I is architecture-neutral. Its purpose is to determine whether the target
+host can safely and reproducibly resolve effect sizes relevant to architecture
+promotion.
 
-The valid outcomes are deliberately broader than a universal rigid-primary
-replacement. Lane G may establish a **conditional object-local transient rebuild
-backend** for topology-changing/high-churn geometry if that class passes its own
-frozen correctness, memory and timing gates. Rigid, stable-topology deforming,
-and topology-changing classes must remain separately reported; success in one
-class must not be generalized to another.
+It must use known-delta controlled GPU workloads before any candidate
+architecture. The primary direction is batched, same-process, paired and
+counterbalanced timing, with fresh-process replication retained as a separate
+axis. GPU timestamp and complete CPU wall boundaries remain separately reported.
 
-The Lane G plan also preserves the existing program contracts:
+Lane I must freeze its calibration matrix and pass/fail criteria before target
+execution. It may not use forced GPU power/clock states or post-hoc filtering.
 
-- A001 producer semantics and natural append order;
-- HWRT primary / B003 software fallback disposition unless new decision-valid
-  evidence supersedes it;
-- C001 sparse storage semantics;
-- shared exact Hit semantics;
-- no candidate-specific workload or hidden measurement-boundary changes.
+Valid final outcomes:
 
-No different research lane needs to precede Lane G. Lower-priority follow-ups —
-dense-regime storage, D001 renderer integration, and D005 capacity policy —
-should wait unless new evidence shows they are the dominant blocker.
+- **calibrated protocol accepted** — a specific safe protocol detects the frozen
+  controlled deltas with the required repeatability and may be reused by later
+  architecture lanes;
+- **measurement floor established** — only larger effect sizes are reliably
+  resolvable, so future promotion thresholds must not claim finer resolution;
+- **target timing unsuitable** — safe timing cannot support the intended
+  architecture ranking on this host.
 
-## Lane G start readiness
+### Lane J — topology-changing backend alternatives
 
-Lane G is ready to start once Issue #17 contains the post-synthesis comparison
-and outcome rules above and the lane branch is created from this research
-checkpoint.
+Lane J explores topology-changing/high-churn object-local backends at the data
+structure and update-model level while preserving Lane E ownership boundaries.
 
-Execution order is frozen:
+It must not merely retune the current transient LBVH. The initial research phase
+must consider structurally different families, including at least:
 
-1. G001 census with **no optimization**.
-2. G002 repeatability diagnosis with **unchanged architecture**.
-3. Document and freeze any accepted methodology revision.
-4. G003 memory candidates justified by G001 only.
-5. G004 integration hardening.
-6. G005 final same-boundary replay, including Lane E run-local comparison where
-   practical and required for a formal promotion claim.
+- object-local HWRT rebuild as the incumbent control;
+- cluster/meshlet-local two-level structures where only dirty clusters rebuild;
+- incremental subtree rebuild/refit hybrids;
+- locality-bounded spatial or paged structures that avoid Lane F's global
+  sort/reference-amplification failure mode;
+- broad-phase representations only when an exact-triangle refinement stage
+  preserves the shared exact Hit contract.
 
-No heuristic buffer tuning may precede G001. No accepted timing from a revised
-methodology may be used before that methodology is documented and frozen. No
-historical and run-local timing values may be mixed into one promotion gate.
+Lane J may perform literature review, deterministic workload design,
+correctness, memory accounting, and GPU-independent implementation before Lane I
+finishes. **Formal performance ranking is blocked until Lane I establishes an
+accepted safe protocol**, and that protocol must be frozen into Lane J before
+accepted target timing.
+
+Lane E remains the incumbent throughout. Hardened transient LBVH remains one
+candidate, not the assumed winner.
+
+### Program sequencing
+
+Lane I and Lane J may start in parallel because J's early research/design work
+does not require decision-valid timing. The first formal architecture crossover
+must wait for Lane I.
+
+Lower-priority storage/renderer/capacity-policy follow-ups remain deferred unless
+new evidence makes them the dominant blocker.

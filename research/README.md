@@ -23,9 +23,12 @@ As of 2026-09-30:
 | Lane D — producer optimization | #14 | `research-lane-d-producer-optimization` | completed |
 | Lane E — dynamic ownership | #15 | `research-lane-e-dynamic-geometry` | completed / accepted incumbent |
 | Lane F — dynamic alternatives | #16 | `research-lane-f-dynamic-geometry-alternatives` | completed / no promotion |
-| Lane G — transient LBVH hardening | #17 | proposed `research-lane-g-transient-lbvh-hardening` | planned; amend plan before implementation |
+| Lane G — transient LBVH hardening | #17 | `research-lane-g-transient-lbvh-hardening` | completed / memory+correctness accepted, timing measurement-limited |
+| Lane H — topology rebuild crossover | #18 | `research-lane-h-topology-rebuild-crossover` | completed / measurement-limited |
+| Lane I — measurement calibration | TBD | `research-lane-i-measurement-calibration` | planned from this synthesis checkpoint |
+| Lane J — topology backend alternatives | TBD | `research-lane-j-topology-backend-alternatives` | planned from this synthesis checkpoint |
 
-There is no active Lane G implementation on `research`.
+Lane I and Lane J are the next active research directions.
 
 ## Program topology
 
@@ -52,10 +55,23 @@ program integration/source-of-truth branch.
                                       accepted            no promotion
                                            \               /
                                             \             /
-                                             A-F synthesis
+                                             ▼           ▼
+                                             Lane G #17
+                                     memory/correctness hardened
                                                   │
                                                   ▼
-                                      Lane G #17 (planned)
+                                             Lane H #18
+                                          measurement-limited
+                                                  │
+                                   ┌──────────────┴──────────────┐
+                                   ▼                             ▼
+                              Lane I                         Lane J
+                       measurement calibration      topology alternatives
+                                   │                             │
+                                   └──── accepted timing ────────┘
+                                                 │
+                                                 ▼
+                                   future formal crossover
 ```
 
 Lane E and Lane F answer different questions. Lane E establishes the current
@@ -123,8 +139,11 @@ The completed program establishes:
 - I001 identification of world-space moving-geometry maintenance as the common
   blocker;
 - Lane E object-local ownership/update semantics as the current incumbent;
-- Lane F transient LBVH as a promising but unpromoted mechanism, with sparse
-  memory and timing repeatability unresolved.
+- Lane F transient LBVH as a promising but initially unpromoted mechanism;
+- Lane G hardened transient LBVH with deterministic correctness and sparse-memory
+  blockers resolved, but production timing still measurement-limited;
+- Lane H confirmation that the topology-changing crossover cannot be ranked
+  under the current timing methodology on the target host.
 
 Detailed links and representative values are maintained only in
 [status.md](status.md).
@@ -138,8 +157,9 @@ Do not merge lane implementation branches wholesale into `research`.
 At explicit synthesis checkpoints, only program-level conclusions, methodology,
 roadmap, and other genuinely shared contracts are brought back to `research`.
 
-A future Lane G branch must fork from the explicit post-synthesis `research`
-checkpoint and must not begin implementation until Issue #17 is amended as
-described in `status.md`.
+Lane I and Lane J must fork from the explicit post-Lane-H synthesis checkpoint.
+They remain separate: Lane I owns measurement calibration; Lane J owns topology
+architecture exploration. Lane J may not perform formal performance ranking
+until Lane I has produced an accepted safe protocol.
 
 See [protocol.md](protocol.md) for shared research rules.
