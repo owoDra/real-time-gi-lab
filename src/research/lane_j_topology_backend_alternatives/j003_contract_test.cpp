@@ -35,6 +35,26 @@ std::vector<lane_j::Triangle> make_triangles(std::uint32_t count) {
     return triangles;
 }
 
+std::vector<lane_j::Triangle> make_linear_triangles(
+    std::uint32_t count,
+    std::uint32_t first_id = 0U) {
+    std::vector<lane_j::Triangle> triangles;
+    triangles.reserve(count);
+    for (std::uint32_t i = 0U; i < count; ++i) {
+        const auto x = float(i) * 2.0F;
+        triangles.push_back({
+            {x, 0.0F, 0.0F},
+            {x + 0.8F, 0.0F, 0.0F},
+            {x, 0.0F, 0.8F},
+            first_id + i,
+            7U,
+            3U,
+            true,
+        });
+    }
+    return triangles;
+}
+
 } // namespace
 
 int main() {
@@ -71,39 +91,48 @@ int main() {
             fail("B001-compatible reference hit contract drift");
         }
 
-        // Transition regression: create a second snapshot that removes most of
-        // the first population and inserts a concentrated replacement region.
-        lane_j::ClusterTransitionState transition(triangles);
-        std::vector<lane_j::Triangle> next;
-        next.reserve(80U);
-        for (std::uint32_t i = 0U; i < 20U; ++i) {
-            next.push_back(triangles[i]);
+        // Empty-cluster retirement regression: one-dimensional Morton order
+        // makes the initial 48/48/48 ownership deterministic.
+        const auto retire_source = make_linear_triangles(144U);
+        lane_j::ClusterTransitionState retire_state(retire_source);
+        std::vector<lane_j::Triangle> retire_next(
+            retire_source.begin(),
+            retire_source.begin() + 20);
+        const auto retire_stats = retire_state.update(retire_next);
+        if (retire_stats.retired_empty_cluster_count != 2U) {
+            fail("transition empty-cluster retirement contract drift");
         }
-        for (std::uint32_t i = 0U; i < 60U; ++i) {
-            const float x = 0.02F * float(i);
-            next.push_back({
-                {x, 0.0F, 0.0F},
-                {x + 0.01F, 0.0F, 0.0F},
-                {x, 0.0F, 0.01F},
+        if (retire_stats.unaffected_cluster_rebuild_count != 0U ||
+            retire_stats.occupancy_min == 0U ||
+            retire_stats.occupancy_max > lane_j::kClusterMaximum) {
+            fail("retirement transition invariant drift");
+        }
+
+        // Split regression: one initial cluster receives all inserted geometry,
+        // guaranteeing post-assignment overflow before the deterministic split.
+        const auto split_source = make_linear_triangles(48U);
+        lane_j::ClusterTransitionState split_state(split_source);
+        auto split_next = split_source;
+        for (std::uint32_t i = 0U; i < 40U; ++i) {
+            const float x = 0.01F * float(i);
+            split_next.push_back({
+                {x, 0.1F, 0.0F},
+                {x + 0.005F, 0.1F, 0.0F},
+                {x, 0.1F, 0.005F},
                 5000U + i,
                 7U,
                 3U,
                 true,
             });
         }
-        const auto transition_stats = transition.update(next);
-        if (transition_stats.unaffected_cluster_rebuild_count != 0U) {
-            fail("transition mutated an unaffected cluster");
-        }
-        if (transition_stats.occupancy_min == 0U ||
-            transition_stats.occupancy_max > lane_j::kClusterMaximum) {
-            fail("transition occupancy contract drift");
-        }
-        if (transition_stats.split_count == 0U) {
+        const auto split_stats = split_state.update(split_next);
+        if (split_stats.split_count == 0U) {
             fail("transition split path was not exercised");
         }
-        if (transition_stats.retired_empty_cluster_count == 0U) {
-            fail("transition empty-cluster retirement was not exercised");
+        if (split_stats.unaffected_cluster_rebuild_count != 0U ||
+            split_stats.occupancy_min == 0U ||
+            split_stats.occupancy_max > lane_j::kClusterMaximum) {
+            fail("split transition invariant drift");
         }
 
         std::cout << "J003 host contract PASS\n";
