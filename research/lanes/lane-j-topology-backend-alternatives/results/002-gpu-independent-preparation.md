@@ -1,6 +1,6 @@
 # J002/J003 GPU-independent preparation checkpoint
 
-Status: **GPU-independent implementation complete; canonical local artifact replay pending**
+Status: **COMPLETE — canonical local artifact replay passed**
 
 This checkpoint distinguishes implementation readiness from evidence that
 requires files intentionally kept outside Git.
@@ -127,3 +127,17 @@ Formal performance ranking remains prohibited.
 Lane I is concurrently at I003 target calibration; Issue #19 has not yet
 published I004. Therefore J004 formal crossover remains blocked independently
 of J003.
+
+
+## Completion update
+
+The canonical local replay has now completed successfully.
+
+- J002 materialization matched the frozen A001 source and all frozen topology
+  digests.
+- J003 CPU structural replay passed all declared structural invariants.
+- The retained J003 CPU artifact is summarized in
+  `results/003-cpu-structural-gate.md`.
+
+This checkpoint is therefore closed. Target-GPU J003 validation is the next
+research boundary.
