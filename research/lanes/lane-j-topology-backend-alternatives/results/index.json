@@ -29,6 +29,13 @@
       "status": "implementation-ready-evidence-pending",
       "evidence_class": "target-gpu-probe-implementation",
       "decision": "run host contract then representative target-GPU exact traversal probe before transition integration"
+    },
+    {
+      "id": "J003-gpu-traversal-probe",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/005-target-gpu-traversal-pass.md",
+      "status": "pass",
+      "evidence_class": "representative-target-gpu-exact-traversal",
+      "decision": "GPU layout/exact Hit traversal validated on representative frozen snapshot; promote to transition-time persistent cluster validation"
     }
   ]
 }
