@@ -34,7 +34,9 @@ add_dependencies(phos-lane-i-i001 phos-lane-i-shaders)
 add_executable(phos-lane-i-contract-test i001_contract_test.cpp)
 target_link_libraries(phos-lane-i-contract-test PRIVATE phos-lane-i-contract)
 target_compile_features(phos-lane-i-contract-test PRIVATE cxx_std_20)
-set_target_properties(phos-lane-i-contract-test PROPERTIES CXX_EXTENSIONS OFF)
+set_target_properties(phos-lane-i-contract-test PROPERTIES
+  CXX_EXTENSIONS OFF
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}")
 
 if(MSVC)
   target_compile_options(phos-lane-i-contract PRIVATE /W4 /permissive-)

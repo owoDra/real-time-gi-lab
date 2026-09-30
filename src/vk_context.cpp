@@ -41,10 +41,12 @@ VulkanContext::VulkanContext(bool validation) {
     queue_ = queue_ret.value();
     queue_family_ = family_ret.value();
 
-    VkPhysicalDeviceDriverProperties driver_properties{
-        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES};
-    VkPhysicalDeviceProperties2 properties2{
-        VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2};
+    auto driver_properties =
+        detail::make_vk_info<VkPhysicalDeviceDriverProperties>(
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DRIVER_PROPERTIES);
+    auto properties2 =
+        detail::make_vk_info<VkPhysicalDeviceProperties2>(
+            VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2);
     properties2.pNext = &driver_properties;
     instance_dispatch_.getPhysicalDeviceProperties2(
         device_.physical_device.physical_device, &properties2);
