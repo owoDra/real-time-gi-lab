@@ -26,6 +26,8 @@ CONFIG = (
     / "005-formal-crossover-config.json"
 )
 EXPECTED_CONFIG_BLOB_SHA = "22951382f8a510bf176c7a427a12d7a2ae24e5d9"
+EXPECTED_SOURCE_TREE_SHA = "6f494acf7d039b2c82be6ebf2a504dcafebc1cbd"
+EXPECTED_FORMAL_SHADER_TREE_SHA = "021faf5c71fc2bfed323887602148df0f7809dc9"
 CAMPAIGN_ROOT = (
     ROOT
     / "out/research/lane-j-topology-backend-alternatives"
@@ -167,6 +169,23 @@ def resolved_path(value: str | os.PathLike[str]) -> Path:
 
 
 def verify_frozen_sources() -> None:
+    source_tree = git(
+        "rev-parse",
+        "HEAD:src/research/lane_j_topology_backend_alternatives",
+    )
+    if source_tree != EXPECTED_SOURCE_TREE_SHA:
+        raise RuntimeError(
+            "J004 Lane-J source tree changed after pre-timing freeze"
+        )
+    shader_tree = git(
+        "rev-parse",
+        "HEAD:shaders/research/lane_j_topology_backend_alternatives/formal_runtime",
+    )
+    if shader_tree != EXPECTED_FORMAL_SHADER_TREE_SHA:
+        raise RuntimeError(
+            "J004 formal shader tree changed after pre-timing freeze"
+        )
+
     frozen = {
         **EXPECTED_F003_BLOBS,
         **EXPECTED_FORMAL_HARNESS_BLOBS,
