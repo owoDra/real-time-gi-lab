@@ -95,6 +95,7 @@ struct I001Memory {
     std::size_t persistent_bytes{};
     std::size_t transient_bytes{};
     std::size_t scratch_bytes{};
+    std::size_t old_new_overlap_bytes{};
     std::size_t peak_resident_bytes{};
     std::size_t stream_capacity_bytes{};
     std::size_t storage_capacity_bytes{};
