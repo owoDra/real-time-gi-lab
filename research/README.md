@@ -25,8 +25,8 @@ As of 2026-09-30:
 | Lane F — dynamic alternatives | #16 | `research-lane-f-dynamic-geometry-alternatives` | completed / no promotion |
 | Lane G — transient LBVH hardening | #17 | `research-lane-g-transient-lbvh-hardening` | completed / memory+correctness accepted, timing measurement-limited |
 | Lane H — topology rebuild crossover | #18 | `research-lane-h-topology-rebuild-crossover` | completed / measurement-limited |
-| Lane I — measurement calibration | TBD | `research-lane-i-measurement-calibration` | planned from this synthesis checkpoint |
-| Lane J — topology backend alternatives | TBD | `research-lane-j-topology-backend-alternatives` | planned from this synthesis checkpoint |
+| Lane I — measurement calibration | #19 | `research-lane-i-measurement-calibration` | planned from this synthesis checkpoint |
+| Lane J — topology backend alternatives | #20 | `research-lane-j-topology-backend-alternatives` | planned from this synthesis checkpoint |
 
 Lane I and Lane J are the next active research directions.
 

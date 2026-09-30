@@ -310,7 +310,7 @@ take precedence for concluded experiment outcomes.
 Two new lanes should fork from this synthesis checkpoint and remain logically
 separate.
 
-### Lane I — measurement calibration
+### Lane I / #19 — measurement calibration
 
 Lane I is architecture-neutral. Its purpose is to determine whether the target
 host can safely and reproducibly resolve effect sizes relevant to architecture
@@ -334,7 +334,7 @@ Valid final outcomes:
 - **target timing unsuitable** — safe timing cannot support the intended
   architecture ranking on this host.
 
-### Lane J — topology-changing backend alternatives
+### Lane J / #20 — topology-changing backend alternatives
 
 Lane J explores topology-changing/high-churn object-local backends at the data
 structure and update-model level while preserving Lane E ownership boundaries.
