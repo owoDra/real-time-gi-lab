@@ -18,6 +18,24 @@
       "result": "002-gpu-primary-protocol.md",
       "git_commit": "c886d0f33f63de131da9db3757f2c0b05c7c2634",
       "plan_version": "lane-k-k002-v1"
+    },
+    {
+      "id": "003-target-calibration",
+      "status": "accepted",
+      "evidence_class": "target-calibration",
+      "outcome": "5%-gpu-primary-resolution",
+      "result": "003-target-calibration.md",
+      "git_commit": "0cab088ed2316ba38497b1aa92a8a507638471f5",
+      "plan_version": "lane-k-k002-v1"
+    },
+    {
+      "id": "004-program-timing-capability",
+      "status": "accepted",
+      "evidence_class": "program-methodology",
+      "outcome": "GPU-primary protocol accepted",
+      "result": "004-program-timing-capability.md",
+      "git_commit": "72ced64a7dc7114b946f28fb5cfd4f38be31a0b9",
+      "plan_version": "lane-k-k002-v1"
     }
   ]
 }
