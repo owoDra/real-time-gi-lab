@@ -77,7 +77,8 @@ private:
         std::uint32_t physical_slot,
         const TransitionCluster& cluster);
     void rebuild_upper(const ClusterTransitionState& state);
-    [[nodiscard]] std::uint32_t refit_upper_node(std::uint32_t node_index);
+    [[nodiscard]] std::uint32_t refit_upper(
+        std::span<const std::uint32_t> dirty_physical_slots);
 
     std::uint32_t slot_capacity_{};
     std::uint32_t active_cluster_count_{};
@@ -91,6 +92,8 @@ private:
     std::vector<GpuBvhNode> micro_nodes_;
     std::vector<GpuCluster> clusters_;
     std::vector<GpuBvhNode> upper_nodes_;
+    std::vector<std::uint32_t> upper_parent_;
+    std::vector<std::uint32_t> slot_to_upper_leaf_;
 };
 
 } // namespace phos::gi::research::lane_j
