@@ -117,6 +117,7 @@ add_executable(phos-lane-j-j003-persistent-gpu-replay
   j003_persistent_layout.cpp
   j003_persistent_gpu.cpp
   j003_reference.cpp
+  j003_clustered_bvh.cpp
   ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
 )
 
