@@ -164,6 +164,32 @@ Before timing a dynamic architecture, the harness must also prove that every
 measured sample actually exercises the intended update/rebuild transition.
 Alternating a logical target flag is not sufficient evidence by itself.
 
+### Post-Lane-I calibration disposition
+
+Lane I tested a pre-frozen dual-axis calibration protocol on architecture-neutral
+known work deltas. Under that exact protocol:
+
+- the accepted GPU timestamp control passed and +20%, +10%, and +5% deltas were
+  all detected across fresh-process replication;
+- complete CPU wall produced a non-monotonic result: +20% failed the frozen
+  maximum order-bias gate while +10% and +5% passed;
+- therefore no common 5%, 10%, or 20% dual-axis resolution was accepted;
+- I004 classifies the tested target timing protocol as **target timing
+  unsuitable**.
+
+The demonstrated 5% GPU-timestamp resolution is mechanism evidence, not an
+accepted architecture-ranking protocol.
+
+A later methodology may explicitly define GPU timestamp as the primary
+performance boundary and complete CPU wall as diagnostic-only, but that role
+split must be declared and frozen **before** a new architecture-neutral
+known-delta calibration campaign. Lane I's accepted artifact must not be
+reinterpreted post hoc to satisfy that new contract.
+
+Until such a follow-up calibration passes, formal architecture-performance
+promotion remains blocked on this target. Structural, correctness, and memory
+research may continue independently.
+
 ### GPU safety constraint
 
 The G002c forced-performance-state experiment caused host instability. Active
