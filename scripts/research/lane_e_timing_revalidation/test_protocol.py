@@ -11,7 +11,7 @@ CONFIG = ROOT / "research/lanes/lane-e-timing-revalidation/experiments/002-e001-
 class ProtocolTests(unittest.TestCase):
     def test_frozen_heavy_boundary_contract(self) -> None:
         config = json.loads(CONFIG.read_text(encoding="utf-8"))
-        self.assertEqual(config["plan_version"], "lane-e-timing-revalidation-e001-v3")
+        self.assertEqual(config["plan_version"], "lane-e-timing-revalidation-e001-v4")
         self.assertEqual(config["timing"]["environment"], "dual-context")
         self.assertEqual(config["timing"]["primary_axis"], "gpu_timestamp")
         self.assertEqual(config["timing"]["cpu_wall_role"], "diagnostic-health-provenance-only")
