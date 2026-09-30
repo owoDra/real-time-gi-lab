@@ -47,6 +47,16 @@ public:
         const void* push_constants = nullptr,
         std::size_t push_constant_bytes = 0) const;
 
+    // J004 rebinds only recurrent dynamic resources. Pipeline/layout creation
+    // remains setup work, so no per-transition pipeline creation is hidden
+    // outside the timing boundary.
+    void update_buffer_binding(
+        std::uint32_t binding,
+        const B002Buffer& buffer);
+    void update_acceleration_binding(
+        std::uint32_t binding,
+        VkAccelerationStructureKHR acceleration);
+
 private:
     void bind(
         VkCommandBuffer command,

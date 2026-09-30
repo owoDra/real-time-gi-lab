@@ -70,6 +70,21 @@ public:
         return acceleration_scratch_alignment_;
     }
 
+    [[nodiscard]] std::size_t live_allocation_bytes() const noexcept {
+        return live_allocation_bytes_;
+    }
+    [[nodiscard]] std::size_t peak_allocation_bytes() const noexcept {
+        return peak_allocation_bytes_;
+    }
+    void reset_allocation_peak() noexcept {
+        peak_allocation_bytes_ = live_allocation_bytes_;
+    }
+    [[nodiscard]] double consume_transfer_gpu_us() noexcept {
+        const double value = transfer_gpu_us_;
+        transfer_gpu_us_ = 0.0;
+        return value;
+    }
+
     [[nodiscard]] B002Buffer create_host_buffer(
         VkDeviceSize size,
         VkBufferUsageFlags usage);
@@ -140,6 +155,9 @@ private:
     std::uint32_t api_version_{};
     VkDeviceSize acceleration_scratch_alignment_{1};
     bool hwrt_enabled_{};
+    std::size_t live_allocation_bytes_{};
+    std::size_t peak_allocation_bytes_{};
+    double transfer_gpu_us_{};
 };
 
 [[nodiscard]] std::vector<std::byte> read_b002_binary(

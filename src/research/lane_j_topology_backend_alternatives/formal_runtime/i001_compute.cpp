@@ -203,6 +203,53 @@ I001ComputeStage::~I001ComputeStage() {
             descriptor_layout_, nullptr);
 }
 
+void I001ComputeStage::update_buffer_binding(
+    std::uint32_t binding,
+    const B002Buffer& buffer) {
+    if (buffer.buffer == VK_NULL_HANDLE) {
+        fail("I001 dynamic buffer binding is null");
+    }
+    VkDescriptorBufferInfo info{
+        buffer.buffer,
+        0,
+        buffer.size,
+    };
+    auto write =
+        detail::make_vk_info<VkWriteDescriptorSet>(
+            VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
+    write.dstSet = descriptor_set_;
+    write.dstBinding = binding;
+    write.descriptorCount = 1;
+    write.descriptorType = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
+    write.pBufferInfo = &info;
+    context_.vk().updateDescriptorSets(1, &write, 0, nullptr);
+}
+
+void I001ComputeStage::update_acceleration_binding(
+    std::uint32_t binding,
+    VkAccelerationStructureKHR acceleration) {
+    if (acceleration == VK_NULL_HANDLE) {
+        fail("I001 dynamic acceleration binding is null");
+    }
+    auto acceleration_info =
+        detail::make_vk_info<
+            VkWriteDescriptorSetAccelerationStructureKHR>(
+            VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET_ACCELERATION_STRUCTURE_KHR);
+    acceleration_info.accelerationStructureCount = 1;
+    acceleration_info.pAccelerationStructures = &acceleration;
+
+    auto write =
+        detail::make_vk_info<VkWriteDescriptorSet>(
+            VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
+    write.dstSet = descriptor_set_;
+    write.dstBinding = binding;
+    write.descriptorCount = 1;
+    write.descriptorType =
+        VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR;
+    write.pNext = &acceleration_info;
+    context_.vk().updateDescriptorSets(1, &write, 0, nullptr);
+}
+
 void I001ComputeStage::bind(
     VkCommandBuffer command,
     const void* push_constants,

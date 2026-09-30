@@ -2,6 +2,7 @@
 
 #include "vk_init.hpp"
 
+#include <algorithm>
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
@@ -234,6 +235,11 @@ B002Buffer B002VulkanContext::create_buffer(
         destroy_buffer(output);
         fail("B002 vkBindBufferMemory failed");
     }
+
+    live_allocation_bytes_ += static_cast<std::size_t>(output.allocation_size);
+    peak_allocation_bytes_ = std::max(
+        peak_allocation_bytes_,
+        live_allocation_bytes_);
 
     if (map &&
         dispatch_.mapMemory(
@@ -490,6 +496,7 @@ double B002VulkanContext::copy_buffer_regions_timed(
     dispatch_.destroyFence(fence, nullptr);
     dispatch_.destroyQueryPool(query_pool, nullptr);
     dispatch_.destroyCommandPool(pool, nullptr);
+    transfer_gpu_us_ += gpu_us;
     return gpu_us;
 }
 
@@ -594,13 +601,18 @@ void B002VulkanContext::download_device_buffer(
 }
 
 void B002VulkanContext::destroy_buffer(B002Buffer& buffer) {
-    if (buffer.mapped != nullptr) {
+    if (buffer.mapped != nullptr && buffer.memory != VK_NULL_HANDLE) {
         dispatch_.unmapMemory(buffer.memory);
     }
     if (buffer.buffer != VK_NULL_HANDLE) {
         dispatch_.destroyBuffer(buffer.buffer, nullptr);
     }
     if (buffer.memory != VK_NULL_HANDLE) {
+        const auto bytes = static_cast<std::size_t>(buffer.allocation_size);
+        live_allocation_bytes_ =
+            bytes <= live_allocation_bytes_
+                ? live_allocation_bytes_ - bytes
+                : 0U;
         dispatch_.freeMemory(buffer.memory, nullptr);
     }
     buffer = {};
