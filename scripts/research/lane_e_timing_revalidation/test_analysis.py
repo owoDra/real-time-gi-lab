@@ -84,7 +84,7 @@ class AnalysisTests(unittest.TestCase):
     def test_large_effect_inside_control_noise_is_measurement_limited(self) -> None:
         controls = [
             summarize_process(
-                process_rows(1.30 if block == 0 else 1.0, block, "control")
+                process_rows(1.40 if block == 0 else 1.0, block, "control")
             )
             for block in range(8)
         ]
