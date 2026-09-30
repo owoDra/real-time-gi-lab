@@ -1,8 +1,10 @@
 # Research program status
 
-As of 2026-09-30, Lane A-I and Integration #13 are concluded. Lane J remains in
-progress on its lane branch and is not yet synthesized as a concluded result.
-This document is the program-level synthesis on the `research` branch. Detailed experiment results,
+As of 2026-09-30, Lane A-K and Integration #13 are concluded. Lane J closed
+measurement-limited before an accepted timing methodology existed; Lane K now
+provides the accepted GPU-primary calibration required for a future
+J004-equivalent crossover. This document is the program-level synthesis on the
+`research` branch. Detailed experiment results,
 raw-artifact provenance, and lane-local decisions remain canonical in each lane's
 `results/` documents and are not duplicated here.
 
@@ -53,6 +55,12 @@ the completed lanes:
    +20%, +10%, and +5% controlled-work deltas across fresh processes. Complete
    CPU wall produced a non-monotonic frozen-gate failure, so I004 closes
    **target timing unsuitable** under the dual-axis `lane-i-i002-v1` protocol.
+9. Lane K froze a new role split before new target timing: GPU timestamp is the
+   sole primary performance axis and complete CPU wall is diagnostic/health/
+   provenance only. K003 passed the baseline control and detected +20%, +10%,
+   and +5% contiguously across eight fresh processes. K004 therefore accepts
+   `lane-k-k002-v1` with a demonstrated **5%** minimum effect size on the
+   measured target.
 
 The main architectural blocker found by Integration #13 — world-space
 moving-geometry maintenance — is solved by Lane E for rigid and
@@ -60,15 +68,14 @@ stable-topology-deforming geometry under its frozen gates. Lane G also removed
 the deterministic sparse-memory blocker for hardened transient LBVH.
 
 The remaining architecture question is still the topology-changing/high-churn
-object-local rebuild backend. Lane I narrowed the immediate measurement blocker:
-the target host demonstrated clean 5% known-delta resolution on the frozen GPU
-timestamp axis, but the required complete CPU-wall axis was non-monotonic and
-prevented any common 5%, 10%, or 20% promotion resolution. The current dual-axis
-protocol is therefore not reusable for formal architecture ranking. A future
-methodology may explicitly make GPU timestamp primary and CPU wall diagnostic,
-but it must be frozen and calibrated in a new architecture-neutral campaign
-before any formal crossover. Lane J may continue structural, correctness, and
-memory research while that methodology remains unresolved.
+object-local rebuild backend. Lane K resolves the program-level timing-method
+dependency for the measured target: `lane-k-k002-v1` safely resolves a 5%
+known-delta effect with GPU timestamp primary while complete CPU wall remains
+diagnostic/health/provenance only. A future J004-equivalent crossover may now
+run only after importing this protocol before target candidate timing and
+freezing a promotion threshold no smaller than 5%. Historical E/G/J timing does
+not become decision-valid; run-local architecture comparisons are still
+required.
 
 ## Major findings
 
@@ -84,6 +91,8 @@ memory research while that methodology remains unresolved.
 | Lane G / #17 | Complete, deterministic hardening accepted | Hardened transient LBVH passes 60/60 deterministic correctness/workload rows; sparse-stress peak is 2.708583x vanilla and sparse-moving 2.699209x, resolving the former >3.0x blocker. Timing remains measurement-limited. |
 | Lane H / #18 | Complete, measurement-limited | Safe timing methodology did not pass: even valid static controls failed frozen repeatability criteria. The topology-changing crossover was therefore not run and no backend was promoted. |
 | Lane I / #19 | Complete, target timing unsuitable | Frozen GPU timestamps detected +20%, +10%, and +5% known work deltas, but complete CPU wall failed the contiguous dual-axis criterion because +20% exceeded the frozen order-bias gate while +10%/+5% passed. GPU-only 5% resolution is mechanism evidence, not an accepted promotion protocol. |
+| Lane J / #20 | Complete, measurement-limited | Clustered two-level object-local BVH passed deterministic correctness and lifetime-memory work, but formal performance ranking did not run because no accepted timing protocol existed at closure. It remains qualified for a future J004-equivalent crossover. |
+| Lane K / #21 | Accepted | `lane-k-k002-v1` uses GPU timestamp as the primary axis and CPU wall as diagnostic/health/provenance only. K003 passed the frozen baseline and detected +20%, +10%, and +5% contiguously; K004 accepts a 5% minimum effect-size protocol on the measured target. |
 
 Representative values above are anchors only. Exact per-case numbers and raw
 artifact provenance remain in the lane result documents.
@@ -195,10 +204,8 @@ accepted topology-changing performance result.
 
 ### Unresolved
 
-- whether a newly pre-frozen GPU-primary protocol can turn Lane I's demonstrated
-  5% GPU-timestamp known-delta resolution into accepted architecture-ranking
-  methodology while keeping complete CPU wall explicitly diagnostic-only;
-- which object-local backend is best for topology-changing/high-churn geometry;
+- which object-local backend is best for topology-changing/high-churn geometry
+  under a new run-local crossover that imports Lane K before timing;
 - same-boundary crossover between Lane E object-local rebuild, hardened
   transient LBVH, and any structurally different topology backend;
 - topology-changing performance under the Lane E ownership model;
@@ -247,7 +254,7 @@ The sorted grid has a stronger negative disposition because reference
 amplification and sorting dominate the dynamic builder and a decision-valid
 large-world-moving gate also fails.
 
-## Lane G/H/I interpretation
+## Lane G/H/I/K interpretation
 
 Lane G changed the transient-LBVH conclusion materially:
 
@@ -287,6 +294,15 @@ I004 therefore closes **target timing unsuitable** for the exact
 evidence, but cannot be retroactively promoted by demoting CPU wall after seeing
 the result.
 
+Lane K then tested that role split prospectively instead of reinterpreting Lane
+I. K002 froze GPU timestamp as the sole primary performance axis before target
+timing, with complete CPU wall diagnostic/health/provenance only. K003 retained
+all 1,024 raw rows across 32 fresh processes, passed the frozen GPU baseline
+control, and detected +20%, +10%, and +5% contiguously. CPU wall produced only a
++5% annotation warning and no structural invalidation. K004 therefore accepts
+`lane-k-k002-v1` with a **5%** demonstrated effect-size floor on the measured
+target.
+
 ## Measurement methodology issue
 
 Timing repeatability is now a **program-level first-class research problem**.
@@ -310,13 +326,17 @@ may require `profile_peak`, `power_dpm_force_performance_level` writes,
 privileged clock/power sysfs manipulation, or equivalent forced power-state
 controls.
 
-Any follow-up methodology must again calibrate against **known-delta controlled
-workloads before measuring competing architectures**. Lane I specifically
-supports investigating a protocol that declares GPU timestamp as the primary
-performance boundary and complete CPU wall as diagnostic/health evidence from
-the outset. That role split, thresholds, batching, fresh-process replication,
-and decision gates must all be frozen before a new accepted target campaign.
-Lane I's I003 artifact cannot be reinterpreted post hoc as that calibration.
+Lane K is now the accepted follow-up calibration for the measured target.
+`lane-k-k002-v1` declares GPU timestamp as the primary performance boundary and
+complete CPU wall as diagnostic/health/provenance evidence from the outset. It
+freezes batching, fresh-process replication, counterbalancing, thresholds,
+structural health checks, raw-sample retention, and zero timing-rerun budget
+before target timing.
+
+Downstream architecture timing may reuse Lane K only by importing the protocol
+before its first accepted candidate timing and freezing a promotion threshold
+no smaller than the demonstrated 5% effect size. This does not validate
+historical architecture timing retroactively.
 
 ## Evidence chain
 
@@ -332,52 +352,47 @@ Detailed source-of-truth documents:
 - Lane G: [G002 repeatability diagnosis](https://github.com/owoDra/phos-gi-lab/blob/research-lane-g-transient-lbvh-hardening/research/lanes/lane-g-transient-lbvh-hardening/results/002-timing-repeatability-diagnosis.md), [G005 deterministic replay](https://github.com/owoDra/phos-gi-lab/blob/research-lane-g-transient-lbvh-hardening/research/lanes/lane-g-transient-lbvh-hardening/results/005-final-deterministic-replay.md)
 - Lane H: [H001 safe timing result](https://github.com/owoDra/phos-gi-lab/blob/research-lane-h-topology-rebuild-crossover/research/lanes/lane-h-topology-rebuild-crossover/results/001-safe-timing-methodology.md), [H004 final decision](https://github.com/owoDra/phos-gi-lab/blob/research-lane-h-topology-rebuild-crossover/research/lanes/lane-h-topology-rebuild-crossover/results/004-final-decision.md)
 - Lane I: [I003 target calibration](https://github.com/owoDra/phos-gi-lab/blob/research-lane-i-measurement-calibration/research/lanes/lane-i-measurement-calibration/results/003-target-calibration.md), [I004 timing capability](https://github.com/owoDra/phos-gi-lab/blob/research-lane-i-measurement-calibration/research/lanes/lane-i-measurement-calibration/results/004-program-timing-capability.md)
+- Lane K: [K003 target calibration](https://github.com/owoDra/phos-gi-lab/blob/research-lane-k-gpu-primary-calibration/research/lanes/lane-k-gpu-primary-calibration/results/003-target-calibration.md), [K004 timing capability](https://github.com/owoDra/phos-gi-lab/blob/research-lane-k-gpu-primary-calibration/research/lanes/lane-k-gpu-primary-calibration/results/004-program-timing-capability.md)
 
 Issues #9-#19 provide frozen plans and cross-lane context; lane result documents
 take precedence for concluded experiment outcomes.
 
 ## Next research priority
 
-Lane I is concluded. Lane J remains the active architecture-exploration lane,
-while a separate measurement-methodology follow-up is required before any formal
-architecture timing crossover.
+Lane K has resolved the immediate timing-methodology blocker on the measured
+target. The next decision-relevant architecture work is a new
+**J004-equivalent topology-backend crossover** using the already-qualified Lane-J
+candidate/control set.
 
-### Measurement follow-up — GPU-primary calibration
+### Timing import requirement
 
-The next methodology experiment should remain architecture-neutral and test the
-promising part of Lane I without retroactively changing Lane I:
+Before the first accepted architecture timing sample, that crossover must:
 
-- declare GPU timestamp as the **primary** performance decision boundary before
-  target execution;
-- declare complete CPU wall as diagnostic/health/provenance evidence rather than
-  a co-equal promotion gate;
-- retain known +5%, +10%, and +20% controlled-work deltas;
-- retain same-process batching, paired/counterbalanced ordering, fresh-process
-  replication, all raw samples, and zero favorable reruns;
-- freeze thresholds and role semantics before accepted target calibration;
-- keep all forced GPU clock/power-state manipulation forbidden.
+- import `lane-k-k002-v1` explicitly;
+- keep GPU timestamp as the primary performance axis;
+- keep complete CPU wall diagnostic/health/provenance only;
+- freeze a promotion threshold **no smaller than 5%**;
+- preserve the Lane-K batching/fresh-process/counterbalancing and no-rerun
+  discipline unless a new architecture-neutral calibration is performed first;
+- retain all run-local comparator evidence.
 
-No architecture ranking may treat Lane I's GPU-only 5% result as an already
-accepted protocol. The new role split must first pass its own frozen known-delta
-calibration.
+Historical Lane E/G/J timing remains diagnostic context only and cannot satisfy
+the new crossover.
 
-### Lane J / #20 — topology-changing backend alternatives
+### Lane J / #20 — next topology-changing crossover
 
-Lane J explores topology-changing/high-churn object-local backends at the data
-structure and update-model level while preserving Lane E ownership boundaries.
+Lane J already qualified the clustered two-level object-local BVH structurally,
+for exact correctness, and for absolute/lifetime memory. A future
+J004-equivalent run should compare it against the retained Lane-E object-local
+rebuild controls and hardened transient LBVH under one run-local boundary.
 
-It may continue literature review, deterministic workload design, structural
-gates, correctness, memory accounting, and GPU implementation/probing. It must
-not convert those observations into a formal performance ranking until a new
-measurement protocol has passed architecture-neutral calibration and has been
-frozen into Lane J's crossover plan.
-
-Lane E remains the incumbent. Hardened transient LBVH remains one candidate, not
-the assumed winner.
+Lane E remains the incumbent until that crossover passes its predeclared
+correctness, relative-memory, timing, and integration gates.
 
 ### Program sequencing
 
-Lane J's non-ranking work may continue in parallel with the measurement
-follow-up. The first formal topology-backend crossover waits for an accepted
-timing protocol. Lower-priority storage/renderer/capacity-policy follow-ups remain
-deferred unless new evidence makes them the dominant blocker.
+The measurement-calibration lane itself is complete. The highest-value next step
+is therefore the topology-backend crossover, not another timing-methodology lane.
+Lane-E timing revalidation may also use Lane K when needed, but it must likewise
+import the protocol before timing and use a threshold no smaller than 5%.
+Cross-GPU calibration remains separate future work.
