@@ -67,9 +67,21 @@ void include(DAabb& bounds, DVec3 point) {
 }
 
 void include(DAabb& bounds, const Triangle& triangle) {
-    include(bounds, {triangle.v0.x, triangle.v0.y, triangle.v0.z});
-    include(bounds, {triangle.v1.x, triangle.v1.y, triangle.v1.z});
-    include(bounds, {triangle.v2.x, triangle.v2.y, triangle.v2.z});
+    include(bounds, DVec3{
+        double(triangle.v0.x),
+        double(triangle.v0.y),
+        double(triangle.v0.z),
+    });
+    include(bounds, DVec3{
+        double(triangle.v1.x),
+        double(triangle.v1.y),
+        double(triangle.v1.z),
+    });
+    include(bounds, DVec3{
+        double(triangle.v2.x),
+        double(triangle.v2.y),
+        double(triangle.v2.z),
+    });
 }
 
 [[nodiscard]] DAabb bounds_of(std::span<const Triangle> triangles) {
