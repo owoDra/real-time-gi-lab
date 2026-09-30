@@ -1,6 +1,6 @@
 # Lane J plan v1.5 amendment — robust per-axis slab far bound
 
-Status: **frozen after v1.4 rerun failed unchanged**
+Status: **REJECTED BY RERUN EVIDENCE — implementation reverted**
 
 The v1.4 rerun reproduced the exact same retained mismatch and traversal
 statistics. Therefore enlarging only the final AABB distance limit did not
@@ -36,3 +36,14 @@ Rules:
 - retain the v1.4 final-limit guard as an additional conservative bound;
 - if v1.5 still fails, add explicit shader-side primitive-visit diagnostics
   before any further numerical change.
+
+
+## Rejection
+
+The unchanged representative target-GPU replay reproduced the same retained
+step-3 mismatch with the same watched ray outcome and unchanged aggregate
+traversal visit/test counts. This correction therefore did not explain or fix
+the failure and is not part of the retained candidate implementation.
+
+The shader changes from this amendment were reverted before explicit
+shader-side watched-primitive diagnosis.
