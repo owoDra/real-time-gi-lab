@@ -35,6 +35,7 @@ namespace lane_b = phos::gi::research::lane_b;
 namespace lane_f = phos::gi::research::lane_f;
 namespace lane_i = phos::gi::research::integration;
 namespace lane_j = phos::gi::research::lane_j;
+namespace detail = phos::gi::detail;
 
 namespace {
 
