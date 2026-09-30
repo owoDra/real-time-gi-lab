@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-j-j004-formal-v1",
+  "issue": 23,
+  "gate_commit": "fc354b42ac3d526f879174740cf6c07ccd5dc648",
+  "memory_preflight_decision_commit": "79505446ffabc013fe136b58f0d6c64990f4f563",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "accepted_timing_validation": false,
+  "axis_roles": {
+    "primary_performance": "gpu_timestamp",
+    "cpu_wall": "diagnostic-health-provenance-only"
+  },
+  "j002": {
+    "materialized_root": "out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized",
+    "producer_contract": "A001-schema-v1-natural-append",
+    "hit_contract": "B001-exact-hit-v1",
+    "storage_contract": "C001-per-probe-sparse-hash",
+    "validation_ray_prefix_count": 4096,
+    "profiles": [
+      {
+        "name": "small-global-high",
+        "locality": "global"
+      },
+      {
+        "name": "medium-global-representative",
+        "locality": "global"
+      },
+      {
+        "name": "medium-local-high",
+        "locality": "local"
+      },
+      {
+        "name": "large-global-high",
+        "locality": "global"
+      },
+      {
+        "name": "large-local-high",
+        "locality": "local"
+      }
+    ]
+  },
+  "sources": {
+    "lane_a_accepted_stream_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+    "lane_e_hwrt_measurement_commit": "2911790d8fd1716615a59dc86034e4fea783c9ec",
+    "lane_g_final_commit": "9176cc1c175bcfec43fd28d993f88385b7a131d7"
+  },
+  "variants": {
+    "primary": {
+      "control": "lane-e-object-local-hwrt-rebuild",
+      "candidate": "hardened-transient-lbvh",
+      "static_backend": "hwrt"
+    },
+    "software": {
+      "control": "lane-e-object-local-software-b003-rebuild",
+      "candidate": "hardened-transient-lbvh",
+      "static_backend": "b003-quantized"
+    },
+    "accounting_control": "vanilla-software-bvh-rebuild",
+    "clustered_two_level_bvh": {
+      "status": "rejected-before-timing",
+      "reason": "failed frozen <=1.25x same-run Lane-E HWRT relative-memory gate"
+    },
+    "unchanged_transient_lbvh": {
+      "status": "attribution-equivalent-within-j004-recurring-boundary",
+      "rule": "Lane-G hardening changes setup allocation lifetime; J004 uses common static setup and the same F003 recurrent dynamic builder/traversal source, so separate formal timing is not required unless source-equivalence check fails"
+    }
+  },
+  "recurring_boundary": {
+    "batch_transitions": 16,
+    "topology_steps_per_cycle": 8,
+    "future_snapshot_prebuild": false,
+    "recurrent_pipeline_creation": false,
+    "storage_capacity_policy": "next_pow2(max(2, producer_output_count * 2))",
+    "storage_max_probe": 128,
+    "radiance_state": "A001 static light derived from frozen scene bounds; identical for all variants",
+    "complete_gpu_components": [
+      "geometry transfer GPU",
+      "HWRT AS build GPU when applicable",
+      "dynamic builder GPU when applicable",
+      "static traversal GPU",
+      "dynamic traversal GPU",
+      "exact hit merge GPU",
+      "radiance GPU",
+      "merge GPU",
+      "C001 storage reserve/accumulate GPU",
+      "C001 invalidation GPU",
+      "C001 resolve GPU"
+    ]
+  },
+  "timing": {
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "settle_seconds": 1,
+    "start_order_by_block": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "BA",
+      "AB",
+      "BA",
+      "AB"
+    ],
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0
+  },
+  "gpu_primary_criteria": {
+    "promotion_ratio_max": 0.95,
+    "nonregression_ratio_max": 1.05,
+    "control_max_abs_process_median_ratio": 1.02,
+    "control_process_median_span_ratio": 1.03,
+    "control_max_within_process_order_bias_ratio": 1.02,
+    "candidate_process_effect_span_ratio": 1.05,
+    "candidate_max_within_process_order_bias_ratio": 1.03,
+    "candidate_min_improving_pair_fraction": 0.75,
+    "require_every_process_beyond_control_noise": true
+  },
+  "selector": {
+    "classes": {
+      "global-topology-churn": [
+        "small-global-high",
+        "medium-global-representative",
+        "large-global-high"
+      ],
+      "local-topology-churn": [
+        "medium-local-high",
+        "large-local-high"
+      ]
+    },
+    "rule": "retain a backend for a class only when every profile in the class passes promotion/repeatability and no exercised profile in the other class regresses by >5%; no post-hoc size/dirty threshold"
+  }
+}
