@@ -11,6 +11,10 @@
 #include "../j003_reference.hpp"
 #include "../j003_snapshot.hpp"
 #include "vk_init.hpp"
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+#include "../../lane_m_topology_backend_crossover/m001_clustered_adapter.hpp"
+#include "../../lane_m_topology_backend_crossover/m001_contract.hpp"
+#endif
 
 #include <algorithm>
 #include <array>
@@ -35,6 +39,9 @@ namespace lane_b = phos::gi::research::lane_b;
 namespace lane_f = phos::gi::research::lane_f;
 namespace lane_i = phos::gi::research::integration;
 namespace lane_j = phos::gi::research::lane_j;
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+namespace lane_m = phos::gi::research::lane_m;
+#endif
 namespace detail = phos::gi::detail;
 
 namespace {
@@ -63,6 +70,9 @@ enum class DynamicKind {
     Hwrt,
     B003,
     Lbvh,
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    Clustered,
+#endif
     Vanilla,
 };
 
@@ -73,6 +83,9 @@ struct Options {
     std::filesystem::path producer_stream{};
     Track track{Track::Primary};
     std::string comparison{"candidate"};
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    std::string scenario{"topology-changing-object-local"};
+#endif
     std::string start_order{"AB"};
     std::uint32_t warmup_pairs{4U};
     std::uint32_t measured_pairs{12U};
@@ -134,6 +147,10 @@ struct TransitionResult {
     std::size_t resident_bytes{};
     std::size_t true_peak_resident_bytes{};
     std::size_t storage_failures{};
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    std::uint32_t topology_mutation_count{};
+    std::uint32_t backend_rebuild_count{};
+#endif
 };
 
 struct BatchResult {
@@ -159,6 +176,15 @@ struct BatchResult {
     std::size_t max_resident_bytes{};
     std::size_t max_true_peak_resident_bytes{};
     std::size_t storage_failures{};
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    std::uint32_t topology_mutation_count{};
+    std::uint32_t backend_rebuild_count{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations_before{};
+    std::size_t live_allocations_after{};
+    bool allocation_lifetime_complete{};
+#endif
 };
 
 struct ValidationResult {
@@ -173,6 +199,16 @@ struct ValidationResult {
     std::uint64_t traversal_runtime_errors{};
     std::uint64_t storage_failures{};
     std::uint64_t immutable_owner_mutations{};
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    std::uint64_t unrelated_owner_mutations{};
+    std::uint32_t topology_mutation_count{};
+    std::uint32_t backend_rebuild_count{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations_before{};
+    std::size_t live_allocations_after{};
+    bool allocation_lifetime_complete{};
+#endif
     std::uint64_t resolved_digest{1469598103934665603ULL};
 };
 
@@ -232,6 +268,10 @@ void hash_bytes(
         return "lane-e-object-local-software-b003-rebuild";
     case DynamicKind::Lbvh:
         return "hardened-transient-lbvh";
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    case DynamicKind::Clustered:
+        return "clustered-two-level-object-local-bvh";
+#endif
     case DynamicKind::Vanilla:
         return "vanilla-software-bvh-rebuild";
     }
@@ -265,6 +305,10 @@ Options parse_options(int argc, char** argv) {
             options.track = parse_track(value("--track"));
         } else if (argument == "--comparison") {
             options.comparison = value("--comparison");
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        } else if (argument == "--scenario") {
+            options.scenario = value("--scenario");
+#endif
         } else if (argument == "--start-order") {
             options.start_order = value("--start-order");
         } else if (argument == "--warmup-pairs") {
@@ -315,6 +359,14 @@ Options parse_options(int argc, char** argv) {
         options.start_order != "BA") {
         fail("J004 start order must be AB or BA");
     }
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    if (options.comparison != "control" &&
+        options.comparison != "lbvh" &&
+        options.comparison != "clustered") {
+        fail("Lane M comparison must be control, lbvh, or clustered");
+    }
+    (void)lane_m::parse_m001_scenario(options.scenario);
+#else
     if (options.comparison != "control" &&
         options.comparison != "candidate" &&
         options.comparison != "accounting") {
@@ -324,6 +376,7 @@ Options parse_options(int argc, char** argv) {
         options.track != Track::Software) {
         fail("J004 accounting comparison is software-track only");
     }
+#endif
     if (options.batch_transitions != 16U) {
         fail("J004 v1 requires exactly 16 transitions per timed sample");
     }
@@ -634,6 +687,9 @@ public:
         dynamic_hwrt_.reset();
         dynamic_quant_.reset();
         dynamic_lbvh_.reset();
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        dynamic_clustered_.reset();
+#endif
         dynamic_vanilla_.reset();
         static_hwrt_.reset();
         static_quant_.reset();
@@ -669,6 +725,10 @@ public:
     [[nodiscard]] BatchResult run_batch(
         std::uint32_t transition_count) {
         BatchResult batch{};
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        const auto allocations_before =
+            context_.allocation_stats();
+#endif
         for (std::uint32_t offset = 0U;
              offset < transition_count;
              ++offset) {
@@ -731,7 +791,44 @@ public:
                     result.true_peak_resident_bytes);
             batch.storage_failures +=
                 result.storage_failures;
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+            batch.topology_mutation_count +=
+                result.topology_mutation_count;
+            batch.backend_rebuild_count +=
+                result.backend_rebuild_count;
+            batch.max_transient_bytes =
+                std::max(
+                    batch.max_transient_bytes,
+                    result.transient_bytes);
+#endif
         }
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        const auto allocations_after =
+            context_.allocation_stats();
+        batch.allocation_count =
+            allocations_after.allocation_count -
+            allocations_before.allocation_count;
+        batch.free_count =
+            allocations_after.free_count -
+            allocations_before.free_count;
+        batch.live_allocations_before =
+            allocations_before.live_allocations;
+        batch.live_allocations_after =
+            allocations_after.live_allocations;
+        batch.allocation_lifetime_complete =
+            batch.allocation_count == batch.free_count &&
+            batch.live_allocations_before ==
+                batch.live_allocations_after;
+        const auto expected_updates =
+            lane_m::m001_scenario_spec(m_scenario_).
+                topology_mutation_required
+                ? transition_count
+                : 0U;
+        if (batch.topology_mutation_count != expected_updates ||
+            batch.backend_rebuild_count != expected_updates) {
+            fail("Lane M timed sample mutation/rebuild count mismatch");
+        }
+#endif
         if (transition_count % snapshots_.size() == 0U &&
             current_step_ != 0U) {
             fail("J004 batch did not return to frozen step-00");
@@ -742,6 +839,10 @@ public:
     [[nodiscard]] ValidationResult validate_cycle(
         std::uint32_t validation_rays) {
         ValidationResult total{};
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        const auto allocations_before =
+            context_.allocation_stats();
+#endif
         const auto static_before = capture_static_buffers();
         for (std::uint32_t offset = 0U;
              offset < snapshots_.size();
@@ -753,6 +854,12 @@ public:
                 run_transition(next_step);
             total.storage_failures +=
                 result.storage_failures;
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+            total.topology_mutation_count +=
+                result.topology_mutation_count;
+            total.backend_rebuild_count +=
+                result.backend_rebuild_count;
+#endif
 
             const auto count =
                 validation_rays == 0U
@@ -908,6 +1015,35 @@ public:
             }
         }
 
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        total.unrelated_owner_mutations =
+            total.immutable_owner_mutations;
+        const auto allocations_after =
+            context_.allocation_stats();
+        total.allocation_count =
+            allocations_after.allocation_count -
+            allocations_before.allocation_count;
+        total.free_count =
+            allocations_after.free_count -
+            allocations_before.free_count;
+        total.live_allocations_before =
+            allocations_before.live_allocations;
+        total.live_allocations_after =
+            allocations_after.live_allocations;
+        total.allocation_lifetime_complete =
+            total.allocation_count == total.free_count &&
+            total.live_allocations_before ==
+                total.live_allocations_after;
+        const auto expected_updates =
+            lane_m::m001_scenario_spec(m_scenario_).
+                topology_mutation_required
+                ? static_cast<std::uint32_t>(snapshots_.size())
+                : 0U;
+        if (total.topology_mutation_count != expected_updates ||
+            total.backend_rebuild_count != expected_updates) {
+            ++total.traversal_runtime_errors;
+        }
+#endif
         // Validation readbacks are diagnostics and must not contaminate a
         // later recurrent GPU sample if the caller reuses this instance.
         (void)context_.consume_transfer_gpu_us();
@@ -973,6 +1109,29 @@ private:
             snapshots_.front().empty()) {
             fail("J004 requires eight non-empty J002 snapshots");
         }
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        m_scenario_ = lane_m::parse_m001_scenario(options_.scenario);
+        lane_m::validate_m001_profile(
+            m_scenario_,
+            options_.profile_dir.filename().string());
+        if (!lane_m::m001_scenario_spec(m_scenario_).
+                topology_mutation_required) {
+            const auto stable = snapshots_.front();
+            for (auto& snapshot : snapshots_) {
+                snapshot = stable;
+            }
+        }
+        for (std::size_t step = 0U; step < snapshots_.size(); ++step) {
+            const auto next = (step + 1U) % snapshots_.size();
+            const auto evidence = lane_m::m001_mutation_evidence(
+                snapshots_[step], snapshots_[next]);
+            if (evidence.topology_changed !=
+                lane_m::m001_scenario_spec(m_scenario_).
+                    topology_mutation_required) {
+                fail("Lane M frozen topology mutation contract mismatch");
+            }
+        }
+#endif
         lbvh_capacity_count_ = 0U;
         for (const auto& snapshot : snapshots_) {
             lbvh_capacity_count_ = std::max(
@@ -1214,6 +1373,21 @@ private:
             }
             const auto gpu = gpu_triangles(triangles);
             (void)dynamic_lbvh_->update_template(gpu);
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        } else if (dynamic_kind_ ==
+                   DynamicKind::Clustered) {
+            if (!dynamic_clustered_) {
+                dynamic_clustered_ =
+                    std::make_unique<lane_m::M001ClusteredBackend>(
+                        context_, triangles);
+            } else {
+                const auto update =
+                    dynamic_clustered_->update(triangles);
+                if (update.unaffected_cluster_rebuild_count != 0U) {
+                    fail("Lane M clustered backend rebuilt unaffected cluster");
+                }
+            }
+#endif
         } else {
             dynamic_vanilla_ =
                 std::make_unique<VanillaState>(
@@ -1525,6 +1699,39 @@ private:
                         "j004_f003_dynamic_traversal.spv")
                         .string(),
                     bindings);
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        } else if (dynamic_kind_ ==
+                   DynamicKind::Clustered) {
+            const std::array<I001Binding, 6>
+                bindings{{
+                    {0,
+                     VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                     &rays_},
+                    {1,
+                     VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                     &dynamic_clustered_->triangles()},
+                    {2,
+                     VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                     &dynamic_clustered_->upper()},
+                    {3,
+                     VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                     &dynamic_clustered_->micro()},
+                    {4,
+                     VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                     &dynamic_clustered_->clusters()},
+                    {5,
+                     VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
+                     &dynamic_hits_},
+                }};
+            dynamic_stage_ =
+                std::make_unique<I001ComputeStage>(
+                    context_,
+                    shader_path(
+                        "m001_clustered_traversal.spv")
+                        .string(),
+                    bindings,
+                    sizeof(lane_m::M001ClusteredTraversalPush));
+#endif
         } else {
             const std::array<I001Binding, 6>
                 bindings{{
@@ -1598,6 +1805,18 @@ private:
                 update_buffer_binding(
                     2,
                     dynamic_lbvh_->nodes());
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        } else if (dynamic_kind_ ==
+                   DynamicKind::Clustered) {
+            dynamic_stage_->update_buffer_binding(
+                1, dynamic_clustered_->triangles());
+            dynamic_stage_->update_buffer_binding(
+                2, dynamic_clustered_->upper());
+            dynamic_stage_->update_buffer_binding(
+                3, dynamic_clustered_->micro());
+            dynamic_stage_->update_buffer_binding(
+                4, dynamic_clustered_->clusters());
+#endif
         } else {
             dynamic_stage_->
                 update_buffer_binding(
@@ -1627,6 +1846,11 @@ private:
         if (dynamic_lbvh_) {
             return dynamic_lbvh_->memory().persistent_bytes;
         }
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        if (dynamic_clustered_) {
+            return dynamic_clustered_->persistent_bytes();
+        }
+#endif
         return 0U;
     }
 
@@ -1766,6 +1990,20 @@ private:
                 command,
                 groups(
                     producer_.header.item_count));
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        } else if (dynamic_kind_ ==
+                   DynamicKind::Clustered) {
+            const auto push =
+                dynamic_clustered_->traversal_push(
+                    producer_.header.item_count);
+            dynamic_stage_->record(
+                command,
+                groups(producer_.header.item_count),
+                1U,
+                1U,
+                &push,
+                sizeof(push));
+#endif
         } else {
             const SoftwareTraversalPush push{
                 producer_.header.item_count,
@@ -1799,50 +2037,88 @@ private:
         const auto old_dynamic_persistent =
             dynamic_persistent_bytes();
 
-        auto old_hwrt =
-            std::move(dynamic_hwrt_);
-        auto old_quant =
-            std::move(dynamic_quant_);
-        auto old_vanilla =
-            std::move(dynamic_vanilla_);
-
-        const auto prepare_start = Clock::now();
-        create_dynamic_backend(next_step);
-        const auto geometry_prepare_wall_us =
-            elapsed_us(prepare_start);
-        const auto new_dynamic_persistent =
-            dynamic_persistent_bytes();
-
-        double external_build_gpu_us = 0.0;
-        if (dynamic_hwrt_) {
-            external_build_gpu_us +=
-                dynamic_hwrt_->
-                    setup_stats().blas_build_us;
-            external_build_gpu_us +=
-                dynamic_hwrt_->
-                    setup_stats().tlas_build_us;
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        const auto mutation = lane_m::m001_mutation_evidence(
+            snapshots_.at(current_step_), snapshots_.at(next_step));
+        const bool update_required =
+            lane_m::m001_scenario_spec(m_scenario_).
+                topology_mutation_required;
+        if (mutation.topology_changed != update_required) {
+            fail("Lane M transition mutation identity mismatch");
         }
+#else
+        constexpr bool update_required = true;
+#endif
 
-        const double transfer_gpu_us =
-            context_.consume_transfer_gpu_us();
-        const auto overlap_peak =
-            context_.peak_allocation_bytes();
-        const auto old_new_overlap_bytes =
-            dynamic_kind_ == DynamicKind::Lbvh
-                ? 0U
-                : old_dynamic_persistent +
-                    new_dynamic_persistent;
+        double geometry_prepare_wall_us = 0.0;
+        double external_build_gpu_us = 0.0;
+        double transfer_gpu_us = 0.0;
+        double allocation_reallocation_wall_us = 0.0;
+        std::size_t overlap_peak = context_.peak_allocation_bytes();
+        std::size_t old_new_overlap_bytes = 0U;
 
-        const auto realloc_start = Clock::now();
-        rebind_dynamic_stage();
+        if (update_required) {
+            auto old_hwrt =
+                std::move(dynamic_hwrt_);
+            auto old_quant =
+                std::move(dynamic_quant_);
+            auto old_vanilla =
+                std::move(dynamic_vanilla_);
 
-        // The queue is idle before every transition. Once descriptors point at
-        // the replacement backend, the previous backend is no longer needed.
-        old_hwrt.reset();
-        old_quant.reset();
-        old_vanilla.reset();
-        const auto allocation_reallocation_wall_us =
-            elapsed_us(realloc_start);
+            const auto prepare_start = Clock::now();
+            create_dynamic_backend(next_step);
+            geometry_prepare_wall_us =
+                elapsed_us(prepare_start);
+            const auto new_dynamic_persistent =
+                dynamic_persistent_bytes();
+
+            if (dynamic_hwrt_) {
+                external_build_gpu_us +=
+                    dynamic_hwrt_->
+                        setup_stats().blas_build_us;
+                external_build_gpu_us +=
+                    dynamic_hwrt_->
+                        setup_stats().tlas_build_us;
+            }
+
+            transfer_gpu_us =
+                context_.consume_transfer_gpu_us();
+            overlap_peak =
+                context_.peak_allocation_bytes();
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+            if (dynamic_kind_ == DynamicKind::Clustered) {
+                const auto& update =
+                    dynamic_clustered_->last_update();
+                old_new_overlap_bytes =
+                    update.old_new_overlap_bytes;
+                if (!update.topology_work_executed) {
+                    fail("Lane M clustered topology update was not exercised");
+                }
+            } else
+#endif
+            {
+                old_new_overlap_bytes =
+                    dynamic_kind_ == DynamicKind::Lbvh
+                        ? 0U
+                        : old_dynamic_persistent +
+                            new_dynamic_persistent;
+            }
+
+            const auto realloc_start = Clock::now();
+            rebind_dynamic_stage();
+
+            // The queue is idle before every transition. Once descriptors point at
+            // the replacement backend, the previous backend is no longer needed.
+            old_hwrt.reset();
+            old_quant.reset();
+            old_vanilla.reset();
+            allocation_reallocation_wall_us =
+                elapsed_us(realloc_start);
+        } else {
+            // Stable/no-change guard: all candidates retain the current local
+            // structure. Rebuilding identical geometry would invalidate the guard.
+            transfer_gpu_us = context_.consume_transfer_gpu_us();
+        }
 
         context_.vk().resetFences(
             1,
@@ -1917,7 +2193,8 @@ private:
         stamp(1U);
 
         if (dynamic_kind_ ==
-            DynamicKind::Lbvh) {
+            DynamicKind::Lbvh &&
+            update_required) {
             dynamic_lbvh_->record_build(
                 command,
                 0.0F,
@@ -2192,6 +2469,13 @@ private:
             persistent_bytes;
         result.transient_bytes =
             transient_bytes;
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        if (dynamic_clustered_) {
+            result.transient_bytes +=
+                dynamic_clustered_->last_update().
+                    transient_staging_bytes;
+        }
+#endif
         result.scratch_bytes =
             scratch_bytes;
         result.old_new_overlap_bytes =
@@ -2204,6 +2488,12 @@ private:
                 boundary_peak);
         result.storage_failures =
             storage_stats[3];
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        result.topology_mutation_count =
+            mutation.topology_changed ? 1U : 0U;
+        result.backend_rebuild_count =
+            update_required ? 1U : 0U;
+#endif
         return result;
     }
 
@@ -2242,6 +2532,12 @@ private:
     std::unique_ptr<
         lane_f::F003TransientLbvh>
         dynamic_lbvh_;
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    std::unique_ptr<lane_m::M001ClusteredBackend>
+        dynamic_clustered_;
+    lane_m::M001Scenario m_scenario_{
+        lane_m::M001Scenario::TopologyChangingObjectLocal};
+#endif
     std::unique_ptr<VanillaState>
         dynamic_vanilla_;
 
@@ -2288,6 +2584,14 @@ private:
         "control") {
         return control_kind(options.track);
     }
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    if (options.validation_variant == "lbvh") {
+        return DynamicKind::Lbvh;
+    }
+    if (options.validation_variant == "clustered") {
+        return DynamicKind::Clustered;
+    }
+#else
     if (options.validation_variant ==
         "candidate") {
         return DynamicKind::Lbvh;
@@ -2296,6 +2600,7 @@ private:
         "accounting") {
         return DynamicKind::Vanilla;
     }
+#endif
     fail(
         "unknown J004 validation variant: " +
         options.validation_variant);
@@ -2366,7 +2671,12 @@ void write_validation(
         result.nearest_hit_tie_mismatches == 0U &&
         result.traversal_runtime_errors == 0U &&
         result.storage_failures == 0U &&
-        result.immutable_owner_mutations == 0U;
+        result.immutable_owner_mutations == 0U
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        && result.unrelated_owner_mutations == 0U
+        && result.allocation_lifetime_complete
+#endif
+        ;
     out
         << "{\n"
         << "  \"schema_version\": 1,\n"
@@ -2412,6 +2722,32 @@ void write_validation(
         << "  \"immutable_owner_mutation_count\": "
         << result.immutable_owner_mutations
         << ",\n"
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        << "  \"unrelated_owner_mutation_count\": "
+        << result.unrelated_owner_mutations
+        << ",\n"
+        << "  \"topology_mutation_count\": "
+        << result.topology_mutation_count
+        << ",\n"
+        << "  \"backend_rebuild_count\": "
+        << result.backend_rebuild_count
+        << ",\n"
+        << "  \"allocation_count\": "
+        << result.allocation_count
+        << ",\n"
+        << "  \"free_count\": "
+        << result.free_count
+        << ",\n"
+        << "  \"live_allocations_before\": "
+        << result.live_allocations_before
+        << ",\n"
+        << "  \"live_allocations_after\": "
+        << result.live_allocations_after
+        << ",\n"
+        << "  \"allocation_lifetime_accounting_complete\": "
+        << (result.allocation_lifetime_complete ? "true" : "false")
+        << ",\n"
+#endif
         << "  \"visibility_mismatch_count\": 0,\n"
         << "  \"producer_semantic_error_count\": 0,\n"
         << "  \"workload_identity_match\": true,\n"
@@ -2464,6 +2800,15 @@ void write_sample_row(
         << result.max_resident_bytes << ","
         << result.max_true_peak_resident_bytes << ","
         << result.storage_failures
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        << "," << result.topology_mutation_count
+        << "," << result.backend_rebuild_count
+        << "," << result.allocation_count
+        << "," << result.free_count
+        << "," << result.live_allocations_before
+        << "," << result.live_allocations_after
+        << "," << (result.allocation_lifetime_complete ? 1 : 0)
+#endif
         << "\n";
 }
 
@@ -2502,7 +2847,12 @@ int main(int argc, char** argv) {
                 validation.nearest_hit_tie_mismatches == 0U &&
                 validation.traversal_runtime_errors == 0U &&
                 validation.storage_failures == 0U &&
-                validation.immutable_owner_mutations == 0U;
+                validation.immutable_owner_mutations == 0U
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+                && validation.unrelated_owner_mutations == 0U
+                && validation.allocation_lifetime_complete
+#endif
+                ;
             std::cout
                 << "J004 validation "
                 << track_name(options.track)
@@ -2543,9 +2893,15 @@ int main(int argc, char** argv) {
         const auto b_kind =
             options.comparison == "control"
                 ? a_kind
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+                : (options.comparison == "clustered"
+                    ? DynamicKind::Clustered
+                    : DynamicKind::Lbvh);
+#else
                 : (options.comparison == "accounting"
                     ? DynamicKind::Vanilla
                     : DynamicKind::Lbvh);
+#endif
 
         FormalRuntime runtime_a(
             context_a,
@@ -2577,7 +2933,13 @@ int main(int argc, char** argv) {
                "persistent_bytes,transient_bytes,scratch_bytes,"
                "old_new_overlap_bytes,true_peak_resident_bytes,"
                "max_resident_bytes,max_true_peak_resident_bytes,"
-               "storage_failures\n";
+               "storage_failures"
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+               ",topology_mutation_count,backend_rebuild_count,"
+               "allocation_count,free_count,live_allocations_before,"
+               "live_allocations_after,allocation_lifetime_complete"
+#endif
+               "\n";
 
         const auto total_pairs =
             options.warmup_pairs +

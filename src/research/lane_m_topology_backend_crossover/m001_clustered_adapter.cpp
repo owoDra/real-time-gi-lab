@@ -2,7 +2,7 @@
 
 #include <algorithm>
 #include <array>
-#include <stdexcept>
+#include <stdexcept>\n#include <type_traits>
 #include <utility>
 #include <vector>
 
