@@ -134,7 +134,18 @@ void main() {
     while (stack_size != 0u) {
         uint node_id = stack[--stack_size];
         BvhNode node = nodes[node_id];
-        if (!ray_aabb(origin, direction, has_best ? best_t : ray.origin_tmax.w, node)) {
+        float traversal_tmax = ray.origin_tmax.w;
+        if (has_best) {
+            float tolerance =
+                max(HIT_ABS_TOL, abs(best_t) * HIT_REL_TOL);
+            traversal_tmax =
+                min(ray.origin_tmax.w, best_t + tolerance);
+        }
+        if (!ray_aabb(
+                origin,
+                direction,
+                traversal_tmax,
+                node)) {
             continue;
         }
 

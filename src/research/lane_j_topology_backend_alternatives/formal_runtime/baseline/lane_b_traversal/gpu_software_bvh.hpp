@@ -56,10 +56,19 @@ public:
             const auto index = stack.back();
             stack.pop_back();
             const auto& node = nodes_.at(index);
+            float traversal_tmax = ray.t_max;
+            if (best.hit) {
+                const float tolerance = std::max(
+                    kHitDistanceAbsTolerance,
+                    std::abs(best.t) * kHitDistanceRelTolerance);
+                traversal_tmax = std::min(
+                    ray.t_max,
+                    best.t + tolerance);
+            }
             if (!ray_aabb(
                     ray,
                     node.bounds,
-                    best.hit ? best.t : ray.t_max)) {
+                    traversal_tmax)) {
                 continue;
             }
 

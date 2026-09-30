@@ -308,10 +308,17 @@ void trace_segment(
 
             float enter;
             float exit;
+            float traversal_tmax = ray_tmax;
+            if (has_best) {
+                float tolerance =
+                    max(HIT_ABS_TOL, abs(best_t) * HIT_REL_TOL);
+                traversal_tmax =
+                    min(ray_tmax, best_t + tolerance);
+            }
             if (!ray_aabb_bounds(
                     origin,
                     direction,
-                    has_best ? best_t : ray_tmax,
+                    traversal_tmax,
                     child_min,
                     child_max,
                     enter,
@@ -447,17 +454,16 @@ void main() {
                 hits[ray_id] = output_hit;
                 return;
             }
-            if (has_best &&
-                best_t <= cursor + HIT_ABS_TOL) {
-                break;
-            }
         }
 
         float next_t =
             min(min(next_x, next_y), min(next_z, exit));
-        if (has_best &&
-            best_t <= next_t + HIT_ABS_TOL) {
-            break;
+        if (has_best) {
+            float tolerance =
+                max(HIT_ABS_TOL, abs(best_t) * HIT_REL_TOL);
+            if (next_t > best_t + tolerance) {
+                break;
+            }
         }
         if (next_t >= exit) break;
 
