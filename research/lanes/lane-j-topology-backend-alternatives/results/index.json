@@ -145,9 +145,16 @@
     {
       "id": "J004-formal-execution-v3",
       "path": "research/lanes/lane-j-topology-backend-alternatives/results/022-formal-crossover-compile-fix-freeze.md",
-      "status": "ready-target-execution",
+      "status": "superseded-pre-execution-by-v4-link-fix",
       "evidence_class": "compile-only-pre-timing-harness-refreeze",
       "decision": "qualify phos::gi::detail helper namespace, refreeze source/runner identities, and rerun the unchanged J004 formal campaign; no accepted timing was observed"
+    },
+    {
+      "id": "J004-formal-execution-v4",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/023-formal-crossover-link-fix-freeze.md",
+      "status": "ready-target-execution",
+      "evidence_class": "link-only-pre-timing-harness-refreeze",
+      "decision": "link the existing j003_clustered_bvh.cpp required by j003_reference.cpp, refreeze source/runner identities, and rerun the unchanged J004 formal campaign; no accepted timing was observed"
     }
   ]
 }

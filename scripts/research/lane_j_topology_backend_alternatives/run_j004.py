@@ -26,7 +26,7 @@ CONFIG = (
     / "005-formal-crossover-config.json"
 )
 EXPECTED_CONFIG_BLOB_SHA = "22951382f8a510bf176c7a427a12d7a2ae24e5d9"
-EXPECTED_SOURCE_TREE_SHA = "cd7dae0c155ffdb7fc21405c8e84cac647e978d6"
+EXPECTED_SOURCE_TREE_SHA = "40c42f30acfe99599d220352c392a95235d1159b"
 EXPECTED_FORMAL_SHADER_TREE_SHA = "021faf5c71fc2bfed323887602148df0f7809dc9"
 CAMPAIGN_ROOT = (
     ROOT
@@ -83,6 +83,10 @@ EXPECTED_FORMAL_HARNESS_BLOBS = {
     "j003_reference.cpp": "c11535694b40b756dd188219f7064edb2361bca8",
     "src/research/lane_j_topology_backend_alternatives/"
     "j003_reference.hpp": "79dfdf0394cc0520784e66abccbedd2d5be90bc0",
+    "src/research/lane_j_topology_backend_alternatives/"
+    "j003_clustered_bvh.cpp": "27bfbf764898a83aa9829282dbd453bf65a4be17",
+    "src/research/lane_j_topology_backend_alternatives/"
+    "j003_clustered_bvh.hpp": "e535972264dc3b8046fe9d2b253597516dfc4b94",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "f003_hit_merge.comp.glsl": "de6f6a8f532cee579bb15dea80585cfca8455768",
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
@@ -102,7 +106,7 @@ EXPECTED_FORMAL_HARNESS_BLOBS = {
     "shaders/research/lane_j_topology_backend_alternatives/formal_runtime/"
     "merge.comp.glsl": "3e9547bc8c02ec0fa41445a8e60df4d2d23f4599",
     "src/research/lane_j_topology_backend_alternatives/formal_runtime/"
-    "CMakeLists.txt": "dfca57f289579a92f769c38bd3207e8d98a36109",
+    "CMakeLists.txt": "7b883480dfc3338c36417df1f1252be3fedcd9c5",
 }
 
 

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-j-j004-formal-v2",
+  "harness_freeze_revision": "v4",
+  "issue": 23,
+  "formal_timing_started": false,
+  "freeze_reason": "link-only pre-target correction: formal target now links the existing j003_clustered_bvh.cpp that owns triangle_bounds/merge_bounds used by j003_reference.cpp; no accepted architecture timing observed and no workload/threshold/selector change",
+  "parent_freeze": "research/lanes/lane-j-topology-backend-alternatives/experiments/007-formal-execution-freeze-v3.json",
+  "link_fix_commit": "eecb51f730e14916a6a7982aa3165a08273830c8",
+  "compile_fix_commit": "7577efb961c1ac8b9fa52c864e956205dc217ce2",
+  "gate_v1_commit": "fc354b42ac3d526f879174740cf6c07ccd5dc648",
+  "clustered_rejection_commit": "79505446ffabc013fe136b58f0d6c64990f4f563",
+  "frozen_inputs": {
+    "j004_config_blob": "22951382f8a510bf176c7a427a12d7a2ae24e5d9",
+    "j002_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19",
+    "lane_a_source_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+    "lane_e_hwrt_source_commit": "2911790d8fd1716615a59dc86034e4fea783c9ec",
+    "lane_g_final_commit": "9176cc1c175bcfec43fd28d993f88385b7a131d7"
+  },
+  "frozen_harness": {
+    "runner_blob": "9e2be93cd37dce9e093fefa7e19ce4eb1b319ac2",
+    "analysis_blob": "9dd6e87d2f5ba807410297d11d9fba32790af2b9",
+    "analysis_test_blob": "1153504f5713f0d3503b37ee173a4ce21876a80e",
+    "j002_geometry_blob": "f0862c52c021255d71695a8196c9f8fdaa0847f7",
+    "j002_contract_python_blob": "7bf5e64130853128932e8cfa1c21757222ee49b8",
+    "lane_j_source_tree": "40c42f30acfe99599d220352c392a95235d1159b",
+    "j004_formal_process_blob": "fa26d3df0ed3b60a3442d329eb047f1d289b9202",
+    "formal_cmake_blob": "7b883480dfc3338c36417df1f1252be3fedcd9c5",
+    "j003_clustered_bvh_cpp_blob": "27bfbf764898a83aa9829282dbd453bf65a4be17",
+    "j003_clustered_bvh_hpp_blob": "e535972264dc3b8046fe9d2b253597516dfc4b94",
+    "formal_shader_tree": "021faf5c71fc2bfed323887602148df0f7809dc9"
+  },
+  "decision_semantics": {
+    "changed": false,
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall": "diagnostic-health-provenance-only",
+    "promotion_threshold": "5%",
+    "nonregression_threshold": "5%",
+    "rerun_budget": 0,
+    "selector": "unchanged from v2"
+  },
+  "execution": {
+    "task": "research:j004:formal",
+    "wrapped_experiment": "004-formal-crossover",
+    "branch": "research-lane-j-formal-crossover",
+    "routine_pr": false
+  }
+}

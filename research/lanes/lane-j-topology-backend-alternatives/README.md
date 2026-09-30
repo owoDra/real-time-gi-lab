@@ -90,9 +90,10 @@ Current follow-up status:
 - pre-timing self review produced a v2 executable-method amendment without
   changing workload/threshold/selector:
   `experiments/004-formal-crossover-gate-v2-amendment.md`;
-- v2 reached target build but exposed a compile-only namespace error before any timing;
-- the compile-only correction is refrozen as v3 and is ready for target execution:
-  `results/022-formal-crossover-compile-fix-freeze.md`;
+- v2 exposed a compile-only namespace error before any timing;
+- v3 then exposed a link-only missing-source dependency before any timing;
+- the link-only correction is refrozen as v4 and is ready for target execution:
+  `results/023-formal-crossover-link-fix-freeze.md`;
 - J005 remains forbidden unless the formal target campaign retains another
   candidate.
 Preparation checkpoint:
