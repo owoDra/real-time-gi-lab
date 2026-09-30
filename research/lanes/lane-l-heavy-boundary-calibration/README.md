@@ -1,39 +1,64 @@
 # Lane L — heavy-boundary timing calibration
 
 Issue: #24  
-Status: **L001 FROZEN — READY FOR TARGET EXECUTION**
+Status: **L002 FROZEN — READY FOR TARGET EXECUTION**
 
-Lane L calibrates the paired GPU timing methodology for the complete J002 heavy
-recurring boundary. It does not rank topology backends.
+Lane L calibrates paired GPU timing for the complete J002 heavy recurring
+boundary. It does not rank topology backends.
 
-## L001
+## L001 — measurement environment calibration
 
-L001 compares same-variant controls under two measurement environments:
+L001 compared:
 
-- `dual-context`: J004-style independent Vulkan contexts and independent runtimes;
-- `single-context-independent-runtime`: one Vulkan context/device/queue with two
-  independent runtime/resource states.
+- `dual-context`;
+- `single-context-independent-runtime`.
 
-Both primary and software incumbent controls are calibrated across all five J002
-profiles. The frozen J004 1.02 / 1.03 / 1.02 control-health gate is unchanged.
+Both primary and software incumbent controls were measured across all five J002
+profiles under the unchanged J004 1.02 / 1.03 / 1.02 control-health gate.
 
-The two environments are position-counterbalanced across fresh-process blocks.
-GPU timestamp is the only performance decision axis. CPU wall is
-diagnostic/health/provenance only.
+Target outcome: **measurement-limited**.
 
-Single-context timed memory is diagnostic-only because the context-level
-allocation counters are shared. Independent allocation lifetime is instead
-validated before timing by observing exact live-allocation restoration as the
-two runtimes are created and destroyed.
+- 20/20 validation rows passed;
+- 160/160 timing processes completed;
+- all samples were retained;
+- both environments failed every required GPU control;
+- no reusable L001 timing environment was established;
+- the single-context hypothesis was not sufficient to explain/fix J004 noise.
 
-Canonical pre-target records:
+Canonical L001 records:
 
 - `experiments/001-l001-heavy-boundary-calibration-plan.md`
 - `experiments/002-l001-config.json`
 - `experiments/003-l001-execution-freeze.json`
 - `results/001-l001-pretarget-freeze.md`
+- `results/002-l001-target-result.md`
+- `results/003-l001-target-artifact-manifest.json`
 
-J004 remains immutable and J005 remains forbidden.
+## L002 — detectable-effect floor
 
-L002 is permitted only if neither L001 environment passes every required
-profile/control gate.
+Because both L001 environments failed, L002 is now allowed and frozen.
+
+L002 acquires a fresh same-variant heavy-boundary campaign in both environments
+and applies analysis-only multiplicative effects to B-role GPU timestamps:
+
+- +20%;
+- +10%;
+- +5%.
+
+Raw measurements are not modified and CPU wall remains diagnostic-only.
+
+An injected effect must exceed the fresh control noise envelope and maintain
+positive direction in every process and both AB/BA strata, with minimum
+positive-pair fraction 0.75. All five profiles × both control families must pass
+independently. Detection is contiguous +20 -> +10 -> +5.
+
+Canonical L002 records:
+
+- `experiments/004-l002-detectable-floor-plan.md`
+- `experiments/005-l002-config.json`
+- `experiments/006-l002-execution-freeze.json`
+- `results/004-l002-pretarget-freeze.md`
+
+J004 remains immutable. J005 remains forbidden. Lane E / #22 remains blocked
+until L002 establishes a usable heavy-boundary floor or concludes that target
+timing is unsuitable up to 20%.
