@@ -76,12 +76,19 @@ struct Options {
     return paths;
 }
 
+struct MismatchDetail {
+    std::size_t ray_index{};
+    lane_j::Hit expected{};
+    lane_j::GpuHit actual{};
+};
+
 struct ValidationSummary {
     std::uint64_t hit_mismatches{};
     std::uint64_t runtime_errors{};
     std::uint64_t upper_visits{};
     std::uint64_t micro_visits{};
     std::uint64_t triangle_tests{};
+    std::vector<MismatchDetail> mismatches;
 };
 
 [[nodiscard]] ValidationSummary validate_hits(
@@ -94,6 +101,13 @@ struct ValidationSummary {
     for (std::size_t index = 0U; index < expected.size(); ++index) {
         if (!lane_j::equivalent_hit(expected[index], actual[index])) {
             ++result.hit_mismatches;
+            if (result.mismatches.size() < 16U) {
+                result.mismatches.push_back({
+                    index,
+                    expected[index],
+                    actual[index],
+                });
+            }
         }
         result.runtime_errors += actual[index].stats[3] != 0U ? 1U : 0U;
         result.upper_visits += actual[index].stats[0];
@@ -171,6 +185,38 @@ int main(int argc, char** argv) {
             total_mismatches += validation.hit_mismatches;
             total_runtime_errors += validation.runtime_errors;
 
+            for (const auto& mismatch : validation.mismatches) {
+                const auto& expected_hit = mismatch.expected;
+                const auto& actual_hit = mismatch.actual;
+                std::cerr
+                    << "J003 mismatch step=" << step
+                    << " ray=" << mismatch.ray_index
+                    << " expected_hit=" << (expected_hit.hit ? 1 : 0)
+                    << " expected_t=" << expected_hit.t
+                    << " expected_primitive=" << expected_hit.primitive_id
+                    << " expected_material=" << expected_hit.material_id
+                    << " expected_instance=" << expected_hit.instance_id
+                    << " expected_normal=("
+                    << expected_hit.normal.x << ","
+                    << expected_hit.normal.y << ","
+                    << expected_hit.normal.z << ")"
+                    << " actual_hit=" << actual_hit.ids[3]
+                    << " actual_t=" << actual_hit.t_normal[0]
+                    << " actual_primitive=" << actual_hit.ids[0]
+                    << " actual_material=" << actual_hit.ids[1]
+                    << " actual_instance=" << actual_hit.ids[2]
+                    << " actual_normal=("
+                    << actual_hit.t_normal[1] << ","
+                    << actual_hit.t_normal[2] << ","
+                    << actual_hit.t_normal[3] << ")"
+                    << " visits=("
+                    << actual_hit.stats[0] << ","
+                    << actual_hit.stats[1] << ","
+                    << actual_hit.stats[2] << ")"
+                    << " runtime_error=" << actual_hit.stats[3]
+                    << "\n";
+            }
+
             if (step != 0U) {
                 json << ",\n";
             }
@@ -203,7 +249,43 @@ int main(int argc, char** argv) {
                  << validation.triangle_tests
                  << ",\"diagnostic_traversal_gpu_us\":"
                  << traversal.traversal_gpu_us
-                 << "}";
+                 << ",\"mismatches\":[";
+            for (std::size_t mismatch_index = 0U;
+                 mismatch_index < validation.mismatches.size();
+                 ++mismatch_index) {
+                const auto& mismatch =
+                    validation.mismatches[mismatch_index];
+                if (mismatch_index != 0U) {
+                    json << ",";
+                }
+                json << "{\"ray_index\":" << mismatch.ray_index
+                     << ",\"expected_hit\":"
+                     << (mismatch.expected.hit ? "true" : "false")
+                     << ",\"expected_t\":" << mismatch.expected.t
+                     << ",\"expected_primitive\":"
+                     << mismatch.expected.primitive_id
+                     << ",\"expected_material\":"
+                     << mismatch.expected.material_id
+                     << ",\"expected_instance\":"
+                     << mismatch.expected.instance_id
+                     << ",\"actual_hit\":"
+                     << (mismatch.actual.ids[3] != 0U ? "true" : "false")
+                     << ",\"actual_t\":" << mismatch.actual.t_normal[0]
+                     << ",\"actual_primitive\":"
+                     << mismatch.actual.ids[0]
+                     << ",\"actual_material\":"
+                     << mismatch.actual.ids[1]
+                     << ",\"actual_instance\":"
+                     << mismatch.actual.ids[2]
+                     << ",\"actual_upper_visits\":"
+                     << mismatch.actual.stats[0]
+                     << ",\"actual_micro_visits\":"
+                     << mismatch.actual.stats[1]
+                     << ",\"actual_triangle_tests\":"
+                     << mismatch.actual.stats[2]
+                     << "}";
+            }
+            json << "]}";
         }
 
         json << "\n  ],\n";
