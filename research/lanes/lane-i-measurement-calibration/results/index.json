@@ -1,5 +1,43 @@
 {
   "schema_version": 1,
   "lane": "lane-i-measurement-calibration",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-calibration-workload",
+      "status": "accepted",
+      "evidence_class": "harness-correctness",
+      "result": "001-calibration-workload.md",
+      "artifact": "out/research/lane-i-measurement-calibration/001-calibration-workload/20260930T063252Z",
+      "git_commit": "7f3c07f7f4d67fc834fbd18a72239c0b4f3cbd39",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)"
+    },
+    {
+      "id": "002-calibration-protocol",
+      "status": "accepted",
+      "outcome": "frozen-before-target-timing",
+      "result": "002-calibration-protocol.md",
+      "git_commit": "08be651119e5c209b18eb79cdfd1608e8396237c",
+      "plan_version": "lane-i-i002-v1"
+    },
+    {
+      "id": "003-target-calibration",
+      "status": "inconclusive",
+      "outcome": "gpu-5-percent-wall-nonmonotonic",
+      "result": "003-target-calibration.md",
+      "artifact": "out/research/lane-i-measurement-calibration/003-target-calibration/20260930T063441Z",
+      "git_commit": "bb6cd493a621a64c3642fe94d3eb9f69b0f57dae",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+      "driver": "radv / Mesa 26.1.2",
+      "gpu_resolution": "5%",
+      "wall_resolution": "inconclusive-nonmonotonic"
+    },
+    {
+      "id": "004-program-timing-capability",
+      "status": "complete",
+      "outcome": "target-timing-unsuitable",
+      "result": "004-program-timing-capability.md",
+      "source_artifact": "out/research/lane-i-measurement-calibration/003-target-calibration/20260930T063441Z",
+      "plan_version": "lane-i-i002-v1"
+    }
+  ]
 }
