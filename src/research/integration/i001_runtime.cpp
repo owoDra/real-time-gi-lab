@@ -414,6 +414,60 @@ void sync_surface_positions(
     }
 }
 
+[[nodiscard]] bool triangle_exact_equal(
+    const lane_b::Triangle& a,
+    const lane_b::Triangle& b) noexcept {
+    return a.v0.x == b.v0.x && a.v0.y == b.v0.y && a.v0.z == b.v0.z &&
+           a.v1.x == b.v1.x && a.v1.y == b.v1.y && a.v1.z == b.v1.z &&
+           a.v2.x == b.v2.x && a.v2.y == b.v2.y && a.v2.z == b.v2.z &&
+           a.primitive_id == b.primitive_id &&
+           a.material_id == b.material_id &&
+           a.instance_id == b.instance_id &&
+           a.two_sided == b.two_sided;
+}
+
+inline void fnv1a_u32(
+    std::uint64_t& hash,
+    std::uint32_t value) noexcept {
+    constexpr std::uint64_t prime = 1099511628211ULL;
+    for (std::uint32_t shift = 0; shift < 32; shift += 8) {
+        hash ^= (value >> shift) & 0xffU;
+        hash *= prime;
+    }
+}
+
+[[nodiscard]] std::uint64_t hash_geometry(
+    const std::vector<lane_b::Triangle>& triangles) noexcept {
+    std::uint64_t hash = 1469598103934665603ULL;
+    for (const auto& triangle : triangles) {
+        for (const auto value : {
+                 triangle.v0.x, triangle.v0.y, triangle.v0.z,
+                 triangle.v1.x, triangle.v1.y, triangle.v1.z,
+                 triangle.v2.x, triangle.v2.y, triangle.v2.z}) {
+            fnv1a_u32(hash, std::bit_cast<std::uint32_t>(value));
+        }
+        fnv1a_u32(hash, triangle.primitive_id);
+        fnv1a_u32(hash, triangle.material_id);
+        fnv1a_u32(hash, triangle.instance_id);
+        fnv1a_u32(hash, triangle.two_sided ? 1U : 0U);
+    }
+    return hash;
+}
+
+template <class T>
+[[nodiscard]] std::uint64_t hash_trivial_span(
+    std::span<const T> values) noexcept {
+    static_assert(std::is_trivially_copyable_v<T>);
+    constexpr std::uint64_t prime = 1099511628211ULL;
+    std::uint64_t hash = 1469598103934665603ULL;
+    const auto bytes = std::as_bytes(values);
+    for (const auto byte : bytes) {
+        hash ^= std::to_integer<std::uint8_t>(byte);
+        hash *= prime;
+    }
+    return hash;
+}
+
 [[nodiscard]] MovingSelection choose_moving_selection(
     const lane_b::B002Scene& scene) {
     std::uint32_t max_instance = 0U;
@@ -717,6 +771,7 @@ struct I001Runtime::Impl {
     B002VulkanContext context;
     lane_a::SceneSurfaceSet a_scene;
     lane_b::B002Scene b_scene;
+    std::vector<lane_b::Triangle> baseline_triangles;
     lane_a::A001Settings settings;
     lane_a::A001ParamsGpu params{};
 
@@ -795,6 +850,7 @@ struct I001Runtime::Impl {
             // so ownership/traversal/memory overhead remains visible.
             moving = choose_moving_selection(b_scene);
         }
+        baseline_triangles = b_scene.triangles;
 
         if (uses_bounded(options.variant)) {
             if (options.bounded_owner_capacity == 0U) {
@@ -867,7 +923,7 @@ struct I001Runtime::Impl {
                 const auto target_geometry = deformed_geometry(
                     b_scene.triangles,
                     moving.primitives,
-                    moving.delta_x);
+                    transition_delta);
                 sync_surface_positions(
                     target_scene,
                     target_geometry,
@@ -994,16 +1050,10 @@ struct I001Runtime::Impl {
             }
             const auto segment_size =
                 lane_b::b002_segment_size(b_scene);
-            const auto target_geometry =
-                deformed_geometry(
-                    b_scene.triangles,
-                    moving.primitives,
-                    moving.delta_x);
             deforming_local_setup =
                 lane_e::make_e004_quantized_setup(
                     b_scene.triangles,
                     moving.primitives,
-                    target_geometry,
                     segment_size);
             deforming_local_hierarchy =
                 std::make_unique<HierarchicalStrataBrick>(
@@ -1140,44 +1190,6 @@ struct I001Runtime::Impl {
             auto hash_capacity = VkDeviceSize(
                 quant_payload.hash_table.size() *
                 sizeof(lane_b::GpuSegmentHashEntry));
-
-            if (options.scenario == I001Scenario::MovingRigid ||
-                options.scenario == I001Scenario::DeformingControl) {
-                auto target_geometry =
-                    options.scenario == I001Scenario::MovingRigid
-                    ? translated_geometry(
-                        b_scene.triangles,
-                        moving.primitives,
-                        moving.delta_x)
-                    : deformed_geometry(
-                        b_scene.triangles,
-                        moving.primitives,
-                        moving.delta_x);
-                HierarchicalStrataBrick target_hierarchy(
-                    target_geometry,
-                    lane_b::b002_segment_size(b_scene));
-                auto target_wide =
-                    lane_b::make_b003_wide_micro_payload(
-                        target_hierarchy.flatten());
-                const auto target_quant =
-                    lane_b::make_b003_quantized_micro_payload(
-                        target_wide);
-                node_capacity = std::max(
-                    node_capacity,
-                    VkDeviceSize(
-                        target_quant.nodes.size() *
-                        sizeof(lane_b::B003GpuQuantNode)));
-                order_capacity = std::max(
-                    order_capacity,
-                    VkDeviceSize(
-                        target_quant.ordered_primitives.size() *
-                        sizeof(std::uint32_t)));
-                hash_capacity = std::max(
-                    hash_capacity,
-                    VkDeviceSize(
-                        target_quant.hash_table.size() *
-                        sizeof(lane_b::GpuSegmentHashEntry)));
-            }
 
             const auto upload_with_capacity =
                 [&](B002Buffer& destination,
@@ -1497,12 +1509,23 @@ struct I001Runtime::Impl {
                     std::span<const lane_b::B002BufferUpdate>(&update, 1));
             return {false, gpu_us};
         }
-        context.replace_device_buffer(
-            buffer,
-            data,
+        auto replacement = context.create_device_buffer(
             size,
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-        return {true, 0.0};
+        const lane_b::B002BufferUpdate update{
+            0U,
+            data,
+            size,
+        };
+        const auto gpu_us =
+            context.update_device_buffer_timed(
+                replacement,
+                std::span<const lane_b::B002BufferUpdate>(
+                    &update,
+                    1));
+        context.destroy_buffer(buffer);
+        buffer = replacement;
+        return {true, gpu_us};
     }
 
     struct DynamicUpdateStats {
@@ -1531,9 +1554,12 @@ struct I001Runtime::Impl {
         const bool dynamic_scenario =
             options.scenario == I001Scenario::MovingRigid ||
             options.scenario == I001Scenario::DeformingControl;
-        if (!dynamic_scenario || !target_state || geometry_is_target) {
+        if (!dynamic_scenario || target_state == geometry_is_target) {
             return {};
         }
+
+        const float transition_delta =
+            target_state ? moving.delta_x : -moving.delta_x;
 
         using Clock = std::chrono::steady_clock;
         const auto elapsed_us = [](Clock::time_point start) {
@@ -1588,11 +1614,11 @@ struct I001Runtime::Impl {
                 ? translated_geometry(
                     b_scene.triangles,
                     moving.primitives,
-                    moving.delta_x)
+                    transition_delta)
                 : deformed_geometry(
                     b_scene.triangles,
                     moving.primitives,
-                    moving.delta_x);
+                    transition_delta);
             out.geometry_prepare_cpu_us = elapsed_us(phase_start);
             b_scene.triangles = std::move(target_geometry);
         } else if (options.scenario != I001Scenario::MovingRigid) {
@@ -1608,7 +1634,7 @@ struct I001Runtime::Impl {
                     a_scene.samples.at(primitive).position,
                     4,
                     position.data());
-                position[0] += moving.delta_x;
+                position[0] += transition_delta;
                 moved_positions.push_back(position);
             } else {
                 const auto& triangle = b_scene.triangles.at(primitive);
@@ -1641,7 +1667,7 @@ struct I001Runtime::Impl {
         if (uses_hwrt(options.variant)) {
             if (rigid_instance_candidate) {
                 const auto stats = hwrt->update_rigid_transform(
-                    moving.delta_x,
+                    target_state ? moving.delta_x : 0.0F,
                     rigid_tlas_policy(options.variant));
                 out.instance_transfer_wall_us =
                     stats.instance_upload_us;
@@ -1842,7 +1868,7 @@ struct I001Runtime::Impl {
             auto moved_instance =
                 lane_e::translated_instance(
                     instances[instance_index],
-                    moving.delta_x);
+                    target_state ? moving.delta_x : 0.0F);
             const lane_b::B002BufferUpdate update{
                 VkDeviceSize(instance_index) *
                     VkDeviceSize(sizeof(lane_e::E003GpuInstance)),
@@ -1989,7 +2015,7 @@ struct I001Runtime::Impl {
 
         if (options.scenario == I001Scenario::MovingRigid) {
             for (const auto primitive : moving.primitives) {
-                a_scene.samples.at(primitive).position[0] += moving.delta_x;
+                a_scene.samples.at(primitive).position[0] += transition_delta;
             }
         } else {
             sync_surface_positions(
@@ -1997,17 +2023,16 @@ struct I001Runtime::Impl {
                 b_scene.triangles,
                 moving.primitives);
         }
-        geometry_is_target = true;
+        geometry_is_target = target_state;
         out.wall_us = elapsed_us(start);
 
-        // The rigid-instance candidate does not mutate traversal geometry.
-        // Keep the translated CPU scene only as an out-of-band correctness
-        // reference after the measured maintenance boundary has closed.
+        // Rigid-instance traversal geometry stays immutable. Mirror only the
+        // CPU reference scene after the measured maintenance boundary closes.
         if (rigid_instance_candidate) {
             b_scene.triangles = translated_geometry(
                 b_scene.triangles,
                 moving.primitives,
-                moving.delta_x);
+                transition_delta);
         }
         return out;
     }
