@@ -98,3 +98,6 @@ Current follow-up status:
   candidate.
 Preparation checkpoint:
 `results/019-formal-crossover-preparation.md`.
+
+- v4 built/linked but hard validation stopped at `large-global-high/primary/control` before timing; diagnostic visibility record:
+  `results/024-formal-validation-diagnostic-visibility.md`.

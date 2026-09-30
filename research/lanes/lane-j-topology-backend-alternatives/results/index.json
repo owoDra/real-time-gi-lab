@@ -155,6 +155,13 @@
       "status": "ready-target-execution",
       "evidence_class": "link-only-pre-timing-harness-refreeze",
       "decision": "link the existing j003_clustered_bvh.cpp required by j003_reference.cpp, refreeze source/runner identities, and rerun the unchanged J004 formal campaign; no accepted timing was observed"
+    },
+    {
+      "id": "J004-validation-diagnostic-v5",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/024-formal-validation-diagnostic-visibility.md",
+      "status": "awaiting-retained-validation-counter-inspection",
+      "evidence_class": "diagnostic-only-pre-timing",
+      "decision": "large-global-high/primary/control hard validation failed before timing; retain failure and expose exact validation counters before any root-cause correction"
     }
   ]
 }
