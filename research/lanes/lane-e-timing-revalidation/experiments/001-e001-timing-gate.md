@@ -1,6 +1,6 @@
 # E001 — Lane E timing revalidation gate
 
-Status: **frozen before any target candidate timing**
+Status: **v2 frozen before any target candidate timing**
 
 This prospective gate revalidates the already accepted Lane E object-local ownership/update architecture; it does not redesign it.
 
@@ -19,7 +19,7 @@ Accepted environment is `dual-context`. GPU timestamp is primary. CPU wall is di
 - 16 complete recurring-boundary transitions per timed sample.
 - 4 warmup pairs + 12 measured pairs per fresh process.
 - 8 fresh-process blocks.
-- block start order: `AB, BA, AB, BA, BA, AB, BA, AB`; pair order alternates inside each process.
+- block start order: `AB, BA, AB, BA, BA, AB, BA, AB`; pair order alternates inside each process.\n- control/candidate process position is independently counterbalanced 4/4 across blocks: `control→candidate, candidate→control, control→candidate, candidate→control, candidate→control, control→candidate, candidate→control, control→candidate`.
 - 1 second settle before each process.
 - accepted timing disables validation layers.
 - sample exclusion forbidden; instability rerun budget 0; completed-campaign rerun budget 0.
