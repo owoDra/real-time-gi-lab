@@ -48,10 +48,14 @@ Run the host contract first:
 "$PHOS_GI_BUILD_DIR/phos-lane-j-contract-test"
 ```
 
-Then validate the representative frozen snapshot:
+Then validate the representative frozen snapshot through the repository's
+NixOS/Vulkan launcher. Direct execution is intentionally avoided because NixOS
+may not expose `libvulkan.so.1` or the host ICD search paths to the development
+shell:
 
 ```bash
-"$PHOS_GI_BUILD_DIR/phos-lane-j-j003-probe" \
+bash ./scripts/run_with_vulkan.sh \
+  "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-probe" \
   --validation \
   --snapshot \
   out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized/medium-global-representative/step-00.bin \
@@ -84,3 +88,15 @@ This checkpoint does not claim completion of:
 - final J003 hard-memory eligibility.
 
 Those are subsequent J003 gates after the first target-GPU traversal proof.
+
+
+## Invocation correction
+
+The first attempted target-GPU invocation used the executable directly and
+failed at vk-bootstrap instance initialization with `vulkan_unavailable`.
+No Vulkan instance, device, shader dispatch, or candidate evidence was produced.
+
+The repository already standardizes NixOS Vulkan execution through
+`scripts/run_with_vulkan.sh`, which exposes the Vulkan loader and
+`/run/opengl-driver` paths. All retained J003 target-GPU commands must use that
+launcher (or an equivalent environment proven to expose the same loader/ICD).
