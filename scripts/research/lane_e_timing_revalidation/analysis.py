@@ -167,7 +167,7 @@ def classify_memory(rows: list[dict[str, object]]) -> dict[str, object]:
         a_overlap = float(pair["A"]["old_new_overlap_bytes"])
         b_overlap = float(pair["B"]["old_new_overlap_bytes"])
         overlap_ratios.append(
-            b_overlap / a_overlap if a_overlap > 0 else (1.0 if b_overlap == 0 else math.inf)
+            b_overlap / a_overlap if a_overlap > 0 else (1.0 if b_overlap == 0 else None)
         )
     if not persistent_ratios:
         raise ValueError("memory classification requires measured pairs")
@@ -199,7 +199,11 @@ def classify_memory(rows: list[dict[str, object]]) -> dict[str, object]:
         "persistent_ratio_max": persistent_max,
         "true_peak_ratio_median": peak_median,
         "true_peak_ratio_max": peak_max,
-        "old_new_overlap_ratio_median": median(overlap_ratios),
+        "old_new_overlap_ratio_median": (
+            None
+            if any(value is None for value in overlap_ratios)
+            else median([float(value) for value in overlap_ratios])
+        ),
         "allocation_lifetime_accounting_complete": lifetime_complete,
     }
 
