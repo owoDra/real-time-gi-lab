@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "lane": "lane-j-topology-backend-alternatives",
+  "results": [
+    {
+      "experiment": "J001",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/001-deep-architecture-survey.md",
+      "status": "complete",
+      "evidence_class": "research-and-planning",
+      "decision": "retain clustered-two-level-bvh as sole new structural candidate; retain Lane E HWRT rebuild and hardened transient LBVH as controls"
+    }
+  ]
+}
