@@ -440,7 +440,7 @@ void PersistentClusterLayout::rebuild_upper(
     upper_node_count_ = next_node;
 }
 
-std::uint32_t PersistentClusterLayout::refit_upper(
+std::vector<std::uint32_t> PersistentClusterLayout::refit_upper(
     std::span<const std::uint32_t> dirty_physical_slots) {
     if (upper_root_ == kInvalidId || upper_root_ >= upper_node_count_) {
         throw std::runtime_error("upper refit missing root");
@@ -508,7 +508,11 @@ std::uint32_t PersistentClusterLayout::refit_upper(
         };
     }
 
-    return static_cast<std::uint32_t>(affected.size());
+    std::vector<std::uint32_t> dirty_nodes(
+        affected.begin(),
+        affected.end());
+    std::sort(dirty_nodes.begin(), dirty_nodes.end());
+    return dirty_nodes;
 }
 
 PersistentLayoutUpdate PersistentClusterLayout::synchronize(
@@ -594,7 +598,9 @@ PersistentLayoutUpdate PersistentClusterLayout::synchronize(
         result.upper_rebuilt = true;
         result.upper_rebuild_node_count = upper_node_count_;
     } else {
-        result.upper_refit_node_count = refit_upper(dirty_slots);
+        result.dirty_upper_nodes = refit_upper(dirty_slots);
+        result.upper_refit_node_count =
+            static_cast<std::uint32_t>(result.dirty_upper_nodes.size());
     }
 
     if (logical_to_slot_.size() != state.clusters().size()) {
