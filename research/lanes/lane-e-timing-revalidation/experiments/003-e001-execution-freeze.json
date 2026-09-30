@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "plan_version": "lane-e-timing-revalidation-e001-v1",
-  "status": "frozen-before-target-candidate-timing",
-  "source_parent_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
+  "status": "protocol-frozen-before-target-candidate-timing",
+  "source_parent_commit": "91e13b6189ea256579d6371245465526cae30698",
   "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
   "imported_lane_l_measurement_commit": "b8bb76f728ee329cf4daef5855a05972757072f6",
   "accepted_environment": "dual-context",
@@ -24,15 +24,24 @@
       "AB",
       "BA",
       "AB"
-    ]
+    ],
+    "expected_fresh_timing_processes": 160
   },
   "rerun_policy": {
     "sample_exclusion": "forbidden",
     "instability_rerun_budget": 0,
-    "completed_campaign_rerun_budget": 0
+    "completed_campaign_rerun_budget": 0,
+    "partial_process_with_measured_rows": "campaign-invalid-no-rerun"
   },
   "frozen_blobs": {
-    "research/lanes/lane-e-timing-revalidation/experiments/001-e001-timing-gate.md": "5021032d0ec7fafd4a0d7b51f3aead5113c6afbb",
-    "research/lanes/lane-e-timing-revalidation/experiments/002-e001-config.json": "a6e34b9fb3a7f7f6c94b0c43dfb490e69b275d88"
-  }
+    "research/lanes/lane-e-timing-revalidation/experiments/001-e001-timing-gate.md": "66fb014f89f072596f57424968e0828f229182a4",
+    "research/lanes/lane-e-timing-revalidation/experiments/002-e001-config.json": "620ae9d96db3570bb995b9722c6c1d9672602a8d"
+  },
+  "imported_lane_l_blobs": {
+    "research/lanes/lane-l-heavy-boundary-calibration/experiments/005-l002-config.json": "b7b20a53de965f198ac5b117645b07626204bbab",
+    "research/lanes/lane-l-heavy-boundary-calibration/experiments/006-l002-execution-freeze.json": "0c46ffb724775807a871637f8c6f7bde801de848",
+    "research/lanes/lane-l-heavy-boundary-calibration/results/005-l002-target-result.md": "acb84da701ea786ee6231368fc625ab5178ca3c7",
+    "research/lanes/lane-l-heavy-boundary-calibration/results/007-lane-l-final.md": "136178825f24aeab5d60a34a25329ec52158ae34"
+  },
+  "execution_identity_note": "Runtime/source blob identities are added by the final prospective pre-target refreeze after GPU-independent implementation/tests. No target timing may start before that refreeze."
 }
