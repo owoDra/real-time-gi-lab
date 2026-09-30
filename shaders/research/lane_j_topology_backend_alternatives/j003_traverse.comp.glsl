@@ -40,6 +40,7 @@ struct Hit {
     vec4 t_normal;
     uvec4 ids;
     uvec4 stats;
+    uvec4 debug;
 };
 
 layout(std430, binding = 0) readonly buffer TriangleBuffer {
@@ -68,6 +69,8 @@ layout(push_constant) uniform Push {
     uint micro_node_count;
     uint cluster_count;
     uint triangle_count;
+    uint debug_ray_index;
+    uint debug_primitive_id;
 } push_data;
 
 float hit_tolerance(float t) {
@@ -208,6 +211,7 @@ void main() {
         0.0);
     result.ids = uvec4(INVALID_ID, INVALID_ID, INVALID_ID, 0u);
     result.stats = uvec4(0u);
+    result.debug = uvec4(0u, 0u, 0u, INVALID_ID);
 
     if (isnan(direction_length) || isinf(direction_length) ||
         direction_length <= 1.0e-8 ||
@@ -294,20 +298,45 @@ void main() {
                     result.stats.z += 1u;
                     float candidate_t = 0.0;
                     vec3 candidate_normal = vec3(0.0);
-                    if (intersect_triangle(
-                            triangle,
-                            origin,
-                            direction,
-                            ray_tmax,
-                            best_t,
-                            candidate_t,
-                            candidate_normal) &&
+                    bool watched =
+                        ray_index == push_data.debug_ray_index &&
+                        triangle.meta.x == push_data.debug_primitive_id;
+                    if (watched) {
+                        result.debug.x |= 1u;
+                        if (current_hit) {
+                            result.debug.x |= 8u;
+                        }
+                        result.debug.z = floatBitsToUint(best_t);
+                        result.debug.w = result.ids.x;
+                    }
+
+                    bool intersected = intersect_triangle(
+                        triangle,
+                        origin,
+                        direction,
+                        ray_tmax,
+                        best_t,
+                        candidate_t,
+                        candidate_normal);
+                    if (watched) {
+                        result.debug.y = floatBitsToUint(candidate_t);
+                        if (intersected) {
+                            result.debug.x |= 2u;
+                        }
+                    }
+
+                    bool preferred = intersected &&
                         prefer_hit(
                             candidate_t,
                             triangle.meta.x,
                             current_hit,
                             best_t,
-                            result.ids.x)) {
+                            result.ids.x);
+                    if (watched && preferred) {
+                        result.debug.x |= 4u;
+                    }
+
+                    if (preferred) {
                         current_hit = true;
                         best_t = candidate_t;
                         result.t_normal = vec4(
