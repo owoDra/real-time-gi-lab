@@ -351,3 +351,23 @@ mise run research:l001:test
 cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-l-l001-formal-process
 exec python scripts/research/lane_l_heavy_boundary_calibration/run_l001.py
 '''
+
+
+[tasks."research:l002:test"]
+description = "Run GPU-independent Lane L L002 protocol and analysis tests"
+run = '''
+python -m unittest \
+  scripts.research.lane_l_heavy_boundary_calibration.test_l002_analysis \
+  scripts.research.lane_l_heavy_boundary_calibration.test_l002_protocol
+'''
+
+[tasks."research:l002:formal"]
+description = "Build, validate, and run frozen Lane L L002 heavy-boundary floor calibration"
+depends = ["configure"]
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+mise run research:l002:test
+cmake --build "$PHOS_GI_BUILD_DIR" --target phos-lane-l-l001-formal-process
+exec python scripts/research/lane_l_heavy_boundary_calibration/run_l002.py
+'''
