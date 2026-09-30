@@ -5,11 +5,13 @@
 #include "j003_transition.hpp"
 #include "vk_context.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <limits>
+#include <span>
 #include <sstream>
 #include <stdexcept>
 #include <string>
