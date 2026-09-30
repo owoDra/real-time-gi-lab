@@ -217,3 +217,35 @@ for profile in "${profiles[@]}"; do
     --output "$output_root/$profile.json"
 done
 '''
+
+
+[tasks."research:j003:persistent-gpu"]
+description = "Replay the representative J003 profile through persistent Vulkan buffers"
+depends = ["configure"]
+usage = '''
+flag "--profile <profile>" help="Frozen J002 profile" default="medium-global-representative"
+flag "--ray-count <ray_count>" help="Exact validation ray count per snapshot" default="4096"
+flag "--validation" help="Enable Vulkan validation layers"
+'''
+run = '''
+#!/usr/bin/env bash
+set -euo pipefail
+
+profile="${usage_profile?}"
+artifact_root="out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized"
+output_root="out/research/lane-j-topology-backend-alternatives/003-target-gpu-prototype/persistent-gpu"
+mkdir -p "$output_root"
+
+cmake --build "$PHOS_GI_BUILD_DIR"   --target phos-lane-j-j003-persistent-gpu-replay
+
+args=(
+  --profile-dir "$artifact_root/$profile"
+  --output "$output_root/$profile.json"
+  --ray-count "${usage_ray_count?}"
+)
+if [ "${usage_validation:-false}" = "true" ]; then
+  args+=(--validation)
+fi
+
+exec bash ./scripts/run_with_vulkan.sh   "$PHOS_GI_BUILD_DIR/phos-lane-j-j003-persistent-gpu-replay"   "${args[@]}"
+'''
