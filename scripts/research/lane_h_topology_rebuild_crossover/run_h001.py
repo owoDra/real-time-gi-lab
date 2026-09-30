@@ -386,6 +386,9 @@ def main() -> int:
     (root / "h001-host-observations.json").write_text(
         json.dumps(observations, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
+    (root / "h001-devices.json").write_text(
+        json.dumps(devices, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
     (root / "h001-config.json").write_text(
         json.dumps(cfg, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
