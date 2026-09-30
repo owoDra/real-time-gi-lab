@@ -83,8 +83,13 @@ struct alignas(16) GpuHit {
     std::array<std::uint32_t, 4> ids{};
     // upper node visits, micro node visits, exact triangle tests, runtime error
     std::array<std::uint32_t, 4> stats{};
+    // Validation-only watched-primitive diagnostics:
+    // x=flags, y=candidate t bits, z=current t bits, w=current primitive id.
+    // flags: bit0 leaf/test reached, bit1 intersect accepted,
+    // bit2 prefer accepted, bit3 current hit existed before candidate.
+    std::array<std::uint32_t, 4> debug{};
 };
-static_assert(sizeof(GpuHit) == 48);
+static_assert(sizeof(GpuHit) == 64);
 
 struct Ray {
     Vec3 origin{};
