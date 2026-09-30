@@ -85,6 +85,13 @@
       "status": "diagnostic",
       "evidence_class": "retained-target-gpu-correctness-failure",
       "decision": "reject v1.4/v1.5 pruning hypotheses; use explicit shader watched-primitive path before any further correction"
+    },
+    {
+      "id": "J003-persistent-vulkan-watched-primitive",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/013-watched-primitive-root-cause.md",
+      "status": "root-cause-layer-identified",
+      "evidence_class": "shader-watched-primitive-diagnostic",
+      "decision": "exact triangle fp32 reproducibility is active failure layer; rerun frozen v1.6 NoContraction correction"
     }
   ]
 }
