@@ -531,6 +531,20 @@ TransitionStats ClusterTransitionState::update(
         }
     }
 
+    std::vector<std::uint32_t> dirty_ids;
+    dirty_ids.reserve(final_dirty_count);
+    for (const auto& cluster : clusters_) {
+        if (dirty.contains(cluster.cluster_id)) {
+            dirty_ids.push_back(cluster.cluster_id);
+        }
+    }
+    std::sort(dirty_ids.begin(), dirty_ids.end());
+
+    std::vector<std::uint32_t> retired_cluster_ids(
+        retired_ids.begin(),
+        retired_ids.end());
+    std::sort(retired_cluster_ids.begin(), retired_cluster_ids.end());
+
     return {
         static_cast<std::uint32_t>(clusters_.size()),
         final_dirty_count,
@@ -546,6 +560,8 @@ TransitionStats ClusterTransitionState::update(
         split_count != 0U ||
             merge_count != 0U ||
             !retired_ids.empty(),
+        std::move(dirty_ids),
+        std::move(retired_cluster_ids),
     };
 }
 
