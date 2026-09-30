@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-h-h001-safe-timing-v1",
+  "experiment": "H001",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "architecture_changes_forbidden": true,
+  "validation_for_accepted_timing": false,
+  "outlier_deletion": false,
+  "fastest_subset_selection": false,
+  "instability_rerun_budget": 0,
+  "warmup_frames": 16,
+  "measured_frames": 16,
+  "settle_seconds": 1,
+  "process_blocks": 8,
+  "variants": {
+    "A": "hardened-transient-lbvh",
+    "B": "transient-lbvh",
+    "C": "combined-hwrt",
+    "D": "vanilla-software"
+  },
+  "block_orders": [
+    "ABCD",
+    "BCDA",
+    "CDAB",
+    "DABC",
+    "DCBA",
+    "ADCB",
+    "BADC",
+    "CBAD"
+  ],
+  "cases": [
+    {
+      "id": "static-control",
+      "scenario": "static",
+      "geometry_class": "representative-rigid"
+    },
+    {
+      "id": "moving-rigid-control",
+      "scenario": "moving-rigid",
+      "geometry_class": "representative-rigid"
+    },
+    {
+      "id": "topology-replace25-control",
+      "scenario": "moving-rigid",
+      "geometry_class": "topology-replace25"
+    }
+  ],
+  "target_state_sequence": {
+    "static": "true for every warmup and measured frame",
+    "dynamic": "alternate false/true by absolute frame index; measured frame 0 continues the alternation so every measured frame is a transition"
+  },
+  "statistics": {
+    "within_process": "median, p10, p90, first4 median, last4 median for all measured frames",
+    "fresh_process": "median of the eight per-process medians",
+    "order_sensitivity": "max/min of medians grouped by process slot position"
+  },
+  "repeatability_criteria": {
+    "gpu": {
+      "within_process_p90_p10_max": 1.1,
+      "first_last_median_ratio_max": 1.1,
+      "fresh_process_median_max_min_max": 1.1,
+      "fresh_process_mad_over_median_max": 0.04,
+      "slot_position_median_max_min_max": 1.1
+    },
+    "wall": {
+      "within_process_p90_p10_max": 1.15,
+      "first_last_median_ratio_max": 1.15,
+      "fresh_process_median_max_min_max": 1.15,
+      "fresh_process_mad_over_median_max": 0.06,
+      "slot_position_median_max_min_max": 1.15
+    }
+  },
+  "campaign_pass_rule": "Every case/variant row, including both candidate and controls, must pass every frozen GPU and wall criterion. Any instability makes H001 INCONCLUSIVE; no instability rerun is permitted.",
+  "background_observation": {
+    "gate": false,
+    "fields": [
+      "loadavg_1m",
+      "loadavg_5m",
+      "loadavg_15m",
+      "mem_available_bytes",
+      "process_start_monotonic_ns",
+      "process_end_monotonic_ns"
+    ]
+  },
+  "forbidden_methods": [
+    "power_dpm_force_performance_level writes",
+    "profile_peak",
+    "GPU clock/power sysfs writes",
+    "sudo GPU performance-state fixing",
+    "outlier deletion",
+    "fastest-subset selection",
+    "post-hoc threshold changes"
+  ]
+}

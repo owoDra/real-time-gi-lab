@@ -26,6 +26,11 @@ LANES = {
         "shader": "shaders/research/lane_g_transient_lbvh_hardening/README.md",
         "script": "scripts/research/lane_g_transient_lbvh_hardening/README.md",
     },
+    "lane-h-topology-rebuild-crossover": {
+        "src": "src/research/lane_h_topology_rebuild_crossover/CMakeLists.txt",
+        "shader": "shaders/research/lane_h_topology_rebuild_crossover/README.md",
+        "script": "scripts/research/lane_h_topology_rebuild_crossover/README.md",
+    },
 }
 
 

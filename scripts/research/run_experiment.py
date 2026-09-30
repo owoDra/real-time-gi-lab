@@ -18,6 +18,7 @@ LANES = {
     "lane-a-split-rc",
     "lane-b-traversal",
     "lane-c-storage-locality",
+    "lane-h-topology-rebuild-crossover",
 }
 EXPERIMENT_RE = re.compile(r"^[0-9]{3}-[a-z0-9][a-z0-9-]*$")
 GPU_RE = re.compile(r"^GPU:\s*(.+)$", re.MULTILINE)
