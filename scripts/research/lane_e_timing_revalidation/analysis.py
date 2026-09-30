@@ -151,19 +151,36 @@ def classify_memory(rows: list[dict[str, object]]) -> dict[str, object]:
         key = (int(row["block"]), int(row["pair_index"]))
         pairs[key][str(row["role"])] = row
     persistent_ratios: list[float] = []
+    transient_ratios: list[float] = []
+    scratch_ratios: list[float] = []
     peak_ratios: list[float] = []
-    overlap_ratios: list[float] = []
+    allocation_count_ratios: list[float | None] = []
+    overlap_ratios: list[float | None] = []
     for key, pair in pairs.items():
         if set(pair) != {"A", "B"}:
             raise ValueError(f"incomplete memory pair {key}")
         a_p = float(pair["A"]["persistent_bytes"])
         b_p = float(pair["B"]["persistent_bytes"])
+        a_t = float(pair["A"]["transient_bytes"])
+        b_t = float(pair["B"]["transient_bytes"])
+        a_s = float(pair["A"]["scratch_bytes"])
+        b_s = float(pair["B"]["scratch_bytes"])
         a_peak = float(pair["A"]["true_peak_bytes"])
         b_peak = float(pair["B"]["true_peak_bytes"])
-        if a_p <= 0 or a_peak <= 0:
-            raise ValueError("control memory must be positive")
+        if a_p <= 0 or a_t <= 0 or a_peak <= 0:
+            raise ValueError("control persistent/transient/peak memory must be positive")
         persistent_ratios.append(b_p / a_p)
+        transient_ratios.append(b_t / a_t)
+        scratch_ratios.append(
+            b_s / a_s if a_s > 0 else (1.0 if b_s == 0 else math.inf)
+        )
         peak_ratios.append(b_peak / a_peak)
+
+        a_alloc = float(pair["A"]["allocation_count"])
+        b_alloc = float(pair["B"]["allocation_count"])
+        allocation_count_ratios.append(
+            b_alloc / a_alloc if a_alloc > 0 else (1.0 if b_alloc == 0 else None)
+        )
         a_overlap = float(pair["A"]["old_new_overlap_bytes"])
         b_overlap = float(pair["B"]["old_new_overlap_bytes"])
         overlap_ratios.append(
@@ -187,23 +204,32 @@ def classify_memory(rows: list[dict[str, object]]) -> dict[str, object]:
     )
     if hard_regression:
         classification = "regression"
-    elif persistent_median <= 1.0 and peak_median <= 1.0 and (
+    elif persistent_max <= 1.0 and peak_max <= 1.0 and (
         persistent_median < 1.0 or peak_median < 1.0
     ):
+        # Improvement means the candidate is never worse on either frozen
+        # decision memory axis, with at least one axis strictly better.
         classification = "improvement"
     else:
         classification = "neutral"
+
+    def optional_median(values: list[float | None]) -> float | None:
+        if any(value is None for value in values):
+            return None
+        return median([float(value) for value in values])
+
     return {
         "classification": classification,
         "persistent_ratio_median": persistent_median,
         "persistent_ratio_max": persistent_max,
+        "transient_ratio_median": median(transient_ratios),
+        "transient_ratio_max": max(transient_ratios),
+        "scratch_ratio_median": median(scratch_ratios),
+        "scratch_ratio_max": max(scratch_ratios),
         "true_peak_ratio_median": peak_median,
         "true_peak_ratio_max": peak_max,
-        "old_new_overlap_ratio_median": (
-            None
-            if any(value is None for value in overlap_ratios)
-            else median([float(value) for value in overlap_ratios])
-        ),
+        "old_new_overlap_ratio_median": optional_median(overlap_ratios),
+        "allocation_count_ratio_median": optional_median(allocation_count_ratios),
         "allocation_lifetime_accounting_complete": lifetime_complete,
     }
 
