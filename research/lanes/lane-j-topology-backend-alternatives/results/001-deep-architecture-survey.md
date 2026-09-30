@@ -378,3 +378,249 @@ run-local controls, plus the required software/vanilla/accounting controls.
 No performance ordering is claimed. J002 must freeze the deterministic topology
 workload and comparator contract before any candidate timing. J003 may implement
 only this retained candidate and required controls. J004 is blocked on Lane I.
+
+
+## Full comparison against Lane-J criteria
+
+The short table above is only a disposition summary. This matrix records the
+criteria required by Issue #20 for every serious family.
+
+### Object-local HWRT rebuild
+
+- **representation / hierarchy:** ordinary triangle BLAS owned by the changed
+  object, referenced by TLAS.
+- **topology mutation:** primitive count/index topology change requires BUILD,
+  not E004-style UPDATE. Vulkan UPDATE requires primitive counts and indexed
+  triangle indices to remain compatible with the original build.
+- **GPU build/update:** geometry upload -> size query/capacity decision ->
+  destination/scratch availability -> BLAS BUILD -> instance reference/bounds
+  update -> TLAS work -> synchronization.
+- **dirty granularity / locality:** object only, but all triangles in that object
+  participate in BLAS rebuild.
+- **allocation/reallocation:** object BLAS destination may need growth when
+  primitive count changes; old/new overlap must remain live until safe release.
+- **scratch:** implementation-reported build scratch is mandatory when nonzero.
+- **persistent/transient/true peak:** persistent BLAS/TLAS plus geometry; build
+  scratch transient; resize may overlap old destination, new destination,
+  geometry, and scratch. J002 measures lifetime peak rather than final resident.
+- **geometry upload:** changed object's exact triangle data only; unrelated
+  geometry never uploads.
+- **rebuild/refit/update:** BUILD for topology/count mutation; TLAS update/build
+  is separately accounted. No UPDATE substitution is allowed when KHR update
+  rules do not permit the changed topology.
+- **compaction:** ALLOW_COMPACTION permits compacting copy only after build and
+  compacted-size query. That adds query/copy/synchronization and source/dest
+  overlap; recurrent compaction is therefore not the default low-latency
+  control. If tested later it must be a separate frozen variant.
+- **synchronization:** AS build/copy and subsequent tracing require explicit
+  synchronization; it remains inside the boundary.
+- **traversal/divergence:** hardware implementation-dependent; expected strongest
+  trace path on the measured target, but no J001 performance assumption.
+- **exact Hit / nearest/tie:** feasible with shared triangle semantics and
+  canonical merge.
+- **static+dynamic merge:** naturally compatible with Lane E object-local BLAS +
+  TLAS ownership.
+- **small high-churn:** fixed AS setup/dispatch/scratch may dominate.
+- **large high-churn:** full-object build work scales with whole object even if
+  mutation is spatially local.
+- **frequent primitive-count changes / insert/remove / replacement:** supported
+  by rebuild, but may force resize/reallocation and full build.
+- **complexity:** moderate because Vulkan path already exists conceptually, but
+  complete accounting is nontrivial.
+- **global/God-object risk:** low if BLAS remains per object.
+- **Lane F/G relation:** avoids sorted-grid amplification; unlike G's LBVH it
+  delegates hierarchy layout/traversal to HWRT. Performance crossover remains
+  unmeasured.
+
+### Hardened transient LBVH
+
+- **representation / hierarchy:** object-local full binary LBVH rebuilt from
+  current exact triangles, with software exact traversal and static/dynamic
+  merge.
+- **topology mutation:** naturally consumes arbitrary current primitive set;
+  primitive count and identity can change between builds.
+- **GPU build/update:** current-frame geometry -> Morton/key generation ->
+  radix/order work -> hierarchy build/bounds -> traversal.
+- **dirty granularity / locality:** object-local but monolithic; unaffected
+  subregions do not retain hierarchy work across topology updates.
+- **allocation/reallocation:** compact object-local payload; count growth may
+  resize geometry/key/node scratch.
+- **scratch:** key/radix/node/bounds scratch is explicit.
+- **persistent/transient/true peak:** Lane G already established exact lifetime
+  accounting and closed the sparse integration blocker; J002 must reproduce
+  this accounting for topology profiles.
+- **geometry upload:** changed object geometry/current-frame data only.
+- **rebuild/refit/update:** full rebuild on every topology step; no refit benefit
+  for unchanged subregions.
+- **synchronization:** builder stage dependencies and traversal readiness are
+  explicit GPU synchronization costs.
+- **traversal/divergence:** software BVH traversal; quality depends on builder
+  and may diverge more than hardware traversal. No timing conclusion is carried
+  from F/G.
+- **exact Hit / nearest/tie:** already demonstrated feasible in G's deterministic
+  semantic replay.
+- **static+dynamic merge:** proven conceptually by G integration runtime.
+- **small high-churn:** builder overhead is bounded and payload small in prior
+  796-triangle evidence; very small object crossover is unknown.
+- **large high-churn:** full rebuild cost grows with all primitives but GPU
+  parallelism is strong.
+- **frequent primitive-count changes / insert/remove / replacement:** natural
+  full-rebuild input model.
+- **complexity:** already implemented/hardened; lowest new implementation risk.
+- **global/God-object risk:** low if kept as object-local backend.
+- **Lane F/G relation:** direct retained control. G resolves memory, not timing.
+
+### Clustered two-level object-local BVH
+
+- **representation / hierarchy:** stable object -> cluster upper BVH -> bounded
+  cluster micro-BVH -> exact triangles.
+- **topology mutation:** changed triangles affect their cluster; insertions/removals
+  may dirty, split, or merge bounded clusters. Stable clusters persist.
+- **GPU build/update:** candidate-owned dirty classification/assignment, dirty
+  micro-BVH rebuild, cluster-bound update, ancestor refit, and upper rebuild only
+  when cluster set changes.
+- **dirty granularity / locality:** bounded cluster granularity; local mutation
+  can avoid rebuilding unrelated clusters.
+- **allocation/reallocation:** persistent cluster descriptors/payload plus bounded
+  cluster page growth; split/merge can require old/new overlap. All pools/reserved
+  capacity count.
+- **scratch:** dirty classification, local partition/build, upper refit/rebuild
+  scratch are explicit.
+- **persistent/transient/true peak:** more persistent metadata than monolithic
+  LBVH is expected; J003 has a 1.25x hard memory eligibility ceiling and exact
+  lifetime census.
+- **geometry upload:** only changed object's canonical snapshot is shared across
+  candidates; candidate-specific cluster staging is counted as preprocessing,
+  not hidden setup.
+- **rebuild/refit/update:** dirty cluster rebuild; upper refit if cluster set
+  stable; upper rebuild on split/merge.
+- **synchronization:** dirty classification -> local rebuild -> bounds ->
+  upper-level maintenance creates more dependency stages than monolithic LBVH;
+  this is a principal falsification risk.
+- **traversal/divergence:** adds an upper cluster traversal level and potentially
+  irregular per-cluster paths. Exact tests remain at triangle leaves.
+- **exact Hit / nearest/tie:** feasible because cluster/upper structures are only
+  conservative acceleration; final triangle tests and shared merge decide Hit.
+- **static+dynamic merge:** changed object produces an exact dynamic hit stream
+  compatible with the existing static/dynamic merge contract.
+- **small high-churn:** likely vulnerable to fixed metadata/dispatch overhead;
+  J002 deliberately includes 128 triangles.
+- **large high-churn:** strongest intended case when high churn is spatially
+  localized; global high-churn is an explicit falsification profile.
+- **frequent primitive-count changes:** handled through deterministic cluster
+  assignment and split/merge.
+- **insertion/removal:** supported by the frozen J003 cluster ownership rules;
+  allocator/synchronization costs remain visible.
+- **large topology replacement:** may dirty nearly all clusters, degenerating
+  toward a full rebuild plus metadata overhead. That failure is retained.
+- **complexity:** medium/high but bounded; significantly lower allocator and
+  dependency complexity than arbitrary subtree surgery.
+- **global/God-object risk:** low because all cluster state is object-owned and
+  no world-global index is introduced.
+- **Lane F/G relation:** deliberately avoids triangle-to-cell reference
+  amplification/global sorting from F and tests whether G's monolithic rebuild
+  can be beaten by retaining unaffected local structure.
+
+### Arbitrary incremental subtree rebuild/refit
+
+- **representation / hierarchy:** persistent object-local BVH with mutable leaves,
+  dirty subtrees, retained unaffected subtrees, ancestor refit.
+- **topology mutation:** arbitrary insertion/removal requires leaf and internal
+  topology edits plus quality policy.
+- **GPU build/update:** dirty propagation, subtree selection, local reconstruction,
+  parent rewiring/refit, allocator/free-list updates.
+- **dirty granularity / locality:** finer than clusters in principle.
+- **allocation/reallocation:** fine-grained persistent node allocation and
+  fragmentation; old/new subtree overlap before parent publication/release.
+- **scratch:** dirty queues, dependency/parent queues, subtree builders, allocator
+  metadata.
+- **persistent/transient/true peak:** difficult but measurable; fragmentation and
+  allocator reserve are part of persistent/peak memory.
+- **geometry upload:** changed object only.
+- **rebuild/refit/update:** localized subtree rebuild + ancestors; larger rebuild
+  needed when quality degrades.
+- **synchronization:** high-risk due to parent/child dependencies, publication,
+  free-list safety, and multi-stage propagation.
+- **traversal/divergence:** can remain direct exact BVH traversal; quality can
+  degrade if reconstruction policy is weak.
+- **exact Hit / nearest/tie:** feasible.
+- **static+dynamic merge:** compatible if object-local.
+- **small high-churn:** bookkeeping may dominate.
+- **large local high-churn:** potentially excellent if dirty-subtree selection is
+  stable.
+- **global replacement:** converges toward whole-tree reconstruction plus
+  persistent allocator cost.
+- **primitive-count changes / insertion/removal:** core strength but also the
+  hardest correctness path.
+- **complexity:** highest among serious software candidates.
+- **global/God-object risk:** low if object-owned, but allocator/shared queues can
+  accidentally become global; prohibited by Lane J.
+- **Lane F/G relation:** avoids F's grid amplification and G's whole-object
+  rebuild, but introduces a larger unvalidated synchronization/allocator problem.
+  Rejected from J003 until cluster granularity is falsified.
+
+### Object-local paged/hashed cells
+
+- **representation / hierarchy:** sparse object-space cell/page hash with triangle
+  references and optional per-page micro-hierarchy.
+- **topology mutation:** update/rebuild touched pages/cells; insert/remove
+  references.
+- **GPU build/update:** overlap enumeration -> page/hash allocation -> reference
+  writes -> optional page micro-build.
+- **dirty granularity / locality:** spatial page/cell.
+- **allocation/reallocation:** page pools/hash growth; reference lists can expand
+  sharply for large triangles.
+- **scratch / transient:** overlap/reference stream and allocation metadata.
+- **true peak:** pool reserve plus old/new page/reference overlap.
+- **geometry upload:** changed object only, but references may amplify geometry.
+- **rebuild/refit/update:** touched pages only in ideal local case.
+- **synchronization:** hash/page allocation and variable-length reference writes
+  require atomics/prefix or equivalent staging.
+- **traversal/divergence:** object-local DDA/hash plus micro traversal; empty-cell
+  steps remain possible.
+- **exact Hit / tie:** feasible only with exact triangle refinement.
+- **static+dynamic merge:** compatible if object-local.
+- **small high-churn:** fixed hash/page overhead can dominate.
+- **large high-churn:** global replacement can touch many pages.
+- **primitive-count change / insert/remove:** natural if allocator is robust.
+- **large topology replacement:** reference regeneration can approach full
+  rebuild.
+- **complexity:** medium/high.
+- **global/God-object risk:** medium if page allocator is shared globally; Lane J
+  would require object-local ownership.
+- **Lane F/G relation:** object coordinates fix world-scale/vertical sensitivity
+  but **do not** fix Lane F's key failure: primitive-to-cell reference
+  amplification and empty-cell traversal. Rejected.
+
+### Broad phase + exact triangle refinement
+
+- **representation / hierarchy:** coarse occupancy/voxel/SDF-like conservative
+  broad phase plus exact triangle representation/refinement.
+- **topology mutation:** update broad phase and exact refinement structure/list.
+- **GPU build/update:** occupancy generation and exact-structure update are both
+  recurring unless one can be reused.
+- **dirty granularity / locality:** potentially coarse local regions.
+- **allocation/reallocation:** dual representations increase persistent and
+  transient lifetime unless broad phase replaces substantial exact work.
+- **scratch / true peak:** occupancy build scratch plus exact representation and
+  old/new overlap.
+- **geometry upload:** changed object; candidate preprocessing additionally
+  derives occupancy.
+- **synchronization:** broad-phase build must complete before traversal; exact
+  refinement still follows.
+- **traversal/divergence:** broad phase can cheaply reject empty regions but adds
+  another branch/lookup layer for occupied regions.
+- **exact Hit / nearest/tie:** only valid when final triangle intersection and
+  shared tie rules remain authoritative; approximate final hits are forbidden.
+- **static+dynamic merge:** feasible.
+- **small high-churn:** extra representation likely poor.
+- **large sparse/local high-churn:** could be useful only if broad-phase rejection
+  eliminates substantial exact traversal.
+- **primitive-count changes / insert/remove:** possible but both structures need
+  maintenance.
+- **large replacement:** broad and exact rebuilds both recur.
+- **complexity:** medium/high.
+- **global/God-object risk:** low if object-local.
+- **Lane F/G relation:** risks adding a second structure without addressing the
+  measured dominant cost. No repo evidence shows dynamic exact traversal is the
+  bottleneck relative to build/update, so it is rejected from J003.
