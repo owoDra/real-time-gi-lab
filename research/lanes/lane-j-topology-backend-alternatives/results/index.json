@@ -92,6 +92,13 @@
       "status": "root-cause-layer-identified",
       "evidence_class": "shader-watched-primitive-diagnostic",
       "decision": "exact triangle fp32 reproducibility is active failure layer; rerun frozen v1.6 NoContraction correction"
+    },
+    {
+      "id": "J003-persistent-vulkan-representative-v1.6",
+      "path": "research/lanes/lane-j-topology-backend-alternatives/results/014-representative-persistent-vulkan-pass.md",
+      "status": "pass",
+      "evidence_class": "representative-persistent-vulkan-exact-replay",
+      "decision": "promote to large-global-high resize-path target-GPU gate"
     }
   ]
 }
