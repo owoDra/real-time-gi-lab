@@ -366,7 +366,7 @@ ClusteredBvhData build_initial_clustered_bvh(
             };
             const auto code_a = morton10(center(bounds_a), upper_centroid_bounds);
             const auto code_b = morton10(center(bounds_b), upper_centroid_bounds);
-            return std::tie(code_a, a) < std::tie(code_b, b);
+            return std::tuple{code_a, a} < std::tuple{code_b, b};
         });
 
     const auto upper = build_upper_tree(
