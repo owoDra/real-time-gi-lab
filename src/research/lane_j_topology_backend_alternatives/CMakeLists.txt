@@ -47,6 +47,7 @@ add_executable(phos-lane-j-contract-test
   j003_clustered_bvh.cpp
   j003_reference.cpp
   j003_transition.cpp
+  j003_persistent_layout.cpp
 )
 
 target_include_directories(phos-lane-j-contract-test PRIVATE
