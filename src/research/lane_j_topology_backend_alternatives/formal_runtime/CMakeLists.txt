@@ -44,7 +44,8 @@ add_executable(phos-lane-j-j004-formal-process
   baseline/lane_b_traversal/b002_scene.cpp
   baseline/lane_b_traversal/b002_vulkan.cpp
   ../j003_snapshot.cpp
-  ../j003_reference.cpp)
+  ../j003_reference.cpp
+  ../j003_clustered_bvh.cpp)
 
 target_include_directories(phos-lane-j-j004-formal-process PRIVATE
   "${CMAKE_SOURCE_DIR}/src"
