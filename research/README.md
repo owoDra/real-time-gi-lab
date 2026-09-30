@@ -12,7 +12,7 @@ lane branch's committed `results/` documents.
 
 ## Current state
 
-As of 2026-09-30:
+As of 2026-10-01:
 
 | Workstream | Issue | Branch | State |
 | --- | ---: | --- | --- |
@@ -26,11 +26,15 @@ As of 2026-09-30:
 | Lane G — transient LBVH hardening | #17 | `research-lane-g-transient-lbvh-hardening` | completed / memory+correctness accepted, timing measurement-limited |
 | Lane H — topology rebuild crossover | #18 | `research-lane-h-topology-rebuild-crossover` | completed / measurement-limited |
 | Lane I — measurement calibration | #19 | `research-lane-i-measurement-calibration` | completed / target timing unsuitable; GPU timestamp 5% mechanism evidence |
-| Lane J — topology backend alternatives | #20 | `research-lane-j-topology-backend-alternatives` | in progress / formal timing ranking blocked |
+| Lane J — topology backend alternatives | #20 | `research-lane-j-topology-backend-alternatives` | completed / measurement-limited |
+| Lane K — GPU-primary calibration | #21 | `research-lane-k-gpu-primary-calibration` | completed / accepted 5% calibration workload protocol |
+| Lane L — heavy-boundary calibration | #24 | `research-lane-l-heavy-boundary-calibration` | completed / accepted 20% heavy-boundary capability |
+| Lane E timing revalidation | #22 | `research-lane-e-timing-revalidation` | completed / accepted |
 
-Lane I is concluded. Lane J remains active, but formal architecture ranking is
-blocked until a new architecture-neutral timing calibration accepts a reusable
-protocol.
+Lane J is concluded measurement-limited. Lane K accepts a reusable GPU-primary
+5% calibration protocol on its calibration workload. Lane L separately accepts
+a 20% detectable-effect capability for the heavier complete recurring boundary.
+Lane E timing revalidation is concluded under that Lane-L capability.
 
 ## Program topology
 
@@ -152,7 +156,14 @@ The completed program establishes:
   under the prior timing methodology on the target host;
 - Lane I demonstration that batched GPU timestamps can resolve the tested 5%
   known-work delta, while the frozen GPU+CPU-wall dual-axis protocol remains
-  unsuitable for formal architecture ranking.
+  unsuitable for formal architecture ranking;
+- Lane K acceptance of GPU-primary / CPU-wall-diagnostic timing on its calibrated
+  workload down to a demonstrated 5% effect;
+- Lane L acceptance of the same role split for the heavier complete recurring
+  boundary with a demonstrated 20% effect floor;
+- Lane E follow-up revalidation of moving-rigid and stable-topology-deforming
+  object-local maintenance on both HWRT and software fallback, with no detected
+  >=20% static/camera/light guard regression.
 
 Detailed links and representative values are maintained only in
 [status.md](status.md).
@@ -166,11 +177,11 @@ Do not merge lane implementation branches wholesale into `research`.
 At explicit synthesis checkpoints, only program-level conclusions, methodology,
 roadmap, and other genuinely shared contracts are brought back to `research`.
 
-Lane I and Lane J forked from the explicit post-Lane-H synthesis checkpoint and
-remain logically separate. Lane I is now concluded with no accepted reusable
-dual-axis timing protocol. Lane J may continue non-ranking architecture work,
-but may not perform formal performance ranking until a new architecture-neutral
-calibration has accepted a safe protocol and that protocol is frozen into Lane
-J's crossover plan.
+Lane I's dual-axis protocol remains unsuitable. Lane K is the accepted
+GPU-primary calibration for its measured calibration workload. Lane L is the
+accepted capability result for the heavier complete recurring boundary and sets
+a 20% floor for that boundary. Lane E #22 imported Lane L prospectively and
+revalidated its two formal dynamic classes without changing the incumbent
+ownership architecture.
 
 See [protocol.md](protocol.md) for shared research rules.
