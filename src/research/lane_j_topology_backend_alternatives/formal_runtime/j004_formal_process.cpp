@@ -238,7 +238,7 @@ Options parse_options(int argc, char** argv) {
                 << "phos-lane-j-j004-formal-process "
                    "--profile-dir path --producer-stream path "
                    "[--scene path] --track primary|software "
-                   "[--comparison control|candidate] "
+                   "[--comparison control|candidate|accounting] "
                    "[--start-order AB|BA] "
                    "[--warmup-pairs 4] [--measured-pairs 12] "
                    "[--batch-transitions 16] "
@@ -259,8 +259,13 @@ Options parse_options(int argc, char** argv) {
         fail("J004 start order must be AB or BA");
     }
     if (options.comparison != "control" &&
-        options.comparison != "candidate") {
-        fail("J004 comparison must be control or candidate");
+        options.comparison != "candidate" &&
+        options.comparison != "accounting") {
+        fail("J004 comparison must be control, candidate, or accounting");
+    }
+    if (options.comparison == "accounting" &&
+        options.track != Track::Software) {
+        fail("J004 accounting comparison is software-track only");
     }
     if (options.batch_transitions != 16U) {
         fail("J004 v1 requires exactly 16 transitions per timed sample");
@@ -2044,7 +2049,9 @@ int main(int argc, char** argv) {
         const auto b_kind =
             options.comparison == "control"
                 ? a_kind
-                : DynamicKind::Lbvh;
+                : (options.comparison == "accounting"
+                    ? DynamicKind::Vanilla
+                    : DynamicKind::Lbvh);
 
         FormalRuntime runtime_a(
             context_a,
