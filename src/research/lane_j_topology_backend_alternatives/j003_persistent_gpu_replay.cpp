@@ -6,6 +6,7 @@
 #include "vk_context.hpp"
 
 #include <algorithm>
+#include <bit>
 #include <cmath>
 #include <cstdint>
 #include <filesystem>
@@ -83,6 +84,8 @@ struct MismatchDetail {
     lane_j::Ray ray{};
     lane_j::Hit expected{};
     lane_j::GpuHit actual{};
+    lane_j::GpuHit watched{};
+    bool watched_valid{};
 };
 
 struct ValidationSummary {
@@ -124,6 +127,8 @@ struct ValidationSummary {
                     rays[index],
                     expected[index],
                     actual[index],
+                    {},
+                    false,
                 });
             }
         }
@@ -198,8 +203,27 @@ int main(int argc, char** argv) {
 
             const auto traversal =
                 gpu.trace(layout, gpu_rays, shader_path);
-            const auto validation =
+            auto validation =
                 validate_hits(rays, expected, traversal.hits);
+
+            for (auto& mismatch : validation.mismatches) {
+                const auto diagnostic = gpu.trace(
+                    layout,
+                    gpu_rays,
+                    shader_path,
+                    lane_j::PersistentGpuDebugRequest{
+                        static_cast<std::uint32_t>(mismatch.ray_index),
+                        mismatch.expected.primitive_id,
+                    });
+                if (mismatch.ray_index >= diagnostic.hits.size()) {
+                    throw std::runtime_error(
+                        "persistent GPU diagnostic ray out of range");
+                }
+                mismatch.watched =
+                    diagnostic.hits[mismatch.ray_index];
+                mismatch.watched_valid = true;
+            }
+
             total_mismatches += validation.hit_mismatches;
             total_runtime_errors += validation.runtime_errors;
 
@@ -281,8 +305,29 @@ int main(int argc, char** argv) {
                     << ((expected_single.hit && actual_single.hit &&
                          std::abs(reference_delta) <= reference_tolerance)
                             ? 1
-                            : 0)
-                    << "\n";
+                            : 0);
+                if (mismatch.watched_valid) {
+                    const auto flags = mismatch.watched.debug[0];
+                    const auto candidate_t =
+                        std::bit_cast<float>(mismatch.watched.debug[1]);
+                    const auto current_t =
+                        std::bit_cast<float>(mismatch.watched.debug[2]);
+                    std::cerr
+                        << " gpu_watch_flags=" << flags
+                        << " gpu_watch_leaf_reached="
+                        << ((flags & 1U) != 0U ? 1 : 0)
+                        << " gpu_watch_intersected="
+                        << ((flags & 2U) != 0U ? 1 : 0)
+                        << " gpu_watch_preferred="
+                        << ((flags & 4U) != 0U ? 1 : 0)
+                        << " gpu_watch_had_current="
+                        << ((flags & 8U) != 0U ? 1 : 0)
+                        << " gpu_watch_candidate_t=" << candidate_t
+                        << " gpu_watch_current_t=" << current_t
+                        << " gpu_watch_current_primitive="
+                        << mismatch.watched.debug[3];
+                }
+                std::cerr << "\n";
             }
 
             if (step != 0U) {
@@ -426,6 +471,28 @@ int main(int argc, char** argv) {
                     json << ",\"reference_delta\":null"
                          << ",\"reference_tolerance\":null"
                          << ",\"reference_tie_window\":false";
+                }
+                if (mismatch.watched_valid) {
+                    const auto flags = mismatch.watched.debug[0];
+                    const auto candidate_t =
+                        std::bit_cast<float>(mismatch.watched.debug[1]);
+                    const auto current_t =
+                        std::bit_cast<float>(mismatch.watched.debug[2]);
+                    json << ",\"gpu_watch_flags\":" << flags
+                         << ",\"gpu_watch_leaf_reached\":"
+                         << ((flags & 1U) != 0U ? "true" : "false")
+                         << ",\"gpu_watch_intersected\":"
+                         << ((flags & 2U) != 0U ? "true" : "false")
+                         << ",\"gpu_watch_preferred\":"
+                         << ((flags & 4U) != 0U ? "true" : "false")
+                         << ",\"gpu_watch_had_current\":"
+                         << ((flags & 8U) != 0U ? "true" : "false")
+                         << ",\"gpu_watch_candidate_t\":"
+                         << std::setprecision(9) << candidate_t
+                         << ",\"gpu_watch_current_t\":"
+                         << std::setprecision(9) << current_t
+                         << ",\"gpu_watch_current_primitive\":"
+                         << mismatch.watched.debug[3];
                 }
                 json << "}";
             }
