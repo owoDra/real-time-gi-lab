@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-e-timing-revalidation-e001-v1",
+  "status": "frozen-before-target-candidate-timing",
+  "source_parent_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "imported_lane_l_measurement_commit": "b8bb76f728ee329cf4daef5855a05972757072f6",
+  "accepted_environment": "dual-context",
+  "primary_axis": "gpu_timestamp",
+  "cpu_wall_role": "diagnostic-health-provenance-only",
+  "heavy_boundary_floor_percent": 20,
+  "sample_shape": {
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "complete_transitions_per_sample": 16,
+    "settle_seconds": 1,
+    "start_order_by_block": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "BA",
+      "AB",
+      "BA",
+      "AB"
+    ]
+  },
+  "rerun_policy": {
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0
+  },
+  "frozen_blobs": {
+    "research/lanes/lane-e-timing-revalidation/experiments/001-e001-timing-gate.md": "5021032d0ec7fafd4a0d7b51f3aead5113c6afbb",
+    "research/lanes/lane-e-timing-revalidation/experiments/002-e001-config.json": "a6e34b9fb3a7f7f6c94b0c43dfb490e69b275d88"
+  }
+}
