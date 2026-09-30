@@ -580,62 +580,76 @@ def main() -> int:
                         log = root / "timing" / f"{process_id}.log"
                         output.parent.mkdir(parents=True, exist_ok=True)
                         if process_id not in progress["completed_processes"]:
+                            recovered_complete = False
                             if output.exists() and output.stat().st_size > 0:
                                 partial_rows = read_csv(output)
-                                if any(
-                                    row.get("phase") == "measured"
-                                    for row in partial_rows
-                                ):
-                                    progress["state"] = "campaign-invalid-no-rerun"
-                                    progress["invalid_process_id"] = process_id
-                                    save_progress()
-                                    raise RuntimeError(
-                                        "partial E001 process contains measured rows "
-                                        f"and cannot be rerun: {process_id}"
-                                    )
-                                output.unlink()
-                            progress["current"] = {
-                                "phase": "timing",
-                                "process_id": process_id,
-                            }
-                            save_progress()
-                            try:
-                                run_process(
-                                    command_for(
-                                        executable,
-                                        scene,
-                                        output,
-                                        scenario,
-                                        track,
-                                        comparison,
-                                        validation=False,
-                                        block=block,
-                                        start_order=start_orders[block],
-                                        config=config,
-                                    ),
-                                    log,
-                                )
-                            except BaseException:
-                                partial_rows = (
-                                    read_csv(output)
-                                    if output.exists() and output.stat().st_size > 0
-                                    else []
-                                )
-                                if any(
-                                    row.get("phase") == "measured"
-                                    for row in partial_rows
-                                ):
-                                    progress["state"] = "campaign-invalid-no-rerun"
-                                    progress["invalid_process_id"] = process_id
+                                try:
+                                    health_check_timing_rows(partial_rows)
+                                except RuntimeError:
+                                    if any(
+                                        row.get("phase") == "measured"
+                                        for row in partial_rows
+                                    ):
+                                        progress["state"] = "campaign-invalid-no-rerun"
+                                        progress["invalid_process_id"] = process_id
+                                        save_progress()
+                                        raise RuntimeError(
+                                            "partial E001 process contains measured rows "
+                                            f"and cannot be rerun: {process_id}"
+                                        )
+                                    output.unlink()
                                 else:
-                                    progress["state"] = "interrupted-resumable-missing-process"
+                                    # The child finished and flushed the full
+                                    # process before the parent progress update.
+                                    # Recover it as immutable evidence; do not
+                                    # rerun a completed process.
+                                    progress["completed_processes"].append(process_id)
+                                    progress["state"] = "timing"
+                                    save_progress()
+                                    recovered_complete = True
+                            if not recovered_complete:
+                                progress["current"] = {
+                                    "phase": "timing",
+                                    "process_id": process_id,
+                                }
                                 save_progress()
-                                raise
-                            rows = read_csv(output)
-                            health_check_timing_rows(rows)
-                            progress["completed_processes"].append(process_id)
-                            progress["state"] = "timing"
-                            save_progress()
+                                try:
+                                        run_process(
+                                        command_for(
+                                            executable,
+                                            scene,
+                                            output,
+                                            scenario,
+                                            track,
+                                            comparison,
+                                            validation=False,
+                                            block=block,
+                                            start_order=start_orders[block],
+                                            config=config,
+                                        ),
+                                        log,
+                                    )
+                                except BaseException:
+                                    partial_rows = (
+                                        read_csv(output)
+                                        if output.exists() and output.stat().st_size > 0
+                                        else []
+                                    )
+                                    if any(
+                                        row.get("phase") == "measured"
+                                        for row in partial_rows
+                                    ):
+                                        progress["state"] = "campaign-invalid-no-rerun"
+                                        progress["invalid_process_id"] = process_id
+                                    else:
+                                        progress["state"] = "interrupted-resumable-missing-process"
+                                    save_progress()
+                                    raise
+                                rows = read_csv(output)
+                                health_check_timing_rows(rows)
+                                progress["completed_processes"].append(process_id)
+                                progress["state"] = "timing"
+                                save_progress()
                         rows = read_csv(output)
                         health_check_timing_rows(rows)
                         for row in rows:
@@ -692,14 +706,14 @@ def main() -> int:
             json.dumps(summary, indent=2, sort_keys=True) + "\n",
             encoding="utf-8",
         )
-        progress["state"] = "complete"
-        progress.pop("current", None)
-        save_progress()
-
         required = [str(name) for name in config["artifact_schema"]["required"]]
         missing = [name for name in required if not (root / name).is_file()]
         if missing:
             raise RuntimeError(f"E001 required artifacts missing: {missing}")
+
+        progress["state"] = "complete"
+        progress.pop("current", None)
+        save_progress()
 
         print("GPU:", provenance["device_name"])
         print(f"E001 artifacts: {root}")
