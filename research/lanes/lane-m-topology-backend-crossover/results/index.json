@@ -8,7 +8,19 @@
       "path": "research/lanes/lane-m-topology-backend-crossover/results/001-gpu-independent-preparation.md",
       "status": "complete",
       "evidence_class": "pre-target-gpu-independent-execution-freeze",
-      "decision": "common three-backend boundary, deterministic topology workloads, correctness/identity instrumentation, lifetime-memory hard guards, Lane-L 20% timing protocol, and execution freeze complete; accepted target timing not started"
+      "decision": "common three-backend boundary, deterministic topology workloads, correctness/identity instrumentation, lifetime-memory hard guards, Lane-L 20% timing protocol, and execution freeze complete"
+    },
+    {
+      "id": "M001-formal-crossover",
+      "path": "research/lanes/lane-m-topology-backend-crossover/results/002-m001-formal-crossover.md",
+      "status": "accepted",
+      "evidence_class": "target-formal-crossover",
+      "decision": "Lane E incumbent retained for all frozen topology-changing/high-churn regimes; LBVH and clustered not promoted",
+      "measured_source_commit": "b07b6bf5f5020b59742d17b85de240e35a2b39df",
+      "plan_version": "lane-m-m001-v1",
+      "timing_processes": 192,
+      "timing_rows": 6144,
+      "conditional_direct_processes": 0
     }
   ]
 }

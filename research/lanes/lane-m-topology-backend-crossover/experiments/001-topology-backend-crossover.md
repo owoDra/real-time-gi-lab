@@ -1,6 +1,6 @@
 # M001 — topology backend crossover
 
-Status: **GPU-independent preparation frozen; accepted target timing has not started**
+Status: **complete / accepted — Lane E incumbent retained**
 
 Issue: #25
 
@@ -61,8 +61,19 @@ and is not ranked.
 If both candidates qualify against the incumbent, a prospectively frozen
 LBVH-control versus clustered comparison uses the same 20% and 1.25x gates.
 
-## Execution policy
+## Final outcome
 
-Accepted target timing has not started. Allowed order is build/unit/contract
-checks, target validation, then formal timing only if validation passes without
-source or input changes. GitHub Actions and routine PRs are not used.
+Target validation passed without source/input drift. Formal timing then
+completed **192/192 fresh processes** and retained **6,144 rows**.
+
+Neither hardened LBVH nor clustered qualified for promotion in any required
+mutating scenario on either primary or software. All memory hard guards passed.
+The formal disposition is therefore **Lane E incumbent retained** for all frozen
+topology-changing/high-churn regimes.
+
+No pair reached the dual-promotion trigger, so the conditional direct
+LBVH-vs-clustered stage did not execute.
+
+Canonical evidence and exact ratios are in:
+
+`results/002-m001-formal-crossover.md`
