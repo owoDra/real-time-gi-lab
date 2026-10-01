@@ -29,7 +29,7 @@ CONFIG = (
     / "research/lanes/lane-m-topology-backend-crossover/experiments"
     / "001-topology-backend-crossover-config.json"
 )
-EXPECTED_CONFIG_BLOB_SHA = "b1f2164df9ad2c9e154b328cfe332196cfd909f8"
+EXPECTED_CONFIG_BLOB_SHA = "a8c78dfe801f934c8ad4b408a0a4d7e4c049c293"
 EXPECTED_J_SOURCE_TREE_SHA = "757da6c85c697a42cbebe918f96cf59008772805"
 EXPECTED_J_FORMAL_SHADER_TREE_SHA = "83e6f0f5286e7edb14b15a3e722dca379e126ce5"
 EXPECTED_CORE_BLOBS = {
@@ -53,7 +53,7 @@ EXPECTED_CORE_BLOBS = {
     "scripts/research/lane_m_topology_backend_crossover/test_m001_analysis.py":
         "47306e909c4ba7271046e8294456b795ac76ea10",
     "scripts/research/lane_m_topology_backend_crossover/test_m001_protocol.py":
-        "d66c8d8b57da228be79469eb941af6e365c20cb2",
+        "e8352027cf24e4e79acf698c028744453b88d76b",
     "CMakeLists.txt":
         "6ebf86f9c882d9eb2d5d65b6e5649df7485df396",
     "scripts/research/run_experiment.py":
@@ -172,6 +172,25 @@ def validate_config(config: dict[str, object]) -> None:
         raise RuntimeError("Lane M exclusion/rerun/validation policy drifted")
     if int(config["j002"]["validation_ray_prefix_count"]) != 0:
         raise RuntimeError("Lane M validation must replay all frozen A001 rays")
+    expected_j002_profiles = {
+        "small-global-high",
+        "medium-global-representative",
+        "medium-local-high",
+        "large-global-high",
+        "large-local-high",
+    }
+    configured_j002_profiles = {
+        str(item["name"]) for item in config["j002"]["profiles"]
+    }
+    if configured_j002_profiles != expected_j002_profiles:
+        raise RuntimeError(
+            "Lane M must pin the complete frozen J002 materialized profile set"
+        )
+    scenario_profiles = {
+        str(item["profile"]) for item in config["scenarios"]
+    }
+    if not scenario_profiles <= configured_j002_profiles:
+        raise RuntimeError("Lane M scenario references an unpinned J002 profile")
 
 
 def scenario_map(config: dict[str, object]) -> dict[str, dict[str, object]]:
