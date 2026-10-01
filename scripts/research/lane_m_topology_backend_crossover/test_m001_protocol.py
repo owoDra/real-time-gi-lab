@@ -49,6 +49,33 @@ class ProtocolTest(unittest.TestCase):
         self.assertEqual(timing["completed_campaign_rerun_budget"], 0)
         self.assertFalse(timing["accepted_timing_validation"])
 
+    def test_j002_materialized_contract_pins_full_profile_set(self) -> None:
+        profiles = {
+            item["name"] for item in self.config["j002"]["profiles"]
+        }
+        self.assertEqual(
+            profiles,
+            {
+                "small-global-high",
+                "medium-global-representative",
+                "medium-local-high",
+                "large-global-high",
+                "large-local-high",
+            },
+        )
+        scenario_profiles = {
+            item["profile"] for item in self.config["scenarios"]
+        }
+        self.assertTrue(scenario_profiles <= profiles)
+        self.assertEqual(
+            scenario_profiles,
+            {
+                "medium-global-representative",
+                "large-global-high",
+                "large-local-high",
+            },
+        )
+
     def test_scenarios_cover_representative_high_churn_and_guard(self) -> None:
         scenarios = {
             item["id"]: item for item in self.config["scenarios"]
