@@ -30,7 +30,7 @@ CONFIG = (
     / "001-topology-backend-crossover-config.json"
 )
 EXPECTED_CONFIG_BLOB_SHA = "a8c78dfe801f934c8ad4b408a0a4d7e4c049c293"
-EXPECTED_J_SOURCE_TREE_SHA = "757da6c85c697a42cbebe918f96cf59008772805"
+EXPECTED_J_SOURCE_TREE_SHA = "030c0bc016dc7956f24ba1a655c05a3bf3a97abe"
 EXPECTED_J_FORMAL_SHADER_TREE_SHA = "83e6f0f5286e7edb14b15a3e722dca379e126ce5"
 EXPECTED_CORE_BLOBS = {
     "src/research/lane_m_topology_backend_crossover/m001_contract.hpp":
@@ -53,7 +53,7 @@ EXPECTED_CORE_BLOBS = {
     "scripts/research/lane_m_topology_backend_crossover/test_m001_analysis.py":
         "47306e909c4ba7271046e8294456b795ac76ea10",
     "scripts/research/lane_m_topology_backend_crossover/test_m001_protocol.py":
-        "e8352027cf24e4e79acf698c028744453b88d76b",
+        "0834ddf37b4db3303208e946b6a190bc6266e39f",
     "CMakeLists.txt":
         "6ebf86f9c882d9eb2d5d65b6e5649df7485df396",
     "scripts/research/run_experiment.py":
@@ -273,8 +273,17 @@ def run_validation(
     (process_root / "stdout.log").write_text(proc.stdout, encoding="utf-8")
     (process_root / "stderr.log").write_text(proc.stderr, encoding="utf-8")
     if proc.returncode != 0:
+        stderr_tail = proc.stderr.strip()[-4000:]
+        detail = (
+            f"\nchild stderr tail:\n{stderr_tail}"
+            if stderr_tail
+            else ""
+        )
         raise RuntimeError(
-            f"Lane M validation failed: {scenario}/{track}/{variant}"
+            "Lane M validation failed: "
+            f"{scenario}/{track}/{variant}; "
+            f"see {process_root / 'stderr.log'}"
+            f"{detail}"
         )
 
     validation = json.loads(
