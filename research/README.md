@@ -12,7 +12,7 @@ lane branch's committed `results/` documents.
 
 ## Current state
 
-As of 2026-10-01:
+As of 2026-10-02:
 
 | Workstream | Issue | Branch | State |
 | --- | ---: | --- | --- |
@@ -30,11 +30,15 @@ As of 2026-10-01:
 | Lane K — GPU-primary calibration | #21 | `research-lane-k-gpu-primary-calibration` | completed / accepted 5% calibration workload protocol |
 | Lane L — heavy-boundary calibration | #24 | `research-lane-l-heavy-boundary-calibration` | completed / accepted 20% heavy-boundary capability |
 | Lane E timing revalidation | #22 | `research-lane-e-timing-revalidation` | completed / accepted |
+| Lane M — topology backend crossover | #25 | `research-lane-m-topology-backend-crossover` | completed / accepted; Lane E incumbent retained |
 
 Lane J is concluded measurement-limited. Lane K accepts a reusable GPU-primary
 5% calibration protocol on its calibration workload. Lane L separately accepts
 a 20% detectable-effect capability for the heavier complete recurring boundary.
-Lane E timing revalidation is concluded under that Lane-L capability.
+Lane E timing revalidation is concluded under that Lane-L capability. Lane M
+then completes the run-local topology-backend crossover: hardened transient LBVH
+and clustered two-level BVH are not promoted, and the Lane E incumbent is
+retained for all frozen topology-changing/high-churn regimes on both tracks.
 
 ## Program topology
 
@@ -49,7 +53,7 @@ program integration/source-of-truth branch.
               │             │             │
          Lane A #10    Lane B #11    Lane C #12
               │             │             │
-              └────── representative contracts ──────┐
+              └──── representative contracts ──────┐
                                                      │
                                                 Lane D #14
                                                      │
@@ -58,12 +62,12 @@ program integration/source-of-truth branch.
                                                /           \
                                               /             \
                                       Lane E #15         Lane F #16
-                                      accepted            no promotion
+                                      incumbent           alternatives
                                            \               /
                                             \             /
                                              ▼           ▼
                                              Lane G #17
-                                     memory/correctness hardened
+                                     LBVH correctness/memory
                                                   │
                                                   ▼
                                              Lane H #18
@@ -72,16 +76,23 @@ program integration/source-of-truth branch.
                                    ┌──────────────┴──────────────┐
                                    ▼                             ▼
                               Lane I #19                    Lane J #20
-                       calibration complete            topology alternatives
-                    GPU 5%; dual-axis unsuitable           in progress
+                         calibration diagnosis          clustered candidate
                                    │                             │
                                    ▼                             │
-                     future GPU-primary calibration              │
+                              Lane K #21                        │
+                         GPU-primary capability                  │
                                    │                             │
-                                   └──── accepted timing ────────┘
-                                                 │
-                                                 ▼
-                                   future formal crossover
+                                   ▼                             │
+                              Lane L #24                        │
+                         heavy-boundary 20%                     │
+                                   │                             │
+                                   ▼                             │
+                         Lane E revalidation #22                │
+                                   └──────────────┬──────────────┘
+                                                  ▼
+                                             Lane M #25
+                                      formal topology crossover
+                                      Lane E incumbent retained
 ```
 
 Lane E and Lane F answer different questions. Lane E establishes the current
@@ -163,7 +174,11 @@ The completed program establishes:
   boundary with a demonstrated 20% effect floor;
 - Lane E follow-up revalidation of moving-rigid and stable-topology-deforming
   object-local maintenance on both HWRT and software fallback, with no detected
-  >=20% static/camera/light guard regression.
+  >=20% static/camera/light guard regression;
+- Lane M formal same-boundary topology-backend crossover retaining the Lane E
+  incumbent for topology-changing/high-churn work on both tracks; hardened LBVH
+  and clustered two-level BVH fail promotion on performance while their memory
+  hard guards pass.
 
 Detailed links and representative values are maintained only in
 [status.md](status.md).
@@ -181,7 +196,8 @@ Lane I's dual-axis protocol remains unsuitable. Lane K is the accepted
 GPU-primary calibration for its measured calibration workload. Lane L is the
 accepted capability result for the heavier complete recurring boundary and sets
 a 20% floor for that boundary. Lane E #22 imported Lane L prospectively and
-revalidated its two formal dynamic classes without changing the incumbent
-ownership architecture.
+revalidated its two formal dynamic classes. Lane M #25 then imported the same
+heavy-boundary capability prospectively and resolves the remaining tested
+topology-backend choice in favor of retaining the Lane E incumbent.
 
 See [protocol.md](protocol.md) for shared research rules.

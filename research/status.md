@@ -1,13 +1,55 @@
 # Research program status
 
-As of 2026-10-01, Lane A-K, Lane L, Lane E timing revalidation, and Integration
-#13 are concluded. Lane J closed measurement-limited before an accepted timing
-methodology existed. Lane K provides the accepted GPU-primary calibration on its
-calibration workload; Lane L separately establishes a 20% detectable-effect
-floor for the heavier complete recurring boundary used by Lane E #22. This document is the program-level synthesis on the
+As of 2026-10-02, Lane A-K, Lane L, Lane M, Lane E timing revalidation, and
+Integration #13 are concluded. Lane J closed measurement-limited before an
+accepted timing methodology existed. Lane K provides the accepted GPU-primary
+calibration on its calibration workload; Lane L separately establishes a 20%
+detectable-effect floor for the heavier complete recurring boundary used by
+Lane E #22 and Lane M #25. This document is the program-level synthesis on the
 `research` branch. Detailed experiment results,
 raw-artifact provenance, and lane-local decisions remain canonical in each lane's
 `results/` documents and are not duplicated here.
+
+## 2026-10-02 Lane M topology-backend crossover checkpoint
+
+Lane M / #25 prospectively imported the Lane-L heavy-boundary capability and
+completed the previously unresolved run-local comparison among the Lane-E
+incumbent object-local rebuild boundary, Lane-G hardened transient LBVH, and the
+Lane-J clustered two-level object-local BVH.
+
+The accepted formal campaign retained all **6,144 timing rows across 192 fresh
+processes**. GPU timestamp was the primary performance axis; CPU wall remained
+diagnostic/health/provenance only. The frozen 20% decision floor, 1.25x
+persistent/true-peak memory hard guard, exact correctness/identity gates, and
+zero-rerun policy were preserved.
+
+For every required mutating scenario on both primary and software tracks,
+neither candidate qualified for promotion:
+
+- topology-changing-object-local:
+  - LBVH: 1.218883x primary, 1.272652x software;
+  - clustered: 3.323954x primary, 2.690152x software;
+- high-churn-global:
+  - LBVH: 2.358234x primary, 2.181794x software;
+  - clustered: 8.109075x primary, 6.477188x software;
+- high-churn-local:
+  - LBVH: 2.608696x primary, 1.889332x software;
+  - clustered: 11.551081x primary, 8.255209x software.
+
+All required candidate memory hard guards passed, so the rejection is driven by
+complete-GPU performance rather than the frozen 1.25x memory limit. No
+scenario/track promoted both candidates, therefore the conditional direct
+LBVH-vs-clustered stage did not run.
+
+The stable/no-change guard also rejects clustered on both tracks and LBVH on the
+primary track. Software LBVH is only 1.040619x in that guard and remains
+<20% difference / measurement-limited.
+
+**Program conclusion:** retain the Lane-E incumbent object-local rebuild backend
+for the frozen topology-changing/high-churn regimes on the measured target.
+Hardened transient LBVH and clustered two-level BVH remain useful mechanism
+evidence but are not production replacements under the decision-valid M001
+boundary.
 
 ## 2026-10-01 Lane E heavy-boundary revalidation checkpoint
 
@@ -100,21 +142,24 @@ the completed lanes:
    and +5% contiguously across eight fresh processes. K004 therefore accepts
    `lane-k-k002-v1` with a demonstrated **5%** minimum effect size on the
    measured target.
+10. Lane M applies the accepted heavy-boundary role split to the topology
+    backend question. Across all frozen mutating regimes and both tracks,
+    hardened transient LBVH and clustered two-level BVH are decision-valid
+    regressions versus the Lane-E incumbent. Their 1.25x memory hard guards pass,
+    so Lane E remains selected for topology-changing/high-churn work on the
+    measured target.
 
 The main architectural blocker found by Integration #13 — world-space
 moving-geometry maintenance — is solved by Lane E for rigid and
 stable-topology-deforming geometry under its frozen gates. Lane G also removed
 the deterministic sparse-memory blocker for hardened transient LBVH.
 
-The remaining architecture question is still the topology-changing/high-churn
-object-local rebuild backend. Lane K resolves the program-level timing-method
-dependency for the measured target: `lane-k-k002-v1` safely resolves a 5%
-known-delta effect with GPU timestamp primary while complete CPU wall remains
-diagnostic/health/provenance only. A future J004-equivalent crossover may now
-run only after importing this protocol before target candidate timing and
-freezing a promotion threshold no smaller than 5%. Historical E/G/J timing does
-not become decision-valid; run-local architecture comparisons are still
-required.
+The previously remaining topology-changing/high-churn backend question is now
+resolved for the measured target and frozen M001 regimes. Lane M used a fresh,
+run-local same-boundary campaign under the prospectively frozen Lane-L 20%
+heavy-boundary capability and retained the Lane-E incumbent. Historical E/G/J
+timing remains diagnostic context only; the accepted conclusion comes from the
+new Lane-M comparison.
 
 ## Major findings
 
@@ -134,6 +179,7 @@ required.
 | Lane K / #21 | Accepted | `lane-k-k002-v1` uses GPU timestamp as the primary axis and CPU wall as diagnostic/health/provenance only. K003 passed the frozen baseline and detected +20%, +10%, and +5% contiguously; K004 accepts a 5% minimum effect-size protocol on its calibration workload. |
 | Lane L / #24 | Accepted | Dual-context heavy-boundary calibration accepts GPU timestamp primary / CPU wall diagnostic with a demonstrated 20% minimum detectable effect for the complete recurring boundary. |
 | Lane E timing revalidation / #22 | Accepted | Under Lane L's 20% floor, moving-rigid and stable-topology-deforming both revalidate on HWRT and software fallback; static/camera/light show no detected >=20% regression and hard memory guards pass. |
+| Lane M / #25 | Accepted | Formal 192-process same-boundary crossover retains Lane E for topology-changing/high-churn work on both tracks. Hardened LBVH and clustered two-level BVH are not promoted; all required memory hard guards pass, so rejection is performance-driven. |
 
 Representative values above are anchors only. Exact per-case numbers and raw
 artifact provenance remain in the lane result documents.
@@ -209,13 +255,15 @@ Lane E is the current incumbent:
   - HWRT: update only the changed object's local geometry/BLAS, then TLAS UPDATE;
   - software: maintain/repack/upload only the changed object's local hierarchy
     and instance bounds;
-- **topology-changing**: object-local rebuild boundary; unrelated structures
-  remain untouched.
+- **topology-changing/high-churn**: retain the Lane-E object-local rebuild
+  backend; unrelated structures remain untouched. Lane M formally rejects
+  hardened LBVH and clustered two-level BVH as replacements for the frozen
+  topology-changing/high-churn regimes on both primary and software tracks.
 
-The topology-changing rule is an accepted architectural boundary, **not** an
-accepted topology-changing performance result. Lane E #22 independently
-revalidates the non-topology-changing rigid and stable-topology-deforming timing
-claims under the heavier Lane-L protocol.
+Lane E #22 independently revalidates the rigid and stable-topology-deforming
+timing claims, while Lane M #25 supplies the accepted same-boundary
+topology-changing/high-churn backend decision under the Lane-L heavy-boundary
+protocol.
 
 ## Accepted, conditional, rejected, unresolved
 
@@ -228,15 +276,18 @@ claims under the heavier Lane-L protocol.
 - Lane E object-local ownership/update semantics for static, rigid and
   stable-topology deforming geometry;
 - Lane E #22 heavy-boundary performance revalidation for rigid and
-  stable-topology-deforming geometry on both HWRT and software fallback.
+  stable-topology-deforming geometry on both HWRT and software fallback;
+- Lane M #25 retention of the Lane-E object-local rebuild backend for the frozen
+  topology-changing/high-churn regimes on both primary and software tracks.
 
 ### Conditional
 
 - D001 renderer-depth reuse.
 - D005 bounded-capacity/safe-overflow policy.
 - virtual/clipmap storage in dense/residency-stable regimes.
-- hardened transient LBVH as a correctness/memory-qualified future mechanism
-  candidate; production performance remains unproven.
+- hardened transient LBVH and clustered two-level BVH remain reusable research
+  mechanisms for materially new workloads/backends, but Lane M rejects them as
+  production replacements for its frozen topology-changing/high-churn regimes.
 
 ### Rejected or not retained
 
@@ -244,20 +295,22 @@ claims under the heavier Lane-L protocol.
 - D002/D003/D004 producer replacements;
 - D005 tested implementation as the standalone producer;
 - Lane F sorted two-level grid as the next dynamic-geometry direction;
+- hardened transient LBVH as a replacement for Lane E in Lane M's frozen
+  topology-changing/high-churn regimes;
+- clustered two-level object-local BVH as a replacement for Lane E in Lane M's
+  frozen topology-changing/high-churn regimes;
 - treating the old world-space update model as the universal dynamic ownership
   model.
 
 ### Unresolved
 
-- which object-local backend is best for topology-changing/high-churn geometry
-  under a new run-local crossover that imports Lane K before timing;
-- same-boundary crossover between Lane E object-local rebuild, hardened
-  transient LBVH, and any structurally different topology backend;
-- topology-changing performance under the Lane E ownership model;
+- whether materially different topology workloads or a materially different
+  backend justify reopening the Lane-M topology decision;
 - whether a future representative dense workload justifies reopening clipmap
   storage;
 - cross-GPU generality beyond the measured AMD Radeon 8060S target;
-- final renderer integration of D001 and any future D005-style capacity policy.
+- final renderer/end-to-end integration of D001 and any future D005-style
+  capacity policy.
 
 ## Lane E and Lane F are not mutually exclusive
 
@@ -265,17 +318,14 @@ Lane E answers **who owns geometry and which update semantics apply**. Lane F
 tests **how a dynamic subset can be rebuilt/traversed each frame**. Those are
 different architectural axes.
 
-The current evidence supports Lane E as the ownership architecture. A hardened
-transient LBVH could still fit *inside* that architecture, for example as the
-object-local rebuild mechanism for topology-changing/high-churn objects.
+The current evidence supports Lane E as the ownership architecture. Lane M
+directly tested hardened transient LBVH and clustered two-level BVH *inside* the
+same object-local topology-changing boundary.
 
-That composition is only a hypothesis today. F006's topology/deformation
-mechanism evidence is diagnostic because its formal timing campaign remained
-inconclusive. F007 also cannot be compared numerically to E005 as a promotion
-gate: the campaigns use different measurement boundaries/controls and F007 has
-unstable required rows.
-
-Therefore the program does **not** adopt transient LBVH into Lane E yet.
+Earlier F/G/J mechanism evidence remains useful historical context, but Lane M
+is now the decision-valid promotion gate. Neither alternative qualifies in any
+frozen mutating scenario/track, so the program retains the Lane-E rebuild
+backend rather than adopting transient LBVH or clustered BVH.
 
 ## Lane F interpretation
 
@@ -299,7 +349,7 @@ The sorted grid has a stronger negative disposition because reference
 amplification and sorting dominate the dynamic builder and a decision-valid
 large-world-moving gate also fails.
 
-## Lane G/H/I/K interpretation
+## Lane G/H/I/K/L/M interpretation
 
 Lane G changed the transient-LBVH conclusion materially:
 
@@ -347,6 +397,18 @@ control, and detected +20%, +10%, and +5% contiguously. CPU wall produced only a
 +5% annotation warning and no structural invalidation. K004 therefore accepts
 `lane-k-k002-v1` with a **5%** demonstrated effect-size floor on the measured
 target.
+
+Lane L then calibrated the heavier complete recurring boundary used by the
+dynamic-geometry architecture work and accepted a 20% demonstrated effect floor
+with GPU timestamp primary and CPU wall diagnostic only. Lane E #22 used that
+capability to revalidate rigid and stable-topology deformation.
+
+Lane M #25 subsequently used the same heavy-boundary capability prospectively
+for the remaining topology-backend question. Its 192-process formal campaign is
+decision-valid: all required candidate memory guards pass, but hardened LBVH and
+clustered BVH regress against the Lane-E incumbent in every mutating
+scenario/track. This supersedes the earlier "timing unresolved" status for
+topology-changing/high-churn backend selection on the measured target.
 
 ## Measurement methodology issue
 
@@ -399,46 +461,32 @@ Detailed source-of-truth documents:
 - Lane I: [I003 target calibration](https://github.com/owoDra/phos-gi-lab/blob/research-lane-i-measurement-calibration/research/lanes/lane-i-measurement-calibration/results/003-target-calibration.md), [I004 timing capability](https://github.com/owoDra/phos-gi-lab/blob/research-lane-i-measurement-calibration/research/lanes/lane-i-measurement-calibration/results/004-program-timing-capability.md)
 - Lane K: [K003 target calibration](https://github.com/owoDra/phos-gi-lab/blob/research-lane-k-gpu-primary-calibration/research/lanes/lane-k-gpu-primary-calibration/results/003-target-calibration.md), [K004 timing capability](https://github.com/owoDra/phos-gi-lab/blob/research-lane-k-gpu-primary-calibration/research/lanes/lane-k-gpu-primary-calibration/results/004-program-timing-capability.md)
 - Lane L: [L002 target result](https://github.com/owoDra/phos-gi-lab/blob/research-lane-l-heavy-boundary-calibration/research/lanes/lane-l-heavy-boundary-calibration/results/005-l002-target-result.md), [Lane L final](https://github.com/owoDra/phos-gi-lab/blob/research-lane-l-heavy-boundary-calibration/research/lanes/lane-l-heavy-boundary-calibration/results/007-lane-l-final.md)
+- Lane M: [M001 formal crossover](https://github.com/owoDra/phos-gi-lab/blob/research-lane-m-topology-backend-crossover/research/lanes/lane-m-topology-backend-crossover/results/002-m001-formal-crossover.md)
 
-Issues #9-#19 provide frozen plans and cross-lane context; lane result documents
+Issues #9-#25 provide frozen plans and cross-lane context; lane result documents
 take precedence for concluded experiment outcomes.
 
 ## Next research priority
 
-Lane K has resolved the immediate timing-methodology blocker on the measured
-target. The next decision-relevant architecture work is a new
-**J004-equivalent topology-backend crossover** using the already-qualified Lane-J
-candidate/control set.
+The immediate topology-backend blocker is closed for the measured target:
+Lane M retains the Lane-E object-local rebuild backend for the frozen
+topology-changing/high-churn regimes.
 
-### Timing import requirement
+The next program work should therefore move back toward the umbrella exit
+criterion: an end-to-end renderer/integration replay using the currently
+evidence-backed producer, traversal, storage and dynamic-geometry architecture.
 
-Before the first accepted architecture timing sample, that crossover must:
+Decision-relevant future branches should be opened only for a concrete new
+question, such as:
 
-- import `lane-k-k002-v1` explicitly;
-- keep GPU timestamp as the primary performance axis;
-- keep complete CPU wall diagnostic/health/provenance only;
-- freeze a promotion threshold **no smaller than 5%**;
-- preserve the Lane-K batching/fresh-process/counterbalancing and no-rerun
-  discipline unless a new architecture-neutral calibration is performed first;
-- retain all run-local comparator evidence.
+- cross-GPU calibration and replay on a new target;
+- a materially different topology workload or backend that justifies reopening
+  Lane M;
+- a representative dense/residency-stable workload that justifies reopening
+  clipmap storage;
+- renderer integration of D001 depth reuse or a future D005-style bounded
+  capacity policy under full end-to-end cost accounting.
 
-Historical Lane E/G/J timing remains diagnostic context only and cannot satisfy
-the new crossover.
-
-### Lane J / #20 — next topology-changing crossover
-
-Lane J already qualified the clustered two-level object-local BVH structurally,
-for exact correctness, and for absolute/lifetime memory. A future
-J004-equivalent run should compare it against the retained Lane-E object-local
-rebuild controls and hardened transient LBVH under one run-local boundary.
-
-Lane E remains the incumbent until that crossover passes its predeclared
-correctness, relative-memory, timing, and integration gates.
-
-### Program sequencing
-
-The measurement-calibration lane itself is complete. The highest-value next step
-is therefore the topology-backend crossover, not another timing-methodology lane.
-Lane-E timing revalidation is now complete: it prospectively imported Lane L's
-heavy-boundary protocol and used the stricter 20% floor appropriate to that
-boundary. Cross-GPU calibration remains separate future work.
+Historical mechanism timing remains context only. Any reopened architecture
+axis must again freeze its own run-local comparison, correctness/memory gates,
+measurement capability and rerun policy before accepted target timing.
