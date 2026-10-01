@@ -5,17 +5,17 @@
   "issue": 25,
   "status": "gpu-independent-preparation-frozen",
   "accepted_target_timing_started": false,
-  "implementation_commit": "a48bdd0a8ed39d1a312e1a0593ba812ddaa1bb74",
+  "implementation_commit": "6f15955a0824e5fdf46a79493c6c1edf7ffa1590",
   "base_program_commit": "e1376fb000a73d4b8d5a9b900d4303421aedd68e",
   "lane_entry_commit": "d2bcb942e91691ebf2561009392d48acee572a65",
   "source_fingerprint": {
-    "config_blob": "b1f2164df9ad2c9e154b328cfe332196cfd909f8",
-    "runner_blob": "13ffabb490bc7eb38196962d239d878cf0ea572d",
+    "config_blob": "a8c78dfe801f934c8ad4b408a0a4d7e4c049c293",
+    "runner_blob": "3ae57b6703b0288672f8ef98c92c7cd1b8e6c697",
     "analysis_blob": "d62face01841e65e6d6b4b9be4c673ca79feb40d",
     "analysis_test_blob": "47306e909c4ba7271046e8294456b795ac76ea10",
-    "protocol_test_blob": "d66c8d8b57da228be79469eb941af6e365c20cb2",
+    "protocol_test_blob": "e8352027cf24e4e79acf698c028744453b88d76b",
     "lane_m_source_tree": "3aa3f135b9afc3a8b43109240349254d72363b1f",
-    "lane_m_scripts_tree": "e74d9803ef2b7883872489d6eb2512258d41ad50",
+    "lane_m_scripts_tree": "f5b2403efdf6e964107c9d87462640dc455af959",
     "lane_m_shader_tree": "d8089f9cd0ab22d84795f57230d9d72600fccd4a",
     "qualified_j_source_tree": "757da6c85c697a42cbebe918f96cf59008772805",
     "qualified_j_formal_shader_tree": "83e6f0f5286e7edb14b15a3e722dca379e126ce5",
@@ -102,6 +102,7 @@
     "duplicate_formal_runtime_rejected": true,
     "qualified_common_runtime_reuse_selected": true,
     "direct_pair_memory_guard_added_before_freeze": true,
-    "validation_to_formal_input_sha_handoff_added_before_freeze": true
+    "validation_to_formal_input_sha_handoff_added_before_freeze": true,
+    "full_j002_materialized_profile_contract_pinned": true
   }
 }
