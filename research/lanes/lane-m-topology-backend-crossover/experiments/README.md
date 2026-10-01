@@ -1,15 +1,12 @@
 # Lane M experiments
 
-No accepted target timing has started.
+Accepted target timing has not started.
 
-The first experiment must prospectively freeze:
+- 001-topology-backend-crossover.md records the M001 protocol.
+- 001-topology-backend-crossover-config.json is the machine-readable
+  prospective configuration.
+- 002-m001-execution-freeze.json pins implementation provenance, workload,
+  Lane-L capability import, correctness/memory gates, timing shape, and
+  execution policy before target validation/timing.
 
-- exact topology-changing/high-churn workload identity;
-- exact incumbent/candidate variants;
-- Lane-L heavy-boundary timing capability import;
-- >=20% decision threshold;
-- correctness and memory gates;
-- timing/sample/counterbalance shape;
-- interruption, exclusion, and rerun policy.
-
-Do not infer a ranking from historical Lane E/G/J timing.
+Historical Lane E/G/J timing remains context only.

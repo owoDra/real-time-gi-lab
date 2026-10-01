@@ -2,19 +2,18 @@
 
 Issue: #25
 
-Lane M resolves the remaining topology-changing / high-churn object-local
-backend question after Lane E timing revalidation.
+Status: **GPU-independent preparation frozen; accepted target timing not started**
 
-Candidate families:
+Candidates are the Lane E incumbent object-local rebuild, Lane G hardened
+transient LBVH, and Lane J clustered two-level object-local BVH.
 
-- Lane E incumbent object-local rebuild boundary;
-- Lane G hardened transient LBVH;
-- Lane J clustered two-level object-local BVH.
+M001 uses one qualified J004-derived complete recurring boundary for all three
+backends. J002 topology workloads, Lane L dual-context capability, the 20%
+decision floor, 1.25x memory hard guard, exact correctness/identity gates, and
+zero-rerun policy are frozen prospectively.
 
-Accepted target timing is forbidden until Lane M prospectively freezes its exact
-workload, candidate set, Lane-L heavy-boundary import, >=20% decision floor,
-memory rule, sample shape, and zero-rerun policy.
+Implementation behavior belongs in source/doc comments/tests. Research docs
+retain only protocol, provenance, evidence limits, and decisions.
 
-Source code, comments, and tests are the implementation source of truth.
-Lane docs retain only experiment protocol, provenance, decisions, and evidence
-that cannot be represented cleanly in code/tests.
+Next boundary: target validation. Accepted formal timing remains forbidden until
+validation passes unchanged.
