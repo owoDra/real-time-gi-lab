@@ -49,9 +49,9 @@ EXPECTED_CORE_BLOBS = {
     "m001_clustered_traversal.comp.glsl":
         "2e71427f13ebb8fb1cc6a5a7295dd95dc552b647",
     "scripts/research/lane_m_topology_backend_crossover/m001_analysis.py":
-        "45c5bfb24afaa26f2c8d19177bf97e996cdb46fc",
+        "d62face01841e65e6d6b4b9be4c673ca79feb40d",
     "scripts/research/lane_m_topology_backend_crossover/test_m001_analysis.py":
-        "242ed088a6b172126c9da89ea12458fa407dd9a7",
+        "47306e909c4ba7271046e8294456b795ac76ea10",
     "scripts/research/lane_m_topology_backend_crossover/test_m001_protocol.py":
         "d66c8d8b57da228be79469eb941af6e365c20cb2",
     "CMakeLists.txt":
@@ -98,6 +98,10 @@ def write_csv(path: Path, rows: list[dict[str, object]]) -> None:
 def source_fingerprint() -> dict[str, object]:
     return {
         "config_blob": git("hash-object", str(CONFIG.relative_to(ROOT))),
+        "runner_blob": git(
+            "hash-object",
+            str(Path(__file__).resolve().relative_to(ROOT)),
+        ),
         "j_source_tree": git(
             "rev-parse",
             "HEAD:src/research/lane_j_topology_backend_alternatives",
@@ -576,7 +580,12 @@ def build_outcomes(
                         "direct crossover evidence missing after dual promotion"
                     )
                 classification = direct_record["performance"]["classification"]
-                if classification == ">=20% detected improvement":
+                if not bool(direct_record["memory"]["passed"]):
+                    decision = (
+                        "LBVH promoted over clustered; clustered failed "
+                        "the direct 1.25x memory hard guard"
+                    )
+                elif classification == ">=20% detected improvement":
                     decision = "clustered promoted over LBVH"
                 elif classification == "detected >=20% regression":
                     decision = "LBVH promoted over clustered"
@@ -620,6 +629,29 @@ def run_formal_phase(
         )
 
     materialized, manifest, producer, scene = j004.load_materialized(config)
+    current_input = {
+        "input_manifest_sha256": j004.sha256_file(
+            materialized / "j002-materialized-manifest.json"
+        ),
+        "producer_stream_sha256": j004.sha256_file(producer),
+        "scene_sha256": j004.sha256_file(scene),
+    }
+    for key, value in current_input.items():
+        if validation.get(key) != value:
+            raise RuntimeError(
+                f"Lane M {key} changed after validation; accepted timing forbidden"
+            )
+    for key in (
+        "device_driver_api_timestamp_provenance_match",
+        "resolved_output_identity_match",
+        "geometry_input_identity_match",
+        "workload_identity_match",
+    ):
+        if validation.get(key) is not True:
+            raise RuntimeError(
+                f"Lane M validation prerequisite {key} did not pass"
+            )
+
     root = artifact_root("formal")
     root.mkdir(
         parents=True,

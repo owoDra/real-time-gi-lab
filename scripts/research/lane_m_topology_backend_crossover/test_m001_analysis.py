@@ -69,6 +69,22 @@ class AnalysisTest(unittest.TestCase):
                 row["persistent_bytes"] = 1251
         self.assertFalse(a.classify_memory(candidate)["passed"])
 
+    def test_direct_stage_applies_memory_hard_guard(self) -> None:
+        direct = (
+            rows(1.0, "lbvh-control")
+            + rows(0.70, "clustered-vs-lbvh")
+        )
+        for row in direct:
+            if (
+                row["comparison"] == "clustered-vs-lbvh"
+                and row["role"] == "B"
+            ):
+                row["persistent_bytes"] = 1300
+        result = a.summarize_direct_stage(direct)
+        record = result["results"]["topology-changing-object-local"]["primary"]
+        self.assertFalse(record["memory"]["passed"])
+        self.assertIn("memory hard-guard fail", record["decision"])
+
 
 if __name__ == "__main__":
     unittest.main()

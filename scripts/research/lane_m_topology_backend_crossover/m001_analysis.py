@@ -289,11 +289,23 @@ def summarize_direct_stage(
         envelope = control_envelope(
             grouped[(scenario, track, "lbvh-control")]
         )
-        perf = classify_performance(
-            grouped[(scenario, track, "clustered-vs-lbvh")],
-            envelope,
-        )
-        if perf["classification"] == ">=20% detected improvement":
+        candidate_processes = grouped[
+            (scenario, track, "clustered-vs-lbvh")
+        ]
+        perf = classify_performance(candidate_processes, envelope)
+        candidate_raw = [
+            row for row in raw_rows
+            if str(row["scenario"]) == scenario
+            and str(row["track"]) == track
+            and str(row["comparison"]) == "clustered-vs-lbvh"
+        ]
+        memory = classify_memory(candidate_raw)
+        if not memory["passed"]:
+            decision = (
+                "clustered direct memory hard-guard fail vs LBVH; "
+                "LBVH retained among the two eligible candidates"
+            )
+        elif perf["classification"] == ">=20% detected improvement":
             decision = "clustered detectably faster than LBVH"
         elif perf["classification"] == "detected >=20% regression":
             decision = "LBVH detectably faster than clustered"
@@ -302,6 +314,7 @@ def summarize_direct_stage(
         results.setdefault(scenario, {})[track] = {
             "control": envelope,
             "performance": perf,
+            "memory": memory,
             "decision": decision,
         }
     return {"process_rows": process_rows, "results": results}
