@@ -672,8 +672,12 @@ public:
         create_dynamic_backend(0U);
         create_stages();
         create_command_resources();
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+        prime_stable_lbvh();
+#endif
 
-        // Setup transfers must never leak into the first recurrent sample.
+        // Setup transfers and one-time backend priming must never leak into
+        // the first recurrent sample.
         (void)context_.consume_transfer_gpu_us();
         context_.reset_allocation_peak();
     }
@@ -1945,6 +1949,92 @@ private:
             fail("J004 fence creation failed");
         }
     }
+
+#ifdef PHOS_LANE_M_TOPOLOGY_CROSSOVER
+    void prime_stable_lbvh() {
+        if (dynamic_kind_ != DynamicKind::Lbvh ||
+            lane_m::m001_scenario_spec(m_scenario_).
+                topology_mutation_required) {
+            return;
+        }
+
+        // Stable/no-change measures steady-state traversal with zero recurrent
+        // rebuilds. F003TransientLbvh::update_template() only stages the
+        // step-00 input; its node hierarchy is produced by record_build().
+        // Prime that initial hierarchy once in setup, outside validation/formal
+        // transition accounting and outside the recurrent timing boundary.
+        VkCommandBuffer command{};
+        auto allocation =
+            detail::make_vk_info<
+                VkCommandBufferAllocateInfo>(
+                VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+        allocation.commandPool = command_pool_;
+        allocation.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocation.commandBufferCount = 1;
+        if (context_.vk().allocateCommandBuffers(
+                &allocation,
+                &command) != VK_SUCCESS) {
+            fail("Lane M stable LBVH setup command allocation failed");
+        }
+
+        auto begin =
+            detail::make_vk_info<
+                VkCommandBufferBeginInfo>(
+                VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+        begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        if (context_.vk().beginCommandBuffer(
+                command,
+                &begin) != VK_SUCCESS) {
+            fail("Lane M stable LBVH setup command begin failed");
+        }
+
+        context_.vk().cmdResetQueryPool(
+            command,
+            query_pool_,
+            2U,
+            8U);
+        dynamic_lbvh_->record_build(
+            command,
+            0.0F,
+            query_pool_,
+            2U);
+
+        if (context_.vk().endCommandBuffer(
+                command) != VK_SUCCESS) {
+            fail("Lane M stable LBVH setup command end failed");
+        }
+
+        auto submit =
+            detail::make_vk_info<
+                VkSubmitInfo>(
+                VK_STRUCTURE_TYPE_SUBMIT_INFO);
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &command;
+        if (context_.vk().queueSubmit(
+                context_.queue(),
+                1,
+                &submit,
+                fence_) != VK_SUCCESS) {
+            fail("Lane M stable LBVH setup submit failed");
+        }
+        if (context_.vk().waitForFences(
+                1,
+                &fence_,
+                VK_TRUE,
+                UINT64_MAX) != VK_SUCCESS) {
+            fail("Lane M stable LBVH setup fence wait failed");
+        }
+        context_.vk().freeCommandBuffers(
+            command_pool_,
+            1,
+            &command);
+        if (context_.vk().resetFences(
+                1,
+                &fence_) != VK_SUCCESS) {
+            fail("Lane M stable LBVH setup fence reset failed");
+        }
+    }
+#endif
 
     void record_static_traversal(
         VkCommandBuffer command) {
