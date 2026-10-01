@@ -5,21 +5,21 @@
   "issue": 25,
   "status": "gpu-independent-preparation-frozen",
   "accepted_target_timing_started": false,
-  "implementation_commit": "6f15955a0824e5fdf46a79493c6c1edf7ffa1590",
+  "implementation_commit": "fc81e5f79d998fa7b10946aece86de6e3b211f31",
   "base_program_commit": "e1376fb000a73d4b8d5a9b900d4303421aedd68e",
   "lane_entry_commit": "d2bcb942e91691ebf2561009392d48acee572a65",
   "source_fingerprint": {
     "config_blob": "a8c78dfe801f934c8ad4b408a0a4d7e4c049c293",
-    "runner_blob": "3ae57b6703b0288672f8ef98c92c7cd1b8e6c697",
+    "runner_blob": "c4d5c6901c18b3bd6b532d0c2a6dc17dacded019",
     "analysis_blob": "d62face01841e65e6d6b4b9be4c673ca79feb40d",
     "analysis_test_blob": "47306e909c4ba7271046e8294456b795ac76ea10",
-    "protocol_test_blob": "e8352027cf24e4e79acf698c028744453b88d76b",
+    "protocol_test_blob": "0834ddf37b4db3303208e946b6a190bc6266e39f",
     "lane_m_source_tree": "3aa3f135b9afc3a8b43109240349254d72363b1f",
-    "lane_m_scripts_tree": "f5b2403efdf6e964107c9d87462640dc455af959",
+    "lane_m_scripts_tree": "1ee8aa3e454596e54b65530f8bb74c28d11a8b62",
     "lane_m_shader_tree": "d8089f9cd0ab22d84795f57230d9d72600fccd4a",
-    "qualified_j_source_tree": "757da6c85c697a42cbebe918f96cf59008772805",
+    "qualified_j_source_tree": "030c0bc016dc7956f24ba1a655c05a3bf3a97abe",
     "qualified_j_formal_shader_tree": "83e6f0f5286e7edb14b15a3e722dca379e126ce5",
-    "common_formal_runtime_blob": "0d7688fbc304cfc18e6de8be1ce95e8ce27add99",
+    "common_formal_runtime_blob": "10003868cdad58f2a149b00397e7176491efb9ed",
     "allocation_context_header_blob": "64249112d157104b66b5f334d29558b0a01bc674",
     "allocation_context_source_blob": "faf6c585a2f8ffbf26c6e9181e49ea8a7e84f81f",
     "lane_g_lbvh_source_blob": "17f55f17a35aaa5373074591af552636b1dfe82d",
@@ -103,6 +103,8 @@
     "qualified_common_runtime_reuse_selected": true,
     "direct_pair_memory_guard_added_before_freeze": true,
     "validation_to_formal_input_sha_handoff_added_before_freeze": true,
-    "full_j002_materialized_profile_contract_pinned": true
+    "full_j002_materialized_profile_contract_pinned": true,
+    "stable_lbvh_setup_priming_outside_recurrent_boundary": true,
+    "validation_child_stderr_exposed": true
   }
 }
