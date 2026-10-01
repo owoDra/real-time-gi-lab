@@ -30,8 +30,16 @@
     "validation_ray_prefix_count": 0,
     "profiles": [
       {
+        "name": "small-global-high",
+        "expected_topology_digest": "45819e4759e2cbe2ff90b617043a8baa5ed3242c5b648e447b43ef21853309c5"
+      },
+      {
         "name": "medium-global-representative",
         "expected_topology_digest": "3c7de01e9628d46d0b516dc0e3b7edd5a66f7e47c23e7cec8a89b4ca9a3cc358"
+      },
+      {
+        "name": "medium-local-high",
+        "expected_topology_digest": "b0e58dc496f5c8d5efb1e5ab549bd310e51f26fd5e5d65a4bd5cecdb712407bb"
       },
       {
         "name": "large-global-high",
