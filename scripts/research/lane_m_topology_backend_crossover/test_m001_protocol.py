@@ -11,6 +11,11 @@ CONFIG = (
     / "research/lanes/lane-m-topology-backend-crossover/experiments"
     / "001-topology-backend-crossover-config.json"
 )
+FORMAL_RUNTIME = (
+    ROOT
+    / "src/research/lane_j_topology_backend_alternatives/formal_runtime"
+    / "j004_formal_process.cpp"
+)
 
 
 class ProtocolTest(unittest.TestCase):
@@ -117,6 +122,18 @@ class ProtocolTest(unittest.TestCase):
             direct["candidate_comparison"], "clustered-vs-lbvh"
         )
         self.assertTrue(direct["same_20_percent_gate"])
+
+    def test_stable_lbvh_is_primed_only_in_setup(self) -> None:
+        source = FORMAL_RUNTIME.read_text(encoding="utf-8")
+        self.assertIn("prime_stable_lbvh();", source)
+        self.assertIn(
+            "Stable/no-change measures steady-state traversal with zero recurrent",
+            source,
+        )
+        self.assertIn(
+            "dynamic_lbvh_->record_build(\n            command,",
+            source,
+        )
 
     def test_no_duplicate_lane_m_formal_runtime_source(self) -> None:
         # Lane M must extend the qualified J004 orchestration at build time
