@@ -34,6 +34,19 @@ struct HwrtUpdateStats {
     double geometry_upload_us{};
     double blas_update_us{};
     double tlas_update_us{};
+    double geometry_upload_gpu_us{};
+};
+
+enum class HwrtTlasPolicy {
+    Update,
+    Build,
+};
+
+struct HwrtRigidUpdateStats {
+    std::size_t moved_primitives{};
+    double instance_upload_us{};
+    double instance_upload_gpu_us{};
+    double tlas_update_us{};
 };
 
 class B002HwrtTraversal {
@@ -41,7 +54,15 @@ public:
     B002HwrtTraversal(
         B002VulkanContext& context,
         const std::vector<Triangle>& triangles,
-        std::string shader_path);
+        std::string shader_path,
+        bool create_trace_runtime = true);
+    B002HwrtTraversal(
+        B002VulkanContext& context,
+        const std::vector<Triangle>& triangles,
+        std::span<const std::uint32_t> rigid_primitives,
+        std::string shader_path,
+        bool create_trace_runtime = true,
+        bool allow_partition_updates = false);
     ~B002HwrtTraversal();
 
     B002HwrtTraversal(const B002HwrtTraversal&) = delete;
@@ -59,6 +80,28 @@ public:
         const std::vector<Triangle>& triangles,
         std::span<const std::uint32_t> moved_primitives);
 
+    // Lane E E004: stable-topology deformation in a partitioned object updates
+    // only that object's contiguous vertex/metadata range and local BLAS.
+    [[nodiscard]] HwrtUpdateStats update_partition_geometry(
+        const std::vector<Triangle>& triangles,
+        std::span<const std::uint32_t> moved_primitives);
+
+    // Lane E E002: rigid geometry is immutable after setup. Only the second
+    // TLAS instance transform is changed; no vertex/metadata upload or BLAS
+    // update is permitted on this path.
+    [[nodiscard]] HwrtRigidUpdateStats update_rigid_transform(
+        float translation_x,
+        HwrtTlasPolicy policy);
+
+    // Integration #13 reuses the accepted B002 AS build/update ownership while
+    // recording traversal in a larger end-to-end command stream.
+    [[nodiscard]] VkAccelerationStructureKHR top_level() const noexcept {
+        return tlas_.handle;
+    }
+    [[nodiscard]] const B002Buffer& triangle_buffer() const noexcept {
+        return triangle_buffer_;
+    }
+
 private:
     struct AccelerationStructure {
         B002Buffer storage{};
@@ -67,11 +110,16 @@ private:
         VkDeviceAddress address{};
     };
 
-    [[nodiscard]] double build_blas(
-        const std::vector<Triangle>& triangles);
+    [[nodiscard]] double build_blas_range(
+        VkDeviceAddress vertex_address,
+        std::size_t triangle_count,
+        AccelerationStructure& target,
+        bool allow_update);
     [[nodiscard]] double build_tlas();
     [[nodiscard]] double update_blas(std::size_t triangle_count);
+    [[nodiscard]] double update_dynamic_blas();
     [[nodiscard]] double update_tlas();
+    [[nodiscard]] double maintain_tlas(HwrtTlasPolicy policy);
     void ensure_scratch_capacity(VkDeviceSize required_bytes);
     [[nodiscard]] VkDeviceAddress scratch_address() const noexcept;
     [[nodiscard]] double submit_build(
@@ -91,6 +139,7 @@ private:
     B002Buffer instance_buffer_{};
     B002Buffer scratch_{};
     AccelerationStructure blas_{};
+    AccelerationStructure dynamic_blas_{};
     AccelerationStructure tlas_{};
 
     VkDescriptorSetLayout descriptor_layout_{VK_NULL_HANDLE};
@@ -104,6 +153,11 @@ private:
 
     HwrtSetupStats setup_stats_{};
     std::size_t triangle_count_{};
+    std::size_t static_triangle_count_{};
+    std::size_t dynamic_triangle_count_{};
+    std::vector<std::uint32_t> dynamic_primitives_;
+    bool rigid_partitioned_{};
+    bool dynamic_partition_updates_{};
 };
 
 } // namespace phos::gi::research::lane_b

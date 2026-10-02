@@ -138,16 +138,32 @@ void main() {
             rayQueryGetIntersectionPrimitiveIndexEXT(
                 query,
                 false);
-        if (candidate_index < 0) continue;
+        int instance_base =
+            rayQueryGetIntersectionInstanceCustomIndexEXT(
+                query,
+                false);
+        if (candidate_index < 0 || instance_base < 0) continue;
+
+        // instanceCustomIndex is the metadata base for this BLAS. The legacy
+        // one-BLAS path uses base zero; Lane E E002 gives the rigid BLAS a
+        // non-zero base after partitioning static and rigid metadata.
         TriangleData triangle =
-            triangles[uint(candidate_index)];
+            triangles[uint(instance_base) + uint(candidate_index)];
+
+        // Candidate triangles are stored in BLAS/object space. Ray-query keeps
+        // the parametric t invariant across spaces, so manual shared Hit
+        // semantics must intersect against the candidate's object-space ray.
+        vec3 object_origin =
+            rayQueryGetIntersectionObjectRayOriginEXT(query, false);
+        vec3 object_direction =
+            rayQueryGetIntersectionObjectRayDirectionEXT(query, false);
 
         float candidate_t;
         vec3 candidate_normal;
         if (intersect_triangle(
                 triangle,
-                origin,
-                direction,
+                object_origin,
+                object_direction,
                 ray.origin_tmax.w,
                 has_best ? best_t : ray.origin_tmax.w,
                 candidate_t,
@@ -161,8 +177,14 @@ void main() {
             has_best = true;
             best_t = candidate_t;
             best_primitive = triangle.metadata.x;
+            // E002 permits rigid transforms only, so transforming the local
+            // geometric normal by the object-to-world linear part is exact.
+            mat4x3 object_to_world =
+                rayQueryGetIntersectionObjectToWorldEXT(query, false);
+            vec3 world_normal =
+                normalize(object_to_world * vec4(candidate_normal, 0.0));
             output_hit.normal_t =
-                vec4(candidate_normal, candidate_t);
+                vec4(world_normal, candidate_t);
             output_hit.metadata = uvec4(
                 triangle.metadata.x,
                 triangle.metadata.y,

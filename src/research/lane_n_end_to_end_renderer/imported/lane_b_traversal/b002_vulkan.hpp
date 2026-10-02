@@ -95,6 +95,9 @@ public:
     void update_device_buffer(
         B002Buffer& destination,
         std::span<const B002BufferUpdate> updates);
+    [[nodiscard]] double update_device_buffer_timed(
+        B002Buffer& destination,
+        std::span<const B002BufferUpdate> updates);
     void download_device_buffer(
         const B002Buffer& source,
         void* destination,
@@ -113,6 +116,10 @@ private:
         VkBuffer destination,
         VkDeviceSize size);
     void copy_buffer_regions(
+        VkBuffer source,
+        VkBuffer destination,
+        std::span<const VkBufferCopy> regions);
+    [[nodiscard]] double copy_buffer_regions_timed(
         VkBuffer source,
         VkBuffer destination,
         std::span<const VkBufferCopy> regions);

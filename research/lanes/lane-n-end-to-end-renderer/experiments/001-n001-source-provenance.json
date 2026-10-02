@@ -2,18 +2,20 @@
   "schema_version": 1,
   "purpose": "N001 exact source snapshots for evidence-backed producer/traversal/storage/dynamic ownership bring-up",
   "source_of_truth_research_commit": "a75cf7857761cfbc783c9f1f847dc1380359481e",
-  "source_branches": {
+  "architecture_evidence_commits": {
     "lane_a_split_rc": "1e51b360e36b44912e5127c42c45195b4f39ad53",
     "lane_b_traversal": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
     "lane_e_dynamic_geometry": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
-    "lane_m_topology_backend_crossover": {
-      "commit": "af5edd826ada9d7785176fbeab3c2e8ddec9dd79",
-      "imported_for_n001": false,
-      "note": "topology-changing/high-churn remains frozen but is not exercised by N001 bring-up; import is deferred until its N002/N004 scenario is wired"
-    }
+    "lane_m_topology_backend_crossover": "af5edd826ada9d7785176fbeab3c2e8ddec9dd79"
+  },
+  "compatibility_note": "Lane B implementation files are snapshotted from the Lane E integration branch because Integration #13/Lane E added the accepted partitioned HWRT/update APIs consumed by the end-to-end runtime. The Lane B architecture decision remains the canonical traversal decision.",
+  "lane_m_import": {
+    "imported_for_n001": false,
+    "note": "topology-changing/high-churn is frozen to the Lane-E object-local rebuild decision but is not exercised by the N001 bring-up playback; implementation wiring is deferred to its later scenario."
   },
   "imported": [
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/finalize.comp.glsl",
@@ -21,6 +23,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/finalize.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/gather.comp.glsl",
@@ -28,6 +31,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/gather.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/merge.comp.glsl",
@@ -35,6 +39,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/merge.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/producer.comp.glsl",
@@ -42,6 +47,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/producer.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/resolve.comp.glsl",
@@ -49,6 +55,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/resolve.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/visibility_depth.comp.glsl",
@@ -56,6 +63,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/visibility_depth.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "shaders/research/lane_a_split_rc/visibility_owner.comp.glsl",
@@ -63,6 +71,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/visibility_owner.comp.glsl"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_analysis.cpp",
@@ -70,6 +79,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.cpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_analysis.hpp",
@@ -77,6 +87,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.hpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_runtime.cpp",
@@ -84,6 +95,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_runtime.cpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_runtime.hpp",
@@ -91,6 +103,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_runtime.hpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_scene.cpp",
@@ -98,6 +111,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_scene.cpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_scene.hpp",
@@ -105,6 +119,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_scene.hpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/a001_types.hpp",
@@ -112,6 +127,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_types.hpp"
     },
     {
+      "architecture_lineage": "Lane A",
       "source_branch": "research-lane-a-split-rc",
       "source_commit": "1e51b360e36b44912e5127c42c45195b4f39ad53",
       "source_path": "src/research/lane_a_split_rc/stream_schema.hpp",
@@ -119,216 +135,247 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/stream_schema.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b002_hierarchical.comp.glsl",
       "sha": "b2e08068fccf0adb7361833bb1280862356ac920",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hierarchical.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b002_hwrt.comp.glsl",
-      "sha": "63e9018d63fc8748273eb24270545e136a316f50",
+      "sha": "88e1e5df204dca5cc178f93291bb18c51fcddc59",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b002_software_bvh.comp.glsl",
       "sha": "efb79c9cabdb602158a89633b51c36e8ef999d27",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_software_bvh.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b003_macro_bvh8.comp.glsl",
       "sha": "1040cc79c35e20b3c2ae61930a0099660b927fd8",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_macro_bvh8.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b003_micro_bvh8.comp.glsl",
       "sha": "dd810d1d5f5fffb7514f5123ecdb1d97f156004a",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_micro_bvh8.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b003_quantized_bvh8.comp.glsl",
       "sha": "26831c52df911796ce4b85fa4c047d72a9a6f36a",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_quantized_bvh8.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b003_triangle_packets.comp.glsl",
       "sha": "83013649446750db5719df58157a4e50d3a07085",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_triangle_packets.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_b_traversal/b003_triangle_packets_compact.comp.glsl",
       "sha": "65a612328ae205c40e9ee41c81f62bdbd1f5fcc4",
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_triangle_packets_compact.comp.glsl"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_compute.cpp",
       "sha": "b24666b8dc74b28a33d9ed1bce39300814f3061b",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_compute.hpp",
       "sha": "7e3f11e24fad5b078accdbedd75cac9d80faa1d3",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_gpu_layout.hpp",
       "sha": "70a43f1f293b2fb6822395616492331342ec2ab6",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_gpu_layout.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_hwrt.cpp",
-      "sha": "7f7671b7638a3fa063f26425db67ccaa2a011c7c",
+      "sha": "91456326f9d946aedec46ff479f5d68600ed14a2",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_hwrt.hpp",
-      "sha": "51ef943d444f5fb0176a6e889e8f5821d145aa1c",
+      "sha": "a00fbfbfd5b9b2fd3c36cd2ceed49c14d2c9f71c",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_replay.hpp",
       "sha": "7a9cdbed7b96ab4a91da931c900cf48461232cf3",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_replay.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_scene.cpp",
       "sha": "fcdb35245aa34f5aa7d80838d2dc899bc30cb5c1",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_scene.cpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_scene.hpp",
       "sha": "ceb9eddd789a9541dc0ab7619a89208f6e95ca94",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_scene.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_vulkan.cpp",
-      "sha": "6c2453a470b20347934c4ae9979e048425652bd4",
+      "sha": "5cff8c2f7f1a739e9643fc303e15ce49d0504d3e",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_vulkan.cpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b002_vulkan.hpp",
-      "sha": "e162bbb9b0e5a24134389899c856f32cb145ecdc",
+      "sha": "7df5275cb40ddabbceb3d8a09040fb4c63244e6a",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_vulkan.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b003_macro_bvh8.hpp",
       "sha": "f2ac28efe3e2a7028137a8b03a205d1a7c14eb99",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_macro_bvh8.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b003_micro_bvh8.hpp",
       "sha": "4ff5a5ee799c112e0f5542ac24645b1a0faabe96",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_micro_bvh8.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b003_quantized_bvh8.hpp",
       "sha": "03ffe09f050f218cd18ffd6a22dfcfa5492000ed",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_quantized_bvh8.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b003_triangle_packets.hpp",
       "sha": "d2da772b4ca170c69513bb95421b2c43be713060",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_triangle_packets.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/b003_triangle_packets_compact.hpp",
       "sha": "a731af1381e289fe0af7bed4babd8097e7ac1fb5",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_triangle_packets_compact.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/gpu_software_bvh.hpp",
       "sha": "22f57bf18bbaa56b81c683ab7786e7901d614a1d",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/gpu_software_bvh.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/hierarchical_stratabrick.hpp",
       "sha": "e69dde36360bb67019caaaee08d8526de759dc28",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/hierarchical_stratabrick.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/lane_a_stream_v1.hpp",
       "sha": "ee09f99ebe28294af4900cc0718586ae1b8365a9",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/lane_a_stream_v1.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/software_bvh.hpp",
       "sha": "73758fea03848ed6c7f29c4764043f43d2846036",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/software_bvh.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/sparse_grid.hpp",
       "sha": "4941d5ab901aa75781e78bfb50de3e6ad7d0abb2",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/sparse_grid.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/traversal_common.hpp",
       "sha": "9a688da65f43b9e9d1b609b2294e7b495d621c39",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/traversal_common.hpp"
     },
     {
-      "source_branch": "research-lane-b-traversal",
-      "source_commit": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "architecture_lineage": "Lane B with accepted Integration/Lane E dynamic API amendments",
+      "source_branch": "research-lane-e-dynamic-geometry",
+      "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_b_traversal/traversal_contract.hpp",
       "sha": "67d26698198ab9579e6f1d838cb36fc958b55dc0",
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/traversal_contract.hpp"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_bounded_producer.comp.glsl",
@@ -336,6 +383,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_bounded_producer.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_clamp_counters.comp.glsl",
@@ -343,6 +391,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_clamp_counters.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_hwrt.comp.glsl",
@@ -350,6 +399,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_hwrt.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_quantized_bvh8.comp.glsl",
@@ -357,6 +407,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_quantized_bvh8.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_radiance.comp.glsl",
@@ -364,6 +415,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_radiance.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_software_bvh.comp.glsl",
@@ -371,6 +423,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_software_bvh.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_storage_invalidate.comp.glsl",
@@ -378,6 +431,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_storage_invalidate.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_storage_resolve.comp.glsl",
@@ -385,6 +439,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_storage_resolve.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_storage_update.comp.glsl",
@@ -392,6 +447,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_storage_update.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/integration/i001_work_to_rays.comp.glsl",
@@ -399,6 +455,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_work_to_rays.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_e_dynamic_geometry/e003_instance_binary.comp.glsl",
@@ -406,6 +463,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_binary.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "shaders/research/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl",
@@ -413,6 +471,7 @@
       "destination_path": "shaders/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/integration/i001_compute.cpp",
@@ -420,6 +479,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/integration/i001_compute.hpp",
@@ -427,6 +487,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/integration/i001_compute.hpp"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/integration/i001_runtime.cpp",
@@ -434,6 +495,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/integration/i001_runtime.cpp"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/integration/i001_runtime.hpp",
@@ -441,6 +503,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/integration/i001_runtime.hpp"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_e_dynamic_geometry/e003_instance_payload.hpp",
@@ -448,6 +511,7 @@
       "destination_path": "src/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_payload.hpp"
     },
     {
+      "architecture_lineage": "Integration #13 / Lane E",
       "source_branch": "research-lane-e-dynamic-geometry",
       "source_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
       "source_path": "src/research/lane_e_dynamic_geometry/e004_deforming_payload.hpp",

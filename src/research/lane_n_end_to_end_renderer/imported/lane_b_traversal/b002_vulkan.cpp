@@ -312,7 +312,17 @@ void B002VulkanContext::copy_buffer_regions(
     VkBuffer source,
     VkBuffer destination,
     std::span<const VkBufferCopy> regions) {
-    if (regions.empty()) return;
+    (void)copy_buffer_regions_timed(
+        source,
+        destination,
+        regions);
+}
+
+double B002VulkanContext::copy_buffer_regions_timed(
+    VkBuffer source,
+    VkBuffer destination,
+    std::span<const VkBufferCopy> regions) {
+    if (regions.empty()) return 0.0;
 
     VkCommandPool pool{};
     auto pool_info = detail::make_vk_info<VkCommandPoolCreateInfo>(
@@ -339,13 +349,34 @@ void B002VulkanContext::copy_buffer_regions(
         fail("B002 copy command buffer");
     }
 
+    VkQueryPool query_pool{};
+    auto query_info = detail::make_vk_info<VkQueryPoolCreateInfo>(
+        VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO);
+    query_info.queryType = VK_QUERY_TYPE_TIMESTAMP;
+    query_info.queryCount = 2;
+    if (dispatch_.createQueryPool(
+            &query_info,
+            nullptr,
+            &query_pool) != VK_SUCCESS) {
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy query pool");
+    }
+
     auto begin_info = detail::make_vk_info<VkCommandBufferBeginInfo>(
         VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
     begin_info.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
     if (dispatch_.beginCommandBuffer(command, &begin_info) != VK_SUCCESS) {
+        dispatch_.destroyQueryPool(query_pool, nullptr);
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy begin");
     }
+
+    dispatch_.cmdResetQueryPool(command, query_pool, 0, 2);
+    dispatch_.cmdWriteTimestamp(
+        command,
+        VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+        query_pool,
+        0);
 
     auto before = detail::make_vk_info<VkMemoryBarrier>(
         VK_STRUCTURE_TYPE_MEMORY_BARRIER);
@@ -387,8 +418,14 @@ void B002VulkanContext::copy_buffer_regions(
         nullptr,
         0,
         nullptr);
+    dispatch_.cmdWriteTimestamp(
+        command,
+        VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,
+        query_pool,
+        1);
 
     if (dispatch_.endCommandBuffer(command) != VK_SUCCESS) {
+        dispatch_.destroyQueryPool(query_pool, nullptr);
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy end");
     }
@@ -400,6 +437,7 @@ void B002VulkanContext::copy_buffer_regions(
             &fence_info,
             nullptr,
             &fence) != VK_SUCCESS) {
+        dispatch_.destroyQueryPool(query_pool, nullptr);
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy fence");
     }
@@ -414,6 +452,7 @@ void B002VulkanContext::copy_buffer_regions(
             &submit_info,
             fence) != VK_SUCCESS) {
         dispatch_.destroyFence(fence, nullptr);
+        dispatch_.destroyQueryPool(query_pool, nullptr);
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy submit");
     }
@@ -423,12 +462,35 @@ void B002VulkanContext::copy_buffer_regions(
             VK_TRUE,
             UINT64_MAX) != VK_SUCCESS) {
         dispatch_.destroyFence(fence, nullptr);
+        dispatch_.destroyQueryPool(query_pool, nullptr);
         dispatch_.destroyCommandPool(pool, nullptr);
         fail("B002 copy wait");
     }
 
+    std::uint64_t timestamps[2]{};
+    if (dispatch_.getQueryPoolResults(
+            query_pool,
+            0,
+            2,
+            sizeof(timestamps),
+            timestamps,
+            sizeof(std::uint64_t),
+            VK_QUERY_RESULT_64_BIT |
+                VK_QUERY_RESULT_WAIT_BIT) != VK_SUCCESS) {
+        dispatch_.destroyFence(fence, nullptr);
+        dispatch_.destroyQueryPool(query_pool, nullptr);
+        dispatch_.destroyCommandPool(pool, nullptr);
+        fail("B002 copy timestamp readback");
+    }
+
+    const auto gpu_us =
+        double(timestamps[1] - timestamps[0]) *
+        double(timestamp_period_ns_) /
+        1000.0;
     dispatch_.destroyFence(fence, nullptr);
+    dispatch_.destroyQueryPool(query_pool, nullptr);
     dispatch_.destroyCommandPool(pool, nullptr);
+    return gpu_us;
 }
 
 B002Buffer B002VulkanContext::upload_device_buffer(
@@ -470,7 +532,15 @@ void B002VulkanContext::replace_device_buffer(
 void B002VulkanContext::update_device_buffer(
     B002Buffer& destination,
     std::span<const B002BufferUpdate> updates) {
-    if (updates.empty()) return;
+    (void)update_device_buffer_timed(
+        destination,
+        updates);
+}
+
+double B002VulkanContext::update_device_buffer_timed(
+    B002Buffer& destination,
+    std::span<const B002BufferUpdate> updates) {
+    if (updates.empty()) return 0.0;
 
     VkDeviceSize staging_size = 0;
     for (const auto& update : updates) {
@@ -501,11 +571,12 @@ void B002VulkanContext::update_device_buffer(
         source_offset += update.size;
     }
 
-    copy_buffer_regions(
+    const auto gpu_us = copy_buffer_regions_timed(
         staging.buffer,
         destination.buffer,
         regions);
     destroy_buffer(staging);
+    return gpu_us;
 }
 
 void B002VulkanContext::download_device_buffer(
