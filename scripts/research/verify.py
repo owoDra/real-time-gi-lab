@@ -26,6 +26,11 @@ LANES = {
         "shader": "shaders/research/lane_k_gpu_primary_calibration/README.md",
         "script": "scripts/research/lane_k_gpu_primary_calibration/README.md",
     },
+    "lane-n-end-to-end-renderer": {
+        "src": "src/research/lane_n_end_to_end_renderer/README.md",
+        "shader": "shaders/research/lane_n_end_to_end_renderer/README.md",
+        "script": "scripts/research/lane_n_end_to_end_renderer/README.md",
+    },
 }
 
 

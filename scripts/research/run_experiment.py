@@ -19,6 +19,7 @@ LANES = {
     "lane-b-traversal",
     "lane-c-storage-locality",
     "lane-k-gpu-primary-calibration",
+    "lane-n-end-to-end-renderer",
 }
 EXPERIMENT_RE = re.compile(r"^[0-9]{3}-[a-z0-9][a-z0-9-]*$")
 GPU_RE = re.compile(r"^GPU:\s*(.+)$", re.MULTILINE)
