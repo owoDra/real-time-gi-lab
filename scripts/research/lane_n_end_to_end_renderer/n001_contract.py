@@ -103,6 +103,8 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("N001 currently requires all finite pixels to participate in metrics")
     if render.get("tone_mapping_for_metrics") is not False:
         raise ContractError("N001 metrics must use untone-mapped HDR values")
+    if render.get("material_model") != "constant-white-lambertian":
+        raise ContractError("N001 bring-up freezes constant-white-lambertian material response")
     exposure = _require_number(render.get("metric_exposure"), "render_contract.metric_exposure")
     if exposure != 1.0:
         raise ContractError("N001 radiometric metrics must run before exposure/tone mapping")
@@ -205,7 +207,9 @@ def validate_config(config: dict[str, Any]) -> None:
     stages = _require_sequence(timing.get("required_gi_stages"), "timing_boundary.required_gi_stages")
     required_stages = {
         "renderer_prerequisite_attributable_to_gi",
+        "frame_init_visibility",
         "producer",
+        "ray_prepare",
         "geometry_prepare_upload",
         "acceleration_structure_maintenance",
         "traversal",
@@ -226,6 +230,12 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("timing_boundary.required_totals does not match the frozen N001 totals")
     if timing.get("formal_performance_threshold") is not None:
         raise ContractError("N001 must not freeze a performance winner threshold before Lane-N calibration")
+    stage_sum_tolerance = _require_number(
+        timing.get("stage_sum_tolerance_us"),
+        "timing_boundary.stage_sum_tolerance_us",
+    )
+    if stage_sum_tolerance < 0.0:
+        raise ContractError("timing stage-sum tolerance must be non-negative")
 
     memory = _require_mapping(config.get("memory_boundary"), "memory_boundary")
     categories = set(_require_sequence(memory.get("required_categories"), "memory_boundary.required_categories"))
@@ -447,9 +457,18 @@ def validate_target_artifact(root: Path, config: dict[str, Any]) -> dict[str, An
         stages = _require_mapping(timings.get("stages"), "frame.timing_us.stages")
         if set(stages) != required_stages:
             raise ContractError("frame timing stage set does not match frozen boundary")
+        normalized_stages: dict[str, float] = {}
         for name, value in stages.items():
-            if _require_number(value, f"timing stage {name}") < 0.0:
+            numeric = _require_number(value, f"timing stage {name}")
+            if numeric < 0.0:
                 raise ContractError("timing stage values must be non-negative")
+            normalized_stages[name] = numeric
+        stage_sum = sum(normalized_stages.values())
+        stage_sum_tolerance = float(config["timing_boundary"]["stage_sum_tolerance_us"])
+        if abs(stage_sum - gi) > stage_sum_tolerance:
+            raise ContractError(
+                f"complete GI stage accounting mismatch: {stage_sum} vs {gi}"
+            )
 
         memory = _require_mapping(frame.get("memory_bytes"), "frame.memory_bytes")
         if set(memory) != required_memory:

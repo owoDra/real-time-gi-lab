@@ -78,7 +78,11 @@ accepted A001 framing rather than baking one machine-specific world transform:
 - moved light offset `[-0.30, 0.22, 0.28] * diagonal`.
 
 Four bring-up states are frozen: static, camera motion, light motion, and one
-deterministic geometry-motion state. Geometry selection is seeded. Every state
+deterministic **rigid** geometry-motion state. Geometry selection is seeded.
+Stable-topology deformation and topology-changing/high-churn remain frozen
+architecture decisions, but their separate image behavior is intentionally
+deferred to the later Lane-N scenario matrix instead of mixing two geometry
+transitions into one N001 frame. Every state
 gets an exact canonical JSON digest and the target renderer/reference must emit
 that digest with the frame.
 
@@ -102,6 +106,9 @@ only.
 The N001 reference is diffuse path tracing, not a new realtime feature:
 
 - direct + indirect Lambertian transport;
+- constant white Lambertian material response for the N001 bring-up image;
+- white point-light radiance; changing-illumination bring-up moves the light
+  without also changing its spectrum;
 - up to 8 diffuse bounces;
 - no glossy/specular reference in N001 bring-up;
 - two deterministic independent seeds;
@@ -138,7 +145,9 @@ performance threshold**.
 Complete GI GPU time contains recurrent work for:
 
 - renderer prerequisite attributable to GI;
+- frame init / visibility-owner work;
 - producer;
+- ray preparation;
 - geometry preparation/upload;
 - acceleration-structure maintenance;
 - traversal;
@@ -151,6 +160,9 @@ The artifact also records complete renderer GPU time. A renderer prerequisite
 shared with non-GI rendering may be reported in the renderer total, but any
 incremental prerequisite required specifically by a GI variant stays inside the
 GI boundary.
+
+The sum of the named complete-GI stages must agree with `complete_gi_gpu`
+within 2 us; positive unaccounted work may not be hidden in the total.
 
 Lane K's 5% and Lane L's 20% floors are not imported as Lane-N thresholds.
 Before N002/N003 performance claims, calibrate the actual complete-frame
