@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "experiment": "N001",
+  "source_of_truth": {
+    "research_commit": "a75cf7857761cfbc783c9f1f847dc1380359481e",
+    "issue": 26,
+    "architecture_contract": "research/status.md@a75cf7857761cfbc783c9f1f847dc1380359481e"
+  },
+  "scene": {
+    "path": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+    "sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6"
+  },
+  "render_contract": {
+    "width": 320,
+    "height": 180,
+    "hdr_format": "PFM-RGB-f32",
+    "color_space": "linear-rec709",
+    "origin": "top-left",
+    "valid_pixel_mask": "all-finite-pixels",
+    "metric_exposure": 1.0,
+    "tone_mapping_for_metrics": false
+  },
+  "reference_contract": {
+    "transport": "diffuse-path-traced",
+    "glossy_specular": false,
+    "max_diffuse_bounces": 8,
+    "min_spp": 512,
+    "max_spp": 8192,
+    "sample_growth": "powers-of-two",
+    "seed_a": 1311768467463790320,
+    "seed_b": 1147797409030816545,
+    "replicate_p99_abs_luminance_max": 0.001,
+    "replicate_p99_relative_luminance_max": 0.01
+  },
+  "playback": {
+    "geometry_subset_seed": 20261002,
+    "frames": [
+      {
+        "frame": 0,
+        "kind": "static",
+        "camera": {
+          "base_direction": [1.0, 0.32, 1.0],
+          "orbit_radians": 0.0,
+          "distance_diagonal": 0.82,
+          "vfov_degrees": 70.0
+        },
+        "light": {
+          "offset_diagonal": [0.15, 0.35, 0.10],
+          "radiance": [18.0, 16.0, 14.0]
+        },
+        "geometry": {
+          "rigid_phase": 0.0,
+          "deform_phase": 0.0,
+          "topology_epoch": 0
+        }
+      },
+      {
+        "frame": 1,
+        "kind": "camera-motion",
+        "camera": {
+          "base_direction": [1.0, 0.32, 1.0],
+          "orbit_radians": 0.35,
+          "distance_diagonal": 0.82,
+          "vfov_degrees": 70.0
+        },
+        "light": {
+          "offset_diagonal": [0.15, 0.35, 0.10],
+          "radiance": [18.0, 16.0, 14.0]
+        },
+        "geometry": {
+          "rigid_phase": 0.0,
+          "deform_phase": 0.0,
+          "topology_epoch": 0
+        }
+      },
+      {
+        "frame": 2,
+        "kind": "light-motion",
+        "camera": {
+          "base_direction": [1.0, 0.32, 1.0],
+          "orbit_radians": 0.0,
+          "distance_diagonal": 0.82,
+          "vfov_degrees": 70.0
+        },
+        "light": {
+          "offset_diagonal": [-0.30, 0.22, 0.28],
+          "radiance": [12.0, 18.0, 22.0]
+        },
+        "geometry": {
+          "rigid_phase": 0.0,
+          "deform_phase": 0.0,
+          "topology_epoch": 0
+        }
+      },
+      {
+        "frame": 3,
+        "kind": "geometry-motion",
+        "camera": {
+          "base_direction": [1.0, 0.32, 1.0],
+          "orbit_radians": 0.0,
+          "distance_diagonal": 0.82,
+          "vfov_degrees": 70.0
+        },
+        "light": {
+          "offset_diagonal": [0.15, 0.35, 0.10],
+          "radiance": [18.0, 16.0, 14.0]
+        },
+        "geometry": {
+          "rigid_phase": 1.0,
+          "deform_phase": 0.35,
+          "topology_epoch": 0
+        }
+      }
+    ]
+  },
+  "image_metrics": {
+    "relative_luminance_floor": 0.0001,
+    "affected_abs_luminance": 0.01,
+    "affected_relative_luminance": 0.05,
+    "required": [
+      "mean_abs_luminance_error",
+      "mean_relative_luminance_error",
+      "rgb_rms_error",
+      "p95_abs_luminance_error",
+      "p99_abs_luminance_error",
+      "max_abs_luminance_error",
+      "p95_relative_luminance_error",
+      "p99_relative_luminance_error",
+      "affected_pixel_fraction"
+    ]
+  },
+  "timing_boundary": {
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-health-provenance",
+    "required_gi_stages": [
+      "renderer_prerequisite_attributable_to_gi",
+      "producer",
+      "geometry_prepare_upload",
+      "acceleration_structure_maintenance",
+      "traversal",
+      "gather",
+      "radiance_storage",
+      "merge_resolve",
+      "synchronization"
+    ],
+    "required_totals": [
+      "complete_gi_gpu",
+      "complete_renderer_gpu"
+    ],
+    "formal_performance_threshold": null,
+    "note": "N001 does not rank performance. Lane-N complete-frame calibration is required before N002/N003 formal performance claims."
+  },
+  "memory_boundary": {
+    "required_categories": [
+      "geometry_as_persistent",
+      "radiance_storage_persistent",
+      "producer_stream_persistent",
+      "transient",
+      "scratch",
+      "old_new_overlap",
+      "true_lifetime_peak",
+      "host_mirrors"
+    ]
+  },
+  "correctness": {
+    "required_zero": [
+      "traversal_runtime_errors",
+      "oob_errors",
+      "storage_failures",
+      "lifetime_errors"
+    ],
+    "alignment_valid": true,
+    "sample_exclusion_allowed": false,
+    "rerun_policy": "not-applicable-until-target-timing-freeze"
+  }
+}
