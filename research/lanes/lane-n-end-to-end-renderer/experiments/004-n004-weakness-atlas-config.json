@@ -44,7 +44,14 @@
   },
   "families": {
     "thin-geometry-light-leak": {
-      "scenes": ["leak-thin", "leak-medium", "leak-thick"],
+      "scenes": [
+        "leak-thin",
+        "leak-medium",
+        "leak-thick",
+        "leak-grazing",
+        "leak-one-sided",
+        "leak-enclosed"
+      ],
       "target_frames": 1,
       "dark_reference_luminance_max": 0.001,
       "false_irradiance_delta_min": 0.001,
@@ -59,12 +66,30 @@
     },
     "camera-disocclusion": {
       "scenario": "camera-motion",
-      "target_frames": 8,
+      "cases": [
+        {
+          "name": "abrupt-reveal",
+          "motion_fractions": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+        },
+        {
+          "name": "gradual-motion",
+          "motion_fractions": [0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
+        }
+      ],
       "bounded_convergence_frame_max": 4
     },
     "changing-illumination": {
       "scenario": "light-motion",
-      "target_frames": 8,
+      "cases": [
+        {
+          "name": "step-change",
+          "motion_fractions": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+        },
+        {
+          "name": "gradual-change",
+          "motion_fractions": [0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
+        }
+      ],
       "bounded_convergence_frame_max": 4
     },
     "dynamic-geometry": {
