@@ -215,9 +215,12 @@ I001FrameResult I001Runtime::run_n003_vanilla_topology_churn_frame() {
 
     const auto surface_update_gpu_us =
         impl_->context.update_device_buffer_timed(impl_->surfaces, surface_updates);
+    const auto geometry_transfer_start = Clock::now();
     const auto geometry_transfer_gpu_us =
         impl_->context.update_device_buffer_timed(
             impl_->triangle_buffer, triangle_updates);
+    const auto geometry_transfer_wall_us =
+        elapsed_us(geometry_transfer_start);
 
     const auto rebuild_start = Clock::now();
     impl_->software_cpu->rebuild(impl_->b_scene.triangles);
@@ -248,6 +251,7 @@ I001FrameResult I001Runtime::run_n003_vanilla_topology_churn_frame() {
         impl_->context.update_device_buffer_timed(
             impl_->software_order,
             std::span<const lane_b::B002BufferUpdate>(&order_update, 1));
+    const auto dynamic_update_wall_us = elapsed_us(total_start);
 
     impl_->geometry_is_target = true;
     impl_->calculate_memory();
@@ -257,9 +261,10 @@ I001FrameResult I001Runtime::run_n003_vanilla_topology_churn_frame() {
         surface_update_gpu_us + geometry_transfer_gpu_us +
         hierarchy_upload_gpu_us;
     result.timings.traversal_maintenance_gpu_us = maintenance_gpu_us;
-    result.timings.dynamic_update_wall_us = elapsed_us(total_start);
+    result.timings.dynamic_update_wall_us = dynamic_update_wall_us;
     result.timings.geometry_prepare_cpu_us = geometry_prepare_cpu_us;
     result.timings.surface_update_gpu_us = surface_update_gpu_us;
+    result.timings.geometry_transfer_wall_us = geometry_transfer_wall_us;
     result.timings.geometry_transfer_gpu_us = geometry_transfer_gpu_us;
     result.timings.hierarchy_upload_gpu_us = hierarchy_upload_gpu_us;
     result.timings.software_bvh_rebuild_cpu_us = software_bvh_rebuild_cpu_us;
