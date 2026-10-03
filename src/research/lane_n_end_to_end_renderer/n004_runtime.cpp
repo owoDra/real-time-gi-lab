@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <stdexcept>
 #include <vector>
 
@@ -34,6 +35,7 @@ I001N004HitDiagnostics I001Runtime::n004_hit_diagnostics() {
         gpu_hits.size() * sizeof(traversal::GpuHit));
 
     I001N004HitDiagnostics diagnostics{};
+    bool printed_substantive = false;
     for (std::size_t index = 0; index < gpu_rays.size(); ++index) {
         const auto& gpu_ray = gpu_rays[index];
         const traversal::Ray ray{
@@ -59,6 +61,14 @@ I001N004HitDiagnostics I001Runtime::n004_hit_diagnostics() {
 
         ++diagnostics.strict_mismatches;
         bool surface_tie = false;
+        float normal_dot = 0.0F;
+        float distance_delta = 0.0F;
+        if (expected.hit && actual.hit) {
+            distance_delta = std::abs(expected.t - actual.t);
+            normal_dot = traversal::dot(
+                traversal::normalize(expected.normal),
+                traversal::normalize(actual.normal));
+        }
         if (expected.hit && actual.hit &&
             expected.primitive_id != actual.primitive_id &&
             expected.material_id == actual.material_id &&
@@ -66,11 +76,8 @@ I001N004HitDiagnostics I001Runtime::n004_hit_diagnostics() {
             const auto tolerance = std::max(
                 traversal::kHitDistanceAbsTolerance,
                 std::abs(expected.t) * traversal::kHitDistanceRelTolerance);
-            const auto normal_dot = traversal::dot(
-                traversal::normalize(expected.normal),
-                traversal::normalize(actual.normal));
             surface_tie =
-                std::abs(expected.t - actual.t) <= tolerance &&
+                distance_delta <= tolerance &&
                 normal_dot > 0.9999F;
         }
 
@@ -78,6 +85,30 @@ I001N004HitDiagnostics I001Runtime::n004_hit_diagnostics() {
             ++diagnostics.surface_tie_equivalent_mismatches;
         } else {
             ++diagnostics.substantive_mismatches;
+            if (!printed_substantive) {
+                printed_substantive = true;
+                std::cerr
+                    << "N004 substantive hit mismatch"
+                    << " ray_index=" << index
+                    << " ray_origin=(" << ray.origin.x << ',' << ray.origin.y << ',' << ray.origin.z << ')'
+                    << " ray_direction=(" << ray.direction.x << ',' << ray.direction.y << ',' << ray.direction.z << ')'
+                    << " ray_tmax=" << ray.t_max
+                    << " expected_hit=" << (expected.hit ? 1 : 0)
+                    << " expected_t=" << expected.t
+                    << " expected_primitive=" << expected.primitive_id
+                    << " expected_material=" << expected.material_id
+                    << " expected_instance=" << expected.instance_id
+                    << " expected_normal=(" << expected.normal.x << ',' << expected.normal.y << ',' << expected.normal.z << ')'
+                    << " actual_hit=" << (actual.hit ? 1 : 0)
+                    << " actual_t=" << actual.t
+                    << " actual_primitive=" << actual.primitive_id
+                    << " actual_material=" << actual.material_id
+                    << " actual_instance=" << actual.instance_id
+                    << " actual_normal=(" << actual.normal.x << ',' << actual.normal.y << ',' << actual.normal.z << ')'
+                    << " distance_delta=" << distance_delta
+                    << " normal_dot=" << normal_dot
+                    << '\n';
+            }
         }
     }
     return diagnostics;
