@@ -231,7 +231,7 @@ def run_case(
     if not path.is_file():
         raise contract.ContractError(f"N004 evidence missing: {root.name}")
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("protocol_version") != "n004-atlas-evidence-v2":
+    if payload.get("protocol_version") != "n004-atlas-evidence-v3":
         raise contract.ContractError("N004 evidence protocol changed")
     if len(payload.get("frames", [])) != target_frames:
         raise contract.ContractError("N004 evidence frame count mismatch")
@@ -249,6 +249,8 @@ def analyze_case(case_root: Path, evidence: dict[str, Any], config: dict[str, An
         frames.append({
             "index": frame["index"],
             "motion_fraction": frame["motion_fraction"],
+            "internal_correctness": bool(frame["internal_correctness"]),
+            "quality": frame["quality"],
             "reference": frame["reference"],
             "metrics": m,
             "generic_classification": generic_classification(m, config),
@@ -258,7 +260,18 @@ def analyze_case(case_root: Path, evidence: dict[str, Any], config: dict[str, An
         })
     for index, frame in enumerate(frames):
         frame["temporal_rgb_rms_from_previous"] = None if index == 0 else temporal_rgb_rms(images[index], images[index - 1])
-    return {"scenario": evidence["scenario"], "probe_spacing_world": evidence["probe_spacing_world"], "frames": frames}
+    return {
+        "scenario": evidence["scenario"],
+        "probe_spacing_world": evidence["probe_spacing_world"],
+        "source": evidence["source"],
+        "frames": frames,
+    }
+
+
+def correctness_failed(analyzed: dict[str, Any]) -> bool:
+    if not bool(analyzed["source"]["internal_correctness"]):
+        return True
+    return any(not bool(frame["internal_correctness"]) for frame in analyzed["frames"])
 
 
 def convergence_classification(frames: list[dict[str, Any]], max_bounded: int) -> tuple[str, int | None]:
@@ -342,7 +355,12 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
         evidence = run_case(binary, case_root, generated / meta["path"], "static", source_warmup, 1)
         analyzed = analyze_case(case_root, evidence, config)
         analyzed["scene"] = meta
-        analyzed["classification"] = analyzed["frames"][0]["generic_classification"]
+        analyzed["correctness_or_capacity_failure"] = correctness_failed(analyzed)
+        analyzed["classification"] = (
+            "material-blocker"
+            if analyzed["correctness_or_capacity_failure"] and world_cfg["correctness_or_capacity_failure_is_blocker"]
+            else analyzed["frames"][0]["generic_classification"]
+        )
         world_cases.append(analyzed)
     families["world-shape"] = {"cases": world_cases}
 
