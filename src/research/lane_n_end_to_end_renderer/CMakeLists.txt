@@ -1,5 +1,7 @@
 # Lane N N001 image-producing renderer/reference bring-up.
 
+find_package(Threads REQUIRED)
+
 add_compute_shader(
   lane_a_visibility_depth
   shaders/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/visibility_depth.comp.glsl)
@@ -95,6 +97,7 @@ target_include_directories(phos-n001 PRIVATE
 target_link_libraries(phos-n001 PRIVATE
   vk-bootstrap::vk-bootstrap
   fastgltf::fastgltf
+  Threads::Threads
   ${CMAKE_DL_LIBS}
 )
 target_compile_features(phos-n001 PRIVATE cxx_std_20)
