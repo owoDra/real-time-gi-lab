@@ -156,3 +156,15 @@ add_executable(phos-n003-preflight
   ${N001_SHARED_SUPPORT_SOURCES}
 )
 configure_lane_n_renderer(phos-n003-preflight)
+
+# N003 moving-rigid workload-invariance diagnostic. This is not a performance
+# comparison target: it records integer source/target work counters for paired
+# fresh runtimes so residual timing noise can be separated from workload
+# nondeterminism without changing the host GPU power/performance policy.
+add_executable(phos-n003-workload-diagnostic
+  n003_workload_diagnostic_main.cpp
+  n002_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n003-workload-diagnostic)
