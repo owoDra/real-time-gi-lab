@@ -4,37 +4,47 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 core target PASS and full six-scenario target ready (#27)**.
+Status: **N001 complete; N002 full six-scenario baseline complete; comparison calibration next (#31)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance winner claim.
 
-N001 implementation/result truth is split across:
+## N001
 
-- `experiments/001-n001-config.json` — frozen workload/metric contract;
-- `experiments/001-n001-source-provenance.json` — exact accepted A/B/E source snapshots;
-- `src/research/lane_n_end_to_end_renderer/` — image renderer + diffuse reference;
-- `scripts/research/lane_n_end_to_end_renderer/` — contract, target artifact validation, and HDR signal sanity;
-- `results/001-renderer-reference-bringup.md` — accepted N001 target result.
+N001 renderer/reference bring-up is complete. See:
 
-N001 passed target correctness/provenance and campaign-level renderer/reference HDR signal sanity on the target AMD Radeon 8060S. Individual black reference frames remain valid observations; no samples were excluded. N001 makes no performance-winner claim.
+- `experiments/001-n001-config.json`;
+- `experiments/001-n001-source-provenance.json`;
+- `results/001-renderer-reference-bringup.md`.
 
-N002 core checkpoint:
+The target AMD Radeon 8060S / RADV run passed correctness/provenance and campaign-level renderer/reference HDR signal sanity. Individual black reference frames remain valid observations. N001 makes no performance-winner claim.
 
-- `experiments/002-n002-config.json` freezes static, camera motion, changing light, moving rigid, and stable-topology deformation;
-- `n002_main.cpp` / `phos-n002` run those five scenarios through the current accepted Lane-E-final HWRT renderer boundary;
-- target artifact `002-current-architecture-baseline-core/20261003T044631Z` passed correctness, provenance, reference convergence and campaign HDR signal gates at commit `041171dbbd12ffaccd3d7c0f8105de77e4dbc672`.
+## N002
 
-N002 full completion target:
+N002 current-architecture baseline is complete. See:
 
-- `experiments/002-n002-full-config.json` freezes all six required scenarios;
-- `n002_runtime.cpp`, `n002_hwrt_rebuild.cpp`, and `phos-n002-topology` add the Lane-M retained topology/high-churn incumbent without replacing the core runtime;
-- topology churn replaces 50% of one dynamic object's primitive identities while retaining stable renderer slot capacity;
-- static ownership/BLAS remains immutable;
-- replacement dynamic BLAS is built, TLAS is switched, then the old dynamic BLAS is retired;
-- old/new overlap and lifetime peak are part of the required evidence;
-- `run_n002_full.py` combines the core five frames plus topology frame into one final six-frame provenance artifact;
-- `n002_full_contract.py` is the final N002 completion gate.
+- `experiments/002-n002-config.json` — core five-scenario checkpoint;
+- `experiments/002-n002-full-config.json` — final six-scenario playback;
+- `n002_main.cpp` / `phos-n002` — static, camera, light, moving-rigid, stable-topology deformation;
+- `n002_runtime.cpp`, `n002_hwrt_rebuild.cpp`, `n002_topology_main.cpp` / `phos-n002-topology` — topology-changing/high-churn object-local rebuild;
+- `n002_full_contract.py` / `run_n002_full.py` — final completion artifact and validation;
+- `results/002-current-architecture-baseline.md` — accepted target result.
 
-N002 remains incomplete until that final target artifact passes. Timing remains descriptive only until the Lane-N complete-frame boundary receives its own prospectively frozen calibration; Lane K's 5% and Lane L's 20% floors are not imported as N002 thresholds.
+Final evidence commit: `0188c7f7b4b43e5d887cd753d74a69e11a2ea764`.
 
-Raw target artifacts remain under `out/research/`. Proceed in Issue #26 order: complete N002 (#27), then freeze the Lane-N comparison/calibration contract before N003–N005.
+The six-scenario artifact passed correctness, provenance, reference convergence, HDR campaign-signal, timing-accounting, and memory gates. Topology/high-churn replaced 398/796 dynamic-owner primitive identities, executed exactly one object-local backend rebuild, recorded 252,928 bytes of old/new overlap, and retained static ownership outside the rebuild path.
+
+N002 timing remains descriptive only. Its current `affected_pixel_fraction` is zero for every frame despite non-zero raw HDR errors, so that classification threshold is not suitable for the observed dim workload.
+
+## Next gate
+
+Complete #31 before N003:
+
+- prospectively calibrate/freeze complete-GI and complete-renderer GPU timing interpretation;
+- freeze warm-up/sample/rerun/aggregation/material-change rules;
+- freeze a scale-appropriate image-quality interpretation while retaining raw HDR metrics and black-reference observations;
+- do not import Lane K/L thresholds without Lane-N evidence;
+- no sample deletion or post-hoc threshold relaxation.
+
+Only after #31 is complete should N003 run vanilla Split Radiance Cascades under the same complete renderer boundary.
+
+Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
