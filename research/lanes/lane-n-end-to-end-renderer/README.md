@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight complete; N003 proper complete; N004 next**.
+Status: **N001 complete; N002 complete; N003 complete; N004 implemented and awaiting local build/probe evidence (#39)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -22,66 +22,39 @@ The six-scenario artifact passed correctness, provenance, reference convergence,
 
 Issue #31 is complete. See `results/003-preflight-calibration.md`.
 
-Retained calibration lineage:
-
-- v1: 145% global threshold, timing-unsuitable;
-- v2: 110%, timing-unsuitable; quality interpretation accepted;
-- v3: 207.5%, timing-unsuitable;
-- v4: 98.5%, timing-unsuitable;
-- v5: withdrawn before target execution because forcing the target GPU performance profile can trigger host safety shutdown;
-- v6: all 40 replicated-median micro-pairs retained, zero false formal claims, worst p95 block effect 18.4%, but moving-rigid drove the global threshold to 28.5%.
-
-The moving-rigid workload diagnostic proved exact source/target integer workload invariance across A/B and all eight blocks. Its remaining timing variation is measurement/execution-state limited rather than workload-count drift.
+Retained calibration lineage: v1 145%, v2 110%, v3 207.5%, v4 98.5% all timing-unsuitable; v5 clock-pinned proposal withdrawn for host safety; v6 replicated median made five scenarios timing-eligible while moving-rigid remained measurement-limited despite exact workload invariance.
 
 **Lane N must not change GPU power/performance profiles.** The host GPU policy remains unchanged.
 
-Frozen N003 timing thresholds:
-
-- static: 7.0%;
-- camera-motion: 1.5%;
-- light-motion: 5.0%;
-- moving-rigid: timing-inconclusive, no formal performance win/loss claim;
-- stable-topology-deforming: 2.5%;
-- topology-changing-high-churn: 1.5%.
+Frozen N003 thresholds: static 7.0%, camera 1.5%, light 5.0%, stable deforming 2.5%, topology/high-churn 1.5%; moving-rigid has no formal timing claim.
 
 ## N003 proper
 
 Issue #38 is complete. See `experiments/003-n003-comparison.md` and `results/003-current-vs-vanilla.md`.
 
-The fair same-boundary comparison used the accepted N002 `LaneEFinalHwrt` path as current and the historical Integration-13 global binary software-BVH Split RC path as vanilla. A001 producer/cascade/probe/ray semantics, sparse radiance storage, renderer/reference semantics and complete timing boundaries were shared.
+Formal complete-renderer median vanilla/current ratios were 3.023x static, 2.756x camera, 3.108x light, 2.506x stable deforming and 2.354x topology/high-churn, all favoring current with 8/8 blocks in the same direction. Moving-rigid was descriptively ~1.787x but remains timing measurement-limited.
 
-Formal complete-renderer median vanilla/current ratios:
+Quality was equal across all six scenarios. Device true-lifetime peak is the retained trade-off: current is about 26.5% heavier in ordinary scenarios and 23.9% heavier under topology churn. Non-formal CPU/host diagnostics strongly favor current for dynamic updates.
 
-- static: **3.023x** current faster;
-- camera-motion: **2.756x** current faster;
-- light-motion: **3.108x** current faster;
-- stable-topology-deforming: **2.506x** current faster;
-- topology-changing/high-churn: **2.354x** current faster.
+N003 confirms that the accepted support architecture survives the integrated renderer boundary against the mandatory vanilla Split RC baseline.
 
-Every formal claim had 8/8 outer blocks in the same direction and exceeded its prospectively frozen threshold. Moving-rigid produced a descriptive ~1.787x ratio favoring current but remains measurement-limited and has no formal timing direction.
+## N004 weakness atlas
 
-Quality/reference evidence showed **no material quality difference in any of the six scenarios**: current and vanilla had exactly equal RGB RMS error, p99 absolute luminance error and scale-aware affected-pixel fraction for each scenario under converged 512-spp references.
+Issue #39 is active. Prospective contract: `experiments/004-n004-weakness-atlas-config.json`; design/interpretation truth: `experiments/004-n004-weakness-atlas.md`.
 
-The main trade-off is device lifetime memory:
+Implementation is complete but no target result is accepted yet.
 
-- ordinary scenarios: current `363,297,488` B vs vanilla `287,091,936` B, about **+26.5%**;
-- topology/high-churn: current `363,424,016` B vs vanilla `293,392,656` B, about **+23.9%**.
+The atlas measures, without mitigation:
 
-Non-formal diagnostics show the opposite trend for renderer-owned host mirrors and expose the vanilla dynamic bottleneck. Global software-BVH rebuild makes dynamic CPU wall roughly 105–110 ms in vanilla versus about 1.6–3.8 ms for current across the three dynamic classes. These CPU values are explanatory only; GPU timestamps remain the formal performance axis.
+- leak thickness sweep plus grazing, one-sided and enclosed occluder cases;
+- abrupt and gradual camera/disocclusion paths;
+- step and gradual illumination changes;
+- rigid, stable-deforming and topology-changing dynamic classes;
+- sparse, dense, large-horizontal and vertical/tall synthetic world layouts;
+- higher-order diffuse and glossy/specular capability boundaries.
 
-N003 therefore confirms that the A–M support architecture's component-level wins survive the integrated renderer boundary against the mandatory vanilla Split RC baseline, while explicitly retaining the higher device-memory cost.
+Synthetic scenes are deterministic multi-mesh glTFs with a frozen 36-triangle idle dynamic control object so the primary synthetic geometry remains static ownership. N004 does not change the accepted A001 runtime used by N001–N003: the atlas target links an isolated wrapper that adds only prospective camera/light fractions.
 
-## N004 next
+Generic image classification thresholds and leak-specific false-irradiance thresholds are frozen before target data. Moving-rigid timing remains measurement-limited. All raw samples are retained, aggregate weakness scores are forbidden, and the accepted completed-campaign rerun budget is zero.
 
-N004 must build the weakness atlas required by #26 without first changing the transport solution. Measure independently:
-
-- thin geometry / light leaking;
-- camera motion and disocclusion behavior;
-- changing illumination response;
-- rigid / deforming / topology-changing dynamic behavior;
-- spatial scale and world-shape stress;
-- explicit multi-bounce and glossy/specular capability gaps.
-
-The output must classify each regime as solved/not observed, present but bounded, material blocker, capability not implemented, or measurement-limited. N005 then selects exactly one evidence-backed next transport research question.
-
-Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
+Build/contract/probe locally before the one accepted N004 target campaign. Raw target artifacts remain under `out/research/`.
