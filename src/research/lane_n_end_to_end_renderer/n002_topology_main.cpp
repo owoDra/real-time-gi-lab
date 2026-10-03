@@ -160,6 +160,12 @@ struct FrozenTiming {
         throw std::runtime_error(
             "N002 topology frame did not exercise exactly one mutation/rebuild transition");
     }
+    if (measured.stats.topology_replaced_primitives == 0U ||
+        measured.stats.topology_replaced_primitives !=
+            (measured.stats.moved_primitives + 1U) / 2U) {
+        throw std::runtime_error(
+            "N002 topology frame did not exercise the frozen 50% churn schedule");
+    }
     if (measured.memory.old_new_overlap_bytes == 0U) {
         throw std::runtime_error(
             "N002 topology frame did not record old/new object-local overlap");
@@ -198,7 +204,8 @@ struct FrozenTiming {
         << "      \"topology\": {\n"
         << "        \"mutations\": " << measured.stats.topology_mutations << ",\n"
         << "        \"backend_rebuilds\": " << measured.stats.backend_rebuilds << ",\n"
-        << "        \"partition_primitives\": " << measured.stats.moved_primitives << "\n"
+        << "        \"partition_primitives\": " << measured.stats.moved_primitives << ",\n"
+        << "        \"replaced_primitives\": " << measured.stats.topology_replaced_primitives << "\n"
         << "      },\n"
         << "      \"timing_us\": {\n"
         << "        \"complete_gi_gpu\": " << timing.complete_gi << ",\n"
