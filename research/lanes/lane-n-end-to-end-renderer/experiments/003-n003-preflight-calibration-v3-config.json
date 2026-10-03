@@ -1,0 +1,95 @@
+{
+  "schema_version": 3,
+  "experiment": "N003-preflight",
+  "phase": "calibration",
+  "protocol_version": "paired-control-v3",
+  "source_of_truth": {
+    "issue": 31,
+    "parent_issue": 26,
+    "n002_completion_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
+    "v1_result": "timing-unsuitable: absolute across-process timing noise 48.297%, derived threshold 145%",
+    "v2_result": "timing-unsuitable: paired fresh-process A/A threshold 110%; short scenarios showed near-2x timing modes"
+  },
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "baseline": {
+    "scene": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+    "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+    "playback_sha256": "805c544bed5aaaf7c32dd942d5e8f9f460ff670601b336fc12a521fbd57398c5",
+    "required_scenarios": [
+      "static",
+      "camera-motion",
+      "light-motion",
+      "moving-rigid",
+      "stable-topology-deforming",
+      "topology-changing-high-churn"
+    ]
+  },
+  "timing_calibration": {
+    "probe_binary": "build/phos-n003-preflight",
+    "comparison_unit": "same-process-prewarmed-A-A",
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-only",
+    "fresh_process_pair_blocks": 8,
+    "source_warmup_frames": 32,
+    "start_orders": ["AB", "BA", "AB", "BA", "BA", "AB", "BA", "AB"],
+    "settle_seconds_between_pairs": 1.0,
+    "required_totals": ["complete_gi_gpu", "complete_renderer_gpu"],
+    "required_stages": [
+      "renderer_prerequisite_attributable_to_gi",
+      "frame_init_visibility",
+      "producer",
+      "ray_prepare",
+      "geometry_prepare_upload",
+      "acceleration_structure_maintenance",
+      "traversal",
+      "gather",
+      "radiance_storage",
+      "merge_resolve",
+      "synchronization"
+    ],
+    "sample_exclusion": "forbidden",
+    "completed_campaign_rerun_budget": 0,
+    "primary_statistic": "median-paired-log-ratio",
+    "noise_estimator": "abs-median-log-bias-plus-3x-1.4826-MAD",
+    "material_change_threshold": {
+      "minimum_fraction": 0.01,
+      "round_up_step_fraction": 0.005,
+      "timing_unsuitable_above_fraction": 0.20
+    },
+    "formal_claim_requires": {
+      "magnitude_at_least_derived_threshold": true,
+      "minimum_same_direction_pair_fraction": 0.75
+    },
+    "control_sanity": {
+      "must_not_trigger_formal_claim": true,
+      "maximum_p95_pair_effect_fraction": 0.20
+    }
+  },
+  "quality_interpretation": {
+    "status": "accepted-from-v2",
+    "legacy_affected_pixel_fraction_role": "diagnostic-only",
+    "scale_aware_affected_relative_threshold": 0.05,
+    "relative_luminance_floor": 0.0001,
+    "primary_metrics": [
+      "rgb_rms_error",
+      "p99_abs_luminance_error",
+      "scale_aware_affected_pixel_fraction"
+    ],
+    "v2_observation": "all 16 A/B observations were deterministic per scenario and scale-aware campaign signal was present",
+    "material_change": {
+      "required_concordant_primary_metrics": 2,
+      "error_metric_min_relative_change": 0.10,
+      "scale_aware_affected_fraction_min_absolute_change": 0.005
+    },
+    "aggregate_winner_score": false,
+    "individual_black_reference_frames_valid": true
+  },
+  "artifact_contract": {
+    "required": [
+      "n003-preflight-v3-config.json",
+      "n003-preflight-v3-progress.json",
+      "n003-preflight-v3-raw.json",
+      "n003-preflight-v3-summary.json"
+    ]
+  }
+}
