@@ -200,3 +200,14 @@ add_executable(phos-n003-comparison
 )
 configure_lane_n_renderer(phos-n003-comparison)
 add_dependencies(phos-n003-comparison phos-n003-comparison-shaders)
+
+# Quality/reference evidence is a separate one-shot target so expensive
+# converged reference rendering never contaminates the replicated timing run.
+add_executable(phos-n003-quality
+  n003_quality_main.cpp
+  n003_comparison_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n003-quality)
+add_dependencies(phos-n003-quality phos-n003-comparison-shaders)
