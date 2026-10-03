@@ -10,6 +10,7 @@
     "n002_completion_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
     "v1_result": "timing-unsuitable: absolute across-process timing noise 48.297%, derived threshold 145%",
     "v2_result": "timing-unsuitable: paired fresh-process A/A threshold 110%; short scenarios showed near-2x timing modes",
+    "v3_commit": "ac143a567a056ff520e6f5ff73904c58196e989b",
     "v3_result": "timing-unsuitable: same-process prewarmed A/A threshold 207.5%; static p95 pair effect 82.3%",
     "v4_commit": "8f9c78bddf31cd4d39070be5087a122c4b8edd84",
     "v4_result": "timing-unsuitable: hot-adjacent A/A threshold 98.5%; moving-rigid dominated residual timing instability"
