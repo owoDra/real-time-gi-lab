@@ -1,4 +1,4 @@
-# Lane N N001 image-producing renderer/reference bring-up.
+# Lane N image-producing renderer/reference experiments.
 
 find_package(Threads REQUIRED)
 
@@ -71,8 +71,7 @@ set(N001_SHADER_OUTPUTS
 )
 add_custom_target(phos-n001-shaders DEPENDS ${N001_SHADER_OUTPUTS})
 
-add_executable(phos-n001
-  n001_main.cpp
+set(N001_SHARED_SOURCES
   n001_runtime.cpp
   n001_reference.cpp
   imported/integration/i001_compute.cpp
@@ -86,33 +85,47 @@ add_executable(phos-n001
   ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
 )
 
-target_include_directories(phos-n001 PRIVATE
-  "${CMAKE_SOURCE_DIR}/src"
-  "${CMAKE_CURRENT_SOURCE_DIR}"
-  "${CMAKE_CURRENT_SOURCE_DIR}/imported/integration"
-  "${CMAKE_CURRENT_SOURCE_DIR}/imported/lane_a_split_rc"
-  "${CMAKE_CURRENT_SOURCE_DIR}/imported/lane_b_traversal"
-  "${CMAKE_CURRENT_SOURCE_DIR}/imported/lane_e_dynamic_geometry"
+function(configure_lane_n_renderer target)
+  target_include_directories(${target} PRIVATE
+    "${CMAKE_SOURCE_DIR}/src"
+    "${CMAKE_CURRENT_SOURCE_DIR}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imported/integration"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imported/lane_a_split_rc"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imported/lane_b_traversal"
+    "${CMAKE_CURRENT_SOURCE_DIR}/imported/lane_e_dynamic_geometry"
+  )
+  target_link_libraries(${target} PRIVATE
+    vk-bootstrap::vk-bootstrap
+    fastgltf::fastgltf
+    Threads::Threads
+    ${CMAKE_DL_LIBS}
+  )
+  target_compile_features(${target} PRIVATE cxx_std_20)
+  target_compile_definitions(${target} PRIVATE
+    PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+    PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+    PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  )
+  set_target_properties(${target} PROPERTIES
+    CXX_EXTENSIONS OFF
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+  )
+  add_dependencies(${target} phos-n001-shaders)
+  if(MSVC)
+    target_compile_options(${target} PRIVATE /W4 /permissive-)
+  else()
+    target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
+  endif()
+endfunction()
+
+add_executable(phos-n001
+  n001_main.cpp
+  ${N001_SHARED_SOURCES}
 )
-target_link_libraries(phos-n001 PRIVATE
-  vk-bootstrap::vk-bootstrap
-  fastgltf::fastgltf
-  Threads::Threads
-  ${CMAKE_DL_LIBS}
+configure_lane_n_renderer(phos-n001)
+
+add_executable(phos-n002
+  n002_main.cpp
+  ${N001_SHARED_SOURCES}
 )
-target_compile_features(phos-n001 PRIVATE cxx_std_20)
-target_compile_definitions(phos-n001 PRIVATE
-  PHOS_GI_LANE_A_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
-  PHOS_GI_LANE_B_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
-  PHOS_GI_INTEGRATION_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
-)
-set_target_properties(phos-n001 PROPERTIES
-  CXX_EXTENSIONS OFF
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
-)
-add_dependencies(phos-n001 phos-n001-shaders)
-if(MSVC)
-  target_compile_options(phos-n001 PRIVATE /W4 /permissive-)
-else()
-  target_compile_options(phos-n001 PRIVATE -Wall -Wextra -Wpedantic)
-endif()
+configure_lane_n_renderer(phos-n002)
