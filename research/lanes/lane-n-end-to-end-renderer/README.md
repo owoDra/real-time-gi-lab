@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight v1–v4 timing-unsuitable; clock-pinned v5 next (#31)**.
+Status: **N001 complete; N002 complete; N003 preflight v1–v4 timing-unsuitable; v5 withdrawn for host safety; replicated-median v6 next (#31)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -37,30 +37,27 @@ The six-scenario artifact passed correctness, provenance, reference convergence,
 
 Issue #31 is part of Lane N and is the preflight for N003 proper, not a separate lane.
 
-Retained failed timing calibrations:
+Retained calibration lineage:
 
-- v1 (`422945ea...`): absolute fresh-process timing, 48.297% worst noise, 145% threshold;
-- v2 (`aa46afd1...`): paired fresh-process A/A, 110% threshold, ~97% worst p95 effect;
-- v3 (`ac143a56...`): same-process prewarm, 207.5% threshold, 82.3% worst complete-frame p95 effect;
-- v4 (`8f9c78bd...`): hot-adjacent same-process A/A, 98.5% threshold and 27.2% worst complete-frame p95 effect. Static/stable/topology improved substantially, but moving-rigid still dominated robust timing noise.
+- v1 (`422945ea...`): 145% threshold, `timing-unsuitable`;
+- v2 (`aa46afd1...`): 110% threshold, `timing-unsuitable`; quality interpretation accepted;
+- v3 (`ac143a56...`): 207.5% threshold, `timing-unsuitable`;
+- v4 (`8f9c78bd...`): 98.5% threshold, 27.2% worst complete-frame p95, `timing-unsuitable`; static/stable/topology improved substantially while moving-rigid remained noisy;
+- v5: withdrawn before target execution because forcing the target GPU performance profile can trigger the host safety shutdown. GPU profile changes are now explicitly forbidden for Lane N measurement.
 
-Current v5 preserves the v4 binary and all statistical gates. The only new requirement is a pinned AMDGPU profiling state:
+Current v6 reuses the v4 `phos-n003-preflight` probe without renderer/C++ changes or host GPU policy changes. Each of eight outer blocks contains five complete hot-adjacent A/A micro-pairs. All 40 micro-pairs remain raw evidence; the formal sample for each outer block is the median of its five paired log ratios. A one-off transient therefore cannot dominate a block, while instability affecting >=3/5 micro-pairs remains visible.
 
-- `power_dpm_force_performance_level=profile_peak` before the campaign;
-- verify the level before/after every block and at campaign end;
-- retain available `pp_dpm_*` clock-state text in provenance;
-- keep the eight-block AB/BA schedule, 32-frame hot-adjacent warm-up, complete-GI/renderer boundaries, stage diagnostics, MAD estimator, <=20% suitability gates, and zero sample exclusion unchanged.
+Formal gates remain strict: <=20% derived threshold, <=20% p95 block effect, zero A/A formal-claim triggers, >=75% same-direction outer blocks for any future current-vs-vanilla claim, no stage active/inactive mismatches, no sample deletion, and no completed-PASS rerun.
 
 See:
 
-- `experiments/003-n003-preflight-calibration-v5-config.json`;
+- `experiments/003-n003-preflight-calibration-v6-config.json`;
 - `experiments/003-n003-preflight-calibration.md`;
-- `n003_preflight_v5_contract.py` / `run_n003_preflight_v5.py` / `test_n003_preflight_v5_contract.py`;
-- `n003_gpu_profile.sh`;
+- `n003_preflight_v6_contract.py` / `run_n003_preflight_v6.py` / `test_n003_preflight_v6_contract.py`;
 - reused `n003_preflight_main.cpp` / `phos-n003-preflight` measurement probe.
 
 Quality interpretation remains accepted from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are primary scenario-by-scenario metrics with no aggregate winner score.
 
-N003 proper must not start until v5 passes and both the derived timing threshold and required GPU performance state are recorded in result truth.
+N003 proper must not start until v6 passes and its derived timing threshold is recorded in result truth. N003 proper must use the same five-micro-pair/eight-block aggregation if accepted.
 
 Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
