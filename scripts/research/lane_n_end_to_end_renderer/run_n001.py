@@ -8,6 +8,7 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 
 import n001_contract as contract
 
@@ -52,7 +53,7 @@ def require_clean_lane_n() -> dict[str, object]:
     return {"branch": branch, "commit": commit, "dirty": False}
 
 
-def validate_scene(config: dict) -> Path:
+def scene_provenance(config: dict) -> tuple[Path, dict[str, object]]:
     scene = (ROOT / config["scene"]["path"]).resolve()
     if not scene.is_file():
         raise contract.ContractError(f"N001 scene is missing: {scene}")
@@ -62,7 +63,57 @@ def validate_scene(config: dict) -> Path:
         raise contract.ContractError(
             f"N001 scene digest mismatch: expected {expected}, got {actual}"
         )
-    return scene
+
+    try:
+        gltf = json.loads(scene.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise contract.ContractError(f"N001 could not parse scene glTF: {error}") from error
+
+    scene_root = scene.parent.resolve()
+    buffers: list[dict[str, object]] = []
+    for index, entry in enumerate(gltf.get("buffers", [])):
+        if not isinstance(entry, dict):
+            raise contract.ContractError(f"N001 glTF buffer[{index}] is not an object")
+        uri = entry.get("uri")
+        if not isinstance(uri, str) or not uri:
+            raise contract.ContractError(
+                f"N001 glTF buffer[{index}] must use a local external URI"
+            )
+        lowered = uri.lower()
+        if lowered.startswith("data:") or "://" in uri:
+            raise contract.ContractError(
+                f"N001 glTF buffer[{index}] must be a local external file"
+            )
+        relative = Path(unquote(uri))
+        if relative.is_absolute() or ".." in relative.parts:
+            raise contract.ContractError(
+                f"N001 glTF buffer[{index}] escapes the scene directory"
+            )
+        path = (scene_root / relative).resolve()
+        if not path.is_relative_to(scene_root) or not path.is_file():
+            raise contract.ContractError(
+                f"N001 glTF buffer[{index}] is missing or outside the scene directory: {uri}"
+            )
+        buffers.append(
+            {
+                "index": index,
+                "uri": uri,
+                "bytes": path.stat().st_size,
+                "sha256": contract.sha256_file(path),
+            }
+        )
+
+    bundle_payload = {
+        "scene_sha256": actual,
+        "buffers": buffers,
+    }
+    bundle_sha256 = contract.sha256_bytes(
+        contract.canonical_json_bytes(bundle_payload)
+    )
+    return scene, {
+        **bundle_payload,
+        "bundle_sha256": bundle_sha256,
+    }
 
 
 def validation_error_count(stderr: str) -> int:
@@ -70,14 +121,11 @@ def validation_error_count(stderr: str) -> int:
 
 
 def lifetime_error_count(memory: dict[str, object]) -> int:
-    try:
-        values = {
-            key: int(value)
-            for key, value in memory.items()
-            if isinstance(value, int) and not isinstance(value, bool)
-        }
-    except (TypeError, ValueError):
-        return 1
+    values = {
+        key: value
+        for key, value in memory.items()
+        if isinstance(value, int) and not isinstance(value, bool)
+    }
     if set(values) != set(memory):
         return 1
     if any(value < 0 for value in values.values()):
@@ -97,6 +145,7 @@ def finalize_runtime_artifact(
     root: Path,
     config: dict,
     git_identity: dict[str, object],
+    scene_identity: dict[str, object],
     validation_errors: int,
 ) -> dict:
     runtime_path = root / "n001-runtime.json"
@@ -143,6 +192,7 @@ def finalize_runtime_artifact(
         "git": git_identity,
         "device": runtime.get("device"),
         "scene_sha256": config["scene"]["sha256"],
+        "scene_bundle": scene_identity,
         "playback_sha256": playback["playback_sha256"],
         "validation_layer_error_lines": validation_errors,
         "frames": frames,
@@ -152,6 +202,8 @@ def finalize_runtime_artifact(
         encoding="utf-8",
     )
     result = contract.validate_target_artifact(root, config)
+    result["scene_bundle_sha256"] = scene_identity["bundle_sha256"]
+    result["scene_external_buffer_count"] = len(scene_identity["buffers"])
     (root / "n001-validation-summary.json").write_text(
         json.dumps(result, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -161,7 +213,7 @@ def finalize_runtime_artifact(
 
 def run_target(root: Path, binary: Path, config: dict) -> int:
     git_identity = require_clean_lane_n()
-    scene = validate_scene(config)
+    scene, scene_identity = scene_provenance(config)
     if not binary.is_file():
         raise contract.ContractError(
             f"N001 target binary is missing: {binary}; build phos-n001 first"
@@ -193,10 +245,11 @@ def run_target(root: Path, binary: Path, config: dict) -> int:
 
     errors = validation_error_count(proc.stderr)
     result = finalize_runtime_artifact(
-        root, config, git_identity, errors
+        root, config, git_identity, scene_identity, errors
     )
     print("N001 target artifact validation: PASS")
     print(f"playback_sha256={result['playback_sha256']}")
+    print(f"scene_bundle_sha256={result['scene_bundle_sha256']}")
     return 0
 
 
