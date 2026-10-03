@@ -49,7 +49,7 @@ HOST_FIELDS = (
 
 def git(*args: str) -> str:
     proc = subprocess.run(
-        ["git", *args], cwd=ROOT, text=True, capture_output=True, check=False
+        ["git", *args), cwd=ROOT, text=True, capture_output=True, check=False
     )
     if proc.returncode != 0:
         raise contract.ContractError(proc.stderr.strip())
@@ -167,7 +167,7 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
     if scene_sha != config["baseline"]["scene_sha256"]:
         raise contract.ContractError("N003 diagnostics scene digest mismatch")
 
-    root.mkdir(parents=True, exist_ok=False)
+    root.mkdir(parents=True, exist_ok=True)
     command = [
         str(binary),
         "--artifact-dir", str(root),
