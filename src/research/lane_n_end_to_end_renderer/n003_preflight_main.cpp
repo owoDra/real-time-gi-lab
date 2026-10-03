@@ -101,14 +101,21 @@ struct Sample {
     const ScenarioSpec& spec,
     std::uint32_t source_warmup_frames) {
     lane_n::I001Runtime runtime(options_for(scene, spec));
-    for (std::uint32_t index = 0; index < source_warmup_frames; ++index) {
-        (void)runtime.run_frame(false);
-    }
-    const auto warmup_quality = runtime.validate_last_frame();
-    if (!warmup_quality.passed) {
+
+    // Validate the source state early, then leave the final warm-up frame
+    // immediately adjacent to the measured target transition. v3 validated
+    // after all warm-up frames, and that validation path performs independent
+    // reference GPU work and buffer traffic; it broke the intended hot-start
+    // boundary before the measured frame.
+    (void)runtime.run_frame(false);
+    const auto source_quality = runtime.validate_last_frame();
+    if (!source_quality.passed) {
         throw std::runtime_error(
-            std::string("N003 preflight source warm-up correctness failed for ") +
+            std::string("N003 preflight source correctness failed for ") +
             spec.name);
+    }
+    for (std::uint32_t index = 1; index < source_warmup_frames; ++index) {
+        (void)runtime.run_frame(false);
     }
 
     lane_n::I001FrameResult measured{};
@@ -244,8 +251,9 @@ int main(int argc, char** argv) {
         out << std::setprecision(17)
             << "{\n"
             << "  \"schema_version\": 1,\n"
-            << "  \"protocol_version\": \"paired-control-v3\",\n"
+            << "  \"protocol_version\": \"paired-control-v4\",\n"
             << "  \"source_warmup_frames\": " << source_warmup_frames << ",\n"
+            << "  \"warmup_validation_position\": \"after-first-source-frame\",\n"
             << "  \"start_order\": \"" << start_order << "\",\n"
             << "  \"device\": {\n"
             << "    \"name\": \"" << device.device_name << "\",\n"
