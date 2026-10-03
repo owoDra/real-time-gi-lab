@@ -39,38 +39,6 @@ using Clock = std::chrono::steady_clock;
     return {value.x / length, value.y / length, value.z / length};
 }
 
-void n002_recompute_bounds(
-    lane_a::SceneSurfaceSet& a_scene,
-    lane_b::B002Scene& b_scene) {
-    for (int axis = 0; axis < 3; ++axis) {
-        a_scene.min_position[axis] =
-            std::numeric_limits<float>::infinity();
-        a_scene.max_position[axis] =
-            -std::numeric_limits<float>::infinity();
-    }
-    b_scene.bounds = {};
-    for (std::size_t index = 0; index < a_scene.samples.size(); ++index) {
-        const auto& sample = a_scene.samples[index];
-        for (int axis = 0; axis < 3; ++axis) {
-            a_scene.min_position[axis] = std::min(
-                a_scene.min_position[axis],
-                sample.position[axis]);
-            a_scene.max_position[axis] = std::max(
-                a_scene.max_position[axis],
-                sample.position[axis]);
-        }
-        b_scene.bounds = lane_b::merge(
-            b_scene.bounds,
-            lane_b::triangle_bounds(b_scene.triangles[index]));
-    }
-    b_scene.diagonal = lane_b::length(
-        b_scene.bounds.max - b_scene.bounds.min);
-    if (!std::isfinite(b_scene.diagonal) || b_scene.diagonal <= 0.0F) {
-        throw std::runtime_error(
-            "N002 topology mutation produced invalid scene bounds");
-    }
-}
-
 } // namespace
 
 I001FrameResult I001Runtime::run_topology_churn_frame() {
@@ -122,6 +90,8 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
     // primitives with new primitive identities and changed geometry while the
     // object slot count remains constant. Semantically this is delete+insert,
     // so topology changes even though renderer buffer capacity is stable.
+    // Scene bounds stay frozen: topology churn must not silently move the
+    // camera/light contract through build_a001_params().
     for (std::size_t local = 0; local < impl_->moving.primitives.size(); ++local) {
         const auto primitive = impl_->moving.primitives[local];
         auto& triangle = impl_->b_scene.triangles.at(primitive);
@@ -161,7 +131,6 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
         throw std::runtime_error(
             "N002 topology mutation did not match the frozen 50% churn schedule");
     }
-    n002_recompute_bounds(impl_->a_scene, impl_->b_scene);
     const auto geometry_prepare_cpu_us =
         n002_elapsed_us(prepare_start);
 
