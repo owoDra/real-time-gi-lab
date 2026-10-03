@@ -1,5 +1,14 @@
 {
   "schema_version": 1,
   "lane": "lane-n-end-to-end-renderer",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "N001",
+      "slug": "renderer-reference-bringup",
+      "status": "complete",
+      "result": "001-renderer-reference-bringup.md",
+      "target_artifact": "out/research/lane-n-end-to-end-renderer/001-renderer-reference-bringup/20261003T040015Z",
+      "decision": "renderer/reference bring-up accepted; no architecture performance claim"
+    }
+  ]
 }
