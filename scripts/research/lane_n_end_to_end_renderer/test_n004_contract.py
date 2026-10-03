@@ -70,6 +70,32 @@ def main() -> int:
         "N004 blocker classification changed",
     )
 
+    require(
+        runner.correctness_failed({
+            "source": {"internal_correctness": False},
+            "frames": [{"internal_correctness": True}],
+        }),
+        "N004 source correctness failure must remain observable",
+    )
+    require(
+        runner.correctness_failed({
+            "source": {"internal_correctness": True},
+            "frames": [{"internal_correctness": False}],
+        }),
+        "N004 target correctness failure must remain observable",
+    )
+    require(
+        not runner.correctness_failed({
+            "source": {"internal_correctness": True},
+            "frames": [{"internal_correctness": True}],
+        }),
+        "N004 correctness pass was misclassified",
+    )
+    require(
+        families["world-shape"]["correctness_or_capacity_failure_is_blocker"] is True,
+        "N004 world correctness failure must remain a blocker",
+    )
+
     with tempfile.TemporaryDirectory() as tmp:
         root = Path(tmp)
         manifest_a = scene_factory.generate_all(root / "a")
@@ -105,7 +131,7 @@ def main() -> int:
     require("n004_a001_runtime.cpp" in cmake and "N004_SHARED_SUPPORT_SOURCES" in cmake,
             "N004 isolated source wiring missing")
 
-    print("N004 contract/scene-factory/isolation tests: PASS")
+    print("N004 contract/scene-factory/isolation/correctness tests: PASS")
     return 0
 
 
