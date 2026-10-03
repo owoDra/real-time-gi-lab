@@ -1,5 +1,6 @@
 #include "imported/lane_b_traversal/b002_hwrt.hpp"
 
+#include <algorithm>
 #include <array>
 #include <chrono>
 #include <stdexcept>
