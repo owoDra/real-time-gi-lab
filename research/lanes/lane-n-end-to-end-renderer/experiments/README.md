@@ -9,6 +9,7 @@
 - `003-n003-preflight-calibration-v5-config.json` — safety tombstone only; clock-pinned/profile-changing v5 was withdrawn before target execution and must not be run.
 - `003-n003-preflight-calibration-v6-config.json` / `003-n003-preflight-calibration.md` — retained replicated-median v6 timing calibration lineage and final scenario-scoped preflight decision.
 - `003-n003-moving-workload-diagnostic-config.json` — completed moving-rigid workload-invariance diagnostic; all required integer counters were invariant.
-- `003-n003-comparison-config.json` / `003-n003-comparison.md` — N003 proper current-vs-vanilla Split RC same-boundary contract, including frozen timing and quality interpretation.
+- `003-n003-comparison-config.json` / `003-n003-comparison.md` — completed N003 proper current-vs-vanilla Split RC same-boundary contract/result interpretation.
+- `004-n004-weakness-atlas-config.json` / `004-n004-weakness-atlas.md` — prospective N004 weakness-atlas matrix and classification contract; target evidence not yet accepted.
 
 Raw target artifacts remain under `out/research/`; they are not committed here.
