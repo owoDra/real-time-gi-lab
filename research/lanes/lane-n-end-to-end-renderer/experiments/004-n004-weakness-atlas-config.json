@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "experiment": "N004-weakness-atlas",
+  "protocol_version": "n004-weakness-atlas-v1",
+  "parent_issue": 26,
+  "issue": 39,
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "baseline": {
+    "role": "current-lane-e-final-hwrt",
+    "scene": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+    "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+    "resolution": [320, 180],
+    "cascades": 4,
+    "rays_per_probe": 8,
+    "source_warmup_frames": 32
+  },
+  "host_safety": {
+    "gpu_profile_changes": "forbidden",
+    "host_gpu_policy": "leave-unchanged"
+  },
+  "reference": {
+    "min_spp": 512,
+    "max_spp": 8192,
+    "max_diffuse_bounces": 8,
+    "replicate_p99_abs_luminance_max": 0.001,
+    "replicate_p99_relative_luminance_max": 0.01,
+    "relative_luminance_floor": 0.0001
+  },
+  "quality_metrics": {
+    "scale_aware_fraction": 0.05,
+    "scale_aware_floor": 0.0001,
+    "generic_not_observed": {
+      "rgb_rms_max_exclusive": 0.001,
+      "p99_relative_luminance_max_exclusive": 0.05,
+      "scale_aware_affected_fraction_max_exclusive": 0.01
+    },
+    "generic_material_blocker": {
+      "minimum_trigger_count": 2,
+      "rgb_rms_min": 0.01,
+      "p99_relative_luminance_min": 0.25,
+      "scale_aware_affected_fraction_min": 0.10
+    }
+  },
+  "families": {
+    "thin-geometry-light-leak": {
+      "scenes": ["leak-thin", "leak-medium", "leak-thick"],
+      "target_frames": 1,
+      "dark_reference_luminance_max": 0.001,
+      "false_irradiance_delta_min": 0.001,
+      "not_observed": {
+        "false_irradiance_fraction_max_exclusive": 0.005,
+        "false_irradiance_p99_max_exclusive": 0.001
+      },
+      "material_blocker": {
+        "false_irradiance_fraction_min": 0.05,
+        "false_irradiance_p99_min": 0.01
+      }
+    },
+    "camera-disocclusion": {
+      "scenario": "camera-motion",
+      "target_frames": 8,
+      "bounded_convergence_frame_max": 4
+    },
+    "changing-illumination": {
+      "scenario": "light-motion",
+      "target_frames": 8,
+      "bounded_convergence_frame_max": 4
+    },
+    "dynamic-geometry": {
+      "target_frames": 4,
+      "scenarios": [
+        {"name": "moving-rigid", "scenario": "moving-rigid", "topology": false, "formal_timing": false},
+        {"name": "stable-topology-deforming", "scenario": "deforming-control", "topology": false, "formal_timing": true},
+        {"name": "topology-changing-high-churn", "scenario": "deforming-control", "topology": true, "formal_timing": true}
+      ]
+    },
+    "world-shape": {
+      "scenes": ["world-sparse", "world-dense", "world-large-horizontal", "world-vertical-tall"],
+      "target_frames": 1,
+      "correctness_or_capacity_failure_is_blocker": true
+    },
+    "capability-boundary": {
+      "diffuse_reference_bounces": [1, 8],
+      "higher_order_material_rule": {
+        "minimum_trigger_count": 2,
+        "rgb_rms_min": 0.005,
+        "p99_relative_luminance_min": 0.10,
+        "scale_aware_affected_fraction_min": 0.05
+      },
+      "glossy_specular": {
+        "renderer_claim": "constant-white-lambertian-diffuse-only",
+        "expected_classification": "capability-not-implemented"
+      }
+    }
+  },
+  "classification_values": [
+    "not-observed-under-tested-regime",
+    "present-but-bounded",
+    "material-blocker",
+    "capability-not-implemented",
+    "measurement-limited"
+  ],
+  "timing": {
+    "primary": "gpu-timestamp",
+    "cpu_wall": "diagnostic-only",
+    "moving_rigid": "measurement-limited-descriptive-only",
+    "complete_gi_and_renderer_boundaries": "reuse-N001-N003"
+  },
+  "sample_exclusion": "forbidden",
+  "aggregate_weakness_score": "forbidden"
+}
