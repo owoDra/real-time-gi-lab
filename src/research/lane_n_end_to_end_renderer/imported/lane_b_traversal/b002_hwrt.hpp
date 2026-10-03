@@ -87,6 +87,13 @@ public:
         return setup_stats_;
     }
 
+    // Diagnostic-only renderer-owned host mirror accounting. This does not
+    // attempt to estimate driver/internal Vulkan host memory; it reports only
+    // the explicit dynamic primitive-index vector owned by this traversal.
+    [[nodiscard]] std::size_t host_mirror_bytes() const noexcept {
+        return dynamic_primitives_.capacity() * sizeof(std::uint32_t);
+    }
+
     [[nodiscard]] HwrtTraceResult trace(
         std::span<const GpuRay> rays,
         std::uint32_t iterations);
