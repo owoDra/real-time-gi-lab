@@ -222,3 +222,15 @@ add_executable(phos-n003-diagnostics
 )
 configure_lane_n_renderer(phos-n003-diagnostics)
 add_dependencies(phos-n003-diagnostics phos-n003-comparison-shaders)
+
+# N004 weakness-atlas evidence target. It reuses the accepted current renderer,
+# the N002 topology transition and the N001 converged reference without adding
+# any mitigation. One executable is parameterized by scene/scenario so all
+# atlas families share the same image/timing/memory boundaries.
+add_executable(phos-n004-atlas
+  n004_atlas_main.cpp
+  n002_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n004-atlas)
