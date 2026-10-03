@@ -173,6 +173,14 @@ public:
     // rebuild, then executes the unchanged complete renderer/GI frame.
     [[nodiscard]] I001FrameResult run_topology_churn_frame();
 
+    // N003-only hooks. The comparison target constructs the accepted current
+    // runtime first, then swaps only its candidate/renderer traversal to the
+    // historical Integration #13 vanilla software-BVH baseline. N001/N002
+    // targets never call these methods, so their accepted semantics remain
+    // unchanged.
+    void configure_n003_vanilla_software_baseline();
+    [[nodiscard]] I001FrameResult run_n003_vanilla_topology_churn_frame();
+
     [[nodiscard]] I001Quality validate_last_frame();
     [[nodiscard]] I001RendererReadback renderer_readback();
 
