@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight v1 timing-unsuitable; paired-control v2 next (#31)**.
+Status: **N001 complete; N002 complete; N003 preflight v1/v2 timing-unsuitable; same-process prewarmed v3 next (#31)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -35,18 +35,31 @@ The six-scenario artifact passed correctness, provenance, reference convergence,
 
 ## N003 preflight/calibration
 
-Issue #31 is part of Lane N and is the preflight for N003 proper, not a separate lane. See:
+Issue #31 is part of Lane N and is the preflight for N003 proper, not a separate lane.
 
-- `experiments/003-n003-preflight-calibration-config.json`;
+v1 at commit `422945ea32164e487e8562214dc7568f6e2ad9a6` used absolute fresh-process timing and failed: 48.297% worst noise, 145% derived threshold.
+
+v2 at commit `aa46afd1594cf66cae440b30223cfc1350475a67` used eight fresh-process A/A pairs and also failed: 110% derived threshold and roughly 97% worst p95 pair effect. The short static/camera scenarios showed near-2x timing modes. Quality, however, was deterministic across all 16 A/B observations and the scale-aware quality metric had signal.
+
+Current v3 keeps the same timing boundary and statistical thresholds but uses a dedicated `phos-n003-preflight` timing probe:
+
+- A and B run in the same process;
+- each role receives 32 unmeasured source-state warm-up frames immediately before its measured target transition;
+- dynamic update/rebuild remains inside the one measured target frame;
+- eight fresh process pair blocks with alternating AB/BA order;
+- complete-GI, complete-renderer and per-stage GPU timings are retained.
+
+See:
+
+- `experiments/003-n003-preflight-calibration-v3-config.json`;
 - `experiments/003-n003-preflight-calibration.md`;
-- `n003_preflight_contract.py` / `run_n003_preflight.py` / `test_n003_preflight_contract.py`.
+- `n003_preflight_v3_contract.py` / `run_n003_preflight_v3.py` / `test_n003_preflight_v3_contract.py`;
+- `n003_preflight_main.cpp` / `phos-n003-preflight`.
 
-v1 at commit `422945ea32164e487e8562214dc7568f6e2ad9a6` measured absolute timing across six fresh processes. It correctly failed as timing-unsuitable: worst noise 48.297%, implied material-change threshold 145%. The failed artifact is retained.
+The timing decision rule remains median paired `log(B/A)` plus robust MAD null bound, >=75% same-direction support, <=20% derived threshold, <=20% worst p95 A/A pair effect, and zero A/A formal-claim triggers. Failed v1/v2 artifacts remain retained; no sample deletion or post-hoc threshold relaxation is allowed.
 
-v2 is frozen before any current-vs-vanilla measurement and calibrates the actual N003 decision unit: eight fresh-process current/current A/A pairs. The primary statistic is median paired `log(B/A)`; robust null spread uses MAD. A future timing claim requires both the derived magnitude threshold and at least 75% same-direction paired effects. A/A control must not trigger that rule, and its worst p95 pair effect must remain <=20%.
+Quality interpretation remains unchanged from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are the primary scenario-by-scenario metrics with no aggregate winner score.
 
-The legacy fixed-absolute `affected_pixel_fraction` remains diagnostic-only. N003 uses scale-aware affected pixels with `abs_error >= 0.05 * max(abs(reference_luminance), 0.0001)` alongside RGB RMS and p99 absolute luminance error. Quality remains scenario-by-scenario with no aggregate winner score.
-
-N003 proper must not start until paired-control v2 passes and the derived timing threshold is recorded in result truth.
+N003 proper must not start until v3 passes and its derived timing threshold is recorded in result truth.
 
 Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
