@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import subprocess
@@ -142,6 +143,87 @@ def lifetime_error_count(memory: dict[str, object]) -> int:
     return 0 if device_components and peak >= max(device_components) else 1
 
 
+def percentile(sorted_values: list[float], fraction: float) -> float:
+    if not sorted_values:
+        return 0.0
+    position = fraction * (len(sorted_values) - 1)
+    lo = math.floor(position)
+    hi = math.ceil(position)
+    if lo == hi:
+        return sorted_values[lo]
+    weight = position - lo
+    return sorted_values[lo] * (1.0 - weight) + sorted_values[hi] * weight
+
+
+def image_signal_stats(
+    image: contract.PFMImage,
+    relative_floor: float,
+) -> dict[str, float | int]:
+    luminance: list[float] = []
+    for pixel in range(image.width * image.height):
+        base = pixel * 3
+        value = (
+            image.pixels[base + 0] * 0.2126
+            + image.pixels[base + 1] * 0.7152
+            + image.pixels[base + 2] * 0.0722
+        )
+        luminance.append(value)
+
+    ordered = sorted(luminance)
+    count = len(ordered)
+    positive = sum(1 for value in ordered if value > 0.0)
+    above_floor = sum(1 for value in ordered if value >= relative_floor)
+    return {
+        "pixel_count": count,
+        "min_luminance": ordered[0],
+        "mean_luminance": sum(ordered) / count,
+        "p95_luminance": percentile(ordered, 0.95),
+        "p99_luminance": percentile(ordered, 0.99),
+        "max_luminance": ordered[-1],
+        "positive_pixel_fraction": positive / count,
+        "above_relative_floor_fraction": above_floor / count,
+    }
+
+
+def add_signal_sanity(
+    root: Path,
+    result: dict,
+    config: dict,
+) -> dict:
+    provenance_path = root / "n001-provenance.json"
+    provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
+    frames = provenance.get("frames")
+    if not isinstance(frames, list) or not frames:
+        raise contract.ContractError("N001 signal sanity requires provenance frames")
+
+    relative_floor = float(config["image_metrics"]["relative_luminance_floor"])
+    signal_frames: list[dict[str, object]] = []
+    for frame in frames:
+        index = frame.get("frame")
+        output = contract.read_pfm(root / str(frame.get("output_hdr")))
+        reference = contract.read_pfm(root / str(frame.get("reference_hdr")))
+        output_stats = image_signal_stats(output, relative_floor)
+        reference_stats = image_signal_stats(reference, relative_floor)
+        if output_stats["max_luminance"] <= 0.0:
+            raise contract.ContractError(
+                f"N001 frame {index} renderer HDR has no positive radiance signal"
+            )
+        if reference_stats["max_luminance"] <= 0.0:
+            raise contract.ContractError(
+                f"N001 frame {index} reference HDR has no positive radiance signal"
+            )
+        signal_frames.append(
+            {
+                "frame": index,
+                "output": output_stats,
+                "reference": reference_stats,
+            }
+        )
+
+    result["frame_signal"] = signal_frames
+    return result
+
+
 def is_nixos(os_release: Path = Path("/etc/os-release")) -> bool:
     try:
         lines = os_release.read_text(encoding="utf-8").splitlines()
@@ -232,6 +314,7 @@ def finalize_runtime_artifact(
         encoding="utf-8",
     )
     result = contract.validate_target_artifact(root, config)
+    result = add_signal_sanity(root, result, config)
     result["scene_bundle_sha256"] = scene_identity["bundle_sha256"]
     result["scene_external_buffer_count"] = len(scene_identity["buffers"])
     (root / "n001-validation-summary.json").write_text(
@@ -312,8 +395,10 @@ def main() -> int:
 
     if args.target_artifact is None:
         parser.error("--target-artifact is required for --phase validate-target")
-    result = contract.validate_target_artifact(args.target_artifact.resolve(), config)
-    output = args.target_artifact.resolve() / "n001-validation-summary.json"
+    target_root = args.target_artifact.resolve()
+    result = contract.validate_target_artifact(target_root, config)
+    result = add_signal_sanity(target_root, result, config)
+    output = target_root / "n001-validation-summary.json"
     output.write_text(
         json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
