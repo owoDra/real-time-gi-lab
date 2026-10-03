@@ -61,45 +61,32 @@ def normalized_v4_config(config: dict[str, Any]) -> dict[str, Any]:
     timing["comparison_unit"] = "same-process-hot-adjacent-A-A"
     timing["fresh_process_pair_blocks"] = 8
     timing["start_orders"] = list(EXPECTED_OUTER_ORDERS)
-    timing["settle_seconds_between_pairs"] = float(
-        timing["settle_seconds_between_outer_blocks"]
-    )
+    timing["settle_seconds_between_pairs"] = float(timing["settle_seconds_between_outer_blocks"])
     timing["primary_statistic"] = "median-paired-log-ratio"
     timing["noise_estimator"] = "abs-median-log-bias-plus-3x-1.4826-MAD"
     timing["formal_claim_requires"] = {
         "magnitude_at_least_derived_threshold": True,
         "minimum_same_direction_pair_fraction": float(
-            config["timing_calibration"]["formal_claim_requires"][
-                "minimum_same_direction_block_fraction"
-            ]
+            config["timing_calibration"]["formal_claim_requires"]["minimum_same_direction_block_fraction"]
         ),
     }
     timing["control_sanity"] = {
         "must_not_trigger_formal_claim": True,
         "maximum_p95_pair_effect_fraction": float(
-            config["timing_calibration"]["control_sanity"][
-                "maximum_p95_block_effect_fraction"
-            ]
+            config["timing_calibration"]["control_sanity"]["maximum_p95_block_effect_fraction"]
         ),
     }
     for key in (
-        "measurement_probe_protocol",
-        "outer_blocks",
-        "micro_pairs_per_block",
-        "outer_start_orders",
-        "micro_order_rule",
-        "settle_seconds_between_outer_blocks",
-        "raw_micro_pair_effect_role",
-        "all_micro_pairs_retained",
-        "gpu_profile_changes",
+        "measurement_probe_protocol", "outer_blocks", "micro_pairs_per_block",
+        "outer_start_orders", "micro_order_rule", "settle_seconds_between_outer_blocks",
+        "raw_micro_pair_effect_role", "all_micro_pairs_retained", "gpu_profile_changes",
+        "host_gpu_policy",
     ):
         timing.pop(key, None)
     normalized["artifact_contract"] = {
         "required": [
-            "n003-preflight-v4-config.json",
-            "n003-preflight-v4-progress.json",
-            "n003-preflight-v4-raw.json",
-            "n003-preflight-v4-summary.json",
+            "n003-preflight-v4-config.json", "n003-preflight-v4-progress.json",
+            "n003-preflight-v4-raw.json", "n003-preflight-v4-summary.json",
         ]
     }
     return normalized
@@ -124,30 +111,22 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("N003 preflight v6 comparison unit changed")
     if timing.get("measurement_probe_protocol") != PROBE_PROTOCOL_VERSION:
         raise ContractError("N003 preflight v6 probe protocol changed")
-    if timing.get("outer_blocks") != 8:
-        raise ContractError("N003 preflight v6 requires eight outer blocks")
-    if timing.get("micro_pairs_per_block") != 5:
-        raise ContractError("N003 preflight v6 requires five micro-pairs per block")
+    if timing.get("outer_blocks") != 8 or timing.get("micro_pairs_per_block") != 5:
+        raise ContractError("N003 preflight v6 requires 8 blocks x 5 micro-pairs")
     if _sequence(timing.get("outer_start_orders"), "outer_start_orders") != EXPECTED_OUTER_ORDERS:
         raise ContractError("N003 preflight v6 outer order schedule changed")
     if timing.get("micro_order_rule") != "alternate-from-outer-start-order":
         raise ContractError("N003 preflight v6 micro-order rule changed")
-    if timing.get("primary_statistic") != (
-        "median-of-five-micro-pair-log-ratios-then-median-across-eight-blocks"
-    ):
+    if timing.get("primary_statistic") != "median-of-five-micro-pair-log-ratios-then-median-across-eight-blocks":
         raise ContractError("N003 preflight v6 primary statistic changed")
-    if timing.get("noise_estimator") != (
-        "abs-median-block-log-bias-plus-3x-1.4826-MAD"
-    ):
+    if timing.get("noise_estimator") != "abs-median-block-log-bias-plus-3x-1.4826-MAD":
         raise ContractError("N003 preflight v6 noise estimator changed")
     if timing.get("raw_micro_pair_effect_role") != "diagnostic-only":
         raise ContractError("N003 preflight v6 raw micro-pair role changed")
-    if timing.get("sample_exclusion") != "forbidden":
-        raise ContractError("N003 preflight v6 sample exclusion must remain forbidden")
-    if timing.get("all_micro_pairs_retained") is not True:
-        raise ContractError("N003 preflight v6 must retain all micro-pairs")
-    if timing.get("gpu_profile_changes") != "forbidden":
-        raise ContractError("N003 preflight v6 must forbid GPU profile changes")
+    if timing.get("sample_exclusion") != "forbidden" or timing.get("all_micro_pairs_retained") is not True:
+        raise ContractError("N003 preflight v6 must retain every micro-pair")
+    if timing.get("gpu_profile_changes") != "forbidden" or timing.get("host_gpu_policy") != "leave-unchanged":
+        raise ContractError("N003 preflight v6 must leave host GPU policy unchanged")
     if timing.get("completed_campaign_rerun_budget") != 0:
         raise ContractError("N003 preflight v6 completed rerun budget changed")
 
@@ -171,14 +150,11 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("N003 preflight v6 control p95 ceiling changed")
 
     v4.validate_config(normalized_v4_config(config))
-
     artifact = _mapping(config.get("artifact_contract"), "artifact_contract")
     required = set(_sequence(artifact.get("required"), "artifact_contract.required"))
     if required != {
-        "n003-preflight-v6-config.json",
-        "n003-preflight-v6-progress.json",
-        "n003-preflight-v6-raw.json",
-        "n003-preflight-v6-summary.json",
+        "n003-preflight-v6-config.json", "n003-preflight-v6-progress.json",
+        "n003-preflight-v6-raw.json", "n003-preflight-v6-summary.json",
     }:
         raise ContractError("N003 preflight v6 artifact contract changed")
 
@@ -210,8 +186,7 @@ def _stats_from_block_logs(block_logs: list[float], raw_micro_logs: list[float])
     deviations = [abs(value - median_log) for value in block_logs]
     mad = float(statistics.median(deviations))
     robust_sigma = 1.4826 * mad
-    null_log_bound = abs(median_log) + 3.0 * robust_sigma
-    noise_fraction = math.expm1(null_log_bound)
+    noise_fraction = math.expm1(abs(median_log) + 3.0 * robust_sigma)
     block_ratios = [math.exp(value) for value in block_logs]
     raw_ratios = [math.exp(value) for value in raw_micro_logs]
     positive = sum(value > 0.0 for value in block_logs) / len(block_logs)
@@ -224,12 +199,8 @@ def _stats_from_block_logs(block_logs: list[float], raw_micro_logs: list[float])
         "mad_block_log_ratio": mad,
         "robust_sigma_block_log_ratio": robust_sigma,
         "noise_fraction": noise_fraction,
-        "p95_block_effect_fraction": _percentile(
-            [abs(value - 1.0) for value in block_ratios], 0.95
-        ),
-        "raw_micro_pair_p95_effect_fraction": _percentile(
-            [abs(value - 1.0) for value in raw_ratios], 0.95
-        ),
+        "p95_block_effect_fraction": _percentile([abs(value - 1.0) for value in block_ratios], 0.95),
+        "raw_micro_pair_p95_effect_fraction": _percentile([abs(value - 1.0) for value in raw_ratios], 0.95),
         "positive_block_fraction": positive,
         "negative_block_fraction": negative,
         "same_direction_block_fraction": max(positive, negative),
@@ -271,8 +242,7 @@ def summarize(blocks: list[dict[str, Any]], config: dict[str, Any]) -> dict[str,
                 micro_logs: list[float] = []
                 for micro in block["micro_pairs"]:
                     entry = micro["pair"]["scenarios"][scenario]
-                    ratio = float(entry["B"][axis]) / float(entry["A"][axis])
-                    log_ratio = math.log(ratio)
+                    log_ratio = math.log(float(entry["B"][axis]) / float(entry["A"][axis]))
                     micro_logs.append(log_ratio)
                     raw_logs.append(log_ratio)
                 block_logs.append(float(statistics.median(micro_logs)))
@@ -287,16 +257,11 @@ def summarize(blocks: list[dict[str, Any]], config: dict[str, Any]) -> dict[str,
         max(float(threshold_cfg["minimum_fraction"]), worst_noise),
         float(threshold_cfg["round_up_step_fraction"]),
     )
-    direction_floor = float(
-        timing_cfg["formal_claim_requires"]["minimum_same_direction_block_fraction"]
-    )
+    direction_floor = float(timing_cfg["formal_claim_requires"]["minimum_same_direction_block_fraction"])
     trigger_count = 0
     for axes in per_scenario.values():
         for stats in axes.values():
-            trigger = (
-                stats["median_effect_fraction"] >= derived
-                and stats["same_direction_block_fraction"] >= direction_floor
-            )
+            trigger = stats["median_effect_fraction"] >= derived and stats["same_direction_block_fraction"] >= direction_floor
             stats["would_trigger_formal_claim"] = trigger
             trigger_count += int(trigger)
 
@@ -323,9 +288,9 @@ def summarize(blocks: list[dict[str, Any]], config: dict[str, Any]) -> dict[str,
                     if a_active != b_active:
                         mismatches += 1
                         continue
-                    log_ratio = math.log(b / a)
-                    micro_logs.append(log_ratio)
-                    raw_logs.append(log_ratio)
+                    value = math.log(b / a)
+                    micro_logs.append(value)
+                    raw_logs.append(value)
                 if micro_logs:
                     block_logs.append(float(statistics.median(micro_logs)))
             stage_mismatches += mismatches
@@ -337,27 +302,17 @@ def summarize(blocks: list[dict[str, Any]], config: dict[str, Any]) -> dict[str,
                 "raw_active_micro_pair_count": len(raw_logs),
                 "below_floor_mismatch_count": mismatches,
                 "diagnostic_active_floor_us": floor_us,
-                "median_block_ratio_B_over_A": (
-                    float(statistics.median(block_ratios)) if block_ratios else None
-                ),
+                "median_block_ratio_B_over_A": float(statistics.median(block_ratios)) if block_ratios else None,
                 "p95_block_effect_fraction": p95_block,
-                "raw_micro_pair_p95_effect_fraction": _percentile(
-                    [abs(value - 1.0) for value in raw_ratios], 0.95
-                ),
+                "raw_micro_pair_p95_effect_fraction": _percentile([abs(value - 1.0) for value in raw_ratios], 0.95),
             }
             if p95_block > worst_stage["p95_block_effect_fraction"]:
-                worst_stage = {
-                    "scenario": scenario,
-                    "stage": stage,
-                    "p95_block_effect_fraction": p95_block,
-                }
+                worst_stage = {"scenario": scenario, "stage": stage, "p95_block_effect_fraction": p95_block}
         stage_diagnostics[scenario] = scenario_stages
 
     suitable = (
         derived <= float(threshold_cfg["timing_unsuitable_above_fraction"])
-        and worst_p95_block <= float(
-            timing_cfg["control_sanity"]["maximum_p95_block_effect_fraction"]
-        )
+        and worst_p95_block <= float(timing_cfg["control_sanity"]["maximum_p95_block_effect_fraction"])
         and trigger_count == 0
         and stage_mismatches == 0
     )
@@ -369,9 +324,7 @@ def summarize(blocks: list[dict[str, Any]], config: dict[str, Any]) -> dict[str,
         "worst_noise_fraction": worst_noise,
         "derived_material_change_threshold_fraction": derived,
         "worst_p95_block_effect_fraction": worst_p95_block,
-        "control_p95_block_ceiling_fraction": float(
-            timing_cfg["control_sanity"]["maximum_p95_block_effect_fraction"]
-        ),
+        "control_p95_block_ceiling_fraction": float(timing_cfg["control_sanity"]["maximum_p95_block_effect_fraction"]),
         "minimum_same_direction_block_fraction": direction_floor,
         "control_formal_claim_trigger_count": trigger_count,
         "stage_below_floor_mismatch_count": stage_mismatches,
