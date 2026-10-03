@@ -116,9 +116,6 @@ struct I001Memory {
     std::size_t image_bytes{};
 };
 
-// N003 diagnostic-only explicit host mirror accounting. These are logical
-// vector/BVH capacity bytes owned directly by the renderer code; allocator
-// bookkeeping and opaque driver/Vulkan host memory are intentionally excluded.
 struct I001N003HostMemory {
     std::size_t scene_surface_capacity_bytes{};
     std::size_t scene_triangle_capacity_bytes{};
@@ -177,21 +174,15 @@ public:
     I001Runtime& operator=(const I001Runtime&) = delete;
 
     [[nodiscard]] I001FrameResult run_frame(bool target_state);
-
-    // N002-only extension. The implementation is compiled by the topology
-    // target after including the accepted N001 runtime implementation. It
-    // mutates exactly the frozen dynamic owner, performs an object-local BLAS
-    // rebuild, then executes the unchanged complete renderer/GI frame.
     [[nodiscard]] I001FrameResult run_topology_churn_frame();
 
-    // N003-only hooks. The comparison target constructs the accepted current
-    // runtime first, then swaps only its candidate/renderer traversal to the
-    // historical Integration #13 vanilla software-BVH baseline. N001/N002
-    // targets never call these methods, so their accepted semantics remain
-    // unchanged.
     void configure_n003_vanilla_software_baseline();
     [[nodiscard]] I001FrameResult run_n003_vanilla_topology_churn_frame();
     [[nodiscard]] I001N003HostMemory n003_host_memory() const noexcept;
+
+    // N004-only control. Intermediate fractions are applied only to the
+    // prospective camera/light path; the default historical fraction is 1.
+    void set_n004_motion_fraction(float fraction);
 
     [[nodiscard]] I001Quality validate_last_frame();
     [[nodiscard]] I001RendererReadback renderer_readback();
