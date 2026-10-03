@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight/calibration target run next (#31)**.
+Status: **N001 complete; N002 complete; N003 preflight v1 timing-unsuitable; paired-control v2 next (#31)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -41,10 +41,12 @@ Issue #31 is part of Lane N and is the preflight for N003 proper, not a separate
 - `experiments/003-n003-preflight-calibration.md`;
 - `n003_preflight_contract.py` / `run_n003_preflight.py` / `test_n003_preflight_contract.py`.
 
-The timing protocol repeats the frozen six-scenario N002 baseline in six fresh-process blocks. `worst_noise` is the maximum absolute relative deviation from the across-block median over both `complete_gi_gpu` and `complete_renderer_gpu`. The N003 material-change floor is prospectively defined as `ceil_0.5%(max(1%, 3 * worst_noise))`; if it exceeds 20%, the boundary is timing-unsuitable for formal N003 performance claims.
+v1 at commit `422945ea32164e487e8562214dc7568f6e2ad9a6` measured absolute timing across six fresh processes. It correctly failed as timing-unsuitable: worst noise 48.297%, implied material-change threshold 145%. The failed artifact is retained.
+
+v2 is frozen before any current-vs-vanilla measurement and calibrates the actual N003 decision unit: eight fresh-process current/current A/A pairs. The primary statistic is median paired `log(B/A)`; robust null spread uses MAD. A future timing claim requires both the derived magnitude threshold and at least 75% same-direction paired effects. A/A control must not trigger that rule, and its worst p95 pair effect must remain <=20%.
 
 The legacy fixed-absolute `affected_pixel_fraction` remains diagnostic-only. N003 uses scale-aware affected pixels with `abs_error >= 0.05 * max(abs(reference_luminance), 0.0001)` alongside RGB RMS and p99 absolute luminance error. Quality remains scenario-by-scenario with no aggregate winner score.
 
-N003 proper must not start until #31's target calibration passes and the derived timing threshold is recorded in result truth.
+N003 proper must not start until paired-control v2 passes and the derived timing threshold is recorded in result truth.
 
 Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
