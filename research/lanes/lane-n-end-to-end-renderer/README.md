@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight complete; N003 proper unblocked**.
+Status: **N001 complete; N002 complete; N003 preflight complete; N003 proper implemented and awaiting local build/target evidence (#38)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -35,7 +35,7 @@ The moving-rigid workload diagnostic then proved exact source/target integer wor
 
 **Lane N must not change GPU power/performance profiles.** The host GPU policy remains unchanged.
 
-N003 timing interpretation is frozen per scenario before current-vs-vanilla data is collected:
+Frozen N003 timing thresholds:
 
 - static: 7.0%;
 - camera-motion: 1.5%;
@@ -44,16 +44,31 @@ N003 timing interpretation is frozen per scenario before current-vs-vanilla data
 - stable-topology-deforming: 2.5%;
 - topology-changing-high-churn: 1.5%.
 
-The same scenario threshold applies to complete-GI and complete-renderer axes, based on the worse calibrated axis. Formal claims still require >=75% same-direction outer blocks. No sample deletion, threshold relaxation or cross-scenario aggregate timing winner is permitted.
-
-Moving-rigid remains valid for correctness, workload, memory and image-quality comparison; its timing is descriptive only.
-
-Quality interpretation remains accepted from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are primary scenario-by-scenario metrics with no aggregate winner score.
+The same scenario threshold applies to complete-GI and complete-renderer axes, based on the worse calibrated axis. Formal claims require >=75% same-direction outer blocks. No sample deletion, threshold relaxation or cross-scenario aggregate timing winner is permitted.
 
 ## N003 proper
 
-N003 proper is now unblocked: compare the current architecture against a fair vanilla Split Radiance Cascades baseline under identical scene, transport semantics, resolution, rays/probes/cascades, reference frames, timing boundary and memory boundary.
+Issue #38 tracks the fair current-vs-vanilla Split RC same-boundary comparison. See `experiments/003-n003-comparison-config.json` and `experiments/003-n003-comparison.md`.
 
-Do not simplify vanilla Split RC or add new transport features. Report timing only for calibrated-eligible scenarios; report moving-rigid timing as measurement-limited. Quality/memory/correctness remain scenario-by-scenario for all six scenarios.
+Implementation is present but no N003 target result is accepted yet.
 
-Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
+Current role:
+
+- accepted N002 `LaneEFinalHwrt` renderer and object-local dynamic maintenance.
+
+Vanilla role:
+
+- historical Integration-13 global binary software-BVH baseline;
+- same A001 Split RC producer/cascade/probe/ray semantics;
+- whole global BVH rebuild for dynamic/topology changes;
+- N003-only software primary visibility and direct-light visibility so the baseline does not depend on current HWRT support architecture.
+
+N001/N002 runtime implementation files remain unchanged. N003 adds comparison-only hooks through `n003_comparison_runtime.cpp`; the only shared header change exposes those hooks.
+
+Timing/memory evidence uses `phos-n003-comparison` with five micro-pairs x eight outer blocks. Quality/reference evidence is intentionally separate in `phos-n003-quality` so converged reference rendering cannot contaminate timing measurements.
+
+Quality remains scenario-by-scenario using RGB RMS, p99 absolute luminance error and scale-aware affected fraction. A material scenario direction requires at least two of three primary metrics to move materially in the same direction. No aggregate quality winner is permitted.
+
+Moving-rigid remains valid for correctness, workload, memory and image quality; only its timing interpretation is measurement-limited.
+
+Raw target artifacts remain under `out/research/`. Continue in Issue #38 and parent Issue #26.
