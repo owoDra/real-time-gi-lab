@@ -20,6 +20,11 @@ struct A001Settings {
     std::uint32_t cascade_count{4};
     std::uint32_t rays_per_probe{8};
     std::uint32_t frame_id{};
+    // N004 control surface. Defaults preserve every historical A001/N001-N003
+    // target exactly: CameraMotion and LightMotion still use their full frozen
+    // target state unless N004 prospectively requests an intermediate fraction.
+    float camera_motion_fraction{1.0F};
+    float light_motion_fraction{1.0F};
 };
 
 struct alignas(16) A001ParamsGpu {
