@@ -38,7 +38,7 @@ The historical Integration-13 independent vanilla software-BVH reference, promot
 
 The vanilla path does **not** import the current architecture's object-local ownership, TLAS/BLAS update strategy, StrataBrick/Micro-BVH fallback or other support optimizations that define the comparison target. It also does not intentionally reduce Split RC sampling or image semantics.
 
-The `VanillaSoftware` path is not newly invented for N003: it is the independent vanilla software-BVH baseline already used by the earlier Integration #13 comparison. N003 adds only the complete renderer primary/composite path and the topology transition needed for the six-scenario Lane-N boundary.
+The `VanillaSoftware` path is not newly invented for N003: it is the independent vanilla software-BVH baseline already used by the earlier Integration #13 comparison. Integration #13 also retained A001 producer semantics/natural order and C001 sparse hash as shared stable contracts, so sharing those components here preserves the historical comparison identity rather than weakening vanilla.
 
 ## Shared semantics
 
@@ -74,9 +74,11 @@ The transient construction-time HWRT setup is outside warm-up, timing and retain
 
 ## Dynamic geometry
 
-For moving-rigid and stable-topology-deforming vanilla frames, the existing software candidate path uploads the changed triangles, rebuilds the global binary BVH on CPU and uploads the resulting node/order buffers. GPU upload/maintenance is counted inside the complete-GI and complete-renderer boundaries; CPU rebuild wall time is retained diagnostically.
+For moving-rigid and stable-topology-deforming vanilla frames, the existing software candidate path uploads the changed triangles, rebuilds the global binary BVH on CPU and uploads the resulting node/order buffers. GPU upload/maintenance is counted inside the complete-GI and complete-renderer boundaries. CPU preparation/rebuild wall values are retained only in the separate non-formal diagnostics artifact.
 
 For topology-changing/high-churn, `run_n003_vanilla_topology_churn_frame()` applies the exact N002 frozen 50% replacement schedule, uploads the changed surfaces/triangles, rebuilds the same global binary software BVH and then executes the unchanged complete renderer/GI frame. The current role executes N002's accepted object-local BLAS/TLAS replacement path.
+
+The vanilla topology `true_lifetime_peak` includes the largest synchronously overlapping host-visible staging allocation used by surface, triangle, node or order upload. Since each upload is fenced and destroys its staging buffer before the next upload, these staging allocations do not overlap one another. The CPU software-BVH rebuild does not create an old/new device-AS overlap, so `old_new_overlap` remains zero for vanilla.
 
 ## Timing protocol
 
@@ -104,6 +106,31 @@ Formal scenario thresholds:
 
 Moving-rigid timing can never produce a formal N003 performance direction under this campaign. Correctness, workload, memory and quality remain valid there.
 
+## Memory boundary
+
+Formal pair artifacts record device-side:
+
+- persistent bytes;
+- transient bytes;
+- explicit scratch;
+- old/new overlap;
+- true lifetime peak;
+- radiance-storage persistent bytes;
+- producer-stream capacity;
+- image transient bytes.
+
+`phos-n003-diagnostics` separately records renderer-owned host mirror capacity for each role/scenario:
+
+- A001 surface scene mirror;
+- B002 triangle scene mirror;
+- selected dynamic primitive-index mirror;
+- candidate traversal host structure (HWRT dynamic-index mirror or software-BVH nodes/order);
+- their renderer-owned total.
+
+This host-memory diagnostic intentionally excludes STL allocator bookkeeping and opaque driver/Vulkan host allocations because those are not directly observable by the renderer and would otherwise be guessed. It is not a formal performance axis.
+
+The same diagnostics artifact also retains CPU wall/preparation/rebuild values already measured by the runtime. These values are health/explanation evidence only and cannot override the frozen GPU-primary timing decision.
+
 ## Quality/reference protocol
 
 Quality is deliberately separated from the replicated timing run. `phos-n003-quality` runs each current/vanilla scenario once after the same 32 source-state warm-up, requires exact A/B final scene-state identity, emits both HDR frames, and generates one converged diffuse reference from that shared state.
@@ -124,11 +151,12 @@ Lane N must not change GPU power/performance profiles. N003 runners do not write
 
 ## Local validation order
 
-1. build `phos-n003-comparison` and `phos-n003-quality`;
-2. run GPU-independent comparison and quality contract tests;
-3. run one comparison probe manually if build succeeds;
-4. run the full replicated timing/memory campaign;
-5. run the one-shot quality/reference campaign;
-6. only then interpret and commit the N003 result.
+1. build `phos-n003-comparison`, `phos-n003-quality` and `phos-n003-diagnostics`;
+2. run GPU-independent comparison, quality and diagnostics contract entrypoints;
+3. run one comparison probe manually to catch Vulkan/shader/runtime integration faults; this is validation evidence, not an accepted timing campaign;
+4. run the one-shot diagnostics census and retain its artifact;
+5. run the full replicated timing/memory campaign exactly once after the probe passes;
+6. run the one-shot quality/reference campaign;
+7. only then interpret and commit the N003 result.
 
 Raw artifacts stay under `out/research/`.
