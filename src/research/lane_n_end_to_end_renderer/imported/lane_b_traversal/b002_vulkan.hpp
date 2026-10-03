@@ -6,6 +6,7 @@
 #include <cstdint>
 #include <span>
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 namespace phos::gi::research::lane_b {
@@ -17,6 +18,14 @@ struct B002BufferUpdate {
     VkDeviceSize destination_offset{};
     const void* data{};
     VkDeviceSize size{};
+};
+
+struct B002AllocationStats {
+    std::size_t current_bytes{};
+    std::size_t peak_bytes{};
+    std::size_t allocation_count{};
+    std::size_t free_count{};
+    std::size_t live_allocations{};
 };
 
 struct B002Buffer {
@@ -68,6 +77,25 @@ public:
     }
     [[nodiscard]] VkDeviceSize acceleration_scratch_alignment() const noexcept {
         return acceleration_scratch_alignment_;
+    }
+
+    [[nodiscard]] std::size_t live_allocation_bytes() const noexcept {
+        return live_allocation_bytes_;
+    }
+    [[nodiscard]] std::size_t peak_allocation_bytes() const noexcept {
+        return peak_allocation_bytes_;
+    }
+    void reset_allocation_peak() noexcept {
+        peak_allocation_bytes_ = live_allocation_bytes_;
+    }
+    [[nodiscard]] B002AllocationStats allocation_stats() const noexcept {
+        return {
+            live_allocation_bytes_,
+            peak_allocation_bytes_,
+            allocation_count_,
+            free_count_,
+            tracked_allocations_.size(),
+        };
     }
 
     [[nodiscard]] B002Buffer create_host_buffer(
@@ -140,6 +168,11 @@ private:
     std::uint32_t api_version_{};
     VkDeviceSize acceleration_scratch_alignment_{1};
     bool hwrt_enabled_{};
+    std::size_t live_allocation_bytes_{};
+    std::size_t peak_allocation_bytes_{};
+    std::size_t allocation_count_{};
+    std::size_t free_count_{};
+    std::unordered_set<VkDeviceMemory> tracked_allocations_;
 };
 
 [[nodiscard]] std::vector<std::byte> read_b002_binary(
