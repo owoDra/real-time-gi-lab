@@ -98,9 +98,11 @@ def main() -> int:
     assert stable["stage_below_floor_mismatch_count"] == 0
     assert stable["timing_suitable_for_n003_formal_claims"] is True
 
-    # Floating-point remainder noise below 1 us must be diagnostic-inactive.
+    # Floating-point remainder noise below 1 us on both sides is inactive.
     tiny = blocks(config, [1.0] * 8)
-    tiny[0]["pair"]["scenarios"]["static"]["A"]["stages"]["synchronization"] = 1.0e-12
+    tiny_pair = tiny[0]["pair"]["scenarios"]["static"]
+    tiny_pair["A"]["stages"]["synchronization"] = 1.0e-12
+    tiny_pair["B"]["stages"]["synchronization"] = 2.0e-12
     tiny_result = contract.summarize(tiny, config)
     assert tiny_result["stage_below_floor_mismatch_count"] == 0
     assert tiny_result["timing_suitable_for_n003_formal_claims"] is True
