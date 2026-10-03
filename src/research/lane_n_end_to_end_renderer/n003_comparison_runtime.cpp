@@ -73,6 +73,31 @@ void I001Runtime::configure_n003_vanilla_software_baseline() {
     impl_->calculate_memory();
 }
 
+I001N003HostMemory I001Runtime::n003_host_memory() const noexcept {
+    I001N003HostMemory out{};
+    if (!impl_) return out;
+
+    out.scene_surface_capacity_bytes =
+        impl_->a_scene.samples.capacity() * sizeof(lane_a::SurfaceSampleGpu);
+    out.scene_triangle_capacity_bytes =
+        impl_->b_scene.triangles.capacity() * sizeof(lane_b::Triangle);
+    out.dynamic_selection_capacity_bytes =
+        impl_->moving.primitives.capacity() * sizeof(std::uint32_t);
+    if (impl_->software_cpu) {
+        out.candidate_structure_capacity_bytes =
+            impl_->software_cpu->persistent_bytes();
+    } else if (impl_->hwrt) {
+        out.candidate_structure_capacity_bytes =
+            impl_->hwrt->host_mirror_bytes();
+    }
+    out.renderer_owned_total_bytes =
+        out.scene_surface_capacity_bytes +
+        out.scene_triangle_capacity_bytes +
+        out.dynamic_selection_capacity_bytes +
+        out.candidate_structure_capacity_bytes;
+    return out;
+}
+
 I001FrameResult I001Runtime::run_n003_vanilla_topology_churn_frame() {
     if (!impl_) {
         throw std::runtime_error("N003 vanilla topology runtime is not initialized");
