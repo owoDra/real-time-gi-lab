@@ -9,6 +9,14 @@
       "result": "001-renderer-reference-bringup.md",
       "target_artifact": "out/research/lane-n-end-to-end-renderer/001-renderer-reference-bringup/20261003T040015Z",
       "decision": "renderer/reference bring-up accepted; no architecture performance claim"
+    },
+    {
+      "id": "N002",
+      "slug": "current-architecture-baseline",
+      "status": "complete",
+      "result": "002-current-architecture-baseline.md",
+      "evidence_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
+      "decision": "full six-scenario current architecture baseline accepted; timing descriptive only; calibrate Lane-N comparison contract before N003"
     }
   ]
 }
