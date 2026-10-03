@@ -110,11 +110,38 @@ void write_memory(std::ostream& out, const lane_n::I001Memory& m, int indent) {
         << p << "  \"image_transient\": " << m.image_bytes << "\n" << p << "}";
 }
 
+void write_quality(std::ostream& out, const lane_n::I001Quality& q, int indent) {
+    const std::string p(static_cast<std::size_t>(indent), ' ');
+    out << std::setprecision(17) << p << "{\n"
+        << p << "  \"passed\": " << (q.passed ? "true" : "false") << ",\n"
+        << p << "  \"visibility_mismatches\": " << q.visibility_mismatches << ",\n"
+        << p << "  \"producer_semantic_errors\": " << q.producer_semantic_errors << ",\n"
+        << p << "  \"hit_mismatches\": " << q.hit_mismatches << ",\n"
+        << p << "  \"traversal_runtime_errors\": " << q.traversal_runtime_errors << ",\n"
+        << p << "  \"missing_probes\": " << q.missing_probes << ",\n"
+        << p << "  \"leaked_probes\": " << q.leaked_probes << ",\n"
+        << p << "  \"stale_storage_slots\": " << q.stale_storage_slots << ",\n"
+        << p << "  \"resolved_output_mismatches\": " << q.resolved_output_mismatches << ",\n"
+        << p << "  \"radiance_rms_error\": " << q.radiance_rms_error << ",\n"
+        << p << "  \"radiance_max_abs_error\": " << q.radiance_max_abs_error << ",\n"
+        << p << "  \"temporal_rms_error\": " << q.temporal_rms_error << ",\n"
+        << p << "  \"temporal_max_abs_error\": " << q.temporal_max_abs_error << "\n"
+        << p << "}";
+}
+
+[[nodiscard]] bool internal_correctness(
+    const lane_n::I001FrameResult& result,
+    const lane_n::I001Quality& quality) noexcept {
+    return quality.passed && result.stats.storage_failures == 0U && result.stats.overflow == 0U;
+}
+
 struct FrameEvidence {
     lane_n::I001FrameResult result;
+    lane_n::I001Quality quality;
     lane_n::I001RendererReadback readback;
     std::string image_path;
     float motion_fraction{1.0F};
+    bool correctness_passed{};
 };
 
 struct ReferenceMeta {
@@ -194,8 +221,9 @@ int main(int argc, char** argv) {
         options.validation = true;
         lane_n::I001Runtime runtime(options);
 
-        (void)runtime.run_frame(false);
-        if (!runtime.validate_last_frame().passed) throw std::runtime_error("N004 source correctness failed");
+        const auto source_result = runtime.run_frame(false);
+        const auto source_quality = runtime.validate_last_frame();
+        const bool source_correctness = internal_correctness(source_result, source_quality);
         for (std::uint32_t index = 1; index < source_warmup_frames; ++index) (void)runtime.run_frame(false);
 
         fs::create_directories(artifact_dir / "frames");
@@ -207,13 +235,11 @@ int main(int argc, char** argv) {
             if (index == 0U && topology) result = runtime.run_topology_churn_frame();
             else result = runtime.run_frame(true);
             const auto quality = runtime.validate_last_frame();
-            if (!quality.passed || result.stats.storage_failures != 0U || result.stats.overflow != 0U) {
-                throw std::runtime_error("N004 target correctness/capacity failed");
-            }
+            const bool correctness = internal_correctness(result, quality);
             auto readback = runtime.renderer_readback();
             const auto path = indexed_path("current", index);
             write_pfm(artifact_dir / path, readback.width, readback.height, rgb_from_rgba(readback));
-            frames.push_back({result, std::move(readback), path, fractions[index]});
+            frames.push_back({result, quality, std::move(readback), path, fractions[index], correctness});
         }
 
         const bool varying_state = !std::all_of(
@@ -247,11 +273,20 @@ int main(int argc, char** argv) {
         if (!out) throw std::runtime_error("could not open N004 evidence JSON");
         out << std::setprecision(17)
             << "{\n  \"schema_version\": 1,\n"
-            << "  \"protocol_version\": \"n004-atlas-evidence-v2\",\n"
+            << "  \"protocol_version\": \"n004-atlas-evidence-v3\",\n"
             << "  \"scenario\": \"" << scenario_name << "\",\n"
             << "  \"topology\": " << (topology ? "true" : "false") << ",\n"
             << "  \"source_warmup_frames\": " << source_warmup_frames << ",\n"
             << "  \"probe_spacing_world\": " << frames.front().readback.params.scene_origin_spacing[3] << ",\n"
+            << "  \"source\": {\n"
+            << "    \"internal_correctness\": " << (source_correctness ? "true" : "false") << ",\n"
+            << "    \"quality\": ";
+        write_quality(out, source_quality, 4);
+        out << ",\n    \"stats\": ";
+        write_stats(out, source_result.stats, 4);
+        out << ",\n    \"memory_bytes\": ";
+        write_memory(out, source_result.memory, 4);
+        out << "\n  },\n"
             << "  \"device\": {\n"
             << "    \"name\": \"" << runtime.device_name() << "\",\n"
             << "    \"driver_name\": \"" << runtime.driver_name() << "\",\n"
@@ -269,7 +304,10 @@ int main(int argc, char** argv) {
             out << "    {\n"
                 << "      \"index\": " << index << ",\n"
                 << "      \"motion_fraction\": " << frame.motion_fraction << ",\n"
-                << "      \"image\": \"" << frame.image_path << "\",\n"
+                << "      \"internal_correctness\": " << (frame.correctness_passed ? "true" : "false") << ",\n"
+                << "      \"quality\": ";
+            write_quality(out, frame.quality, 6);
+            out << ",\n      \"image\": \"" << frame.image_path << "\",\n"
                 << "      \"reference\": ";
             write_reference(out, references[index], 6);
             out << ",\n      \"timing_us\": ";
@@ -287,7 +325,13 @@ int main(int argc, char** argv) {
 
         std::cout << "N004 atlas evidence: " << artifact_dir << '\n'
                   << "scenario=" << scenario_name << " target_frames=" << target_frames
-                  << " varying_state=" << (varying_state ? "yes" : "no") << '\n';
+                  << " varying_state=" << (varying_state ? "yes" : "no")
+                  << " source_correctness=" << (source_correctness ? "pass" : "FAIL") << '\n';
+        for (std::size_t index = 0; index < frames.size(); ++index) {
+            if (!frames[index].correctness_passed) {
+                std::cout << "N004 target correctness FAIL frame=" << index << '\n';
+            }
+        }
         return 0;
     } catch (const std::exception& error) {
         std::cerr << "N004 atlas failure: " << error.what() << '\n';
