@@ -1,6 +1,6 @@
 # N003 preflight/calibration — complete-frame comparison contract
 
-Status: **v1 and v2 timing-unsuitable; paired-control v3 target pending**
+Status: **v1/v2/v3 timing-unsuitable; paired-control v4 target pending**
 
 Issue: #31  
 Parent: #26  
@@ -14,36 +14,43 @@ This is part of Lane N and is the preflight for N003 proper. It freezes how N003
 
 ### v1 — absolute fresh-process timing
 
-Commit `422945ea32164e487e8562214dc7568f6e2ad9a6`:
-
-- worst across-process timing noise: **48.297%**;
-- derived threshold: **145.0%**;
-- result: `timing-unsuitable`.
-
-The failure showed that absolute fresh-process timing is not the correct N003 decision unit.
+Commit `422945ea32164e487e8562214dc7568f6e2ad9a6`: worst noise **48.297%**, derived threshold **145.0%**, result `timing-unsuitable`.
 
 ### v2 — paired fresh-process A/A
 
-Commit `aa46afd1594cf66cae440b30223cfc1350475a67`:
+Commit `aa46afd1594cf66cae440b30223cfc1350475a67`: derived threshold **110%**, worst p95 A/A effect about **97%**, result `timing-unsuitable`. Quality was deterministic across all 16 A/B observations and remains accepted.
 
-- A and B were identical current-architecture N002 executions;
-- eight pair blocks completed with no sample exclusion;
-- control formal-claim trigger count: **0**;
-- derived threshold: **110%**;
-- worst p95 A/A pair effect: about **97%**, from camera-motion;
-- result: `timing-unsuitable`.
+### v3 — same-process prewarmed A/A
 
-v2 exposed near-2x modes in short static/camera complete-frame timings, while stable-topology-deforming remained comparatively stable. Quality was deterministic across all 16 A/B observations and the scale-aware affected metric had campaign signal.
+Commit `ac143a567a056ff520e6f5ff73904c58196e989b`: all eight pair blocks completed with no sample exclusion, but timing remained unsuitable:
 
-Both failed artifacts remain evidence. Neither is filtered or rewritten as PASS.
+- derived threshold: **207.5%**;
+- worst p95 complete-frame A/A effect: **82.3%** (`static`);
+- A/A formal-claim trigger count: **0**;
+- static/camera showed large early-frame swings;
+- dynamic scenarios also showed intermittent `geometry_prepare_upload` inflation.
 
-## Timing protocol v3
+Stage evidence localized the instability. In static, slow samples inflated `renderer_prerequisite_attributable_to_gi`, `frame_init_visibility`, `producer`, and `ray_prepare` together. Stable/deforming cases also showed occasional approximately 2x geometry upload cost. This is consistent with the GPU not remaining in the same performance state across the measurement boundary, rather than one bad timestamp query.
 
-v3 retains the same complete renderer/GI timing boundary and the same statistical decision rules. Only the timing harness changes prospectively.
+v3 also exposed a diagnostics-only bug: the `synchronization` remainder can be floating-point noise around `1e-13 us`; treating that as an active stage produced meaningless ratio/mismatch diagnostics. It never explains the complete-frame failure.
 
-A dedicated `phos-n003-preflight` target executes A and B inside one process. For every role/scenario it runs **32 unmeasured source-state frames immediately before the one measured target-state transition**. This warms the GPU without consuming the measured dynamic update/rebuild: moving-rigid, stable-topology-deforming and topology-changing/high-churn still perform their target transition exactly once inside the measured sample.
+All failed artifacts remain valid diagnostic evidence. None are deleted, filtered, or rewritten as PASS.
 
-Eight fresh process pair blocks are used. AB/BA start order alternates. Every measured frame must pass runtime correctness. The pair artifact retains both complete timing axes and every N002 stage bucket so a remaining instability can be localized.
+## Timing protocol v4
+
+v4 keeps the same complete renderer/GI boundaries and **does not relax any statistical performance gate**. Only the harness adjacency and stage-diagnostic floor change prospectively.
+
+For each A/B role and scenario:
+
+1. create a fresh accepted `I001Runtime`;
+2. run one unmeasured source-state frame and validate source correctness;
+3. run the remaining 31 unmeasured source-state warm-up frames;
+4. immediately execute the single measured target-state transition with no validation/reference work inserted between the final warm-up and measurement;
+5. validate the measured target frame after the timing boundary closes.
+
+Thus the measured moving-rigid, stable-topology-deforming, and topology-changing/high-churn paths still execute their real update/rebuild exactly once. The change only removes v3's reference-validation workload from the warm-up/measurement boundary.
+
+Eight fresh process pair blocks remain. AB/BA order remains frozen as `AB, BA, AB, BA, BA, AB, BA, AB`. Stage timings remain diagnostic. Values below **1 us** are stage-diagnostic inactive so floating-point remainder noise cannot create false zero mismatches; this floor does not alter complete-frame timing samples or the formal timing threshold.
 
 For each scenario and each of `complete_gi_gpu` / `complete_renderer_gpu`:
 
@@ -59,7 +66,7 @@ Lane K's 5% and Lane L's 20% values are not imported as the N003 threshold. Samp
 
 ## Quality protocol
 
-Quality interpretation was established and shown deterministic by v2, so v3 does not alter it.
+Quality interpretation was established and shown deterministic by v2 and is unchanged in v4.
 
 Legacy `affected_pixel_fraction` remains diagnostic-only. Primary metrics are:
 
@@ -71,6 +78,6 @@ There is no aggregate winner score. Interpretation is scenario-by-scenario. A ma
 
 ## Execution
 
-Build `phos-n003-preflight`, run the v3 contract test, then run `run_n003_preflight_v3.py` through the research experiment wrapper. v1/v2 artifacts remain untouched under `out/research/`.
+Build `phos-n003-preflight`, run `test_n003_preflight_v4_contract.py`, then run `run_n003_preflight_v4.py` through the research experiment wrapper. v1/v2/v3 artifacts remain untouched under `out/research/`.
 
-N003 proper may start only after v3 passes and its derived timing threshold is recorded in result truth.
+N003 proper may start only after v4 passes and its derived timing threshold is recorded in result truth.
