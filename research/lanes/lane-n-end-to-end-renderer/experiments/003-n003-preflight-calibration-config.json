@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "experiment": "N003-preflight",
+  "phase": "calibration",
+  "source_of_truth": {
+    "n002_completion_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
+    "issue": 31,
+    "parent_issue": 26
+  },
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "baseline": {
+    "runner": "scripts/research/lane_n_end_to_end_renderer/run_n002_full.py",
+    "config": "research/lanes/lane-n-end-to-end-renderer/experiments/002-n002-full-config.json",
+    "required_scenarios": [
+      "static",
+      "camera-motion",
+      "light-motion",
+      "moving-rigid",
+      "stable-topology-deforming",
+      "topology-changing-high-churn"
+    ]
+  },
+  "timing_calibration": {
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-only",
+    "validation_mode": "same-as-n002-full-baseline",
+    "fresh_process_blocks": 6,
+    "settle_seconds": 1.0,
+    "required_totals": [
+      "complete_gi_gpu",
+      "complete_renderer_gpu"
+    ],
+    "sample_exclusion": "forbidden",
+    "completed_campaign_rerun_budget": 0,
+    "noise_statistic": "max-absolute-relative-deviation-from-across-block-median",
+    "material_change_threshold": {
+      "multiplier_over_worst_noise": 3.0,
+      "minimum_fraction": 0.01,
+      "round_up_step_fraction": 0.005,
+      "timing_unsuitable_above_fraction": 0.20
+    }
+  },
+  "quality_interpretation": {
+    "relative_luminance_floor": 0.0001,
+    "scale_aware_affected_relative_threshold": 0.05,
+    "legacy_affected_pixel_fraction_role": "diagnostic-only",
+    "primary_metrics": [
+      "rgb_rms_error",
+      "p99_abs_luminance_error",
+      "scale_aware_affected_pixel_fraction"
+    ],
+    "material_change": {
+      "required_concordant_primary_metrics": 2,
+      "error_metric_min_relative_change": 0.10,
+      "scale_aware_affected_fraction_min_absolute_change": 0.005
+    },
+    "aggregate_winner_score": false,
+    "individual_black_reference_frames_valid": true
+  },
+  "artifact_contract": {
+    "required": [
+      "n003-preflight-config.json",
+      "n003-preflight-progress.json",
+      "n003-preflight-raw.json",
+      "n003-preflight-summary.json"
+    ]
+  }
+}
