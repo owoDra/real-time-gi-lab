@@ -211,3 +211,14 @@ add_executable(phos-n003-quality
 )
 configure_lane_n_renderer(phos-n003-quality)
 add_dependencies(phos-n003-quality phos-n003-comparison-shaders)
+
+# Diagnostic-only CPU wall and explicit renderer-owned host mirror census. It
+# is intentionally outside the formal GPU timing decision axis.
+add_executable(phos-n003-diagnostics
+  n003_diagnostics_main.cpp
+  n003_comparison_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n003-diagnostics)
+add_dependencies(phos-n003-diagnostics phos-n003-comparison-shaders)
