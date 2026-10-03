@@ -7,7 +7,8 @@
 - `003-n003-preflight-calibration-v3-config.json` — retained same-process prewarmed v3 calibration lineage.
 - `003-n003-preflight-calibration-v4-config.json` — retained hot-adjacent v4 calibration lineage.
 - `003-n003-preflight-calibration-v5-config.json` — safety tombstone only; clock-pinned/profile-changing v5 was withdrawn before target execution and must not be run.
-- `003-n003-preflight-calibration-v6-config.json` / `003-n003-preflight-calibration.md` — retained replicated-median v6 timing calibration; v6 completed `timing-unsuitable` at a 28.5% derived threshold.
-- `003-n003-moving-workload-diagnostic-config.json` — current moving-rigid workload-invariance diagnostic before any further timing calibration changes.
+- `003-n003-preflight-calibration-v6-config.json` / `003-n003-preflight-calibration.md` — retained replicated-median v6 timing calibration lineage and final scenario-scoped preflight decision.
+- `003-n003-moving-workload-diagnostic-config.json` — completed moving-rigid workload-invariance diagnostic; all required integer counters were invariant.
+- `003-n003-comparison-config.json` / `003-n003-comparison.md` — N003 proper current-vs-vanilla Split RC same-boundary contract, including frozen timing and quality interpretation.
 
 Raw target artifacts remain under `out/research/`; they are not committed here.
