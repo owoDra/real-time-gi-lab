@@ -5,6 +5,7 @@
   "parent_issue": 26,
   "issue": 39,
   "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "completed_campaign_rerun_budget": 0,
   "baseline": {
     "role": "current-lane-e-final-hwrt",
     "scene": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
