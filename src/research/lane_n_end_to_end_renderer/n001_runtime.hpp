@@ -97,6 +97,7 @@ struct I001FrameStats {
     std::uint32_t hierarchy_refit_segments{};
     std::uint32_t hierarchy_rebuilt_segments{};
     std::uint32_t topology_mutations{};
+    std::uint32_t topology_replaced_primitives{};
     std::uint32_t backend_rebuilds{};
     std::uint32_t storage_allocations{};
     std::uint32_t storage_updates{};
