@@ -1,5 +1,8 @@
 #include "n002_runtime.cpp"
 
+#include <cmath>
+#include <stdexcept>
+
 namespace phos::gi::research::integration {
 
 void I001Runtime::set_n004_motion_fraction(float fraction) {
