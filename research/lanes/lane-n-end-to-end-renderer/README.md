@@ -59,13 +59,15 @@ Current role:
 Vanilla role:
 
 - historical Integration-13 global binary software-BVH baseline;
-- same A001 Split RC producer/cascade/probe/ray semantics;
+- same A001 Split RC producer/cascade/probe/ray semantics and C001-style sparse storage boundary;
 - whole global BVH rebuild for dynamic/topology changes;
 - N003-only software primary visibility and direct-light visibility so the baseline does not depend on current HWRT support architecture.
 
-N001/N002 runtime implementation files remain unchanged. N003 adds comparison-only hooks through `n003_comparison_runtime.cpp`; the only shared header change exposes those hooks.
+N001/N002 runtime implementation files remain unchanged. N003 adds comparison-only hooks through `n003_comparison_runtime.cpp`; shared declarations expose those hooks, and the imported HWRT header adds only a read-only host-mirror byte accessor for diagnostics.
 
-Timing/memory evidence uses `phos-n003-comparison` with five micro-pairs x eight outer blocks. Quality/reference evidence is intentionally separate in `phos-n003-quality` so converged reference rendering cannot contaminate timing measurements.
+Formal timing/device-memory evidence uses `phos-n003-comparison` with five micro-pairs x eight outer blocks. Quality/reference evidence is intentionally separate in `phos-n003-quality` so converged reference rendering cannot contaminate timing measurements. `phos-n003-diagnostics` separately records CPU wall/preparation data and renderer-owned host mirror capacity; these diagnostics are not formal performance axes.
+
+Topology vanilla true-lifetime memory includes the largest synchronously overlapping upload staging allocation. Renderer-owned host mirror diagnostics include explicit scene/dynamic/BVH vector capacity only; opaque driver/Vulkan host memory and allocator bookkeeping are not guessed.
 
 Quality remains scenario-by-scenario using RGB RMS, p99 absolute luminance error and scale-aware affected fraction. A material scenario direction requires at least two of three primary metrics to move materially in the same direction. No aggregate quality winner is permitted.
 
