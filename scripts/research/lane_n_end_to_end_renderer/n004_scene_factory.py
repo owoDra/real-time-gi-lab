@@ -7,6 +7,10 @@ import math
 import struct
 from pathlib import Path
 
+GENERATOR = "phos-n004-scene-factory-v4"
+WORLD_X_JITTER = 0.037
+WORLD_Z_JITTER = 0.041
+
 
 def add_quad(positions, indices, a, b, c, d):
     base = len(positions)
@@ -20,12 +24,12 @@ def add_box(positions, indices, center, half):
     x0, x1 = cx - hx, cx + hx
     y0, y1 = cy - hy, cy + hy
     z0, z1 = cz - hz, cz + hz
-    add_quad(positions, indices, (x0,y0,z1),(x1,y0,z1),(x1,y1,z1),(x0,y1,z1))
-    add_quad(positions, indices, (x1,y0,z0),(x0,y0,z0),(x0,y1,z0),(x1,y1,z0))
-    add_quad(positions, indices, (x0,y0,z0),(x0,y0,z1),(x0,y1,z1),(x0,y1,z0))
-    add_quad(positions, indices, (x1,y0,z1),(x1,y0,z0),(x1,y1,z0),(x1,y1,z1))
-    add_quad(positions, indices, (x0,y1,z1),(x1,y1,z1),(x1,y1,z0),(x0,y1,z0))
-    add_quad(positions, indices, (x0,y0,z0),(x1,y0,z0),(x1,y0,z1),(x0,y0,z1))
+    add_quad(positions, indices, (x0, y0, z1), (x1, y0, z1), (x1, y1, z1), (x0, y1, z1))
+    add_quad(positions, indices, (x1, y0, z0), (x0, y0, z0), (x0, y1, z0), (x1, y1, z0))
+    add_quad(positions, indices, (x0, y0, z0), (x0, y0, z1), (x0, y1, z1), (x0, y1, z0))
+    add_quad(positions, indices, (x1, y0, z1), (x1, y0, z0), (x1, y1, z0), (x1, y1, z1))
+    add_quad(positions, indices, (x0, y1, z1), (x1, y1, z1), (x1, y1, z0), (x0, y1, z0))
+    add_quad(positions, indices, (x0, y0, z0), (x1, y0, z0), (x1, y0, z1), (x0, y0, z1))
 
 
 def add_grid_floor(positions, indices, size=8.0, cells=24):
@@ -37,7 +41,7 @@ def add_grid_floor(positions, indices, size=8.0, cells=24):
             x1 = x0 + step
             z0 = origin + z * step
             z1 = z0 + step
-            add_quad(positions, indices, (x0,0.0,z0),(x1,0.0,z0),(x1,0.0,z1),(x0,0.0,z1))
+            add_quad(positions, indices, (x0, 0.0, z0), (x1, 0.0, z0), (x1, 0.0, z1), (x0, 0.0, z1))
 
 
 def control_group(center):
@@ -58,14 +62,14 @@ def wall_box(thickness: float):
     p, i = [], []
     add_box(p, i, (0.0, 1.35, 0.0), (thickness * 0.5, 1.35, 2.25))
     add_box(p, i, (0.0, 0.75, -2.75), (0.35, 0.75, 0.35))
-    add_box(p, i, (0.0, 0.75,  2.75), (0.35, 0.75, 0.35))
+    add_box(p, i, (0.0, 0.75, 2.75), (0.35, 0.75, 0.35))
     return p, i
 
 
 def rotate_y(group, radians: float):
     positions, indices = group
     c, s = math.cos(radians), math.sin(radians)
-    rotated = [(x*c + z*s, y, -x*s + z*c) for x, y, z in positions]
+    rotated = [(x * c + z * s, y, -x * s + z * c) for x, y, z in positions]
     return rotated, list(indices)
 
 
@@ -77,15 +81,14 @@ def leak_scene(case: str, thickness: float = 0.10):
         geometry = rotate_y(wall_box(thickness), math.radians(68.0))
     elif case == "one-sided":
         p, i = [], []
-        add_quad(p, i, (0.0,0.0,-2.25),(0.0,0.0,2.25),(0.0,2.7,2.25),(0.0,2.7,-2.25))
+        add_quad(p, i, (0.0, 0.0, -2.25), (0.0, 0.0, 2.25), (0.0, 2.7, 2.25), (0.0, 2.7, -2.25))
         geometry = (p, i)
     elif case == "enclosed":
         p, i = [], []
         add_box(p, i, (0.0, 1.35, 0.0), (thickness * 0.5, 1.35, 2.25))
-        # A dark-side enclosure behind the wall: rear, side caps and roof.
         add_box(p, i, (1.55, 1.35, 0.0), (0.08, 1.35, 2.25))
         add_box(p, i, (0.78, 1.35, -2.25), (0.78, 1.35, 0.08))
-        add_box(p, i, (0.78, 1.35,  2.25), (0.78, 1.35, 0.08))
+        add_box(p, i, (0.78, 1.35, 2.25), (0.78, 1.35, 0.08))
         add_box(p, i, (0.78, 2.70, 0.0), (0.78, 0.08, 2.25))
         geometry = (p, i)
     else:
@@ -105,67 +108,125 @@ def world_scene(kind: str):
         nx, ny, nz, spacing, half = 4, 32, 4, (1.5, 1.6, 1.5), (0.42, 0.42, 0.42)
     else:
         raise ValueError(f"unknown world scene: {kind}")
+
     ox = -0.5 * (nx - 1) * spacing[0]
     oy = 0.5
     oz = -0.5 * (nz - 1) * spacing[2]
     for y in range(ny):
         for z in range(nz):
             for x in range(nx):
-                jitter = 0.07 * math.sin((x + 1) * 1.7 + (z + 1) * 0.9 + y * 0.4)
-                add_box(positions, indices, (ox+x*spacing[0], oy+y*spacing[1]+jitter, oz+z*spacing[2]), half)
+                phase = (x + 1) * 1.7 + (z + 1) * 0.9 + y * 0.4
+                jitter_y = 0.07 * math.sin(phase)
+                # v4 deliberately breaks exact X/Z lattice alignment. v3 let
+                # the canonical diagonal RC ray pass exactly through a box
+                # edge in world-sparse, producing CPU Moller-Trumbore hit vs
+                # hardware-triangle miss without any radiance error.
+                jitter_x = WORLD_X_JITTER * math.sin((x + 1) * 1.31 + (z + 1) * 2.17 + (y + 1) * 0.73)
+                jitter_z = WORLD_Z_JITTER * math.cos((x + 1) * 2.03 + (z + 1) * 1.11 + (y + 1) * 0.57)
+                add_box(
+                    positions,
+                    indices,
+                    (
+                        ox + x * spacing[0] + jitter_x,
+                        oy + y * spacing[1] + jitter_y,
+                        oz + z * spacing[2] + jitter_z,
+                    ),
+                    half,
+                )
     return [control_group((ox + 0.2, oy + 0.15, oz + 0.2)), (positions, indices)]
 
 
 def write_gltf(root: Path, name: str, groups):
     root.mkdir(parents=True, exist_ok=True)
-    binary = bytearray(); buffer_views = []; accessors = []; meshes = []; nodes = []
+    binary = bytearray()
+    buffer_views = []
+    accessors = []
+    meshes = []
+    nodes = []
     for mesh_index, (positions, indices) in enumerate(groups):
-        while len(binary) % 4: binary.append(0)
+        while len(binary) % 4:
+            binary.append(0)
         position_offset = len(binary)
-        for p in positions: binary.extend(struct.pack("<3f", *p))
+        for p in positions:
+            binary.extend(struct.pack("<3f", *p))
         position_view = len(buffer_views)
-        buffer_views.append({"buffer":0,"byteOffset":position_offset,"byteLength":len(positions)*12,"target":34962})
-        xs=[p[0] for p in positions]; ys=[p[1] for p in positions]; zs=[p[2] for p in positions]
-        position_accessor=len(accessors)
-        accessors.append({"bufferView":position_view,"byteOffset":0,"componentType":5126,"count":len(positions),"type":"VEC3","min":[min(xs),min(ys),min(zs)],"max":[max(xs),max(ys),max(zs)]})
-        while len(binary) % 4: binary.append(0)
-        index_offset=len(binary)
-        for value in indices: binary.extend(struct.pack("<I", value))
-        index_view=len(buffer_views)
-        buffer_views.append({"buffer":0,"byteOffset":index_offset,"byteLength":len(indices)*4,"target":34963})
-        index_accessor=len(accessors)
-        accessors.append({"bufferView":index_view,"byteOffset":0,"componentType":5125,"count":len(indices),"type":"SCALAR","min":[min(indices)],"max":[max(indices)]})
-        meshes.append({"primitives":[{"attributes":{"POSITION":position_accessor},"indices":index_accessor}]})
-        nodes.append({"mesh":mesh_index})
-    bin_name=f"{name}.bin"
-    gltf={"asset":{"version":"2.0","generator":"phos-n004-scene-factory-v3"},"buffers":[{"uri":bin_name,"byteLength":len(binary)}],"bufferViews":buffer_views,"accessors":accessors,"meshes":meshes,"nodes":nodes,"scenes":[{"nodes":list(range(len(nodes)))}],"scene":0}
-    (root/bin_name).write_bytes(binary)
-    path=root/f"{name}.gltf"; path.write_text(json.dumps(gltf,indent=2,sort_keys=True)+"\n",encoding="utf-8")
+        buffer_views.append({"buffer": 0, "byteOffset": position_offset, "byteLength": len(positions) * 12, "target": 34962})
+        xs = [p[0] for p in positions]
+        ys = [p[1] for p in positions]
+        zs = [p[2] for p in positions]
+        position_accessor = len(accessors)
+        accessors.append({"bufferView": position_view, "byteOffset": 0, "componentType": 5126, "count": len(positions), "type": "VEC3", "min": [min(xs), min(ys), min(zs)], "max": [max(xs), max(ys), max(zs)]})
+        while len(binary) % 4:
+            binary.append(0)
+        index_offset = len(binary)
+        for value in indices:
+            binary.extend(struct.pack("<I", value))
+        index_view = len(buffer_views)
+        buffer_views.append({"buffer": 0, "byteOffset": index_offset, "byteLength": len(indices) * 4, "target": 34963})
+        index_accessor = len(accessors)
+        accessors.append({"bufferView": index_view, "byteOffset": 0, "componentType": 5125, "count": len(indices), "type": "SCALAR", "min": [min(indices)], "max": [max(indices)]})
+        meshes.append({"primitives": [{"attributes": {"POSITION": position_accessor}, "indices": index_accessor}]})
+        nodes.append({"mesh": mesh_index})
+
+    bin_name = f"{name}.bin"
+    gltf = {
+        "asset": {"version": "2.0", "generator": GENERATOR},
+        "buffers": [{"uri": bin_name, "byteLength": len(binary)}],
+        "bufferViews": buffer_views,
+        "accessors": accessors,
+        "meshes": meshes,
+        "nodes": nodes,
+        "scenes": [{"nodes": list(range(len(nodes)))}],
+        "scene": 0,
+    }
+    (root / bin_name).write_bytes(binary)
+    path = root / f"{name}.gltf"
+    path.write_text(json.dumps(gltf, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return path
 
 
 def triangle_count(groups):
-    return sum(len(indices)//3 for _,indices in groups)
+    return sum(len(indices) // 3 for _, indices in groups)
 
 
 def generate_all(root: Path):
-    manifest={"schema_version":1,"generator":"phos-n004-scene-factory-v3","scenes":{}}
-    leak_specs=(("thin",0.02),("medium",0.10),("thick",0.40),("grazing",0.10),("one-sided",0.0),("enclosed",0.10))
+    manifest = {"schema_version": 1, "generator": GENERATOR, "scenes": {}}
+    leak_specs = (("thin", 0.02), ("medium", 0.10), ("thick", 0.40), ("grazing", 0.10), ("one-sided", 0.0), ("enclosed", 0.10))
     for case, thickness in leak_specs:
-        groups=leak_scene(case, max(thickness,0.10) if case=="one-sided" else thickness)
-        name=f"leak-{case}"; path=write_gltf(root,name,groups)
-        manifest["scenes"][name]={"path":path.name,"kind":"leak","geometry_case":case,"wall_thickness_world":thickness,"triangles":triangle_count(groups),"mesh_count":len(groups),"idle_dynamic_control_triangles":36}
-    for kind in ("sparse","dense","large-horizontal","vertical-tall"):
-        groups=world_scene(kind); name=f"world-{kind}"; path=write_gltf(root,name,groups)
-        manifest["scenes"][name]={"path":path.name,"kind":"world-shape","layout":kind,"triangles":triangle_count(groups),"mesh_count":len(groups),"idle_dynamic_control_triangles":36}
-    (root/"n004-scenes.json").write_text(json.dumps(manifest,indent=2,sort_keys=True)+"\n",encoding="utf-8")
+        groups = leak_scene(case, max(thickness, 0.10) if case == "one-sided" else thickness)
+        name = f"leak-{case}"
+        path = write_gltf(root, name, groups)
+        manifest["scenes"][name] = {
+            "path": path.name,
+            "kind": "leak",
+            "geometry_case": case,
+            "wall_thickness_world": thickness,
+            "triangles": triangle_count(groups),
+            "mesh_count": len(groups),
+            "idle_dynamic_control_triangles": 36,
+        }
+    for kind in ("sparse", "dense", "large-horizontal", "vertical-tall"):
+        groups = world_scene(kind)
+        name = f"world-{kind}"
+        path = write_gltf(root, name, groups)
+        manifest["scenes"][name] = {
+            "path": path.name,
+            "kind": "world-shape",
+            "layout": kind,
+            "triangles": triangle_count(groups),
+            "mesh_count": len(groups),
+            "idle_dynamic_control_triangles": 36,
+            "xz_jitter_max_world": max(WORLD_X_JITTER, WORLD_Z_JITTER),
+        }
+    (root / "n004-scenes.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return manifest
 
 
 def main():
-    parser=argparse.ArgumentParser(description="Generate deterministic N004 synthetic glTF workloads")
-    parser.add_argument("--output-dir",type=Path,required=True)
-    args=parser.parse_args(); print(json.dumps(generate_all(args.output_dir.resolve()),indent=2,sort_keys=True))
+    parser = argparse.ArgumentParser(description="Generate deterministic N004 synthetic glTF workloads")
+    parser.add_argument("--output-dir", type=Path, required=True)
+    args = parser.parse_args()
+    print(json.dumps(generate_all(args.output_dir.resolve()), indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
