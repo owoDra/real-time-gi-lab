@@ -102,6 +102,23 @@ set(N001_SHARED_SUPPORT_SOURCES
   ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
 )
 
+# N004 substitutes only A001's CPU parameter-builder/runtime translation unit
+# with a wrapper that includes the accepted implementation and adds fractional
+# camera/light interpolation. Historical N001-N003 targets keep the original
+# source list above unchanged.
+set(N004_SHARED_SUPPORT_SOURCES
+  n001_reference.cpp
+  imported/integration/i001_compute.cpp
+  imported/lane_a_split_rc/a001_scene.cpp
+  n004_a001_runtime.cpp
+  imported/lane_a_split_rc/a001_analysis.cpp
+  imported/lane_b_traversal/b002_scene.cpp
+  imported/lane_b_traversal/b002_vulkan.cpp
+  imported/lane_b_traversal/b002_compute.cpp
+  imported/lane_b_traversal/b002_hwrt.cpp
+  ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+
 set(N001_SHARED_SOURCES
   n001_runtime.cpp
   ${N001_SHARED_SUPPORT_SOURCES}
@@ -204,12 +221,12 @@ configure_lane_n_renderer(phos-n003-diagnostics)
 add_dependencies(phos-n003-diagnostics phos-n003-comparison-shaders)
 
 # N004 adds only a prospective motion-fraction control surface around the
-# accepted N002 runtime. Default fractions remain 1.0, so N001-N003 semantics
-# are unchanged. The atlas target itself adds no mitigation.
+# accepted N002 runtime. The atlas target adds no mitigation and uses the
+# isolated A001 wrapper above; N001-N003 continue to link the accepted source.
 add_executable(phos-n004-atlas
   n004_atlas_main.cpp
   n004_runtime.cpp
   n002_hwrt_rebuild.cpp
-  ${N001_SHARED_SUPPORT_SOURCES}
+  ${N004_SHARED_SUPPORT_SOURCES}
 )
 configure_lane_n_renderer(phos-n004-atlas)
