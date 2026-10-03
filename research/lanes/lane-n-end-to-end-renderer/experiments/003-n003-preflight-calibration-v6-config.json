@@ -1,0 +1,105 @@
+{
+  "schema_version": 6,
+  "experiment": "N003-preflight",
+  "phase": "calibration",
+  "protocol_version": "paired-control-v6-replicated-median",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "source_of_truth": {
+    "issue": 31,
+    "parent_issue": 26,
+    "n002_completion_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
+    "v3_commit": "ac143a567a056ff520e6f5ff73904c58196e989b",
+    "v4_commit": "8f9c78bddf31cd4d39070be5087a122c4b8edd84",
+    "v4_result": "timing-unsuitable: hot-adjacent A/A threshold 98.5%; residual instability dominated by moving-rigid",
+    "v5_status": "withdrawn-before-target-run: changing GPU power/performance profile is prohibited on the target host because it can trigger safety shutdown"
+  },
+  "baseline": {
+    "scene": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+    "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+    "playback_sha256": "805c544bed5aaaf7c32dd942d5e8f9f460ff670601b336fc12a521fbd57398c5",
+    "required_scenarios": [
+      "static",
+      "camera-motion",
+      "light-motion",
+      "moving-rigid",
+      "stable-topology-deforming",
+      "topology-changing-high-churn"
+    ]
+  },
+  "timing_calibration": {
+    "comparison_unit": "five-micro-pair-block-median-A-A",
+    "measurement_probe_protocol": "paired-control-v4",
+    "probe_binary": "build/phos-n003-preflight",
+    "outer_blocks": 8,
+    "micro_pairs_per_block": 5,
+    "outer_start_orders": ["AB", "BA", "AB", "BA", "BA", "AB", "BA", "AB"],
+    "micro_order_rule": "alternate-from-outer-start-order",
+    "settle_seconds_between_outer_blocks": 1.0,
+    "source_warmup_frames": 32,
+    "warmup_validation_position": "after-first-source-frame",
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-only",
+    "required_totals": ["complete_gi_gpu", "complete_renderer_gpu"],
+    "required_stages": [
+      "renderer_prerequisite_attributable_to_gi",
+      "frame_init_visibility",
+      "producer",
+      "ray_prepare",
+      "geometry_prepare_upload",
+      "acceleration_structure_maintenance",
+      "traversal",
+      "gather",
+      "radiance_storage",
+      "merge_resolve",
+      "synchronization"
+    ],
+    "stage_diagnostic_active_floor_us": 1.0,
+    "primary_statistic": "median-of-five-micro-pair-log-ratios-then-median-across-eight-blocks",
+    "noise_estimator": "abs-median-block-log-bias-plus-3x-1.4826-MAD",
+    "material_change_threshold": {
+      "minimum_fraction": 0.01,
+      "round_up_step_fraction": 0.005,
+      "timing_unsuitable_above_fraction": 0.2
+    },
+    "formal_claim_requires": {
+      "magnitude_at_least_derived_threshold": true,
+      "minimum_same_direction_block_fraction": 0.75
+    },
+    "control_sanity": {
+      "must_not_trigger_formal_claim": true,
+      "maximum_p95_block_effect_fraction": 0.2
+    },
+    "raw_micro_pair_effect_role": "diagnostic-only",
+    "sample_exclusion": "forbidden",
+    "all_micro_pairs_retained": true,
+    "gpu_profile_changes": "forbidden",
+    "completed_campaign_rerun_budget": 0
+  },
+  "quality_interpretation": {
+    "status": "accepted-from-v2",
+    "v2_observation": "all 16 A/B observations were deterministic per scenario and scale-aware campaign signal was present",
+    "legacy_affected_pixel_fraction_role": "diagnostic-only",
+    "relative_luminance_floor": 0.0001,
+    "scale_aware_affected_relative_threshold": 0.05,
+    "primary_metrics": [
+      "rgb_rms_error",
+      "p99_abs_luminance_error",
+      "scale_aware_affected_pixel_fraction"
+    ],
+    "material_change": {
+      "error_metric_min_relative_change": 0.1,
+      "scale_aware_affected_fraction_min_absolute_change": 0.005,
+      "required_concordant_primary_metrics": 2
+    },
+    "aggregate_winner_score": false,
+    "individual_black_reference_frames_valid": true
+  },
+  "artifact_contract": {
+    "required": [
+      "n003-preflight-v6-config.json",
+      "n003-preflight-v6-progress.json",
+      "n003-preflight-v6-raw.json",
+      "n003-preflight-v6-summary.json"
+    ]
+  }
+}
