@@ -1,232 +1,124 @@
 # N001 — renderer/reference bring-up
 
-Status: **GPU-independent preparation complete; target renderer/reference execution pending**
+Status: **GPU-independent implementation complete; target GPU execution pending**
 
 Issue: #26  
 Branch: `research-lane-n-end-to-end-renderer`  
-Program source of truth: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
+Architecture source of truth: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-## Question
+## Scope
 
-Can the accepted A–M architecture be brought into an image-producing renderer
-with a deterministic scene/playback, a converged diffuse reference, exact pixel
-alignment, complete GI/renderer timing boundaries, true-lifetime memory
-accounting, and machine-checkable provenance before any performance ranking or
-new transport mechanism is attempted?
+N001 builds an actual linear-HDR end-to-end renderer around the accepted A–M decisions. It does not select a performance winner and does not add temporal reuse, leak mitigation, denoising, glossy/specular transport, or new multi-bounce realtime transport.
 
-N001 does **not** answer which architecture is faster. It only establishes a
-trustworthy renderer/reference measurement surface.
-
-## Frozen architecture inputs
-
-N001 must preserve the current `research/status.md` decisions:
+The accepted architecture remains unchanged:
 
 - A001 visibility-driven Split RC producer/schema v1;
-- natural GPU append order, with no post-producer global reorder;
+- natural GPU append order;
 - HWRT/TLAS primary traversal;
-- software fallback: segment DDA/hash + object-local StrataBrick + conservative
-  quantized Micro BVH8;
+- software fallback: segment DDA/hash + object-local StrataBrick + conservative quantized Micro BVH8;
 - per-probe open-addressed sparse hash radiance storage;
-- immutable static geometry ownership;
+- immutable static geometry;
 - rigid object-local BLAS + instance transform;
-- stable-topology deformation through object-local UPDATE;
-- topology-changing/high-churn through the retained Lane-E object-local rebuild
-  backend.
+- stable-topology object-local UPDATE;
+- topology-changing/high-churn object-local rebuild.
 
-N001 geometry playback only needs to prove deterministic geometry-state replay;
-the target bring-up frame may exercise the rigid/stable-topology paths. Full
-separate topology-changing/high-churn characterization starts in N002/N004.
+N001 snapshots the accepted A/B/E implementation blobs with exact SHA provenance instead of reimplementing those mechanisms. The historical Integration #13 integer/hash radiance payload is replaced only at the image-transport boundary by real Lambertian radiance; the accepted producer/traversal/storage/ownership mechanisms are preserved.
 
-The historical Integration #13 `i001_radiance.comp.glsl` deterministic integer
-radiance payload is **not** a valid N001 image renderer or reference. It was a
-correctness/control mechanism, not physical diffuse transport. N001 must produce
-linear HDR radiance from real direct + indirect diffuse transport.
+## Frozen workload
 
-## GPU-independent contract
+Scene: `assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf`  
+SHA-256: `2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6`
 
-The machine-readable freeze is `001-n001-config.json`.
+Raw output/reference:
 
-The contract code:
-
-- validates the frozen experiment/config identity;
-- derives a SHA-256 playback identity for every camera/light/geometry frame;
-- reads/writes RGB float PFM with an explicit top-left in-memory origin;
-- rejects non-finite HDR values and dimension/alignment mismatches;
-- computes raw radiometric metrics before exposure/tone mapping;
-- validates complete GI and complete-renderer GPU boundaries independently;
-- validates persistent/transient/scratch/old-new-overlap/true-lifetime-peak
-  memory categories;
-- validates clean-commit/device/driver/API/timestamp provenance;
-- rejects any target artifact with traversal/OOB/storage/lifetime errors.
-
-The contract smoke uses a synthetic HDR gradient only to test serialization and
-metric arithmetic. It is not GI evidence.
-
-## Scene and deterministic playback
-
-Scene: Sponza `Sponza01.gltf`, SHA-256
-`2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6`.
-
-The camera/light parameterization stays scene-relative so it reproduces the
-accepted A001 framing rather than baking one machine-specific world transform:
-
-- base direction `[1, 0.32, 1]`;
-- eye distance `0.82 * scene diagonal`;
-- vertical FOV `70°`;
-- camera-motion orbit `0.35 rad`;
-- static light offset `[0.15, 0.35, 0.10] * diagonal`;
-- moved light offset `[-0.30, 0.22, 0.28] * diagonal`.
-
-Four bring-up states are frozen: static, camera motion, light motion, and one
-deterministic **rigid** geometry-motion state. Geometry selection is seeded.
-Stable-topology deformation and topology-changing/high-churn remain frozen
-architecture decisions, but their separate image behavior is intentionally
-deferred to the later Lane-N scenario matrix instead of mixing two geometry
-transitions into one N001 frame. Every state
-gets an exact canonical JSON digest and the target renderer/reference must emit
-that digest with the frame.
-
-## HDR and alignment contract
-
-N001 raw exchange format is RGB float PFM:
-
-- 320 × 180;
-- linear Rec.709 RGB;
+- 320×180 RGB float PFM;
+- linear Rec.709;
 - top-left logical origin;
-- no exposure or tone mapping in the metric path;
-- all finite pixels are valid in N001;
-- output and reference must have identical dimensions and playback state digest.
+- no exposure/tone mapping in metrics;
+- constant-white Lambertian material response;
+- deterministic independent reference seeds `0x12345678` and `0x9abcdef0`.
 
-PFM is used here because it is dependency-free, lossless float HDR, and easy to
-audit. Display PNG/JPEG screenshots may be generated later but are diagnostic
-only.
+Playback contains four independently identified states: static, camera motion, light motion, and rigid geometry motion. Each state is canonical-JSON hashed and must match between output and reference.
 
-## Diffuse reference contract
+## Renderer path
 
-The N001 reference is diffuse path tracing, not a new realtime feature:
+`phos-n001` uses:
+
+1. a full-resolution HWRT primary-visibility prerequisite;
+2. the accepted A001 visibility-driven producer and natural append order;
+3. accepted Lane-E-final HWRT traversal/dynamic ownership;
+4. one-bounce Lambertian probe-hit radiance;
+5. accepted per-probe open-addressed sparse radiance storage;
+6. a full-resolution composite that reads the sparse probe storage and emits HDR pixels.
+
+The direct-light shadow prerequisite is shared by every future Lane-N variant and uses conservative triangle occlusion. It is not counted as a new GI mitigation. Any residual discrepancy against the reference remains observable rather than being hidden by a denoiser or temporal pass.
+
+## Diffuse reference
+
+The reference is an independent CPU BVH diffuse path tracer using the same frozen camera/geometry state:
 
 - direct + indirect Lambertian transport;
-- constant white Lambertian material response for the N001 bring-up image;
-- white point-light radiance; changing-illumination bring-up moves the light
-  without also changing its spectrum;
 - up to 8 diffuse bounces;
-- no glossy/specular reference in N001 bring-up;
-- two deterministic independent seeds;
-- begin at 512 spp and grow by powers of two up to 8192 spp;
-- reference convergence requires both independent replicates to satisfy:
-  - p99 absolute luminance delta <= 0.001;
-  - p99 relative luminance delta <= 0.01.
+- two independent seeds;
+- 512 spp, then powers of two up to 8192 spp;
+- convergence requires both p99 absolute luminance delta <= 0.001 and p99 relative luminance delta <= 0.01.
 
-If a frame does not converge by 8192 spp, that frame is not N001-valid. The
-thresholds must not be relaxed after observing the target result.
+A frame that fails to converge by 8192 spp is not N001-valid. Multi-bounce difference is intentionally recorded as a current capability boundary; Lane N does not implement a realtime solution for it.
 
-Multi-bounce mismatch and glossy/specular capability are recorded later as
-capability boundaries; no mitigation is implemented in Lane N.
+## Timing boundary
 
-## Image metrics
-
-At minimum, preserve per frame:
-
-- mean absolute luminance error;
-- mean relative luminance error;
-- RGB RMS error;
-- p95/p99/max absolute luminance error;
-- p95/p99 relative luminance error;
-- affected-pixel fraction using the frozen absolute + relative thresholds.
-
-No single aggregate score replaces these radiometric values.
-
-## Complete timing boundary
-
-GPU timestamp remains the primary performance axis and complete CPU wall remains
-diagnostic/health/provenance only. N001 freezes names/boundaries, **not a
-performance threshold**.
-
-Complete GI GPU time contains recurrent work for:
+GPU timestamps are primary. CPU wall time is diagnostic/provenance only. Complete GI contains:
 
 - renderer prerequisite attributable to GI;
-- frame init / visibility-owner work;
+- frame init / visibility;
 - producer;
 - ray preparation;
-- geometry preparation/upload;
-- acceleration-structure maintenance;
+- geometry upload;
+- AS maintenance;
 - traversal;
 - gather;
-- radiance storage lookup/update/invalidation/allocation;
+- radiance storage;
 - merge/resolve;
-- required synchronization.
+- synchronization.
 
-The artifact also records complete renderer GPU time. A renderer prerequisite
-shared with non-GI rendering may be reported in the renderer total, but any
-incremental prerequisite required specifically by a GI variant stays inside the
-GI boundary.
-
-The sum of the named complete-GI stages must agree with `complete_gi_gpu`
-within 2 us; positive unaccounted work may not be hidden in the total.
-
-Lane K's 5% and Lane L's 20% floors are not imported as Lane-N thresholds.
-Before N002/N003 performance claims, calibrate the actual complete-frame
-boundary and freeze workload, metrics, threshold, process/order structure, and
-rerun policy.
+The named stage sum must match `complete_gi_gpu` within 2 us. `complete_renderer_gpu` additionally includes final image composition. N001 has no formal winner threshold; Lane K 5% and Lane L 20% thresholds are not reused.
 
 ## Memory boundary
 
 Every frame records:
 
-- geometry-AS persistent bytes;
-- radiance-storage persistent bytes;
-- producer/stream persistent bytes;
+- aggregate persistent bytes;
 - transient bytes;
 - scratch bytes;
-- simultaneous old/new overlap during updates;
+- simultaneous old/new overlap;
 - true lifetime peak;
-- host mirrors separately.
+- radiance-storage persistent bytes;
+- producer-stream capacity;
+- image transient bytes.
 
-`true_lifetime_peak` must describe simultaneous lifetime overlap, not the sum of
-independent per-stage maxima.
-
-## Required target artifact
-
-A valid target root contains at least:
-
-```text
-n001-provenance.json
-frames/
-  output-000.pfm
-  reference-000.pfm
-  ...
-n001-validation-summary.json   # written after validator passes
-```
-
-`n001-provenance.json` contains the clean Git identity, target device/driver/API
-and timestamp period, scene/playback digests, per-frame reference convergence,
-correctness counters, complete timing boundaries, memory census, and relative
-paths to output/reference PFM files.
+For the N001 rigid UPDATE path, old/new overlap is zero because the accepted AS update is in-place. `true_lifetime_peak` must be at least every simultaneously live component and is automatically validated.
 
 ## Correctness / provenance gate
 
-Before N001 can conclude:
+Target evidence is valid only when all of these pass automatically:
 
 - clean `research-lane-n-end-to-end-renderer` checkout;
-- exact Sponza digest;
-- exact playback digest and per-frame state digests;
-- output/reference alignment valid;
-- finite HDR payloads at 320 × 180;
-- reference convergence gate passes per frame;
+- exact Sponza SHA-256;
+- exact playback and per-frame state digests;
+- output/reference dimensions and HDR alignment;
+- finite HDR payloads;
+- converged reference for every frame;
 - traversal runtime errors = 0;
-- OOB errors = 0;
-- unresolved storage failures = 0;
-- allocation/lifetime accounting errors = 0;
+- Vulkan validation-layer error lines = 0 (recorded as OOB/error gate);
+- storage failures = 0;
+- lifetime-accounting errors = 0;
 - target device/driver/API/timestamp provenance present;
-- complete GI time and complete renderer time present;
-- all required memory categories present.
+- complete GI/renderer timing present and internally accounted;
+- required memory categories present.
 
-No sample/outlier deletion exists in N001. Formal timing rerun policy is not
-selected until the complete-frame calibration is designed prospectively.
+No sample or outlier deletion is allowed.
 
-## GPU-independent execution
-
-Run the contract/tests before any target-GPU work:
+## GPU-independent checks
 
 ```bash
 mise exec -- python scripts/research/lane_n_end_to_end_renderer/test_n001_contract.py
@@ -237,19 +129,41 @@ mise exec -- python scripts/research/run_experiment.py \
   --command "mise exec -- python scripts/research/lane_n_end_to_end_renderer/run_n001.py --phase contract"
 ```
 
-This produces only contract-smoke artifacts under `out/research/`; it is not a
-renderer result.
+The synthetic PFM generated by `--phase contract` is serialization/metric smoke only and is never GI evidence.
 
-## Target handoff boundary
+## Target build and execution
 
-The next implementation checkpoint is the Vulkan image-producing runtime that
-ports the accepted producer/traversal/storage/dynamic-ownership mechanisms into
-Lane N and emits the frozen target artifact above. Do not use the old synthetic
-Integration #13 radiance function as a shortcut.
+Build first:
 
-Once that runtime exists and builds cleanly, target execution must be wrapped by
-`scripts/research/run_experiment.py`; the exact target command and expected
-artifact list must be frozen in this document before the first target run.
+```bash
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build --target phos-n001 -j
+```
 
-N002 is blocked until N001 target artifacts pass the validator. N003/N004/N005
-remain blocked behind N002 in the order defined by Issue #26.
+Then run target evidence through the research wrapper:
+
+```bash
+mise exec -- python scripts/research/run_experiment.py \
+  --lane lane-n-end-to-end-renderer \
+  --experiment 001-renderer-reference-bringup \
+  --command "mise exec -- python scripts/research/lane_n_end_to_end_renderer/run_n001.py --phase target --binary build/phos-n001"
+```
+
+Expected run-root artifacts include:
+
+```text
+metadata.json
+stdout.log
+stderr.log
+n001-renderer-stdout.log
+n001-renderer-stderr.log
+n001-runtime.json
+n001-provenance.json
+n001-validation-summary.json
+frames/output-000.pfm ... output-003.pfm
+frames/reference-000.pfm ... reference-003.pfm
+```
+
+Success means the command exits 0 and `n001-validation-summary.json` has `status: "pass"`. N001 still makes no performance winner claim.
+
+N002 is blocked until this target gate passes. N003, N004, and N005 remain ordered behind N002 as specified by Issue #26.

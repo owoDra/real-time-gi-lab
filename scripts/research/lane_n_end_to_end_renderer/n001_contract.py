@@ -240,14 +240,14 @@ def validate_config(config: dict[str, Any]) -> None:
     memory = _require_mapping(config.get("memory_boundary"), "memory_boundary")
     categories = set(_require_sequence(memory.get("required_categories"), "memory_boundary.required_categories"))
     required_categories = {
-        "geometry_as_persistent",
-        "radiance_storage_persistent",
-        "producer_stream_persistent",
+        "persistent",
         "transient",
         "scratch",
         "old_new_overlap",
         "true_lifetime_peak",
-        "host_mirrors",
+        "radiance_storage_persistent",
+        "producer_stream_capacity",
+        "image_transient",
     }
     if categories != required_categories:
         raise ContractError("memory_boundary.required_categories does not match the frozen N001 boundary")
@@ -481,7 +481,7 @@ def validate_target_artifact(root: Path, config: dict[str, Any]) -> dict[str, An
                 raise ContractError("memory values must be non-negative")
             normalized_memory[name] = value
         true_peak = normalized_memory["true_lifetime_peak"]
-        if true_peak < max(value for name, value in normalized_memory.items() if name != "host_mirrors"):
+        if true_peak < max(value for name, value in normalized_memory.items() if name != "true_lifetime_peak"):
             raise ContractError("true_lifetime_peak is smaller than a device allocation category")
 
         output_path = _artifact_relative_path(root, frame.get("output_hdr"), "frame.output_hdr")

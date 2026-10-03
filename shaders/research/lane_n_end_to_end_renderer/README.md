@@ -1,5 +1,10 @@
 # Lane N renderer shaders
 
-Image-producing Split RC shaders for Lane N will live here after the accepted
-A/E/M mechanisms are selectively ported. N001 does not add temporal reuse, leak
-mitigation, multi-bounce extensions, glossy/specular transport, or denoising.
+N001 shader ownership is intentionally narrow:
+
+- accepted Lane A/B/E shaders are exact snapshots under `imported/`;
+- `n001_physical_radiance.comp.glsl` replaces only Integration #13's synthetic hash radiance with one-bounce Lambertian probe-hit radiance;
+- `n001_primary.comp.glsl` produces full-resolution primary visibility for HDR alignment;
+- `n001_composite.comp.glsl` resolves direct lighting plus sparse stored probe radiance into linear HDR pixels.
+
+N001 does not add temporal reuse, leak mitigation, denoising, glossy/specular transport, or realtime multi-bounce transport.

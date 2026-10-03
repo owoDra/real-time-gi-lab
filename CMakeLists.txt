@@ -121,6 +121,7 @@ add_subdirectory(src/research/lane_a_split_rc)
 add_subdirectory(src/research/lane_b_traversal)
 add_subdirectory(src/research/lane_c_storage_locality)
 add_subdirectory(src/research/lane_k_gpu_primary_calibration)
+add_subdirectory(src/research/lane_n_end_to_end_renderer)
 
 get_property(SHADER_OUTPUTS GLOBAL PROPERTY PHOS_GI_SHADER_OUTPUTS)
 add_custom_target(phos-gi-shaders ALL DEPENDS ${SHADER_OUTPUTS})

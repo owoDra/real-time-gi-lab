@@ -1,16 +1,13 @@
 # Lane N N001 scripts
 
-`n001_contract.py` is the implementation truth for the N001 HDR exchange,
-playback identity, radiometric comparison, timing/memory artifact schema, and
-target-artifact validation.
+`n001_contract.py` is the implementation truth for HDR exchange, playback identity, radiometric metrics, complete timing/memory schema, and target-artifact validation.
 
-`run_n001.py --phase contract` performs a GPU-independent serialization/metric
-smoke and emits the frozen playback manifest. The synthetic gradient used by
-this phase is not GI evidence.
+`run_n001.py` supports three phases:
 
-`run_n001.py --phase validate-target --target-artifact <path>` validates a real
-N001 target artifact after the image-producing Vulkan runtime exists.
+- `--phase contract`: GPU-independent PFM/playback/metric smoke only;
+- `--phase target`: requires a clean Lane-N checkout, exact scene SHA, built `phos-n001`, captures validation-layer output, finalizes provenance, and runs the target artifact validator;
+- `--phase validate-target`: revalidates an existing target artifact root.
 
-`test_n001_contract.py` covers deterministic playback hashing, PFM orientation,
-metric behavior, the contract smoke, and a complete synthetic target-artifact
-validation path.
+`test_n001_contract.py` covers deterministic playback hashing, PFM orientation, HDR metric behavior, target schema validation, integer memory accounting, path containment, and complete-GI stage accounting.
+
+The target phase must be wrapped by `scripts/research/run_experiment.py` so raw logs and repository metadata are retained under `out/research/`.

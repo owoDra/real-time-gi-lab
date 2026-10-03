@@ -17,7 +17,7 @@
     "color_space": "linear-rec709",
     "origin": "top-left",
     "valid_pixel_mask": "all-finite-pixels",
-    "metric_exposure": 1,
+    "metric_exposure": 1.0,
     "tone_mapping_for_metrics": false,
     "material_model": "constant-white-lambertian"
   },
@@ -28,8 +28,8 @@
     "min_spp": 512,
     "max_spp": 8192,
     "sample_growth": "powers-of-two",
-    "seed_a": 1311768467463790300,
-    "seed_b": 1147797409030816500,
+    "seed_a": 305419896,
+    "seed_b": 2596069104,
     "replicate_p99_abs_luminance_max": 0.001,
     "replicate_p99_relative_luminance_max": 0.01
   },
@@ -39,126 +39,30 @@
       {
         "frame": 0,
         "kind": "static",
-        "camera": {
-          "base_direction": [
-            1,
-            0.32,
-            1
-          ],
-          "orbit_radians": 0,
-          "distance_diagonal": 0.82,
-          "vfov_degrees": 70
-        },
-        "light": {
-          "offset_diagonal": [
-            0.15,
-            0.35,
-            0.1
-          ],
-          "radiance": [
-            18,
-            18,
-            18
-          ]
-        },
-        "geometry": {
-          "rigid_phase": 0,
-          "deform_phase": 0,
-          "topology_epoch": 0
-        }
+        "camera": {"base_direction": [1.0, 0.32, 1.0], "orbit_radians": 0.0, "distance_diagonal": 0.82, "vfov_degrees": 70.0},
+        "light": {"offset_diagonal": [0.15, 0.35, 0.10], "radiance": [1.0, 1.0, 1.0]},
+        "geometry": {"rigid_phase": 0.0, "deform_phase": 0.0, "topology_epoch": 0}
       },
       {
         "frame": 1,
         "kind": "camera-motion",
-        "camera": {
-          "base_direction": [
-            1,
-            0.32,
-            1
-          ],
-          "orbit_radians": 0.35,
-          "distance_diagonal": 0.82,
-          "vfov_degrees": 70
-        },
-        "light": {
-          "offset_diagonal": [
-            0.15,
-            0.35,
-            0.1
-          ],
-          "radiance": [
-            18,
-            18,
-            18
-          ]
-        },
-        "geometry": {
-          "rigid_phase": 0,
-          "deform_phase": 0,
-          "topology_epoch": 0
-        }
+        "camera": {"base_direction": [1.0, 0.32, 1.0], "orbit_radians": 0.35, "distance_diagonal": 0.82, "vfov_degrees": 70.0},
+        "light": {"offset_diagonal": [0.15, 0.35, 0.10], "radiance": [1.0, 1.0, 1.0]},
+        "geometry": {"rigid_phase": 0.0, "deform_phase": 0.0, "topology_epoch": 0}
       },
       {
         "frame": 2,
         "kind": "light-motion",
-        "camera": {
-          "base_direction": [
-            1,
-            0.32,
-            1
-          ],
-          "orbit_radians": 0,
-          "distance_diagonal": 0.82,
-          "vfov_degrees": 70
-        },
-        "light": {
-          "offset_diagonal": [
-            -0.3,
-            0.22,
-            0.28
-          ],
-          "radiance": [
-            18,
-            18,
-            18
-          ]
-        },
-        "geometry": {
-          "rigid_phase": 0,
-          "deform_phase": 0,
-          "topology_epoch": 0
-        }
+        "camera": {"base_direction": [1.0, 0.32, 1.0], "orbit_radians": 0.0, "distance_diagonal": 0.82, "vfov_degrees": 70.0},
+        "light": {"offset_diagonal": [-0.30, 0.22, 0.28], "radiance": [1.0, 1.0, 1.0]},
+        "geometry": {"rigid_phase": 0.0, "deform_phase": 0.0, "topology_epoch": 0}
       },
       {
         "frame": 3,
         "kind": "geometry-motion",
-        "camera": {
-          "base_direction": [
-            1,
-            0.32,
-            1
-          ],
-          "orbit_radians": 0,
-          "distance_diagonal": 0.82,
-          "vfov_degrees": 70
-        },
-        "light": {
-          "offset_diagonal": [
-            0.15,
-            0.35,
-            0.1
-          ],
-          "radiance": [
-            18,
-            18,
-            18
-          ]
-        },
-        "geometry": {
-          "rigid_phase": 1,
-          "deform_phase": 0,
-          "topology_epoch": 0
-        }
+        "camera": {"base_direction": [1.0, 0.32, 1.0], "orbit_radians": 0.0, "distance_diagonal": 0.82, "vfov_degrees": 70.0},
+        "light": {"offset_diagonal": [0.15, 0.35, 0.10], "radiance": [1.0, 1.0, 1.0]},
+        "geometry": {"rigid_phase": 1.0, "deform_phase": 0.0, "topology_epoch": 0}
       }
     ]
   },
@@ -194,24 +98,21 @@
       "merge_resolve",
       "synchronization"
     ],
-    "required_totals": [
-      "complete_gi_gpu",
-      "complete_renderer_gpu"
-    ],
+    "required_totals": ["complete_gi_gpu", "complete_renderer_gpu"],
     "formal_performance_threshold": null,
-    "note": "N001 does not rank performance. Lane-N complete-frame calibration is required before N002/N003 formal performance claims. Every complete-GI stage is explicit and its sum must match complete_gi_gpu within the frozen tolerance.",
-    "stage_sum_tolerance_us": 2
+    "stage_sum_tolerance_us": 2.0,
+    "note": "N001 does not rank performance. Lane-N complete-frame calibration is required before N002/N003 formal performance claims."
   },
   "memory_boundary": {
     "required_categories": [
-      "geometry_as_persistent",
-      "radiance_storage_persistent",
-      "producer_stream_persistent",
+      "persistent",
       "transient",
       "scratch",
       "old_new_overlap",
       "true_lifetime_peak",
-      "host_mirrors"
+      "radiance_storage_persistent",
+      "producer_stream_capacity",
+      "image_transient"
     ]
   },
   "correctness": {
