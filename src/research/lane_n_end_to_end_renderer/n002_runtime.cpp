@@ -102,9 +102,11 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
                 triangle.primitive_id);
         }
     }
-    if (max_primitive_id >
-        std::numeric_limits<std::uint32_t>::max() -
-            impl_->moving.primitives.size() - 1U) {
+    const auto primitive_budget = impl_->moving.primitives.size() + 1U;
+    if (primitive_budget > std::numeric_limits<std::uint32_t>::max() ||
+        max_primitive_id >
+            std::numeric_limits<std::uint32_t>::max() -
+                static_cast<std::uint32_t>(primitive_budget)) {
         throw std::runtime_error(
             "N002 topology replacement primitive-id range overflow");
     }
@@ -153,9 +155,11 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
             sample.position[3],
         });
     }
-    if (replaced == 0U || replaced * 2U < impl_->moving.primitives.size() - 1U) {
+    const auto expected_replaced =
+        (impl_->moving.primitives.size() + 1U) / 2U;
+    if (replaced != expected_replaced) {
         throw std::runtime_error(
-            "N002 topology mutation failed to exercise the frozen high-churn fraction");
+            "N002 topology mutation did not match the frozen 50% churn schedule");
     }
     n002_recompute_bounds(impl_->a_scene, impl_->b_scene);
     const auto geometry_prepare_cpu_us =
@@ -216,6 +220,8 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
     result.stats.moved_primitives =
         static_cast<std::uint32_t>(impl_->moving.primitives.size());
     result.stats.topology_mutations = 1U;
+    result.stats.topology_replaced_primitives =
+        static_cast<std::uint32_t>(replaced);
     result.stats.backend_rebuilds = 1U;
 
     result.memory.old_new_overlap_bytes =
@@ -224,9 +230,13 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
         rebuild.old_new_overlap_bytes >= rebuild.replacement_blas_bytes
             ? rebuild.old_new_overlap_bytes - rebuild.replacement_blas_bytes
             : 0U;
-    result.memory.peak_resident_bytes = std::max(
-        result.memory.peak_resident_bytes,
-        result.memory.peak_resident_bytes + retired_old_bytes);
+    const auto steady_peak = result.memory.peak_resident_bytes;
+    if (retired_old_bytes >
+        std::numeric_limits<std::size_t>::max() - steady_peak) {
+        throw std::runtime_error("N002 topology lifetime peak overflow");
+    }
+    result.memory.peak_resident_bytes =
+        steady_peak + retired_old_bytes;
 
     impl_->memory_stats = result.memory;
     impl_->last = result;
