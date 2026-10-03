@@ -49,7 +49,7 @@ HOST_FIELDS = (
 
 def git(*args: str) -> str:
     proc = subprocess.run(
-        ["git", *args), cwd=ROOT, text=True, capture_output=True, check=False
+        ["git", *args], cwd=ROOT, text=True, capture_output=True, check=False
     )
     if proc.returncode != 0:
         raise contract.ContractError(proc.stderr.strip())
