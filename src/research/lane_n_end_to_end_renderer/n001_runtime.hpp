@@ -96,6 +96,8 @@ struct I001FrameStats {
     std::uint32_t segment_membership_changes{};
     std::uint32_t hierarchy_refit_segments{};
     std::uint32_t hierarchy_rebuilt_segments{};
+    std::uint32_t topology_mutations{};
+    std::uint32_t backend_rebuilds{};
     std::uint32_t storage_allocations{};
     std::uint32_t storage_updates{};
     std::uint32_t storage_invalidations{};
@@ -106,6 +108,7 @@ struct I001Memory {
     std::size_t persistent_bytes{};
     std::size_t transient_bytes{};
     std::size_t scratch_bytes{};
+    std::size_t old_new_overlap_bytes{};
     std::size_t peak_resident_bytes{};
     std::size_t stream_capacity_bytes{};
     std::size_t storage_capacity_bytes{};
@@ -162,6 +165,13 @@ public:
     I001Runtime& operator=(const I001Runtime&) = delete;
 
     [[nodiscard]] I001FrameResult run_frame(bool target_state);
+
+    // N002-only extension. The implementation is compiled by the topology
+    // target after including the accepted N001 runtime implementation. It
+    // mutates exactly the frozen dynamic owner, performs an object-local BLAS
+    // rebuild, then executes the unchanged complete renderer/GI frame.
+    [[nodiscard]] I001FrameResult run_topology_churn_frame();
+
     [[nodiscard]] I001Quality validate_last_frame();
     [[nodiscard]] I001RendererReadback renderer_readback();
 
