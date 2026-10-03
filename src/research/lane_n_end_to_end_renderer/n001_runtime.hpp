@@ -13,6 +13,9 @@
 
 namespace phos::gi::research::integration {
 
+namespace lane_a = phos::gi::lane_a;
+namespace lane_b = phos::gi::research::lane_b;
+
 enum class I001Variant {
     VanillaSoftware,
     CombinedHwrt,
