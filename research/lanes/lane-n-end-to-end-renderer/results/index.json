@@ -17,6 +17,13 @@
       "result": "002-current-architecture-baseline.md",
       "evidence_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
       "decision": "full six-scenario current architecture baseline accepted; timing descriptive only; calibrate Lane-N comparison contract before N003"
+    },
+    {
+      "id": "N003-preflight",
+      "slug": "comparison-calibration",
+      "status": "complete",
+      "result": "003-preflight-calibration.md",
+      "decision": "scenario-scoped timing eligibility frozen: static 7.0%, camera 1.5%, light 5.0%, stable-deforming 2.5%, topology-high-churn 1.5%; moving-rigid timing measurement-limited; N003 proper unblocked"
     }
   ]
 }
