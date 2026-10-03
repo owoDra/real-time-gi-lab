@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "experiment": "N003-current-vs-vanilla",
+  "phase": "comparison",
+  "protocol_version": "current-vs-vanilla-v1",
+  "source_of_truth": {
+    "parent_issue": 26,
+    "issue": 38,
+    "preflight_issue": 31,
+    "n002_completion_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764"
+  },
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "baseline": {
+    "scene": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+    "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+    "roles": {
+      "A": "current-lane-e-final-hwrt",
+      "B": "vanilla-software-bvh"
+    },
+    "shared": [
+      "scene-and-six-scenario-playback",
+      "A001-visibility-producer-and-natural-append-order",
+      "320x180-renderer-resolution",
+      "four-cascades-eight-rays-per-probe",
+      "radiance-gather-merge-open-addressed-sparse-storage-resolve",
+      "direct-plus-indirect-diffuse-renderer-semantics",
+      "reference-and-correctness-contract",
+      "complete-GI-and-complete-renderer-boundaries"
+    ],
+    "intentionally_different": {
+      "A": "accepted object-local HWRT/TLAS traversal and dynamic maintenance from N002",
+      "B": "historical Integration-13 vanilla global binary software-BVH traversal with whole-BVH rebuild for dynamic/topology changes; software-BVH primary and direct-light visibility"
+    }
+  },
+  "scenarios": [
+    "static",
+    "camera-motion",
+    "light-motion",
+    "moving-rigid",
+    "stable-topology-deforming",
+    "topology-changing-high-churn"
+  ],
+  "timing": {
+    "probe_binary": "build/phos-n003-comparison",
+    "source_warmup_frames": 32,
+    "outer_blocks": 8,
+    "micro_pairs_per_block": 5,
+    "outer_start_orders": ["AB", "BA", "AB", "BA", "BA", "AB", "BA", "AB"],
+    "micro_order_rule": "alternate-from-outer-start-order",
+    "settle_seconds_between_outer_blocks": 1.0,
+    "sample_exclusion": "forbidden",
+    "all_micro_pairs_retained": true,
+    "completed_campaign_rerun_budget": 0,
+    "gpu_profile_changes": "forbidden",
+    "host_gpu_policy": "leave-unchanged",
+    "primary_statistic": "median-of-five-micro-pair-log-ratios-then-median-across-eight-blocks",
+    "ratio": "B-vanilla-over-A-current",
+    "minimum_same_direction_block_fraction": 0.75,
+    "scenario_threshold_fraction": {
+      "static": 0.07,
+      "camera-motion": 0.015,
+      "light-motion": 0.05,
+      "moving-rigid": null,
+      "stable-topology-deforming": 0.025,
+      "topology-changing-high-churn": 0.015
+    },
+    "scenario_timing_eligible": {
+      "static": true,
+      "camera-motion": true,
+      "light-motion": true,
+      "moving-rigid": false,
+      "stable-topology-deforming": true,
+      "topology-changing-high-churn": true
+    },
+    "moving_rigid_interpretation": "measurement-limited-descriptive-only",
+    "aggregate_winner": "forbidden"
+  },
+  "quality": {
+    "primary_metrics": [
+      "rgb_rms_error",
+      "p99_abs_luminance_error",
+      "scale_aware_affected_pixel_fraction"
+    ],
+    "scale_aware_fraction": 0.05,
+    "scale_aware_floor": 0.0001,
+    "material_error_relative_change_fraction": 0.10,
+    "material_affected_fraction_absolute_change": 0.005,
+    "material_change_requires_primary_metric_count": 2,
+    "legacy_affected_pixel_fraction": "diagnostic-only",
+    "aggregate_winner": "forbidden",
+    "black_reference_frames": "valid"
+  },
+  "correctness": {
+    "require_same_device": true,
+    "require_same_producer_workload": true,
+    "require_zero_storage_failures": true,
+    "require_internal_quality_pass": true,
+    "topology_requires_exact_same_mutation_schedule": true
+  },
+  "artifact_contract": {
+    "required": [
+      "n003-comparison-config.json",
+      "n003-comparison-progress.json",
+      "n003-comparison-raw.json",
+      "n003-comparison-summary.json"
+    ]
+  }
+}
