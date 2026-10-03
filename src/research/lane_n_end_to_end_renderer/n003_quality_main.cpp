@@ -10,6 +10,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -111,7 +112,9 @@ void require_same_device(const RoleEvidence& a, const RoleEvidence& b) {
     }
 }
 
-[[nodiscard]] bool same_vec(lane_n::lane_b::Vec3 a, lane_n::lane_b::Vec3 b) {
+[[nodiscard]] bool same_vec(
+    phos::gi::research::lane_b::Vec3 a,
+    phos::gi::research::lane_b::Vec3 b) {
     return a.x == b.x && a.y == b.y && a.z == b.z;
 }
 
