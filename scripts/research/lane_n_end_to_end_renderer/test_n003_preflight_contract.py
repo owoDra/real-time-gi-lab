@@ -92,7 +92,7 @@ def main() -> int:
     assert jitter["control_formal_claim_trigger_count"] == 0
     assert jitter["timing_suitable_for_n003_formal_claims"] is True
 
-    # A consistently biased A/A control must be visible to the calibration.
+    # A consistently biased A/A control must make the boundary unsuitable.
     biased = contract.summarize_timing(paired_blocks([1.25] * 8), config)
     assert biased["derived_material_change_threshold_fraction"] > 0.20
     assert biased["timing_suitable_for_n003_formal_claims"] is False
