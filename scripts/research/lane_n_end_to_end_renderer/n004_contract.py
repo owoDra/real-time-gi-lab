@@ -13,6 +13,12 @@ EXPECTED_CLASSIFICATIONS = [
     "capability-not-implemented",
     "measurement-limited",
 ]
+EXPECTED_LEAK_SCENES = [
+    "leak-thin", "leak-medium", "leak-thick", "leak-grazing",
+    "leak-one-sided", "leak-enclosed",
+]
+GRADUAL_FRACTIONS = [0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1.0]
+ABRUPT_FRACTIONS = [1.0] * 8
 
 
 class ContractError(RuntimeError):
@@ -43,10 +49,18 @@ def load_config(path: Path) -> dict[str, Any]:
     return payload
 
 
+def validate_motion_cases(value: Any, label: str, names: list[str]) -> None:
+    cases = _sequence(value, label)
+    if [case.get("name") for case in cases] != names:
+        raise ContractError(f"{label} names/order changed")
+    if cases[0].get("motion_fractions") != ABRUPT_FRACTIONS:
+        raise ContractError(f"{label} abrupt/step path changed")
+    if cases[1].get("motion_fractions") != GRADUAL_FRACTIONS:
+        raise ContractError(f"{label} gradual path changed")
+
+
 def validate_config(config: dict[str, Any]) -> None:
-    if config.get("schema_version") != SCHEMA_VERSION:
-        raise ContractError("N004 schema_version changed")
-    if config.get("experiment") != "N004-weakness-atlas":
+    if config.get("schema_version") != SCHEMA_VERSION or config.get("experiment") != "N004-weakness-atlas":
         raise ContractError("N004 experiment identity changed")
     if config.get("protocol_version") != PROTOCOL_VERSION:
         raise ContractError("N004 protocol_version changed")
@@ -54,6 +68,8 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("N004 issue identity changed")
     if config.get("target_gpu") != "AMD Radeon 8060S Graphics (RADV STRIX_HALO)":
         raise ContractError("N004 target GPU changed")
+    if config.get("completed_campaign_rerun_budget") != 0:
+        raise ContractError("N004 completed campaign rerun budget changed")
 
     baseline = _mapping(config.get("baseline"), "baseline")
     if baseline.get("role") != "current-lane-e-final-hwrt":
@@ -72,59 +88,52 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("N004 reference convergence contract changed")
 
     metrics = _mapping(config.get("quality_metrics"), "quality_metrics")
-    if _number(metrics.get("scale_aware_fraction"), "scale_aware_fraction") != 0.05:
-        raise ContractError("N004 scale-aware fraction changed")
-    if _number(metrics.get("scale_aware_floor"), "scale_aware_floor") != 0.0001:
-        raise ContractError("N004 scale-aware floor changed")
-
-    not_observed = _mapping(metrics.get("generic_not_observed"), "generic_not_observed")
-    if (_number(not_observed.get("rgb_rms_max_exclusive"), "not_observed.rgb") != 0.001 or
-        _number(not_observed.get("p99_relative_luminance_max_exclusive"), "not_observed.p99rel") != 0.05 or
-        _number(not_observed.get("scale_aware_affected_fraction_max_exclusive"), "not_observed.affected") != 0.01):
-        raise ContractError("N004 generic not-observed threshold changed")
-
-    blocker = _mapping(metrics.get("generic_material_blocker"), "generic_material_blocker")
-    if blocker.get("minimum_trigger_count") != 2:
-        raise ContractError("N004 blocker trigger count changed")
-    if (_number(blocker.get("rgb_rms_min"), "blocker.rgb") != 0.01 or
-        _number(blocker.get("p99_relative_luminance_min"), "blocker.p99rel") != 0.25 or
-        _number(blocker.get("scale_aware_affected_fraction_min"), "blocker.affected") != 0.10):
-        raise ContractError("N004 generic blocker threshold changed")
+    if _number(metrics.get("scale_aware_fraction"), "scale_aware_fraction") != 0.05 or _number(metrics.get("scale_aware_floor"), "scale_aware_floor") != 0.0001:
+        raise ContractError("N004 scale-aware contract changed")
+    n = _mapping(metrics.get("generic_not_observed"), "generic_not_observed")
+    if (_number(n.get("rgb_rms_max_exclusive"), "not_observed.rgb") != 0.001 or
+        _number(n.get("p99_relative_luminance_max_exclusive"), "not_observed.p99rel") != 0.05 or
+        _number(n.get("scale_aware_affected_fraction_max_exclusive"), "not_observed.affected") != 0.01):
+        raise ContractError("N004 not-observed threshold changed")
+    b = _mapping(metrics.get("generic_material_blocker"), "generic_material_blocker")
+    if (b.get("minimum_trigger_count") != 2 or
+        _number(b.get("rgb_rms_min"), "blocker.rgb") != 0.01 or
+        _number(b.get("p99_relative_luminance_min"), "blocker.p99rel") != 0.25 or
+        _number(b.get("scale_aware_affected_fraction_min"), "blocker.affected") != 0.10):
+        raise ContractError("N004 blocker threshold changed")
 
     families = _mapping(config.get("families"), "families")
-    expected_family_keys = {
+    if set(families) != {
         "thin-geometry-light-leak", "camera-disocclusion", "changing-illumination",
         "dynamic-geometry", "world-shape", "capability-boundary",
-    }
-    if set(families) != expected_family_keys:
+    }:
         raise ContractError("N004 family set changed")
 
     leak = _mapping(families["thin-geometry-light-leak"], "leak")
-    if leak.get("scenes") != ["leak-thin", "leak-medium", "leak-thick"] or leak.get("target_frames") != 1:
+    if leak.get("scenes") != EXPECTED_LEAK_SCENES or leak.get("target_frames") != 1:
         raise ContractError("N004 leak matrix changed")
 
     camera = _mapping(families["camera-disocclusion"], "camera")
+    if camera.get("scenario") != "camera-motion" or camera.get("bounded_convergence_frame_max") != 4:
+        raise ContractError("N004 camera contract changed")
+    validate_motion_cases(camera.get("cases"), "camera.cases", ["abrupt-reveal", "gradual-motion"])
+
     light = _mapping(families["changing-illumination"], "light")
-    if camera.get("scenario") != "camera-motion" or camera.get("target_frames") != 8 or camera.get("bounded_convergence_frame_max") != 4:
-        raise ContractError("N004 camera sequence changed")
-    if light.get("scenario") != "light-motion" or light.get("target_frames") != 8 or light.get("bounded_convergence_frame_max") != 4:
-        raise ContractError("N004 light sequence changed")
+    if light.get("scenario") != "light-motion" or light.get("bounded_convergence_frame_max") != 4:
+        raise ContractError("N004 light contract changed")
+    validate_motion_cases(light.get("cases"), "light.cases", ["step-change", "gradual-change"])
 
     dynamic = _mapping(families["dynamic-geometry"], "dynamic")
     if dynamic.get("target_frames") != 4:
         raise ContractError("N004 dynamic sequence length changed")
     dynamic_scenarios = _sequence(dynamic.get("scenarios"), "dynamic.scenarios")
-    if [item.get("name") for item in dynamic_scenarios] != [
-        "moving-rigid", "stable-topology-deforming", "topology-changing-high-churn"
-    ]:
+    if [item.get("name") for item in dynamic_scenarios] != ["moving-rigid", "stable-topology-deforming", "topology-changing-high-churn"]:
         raise ContractError("N004 dynamic scenario order changed")
     if dynamic_scenarios[0].get("formal_timing") is not False:
         raise ContractError("N004 moving-rigid timing must remain measurement-limited")
 
     world = _mapping(families["world-shape"], "world")
-    if world.get("scenes") != [
-        "world-sparse", "world-dense", "world-large-horizontal", "world-vertical-tall"
-    ]:
+    if world.get("scenes") != ["world-sparse", "world-dense", "world-large-horizontal", "world-vertical-tall"]:
         raise ContractError("N004 world-shape matrix changed")
 
     capability = _mapping(families["capability-boundary"], "capability")
