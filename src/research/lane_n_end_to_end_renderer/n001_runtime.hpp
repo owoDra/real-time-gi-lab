@@ -124,6 +124,12 @@ struct I001N003HostMemory {
     std::size_t renderer_owned_total_bytes{};
 };
 
+struct I001N004HitDiagnostics {
+    std::size_t strict_mismatches{};
+    std::size_t surface_tie_equivalent_mismatches{};
+    std::size_t substantive_mismatches{};
+};
+
 struct I001RendererReadback {
     std::uint32_t width{};
     std::uint32_t height{};
@@ -180,9 +186,11 @@ public:
     [[nodiscard]] I001FrameResult run_n003_vanilla_topology_churn_frame();
     [[nodiscard]] I001N003HostMemory n003_host_memory() const noexcept;
 
-    // N004-only control. Intermediate fractions are applied only to the
-    // prospective camera/light path; the default historical fraction is 1.
+    // N004-only controls/diagnostics. Historical N001-N003 validation remains
+    // strict; N004 separately identifies geometrically equivalent primitive-ID
+    // ties without changing I001Quality::passed.
     void set_n004_motion_fraction(float fraction);
+    [[nodiscard]] I001N004HitDiagnostics n004_hit_diagnostics();
 
     [[nodiscard]] I001Quality validate_last_frame();
     [[nodiscard]] I001RendererReadback renderer_readback();
