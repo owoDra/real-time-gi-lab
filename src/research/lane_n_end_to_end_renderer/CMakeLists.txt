@@ -71,6 +71,26 @@ set(N001_SHADER_OUTPUTS
 )
 add_custom_target(phos-n001-shaders DEPENDS ${N001_SHADER_OUTPUTS})
 
+# N003-only vanilla renderer shaders. Keep these out of the accepted N001/N002
+# shader dependency set so historical renderer targets are unchanged.
+add_compute_shader(
+  i001_software_bvh
+  shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_software_bvh.comp.glsl)
+add_compute_shader(
+  n003_primary_software
+  shaders/research/lane_n_end_to_end_renderer/n003_primary_software.comp.glsl)
+add_compute_shader(
+  n003_composite_software
+  shaders/research/lane_n_end_to_end_renderer/n003_composite_software.comp.glsl)
+set(N003_COMPARISON_SHADER_OUTPUTS
+  "${CMAKE_BINARY_DIR}/shaders/i001_software_bvh.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n003_primary_software.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n003_composite_software.spv"
+)
+add_custom_target(
+  phos-n003-comparison-shaders
+  DEPENDS ${N003_COMPARISON_SHADER_OUTPUTS})
+
 set(N001_SHARED_SUPPORT_SOURCES
   n001_reference.cpp
   imported/integration/i001_compute.cpp
@@ -168,3 +188,15 @@ add_executable(phos-n003-workload-diagnostic
   ${N001_SHARED_SUPPORT_SOURCES}
 )
 configure_lane_n_renderer(phos-n003-workload-diagnostic)
+
+# N003 proper current-vs-vanilla comparison. The comparison runtime includes
+# the accepted N002 runtime in one TU and adds only comparison-specific vanilla
+# reconfiguration/topology hooks; N001/N002 targets remain source-identical.
+add_executable(phos-n003-comparison
+  n003_comparison_main.cpp
+  n003_comparison_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n003-comparison)
+add_dependencies(phos-n003-comparison phos-n003-comparison-shaders)
