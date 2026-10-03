@@ -73,6 +73,7 @@
     "sample_exclusion": "forbidden",
     "all_micro_pairs_retained": true,
     "gpu_profile_changes": "forbidden",
+    "host_gpu_policy": "leave-unchanged",
     "completed_campaign_rerun_budget": 0
   },
   "quality_interpretation": {
