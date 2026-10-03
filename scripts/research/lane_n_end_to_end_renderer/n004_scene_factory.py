@@ -40,14 +40,31 @@ def add_grid_floor(positions, indices, size=8.0, cells=24):
             add_quad(positions, indices, (x0,0.0,z0),(x1,0.0,z0),(x1,0.0,z1),(x0,0.0,z1))
 
 
-def leak_scene(thickness: float):
+def control_group(center):
     positions, indices = [], []
-    add_grid_floor(positions, indices, 8.0, 24)
-    add_box(positions, indices, (0.0, 1.35, 0.0), (thickness * 0.5, 1.35, 2.25))
-    # Two side blockers keep the controlled shadow region mostly inside view.
-    add_box(positions, indices, (0.0, 0.75, -2.75), (0.35, 0.75, 0.35))
-    add_box(positions, indices, (0.0, 0.75,  2.75), (0.35, 0.75, 0.35))
+    cx, cy, cz = center
+    # Three boxes = 36 triangles. The accepted Lane-E-final stable path keeps
+    # one idle dynamic object; making this mesh first ensures the large workload
+    # geometry remains static ownership rather than becoming the control object.
+    for offset in (-0.36, 0.0, 0.36):
+        add_box(positions, indices, (cx + offset, cy, cz), (0.12, 0.12, 0.12))
     return positions, indices
+
+
+def leak_scene(thickness: float):
+    floor_p, floor_i = [], []
+    add_grid_floor(floor_p, floor_i, 8.0, 24)
+
+    wall_p, wall_i = [], []
+    add_box(wall_p, wall_i, (0.0, 1.35, 0.0), (thickness * 0.5, 1.35, 2.25))
+    add_box(wall_p, wall_i, (0.0, 0.75, -2.75), (0.35, 0.75, 0.35))
+    add_box(wall_p, wall_i, (0.0, 0.75,  2.75), (0.35, 0.75, 0.35))
+
+    return [
+        control_group((-3.35, 0.18, -3.35)),
+        (floor_p, floor_i),
+        (wall_p, wall_i),
+    ]
 
 
 def world_scene(kind: str):
@@ -77,7 +94,6 @@ def world_scene(kind: str):
     for y in range(ny):
         for z in range(nz):
             for x in range(nx):
-                # Small deterministic offsets avoid a perfectly periodic ray workload.
                 jitter = 0.07 * math.sin((x + 1) * 1.7 + (z + 1) * 0.9 + y * 0.4)
                 add_box(
                     positions,
@@ -85,46 +101,68 @@ def world_scene(kind: str):
                     (ox + x * spacing[0], oy + y * spacing[1] + jitter, oz + z * spacing[2]),
                     half,
                 )
-    return positions, indices
+
+    control_center = (ox + 0.2, oy + 0.15, oz + 0.2)
+    return [control_group(control_center), (positions, indices)]
 
 
-def write_gltf(root: Path, name: str, positions, indices):
+def write_gltf(root: Path, name: str, groups):
     root.mkdir(parents=True, exist_ok=True)
     binary = bytearray()
-    for p in positions:
-        binary.extend(struct.pack("<3f", *p))
-    while len(binary) % 4:
-        binary.append(0)
-    index_offset = len(binary)
-    for i in indices:
-        binary.extend(struct.pack("<I", i))
+    buffer_views = []
+    accessors = []
+    meshes = []
+    nodes = []
 
-    xs = [p[0] for p in positions]
-    ys = [p[1] for p in positions]
-    zs = [p[2] for p in positions]
+    for mesh_index, (positions, indices) in enumerate(groups):
+        while len(binary) % 4:
+            binary.append(0)
+        position_offset = len(binary)
+        for p in positions:
+            binary.extend(struct.pack("<3f", *p))
+        position_view = len(buffer_views)
+        buffer_views.append({
+            "buffer": 0, "byteOffset": position_offset,
+            "byteLength": len(positions) * 12, "target": 34962,
+        })
+        xs = [p[0] for p in positions]
+        ys = [p[1] for p in positions]
+        zs = [p[2] for p in positions]
+        position_accessor = len(accessors)
+        accessors.append({
+            "bufferView": position_view, "byteOffset": 0, "componentType": 5126,
+            "count": len(positions), "type": "VEC3",
+            "min": [min(xs), min(ys), min(zs)], "max": [max(xs), max(ys), max(zs)],
+        })
+
+        while len(binary) % 4:
+            binary.append(0)
+        index_offset = len(binary)
+        for i in indices:
+            binary.extend(struct.pack("<I", i))
+        index_view = len(buffer_views)
+        buffer_views.append({
+            "buffer": 0, "byteOffset": index_offset,
+            "byteLength": len(indices) * 4, "target": 34963,
+        })
+        index_accessor = len(accessors)
+        accessors.append({
+            "bufferView": index_view, "byteOffset": 0, "componentType": 5125,
+            "count": len(indices), "type": "SCALAR",
+            "min": [min(indices)], "max": [max(indices)],
+        })
+        meshes.append({"primitives": [{"attributes": {"POSITION": position_accessor}, "indices": index_accessor}]})
+        nodes.append({"mesh": mesh_index})
+
     bin_name = f"{name}.bin"
     gltf = {
-        "asset": {"version": "2.0", "generator": "phos-n004-scene-factory-v1"},
+        "asset": {"version": "2.0", "generator": "phos-n004-scene-factory-v2"},
         "buffers": [{"uri": bin_name, "byteLength": len(binary)}],
-        "bufferViews": [
-            {"buffer": 0, "byteOffset": 0, "byteLength": len(positions) * 12, "target": 34962},
-            {"buffer": 0, "byteOffset": index_offset, "byteLength": len(indices) * 4, "target": 34963},
-        ],
-        "accessors": [
-            {
-                "bufferView": 0, "byteOffset": 0, "componentType": 5126,
-                "count": len(positions), "type": "VEC3",
-                "min": [min(xs), min(ys), min(zs)], "max": [max(xs), max(ys), max(zs)],
-            },
-            {
-                "bufferView": 1, "byteOffset": 0, "componentType": 5125,
-                "count": len(indices), "type": "SCALAR",
-                "min": [min(indices)], "max": [max(indices)],
-            },
-        ],
-        "meshes": [{"primitives": [{"attributes": {"POSITION": 0}, "indices": 1}]}],
-        "nodes": [{"mesh": 0}],
-        "scenes": [{"nodes": [0]}],
+        "bufferViews": buffer_views,
+        "accessors": accessors,
+        "meshes": meshes,
+        "nodes": nodes,
+        "scenes": [{"nodes": list(range(len(nodes)))}],
         "scene": 0,
     }
     (root / bin_name).write_bytes(binary)
@@ -133,21 +171,27 @@ def write_gltf(root: Path, name: str, positions, indices):
     return path
 
 
+def triangle_count(groups):
+    return sum(len(indices) // 3 for _, indices in groups)
+
+
 def generate_all(root: Path):
-    manifest = {"schema_version": 1, "generator": "phos-n004-scene-factory-v1", "scenes": {}}
+    manifest = {"schema_version": 1, "generator": "phos-n004-scene-factory-v2", "scenes": {}}
     for label, thickness in (("thin", 0.02), ("medium", 0.10), ("thick", 0.40)):
-        p, i = leak_scene(thickness)
-        path = write_gltf(root, f"leak-{label}", p, i)
+        groups = leak_scene(thickness)
+        path = write_gltf(root, f"leak-{label}", groups)
         manifest["scenes"][f"leak-{label}"] = {
             "path": path.name, "kind": "leak", "wall_thickness_world": thickness,
-            "triangles": len(i) // 3,
+            "triangles": triangle_count(groups), "mesh_count": len(groups),
+            "idle_dynamic_control_triangles": 36,
         }
     for kind in ("sparse", "dense", "large-horizontal", "vertical-tall"):
-        p, i = world_scene(kind)
-        path = write_gltf(root, f"world-{kind}", p, i)
+        groups = world_scene(kind)
+        path = write_gltf(root, f"world-{kind}", groups)
         manifest["scenes"][f"world-{kind}"] = {
             "path": path.name, "kind": "world-shape", "layout": kind,
-            "triangles": len(i) // 3,
+            "triangles": triangle_count(groups), "mesh_count": len(groups),
+            "idle_dynamic_control_triangles": 36,
         }
     (root / "n004-scenes.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
