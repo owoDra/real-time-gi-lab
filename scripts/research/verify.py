@@ -27,7 +27,7 @@ LANES = {
         "script": "scripts/research/lane_k_gpu_primary_calibration/README.md",
     },
     "lane-n-end-to-end-renderer": {
-        "src": "src/research/lane_n_end_to_end_renderer/README.md",
+        "src": "src/research/lane_n_end_to_end_renderer/CMakeLists.txt",
         "shader": "shaders/research/lane_n_end_to_end_renderer/README.md",
         "script": "scripts/research/lane_n_end_to_end_renderer/README.md",
     },
