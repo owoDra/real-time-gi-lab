@@ -96,6 +96,7 @@ I001FrameResult I001Runtime::run_n003_vanilla_topology_churn_frame() {
         return std::chrono::duration<double, std::micro>(
             Clock::now() - start).count();
     };
+    const auto source_steady_peak = impl_->memory_stats.peak_resident_bytes;
     const auto total_start = Clock::now();
     const auto prepare_start = Clock::now();
 
@@ -248,6 +249,29 @@ I001FrameResult I001Runtime::run_n003_vanilla_topology_churn_frame() {
         static_cast<std::uint32_t>(replaced);
     result.stats.backend_rebuilds = 1U;
     result.memory.old_new_overlap_bytes = 0U;
+
+    // Match N002's true-lifetime convention. Every partial upload is
+    // synchronously fenced and destroys its host-visible staging buffer before
+    // the next upload starts, so only the largest staging payload can overlap
+    // the steady device-resident set at once. The vanilla software BVH rebuild
+    // is CPU-side and does not create an old/new device-AS overlap.
+    const auto partition_count = impl_->moving.primitives.size();
+    const auto surface_staging = n002_checked_mul(
+        partition_count,
+        sizeof(std::array<float, 4>));
+    const auto triangle_staging = n002_checked_mul(
+        partition_count,
+        sizeof(GpuTriangle));
+    const auto node_staging = static_cast<std::size_t>(node_bytes);
+    const auto order_staging = static_cast<std::size_t>(order_bytes);
+    const auto max_staging = std::max(
+        {surface_staging, triangle_staging, node_staging, order_staging});
+    const auto steady_peak = std::max(
+        source_steady_peak,
+        result.memory.peak_resident_bytes);
+    result.memory.peak_resident_bytes = std::max(
+        result.memory.peak_resident_bytes,
+        n002_checked_add(steady_peak, max_staging));
 
     impl_->memory_stats = result.memory;
     impl_->last = result;
