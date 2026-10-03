@@ -6,7 +6,8 @@
 - `003-n003-preflight-calibration-config.json` — retained v2 paired fresh-process calibration lineage.
 - `003-n003-preflight-calibration-v3-config.json` — retained same-process prewarmed v3 calibration lineage.
 - `003-n003-preflight-calibration-v4-config.json` — retained hot-adjacent v4 calibration lineage.
-- `003-n003-preflight-calibration-v5-config.json` — withdrawn safety tombstone only; must not execute and must not change GPU power/performance profile.
-- `003-n003-preflight-calibration-v6-config.json` / `003-n003-preflight-calibration.md` — current N003 preflight contract: normal host GPU policy unchanged; five retained hot-adjacent micro-pairs per outer block; median aggregation across eight outer blocks.
+- `003-n003-preflight-calibration-v5-config.json` — safety tombstone only; clock-pinned/profile-changing v5 was withdrawn before target execution and must not be run.
+- `003-n003-preflight-calibration-v6-config.json` / `003-n003-preflight-calibration.md` — retained replicated-median v6 timing calibration; v6 completed `timing-unsuitable` at a 28.5% derived threshold.
+- `003-n003-moving-workload-diagnostic-config.json` — current moving-rigid workload-invariance diagnostic before any further timing calibration changes.
 
 Raw target artifacts remain under `out/research/`; they are not committed here.
