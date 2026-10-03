@@ -18,7 +18,7 @@ V3 add(V3 a, V3 b) { return {a.x+b.x, a.y+b.y, a.z+b.z}; }
 V3 sub(V3 a, V3 b) { return {a.x-b.x, a.y-b.y, a.z-b.z}; }
 V3 mul(V3 a, float s) { return {a.x*s, a.y*s, a.z*s}; }
 float dot(V3 a, V3 b) { return a.x*b.x + a.y*b.y + a.z*b.z; }
-V3 cross(V3 a, V3 b) { return {a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x}; }
+V3 cross(V3 a, V3 b) { return {a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x}; }
 float length(V3 v) { return std::sqrt(dot(v,v)); }
 V3 normalize(V3 v) { const float l=length(v); return l>1e-12f ? mul(v,1.0f/l) : V3{}; }
 
@@ -26,14 +26,14 @@ V3 normalize(V3 v) { const float l=length(v); return l>1e-12f ? mul(v,1.0f/l) : 
 std::uint32_t groups(std::uint32_t count) { return (count + 63u) / 64u; }
 
 VkBufferMemoryBarrier buffer_barrier(const GpuBuffer& buffer, VkAccessFlags src, VkAccessFlags dst) {
-    auto b = detail::make_vk_info<VkBufferMemoryBarrier>(VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER);
-    b.srcAccessMask = src;
-    b.dstAccessMask = dst;
-    b.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    b.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
-    b.buffer = buffer.buffer;
-    b.offset = 0;
-    b.size = buffer.size;
+    auto b=detail::make_vk_info<VkBufferMemoryBarrier>(VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER);
+    b.srcAccessMask=src;
+    b.dstAccessMask=dst;
+    b.srcQueueFamilyIndex=VK_QUEUE_FAMILY_IGNORED;
+    b.dstQueueFamilyIndex=VK_QUEUE_FAMILY_IGNORED;
+    b.buffer=buffer.buffer;
+    b.offset=0;
+    b.size=buffer.size;
     return b;
 }
 
@@ -62,7 +62,9 @@ A001ParamsGpu build_a001_params(const SceneSurfaceSet& scene, const A001Settings
     const V3 center=mul(add(bmin,bmax),0.5f);
     const float diagonal=std::max(length(sub(bmax,bmin)),1.0f);
     float orbit=0.0f;
-    if (settings.case_id == A001Case::CameraMotion) orbit=0.35f;
+    if (settings.case_id == A001Case::CameraMotion) {
+        orbit=0.35f*std::clamp(settings.camera_motion_fraction,0.0f,1.0f);
+    }
     const V3 base=normalize({1.0f,0.32f,1.0f});
     const float co=std::cos(orbit), si=std::sin(orbit);
     const V3 offset{base.x*co-base.z*si,base.y,base.x*si+base.z*co};
@@ -71,9 +73,13 @@ A001ParamsGpu build_a001_params(const SceneSurfaceSet& scene, const A001Settings
     V3 right=normalize(cross(forward,{0.0f,1.0f,0.0f}));
     if (length(right)<1e-5f) right={1.0f,0.0f,0.0f};
     const V3 up=normalize(cross(right,forward));
-    V3 light=add(center,{diagonal*0.15f,diagonal*0.35f,diagonal*0.10f});
-    if (settings.case_id == A001Case::LightMotion)
-        light=add(center,{-diagonal*0.30f,diagonal*0.22f,diagonal*0.28f});
+    const V3 light_base=add(center,{diagonal*0.15f,diagonal*0.35f,diagonal*0.10f});
+    V3 light=light_base;
+    if (settings.case_id == A001Case::LightMotion) {
+        const V3 light_target=add(center,{-diagonal*0.30f,diagonal*0.22f,diagonal*0.28f});
+        const float t=std::clamp(settings.light_motion_fraction,0.0f,1.0f);
+        light=add(mul(light_base,1.0f-t),mul(light_target,t));
+    }
 
     const std::uint64_t tile_count=std::uint64_t(settings.tile_width)*settings.tile_height;
     const std::uint64_t max_outputs=tile_count*settings.cascade_count;
@@ -186,8 +192,7 @@ struct A001Runtime::Impl {
         if(ctx.vk().createQueryPool(&qpi,nullptr,&query_pool)!=VK_SUCCESS)
             fail("A001 query pool");
 
-        auto fi=detail::make_vk_info<VkFenceCreateInfo>(
-            VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
+        auto fi=detail::make_vk_info<VkFenceCreateInfo>(VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
         if(ctx.vk().createFence(&fi,nullptr,&fence)!=VK_SUCCESS)
             fail("A001 fence");
     }
@@ -226,15 +231,13 @@ struct A001Runtime::Impl {
         bindings[9].descriptorCount=1;
         bindings[9].stageFlags=VK_SHADER_STAGE_COMPUTE_BIT;
 
-        auto dli=detail::make_vk_info<VkDescriptorSetLayoutCreateInfo>(
-            VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO);
+        auto dli=detail::make_vk_info<VkDescriptorSetLayoutCreateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO);
         dli.bindingCount=static_cast<std::uint32_t>(bindings.size());
         dli.pBindings=bindings.data();
         if(ctx.vk().createDescriptorSetLayout(&dli,nullptr,&descriptor_layout)!=VK_SUCCESS)
             fail("A001 descriptor layout");
 
-        auto pli=detail::make_vk_info<VkPipelineLayoutCreateInfo>(
-            VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO);
+        auto pli=detail::make_vk_info<VkPipelineLayoutCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO);
         pli.setLayoutCount=1;
         pli.pSetLayouts=&descriptor_layout;
         if(ctx.vk().createPipelineLayout(&pli,nullptr,&pipeline_layout)!=VK_SUCCESS)
@@ -244,277 +247,153 @@ struct A001Runtime::Impl {
             {VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,9},
             {VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,1},
         }};
-        auto dpi=detail::make_vk_info<VkDescriptorPoolCreateInfo>(
-            VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO);
+        auto dpi=detail::make_vk_info<VkDescriptorPoolCreateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO);
         dpi.maxSets=1;
         dpi.poolSizeCount=static_cast<std::uint32_t>(sizes.size());
         dpi.pPoolSizes=sizes.data();
         if(ctx.vk().createDescriptorPool(&dpi,nullptr,&descriptor_pool)!=VK_SUCCESS)
             fail("A001 descriptor pool");
 
-        auto ai=detail::make_vk_info<VkDescriptorSetAllocateInfo>(
-            VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO);
+        auto ai=detail::make_vk_info<VkDescriptorSetAllocateInfo>(VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO);
         ai.descriptorPool=descriptor_pool;
         ai.descriptorSetCount=1;
         ai.pSetLayouts=&descriptor_layout;
-        if(ctx.vk().allocateDescriptorSets(&ai,&descriptor_set)!=VK_SUCCESS)
+        if(ctx.vk().allocateDescriptorSets(&ai,nullptr,&descriptor_set)!=VK_SUCCESS)
             fail("A001 descriptor set");
-
-        std::array<const GpuBuffer*,10> bu{{
-            &surfaces,&depth,&counters,&work,&contributions,
-            &accum,&resolved,&indirect,&owners,&uniform,
-        }};
-        std::array<VkDescriptorBufferInfo,10> infos{};
+        std::array<VkDescriptorBufferInfo,9> infos{{
+            {surfaces.buffer,0,surfaces.size},{depth.buffer,0,depth.size},{counters.buffer,0,counters.size},
+            {work.buffer,0,work.size},{contributions.buffer,0,contributions.size},{accum.buffer,0,accum.size},
+            {resolved.buffer,0,resolved.size},{indirect.buffer,0,indirect.size},{owners.buffer,0,owners.size}}};
         std::array<VkWriteDescriptorSet,10> writes{};
-        for(std::uint32_t i=0;i<10;++i){
-            infos[i]={bu[i]->buffer,0,bu[i]->size};
-            writes[i]=detail::make_vk_info<VkWriteDescriptorSet>(
-                VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
-            writes[i].dstSet=descriptor_set;
-            writes[i].dstBinding=i;
-            writes[i].descriptorCount=1;
-            writes[i].descriptorType=
-                i==9 ? VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER : VK_DESCRIPTOR_TYPE_STORAGE_BUFFER;
-            writes[i].pBufferInfo=&infos[i];
+        for(std::uint32_t i=0;i<9;++i){
+            writes[i]=detail::make_vk_info<VkWriteDescriptorSet>(VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
+            writes[i].dstSet=descriptor_set; writes[i].dstBinding=i; writes[i].descriptorCount=1;
+            writes[i].descriptorType=VK_DESCRIPTOR_TYPE_STORAGE_BUFFER; writes[i].pBufferInfo=&infos[i];
         }
-        ctx.vk().updateDescriptorSets(
-            static_cast<std::uint32_t>(writes.size()),writes.data(),0,nullptr);
+        VkDescriptorBufferInfo uinfo{uniform.buffer,0,uniform.size};
+        writes[9]=detail::make_vk_info<VkWriteDescriptorSet>(VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET);
+        writes[9].dstSet=descriptor_set; writes[9].dstBinding=9; writes[9].descriptorCount=1;
+        writes[9].descriptorType=VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER; writes[9].pBufferInfo=&uinfo;
+        ctx.vk().updateDescriptorSets(static_cast<std::uint32_t>(writes.size()),writes.data(),0,nullptr);
     }
 
-    VkPipeline make_pipeline(const std::string& filename){
-        auto code=read_binary_file(
-            (std::filesystem::path(PHOS_GI_LANE_A_SHADER_DIR)/filename).string());
-
-        auto smi=detail::make_vk_info<VkShaderModuleCreateInfo>(
-            VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO);
-        smi.codeSize=code.size();
-        smi.pCode=reinterpret_cast<const std::uint32_t*>(code.data());
-        VkShaderModule module{};
-        if(ctx.vk().createShaderModule(&smi,nullptr,&module)!=VK_SUCCESS)
-            fail("A001 shader module");
-
-        auto stage=detail::make_vk_info<VkPipelineShaderStageCreateInfo>(
-            VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO);
-        stage.stage=VK_SHADER_STAGE_COMPUTE_BIT;
-        stage.module=module;
-        stage.pName="main";
-
-        auto ci=detail::make_vk_info<VkComputePipelineCreateInfo>(
-            VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO);
-        ci.stage=stage;
-        ci.layout=pipeline_layout;
-
+    VkPipeline make_pipeline(const char* name){
+        auto shader=load_shader_module(ctx.vk(),ctx.device(),std::filesystem::path(LANE_A_SHADER_DIR)/name);
+        auto si=detail::make_vk_info<VkPipelineShaderStageCreateInfo>(VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO);
+        si.stage=VK_SHADER_STAGE_COMPUTE_BIT; si.module=shader; si.pName="main";
+        auto ci=detail::make_vk_info<VkComputePipelineCreateInfo>(VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO);
+        ci.stage=si; ci.layout=pipeline_layout;
         VkPipeline p{};
-        const auto result=ctx.vk().createComputePipelines(
-            VK_NULL_HANDLE,1,&ci,nullptr,&p);
-        ctx.vk().destroyShaderModule(module,nullptr);
-        if(result!=VK_SUCCESS) fail("A001 compute pipeline");
-        return p;
+        if(ctx.vk().createComputePipelines(VK_NULL_HANDLE,1,&ci,nullptr,&p)!=VK_SUCCESS){
+            ctx.vk().destroyShaderModule(shader,nullptr); fail("A001 compute pipeline");
+        }
+        ctx.vk().destroyShaderModule(shader,nullptr); return p;
     }
 
-    void bind(VkPipeline p){
-        ctx.vk().cmdBindPipeline(
-            command_buffer,VK_PIPELINE_BIND_POINT_COMPUTE,p);
-        ctx.vk().cmdBindDescriptorSets(
-            command_buffer,VK_PIPELINE_BIND_POINT_COMPUTE,pipeline_layout,
-            0,1,&descriptor_set,0,nullptr);
+    void dispatch(VkCommandBuffer command,VkPipeline pipeline,std::uint32_t gx,std::uint32_t gy=1){
+        ctx.vk().cmdBindPipeline(command,VK_PIPELINE_BIND_POINT_COMPUTE,pipeline);
+        ctx.vk().cmdBindDescriptorSets(command,VK_PIPELINE_BIND_POINT_COMPUTE,pipeline_layout,0,1,&descriptor_set,0,nullptr);
+        ctx.vk().cmdDispatch(command,gx,gy,1);
     }
 
-    void sync_compute(const GpuBuffer& b){
-        auto x=buffer_barrier(
-            b,VK_ACCESS_SHADER_WRITE_BIT,
-            VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT);
-        ctx.vk().cmdPipelineBarrier(
-            command_buffer,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            0,0,nullptr,1,&x,0,nullptr);
-    }
-
-    std::array<std::uint64_t,8> run(bool read_timestamps){
-        ctx.vk().resetCommandBuffer(command_buffer,0);
-
-        auto bi=detail::make_vk_info<VkCommandBufferBeginInfo>(
-            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
-        bi.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-        if(ctx.vk().beginCommandBuffer(command_buffer,&bi)!=VK_SUCCESS)
-            fail("A001 begin command buffer");
-
-        ctx.vk().cmdResetQueryPool(command_buffer,query_pool,0,8);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,query_pool,0);
-
-        ctx.vk().cmdFillBuffer(command_buffer,depth.buffer,0,depth.size,0x7f800000u);
-        ctx.vk().cmdFillBuffer(command_buffer,owners.buffer,0,owners.size,0xffffffffu);
-        ctx.vk().cmdFillBuffer(command_buffer,counters.buffer,0,counters.size,0u);
-        ctx.vk().cmdFillBuffer(command_buffer,accum.buffer,0,accum.size,0u);
-
-        std::array<VkBufferMemoryBarrier,4> clears{{
-            buffer_barrier(depth,VK_ACCESS_TRANSFER_WRITE_BIT,
-                VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT),
-            buffer_barrier(owners,VK_ACCESS_TRANSFER_WRITE_BIT,
-                VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT),
-            buffer_barrier(counters,VK_ACCESS_TRANSFER_WRITE_BIT,
-                VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT),
-            buffer_barrier(accum,VK_ACCESS_TRANSFER_WRITE_BIT,
-                VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT),
-        }};
-        ctx.vk().cmdPipelineBarrier(
-            command_buffer,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            0,0,nullptr,
-            static_cast<std::uint32_t>(clears.size()),clears.data(),
-            0,nullptr);
-
-        bind(pipelines[0]);
-        ctx.vk().cmdDispatch(command_buffer,groups(params.counts[0]),1,1);
-        sync_compute(depth);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,1);
-
-        bind(pipelines[1]);
-        ctx.vk().cmdDispatch(command_buffer,groups(params.counts[0]),1,1);
-        sync_compute(owners);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,2);
-
-        bind(pipelines[2]);
-        ctx.vk().cmdDispatch(command_buffer,groups(params.counts[0]),1,1);
-        sync_compute(counters);
-        sync_compute(work);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,3);
-
-        bind(pipelines[3]);
-        ctx.vk().cmdDispatch(command_buffer,1,1,1);
-        auto indirect_ready=buffer_barrier(
-            indirect,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
-        ctx.vk().cmdPipelineBarrier(
-            command_buffer,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT,
-            0,0,nullptr,1,&indirect_ready,0,nullptr);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,4);
-
-        bind(pipelines[4]);
-        ctx.vk().cmdDispatchIndirect(command_buffer,indirect.buffer,0);
-        sync_compute(contributions);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,5);
-
-        bind(pipelines[5]);
-        ctx.vk().cmdDispatchIndirect(command_buffer,indirect.buffer,0);
-        sync_compute(accum);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,6);
-
-        bind(pipelines[6]);
-        ctx.vk().cmdDispatchIndirect(
-            command_buffer,indirect.buffer,3*sizeof(std::uint32_t));
-        auto resolved_ready=buffer_barrier(
-            resolved,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_TRANSFER_READ_BIT);
-        ctx.vk().cmdPipelineBarrier(
-            command_buffer,
-            VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,
-            VK_PIPELINE_STAGE_TRANSFER_BIT,
-            0,0,nullptr,1,&resolved_ready,0,nullptr);
-        ctx.vk().cmdWriteTimestamp(
-            command_buffer,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,query_pool,7);
-
-        if(ctx.vk().endCommandBuffer(command_buffer)!=VK_SUCCESS)
-            fail("A001 end command buffer");
-
+    A001Timings execute(){
         ctx.vk().resetFences(1,&fence);
+        ctx.vk().resetCommandPool(command_pool,0);
+        auto bi=detail::make_vk_info<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+        if(ctx.vk().beginCommandBuffer(command_buffer,&bi)!=VK_SUCCESS) fail("A001 begin command");
+        ctx.vk().cmdResetQueryPool(command_buffer,query_pool,0,8);
+        ctx.vk().cmdFillBuffer(command_buffer,depth.buffer,0,depth.size,0xffffffffu);
+        ctx.vk().cmdFillBuffer(command_buffer,counters.buffer,0,counters.size,0);
+        ctx.vk().cmdFillBuffer(command_buffer,accum.buffer,0,accum.size,0);
+        auto fill_barriers=std::array{
+            buffer_barrier(depth,VK_ACCESS_TRANSFER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT),
+            buffer_barrier(counters,VK_ACCESS_TRANSFER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT),
+            buffer_barrier(accum,VK_ACCESS_TRANSFER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT)};
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_TRANSFER_BIT,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,
+            0,nullptr,static_cast<std::uint32_t>(fill_barriers.size()),fill_barriers.data(),0,nullptr);
+        auto stamp=[&](std::uint32_t q){ctx.vk().cmdWriteTimestamp(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,query_pool,q);};
+        stamp(0);
+        dispatch(command_buffer,pipelines[0],groups(params.counts[0])); stamp(1);
+        auto depth_barrier=buffer_barrier(depth,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT);
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,
+            0,nullptr,1,&depth_barrier,0,nullptr);
+        dispatch(command_buffer,pipelines[1],groups(params.counts[0])); stamp(2);
+        auto owner_barrier=buffer_barrier(owners,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT);
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,
+            0,nullptr,1,&owner_barrier,0,nullptr);
+        dispatch(command_buffer,pipelines[2],groups(params.counts[0])); stamp(3);
+        auto cb=buffer_barrier(counters,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT);
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,
+            0,nullptr,1,&cb,0,nullptr);
+        dispatch(command_buffer,pipelines[3],1); stamp(4);
+        auto ib=buffer_barrier(indirect,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_INDIRECT_COMMAND_READ_BIT);
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT,0,
+            0,nullptr,1,&ib,0,nullptr);
+        ctx.vk().cmdBindPipeline(command_buffer,VK_PIPELINE_BIND_POINT_COMPUTE,pipelines[4]);
+        ctx.vk().cmdBindDescriptorSets(command_buffer,VK_PIPELINE_BIND_POINT_COMPUTE,pipeline_layout,0,1,&descriptor_set,0,nullptr);
+        ctx.vk().cmdDispatchIndirect(command_buffer,indirect.buffer,0); stamp(5);
+        auto ab=buffer_barrier(accum,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT);
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,
+            0,nullptr,1,&ab,0,nullptr);
+        dispatch(command_buffer,pipelines[5],groups(max_outputs)); stamp(6);
+        auto rb=buffer_barrier(resolved,VK_ACCESS_SHADER_WRITE_BIT,VK_ACCESS_SHADER_READ_BIT);
+        ctx.vk().cmdPipelineBarrier(command_buffer,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,
+            0,nullptr,1,&rb,0,nullptr);
+        dispatch(command_buffer,pipelines[6],groups(max_outputs)); stamp(7);
+        if(ctx.vk().endCommandBuffer(command_buffer)!=VK_SUCCESS) fail("A001 end command");
         auto si=detail::make_vk_info<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
-        si.commandBufferCount=1;
-        si.pCommandBuffers=&command_buffer;
-        if(ctx.vk().queueSubmit(ctx.queue(),1,&si,fence)!=VK_SUCCESS)
-            fail("A001 submit");
-        if(ctx.vk().waitForFences(1,&fence,VK_TRUE,UINT64_MAX)!=VK_SUCCESS)
-            fail("A001 wait");
-
-        std::array<std::uint64_t,8> ts{};
-        if(read_timestamps &&
-           ctx.vk().getQueryPoolResults(
-               query_pool,0,8,sizeof(ts),ts.data(),sizeof(std::uint64_t),
-               VK_QUERY_RESULT_64_BIT|VK_QUERY_RESULT_WAIT_BIT)!=VK_SUCCESS)
-            fail("A001 timestamps");
-        return ts;
+        si.commandBufferCount=1; si.pCommandBuffers=&command_buffer;
+        if(ctx.vk().queueSubmit(ctx.queue(),1,&si,fence)!=VK_SUCCESS) fail("A001 submit");
+        ctx.vk().waitForFences(1,&fence,VK_TRUE,std::numeric_limits<std::uint64_t>::max());
+        std::array<std::uint64_t,8> q{};
+        if(ctx.vk().getQueryPoolResults(query_pool,0,8,sizeof(q),q.data(),sizeof(std::uint64_t),
+            VK_QUERY_RESULT_64_BIT|VK_QUERY_RESULT_WAIT_BIT)!=VK_SUCCESS) fail("A001 timestamps");
+        auto us=[&](std::uint32_t a,std::uint32_t b){return double(q[b]-q[a])*ctx.timestamp_period()/1000.0;};
+        return {us(0,1),us(1,2),us(2,3),us(3,4),us(0,4),us(4,5),us(5,6),us(6,7),us(0,7)};
     }
 };
 
-A001Runtime::A001Runtime(
-    VulkanContext& c,const SceneSurfaceSet& s,const A001ParamsGpu& p)
-    : impl_(std::make_unique<Impl>(c,s,p)) {}
+A001Runtime::A001Runtime(VulkanContext& context,const SceneSurfaceSet& scene,const A001ParamsGpu& params)
+    : impl_(std::make_unique<Impl>(context,scene,params)){}
 A001Runtime::~A001Runtime()=default;
 
 A001Timings A001Runtime::measure(std::uint32_t iterations){
-    if(iterations==0) throw std::runtime_error("A001 iterations must be positive");
-    for(int i=0;i<3;++i) impl_->run(false);
-
-    std::array<double,9> sum{};
+    if(iterations==0) throw std::runtime_error("A001 measure iterations must be positive");
+    A001Timings total{};
     for(std::uint32_t i=0;i<iterations;++i){
-        const auto t=impl_->run(true);
-        const auto us=[&](int a,int b){
-            return double(t[b]-t[a])*impl_->ctx.timestamp_period_ns()/1000.0;
-        };
-        sum[0]+=us(0,1);
-        sum[1]+=us(1,2);
-        sum[2]+=us(2,3);
-        sum[3]+=us(3,4);
-        sum[4]+=us(0,4);
-        sum[5]+=us(4,5);
-        sum[6]+=us(5,6);
-        sum[7]+=us(6,7);
-        sum[8]+=us(0,7);
+        const auto t=impl_->execute();
+        total.visibility_depth_us+=t.visibility_depth_us; total.visibility_owner_us+=t.visibility_owner_us;
+        total.producer_emit_us+=t.producer_emit_us; total.finalize_us+=t.finalize_us;
+        total.producer_total_us+=t.producer_total_us; total.gather_us+=t.gather_us;
+        total.merge_us+=t.merge_us; total.resolve_us+=t.resolve_us; total.end_to_end_us+=t.end_to_end_us;
     }
-    for(auto& v:sum) v/=double(iterations);
-
-    return{
-        sum[0],sum[1],sum[2],sum[3],sum[4],
-        sum[5],sum[6],sum[7],sum[8],
-    };
+    const double inv=1.0/double(iterations);
+    total.visibility_depth_us*=inv; total.visibility_owner_us*=inv; total.producer_emit_us*=inv; total.finalize_us*=inv;
+    total.producer_total_us*=inv; total.gather_us*=inv; total.merge_us*=inv; total.resolve_us*=inv; total.end_to_end_us*=inv;
+    return total;
 }
 
 A001Readback A001Runtime::readback(){
     A001Readback out;
-    impl_->ctx.download_device_buffer(
-        impl_->counters,out.counters.data(),sizeof(out.counters));
-    if(out.counters[0]>impl_->max_work || out.counters[1]>impl_->max_outputs)
-        throw std::runtime_error("A001 GPU counters exceeded allocated capacity");
-
-    out.tile_owner.resize(impl_->tile_count);
-    impl_->ctx.download_device_buffer(
-        impl_->owners,out.tile_owner.data(),
-        VkDeviceSize(out.tile_owner.size())*sizeof(std::uint32_t));
-
-    out.work_items.resize(out.counters[0]);
-    if(!out.work_items.empty())
-        impl_->ctx.download_device_buffer(
-            impl_->work,out.work_items.data(),
-            VkDeviceSize(out.work_items.size())*sizeof(SplitRcWorkItemV1));
-
-    out.resolved.resize(out.counters[1]);
-    if(!out.resolved.empty())
-        impl_->ctx.download_device_buffer(
-            impl_->resolved,out.resolved.data(),
-            VkDeviceSize(out.resolved.size())*sizeof(float));
+    const auto c=impl_->ctx.read_device_buffer(impl_->counters);
+    std::memcpy(out.counters.data(),c.data(),std::min(c.size(),sizeof(out.counters)));
+    const auto o=impl_->ctx.read_device_buffer(impl_->owners);
+    out.tile_owner.resize(impl_->tile_count); std::memcpy(out.tile_owner.data(),o.data(),o.size());
+    const auto w=impl_->ctx.read_device_buffer(impl_->work);
+    out.work_items.resize(impl_->max_work); std::memcpy(out.work_items.data(),w.data(),w.size());
+    const auto r=impl_->ctx.read_device_buffer(impl_->resolved);
+    out.resolved.resize(impl_->max_outputs); std::memcpy(out.resolved.data(),r.data(),r.size());
     return out;
 }
 
 A001Memory A001Runtime::memory() const {
-    const auto& i=*impl_;
-    const std::size_t persistent=i.surfaces.size+i.uniform.size+i.resolved.size;
-    const std::size_t transient=
-        i.depth.size+i.owners.size+i.counters.size+i.work.size+
-        i.contributions.size+i.accum.size+i.indirect.size;
-    return{
-        persistent,
-        transient,
-        persistent+transient,
-        static_cast<std::size_t>(i.work.size),
+    return {
+        impl_->surfaces.size+impl_->uniform.size,
+        impl_->depth.size+impl_->counters.size+impl_->owners.size+impl_->work.size+impl_->contributions.size+
+            impl_->accum.size+impl_->resolved.size+impl_->indirect.size,
+        impl_->surfaces.size+impl_->uniform.size+impl_->depth.size+impl_->counters.size+impl_->owners.size+
+            impl_->work.size+impl_->contributions.size+impl_->accum.size+impl_->resolved.size+impl_->indirect.size,
+        impl_->work.size+impl_->contributions.size,
     };
 }
 
