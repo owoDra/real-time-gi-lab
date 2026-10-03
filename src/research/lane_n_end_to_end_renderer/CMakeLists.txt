@@ -71,8 +71,7 @@ set(N001_SHADER_OUTPUTS
 )
 add_custom_target(phos-n001-shaders DEPENDS ${N001_SHADER_OUTPUTS})
 
-set(N001_SHARED_SOURCES
-  n001_runtime.cpp
+set(N001_SHARED_SUPPORT_SOURCES
   n001_reference.cpp
   imported/integration/i001_compute.cpp
   imported/lane_a_split_rc/a001_scene.cpp
@@ -83,6 +82,11 @@ set(N001_SHARED_SOURCES
   imported/lane_b_traversal/b002_compute.cpp
   imported/lane_b_traversal/b002_hwrt.cpp
   ${PROJECT_SOURCE_DIR}/src/vk_context.cpp
+)
+
+set(N001_SHARED_SOURCES
+  n001_runtime.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
 )
 
 function(configure_lane_n_renderer target)
@@ -129,3 +133,14 @@ add_executable(phos-n002
   ${N001_SHARED_SOURCES}
 )
 configure_lane_n_renderer(phos-n002)
+
+# N002 topology/high-churn extension. n002_runtime.cpp includes the accepted
+# n001_runtime.cpp in its translation unit and adds only the N002 topology
+# transition member. This avoids duplicating or modifying the N001 runtime.
+add_executable(phos-n002-topology
+  n002_topology_main.cpp
+  n002_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n002-topology)
