@@ -5,6 +5,7 @@
 - `002-n002-full-config.json` — final N002 six-scenario completion contract, including topology-changing/high-churn object-local rebuild.
 - `003-n003-preflight-calibration-config.json` — retained v2 paired fresh-process calibration lineage.
 - `003-n003-preflight-calibration-v3-config.json` — retained same-process prewarmed v3 calibration lineage.
-- `003-n003-preflight-calibration-v4-config.json` / `003-n003-preflight-calibration.md` — current N003 preflight contract: same-process hot-adjacent paired A/A timing calibration; v1/v2/v3 remain retained failed evidence.
+- `003-n003-preflight-calibration-v4-config.json` — retained hot-adjacent v4 calibration lineage.
+- `003-n003-preflight-calibration-v5-config.json` / `003-n003-preflight-calibration.md` — current N003 preflight contract: v4 measurement probe/statistics under pinned AMDGPU `profile_peak`; v1–v4 remain retained failed evidence.
 
 Raw target artifacts remain under `out/research/`; they are not committed here.
