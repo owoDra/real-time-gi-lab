@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight v1–v4/v6 timing-unsuitable; v5 withdrawn for host safety; moving-rigid workload diagnostic next (#31)**.
+Status: **N001 complete; N002 complete; N003 preflight complete; N003 proper unblocked**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -20,37 +20,40 @@ The six-scenario artifact passed correctness, provenance, reference convergence,
 
 ## N003 preflight/calibration
 
-Issue #31 is part of Lane N and is the preflight for N003 proper, not a separate lane.
+Issue #31 is complete. See `results/003-preflight-calibration.md`.
 
 Retained calibration lineage:
 
-- v1 (`422945ea...`): 145% threshold, `timing-unsuitable`;
-- v2 (`aa46afd1...`): 110% threshold, `timing-unsuitable`; quality interpretation accepted;
-- v3 (`ac143a56...`): 207.5% threshold, `timing-unsuitable`;
-- v4 (`8f9c78bd...`): 98.5% threshold, 27.2% worst complete-frame p95, `timing-unsuitable`;
+- v1: 145% global threshold, timing-unsuitable;
+- v2: 110%, timing-unsuitable; quality interpretation accepted;
+- v3: 207.5%, timing-unsuitable;
+- v4: 98.5%, timing-unsuitable;
 - v5: withdrawn before target execution because forcing the target GPU performance profile can trigger host safety shutdown;
-- v6 (`00248643...` target evidence): all 40 micro-pairs retained, zero false formal claims, worst p95 block effect 18.4% but derived threshold 28.5%, therefore `timing-unsuitable`.
+- v6: all 40 replicated-median micro-pairs retained, zero false formal claims, worst p95 block effect 18.4%, but moving-rigid drove the global threshold to 28.5%.
+
+The moving-rigid workload diagnostic then proved exact source/target integer workload invariance across A/B and all eight blocks. Its remaining timing variation is therefore measurement/execution-state limited rather than workload-count drift.
 
 **Lane N must not change GPU power/performance profiles.** The host GPU policy remains unchanged.
 
-v6 stabilized every scenario except moving-rigid sufficiently that simply increasing replication again is not justified. Moving-rigid alone dominates the residual robust timing noise. Geometry-upload block timing remains comparatively stable while frame-init/visibility remains volatile.
+N003 timing interpretation is frozen per scenario before current-vs-vanilla data is collected:
 
-The current step is therefore a dedicated moving-rigid workload-invariance diagnostic:
+- static: 7.0%;
+- camera-motion: 1.5%;
+- light-motion: 5.0%;
+- moving-rigid: timing-inconclusive, no formal performance win/loss claim;
+- stable-topology-deforming: 2.5%;
+- topology-changing-high-churn: 1.5%.
 
-- target: `phos-n003-workload-diagnostic`;
-- eight fresh A/A pair blocks with the established AB/BA order;
-- 32 source-state warm-up frames per role;
-- normal host GPU policy; GPU profile changes explicitly forbidden;
-- final source frame and first measured target transition record all integer `I001FrameStats` counters;
-- exact counter invariance is required across A/B and all blocks;
-- timing is diagnostic-only.
+The same scenario threshold applies to complete-GI and complete-renderer axes, based on the worse calibrated axis. Formal claims still require >=75% same-direction outer blocks. No sample deletion, threshold relaxation or cross-scenario aggregate timing winner is permitted.
 
-If counters vary, investigate moving-rigid workload/synchronization nondeterminism before any new timing estimator. If counters are invariant, the residual v6 timing variation is isolated to execution-time state and the next calibration may use only non-invasive methods such as read-only telemetry or an adjacent fixed sentinel workload.
-
-See `experiments/003-n003-preflight-calibration.md`, `experiments/003-n003-moving-workload-diagnostic-config.json`, `n003_workload_diagnostic_main.cpp`, `n003_moving_workload_contract.py`, `run_n003_moving_workload_diagnostic.py`, and `test_n003_moving_workload_contract.py`.
+Moving-rigid remains valid for correctness, workload, memory and image-quality comparison; its timing is descriptive only.
 
 Quality interpretation remains accepted from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are primary scenario-by-scenario metrics with no aggregate winner score.
 
-N003 proper remains blocked until the moving-rigid cause is resolved and a timing calibration passes prospectively.
+## N003 proper
+
+N003 proper is now unblocked: compare the current architecture against a fair vanilla Split Radiance Cascades baseline under identical scene, transport semantics, resolution, rays/probes/cascades, reference frames, timing boundary and memory boundary.
+
+Do not simplify vanilla Split RC or add new transport features. Report timing only for calibrated-eligible scenarios; report moving-rigid timing as measurement-limited. Quality/memory/correctness remain scenario-by-scenario for all six scenarios.
 
 Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
