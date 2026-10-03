@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "experiment": "N003-moving-workload-diagnostic",
+  "phase": "diagnostic",
+  "protocol_version": "moving-rigid-workload-invariance-v1",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "source_of_truth": {
+    "issue": 31,
+    "parent_issue": 26,
+    "n002_completion_commit": "0188c7f7b4b43e5d887cd753d74a69e11a2ea764",
+    "v6_result": "timing-unsuitable: replicated-median threshold 28.5%; p95 block effect 18.4%; residual noise dominated by moving-rigid"
+  },
+  "baseline": {
+    "scene": "assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+    "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6"
+  },
+  "diagnostic": {
+    "scenario": "moving-rigid",
+    "probe_binary": "build/phos-n003-workload-diagnostic",
+    "pair_blocks": 8,
+    "start_orders": ["AB", "BA", "AB", "BA", "BA", "AB", "BA", "AB"],
+    "source_warmup_frames": 32,
+    "gpu_profile_changes": "forbidden",
+    "host_gpu_policy": "leave-unchanged",
+    "sample_exclusion": "forbidden",
+    "required_stat_fields": [
+      "work_items",
+      "outputs",
+      "requested_work_items",
+      "requested_outputs",
+      "overflow",
+      "visible_owners",
+      "moved_primitives",
+      "segment_membership_changes",
+      "hierarchy_refit_segments",
+      "hierarchy_rebuilt_segments",
+      "topology_mutations",
+      "topology_replaced_primitives",
+      "backend_rebuilds",
+      "storage_allocations",
+      "storage_updates",
+      "storage_invalidations",
+      "storage_failures"
+    ],
+    "invariance_gate": "every required integer counter must be identical across A/B and all 8 blocks separately for final source and measured target frames",
+    "timing_role": "diagnostic-only"
+  }
+}
