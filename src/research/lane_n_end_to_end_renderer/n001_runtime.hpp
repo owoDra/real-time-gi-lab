@@ -116,6 +116,17 @@ struct I001Memory {
     std::size_t image_bytes{};
 };
 
+// N003 diagnostic-only explicit host mirror accounting. These are logical
+// vector/BVH capacity bytes owned directly by the renderer code; allocator
+// bookkeeping and opaque driver/Vulkan host memory are intentionally excluded.
+struct I001N003HostMemory {
+    std::size_t scene_surface_capacity_bytes{};
+    std::size_t scene_triangle_capacity_bytes{};
+    std::size_t dynamic_selection_capacity_bytes{};
+    std::size_t candidate_structure_capacity_bytes{};
+    std::size_t renderer_owned_total_bytes{};
+};
+
 struct I001RendererReadback {
     std::uint32_t width{};
     std::uint32_t height{};
@@ -180,6 +191,7 @@ public:
     // unchanged.
     void configure_n003_vanilla_software_baseline();
     [[nodiscard]] I001FrameResult run_n003_vanilla_topology_churn_frame();
+    [[nodiscard]] I001N003HostMemory n003_host_memory() const noexcept;
 
     [[nodiscard]] I001Quality validate_last_frame();
     [[nodiscard]] I001RendererReadback renderer_readback();
