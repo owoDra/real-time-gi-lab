@@ -20,6 +20,27 @@ def require(condition: bool, message: str) -> None:
 
 def main() -> int:
     config = contract.load_config(CONFIG)
+    families = config["families"]
+    require(
+        families["thin-geometry-light-leak"]["scenes"] == contract.EXPECTED_LEAK_SCENES,
+        "N004 leak matrix is incomplete",
+    )
+    require(
+        families["camera-disocclusion"]["cases"][0]["motion_fractions"] == contract.ABRUPT_FRACTIONS,
+        "N004 abrupt camera path changed",
+    )
+    require(
+        families["camera-disocclusion"]["cases"][1]["motion_fractions"] == contract.GRADUAL_FRACTIONS,
+        "N004 gradual camera path changed",
+    )
+    require(
+        families["changing-illumination"]["cases"][0]["motion_fractions"] == contract.ABRUPT_FRACTIONS,
+        "N004 step light path changed",
+    )
+    require(
+        families["changing-illumination"]["cases"][1]["motion_fractions"] == contract.GRADUAL_FRACTIONS,
+        "N004 gradual light path changed",
+    )
 
     not_observed = {
         "rgb_rms_error": 0.0002,
@@ -54,6 +75,10 @@ def main() -> int:
         manifest_a = scene_factory.generate_all(root / "a")
         manifest_b = scene_factory.generate_all(root / "b")
         require(manifest_a == manifest_b, "N004 synthetic scene manifest is nondeterministic")
+        require(
+            set(contract.EXPECTED_LEAK_SCENES).issubset(manifest_a["scenes"]),
+            "N004 generated leak cases are incomplete",
+        )
         for scene_name, meta in manifest_a["scenes"].items():
             require(meta["idle_dynamic_control_triangles"] == 36, f"control mesh changed: {scene_name}")
             gltf_a = json.loads((root / "a" / meta["path"]).read_text(encoding="utf-8"))
@@ -66,7 +91,21 @@ def main() -> int:
             require((root / "a" / meta["path"]).is_file(), f"missing generated glTF: {scene_name}")
             require((root / "a" / Path(meta["path"]).with_suffix(".bin")).is_file(), f"missing generated buffer: {scene_name}")
 
-    print("N004 contract/scene-factory tests: PASS")
+    accepted_a001 = (
+        common.ROOT / "src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_runtime.cpp"
+    ).read_text(encoding="utf-8")
+    wrapper = (
+        common.ROOT / "src/research/lane_n_end_to_end_renderer/n004_a001_runtime.cpp"
+    ).read_text(encoding="utf-8")
+    cmake = (
+        common.ROOT / "src/research/lane_n_end_to_end_renderer/CMakeLists.txt"
+    ).read_text(encoding="utf-8")
+    require("camera_motion_fraction" not in accepted_a001, "N004 contaminated accepted A001 runtime")
+    require("build_a001_params_n004_original" in wrapper, "N004 isolated A001 wrapper missing")
+    require("n004_a001_runtime.cpp" in cmake and "N004_SHARED_SUPPORT_SOURCES" in cmake,
+            "N004 isolated source wiring missing")
+
+    print("N004 contract/scene-factory/isolation tests: PASS")
     return 0
 
 
