@@ -71,8 +71,6 @@ set(N001_SHADER_OUTPUTS
 )
 add_custom_target(phos-n001-shaders DEPENDS ${N001_SHADER_OUTPUTS})
 
-# N003-only vanilla renderer shaders. Keep these out of the accepted N001/N002
-# shader dependency set so historical renderer targets are unchanged.
 add_compute_shader(
   i001_software_bvh
   shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_software_bvh.comp.glsl)
@@ -154,9 +152,6 @@ add_executable(phos-n002
 )
 configure_lane_n_renderer(phos-n002)
 
-# N002 topology/high-churn extension. n002_runtime.cpp includes the accepted
-# n001_runtime.cpp in its translation unit and adds only the N002 topology
-# transition member. This avoids duplicating or modifying the N001 runtime.
 add_executable(phos-n002-topology
   n002_topology_main.cpp
   n002_runtime.cpp
@@ -165,10 +160,6 @@ add_executable(phos-n002-topology
 )
 configure_lane_n_renderer(phos-n002-topology)
 
-# N003 preflight timing probe. It keeps the accepted N002 renderer/runtime
-# boundary but places A and B in one process, with source-state GPU warm-up
-# immediately before each measured transition. Stage timings are retained for
-# diagnosis if the paired-control gate remains unsuitable.
 add_executable(phos-n003-preflight
   n003_preflight_main.cpp
   n002_runtime.cpp
@@ -177,10 +168,6 @@ add_executable(phos-n003-preflight
 )
 configure_lane_n_renderer(phos-n003-preflight)
 
-# N003 moving-rigid workload-invariance diagnostic. This is not a performance
-# comparison target: it records integer source/target work counters for paired
-# fresh runtimes so residual timing noise can be separated from workload
-# nondeterminism without changing the host GPU power/performance policy.
 add_executable(phos-n003-workload-diagnostic
   n003_workload_diagnostic_main.cpp
   n002_runtime.cpp
@@ -189,9 +176,6 @@ add_executable(phos-n003-workload-diagnostic
 )
 configure_lane_n_renderer(phos-n003-workload-diagnostic)
 
-# N003 proper current-vs-vanilla comparison. The comparison runtime includes
-# the accepted N002 runtime in one TU and adds only comparison-specific vanilla
-# reconfiguration/topology hooks; N001/N002 targets remain source-identical.
 add_executable(phos-n003-comparison
   n003_comparison_main.cpp
   n003_comparison_runtime.cpp
@@ -201,8 +185,6 @@ add_executable(phos-n003-comparison
 configure_lane_n_renderer(phos-n003-comparison)
 add_dependencies(phos-n003-comparison phos-n003-comparison-shaders)
 
-# Quality/reference evidence is a separate one-shot target so expensive
-# converged reference rendering never contaminates the replicated timing run.
 add_executable(phos-n003-quality
   n003_quality_main.cpp
   n003_comparison_runtime.cpp
@@ -212,8 +194,6 @@ add_executable(phos-n003-quality
 configure_lane_n_renderer(phos-n003-quality)
 add_dependencies(phos-n003-quality phos-n003-comparison-shaders)
 
-# Diagnostic-only CPU wall and explicit renderer-owned host mirror census. It
-# is intentionally outside the formal GPU timing decision axis.
 add_executable(phos-n003-diagnostics
   n003_diagnostics_main.cpp
   n003_comparison_runtime.cpp
@@ -223,13 +203,12 @@ add_executable(phos-n003-diagnostics
 configure_lane_n_renderer(phos-n003-diagnostics)
 add_dependencies(phos-n003-diagnostics phos-n003-comparison-shaders)
 
-# N004 weakness-atlas evidence target. It reuses the accepted current renderer,
-# the N002 topology transition and the N001 converged reference without adding
-# any mitigation. One executable is parameterized by scene/scenario so all
-# atlas families share the same image/timing/memory boundaries.
+# N004 adds only a prospective motion-fraction control surface around the
+# accepted N002 runtime. Default fractions remain 1.0, so N001-N003 semantics
+# are unchanged. The atlas target itself adds no mitigation.
 add_executable(phos-n004-atlas
   n004_atlas_main.cpp
-  n002_runtime.cpp
+  n004_runtime.cpp
   n002_hwrt_rebuild.cpp
   ${N001_SHARED_SUPPORT_SOURCES}
 )
