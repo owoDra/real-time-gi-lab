@@ -15,6 +15,7 @@ import n001_contract as contract
 ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_CONFIG = ROOT / "research/lanes/lane-n-end-to-end-renderer/experiments/001-n001-config.json"
 DEFAULT_BINARY = ROOT / "build/phos-n001"
+VULKAN_WRAPPER = ROOT / "scripts/run_with_vulkan.sh"
 VALIDATION_ERROR_RE = re.compile(r"Validation Error|\bVUID-[A-Za-z0-9_-]+|\bUNASSIGNED-[A-Za-z0-9_-]+")
 
 
@@ -141,6 +142,35 @@ def lifetime_error_count(memory: dict[str, object]) -> int:
     return 0 if device_components and peak >= max(device_components) else 1
 
 
+def is_nixos(os_release: Path = Path("/etc/os-release")) -> bool:
+    try:
+        lines = os_release.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return False
+    for line in lines:
+        key, separator, value = line.partition("=")
+        if separator and key == "ID":
+            return value.strip().strip('"\'') == "nixos"
+    return False
+
+
+def renderer_command(binary: Path, root: Path, scene: Path) -> list[str]:
+    command = [
+        str(binary),
+        "--artifact-dir",
+        str(root),
+        "--scene",
+        str(scene),
+    ]
+    if not is_nixos():
+        return command
+    if not VULKAN_WRAPPER.is_file():
+        raise contract.ContractError(
+            f"N001 requires the NixOS Vulkan launcher but it is missing: {VULKAN_WRAPPER}"
+        )
+    return ["bash", str(VULKAN_WRAPPER), *command]
+
+
 def finalize_runtime_artifact(
     root: Path,
     config: dict,
@@ -220,13 +250,7 @@ def run_target(root: Path, binary: Path, config: dict) -> int:
         )
 
     root.mkdir(parents=True, exist_ok=True)
-    command = [
-        str(binary),
-        "--artifact-dir",
-        str(root),
-        "--scene",
-        str(scene),
-    ]
+    command = renderer_command(binary, root, scene)
     proc = subprocess.run(
         command,
         cwd=ROOT,
