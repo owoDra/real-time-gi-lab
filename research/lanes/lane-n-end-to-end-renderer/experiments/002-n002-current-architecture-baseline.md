@@ -1,6 +1,6 @@
 # N002 — current architecture end-to-end baseline
 
-Status: **in progress — core five-scenario renderer slice frozen first**
+Status: **in progress — core five-scenario target PASS; topology/high-churn target ready**
 
 Issue: #27  
 Parent: #26  
@@ -10,7 +10,7 @@ N001 result: `results/001-renderer-reference-bringup.md`
 
 Run the accepted A–M architecture through the Lane-N image-producing boundary before any same-boundary vanilla comparison.
 
-N002 completion still requires all six scenario classes from #27:
+N002 completion requires all six scenario classes from #27:
 
 1. static;
 2. camera motion / disocclusion;
@@ -19,45 +19,69 @@ N002 completion still requires all six scenario classes from #27:
 5. stable-topology deformation;
 6. topology-changing / high-churn.
 
-## Staged implementation rule
+## Core target checkpoint
 
-The first target checkpoint intentionally exercises the five scenario classes already supported by the accepted Lane-E-final integrated runtime. This is a correctness/quality/provenance vertical slice, not a reduced N002 completion criterion.
+The five scenario classes already supported by the accepted Lane-E-final integrated runtime have passed the target checkpoint on AMD Radeon 8060S / RADV Mesa 26.1.2.
 
-Topology-changing/high-churn remains mandatory. It is added only after the core slice is target-valid because its accepted Lane-M implementation requires a materially different ownership boundary: immutable static world backend plus a separately rebuilt dynamic-object backend with old/new lifetime overlap. Rebuilding the whole world would violate the accepted Lane-M/Lane-E semantics and is therefore not an acceptable shortcut.
+Artifact root:
 
-## Core playback
+`out/research/lane-n-end-to-end-renderer/002-current-architecture-baseline-core/20261003T044631Z`
 
-The frozen core checkpoint uses the N001 Sponza/render/reference contract and adds stable-topology deformation:
+Measured source commit:
 
-- static;
-- camera-motion;
-- light-motion;
-- moving-rigid;
-- stable-topology-deforming (`I001Scenario::DeformingControl`).
+`041171dbbd12ffaccd3d7c0f8105de77e4dbc672`
 
-Each scenario is instantiated in a fresh runtime, warmed in the source state, then measured/rendered in its target state. This preserves N001's deterministic reference and avoids cross-scenario state leakage.
+Observed gates:
+
+- process return code: 0;
+- target validation: PASS;
+- validation-layer error lines: 0;
+- traversal/runtime, storage, OOB, lifetime and alignment gates: PASS for all five frames;
+- reference convergence: PASS for all five frames at 512 spp;
+- campaign-level renderer HDR signal: present;
+- campaign-level reference HDR signal: present;
+- no samples excluded.
+
+The timing rows are retained only as descriptive diagnostics. No performance ranking is inferred from this checkpoint.
+
+## Topology/high-churn integration
+
+The final N002 adapter preserves the M001 retained Lane-E incumbent rather than using a whole-scene rebuild:
+
+- one deterministic dynamic object partition is selected;
+- static world geometry and the static BLAS remain immutable;
+- exactly 50% of the selected object's primitive identities are replaced, exercising delete+insert topology churn while renderer slot capacity remains stable;
+- only the dynamic object BLAS is rebuilt;
+- the replacement dynamic BLAS is built while the old one remains alive;
+- TLAS switches to the replacement before the old dynamic BLAS is retired;
+- old/new overlap is recorded explicitly;
+- the lifetime peak includes the retired old dynamic BLAS during handover;
+- renderer/GI execution after handover reuses the unchanged complete Lane-N frame boundary.
+
+The final target is split into `phos-n002` for the five accepted core paths and `phos-n002-topology` for the object-local topology transition, then combined into one six-frame provenance artifact by `run_n002_full.py`. Both phases must report identical device/driver/timestamp provenance.
+
+## Full completion contract
+
+The full frozen contract is `002-n002-full-config.json`. The final validator requires:
+
+- all six scenario frames;
+- deterministic scene/playback provenance;
+- reference convergence;
+- zero required correctness counters;
+- complete GI / complete renderer GPU accounting;
+- all required memory categories;
+- frame 5 executes exactly one topology mutation and one object-local backend rebuild;
+- frame 5 records nonzero old/new overlap;
+- campaign-level renderer/reference HDR signal remains present;
+- no sample deletion or post-hoc threshold change.
+
+N002 remains incomplete until the six-frame target artifact passes this contract.
 
 ## Interpretation
 
-N002 core timing is **descriptive only**. No architecture performance winner or regression classification is allowed until the Lane-N complete-frame boundary has its own prospectively frozen calibration. Lane K's 5% and Lane L's 20% floors are not imported as N002 thresholds.
+N002 timing is **descriptive only**. No architecture performance winner or regression classification is allowed until the Lane-N complete-frame boundary has its own prospectively frozen calibration. Lane K's 5% and Lane L's 20% floors are not imported as N002 thresholds.
 
-Image metrics remain raw radiometric diagnostics. N002 does not turn them into a single score or winner.
-
-An individual black reference frame is valid. The campaign must contain positive renderer and reference HDR signal overall; black frames remain evidence rather than exclusions.
-
-## Topology/high-churn adapter requirement
-
-The follow-up adapter must preserve the M001 retained incumbent:
-
-- static world ownership remains immutable;
-- only the selected dynamic object is rebuilt;
-- old and new dynamic backends may coexist during handover and that overlap must be counted;
-- true lifetime peak must include the rebuild overlap;
-- unrelated static ownership must not be rebuilt or mutated;
-- renderer primary visibility, GI traversal, and direct-light visibility must all see both static and dynamic backends;
-- no fallback to whole-scene rebuild is permitted.
-
-N002 is not complete until that adapter produces aligned HDR/reference evidence and passes correctness/provenance gates.
+An individual black reference frame remains valid. Campaign-level signal, not every individual frame, is the sanity gate.
 
 ## No-claim rule
 
