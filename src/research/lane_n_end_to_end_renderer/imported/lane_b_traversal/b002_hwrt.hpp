@@ -49,6 +49,21 @@ struct HwrtRigidUpdateStats {
     double tlas_update_us{};
 };
 
+// N002 topology-changing/high-churn path. The accepted Lane-M incumbent keeps
+// the static owner immutable, builds a replacement object-local BLAS, switches
+// the TLAS to that BLAS, and only then releases the old object-local BLAS.
+struct HwrtPartitionRebuildStats {
+    std::size_t moved_primitives{};
+    double geometry_upload_us{};
+    double geometry_upload_gpu_us{};
+    double blas_build_us{};
+    double instance_upload_us{};
+    double instance_upload_gpu_us{};
+    double tlas_build_us{};
+    std::size_t old_new_overlap_bytes{};
+    std::size_t replacement_blas_bytes{};
+};
+
 class B002HwrtTraversal {
 public:
     B002HwrtTraversal(
@@ -83,6 +98,13 @@ public:
     // Lane E E004: stable-topology deformation in a partitioned object updates
     // only that object's contiguous vertex/metadata range and local BLAS.
     [[nodiscard]] HwrtUpdateStats update_partition_geometry(
+        const std::vector<Triangle>& triangles,
+        std::span<const std::uint32_t> moved_primitives);
+
+    // Lane N N002: topology-changing/high-churn keeps the static BLAS intact,
+    // builds a replacement dynamic BLAS, switches the TLAS, then retires the
+    // old dynamic BLAS. Implemented only by the N002 topology extension TU.
+    [[nodiscard]] HwrtPartitionRebuildStats rebuild_partition_geometry(
         const std::vector<Triangle>& triangles,
         std::span<const std::uint32_t> moved_primitives);
 
