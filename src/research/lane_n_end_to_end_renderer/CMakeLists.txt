@@ -144,3 +144,15 @@ add_executable(phos-n002-topology
   ${N001_SHARED_SUPPORT_SOURCES}
 )
 configure_lane_n_renderer(phos-n002-topology)
+
+# N003 preflight timing probe. It keeps the accepted N002 renderer/runtime
+# boundary but places A and B in one process, with source-state GPU warm-up
+# immediately before each measured transition. Stage timings are retained for
+# diagnosis if the paired-control gate remains unsuitable.
+add_executable(phos-n003-preflight
+  n003_preflight_main.cpp
+  n002_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N001_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n003-preflight)
