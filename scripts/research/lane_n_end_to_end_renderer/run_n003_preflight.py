@@ -118,21 +118,22 @@ def completed_campaigns(current_root: Path) -> list[Path]:
             payload = json.loads(summary.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
-        if payload.get("status") == "pass":
+        if payload.get("status") == "pass" and payload.get("protocol_version") == "paired-control-v2":
             completed.append(summary)
     return sorted(completed)
 
 
-def run_block(
+def run_member(
     block: int,
-    root: Path,
+    role: str,
+    pair_root: Path,
     config: dict[str, object],
     core_binary: Path,
     topology_binary: Path,
     expected_commit: str,
 ) -> dict[str, object]:
-    block_root = root / "blocks" / f"block-{block:02d}"
-    block_root.mkdir(parents=True, exist_ok=False)
+    member_root = pair_root / role
+    member_root.mkdir(parents=True, exist_ok=False)
 
     runner = ROOT / str(config["baseline"]["runner"])
     baseline_config = ROOT / str(config["baseline"]["config"])
@@ -142,7 +143,7 @@ def run_block(
         "--phase",
         "target",
         "--artifact-dir",
-        str(block_root),
+        str(member_root),
         "--config",
         str(baseline_config),
         "--core-binary",
@@ -161,50 +162,46 @@ def run_block(
         check=False,
     )
     after = host_snapshot()
-    (block_root / "preflight-stdout.log").write_text(
-        proc.stdout, encoding="utf-8"
-    )
-    (block_root / "preflight-stderr.log").write_text(
-        proc.stderr, encoding="utf-8"
-    )
+    (member_root / "preflight-stdout.log").write_text(proc.stdout, encoding="utf-8")
+    (member_root / "preflight-stderr.log").write_text(proc.stderr, encoding="utf-8")
     sys.stdout.write(proc.stdout)
     sys.stderr.write(proc.stderr)
     if proc.returncode != 0:
         raise contract.ContractError(
-            f"N003 preflight block {block} failed; retain artifact and do not exclude it"
+            f"N003 preflight block {block} role {role} failed; retain artifact"
         )
 
-    provenance_path = block_root / "n002-provenance.json"
-    summary_path = block_root / "n002-validation-summary.json"
+    provenance_path = member_root / "n002-provenance.json"
+    summary_path = member_root / "n002-validation-summary.json"
     if not provenance_path.is_file() or not summary_path.is_file():
         raise contract.ContractError(
-            f"N003 preflight block {block} is missing N002 completion artifacts"
+            f"N003 preflight block {block} role {role} is missing N002 artifacts"
         )
     provenance = json.loads(provenance_path.read_text(encoding="utf-8"))
     validation = json.loads(summary_path.read_text(encoding="utf-8"))
     if validation.get("status") != "pass" or validation.get("n002_complete") is not True:
         raise contract.ContractError(
-            f"N003 preflight block {block} did not pass the N002 completion gate"
+            f"N003 preflight block {block} role {role} failed N002 completion gate"
         )
     git_info = provenance.get("git")
     if not isinstance(git_info, dict) or git_info.get("commit") != expected_commit:
         raise contract.ContractError(
-            f"N003 preflight block {block} Git provenance changed"
+            f"N003 preflight block {block} role {role} Git provenance changed"
         )
     if git_info.get("dirty") is not False:
         raise contract.ContractError(
-            f"N003 preflight block {block} was produced from a dirty worktree"
+            f"N003 preflight block {block} role {role} used a dirty worktree"
         )
 
     raw_frames = provenance.get("frames")
     raw_metrics = validation.get("frame_metrics")
     if not isinstance(raw_frames, list) or not isinstance(raw_metrics, list):
         raise contract.ContractError(
-            f"N003 preflight block {block} frame payload is malformed"
+            f"N003 preflight block {block} role {role} frame payload malformed"
         )
     if len(raw_frames) != len(contract.EXPECTED_SCENARIOS) or len(raw_metrics) != len(contract.EXPECTED_SCENARIOS):
         raise contract.ContractError(
-            f"N003 preflight block {block} frame count mismatch"
+            f"N003 preflight block {block} role {role} frame count mismatch"
         )
 
     timing: dict[str, object] = {}
@@ -214,19 +211,19 @@ def run_block(
         metric = raw_metrics[index]
         if frame.get("scenario") != scenario or metric.get("scenario") != scenario:
             raise contract.ContractError(
-                f"N003 preflight block {block} scenario order mismatch at {index}"
+                f"N003 preflight block {block} role {role} scenario mismatch at {index}"
             )
         timing_payload = frame.get("timing_us")
         if not isinstance(timing_payload, dict):
             raise contract.ContractError(
-                f"N003 preflight block {block} timing payload malformed"
+                f"N003 preflight block {block} role {role} timing payload malformed"
             )
         timing[scenario] = {
             axis: timing_payload.get(axis) for axis in contract.TIMING_TOTALS
         }
 
-        output_path = block_root / str(frame.get("output_hdr"))
-        reference_path = block_root / str(frame.get("reference_hdr"))
+        output_path = member_root / str(frame.get("output_hdr"))
+        reference_path = member_root / str(frame.get("reference_hdr"))
         output = image_contract.read_pfm(output_path)
         reference = image_contract.read_pfm(reference_path)
         scale_aware = contract.scale_aware_affected_pixel_fraction(
@@ -242,11 +239,11 @@ def run_block(
     device = provenance.get("device")
     if not isinstance(device, dict) or device.get("name") != config["target_gpu"]:
         raise contract.ContractError(
-            f"N003 preflight block {block} ran on the wrong GPU"
+            f"N003 preflight block {block} role {role} ran on the wrong GPU"
         )
 
     return {
-        "block": block,
+        "role": role,
         "git_commit": expected_commit,
         "device": device,
         "before": before,
@@ -255,6 +252,34 @@ def run_block(
         "quality": quality,
         "n002_playback_sha256": provenance.get("playback_sha256"),
         "n002_scene_sha256": provenance.get("scene_sha256"),
+    }
+
+
+def run_pair(
+    block: int,
+    root: Path,
+    config: dict[str, object],
+    core_binary: Path,
+    topology_binary: Path,
+    expected_commit: str,
+) -> dict[str, object]:
+    pair_root = root / "pairs" / f"pair-{block:02d}"
+    pair_root.mkdir(parents=True, exist_ok=False)
+    pair_before = host_snapshot()
+    a = run_member(
+        block, "A", pair_root, config, core_binary, topology_binary, expected_commit
+    )
+    b = run_member(
+        block, "B", pair_root, config, core_binary, topology_binary, expected_commit
+    )
+    pair_after = host_snapshot()
+    return {
+        "block": block,
+        "comparison": "current-vs-current-control",
+        "pair_before": pair_before,
+        "A": a,
+        "B": b,
+        "pair_after": pair_after,
     }
 
 
@@ -274,7 +299,7 @@ def run_target(
     if completed:
         joined = ", ".join(str(path.parent.relative_to(ROOT)) for path in completed)
         raise contract.ContractError(
-            "N003 preflight completed-campaign rerun budget is zero; existing PASS: "
+            "N003 paired-control preflight completed-campaign rerun budget is zero; existing PASS: "
             + joined
         )
 
@@ -284,10 +309,11 @@ def run_target(
         encoding="utf-8",
     )
     progress: dict[str, object] = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "protocol_version": config["protocol_version"],
         "state": "running",
         "git_commit": commit,
-        "completed_blocks": [],
+        "completed_pair_blocks": [],
     }
 
     def save_progress() -> None:
@@ -299,14 +325,14 @@ def run_target(
     save_progress()
     blocks: list[dict[str, object]] = []
     try:
-        block_count = int(config["timing_calibration"]["fresh_process_blocks"])
-        settle = float(config["timing_calibration"]["settle_seconds"])
+        block_count = int(config["timing_calibration"]["fresh_process_pair_blocks"])
+        settle = float(config["timing_calibration"]["settle_seconds_between_pairs"])
         for block in range(block_count):
-            progress["current_block"] = block
+            progress["current_pair_block"] = block
             save_progress()
             if settle > 0.0:
                 time.sleep(settle)
-            result = run_block(
+            result = run_pair(
                 block,
                 root,
                 config,
@@ -315,20 +341,21 @@ def run_target(
                 commit,
             )
             blocks.append(result)
-            progress["completed_blocks"].append(block)
+            progress["completed_pair_blocks"].append(block)
             save_progress()
     except BaseException:
         progress["state"] = "invalid-or-interrupted"
         save_progress()
         raise
 
-    devices = [block["device"] for block in blocks]
+    members = [block[role] for block in blocks for role in ("A", "B")]
+    devices = [member["device"] for member in members]
     if not same_device(devices):
         raise contract.ContractError(
             "N003 preflight device/driver/API provenance changed during campaign"
         )
-    playback = {block["n002_playback_sha256"] for block in blocks}
-    scene = {block["n002_scene_sha256"] for block in blocks}
+    playback = {member["n002_playback_sha256"] for member in members}
+    scene = {member["n002_scene_sha256"] for member in members}
     if len(playback) != 1 or len(scene) != 1:
         raise contract.ContractError(
             "N003 preflight N002 playback/scene provenance changed during campaign"
@@ -337,7 +364,8 @@ def run_target(
     timing = contract.summarize_timing(blocks, config)
     quality = contract.summarize_quality(blocks, config)
     raw = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "protocol_version": config["protocol_version"],
         "git_commit": commit,
         "config_sha256": canonical_sha256(config),
         "blocks": blocks,
@@ -349,7 +377,8 @@ def run_target(
 
     status = "pass" if timing["timing_suitable_for_n003_formal_claims"] else "timing-unsuitable"
     summary = {
-        "schema_version": 1,
+        "schema_version": 2,
+        "protocol_version": config["protocol_version"],
         "status": status,
         "phase": "n003-preflight-calibration",
         "git_commit": commit,
@@ -358,6 +387,7 @@ def run_target(
         "sample_exclusion": "none",
         "all_samples_retained": True,
         "completed_campaign_rerun_budget": 0,
+        "v1_failure_retained": config["source_of_truth"]["v1_result"],
         "timing": timing,
         "quality": quality,
         "n003_proper_allowed": status == "pass",
@@ -367,13 +397,17 @@ def run_target(
         encoding="utf-8",
     )
     progress["state"] = "complete"
-    progress.pop("current_block", None)
+    progress.pop("current_pair_block", None)
     save_progress()
 
-    print(f"N003 preflight artifacts: {root}")
+    print(f"N003 paired-control preflight artifacts: {root}")
     print(
-        "worst timing noise: "
+        "robust paired timing noise: "
         f"{timing['worst_noise_fraction'] * 100.0:.3f}%"
+    )
+    print(
+        "worst p95 A/A pair effect: "
+        f"{timing['worst_p95_pair_effect_fraction'] * 100.0:.3f}%"
     )
     print(
         "derived N003 material-change threshold: "
@@ -389,7 +423,7 @@ def run_target(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Lane N N003 preflight complete-frame calibration"
+        description="Lane N N003 paired-control preflight calibration"
     )
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--phase", choices=("contract", "target"), required=True)
@@ -402,7 +436,7 @@ def main() -> int:
 
     config = contract.load_config(args.config.resolve())
     if args.phase == "contract":
-        print("N003 preflight GPU-independent contract validation: PASS")
+        print("N003 paired-control preflight GPU-independent contract validation: PASS")
         return 0
     return run_target(
         artifact_dir(args.artifact_dir),
