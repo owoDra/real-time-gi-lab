@@ -10,26 +10,11 @@ Lane N is the image-producing end-to-end lane. It preserves the accepted A–M a
 
 ## N001
 
-N001 renderer/reference bring-up is complete. See:
-
-- `experiments/001-n001-config.json`;
-- `experiments/001-n001-source-provenance.json`;
-- `results/001-renderer-reference-bringup.md`.
-
-The target AMD Radeon 8060S / RADV run passed correctness/provenance and campaign-level renderer/reference HDR signal sanity. Individual black reference frames remain valid observations. N001 makes no performance claim.
+N001 renderer/reference bring-up is complete. See `experiments/001-n001-config.json`, `experiments/001-n001-source-provenance.json`, and `results/001-renderer-reference-bringup.md`.
 
 ## N002
 
-N002 current-architecture baseline is complete. See:
-
-- `experiments/002-n002-config.json` — core five-scenario checkpoint;
-- `experiments/002-n002-full-config.json` — final six-scenario playback;
-- `n002_main.cpp` / `phos-n002` — static, camera, light, moving-rigid, stable-topology deformation;
-- `n002_runtime.cpp`, `n002_hwrt_rebuild.cpp`, `n002_topology_main.cpp` / `phos-n002-topology` — topology-changing/high-churn object-local rebuild;
-- `n002_full_contract.py` / `run_n002_full.py` — final completion artifact and validation;
-- `results/002-current-architecture-baseline.md` — accepted target result.
-
-Final evidence commit: `0188c7f7b4b43e5d887cd753d74a69e11a2ea764`.
+N002 current-architecture baseline is complete. Final evidence commit: `0188c7f7b4b43e5d887cd753d74a69e11a2ea764`.
 
 The six-scenario artifact passed correctness, provenance, reference convergence, HDR campaign-signal, timing-accounting, and memory gates. Topology/high-churn replaced 398/796 dynamic-owner primitive identities, executed exactly one object-local backend rebuild, recorded 252,928 bytes of old/new overlap, and retained static ownership outside the rebuild path.
 
@@ -43,18 +28,15 @@ Retained calibration lineage:
 - v2 (`aa46afd1...`): 110% threshold, `timing-unsuitable`; quality interpretation accepted;
 - v3 (`ac143a56...`): 207.5% threshold, `timing-unsuitable`;
 - v4 (`8f9c78bd...`): 98.5% threshold, 27.2% worst complete-frame p95, `timing-unsuitable`; static/stable/topology improved substantially while moving-rigid remained noisy;
-- v5: withdrawn before target execution because forcing the target GPU performance profile can trigger the host safety shutdown. GPU profile changes are now explicitly forbidden for Lane N measurement.
+- v5: withdrawn before target execution because forcing the target GPU performance profile can trigger the host safety shutdown.
+
+**Lane N must not change GPU power/performance profiles.** The host GPU policy remains unchanged for calibration and N003 proper.
 
 Current v6 reuses the v4 `phos-n003-preflight` probe without renderer/C++ changes or host GPU policy changes. Each of eight outer blocks contains five complete hot-adjacent A/A micro-pairs. All 40 micro-pairs remain raw evidence; the formal sample for each outer block is the median of its five paired log ratios. A one-off transient therefore cannot dominate a block, while instability affecting >=3/5 micro-pairs remains visible.
 
-Formal gates remain strict: <=20% derived threshold, <=20% p95 block effect, zero A/A formal-claim triggers, >=75% same-direction outer blocks for any future current-vs-vanilla claim, no stage active/inactive mismatches, no sample deletion, and no completed-PASS rerun.
+Formal gates remain strict: <=20% derived threshold, <=20% p95 block effect, zero A/A formal-claim triggers, >=75% same-direction outer blocks for future current-vs-vanilla claims, no stage active/inactive mismatches, no sample deletion, and no completed-PASS rerun.
 
-See:
-
-- `experiments/003-n003-preflight-calibration-v6-config.json`;
-- `experiments/003-n003-preflight-calibration.md`;
-- `n003_preflight_v6_contract.py` / `run_n003_preflight_v6.py` / `test_n003_preflight_v6_contract.py`;
-- reused `n003_preflight_main.cpp` / `phos-n003-preflight` measurement probe.
+See `experiments/003-n003-preflight-calibration-v6-config.json`, `experiments/003-n003-preflight-calibration.md`, `n003_preflight_v6_contract.py`, `run_n003_preflight_v6.py`, and `test_n003_preflight_v6_contract.py`.
 
 Quality interpretation remains accepted from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are primary scenario-by-scenario metrics with no aggregate winner score.
 
