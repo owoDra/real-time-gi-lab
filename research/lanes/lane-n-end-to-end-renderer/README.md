@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight v1/v2 timing-unsuitable; same-process prewarmed v3 next (#31)**.
+Status: **N001 complete; N002 complete; N003 preflight v1/v2/v3 timing-unsuitable; hot-adjacent v4 next (#31)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -37,29 +37,34 @@ The six-scenario artifact passed correctness, provenance, reference convergence,
 
 Issue #31 is part of Lane N and is the preflight for N003 proper, not a separate lane.
 
-v1 at commit `422945ea32164e487e8562214dc7568f6e2ad9a6` used absolute fresh-process timing and failed: 48.297% worst noise, 145% derived threshold.
+Retained failed timing calibrations:
 
-v2 at commit `aa46afd1594cf66cae440b30223cfc1350475a67` used eight fresh-process A/A pairs and also failed: 110% derived threshold and roughly 97% worst p95 pair effect. The short static/camera scenarios showed near-2x timing modes. Quality, however, was deterministic across all 16 A/B observations and the scale-aware quality metric had signal.
+- v1 (`422945ea...`): absolute fresh-process timing, 48.297% worst noise, 145% threshold;
+- v2 (`aa46afd1...`): paired fresh-process A/A, 110% threshold, ~97% worst p95 effect;
+- v3 (`ac143a56...`): same-process 32-frame prewarm, 207.5% threshold, 82.3% worst complete-frame p95 effect.
 
-Current v3 keeps the same timing boundary and statistical thresholds but uses a dedicated `phos-n003-preflight` timing probe:
+v3 stage diagnostics localized the remaining instability to early-frame GPU work and occasional dynamic upload inflation. Its warm-up loop was followed by `validate_last_frame()`, which runs independent reference GPU/buffer work before the measured frame, so the intended hot-adjacent timing boundary was not actually preserved.
 
-- A and B run in the same process;
-- each role receives 32 unmeasured source-state warm-up frames immediately before its measured target transition;
-- dynamic update/rebuild remains inside the one measured target frame;
-- eight fresh process pair blocks with alternating AB/BA order;
-- complete-GI, complete-renderer and per-stage GPU timings are retained.
+Current v4 keeps every formal statistical gate unchanged and only repairs that harness boundary:
+
+- validate source correctness after the first unmeasured source frame;
+- run the remaining 31 source warm-up frames;
+- immediately measure the single target transition with no reference validation inserted between warm-up and measurement;
+- retain eight fresh process A/A pair blocks and frozen AB/BA order;
+- retain complete-GI, complete-renderer and per-stage GPU timings;
+- treat stage timings below 1 us as diagnostic-inactive so floating-point synchronization remainder noise cannot create false stage mismatches.
 
 See:
 
-- `experiments/003-n003-preflight-calibration-v3-config.json`;
+- `experiments/003-n003-preflight-calibration-v4-config.json`;
 - `experiments/003-n003-preflight-calibration.md`;
-- `n003_preflight_v3_contract.py` / `run_n003_preflight_v3.py` / `test_n003_preflight_v3_contract.py`;
+- `n003_preflight_v4_contract.py` / `run_n003_preflight_v4.py` / `test_n003_preflight_v4_contract.py`;
 - `n003_preflight_main.cpp` / `phos-n003-preflight`.
 
-The timing decision rule remains median paired `log(B/A)` plus robust MAD null bound, >=75% same-direction support, <=20% derived threshold, <=20% worst p95 A/A pair effect, and zero A/A formal-claim triggers. Failed v1/v2 artifacts remain retained; no sample deletion or post-hoc threshold relaxation is allowed.
+The timing decision rule remains median paired `log(B/A)` plus robust MAD null bound, >=75% same-direction support, <=20% derived threshold, <=20% worst p95 A/A pair effect, and zero A/A formal-claim triggers. Failed artifacts remain retained; no sample deletion or post-hoc threshold relaxation is allowed.
 
-Quality interpretation remains unchanged from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are the primary scenario-by-scenario metrics with no aggregate winner score.
+Quality interpretation remains accepted from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are primary scenario-by-scenario metrics with no aggregate winner score.
 
-N003 proper must not start until v3 passes and its derived timing threshold is recorded in result truth.
+N003 proper must not start until v4 passes and its derived timing threshold is recorded in result truth.
 
 Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
