@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 preflight v1–v4 timing-unsuitable; v5 withdrawn for host safety; replicated-median v6 next (#31)**.
+Status: **N001 complete; N002 complete; N003 preflight v1–v4/v6 timing-unsuitable; v5 withdrawn for host safety; moving-rigid workload diagnostic next (#31)**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -27,19 +27,30 @@ Retained calibration lineage:
 - v1 (`422945ea...`): 145% threshold, `timing-unsuitable`;
 - v2 (`aa46afd1...`): 110% threshold, `timing-unsuitable`; quality interpretation accepted;
 - v3 (`ac143a56...`): 207.5% threshold, `timing-unsuitable`;
-- v4 (`8f9c78bd...`): 98.5% threshold, 27.2% worst complete-frame p95, `timing-unsuitable`; static/stable/topology improved substantially while moving-rigid remained noisy;
-- v5: withdrawn before target execution because forcing the target GPU performance profile can trigger the host safety shutdown.
+- v4 (`8f9c78bd...`): 98.5% threshold, 27.2% worst complete-frame p95, `timing-unsuitable`;
+- v5: withdrawn before target execution because forcing the target GPU performance profile can trigger host safety shutdown;
+- v6 (`00248643...` target evidence): all 40 micro-pairs retained, zero false formal claims, worst p95 block effect 18.4% but derived threshold 28.5%, therefore `timing-unsuitable`.
 
-**Lane N must not change GPU power/performance profiles.** The host GPU policy remains unchanged for calibration and N003 proper.
+**Lane N must not change GPU power/performance profiles.** The host GPU policy remains unchanged.
 
-Current v6 reuses the v4 `phos-n003-preflight` probe without renderer/C++ changes or host GPU policy changes. Each of eight outer blocks contains five complete hot-adjacent A/A micro-pairs. All 40 micro-pairs remain raw evidence; the formal sample for each outer block is the median of its five paired log ratios. A one-off transient therefore cannot dominate a block, while instability affecting >=3/5 micro-pairs remains visible.
+v6 stabilized every scenario except moving-rigid sufficiently that simply increasing replication again is not justified. Moving-rigid alone dominates the residual robust timing noise. Geometry-upload block timing remains comparatively stable while frame-init/visibility remains volatile.
 
-Formal gates remain strict: <=20% derived threshold, <=20% p95 block effect, zero A/A formal-claim triggers, >=75% same-direction outer blocks for future current-vs-vanilla claims, no stage active/inactive mismatches, no sample deletion, and no completed-PASS rerun.
+The current step is therefore a dedicated moving-rigid workload-invariance diagnostic:
 
-See `experiments/003-n003-preflight-calibration-v6-config.json`, `experiments/003-n003-preflight-calibration.md`, `n003_preflight_v6_contract.py`, `run_n003_preflight_v6.py`, and `test_n003_preflight_v6_contract.py`.
+- target: `phos-n003-workload-diagnostic`;
+- eight fresh A/A pair blocks with the established AB/BA order;
+- 32 source-state warm-up frames per role;
+- normal host GPU policy; GPU profile changes explicitly forbidden;
+- final source frame and first measured target transition record all integer `I001FrameStats` counters;
+- exact counter invariance is required across A/B and all blocks;
+- timing is diagnostic-only.
+
+If counters vary, investigate moving-rigid workload/synchronization nondeterminism before any new timing estimator. If counters are invariant, the residual v6 timing variation is isolated to execution-time state and the next calibration may use only non-invasive methods such as read-only telemetry or an adjacent fixed sentinel workload.
+
+See `experiments/003-n003-preflight-calibration.md`, `experiments/003-n003-moving-workload-diagnostic-config.json`, `n003_workload_diagnostic_main.cpp`, `n003_moving_workload_contract.py`, `run_n003_moving_workload_diagnostic.py`, and `test_n003_moving_workload_contract.py`.
 
 Quality interpretation remains accepted from v2: legacy fixed-absolute affected fraction is diagnostic-only; RGB RMS, p99 absolute luminance error, and scale-aware affected fraction are primary scenario-by-scenario metrics with no aggregate winner score.
 
-N003 proper must not start until v6 passes and its derived timing threshold is recorded in result truth. N003 proper must use the same five-micro-pair/eight-block aggregation if accepted.
+N003 proper remains blocked until the moving-rigid cause is resolved and a timing calibration passes prospectively.
 
 Raw target artifacts remain under `out/research/`. Continue in parent Issue #26.
