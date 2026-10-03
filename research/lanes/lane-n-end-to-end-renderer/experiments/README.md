@@ -6,6 +6,7 @@
 - `003-n003-preflight-calibration-config.json` — retained v2 paired fresh-process calibration lineage.
 - `003-n003-preflight-calibration-v3-config.json` — retained same-process prewarmed v3 calibration lineage.
 - `003-n003-preflight-calibration-v4-config.json` — retained hot-adjacent v4 calibration lineage.
-- `003-n003-preflight-calibration-v5-config.json` / `003-n003-preflight-calibration.md` — current N003 preflight contract: v4 measurement probe/statistics under pinned AMDGPU `profile_peak`; v1–v4 remain retained failed evidence.
+- `003-n003-preflight-calibration-v5-config.json` — withdrawn safety tombstone only; must not execute or change GPU profile.
+- `003-n003-preflight-calibration-v6-config.json` / `003-n003-preflight-calibration.md` — current N003 preflight contract: five retained hot-adjacent micro-pairs per outer block, median aggregation across eight outer blocks, normal host GPU policy unchanged.
 
 Raw target artifacts remain under `out/research/`; they are not committed here.
