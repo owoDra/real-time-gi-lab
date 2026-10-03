@@ -5,5 +5,6 @@
   "status": "withdrawn",
   "reason": "The target host can trigger a safety shutdown when its GPU performance profile is forced. N003 research must not change GPU power/performance profiles.",
   "replacement": "paired-control-v6-replicated-median",
-  "must_not_execute": true
+  "must_not_execute": true,
+  "gpu_profile_changes": "forbidden"
 }
