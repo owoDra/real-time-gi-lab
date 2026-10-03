@@ -384,8 +384,13 @@ def validate_target_artifact(root: Path, config: dict[str, Any]) -> dict[str, An
             if topology.get("mutations") != 1 or topology.get("backend_rebuilds") != 1:
                 raise ContractError("N002 topology frame must execute one mutation/rebuild")
             partition = topology.get("partition_primitives")
+            replaced = topology.get("replaced_primitives")
             if not isinstance(partition, int) or isinstance(partition, bool) or partition <= 0:
                 raise ContractError("N002 topology partition primitive count invalid")
+            if not isinstance(replaced, int) or isinstance(replaced, bool) or replaced <= 0:
+                raise ContractError("N002 topology replaced primitive count invalid")
+            if replaced != (partition + 1) // 2:
+                raise ContractError("N002 topology did not retain the frozen 50% churn schedule")
             if normalized_memory["old_new_overlap"] <= 0:
                 raise ContractError("N002 topology old/new overlap was not captured")
             if normalized_memory["true_lifetime_peak"] <= normalized_memory["persistent"]:
