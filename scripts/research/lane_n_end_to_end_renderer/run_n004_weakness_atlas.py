@@ -54,62 +54,94 @@ def artifact_dir(explicit: Path | None) -> Path:
     return (CAMPAIGN_ROOT / stamp).resolve()
 
 
+def completed_campaigns(current_root: Path) -> list[Path]:
+    if not CAMPAIGN_ROOT.exists():
+        return []
+    completed: list[Path] = []
+    for path in CAMPAIGN_ROOT.glob("*/n004-summary.json"):
+        if path.parent.resolve() == current_root.resolve():
+            continue
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if payload.get("status") == "complete":
+            completed.append(path)
+    return sorted(completed)
+
+
 def percentile(values: list[float], fraction: float) -> float:
     if not values:
         return 0.0
     ordered = sorted(values)
-    pos = fraction * (len(ordered) - 1)
-    lo = math.floor(pos)
-    hi = math.ceil(pos)
+    position = fraction * (len(ordered) - 1)
+    lo, hi = math.floor(position), math.ceil(position)
     if lo == hi:
         return ordered[lo]
-    w = pos - lo
-    return ordered[lo] * (1.0 - w) + ordered[hi] * w
+    weight = position - lo
+    return ordered[lo] * (1.0 - weight) + ordered[hi] * weight
 
 
 def safe_file(root: Path, relative: str) -> Path:
-    p = Path(relative)
-    if p.is_absolute() or ".." in p.parts:
+    path = Path(relative)
+    if path.is_absolute() or ".." in path.parts:
         raise contract.ContractError("N004 evidence path escaped case root")
-    result = root / p
+    result = root / path
     if not result.is_file():
         raise contract.ContractError(f"N004 evidence file missing: {result}")
     return result
+
+
+def luminance(rgb: list[float] | tuple[float, ...]) -> float:
+    return sum(rgb[index] * LUMA[index] for index in range(3))
 
 
 def metrics(output: image_contract.PFMImage, reference: image_contract.PFMImage, config: dict[str, Any]) -> dict[str, float | int]:
     if (output.width, output.height) != (reference.width, reference.height):
         raise contract.ContractError("N004 image dimensions differ")
     floor = float(config["quality_metrics"]["scale_aware_floor"])
-    frac = float(config["quality_metrics"]["scale_aware_fraction"])
+    fraction = float(config["quality_metrics"]["scale_aware_fraction"])
     pixels = output.width * output.height
     rgb_sq = 0.0
     abs_luma: list[float] = []
     rel_luma: list[float] = []
+    signed_luma: list[float] = []
     affected = 0
     for pixel in range(pixels):
         base = pixel * 3
-        out_rgb = output.pixels[base:base+3]
-        ref_rgb = reference.pixels[base:base+3]
-        out_y = sum(out_rgb[i] * LUMA[i] for i in range(3))
-        ref_y = sum(ref_rgb[i] * LUMA[i] for i in range(3))
-        delta = abs(out_y - ref_y)
+        out_rgb = output.pixels[base:base + 3]
+        ref_rgb = reference.pixels[base:base + 3]
+        out_y, ref_y = luminance(out_rgb), luminance(ref_rgb)
+        signed = out_y - ref_y
+        delta = abs(signed)
         abs_luma.append(delta)
+        signed_luma.append(signed)
         rel_luma.append(delta / max(abs(ref_y), floor))
-        if delta >= frac * max(abs(ref_y), floor):
+        if delta >= fraction * max(abs(ref_y), floor):
             affected += 1
-        for i in range(3):
-            d = out_rgb[i] - ref_rgb[i]
+        for channel in range(3):
+            d = out_rgb[channel] - ref_rgb[channel]
             rgb_sq += d * d
     return {
         "pixel_count": pixels,
         "rgb_rms_error": math.sqrt(rgb_sq / (pixels * 3)),
         "mean_abs_luminance_error": statistics.fmean(abs_luma),
+        "signed_mean_luminance_error": statistics.fmean(signed_luma),
         "p99_abs_luminance_error": percentile(abs_luma, 0.99),
         "max_abs_luminance_error": max(abs_luma, default=0.0),
         "p99_relative_luminance_error": percentile(rel_luma, 0.99),
         "scale_aware_affected_pixel_fraction": affected / pixels,
     }
+
+
+def temporal_rgb_rms(a: image_contract.PFMImage, b: image_contract.PFMImage) -> float:
+    if (a.width, a.height) != (b.width, b.height):
+        raise contract.ContractError("N004 temporal image dimensions differ")
+    total = 0.0
+    for x, y in zip(a.pixels, b.pixels, strict=True):
+        d = x - y
+        total += d * d
+    return math.sqrt(total / max(len(a.pixels), 1))
 
 
 def generic_classification(m: dict[str, Any], config: dict[str, Any]) -> str:
@@ -119,34 +151,38 @@ def generic_classification(m: dict[str, Any], config: dict[str, Any]) -> str:
         m["p99_relative_luminance_error"] < n["p99_relative_luminance_max_exclusive"] and
         m["scale_aware_affected_pixel_fraction"] < n["scale_aware_affected_fraction_max_exclusive"]):
         return "not-observed-under-tested-regime"
-    b = q["generic_material_blocker"]
+    blocker = q["generic_material_blocker"]
     triggers = sum((
-        m["rgb_rms_error"] >= b["rgb_rms_min"],
-        m["p99_relative_luminance_error"] >= b["p99_relative_luminance_min"],
-        m["scale_aware_affected_pixel_fraction"] >= b["scale_aware_affected_fraction_min"],
+        m["rgb_rms_error"] >= blocker["rgb_rms_min"],
+        m["p99_relative_luminance_error"] >= blocker["p99_relative_luminance_min"],
+        m["scale_aware_affected_pixel_fraction"] >= blocker["scale_aware_affected_fraction_min"],
     ))
-    if triggers >= b["minimum_trigger_count"]:
-        return "material-blocker"
-    return "present-but-bounded"
+    return "material-blocker" if triggers >= blocker["minimum_trigger_count"] else "present-but-bounded"
 
 
-def false_irradiance_metrics(output: image_contract.PFMImage, reference: image_contract.PFMImage, leak_cfg: dict[str, Any]) -> dict[str, float | int]:
+def false_irradiance_metrics(output: image_contract.PFMImage, reference: image_contract.PFMImage, leak_cfg: dict[str, Any]) -> dict[str, Any]:
     dark_limit = float(leak_cfg["dark_reference_luminance_max"])
     delta_min = float(leak_cfg["false_irradiance_delta_min"])
-    dark_count = 0
-    false_count = 0
+    dark_count = false_count = 0
     deltas: list[float] = []
-    pixels = output.width * output.height
-    for pixel in range(pixels):
+    xs: list[int] = []
+    ys: list[int] = []
+    for pixel in range(output.width * output.height):
         base = pixel * 3
-        out_y = sum(output.pixels[base+i] * LUMA[i] for i in range(3))
-        ref_y = sum(reference.pixels[base+i] * LUMA[i] for i in range(3))
+        out_y = luminance(output.pixels[base:base + 3])
+        ref_y = luminance(reference.pixels[base:base + 3])
         if ref_y <= dark_limit:
             dark_count += 1
             positive = max(0.0, out_y - ref_y)
             deltas.append(positive)
             if positive >= delta_min:
                 false_count += 1
+                xs.append(pixel % output.width)
+                ys.append(pixel // output.width)
+    bbox = None if not xs else {
+        "min_x": min(xs), "max_x": max(xs), "min_y": min(ys), "max_y": max(ys),
+        "width": max(xs) - min(xs) + 1, "height": max(ys) - min(ys) + 1,
+    }
     return {
         "dark_reference_pixels": dark_count,
         "false_irradiance_pixels": false_count,
@@ -154,28 +190,31 @@ def false_irradiance_metrics(output: image_contract.PFMImage, reference: image_c
         "false_irradiance_mean": statistics.fmean(deltas) if deltas else 0.0,
         "false_irradiance_p99": percentile(deltas, 0.99),
         "false_irradiance_max": max(deltas, default=0.0),
+        "false_irradiance_bbox": bbox,
     }
 
 
-def classify_leak(m: dict[str, Any], leak_cfg: dict[str, Any]) -> str:
-    n = leak_cfg["not_observed"]
+def classify_leak(m: dict[str, Any], cfg: dict[str, Any]) -> str:
+    n = cfg["not_observed"]
     if (m["false_irradiance_fraction"] < n["false_irradiance_fraction_max_exclusive"] and
         m["false_irradiance_p99"] < n["false_irradiance_p99_max_exclusive"]):
         return "not-observed-under-tested-regime"
-    b = leak_cfg["material_blocker"]
-    if (m["false_irradiance_fraction"] >= b["false_irradiance_fraction_min"] and
-        m["false_irradiance_p99"] >= b["false_irradiance_p99_min"]):
+    b = cfg["material_blocker"]
+    if m["false_irradiance_fraction"] >= b["false_irradiance_fraction_min"] and m["false_irradiance_p99"] >= b["false_irradiance_p99_min"]:
         return "material-blocker"
     return "present-but-bounded"
 
 
-def run_case(binary: Path, root: Path, scene: Path, scenario: str, source_warmup: int, target_frames: int, *, topology: bool = False, one_bounce: bool = False) -> dict[str, Any]:
+def run_case(
+    binary: Path, root: Path, scene: Path, scenario: str, source_warmup: int,
+    target_frames: int, *, topology: bool = False, one_bounce: bool = False,
+    motion_fractions: list[float] | None = None,
+) -> dict[str, Any]:
     root.mkdir(parents=True, exist_ok=True)
-    command = [
-        str(binary), "--artifact-dir", str(root), "--scene", str(scene),
-        "--scenario", scenario, "--source-warmup-frames", str(source_warmup),
-        "--target-frames", str(target_frames),
-    ]
+    command = [str(binary), "--artifact-dir", str(root), "--scene", str(scene), "--scenario", scenario,
+               "--source-warmup-frames", str(source_warmup), "--target-frames", str(target_frames)]
+    if motion_fractions is not None:
+        command += ["--motion-fractions", ",".join(str(value) for value in motion_fractions)]
     if topology:
         command.append("--topology")
     if one_bounce:
@@ -185,44 +224,49 @@ def run_case(binary: Path, root: Path, scene: Path, scenario: str, source_warmup
     proc = subprocess.run(command, cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
     (root / "stdout.log").write_text(proc.stdout, encoding="utf-8")
     (root / "stderr.log").write_text(proc.stderr, encoding="utf-8")
-    sys.stdout.write(proc.stdout)
-    sys.stderr.write(proc.stderr)
+    sys.stdout.write(proc.stdout); sys.stderr.write(proc.stderr)
     if proc.returncode != 0:
         raise contract.ContractError(f"N004 case failed: {root.name}; artifact retained")
     path = root / "n004-evidence.json"
     if not path.is_file():
         raise contract.ContractError(f"N004 evidence missing: {root.name}")
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("protocol_version") != "n004-atlas-evidence-v1":
+    if payload.get("protocol_version") != "n004-atlas-evidence-v2":
         raise contract.ContractError("N004 evidence protocol changed")
+    if len(payload.get("frames", [])) != target_frames:
+        raise contract.ContractError("N004 evidence frame count mismatch")
     return payload
 
 
 def analyze_case(case_root: Path, evidence: dict[str, Any], config: dict[str, Any]) -> dict[str, Any]:
-    reference = image_contract.read_pfm(safe_file(case_root, evidence["reference"]["path"]))
-    frames = []
+    frames: list[dict[str, Any]] = []
+    images: list[image_contract.PFMImage] = []
     for frame in evidence["frames"]:
         image = image_contract.read_pfm(safe_file(case_root, frame["image"]))
+        reference = image_contract.read_pfm(safe_file(case_root, frame["reference"]["path"]))
         m = metrics(image, reference, config)
+        images.append(image)
         frames.append({
-            "index": frame["index"], "metrics": m,
+            "index": frame["index"],
+            "motion_fraction": frame["motion_fraction"],
+            "reference": frame["reference"],
+            "metrics": m,
             "generic_classification": generic_classification(m, config),
-            "timing_us": frame["timing_us"], "stats": frame["stats"], "memory_bytes": frame["memory_bytes"],
+            "timing_us": frame["timing_us"],
+            "stats": frame["stats"],
+            "memory_bytes": frame["memory_bytes"],
         })
-    return {
-        "scenario": evidence["scenario"],
-        "probe_spacing_world": evidence["probe_spacing_world"],
-        "reference": evidence["reference"],
-        "frames": frames,
-    }
+    for index, frame in enumerate(frames):
+        frame["temporal_rgb_rms_from_previous"] = None if index == 0 else temporal_rgb_rms(images[index], images[index - 1])
+    return {"scenario": evidence["scenario"], "probe_spacing_world": evidence["probe_spacing_world"], "frames": frames}
 
 
 def convergence_classification(frames: list[dict[str, Any]], max_bounded: int) -> tuple[str, int | None]:
     if frames[0]["generic_classification"] == "not-observed-under-tested-regime":
         return "not-observed-under-tested-regime", 0
-    convergence = next((f["index"] for f in frames if f["generic_classification"] == "not-observed-under-tested-regime"), None)
-    any_blocker = any(f["generic_classification"] == "material-blocker" for f in frames)
-    if any_blocker and (convergence is None or convergence > max_bounded):
+    convergence = next((frame["index"] for frame in frames if frame["generic_classification"] == "not-observed-under-tested-regime"), None)
+    blocker = any(frame["generic_classification"] == "material-blocker" for frame in frames)
+    if blocker and (convergence is None or convergence > max_bounded):
         return "material-blocker", convergence
     return "present-but-bounded", convergence
 
@@ -231,6 +275,11 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
     commit = require_clean_lane_n()
     if not binary.is_file():
         raise contract.ContractError(f"missing N004 binary: {binary}")
+    existing = completed_campaigns(root)
+    if existing:
+        joined = ", ".join(str(path.parent.relative_to(ROOT)) for path in existing)
+        raise contract.ContractError("N004 completed campaign rerun budget is zero; existing campaign: " + joined)
+
     sponza = (ROOT / config["baseline"]["scene"]).resolve()
     if common.sha256_file(sponza) != config["baseline"]["scene_sha256"]:
         raise contract.ContractError("N004 Sponza digest mismatch")
@@ -243,15 +292,16 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
     leak_cfg = config["families"]["thin-geometry-light-leak"]
     leak_cases = []
     for scene_name in leak_cfg["scenes"]:
-        scene_meta = manifest["scenes"][scene_name]
+        meta = manifest["scenes"][scene_name]
         case_root = root / "cases" / scene_name
-        evidence = run_case(binary, case_root, generated / scene_meta["path"], "static", source_warmup, 1)
+        evidence = run_case(binary, case_root, generated / meta["path"], "static", source_warmup, 1)
         analyzed = analyze_case(case_root, evidence, config)
-        image = image_contract.read_pfm(safe_file(case_root, evidence["frames"][0]["image"]))
-        reference = image_contract.read_pfm(safe_file(case_root, evidence["reference"]["path"]))
+        frame = evidence["frames"][0]
+        image = image_contract.read_pfm(safe_file(case_root, frame["image"]))
+        reference = image_contract.read_pfm(safe_file(case_root, frame["reference"]["path"]))
         leak_metrics = false_irradiance_metrics(image, reference, leak_cfg)
-        analyzed["scene"] = scene_meta
-        analyzed["wall_thickness_over_probe_spacing"] = scene_meta["wall_thickness_world"] / analyzed["probe_spacing_world"]
+        analyzed["scene"] = meta
+        analyzed["wall_thickness_over_probe_spacing"] = meta["wall_thickness_world"] / analyzed["probe_spacing_world"]
         analyzed["leak_metrics"] = leak_metrics
         analyzed["classification"] = classify_leak(leak_metrics, leak_cfg)
         leak_cases.append(analyzed)
@@ -259,64 +309,63 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
 
     for family_name in ("camera-disocclusion", "changing-illumination"):
         cfg = config["families"][family_name]
-        case_root = root / "cases" / family_name
-        evidence = run_case(binary, case_root, sponza, cfg["scenario"], source_warmup, int(cfg["target_frames"]))
-        analyzed = analyze_case(case_root, evidence, config)
-        classification, convergence = convergence_classification(analyzed["frames"], int(cfg["bounded_convergence_frame_max"]))
-        analyzed["classification"] = classification
-        analyzed["convergence_frame"] = convergence
-        families[family_name] = analyzed
+        temporal_cases = []
+        for spec in cfg["cases"]:
+            fractions = [float(value) for value in spec["motion_fractions"]]
+            case_root = root / "cases" / family_name / spec["name"]
+            evidence = run_case(binary, case_root, sponza, cfg["scenario"], source_warmup, len(fractions), motion_fractions=fractions)
+            analyzed = analyze_case(case_root, evidence, config)
+            classification, convergence = convergence_classification(analyzed["frames"], int(cfg["bounded_convergence_frame_max"]))
+            analyzed["name"] = spec["name"]
+            analyzed["classification"] = classification
+            analyzed["convergence_frame"] = convergence
+            temporal_cases.append(analyzed)
+        families[family_name] = {"cases": temporal_cases}
 
     dynamic_cfg = config["families"]["dynamic-geometry"]
     dynamic_cases = []
     for spec in dynamic_cfg["scenarios"]:
         case_root = root / "cases" / spec["name"]
-        evidence = run_case(
-            binary, case_root, sponza, spec["scenario"], source_warmup,
-            int(dynamic_cfg["target_frames"]), topology=bool(spec["topology"]),
-        )
+        evidence = run_case(binary, case_root, sponza, spec["scenario"], source_warmup, int(dynamic_cfg["target_frames"]), topology=bool(spec["topology"]))
         analyzed = analyze_case(case_root, evidence, config)
         analyzed["name"] = spec["name"]
         analyzed["formal_timing"] = bool(spec["formal_timing"])
-        analyzed["classification"] = (
-            "measurement-limited" if spec["name"] == "moving-rigid"
-            else analyzed["frames"][0]["generic_classification"]
-        )
+        analyzed["classification"] = "measurement-limited" if spec["name"] == "moving-rigid" else analyzed["frames"][0]["generic_classification"]
         dynamic_cases.append(analyzed)
     families["dynamic-geometry"] = {"cases": dynamic_cases}
 
     world_cfg = config["families"]["world-shape"]
     world_cases = []
     for scene_name in world_cfg["scenes"]:
-        scene_meta = manifest["scenes"][scene_name]
+        meta = manifest["scenes"][scene_name]
         case_root = root / "cases" / scene_name
-        evidence = run_case(binary, case_root, generated / scene_meta["path"], "static", source_warmup, 1)
+        evidence = run_case(binary, case_root, generated / meta["path"], "static", source_warmup, 1)
         analyzed = analyze_case(case_root, evidence, config)
-        analyzed["scene"] = scene_meta
+        analyzed["scene"] = meta
         analyzed["classification"] = analyzed["frames"][0]["generic_classification"]
         world_cases.append(analyzed)
     families["world-shape"] = {"cases": world_cases}
 
     capability_root = root / "cases" / "capability-diffuse"
-    cap_evidence = run_case(binary, capability_root, sponza, "static", source_warmup, 1, one_bounce=True)
-    one = image_contract.read_pfm(safe_file(capability_root, cap_evidence["reference_one_bounce"]["path"]))
-    eight = image_contract.read_pfm(safe_file(capability_root, cap_evidence["reference"]["path"]))
+    cap = run_case(binary, capability_root, sponza, "static", source_warmup, 1, one_bounce=True)
+    one = image_contract.read_pfm(safe_file(capability_root, cap["reference_one_bounce"]["path"]))
+    eight = image_contract.read_pfm(safe_file(capability_root, cap["frames"][0]["reference"]["path"]))
     higher = metrics(one, eight, config)
-    cap_rule = config["families"]["capability-boundary"]["higher_order_material_rule"]
-    cap_triggers = sum((
-        higher["rgb_rms_error"] >= cap_rule["rgb_rms_min"],
-        higher["p99_relative_luminance_error"] >= cap_rule["p99_relative_luminance_min"],
-        higher["scale_aware_affected_pixel_fraction"] >= cap_rule["scale_aware_affected_fraction_min"],
+    rule = config["families"]["capability-boundary"]["higher_order_material_rule"]
+    triggers = sum((
+        higher["rgb_rms_error"] >= rule["rgb_rms_min"],
+        higher["p99_relative_luminance_error"] >= rule["p99_relative_luminance_min"],
+        higher["scale_aware_affected_pixel_fraction"] >= rule["scale_aware_affected_fraction_min"],
     ))
     families["capability-boundary"] = {
         "higher_order_diffuse": {
             "classification": "capability-not-implemented",
             "reference_delta_metrics_1bounce_vs_8bounce": higher,
-            "material_gap_exposed_under_sponza": cap_triggers >= cap_rule["minimum_trigger_count"],
+            "material_gap_exposed_under_sponza": triggers >= rule["minimum_trigger_count"],
         },
         "glossy_specular": {
             "classification": "capability-not-implemented",
-            "evidence": "frozen renderer and reference comparison semantics are constant-white Lambertian diffuse; no glossy/specular indirect transport path exists",
+            "evidence": "frozen renderer is constant-white Lambertian diffuse and has no glossy/specular indirect transport path",
         },
     }
 
@@ -327,6 +376,7 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
         "git_commit": commit,
         "target_gpu": config["target_gpu"],
         "gpu_profile_changes": "forbidden-and-not-performed-by-runner",
+        "completed_campaign_rerun_budget": 0,
         "sample_exclusion": "none",
         "families": families,
         "aggregate_weakness_score": None,
@@ -335,17 +385,13 @@ def run_target(root: Path, config: dict[str, Any], binary: Path) -> int:
     (root / "n004-summary.json").write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (root / "n004-provenance.json").write_text(json.dumps({
         "schema_version": 1,
+        "protocol_version": config["protocol_version"],
         "git": {"branch": EXPECTED_BRANCH, "commit": commit, "dirty": False},
         "scene_sha256": config["baseline"]["scene_sha256"],
         "target_gpu": config["target_gpu"],
         "gpu_profile_changes": "forbidden-and-not-performed-by-runner",
     }, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(f"N004 weakness-atlas artifacts: {root}")
-    for name, value in families.items():
-        if "classification" in value:
-            print(f"{name}: {value['classification']}")
-        elif "cases" in value:
-            print(f"{name}: " + ", ".join(f"{item.get('name', item.get('scene', {}).get('layout', item.get('scene', {}).get('path', 'case')))}={item['classification']}" for item in value["cases"]))
     print("N004 weakness atlas: COMPLETE")
     return 0
 
