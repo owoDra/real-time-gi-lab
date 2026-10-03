@@ -24,6 +24,14 @@
       "status": "complete",
       "result": "003-preflight-calibration.md",
       "decision": "scenario-scoped timing eligibility frozen: static 7.0%, camera 1.5%, light 5.0%, stable-deforming 2.5%, topology-high-churn 1.5%; moving-rigid timing measurement-limited; N003 proper unblocked"
+    },
+    {
+      "id": "N003",
+      "slug": "current-vs-vanilla",
+      "status": "complete",
+      "result": "003-current-vs-vanilla.md",
+      "evidence_commit": "52a8d2c7ab2653d40b73afa9f17690712536239e",
+      "decision": "current architecture is formally faster than vanilla in all five timing-eligible scenarios with identical measured image quality; moving-rigid timing remains measurement-limited; current uses about 24-27% more device lifetime memory; proceed to N004 weakness atlas"
     }
   ]
 }
