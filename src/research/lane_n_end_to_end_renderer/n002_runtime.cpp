@@ -39,6 +39,24 @@ using Clock = std::chrono::steady_clock;
     return {value.x / length, value.y / length, value.z / length};
 }
 
+[[nodiscard]] std::size_t n002_checked_add(
+    std::size_t a,
+    std::size_t b) {
+    if (b > std::numeric_limits<std::size_t>::max() - a) {
+        throw std::runtime_error("N002 topology lifetime byte count overflow");
+    }
+    return a + b;
+}
+
+[[nodiscard]] std::size_t n002_checked_mul(
+    std::size_t a,
+    std::size_t b) {
+    if (a != 0U && b > std::numeric_limits<std::size_t>::max() / a) {
+        throw std::runtime_error("N002 topology staging byte count overflow");
+    }
+    return a * b;
+}
+
 } // namespace
 
 I001FrameResult I001Runtime::run_topology_churn_frame() {
@@ -59,6 +77,7 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
             "N002 topology frame has no dynamic owner partition");
     }
 
+    const auto source_steady_peak = impl_->memory_stats.peak_resident_bytes;
     const auto total_start = Clock::now();
     const auto prepare_start = Clock::now();
 
@@ -199,13 +218,37 @@ I001FrameResult I001Runtime::run_topology_churn_frame() {
         rebuild.old_new_overlap_bytes >= rebuild.replacement_blas_bytes
             ? rebuild.old_new_overlap_bytes - rebuild.replacement_blas_bytes
             : 0U;
-    const auto steady_peak = result.memory.peak_resident_bytes;
-    if (retired_old_bytes >
-        std::numeric_limits<std::size_t>::max() - steady_peak) {
-        throw std::runtime_error("N002 topology lifetime peak overflow");
-    }
-    result.memory.peak_resident_bytes =
-        steady_peak + retired_old_bytes;
+
+    // All transfer helpers are synchronously fenced. Before the replacement
+    // BLAS exists, at most one staging allocation is live. Once replacement
+    // BLAS and old BLAS coexist, only the tiny instance-record staging upload
+    // is additionally live. This makes the following lifetime maximum exact
+    // for the N002 rebuild sequence without adding global allocator state to
+    // the accepted N001/core runtime.
+    const auto partition_count = impl_->moving.primitives.size();
+    const auto surface_staging = n002_checked_mul(
+        partition_count,
+        sizeof(std::array<float, 4>));
+    const auto vertex_staging = n002_checked_mul(
+        partition_count,
+        3U * 3U * sizeof(float));
+    const auto metadata_staging = n002_checked_mul(
+        partition_count,
+        sizeof(lane_b::GpuTriangle));
+    const auto pre_replacement_staging = std::max(
+        {surface_staging, vertex_staging, metadata_staging});
+    const auto pre_replacement_peak = n002_checked_add(
+        source_steady_peak,
+        pre_replacement_staging);
+
+    const auto steady_target_peak = result.memory.peak_resident_bytes;
+    const auto overlap_peak = n002_checked_add(
+        n002_checked_add(
+            steady_target_peak,
+            retired_old_bytes),
+        sizeof(VkAccelerationStructureInstanceKHR));
+    result.memory.peak_resident_bytes = std::max(
+        {steady_target_peak, pre_replacement_peak, overlap_peak});
 
     impl_->memory_stats = result.memory;
     impl_->last = result;
