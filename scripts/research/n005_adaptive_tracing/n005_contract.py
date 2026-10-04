@@ -105,7 +105,7 @@ def validate_config(config: dict[str, Any]) -> None:
     if accounting.get("base_traced_ray_source") != "n004-frame.stats.work_items":
         raise ContractError("base ray accounting source changed")
     if accounting.get("future_insertion_boundary") != (
-        "after-frozen-base-producer-before-traversal"
+        "after-frozen-base-producer-before-ray-prepare"
     ):
         raise ContractError("future extra-ray insertion boundary changed")
     if accounting.get("base_work_mutation") != "forbidden":

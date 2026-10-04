@@ -27,7 +27,7 @@
   },
   "p0_extra_ray_accounting": {
     "base_traced_ray_source": "n004-frame.stats.work_items",
-    "future_insertion_boundary": "after-frozen-base-producer-before-traversal",
+    "future_insertion_boundary": "after-frozen-base-producer-before-ray-prepare",
     "base_work_mutation": "forbidden",
     "extra_work_storage": "separate-append-range",
     "equal_budget_gate": "actual-extra-rays-traced-equal-per-frame-and-case",

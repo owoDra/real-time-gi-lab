@@ -97,6 +97,21 @@ class N005AnalysisTests(unittest.TestCase):
         self.assertGreater(signals["temporal-depth-change"][0], 0.0)
         self.assertGreater(signals["depth-discontinuity"][0], 0.0)
 
+    def test_visibility_discontinuity_does_not_select_unowned_current_tile(self) -> None:
+        previous = analysis.VisibilityCapture(
+            2, 1,
+            [1.0, float("inf")],
+            [1, analysis.INVALID_OWNER],
+        )
+        current = analysis.VisibilityCapture(
+            2, 1,
+            [1.0, float("inf")],
+            [1, analysis.INVALID_OWNER],
+        )
+        signals = analysis.signal_maps(previous, current)
+        self.assertEqual(signals["visibility-discontinuity"][0], 1.0)
+        self.assertEqual(signals["visibility-discontinuity"][1], 0.0)
+
     def test_pixel_errors_keep_absolute_relative_and_affected_separate(self) -> None:
         output = [0.001, 0.001, 0.001, 0.2, 0.2, 0.2]
         reference = [0.0, 0.0, 0.0, 0.1, 0.1, 0.1]

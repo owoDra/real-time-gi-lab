@@ -141,9 +141,9 @@ def signal_maps(
                 neighbors.append(index + width)
 
             for neighbor in neighbors:
-                if current_valid[index] != current_valid[neighbor]:
+                if current_valid[index] and not current_valid[neighbor]:
                     visibility_discontinuity[index] = 1.0
-                elif current_valid[index]:
+                elif current_valid[index] and current_valid[neighbor]:
                     depth_discontinuity[index] = max(
                         depth_discontinuity[index],
                         _relative_depth_delta(

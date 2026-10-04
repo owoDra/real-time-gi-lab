@@ -35,7 +35,7 @@ The N005-only runtime readback occurs after a frame has completed. It cannot cha
 
 ### Future extra-ray accounting
 
-P2 must preserve the frozen base producer. Extra work is a logically separate append range inserted after the base producer and before traversal.
+P2 must preserve the frozen base producer. Extra work is a logically separate append range inserted after the frozen base producer and before ray preparation (`work -> rays`). The base work-item count is snapshotted before the append so base and extra work remain separately accountable.
 
 Per frame, future evidence must distinguish:
 
@@ -56,7 +56,7 @@ Measure these independently:
 1. `newly-visible` — current tile becomes owned after being unowned in the previous observed state.
 2. `ownership-changed` — a visible tile changes owning surface ID.
 3. `temporal-depth-change` — normalized depth change where both previous/current tiles are visible.
-4. `visibility-discontinuity` — current 4-neighborhood crosses visible/unowned state.
+4. `visibility-discontinuity` — a **visible current tile** borders an unowned 4-neighbor. Unowned current tiles are not candidates because P2 must be able to map every selected region back to base probe work.
 5. `depth-discontinuity` — maximum normalized depth difference to visible 4-neighbors.
 
 The first three are state-change signals. The last two are persistent local confidence signals. Do not combine them in P1.
