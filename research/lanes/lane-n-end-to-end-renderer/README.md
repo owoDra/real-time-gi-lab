@@ -4,7 +4,7 @@ Issue: #26
 Canonical branch: `research-lane-n-end-to-end-renderer`  
 Architecture base: `research@a75cf7857761cfbc783c9f1f847dc1380359481e`
 
-Status: **N001 complete; N002 complete; N003 complete; N004 implemented and awaiting local build/probe evidence (#39)**.
+Status: **N001 complete; N002 complete; N003 complete; N004 complete; N005 transport question selected**.
 
 Lane N is the image-producing end-to-end lane. It preserves the accepted A–M architecture from `research/status.md` and establishes trustworthy HDR/reference/timing/memory/provenance boundaries before any new GI feature or performance claim.
 
@@ -40,21 +40,27 @@ N003 confirms that the accepted support architecture survives the integrated ren
 
 ## N004 weakness atlas
 
-Issue #39 is active. Prospective contract: `experiments/004-n004-weakness-atlas-config.json`; design/interpretation truth: `experiments/004-n004-weakness-atlas.md`.
+Issue #39 is complete. Accepted protocol: `experiments/004-n004-weakness-atlas-v2-config.json`; design/lineage: `experiments/004-n004-weakness-atlas.md`; result truth: `results/004-weakness-atlas.md`.
 
-Implementation is complete but no target result is accepted yet.
+The accepted campaign completed all six weakness families with no sample exclusion and no GPU profile changes. Whole-case checkpoint resume was used only after interruption: eight already-complete cases were validated and reused, the partial changing-light case was retained and rerun in full, and every remaining case ran normally.
 
-The atlas measures, without mitigation:
+Result summary:
 
-- leak thickness sweep plus grazing, one-sided and enclosed occluder cases;
-- abrupt and gradual camera/disocclusion paths;
-- step and gradual illumination changes;
-- rigid, stable-deforming and topology-changing dynamic classes;
-- sparse, dense, large-horizontal and vertical/tall synthetic world layouts;
-- higher-order diffuse and glossy/specular capability boundaries.
+- all six thin-geometry/light-leak cases: `not-observed-under-tested-regime`;
+- abrupt and gradual camera/disocclusion: `material-blocker` under the frozen classifier;
+- step and gradual illumination change: `present-but-bounded`;
+- moving-rigid: `measurement-limited` for formal timing;
+- stable-topology deformation and topology-changing/high-churn: `material-blocker` under the frozen classifier;
+- sparse world-shape: `not-observed-under-tested-regime`;
+- dense, large-horizontal and vertical/tall world-shape: `present-but-bounded`, with no correctness/capacity failure;
+- higher-order diffuse and glossy/specular: `capability-not-implemented`; the 1-vs-8 bounce Sponza reference gap was not materially exposed.
 
-Synthetic scenes are deterministic multi-mesh glTFs with a frozen 36-triangle idle dynamic control object so the primary synthetic geometry remains static ownership. N004 does not change the accepted A001 runtime used by N001–N003: the atlas target links an isolated wrapper that adds only prospective camera/light fractions.
+The blocker labels are retained exactly from the prospective classifier. They are driven by relative-luminance and scale-aware affected-pixel gates in a dim workload; the corresponding absolute HDR errors remain small. N004 therefore does not reinterpret thresholds post hoc.
 
-Generic image classification thresholds and leak-specific false-irradiance thresholds are frozen before target data. Moving-rigid timing remains measurement-limited. All raw samples are retained, aggregate weakness scores are forbidden, and the accepted completed-campaign rerun budget is zero.
+The single N005 transport question selected from the evidence is:
 
-Build/contract/probe locally before the one accepted N004 target campaign. Raw target artifacts remain under `out/research/`.
+> Can state-change/confidence-driven adaptive tracing reduce the persistent low-radiance error tails observed under camera motion and dynamic geometry, without materially increasing the accepted complete-renderer GPU boundary or reopening the accepted A–M traversal/storage architecture?
+
+Leak mitigation and multi-bounce are lower priority under N004 evidence: controlled leaking was not observed, and the tested Sponza state did not materially expose the higher-order diffuse gap.
+
+Raw target artifacts remain under `out/research/`.
