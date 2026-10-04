@@ -112,6 +112,15 @@ I001N004HitDiagnostics I001Runtime::n004_hit_diagnostics() {
         gpu_validator_hits.data(),
         gpu_validator_hits.size() * sizeof(GpuHit));
 
+    // B002Buffer is an explicitly-owned Vulkan allocation rather than an RAII
+    // wrapper. The N004 cross-check is invoked after individual measured frames,
+    // so retaining these temporary buffers until device teardown would leak one
+    // set per diagnostic call and could perturb later frames in the same case.
+    impl_->context.destroy_buffer(validator_hits_buffer);
+    impl_->context.destroy_buffer(ordered);
+    impl_->context.destroy_buffer(nodes);
+    impl_->context.destroy_buffer(triangle);
+
     I001N004HitDiagnostics diagnostics{};
     std::size_t candidate_vs_gpu_validator = 0U;
     std::size_t cpu_vs_gpu_validator = 0U;
