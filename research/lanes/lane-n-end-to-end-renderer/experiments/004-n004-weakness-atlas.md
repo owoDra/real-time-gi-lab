@@ -2,13 +2,28 @@
 
 Issue: #39  
 Parent: #26  
-Status: **implementation complete; prospective contract frozen; local build/probe required before target campaign**
+Status: **protocol v2 frozen; v4 world workload validated; ready for one accepted target campaign**
 
 ## Goal
 
 Measure the accepted current Lane-N renderer without adding mitigation first. N004 classifies the suspected Split Radiance Cascades weaknesses into evidence-backed regimes and leaves one N005 research question after target data.
 
 No aggregate weakness score is permitted.
+
+## Protocol lineage
+
+N004 v1 is retained as failed pre-target lineage. Its first formal attempt stopped in `world-sparse` because the v3 synthetic world generator placed regular-grid box edges exactly on a canonical diagonal RC ray. The strict CPU reference reported a hit where hardware triangle traversal reported a miss, while radiance remained numerically unchanged. This is a workload degeneracy, not accepted target evidence.
+
+Protocol v2 changes only the synthetic world placement:
+
+- scene factory is frozen at `phos-n004-scene-factory-v4`;
+- world boxes receive deterministic X/Z jitter (`0.037` / `0.041` amplitude) to remove exact lattice/edge alignment;
+- triangle counts, sparse/dense/large-horizontal/vertical-tall classes and the 36-triangle idle dynamic control mesh remain unchanged;
+- the six weakness families, quality thresholds, reference rules, timing interpretation, sample-exclusion rule and completed-campaign rerun budget remain unchanged.
+
+After the v4 correction, `world-sparse` passed strict source validation. One subsequent probe produced 10 target-only historical-validator hit mismatches, but the anomaly did not reproduce. A dedicated three-way diagnostic compares HWRT candidate, CPU brute-force reference and GPU software-BVH validator reference without changing the historical validator. Five fresh-process repeats produced 10/10 source/target cross-checks with `cpu_vs_candidate=0`, `gpu_validator_vs_candidate=0`, and `cpu_vs_gpu_validator=0`. The anomalous probe is retained as validation evidence and is not target data.
+
+The accepted target campaign is therefore protocol v2 and still has completed-campaign rerun budget zero.
 
 ## Frozen renderer
 
@@ -39,7 +54,7 @@ No historical target uses this wrapper.
 
 Synthetic leak/world glTFs are generated deterministically at campaign time. Mesh 0 is always a small 36-triangle control object so Lane-E-final's stable-regime idle dynamic partition does not accidentally absorb the primary synthetic workload. Main workload geometry remains static ownership.
 
-The generated scene manifest and glTF/bin files are retained in the raw artifact.
+The generated scene manifest and glTF/bin files are retained in the raw artifact. For protocol v2, the manifest and glTF asset generator must identify `phos-n004-scene-factory-v4`.
 
 ## Families
 
@@ -99,7 +114,9 @@ Deterministic synthetic layouts:
 - large-horizontal;
 - vertical-tall.
 
-Record quality, visible owners/work items, storage churn, complete GPU time and memory independently. Correctness/capacity failure stops the accepted campaign rather than being silently discarded.
+Protocol v2 keeps these classes but removes exact X/Z lattice-edge alignment with the frozen deterministic jitter described above.
+
+Record quality, visible owners/work items, storage churn, complete GPU time and memory independently. Correctness/capacity failure is retained as a `material-blocker`; it is not silently discarded.
 
 ### F. Capability boundary
 
@@ -129,7 +146,7 @@ Primary metrics against aligned reference:
 
 Everything between those gates is `present-but-bounded` unless a family-specific capability/measurement rule applies.
 
-These thresholds are frozen before any N004 target data.
+These thresholds were frozen before any accepted N004 target data and are unchanged in v2.
 
 ## Reference and artifact discipline
 
@@ -143,4 +160,4 @@ Raw artifacts retain:
 - full summary and provenance;
 - all timing/stats/memory values.
 
-No sample exclusion is allowed. Completed accepted campaign rerun budget is zero. Probe runs are validation-only and must use a separate non-campaign artifact path.
+No sample exclusion is allowed. Completed accepted campaign rerun budget is zero. Probe runs are validation-only and must use a separate non-campaign artifact path. Failed v1 and anomalous validation artifacts remain part of the research lineage and must not be deleted or reclassified as target evidence.
