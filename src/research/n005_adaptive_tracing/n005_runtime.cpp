@@ -5,6 +5,7 @@
 // prospective stage without changing historical renderer translation units.
 #include "../lane_n_end_to_end_renderer/n004_runtime.cpp"
 
+#include <algorithm>
 #include <array>
 #include <bit>
 #include <cmath>
@@ -13,6 +14,7 @@
 #include <map>
 #include <span>
 #include <stdexcept>
+#include <utility>
 #include <vector>
 
 namespace phos::gi::research::integration {
@@ -179,7 +181,6 @@ N005FrameResult N005Runtime::run_candidate_frame(
     i001_compute_barrier(impl.context, command);
     stamp(3);
 
-    // Frozen base producer path.
     impl.producer_stage->record(command, groups(impl.params.counts[0]));
     i001_compute_barrier(impl.context, command);
     impl.clamp_stage->record(command, 1);
@@ -202,9 +203,6 @@ N005FrameResult N005Runtime::run_candidate_frame(
         };
         state_->extra_stage->record(command, 1, 1, 1, &push, sizeof(push));
         i001_compute_barrier(impl.context, command);
-
-        // counters.data[0] changed; rebuild indirect dispatch from the
-        // base+extra total without touching outputs or the base prefix.
         impl.finalize_stage->record(command, 1);
         i001_compute_barrier(impl.context, command);
         stamp(17);
@@ -302,10 +300,11 @@ N005FrameResult N005Runtime::run_candidate_frame(
     }
 
     std::array<std::uint64_t, 18> timestamps{};
+    const auto timestamp_count = active_extra ? 18U : 16U;
     if (impl.context.vk().getQueryPoolResults(
             impl.query_pool,
             0,
-            static_cast<std::uint32_t>(timestamps.size()),
+            timestamp_count,
             sizeof(timestamps),
             timestamps.data(),
             sizeof(std::uint64_t),
