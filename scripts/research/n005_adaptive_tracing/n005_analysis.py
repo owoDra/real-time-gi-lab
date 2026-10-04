@@ -1,9 +1,26 @@
 from __future__ import annotations
 
+import array
 import math
+import struct
+import sys
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Any, Sequence
 
 LUMA = (0.2126, 0.7152, 0.0722)
+VISIBILITY_MAGIC = b"N005VIS1"
+VISIBILITY_VERSION = 1
+INVALID_OWNER = 0xFFFFFFFF
+_HEADER = struct.Struct("<8sIIII")
+
+
+@dataclass(frozen=True)
+class VisibilityCapture:
+    width: int
+    height: int
+    depth: Sequence[float]
+    owner: Sequence[int]
 
 
 def luminance(rgb: Sequence[float]) -> float:
@@ -34,6 +51,114 @@ def pixel_error_vectors(
         relative.append(delta / scale)
         affected.append(delta >= affected_fraction * scale)
     return absolute, relative, affected
+
+
+def read_visibility_capture(path: Path) -> VisibilityCapture:
+    payload = path.read_bytes()
+    if len(payload) < _HEADER.size:
+        raise ValueError(f"visibility capture header is truncated: {path}")
+    magic, version, width, height, count = _HEADER.unpack_from(payload)
+    if magic != VISIBILITY_MAGIC or version != VISIBILITY_VERSION:
+        raise ValueError(f"visibility capture protocol mismatch: {path}")
+    if count != width * height:
+        raise ValueError(f"visibility capture dimensions/count mismatch: {path}")
+    expected = _HEADER.size + count * 8
+    if len(payload) != expected:
+        raise ValueError(f"visibility capture payload size mismatch: {path}")
+
+    depth_bytes = payload[_HEADER.size:_HEADER.size + count * 4]
+    owner_bytes = payload[_HEADER.size + count * 4:]
+    depth = array.array("f")
+    depth.frombytes(depth_bytes)
+    owner = array.array("I")
+    owner.frombytes(owner_bytes)
+    if depth.itemsize != 4 or owner.itemsize != 4:
+        raise ValueError("N005 visibility capture requires 32-bit float/uint arrays")
+    if sys.byteorder != "little":
+        depth.byteswap()
+        owner.byteswap()
+    return VisibilityCapture(width, height, depth, owner)
+
+
+def _visible(capture: VisibilityCapture, index: int) -> bool:
+    return (
+        capture.owner[index] != INVALID_OWNER
+        and math.isfinite(float(capture.depth[index]))
+        and float(capture.depth[index]) > 0.0
+    )
+
+
+def _relative_depth_delta(a: float, b: float) -> float:
+    return abs(a - b) / max(abs(a), abs(b), 1.0e-6)
+
+
+def signal_maps(
+    previous: VisibilityCapture,
+    current: VisibilityCapture,
+) -> dict[str, list[float]]:
+    if (previous.width, previous.height) != (current.width, current.height):
+        raise ValueError("visibility capture dimensions changed")
+    count = current.width * current.height
+    if not (
+        len(previous.depth) == len(previous.owner) ==
+        len(current.depth) == len(current.owner) == count
+    ):
+        raise ValueError("visibility capture vector length mismatch")
+
+    newly_visible = [0.0] * count
+    ownership_changed = [0.0] * count
+    temporal_depth_change = [0.0] * count
+    visibility_discontinuity = [0.0] * count
+    depth_discontinuity = [0.0] * count
+
+    previous_valid = [_visible(previous, index) for index in range(count)]
+    current_valid = [_visible(current, index) for index in range(count)]
+
+    for index in range(count):
+        if current_valid[index] and not previous_valid[index]:
+            newly_visible[index] = 1.0
+        if current_valid[index] and previous_valid[index]:
+            if current.owner[index] != previous.owner[index]:
+                ownership_changed[index] = 1.0
+            temporal_depth_change[index] = _relative_depth_delta(
+                float(current.depth[index]),
+                float(previous.depth[index]),
+            )
+
+    width = current.width
+    height = current.height
+    for y in range(height):
+        for x in range(width):
+            index = y * width + x
+            neighbors: list[int] = []
+            if x > 0:
+                neighbors.append(index - 1)
+            if x + 1 < width:
+                neighbors.append(index + 1)
+            if y > 0:
+                neighbors.append(index - width)
+            if y + 1 < height:
+                neighbors.append(index + width)
+
+            for neighbor in neighbors:
+                if current_valid[index] != current_valid[neighbor]:
+                    visibility_discontinuity[index] = 1.0
+                elif current_valid[index]:
+                    depth_discontinuity[index] = max(
+                        depth_discontinuity[index],
+                        _relative_depth_delta(
+                            float(current.depth[index]),
+                            float(current.depth[neighbor]),
+                        ),
+                    )
+
+    return {
+        "newly-visible": newly_visible,
+        "ownership-changed": ownership_changed,
+        "temporal-depth-change": temporal_depth_change,
+        "visibility-discontinuity": visibility_discontinuity,
+        "depth-discontinuity": depth_discontinuity,
+    }
 
 
 def pearson(values: Sequence[float], errors: Sequence[float]) -> float | None:

@@ -1,4 +1,5 @@
 #include "n002_runtime.cpp"
+#include "../n005_adaptive_tracing/n005_visibility_capture.hpp"
 
 #include <algorithm>
 #include <array>
@@ -22,6 +23,13 @@ I001N004HitDiagnostics I001Runtime::n004_hit_diagnostics() {
     if (!impl_->have_last) {
         throw std::runtime_error("N004 hit diagnostics requested before a frame");
     }
+
+    phos::gi::research::n005::capture_visibility_if_requested(
+        impl_->context,
+        impl_->depth,
+        impl_->owners,
+        impl_->params.counts[1],
+        impl_->params.counts[2]);
 
     const auto work_count = impl_->last.stats.work_items;
     std::vector<traversal::GpuRay> gpu_rays(work_count);

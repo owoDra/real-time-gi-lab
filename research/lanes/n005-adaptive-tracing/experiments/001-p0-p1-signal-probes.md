@@ -20,7 +20,9 @@ Reuse the N004 executable path rather than copying the renderer/reference/playba
 - N004's aligned multi-bounce reference generation and PFM evidence are reused;
 - `n004_scene_factory.py`, `run_n004_weakness_atlas.run_case`, image loading, and N004 config validation are reused by the P1 runner.
 
-N005 adds a separately compiled `phos-n005-signal-probe` target from the same N004 main. A compile-time observation hook reads already-produced visibility depth/owner buffers after each completed frame and emits sidecar signal maps. The normal `phos-n004-atlas` target does not enable the hook.
+N005 uses the same `phos-n004-atlas` playback. An opt-in observation hook inside the existing N004 diagnostic boundary reads already-produced visibility depth/owner buffers only when `PHOS_N005_VISIBILITY_CAPTURE_DIR` is set. Normal N004 runs leave the environment unset, so their diagnostic behavior remains unchanged apart from the dormant environment check.
+
+P1 stores the exact depth/owner snapshots as raw sidecars and derives signal maps offline. This keeps signal math out of the renderer and makes every P1 signal reproducible from retained raw observation data.
 
 ### Minimum-invasive signal data
 

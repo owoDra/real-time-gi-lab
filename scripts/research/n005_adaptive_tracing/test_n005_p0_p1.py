@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import copy
 import json
+import struct
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -55,6 +57,45 @@ class N005AnalysisTests(unittest.TestCase):
         self.assertEqual(
             result["ranked_selection"][0]["affected_recall"], 1.0
         )
+
+    def test_visibility_capture_binary_contract(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "visibility-000.bin"
+            header = struct.pack(
+                "<8sIIII",
+                analysis.VISIBILITY_MAGIC,
+                analysis.VISIBILITY_VERSION,
+                2,
+                1,
+                2,
+            )
+            path.write_bytes(
+                header
+                + struct.pack("<2f", 1.0, float("inf"))
+                + struct.pack("<2I", 7, analysis.INVALID_OWNER)
+            )
+            capture = analysis.read_visibility_capture(path)
+            self.assertEqual((capture.width, capture.height), (2, 1))
+            self.assertAlmostEqual(capture.depth[0], 1.0)
+            self.assertEqual(capture.owner[0], 7)
+            self.assertEqual(capture.owner[1], analysis.INVALID_OWNER)
+
+    def test_visibility_signal_maps_separate_temporal_and_spatial_changes(self) -> None:
+        previous = analysis.VisibilityCapture(
+            2, 2,
+            [1.0, float("inf"), 2.0, 2.0],
+            [1, analysis.INVALID_OWNER, 2, 3],
+        )
+        current = analysis.VisibilityCapture(
+            2, 2,
+            [1.5, 3.0, 2.0, 2.0],
+            [1, 4, 5, 3],
+        )
+        signals = analysis.signal_maps(previous, current)
+        self.assertEqual(signals["newly-visible"][1], 1.0)
+        self.assertEqual(signals["ownership-changed"][2], 1.0)
+        self.assertGreater(signals["temporal-depth-change"][0], 0.0)
+        self.assertGreater(signals["depth-discontinuity"][0], 0.0)
 
     def test_pixel_errors_keep_absolute_relative_and_affected_separate(self) -> None:
         output = [0.001, 0.001, 0.001, 0.2, 0.2, 0.2]
