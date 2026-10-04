@@ -10,7 +10,7 @@ import n004_scene_factory as scene_factory
 import run_n004_weakness_atlas as runner
 import run_n003_preflight_v4 as common
 
-CONFIG = common.ROOT / "research/lanes/lane-n-end-to-end-renderer/experiments/004-n004-weakness-atlas-config.json"
+CONFIG = common.ROOT / "research/lanes/lane-n-end-to-end-renderer/experiments/004-n004-weakness-atlas-v2-config.json"
 
 
 def require(condition: bool, message: str) -> None:
@@ -102,6 +102,10 @@ def main() -> int:
         manifest_b = scene_factory.generate_all(root / "b")
         require(manifest_a == manifest_b, "N004 synthetic scene manifest is nondeterministic")
         require(
+            manifest_a.get("generator") == contract.SCENE_GENERATOR,
+            "N004 synthetic scene generator revision changed",
+        )
+        require(
             set(contract.EXPECTED_LEAK_SCENES).issubset(manifest_a["scenes"]),
             "N004 generated leak cases are incomplete",
         )
@@ -110,6 +114,10 @@ def main() -> int:
             gltf_a = json.loads((root / "a" / meta["path"]).read_text(encoding="utf-8"))
             gltf_b = json.loads((root / "b" / meta["path"]).read_text(encoding="utf-8"))
             require(gltf_a == gltf_b, f"N004 glTF nondeterministic: {scene_name}")
+            require(
+                gltf_a.get("asset", {}).get("generator") == contract.SCENE_GENERATOR,
+                f"N004 glTF generator changed: {scene_name}",
+            )
             require(len(gltf_a["meshes"]) >= 2, f"N004 scene lost static/dynamic ownership split: {scene_name}")
             first_index_accessor = gltf_a["meshes"][0]["primitives"][0]["indices"]
             first_triangle_count = gltf_a["accessors"][first_index_accessor]["count"] // 3
@@ -131,7 +139,7 @@ def main() -> int:
     require("n004_a001_runtime.cpp" in cmake and "N004_SHARED_SUPPORT_SOURCES" in cmake,
             "N004 isolated source wiring missing")
 
-    print("N004 contract/scene-factory/isolation/correctness tests: PASS")
+    print("N004 v2 contract/scene-factory/isolation/correctness tests: PASS")
     return 0
 
 
