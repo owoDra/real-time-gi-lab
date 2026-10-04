@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "experiment": "N005-p0-p1-signal-probes",
+  "protocol_version": "n005-p0-p1-signal-probes-v1",
+  "issue": 40,
+  "branch": "research-n005-adaptive-tracing",
+  "base": {
+    "branch": "research-lane-n-end-to-end-renderer",
+    "commit": "c8af6b14bec9621cabdc8525b7e166a12a5fd272"
+  },
+  "predecessor": {
+    "config": "research/lanes/lane-n-end-to-end-renderer/experiments/004-n004-weakness-atlas-v2-config.json",
+    "protocol_version": "n004-weakness-atlas-v2",
+    "evidence_protocol_version": "n004-atlas-evidence-v3",
+    "renderer_role": "current-lane-e-final-hwrt"
+  },
+  "host_safety": {
+    "gpu_profile_changes": "forbidden",
+    "host_gpu_policy": "leave-unchanged"
+  },
+  "phase_scope": {
+    "p0": "reuse-and-accounting",
+    "p1": "observation-only-signal-localization",
+    "extra_rays": 0,
+    "formal_target_measurement": false,
+    "adaptive_tracing_implementation": false
+  },
+  "p0_extra_ray_accounting": {
+    "base_traced_ray_source": "n004-frame.stats.work_items",
+    "future_insertion_boundary": "after-frozen-base-producer-before-traversal",
+    "base_work_mutation": "forbidden",
+    "extra_work_storage": "separate-append-range",
+    "equal_budget_gate": "actual-extra-rays-traced-equal-per-frame-and-case",
+    "per_extra_ray_attribution": [
+      "probe_x",
+      "probe_y",
+      "probe_z",
+      "cascade",
+      "source_tile_id",
+      "signal_id"
+    ],
+    "required_future_frame_fields": [
+      "base_traced_rays",
+      "extra_rays_requested",
+      "extra_rays_traced",
+      "extra_work_items",
+      "eligible_probe_count",
+      "extra_probe_count",
+      "extra_probe_fraction"
+    ]
+  },
+  "p1": {
+    "signal_source": "exact-gpu-visibility-depth-and-owner-readback",
+    "signals": [
+      "newly-visible",
+      "ownership-changed",
+      "temporal-depth-change",
+      "visibility-discontinuity",
+      "depth-discontinuity"
+    ],
+    "signal_combination": "forbidden",
+    "selection_fractions": [
+      0.01,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "error_axes": [
+      "absolute-luminance-error",
+      "relative-luminance-error",
+      "n004-scale-aware-affected-pixel"
+    ],
+    "timing_interpretation": "descriptive-only-observation-readback-can-perturb-inter-frame-host-sequencing",
+    "decision_regimes": [
+      "camera-abrupt-reveal",
+      "camera-gradual-motion",
+      "stable-topology-deforming",
+      "topology-changing-high-churn"
+    ],
+    "control_regimes": [
+      "static",
+      "changing-illumination-step",
+      "world-dense"
+    ],
+    "deferred_signals": [
+      "storage-allocation-invalidation-update-churn",
+      "dynamic-owner-aabb-proximity-overlap",
+      "probe-age-newly-created-state",
+      "sample-disagreement-variance-proxy"
+    ]
+  },
+  "sample_exclusion": "forbidden",
+  "post_hoc_signal_threshold_change": "forbidden",
+  "aggregate_score": "forbidden"
+}
