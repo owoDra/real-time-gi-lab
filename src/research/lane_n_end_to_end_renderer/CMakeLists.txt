@@ -72,6 +72,14 @@ set(N001_SHADER_OUTPUTS
 add_custom_target(phos-n001-shaders DEPENDS ${N001_SHADER_OUTPUTS})
 
 add_compute_shader(
+  n005_extra_producer
+  shaders/research/n005_adaptive_tracing/n005_extra_producer.comp.glsl)
+set(N005_SHADER_OUTPUTS
+  "${CMAKE_BINARY_DIR}/shaders/n005_extra_producer.spv"
+)
+add_custom_target(phos-n005-shaders DEPENDS ${N005_SHADER_OUTPUTS})
+
+add_compute_shader(
   i001_software_bvh
   shaders/research/lane_n_end_to_end_renderer/imported/integration/i001_software_bvh.comp.glsl)
 add_compute_shader(
@@ -230,3 +238,18 @@ add_executable(phos-n004-atlas
   ${N004_SHARED_SUPPORT_SOURCES}
 )
 configure_lane_n_renderer(phos-n004-atlas)
+
+# N005 keeps N004 and all historical targets unchanged. Its integration-only
+# runtime includes the accepted N004/N002/N001 runtime chain in one translation
+# unit and inserts exactly one extra producer stage at the frozen P0 boundary.
+add_executable(phos-n005-candidate
+  ${PROJECT_SOURCE_DIR}/src/research/n005_adaptive_tracing/n005_candidate_main.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/n005_adaptive_tracing/n005_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N004_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n005-candidate)
+target_compile_definitions(phos-n005-candidate PRIVATE
+  PHOS_GI_N005_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+add_dependencies(phos-n005-candidate phos-n005-shaders)
