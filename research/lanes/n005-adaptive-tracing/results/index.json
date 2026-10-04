@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "results": [
+    {
+      "experiment": "001-p0-p1-signal-probes",
+      "status": "complete",
+      "result": "001-p0-p1-signal-probes.md",
+      "decision": "proceed-to-p2-with-state-gated-depth-discontinuity"
+    }
+  ]
+}
