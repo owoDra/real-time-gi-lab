@@ -19,7 +19,7 @@ N004 is complete. Treat these as accepted inputs, not hypotheses to rewrite:
 - moving-rigid timing remains measurement-limited;
 - glossy/specular is not implemented; higher-order diffuse was not materially exposed by the tested Sponza capability case.
 
-N004 blocker labels must remain interpreted under their frozen metric contract. Do not retrospectively change thresholds because some blocker decisions are driven by low-luminance relative-error / affected-pixel behavior despite small absolute radiometric error.
+N004 blocker labels remain interpreted under their frozen metric contract. Do not retrospectively change thresholds.
 
 Canonical predecessor result:
 `research/lanes/lane-n-end-to-end-renderer/results/004-weakness-atlas.md`
@@ -33,19 +33,6 @@ Use equal incremental tracing budgets:
 3. adaptive extra rays selected by one frozen state-change/confidence rule.
 
 An adaptive candidate cannot win merely by tracing more total rays.
-
-## Initial candidate signals
-
-Measure simple signals independently before combining them:
-
-- newly visible or ownership-changed probes;
-- depth/visibility discontinuity;
-- allocation/invalidation/update churn;
-- changed dynamic-owner AABB proximity/overlap;
-- probe age/newly-created state;
-- existing sample disagreement/variance proxy.
-
-Do not start with learned predictors.
 
 ## Primary regimes
 
@@ -63,11 +50,9 @@ Controls:
 
 ### P0 — reuse and accounting
 
-Reuse N004 renderer/reference/playback. Define exact per-frame/per-probe extra-ray accounting and candidate evidence schema.
+Complete. Reuse N004 renderer/reference/playback and keep extra work as an attributable suffix after the frozen producer and before ray preparation.
 
 ### P1 — signal probes
-
-Expose candidate confidence/state-change signals without changing tracing. Measure whether each signal localizes N004 error-prone regions. Reject weak signals rather than stacking heuristics.
 
 **Complete.** P1 retained `depth-discontinuity` as the single first P2 local confidence signal. Temporal owner/depth-change signals were useful for camera transitions but nearly blind to the dynamic blockers. Persistent depth discontinuity localized both camera and dynamic error, but also fires on static geometry, so P2 gates it with explicit camera/dynamic state-change events.
 
@@ -76,12 +61,12 @@ Canonical result:
 
 ### P2 — equal-budget candidates
 
-**Frozen and ready for implementation validation.**
+**Contract frozen; implementation checkpoint complete; local build/GPU validation pending.**
 
 Candidate contract:
 `research/lanes/n005-adaptive-tracing/experiments/002-p2-equal-budget-candidates.md`
 
-Initial frozen candidate:
+Frozen candidate:
 
 - `depth-discontinuity >= 0.01`;
 - state-change gate only for camera/dynamic transitions;
@@ -90,7 +75,15 @@ Initial frozen candidate:
 - 9,216 requested extra rays per active frame;
 - exact actual-ray equality between uniform and adaptive.
 
-P2 remains non-formal validation/calibration.
+Implemented:
+
+- `n005_extra_producer.comp.glsl` appends extra work after the unchanged base prefix;
+- uniform and adaptive use the same deterministic extra-ray direction generator;
+- `N005Runtime` records base/extra accounting and validates the base prefix plus appended metadata;
+- the P2 candidate executable records image/reference, GPU timing, memory, traversal diagnostics and accounting evidence;
+- `run_n005_p2.py` rejects correctness, eligibility, control-budget or actual-ray-equality violations before accepting a P2 campaign.
+
+P2 remains non-formal validation/calibration. No P2 quality result is accepted until the local CMake/Vulkan build and GPU campaign run successfully.
 
 ### P3 — formal comparison
 
