@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "experiment": "N005-p2-equal-budget-candidates",
+  "protocol_version": "n005-p2-equal-budget-candidates-v1",
+  "issue": 40,
+  "branch": "research-n005-adaptive-tracing",
+  "predecessor": {
+    "p1_protocol_version": "n005-p0-p1-signal-probes-v1",
+    "p1_commit": "f110ee3044b00f4dba5c7ae5787aa3df094bd0e1",
+    "n004_protocol_version": "n004-weakness-atlas-v2"
+  },
+  "phase_scope": {
+    "phase": "P2",
+    "formal_target_measurement": false,
+    "purpose": "implementation-validation-and-equal-budget-calibration"
+  },
+  "candidate": {
+    "signal": "depth-discontinuity",
+    "signal_definition": "max-normalized-depth-delta-to-visible-4-neighbors",
+    "normalized_depth_threshold": 0.01,
+    "state_gate": "camera-or-dynamic-state-change-only",
+    "selection_basis": "visible-owner-region",
+    "owner_budget_per_active_frame": 576,
+    "cascades_per_owner": 4,
+    "extra_rays_per_probe": 4,
+    "requested_extra_rays_per_active_frame": 9216,
+    "adaptive_selection": "deterministically-even-across-threshold-eligible-owner-order",
+    "uniform_selection": "deterministically-even-across-all-visible-owner-order",
+    "eligibility_shortfall": "invalid-candidate-frame",
+    "extra_direction_rule": "same-deterministic-probe-key-hash-directions-for-uniform-and-adaptive"
+  },
+  "state_change_schedule": {
+    "camera-abrupt-reveal": [576, 0, 0, 0, 0, 0, 0, 0],
+    "camera-gradual-motion": [576, 576, 576, 576, 576, 576, 576, 576],
+    "stable-topology-deforming": [576, 0, 0, 0],
+    "topology-changing-high-churn": [576, 0, 0, 0],
+    "static": [0],
+    "changing-illumination-step": [0, 0, 0, 0, 0, 0, 0, 0],
+    "world-dense": [0]
+  },
+  "required_modes": [
+    "current",
+    "uniform-extra-rays",
+    "adaptive-extra-rays"
+  ],
+  "equal_budget_gate": {
+    "basis": "actual-extra-rays-traced",
+    "scope": "per-frame-and-case",
+    "uniform_adaptive_must_match": true,
+    "base_work_prefix_immutable": true,
+    "extra_work_boundary": "after-frozen-base-producer-before-ray-prepare"
+  },
+  "measurements": [
+    "rgb-rms-error",
+    "p99-absolute-luminance-error",
+    "p99-relative-luminance-error",
+    "scale-aware-affected-pixel-fraction",
+    "temporal-rgb-rms",
+    "base-traced-rays",
+    "extra-rays-requested",
+    "extra-rays-traced",
+    "extra-work-items",
+    "eligible-probe-count",
+    "extra-probe-count",
+    "extra-probe-fraction",
+    "complete-gi-gpu-us",
+    "complete-renderer-gpu-us",
+    "extra-producer-gpu-us",
+    "persistent-transient-peak-memory",
+    "correctness-traversal-storage"
+  ],
+  "decision_discipline": {
+    "p2_is_formal": false,
+    "aggregate_score": "forbidden",
+    "sample_exclusion": "forbidden",
+    "post_hoc_threshold_change": "forbidden",
+    "gpu_profile_changes": "forbidden",
+    "github_actions": "forbidden",
+    "p3_requires_new_frozen_formal_contract": true
+  }
+}
