@@ -16,6 +16,8 @@ namespace phos::gi::research::integration {
 namespace lane_a = phos::gi::lane_a;
 namespace lane_b = phos::gi::research::lane_b;
 
+class N005Runtime;
+
 enum class I001Variant {
     VanillaSoftware,
     CombinedHwrt,
@@ -203,6 +205,7 @@ public:
     [[nodiscard]] float timestamp_period_ns() const noexcept;
 
 private:
+    friend class N005Runtime;
     struct Impl;
     std::unique_ptr<Impl> impl_;
 };
