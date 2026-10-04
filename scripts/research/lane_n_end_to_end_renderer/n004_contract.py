@@ -5,7 +5,8 @@ from pathlib import Path
 from typing import Any
 
 SCHEMA_VERSION = 1
-PROTOCOL_VERSION = "n004-weakness-atlas-v1"
+PROTOCOL_VERSION = "n004-weakness-atlas-v2"
+SCENE_GENERATOR = "phos-n004-scene-factory-v4"
 EXPECTED_CLASSIFICATIONS = [
     "not-observed-under-tested-regime",
     "present-but-bounded",
@@ -71,6 +72,22 @@ def validate_config(config: dict[str, Any]) -> None:
     if config.get("completed_campaign_rerun_budget") != 0:
         raise ContractError("N004 completed campaign rerun budget changed")
 
+    revision = _mapping(config.get("revision"), "revision")
+    if revision.get("predecessor_protocol") != "n004-weakness-atlas-v1":
+        raise ContractError("N004 v2 predecessor changed")
+    if revision.get("synthetic_scene_generator") != SCENE_GENERATOR:
+        raise ContractError("N004 synthetic scene generator changed")
+    if _number(revision.get("world_x_jitter"), "revision.world_x_jitter") != 0.037:
+        raise ContractError("N004 world X jitter changed")
+    if _number(revision.get("world_z_jitter"), "revision.world_z_jitter") != 0.041:
+        raise ContractError("N004 world Z jitter changed")
+    if any(revision.get(key) is not False for key in (
+        "family_matrix_changed",
+        "classification_thresholds_changed",
+        "sample_exclusion_changed",
+    )):
+        raise ContractError("N004 v2 may only remove the world exact-edge workload degeneracy")
+
     baseline = _mapping(config.get("baseline"), "baseline")
     if baseline.get("role") != "current-lane-e-final-hwrt":
         raise ContractError("N004 must measure the accepted current renderer")
@@ -135,6 +152,8 @@ def validate_config(config: dict[str, Any]) -> None:
     world = _mapping(families["world-shape"], "world")
     if world.get("scenes") != ["world-sparse", "world-dense", "world-large-horizontal", "world-vertical-tall"]:
         raise ContractError("N004 world-shape matrix changed")
+    if world.get("correctness_or_capacity_failure_is_blocker") is not True:
+        raise ContractError("N004 world correctness/capacity rule changed")
 
     capability = _mapping(families["capability-boundary"], "capability")
     if capability.get("diffuse_reference_bounces") != [1, 8]:
