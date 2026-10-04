@@ -102,20 +102,23 @@ void main() {
     if (gl_GlobalInvocationID.x != 0u) return;
 
     uint base_work = counters.data[0];
-    uint visible_owners = counters.data[3];
     uint block_count = p.counts.w * p.limits.x;
     stats.data[0] = base_work;
     stats.data[1] = 0u;
     stats.data[2] = 0u;
     stats.data[3] = 0u;
 
-    if (pc.mode == MODE_CURRENT || pc.owner_budget == 0u ||
-        visible_owners == 0u || block_count == 0u) {
+    if (pc.mode == MODE_CURRENT || pc.owner_budget == 0u || block_count == 0u) {
         return;
     }
 
+    // Producer increments visible-owner diagnostics before its capacity guard.
+    // Only blocks actually present in the frozen base prefix are safe to read.
+    uint base_owner_count = base_work / block_count;
+    if (base_owner_count == 0u) return;
+
     uint eligible = 0u;
-    for (uint owner_index = 0u; owner_index < visible_owners; ++owner_index) {
+    for (uint owner_index = 0u; owner_index < base_owner_count; ++owner_index) {
         if (owner_is_eligible(owner_index, block_count)) ++eligible;
     }
     stats.data[1] = eligible;
@@ -130,7 +133,7 @@ void main() {
 
     uint eligible_rank = 0u;
     uint selected = 0u;
-    for (uint owner_index = 0u; owner_index < visible_owners; ++owner_index) {
+    for (uint owner_index = 0u; owner_index < base_owner_count; ++owner_index) {
         if (!owner_is_eligible(owner_index, block_count)) continue;
 
         uint before = (eligible_rank * selected_target) / max(eligible, 1u);
