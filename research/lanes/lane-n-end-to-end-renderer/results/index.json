@@ -32,6 +32,14 @@
       "result": "003-current-vs-vanilla.md",
       "evidence_commit": "52a8d2c7ab2653d40b73afa9f17690712536239e",
       "decision": "current architecture is formally faster than vanilla in all five timing-eligible scenarios with identical measured image quality; moving-rigid timing remains measurement-limited; current uses about 24-27% more device lifetime memory; proceed to N004 weakness atlas"
+    },
+    {
+      "id": "N004",
+      "slug": "weakness-atlas",
+      "status": "complete",
+      "result": "004-weakness-atlas.md",
+      "evidence_commit": "3392d66a39f15d70814b71d7129c11ca84c5c8f8",
+      "decision": "thin-geometry leaking was not observed; world-shape stress remained correctness/capacity safe; changing light was bounded; camera plus stable/topology dynamic crossed the frozen blocker classifier; select state-change/confidence-driven adaptive tracing as the single N005 transport question"
     }
   ]
 }
