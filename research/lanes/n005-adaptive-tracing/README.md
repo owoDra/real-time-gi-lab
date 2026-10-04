@@ -69,13 +69,32 @@ Reuse N004 renderer/reference/playback. Define exact per-frame/per-probe extra-r
 
 Expose candidate confidence/state-change signals without changing tracing. Measure whether each signal localizes N004 error-prone regions. Reject weak signals rather than stacking heuristics.
 
+**Complete.** P1 retained `depth-discontinuity` as the single first P2 local confidence signal. Temporal owner/depth-change signals were useful for camera transitions but nearly blind to the dynamic blockers. Persistent depth discontinuity localized both camera and dynamic error, but also fires on static geometry, so P2 gates it with explicit camera/dynamic state-change events.
+
+Canonical result:
+`research/lanes/n005-adaptive-tracing/results/001-p0-p1-signal-probes.md`
+
 ### P2 — equal-budget candidates
 
-Implement `uniform-extra-rays` and one minimal `adaptive-extra-rays` candidate. Calibrate/freeze ray budgets, thresholds, candidate-selection rule, timing interpretation and formal regimes before final target evidence.
+**Frozen and ready for implementation validation.**
+
+Candidate contract:
+`research/lanes/n005-adaptive-tracing/experiments/002-p2-equal-budget-candidates.md`
+
+Initial frozen candidate:
+
+- `depth-discontinuity >= 0.01`;
+- state-change gate only for camera/dynamic transitions;
+- 576 selected visible owner regions on active frames;
+- 4 extra rays per selected cascade/probe;
+- 9,216 requested extra rays per active frame;
+- exact actual-ray equality between uniform and adaptive.
+
+P2 remains non-formal validation/calibration.
 
 ### P3 — formal comparison
 
-Run current vs uniform vs adaptive on the frozen matrix. Preserve all evidence and publish quality/cost/memory/correctness results plus adopt/reject/refine decision.
+Run current vs uniform vs adaptive on a separately frozen formal contract. Preserve all evidence and publish quality/cost/memory/correctness results plus adopt/reject/refine decision.
 
 ## Discipline
 
@@ -86,7 +105,3 @@ Run current vs uniform vs adaptive on the frozen matrix. Preserve all evidence a
 - No unrelated leak suppression, denoising, multi-bounce, glossy/specular work or global reorder.
 - No GitHub Actions.
 - Commit/push meaningful checkpoints frequently.
-
-## First task
-
-Before implementing adaptive tracing, read Issue #40 and the N004 result/config/runner. Then design P0/P1 so confidence signals are observable and measurable **without changing the current tracing result**. The first accepted N005 target evidence must not be produced until the candidate/budget/decision contract is frozen.
