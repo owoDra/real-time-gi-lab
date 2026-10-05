@@ -1,5 +1,5 @@
 #version 460
-layout(local_size_x = 1) in;
+layout(local_size_x = 128) in;
 
 struct WorkItem {
     int probe_x; int probe_y; int probe_z; uint cascade;
@@ -29,7 +29,18 @@ const uint MODE_CURRENT = 0u;
 const uint MODE_UNIFORM = 1u;
 const uint MODE_ADAPTIVE = 2u;
 const uint INVALID_OWNER = 0xffffffffu;
+const uint LOCAL_SIZE = 128u;
 const float PI = 3.14159265358979323846;
+
+shared uint scan_values[128];
+shared uint base_work_shared;
+shared uint base_owner_count_shared;
+shared uint block_count_shared;
+shared uint total_eligible_shared;
+shared uint selected_target_shared;
+shared uint extra_per_owner_shared;
+shared uint running_eligible_shared;
+shared uint capacity_ok_shared;
 
 bool valid_depth(uint tile) {
     if (owner_buffer.owner_ids[tile] == INVALID_OWNER) return false;
@@ -99,68 +110,138 @@ bool owner_is_eligible(uint owner_index, uint block_count) {
 }
 
 void main() {
-    if (gl_GlobalInvocationID.x != 0u) return;
+    if (gl_WorkGroupID.x != 0u) return;
 
-    uint base_work = counters.data[0];
-    uint block_count = p.counts.w * p.limits.x;
-    stats.data[0] = base_work;
-    stats.data[1] = 0u;
-    stats.data[2] = 0u;
-    stats.data[3] = 0u;
+    uint lane = gl_LocalInvocationID.x;
+    if (lane == 0u) {
+        uint base_work = counters.data[0];
+        uint block_count = p.counts.w * p.limits.x;
+        base_work_shared = base_work;
+        block_count_shared = block_count;
+        base_owner_count_shared = block_count == 0u ? 0u : base_work / block_count;
+        total_eligible_shared = 0u;
+        selected_target_shared = 0u;
+        extra_per_owner_shared = 0u;
+        running_eligible_shared = 0u;
+        capacity_ok_shared = 1u;
+        stats.data[0] = base_work;
+        stats.data[1] = 0u;
+        stats.data[2] = 0u;
+        stats.data[3] = 0u;
+    }
+    barrier();
 
-    if (pc.mode == MODE_CURRENT || pc.owner_budget == 0u || block_count == 0u) {
+    if (pc.mode == MODE_CURRENT || pc.owner_budget == 0u ||
+        block_count_shared == 0u || base_owner_count_shared == 0u) {
         return;
     }
 
-    // Producer increments visible-owner diagnostics before its capacity guard.
-    // Only blocks actually present in the frozen base prefix are safe to read.
-    uint base_owner_count = base_work / block_count;
-    if (base_owner_count == 0u) return;
-
-    uint eligible = 0u;
-    for (uint owner_index = 0u; owner_index < base_owner_count; ++owner_index) {
-        if (owner_is_eligible(owner_index, block_count)) ++eligible;
+    // Pass 1: count eligible owners in parallel. This preserves the exact
+    // eligibility predicate from the frozen serial P2 implementation.
+    uint local_eligible = 0u;
+    for (uint owner_index = lane;
+         owner_index < base_owner_count_shared;
+         owner_index += LOCAL_SIZE) {
+        if (owner_is_eligible(owner_index, block_count_shared)) {
+            ++local_eligible;
+        }
     }
-    stats.data[1] = eligible;
+    scan_values[lane] = local_eligible;
+    barrier();
 
-    uint selected_target = min(pc.owner_budget, eligible);
-    uint extra_per_owner = p.counts.w * pc.extra_rays_per_probe;
-    uint required = selected_target * extra_per_owner;
-    if (base_work + required > p.limits.y) {
-        counters.data[2] = 1u;
+    for (uint offset = LOCAL_SIZE >> 1u; offset > 0u; offset >>= 1u) {
+        if (lane < offset) {
+            scan_values[lane] += scan_values[lane + offset];
+        }
+        barrier();
+    }
+
+    if (lane == 0u) {
+        uint eligible = scan_values[0];
+        uint selected_target = min(pc.owner_budget, eligible);
+        uint extra_per_owner = p.counts.w * pc.extra_rays_per_probe;
+        uint required = selected_target * extra_per_owner;
+        total_eligible_shared = eligible;
+        selected_target_shared = selected_target;
+        extra_per_owner_shared = extra_per_owner;
+        stats.data[1] = eligible;
+        if (base_work_shared + required > p.limits.y) {
+            counters.data[2] = 1u;
+            capacity_ok_shared = 0u;
+        }
+    }
+    barrier();
+
+    if (capacity_ok_shared == 0u || selected_target_shared == 0u) {
         return;
     }
 
-    uint eligible_rank = 0u;
-    uint selected = 0u;
-    for (uint owner_index = 0u; owner_index < base_owner_count; ++owner_index) {
-        if (!owner_is_eligible(owner_index, block_count)) continue;
+    // Pass 2: scan eligibility in owner-order chunks. The exclusive eligible
+    // rank reproduces the frozen serial rank exactly. The selected output slot
+    // is derived from that rank, so parallel lanes never contend for a slot.
+    for (uint chunk_start = 0u;
+         chunk_start < base_owner_count_shared;
+         chunk_start += LOCAL_SIZE) {
+        uint owner_index = chunk_start + lane;
+        bool eligible_flag = owner_index < base_owner_count_shared &&
+            owner_is_eligible(owner_index, block_count_shared);
+        uint flag = eligible_flag ? 1u : 0u;
+        scan_values[lane] = flag;
+        barrier();
 
-        uint before = (eligible_rank * selected_target) / max(eligible, 1u);
-        ++eligible_rank;
-        uint after = (eligible_rank * selected_target) / max(eligible, 1u);
-        if (after == before) continue;
+        for (uint offset = 1u; offset < LOCAL_SIZE; offset <<= 1u) {
+            uint add = lane >= offset ? scan_values[lane - offset] : 0u;
+            barrier();
+            scan_values[lane] += add;
+            barrier();
+        }
 
-        uint owner_base = owner_index * block_count;
-        uint append_base = base_work + selected * extra_per_owner;
-        for (uint cascade = 0u; cascade < p.counts.w; ++cascade) {
-            WorkItem source = work.items[owner_base + cascade * p.limits.x];
-            for (uint extra = 0u; extra < pc.extra_rays_per_probe; ++extra) {
-                WorkItem item = source;
-                item.ray_index = p.limits.x + extra;
-                vec3 direction = extra_direction(item, extra);
-                item.dir_x = direction.x;
-                item.dir_y = direction.y;
-                item.dir_z = direction.z;
-                uint local = cascade * pc.extra_rays_per_probe + extra;
-                work.items[append_base + local] = item;
+        if (eligible_flag) {
+            uint eligible_rank =
+                running_eligible_shared + scan_values[lane] - 1u;
+            uint before =
+                (eligible_rank * selected_target_shared) /
+                total_eligible_shared;
+            uint after =
+                ((eligible_rank + 1u) * selected_target_shared) /
+                total_eligible_shared;
+            if (after != before) {
+                uint selected_ordinal = after - 1u;
+                uint owner_base = owner_index * block_count_shared;
+                uint append_base =
+                    base_work_shared +
+                    selected_ordinal * extra_per_owner_shared;
+                for (uint cascade = 0u; cascade < p.counts.w; ++cascade) {
+                    WorkItem source =
+                        work.items[owner_base + cascade * p.limits.x];
+                    for (uint extra = 0u;
+                         extra < pc.extra_rays_per_probe;
+                         ++extra) {
+                        WorkItem item = source;
+                        item.ray_index = p.limits.x + extra;
+                        vec3 direction = extra_direction(item, extra);
+                        item.dir_x = direction.x;
+                        item.dir_y = direction.y;
+                        item.dir_z = direction.z;
+                        uint local =
+                            cascade * pc.extra_rays_per_probe + extra;
+                        work.items[append_base + local] = item;
+                    }
+                }
             }
         }
-        ++selected;
+
+        barrier();
+        if (lane == 0u) {
+            running_eligible_shared += scan_values[LOCAL_SIZE - 1u];
+        }
+        barrier();
     }
 
-    uint extra_work = selected * extra_per_owner;
-    stats.data[2] = selected;
-    stats.data[3] = extra_work;
-    counters.data[0] = base_work + extra_work;
+    if (lane == 0u) {
+        uint extra_work = selected_target_shared * extra_per_owner_shared;
+        stats.data[2] = selected_target_shared;
+        stats.data[3] = extra_work;
+        counters.data[0] = base_work_shared + extra_work;
+    }
 }
