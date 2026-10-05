@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import struct
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -82,6 +83,24 @@ def safe_file(root: Path, relative: str) -> Path:
     return full
 
 
+def float32(value: float) -> float:
+    """Normalize a config value to the float32 value consumed by C++/GLSL."""
+    return struct.unpack("<f", struct.pack("<f", float(value)))[0]
+
+
+def validate_evidence_threshold(actual: Any, expected: float) -> None:
+    try:
+        observed = float(actual)
+    except (TypeError, ValueError) as error:
+        raise contract.ContractError("N005 P2 evidence threshold is not numeric") from error
+    expected_f32 = float32(expected)
+    if observed != expected_f32:
+        raise contract.ContractError(
+            "N005 P2 evidence threshold mismatch; "
+            f"expected float32 {expected_f32!r}, got {observed!r}"
+        )
+
+
 def run_case(
     *,
     binary: Path,
@@ -150,8 +169,7 @@ def run_case(
         raise contract.ContractError("N005 P2 evidence mode mismatch")
     if len(payload.get("frames", [])) != target_frames:
         raise contract.ContractError("N005 P2 evidence frame count mismatch")
-    if payload.get("depth_threshold") != depth_threshold:
-        raise contract.ContractError("N005 P2 evidence threshold mismatch")
+    validate_evidence_threshold(payload.get("depth_threshold"), depth_threshold)
     if payload.get("extra_rays_per_probe") != extra_rays_per_probe:
         raise contract.ContractError("N005 P2 extra-ray multiplicity mismatch")
     return payload
@@ -377,38 +395,38 @@ def run_p2(
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="N005 P2 equal-budget candidate runner")
+    parser = argparse.ArgumentParser(description="Run N005 P2 equal-budget candidates")
+    parser.add_argument("--phase", choices=["contract", "p2"], default="contract")
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
-    parser.add_argument("--phase", choices=("contract", "p2"), required=True)
     parser.add_argument("--artifact-dir", type=Path)
-    parser.add_argument("--binary", type=Path)
+    parser.add_argument(
+        "--binary",
+        type=Path,
+        default=ROOT / "build/release/phos-n005-candidate",
+    )
     args = parser.parse_args()
 
-    config = contract.load_config(args.config.resolve())
-    n004_config = n004_contract.load_config(N004_CONFIG.resolve())
-    if n004_config.get("protocol_version") != "n004-weakness-atlas-v2":
-        raise contract.ContractError("N005 P2 requires accepted N004 v2")
-
-    if args.phase == "contract":
-        print("N005 P2 prospective contract validation: PASS")
-        return 0
-
-    binary = (
-        args.binary.resolve()
-        if args.binary
-        else (ROOT / "build/release/phos-n005-candidate").resolve()
-    )
-    return run_p2(
-        artifact_dir(args.artifact_dir),
-        config,
-        n004_config,
-        binary,
-    )
+    try:
+        config = contract.load_config(args.config)
+        n004_config = json.loads(N004_CONFIG.read_text(encoding="utf-8"))
+        n004_contract.validate_config(n004_config)
+        contract.validate_n004_predecessor(n004_config)
+        if args.phase == "contract":
+            print("N005 P2 contract: PASS")
+            print(json.dumps({
+                "protocol_version": config["protocol_version"],
+                "signal": config["candidate"]["signal"],
+                "threshold": config["candidate"]["normalized_depth_threshold"],
+                "owner_budget": config["candidate"]["owner_budget_per_active_frame"],
+                "extra_rays_per_probe": config["candidate"]["extra_rays_per_probe"],
+                "requested_extra_rays_per_active_frame": config["candidate"]["requested_extra_rays_per_active_frame"],
+            }, indent=2, sort_keys=True))
+            return 0
+        return run_p2(artifact_dir(args.artifact_dir), config, n004_config, args.binary.resolve())
+    except (contract.ContractError, n004_contract.ContractError) as error:
+        print(f"N005 P2 error: {error}", file=sys.stderr)
+        return 1
 
 
 if __name__ == "__main__":
-    try:
-        raise SystemExit(main())
-    except (contract.ContractError, n004_contract.ContractError, ValueError) as error:
-        print(f"N005 P2 error: {error}", file=sys.stderr)
-        raise SystemExit(2)
+    raise SystemExit(main())
