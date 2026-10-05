@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+import n005_contract as p1_contract
+
 SCHEMA_VERSION = 1
 PROTOCOL_VERSION = "n005-p2-equal-budget-candidates-v1"
 EXPECTED_BRANCH = "research-n005-adaptive-tracing"
@@ -13,6 +15,9 @@ EXPECTED_OWNER_BUDGET = 576
 EXPECTED_CASCADES = 4
 EXPECTED_EXTRA_RAYS_PER_PROBE = 4
 EXPECTED_EXTRA_RAYS = 9216
+EXPECTED_P1_PROTOCOL = "n005-p0-p1-signal-probes-v1"
+EXPECTED_P1_COMMIT = "f110ee3044b00f4dba5c7ae5787aa3df094bd0e1"
+EXPECTED_N004_PROTOCOL = "n004-weakness-atlas-v2"
 
 EXPECTED_SCHEDULES = {
     "camera-abrupt-reveal": [576, 0, 0, 0, 0, 0, 0, 0],
@@ -44,6 +49,16 @@ def validate_config(config: dict[str, Any]) -> None:
         raise ContractError("N005 P2 protocol version changed")
     if config.get("issue") != 40 or config.get("branch") != EXPECTED_BRANCH:
         raise ContractError("N005 P2 issue/branch identity changed")
+
+    predecessor = config.get("predecessor")
+    if not isinstance(predecessor, dict):
+        raise ContractError("N005 P2 predecessor missing")
+    if predecessor.get("p1_protocol_version") != EXPECTED_P1_PROTOCOL:
+        raise ContractError("N005 P2 P1 predecessor protocol changed")
+    if predecessor.get("p1_commit") != EXPECTED_P1_COMMIT:
+        raise ContractError("N005 P2 P1 predecessor commit changed")
+    if predecessor.get("n004_protocol_version") != EXPECTED_N004_PROTOCOL:
+        raise ContractError("N005 P2 N004 predecessor protocol changed")
 
     phase = config.get("phase_scope")
     if not isinstance(phase, dict):
@@ -112,3 +127,11 @@ def validate_config(config: dict[str, Any]) -> None:
             raise ContractError(f"N005 P2 {key} must remain forbidden")
     if discipline.get("p3_requires_new_frozen_formal_contract") is not True:
         raise ContractError("N005 P3 freeze requirement changed")
+
+
+def validate_n004_predecessor(n004: dict[str, Any]) -> None:
+    """Reuse the P1-frozen N004 facts consumed by N005."""
+    try:
+        p1_contract.validate_n004_predecessor(n004)
+    except p1_contract.ContractError as error:
+        raise ContractError(str(error)) from error
