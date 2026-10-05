@@ -22,9 +22,30 @@ class N005P2ContractTests(unittest.TestCase):
               "002-p2-equal-budget-candidates-config.json"
         )
         cls.config = json.loads(cls.path.read_text(encoding="utf-8"))
+        cls.n004_path = (
+            ROOT
+            / "research/lanes/lane-n-end-to-end-renderer/experiments/"
+              "004-n004-weakness-atlas-v2-config.json"
+        )
+        cls.n004_config = json.loads(cls.n004_path.read_text(encoding="utf-8"))
 
     def test_repository_config_is_frozen(self) -> None:
         contract.validate_config(copy.deepcopy(self.config))
+
+    def test_n004_predecessor_is_accepted(self) -> None:
+        contract.validate_n004_predecessor(copy.deepcopy(self.n004_config))
+
+    def test_p1_predecessor_commit_drift_is_rejected(self) -> None:
+        changed = copy.deepcopy(self.config)
+        changed["predecessor"]["p1_commit"] = "0" * 40
+        with self.assertRaises(contract.ContractError):
+            contract.validate_config(changed)
+
+    def test_n004_predecessor_protocol_drift_is_rejected(self) -> None:
+        changed = copy.deepcopy(self.n004_config)
+        changed["protocol_version"] = "n004-drifted"
+        with self.assertRaises(contract.ContractError):
+            contract.validate_n004_predecessor(changed)
 
     def test_threshold_drift_is_rejected(self) -> None:
         changed = copy.deepcopy(self.config)
