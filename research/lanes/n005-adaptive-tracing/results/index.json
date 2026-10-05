@@ -6,6 +6,12 @@
       "status": "complete",
       "result": "001-p0-p1-signal-probes.md",
       "decision": "proceed-to-p2-with-state-gated-depth-discontinuity"
+    },
+    {
+      "experiment": "002-p2-equal-budget-candidates",
+      "status": "implementation-follow-up-required",
+      "result": "002-p2-equal-budget-candidates.md",
+      "decision": "parallelize-extra-producer-and-rerun-frozen-p2-before-p3"
     }
   ]
 }
