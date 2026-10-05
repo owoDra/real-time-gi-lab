@@ -46,6 +46,16 @@ class N005P2RunnerTests(unittest.TestCase):
             "frames": frames,
         }
 
+    def test_float32_threshold_round_trip_is_accepted(self) -> None:
+        expected = 0.01
+        evidence_value = runner.float32(expected)
+        self.assertNotEqual(evidence_value, expected)
+        runner.validate_evidence_threshold(evidence_value, expected)
+
+    def test_wrong_threshold_is_rejected(self) -> None:
+        with self.assertRaises(contract.ContractError):
+            runner.validate_evidence_threshold(0.02, 0.01)
+
     def test_active_frame_accepts_frozen_9216_rays(self) -> None:
         analyzed = self.analyzed([self.frame(9216)])
         runner.validate_mode_case(
