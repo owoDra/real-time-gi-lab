@@ -146,22 +146,14 @@ void main() {
             ++local_eligible;
         }
     }
-    scan_values[lane] = local_eligible;
+    atomicAdd(total_eligible_shared, local_eligible);
     barrier();
 
-    for (uint offset = LOCAL_SIZE >> 1u; offset > 0u; offset >>= 1u) {
-        if (lane < offset) {
-            scan_values[lane] += scan_values[lane + offset];
-        }
-        barrier();
-    }
-
     if (lane == 0u) {
-        uint eligible = scan_values[0];
+        uint eligible = total_eligible_shared;
         uint selected_target = min(pc.owner_budget, eligible);
         uint extra_per_owner = p.counts.w * pc.extra_rays_per_probe;
         uint required = selected_target * extra_per_owner;
-        total_eligible_shared = eligible;
         selected_target_shared = selected_target;
         extra_per_owner_shared = extra_per_owner;
         stats.data[1] = eligible;
