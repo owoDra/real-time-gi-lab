@@ -227,8 +227,7 @@ void write_hit(
 
 struct FrameEvidence {
     lane_n::N005FrameResult result;
-    lane_n::I001N004HitDiagnostics hits;
-    lane_n::I001RendererReadback readback;
+    lane_n::I001N004HitDiagnostics hits;    lane_n::I001RendererReadback readback;
     std::string image_path;
     float motion_fraction{};
     std::uint32_t owner_budget{};
@@ -259,6 +258,7 @@ int main(int argc, char** argv) {
     float depth_threshold = 0.01F;
     std::uint32_t extra_rays_per_probe = 4U;
     bool topology = false;
+    bool skip_reference = false;
 
     for (int index = 1; index < argc; ++index) {
         const std::string_view arg = argv[index];
@@ -279,13 +279,15 @@ int main(int argc, char** argv) {
         } else if (arg == "--extra-rays-per-probe" && index + 1 < argc) {
             extra_rays_per_probe = static_cast<std::uint32_t>(std::stoul(argv[++index]));
         } else if (arg == "--topology") topology = true;
+        else if (arg == "--skip-reference") skip_reference = true;
         else {
             std::cerr
                 << "usage: phos-n005-candidate --artifact-dir PATH --scene PATH "
                    "--scenario NAME --mode current|uniform-extra-rays|adaptive-extra-rays "
                    "--owner-budgets CSV [--motion-fractions CSV] [--topology] "
                    "[--source-warmup-frames N] [--target-frames N] "
-                   "[--depth-threshold F] [--extra-rays-per-probe N]\n";
+                   "[--depth-threshold F] [--extra-rays-per-probe N] "
+                   "[--skip-reference]\n";
             return 2;
         }
     }
@@ -369,20 +371,22 @@ int main(int argc, char** argv) {
             fractions.end(),
             [&](float value) { return value == fractions.front(); });
         std::vector<ReferenceMeta> references;
-        references.reserve(frames.size());
-        if (varying_state) {
-            for (std::uint32_t index = 0; index < frames.size(); ++index) {
-                references.push_back(render_reference(
-                    frames[index].readback,
+        if (!skip_reference) {
+            references.reserve(frames.size());
+            if (varying_state) {
+                for (std::uint32_t index = 0; index < frames.size(); ++index) {
+                    references.push_back(render_reference(
+                        frames[index].readback,
+                        artifact_dir,
+                        indexed_path("reference-8bounce", index)));
+                }
+            } else {
+                const auto shared = render_reference(
+                    frames.front().readback,
                     artifact_dir,
-                    indexed_path("reference-8bounce", index)));
+                    "frames/reference-8bounce.pfm");
+                references.assign(frames.size(), shared);
             }
-        } else {
-            const auto shared = render_reference(
-                frames.front().readback,
-                artifact_dir,
-                "frames/reference-8bounce.pfm");
-            references.assign(frames.size(), shared);
         }
 
         std::ofstream out(artifact_dir / "n005-candidate-evidence.json");
@@ -397,6 +401,8 @@ int main(int argc, char** argv) {
             << "  \"source_warmup_frames\":" << source_warmup_frames << ",\n"
             << "  \"depth_threshold\":" << depth_threshold << ",\n"
             << "  \"extra_rays_per_probe\":" << extra_rays_per_probe << ",\n"
+            << "  \"reference_generation\":\""
+            << (skip_reference ? "skipped" : "rendered") << "\",\n"
             << "  \"source\":{\"internal_correctness\":"
             << (source_correct ? "true" : "false") << ",\"extra\":";
         write_extra(out, source.extra);
@@ -418,7 +424,8 @@ int main(int argc, char** argv) {
                 << ",\"internal_correctness\":"
                 << (frame.internal_correctness ? "true" : "false")
                 << ",\"image\":\"" << frame.image_path << "\",\"reference\":";
-            write_reference(out, references[index]);
+            if (skip_reference) out << "null";
+            else write_reference(out, references[index]);
             out << ",\"hit_diagnostics\":";
             write_hit(out, frame.hits);
             out << ",\"timing_us\":";
