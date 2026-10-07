@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "experiment": "N005-p3-formal-comparison",
+  "protocol_version": "n005-p3-formal-comparison-v1",
+  "issue": 40,
+  "branch": "research-n005-adaptive-tracing",
+  "predecessor": {
+    "p2_protocol_version": "n005-p2-equal-budget-candidates-v1",
+    "optimized_p2_evidence_commit": "c9c2d80e898fe3b01e3c40e8ee449865ae65e581",
+    "n004_protocol_version": "n004-weakness-atlas-v2"
+  },
+  "phase_scope": {
+    "phase": "P3",
+    "formal_target_measurement": true
+  },
+  "candidate": {
+    "signal": "depth-discontinuity",
+    "normalized_depth_threshold": 0.01,
+    "state_gate": "camera-or-dynamic-state-change-only",
+    "owner_budget_per_active_frame": 576,
+    "cascades_per_owner": 4,
+    "extra_rays_per_probe": 4,
+    "requested_extra_rays_per_active_frame": 9216,
+    "adaptive_selection": "deterministically-even-across-threshold-eligible-owner-order",
+    "uniform_selection": "deterministically-even-across-all-visible-owner-order",
+    "eligibility_shortfall": "invalid-candidate-frame",
+    "extra_direction_rule": "same-deterministic-probe-key-hash-directions-for-uniform-and-adaptive"
+  },
+  "state_change_schedule": {
+    "camera-abrupt-reveal": [576, 0, 0, 0, 0, 0, 0, 0],
+    "camera-gradual-motion": [576, 576, 576, 576, 576, 576, 576, 576],
+    "stable-topology-deforming": [576, 0, 0, 0],
+    "topology-changing-high-churn": [576, 0, 0, 0],
+    "static": [0],
+    "changing-illumination-step": [0, 0, 0, 0, 0, 0, 0, 0],
+    "world-dense": [0]
+  },
+  "required_modes": ["current", "uniform-extra-rays", "adaptive-extra-rays"],
+  "formal_regimes": {
+    "decision": [
+      "camera-abrupt-reveal",
+      "camera-gradual-motion",
+      "stable-topology-deforming",
+      "topology-changing-high-churn"
+    ],
+    "controls": ["static", "changing-illumination-step", "world-dense"],
+    "moving_rigid": "excluded-formal-timing"
+  },
+  "reference": {
+    "policy": "one-canonical-reference-set-per-case-shared-across-all-modes-and-repetitions",
+    "seed_mode": "current",
+    "seed_is_formal_repetition": false,
+    "n004_reference_contract_unchanged": true
+  },
+  "repetition": {
+    "count": 5,
+    "fresh_process_per_mode_repetition": true,
+    "mode_order_rotation": [
+      ["current", "uniform-extra-rays", "adaptive-extra-rays"],
+      ["uniform-extra-rays", "adaptive-extra-rays", "current"],
+      ["adaptive-extra-rays", "current", "uniform-extra-rays"]
+    ],
+    "summary_statistic": "median",
+    "retain_all_raw_samples": true
+  },
+  "timing": {
+    "primary": "gpu-timestamp",
+    "cpu_wall": "diagnostic-only",
+    "non_positive_incremental_gpu_cost": "measurement-limited"
+  },
+  "equal_budget_gate": {
+    "basis": "actual-extra-rays-traced",
+    "scope": "per-frame-case-repetition",
+    "uniform_adaptive_must_match": true,
+    "active_actual_extra_rays": 9216,
+    "base_work_prefix_immutable": true,
+    "extra_work_boundary": "after-frozen-base-producer-before-ray-prepare"
+  },
+  "decision_discipline": {
+    "primary_quality_metric": "rgb-rms-error",
+    "secondary_quality_metrics": [
+      "p99-absolute-luminance-error",
+      "p99-relative-luminance-error",
+      "scale-aware-affected-pixel-fraction",
+      "temporal-rgb-rms"
+    ],
+    "efficiency_views": [
+      "quality-improvement-per-1000-extra-rays",
+      "quality-improvement-per-positive-incremental-complete-gi-gpu-us",
+      "adaptive-vs-uniform-quality-and-cost-deltas"
+    ],
+    "final_decision_values": ["adopt", "reject", "refine"],
+    "aggregate_score": "forbidden",
+    "sample_exclusion": "forbidden",
+    "post_hoc_threshold_or_budget_change": "forbidden",
+    "gpu_profile_changes": "forbidden",
+    "github_actions": "forbidden"
+  }
+}
