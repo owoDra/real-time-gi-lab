@@ -9,9 +9,9 @@
     },
     {
       "experiment": "002-p2-equal-budget-candidates",
-      "status": "implementation-follow-up-required",
+      "status": "complete",
       "result": "002-p2-equal-budget-candidates.md",
-      "decision": "parallelize-extra-producer-and-rerun-frozen-p2-before-p3"
+      "decision": "accept-optimized-candidate-and-freeze-p3"
     }
   ]
 }
