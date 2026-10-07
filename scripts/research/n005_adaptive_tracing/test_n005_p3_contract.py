@@ -26,6 +26,12 @@ class N005P3ContractTests(unittest.TestCase):
     def test_repository_config_is_frozen(self) -> None:
         contract.validate_config(copy.deepcopy(self.config))
 
+    def test_completed_campaign_rerun_is_forbidden(self) -> None:
+        changed = copy.deepcopy(self.config)
+        changed["completed_campaign_rerun_budget"] = 1
+        with self.assertRaises(contract.ContractError):
+            contract.validate_config(changed)
+
     def test_candidate_threshold_drift_is_rejected(self) -> None:
         changed = copy.deepcopy(self.config)
         changed["candidate"]["normalized_depth_threshold"] = 0.02
