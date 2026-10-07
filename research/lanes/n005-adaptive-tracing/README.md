@@ -61,33 +61,49 @@ Canonical result:
 
 ### P2 — equal-budget candidates
 
-**Contract frozen; implementation checkpoint complete; local build/GPU validation pending.**
+**Complete.** The frozen equal-budget candidate was validated twice: first with a serial extra-producer implementation, then with the same semantics implemented using a parallel 128-thread owner scan.
 
-Candidate contract:
-`research/lanes/n005-adaptive-tracing/experiments/002-p2-equal-budget-candidates.md`
+Canonical result:
+`research/lanes/n005-adaptive-tracing/results/002-p2-equal-budget-candidates.md`
 
 Frozen candidate:
 
 - `depth-discontinuity >= 0.01`;
-- state-change gate only for camera/dynamic transitions;
+- camera/dynamic state-change gate only;
 - 576 selected visible owner regions on active frames;
-- 4 extra rays per selected cascade/probe;
-- 9,216 requested extra rays per active frame;
+- 4 cascades;
+- 4 extra rays per selected probe;
+- 9,216 requested/actual extra rays per active frame;
 - exact actual-ray equality between uniform and adaptive.
 
-Implemented:
+Optimized P2 retained all correctness/equal-budget/control gates. Across the 11 active decision frames, RGB RMS reduction vs current averaged about 2.54% for uniform and 4.23% for adaptive. Extra-producer GPU time fell from millisecond-scale serial behavior to about 144 us mean for uniform and 215 us mean for adaptive.
 
-- `n005_extra_producer.comp.glsl` appends extra work after the unchanged base prefix;
-- uniform and adaptive use the same deterministic extra-ray direction generator;
-- `N005Runtime` records base/extra accounting and validates the base prefix plus appended metadata;
-- the P2 candidate executable records image/reference, GPU timing, memory, traversal diagnostics and accounting evidence;
-- `run_n005_p2.py` rejects correctness, eligibility, control-budget or actual-ray-equality violations before accepting a P2 campaign.
-
-P2 remains non-formal validation/calibration. No P2 quality result is accepted until the local CMake/Vulkan build and GPU campaign run successfully.
+P2 remains calibration evidence, not the final formal measurement.
 
 ### P3 — formal comparison
 
-Run current vs uniform vs adaptive on a separately frozen formal contract. Preserve all evidence and publish quality/cost/memory/correctness results plus adopt/reject/refine decision.
+**Contract frozen; runner implemented; local build/tests/formal target run pending.**
+
+Formal contract:
+`research/lanes/n005-adaptive-tracing/experiments/003-p3-formal-comparison.md`
+
+Formal config:
+`research/lanes/n005-adaptive-tracing/experiments/003-p3-formal-comparison-config.json`
+
+P3 freezes the P2 candidate without re-tuning and adds:
+
+- one canonical converged reference set per case, shared across all formal samples;
+- 5 fresh-process repetitions per case/mode;
+- rotating mode order across repetitions;
+- GPU timestamp medians as the primary timing statistic;
+- all raw samples retained;
+- zero completed-campaign rerun budget;
+- separate ray-normalized and GPU-cost efficiency views; no aggregate score.
+
+`phos-n005-candidate --skip-reference` exists only to avoid regenerating the expensive canonical reference during formal repetitions. Default P2 behavior remains unchanged.
+
+Runner:
+`scripts/research/n005_adaptive_tracing/run_n005_p3.py`
 
 ## Discipline
 
