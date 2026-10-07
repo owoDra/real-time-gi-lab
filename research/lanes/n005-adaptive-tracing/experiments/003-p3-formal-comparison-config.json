@@ -9,6 +9,7 @@
     "optimized_p2_evidence_commit": "c9c2d80e898fe3b01e3c40e8ee449865ae65e581",
     "n004_protocol_version": "n004-weakness-atlas-v2"
   },
+  "completed_campaign_rerun_budget": 0,
   "phase_scope": {
     "phase": "P3",
     "formal_target_measurement": true
