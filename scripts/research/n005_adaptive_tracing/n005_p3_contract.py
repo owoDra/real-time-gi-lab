@@ -42,6 +42,9 @@ def validate_config(config: dict[str, Any]) -> None:
     if config.get("issue") != 40 or config.get("branch") != EXPECTED_BRANCH:
         raise ContractError("N005 P3 issue/branch identity changed")
 
+    if config.get("completed_campaign_rerun_budget") != 0:
+        raise ContractError("N005 P3 completed campaign rerun budget changed")
+
     predecessor = config.get("predecessor")
     if not isinstance(predecessor, dict):
         raise ContractError("N005 P3 predecessor missing")
