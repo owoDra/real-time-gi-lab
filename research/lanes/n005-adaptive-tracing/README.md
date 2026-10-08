@@ -82,28 +82,25 @@ P2 remains calibration evidence, not the final formal measurement.
 
 ### P3 — formal comparison
 
-**Contract frozen; runner implemented; local build/tests/formal target run pending.**
+**Complete. Decision: REFINE.**
 
-Formal contract:
-`research/lanes/n005-adaptive-tracing/experiments/003-p3-formal-comparison.md`
+Canonical result:
+`research/lanes/n005-adaptive-tracing/results/003-p3-formal-comparison.md`
 
-Formal config:
-`research/lanes/n005-adaptive-tracing/experiments/003-p3-formal-comparison-config.json`
+The formal campaign retained the frozen P2 candidate and completed five fresh-process repetitions per case/mode against shared canonical references.
 
-P3 freezes the P2 candidate without re-tuning and adds:
+Result:
 
-- one canonical converged reference set per case, shared across all formal samples;
-- 5 fresh-process repetitions per case/mode;
-- rotating mode order across repetitions;
-- GPU timestamp medians as the primary timing statistic;
-- all raw samples retained;
-- zero completed-campaign rerun budget;
-- separate ray-normalized and GPU-cost efficiency views; no aggregate score.
+- camera abrupt: adaptive improved RGB RMS more than uniform, but at higher measured cost;
+- camera gradual: adaptive had a small median quality advantage but substantially higher median incremental complete-GI cost;
+- stable-topology deforming: adaptive clearly beat uniform on both quality and cost;
+- topology-changing/high-churn: adaptive was slightly worse on both quality and cost;
+- controls performed zero extra work and remained quality-identical;
+- the scale-aware affected-pixel blocker was not materially reduced.
 
-`phos-n005-candidate --skip-reference` exists only to avoid regenerating the expensive canonical reference during formal repetitions. Default P2 behavior remains unchanged.
+Therefore N005 confirms that targeted extra tracing is useful, but rejects adopting the frozen single `depth-discontinuity >= 0.01` policy as the final architecture.
 
-Runner:
-`scripts/research/n005_adaptive_tracing/run_n005_p3.py`
+The follow-up direction is an RC-native confidence/update policy at probe/cascade/radiance-interval granularity, with any new signal or threshold tested under a new prospective experiment rather than re-tuned on the retained P3 formal set.
 
 ## Discipline
 
