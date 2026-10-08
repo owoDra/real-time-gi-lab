@@ -288,6 +288,7 @@ int main(int argc, char** argv) {
     bool topology = false;
     bool skip_reference = false;
     bool capture_visible_tiles = false;
+    bool capture_probe_multiplicity = false;
 
     for (int index = 1; index < argc; ++index) {
         const std::string_view arg = argv[index];
@@ -314,6 +315,7 @@ int main(int argc, char** argv) {
         } else if (arg == "--topology") topology = true;
         else if (arg == "--skip-reference") skip_reference = true;
         else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
+        else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
         else {
             std::cerr
                 << "usage: phos-n006-candidate --artifact-dir PATH --scene PATH "
@@ -406,6 +408,44 @@ int main(int argc, char** argv) {
                 budgets[index],
                 frame_correct(result, hits),
             });
+        }
+
+        if (capture_probe_multiplicity) {
+            if (mode != lane_n::N006ExtraMode::Current ||
+                target_frames != 1U || !skip_reference) {
+                throw std::runtime_error(
+                    "N006 multiplicity capture requires current, one frame, no reference");
+            }
+            const auto audit = runtime.probe_multiplicity_audit();
+            std::ofstream output(artifact_dir / "n006-probe-multiplicity.json");
+            if (!output) {
+                throw std::runtime_error("N006 multiplicity output creation failed");
+            }
+            output << "{\"schema_version\":1,\"protocol_version\":"
+                      "\"n006-probe-multiplicity-v1\","
+                   << "\"base_work_items\":" << audit.base_work_items << ','
+                   << "\"visible_owners\":" << audit.visible_owners << ','
+                   << "\"rays_per_probe\":" << audit.rays_per_probe << ','
+                   << "\"cascade_count\":" << audit.cascade_count << ','
+                   << "\"cascades\":[";
+            for (std::size_t index = 0; index < audit.cascades.size(); ++index) {
+                const auto& row = audit.cascades[index];
+                if (index != 0U) output << ',';
+                output << "{\"cascade\":" << row.cascade
+                       << ",\"owner_outputs\":" << row.owner_outputs
+                       << ",\"unique_probe_keys\":" << row.unique_probe_keys
+                       << ",\"max_owner_outputs_per_key\":"
+                       << row.max_owner_outputs_per_key
+                       << ",\"shared_keys\":" << row.shared_keys
+                       << ",\"duplicated_ray_inputs\":" << row.duplicated_ray_inputs
+                       << ",\"same_probe_ray_inputs_identical\":"
+                       << (row.same_probe_ray_inputs_identical ? "true" : "false")
+                       << '}';
+            }
+            output << "]}\n";
+            if (!output) {
+                throw std::runtime_error("N006 multiplicity capture write failed");
+            }
         }
 
         if (capture_visible_tiles) {
