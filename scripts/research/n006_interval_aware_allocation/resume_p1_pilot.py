@@ -102,7 +102,8 @@ def require_fixed_cli() -> None:
     # expensive reference work until the rebuilt executable parses both flags.
     import subprocess
     proc = subprocess.run(
-        [str(pilot.BINARY), "--selected-tile-id", "22890",
+        ["bash", str(pilot.ROOT / "scripts/run_with_vulkan.sh"),
+         str(pilot.BINARY), "--selected-tile-id", "22890",
          "--selected-cascade", "2"],
         text=True, capture_output=True, check=False,
     )
