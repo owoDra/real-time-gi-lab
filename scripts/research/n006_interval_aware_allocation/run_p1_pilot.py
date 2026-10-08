@@ -176,8 +176,9 @@ def main() -> int:
     original_rms = read_rms(base_image, reference_path)
     # A second fresh-process current rendering bounds run-to-run noise.
     repeat = run(BINARY, scene, out / "current-repeat", "current", gpu)
-    repeat_rms = read_rms(out / "current-repeat" / repeat["frame"]["image"],
-                          reference_path)
+    repeat_image = out / "current-repeat" / repeat["frame"]["image"]
+    repeat_rms = read_rms(repeat_image, reference_path)
+    baseline_image_repeat_rgb_rms = read_rms(repeat_image, base_image)
     visible = json.loads((out / "current" / "n006-visible-tiles.json").read_text(encoding="utf-8"))
     tiles = deterministic_tiles(visible["tile_ids"], args.tile_count)
     summary: dict[str, Any] = {
@@ -197,6 +198,7 @@ def main() -> int:
         "baseline_rgb_rms": original_rms,
         "baseline_repeat_rgb_rms": repeat_rms,
         "baseline_run_to_run_rms_delta": abs(original_rms - repeat_rms),
+        "baseline_image_repeat_rgb_rms": baseline_image_repeat_rgb_rms,
         "interventions": [],
         "failures": [],
     }
