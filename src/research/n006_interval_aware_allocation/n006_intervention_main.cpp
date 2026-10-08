@@ -261,6 +261,7 @@ int main(int argc, char** argv) {
     std::uint32_t selected_cascade = 0xffffffffU;
     bool topology = false;
     bool skip_reference = false;
+    bool capture_visible_tiles = false;
 
     for (int index = 1; index < argc; ++index) {
         const std::string_view arg = argv[index];
@@ -282,6 +283,7 @@ int main(int argc, char** argv) {
             extra_rays_per_probe = static_cast<std::uint32_t>(std::stoul(argv[++index]));
         } else if (arg == "--topology") topology = true;
         else if (arg == "--skip-reference") skip_reference = true;
+        else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
         else {
             std::cerr
                 << "usage: phos-n006-candidate --artifact-dir PATH --scene PATH "
@@ -374,6 +376,19 @@ int main(int argc, char** argv) {
                 budgets[index],
                 frame_correct(result, hits),
             });
+        }
+
+        if (capture_visible_tiles) {
+            const auto tiles = runtime.visible_tile_ids();
+            std::ofstream visible_file(artifact_dir / "n006-visible-tiles.json");
+            if (!visible_file) throw std::runtime_error("N006 visible tile capture file open failed");
+            visible_file << "{\"schema_version\":1,\"width\":320,\"height\":180,\"tile_ids\":[";
+            for (std::size_t i = 0; i < tiles.size(); ++i) {
+                if (i != 0U) visible_file << ',';
+                visible_file << tiles[i];
+            }
+            visible_file << "]}\n";
+            if (!visible_file) throw std::runtime_error("N006 visible tile capture write failed");
         }
 
         const bool varying_state = !std::all_of(
