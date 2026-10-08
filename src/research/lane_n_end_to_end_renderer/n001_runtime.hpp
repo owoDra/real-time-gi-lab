@@ -206,6 +206,7 @@ public:
 
 private:
     friend class N005Runtime;
+    friend class N006Runtime; // P1-only isolated experimental adaptation.
     struct Impl;
     std::unique_ptr<Impl> impl_;
 };
