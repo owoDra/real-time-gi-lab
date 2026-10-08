@@ -50,3 +50,9 @@ Potential blockers: interval may not be independently schedulable, local error i
 ## P1a first GPU attempt and correction (2026-10-08)
 
 The baseline and independent reference completed but all 12 targeted interventions exited with a **harness CLI parsing error**, yielding **zero scientific intervention results**. See [P1a invalid attempt / controlled repair](./results/002-p1a-cli-parser-failure-and-repair.md). An explicit `resume_p1_pilot.py` runner preserves the original failed artifacts, verifies the original successful reference against a newly built current image, and only then repeats the 12 **unchanged** targeted interventions. No hypothesis, tile selection or decision criterion was changed after seeing the failed run.
+
+## P1a completed calibration + offline observability gate
+
+The user completed the corrected P1a on `4871623797b8ba0b155447f63697bd3340829ee3`, with 12/12 valid targeted interventions, reference reuse checked and zero baseline replay drift. Eleven global RGB RMS gains were zero; the last was +`4.134909315207209e-10`, far too small to justify a signal ranking or scheduler. See [P1a completed evidence interpretation](./results/003-p1a-causal-pilot-calibration.md).
+
+Before spending more GPU time, run `mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1a_images.py` with the retained repaired-run PFM images (one unique repaired run is auto-located). The audit compares **actual changed pixels** rather than only global RMS and saves a separate JSON under `out/research/n006-interval-aware-allocation/p1a-image-audit/`. Keep all raw N004/N005/N006 campaigns intact. The P1 predictive gate remains unpassed.
