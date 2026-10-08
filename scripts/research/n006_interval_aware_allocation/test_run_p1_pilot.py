@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import unittest
+import subprocess
+from run_p1_pilot import BINARY
 
 from run_p1_pilot import check_evidence, deterministic_tiles
 
@@ -44,6 +46,19 @@ class TestN006Pilot(unittest.TestCase):
     def test_targeted(self) -> None:
         data = evidence("targeted-extra-rays", 4, 1)
         self.assertTrue(check_evidence(data, "targeted-extra-rays", 4, GPU))
+
+    def test_compiled_cli_accepts_tile_and_cascade_flags(self) -> None:
+        # Runs before any GPU initialization. The original regression returned
+        # exit 2 + usage because these two flags were not parsed.
+        if not BINARY.is_file():
+            self.fail("build phos-n006-intervention before running unit tests")
+        result = subprocess.run(
+            [str(BINARY), "--selected-tile-id", "22890",
+             "--selected-cascade", "2"],
+            capture_output=True, text=True, check=False,
+        )
+        self.assertEqual(result.returncode, 1, result.stderr)
+        self.assertIn("invalid N006 candidate arguments", result.stderr)
 
     def test_targeted_missing_rays_fails(self) -> None:
         with self.assertRaisesRegex(RuntimeError, "extra work"):
