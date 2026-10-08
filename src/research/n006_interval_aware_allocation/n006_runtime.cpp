@@ -558,6 +558,138 @@ N006FrameResult N006Runtime::run_candidate_frame(
     }
     extra.extra_work_correct = extra_ok;
 
+    // Non-formal forensic readback only. The original N006 candidate produces
+    // identical RGB on 11/12 probes; identify where integer quantization or
+    // shared-probe averaging can erase the additional-ray contribution.
+    if (active_extra && extra_ok && extra.extra_work_items != 0U &&
+        request.mode == N006ExtraMode::Targeted) {
+        N006InfluenceTrace trace{};
+        const auto& selected = work_items.at(extra.base_traced_rays);
+        if (selected.tile_id != request.selected_tile_id ||
+            selected.cascade != request.selected_cascade ||
+            selected.output_id >= result.stats.outputs) {
+            throw std::runtime_error("N006 influence target work identity mismatch");
+        }
+
+        trace.tile_id = selected.tile_id;
+        trace.cascade = selected.cascade;
+        trace.output_id = selected.output_id;
+        trace.probe_x = selected.probe_x;
+        trace.probe_y = selected.probe_y;
+        trace.probe_z = selected.probe_z;
+
+        std::vector<std::array<std::uint32_t, 2>> contributions(total_work);
+        impl.context.download_device_buffer(
+            impl.contributions,
+            contributions.data(),
+            contributions.size() * sizeof(contributions[0]));
+
+        std::vector<std::array<std::uint32_t, 2>> merged(result.stats.outputs);
+        impl.context.download_device_buffer(
+            impl.accum,
+            merged.data(),
+            merged.size() * sizeof(merged[0]));
+
+        auto same_key = [&](const LaneAWorkItemV1& item) {
+            return item.probe_x == trace.probe_x &&
+                item.probe_y == trace.probe_y &&
+                item.probe_z == trace.probe_z &&
+                item.cascade == trace.cascade;
+        };
+        for (std::uint32_t index = 0U; index < total_work; ++index) {
+            const auto& item = work_items[index];
+            if (item.output_id != trace.output_id) continue;
+            if (contributions[index][0] != trace.output_id) {
+                throw std::runtime_error("N006 contribution output ID drift");
+            }
+            const auto value = contributions[index][1];
+            if (value > 65535U) {
+                throw std::runtime_error("N006 contribution exceeds 16-bit value");
+            }
+            if (index < extra.base_traced_rays) {
+                ++trace.base_ray_count;
+                trace.base_radiance_sum16 += value;
+                if (value == 0U) ++trace.base_zero_rays;
+            } else {
+                ++trace.extra_ray_count;
+                trace.extra_radiance_sum16 += value;
+                if (value == 0U) ++trace.extra_zero_rays;
+            }
+        }
+        if (trace.base_ray_count != impl.settings.rays_per_probe ||
+            trace.extra_ray_count != request.extra_rays_per_probe) {
+            throw std::runtime_error("N006 causal trace contribution count mismatch");
+        }
+        const auto merged_sum =
+            trace.base_radiance_sum16 + trace.extra_radiance_sum16;
+        const auto merged_count = trace.base_ray_count + trace.extra_ray_count;
+        if (merged[trace.output_id][0] != merged_sum ||
+            merged[trace.output_id][1] != merged_count) {
+            throw std::runtime_error("N006 merged output disagrees with ray contributions");
+        }
+        const auto rounded_mean16 = [](std::uint64_t sum,
+                                       std::uint32_t count) -> std::uint32_t {
+            if (count == 0U) throw std::runtime_error("N006 zero sample count");
+            return static_cast<std::uint32_t>((sum + count / 2U) / count);
+        };
+        trace.base_output_mean16 = rounded_mean16(
+            trace.base_radiance_sum16, trace.base_ray_count);
+        trace.target_output_mean16 = rounded_mean16(
+            merged_sum, merged_count);
+
+        for (std::uint32_t index = 0U; index < extra.base_traced_rays; ++index) {
+            const auto& item = work_items[index];
+            if (item.ray_index != 0U || !same_key(item)) continue;
+            if (item.output_id >= merged.size()) {
+                throw std::runtime_error("N006 other owner output out of range");
+            }
+            const auto& entry = merged[item.output_id];
+            if (entry[1] == 0U) {
+                throw std::runtime_error("N006 same-probe owner lacks merged output");
+            }
+            const auto sample_after = rounded_mean16(entry[0], entry[1]);
+            const auto sample_before = item.output_id == trace.output_id
+                ? trace.base_output_mean16
+                : sample_after;
+            trace.before_storage_sum16 += sample_before;
+            trace.after_storage_sum16 += sample_after;
+            ++trace.shared_probe_outputs;
+        }
+        if (trace.shared_probe_outputs == 0U) {
+            throw std::runtime_error("N006 target probe has no storage owners");
+        }
+        trace.before_storage_mean16 =
+            double(trace.before_storage_sum16) /
+            double(trace.shared_probe_outputs);
+        trace.after_storage_mean16 =
+            double(trace.after_storage_sum16) /
+            double(trace.shared_probe_outputs);
+
+        std::vector<HashSlotCpu> slots(impl.storage_capacity);
+        impl.context.download_device_buffer(
+            impl.storage_slots, slots.data(), slots.size() * sizeof(slots[0]));
+        std::uint32_t matches = 0U;
+        for (const auto& slot : slots) {
+            if (slot.key[0] != trace.probe_x ||
+                slot.key[1] != trace.probe_y ||
+                slot.key[2] != trace.probe_z ||
+                slot.key[3] != static_cast<std::int32_t>(trace.cascade) ||
+                slot.data[3] != impl.frame_id ||
+                slot.data[2] == 0U) continue;
+            trace.observed_storage_sum16 = slot.data[1];
+            trace.observed_storage_outputs = slot.data[2];
+            ++matches;
+        }
+        if (matches != 1U ||
+            trace.observed_storage_sum16 != trace.after_storage_sum16 ||
+            trace.observed_storage_outputs != trace.shared_probe_outputs) {
+            throw std::runtime_error(
+                "N006 storage probe aggregation differs from owner contributions");
+        }
+        trace.available = true;
+        extra.influence_trace = trace;
+    }
+
     return {result, extra};
 }
 
