@@ -1,6 +1,6 @@
 # N006 P0 source-level feasibility checkpoint
 
-Issue: #42. Status: **source-audit GO for owner × cascade intervention; GPU correctness PENDING.**  
+Issue: #42. Status: **source-audit GO for owner × cascade intervention; baseline GPU smoke PASS. Novel per-cascade intervention PENDING.**  
 No renderer, shader, N004/N005 raw result, or frozen contract changed in this checkpoint.
 
 ## What we checked (actual accepted source)
@@ -17,6 +17,21 @@ No renderer, shader, N004/N005 raw result, or frozen contract changed in this ch
 An **owner × cascade count-varying extra suffix** looks implementable without a new persistent confidence structure or representation rewrite. It would keep the frozen base output IDs and ray-index-zero storage reservation intact. *This is source-level feasibility only.* It does not validate execution under novel ray placement or prove unbiased angular quadrature: the extra directions use a hashed spherical scheme while base uses eight octants, so differing per-cascade counts can alter finite-sample noise/error. Verify observed causal marginal gain, image correctness and sample-count identity on GPU before relying on the new scheduling unit.
 
 The smallest **demonstrably represented** update identity is `(probe xyz, cascade)` with `interval_min/max` carried in its work items. Scheduling finer *angular intervals* as independently persistent entities remains **unproven and out of scope for the initial intervention**.
+
+
+## P0 baseline GPU smoke — accepted device/correctness check
+
+User-run evidence received 2026-10-08 (separate, non-formal device verification; no independent quality reference generated).
+
+- Protocol: `n005-p2-candidate-evidence-v1`, `mode=current`, `scenario=static`; source warmup = 1, target frames = 1, zero extra-ray budget.
+- Clean working branch `research-n006-interval-aware-allocation` at commit `7e4d3abe6f9b17e169c164391bbc19092c507287`; N005 accepted predecessor `3a098584ec76bcaa06e5166793b2946cd1f7eb25`.
+- GPU: AMD Radeon 8060S Graphics (RADV STRIX_HALO), Mesa 26.1.2, RADV.
+- `source_correct=true`, `frame_correct=true`; strict/tie/substantive traversal mismatches all 0.
+- Visible owners = 4,167; base work items = 133,344; outputs = 16,668; zero extra ray, overflow, and storage failures.
+- One-frame descriptive GPU time = **818.354884 us complete GI**, **846.448262 us renderer**; do not treat a one-shot smoke as timing evidence.
+- No independent path-traced reference was generated (`reference_generation=skipped`), so **no quality advantage or P1 ranking signal is established**.
+
+Decision: local baseline GPU environment and N005 correctness checks **PASS**. The executable owner × cascade experimental intervention still requires dedicated implementation and GPU correctness checks. The next user GPU action should be on **new N006 pilot code**, not a repetition of this smoke.
 
 ## GPU data needed next
 
