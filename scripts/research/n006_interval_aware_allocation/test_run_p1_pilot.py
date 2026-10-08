@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 import subprocess
-from run_p1_pilot import BINARY
+from run_p1_pilot import BINARY, ROOT
 
 from run_p1_pilot import check_evidence, deterministic_tiles
 
@@ -53,7 +53,8 @@ class TestN006Pilot(unittest.TestCase):
         if not BINARY.is_file():
             self.fail("build phos-n006-intervention before running unit tests")
         result = subprocess.run(
-            [str(BINARY), "--selected-tile-id", "22890",
+            ["bash", str(ROOT / "scripts/run_with_vulkan.sh"),
+             str(BINARY), "--selected-tile-id", "22890",
              "--selected-cascade", "2"],
             capture_output=True, text=True, check=False,
         )
