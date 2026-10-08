@@ -45,3 +45,8 @@ No ReSTIR-like per-pixel reservoir, accumulation-dependent transport, denoising,
 Potential blockers: interval may not be independently schedulable, local error is not marginal gain, output influence may overlap, signal must exist **before** its ray, and selection overhead can outweigh savings. Each is a P0/P1 gate, not an assumption.
 
 **Decision: proceed with P0; P1 instrumentation requires a prospective versioned contract; P2/P3 not authorized yet.**
+
+
+## P1a first GPU attempt and correction (2026-10-08)
+
+The baseline and independent reference completed but all 12 targeted interventions exited with a **harness CLI parsing error**, yielding **zero scientific intervention results**. See [P1a invalid attempt / controlled repair](./results/002-p1a-cli-parser-failure-and-repair.md). An explicit `resume_p1_pilot.py` runner preserves the original failed artifacts, verifies the original successful reference against a newly built current image, and only then repeats the 12 **unchanged** targeted interventions. No hypothesis, tile selection or decision criterion was changed after seeing the failed run.
