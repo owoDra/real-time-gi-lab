@@ -69,3 +69,11 @@ The next step is a strictly bounded [P1b causal-chain diagnostic](./experiments/
 P1b completed with zero failures, bit-identical baseline and intervention replay. Both selected owner×cascade interventions changed the real GPU spatial storage sum by one 16-bit unit, despite only one affecting final pixels. The P1b readback also exposed **8** and **151** same-probe owner outputs for the two sampled keys. The accepted producer / ray-preparation / traversal / radiance code shows same-probe owners currently issue identical *base ray inputs*. This is potentially avoidable duplicate ray work, but GPU-grouping costs and correctness remain entirely unmeasured.
 
 See [P1b outcome and frozen P1c exact-base-ray multiplicity survey](./results/005-p1b-causality-and-p1c-multiplicity-contract.md). Next N006 step is **one current frame with no new reference or extra ray**, counting whole-scene per-cascade unique keys and input-identical repeated ray counts via `run_p1c_multiplicity.py`. This is a **forensic count**, not a dedup implementation, speedup or P1 scheduler success claim.
+
+## P1c accepted — exact base ray duplication
+
+User-run P1c validated all four cascade keys/ray inputs on the target GPU and found **109,272 / 133,504 = 81.85% exact repeated base ray inputs**, with 3,029 unique `(probe_xyz,cascade)` keys and 24,232 unique 8-direction ray inputs. P1c had 4,172 visible owners; the most repeated key had 275 owner outputs. See [P1c accepted evidence and hard boundaries](./results/006-p1c-exact-ray-input-multiplicity.md).
+
+**Critical distinction:** 81.85% duplicate *inputs* does not imply 81.85% complete-renderer savings; the observed single-run HWRT traversal stage was only about 145 µs of about 2,453 µs complete GI. Grouping, clearing, scanning and storage redesign have costs.
+
+The next prospective, low-risk gate is [P1d GPU unique-key hash cost preflight](./experiments/004-p1d-gpu-unique-key-cost.md): three rotated fresh-process A/B pairs of N006 current vs a **diagnostic-only** hash insertion pass, zero extra rays, identical output images and counts checked against P1c. This **does not** remove any ray; it determines whether a native GPU grouping/unique-probe approach merits a separately designed actual canonical-probe renderer. N004/N005 remain untouched, no GitHub Actions.
