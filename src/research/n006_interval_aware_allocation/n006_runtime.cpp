@@ -412,9 +412,14 @@ N006FrameResult N006Runtime::run_candidate_frame(
         timestamp_us(timestamps[2], timestamps[3], period);
     result.timings.producer_us =
         timestamp_us(timestamps[3], timestamps[4], period);
-    result.timings.ray_prepare_us = active_extra
-        ? timestamp_us(timestamps[17], timestamps[5], period)
-        : timestamp_us(timestamps[4], timestamps[5], period);
+    // P1e prospective boundary: hash pass is a disjoint segment 4->19.
+    // Its ray-prep segment is 19->5, not the old inclusive 4->5 P1d
+    // measurement. Frozen P1d GPU evidence is deliberately unchanged.
+    result.timings.ray_prepare_us = request.capture_hash_probe
+        ? timestamp_us(timestamps[19], timestamps[5], period)
+        : (active_extra
+            ? timestamp_us(timestamps[17], timestamps[5], period)
+            : timestamp_us(timestamps[4], timestamps[5], period));
     result.timings.traversal_maintenance_gpu_us = dynamic_update.gpu_us;
     result.timings.dynamic_update_wall_us = dynamic_update.wall_us;
     result.timings.geometry_prepare_cpu_us =
@@ -526,7 +531,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
         probe.failed_inserts = key_stats[3];
         probe.collision_steps = key_stats[4];
         probe.complete_hash_gpu_us =
-            timestamp_us(timestamps[18], timestamps[19], period);
+            timestamp_us(timestamps[4], timestamps[19], period);
         for (std::uint32_t cascade = 0U; cascade < 4U; ++cascade) {
             probe.unique_by_cascade[cascade] = key_stats[6U + cascade];
             probe.duplicate_by_cascade[cascade] = key_stats[10U + cascade];
