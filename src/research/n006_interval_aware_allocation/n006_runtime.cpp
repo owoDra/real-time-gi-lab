@@ -20,6 +20,14 @@
 namespace phos::gi::research::integration {
 namespace {
 
+struct N006GpuHashPush {
+    std::uint32_t mask{};
+    std::uint32_t max_probe{128U};
+    std::uint32_t rays_per_probe{8U};
+    std::uint32_t cascade_count{4U};
+};
+static_assert(sizeof(N006GpuHashPush) == 16U);
+
 struct N006ExtraPush {
     std::uint32_t mode{};
     std::uint32_t owner_budget{};
@@ -59,8 +67,10 @@ static_assert(sizeof(N006ExtraPush) == 20U);
 } // namespace
 
 struct N006Runtime::State {
-    B002Buffer extra_stats{};
+    B002Buffer extra_stats{}, hash_keys{}, hash_stats{};
     std::unique_ptr<I001ComputeStage> extra_stage;
+    std::unique_ptr<I001ComputeStage> hash_stage;
+    std::uint32_t hash_capacity{};
 };
 
 N006Runtime::N006Runtime(I001Options options)
@@ -84,11 +94,38 @@ N006Runtime::N006Runtime(I001Options options)
         shader_path(PHOS_GI_N006_SHADER_DIR, "n006_extra_producer.spv"),
         bindings,
         sizeof(N006ExtraPush));
+
+    const auto maximum_outputs = impl.params.limits[2];
+    if (maximum_outputs == 0U || maximum_outputs >
+        std::numeric_limits<std::uint32_t>::max() / 2U) {
+        throw std::runtime_error("N006 hash capacity out of range");
+    }
+    state_->hash_capacity = std::bit_ceil(maximum_outputs * 2U);
+    state_->hash_keys = impl.context.create_device_buffer(
+        VkDeviceSize(state_->hash_capacity) * sizeof(std::uint32_t),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    state_->hash_stats = impl.context.create_device_buffer(
+        16U * sizeof(std::uint32_t),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    const std::array<I001Binding, 4> hash_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
+        {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+    }};
+    state_->hash_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_probe_unique_hash.spv"),
+        hash_bindings,
+        sizeof(N006GpuHashPush));
 }
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
     state_->extra_stage.reset();
+    state_->hash_stage.reset();
+    runtime_.impl_->context.destroy_buffer(state_->hash_stats);
+    runtime_.impl_->context.destroy_buffer(state_->hash_keys);
     runtime_.impl_->context.destroy_buffer(state_->extra_stats);
 }
 
