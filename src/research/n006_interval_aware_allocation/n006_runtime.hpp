@@ -23,6 +23,24 @@ struct N006ExtraRequest {
     std::uint32_t selected_cascade{0xffffffffU};
 };
 
+// Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
+struct N006InfluenceTrace {
+    bool available{};
+    std::uint32_t tile_id{};
+    std::uint32_t cascade{};
+    std::uint32_t output_id{};
+    std::int32_t probe_x{}, probe_y{}, probe_z{};
+    std::uint32_t base_ray_count{}, extra_ray_count{};
+    std::uint64_t base_radiance_sum16{}, extra_radiance_sum16{};
+    std::uint32_t base_zero_rays{}, extra_zero_rays{};
+    std::uint32_t base_output_mean16{}, target_output_mean16{};
+    std::uint32_t shared_probe_outputs{};
+    std::uint64_t before_storage_sum16{}, after_storage_sum16{};
+    std::uint32_t before_storage_mean16{}, after_storage_mean16{};
+    std::uint64_t observed_storage_sum16{};
+    std::uint32_t observed_storage_outputs{};
+};
+
 struct N006ExtraStats {
     std::uint32_t base_traced_rays{};
     std::uint32_t extra_rays_requested{};
@@ -36,6 +54,7 @@ struct N006ExtraStats {
     double extra_producer_gpu_us{};
     bool base_prefix_correct{};
     bool extra_work_correct{};
+    N006InfluenceTrace influence_trace{};
 };
 
 struct N006FrameResult {
