@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 #include "../lane_n_end_to_end_renderer/n001_runtime.hpp"
 
@@ -57,6 +58,7 @@ public:
     [[nodiscard]] N006FrameResult run_topology_churn_frame(
         N006ExtraRequest request);
 
+    [[nodiscard]] std::vector<std::uint32_t> visible_tile_ids();
     [[nodiscard]] I001N004HitDiagnostics n004_hit_diagnostics();
     [[nodiscard]] I001RendererReadback renderer_readback();
 
