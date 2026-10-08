@@ -20,7 +20,7 @@
 namespace phos::gi::research::integration {
 namespace {
 
-struct alignas(16) N006ExtraPush {
+struct N006ExtraPush {
     std::uint32_t mode{};
     std::uint32_t owner_budget{};
     std::uint32_t extra_rays_per_probe{};
