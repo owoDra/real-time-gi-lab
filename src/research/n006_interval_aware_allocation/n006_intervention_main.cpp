@@ -238,6 +238,30 @@ void write_extra(
             << ",\"observed_storage_sum16\":" << trace.observed_storage_sum16
             << ",\"observed_storage_outputs\":" << trace.observed_storage_outputs;
     }
+    out << "},\"gpu_hash_probe\":{"
+        << "\"executed\":" << (e.gpu_hash_probe.executed ? "true" : "false");
+    if (e.gpu_hash_probe.executed) {
+        const auto& audit = e.gpu_hash_probe;
+        out << ",\"hash_slots\":" << audit.hash_slots
+            << ",\"scratch_bytes\":" << audit.scratch_bytes
+            << ",\"unique_keys\":" << audit.unique_keys
+            << ",\"duplicate_outputs\":" << audit.duplicate_outputs
+            << ",\"invalid_keys\":" << audit.invalid_keys
+            << ",\"failed_inserts\":" << audit.failed_inserts
+            << ",\"collision_steps\":" << audit.collision_steps
+            << ",\"complete_hash_gpu_us\":" << audit.complete_hash_gpu_us
+            << ",\"unique_by_cascade\":[";
+        for (std::size_t i = 0; i < audit.unique_by_cascade.size(); ++i) {
+            if (i != 0U) out << ',';
+            out << audit.unique_by_cascade[i];
+        }
+        out << "],\"duplicate_by_cascade\":[";
+        for (std::size_t i = 0; i < audit.duplicate_by_cascade.size(); ++i) {
+            if (i != 0U) out << ',';
+            out << audit.duplicate_by_cascade[i];
+        }
+        out << ']';
+    }
     out << "}}";
 }
 
@@ -289,6 +313,7 @@ int main(int argc, char** argv) {
     bool skip_reference = false;
     bool capture_visible_tiles = false;
     bool capture_probe_multiplicity = false;
+    bool capture_gpu_unique_hash = false;
 
     for (int index = 1; index < argc; ++index) {
         const std::string_view arg = argv[index];
@@ -316,6 +341,7 @@ int main(int argc, char** argv) {
         else if (arg == "--skip-reference") skip_reference = true;
         else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
         else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
+        else if (arg == "--capture-gpu-unique-hash") capture_gpu_unique_hash = true;
         else {
             std::cerr
                 << "usage: phos-n006-candidate --artifact-dir PATH --scene PATH "
@@ -386,6 +412,7 @@ int main(int argc, char** argv) {
                 extra_rays_per_probe,
                 selected_tile_id,
                 selected_cascade,
+                capture_gpu_unique_hash,
             };
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
@@ -410,6 +437,12 @@ int main(int argc, char** argv) {
             });
         }
 
+        if (capture_gpu_unique_hash &&
+            (mode != lane_n::N006ExtraMode::Current ||
+             target_frames != 1U || !skip_reference)) {
+            throw std::runtime_error(
+                "N006 GPU hash capture requires current, one target frame, no reference");
+        }
         if (capture_probe_multiplicity) {
             if (mode != lane_n::N006ExtraMode::Current ||
                 target_frames != 1U || !skip_reference) {
