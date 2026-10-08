@@ -253,3 +253,23 @@ target_compile_definitions(phos-n005-candidate PRIVATE
   PHOS_GI_N005_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
 )
 add_dependencies(phos-n005-candidate phos-n005-shaders)
+
+# N006 P1 only: an isolated copy of the N005 integration runtime and a
+# targeted owner x cascade extra-ray shader. Accepted historical targets are
+# unchanged. This pilot measures counterfactual marginal gain, not scheduling.
+add_compute_shader(
+  n006_extra_producer
+  shaders/research/n006_interval_aware_allocation/n006_extra_producer.comp.glsl)
+add_custom_target(phos-n006-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_extra_producer.spv")
+add_executable(phos-n006-intervention
+  ${PROJECT_SOURCE_DIR}/src/research/n006_interval_aware_allocation/n006_intervention_main.cpp
+  ${PROJECT_SOURCE_DIR}/src/research/n006_interval_aware_allocation/n006_runtime.cpp
+  n002_hwrt_rebuild.cpp
+  ${N004_SHARED_SUPPORT_SOURCES}
+)
+configure_lane_n_renderer(phos-n006-intervention)
+target_compile_definitions(phos-n006-intervention PRIVATE
+  PHOS_GI_N006_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+)
+add_dependencies(phos-n006-intervention phos-n006-shaders)
