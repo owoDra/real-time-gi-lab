@@ -25,15 +25,27 @@ class TestP1dOfflineAudit(unittest.TestCase):
         result = compare(control, hashed)
         self.assertEqual(result["complete_gi_delta_us"], 28.0)
         self.assertEqual(result["hash_stage_including_clear_us"], 8.0)
-        self.assertEqual(result["subtotal_selected_nonoverlapping_pipeline_delta_us"], 5.0)
-        self.assertEqual(result["unattributed_complete_gi_delta_us"], 15.0)
+        self.assertTrue(result["hash_nested_inside_ray_prepare_gpu"])
+        self.assertEqual(result["ray_prepare_delta_excluding_hash_us"], -8.0)
+        self.assertEqual(result["subtotal_selected_pipeline_delta_including_hash_us"], 5.0)
+        self.assertEqual(result["subtotal_selected_pipeline_delta_excluding_hash_us"], -3.0)
+        self.assertEqual(result["unattributed_complete_gi_delta_us"], 23.0)
 
     def test_cpu_dynamic_wall_not_counted_as_gpu(self):
         control = sample()
         hashed = sample(110.0, 8.0)
         hashed["timing"]["dynamic_update_wall"] += 100000
         result = compare(control, hashed)
-        self.assertEqual(result["unattributed_complete_gi_delta_us"], 2.0)
+        self.assertEqual(result["unattributed_complete_gi_delta_us"], 10.0)
+
+    def test_hash_interval_nested_inside_ray_prepare(self):
+        current = sample(200.0)
+        hashed = sample(222.0, 20.0)
+        hashed["timing"]["ray_prepare_gpu"] += 23.0
+        values = compare(current, hashed)
+        self.assertEqual(values["ray_prepare_delta_excluding_hash_us"], 3.0)
+        self.assertEqual(values["subtotal_selected_pipeline_delta_including_hash_us"], 23.0)
+        self.assertEqual(values["unattributed_complete_gi_delta_us"], -1.0)
 
     def test_raw_current_uses_frozen_summary_gpu_us_field(self):
         # Regression: capture() writes complete_gi_gpu_us but the raw renderer
