@@ -12,6 +12,12 @@
       "status": "complete",
       "result": "002-p2-equal-budget-candidates.md",
       "decision": "accept-optimized-candidate-and-freeze-p3"
+    },
+    {
+      "experiment": "003-p3-formal-comparison",
+      "status": "complete",
+      "result": "003-p3-formal-comparison.md",
+      "decision": "refine"
     }
   ]
 }
