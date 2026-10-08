@@ -213,12 +213,23 @@ def audit(summary_path: Path) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--summary", type=Path, required=True,
-                        help="Completed *-cli-repair/n006-p1-pilot-summary.json")
+    parser.add_argument("--summary", type=Path,
+                        help="Completed *-cli-repair/n006-p1-pilot-summary.json;"
+                             " auto-resolved only when exactly one exists")
     parser.add_argument("--output", type=Path,
                         help="Optional new JSON path (must not already exist)")
     args = parser.parse_args()
-    data = audit(args.summary)
+    summary_path = args.summary
+    if summary_path is None:
+        root = (ROOT / "out/research/n006-interval-aware-allocation"
+                / "p1-causal-pilot")
+        paths = sorted(root.glob("*-cli-repair/n006-p1-pilot-summary.json"))
+        if len(paths) != 1:
+            raise ValueError(
+                f"found {len(paths)} repaired campaigns; pass --summary explicitly"
+            )
+        summary_path = paths[0]
+    data = audit(summary_path)
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out = (args.output or ROOT / "out/research/n006-interval-aware-allocation"
            / "p1a-image-audit" / stamp / "n006-p1a-image-audit.json").resolve()
