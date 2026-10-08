@@ -41,6 +41,26 @@ struct N006InfluenceTrace {
     std::uint32_t observed_storage_outputs{};
 };
 
+// Counts exact-input repeat groups in the existing base work stream.
+// This is a non-timed forensic diagnostic; it does not deduplicate GPU work.
+struct N006ProbeMultiplicityRow {
+    std::uint32_t cascade{};
+    std::uint32_t owner_outputs{};
+    std::uint32_t unique_probe_keys{};
+    std::uint32_t max_owner_outputs_per_key{};
+    std::uint32_t shared_keys{};
+    std::uint64_t duplicated_ray_inputs{};
+    bool same_probe_ray_inputs_identical{true};
+};
+
+struct N006ProbeMultiplicityAudit {
+    std::uint32_t base_work_items{};
+    std::uint32_t visible_owners{};
+    std::uint32_t rays_per_probe{};
+    std::uint32_t cascade_count{};
+    std::vector<N006ProbeMultiplicityRow> cascades;
+};
+
 struct N006ExtraStats {
     std::uint32_t base_traced_rays{};
     std::uint32_t extra_rays_requested{};
@@ -78,6 +98,7 @@ public:
         N006ExtraRequest request);
 
     [[nodiscard]] std::vector<std::uint32_t> visible_tile_ids();
+    [[nodiscard]] N006ProbeMultiplicityAudit probe_multiplicity_audit();
     [[nodiscard]] I001N004HitDiagnostics n004_hit_diagnostics();
     [[nodiscard]] I001RendererReadback renderer_readback();
 
