@@ -20,8 +20,8 @@ Do not assume per-interval metadata/state is required or even compatible with th
 
 - [P0 literature and architecture](./001-literature-and-architecture.md): prior art, reuse and RC incompatibilities, actual work-unit mapping.
 - [Prospective P0/P1 experiment plan](./experiments/001-p0-p1-predictive-value.md): pre-trace feasibility, bounded causal/ranking study, split discipline, stop rules.
-- **P0:** no runtime changes, establish smallest safe allocation unit and predicted signal cost.
-- **P1:** no scheduler, observe signals and run bounded counterfactual extra-ray interventions to measure realized marginal error reduction; decide GO/REFINE/STOP.
+- **P0:** source-level owner × cascade feasibility established and baseline GPU smoke **PASS**; novel intervention correctness remains to verify. [P0 source and smoke result](./results/001-p0-work-unit-feasibility.md).
+- **P1:** start with a calibration-only [P1a causal pilot](./experiments/002-p1a-causal-pilot.md) on new isolated intervention code; then prospectively freeze predictive-signal ranking, calibration/holdout and GO/REFINE/STOP. No scheduler.
 - **P2 (conditional):** at most two scheduler candidates; current vs uniform vs frozen N005 vs N006 under equal actual ray budget.
 - **P3 (conditional):** fresh-process formal GPU comparison with frozen independent holdout and retained raw evidence.
 
