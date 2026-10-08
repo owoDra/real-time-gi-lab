@@ -36,7 +36,7 @@ struct N006InfluenceTrace {
     std::uint32_t base_output_mean16{}, target_output_mean16{};
     std::uint32_t shared_probe_outputs{};
     std::uint64_t before_storage_sum16{}, after_storage_sum16{};
-    std::uint32_t before_storage_mean16{}, after_storage_mean16{};
+    double before_storage_mean16{}, after_storage_mean16{};
     std::uint64_t observed_storage_sum16{};
     std::uint32_t observed_storage_outputs{};
 };
