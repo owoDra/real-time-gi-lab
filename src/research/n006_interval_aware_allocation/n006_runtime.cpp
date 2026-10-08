@@ -719,6 +719,23 @@ N006FrameResult N006Runtime::run_topology_churn_frame(
     return out;
 }
 
+std::vector<std::uint32_t> N006Runtime::visible_tile_ids() {
+    auto& impl = *runtime_.impl_;
+    const std::uint32_t count =
+        impl.params.counts[1] * impl.params.counts[2];
+    std::vector<std::uint32_t> owners(count);
+    impl.context.download_device_buffer(
+        impl.owners,
+        owners.data(),
+        owners.size() * sizeof(owners[0]));
+    std::vector<std::uint32_t> result;
+    result.reserve(count);
+    for (std::uint32_t tile = 0; tile < count; ++tile) {
+        if (owners[tile] != 0xffffffffU) result.push_back(tile);
+    }
+    return result;
+}
+
 I001N004HitDiagnostics N006Runtime::n004_hit_diagnostics() {
     return runtime_.n004_hit_diagnostics();
 }
