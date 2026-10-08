@@ -281,6 +281,10 @@ int main(int argc, char** argv) {
             depth_threshold = std::stof(argv[++index]);
         } else if (arg == "--extra-rays-per-probe" && index + 1 < argc) {
             extra_rays_per_probe = static_cast<std::uint32_t>(std::stoul(argv[++index]));
+        } else if (arg == "--selected-tile-id" && index + 1 < argc) {
+            selected_tile_id = static_cast<std::uint32_t>(std::stoul(argv[++index]));
+        } else if (arg == "--selected-cascade" && index + 1 < argc) {
+            selected_cascade = static_cast<std::uint32_t>(std::stoul(argv[++index]));
         } else if (arg == "--topology") topology = true;
         else if (arg == "--skip-reference") skip_reference = true;
         else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
