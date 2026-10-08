@@ -851,6 +851,96 @@ N006FrameResult N006Runtime::run_topology_churn_frame(
     return out;
 }
 
+N006ProbeMultiplicityAudit N006Runtime::probe_multiplicity_audit() {
+    auto& impl = *runtime_.impl_;
+    if (!impl.have_last) {
+        throw std::runtime_error("N006 multiplicity audit requires completed frame");
+    }
+    const auto cascades = impl.settings.cascade_count;
+    const auto rays = impl.settings.rays_per_probe;
+    const auto block = cascades * rays;
+    const auto count = impl.last.stats.work_items;
+    if (block == 0U || count != impl.last.stats.visible_owners * block ||
+        count != impl.last.stats.outputs * rays ||
+        count % block != 0U) {
+        throw std::runtime_error("N006 multiplicity audit needs unmodified current-mode base stream");
+    }
+    std::vector<LaneAWorkItemV1> work(count);
+    if (count != 0U) {
+        impl.context.download_device_buffer(
+            impl.work, work.data(), work.size() * sizeof(work[0]));
+    }
+
+    // For each shared probe key retain one representative 8-direction block,
+    // then check whether later owners create precisely the same ray origins
+    // and directions (surface/tile/output IDs intentionally excluded).
+    using Key = std::array<std::int32_t, 4>;
+    struct Group { std::uint32_t first{}, count{}; };
+    std::vector<std::map<Key, Group>> keys(cascades);
+    std::vector<bool> identical(cascades, true);
+    for (std::uint32_t owner_base = 0U; owner_base < count;
+         owner_base += block) {
+        for (std::uint32_t cascade = 0U; cascade < cascades; ++cascade) {
+            const auto offset = owner_base + cascade * rays;
+            const auto& first = work[offset];
+            if (first.cascade != cascade || first.ray_index != 0U) {
+                throw std::runtime_error("N006 multiplicity base block layout invalid");
+            }
+            const Key key{first.probe_x, first.probe_y, first.probe_z,
+                          static_cast<std::int32_t>(cascade)};
+            auto [it, added] = keys[cascade].try_emplace(
+                key, Group{offset, 0U});
+            auto& group = it->second;
+            if (!added) {
+                const auto& representative = work[group.first];
+                for (std::uint32_t ray = 0U; ray < rays; ++ray) {
+                    const auto& item = work[offset + ray];
+                    const auto& original = work[group.first + ray];
+                    if (item.ray_index != ray ||
+                        item.cascade != cascade ||
+                        item.probe_x != representative.probe_x ||
+                        item.probe_y != representative.probe_y ||
+                        item.probe_z != representative.probe_z ||
+                        item.interval_min != original.interval_min ||
+                        item.interval_max != original.interval_max ||
+                        item.probe_px != original.probe_px ||
+                        item.probe_py != original.probe_py ||
+                        item.probe_pz != original.probe_pz ||
+                        item.dir_x != original.dir_x ||
+                        item.dir_y != original.dir_y ||
+                        item.dir_z != original.dir_z) {
+                        identical[cascade] = false;
+                    }
+                }
+            }
+            ++group.count;
+        }
+    }
+
+    N006ProbeMultiplicityAudit result{};
+    result.base_work_items = count;
+    result.visible_owners = impl.last.stats.visible_owners;
+    result.rays_per_probe = rays;
+    result.cascade_count = cascades;
+    for (std::uint32_t cascade = 0U; cascade < cascades; ++cascade) {
+        N006ProbeMultiplicityRow row{};
+        row.cascade = cascade;
+        row.owner_outputs = impl.last.stats.visible_owners;
+        row.unique_probe_keys = static_cast<std::uint32_t>(keys[cascade].size());
+        row.same_probe_ray_inputs_identical = identical[cascade];
+        for (const auto& [key, group] : keys[cascade]) {
+            (void)key;
+            row.max_owner_outputs_per_key =
+                std::max(row.max_owner_outputs_per_key, group.count);
+            if (group.count > 1U) ++row.shared_keys;
+        }
+        row.duplicated_ray_inputs =
+            std::uint64_t(row.owner_outputs - row.unique_probe_keys) * rays;
+        result.cascades.push_back(row);
+    }
+    return result;
+}
+
 std::vector<std::uint32_t> N006Runtime::visible_tile_ids() {
     auto& impl = *runtime_.impl_;
     const std::uint32_t count =
