@@ -249,6 +249,37 @@ N006FrameResult N006Runtime::run_candidate_frame(
         stamp(17);
     }
 
+    // Auxiliary P1d hash consumes the immutable base producer stream.
+    // GPU time includes the hash clear, barriers, and insert dispatch.
+    if (request.capture_hash_probe) {
+        if (active_extra || request.mode != N006ExtraMode::Current) {
+            throw std::runtime_error("N006 P1d hash only supports current mode");
+        }
+        // Queries 16/17 are normally reserved for the extra-ray stage. They
+        // must be written even for hash-only runs before reading queries 0..19.
+        stamp(16);
+        stamp(17);
+        stamp(18);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->hash_keys.buffer, 0,
+            state_->hash_keys.size, 0U);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->hash_stats.buffer, 0,
+            state_->hash_stats.size, 0U);
+        i001_transfer_to_compute_barrier(impl.context, command);
+        const N006GpuHashPush push{
+            state_->hash_capacity - 1U,
+            128U,
+            impl.settings.rays_per_probe,
+            impl.settings.cascade_count,
+        };
+        state_->hash_stage->record(
+            command, groups(impl.params.limits[2]), 1U, 1U,
+            &push, sizeof(push));
+        i001_compute_barrier(impl.context, command);
+        stamp(19);
+    }
+
     impl.ray_stage->record_indirect(command, impl.indirect.buffer, 0);
     i001_compute_barrier(impl.context, command);
     stamp(5);
@@ -340,8 +371,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
         fail("N006 fence wait");
     }
 
-    std::array<std::uint64_t, 18> timestamps{};
-    const auto timestamp_count = active_extra ? 18U : 16U;
+    std::array<std::uint64_t, 20> timestamps{};
+    const auto timestamp_count = request.capture_hash_probe
+        ? 20U : (active_extra ? 18U : 16U);
     if (impl.context.vk().getQueryPoolResults(
             impl.query_pool,
             0,
@@ -480,6 +512,36 @@ N006FrameResult N006Runtime::run_candidate_frame(
         : double(extra.selected_owner_count) /
             (double(result.stats.visible_owners) * impl.settings.cascade_count);
     extra.extra_producer_gpu_us = extra_producer_gpu_us;
+    if (request.capture_hash_probe) {
+        std::array<std::uint32_t, 16> key_stats{};
+        impl.context.download_device_buffer(
+            state_->hash_stats, key_stats.data(), sizeof(key_stats));
+        auto& probe = extra.gpu_hash_probe;
+        probe.executed = true;
+        probe.hash_slots = state_->hash_capacity;
+        probe.scratch_bytes = state_->hash_keys.size + state_->hash_stats.size;
+        probe.unique_keys = key_stats[0];
+        probe.duplicate_outputs = key_stats[1];
+        probe.invalid_keys = key_stats[2];
+        probe.failed_inserts = key_stats[3];
+        probe.collision_steps = key_stats[4];
+        probe.complete_hash_gpu_us =
+            timestamp_us(timestamps[18], timestamps[19], period);
+        for (std::uint32_t cascade = 0U; cascade < 4U; ++cascade) {
+            probe.unique_by_cascade[cascade] = key_stats[6U + cascade];
+            probe.duplicate_by_cascade[cascade] = key_stats[10U + cascade];
+        }
+        if (probe.invalid_keys != 0U || probe.failed_inserts != 0U ||
+            probe.unique_keys + probe.duplicate_outputs != result.stats.outputs ||
+            probe.unique_keys !=
+                probe.unique_by_cascade[0] + probe.unique_by_cascade[1] +
+                probe.unique_by_cascade[2] + probe.unique_by_cascade[3] ||
+            probe.duplicate_outputs !=
+                probe.duplicate_by_cascade[0] + probe.duplicate_by_cascade[1] +
+                probe.duplicate_by_cascade[2] + probe.duplicate_by_cascade[3]) {
+            throw std::runtime_error("N006 P1d GPU unique-key hash counts invalid");
+        }
+    }
 
     const auto total_work = result.stats.work_items;
     std::vector<LaneAWorkItemV1> work_items(total_work);
