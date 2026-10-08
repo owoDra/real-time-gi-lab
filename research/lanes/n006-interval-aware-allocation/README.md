@@ -56,3 +56,10 @@ The baseline and independent reference completed but all 12 targeted interventio
 The user completed the corrected P1a on `4871623797b8ba0b155447f63697bd3340829ee3`, with 12/12 valid targeted interventions, reference reuse checked and zero baseline replay drift. Eleven global RGB RMS gains were zero; the last was +`4.134909315207209e-10`, far too small to justify a signal ranking or scheduler. See [P1a completed evidence interpretation](./results/003-p1a-causal-pilot-calibration.md).
 
 Before spending more GPU time, run `mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1a_images.py` with the retained repaired-run PFM images (one unique repaired run is auto-located). The audit compares **actual changed pixels** rather than only global RMS and saves a separate JSON under `out/research/n006-interval-aware-allocation/p1a-image-audit/`. Keep all raw N004/N005/N006 campaigns intact. The P1 predictive gate remains unpassed.
+
+
+## P1a exact-pixel audit and prospective P1b
+
+The P1a [paired-image audit](./results/004-p1a-image-influence-audit.md) established **11/12 pixel-identical final images** despite 4 actual additional rays each; the only nonidentical case was tile 22890 / cascade 3 (468 improved *other* pixels, tiny global gain). Existing output cannot distinguish zero radiance, 16-bit per-output normalization, shared probe dilution or no pixel consumer.
+
+The next step is a strictly bounded [P1b causal-chain diagnostic](./experiments/003-p1b-influence-probe.md), instrumenting the existing N006 experiment for **one unchanged and one changed cascade at the same tile**. This includes a short-warmup baseline bit-equivalence guard against the retained P1a frame, so users do not re-run expensive reference generation unless the guard fails. Results are diagnostic, not ranking/training evidence; P1 GO/P2 gates stay closed.
