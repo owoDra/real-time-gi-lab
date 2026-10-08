@@ -77,3 +77,10 @@ User-run P1c validated all four cascade keys/ray inputs on the target GPU and fo
 **Critical distinction:** 81.85% duplicate *inputs* does not imply 81.85% complete-renderer savings; the observed single-run HWRT traversal stage was only about 145 µs of about 2,453 µs complete GI. Grouping, clearing, scanning and storage redesign have costs.
 
 The next prospective, low-risk gate is [P1d GPU unique-key hash cost preflight](./experiments/004-p1d-gpu-unique-key-cost.md): three rotated fresh-process A/B pairs of N006 current vs a **diagnostic-only** hash insertion pass, zero extra rays, identical output images and counts checked against P1c. This **does not** remove any ray; it determines whether a native GPU grouping/unique-probe approach merits a separately designed actual canonical-probe renderer. N004/N005 remain untouched, no GitHub Actions.
+
+
+## P1d completed — correct hash, unstable whole-GI delta
+
+The user completed three rotated current/hash pairs on AMD Radeon 8060S at `2b862de49b8627e7d8bdbd4d91c312400c161019`: all P1c unique/duplicate counts reproduced, all images byte-identical, zero insertion failures. The **complete hash stage including clear** measured **24.5 µs median**, with **2 MiB scratch**. However, paired complete GI delays were +21, +422 and +636 µs (median +422 µs), much greater than and variable relative to the hash stage. See [P1d accepted evidence and uncertainty](./results/007-p1d-hash-cost-preflight.md).
+
+**Decision:** GPU key extraction correctness PASSES; whole-GI cost interpretation is **REFINE**, not a demonstrated dedup speedup or a P1 scheduler GO. Before running another GPU campaign, inspect all six **already saved** per-stage evidence files with `mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1d_stages.py`; it writes a standalone JSON under `out/research/n006-interval-aware-allocation/p1d-stage-audit/`. This read-only audit cannot eliminate all timing uncertainty, but avoids spending GPU time before identifying whether any recorded stage systematically dominates the unexplained delay.
