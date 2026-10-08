@@ -26,7 +26,7 @@ DYNAMIC_PARTS = (
 )
 CPU_DIAGNOSTICS = ("dynamic_update_wall",)
 STAGES = PIPELINE + DYNAMIC_PARTS + CPU_DIAGNOSTICS
-AUDIT_PROTOCOL = "n006-p1d-offline-stage-audit-v1"
+AUDIT_PROTOCOL = "n006-p1d-offline-stage-audit-v2"
 SOURCE_HEAD = "2b862de49b8627e7d8bdbd4d91c312400c161019"
 
 
@@ -119,20 +119,32 @@ def compare(current: dict[str, Any], hashed: dict[str, Any]) -> dict[str, Any]:
     stage_delta = {stage: h[stage] - c[stage] for stage in STAGES}
     full_delta = h["complete_gi_gpu"] - c["complete_gi_gpu"]
     hash_gpu = hashed["hash_gpu_us"]
+    # N006Runtime reports ray_prepare_gpu = timestamps[4] -> [5] in
+    # current mode. P1d hash is inserted between those two timestamps.
+    # Therefore ray_prepare_gpu ALREADY includes the entire hash duration.
+    # Treating hash as a second independent interval double-subtracts it.
     pipeline_delta = sum(stage_delta[stage] for stage in PIPELINE)
+    hash_free_ray_prepare_delta = stage_delta["ray_prepare_gpu"] - hash_gpu
+    nonoverlapping_pipeline_delta = pipeline_delta - hash_gpu
     return {
         "complete_gi_delta_us": full_delta,
         "complete_renderer_delta_us":
             h["complete_renderer_gpu"] - c["complete_renderer_gpu"],
         "hash_stage_including_clear_us": hash_gpu,
-        "pipeline_stage_delta_us": stage_delta,
-        "subtotal_selected_nonoverlapping_pipeline_delta_us": pipeline_delta,
-        "unattributed_complete_gi_delta_us":
-            full_delta - hash_gpu - pipeline_delta,
-        "note": ("Unattributed is an arithmetic residual that also includes "
-                 "unexported frame/init/visibility/invalidations, dynamic "
-                 "maintenance and differences in measured intervals; "
-                 "it is NOT a measured standalone GPU stage. CPU wall "
+        "raw_timed_stage_delta_us": stage_delta,
+        "hash_nested_inside_ray_prepare_gpu": True,
+        "ray_prepare_delta_excluding_hash_us": hash_free_ray_prepare_delta,
+        "subtotal_selected_pipeline_delta_including_hash_us": pipeline_delta,
+        "subtotal_selected_pipeline_delta_excluding_hash_us":
+            nonoverlapping_pipeline_delta,
+        "unattributed_complete_gi_delta_us": full_delta - pipeline_delta,
+        "note": ("Unattributed = complete-GI delta minus the sum of "
+                 "nonoverlapping exported pipeline-stage deltas; "
+                 "ray_prepare_gpu already includes the hash. The "
+                 "residual includes unexported primary visibility, frame "
+                 "initialization, owner visibility, invalidation, GPU "
+                 "dynamic maintenance and other unexported intervals. "
+                 "It is NOT a separately timestamped stage. CPU wall "
                  "must not be summed into GPU timestamps."),
     }
 
