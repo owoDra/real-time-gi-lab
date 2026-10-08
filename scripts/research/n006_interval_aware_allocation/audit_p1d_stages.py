@@ -79,7 +79,7 @@ def load_raw(campaign: Path, index: int, mode: str, expected: dict[str, Any], gp
         raise ValueError("missing raw timing")
     for key in (*STAGES, "complete_gi_gpu", "complete_renderer_gpu"):
         finite_us(timing, key)
-    if not math.isclose(timing["complete_gi_gpu"], expected["complete_gi_gpu"],
+    if not math.isclose(timing["complete_gi_gpu"], expected["complete_gi_gpu_us"],
                         rel_tol=0, abs_tol=1e-8):
         raise ValueError("raw complete-GI time differs from frozen summary")
     if not math.isclose(timing["complete_renderer_gpu"], expected["complete_renderer_gpu_us"],
