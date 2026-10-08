@@ -260,8 +260,12 @@ add_dependencies(phos-n005-candidate phos-n005-shaders)
 add_compute_shader(
   n006_extra_producer
   shaders/research/n006_interval_aware_allocation/n006_extra_producer.comp.glsl)
+add_compute_shader(
+  n006_probe_unique_hash
+  shaders/research/n006_interval_aware_allocation/n006_probe_unique_hash.comp.glsl)
 add_custom_target(phos-n006-shaders DEPENDS
-  "${CMAKE_BINARY_DIR}/shaders/n006_extra_producer.spv")
+  "${CMAKE_BINARY_DIR}/shaders/n006_extra_producer.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_probe_unique_hash.spv")
 add_executable(phos-n006-intervention
   ${PROJECT_SOURCE_DIR}/src/research/n006_interval_aware_allocation/n006_intervention_main.cpp
   ${PROJECT_SOURCE_DIR}/src/research/n006_interval_aware_allocation/n006_runtime.cpp
