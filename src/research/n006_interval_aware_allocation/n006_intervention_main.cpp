@@ -212,7 +212,33 @@ void write_extra(
         << "\"extra_producer_gpu_us\":" << e.extra_producer_gpu_us << ','
         << "\"base_prefix_correct\":" << (e.base_prefix_correct ? "true" : "false") << ','
         << "\"extra_work_correct\":" << (e.extra_work_correct ? "true" : "false")
-        << '}';
+        << ",\"influence_trace\":{"
+        << "\"available\":" << (e.influence_trace.available ? "true" : "false");
+    if (e.influence_trace.available) {
+        const auto& trace = e.influence_trace;
+        out << ",\"tile_id\":" << trace.tile_id
+            << ",\"cascade\":" << trace.cascade
+            << ",\"output_id\":" << trace.output_id
+            << ",\"probe_x\":" << trace.probe_x
+            << ",\"probe_y\":" << trace.probe_y
+            << ",\"probe_z\":" << trace.probe_z
+            << ",\"base_ray_count\":" << trace.base_ray_count
+            << ",\"extra_ray_count\":" << trace.extra_ray_count
+            << ",\"base_radiance_sum16\":" << trace.base_radiance_sum16
+            << ",\"extra_radiance_sum16\":" << trace.extra_radiance_sum16
+            << ",\"base_zero_rays\":" << trace.base_zero_rays
+            << ",\"extra_zero_rays\":" << trace.extra_zero_rays
+            << ",\"base_output_mean16\":" << trace.base_output_mean16
+            << ",\"target_output_mean16\":" << trace.target_output_mean16
+            << ",\"shared_probe_outputs\":" << trace.shared_probe_outputs
+            << ",\"before_storage_sum16\":" << trace.before_storage_sum16
+            << ",\"after_storage_sum16\":" << trace.after_storage_sum16
+            << ",\"before_storage_mean16\":" << trace.before_storage_mean16
+            << ",\"after_storage_mean16\":" << trace.after_storage_mean16
+            << ",\"observed_storage_sum16\":" << trace.observed_storage_sum16
+            << ",\"observed_storage_outputs\":" << trace.observed_storage_outputs;
+    }
+    out << "}}";
 }
 
 void write_hit(
