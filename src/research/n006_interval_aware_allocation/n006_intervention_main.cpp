@@ -149,6 +149,13 @@ void write_timing(
         << "{\"complete_gi_gpu\":" << t.complete_gpu_us << ','
         << "\"complete_renderer_gpu\":" << t.complete_renderer_gpu_us << ','
         << "\"extra_producer_gpu\":" << extra_producer_gpu_us << ','
+        << "\"primary_visibility_gpu\":" << t.primary_visibility_us << ','
+        << "\"renderer_depth_gpu\":" << t.renderer_depth_us << ','
+        << "\"frame_init_gpu\":" << t.frame_init_us << ','
+        << "\"visibility_reuse_gpu\":" << t.visibility_reuse_us << ','
+        << "\"traversal_maintenance_gpu\":" << t.traversal_maintenance_gpu_us << ','
+        << "\"invalidation_gpu\":" << t.invalidation_us << ','
+        << "\"composite_gpu\":" << t.composite_us << ','
         << "\"producer_gpu\":" << t.producer_us << ','
         << "\"ray_prepare_gpu\":" << t.ray_prepare_us << ','
         << "\"traversal_gpu\":" << t.traversal_us << ','
@@ -314,6 +321,8 @@ int main(int argc, char** argv) {
     bool capture_visible_tiles = false;
     bool capture_probe_multiplicity = false;
     bool capture_gpu_unique_hash = false;
+    // P1e diagnostic only: exact per-target-frame hash flag schedule.
+    std::string hash_frame_pattern;
 
     for (int index = 1; index < argc; ++index) {
         const std::string_view arg = argv[index];
@@ -342,6 +351,9 @@ int main(int argc, char** argv) {
         else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
         else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
         else if (arg == "--capture-gpu-unique-hash") capture_gpu_unique_hash = true;
+        else if (arg == "--hash-frame-pattern" && index + 1 < argc) {
+            hash_frame_pattern = argv[++index];
+        }
         else {
             std::cerr
                 << "usage: phos-n006-candidate --artifact-dir PATH --scene PATH "
@@ -384,6 +396,28 @@ int main(int argc, char** argv) {
             std::any_of(budgets.begin(), budgets.end(), [](auto value) { return value != 0U; })) {
             throw std::runtime_error("N006 current mode must use zero owner budgets");
         }
+        std::vector<std::uint32_t> hash_schedule(
+            target_frames, capture_gpu_unique_hash ? 1U : 0U);
+        if (!hash_frame_pattern.empty()) {
+            if (capture_gpu_unique_hash ||
+                mode != lane_n::N006ExtraMode::Current ||
+                !skip_reference ||
+                target_frames != 12U ||
+                source_warmup_frames != 32U ||
+                scenario_name != "deforming-control" ||
+                !std::all_of(fractions.begin(), fractions.end(),
+                    [](float value) { return value == 1.0F; })) {
+                throw std::runtime_error(
+                    "N006 P1e hash-frame schedule requires 32 warmups, 12 fixed "
+                    "deforming-control target frames, current/no-reference only");
+            }
+            if (hash_frame_pattern != "011001100110") {
+                throw std::runtime_error("N006 P1e hash-frame schedule differs from frozen plan");
+            }
+            for (std::uint32_t index = 0U; index < target_frames; ++index) {
+                hash_schedule[index] = (hash_frame_pattern[index] == '1') ? 1U : 0U;
+            }
+        }
 
         lane_n::I001Options options{};
         options.scene = scene;
@@ -412,7 +446,7 @@ int main(int argc, char** argv) {
                 extra_rays_per_probe,
                 selected_tile_id,
                 selected_cascade,
-                capture_gpu_unique_hash,
+                hash_schedule[index] != 0U,
             };
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
