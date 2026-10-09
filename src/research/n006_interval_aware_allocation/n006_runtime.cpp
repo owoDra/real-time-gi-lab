@@ -336,6 +336,14 @@ N006FrameResult N006Runtime::run_candidate_frame(
         stamp(17);
     }
 
+    if (request.canonical_probe_pilot &&
+        (request.capture_hash_probe || active_extra ||
+         request.mode != N006ExtraMode::Current ||
+         impl.settings.rays_per_probe != 8U ||
+         impl.settings.cascade_count != 4U)) {
+        throw std::runtime_error("N006 P1g canonical pilot requires base current ray stream");
+    }
+
     // Auxiliary P1d hash consumes the immutable base producer stream.
     // GPU time includes the hash clear, barriers, and insert dispatch.
     if (request.capture_hash_probe) {
@@ -363,6 +371,51 @@ N006FrameResult N006Runtime::run_candidate_frame(
         state_->hash_stage->record(
             command, groups(impl.params.limits[2]), 1U, 1U,
             &push, sizeof(push));
+        i001_compute_barrier(impl.context, command);
+        stamp(19);
+    }
+
+    if (request.canonical_probe_pilot) {
+        // Three GPU-only phases: key discovery; compact representative rays
+        // into nonaliasing scratch; copy back and update indirect counters.
+        // All accepted renderer shaders see only the compact work prefix.
+        stamp(16);
+        stamp(17);
+        stamp(18);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->hash_keys.buffer, 0,
+            state_->hash_keys.size, 0U);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->hash_stats.buffer, 0,
+            state_->hash_stats.size, 0U);
+        i001_transfer_to_compute_barrier(impl.context, command);
+        const N006CanonicalPush hash_push{
+            state_->hash_capacity - 1U,
+            128U,
+            impl.settings.rays_per_probe,
+            kN006CanonicalCapacity,
+        };
+        const N006CompactPush compact_push{
+            kN006CanonicalCapacity, impl.settings.rays_per_probe};
+        state_->canonical_index_stage->record(
+            command, groups(impl.params.limits[2]), 1U, 1U,
+            &hash_push, sizeof(hash_push));
+        i001_compute_barrier(impl.context, command);
+        state_->canonical_setup_stage->record(
+            command, 1U, 1U, 1U, &compact_push, sizeof(compact_push));
+        i001_compute_barrier(impl.context, command);
+        state_->canonical_compact_stage->record_indirect(
+            command, state_->canonical_indirect.buffer, 0U,
+            &compact_push, sizeof(compact_push));
+        i001_compute_barrier(impl.context, command);
+        state_->canonical_copy_stage->record_indirect(
+            command, state_->canonical_indirect.buffer, 12U,
+            &compact_push, sizeof(compact_push));
+        i001_compute_barrier(impl.context, command);
+        state_->canonical_apply_stage->record(
+            command, 1U, 1U, 1U, &compact_push, sizeof(compact_push));
+        i001_compute_barrier(impl.context, command);
+        impl.finalize_stage->record(command, 1U);
         i001_compute_barrier(impl.context, command);
         stamp(19);
     }
@@ -459,8 +512,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
     }
 
     std::array<std::uint64_t, 20> timestamps{};
-    const auto timestamp_count = request.capture_hash_probe
-        ? 20U : (active_extra ? 18U : 16U);
+    const auto timestamp_count =
+        (request.capture_hash_probe || request.canonical_probe_pilot)
+            ? 20U : (active_extra ? 18U : 16U);
     if (impl.context.vk().getQueryPoolResults(
             impl.query_pool,
             0,
@@ -502,7 +556,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
     // P1e prospective boundary: hash pass is a disjoint segment 4->19.
     // Its ray-prep segment is 19->5, not the old inclusive 4->5 P1d
     // measurement. Frozen P1d GPU evidence is deliberately unchanged.
-    result.timings.ray_prepare_us = request.capture_hash_probe
+    result.timings.ray_prepare_us =
+        (request.capture_hash_probe || request.canonical_probe_pilot)
         ? timestamp_us(timestamps[19], timestamps[5], period)
         : (active_extra
             ? timestamp_us(timestamps[17], timestamps[5], period)
