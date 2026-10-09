@@ -92,6 +92,7 @@ struct N006OutputEquivalenceAudit {
 // stream; this does NOT deduplicate rays or estimate an attainable speedup.
 struct N006GpuHashProbe {
     bool executed{};
+    bool copyback_executed{true};
     std::uint32_t hash_slots{};
     std::uint32_t unique_keys{};
     std::uint32_t duplicate_outputs{};
@@ -149,7 +150,8 @@ struct N006FrameResult {
 
 class N006Runtime {
 public:
-    explicit N006Runtime(I001Options options, bool p1j_lean_hash = false);
+    explicit N006Runtime(I001Options options, bool p1j_lean_hash = false,
+                         bool p1j_direct_compact = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
