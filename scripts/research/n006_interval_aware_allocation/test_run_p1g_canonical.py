@@ -4,7 +4,7 @@ import copy
 import unittest
 
 from run_p1g_canonical import (
-    BASE_RAYS, CANONICAL_RAYS, CANONICAL_COUNT, validate,
+    BASE_RAYS, CANONICAL_RAYS, CANONICAL_COUNT, validate, image_difference,
 )
 from run_p1d_hash_cost import EXPECTED_KEYS
 
@@ -37,6 +37,9 @@ def sample():
                                "unique_by_cascade": list(EXPECTED_KEYS),
                                "invalid_keys": 0, "failed_inserts": 0,
                                "index_overflows": 0,
+                               "owner_weight_errors": 0,
+                               "weighted_owner_total": 4172 * 4,
+                               "owner_weight_storage_gpu_us": 5.0,
                                "total_canonical_gpu_us": 90.0,
                                "scratch_bytes": 7000000}
                               if canonical else {"executed": False})
@@ -81,6 +84,32 @@ class TestN006P1g(unittest.TestCase):
         data["frames"][1]["extra"]["canonical"]["index_overflows"] = 1
         with self.assertRaisesRegex(ValueError, "canonicalization"):
             validate(data, "AMD Radeon 8060S Graphics (RADV STRIX_HALO)")
+
+    def test_reject_owner_weighting_error(self):
+        data = sample()
+        data["frames"][1]["extra"]["canonical"]["owner_weight_errors"] = 1
+        with self.assertRaisesRegex(ValueError, "canonicalization"):
+            validate(data, "AMD Radeon 8060S Graphics (RADV STRIX_HALO)")
+
+    def test_reject_weighted_owner_count_mismatch(self):
+        data = sample()
+        data["frames"][1]["extra"]["canonical"]["weighted_owner_total"] = 16687
+        with self.assertRaisesRegex(ValueError, "canonicalization"):
+            validate(data, "AMD Radeon 8060S Graphics (RADV STRIX_HALO)")
+
+    def test_image_difference_small_float_ulp(self):
+        class Image:
+            width = 1
+            height = 1
+            pixels = (0.0, 0.0, 0.0)
+        a = Image()
+        b = Image()
+        b.pixels = (1.0e-7, 0.0, 0.0)
+        report = image_difference(a, b)
+        self.assertEqual(report["changed_pixels"], 1)
+        self.assertEqual(report["changed_channels"], 1)
+        self.assertEqual(report["channels_absolute_delta_above_1e-6"], 0)
+        self.assertAlmostEqual(report["rgb_rms_delta"], (1e-14 / 3) ** 0.5)
 
     def test_reject_wrong_baseline(self):
         data = sample()
