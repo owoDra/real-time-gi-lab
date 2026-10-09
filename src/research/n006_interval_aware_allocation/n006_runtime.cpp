@@ -28,6 +28,20 @@ struct N006GpuHashPush {
 };
 static_assert(sizeof(N006GpuHashPush) == 16U);
 
+constexpr std::uint32_t kN006CanonicalCapacity = 8192U;
+struct N006CanonicalPush {
+    std::uint32_t mask{};
+    std::uint32_t max_probe{128U};
+    std::uint32_t rays_per_probe{8U};
+    std::uint32_t capacity{kN006CanonicalCapacity};
+};
+struct N006CompactPush {
+    std::uint32_t capacity{kN006CanonicalCapacity};
+    std::uint32_t rays_per_probe{8U};
+};
+static_assert(sizeof(N006CanonicalPush) == 16U);
+static_assert(sizeof(N006CompactPush) == 8U);
+
 struct N006ExtraPush {
     std::uint32_t mode{};
     std::uint32_t owner_budget{};
@@ -68,8 +82,14 @@ static_assert(sizeof(N006ExtraPush) == 20U);
 
 struct N006Runtime::State {
     B002Buffer extra_stats{}, hash_keys{}, hash_stats{};
+    B002Buffer canonical_reps{}, canonical_work{}, canonical_indirect{};
     std::unique_ptr<I001ComputeStage> extra_stage;
     std::unique_ptr<I001ComputeStage> hash_stage;
+    std::unique_ptr<I001ComputeStage> canonical_index_stage;
+    std::unique_ptr<I001ComputeStage> canonical_setup_stage;
+    std::unique_ptr<I001ComputeStage> canonical_compact_stage;
+    std::unique_ptr<I001ComputeStage> canonical_copy_stage;
+    std::unique_ptr<I001ComputeStage> canonical_apply_stage;
     std::uint32_t hash_capacity{};
 };
 
@@ -118,12 +138,79 @@ N006Runtime::N006Runtime(I001Options options)
         shader_path(PHOS_GI_N006_SHADER_DIR, "n006_probe_unique_hash.spv"),
         hash_bindings,
         sizeof(N006GpuHashPush));
+
+    // Fixed-capacity, fail-closed P1g prototype. A separate scratch stream
+    // avoids modifying the original work list while it is being compacted.
+    state_->canonical_reps = impl.context.create_device_buffer(
+        VkDeviceSize(kN006CanonicalCapacity) * sizeof(std::uint32_t),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    state_->canonical_work = impl.context.create_device_buffer(
+        VkDeviceSize(kN006CanonicalCapacity) * impl.settings.rays_per_probe *
+            sizeof(LaneAWorkItemV1),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    state_->canonical_indirect = impl.context.create_device_buffer(
+        6U * sizeof(std::uint32_t),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT);
+    const std::array<I001Binding, 5> index_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
+        {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+        {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_reps},
+    }};
+    state_->canonical_index_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_index.spv"),
+        index_bindings, sizeof(N006CanonicalPush));
+    const std::array<I001Binding, 2> setup_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_indirect},
+    }};
+    state_->canonical_setup_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_setup.spv"),
+        setup_bindings, sizeof(N006CompactPush));
+    const std::array<I001Binding, 4> compact_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_reps},
+        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+        {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+    }};
+    state_->canonical_compact_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_compact.spv"),
+        compact_bindings, sizeof(N006CompactPush));
+    const std::array<I001Binding, 3> copy_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+    }};
+    state_->canonical_copy_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_copy.spv"),
+        copy_bindings, sizeof(N006CompactPush));
+    const std::array<I001Binding, 2> apply_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+    }};
+    state_->canonical_apply_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_apply.spv"),
+        apply_bindings, sizeof(N006CompactPush));
 }
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
     state_->extra_stage.reset();
     state_->hash_stage.reset();
+    state_->canonical_index_stage.reset();
+    state_->canonical_setup_stage.reset();
+    state_->canonical_compact_stage.reset();
+    state_->canonical_copy_stage.reset();
+    state_->canonical_apply_stage.reset();
+    runtime_.impl_->context.destroy_buffer(state_->canonical_indirect);
+    runtime_.impl_->context.destroy_buffer(state_->canonical_work);
+    runtime_.impl_->context.destroy_buffer(state_->canonical_reps);
     runtime_.impl_->context.destroy_buffer(state_->hash_stats);
     runtime_.impl_->context.destroy_buffer(state_->hash_keys);
     runtime_.impl_->context.destroy_buffer(state_->extra_stats);
