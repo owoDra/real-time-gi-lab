@@ -92,7 +92,6 @@ struct N006OutputEquivalenceAudit {
 // stream; this does NOT deduplicate rays or estimate an attainable speedup.
 struct N006GpuHashProbe {
     bool executed{};
-    bool copyback_executed{true};
     std::uint32_t hash_slots{};
     std::uint32_t unique_keys{};
     std::uint32_t duplicate_outputs{};
@@ -107,6 +106,7 @@ struct N006GpuHashProbe {
 
 struct N006CanonicalStats {
     bool executed{};
+    bool copyback_executed{true};
     std::uint32_t hash_slots{};
     std::uint32_t original_work_items{};
     std::uint32_t original_outputs{};
