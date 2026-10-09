@@ -955,6 +955,150 @@ N006FrameResult N006Runtime::run_topology_churn_frame(
     return out;
 }
 
+N006OutputEquivalenceAudit N006Runtime::probe_output_equivalence_audit() {
+    auto& impl = *runtime_.impl_;
+    if (!impl.have_last) {
+        throw std::runtime_error("N006 P1f requires a completed current frame");
+    }
+    const auto cascades = impl.settings.cascade_count;
+    const auto rays = impl.settings.rays_per_probe;
+    const auto work_count = impl.last.stats.work_items;
+    const auto outputs = impl.last.stats.outputs;
+    const auto owners = impl.last.stats.visible_owners;
+    if (cascades != 4U || rays != 8U ||
+        std::uint64_t(owners) * cascades != outputs ||
+        std::uint64_t(outputs) * rays != work_count) {
+        throw std::runtime_error("N006 P1f unexpected base-only stream cardinality");
+    }
+    std::vector<LaneAWorkItemV1> work(work_count);
+    std::vector<std::array<std::uint32_t, 2>> merged(outputs);
+    std::vector<HashSlotCpu> slots(impl.storage_capacity);
+    impl.context.download_device_buffer(
+        impl.work, work.data(), work.size() * sizeof(work[0]));
+    impl.context.download_device_buffer(
+        impl.accum, merged.data(), merged.size() * sizeof(merged[0]));
+    impl.context.download_device_buffer(
+        impl.storage_slots, slots.data(), slots.size() * sizeof(slots[0]));
+
+    using Key = std::array<std::int32_t, 4>;
+    struct KeyData {
+        std::uint32_t first_sum{}, first_count{}, first_mean{}, owner_count{};
+        std::uint32_t divergent_outputs{};
+        bool divergent_means{};
+        std::uint64_t sum_mean16{};
+        std::uint32_t storage_matches{};
+    };
+    std::vector<std::map<Key, KeyData>> per_cascade(cascades);
+    std::vector<bool> visited_output(outputs, false);
+    N006OutputEquivalenceAudit audit{};
+    audit.base_work_items = work_count;
+    audit.owner_outputs = outputs;
+    audit.visible_owners = owners;
+    audit.rays_per_probe = rays;
+    audit.cascade_count = cascades;
+    audit.cascades.resize(cascades);
+    for (std::uint32_t cascade = 0; cascade < cascades; ++cascade) {
+        audit.cascades[cascade].cascade = cascade;
+    }
+
+    // Each owner emits a four-cascade, eight-ray base block. Only ray zero
+    // is inspected because merged sums/counts belong to its output_id.
+    for (std::uint32_t block_base = 0; block_base < work_count;
+         block_base += cascades * rays) {
+        for (std::uint32_t cascade = 0; cascade < cascades; ++cascade) {
+            const auto& item = work[block_base + cascade * rays];
+            if (item.cascade != cascade || item.ray_index != 0U ||
+                item.output_id >= outputs ||
+                visited_output[item.output_id]) {
+                throw std::runtime_error("N006 P1f output identity invalid");
+            }
+            visited_output[item.output_id] = true;
+            const auto [sum, count] = merged[item.output_id];
+            if (count == 0U || count != rays ||
+                std::uint64_t(sum) > std::uint64_t(count) * 65535U) {
+                ++audit.cascades[cascade].zero_sample_outputs;
+                throw std::runtime_error("N006 P1f invalid merged radiance samples");
+            }
+            // Exactly matches the accepted integer accumulation / rounding.
+            const auto mean = (sum + count / 2U) / count;
+            const Key key{item.probe_x, item.probe_y, item.probe_z,
+                          static_cast<std::int32_t>(cascade)};
+            auto [it, fresh] = per_cascade[cascade].try_emplace(
+                key, KeyData{sum, count, mean, 0U, 0U, false, 0U, 0U});
+            auto& group = it->second;
+            if (!fresh) {
+                if (sum != group.first_sum || count != group.first_count) {
+                    ++group.divergent_outputs;
+                }
+                if (mean != group.first_mean) {
+                    group.divergent_means = true;
+                }
+            }
+            ++group.owner_count;
+            group.sum_mean16 += mean;
+            ++audit.cascades[cascade].owner_outputs;
+        }
+    }
+    if (std::any_of(visited_output.begin(), visited_output.end(),
+                    [](bool found) { return !found; })) {
+        throw std::runtime_error("N006 P1f not every owner output was visited");
+    }
+
+    // The production storage shader must receive the exact per-owner means:
+    // matching one canonical result cannot change the mean if all owners are
+    // equal. Verify this against the GPU's actual frame-tagged hash slots.
+    for (const auto& slot : slots) {
+        if (slot.data[3] != impl.frame_id || slot.data[2] == 0U) {
+            continue;
+        }
+        if (slot.key[3] < 0 || slot.key[3] >= static_cast<int>(cascades)) {
+            throw std::runtime_error("N006 P1f invalid live storage cascade");
+        }
+        const auto cascade = static_cast<std::uint32_t>(slot.key[3]);
+        const Key key{slot.key[0], slot.key[1], slot.key[2], slot.key[3]};
+        const auto it = per_cascade[cascade].find(key);
+        if (it == per_cascade[cascade].end()) {
+            // Spatial slots created in a previous frame must not be counted as
+            // if they were current; a live unknown key violates this contract.
+            throw std::runtime_error("N006 P1f unexpected live GPU storage key");
+        }
+        auto& group = it->second;
+        ++group.storage_matches;
+        if (slot.data[1] != group.sum_mean16 ||
+            slot.data[2] != group.owner_count) {
+            ++audit.cascades[cascade].missing_or_bad_gpu_storage_keys;
+        }
+    }
+
+    for (std::uint32_t cascade = 0; cascade < cascades; ++cascade) {
+        auto& row = audit.cascades[cascade];
+        row.unique_probe_keys =
+            static_cast<std::uint32_t>(per_cascade[cascade].size());
+        for (const auto& [key, group] : per_cascade[cascade]) {
+            (void)key;
+            if (group.owner_count > 1U) {
+                ++row.shared_keys;
+            }
+            if (group.divergent_outputs > 0U) {
+                ++row.divergent_merged_keys;
+                row.divergent_owner_outputs += group.divergent_outputs;
+            }
+            if (group.divergent_means) {
+                ++row.divergent_rounded_mean_keys;
+            }
+            if (group.storage_matches != 1U) {
+                ++row.missing_or_bad_gpu_storage_keys;
+            }
+        }
+    }
+    audit.all_gpu_storage_slots_reconstructed =
+        std::all_of(audit.cascades.begin(), audit.cascades.end(),
+                    [](const auto& row) {
+                        return row.missing_or_bad_gpu_storage_keys == 0U;
+                    });
+    return audit;
+}
+
 N006ProbeMultiplicityAudit N006Runtime::probe_multiplicity_audit() {
     auto& impl = *runtime_.impl_;
     if (!impl.have_last) {
