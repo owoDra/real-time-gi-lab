@@ -525,10 +525,15 @@ int main(int argc, char** argv) {
             for (std::uint32_t warm = 0; warm < target_state_warmup_frames; ++warm) {
                 const auto warm_frame = runtime.run_frame(true, current_request);
                 const auto warm_hits = runtime.n004_hit_diagnostics();
-                if (!frame_correct(warm_frame, warm_hits)) {
+                if (!frame_correct(warm_frame, warm_hits) ||
+                    warm_frame.frame.stats.visible_owners != 4172U ||
+                    warm_frame.frame.stats.work_items != 133504U ||
+                    warm_frame.frame.stats.outputs != 16688U ||
+                    (warm != 0U &&
+                     warm_frame.frame.timings.traversal_maintenance_gpu_us != 0.0)) {
                     target_warmup_correct = false;
                     throw std::runtime_error(
-                        "N006 P1h target-state warmup frame invalid");
+                        "N006 P1h target-state warmup frame/count/maintenance invalid");
                 }
                 last_target_warmup_maintenance_us =
                     warm_frame.frame.timings.traversal_maintenance_gpu_us;
