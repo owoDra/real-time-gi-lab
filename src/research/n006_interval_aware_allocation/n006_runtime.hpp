@@ -63,6 +63,30 @@ struct N006ProbeMultiplicityAudit {
     std::vector<N006ProbeMultiplicityRow> cascades;
 };
 
+// P1f forensic data from a completed, unchanged current-mode GPU frame.
+// Divergent outputs are observed, never silently canonicalized.
+struct N006OutputEquivalenceRow {
+    std::uint32_t cascade{};
+    std::uint32_t unique_probe_keys{};
+    std::uint32_t owner_outputs{};
+    std::uint32_t shared_keys{};
+    std::uint32_t divergent_merged_keys{};
+    std::uint32_t divergent_owner_outputs{};
+    std::uint32_t divergent_rounded_mean_keys{};
+    std::uint32_t zero_sample_outputs{};
+    std::uint32_t missing_or_bad_gpu_storage_keys{};
+};
+
+struct N006OutputEquivalenceAudit {
+    std::uint32_t base_work_items{};
+    std::uint32_t owner_outputs{};
+    std::uint32_t visible_owners{};
+    std::uint32_t rays_per_probe{};
+    std::uint32_t cascade_count{};
+    bool all_gpu_storage_slots_reconstructed{};
+    std::vector<N006OutputEquivalenceRow> cascades;
+};
+
 // Measured overhead of an auxiliary GPU hash on the unmodified base output
 // stream; this does NOT deduplicate rays or estimate an attainable speedup.
 struct N006GpuHashProbe {
@@ -118,6 +142,7 @@ public:
 
     [[nodiscard]] std::vector<std::uint32_t> visible_tile_ids();
     [[nodiscard]] N006ProbeMultiplicityAudit probe_multiplicity_audit();
+    [[nodiscard]] N006OutputEquivalenceAudit probe_output_equivalence_audit();
     [[nodiscard]] I001N004HitDiagnostics n004_hit_diagnostics();
     [[nodiscard]] I001RendererReadback renderer_readback();
 
