@@ -23,3 +23,18 @@ The user-supplied summary has `failures[0]={case_index:5,variant:"lane-e-final-s
 Inspect original retained `out/research/n006-interval-aware-allocation/p1i-cross-backend/20261009T080747Z/case-05-lane-e-final-software-static/stderr.log` (and `stdout.log` if stderr is uninformative). User can send the contents or upload the log; do not guess the exception from `renderer exit 1`. Once grounded, patch only the actual failure, write a regression test, then prospectively rerun a frozen, properly documented test preserving previous failures. Do not waive bit-exact PFM, hash/storage validation or silently skip software variants.
 
 No N001/N004/N005 edits, no GitHub Actions.
+
+
+## Root cause resolved after retained stderr was supplied
+
+The user retrieved the **actual failure line**, not merely the P1i summary:
+
+```text
+N006 candidate failure: N001 renderer bring-up requires the accepted Lane-E-final HWRT primary path
+```
+
+Source-level confirmation: the included accepted `n001_runtime.cpp` constructor checked `options.variant == LaneEFinalHwrt` before allocating renderer stages, and the primary pass and direct-light composite used HWRT `accelerationStructureEXT` descriptors. Therefore the P1i software case did not test actual software candidate image correctness: it failed in the inherited renderer bring-up contract. Merely removing the constructor guard would dereference the absent HWRT acceleration structure.
+
+**Scoped repair:** add a compile-time N006-only guard `PHOS_GI_N006_SOFTWARE_PRIMARY` to the included accepted N001 renderer source. Original N001/N004/N005 build targets are unmodified in behavior. On `LaneEFinalSoftware`, N006 allocates an independent world-space binary software BVH for camera primary rays and shadow ray queries, reuses existing accepted N003 `n003_primary_software.spv` and `n003_composite_software.spv` (already no ray-query extension), and refreshes that BVH on target geometry updates, including world-space rigid instance translation. The Lane-E software GI traversal continues to use its own E003 quantized instance data and is not silently changed to HWRT. Software primary additional memory is included in the N006 renderer memory model; GPU BVH uploads on target transition are added to dynamic-maintenance time.
+
+This is a *new implementation requiring local compile/GPU validation*, not accepted correctness evidence. The original failed P1i run stays `invalid-retained`; a rerun should produce a **new** run directory/HEAD and must still pass both PFM SHA and all GPU count/storage/error gates. If image parity fails, retain exact original and candidate files and investigate software traversal, not weaken acceptance thresholds.
