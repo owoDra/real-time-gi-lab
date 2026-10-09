@@ -333,6 +333,7 @@ int main(int argc, char** argv) {
     fs::path artifact_dir;
     std::string scenario_name = "static";
     std::string mode_text = "current";
+    std::string variant_name = "lane-e-final-hwrt";
     std::string motion_fraction_text;
     std::string owner_budget_text;
     std::uint32_t source_warmup_frames = 32U;
@@ -347,6 +348,7 @@ int main(int argc, char** argv) {
     bool capture_probe_multiplicity = false;
     bool capture_probe_equivalence = false;
     bool canonical_probe_pilot = false;
+    bool canonical_matrix_case = false;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
@@ -382,6 +384,8 @@ int main(int argc, char** argv) {
         else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
         else if (arg == "--capture-probe-equivalence") capture_probe_equivalence = true;
         else if (arg == "--canonical-probe-pilot") canonical_probe_pilot = true;
+        else if (arg == "--canonical-matrix-case") canonical_matrix_case = true;
+        else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
         else if (arg == "--canonical-frame-pattern" && index + 1 < argc) {
             canonical_frame_pattern = argv[++index];
         } else if (arg == "--target-state-warmup-frames" && index + 1 < argc) {
@@ -434,6 +438,34 @@ int main(int argc, char** argv) {
             std::any_of(budgets.begin(), budgets.end(), [](auto value) { return value != 0U; })) {
             throw std::runtime_error("N006 current mode must use zero owner budgets");
         }
+        if (canonical_matrix_case) {
+            const bool accepted_variant =
+                variant_name == "lane-e-final-hwrt" ||
+                variant_name == "lane-e-final-software";
+            const bool accepted_scenario =
+                scenario_name == "static" ||
+                scenario_name == "camera-motion" ||
+                scenario_name == "light-motion" ||
+                scenario_name == "moving-rigid" ||
+                scenario_name == "deforming-control";
+            if (!canonical_probe_pilot || !accepted_variant || !accepted_scenario ||
+                topology || !skip_reference ||
+                !hash_frame_pattern.empty() || !canonical_frame_pattern.empty() ||
+                target_state_warmup_frames != 0U ||
+                capture_gpu_unique_hash || capture_probe_equivalence ||
+                capture_probe_multiplicity || capture_visible_tiles ||
+                mode != lane_n::N006ExtraMode::Current ||
+                source_warmup_frames != 32U || target_frames != 2U ||
+                !std::all_of(fractions.begin(), fractions.end(),
+                    [](float value) { return value == 1.0F; })) {
+                throw std::runtime_error(
+                    "N006 P1i matrix supports only fixed two-frame current/canonical "
+                    "LaneEFinal HWRT/software five-scenario protocol");
+            }
+        } else if (variant_name != "lane-e-final-hwrt") {
+            throw std::runtime_error(
+                "N006 variant override is reserved for P1i matrix study");
+        }
         if (canonical_probe_pilot &&
             (mode != lane_n::N006ExtraMode::Current ||
              !skip_reference ||
@@ -443,7 +475,7 @@ int main(int argc, char** argv) {
              !hash_frame_pattern.empty() ||
              !canonical_frame_pattern.empty() ||
              target_state_warmup_frames != 0U ||
-             scenario_name != "deforming-control" ||
+             (scenario_name != "deforming-control" && !canonical_matrix_case) ||
              source_warmup_frames != 32U ||
              target_frames != 2U ||
              !std::all_of(fractions.begin(), fractions.end(),
@@ -501,7 +533,7 @@ int main(int argc, char** argv) {
 
         lane_n::I001Options options{};
         options.scene = scene;
-        options.variant = lane_n::I001Variant::LaneEFinalHwrt;
+        options.variant = lane_n::i001_parse_variant(variant_name);
         options.scenario = lane_n::i001_parse_scenario(scenario_name);
         options.validation = true;
         lane_n::N006Runtime runtime(options);
@@ -721,6 +753,7 @@ int main(int argc, char** argv) {
             << "  \"mode\":\"" << mode_name(mode) << "\",\n"
             << "  \"scenario\":\"" << scenario_name << "\",\n"
             << "  \"topology\":" << (topology ? "true" : "false") << ",\n"
+            << "  \"variant\":\"" << variant_name << "\",\n"
             << "  \"source_warmup_frames\":" << source_warmup_frames << ",\n"
             << "  \"target_state_warmup\":{\"frames\":"
             << target_state_warmup_frames
