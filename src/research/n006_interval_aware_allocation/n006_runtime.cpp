@@ -491,6 +491,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
         stamp(19);
     }
 
+    const bool direct_canonical =
+        request.canonical_probe_pilot && state_->direct_compact;
     if (request.canonical_probe_pilot) {
         // Three GPU-only phases: key discovery; compact representative rays
         // into nonaliasing scratch; copy back and update indirect counters.
@@ -526,10 +528,12 @@ N006FrameResult N006Runtime::run_candidate_frame(
             command, state_->canonical_indirect.buffer, 0U,
             &compact_push, sizeof(compact_push));
         i001_compute_barrier(impl.context, command);
-        state_->canonical_copy_stage->record_indirect(
-            command, state_->canonical_indirect.buffer, 12U,
-            &compact_push, sizeof(compact_push));
-        i001_compute_barrier(impl.context, command);
+        if (!direct_canonical) {
+            state_->canonical_copy_stage->record_indirect(
+                command, state_->canonical_indirect.buffer, 12U,
+                &compact_push, sizeof(compact_push));
+            i001_compute_barrier(impl.context, command);
+        }
         state_->canonical_apply_stage->record(
             command, 1U, 1U, 1U, &compact_push, sizeof(compact_push));
         i001_compute_barrier(impl.context, command);
@@ -538,7 +542,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
         stamp(19);
     }
 
-    impl.ray_stage->record_indirect(command, impl.indirect.buffer, 0);
+    (direct_canonical ? state_->direct_ray_stage.get() : impl.ray_stage.get())
+        ->record_indirect(command, impl.indirect.buffer, 0);
     i001_compute_barrier(impl.context, command);
     stamp(5);
 
@@ -549,7 +554,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
     i001_compute_barrier(impl.context, command);
     stamp(6);
 
-    impl.radiance_stage->record_indirect(command, impl.indirect.buffer, 0);
+    (direct_canonical ? state_->direct_radiance_stage.get()
+                      : impl.radiance_stage.get())
+        ->record_indirect(command, impl.indirect.buffer, 0);
     i001_compute_barrier(impl.context, command);
     stamp(7);
 
@@ -559,7 +566,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
 
     const StoragePush storage_reserve_push{
         impl.storage_capacity - 1U, kHashMaxProbe, impl.frame_id, 0U};
-    impl.storage_update_stage->record_indirect(
+    (direct_canonical ? state_->direct_storage_update_stage.get()
+                      : impl.storage_update_stage.get())->record_indirect(
         command,
         impl.indirect.buffer,
         0,
@@ -569,7 +577,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
 
     const StoragePush storage_accumulate_push{
         impl.storage_capacity - 1U, kHashMaxProbe, impl.frame_id, 1U};
-    impl.storage_update_stage->record_indirect(
+    (direct_canonical ? state_->direct_storage_update_stage.get()
+                      : impl.storage_update_stage.get())->record_indirect(
         command,
         impl.indirect.buffer,
         0,
@@ -584,7 +593,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
             kHashMaxProbe,
             impl.frame_id,
         };
-        state_->canonical_weight_stage->record(
+        (direct_canonical ? state_->direct_weight_stage.get()
+                          : state_->canonical_weight_stage.get())->record(
             command, groups(impl.params.limits[2]), 1U, 1U,
             &weight, sizeof(weight));
         i001_compute_barrier(impl.context, command);
@@ -606,7 +616,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
 
     const StoragePush storage_resolve_push{
         impl.storage_capacity - 1U, kHashMaxProbe, impl.frame_id, 0U};
-    impl.resolve_stage->record_indirect(
+    (direct_canonical ? state_->direct_resolve_stage.get()
+                      : impl.resolve_stage.get())->record_indirect(
         command,
         impl.indirect.buffer,
         0,
@@ -828,6 +839,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
             state_->hash_stats, counters.data(), sizeof(counters));
         auto& data = extra.canonical;
         data.executed = true;
+        data.copyback_executed = !direct_canonical;
         data.hash_slots = state_->hash_capacity;
         data.canonical_outputs = counters[0];
         data.duplicates = counters[1];
@@ -875,7 +887,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
     std::vector<LaneAWorkItemV1> work_items(total_work);
     if (total_work != 0U) {
         impl.context.download_device_buffer(
-            impl.work,
+            direct_canonical ? state_->canonical_work : impl.work,
             work_items.data(),
             work_items.size() * sizeof(LaneAWorkItemV1));
     }
