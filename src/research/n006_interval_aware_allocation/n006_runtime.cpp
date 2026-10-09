@@ -690,6 +690,48 @@ N006FrameResult N006Runtime::run_candidate_frame(
         }
     }
 
+    if (request.canonical_probe_pilot) {
+        std::array<std::uint32_t, 16> counters{};
+        impl.context.download_device_buffer(
+            state_->hash_stats, counters.data(), sizeof(counters));
+        auto& data = extra.canonical;
+        data.executed = true;
+        data.canonical_outputs = counters[0];
+        data.duplicates = counters[1];
+        data.invalid_keys = counters[2];
+        data.failed_inserts = counters[3];
+        data.collision_steps = counters[4];
+        data.index_overflows = counters[5];
+        data.original_outputs = counters[0] + counters[1];
+        data.original_work_items =
+            data.original_outputs * impl.settings.rays_per_probe;
+        data.canonical_work_items = data.canonical_outputs *
+            impl.settings.rays_per_probe;
+        data.total_canonical_gpu_us =
+            timestamp_us(timestamps[4], timestamps[19], period);
+        data.scratch_bytes = state_->hash_keys.size + state_->hash_stats.size +
+            state_->canonical_reps.size + state_->canonical_work.size +
+            state_->canonical_indirect.size;
+        for (std::uint32_t cascade = 0U; cascade < 4U; ++cascade) {
+            data.unique_by_cascade[cascade] = counters[6U + cascade];
+        }
+        if (data.invalid_keys != 0U || data.failed_inserts != 0U ||
+            data.index_overflows != 0U ||
+            data.canonical_outputs > kN006CanonicalCapacity ||
+            data.original_outputs != result.stats.visible_owners *
+                impl.settings.cascade_count ||
+            data.canonical_outputs != result.stats.outputs ||
+            data.canonical_work_items != result.stats.work_items ||
+            std::uint64_t(data.unique_by_cascade[0]) +
+            data.unique_by_cascade[1] + data.unique_by_cascade[2] +
+            data.unique_by_cascade[3] != data.canonical_outputs ||
+            result.stats.storage_failures != 0U ||
+            result.stats.overflow != 0U) {
+            throw std::runtime_error(
+                "N006 P1g canonical GPU counts/keys/capacity invalid");
+        }
+    }
+
     const auto total_work = result.stats.work_items;
     std::vector<LaneAWorkItemV1> work_items(total_work);
     if (total_work != 0U) {
@@ -707,9 +749,13 @@ N006FrameResult N006Runtime::run_candidate_frame(
 
     const bool base_count_valid =
         extra.base_traced_rays <= total_work &&
-        extra.base_traced_rays % (
-            impl.settings.cascade_count * impl.settings.rays_per_probe) == 0U;
-    if (base_count_valid) {
+        (request.canonical_probe_pilot
+            ? (total_work == result.stats.outputs *
+                impl.settings.rays_per_probe)
+            : (extra.base_traced_rays % (
+                impl.settings.cascade_count *
+                impl.settings.rays_per_probe) == 0U));
+    if (base_count_valid && !request.canonical_probe_pilot) {
         lane_a::A001Readback base_readback{};
         base_readback.counters = {
             extra.base_traced_rays,
@@ -733,6 +779,49 @@ N006FrameResult N006Runtime::run_candidate_frame(
             base_readback);
         extra.base_prefix_correct =
             analysis.visibility_correct && analysis.producer_correct;
+    }
+
+    if (base_count_valid && request.canonical_probe_pilot) {
+        using Key = std::array<std::int32_t, 4>;
+        std::map<Key, std::uint32_t> unique;
+        bool valid = result.stats.work_items ==
+            result.stats.outputs * impl.settings.rays_per_probe;
+        const auto rays = impl.settings.rays_per_probe;
+        for (std::uint32_t output = 0U; valid &&
+             output < result.stats.outputs; ++output) {
+            const auto& representative = work_items[output * rays];
+            const Key key{
+                representative.probe_x, representative.probe_y,
+                representative.probe_z,
+                static_cast<std::int32_t>(representative.cascade)};
+            if (representative.cascade >= 4U ||
+                !unique.emplace(key, output).second ||
+                representative.tile_id >= tile_owners.size() ||
+                tile_owners[representative.tile_id] != representative.surface_id) {
+                valid = false;
+                break;
+            }
+            for (std::uint32_t ray = 0U; ray < rays; ++ray) {
+                const auto& item = work_items[output * rays + ray];
+                if (item.ray_index != ray ||
+                    item.output_id != output ||
+                    item.probe_x != key[0] ||
+                    item.probe_y != key[1] ||
+                    item.probe_z != key[2] ||
+                    item.cascade != representative.cascade ||
+                    item.surface_id != representative.surface_id ||
+                    item.tile_id != representative.tile_id ||
+                    !n006_unit_direction(item) ||
+                    ((item.dir_x > 0.0F) != ((ray & 1U) != 0U)) ||
+                    ((item.dir_y > 0.0F) != ((ray & 2U) != 0U)) ||
+                    ((item.dir_z > 0.0F) != ((ray & 4U) != 0U))) {
+                    valid = false;
+                    break;
+                }
+            }
+        }
+        extra.base_prefix_correct = valid &&
+            unique.size() == result.stats.outputs;
     }
 
     bool extra_ok =
