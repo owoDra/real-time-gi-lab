@@ -24,6 +24,7 @@ struct N006ExtraRequest {
     std::uint32_t selected_cascade{0xffffffffU};
     bool capture_hash_probe{};
     bool canonical_probe_pilot{};
+    bool direct_compact_work{}; // P1k per-frame three-arm selector; requires opt-in stages.
 };
 
 // Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
