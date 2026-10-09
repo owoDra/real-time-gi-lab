@@ -263,9 +263,29 @@ add_compute_shader(
 add_compute_shader(
   n006_probe_unique_hash
   shaders/research/n006_interval_aware_allocation/n006_probe_unique_hash.comp.glsl)
+add_compute_shader(
+  n006_canonical_index
+  shaders/research/n006_interval_aware_allocation/n006_canonical_index.comp.glsl)
+add_compute_shader(
+  n006_canonical_setup
+  shaders/research/n006_interval_aware_allocation/n006_canonical_setup.comp.glsl)
+add_compute_shader(
+  n006_canonical_compact
+  shaders/research/n006_interval_aware_allocation/n006_canonical_compact.comp.glsl)
+add_compute_shader(
+  n006_canonical_copy
+  shaders/research/n006_interval_aware_allocation/n006_canonical_copy.comp.glsl)
+add_compute_shader(
+  n006_canonical_apply
+  shaders/research/n006_interval_aware_allocation/n006_canonical_apply.comp.glsl)
 add_custom_target(phos-n006-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_extra_producer.spv"
-  "${CMAKE_BINARY_DIR}/shaders/n006_probe_unique_hash.spv")
+  "${CMAKE_BINARY_DIR}/shaders/n006_probe_unique_hash.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_canonical_index.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_canonical_setup.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_canonical_compact.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_canonical_copy.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_canonical_apply.spv")
 add_executable(phos-n006-intervention
   ${PROJECT_SOURCE_DIR}/src/research/n006_interval_aware_allocation/n006_intervention_main.cpp
   ${PROJECT_SOURCE_DIR}/src/research/n006_interval_aware_allocation/n006_runtime.cpp
