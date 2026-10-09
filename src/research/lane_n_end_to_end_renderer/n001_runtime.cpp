@@ -734,6 +734,13 @@ struct I001Runtime::Impl {
     std::unique_ptr<HierarchicalStrataBrick> deforming_local_hierarchy;
     std::vector<std::uint32_t> deforming_local_indices;
     std::unique_ptr<GpuSoftwareBvhData> software_cpu;
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+    // N006-only primary/shadow software BVH. The Lane-E candidate traverser
+    // retains its original independent instance/quantized acceleration data.
+    std::unique_ptr<GpuSoftwareBvhData> n006_primary_cpu;
+    B002Buffer n006_primary_triangles{}, n006_primary_nodes{}, n006_primary_order{};
+    bool n006_primary_target{};
+#endif
     std::unique_ptr<HierarchicalStrataBrick> hierarchy_cpu;
     lane_b::B003QuantizedMicroPayload quant_payload;
     std::unique_ptr<B002HwrtTraversal> hwrt;
@@ -771,7 +778,15 @@ struct I001Runtime::Impl {
             fail("I001 A001/B002 scene primitive identity diverged");
         }
         apply_scene_stress(options.scenario, a_scene, b_scene);
+        // Accepted N001/N004/N005 renderer remains HWRT-only. Only the
+        // N006 integration target may opt into the already-accepted N003
+        // software primary and direct-light shadow shaders.
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+        if (options.variant != I001Variant::LaneEFinalHwrt &&
+            options.variant != I001Variant::LaneEFinalSoftware) {
+#else
         if (options.variant != I001Variant::LaneEFinalHwrt) {
+#endif
             fail("N001 renderer bring-up requires the accepted Lane-E-final HWRT primary path");
         }
 
@@ -904,6 +919,11 @@ struct I001Runtime::Impl {
             VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
 
         prepare_candidate_traversal();
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+        if (uses_lane_e_final_software(options.variant)) {
+            n006_prepare_software_primary();
+        }
+#endif
         create_stages();
         create_command_resources();
         calculate_memory();
@@ -932,6 +952,9 @@ struct I001Runtime::Impl {
         if (command_pool != VK_NULL_HANDLE) context.vk().destroyCommandPool(command_pool, nullptr);
 
         for (auto* buffer : {
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+                 &n006_primary_order, &n006_primary_nodes, &n006_primary_triangles,
+#endif
                  &storage_stats, &storage_slots, &uniform, &image, &primary_hits,
                  &resolved, &accum, &contributions, &hits, &rays, &indirect, &work, &counters,
                  &owners, &depth, &surfaces, &instance_table, &instance_hash,
@@ -940,6 +963,88 @@ struct I001Runtime::Impl {
             context.destroy_buffer(*buffer);
         }
     }
+
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+    // N003 software primary/composite expect a binary BVH with root 0 and
+    // world-space triangle indices. Reserve the greater of source and frozen
+    // target geometry BVH capacities, so descriptor buffers never move.
+    void n006_prepare_software_primary() {
+        n006_primary_cpu = std::make_unique<GpuSoftwareBvhData>(b_scene.triangles);
+        if (n006_primary_cpu->root() != 0U) {
+            fail("N006 software primary binary BVH root must be zero");
+        }
+        const auto nodes = n006_primary_cpu->gpu_nodes();
+        const auto& ordered = n006_primary_cpu->ordered_primitives();
+        VkDeviceSize nodes_bytes = nodes.size() * sizeof(lane_b::GpuBvhNode);
+        VkDeviceSize order_bytes = ordered.size() * sizeof(std::uint32_t);
+        if (options.scenario == I001Scenario::MovingRigid ||
+            options.scenario == I001Scenario::DeformingControl) {
+            const auto target = options.scenario == I001Scenario::MovingRigid
+                ? translated_geometry(b_scene.triangles, moving.primitives, moving.delta_x)
+                : deformed_geometry(b_scene.triangles, moving.primitives, moving.delta_x);
+            GpuSoftwareBvhData target_bvh(target);
+            nodes_bytes = std::max(
+                nodes_bytes, VkDeviceSize(target_bvh.gpu_nodes().size() *
+                                          sizeof(lane_b::GpuBvhNode)));
+            order_bytes = std::max(
+                order_bytes, VkDeviceSize(target_bvh.ordered_primitives().size() *
+                                          sizeof(std::uint32_t)));
+        }
+        const auto triangles = gpu_triangles(b_scene);
+        n006_primary_triangles = context.upload_device_buffer(
+            triangles.data(), triangles.size() * sizeof(GpuTriangle),
+            VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        n006_primary_nodes = context.create_device_buffer(
+            nodes_bytes, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        n006_primary_order = context.create_device_buffer(
+            order_bytes, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        const lane_b::B002BufferUpdate node_update{
+            0U, nodes.data(), VkDeviceSize(nodes.size() * sizeof(lane_b::GpuBvhNode))};
+        const lane_b::B002BufferUpdate order_update{
+            0U, ordered.data(), VkDeviceSize(ordered.size() * sizeof(std::uint32_t))};
+        context.update_device_buffer(n006_primary_nodes,
+            std::span<const lane_b::B002BufferUpdate>(&node_update, 1));
+        context.update_device_buffer(n006_primary_order,
+            std::span<const lane_b::B002BufferUpdate>(&order_update, 1));
+    }
+
+    // N006 calls this only after Lane-E software updates b_scene into the
+    // target geometry. All descriptor-bound buffers retain fixed addresses.
+    [[nodiscard]] double n006_refresh_software_primary() {
+        if (!uses_lane_e_final_software(options.variant) ||
+            !geometry_is_target || n006_primary_target) return 0.0;
+        n006_primary_cpu->rebuild(b_scene.triangles);
+        if (n006_primary_cpu->root() != 0U) {
+            fail("N006 software primary target BVH root must be zero");
+        }
+        const auto nodes = n006_primary_cpu->gpu_nodes();
+        const auto& ordered = n006_primary_cpu->ordered_primitives();
+        const auto triangles = gpu_triangles(b_scene);
+        const VkDeviceSize node_bytes =
+            VkDeviceSize(nodes.size() * sizeof(lane_b::GpuBvhNode));
+        const VkDeviceSize order_bytes =
+            VkDeviceSize(ordered.size() * sizeof(std::uint32_t));
+        const VkDeviceSize tri_bytes =
+            VkDeviceSize(triangles.size() * sizeof(GpuTriangle));
+        if (node_bytes > n006_primary_nodes.size ||
+            order_bytes > n006_primary_order.size ||
+            tri_bytes > n006_primary_triangles.size) {
+            fail("N006 software primary target exceeds preallocated BVH capacity");
+        }
+        const lane_b::B002BufferUpdate tri_update{0U, triangles.data(), tri_bytes};
+        const lane_b::B002BufferUpdate node_update{0U, nodes.data(), node_bytes};
+        const lane_b::B002BufferUpdate order_update{0U, ordered.data(), order_bytes};
+        const double gpu_us =
+            context.update_device_buffer_timed(
+                n006_primary_triangles, std::span(&tri_update, 1)) +
+            context.update_device_buffer_timed(
+                n006_primary_nodes, std::span(&node_update, 1)) +
+            context.update_device_buffer_timed(
+                n006_primary_order, std::span(&order_update, 1));
+        n006_primary_target = true;
+        return gpu_us;
+    }
+#endif
 
     void prepare_candidate_traversal() {
         if (uses_hwrt(options.variant)) {
