@@ -118,6 +118,9 @@ struct N006CanonicalStats {
     std::array<std::uint32_t, 4> unique_by_cascade{};
     std::uint64_t scratch_bytes{};
     double total_canonical_gpu_us{};
+    double owner_weight_storage_gpu_us{};
+    std::uint32_t owner_weight_errors{};
+    std::uint32_t weighted_owner_total{};
 };
 
 struct N006ExtraStats {
