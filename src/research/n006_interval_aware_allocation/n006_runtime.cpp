@@ -99,12 +99,24 @@ struct N006Runtime::State {
     std::unique_ptr<I001ComputeStage> canonical_copy_stage;
     std::unique_ptr<I001ComputeStage> canonical_apply_stage;
     std::unique_ptr<I001ComputeStage> canonical_weight_stage;
+    // Optional P1j-B stages consume the compact GPU stream directly.
+    std::unique_ptr<I001ComputeStage> direct_ray_stage;
+    std::unique_ptr<I001ComputeStage> direct_radiance_stage;
+    std::unique_ptr<I001ComputeStage> direct_storage_update_stage;
+    std::unique_ptr<I001ComputeStage> direct_resolve_stage;
+    std::unique_ptr<I001ComputeStage> direct_weight_stage;
     std::uint32_t hash_capacity{};
+    bool direct_compact{};
 };
 
-N006Runtime::N006Runtime(I001Options options, bool p1j_lean_hash)
+N006Runtime::N006Runtime(
+    I001Options options, bool p1j_lean_hash, bool p1j_direct_compact)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
+    if (p1j_direct_compact && !p1j_lean_hash) {
+        throw std::runtime_error("N006 P1j-B direct compact requires lean hash");
+    }
+    state_->direct_compact = p1j_direct_compact;
     auto& impl = *runtime_.impl_;
     state_->extra_stats = impl.context.create_device_buffer(
         4U * sizeof(std::uint32_t),
@@ -228,6 +240,64 @@ N006Runtime::N006Runtime(I001Options options, bool p1j_lean_hash)
         impl.context,
         shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_weight_storage.spv"),
         weight_bindings, sizeof(N006WeightPush));
+
+    // P1j-B: duplicate ONLY the descriptor bindings whose shaders read work.
+    // The original stages are retained for all current/historical frames.
+    if (state_->direct_compact) {
+        const std::array<I001Binding, 3> rays{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.rays},
+        }};
+        state_->direct_ray_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_work_to_rays.spv"),
+            rays);
+        const std::array<I001Binding, 5> radiance{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.hits},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.contributions},
+            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+        }};
+        state_->direct_radiance_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_radiance.spv"),
+            radiance);
+        const std::array<I001Binding, 5> storage{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.accum},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_slots},
+            {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_stats},
+        }};
+        state_->direct_storage_update_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_storage_update.spv"),
+            storage, sizeof(StoragePush));
+        const std::array<I001Binding, 4> resolved{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_slots},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.resolved},
+        }};
+        state_->direct_resolve_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_storage_resolve.spv"),
+            resolved, sizeof(StoragePush));
+        const std::array<I001Binding, 6> reweight{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_multiplicity},
+            {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_slots},
+            {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+        }};
+        state_->direct_weight_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_weight_storage.spv"),
+            reweight, sizeof(N006WeightPush));
+    }
 }
 
 N006Runtime::~N006Runtime() {
@@ -240,6 +310,11 @@ N006Runtime::~N006Runtime() {
     state_->canonical_copy_stage.reset();
     state_->canonical_apply_stage.reset();
     state_->canonical_weight_stage.reset();
+    state_->direct_ray_stage.reset();
+    state_->direct_radiance_stage.reset();
+    state_->direct_storage_update_stage.reset();
+    state_->direct_resolve_stage.reset();
+    state_->direct_weight_stage.reset();
     runtime_.impl_->context.destroy_buffer(state_->canonical_indirect);
     runtime_.impl_->context.destroy_buffer(state_->canonical_work);
     runtime_.impl_->context.destroy_buffer(state_->canonical_reps);
