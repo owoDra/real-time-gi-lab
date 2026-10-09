@@ -106,10 +106,18 @@ class TestN006P1kThreeArm(unittest.TestCase):
         self.assertEqual(delta["post_producer_gpu_us"], 0.0)
 
     def test_reject_missing_original_owner_weight(self):
-        invalid = source()
-        invalid["frames"][5]["extra"]["canonical"]["weighted_owner_total"] = 0
-        with self.assertRaisesRegex(ValueError, "copyback / lean"):
-            self._run(invalid)
+        # Frozen first triplet is 0=current, 1=lean copyback, 2=direct.
+        # The previous fixture corrupted frame 5, which is CURRENT ("0")
+        # and intentionally has no canonical owner-weight validation.
+        for arm in ("1", "2"):
+            with self.subTest(canonical_arm=arm):
+                invalid = source()
+                index = PATTERN.index(arm)
+                self.assertEqual(PATTERN[index], arm)
+                invalid["frames"][index]["extra"]["canonical"][
+                    "weighted_owner_total"] = 0
+                with self.assertRaisesRegex(ValueError, "copyback / lean"):
+                    self._run(invalid)
 
     def test_reject_direct_that_still_copies(self):
         invalid = source()
