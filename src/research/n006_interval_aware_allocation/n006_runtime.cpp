@@ -39,8 +39,15 @@ struct N006CompactPush {
     std::uint32_t capacity{kN006CanonicalCapacity};
     std::uint32_t rays_per_probe{8U};
 };
+struct N006WeightPush {
+    std::uint32_t key_mask{};
+    std::uint32_t storage_mask{};
+    std::uint32_t max_probe{128U};
+    std::uint32_t frame_id{};
+};
 static_assert(sizeof(N006CanonicalPush) == 16U);
 static_assert(sizeof(N006CompactPush) == 8U);
+static_assert(sizeof(N006WeightPush) == 16U);
 
 struct N006ExtraPush {
     std::uint32_t mode{};
@@ -83,6 +90,7 @@ static_assert(sizeof(N006ExtraPush) == 20U);
 struct N006Runtime::State {
     B002Buffer extra_stats{}, hash_keys{}, hash_stats{};
     B002Buffer canonical_reps{}, canonical_work{}, canonical_indirect{};
+    B002Buffer canonical_multiplicity{};
     std::unique_ptr<I001ComputeStage> extra_stage;
     std::unique_ptr<I001ComputeStage> hash_stage;
     std::unique_ptr<I001ComputeStage> canonical_index_stage;
@@ -90,6 +98,7 @@ struct N006Runtime::State {
     std::unique_ptr<I001ComputeStage> canonical_compact_stage;
     std::unique_ptr<I001ComputeStage> canonical_copy_stage;
     std::unique_ptr<I001ComputeStage> canonical_apply_stage;
+    std::unique_ptr<I001ComputeStage> canonical_weight_stage;
     std::uint32_t hash_capacity{};
 };
 
@@ -127,6 +136,9 @@ N006Runtime::N006Runtime(I001Options options)
     state_->hash_stats = impl.context.create_device_buffer(
         16U * sizeof(std::uint32_t),
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+    state_->canonical_multiplicity = impl.context.create_device_buffer(
+        VkDeviceSize(state_->hash_capacity) * sizeof(std::uint32_t),
+        VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
     const std::array<I001Binding, 4> hash_bindings{{
         {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
         {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
@@ -151,12 +163,13 @@ N006Runtime::N006Runtime(I001Options options)
     state_->canonical_indirect = impl.context.create_device_buffer(
         6U * sizeof(std::uint32_t),
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT);
-    const std::array<I001Binding, 5> index_bindings{{
+    const std::array<I001Binding, 6> index_bindings{{
         {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
         {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
         {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
         {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
         {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_reps},
+        {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_multiplicity},
     }};
     state_->canonical_index_stage = std::make_unique<I001ComputeStage>(
         impl.context,
@@ -197,6 +210,18 @@ N006Runtime::N006Runtime(I001Options options)
         impl.context,
         shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_apply.spv"),
         apply_bindings, sizeof(N006CompactPush));
+    const std::array<I001Binding, 6> weight_bindings{{
+        {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+        {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+        {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
+        {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->canonical_multiplicity},
+        {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_slots},
+        {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_stats},
+    }};
+    state_->canonical_weight_stage = std::make_unique<I001ComputeStage>(
+        impl.context,
+        shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_weight_storage.spv"),
+        weight_bindings, sizeof(N006WeightPush));
 }
 
 N006Runtime::~N006Runtime() {
@@ -208,9 +233,11 @@ N006Runtime::~N006Runtime() {
     state_->canonical_compact_stage.reset();
     state_->canonical_copy_stage.reset();
     state_->canonical_apply_stage.reset();
+    state_->canonical_weight_stage.reset();
     runtime_.impl_->context.destroy_buffer(state_->canonical_indirect);
     runtime_.impl_->context.destroy_buffer(state_->canonical_work);
     runtime_.impl_->context.destroy_buffer(state_->canonical_reps);
+    runtime_.impl_->context.destroy_buffer(state_->canonical_multiplicity);
     runtime_.impl_->context.destroy_buffer(state_->hash_stats);
     runtime_.impl_->context.destroy_buffer(state_->hash_keys);
     runtime_.impl_->context.destroy_buffer(state_->extra_stats);
@@ -379,8 +406,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
         // Three GPU-only phases: key discovery; compact representative rays
         // into nonaliasing scratch; copy back and update indirect counters.
         // All accepted renderer shaders see only the compact work prefix.
-        stamp(16);
-        stamp(17);
+        // Query 16/17 are reserved for the later multiplicity restore pass.
         stamp(18);
         impl.context.vk().cmdFillBuffer(
             command, state_->hash_keys.buffer, 0,
@@ -388,6 +414,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
         impl.context.vk().cmdFillBuffer(
             command, state_->hash_stats.buffer, 0,
             state_->hash_stats.size, 0U);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->canonical_multiplicity.buffer, 0,
+            state_->canonical_multiplicity.size, 0U);
         i001_transfer_to_compute_barrier(impl.context, command);
         const N006CanonicalPush hash_push{
             state_->hash_capacity - 1U,
@@ -458,6 +487,20 @@ N006FrameResult N006Runtime::run_candidate_frame(
         &storage_accumulate_push,
         sizeof(storage_accumulate_push));
     i001_compute_barrier(impl.context, command);
+    if (request.canonical_probe_pilot) {
+        stamp(16);
+        const N006WeightPush weight{
+            state_->hash_capacity - 1U,
+            impl.storage_capacity - 1U,
+            kHashMaxProbe,
+            impl.frame_id,
+        };
+        state_->canonical_weight_stage->record(
+            command, groups(impl.params.limits[2]), 1U, 1U,
+            &weight, sizeof(weight));
+        i001_compute_barrier(impl.context, command);
+        stamp(17);
+    }
     stamp(9);
 
     const InvalidationPush invalidation_push{
@@ -702,6 +745,10 @@ N006FrameResult N006Runtime::run_candidate_frame(
         data.failed_inserts = counters[3];
         data.collision_steps = counters[4];
         data.index_overflows = counters[5];
+        data.owner_weight_errors = counters[14];
+        data.weighted_owner_total = counters[15];
+        data.owner_weight_storage_gpu_us =
+            timestamp_us(timestamps[16], timestamps[17], period);
         data.original_outputs = counters[0] + counters[1];
         data.original_work_items =
             data.original_outputs * impl.settings.rays_per_probe;
@@ -710,13 +757,15 @@ N006FrameResult N006Runtime::run_candidate_frame(
         data.total_canonical_gpu_us =
             timestamp_us(timestamps[4], timestamps[19], period);
         data.scratch_bytes = state_->hash_keys.size + state_->hash_stats.size +
+            state_->canonical_multiplicity.size +
             state_->canonical_reps.size + state_->canonical_work.size +
             state_->canonical_indirect.size;
         for (std::uint32_t cascade = 0U; cascade < 4U; ++cascade) {
             data.unique_by_cascade[cascade] = counters[6U + cascade];
         }
         if (data.invalid_keys != 0U || data.failed_inserts != 0U ||
-            data.index_overflows != 0U ||
+            data.index_overflows != 0U || data.owner_weight_errors != 0U ||
+            data.weighted_owner_total != data.original_outputs ||
             data.canonical_outputs > kN006CanonicalCapacity ||
             data.original_outputs != result.stats.visible_owners *
                 impl.settings.cascade_count ||
