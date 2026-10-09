@@ -1013,13 +1013,20 @@ struct I001Runtime::Impl {
     [[nodiscard]] double n006_refresh_software_primary() {
         if (!uses_lane_e_final_software(options.variant) ||
             !geometry_is_target || n006_primary_target) return 0.0;
-        n006_primary_cpu->rebuild(b_scene.triangles);
+        // Rigid Lane-E keeps b_scene in object space and moves via instance
+        // transform. Primary/shadow software BVH must use WORLD geometry.
+        const auto translated =
+            options.scenario == I001Scenario::MovingRigid
+                ? translated_geometry(
+                    b_scene.triangles, moving.primitives, moving.delta_x)
+                : b_scene.triangles;
+        n006_primary_cpu->rebuild(translated);
         if (n006_primary_cpu->root() != 0U) {
             fail("N006 software primary target BVH root must be zero");
         }
         const auto nodes = n006_primary_cpu->gpu_nodes();
         const auto& ordered = n006_primary_cpu->ordered_primitives();
-        const auto triangles = gpu_triangles(b_scene);
+        const auto triangles = gpu_triangles(translated);
         const VkDeviceSize node_bytes =
             VkDeviceSize(nodes.size() * sizeof(lane_b::GpuBvhNode));
         const VkDeviceSize order_bytes =
