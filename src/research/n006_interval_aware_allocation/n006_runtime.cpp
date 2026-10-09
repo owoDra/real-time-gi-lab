@@ -753,6 +753,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
             state_->hash_stats, counters.data(), sizeof(counters));
         auto& data = extra.canonical;
         data.executed = true;
+        data.hash_slots = state_->hash_capacity;
         data.canonical_outputs = counters[0];
         data.duplicates = counters[1];
         data.invalid_keys = counters[2];
