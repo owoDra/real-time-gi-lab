@@ -349,6 +349,7 @@ int main(int argc, char** argv) {
     bool capture_probe_equivalence = false;
     bool canonical_probe_pilot = false;
     bool canonical_matrix_case = false;
+    bool canonical_lean_hash = false;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
@@ -385,6 +386,7 @@ int main(int argc, char** argv) {
         else if (arg == "--capture-probe-equivalence") capture_probe_equivalence = true;
         else if (arg == "--canonical-probe-pilot") canonical_probe_pilot = true;
         else if (arg == "--canonical-matrix-case") canonical_matrix_case = true;
+        else if (arg == "--canonical-lean-hash") canonical_lean_hash = true;
         else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
         else if (arg == "--canonical-frame-pattern" && index + 1 < argc) {
             canonical_frame_pattern = argv[++index];
@@ -437,6 +439,13 @@ int main(int argc, char** argv) {
         if (mode == lane_n::N006ExtraMode::Current &&
             std::any_of(budgets.begin(), budgets.end(), [](auto value) { return value != 0U; })) {
             throw std::runtime_error("N006 current mode must use zero owner budgets");
+        }
+        // P1j-A is a distinct run of the frozen correctness matrix. The
+        // accepted P1i behavior and allocations remain the default.
+        if (canonical_lean_hash &&
+            (!canonical_matrix_case || !canonical_probe_pilot)) {
+            throw std::runtime_error(
+                "N006 P1j-A lean hash requires canonical matrix correctness pilot");
         }
         if (canonical_matrix_case) {
             const bool accepted_variant =
@@ -536,7 +545,7 @@ int main(int argc, char** argv) {
         options.variant = lane_n::i001_parse_variant(variant_name);
         options.scenario = lane_n::i001_parse_scenario(scenario_name);
         options.validation = true;
-        lane_n::N006Runtime runtime(options);
+        lane_n::N006Runtime runtime(options, canonical_lean_hash);
 
         const lane_n::N006ExtraRequest current_request{};
         auto source = runtime.run_frame(false, current_request);
