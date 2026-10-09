@@ -273,7 +273,8 @@ void write_extra(
         << "\"executed\":" << (e.canonical.executed ? "true" : "false");
     if (e.canonical.executed) {
         const auto& a = e.canonical;
-        out << ",\"original_work_items\":" << a.original_work_items
+        out << ",\"hash_slots\":" << a.hash_slots
+            << ",\"original_work_items\":" << a.original_work_items
             << ",\"original_outputs\":" << a.original_outputs
             << ",\"canonical_work_items\":" << a.canonical_work_items
             << ",\"canonical_outputs\":" << a.canonical_outputs
