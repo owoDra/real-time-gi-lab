@@ -348,6 +348,9 @@ int main(int argc, char** argv) {
     bool capture_probe_equivalence = false;
     bool canonical_probe_pilot = false;
     bool capture_gpu_unique_hash = false;
+    // P1h: frozen canonical/current balanced schedule after target-state warmup.
+    std::string canonical_frame_pattern;
+    std::uint32_t target_state_warmup_frames = 0U;
     // P1e diagnostic only: exact per-target-frame hash flag schedule.
     std::string hash_frame_pattern;
 
@@ -379,6 +382,12 @@ int main(int argc, char** argv) {
         else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
         else if (arg == "--capture-probe-equivalence") capture_probe_equivalence = true;
         else if (arg == "--canonical-probe-pilot") canonical_probe_pilot = true;
+        else if (arg == "--canonical-frame-pattern" && index + 1 < argc) {
+            canonical_frame_pattern = argv[++index];
+        } else if (arg == "--target-state-warmup-frames" && index + 1 < argc) {
+            target_state_warmup_frames =
+                static_cast<std::uint32_t>(std::stoul(argv[++index]));
+        }
         else if (arg == "--capture-gpu-unique-hash") capture_gpu_unique_hash = true;
         else if (arg == "--hash-frame-pattern" && index + 1 < argc) {
             hash_frame_pattern = argv[++index];
@@ -432,6 +441,8 @@ int main(int argc, char** argv) {
              capture_probe_multiplicity ||
              capture_probe_equivalence ||
              !hash_frame_pattern.empty() ||
+             !canonical_frame_pattern.empty() ||
+             target_state_warmup_frames != 0U ||
              scenario_name != "deforming-control" ||
              source_warmup_frames != 32U ||
              target_frames != 2U ||
@@ -441,6 +452,30 @@ int main(int argc, char** argv) {
                 "N006 P1g requires 32 warmups, two fixed current/canonical "
                 "target frames, deforming-control and skipped reference");
         }
+        if (!canonical_frame_pattern.empty()) {
+            if (canonical_frame_pattern != "011001100110" ||
+                target_state_warmup_frames != 8U ||
+                source_warmup_frames != 32U ||
+                target_frames != 12U ||
+                canonical_probe_pilot || capture_gpu_unique_hash ||
+                capture_probe_multiplicity || capture_probe_equivalence ||
+                capture_visible_tiles ||
+                !hash_frame_pattern.empty() ||
+                mode != lane_n::N006ExtraMode::Current ||
+                scenario_name != "deforming-control" ||
+                !skip_reference || topology ||
+                !std::all_of(fractions.begin(), fractions.end(),
+                    [](float value) { return value == 1.0F; })) {
+                throw std::runtime_error(
+                    "N006 P1h requires fixed 011001100110, 8 target-state "
+                    "warmups, 32 source warmups, 12 motion=1 current targets, "
+                    "no hash/extra/reference/topology");
+            }
+        } else if (target_state_warmup_frames != 0U) {
+            throw std::runtime_error(
+                "N006 target-state warmup only valid with P1h canonical pattern");
+        }
+
         std::vector<std::uint32_t> hash_schedule(
             target_frames, capture_gpu_unique_hash ? 1U : 0U);
         if (!hash_frame_pattern.empty()) {
@@ -479,6 +514,37 @@ int main(int argc, char** argv) {
             (void)runtime.run_frame(false, current_request);
         }
 
+        // P1h: force traversal maintenance / dynamic transition before the
+        // FIRST timed target. Warmup samples are not pair statistics.
+        bool target_warmup_correct = true;
+        double last_target_warmup_maintenance_us = 0.0;
+        std::uint32_t last_target_warmup_owners = 0U;
+        std::uint32_t last_target_warmup_work = 0U;
+        if (target_state_warmup_frames != 0U) {
+            runtime.set_motion_fraction(1.0F);
+            for (std::uint32_t warm = 0; warm < target_state_warmup_frames; ++warm) {
+                const auto warm_frame = runtime.run_frame(true, current_request);
+                const auto warm_hits = runtime.n004_hit_diagnostics();
+                if (!frame_correct(warm_frame, warm_hits)) {
+                    target_warmup_correct = false;
+                    throw std::runtime_error(
+                        "N006 P1h target-state warmup frame invalid");
+                }
+                last_target_warmup_maintenance_us =
+                    warm_frame.frame.timings.traversal_maintenance_gpu_us;
+                last_target_warmup_owners =
+                    warm_frame.frame.stats.visible_owners;
+                last_target_warmup_work =
+                    warm_frame.frame.stats.work_items;
+            }
+            if (last_target_warmup_maintenance_us != 0.0 ||
+                last_target_warmup_owners != 4172U ||
+                last_target_warmup_work != 133504U) {
+                throw std::runtime_error(
+                    "N006 P1h target-state warmup failed to stabilize");
+            }
+        }
+
         fs::create_directories(artifact_dir / "frames");
         std::vector<FrameEvidence> frames;
         frames.reserve(target_frames);
@@ -492,7 +558,9 @@ int main(int argc, char** argv) {
                 selected_tile_id,
                 selected_cascade,
                 hash_schedule[index] != 0U,
-                canonical_probe_pilot && index == 1U,
+                (canonical_probe_pilot && index == 1U) ||
+                    (!canonical_frame_pattern.empty() &&
+                     canonical_frame_pattern[index] == '1'),
             };
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
@@ -649,6 +717,14 @@ int main(int argc, char** argv) {
             << "  \"scenario\":\"" << scenario_name << "\",\n"
             << "  \"topology\":" << (topology ? "true" : "false") << ",\n"
             << "  \"source_warmup_frames\":" << source_warmup_frames << ",\n"
+            << "  \"target_state_warmup\":{\"frames\":"
+            << target_state_warmup_frames
+            << ",\"correct\":" << (target_warmup_correct ? "true" : "false")
+            << ",\"last_traversal_maintenance_gpu\":"
+            << last_target_warmup_maintenance_us
+            << ",\"last_visible_owners\":" << last_target_warmup_owners
+            << ",\"last_work_items\":" << last_target_warmup_work
+            << "},\n"
             << "  \"depth_threshold\":" << depth_threshold << ",\n"
             << "  \"extra_rays_per_probe\":" << extra_rays_per_probe << ",\n"
             << "  \"selected_tile_id\":" << selected_tile_id << ",\n"
