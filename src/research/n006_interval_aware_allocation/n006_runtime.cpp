@@ -492,7 +492,12 @@ N006FrameResult N006Runtime::run_candidate_frame(
     }
 
     const bool direct_canonical =
-        request.canonical_probe_pilot && state_->direct_compact;
+        request.canonical_probe_pilot && state_->direct_compact &&
+        request.direct_compact_work;
+    if (request.direct_compact_work &&
+        (!state_->direct_compact || !request.canonical_probe_pilot)) {
+        throw std::runtime_error("N006 direct work requires canonical ray stream and direct stage bindings");
+    }
     if (request.canonical_probe_pilot) {
         // Three GPU-only phases: key discovery; compact representative rays
         // into nonaliasing scratch; copy back and update indirect counters.
