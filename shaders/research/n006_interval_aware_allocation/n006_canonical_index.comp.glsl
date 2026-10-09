@@ -12,6 +12,7 @@ layout(std430, binding = 1) readonly buffer Work { WorkItem items[]; } work;
 layout(std430, binding = 2) buffer Keys { uint values[]; } keys;
 layout(std430, binding = 3) buffer Stats { uint data[]; } stats;
 layout(std430, binding = 4) buffer Reps { uint indices[]; } representatives;
+layout(std430, binding = 5) buffer Multiplicity { uint counts[]; } multiplicity;
 layout(push_constant) uniform Push {
     uint mask; uint max_probe; uint rays_per_probe; uint capacity;
 } pc;
@@ -46,6 +47,7 @@ void main() {
     for (uint attempt = 0u; attempt < pc.max_probe; ++attempt) {
         uint old = atomicCompSwap(keys.values[slot], 0u, token);
         if (old == 0u) {
+            atomicAdd(multiplicity.counts[slot], 1u);
             uint index = atomicAdd(stats.data[0], 1u);
             if (index < pc.capacity) {
                 representatives.indices[index] = owner_output;
@@ -56,6 +58,7 @@ void main() {
             return;
         }
         if (old == token) {
+            atomicAdd(multiplicity.counts[slot], 1u);
             atomicAdd(stats.data[1], 1u);
             return;
         }
