@@ -268,7 +268,15 @@ N006FrameResult N006Runtime::run_candidate_frame(
     }
 
     ++impl.frame_id;
-    const auto dynamic_update = impl.update_dynamic_geometry(target_state);
+    auto dynamic_update = impl.update_dynamic_geometry(target_state);
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+    if (target_state &&
+        impl.options.variant == I001Variant::LaneEFinalSoftware) {
+        const double primary_gpu_us = impl.n006_refresh_software_primary();
+        dynamic_update.gpu_us += primary_gpu_us;
+        dynamic_update.hierarchy_upload_gpu_us += primary_gpu_us;
+    }
+#endif
     impl.update_params(target_state);
 
     impl.context.vk().resetFences(1, &impl.fence);
