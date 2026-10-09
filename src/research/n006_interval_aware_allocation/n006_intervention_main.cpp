@@ -269,6 +269,28 @@ void write_extra(
         }
         out << ']';
     }
+    out << "},\"canonical\":{"
+        << "\"executed\":" << (e.canonical.executed ? "true" : "false");
+    if (e.canonical.executed) {
+        const auto& a = e.canonical;
+        out << ",\"original_work_items\":" << a.original_work_items
+            << ",\"original_outputs\":" << a.original_outputs
+            << ",\"canonical_work_items\":" << a.canonical_work_items
+            << ",\"canonical_outputs\":" << a.canonical_outputs
+            << ",\"duplicates\":" << a.duplicates
+            << ",\"invalid_keys\":" << a.invalid_keys
+            << ",\"failed_inserts\":" << a.failed_inserts
+            << ",\"index_overflows\":" << a.index_overflows
+            << ",\"collision_steps\":" << a.collision_steps
+            << ",\"scratch_bytes\":" << a.scratch_bytes
+            << ",\"total_canonical_gpu_us\":" << a.total_canonical_gpu_us
+            << ",\"unique_by_cascade\":[";
+        for (std::size_t i = 0; i < a.unique_by_cascade.size(); ++i) {
+            if (i != 0U) out << ',';
+            out << a.unique_by_cascade[i];
+        }
+        out << ']';
+    }
     out << "}}";
 }
 
@@ -321,6 +343,7 @@ int main(int argc, char** argv) {
     bool capture_visible_tiles = false;
     bool capture_probe_multiplicity = false;
     bool capture_probe_equivalence = false;
+    bool canonical_probe_pilot = false;
     bool capture_gpu_unique_hash = false;
     // P1e diagnostic only: exact per-target-frame hash flag schedule.
     std::string hash_frame_pattern;
@@ -352,6 +375,7 @@ int main(int argc, char** argv) {
         else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
         else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
         else if (arg == "--capture-probe-equivalence") capture_probe_equivalence = true;
+        else if (arg == "--canonical-probe-pilot") canonical_probe_pilot = true;
         else if (arg == "--capture-gpu-unique-hash") capture_gpu_unique_hash = true;
         else if (arg == "--hash-frame-pattern" && index + 1 < argc) {
             hash_frame_pattern = argv[++index];
@@ -397,6 +421,22 @@ int main(int argc, char** argv) {
         if (mode == lane_n::N006ExtraMode::Current &&
             std::any_of(budgets.begin(), budgets.end(), [](auto value) { return value != 0U; })) {
             throw std::runtime_error("N006 current mode must use zero owner budgets");
+        }
+        if (canonical_probe_pilot &&
+            (mode != lane_n::N006ExtraMode::Current ||
+             !skip_reference ||
+             capture_gpu_unique_hash ||
+             capture_probe_multiplicity ||
+             capture_probe_equivalence ||
+             !hash_frame_pattern.empty() ||
+             scenario_name != "deforming-control" ||
+             source_warmup_frames != 32U ||
+             target_frames != 2U ||
+             !std::all_of(fractions.begin(), fractions.end(),
+                  [](float fraction) { return fraction == 1.0F; }))) {
+            throw std::runtime_error(
+                "N006 P1g requires 32 warmups, two fixed current/canonical "
+                "target frames, deforming-control and skipped reference");
         }
         std::vector<std::uint32_t> hash_schedule(
             target_frames, capture_gpu_unique_hash ? 1U : 0U);
@@ -449,6 +489,7 @@ int main(int argc, char** argv) {
                 selected_tile_id,
                 selected_cascade,
                 hash_schedule[index] != 0U,
+                canonical_probe_pilot && index == 1U,
             };
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
