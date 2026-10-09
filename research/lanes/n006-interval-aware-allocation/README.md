@@ -130,3 +130,10 @@ Target-GPU P1h on clean `ff2b80562640440befe3c664a831d5446ab0d75d`: 3 fresh proc
 Whole GI was faster in **14/18** (median −145.857 µs), but primary visibility ran before canonicalization and varied **−829 to +501 µs** across pairs, so there is **no demonstrated universal whole-engine speedup percentage**. Original quality/evidence and accepted N004/N005 remain intact.
 
 Next [P1i cross-backend parity matrix](./experiments/009-p1i-cross-backend-correctness.md) covers the **five supported Lane-E-final scenarios on both HWRT and software traversal** (10 frozen cases). Each case runs original current and actual canonical ray tracing in one process, requires exact PFM SHA, GPU key/owner multiplicity/hit/storage correctness and retains any failures. This is a correctness/portability test, **not a timing or topology-changing claim**. Only after it passes should P1j optimize direct GPU unique-probe production and extra scratch, then measure software fallback and complete-GI timing under matched steady states.
+
+
+## P1i partial: 5/5 HWRT PASS, software static blocked
+
+Uploaded first P1i cross-backend run at clean `07f1bae87efc351a953880a415ddc25bdc819bb1`: all five HWRT cases (static/camera/light/moving-rigid/deforming) ran true canonical GPU work with **80.97–81.95% fewer rays**, zero GPU errors, and baseline/canonical **bit-identical PFM** per case. At the first software variant (`lane-e-final-software` + `static`, case 5), the renderer exited with code 1; the summary includes only a path to `stderr.log`, **not the exception text**. Software cases 6–9 were not run (frozen fail-fast). **P1i is INCOMPLETE, software parity and software speedup are not established.**
+
+See [P1i partial result](./results/014-p1i-cross-backend-partial-hwrt-pass-software-blocked.md). The immediate next step is **retrieve the already saved case-05 stderr**, not rerun GPU or guess a software bug from an exit code. Keep accepted N004/N005 and N006 P1a–P1h untouched; no GitHub Actions.
