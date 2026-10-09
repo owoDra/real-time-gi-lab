@@ -284,6 +284,9 @@ void write_extra(
             << ",\"collision_steps\":" << a.collision_steps
             << ",\"scratch_bytes\":" << a.scratch_bytes
             << ",\"total_canonical_gpu_us\":" << a.total_canonical_gpu_us
+            << ",\"owner_weight_storage_gpu_us\":" << a.owner_weight_storage_gpu_us
+            << ",\"owner_weight_errors\":" << a.owner_weight_errors
+            << ",\"weighted_owner_total\":" << a.weighted_owner_total
             << ",\"unique_by_cascade\":[";
         for (std::size_t i = 0; i < a.unique_by_cascade.size(); ++i) {
             if (i != 0U) out << ',';
