@@ -320,6 +320,7 @@ int main(int argc, char** argv) {
     bool skip_reference = false;
     bool capture_visible_tiles = false;
     bool capture_probe_multiplicity = false;
+    bool capture_probe_equivalence = false;
     bool capture_gpu_unique_hash = false;
     // P1e diagnostic only: exact per-target-frame hash flag schedule.
     std::string hash_frame_pattern;
@@ -350,6 +351,7 @@ int main(int argc, char** argv) {
         else if (arg == "--skip-reference") skip_reference = true;
         else if (arg == "--capture-visible-tiles") capture_visible_tiles = true;
         else if (arg == "--capture-probe-multiplicity") capture_probe_multiplicity = true;
+        else if (arg == "--capture-probe-equivalence") capture_probe_equivalence = true;
         else if (arg == "--capture-gpu-unique-hash") capture_gpu_unique_hash = true;
         else if (arg == "--hash-frame-pattern" && index + 1 < argc) {
             hash_frame_pattern = argv[++index];
@@ -477,6 +479,48 @@ int main(int argc, char** argv) {
             throw std::runtime_error(
                 "N006 GPU hash capture requires current, one target frame, no reference");
         }
+        if (capture_probe_equivalence) {
+            if (mode != lane_n::N006ExtraMode::Current ||
+                target_frames != 1U || !skip_reference ||
+                capture_gpu_unique_hash || !hash_frame_pattern.empty()) {
+                throw std::runtime_error(
+                    "N006 probe equivalence requires current, one target, no hash/reference");
+            }
+            const auto audit = runtime.probe_output_equivalence_audit();
+            std::ofstream out(artifact_dir / "n006-probe-equivalence.json");
+            if (!out) {
+                throw std::runtime_error("N006 P1f equivalence output creation failed");
+            }
+            out << "{\"schema_version\":1,\"protocol_version\":\"n006-p1f-owner-equivalence-v1\","
+                << "\"base_work_items\":" << audit.base_work_items
+                << ",\"owner_outputs\":" << audit.owner_outputs
+                << ",\"visible_owners\":" << audit.visible_owners
+                << ",\"rays_per_probe\":" << audit.rays_per_probe
+                << ",\"cascade_count\":" << audit.cascade_count
+                << ",\"all_gpu_storage_slots_reconstructed\":"
+                << (audit.all_gpu_storage_slots_reconstructed ? "true" : "false")
+                << ",\"cascades\":[";
+            for (std::size_t j = 0; j < audit.cascades.size(); ++j) {
+                const auto& row = audit.cascades[j];
+                if (j != 0U) out << ',';
+                out << "{\"cascade\":" << row.cascade
+                    << ",\"unique_probe_keys\":" << row.unique_probe_keys
+                    << ",\"owner_outputs\":" << row.owner_outputs
+                    << ",\"shared_keys\":" << row.shared_keys
+                    << ",\"divergent_merged_keys\":" << row.divergent_merged_keys
+                    << ",\"divergent_owner_outputs\":" << row.divergent_owner_outputs
+                    << ",\"divergent_rounded_mean_keys\":"
+                    << row.divergent_rounded_mean_keys
+                    << ",\"zero_sample_outputs\":" << row.zero_sample_outputs
+                    << ",\"missing_or_bad_gpu_storage_keys\":"
+                    << row.missing_or_bad_gpu_storage_keys << '}';
+            }
+            out << "]}\n";
+            if (!out) {
+                throw std::runtime_error("N006 P1f equivalence output write failed");
+            }
+        }
+
         if (capture_probe_multiplicity) {
             if (mode != lane_n::N006ExtraMode::Current ||
                 target_frames != 1U || !skip_reference) {
