@@ -299,5 +299,7 @@ add_executable(phos-n006-intervention
 configure_lane_n_renderer(phos-n006-intervention)
 target_compile_definitions(phos-n006-intervention PRIVATE
   PHOS_GI_N006_SHADER_DIR="${CMAKE_BINARY_DIR}/shaders"
+  PHOS_GI_N006_SOFTWARE_PRIMARY=1
 )
-add_dependencies(phos-n006-intervention phos-n006-shaders)
+add_dependencies(phos-n006-intervention
+  phos-n006-shaders phos-n003-comparison-shaders)
