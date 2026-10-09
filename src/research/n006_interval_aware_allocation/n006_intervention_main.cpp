@@ -357,6 +357,8 @@ int main(int argc, char** argv) {
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
+    // P1k frozen balanced order: 0=current, 1=lean copyback, 2=direct compact.
+    std::string three_arm_pattern;
     std::uint32_t target_state_warmup_frames = 0U;
     // P1e diagnostic only: exact per-target-frame hash flag schedule.
     std::string hash_frame_pattern;
@@ -392,6 +394,8 @@ int main(int argc, char** argv) {
         else if (arg == "--canonical-matrix-case") canonical_matrix_case = true;
         else if (arg == "--canonical-lean-hash") canonical_lean_hash = true;
         else if (arg == "--canonical-zero-copy") canonical_zero_copy = true;
+        else if (arg == "--three-arm-pattern" && index + 1 < argc)
+            three_arm_pattern = argv[++index];
         else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
         else if (arg == "--canonical-frame-pattern" && index + 1 < argc) {
             canonical_frame_pattern = argv[++index];
@@ -448,13 +452,15 @@ int main(int argc, char** argv) {
         // P1j-A is a distinct run of the frozen correctness matrix. The
         // accepted P1i behavior and allocations remain the default.
         if (canonical_lean_hash &&
-            (!canonical_matrix_case || !canonical_probe_pilot)) {
+            !((canonical_matrix_case && canonical_probe_pilot) ||
+              !three_arm_pattern.empty())) {
             throw std::runtime_error(
                 "N006 P1j-A lean hash requires canonical matrix correctness pilot");
         }
         if (canonical_zero_copy &&
-            (!canonical_lean_hash || !canonical_matrix_case ||
-             !canonical_probe_pilot)) {
+            (!canonical_lean_hash ||
+             !((canonical_matrix_case && canonical_probe_pilot) ||
+               !three_arm_pattern.empty()))) {
             throw std::runtime_error(
                 "N006 P1j-B direct work requires lean-hash matrix canonical pilot");
         }
@@ -472,6 +478,7 @@ int main(int argc, char** argv) {
                 topology || !skip_reference ||
                 !hash_frame_pattern.empty() || !canonical_frame_pattern.empty() ||
                 target_state_warmup_frames != 0U ||
+                !three_arm_pattern.empty() ||
                 capture_gpu_unique_hash || capture_probe_equivalence ||
                 capture_probe_multiplicity || capture_visible_tiles ||
                 mode != lane_n::N006ExtraMode::Current ||
@@ -482,7 +489,8 @@ int main(int argc, char** argv) {
                     "N006 P1i matrix supports only fixed two-frame current/canonical "
                     "LaneEFinal HWRT/software five-scenario protocol");
             }
-        } else if (variant_name != "lane-e-final-hwrt") {
+        } else if (variant_name != "lane-e-final-hwrt" &&
+                   three_arm_pattern.empty()) {
             throw std::runtime_error(
                 "N006 variant override is reserved for P1i matrix study");
         }
@@ -523,9 +531,36 @@ int main(int argc, char** argv) {
                     "warmups, 32 source warmups, 12 motion=1 current targets, "
                     "no hash/extra/reference/topology");
             }
-        } else if (target_state_warmup_frames != 0U) {
+        } else if (target_state_warmup_frames != 0U &&
+                   three_arm_pattern.empty()) {
             throw std::runtime_error(
-                "N006 target-state warmup only valid with P1h canonical pattern");
+                "N006 target-state warmup only valid with a frozen P1h/P1k pattern");
+        }
+
+        if (!three_arm_pattern.empty()) {
+            // All 6 permutations of (current, lean copyback, lean direct)
+            // in one process; each arm appears twice in every triplet position.
+            if (three_arm_pattern != "012120201021102210" ||
+                canonical_frame_pattern.size() != 0U ||
+                canonical_matrix_case || canonical_probe_pilot ||
+                !canonical_lean_hash || !canonical_zero_copy ||
+                !skip_reference || topology ||
+                mode != lane_n::N006ExtraMode::Current ||
+                scenario_name != "deforming-control" ||
+                (variant_name != "lane-e-final-hwrt" &&
+                 variant_name != "lane-e-final-software") ||
+                source_warmup_frames != 32U ||
+                target_state_warmup_frames != 8U ||
+                target_frames != 18U ||
+                capture_gpu_unique_hash || capture_probe_equivalence ||
+                capture_probe_multiplicity || capture_visible_tiles ||
+                !hash_frame_pattern.empty() ||
+                !std::all_of(fractions.begin(), fractions.end(),
+                    [](float value) { return value == 1.0F; })) {
+                throw std::runtime_error(
+                    "N006 P1k requires frozen balanced 18-frame pattern, 32 source/8 "
+                    "target warmups, 2 supported backends, lean+zero-copy and no reference");
+            }
         }
 
         std::vector<std::uint32_t> hash_schedule(
@@ -618,7 +653,12 @@ int main(int argc, char** argv) {
                 hash_schedule[index] != 0U,
                 (canonical_probe_pilot && index == 1U) ||
                     (!canonical_frame_pattern.empty() &&
-                     canonical_frame_pattern[index] == '1'),
+                     canonical_frame_pattern[index] == '1') ||
+                    (!three_arm_pattern.empty() &&
+                     three_arm_pattern[index] != '0'),
+                (canonical_probe_pilot && canonical_zero_copy && index == 1U) ||
+                    (!three_arm_pattern.empty() &&
+                     three_arm_pattern[index] == '2'),
             };
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
@@ -776,6 +816,7 @@ int main(int argc, char** argv) {
             << "  \"topology\":" << (topology ? "true" : "false") << ",\n"
             << "  \"variant\":\"" << variant_name << "\",\n"
             << "  \"source_warmup_frames\":" << source_warmup_frames << ",\n"
+            << "  \"three_arm_pattern\":\"" << three_arm_pattern << "\",\n"
             << "  \"target_state_warmup\":{\"frames\":"
             << target_state_warmup_frames
             << ",\"correct\":" << (target_warmup_correct ? "true" : "false")
