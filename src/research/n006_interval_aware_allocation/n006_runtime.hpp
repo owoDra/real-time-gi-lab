@@ -148,7 +148,7 @@ struct N006FrameResult {
 
 class N006Runtime {
 public:
-    explicit N006Runtime(I001Options options);
+    explicit N006Runtime(I001Options options, bool p1j_lean_hash = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
