@@ -106,6 +106,7 @@ struct N006GpuHashProbe {
 
 struct N006CanonicalStats {
     bool executed{};
+    std::uint32_t hash_slots{};
     std::uint32_t original_work_items{};
     std::uint32_t original_outputs{};
     std::uint32_t canonical_work_items{};
