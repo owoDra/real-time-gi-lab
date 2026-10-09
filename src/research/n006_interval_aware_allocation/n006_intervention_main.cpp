@@ -273,7 +273,9 @@ void write_extra(
         << "\"executed\":" << (e.canonical.executed ? "true" : "false");
     if (e.canonical.executed) {
         const auto& a = e.canonical;
-        out << ",\"hash_slots\":" << a.hash_slots
+        out << ",\"copyback_executed\":"
+            << (a.copyback_executed ? "true" : "false")
+            << ",\"hash_slots\":" << a.hash_slots
             << ",\"original_work_items\":" << a.original_work_items
             << ",\"original_outputs\":" << a.original_outputs
             << ",\"canonical_work_items\":" << a.canonical_work_items
@@ -351,6 +353,7 @@ int main(int argc, char** argv) {
     bool canonical_probe_pilot = false;
     bool canonical_matrix_case = false;
     bool canonical_lean_hash = false;
+    bool canonical_zero_copy = false;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
@@ -388,6 +391,7 @@ int main(int argc, char** argv) {
         else if (arg == "--canonical-probe-pilot") canonical_probe_pilot = true;
         else if (arg == "--canonical-matrix-case") canonical_matrix_case = true;
         else if (arg == "--canonical-lean-hash") canonical_lean_hash = true;
+        else if (arg == "--canonical-zero-copy") canonical_zero_copy = true;
         else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
         else if (arg == "--canonical-frame-pattern" && index + 1 < argc) {
             canonical_frame_pattern = argv[++index];
@@ -447,6 +451,12 @@ int main(int argc, char** argv) {
             (!canonical_matrix_case || !canonical_probe_pilot)) {
             throw std::runtime_error(
                 "N006 P1j-A lean hash requires canonical matrix correctness pilot");
+        }
+        if (canonical_zero_copy &&
+            (!canonical_lean_hash || !canonical_matrix_case ||
+             !canonical_probe_pilot)) {
+            throw std::runtime_error(
+                "N006 P1j-B direct work requires lean-hash matrix canonical pilot");
         }
         if (canonical_matrix_case) {
             const bool accepted_variant =
@@ -546,7 +556,8 @@ int main(int argc, char** argv) {
         options.variant = lane_n::i001_parse_variant(variant_name);
         options.scenario = lane_n::i001_parse_scenario(scenario_name);
         options.validation = true;
-        lane_n::N006Runtime runtime(options, canonical_lean_hash);
+        lane_n::N006Runtime runtime(
+            options, canonical_lean_hash, canonical_zero_copy);
 
         const lane_n::N006ExtraRequest current_request{};
         auto source = runtime.run_frame(false, current_request);
