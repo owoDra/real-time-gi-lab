@@ -102,7 +102,7 @@ struct N006Runtime::State {
     std::uint32_t hash_capacity{};
 };
 
-N006Runtime::N006Runtime(I001Options options)
+N006Runtime::N006Runtime(I001Options options, bool p1j_lean_hash)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     auto& impl = *runtime_.impl_;
@@ -129,7 +129,13 @@ N006Runtime::N006Runtime(I001Options options)
         std::numeric_limits<std::uint32_t>::max() / 2U) {
         throw std::runtime_error("N006 hash capacity out of range");
     }
-    state_->hash_capacity = std::bit_ceil(maximum_outputs * 2U);
+    // P1j-A is an opt-in, bounded capacity experiment only. Preserve the
+    // accepted P1d/P1g/P1h/P1i hash allocations unless explicitly selected.
+    // The canonical-representative capacity is still 8192 unique keys;
+    // 32768 hash slots guarantee <=25% load at that accepted capacity.
+    state_->hash_capacity = p1j_lean_hash
+        ? 32768U
+        : std::bit_ceil(maximum_outputs * 2U);
     state_->hash_keys = impl.context.create_device_buffer(
         VkDeviceSize(state_->hash_capacity) * sizeof(std::uint32_t),
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
