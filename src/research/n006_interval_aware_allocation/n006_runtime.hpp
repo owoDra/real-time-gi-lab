@@ -23,6 +23,7 @@ struct N006ExtraRequest {
     std::uint32_t selected_tile_id{0xffffffffU};
     std::uint32_t selected_cascade{0xffffffffU};
     bool capture_hash_probe{};
+    bool canonical_probe_pilot{};
 };
 
 // Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
@@ -103,6 +104,22 @@ struct N006GpuHashProbe {
     double complete_hash_gpu_us{};
 };
 
+struct N006CanonicalStats {
+    bool executed{};
+    std::uint32_t original_work_items{};
+    std::uint32_t original_outputs{};
+    std::uint32_t canonical_work_items{};
+    std::uint32_t canonical_outputs{};
+    std::uint32_t duplicates{};
+    std::uint32_t invalid_keys{};
+    std::uint32_t failed_inserts{};
+    std::uint32_t index_overflows{};
+    std::uint32_t collision_steps{};
+    std::array<std::uint32_t, 4> unique_by_cascade{};
+    std::uint64_t scratch_bytes{};
+    double total_canonical_gpu_us{};
+};
+
 struct N006ExtraStats {
     std::uint32_t base_traced_rays{};
     std::uint32_t extra_rays_requested{};
@@ -118,6 +135,7 @@ struct N006ExtraStats {
     bool extra_work_correct{};
     N006InfluenceTrace influence_trace{};
     N006GpuHashProbe gpu_hash_probe{};
+    N006CanonicalStats canonical{};
 };
 
 struct N006FrameResult {
