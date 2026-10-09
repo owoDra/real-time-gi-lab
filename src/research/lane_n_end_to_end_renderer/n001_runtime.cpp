@@ -1406,16 +1406,32 @@ struct I001Runtime::Impl {
 
         create_traversal_stage();
 
-        const std::array<I001Binding, 4> primary_bindings{{
-            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_hits},
-            {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
-            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hwrt->triangle_buffer()},
-            {3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
-        }};
-        primary_stage = std::make_unique<I001ComputeStage>(
-            context,
-            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "n001_primary.spv"),
-            primary_bindings);
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+        if (uses_lane_e_final_software(options.variant)) {
+            const std::array<I001Binding, 5> bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_hits},
+                {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &n006_primary_triangles},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &n006_primary_nodes},
+                {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &n006_primary_order},
+                {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
+            }};
+            primary_stage = std::make_unique<I001ComputeStage>(
+                context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR,
+                                     "n003_primary_software.spv"), bindings);
+        } else
+#endif
+        {
+            const std::array<I001Binding, 4> primary_bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_hits},
+                {1, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &hwrt->triangle_buffer()},
+                {3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
+            }};
+            primary_stage = std::make_unique<I001ComputeStage>(
+                context,
+                shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "n001_primary.spv"),
+                primary_bindings);
+        }
 
         const std::array<I001Binding, 5> radiance_bindings{{
             {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters},
@@ -1464,18 +1480,37 @@ struct I001Runtime::Impl {
             context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "i001_storage_resolve.spv"),
             resolve_bindings, sizeof(StoragePush));
 
-        const std::array<I001Binding, 5> composite_bindings{{
-            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_hits},
-            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &storage_slots},
-            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &image},
-            {3, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
-            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
-        }};
-        composite_stage = std::make_unique<I001ComputeStage>(
-            context,
-            shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "n001_composite.spv"),
-            composite_bindings,
-            sizeof(StoragePush));
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+        if (uses_lane_e_final_software(options.variant)) {
+            const std::array<I001Binding, 7> bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_hits},
+                {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &storage_slots},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &image},
+                {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &n006_primary_triangles},
+                {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &n006_primary_nodes},
+                {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &n006_primary_order},
+                {6, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
+            }};
+            composite_stage = std::make_unique<I001ComputeStage>(
+                context, shader_path(PHOS_GI_INTEGRATION_SHADER_DIR,
+                                     "n003_composite_software.spv"),
+                bindings, sizeof(StoragePush));
+        } else
+#endif
+        {
+            const std::array<I001Binding, 5> composite_bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_hits},
+                {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &storage_slots},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &image},
+                {3, VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR, nullptr, hwrt->top_level()},
+                {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &uniform},
+            }};
+            composite_stage = std::make_unique<I001ComputeStage>(
+                context,
+                shader_path(PHOS_GI_INTEGRATION_SHADER_DIR, "n001_composite.spv"),
+                composite_bindings,
+                sizeof(StoragePush));
+        }
     }
 
     void create_traversal_stage() {
@@ -1571,6 +1606,14 @@ struct I001Runtime::Impl {
         };
         memory_stats.persistent_bytes =
             allocation(surfaces) + allocation(uniform) + allocation(storage_slots);
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+        if (uses_lane_e_final_software(options.variant)) {
+            memory_stats.persistent_bytes +=
+                allocation(n006_primary_triangles) +
+                allocation(n006_primary_nodes) +
+                allocation(n006_primary_order);
+        }
+#endif
 
         if (uses_hwrt(options.variant)) {
             memory_stats.persistent_bytes += hwrt->setup_stats().persistent_bytes;
