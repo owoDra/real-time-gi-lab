@@ -92,6 +92,8 @@ struct N006Runtime::State {
     B002Buffer canonical_reps{}, canonical_work{}, canonical_indirect{};
     B002Buffer canonical_multiplicity{};
     std::unique_ptr<I001ComputeStage> extra_stage;
+    std::unique_ptr<I001ComputeStage> p1l_b1_primary_stage;
+    bool p1l_b1_enabled{};
     std::unique_ptr<I001ComputeStage> hash_stage;
     std::unique_ptr<I001ComputeStage> canonical_index_stage;
     std::unique_ptr<I001ComputeStage> canonical_setup_stage;
@@ -110,14 +112,35 @@ struct N006Runtime::State {
 };
 
 N006Runtime::N006Runtime(
-    I001Options options, bool p1j_lean_hash, bool p1j_direct_compact)
+    I001Options options, bool p1j_lean_hash, bool p1j_direct_compact,
+    bool p1l_b1_enabled)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     if (p1j_direct_compact && !p1j_lean_hash) {
         throw std::runtime_error("N006 P1j-B direct compact requires lean hash");
     }
     state_->direct_compact = p1j_direct_compact;
+    state_->p1l_b1_enabled = p1l_b1_enabled;
     auto& impl = *runtime_.impl_;
+    if (p1l_b1_enabled) {
+        if (impl.options.variant != I001Variant::LaneEFinalSoftware ||
+            !p1j_lean_hash || p1j_direct_compact) {
+            throw std::runtime_error(
+                "N006 P1l-B1 requires software primary and lean copyback");
+        }
+        const std::array<I001Binding, 5> b1_primary{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.primary_hits},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_triangles},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_nodes},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_order},
+            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+        }};
+        state_->p1l_b1_primary_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR,
+                        "n006_p1l_b1_primary_near_first.spv"),
+            b1_primary);
+    }
     state_->extra_stats = impl.context.create_device_buffer(
         4U * sizeof(std::uint32_t),
         VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
@@ -302,6 +325,7 @@ N006Runtime::N006Runtime(
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
+    state_->p1l_b1_primary_stage.reset();
     state_->extra_stage.reset();
     state_->hash_stage.reset();
     state_->canonical_index_stage.reset();
@@ -338,6 +362,10 @@ N006FrameResult N006Runtime::run_candidate_frame(
     bool target_state,
     N006ExtraRequest request) {
     auto& impl = *runtime_.impl_;
+    if (request.p1l_b1_near_first &&
+        (!state_->p1l_b1_enabled || !state_->p1l_b1_primary_stage)) {
+        throw std::runtime_error("N006 P1l-B1 candidate was not enabled");
+    }
     if (request.mode == N006ExtraMode::Targeted &&
         (request.owner_budget != 1U ||
          request.selected_cascade >= 4U ||
@@ -390,7 +418,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
     };
 
     stamp(12);
-    impl.primary_stage->record(
+    (request.p1l_b1_near_first ? state_->p1l_b1_primary_stage.get()
+                               : impl.primary_stage.get())->record(
         command,
         (impl.params.counts[1] + 7U) / 8U,
         (impl.params.counts[2] + 7U) / 8U);
@@ -1658,6 +1687,21 @@ namespace {
 }
 
 } // namespace
+
+std::vector<std::uint8_t> N006Runtime::p1l_b1_primary_hit_bytes() {
+    if (!state_->p1l_b1_enabled || !runtime_.impl_->have_last)
+        throw std::runtime_error("N006 P1l-B1 primary snapshot outside frame");
+    auto& impl = *runtime_.impl_;
+    const auto count = std::size_t(impl.params.counts[1]) *
+                       std::size_t(impl.params.counts[2]);
+    const auto bytes = count * sizeof(GpuHit);
+    if (bytes == 0 || bytes > impl.primary_hits.size)
+        throw std::runtime_error("N006 P1l-B1 primary snapshot size invalid");
+    std::vector<std::uint8_t> snapshot(bytes);
+    impl.context.download_device_buffer(
+        impl.primary_hits, snapshot.data(), VkDeviceSize(bytes));
+    return snapshot;
+}
 
 N006P1lB0Profile N006Runtime::p1l_b0_work_counts() {
     auto& impl = *runtime_.impl_;
