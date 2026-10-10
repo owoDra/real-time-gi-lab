@@ -1,3 +1,17 @@
+# 2026-10-11 continuation — P1l-B1c prepared for first GPU evidence
+
+**This section supersedes the old pre-B1c next-action description below.** Repo `owoDra/phos-gi-lab`, branch `research-n006-interval-aware-allocation`, Issue #42. The original Oct 10 B1b five-scene result remains the **latest accepted scientific GPU evidence** (B1b 5/5 work-count PASS; B1a 15-process GPU performance REJECT). This session continued the work: no repeat of the previous measurements.
+
+- Frozen **before implementation**: `experiments/018-p1l-b1c-packed-axis-proxy.md` (commit `f19b36b`).
+- Opt-in B1c implementation: `e01ae744f51edd8881695192fb1ea42278d06be4`. It uses existing `GpuBvhNode.data[2]` internal-node metadata (48B unchanged) for precomputed child center separation axis/sign; shader decides order from ray direction without B1a's additional two child-node loads. Leaves and accepted shader sources unchanged. This is not B1a's full 3D near-first, nor guaranteed faster.
+- New N006 files: `src/research/n006_interval_aware_allocation/n006_primary_axis_proxy.hpp`, `shaders/research/n006_interval_aware_allocation/n006_p1l_b1c_primary_axis_proxy.comp.glsl`, `scripts/research/n006_interval_aware_allocation/audit_p1l_b1c_spirv.py`, `test_n006_axis_pack.py`, `test_run_p1l_b1c_axis_proxy.py`, `test_audit_p1l_b1c_spirv.py`, `run_p1l_b1c_verified.sh`. C++ runtime/CLI/CMake and B1a runner opt-in extended without changing N003/E003/N004/N005 accepted shaders.
+- Independent C++20 CPU helper smoke **PASS** in the assistant sandbox, source SHA matched remote blob `6e9e0dfb`. Not a full project build. No actual B1c SPIR-V binary comparison, whole-project unit suite, target GPU timing, reference-quality comparison or HWRT-unavailable GPU evidence yet. **No speedup claim**. CPU metadata packing is separately counted; do not mistake GPU stage time for CPU+GPU frame time.
+- **Only remaining necessary external action for this experiment:** On the NixOS AMD RADV machine, `git switch research-n006-interval-aware-allocation && bash scripts/research/n006_interval_aware_allocation/run_p1l_b1c_verified.sh`. The script builds, unit-tests, emits offline SPIR-V audit, runs frozen 5-scene GPU correctness preflight, and runs matched 15-process GPU performance **only if preflight passed**. If it fails, report first failure without forcing further runs.
+- Collect `out/research/n006-interval-aware-allocation/b1c-spv-audit.json` and the latest `p1l-b1c-matched/.../n006-p1l-b1c-summary.json` (or preflight / build error). Apply fixed ≥5% primary/24-of-36-pairs/2-of-3-processes in ≥3 scenes; full renderer ≤+3% each scene, plus CPU packing/memory/build update and correctness. If failed, record REJECT, pivot to E003 quantized secondary child AABB; no repeat or cherry-pick.
+- **N006 P1/P2 predictive ray allocation remains unvalidated**. Do not close Issue #42. Direct research commits (no PR), no CI/GitHub Actions. Read the old handoff below as immutable historical detail only.
+
+---
+
 # N006 GPU GI research — Next-session handoff (2026-10-10, after P1l-B1b)
 
 > **Read this first in the next session.** This handoff is a durable GitHub file, not a running automation. The user explicitly wants the **next research to be done next session**, not now. Do not ask stage-by-stage permission after continuing: finish all repository-side investigation/code/tests you can, then request the **minimum** hardware-only NixOS GPU execution, with one end-to-end command where possible.

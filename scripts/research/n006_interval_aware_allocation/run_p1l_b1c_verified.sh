@@ -3,6 +3,14 @@
 # preflight (all five) -> matched 15 processes ONLY on correctness PASS.
 set -euo pipefail
 cd "$(dirname "$0")/../../.."
+if [ "$(git branch --show-current)" != "research-n006-interval-aware-allocation" ]; then
+  echo "B1c requires research-n006-interval-aware-allocation branch" >&2
+  exit 2
+fi
+if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$(git ls-files --others --exclude-standard)" ]; then
+  echo "B1c requires a clean tracked/untracked worktree" >&2
+  exit 2
+fi
 git pull --ff-only
 mise run build
 mise exec -- python -m unittest discover -s scripts/research/n006_interval_aware_allocation -p 'test_*.py'
