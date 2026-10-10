@@ -310,3 +310,13 @@ mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1l_b1b_
 ```
 
 No manual pause between smoke and full five-scene test is needed (the default command tests all five); no accepted N004/N005/GH Actions changes. Research is ongoing: B1b results must drive the next bounded shader or ray allocator question, **not** a declaration that GI research has ended.
+
+
+For a **single continuous local invocation** (build → tests → all-five-scene GPU capture, stopping only on a real failing gate), the NixOS operator can instead use:
+
+```sh
+git pull --ff-only
+bash scripts/research/n006_interval_aware_allocation/run_p1l_b1b_verified.sh
+```
+
+The wrapper neither commits/pushes nor modifies CI. It fails immediately if not on the research branch, if build/tests fail, or if any GPU case fails/times out. The full JSON summary is a local GPU artifact; the assistant cannot execute or retrieve it from the user's unconnected NixOS host. **This experiment's implementation can be complete while the scientific study remains unfinished until actual GPU evidence arrives.**
