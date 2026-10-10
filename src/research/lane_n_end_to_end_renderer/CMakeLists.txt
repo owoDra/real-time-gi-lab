@@ -281,6 +281,19 @@ add_compute_shader(
 add_compute_shader(
   n006_canonical_weight_storage
   shaders/research/n006_interval_aware_allocation/n006_canonical_weight_storage.comp.glsl)
+# P1l-B0: diagnostic instrumentation ONLY for the N006 executable.
+# The accepted N003/E003 SPIR-V and their targets are not rebuilt from
+# altered shader sources.
+add_compute_shader(n006_p1l_primary_count
+  shaders/research/n006_interval_aware_allocation/n006_p1l_primary_count.comp.glsl)
+add_compute_shader(n006_p1l_composite_count
+  shaders/research/n006_interval_aware_allocation/n006_p1l_composite_count.comp.glsl)
+add_compute_shader(n006_p1l_e003_count
+  shaders/research/n006_interval_aware_allocation/n006_p1l_e003_count.comp.glsl)
+add_custom_target(phos-n006-p1l-b0-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1l_primary_count.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1l_composite_count.spv"
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1l_e003_count.spv")
 add_custom_target(phos-n006-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_extra_producer.spv"
   "${CMAKE_BINARY_DIR}/shaders/n006_probe_unique_hash.spv"
@@ -302,4 +315,4 @@ target_compile_definitions(phos-n006-intervention PRIVATE
   PHOS_GI_N006_SOFTWARE_PRIMARY=1
 )
 add_dependencies(phos-n006-intervention
-  phos-n006-shaders phos-n003-comparison-shaders)
+  phos-n006-shaders phos-n003-comparison-shaders phos-n006-p1l-b0-shaders)
