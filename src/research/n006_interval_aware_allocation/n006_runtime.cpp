@@ -1703,6 +1703,177 @@ std::vector<std::uint8_t> N006Runtime::p1l_b1_primary_hit_bytes() {
     return snapshot;
 }
 
+
+namespace {
+
+[[nodiscard]] N006P1lB1bDifference p1l_b1b_difference(
+    const std::vector<std::uint32_t>& original,
+    const std::vector<std::uint32_t>& candidate,
+    std::uint32_t component) {
+    if (original.empty() || original.size() != candidate.size() ||
+        original.size() % 4U != 0U || component >= 4U) {
+        throw std::runtime_error("P1l-B1b malformed paired count arrays");
+    }
+    const std::size_t count = original.size() / 4U;
+    std::vector<std::int64_t> deltas;
+    deltas.reserve(count);
+    N006P1lB1bDifference value{};
+    for (std::size_t index = 0U; index < count; ++index) {
+        const std::int64_t change =
+            std::int64_t(candidate[index * 4U + component]) -
+            std::int64_t(original[index * 4U + component]);
+        deltas.push_back(change);
+        value.signed_total += change;
+        value.fewer += change < 0 ? 1U : 0U;
+        value.equal += change == 0 ? 1U : 0U;
+        value.more += change > 0 ? 1U : 0U;
+    }
+    std::sort(deltas.begin(), deltas.end());
+    const auto percentile = [&](double fraction) {
+        const double rank = fraction * double(count - 1U);
+        const auto low = static_cast<std::size_t>(rank);
+        const auto high = std::min(low + 1U, count - 1U);
+        const double t = rank - double(low);
+        return double(deltas[low]) * (1.0 - t) + double(deltas[high]) * t;
+    };
+    value.mean = double(value.signed_total) / double(count);
+    value.p50 = percentile(0.5);
+    value.p90 = percentile(0.9);
+    value.p99 = percentile(0.99);
+    value.minimum = deltas.front();
+    value.maximum = deltas.back();
+    return value;
+}
+
+} // namespace
+
+N006P1lB1bProfile N006Runtime::p1l_b1b_work_counts() {
+    auto& impl = *runtime_.impl_;
+    if (impl.options.variant != I001Variant::LaneEFinalSoftware ||
+        !impl.have_last || impl.last.stats.work_items == 0U ||
+        !lane_e_final_supported_scenario(impl.options.scenario)) {
+        throw std::runtime_error(
+            "P1l-B1b requires completed Lane-E-final software frame");
+    }
+    const std::uint32_t pixels = impl.params.counts[1] * impl.params.counts[2];
+    if (pixels == 0U || pixels > 320U * 180U) {
+        throw std::runtime_error("P1l-B1b pixel count out of frozen bounds");
+    }
+    N006P1lB1bProfile result{};
+    result.pixels = pixels;
+    std::array<B002Buffer, 2> outputs{};
+    std::array<B002Buffer, 2> counters{};
+    const auto cleanup = [&]() noexcept {
+        for (auto& buffer : counters) impl.context.destroy_buffer(buffer);
+        for (auto& buffer : outputs) impl.context.destroy_buffer(buffer);
+    };
+    try {
+        constexpr auto usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        const std::array<const char*, 2> shader_names{
+            "n006_p1l_primary_count.spv",
+            "n006_p1l_b1b_primary_near_first_count.spv",
+        };
+        std::array<std::unique_ptr<I001ComputeStage>, 2> shaders{};
+        for (std::size_t arm = 0U; arm < shaders.size(); ++arm) {
+            outputs[arm] = impl.context.create_device_buffer(
+                impl.primary_hits.size, usage);
+            counters[arm] = impl.context.create_device_buffer(
+                VkDeviceSize(pixels) * 4U * sizeof(std::uint32_t), usage);
+            const std::array<I001Binding, 6> bindings{{
+                {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &outputs[arm]},
+                {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_triangles},
+                {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_nodes},
+                {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_order},
+                {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+                {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &counters[arm]},
+            }};
+            shaders[arm] = std::make_unique<I001ComputeStage>(
+                impl.context,
+                shader_path(PHOS_GI_N006_SHADER_DIR, shader_names[arm]),
+                bindings);
+        }
+
+        // Both count-only shaders dispatch AFTER the original uninstrumented
+        // frame, so none of their work contaminates accepted frame timestamps.
+        impl.context.vk().resetFences(1, &impl.fence);
+        impl.context.vk().resetCommandPool(impl.command_pool, 0);
+        VkCommandBuffer command{};
+        auto alloc = detail::make_vk_info<VkCommandBufferAllocateInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+        alloc.commandPool = impl.command_pool;
+        alloc.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        alloc.commandBufferCount = 1;
+        if (impl.context.vk().allocateCommandBuffers(&alloc, &command) != VK_SUCCESS)
+            throw std::runtime_error("P1l-B1b command allocation failed");
+        auto begin = detail::make_vk_info<VkCommandBufferBeginInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+        begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        if (impl.context.vk().beginCommandBuffer(command, &begin) != VK_SUCCESS)
+            throw std::runtime_error("P1l-B1b command begin failed");
+        for (auto& shader : shaders) {
+            shader->record(command, (impl.params.counts[1] + 7U) / 8U,
+                           (impl.params.counts[2] + 7U) / 8U);
+            i001_compute_barrier(impl.context, command);
+        }
+        if (impl.context.vk().endCommandBuffer(command) != VK_SUCCESS)
+            throw std::runtime_error("P1l-B1b command end failed");
+        auto submit = detail::make_vk_info<VkSubmitInfo>(
+            VK_STRUCTURE_TYPE_SUBMIT_INFO);
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &command;
+        if (impl.context.vk().queueSubmit(
+                impl.context.queue(), 1, &submit, impl.fence) != VK_SUCCESS ||
+            impl.context.vk().waitForFences(
+                1, &impl.fence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) {
+            throw std::runtime_error("P1l-B1b GPU submit/fence failed");
+        }
+
+        const VkDeviceSize hit_size = VkDeviceSize(pixels) * sizeof(GpuHit);
+        std::vector<std::uint8_t> accepted(static_cast<std::size_t>(hit_size));
+        impl.context.download_device_buffer(
+            impl.primary_hits, accepted.data(), hit_size);
+        std::array<std::vector<std::uint32_t>, 2> raw{};
+        for (std::size_t arm = 0U; arm < shaders.size(); ++arm) {
+            std::vector<std::uint8_t> instrumented(accepted.size());
+            impl.context.download_device_buffer(
+                outputs[arm], instrumented.data(), hit_size);
+            if (accepted != instrumented)
+                throw std::runtime_error(
+                    arm == 0U ? "P1l-B1b original primary hit bytes diverged"
+                              : "P1l-B1b near-first primary hit bytes diverged");
+            raw[arm].resize(std::size_t(pixels) * 4U);
+            impl.context.download_device_buffer(
+                counters[arm], raw[arm].data(),
+                VkDeviceSize(raw[arm].size() * sizeof(std::uint32_t)));
+        }
+        for (std::uint32_t metric = 0U; metric < 4U; ++metric) {
+            result.original[metric] = p1l_b0_metric(
+                raw[0], pixels, 1U, 0U, metric);
+            result.near_first[metric] = p1l_b0_metric(
+                raw[1], pixels, 1U, 0U, metric);
+        }
+        for (std::uint32_t metric = 0U; metric < 2U; ++metric)
+            result.delta[metric] = p1l_b1b_difference(raw[0], raw[1], metric);
+        if (result.original[2].total != result.near_first[2].total ||
+            result.original[3].total != 0U || result.near_first[3].total != 0U ||
+            result.delta[0].signed_total !=
+                std::int64_t(result.near_first[0].total) -
+                std::int64_t(result.original[0].total) ||
+            result.delta[1].signed_total !=
+                std::int64_t(result.near_first[1].total) -
+                std::int64_t(result.original[1].total)) {
+            throw std::runtime_error("P1l-B1b count/overflow invariant failed");
+        }
+        // Descriptors and pipelines must be destroyed before bound buffers.
+        for (auto& shader : shaders) shader.reset();
+    } catch (...) {
+        cleanup();
+        throw;
+    }
+    cleanup();
+    return result;
+}
+
 N006P1lB0Profile N006Runtime::p1l_b0_work_counts() {
     auto& impl = *runtime_.impl_;
     if (impl.options.variant != I001Variant::LaneEFinalSoftware ||
