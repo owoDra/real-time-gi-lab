@@ -261,3 +261,19 @@ mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1l_b1_n
 ```
 
 No N006 B1a GPU result or claim of HWRT-free device support. Keep each new campaign separate from prior A1b/B0; do not infer an accepted optimization from bare shader-code changes.
+
+
+## P1l-B1a five-scene exact output preflight PASS — full timing still required
+
+User-uploaded `n006-p1l-b1a-summary.json` for B1a at clean source `9fe4126aebab26cacf6f04b336ca1544befd2de4`: **`mode=preflight`, `status=complete`, `failures=[]`, five fresh Software processes and 10/10 measured original/candidate `01` HDR PFM frames matching previously accepted case-specific SHA**, plus actual `primary_hits` byte-exact parity between arms in all five scenes, zero reported oracle/counter/timing failures. CPU N004 full hit reference on each process' candidate frame 1 only. [Full preflight evidence and caution](./results/022-p1l-b1a-five-scene-preflight.md).
+
+**One-pair preliminary GPU primary times** (B1a minus baseline): static **−13.85%**, camera **−5.09%**, light **−34.69%**, deforming **−20.37%**, but **moving-rigid +42.13% SLOWER** and complete renderer **+23.46% slower**. This is **not** frozen performance acceptance: only one baseline-first pair/scenario, no counterbalanced BA order, and no independent repeated medians. The moving-rigid regression is a concrete reason **not to adopt or selectively exclude this scene before full measurement**.
+
+**Preflight GO to frozen matched experiment unchanged**: 5 scenes × 3 fresh processes × 24 `011001100110011001100110` alternating target frames = **15 processes, 360 measured frames, 180 adjacent A/B pairs**, hard 600s process timeout, full accepted HDR SHA/primary hit parity/GPU closure per measured frame, per-scene median/pair win rate/process medians, and same strict no-any-scene complete-renderer regression worse than +3% acceptance gate. Only if GPU evidence meets every frozen condition may B1a be considered an exploratory Software primary improvement. Execute:
+
+```sh
+git pull --ff-only
+mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1l_b1_near_first.py
+```
+
+The full-run result is not collected yet; retain B1 preflight as a separate evidence artifact and the warning even if other conditions win. No N004/N005/GH Actions modifications.
