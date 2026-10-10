@@ -1617,4 +1617,236 @@ float N006Runtime::timestamp_period_ns() const noexcept {
     return runtime_.timestamp_period_ns();
 }
 
+
+namespace {
+
+// One bounded diagnostic workload row; no atomics or writes to accepted
+// output buffers. Each actual ray/pixel writes its own uvec4 slots.
+[[nodiscard]] N006P1lB0Metric p1l_b0_metric(
+    const std::vector<std::uint32_t>& raw,
+    std::uint32_t count,
+    std::uint32_t vectors_per_sample,
+    std::uint32_t tuple,
+    std::uint32_t component) {
+    if (count == 0U || raw.size() !=
+        std::size_t(count) * vectors_per_sample * 4U) {
+        throw std::runtime_error("P1l-B0 malformed diagnostic sample count");
+    }
+    std::vector<std::uint32_t> values;
+    values.reserve(count);
+    N006P1lB0Metric out{};
+    for (std::uint32_t i = 0U; i < count; ++i) {
+        const auto v = raw[(std::size_t(i) * vectors_per_sample + tuple) * 4U + component];
+        values.push_back(v);
+        out.total += v;
+        out.nonzero += (v != 0U) ? 1U : 0U;
+        out.maximum = std::max(out.maximum, v);
+    }
+    std::sort(values.begin(), values.end());
+    const auto percentile = [&](double fraction) {
+        const auto rank = fraction * double(values.size() - 1U);
+        const auto lo = static_cast<std::size_t>(rank);
+        const auto hi = std::min(lo + 1U, values.size() - 1U);
+        const double t = rank - double(lo);
+        return double(values[lo]) * (1.0 - t) + double(values[hi]) * t;
+    };
+    out.mean = double(out.total) / double(count);
+    out.p50 = percentile(0.50);
+    out.p90 = percentile(0.90);
+    out.p99 = percentile(0.99);
+    return out;
+}
+
+} // namespace
+
+N006P1lB0Profile N006Runtime::p1l_b0_work_counts() {
+    auto& impl = *runtime_.impl_;
+    if (impl.options.variant != I001Variant::LaneEFinalSoftware ||
+        !impl.have_last ||
+        impl.last.stats.work_items == 0U ||
+        impl.last.stats.work_items > impl.params.limits[1] ||
+        impl.options.scenario == I001Scenario::TopologyChanging) {
+        throw std::runtime_error(
+            "P1l-B0 requires completed Lane-E-final software canonical frame");
+    }
+    const std::uint32_t pixels = impl.params.counts[1] * impl.params.counts[2];
+    const std::uint32_t rays = impl.last.stats.work_items;
+    N006P1lB0Profile report{};
+    report.pixels = pixels;
+    report.secondary_rays = rays;
+    B002Buffer primary_counts{}, shadow_counts{}, secondary_counts{};
+    B002Buffer primary_output{}, shadow_output{}, secondary_output{};
+
+    const auto cleanup = [&]() noexcept {
+        impl.context.destroy_buffer(secondary_output);
+        impl.context.destroy_buffer(shadow_output);
+        impl.context.destroy_buffer(primary_output);
+        impl.context.destroy_buffer(secondary_counts);
+        impl.context.destroy_buffer(shadow_counts);
+        impl.context.destroy_buffer(primary_counts);
+    };
+    try {
+        constexpr auto storage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        primary_counts = impl.context.create_device_buffer(
+            VkDeviceSize(pixels) * 4U * sizeof(std::uint32_t), storage);
+        shadow_counts = impl.context.create_device_buffer(
+            VkDeviceSize(pixels) * 8U * sizeof(std::uint32_t), storage);
+        secondary_counts = impl.context.create_device_buffer(
+            VkDeviceSize(rays) * 8U * sizeof(std::uint32_t), storage);
+        primary_output = impl.context.create_device_buffer(
+            impl.primary_hits.size, storage);
+        shadow_output = impl.context.create_device_buffer(
+            impl.image.size, storage);
+        secondary_output = impl.context.create_device_buffer(
+            impl.hits.size, storage);
+        const std::array<I001Binding, 6> primary_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_output},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_triangles},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_nodes},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_order},
+            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+            {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &primary_counts},
+        }};
+        const std::array<I001Binding, 8> shadow_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.primary_hits},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_slots},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &shadow_output},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_triangles},
+            {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_nodes},
+            {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.n006_primary_order},
+            {6, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+            {7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &shadow_counts},
+        }};
+        const std::array<I001Binding, 9> secondary_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.rays},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.triangle_buffer},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.instance_nodes},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.instance_order},
+            {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.instance_hash},
+            {5, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.instance_table},
+            {6, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &secondary_output},
+            {7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {8, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &secondary_counts},
+        }};
+        auto primary = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR, "n006_p1l_primary_count.spv"),
+            primary_bindings);
+        auto shadow = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR, "n006_p1l_composite_count.spv"),
+            shadow_bindings, sizeof(StoragePush));
+        auto secondary = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR, "n006_p1l_e003_count.spv"),
+            secondary_bindings, sizeof(lane_e::E003TraversalPush));
+
+        // N004 diagnostic also uses this pool and waits on the same fence.
+        // B0 begins only after the normal measured GPU frame has completed.
+        impl.context.vk().resetFences(1, &impl.fence);
+        impl.context.vk().resetCommandPool(impl.command_pool, 0);
+        VkCommandBuffer command{};
+        auto allocate = detail::make_vk_info<VkCommandBufferAllocateInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+        allocate.commandPool = impl.command_pool;
+        allocate.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocate.commandBufferCount = 1;
+        if (impl.context.vk().allocateCommandBuffers(&allocate, &command) != VK_SUCCESS) {
+            throw std::runtime_error("P1l-B0 command allocation failed");
+        }
+        auto begin = detail::make_vk_info<VkCommandBufferBeginInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+        begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        if (impl.context.vk().beginCommandBuffer(command, &begin) != VK_SUCCESS) {
+            throw std::runtime_error("P1l-B0 command begin failed");
+        }
+
+        primary->record(command, (impl.params.counts[1] + 7U) / 8U,
+                        (impl.params.counts[2] + 7U) / 8U);
+        i001_compute_barrier(impl.context, command);
+
+        const StoragePush composite_push{
+            impl.storage_capacity - 1U, kHashMaxProbe, impl.frame_id, 0U};
+        shadow->record(command, (impl.params.counts[1] + 7U) / 8U,
+                       (impl.params.counts[2] + 7U) / 8U, 1U,
+                       &composite_push, sizeof(composite_push));
+        i001_compute_barrier(impl.context, command);
+
+        lane_e::E003TraversalPush traversal_push{};
+        traversal_push.values[0] = impl.params.limits[1];
+        traversal_push.values[1] = static_cast<std::uint32_t>(
+            impl.options.scenario == I001Scenario::DeformingControl
+              ? impl.deforming_local_setup.instances.size()
+              : impl.instance_quantized_payload.instances.size());
+        secondary->record(command, groups(rays), 1U, 1U,
+                          &traversal_push, sizeof(traversal_push));
+        i001_compute_barrier(impl.context, command);
+        if (impl.context.vk().endCommandBuffer(command) != VK_SUCCESS) {
+            throw std::runtime_error("P1l-B0 command end failed");
+        }
+        auto submit = detail::make_vk_info<VkSubmitInfo>(
+            VK_STRUCTURE_TYPE_SUBMIT_INFO);
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &command;
+        if (impl.context.vk().queueSubmit(
+                impl.context.queue(), 1, &submit, impl.fence) != VK_SUCCESS ||
+            impl.context.vk().waitForFences(
+                1, &impl.fence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) {
+            throw std::runtime_error("P1l-B0 GPU submit/fence failed");
+        }
+
+        const auto download = [&](const B002Buffer& buffer, std::size_t length) {
+            std::vector<std::uint32_t> values(length);
+            impl.context.download_device_buffer(
+                buffer, values.data(), length * sizeof(std::uint32_t));
+            return values;
+        };
+        const auto primary_raw = download(primary_counts, std::size_t(pixels) * 4U);
+        const auto shadow_raw = download(shadow_counts, std::size_t(pixels) * 8U);
+        const auto secondary_raw = download(secondary_counts, std::size_t(rays) * 8U);
+
+        // An instrumented shader is valid only if its output is BYTE IDENTICAL
+        // to the separately rendered, uninstrumented GPU output. Neither
+        // diagnostic can alter the accepted renderer storage or final image.
+        const auto verify_equal = [&](const B002Buffer& accepted,
+                                      const B002Buffer& instrumented,
+                                      VkDeviceSize size, const char* label) {
+            std::vector<std::uint8_t> left(static_cast<std::size_t>(size));
+            std::vector<std::uint8_t> right(static_cast<std::size_t>(size));
+            impl.context.download_device_buffer(accepted, left.data(), size);
+            impl.context.download_device_buffer(instrumented, right.data(), size);
+            if (left != right) {
+                throw std::runtime_error(
+                    std::string("P1l-B0 instrumented output divergence: ") + label);
+            }
+        };
+        verify_equal(impl.primary_hits, primary_output,
+                     VkDeviceSize(pixels) * sizeof(GpuHit), "primary");
+        verify_equal(impl.image, shadow_output,
+                     VkDeviceSize(pixels) * 4U * sizeof(float), "composite");
+        verify_equal(impl.hits, secondary_output,
+                     VkDeviceSize(rays) * sizeof(GpuHit), "secondary");
+
+        for (std::uint32_t metric = 0U; metric < 4U; ++metric) {
+            report.primary[metric] =
+                p1l_b0_metric(primary_raw, pixels, 1U, 0U, metric);
+        }
+        for (std::uint32_t metric = 0U; metric < 8U; ++metric) {
+            report.shadow[metric] = p1l_b0_metric(
+                shadow_raw, pixels, 2U, metric / 4U, metric % 4U);
+            report.secondary[metric] = p1l_b0_metric(
+                secondary_raw, rays, 2U, metric / 4U, metric % 4U);
+        }
+        // Pipelines/descriptors must die before their B002Buffer allocations.
+        secondary.reset();
+        shadow.reset();
+        primary.reset();
+    } catch (...) {
+        cleanup();
+        throw;
+    }
+    cleanup();
+    return report;
+}
+
 } // namespace phos::gi::research::integration
