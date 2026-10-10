@@ -71,14 +71,14 @@ def expected_sha(variant: str, scenario: str) -> str:
 
 def validate_frame(
     frame: dict[str, Any], index: int, folder: Path, variant: str,
-    scenario: str,
+    scenario: str, sampled_hit_index: int = 0,
 ) -> dict[str, Any]:
     owners, cascades = SCENE_EXPECTATIONS[scenario]
     outputs = sum(cascades)
     original_outputs = owners * 4
     canonical_rays = outputs * 8
     diagnostics = frame.get("hit_diagnostics")
-    if index == 0:
+    if index == sampled_hit_index:
         if (not isinstance(diagnostics, dict) or
             diagnostics.get("substantive_mismatches") != 0):
             raise ValueError("P1l-A1b sampled first canonical N004 hit diagnostic failed")
