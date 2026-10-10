@@ -169,6 +169,28 @@ struct N006P1lB0Profile {
     std::array<N006P1lB0Metric, 8> secondary{};
 };
 
+// B1b is diagnostic-only: raw GPU outputs of each independent arm MUST be
+// byte-identical to the accepted original primary hit buffer.
+struct N006P1lB1bDifference {
+    std::int64_t signed_total{};
+    double mean{};
+    double p50{};
+    double p90{};
+    double p99{};
+    std::int64_t minimum{};
+    std::int64_t maximum{};
+    std::uint32_t fewer{};
+    std::uint32_t equal{};
+    std::uint32_t more{};
+};
+struct N006P1lB1bProfile {
+    std::uint32_t pixels{};
+    std::array<N006P1lB0Metric, 4> original{};
+    std::array<N006P1lB0Metric, 4> near_first{};
+    std::array<N006P1lB1bDifference, 2> delta{};
+};
+
+
 
 class N006Runtime {
 public:
@@ -195,6 +217,9 @@ public:
     // Separate compute-only command after an uninstrumented frame has finished
     // and its PFM/correctness evidence has been captured. Software backend only.
     [[nodiscard]] N006P1lB0Profile p1l_b0_work_counts();
+    // B1b runs both independent primary count shaders AFTER a measured frame.
+    // Only count outputs, not instrumented GPU shader time.
+    [[nodiscard]] N006P1lB1bProfile p1l_b1b_work_counts();
     // Exact bytes used only for same-state B1 preflight and timed-frame audit.
     [[nodiscard]] std::vector<std::uint8_t> p1l_b1_primary_hit_bytes();
 
