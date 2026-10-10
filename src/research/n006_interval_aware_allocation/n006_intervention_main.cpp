@@ -348,6 +348,51 @@ void write_p1l_b0_profile(
     out << '}';
 }
 
+
+void write_p1l_b1b_profile(
+    std::ostream& out, const lane_n::N006P1lB1bProfile& profile) {
+    static constexpr std::array<std::string_view, 4> names{
+        "node_pops", "triangle_tests", "hit", "stack_overflow"};
+    const auto group = [&](const auto& metrics) {
+        out << '{';
+        for (std::size_t i = 0; i < metrics.size(); ++i) {
+            if (i) out << ',';
+            const auto& v = metrics[i];
+            out << '"' << names[i] << "\":{\"sum\":" << v.total
+                << ",\"mean\":" << v.mean
+                << ",\"p50\":" << v.p50
+                << ",\"p90\":" << v.p90
+                << ",\"p99\":" << v.p99
+                << ",\"max\":" << v.maximum
+                << ",\"nonzero\":" << v.nonzero << '}';
+        }
+        out << '}';
+    };
+    const auto delta = [&](const lane_n::N006P1lB1bDifference& v) {
+        out << "{\"signed_total\":" << v.signed_total
+            << ",\"mean\":" << v.mean
+            << ",\"p50\":" << v.p50
+            << ",\"p90\":" << v.p90
+            << ",\"p99\":" << v.p99
+            << ",\"min\":" << v.minimum
+            << ",\"max\":" << v.maximum
+            << ",\"fewer\":" << v.fewer
+            << ",\"equal\":" << v.equal
+            << ",\"more\":" << v.more << '}';
+    };
+    out << "{\"diagnostic_only\":true,\"uninstrumented_gpu_timing\":true,"
+           "\"original_hit_byte_exact\":true,\"near_first_hit_byte_exact\":true,"
+           "\"pixels\":" << profile.pixels << ",\"original\":";
+    group(profile.original);
+    out << ",\"near_first\":";
+    group(profile.near_first);
+    out << ",\"delta\":{\"node_pops\":";
+    delta(profile.delta[0]);
+    out << ",\"triangle_tests\":";
+    delta(profile.delta[1]);
+    out << "}}";
+}
+
 struct FrameEvidence {
     lane_n::N006FrameResult result;
     lane_n::I001N004HitDiagnostics hits;
@@ -358,6 +403,7 @@ struct FrameEvidence {
     bool internal_correctness{};
     bool hit_diagnostics_executed{true};
     std::optional<lane_n::N006P1lB0Profile> p1l_b0_profile;
+    std::optional<lane_n::N006P1lB1bProfile> p1l_b1b_profile;
     int p1l_b1_arm{-1};
     bool p1l_b1_primary_exact{};
 };
@@ -404,6 +450,7 @@ int main(int argc, char** argv) {
     bool p1l_stage_probe = false;
     bool p1l_stage_fast = false;
     bool p1l_b0_counts = false;
+    bool p1l_b1b_counts = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -448,6 +495,7 @@ int main(int argc, char** argv) {
         else if (arg == "--p1l-stage-probe") p1l_stage_probe = true;
         else if (arg == "--p1l-stage-fast") p1l_stage_fast = true;
         else if (arg == "--p1l-b0-counts") p1l_b0_counts = true;
+        else if (arg == "--p1l-b1b-counts") p1l_b1b_counts = true;
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -481,9 +529,13 @@ int main(int argc, char** argv) {
             throw std::runtime_error("invalid N006 candidate arguments");
         }
         const bool p1l_b1 = !p1l_b1_pattern.empty();
-        const bool p1l_stage_any = p1l_stage_probe || p1l_stage_fast || p1l_b0_counts || p1l_b1;
-        const bool p1l_sampled_hit = p1l_stage_fast || p1l_b0_counts || p1l_b1;
-        if (int(p1l_stage_probe) + int(p1l_stage_fast) + int(p1l_b0_counts) + int(p1l_b1) > 1) {
+        const bool p1l_stage_any =
+            p1l_stage_probe || p1l_stage_fast || p1l_b0_counts ||
+            p1l_b1 || p1l_b1b_counts;
+        const bool p1l_sampled_hit =
+            p1l_stage_fast || p1l_b0_counts || p1l_b1 || p1l_b1b_counts;
+        if (int(p1l_stage_probe) + int(p1l_stage_fast) +
+            int(p1l_b0_counts) + int(p1l_b1) + int(p1l_b1b_counts) > 1) {
             throw std::runtime_error(
                 "N006 P1l legacy-full and sampled-fast modes are mutually exclusive");
         }
@@ -660,7 +712,7 @@ int main(int argc, char** argv) {
             }
         }
 
-        if (p1l_b0_counts) {
+        if (p1l_b0_counts || p1l_b1b_counts) {
             const bool supported_scenario =
                 scenario_name == "static" || scenario_name == "camera-motion" ||
                 scenario_name == "light-motion" || scenario_name == "moving-rigid" ||
@@ -678,7 +730,7 @@ int main(int argc, char** argv) {
                 !hash_frame_pattern.empty() ||
                 fractions[0] != 1.0F || budgets[0] != 0U) {
                 throw std::runtime_error(
-                    "N006 P1l-B0 requires software, one canonical target, "
+                    "N006 P1l-B0/B1b requires software, one canonical target, "
                     "32 source/8 target warmups, lean-copyback, no reference");
             }
         }
@@ -887,6 +939,12 @@ int main(int argc, char** argv) {
                 }
             }
             std::optional<lane_n::N006P1lB0Profile> b0_profile;
+            std::optional<lane_n::N006P1lB1bProfile> b1b_profile;
+            if (p1l_b1b_counts) {
+                // Frozen B1b: both diagnostic shaders use same accepted
+                // input, AFTER frame timestamps; byte parity is mandatory.
+                b1b_profile = runtime.p1l_b1b_work_counts();
+            }
             if (p1l_b0_counts) {
                 // This separate command runs AFTER the normal renderer and
                 // image readback; no diagnostic work enters accepted GPU timers.
@@ -903,6 +961,7 @@ int main(int argc, char** argv) {
                               : frame_core_correct(result)),
                 hit_executed,
                 std::move(b0_profile),
+                std::move(b1b_profile),
                 p1l_b1 ? int(p1l_b1_pattern[index] - '0') : -1,
                 b1_primary_exact,
             });
@@ -1049,6 +1108,8 @@ int main(int argc, char** argv) {
             << (p1l_stage_fast ? "true" : "false") << ",\n"
             << "  \"p1l_b0_counts\":"
             << (p1l_b0_counts ? "true" : "false") << ",\n"
+            << "  \"p1l_b1b_counts\":"
+            << (p1l_b1b_counts ? "true" : "false") << ",\n"
             << "  \"p1l_b1_pattern\":\"" << p1l_b1_pattern << "\",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
             << (p1l_b1 ? "1" : (p1l_sampled_hit ? "0" : "-1"))
@@ -1102,6 +1163,12 @@ int main(int argc, char** argv) {
             out << ",\"p1l_b1_primary_exact\":";
             if (p1l_b1) out << (frame.p1l_b1_primary_exact ? "true" : "false");
             else out << "null";
+            out << ",\"p1l_b1b_counts\":";
+            if (frame.p1l_b1b_profile) {
+                write_p1l_b1b_profile(out, *frame.p1l_b1b_profile);
+            } else {
+                out << "null";
+            }
             out << ",\"p1l_b0_counts\":";
             if (frame.p1l_b0_profile) {
                 write_p1l_b0_profile(out, *frame.p1l_b0_profile);
