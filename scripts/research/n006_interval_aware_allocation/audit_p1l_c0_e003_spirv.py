@@ -18,9 +18,9 @@ from audit_p1l_b1c_spirv import ROOT, compiler_info, parse_spirv
 
 PROTOCOL = "n006-p1l-c0-e003-spirv-static-audit-v1"
 VARIANTS = {
-    "accepted_e003": (
+    "accepted_e003_rebuilt": (
         "shaders/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl",
-        "e003_instance_quantized.spv",
+        "n006_p1l_c0_e003_source_rebuild.spv",
     ),
     "b0_count_only": (
         "shaders/research/n006_interval_aware_allocation/n006_p1l_e003_count.comp.glsl",
@@ -60,6 +60,7 @@ def audit(build_dir: Path) -> dict:
                        "CPU_refit_and_rebuild_cost"],
         "variants": {},
         "conclusion": "STATIC_COUNTS_ONLY_COMPILER_HOISTING_NOT_ESTABLISHED",
+        "active_shader_binary_match_required": True,
     }
     for name, (source, spv) in VARIANTS.items():
         raw = (build_dir / "shaders" / spv).read_bytes()
@@ -72,7 +73,25 @@ def audit(build_dir: Path) -> dict:
             "opcode_families": {v: counts.get(str(k), 0) for k, v in FAMILY.items()},
             "source_contract": source_contract(src.decode("utf-8")),
         }
-    baseline = doc["variants"]["accepted_e003"]
+    baseline = doc["variants"]["accepted_e003_rebuilt"]
+    # CMake currently does NOT register generation of the runtime's
+    # e003_instance_quantized.spv. Recompile *separately*, then verify it
+    # against the artifact actually loaded by the accepted runtime.
+    active_path = build_dir / "shaders" / "e003_instance_quantized.spv"
+    if not active_path.is_file():
+        raise RuntimeError(
+            "C0 active E003 SPIR-V absent: baseline runtime artifact provenance missing")
+    actual = parse_spirv(active_path.read_bytes())
+    doc["runtime_e003_binary"] = {
+        "file": "e003_instance_quantized.spv",
+        "sha256": actual["sha256"],
+        "binary_bytes": actual["binary_bytes"],
+        "matches_fresh_source_rebuild": actual["sha256"] == baseline["sha256"],
+    }
+    if actual["sha256"] != baseline["sha256"]:
+        raise ValueError(
+            "C0 active E003 SPIR-V differs from freshly rebuilt shader; "
+            "do not interpret static audit until provenance reconciled")
     if not all(baseline["source_contract"].values()):
         raise ValueError("C0 accepted E003 shader source contract changed")
     # Static OpFDiv count is intentionally NOT interpreted as how many
