@@ -335,6 +335,9 @@ def main() -> int:
                 "--skip-reference", "--canonical-lean-hash",
                 "--p1l-stage-fast",
             ]
+            print(f"[P1l-A1b] start {variant}/{scenario} run={attempt} "
+                  f"({len(result['runs']) + 1}/30) "
+                  f"wall-time cap={PROCESS_TIMEOUT_SECONDS}s", flush=True)
             try:
                 try:
                     process = subprocess.run(
@@ -365,6 +368,8 @@ def main() -> int:
                 audited["raw_evidence_sha256"] = hashlib.sha256(
                     source_file.read_bytes()).hexdigest()
                 result["runs"].append(audited)
+                print(f"[P1l-A1b] accepted {len(result['runs'])}/30 "
+                      f"{variant}/{scenario} run={attempt}", flush=True)
             except (RuntimeError, ValueError, OSError, KeyError, TypeError) as error:
                 result["status"] = "invalid-retained"
                 result["failures"].append({
