@@ -354,6 +354,7 @@ int main(int argc, char** argv) {
     bool canonical_matrix_case = false;
     bool canonical_lean_hash = false;
     bool canonical_zero_copy = false;
+    bool p1l_stage_probe = false;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
@@ -394,6 +395,7 @@ int main(int argc, char** argv) {
         else if (arg == "--canonical-matrix-case") canonical_matrix_case = true;
         else if (arg == "--canonical-lean-hash") canonical_lean_hash = true;
         else if (arg == "--canonical-zero-copy") canonical_zero_copy = true;
+        else if (arg == "--p1l-stage-probe") p1l_stage_probe = true;
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
             three_arm_pattern = argv[++index];
         else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
@@ -453,7 +455,7 @@ int main(int argc, char** argv) {
         // accepted P1i behavior and allocations remain the default.
         if (canonical_lean_hash &&
             !((canonical_matrix_case && canonical_probe_pilot) ||
-              !three_arm_pattern.empty())) {
+              !three_arm_pattern.empty() || p1l_stage_probe)) {
             throw std::runtime_error(
                 "N006 P1j-A lean hash requires canonical matrix correctness pilot");
         }
@@ -490,7 +492,7 @@ int main(int argc, char** argv) {
                     "LaneEFinal HWRT/software five-scenario protocol");
             }
         } else if (variant_name != "lane-e-final-hwrt" &&
-                   three_arm_pattern.empty()) {
+                   three_arm_pattern.empty() && !p1l_stage_probe) {
             throw std::runtime_error(
                 "N006 variant override is reserved for P1i matrix study");
         }
@@ -532,7 +534,7 @@ int main(int argc, char** argv) {
                     "no hash/extra/reference/topology");
             }
         } else if (target_state_warmup_frames != 0U &&
-                   three_arm_pattern.empty()) {
+                   three_arm_pattern.empty() && !p1l_stage_probe) {
             throw std::runtime_error(
                 "N006 target-state warmup only valid with a frozen P1h/P1k pattern");
         }
@@ -560,6 +562,40 @@ int main(int argc, char** argv) {
                 throw std::runtime_error(
                     "N006 P1k requires frozen balanced 18-frame pattern, 32 source/8 "
                     "target warmups, 2 supported backends, lean+zero-copy and no reference");
+            }
+        }
+
+        // P1l-A1 uses existing N006-only disjoint GPU timestamps, without
+        // modifying historical shader stages or the three-arm P1k protocol.
+        if (p1l_stage_probe) {
+            const bool supported_variant =
+                variant_name == "lane-e-final-hwrt" ||
+                variant_name == "lane-e-final-software";
+            const bool supported_scenario =
+                scenario_name == "static" ||
+                scenario_name == "camera-motion" ||
+                scenario_name == "light-motion" ||
+                scenario_name == "moving-rigid" ||
+                scenario_name == "deforming-control";
+            if (!supported_variant || !supported_scenario ||
+                !canonical_lean_hash || canonical_zero_copy ||
+                canonical_probe_pilot || canonical_matrix_case ||
+                !canonical_frame_pattern.empty() || !three_arm_pattern.empty() ||
+                topology || !skip_reference ||
+                mode != lane_n::N006ExtraMode::Current ||
+                source_warmup_frames != 32U ||
+                target_state_warmup_frames != 8U || target_frames != 12U ||
+                capture_gpu_unique_hash || capture_probe_equivalence ||
+                capture_probe_multiplicity || capture_visible_tiles ||
+                !hash_frame_pattern.empty() ||
+                !std::all_of(fractions.begin(), fractions.end(),
+                    [](float value) { return value == 1.0F; }) ||
+                !std::all_of(budgets.begin(), budgets.end(),
+                    [](std::uint32_t value) { return value == 0U; })) {
+                throw std::runtime_error(
+                    "N006 P1l-A1 requires fixed 5 scenarios x 2 backends, "
+                    "lean-copyback canonical, 32 source/8 target warmups, "
+                    "12 motion=1 frames and skipped reference");
             }
         }
 
@@ -598,8 +634,14 @@ int main(int argc, char** argv) {
         auto source = runtime.run_frame(false, current_request);
         const auto source_hits = runtime.n004_hit_diagnostics();
         const bool source_correct = frame_correct(source, source_hits);
+        bool source_warmups_correct = source_correct;
         for (std::uint32_t index = 1; index < source_warmup_frames; ++index) {
-            (void)runtime.run_frame(false, current_request);
+            const auto warm_source = runtime.run_frame(false, current_request);
+            if (p1l_stage_probe &&
+                !frame_correct(warm_source, runtime.n004_hit_diagnostics())) {
+                source_warmups_correct = false;
+                throw std::runtime_error("N006 P1l-A1 source warmup invalid");
+            }
         }
 
         // P1h: force traversal maintenance / dynamic transition before the
@@ -608,35 +650,62 @@ int main(int argc, char** argv) {
         double last_target_warmup_maintenance_us = 0.0;
         std::uint32_t last_target_warmup_owners = 0U;
         std::uint32_t last_target_warmup_work = 0U;
+        std::uint32_t first_target_warmup_owners = 0U;
+        std::uint32_t first_target_warmup_outputs = 0U;
+        std::uint32_t first_target_warmup_work = 0U;
+        std::vector<double> target_warmup_maintenance_samples;
         if (target_state_warmup_frames != 0U) {
             runtime.set_motion_fraction(1.0F);
             for (std::uint32_t warm = 0; warm < target_state_warmup_frames; ++warm) {
                 const auto warm_frame = runtime.run_frame(true, current_request);
                 const auto warm_hits = runtime.n004_hit_diagnostics();
+                const auto& stats = warm_frame.frame.stats;
+                const double maintenance =
+                    warm_frame.frame.timings.traversal_maintenance_gpu_us;
+                target_warmup_maintenance_samples.push_back(maintenance);
+                if (warm == 0U) {
+                    first_target_warmup_owners = stats.visible_owners;
+                    first_target_warmup_outputs = stats.outputs;
+                    first_target_warmup_work = stats.work_items;
+                }
+                const bool expected_counts = p1l_stage_probe
+                    ? (first_target_warmup_owners != 0U &&
+                       stats.visible_owners == first_target_warmup_owners &&
+                       stats.outputs == first_target_warmup_owners * 4U &&
+                       stats.outputs == first_target_warmup_outputs &&
+                       stats.work_items == stats.outputs * 8U &&
+                       stats.work_items == first_target_warmup_work)
+                    : (stats.visible_owners == 4172U &&
+                       stats.work_items == 133504U &&
+                       stats.outputs == 16688U);
                 if (!frame_correct(warm_frame, warm_hits) ||
-                    warm_frame.frame.stats.visible_owners != 4172U ||
-                    warm_frame.frame.stats.work_items != 133504U ||
-                    warm_frame.frame.stats.outputs != 16688U ||
-                    (warm != 0U &&
-                     warm_frame.frame.timings.traversal_maintenance_gpu_us != 0.0)) {
+                    !expected_counts || (warm != 0U && maintenance != 0.0)) {
                     target_warmup_correct = false;
                     throw std::runtime_error(
-                        "N006 P1h target-state warmup frame/count/maintenance invalid");
+                        "N006 P1h/P1k/P1l target warmup "
+                        "frame/count/maintenance invalid");
                 }
-                last_target_warmup_maintenance_us =
-                    warm_frame.frame.timings.traversal_maintenance_gpu_us;
-                last_target_warmup_owners =
-                    warm_frame.frame.stats.visible_owners;
-                last_target_warmup_work =
-                    warm_frame.frame.stats.work_items;
+                last_target_warmup_maintenance_us = maintenance;
+                last_target_warmup_owners = stats.visible_owners;
+                last_target_warmup_work = stats.work_items;
             }
             if (last_target_warmup_maintenance_us != 0.0 ||
-                last_target_warmup_owners != 4172U ||
-                last_target_warmup_work != 133504U) {
+                (p1l_stage_probe
+                    ? (last_target_warmup_owners != first_target_warmup_owners ||
+                       last_target_warmup_work != first_target_warmup_work)
+                    : (last_target_warmup_owners != 4172U ||
+                       last_target_warmup_work != 133504U))) {
                 throw std::runtime_error(
-                    "N006 P1h target-state warmup failed to stabilize");
+                    "N006 P1h/P1k/P1l target-state warmup failed to stabilize");
             }
         }
+        std::ostringstream warmup_maintenance_json;
+        warmup_maintenance_json << '[' << std::setprecision(17);
+        for (std::size_t idx = 0; idx < target_warmup_maintenance_samples.size(); ++idx) {
+            if (idx != 0U) warmup_maintenance_json << ',';
+            warmup_maintenance_json << target_warmup_maintenance_samples[idx];
+        }
+        warmup_maintenance_json << ']';
 
         fs::create_directories(artifact_dir / "frames");
         std::vector<FrameEvidence> frames;
@@ -655,7 +724,8 @@ int main(int argc, char** argv) {
                     (!canonical_frame_pattern.empty() &&
                      canonical_frame_pattern[index] == '1') ||
                     (!three_arm_pattern.empty() &&
-                     three_arm_pattern[index] != '0'),
+                     three_arm_pattern[index] != '0') ||
+                    p1l_stage_probe,
                 (canonical_probe_pilot && canonical_zero_copy && index == 1U) ||
                     (!three_arm_pattern.empty() &&
                      three_arm_pattern[index] == '2'),
@@ -816,6 +886,10 @@ int main(int argc, char** argv) {
             << "  \"topology\":" << (topology ? "true" : "false") << ",\n"
             << "  \"variant\":\"" << variant_name << "\",\n"
             << "  \"source_warmup_frames\":" << source_warmup_frames << ",\n"
+            << "  \"source_warmups_correct\":"
+            << (source_warmups_correct ? "true" : "false") << ",\n"
+            << "  \"p1l_stage_probe\":"
+            << (p1l_stage_probe ? "true" : "false") << ",\n"
             << "  \"three_arm_pattern\":\"" << three_arm_pattern << "\",\n"
             << "  \"target_state_warmup\":{\"frames\":"
             << target_state_warmup_frames
@@ -824,6 +898,7 @@ int main(int argc, char** argv) {
             << last_target_warmup_maintenance_us
             << ",\"last_visible_owners\":" << last_target_warmup_owners
             << ",\"last_work_items\":" << last_target_warmup_work
+            << ",\"maintenance_gpu_us\":" << warmup_maintenance_json.str()
             << "},\n"
             << "  \"depth_threshold\":" << depth_threshold << ",\n"
             << "  \"extra_rays_per_probe\":" << extra_rays_per_probe << ",\n"
