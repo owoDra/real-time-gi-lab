@@ -94,6 +94,7 @@ struct N006Runtime::State {
     std::unique_ptr<I001ComputeStage> extra_stage;
     std::unique_ptr<I001ComputeStage> p1l_b1_primary_stage;
     bool p1l_b1_enabled{};
+    bool p1l_b1c_axis_proxy{};
     std::unique_ptr<I001ComputeStage> hash_stage;
     std::unique_ptr<I001ComputeStage> canonical_index_stage;
     std::unique_ptr<I001ComputeStage> canonical_setup_stage;
@@ -113,7 +114,7 @@ struct N006Runtime::State {
 
 N006Runtime::N006Runtime(
     I001Options options, bool p1j_lean_hash, bool p1j_direct_compact,
-    bool p1l_b1_enabled)
+    bool p1l_b1_enabled, bool p1l_b1c_axis_proxy)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     if (p1j_direct_compact && !p1j_lean_hash) {
@@ -121,6 +122,9 @@ N006Runtime::N006Runtime(
     }
     state_->direct_compact = p1j_direct_compact;
     state_->p1l_b1_enabled = p1l_b1_enabled;
+    state_->p1l_b1c_axis_proxy = p1l_b1c_axis_proxy;
+    if (p1l_b1c_axis_proxy && !p1l_b1_enabled)
+        throw std::runtime_error("N006 P1l-B1c requires explicit B1 A/B pattern");
     auto& impl = *runtime_.impl_;
     if (p1l_b1_enabled) {
         if (impl.options.variant != I001Variant::LaneEFinalSoftware ||
@@ -138,7 +142,9 @@ N006Runtime::N006Runtime(
         state_->p1l_b1_primary_stage = std::make_unique<I001ComputeStage>(
             impl.context,
             shader_path(PHOS_GI_N006_SHADER_DIR,
-                        "n006_p1l_b1_primary_near_first.spv"),
+                        p1l_b1c_axis_proxy
+                            ? "n006_p1l_b1c_primary_axis_proxy.spv"
+                            : "n006_p1l_b1_primary_near_first.spv"),
             b1_primary);
     }
     state_->extra_stats = impl.context.create_device_buffer(
@@ -1687,6 +1693,14 @@ namespace {
 }
 
 } // namespace
+
+double N006Runtime::p1l_b1c_pack_cpu_us() const noexcept {
+    return runtime_.impl_->n006_primary_axis_pack_cpu_us;
+}
+
+std::uint64_t N006Runtime::p1l_b1c_packed_nodes() const noexcept {
+    return runtime_.impl_->n006_primary_axis_packed_nodes;
+}
 
 std::vector<std::uint8_t> N006Runtime::p1l_b1_primary_hit_bytes() {
     if (!state_->p1l_b1_enabled || !runtime_.impl_->have_last)

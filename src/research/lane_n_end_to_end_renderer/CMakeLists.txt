@@ -298,6 +298,10 @@ add_compute_shader(n006_p1l_b1b_primary_near_first_count
 add_custom_target(phos-n006-p1l-b1b-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_p1l_primary_count.spv"
   "${CMAKE_BINARY_DIR}/shaders/n006_p1l_b1b_primary_near_first_count.spv")
+add_compute_shader(n006_p1l_b1c_primary_axis_proxy
+  shaders/research/n006_interval_aware_allocation/n006_p1l_b1c_primary_axis_proxy.comp.glsl)
+add_custom_target(phos-n006-p1l-b1c-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1l_b1c_primary_axis_proxy.spv")
 add_custom_target(phos-n006-p1l-b1-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_p1l_b1_primary_near_first.spv")
 add_custom_target(phos-n006-p1l-b0-shaders DEPENDS
@@ -326,4 +330,5 @@ target_compile_definitions(phos-n006-intervention PRIVATE
 )
 add_dependencies(phos-n006-intervention
   phos-n006-shaders phos-n003-comparison-shaders phos-n006-p1l-b0-shaders
-  phos-n006-p1l-b1-shaders phos-n006-p1l-b1b-shaders)
+  phos-n006-p1l-b1-shaders phos-n006-p1l-b1b-shaders
+  phos-n006-p1l-b1c-shaders)

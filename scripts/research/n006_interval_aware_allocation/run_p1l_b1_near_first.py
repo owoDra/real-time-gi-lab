@@ -24,6 +24,7 @@ from run_p1l_a1b_sampled_hit import (
 )
 
 PROTOCOL = "n006-p1l-b1a-primary-near-first-v1"
+B1C_PROTOCOL = "n006-p1l-b1c-packed-axis-v1"
 VARIANT = "lane-e-final-software"
 SCENARIOS = ("static", "camera-motion", "light-motion",
              "moving-rigid", "deforming-control")
@@ -38,12 +39,13 @@ STAGES = (
 
 
 def audit_run(data: dict[str, Any], folder: Path, gpu: str, scene: str,
-              pattern: str) -> dict[str, Any]:
+              pattern: str, axis_proxy: bool = False) -> dict[str, Any]:
     if (scene not in SCENARIOS or pattern not in (PREFLIGHT, BALANCED) or
         data.get("protocol_version") != "n006-p1-intervention-v1" or
         data.get("variant") != VARIANT or data.get("scenario") != scene or
         data.get("mode") != "current" or
         data.get("p1l_b1_pattern") != pattern or
+        data.get("p1l_b1c_axis_proxy", False) is not axis_proxy or
         data.get("p1l_stage_fast") is not False or
         data.get("p1l_stage_probe") is not False or
         data.get("p1l_b0_counts") is not False or
@@ -67,6 +69,12 @@ def audit_run(data: dict[str, Any], folder: Path, gpu: str, scene: str,
         not isinstance(history, list) or len(history) != TARGET_WARMUPS or
         any(finite_gpu({"t": t}, "t") != 0 for t in history[1:])):
         raise ValueError("P1l-B1 target warmup/cold maintenance invalid")
+    pack_cpu = data.get("p1l_b1c_axis_pack_cpu_us")
+    packed_nodes = data.get("p1l_b1c_axis_packed_nodes")
+    if axis_proxy and (not isinstance(pack_cpu, (int, float)) or
+                       not math.isfinite(pack_cpu) or pack_cpu < 0 or
+                       not isinstance(packed_nodes, int) or packed_nodes <= 0):
+        raise ValueError("P1l-B1c missing CPU packing accounting")
     frames = data.get("frames")
     if not isinstance(frames, list) or len(frames) != len(pattern):
         raise ValueError("P1l-B1 wrong number of measured frames")
@@ -87,6 +95,9 @@ def audit_run(data: dict[str, Any], folder: Path, gpu: str, scene: str,
         })
     return {
         "scenario": scene, "variant": VARIANT,
+        "b1c_axis_proxy": axis_proxy,
+        "b1c_axis_pack_cpu_us": pack_cpu if axis_proxy else None,
+        "b1c_axis_packed_nodes": packed_nodes if axis_proxy else None,
         "pattern": pattern, "measured_frames": len(frames),
         "sampled_cpu_hit_candidate_frame": 1,
         "accepted_image_sha256": expected_sha(VARIANT, scene),
@@ -192,6 +203,8 @@ def aggregate(runs: list[dict[str, Any]]) -> dict[str, Any]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--b1c", action="store_true",
+                        help="run prospectively frozen B1c packed-axis variant")
     parser.add_argument("--preflight", action="store_true",
                         help="5 processes x two frozen 01 frames, no timing decision")
     args = parser.parse_args()
@@ -207,13 +220,16 @@ def main() -> int:
         raise RuntimeError("P1l-B1 accepted Sponza scene missing/drifted")
     output_dir = (
         pilot.ROOT / "out/research/n006-interval-aware-allocation" /
-        ("p1l-b1a-preflight" if args.preflight else "p1l-b1a-matched") /
+        (("p1l-b1c" if args.b1c else "p1l-b1a") +
+         ("-preflight" if args.preflight else "-matched")) /
         datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     )
     output_dir.mkdir(parents=True, exist_ok=False)
-    summary_file = output_dir / "n006-p1l-b1a-summary.json"
+    summary_file = output_dir / (
+        "n006-p1l-b1c-summary.json" if args.b1c else "n006-p1l-b1a-summary.json")
     summary: dict[str, Any] = {
-        "protocol_version": PROTOCOL, "status": "in-progress",
+        "protocol_version": B1C_PROTOCOL if args.b1c else PROTOCOL,
+        "b1c_axis_proxy": args.b1c, "status": "in-progress",
         "mode": "preflight" if args.preflight else "matched",
         "formal": False, "reference_generated": False,
         "gpu": config["target_gpu"],
@@ -246,6 +262,7 @@ def main() -> int:
                 "--target-frames", str(len(pattern)),
                 "--skip-reference", "--canonical-lean-hash",
                 "--p1l-b1-pattern", pattern,
+                *(["--p1l-b1c-axis-proxy"] if args.b1c else []),
             ]
             print(f"[P1l-B1] start {scenario} attempt={attempt} "
                   f"({len(summary['runs'])+1}/{total}), timeout={TIMEOUT_SECONDS}s",
@@ -274,7 +291,7 @@ def main() -> int:
                 raw_file = folder / pilot.EVIDENCE_NAME
                 data = json.loads(raw_file.read_text(encoding="utf-8"))
                 audited = audit_run(data, folder, config["target_gpu"],
-                                    scenario, pattern)
+                                    scenario, pattern, axis_proxy=args.b1c)
                 audited["attempt"] = attempt
                 audited["raw_evidence_sha256"] = hashlib.sha256(
                     raw_file.read_bytes()).hexdigest()

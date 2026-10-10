@@ -19,6 +19,9 @@
 #include "imported/lane_e_dynamic_geometry/e003_instance_payload.hpp"
 #include "imported/lane_e_dynamic_geometry/e004_deforming_payload.hpp"
 #include "../../vk_init.hpp"
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+#include "../n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"
+#endif
 
 #include <algorithm>
 #include <array>
@@ -740,6 +743,8 @@ struct I001Runtime::Impl {
     std::unique_ptr<GpuSoftwareBvhData> n006_primary_cpu;
     B002Buffer n006_primary_triangles{}, n006_primary_nodes{}, n006_primary_order{};
     bool n006_primary_target{};
+    double n006_primary_axis_pack_cpu_us{};
+    std::uint64_t n006_primary_axis_packed_nodes{};
 #endif
     std::unique_ptr<HierarchicalStrataBrick> hierarchy_cpu;
     lane_b::B003QuantizedMicroPayload quant_payload;
@@ -973,7 +978,11 @@ struct I001Runtime::Impl {
         if (n006_primary_cpu->root() != 0U) {
             fail("N006 software primary binary BVH root must be zero");
         }
-        const auto nodes = n006_primary_cpu->gpu_nodes();
+        auto nodes = n006_primary_cpu->gpu_nodes();
+        const auto pack_start = std::chrono::steady_clock::now();
+        n006_primary_axis_packed_nodes += n006_pack_primary_axis_proxy(nodes);
+        n006_primary_axis_pack_cpu_us += std::chrono::duration<double, std::micro>(
+            std::chrono::steady_clock::now() - pack_start).count();
         const auto& ordered = n006_primary_cpu->ordered_primitives();
         VkDeviceSize nodes_bytes = nodes.size() * sizeof(lane_b::GpuBvhNode);
         VkDeviceSize order_bytes = ordered.size() * sizeof(std::uint32_t);
@@ -1024,7 +1033,11 @@ struct I001Runtime::Impl {
         if (n006_primary_cpu->root() != 0U) {
             fail("N006 software primary target BVH root must be zero");
         }
-        const auto nodes = n006_primary_cpu->gpu_nodes();
+        auto nodes = n006_primary_cpu->gpu_nodes();
+        const auto pack_start = std::chrono::steady_clock::now();
+        n006_primary_axis_packed_nodes += n006_pack_primary_axis_proxy(nodes);
+        n006_primary_axis_pack_cpu_us += std::chrono::duration<double, std::micro>(
+            std::chrono::steady_clock::now() - pack_start).count();
         const auto& ordered = n006_primary_cpu->ordered_primitives();
         const auto triangles = gpu_triangles(translated);
         const VkDeviceSize node_bytes =

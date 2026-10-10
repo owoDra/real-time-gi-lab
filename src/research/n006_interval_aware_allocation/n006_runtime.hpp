@@ -196,7 +196,8 @@ class N006Runtime {
 public:
     explicit N006Runtime(I001Options options, bool p1j_lean_hash = false,
                          bool p1j_direct_compact = false,
-                         bool p1l_b1_enabled = false);
+                         bool p1l_b1_enabled = false,
+                         bool p1l_b1c_axis_proxy = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
@@ -222,6 +223,8 @@ public:
     [[nodiscard]] N006P1lB1bProfile p1l_b1b_work_counts();
     // Exact bytes used only for same-state B1 preflight and timed-frame audit.
     [[nodiscard]] std::vector<std::uint8_t> p1l_b1_primary_hit_bytes();
+    [[nodiscard]] double p1l_b1c_pack_cpu_us() const noexcept;
+    [[nodiscard]] std::uint64_t p1l_b1c_packed_nodes() const noexcept;
 
     [[nodiscard]] const std::string& device_name() const noexcept;
     [[nodiscard]] const std::string& driver_name() const noexcept;

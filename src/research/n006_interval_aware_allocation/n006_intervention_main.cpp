@@ -451,6 +451,7 @@ int main(int argc, char** argv) {
     bool p1l_stage_fast = false;
     bool p1l_b0_counts = false;
     bool p1l_b1b_counts = false;
+    bool p1l_b1c_axis_proxy = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -496,6 +497,7 @@ int main(int argc, char** argv) {
         else if (arg == "--p1l-stage-fast") p1l_stage_fast = true;
         else if (arg == "--p1l-b0-counts") p1l_b0_counts = true;
         else if (arg == "--p1l-b1b-counts") p1l_b1b_counts = true;
+        else if (arg == "--p1l-b1c-axis-proxy") p1l_b1c_axis_proxy = true;
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -529,6 +531,8 @@ int main(int argc, char** argv) {
             throw std::runtime_error("invalid N006 candidate arguments");
         }
         const bool p1l_b1 = !p1l_b1_pattern.empty();
+        if (p1l_b1c_axis_proxy && !p1l_b1)
+            throw std::runtime_error("N006 P1l-B1c requires frozen --p1l-b1-pattern");
         const bool p1l_stage_any =
             p1l_stage_probe || p1l_stage_fast || p1l_b0_counts ||
             p1l_b1 || p1l_b1b_counts;
@@ -791,7 +795,8 @@ int main(int argc, char** argv) {
         options.scenario = lane_n::i001_parse_scenario(scenario_name);
         options.validation = true;
         lane_n::N006Runtime runtime(
-            options, canonical_lean_hash, canonical_zero_copy, p1l_b1);
+            options, canonical_lean_hash, canonical_zero_copy, p1l_b1,
+            p1l_b1c_axis_proxy);
 
         const lane_n::N006ExtraRequest current_request{};
         auto source = runtime.run_frame(false, current_request);
@@ -1111,6 +1116,9 @@ int main(int argc, char** argv) {
             << "  \"p1l_b1b_counts\":"
             << (p1l_b1b_counts ? "true" : "false") << ",\n"
             << "  \"p1l_b1_pattern\":\"" << p1l_b1_pattern << "\",\n"
+            << "  \"p1l_b1c_axis_proxy\":" << (p1l_b1c_axis_proxy ? "true" : "false") << ",\n"
+            << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
+            << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
             << (p1l_b1 ? "1" : (p1l_sampled_hit ? "0" : "-1"))
             << ",\n"
