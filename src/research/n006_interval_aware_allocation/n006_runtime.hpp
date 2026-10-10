@@ -25,6 +25,7 @@ struct N006ExtraRequest {
     bool capture_hash_probe{};
     bool canonical_probe_pilot{};
     bool direct_compact_work{}; // P1k per-frame three-arm selector; requires opt-in stages.
+    bool p1l_b1_near_first{}; // N006 isolated near-first software primary arm.
 };
 
 // Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
@@ -172,7 +173,8 @@ struct N006P1lB0Profile {
 class N006Runtime {
 public:
     explicit N006Runtime(I001Options options, bool p1j_lean_hash = false,
-                         bool p1j_direct_compact = false);
+                         bool p1j_direct_compact = false,
+                         bool p1l_b1_enabled = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
@@ -193,6 +195,8 @@ public:
     // Separate compute-only command after an uninstrumented frame has finished
     // and its PFM/correctness evidence has been captured. Software backend only.
     [[nodiscard]] N006P1lB0Profile p1l_b0_work_counts();
+    // Exact bytes used only for same-state B1 preflight and timed-frame audit.
+    [[nodiscard]] std::vector<std::uint8_t> p1l_b1_primary_hit_bytes();
 
     [[nodiscard]] const std::string& device_name() const noexcept;
     [[nodiscard]] const std::string& driver_name() const noexcept;
