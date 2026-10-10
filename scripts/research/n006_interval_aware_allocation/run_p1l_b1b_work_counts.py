@@ -19,7 +19,7 @@ from typing import Any
 import run_p1_pilot as pilot
 from run_p1l_a1b_sampled_hit import (
     SCENE_EXPECTATIONS, SOURCE_WARMUPS, TARGET_WARMUPS,
-    validate_frame, finite_gpu, LEAN_SCRATCH, HASH_SLOTS,
+    validate_frame, finite_gpu,
 )
 
 PROTOCOL = "n006-p1l-b1b-paired-primary-counts-v1"
@@ -28,17 +28,6 @@ VARIANT = "lane-e-final-software"
 SCENARIOS = ("light-motion", "camera-motion", "static",
              "moving-rigid", "deforming-control")
 SMOKE = SCENARIOS[:2]
-B0_LABELS = {
-    "primary": ("node_pops", "triangle_tests", "hit", "stack_overflow"),
-    "shadow": ("shadow_queries", "node_pops", "triangle_tests",
-               "blockers", "valid_pixels", "positive_cosine",
-               "stack_overflow", "storage_lookups"),
-    "secondary": ("instance_tests", "dda_cells", "hash_probes",
-                  "quant_node_pops", "child_aabb_tests",
-                  "triangle_tests", "leaf_visits", "overflow"),
-}
-
-
 PIXELS = 320 * 180
 METRICS = ("node_pops", "triangle_tests", "hit", "stack_overflow")
 
@@ -250,6 +239,26 @@ def main() -> int:
             for key in ("node_pops", "triangle_tests")
         }
         for s in summary["results"]
+    }
+    # Mechanism-only next-action routing; never overwrite B1a's REJECT.
+    # These are one-frame WORK counts, not GPU elapsed-time improvements.
+    reduced = [
+        name for name, counts in summary["result_summary"].items()
+        if counts["node_pops"]["delta_total"] < 0
+    ]
+    summary["mechanism_decision"] = {
+        "b1a_performance_decision": "REJECTED_UNCHANGED",
+        "node_visit_reduced_scenes": reduced,
+        "node_visit_reduced_count": len(reduced),
+        "reason": (
+            "No tested scene reduced primary BVH node visits; abandon "
+            "B1a child-center ordering and prioritize E003/shadow."
+            if len(reduced) == 0 else
+            "B1a reduced node visits in at least one scene but failed "
+            "frozen GPU performance; inspect extra child reads, shader "
+            "instructions and divergence before any new GPU timing."
+        ),
+        "gpu_speedup_claim": False,
     }
     save()
     print(json.dumps({"status": summary["status"],
