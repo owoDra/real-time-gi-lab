@@ -290,6 +290,12 @@ add_compute_shader(n006_p1l_composite_count
   shaders/research/n006_interval_aware_allocation/n006_p1l_composite_count.comp.glsl)
 add_compute_shader(n006_p1l_e003_count
   shaders/research/n006_interval_aware_allocation/n006_p1l_e003_count.comp.glsl)
+# C0: independently rebuild the ORIGINAL E003 shader, without altering the
+# accepted runtime binary or any accepted source. Compare their SPIR-V SHA.
+add_compute_shader(n006_p1l_c0_e003_source_rebuild
+  shaders/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl)
+add_custom_target(phos-n006-p1l-c0-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1l_c0_e003_source_rebuild.spv")
 add_compute_shader(n006_p1l_b1_primary_near_first
   shaders/research/n006_interval_aware_allocation/n006_p1l_b1_primary_near_first.comp.glsl)
 # B1b count-only pair; never replaces the accepted original primary.
@@ -331,4 +337,4 @@ target_compile_definitions(phos-n006-intervention PRIVATE
 add_dependencies(phos-n006-intervention
   phos-n006-shaders phos-n003-comparison-shaders phos-n006-p1l-b0-shaders
   phos-n006-p1l-b1-shaders phos-n006-p1l-b1b-shaders
-  phos-n006-p1l-b1c-shaders)
+  phos-n006-p1l-b1c-shaders phos-n006-p1l-c0-shaders)
