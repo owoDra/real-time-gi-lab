@@ -239,3 +239,25 @@ After 2/2 smoke, the user completed the **independent frozen full 5/5 software B
 - **Secondary E003 quantized eight-child BVH:** all scenes have **25.5–26.3 child AABB tests/ray**, 6.7–7 quant node pops, 2.59–2.63 DDA cells and 3.41–3.44 hash probes. Little evidence of extreme hash probing on the current 2-instance scene; counters alone do not show GPU cycles per AABB test.
 
 **Next [prospectively frozen P1l-B1a protocol](./experiments/016-p1l-b1-primary-near-first-traversal.md):** first compare an isolated N006 software-primary **approximate near-first child scheduling** candidate to unchanged N003 software-primary, using child bounds center projection and unchanged intersection/hit tie-breaking. Five-scene full HDR/primary GPU-hit byte-parity preflight MUST pass. Only after this, same-process matched **3 fresh processes ×5 scenes ×24 frames = 360 measured frames /180 pairs**, alternating `011001100110011001100110` order with every GPU stage counted. CPU full-hit oracle only sampled, not in every warmup. Freeze pass gates before looking at candidate results. **The B1a candidate is NOT implemented or GPU-tested yet**, and B0 itself is a **diagnostic only**, not a speedup or production change. If B1a fails, move to a separate shadow any-hit or E003 traversal intervention. No GH Actions/N004/N005 edits.
+
+
+## P1l-B1a coded: isolated near-first primary preflight and same-process GPU A/B
+
+The five-scene B0 work-counts result has now motivated an **N006-only, opt-in closest-hit N003 software-primary near-first child ordering** experiment, prospectively frozen in [P1l-B1 specification](./experiments/016-p1l-b1-primary-near-first-traversal.md). The candidate shader `shaders/research/n006_interval_aware_allocation/n006_p1l_b1_primary_near_first.comp.glsl` is a clone of accepted N003 primary with one change: when processing internal binary-BVH children, push the **farther ray-projected child center first**, so LIFO visits the approximate nearer child first; ties retain N003's original right-first order. This is heuristic center projection, **not exact ray-AABB entry sorting**, and may increase traffic/regress GPU time. N003 original shader, E003 original, N004/N005 and GitHub Actions are unchanged.
+
+With N006 `--p1l-b1-pattern`, build *both* primary SPIR-V stages once, select their dispatch **per measured frame**, and keep the same canonical P1j-A lean-copyback hash/ray/owner/storage stages across arms. An N006-only exact GPU `primary_hits` readback is compared **byte-for-byte with the first original-baseline frame** on *every* target frame, in addition to external frozen scene-specific HDR PFM SHA and sampled N004 CPU-versus-GPU oracle **on the first candidate frame, index 1 only**. A mismatched primary hit aborts the case; no visual-tolerance relaxation. GPU timestamp intervals end before the byte snapshot, so the readback is audit overhead, not counted as candidate shader speed.
+
+[Executable B1a runner](../../../../scripts/research/n006_interval_aware_allocation/run_p1l_b1_near_first.py): first run `--preflight` for **5 fresh software processes × 2 target frames, pattern `01`**, after 32 source and 8 target warmups per process. *Only if all five correctness cases pass* run without the flag for **5 scenes × 3 fresh processes × 24 target frames (balanced `011001100110011001100110`)**: **360 byte-identical images, 180 baseline/candidate adjacent pairs (36 per scene)**. Audit primary GPU, complete GI, complete renderer, producer, secondary traversal and composite timestamps on same-process matched state. The prospectively frozen gate demands >=5% median primary-stage reduction and >=24/36 faster pairs and >=2/3 winning process medians in >=3 scenes, with no scenario >3% median renderer regression. Every process has a hard 600s timeout, checkpointed summary and raw stderr/PFM/evidence. New synthetic tests cover five-scene pattern, hit sampling integrity, exact primary byte gate, image SHA, frozen schedule and 15-process/180-pair acceptance/rejection.
+
+**Status: source, separate SPIR-V target, N006 opt-in runtime/CLI, runner and Python regression tests PUSHED. C++/GLSL build, unit tests, PFM preflight and GPU timings NOT YET EXECUTED** on target NixOS. Do not claim improvement before strict five-scene GPU preflight. User command order:
+
+```sh
+git pull --ff-only
+mise run build
+mise exec -- python -m unittest discover -s scripts/research/n006_interval_aware_allocation -p 'test_*.py'
+mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1l_b1_near_first.py --preflight
+# Only after 5/5 preflight PASS:
+mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1l_b1_near_first.py
+```
+
+No N006 B1a GPU result or claim of HWRT-free device support. Keep each new campaign separate from prior A1b/B0; do not infer an accepted optimization from bare shader-code changes.
