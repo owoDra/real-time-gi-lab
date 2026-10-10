@@ -358,6 +358,8 @@ struct FrameEvidence {
     bool internal_correctness{};
     bool hit_diagnostics_executed{true};
     std::optional<lane_n::N006P1lB0Profile> p1l_b0_profile;
+    int p1l_b1_arm{-1};
+    bool p1l_b1_primary_exact{};
 };
 
 [[nodiscard]] bool frame_core_correct(
@@ -402,6 +404,7 @@ int main(int argc, char** argv) {
     bool p1l_stage_probe = false;
     bool p1l_stage_fast = false;
     bool p1l_b0_counts = false;
+    std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
@@ -445,6 +448,8 @@ int main(int argc, char** argv) {
         else if (arg == "--p1l-stage-probe") p1l_stage_probe = true;
         else if (arg == "--p1l-stage-fast") p1l_stage_fast = true;
         else if (arg == "--p1l-b0-counts") p1l_b0_counts = true;
+        else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
+            p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
             three_arm_pattern = argv[++index];
         else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
@@ -475,9 +480,10 @@ int main(int argc, char** argv) {
             target_frames == 0U) {
             throw std::runtime_error("invalid N006 candidate arguments");
         }
-        const bool p1l_stage_any = p1l_stage_probe || p1l_stage_fast || p1l_b0_counts;
-        const bool p1l_sampled_hit = p1l_stage_fast || p1l_b0_counts;
-        if (int(p1l_stage_probe) + int(p1l_stage_fast) + int(p1l_b0_counts) > 1) {
+        const bool p1l_b1 = !p1l_b1_pattern.empty();
+        const bool p1l_stage_any = p1l_stage_probe || p1l_stage_fast || p1l_b0_counts || p1l_b1;
+        const bool p1l_sampled_hit = p1l_stage_fast || p1l_b0_counts || p1l_b1;
+        if (int(p1l_stage_probe) + int(p1l_stage_fast) + int(p1l_b0_counts) + int(p1l_b1) > 1) {
             throw std::runtime_error(
                 "N006 P1l legacy-full and sampled-fast modes are mutually exclusive");
         }
@@ -676,6 +682,34 @@ int main(int argc, char** argv) {
                     "32 source/8 target warmups, lean-copyback, no reference");
             }
         }
+        if (p1l_b1) {
+            const bool supported_scenario =
+                scenario_name == "static" || scenario_name == "camera-motion" ||
+                scenario_name == "light-motion" || scenario_name == "moving-rigid" ||
+                scenario_name == "deforming-control";
+            if (variant_name != "lane-e-final-software" || !supported_scenario ||
+                !canonical_lean_hash || canonical_zero_copy ||
+                canonical_probe_pilot || canonical_matrix_case ||
+                !canonical_frame_pattern.empty() || !three_arm_pattern.empty() ||
+                topology || !skip_reference ||
+                mode != lane_n::N006ExtraMode::Current ||
+                source_warmup_frames != 32U ||
+                target_state_warmup_frames != 8U ||
+                capture_gpu_unique_hash || capture_probe_equivalence ||
+                capture_probe_multiplicity || capture_visible_tiles ||
+                !hash_frame_pattern.empty() ||
+                !std::all_of(fractions.begin(), fractions.end(),
+                    [](float v) { return v == 1.0F; }) ||
+                !std::all_of(budgets.begin(), budgets.end(),
+                    [](std::uint32_t v) { return v == 0U; }) ||
+                p1l_b1_pattern.size() != target_frames ||
+                !(p1l_b1_pattern == "01" ||
+                  p1l_b1_pattern == "011001100110011001100110")) {
+                throw std::runtime_error(
+                    "N006 P1l-B1 requires software canonical copyback, "
+                    "32+8 warmups and frozen 01 preflight or 24-frame ABBA pattern");
+            }
+        }
         std::vector<std::uint32_t> hash_schedule(
             target_frames, capture_gpu_unique_hash ? 1U : 0U);
         if (!hash_frame_pattern.empty()) {
@@ -705,7 +739,7 @@ int main(int argc, char** argv) {
         options.scenario = lane_n::i001_parse_scenario(scenario_name);
         options.validation = true;
         lane_n::N006Runtime runtime(
-            options, canonical_lean_hash, canonical_zero_copy);
+            options, canonical_lean_hash, canonical_zero_copy, p1l_b1);
 
         const lane_n::N006ExtraRequest current_request{};
         auto source = runtime.run_frame(false, current_request);
@@ -799,6 +833,7 @@ int main(int argc, char** argv) {
         fs::create_directories(artifact_dir / "frames");
         std::vector<FrameEvidence> frames;
         frames.reserve(target_frames);
+        std::vector<std::uint8_t> b1_baseline_hits;
         for (std::uint32_t index = 0; index < target_frames; ++index) {
             runtime.set_motion_fraction(fractions[index]);
             const lane_n::N006ExtraRequest request{
@@ -818,12 +853,14 @@ int main(int argc, char** argv) {
                 (canonical_probe_pilot && canonical_zero_copy && index == 1U) ||
                     (!three_arm_pattern.empty() &&
                      three_arm_pattern[index] == '2'),
+                p1l_b1 && p1l_b1_pattern[index] == '1',
             };
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
                 ? runtime.run_topology_churn_frame(request)
                 : runtime.run_frame(true, request);
-            const bool hit_executed = !p1l_sampled_hit || index == 0U;
+            const bool hit_executed =
+                p1l_b1 ? index == 1U : (!p1l_sampled_hit || index == 0U);
             const auto hits = hit_executed
                 ? runtime.n004_hit_diagnostics()
                 : lane_n::I001N004HitDiagnostics{};
@@ -834,6 +871,21 @@ int main(int argc, char** argv) {
                 readback.width,
                 readback.height,
                 rgb_from_rgba(readback));
+            bool b1_primary_exact = false;
+            if (p1l_b1) {
+                const auto hit_bytes = runtime.p1l_b1_primary_hit_bytes();
+                if (index == 0U) {
+                    if (p1l_b1_pattern[index] != '0') {
+                        throw std::runtime_error("N006 P1l-B1 must start with baseline");
+                    }
+                    b1_baseline_hits = hit_bytes;
+                }
+                b1_primary_exact = hit_bytes == b1_baseline_hits;
+                if (!b1_primary_exact) {
+                    throw std::runtime_error(
+                        "N006 P1l-B1 primary GPU hit bytes diverged between arms");
+                }
+            }
             std::optional<lane_n::N006P1lB0Profile> b0_profile;
             if (p1l_b0_counts) {
                 // This separate command runs AFTER the normal renderer and
@@ -851,6 +903,8 @@ int main(int argc, char** argv) {
                               : frame_core_correct(result)),
                 hit_executed,
                 std::move(b0_profile),
+                p1l_b1 ? int(p1l_b1_pattern[index] - '0') : -1,
+                b1_primary_exact,
             });
         }
 
@@ -995,8 +1049,10 @@ int main(int argc, char** argv) {
             << (p1l_stage_fast ? "true" : "false") << ",\n"
             << "  \"p1l_b0_counts\":"
             << (p1l_b0_counts ? "true" : "false") << ",\n"
+            << "  \"p1l_b1_pattern\":\"" << p1l_b1_pattern << "\",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
-            << (p1l_sampled_hit ? "0" : "-1") << ",\n"
+            << (p1l_b1 ? "1" : (p1l_sampled_hit ? "0" : "-1"))
+            << ",\n"
             << "  \"three_arm_pattern\":\"" << three_arm_pattern << "\",\n"
             << "  \"target_state_warmup\":{\"frames\":"
             << target_state_warmup_frames
@@ -1039,6 +1095,12 @@ int main(int argc, char** argv) {
             else write_reference(out, references[index]);
             out << ",\"hit_diagnostics\":";
             if (frame.hit_diagnostics_executed) write_hit(out, frame.hits);
+            else out << "null";
+            out << ",\"p1l_b1_arm\":";
+            if (p1l_b1) out << frame.p1l_b1_arm;
+            else out << "null";
+            out << ",\"p1l_b1_primary_exact\":";
+            if (p1l_b1) out << (frame.p1l_b1_primary_exact ? "true" : "false");
             else out << "null";
             out << ",\"p1l_b0_counts\":";
             if (frame.p1l_b0_profile) {
