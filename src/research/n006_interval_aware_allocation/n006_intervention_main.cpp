@@ -9,6 +9,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -310,6 +311,43 @@ void write_hit(
         << '}';
 }
 
+void write_p1l_b0_profile(
+    std::ostream& out, const lane_n::N006P1lB0Profile& profile) {
+    static constexpr std::array<std::string_view, 4> kPrimary{
+        "node_pops", "triangle_tests", "hit", "stack_overflow"};
+    static constexpr std::array<std::string_view, 8> kShadow{
+        "shadow_queries", "node_pops", "triangle_tests", "blockers",
+        "valid_pixels", "positive_cosine", "stack_overflow", "storage_lookups"};
+    static constexpr std::array<std::string_view, 8> kSecondary{
+        "instance_tests", "dda_cells", "hash_probes", "quant_node_pops",
+        "child_aabb_tests", "triangle_tests", "leaf_visits", "overflow"};
+    const auto write_group = [&](auto labels, const auto& values) {
+        out << '{';
+        for (std::size_t i = 0; i < values.size(); ++i) {
+            if (i) out << ',';
+            const auto& v = values[i];
+            out << '"' << labels[i] << "\":{\"sum\":" << v.total
+                << ",\"mean\":" << v.mean
+                << ",\"p50\":" << v.p50
+                << ",\"p90\":" << v.p90
+                << ",\"p99\":" << v.p99
+                << ",\"max\":" << v.maximum
+                << ",\"nonzero\":" << v.nonzero << '}';
+        }
+        out << '}';
+    };
+    out << "{\"diagnostic_only\":true,\"uninstrumented_gpu_timing\":true"
+        << ",\"output_byte_identical\":true,\"pixels\":" << profile.pixels
+        << ",\"secondary_rays\":" << profile.secondary_rays
+        << ",\"primary\":";
+    write_group(kPrimary, profile.primary);
+    out << ",\"shadow\":";
+    write_group(kShadow, profile.shadow);
+    out << ",\"secondary\":";
+    write_group(kSecondary, profile.secondary);
+    out << '}';
+}
+
 struct FrameEvidence {
     lane_n::N006FrameResult result;
     lane_n::I001N004HitDiagnostics hits;
@@ -319,6 +357,7 @@ struct FrameEvidence {
     std::uint32_t owner_budget{};
     bool internal_correctness{};
     bool hit_diagnostics_executed{true};
+    std::optional<lane_n::N006P1lB0Profile> p1l_b0_profile;
 };
 
 [[nodiscard]] bool frame_core_correct(
@@ -362,6 +401,7 @@ int main(int argc, char** argv) {
     bool canonical_zero_copy = false;
     bool p1l_stage_probe = false;
     bool p1l_stage_fast = false;
+    bool p1l_b0_counts = false;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
     std::string canonical_frame_pattern;
@@ -404,6 +444,7 @@ int main(int argc, char** argv) {
         else if (arg == "--canonical-zero-copy") canonical_zero_copy = true;
         else if (arg == "--p1l-stage-probe") p1l_stage_probe = true;
         else if (arg == "--p1l-stage-fast") p1l_stage_fast = true;
+        else if (arg == "--p1l-b0-counts") p1l_b0_counts = true;
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
             three_arm_pattern = argv[++index];
         else if (arg == "--variant" && index + 1 < argc) variant_name = argv[++index];
@@ -434,8 +475,9 @@ int main(int argc, char** argv) {
             target_frames == 0U) {
             throw std::runtime_error("invalid N006 candidate arguments");
         }
-        const bool p1l_stage_any = p1l_stage_probe || p1l_stage_fast;
-        if (p1l_stage_probe && p1l_stage_fast) {
+        const bool p1l_stage_any = p1l_stage_probe || p1l_stage_fast || p1l_b0_counts;
+        const bool p1l_sampled_hit = p1l_stage_fast || p1l_b0_counts;
+        if (int(p1l_stage_probe) + int(p1l_stage_fast) + int(p1l_b0_counts) > 1) {
             throw std::runtime_error(
                 "N006 P1l legacy-full and sampled-fast modes are mutually exclusive");
         }
@@ -580,7 +622,7 @@ int main(int argc, char** argv) {
 
         // P1l-A1 uses existing N006-only disjoint GPU timestamps, without
         // modifying historical shader stages or the three-arm P1k protocol.
-        if (p1l_stage_any) {
+        if (p1l_stage_probe || p1l_stage_fast) {
             const bool supported_variant =
                 variant_name == "lane-e-final-hwrt" ||
                 variant_name == "lane-e-final-software";
@@ -612,6 +654,28 @@ int main(int argc, char** argv) {
             }
         }
 
+        if (p1l_b0_counts) {
+            const bool supported_scenario =
+                scenario_name == "static" || scenario_name == "camera-motion" ||
+                scenario_name == "light-motion" || scenario_name == "moving-rigid" ||
+                scenario_name == "deforming-control";
+            if (variant_name != "lane-e-final-software" || !supported_scenario ||
+                !canonical_lean_hash || canonical_zero_copy ||
+                canonical_probe_pilot || canonical_matrix_case ||
+                !canonical_frame_pattern.empty() || !three_arm_pattern.empty() ||
+                topology || !skip_reference ||
+                mode != lane_n::N006ExtraMode::Current ||
+                source_warmup_frames != 32U ||
+                target_state_warmup_frames != 8U || target_frames != 1U ||
+                capture_gpu_unique_hash || capture_probe_equivalence ||
+                capture_probe_multiplicity || capture_visible_tiles ||
+                !hash_frame_pattern.empty() ||
+                fractions[0] != 1.0F || budgets[0] != 0U) {
+                throw std::runtime_error(
+                    "N006 P1l-B0 requires software, one canonical target, "
+                    "32 source/8 target warmups, lean-copyback, no reference");
+            }
+        }
         std::vector<std::uint32_t> hash_schedule(
             target_frames, capture_gpu_unique_hash ? 1U : 0U);
         if (!hash_frame_pattern.empty()) {
@@ -645,17 +709,17 @@ int main(int argc, char** argv) {
 
         const lane_n::N006ExtraRequest current_request{};
         auto source = runtime.run_frame(false, current_request);
-        const auto source_hits = p1l_stage_fast
+        const auto source_hits = p1l_sampled_hit
             ? lane_n::I001N004HitDiagnostics{}
             : runtime.n004_hit_diagnostics();
-        const bool source_correct = p1l_stage_fast
+        const bool source_correct = p1l_sampled_hit
             ? frame_core_correct(source)
             : frame_correct(source, source_hits);
         bool source_warmups_correct = source_correct;
         for (std::uint32_t index = 1; index < source_warmup_frames; ++index) {
             const auto warm_source = runtime.run_frame(false, current_request);
             const bool warm_correct =
-                p1l_stage_fast ? frame_core_correct(warm_source)
+                p1l_sampled_hit ? frame_core_correct(warm_source)
                 : p1l_stage_probe
                     ? frame_correct(warm_source, runtime.n004_hit_diagnostics())
                     : true;
@@ -679,7 +743,7 @@ int main(int argc, char** argv) {
             runtime.set_motion_fraction(1.0F);
             for (std::uint32_t warm = 0; warm < target_state_warmup_frames; ++warm) {
                 const auto warm_frame = runtime.run_frame(true, current_request);
-                const auto warm_hits = p1l_stage_fast
+                const auto warm_hits = p1l_sampled_hit
                     ? lane_n::I001N004HitDiagnostics{}
                     : runtime.n004_hit_diagnostics();
                 const auto& stats = warm_frame.frame.stats;
@@ -701,7 +765,7 @@ int main(int argc, char** argv) {
                     : (stats.visible_owners == 4172U &&
                        stats.work_items == 133504U &&
                        stats.outputs == 16688U);
-                if (!(p1l_stage_fast
+                if (!(p1l_sampled_hit
                       ? frame_core_correct(warm_frame)
                       : frame_correct(warm_frame, warm_hits)) ||
                     !expected_counts || (warm != 0U && maintenance != 0.0)) {
@@ -759,7 +823,7 @@ int main(int argc, char** argv) {
                 (index == 0U && topology)
                 ? runtime.run_topology_churn_frame(request)
                 : runtime.run_frame(true, request);
-            const bool hit_executed = !p1l_stage_fast || index == 0U;
+            const bool hit_executed = !p1l_sampled_hit || index == 0U;
             const auto hits = hit_executed
                 ? runtime.n004_hit_diagnostics()
                 : lane_n::I001N004HitDiagnostics{};
@@ -770,6 +834,12 @@ int main(int argc, char** argv) {
                 readback.width,
                 readback.height,
                 rgb_from_rgba(readback));
+            std::optional<lane_n::N006P1lB0Profile> b0_profile;
+            if (p1l_b0_counts) {
+                // This separate command runs AFTER the normal renderer and
+                // image readback; no diagnostic work enters accepted GPU timers.
+                b0_profile = runtime.p1l_b0_work_counts();
+            }
             frames.push_back({
                 result,
                 hits,
@@ -780,6 +850,7 @@ int main(int argc, char** argv) {
                 (hit_executed ? frame_correct(result, hits)
                               : frame_core_correct(result)),
                 hit_executed,
+                std::move(b0_profile),
             });
         }
 
@@ -922,8 +993,10 @@ int main(int argc, char** argv) {
             << (p1l_stage_probe ? "true" : "false") << ",\n"
             << "  \"p1l_stage_fast\":"
             << (p1l_stage_fast ? "true" : "false") << ",\n"
+            << "  \"p1l_b0_counts\":"
+            << (p1l_b0_counts ? "true" : "false") << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
-            << (p1l_stage_fast ? "0" : "-1") << ",\n"
+            << (p1l_sampled_hit ? "0" : "-1") << ",\n"
             << "  \"three_arm_pattern\":\"" << three_arm_pattern << "\",\n"
             << "  \"target_state_warmup\":{\"frames\":"
             << target_state_warmup_frames
@@ -944,7 +1017,7 @@ int main(int argc, char** argv) {
             << (source_correct ? "true" : "false") << ",\"extra\":";
         write_extra(out, source.extra);
         out << ",\"hit_diagnostics\":";
-        if (p1l_stage_fast) out << "null";
+        if (p1l_sampled_hit) out << "null";
         else write_hit(out, source_hits);
         out << "},\n"
             << "  \"device\":{\"name\":\"" << runtime.device_name()
@@ -967,6 +1040,12 @@ int main(int argc, char** argv) {
             out << ",\"hit_diagnostics\":";
             if (frame.hit_diagnostics_executed) write_hit(out, frame.hits);
             else out << "null";
+            out << ",\"p1l_b0_counts\":";
+            if (frame.p1l_b0_profile) {
+                write_p1l_b0_profile(out, *frame.p1l_b0_profile);
+            } else {
+                out << "null";
+            }
             out << ",\"timing_us\":";
             write_timing(
                 out,
