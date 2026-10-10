@@ -1665,7 +1665,7 @@ N006P1lB0Profile N006Runtime::p1l_b0_work_counts() {
         !impl.have_last ||
         impl.last.stats.work_items == 0U ||
         impl.last.stats.work_items > impl.params.limits[1] ||
-        impl.options.scenario == I001Scenario::TopologyChanging) {
+        !lane_e_final_supported_scenario(impl.options.scenario)) {
         throw std::runtime_error(
             "P1l-B0 requires completed Lane-E-final software canonical frame");
     }
