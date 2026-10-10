@@ -149,6 +149,26 @@ struct N006FrameResult {
     N006ExtraStats extra;
 };
 
+// N006 P1l-B0 diagnostic only: count-only work, NEVER timing performance.
+// Slots are documented in the P1l-B0 protocol and serialized by N006 main.
+struct N006P1lB0Metric {
+    std::uint64_t total{};
+    double mean{};
+    double p50{};
+    double p90{};
+    double p99{};
+    std::uint32_t maximum{};
+    std::uint32_t nonzero{};
+};
+struct N006P1lB0Profile {
+    std::uint32_t pixels{};
+    std::uint32_t secondary_rays{};
+    std::array<N006P1lB0Metric, 4> primary{};
+    std::array<N006P1lB0Metric, 8> shadow{};
+    std::array<N006P1lB0Metric, 8> secondary{};
+};
+
+
 class N006Runtime {
 public:
     explicit N006Runtime(I001Options options, bool p1j_lean_hash = false,
@@ -170,6 +190,9 @@ public:
     [[nodiscard]] N006OutputEquivalenceAudit probe_output_equivalence_audit();
     [[nodiscard]] I001N004HitDiagnostics n004_hit_diagnostics();
     [[nodiscard]] I001RendererReadback renderer_readback();
+    // Separate compute-only command after an uninstrumented frame has finished
+    // and its PFM/correctness evidence has been captured. Software backend only.
+    [[nodiscard]] N006P1lB0Profile p1l_b0_work_counts();
 
     [[nodiscard]] const std::string& device_name() const noexcept;
     [[nodiscard]] const std::string& driver_name() const noexcept;
