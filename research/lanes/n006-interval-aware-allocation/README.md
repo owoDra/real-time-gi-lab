@@ -288,3 +288,25 @@ Primary stage paired **median candidate-minus-baseline GPU percentage** by scene
 For each scene, primary AB `01` candidate-minus-baseline medians were less unfavorable than BA `10` medians (static −74 vs +88 µs, camera +35 vs +76, light +63 vs +183, moving +34 vs +188, deforming +102 vs +228). The frozen schedule collected exactly 18 pairs in both orders, but order-dependent behavior and hundreds-of-µs individual differences warrant explicit timing-noise/interference caution; **no causal claim** of cache, GPU clocks, or near-first node visitation can be inferred. The shader adds two child-node loads for its center-projection ordering, but candidate node counts were **not recorded** in B1a, so even a pruning benefit is unverified.
 
 **Next [frozen bounded P1l-B1b diagnostic](./experiments/017-p1l-b1b-near-first-pruning-attribution.md):** a separate **five-process, count-only** comparison of unchanged N006 B0 fixed-order primary and cloned B1a near-first **per-pixel BVH node/triangle counts**, on identical target inputs. Require both instrumented hits byte-exact to accepted original, zero overflow, full PFM SHA, and report sums/percentiles/fewer/equal/more per-pixel visits. Keep instrumentation outside original GPU timing. If visit counts fail to improve, abandon this heuristic; if they improve but timing worsens, quantify shader instruction/extra node-load tradeoff before any different implementation. **B1b code and GPU results NOT YET AVAILABLE**; no request to rerun rejected B1a. N004/N005/GitHub Actions untouched. Original #42 predictive marginal-value allocation remains gated.
+
+
+## P1l-B1b count-only paired traversal attribution implemented (GPU gate pending)
+
+Follow-up to [B1a's REJECTED 180-pair GPU result](./results/023-p1l-b1a-matched-near-first-reject.md). [The B1b experiment was frozen before implementation](./experiments/017-p1l-b1b-near-first-pruning-attribution.md). Existing original N003 and E003 shaders and N004/N005 paths remain unchanged. **B1a stays rejected regardless of B1b's future work counts.**
+
+New opt-in `--p1l-b1b-counts` within the N006 intervention command enables a **single uninstrumented, frozen lean-copyback software target** after 32 original source and eight stable target warmups. The one target's previously accepted backend-specific HDR PFM SHA, canonical ray/owner/storage/hash and GPU timestamps are checked as before. It then performs **an independent separate GPU command** with (a) unchanged B0 fixed-right-first primary count shader, and (b) new N006-only counter variant using B1a's identical ray-projected child-center near-first ordering. Both instrumented primary-hit buffers are private; **each must byte-match the original uninstrumented GPU primary hit buffer** or abort. GPU timing is taken only from the original shader *before* these count-only GPU passes. The sampled full N004 CPU hit oracle executes once per process on target frame 0; no reference image rendered.
+
+The two count modes report per-screen-pixel **node pops, triangle tests, hit flags, stack overflow** (sum, mean, p50/p90/p99/max and nonzero), plus the **per-pixel candidate-minus-original signed distribution** (total, mean, p50/p90/p99/min/max and number of pixels with fewer/equal/more visits). All data are fail-closed against missing fields, count-shape errors, histogram inconsistencies, pixel-partition mismatch and overflow.
+
+The dedicated `scripts/research/n006_interval_aware_allocation/run_p1l_b1b_work_counts.py` supports a two-scene `--smoke` diagnostic or (default) the **prospectively frozen, independent all-five-scene run** in one invocation, each process capped at **600 seconds** and checkpointed. Full-run summary **automatically classifies mechanism only**: if no scene has fewer primary node visits, abandon the center-order pruning heuristic; if any reduce visits despite the already-rejected GPU results, investigate extra child loads/branch occupancy before any new *frozen* timing comparison. Counts alone cannot reopen B1a, assert a GPU speedup or prove no-HWRT device portability. Retained raw output and summary filename: `n006-p1l-b1b-counts-summary.json`.
+
+**Implementation pushed, but C++/GLSL build, Python unit tests and user GPU evidence are not yet verified.** From clean NixOS branch, run:
+
+```sh
+git pull --ff-only
+mise run build
+mise exec -- python -m unittest discover -s scripts/research/n006_interval_aware_allocation -p 'test_*.py'
+mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1l_b1b_work_counts.py
+```
+
+No manual pause between smoke and full five-scene test is needed (the default command tests all five); no accepted N004/N005/GH Actions changes. Research is ongoing: B1b results must drive the next bounded shader or ray allocator question, **not** a declaration that GI research has ended.
