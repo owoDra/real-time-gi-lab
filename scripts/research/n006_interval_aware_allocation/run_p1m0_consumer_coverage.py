@@ -26,6 +26,13 @@ VARIANT = "lane-e-final-software"
 SCENARIOS = ("static", "camera-motion", "light-motion",
              "moving-rigid", "deforming-control")
 TIMEOUT_SECONDS = 600
+# Independent accepted P1l-B0 one-frame SOFTWARE primary-valid-pixel
+# counts, from result 021. An exact accepted PFM alone does not independently
+# prove the diagnostic's validity mask matches the accepted primary shader.
+VALID_PRIMARY_PIXELS = {
+    "static": 12770, "camera-motion": 12629, "light-motion": 12770,
+    "moving-rigid": 18357, "deforming-control": 12772,
+}
 METRICS = ("valid_primary_pixels", "lookup_attempts", "matched_lookups",
            "absent_keys", "invalid_keys", "probe_exhaustions",
            "uint32_overflows", "invalid_launch", "canonical_keys",
@@ -45,6 +52,7 @@ def audit_coverage(cov: dict[str, Any], scenario: str) -> dict[str, Any]:
         raise ValueError("P1m0 unexpected canonical hash capacity")
     if (stats["canonical_keys"] != sum(cascades) or
         stats["lookup_attempts"] != stats["valid_primary_pixels"] * 4 or
+        stats["valid_primary_pixels"] != VALID_PRIMARY_PIXELS[scenario] or
         stats["valid_primary_pixels"] > 320 * 180 or
         stats["matched_lookups"] + stats["absent_keys"] +
         stats["invalid_keys"] + stats["probe_exhaustions"] !=
