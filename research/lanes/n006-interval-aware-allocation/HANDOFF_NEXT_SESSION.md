@@ -1,3 +1,16 @@
+# 2026-10-11 newest: P1m2a shader/C++ build PASS; stale M1a source-placement test repaired (GPU pending)
+
+User-local P1m2a build successfully generated `n006_p1m2a_tetra_octant_extra.spv`, compiled N006 C++ and linked `phos-n006-intervention`. **227 Python unit tests ran: 1 error**, `test_p1m1a_canonical_probe.TestCanonicalM1Mechanism.test_placement_parity_and_buffer_lifetime`; it looked for removed literal `state_->p1m1_extra_stage->record(`. Current N006 code correctly selects `(request.p1m2_tetra_octant_directions ? state_->p1m2_tetra_octant_stage.get() : state_->p1m1_extra_stage.get())->record(` at the same canonical-to-secondary boundary. Replaced the stale source string with a whitespace-tolerant regex asserting **both arms and their one shared pre-secondary `record`**. Checked regex against current runtime source before pushing. **Test-only fix; no runtime/GLSL behavior changed; unit test suite has not yet been rerun on user's system after fix.** `set -e` stopped before any M2a GPU case: *NO M2a causal/image results yet*.
+
+Next single batch (unchanged):
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m2a_tetra_octant.sh
+```
+Upload `out/research/n006-interval-aware-allocation/p1m2a-tetra-octant-static-c3/<UTC>/n006-p1m2a-tetra-octant-summary.json`. Previous P1m1c GPU 4/4 pass and 11/12 extra-ray misses unchanged. No PR or Actions. P1 marginal quality and P2 NOT approved.
+
+---
+
 # 2026-10-11 LATEST — M1c GPU 4/4 PASS (11/12 extra misses), M2a fixed tetra-octant alternative pilot READY, NOT GPU tested
 
 User-uploaded `n006-p1m1c-ray-fate-summary.json` original SHA256 **`5c87c2b12b3983070e129cd163f7e2560d75f772c402fa719d302219262908ef`**, clean executed HEAD **`db32b403b3ed0e3ce1afab7bf29df97a4aaf55e7`**, AMD Radeon 8060S RADV. 4/4 `ray-fate-audit-complete`, failures=[], accepted exact original control static PFM and original M0 per-key coverage SHA; all three candidate images **pixel/byte identical**; no independent reference, no signed quality/predictor/P2.
