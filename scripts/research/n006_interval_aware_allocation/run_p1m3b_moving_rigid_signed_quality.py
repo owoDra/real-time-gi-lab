@@ -149,20 +149,25 @@ def reference_pair(folder: Path, evidence: dict[str, Any]) -> tuple[dict[str, An
 
 
 def run_case(root: Path, scene: Path, gpu: str,
-             label: str, token: int, with_reference: bool) -> tuple[
+             label: str, token: int, with_reference: bool, *,
+             scenario: str = SCENARIO) -> tuple[
                  dict[str, Any], bytes, dict[str, Any], Path]:
+    if scenario not in ("moving-rigid", "deforming-control"):
+        raise ValueError("P1m3b/M3c unexpected scenario")
+    flag = ("--p1m3b-holdout-quality" if scenario == "moving-rigid"
+            else "--p1m3c-reference-preflight")
     folder = root / label
     folder.mkdir(parents=True, exist_ok=False)
     cmd = [
         "bash", str(pilot.ROOT / "scripts/run_with_vulkan.sh"),
         str(pilot.BINARY), "--scene", str(scene),
         "--artifact-dir", str(folder),
-        "--scenario", SCENARIO, "--variant", VARIANT,
+        "--scenario", scenario, "--variant", VARIANT,
         "--mode", "current", "--source-warmup-frames", "32",
         "--target-state-warmup-frames", "8", "--target-frames", "1",
         "--canonical-lean-hash", "--p1m0-consumer-coverage",
         "--p1m2b-independent-state", "--p1m3-fractional-storage",
-        "--p1m3b-holdout-quality",
+        flag,
     ]
     if not with_reference:
         cmd.append("--skip-reference")
@@ -186,7 +191,7 @@ def run_case(root: Path, scene: Path, gpu: str,
     binary = (folder / pilot.EVIDENCE_NAME).read_bytes()
     evidence = json.loads(binary)
     valid = verify_frame(
-        evidence, SCENARIO, gpu, token,
+        evidence, scenario, gpu, token,
         "control" if token == 0 else "p1m1a-original",
         holdout=True, require_reference=with_reference,
     )
