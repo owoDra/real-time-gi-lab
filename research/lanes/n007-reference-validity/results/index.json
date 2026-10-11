@@ -32,6 +32,27 @@
       "source": "local archived M3b PFMs, user-reported console summary",
       "gpu_run": false,
       "physical_correctness_proven": false
+    },
+    {
+      "id": "N007-P0-004",
+      "status": "complete",
+      "classification": "original archived M3b PFM signal diagnostic",
+      "result": "004-authentic-m3b-full-image-signal.md",
+      "source": "user-provided complete archived M3b inspector JSON",
+      "gpu_run": false,
+      "physical_correctness_proven": false
+    },
+    {
+      "id": "N007-P0-005",
+      "status": "partial",
+      "classification": "archived reference cohort analysis; default 200-pair cap limited coverage",
+      "result": "005-p0-archived-cohort-200-truncation.md",
+      "source_json_sha256": "6b687338e22389bfcde0e8915f6afc23365385167f89d75e9081431725e79606",
+      "pairs_discovered": 338,
+      "pairs_inspected": 200,
+      "unique_pair_signatures": 6,
+      "gpu_run": false,
+      "physical_correctness_proven": false
     }
   ]
 }
