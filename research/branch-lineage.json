@@ -3,7 +3,7 @@
   "audit_date": "2026-10-11",
   "target": "research-n006-interval-aware-allocation",
   "target_commit": "fffe594a4731f9cb8a939c4eab3f68b3948b2d69",
-  "scope": "First half of original remote heads; second half follows in next staging commit",
+  "scope": "All 25 original remote heads; excludes the temporary consolidation branch; compare metadata fetched from GitHub",
   "entries": [
     {
       "branch": "chore/mise-research-environment",
@@ -100,6 +100,110 @@
       "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
       "n006_commits_ahead": 724,
       "branch_commits_ahead": 215
+    },
+    {
+      "branch": "research-lane-e-timing-revalidation",
+      "head": "5e21c85d6d3b1eff2f9f3028692d3be553d573cb",
+      "relationship_to_n006": "diverged",
+      "merge_base": "ff375b43f34db8b49371ab1a73299999f9677778",
+      "n006_commits_ahead": 697,
+      "branch_commits_ahead": 115
+    },
+    {
+      "branch": "research-lane-f-dynamic-geometry-alternatives",
+      "head": "82c1099bac3add0ba001010ab867bcee855461e0",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 198
+    },
+    {
+      "branch": "research-lane-g-transient-lbvh-hardening",
+      "head": "9176cc1c175bcfec43fd28d993f88385b7a131d7",
+      "relationship_to_n006": "diverged",
+      "merge_base": "1ab3c09f62fc6778aa598a791c4c1a6f720d75f9",
+      "n006_commits_ahead": 717,
+      "branch_commits_ahead": 63
+    },
+    {
+      "branch": "research-lane-h-topology-rebuild-crossover",
+      "head": "1a554b4d8e2c570a9b1a191ae86f74b1d54fa0e5",
+      "relationship_to_n006": "diverged",
+      "merge_base": "1ab3c09f62fc6778aa598a791c4c1a6f720d75f9",
+      "n006_commits_ahead": 717,
+      "branch_commits_ahead": 70
+    },
+    {
+      "branch": "research-lane-i-measurement-calibration",
+      "head": "b7d3a58be01a1979a7c94a775aaf10fda22ef967",
+      "relationship_to_n006": "diverged",
+      "merge_base": "76f65f8944aba8405dce5d386161df2540957349",
+      "n006_commits_ahead": 715,
+      "branch_commits_ahead": 7
+    },
+    {
+      "branch": "research-lane-j-formal-crossover",
+      "head": "ccddbf3d63a7f71bda795d562efeffabad173ce7",
+      "relationship_to_n006": "diverged",
+      "merge_base": "76f65f8944aba8405dce5d386161df2540957349",
+      "n006_commits_ahead": 715,
+      "branch_commits_ahead": 211
+    },
+    {
+      "branch": "research-lane-j-topology-backend-alternatives",
+      "head": "c5b18559eeff1cfc22221f6c6fd329b3767fd1dd",
+      "relationship_to_n006": "diverged",
+      "merge_base": "76f65f8944aba8405dce5d386161df2540957349",
+      "n006_commits_ahead": 715,
+      "branch_commits_ahead": 149
+    },
+    {
+      "branch": "research-lane-k-gpu-primary-calibration",
+      "head": "eff91667ba5d8dd33e1730216cfa26b21c994f27",
+      "relationship_to_n006": "ahead",
+      "merge_base": "eff91667ba5d8dd33e1730216cfa26b21c994f27",
+      "n006_commits_ahead": 698,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "research-lane-l-heavy-boundary-calibration",
+      "head": "9efae3970639633764b489c6165d58db3c977208",
+      "relationship_to_n006": "diverged",
+      "merge_base": "76f65f8944aba8405dce5d386161df2540957349",
+      "n006_commits_ahead": 715,
+      "branch_commits_ahead": 265
+    },
+    {
+      "branch": "research-lane-m-topology-backend-crossover",
+      "head": "af5edd826ada9d7785176fbeab3c2e8ddec9dd79",
+      "relationship_to_n006": "diverged",
+      "merge_base": "e1376fb000a73d4b8d5a9b900d4303421aedd68e",
+      "n006_commits_ahead": 694,
+      "branch_commits_ahead": 20
+    },
+    {
+      "branch": "research-lane-n-end-to-end-renderer",
+      "head": "c8af6b14bec9621cabdc8525b7e166a12a5fd272",
+      "relationship_to_n006": "ahead",
+      "merge_base": "c8af6b14bec9621cabdc8525b7e166a12a5fd272",
+      "n006_commits_ahead": 484,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "research-n005-adaptive-tracing",
+      "head": "3a098584ec76bcaa06e5166793b2946cd1f7eb25",
+      "relationship_to_n006": "ahead",
+      "merge_base": "3a098584ec76bcaa06e5166793b2946cd1f7eb25",
+      "n006_commits_ahead": 438,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "research-n006-interval-aware-allocation",
+      "head": "fffe594a4731f9cb8a939c4eab3f68b3948b2d69",
+      "relationship_to_n006": "identical",
+      "merge_base": "fffe594a4731f9cb8a939c4eab3f68b3948b2d69",
+      "n006_commits_ahead": 0,
+      "branch_commits_ahead": 0
     }
   ]
 }
