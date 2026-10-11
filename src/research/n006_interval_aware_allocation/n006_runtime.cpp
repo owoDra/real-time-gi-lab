@@ -2107,6 +2107,34 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
         mark("consumer counters and key/multiplicity download complete");
         N006P1m0Coverage out{};
         out.hash_capacity = capacity;
+        if (state_->last_p1m0_pretrace_frame) {
+            // Parity is checked across the full hash slot population,
+            // including zero-consumer keys and empty slots. Do not infer
+            // cost or correctness from a partial per-cascade histogram.
+            std::vector<std::uint32_t> pretrace_counts(size);
+            std::array<std::uint32_t, 8> pretrace_stats{};
+            impl.context.download_device_buffer(
+                state_->p1m0_pretrace_counts, pretrace_counts.data(),
+                VkDeviceSize(size * sizeof(std::uint32_t)));
+            impl.context.download_device_buffer(
+                state_->p1m0_pretrace_stats, pretrace_stats.data(),
+                VkDeviceSize(sizeof(pretrace_stats)));
+            out.pretrace_executed = true;
+            out.pretrace_slot_byte_equal = (pretrace_counts == raw_counts);
+            out.pretrace_stats_byte_equal = (pretrace_stats == raw_stats);
+            out.pretrace_clear_and_count_gpu_us =
+                state_->last_p1m0_pretrace_gpu_us;
+            out.pretrace_scratch_bytes =
+                std::uint64_t(state_->p1m0_pretrace_counts.size) +
+                std::uint64_t(state_->p1m0_pretrace_stats.size);
+            if (!out.pretrace_slot_byte_equal || !out.pretrace_stats_byte_equal ||
+                out.pretrace_clear_and_count_gpu_us <= 0.0 ||
+                out.pretrace_scratch_bytes !=
+                    std::uint64_t(capacity + 8U) * sizeof(std::uint32_t)) {
+                throw std::runtime_error(
+                    "P1m0b pre-secondary/postframe full-slot/stats parity or cost failed");
+            }
+        }
         out.valid_primary_pixels = raw_stats[0];
         out.lookup_attempts = raw_stats[1];
         out.matched_lookups = raw_stats[2];
