@@ -14,4 +14,7 @@ fi
 git pull --ff-only
 mise run build
 mise exec -- python -m unittest discover -s scripts/research/n006_interval_aware_allocation -p 'test_*.py'
+# No further GPU rerun for rejected B1c: capture its missing static binary audit.
+mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1l_b1c_spirv.py
+# Fail-closed even when static data is retained with status=blocked.
 mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1l_c0_e003_spirv.py
