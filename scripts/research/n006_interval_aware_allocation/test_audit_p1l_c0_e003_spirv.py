@@ -1,6 +1,5 @@
 from __future__ import annotations
 import unittest
-from unittest.mock import patch
 import tempfile
 from pathlib import Path
 import struct
@@ -33,6 +32,54 @@ class TestN006E003StaticAudit(unittest.TestCase):
         cmake = (c0.ROOT / "src/research/lane_n_end_to_end_renderer"
                  / "CMakeLists.txt").read_text()
         self.assertIn("n006_p1l_c0_e003_source_rebuild", cmake)
+
+    @staticmethod
+    def _fake_build(folder: Path, *, active: bytes | None) -> None:
+        shader_dir = folder / "shaders"
+        shader_dir.mkdir()
+        (folder / "CMakeCache.txt").write_text(
+            "GLSLANG_VALIDATOR:FILEPATH=glslangValidator\n")
+        words = [0x07230203, 0x00010600, 0, 20, 0, 0x00010088, 0x000100fd]
+        rebuilt = struct.pack("<" + ("I" * len(words)), *words)
+        (shader_dir / "n006_p1l_c0_e003_source_rebuild.spv").write_bytes(rebuilt)
+        (shader_dir / "n006_p1l_e003_count.spv").write_bytes(rebuilt)
+        if active is not None:
+            (shader_dir / "e003_instance_quantized.spv").write_bytes(active)
+
+    def test_missing_active_binary_is_blocked_but_retains_static_counts(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._fake_build(root, active=None)
+            result = c0.audit(root)
+            self.assertEqual(result["provenance_status"],
+                             "BLOCKED_ACTIVE_BINARY_MISSING")
+            self.assertEqual(result["status"], "blocked")
+            self.assertIn("OpFDiv",
+                          result["variants"]["accepted_e003_rebuilt"]["opcode_families"])
+
+    def test_mismatched_active_binary_is_blocked_with_hash_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._fake_build(root, active=struct.pack(
+                "<7I", 0x07230203, 0x00010600, 0, 20, 0,
+                0x000100fd, 0x000100fd))
+            result = c0.audit(root)
+            self.assertEqual(result["provenance_status"],
+                             "BLOCKED_BINARY_MISMATCH")
+            self.assertFalse(result["runtime_e003_binary"]["matches_fresh_source_rebuild"])
+            self.assertIsNotNone(result["runtime_e003_binary"]["sha256"])
+
+    def test_matched_active_binary_is_static_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._fake_build(root, active=b"")
+            spv_path = root / "shaders" / "n006_p1l_c0_e003_source_rebuild.spv"
+            (root / "shaders" / "e003_instance_quantized.spv").write_bytes(
+                spv_path.read_bytes())
+            result = c0.audit(root)
+            self.assertEqual(result["provenance_status"], "MATCHED")
+            self.assertEqual(result["status"], "ready_static_only")
+            self.assertEqual(result["variants"]["accepted_e003_rebuilt"]["opcode_families"]["OpFDiv"],1)
 
     def test_missing_compiled_artifact_fails_closed(self):
         with tempfile.TemporaryDirectory() as tmp:
