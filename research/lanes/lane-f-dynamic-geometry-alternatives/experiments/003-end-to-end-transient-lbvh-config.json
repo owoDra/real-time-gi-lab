@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-f-plan-v1",
+  "experiment": "F003",
+  "name": "end-to-end-transient-lbvh",
+  "candidate": "persistent-static-hwrt-plus-frame-local-dynamic-lbvh",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "dynamic_classification": {
+    "moving_rigid": "exact F001/I001 selected instance, fixed before warmup and unchanged through measured target frame",
+    "stable_cases": "no dynamic subset; full scene remains persistent static HWRT"
+  },
+  "builder": {
+    "source_template": "immutable original world-space triangles for frozen dynamic subset",
+    "current_frame_generation": "GPU translation inside measured builder input phase",
+    "page_extent_rule": "B002/I001 scene diagonal divided by 16",
+    "page_key_bits_per_axis": 10,
+    "local_morton_bits_per_axis": 10,
+    "radix_digit_bits": 4,
+    "radix_passes": 16,
+    "stable_radix": true,
+    "topology": "Karras binary LBVH",
+    "bounds": "atomic bottom-up",
+    "refit_or_update": false,
+    "persistent_dynamic_nodes": false
+  },
+  "dynamic_traversal": {
+    "node_type": "binary LBVH",
+    "stack_capacity": 128,
+    "intersection": "exact shared B001 triangle contract",
+    "root_index": 0
+  },
+  "merge": {
+    "policy": "nearest static/dynamic Hit with shared absolute/relative tolerance and lower primitive_id tie break"
+  },
+  "scenarios": [
+    "static",
+    "camera-motion",
+    "light-motion",
+    "moving-rigid",
+    "sparse-stress",
+    "dense-stress",
+    "large-world-stress",
+    "vertical-world-stress"
+  ],
+  "run_local_controls": [
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "accepted_timing": {
+    "process_repeats": 5,
+    "warmup_frames_per_process": 1,
+    "measured_frames_per_process": 1,
+    "decision_statistic": "median of process-level measured target frames",
+    "outlier_deletion": false,
+    "instability_rule": "complete_gpu_us max/min > 1.20",
+    "identical_full_reruns_allowed": 1,
+    "quality_replay_inside_timing_process": false,
+    "correctness_source": "prior same-commit target-GPU validation artifact; timing executable runs exactly one warmup frame plus one measured frame"
+  },
+  "gates": {
+    "static_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "camera_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "light_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "stable_stress_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "moving_gpu_max_ratio_vs_vanilla": 0.9,
+    "moving_wall_max_ratio_vs_vanilla": 0.9,
+    "peak_resident_max_ratio_vs_vanilla": 3
+  },
+  "f002_prerequisite_status": "formal-gate-pending-because-f001-run-local-moving-baseline-was-inconclusive",
+  "f004_note": "F004 cannot activate unless F002 obtains a formal PASS under the frozen prerequisite"
+}

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "lane": "lane-e-dynamic-geometry",
+  "experiments": [
+    {
+      "id": "E001",
+      "experiment": "001-dynamic-ownership-decomposition",
+      "status": "complete",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/001-dynamic-ownership-decomposition.md",
+      "measurement_commit": "1fa902d48a8d6e693384f5911033683ebd342a00",
+      "result_commit": "1c05f3553245528164937c0a9ae9bd0cbf2ef2f4"
+    },
+    {
+      "id": "E002",
+      "experiment": "002-hwrt-rigid-instance",
+      "status": "complete",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/002-hwrt-rigid-instance.md",
+      "validation_commit": "7c191fca1b7049fd377597d0e369de36f0a54b93",
+      "validation_protocol_commit": "cb1c4339056a92ed0434be0fab3bb58066fb3a99",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/002-hwrt-rigid-instance.md",
+      "measurement_commit": "40f0f1c04f4109cc04a0f6015241518946f9291a",
+      "selected_policy": "rigid-instance-hwrt-update",
+      "result_commit": "d2d8a7a4a7c52da79c8b82ac4e4e0eec1cd33ede"
+    },
+    {
+      "id": "E003",
+      "experiment": "003-software-object-local",
+      "status": "complete",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/003-software-object-local.md",
+      "protocol_commit": "8d19c909f78a2733043b58dca839fde092b905b4",
+      "implementation_checkpoint": "4ff3688e21f1c892832a7212b7b82318a769ee60",
+      "validation_commit": "2a48b944d33b56e69947e9f437bba7ff0d445e30",
+      "validation_protocol_commit": "411a888199dc73800e22e47e23d790e3a753dff7",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/003-software-object-local.md",
+      "measurement_commit": "09944ee0b580cd67911d3c0a13b87821d8c939dc",
+      "selected_policy": "rigid-instance-software-quantized",
+      "result_commit": "e8ff5bcb90852103736b5c1326d0999be0e34225"
+    },
+    {
+      "id": "E004",
+      "experiment": "004-deforming-boundary",
+      "status": "complete",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/004-deforming-boundary.md",
+      "protocol_commit": "b28fa0cd31fc2cc565f49a0f101bda8f08b39a7d",
+      "implementation_checkpoint": "ca62af2b9ca20a042990e68ec987d88ddbee9d43",
+      "self_review_code_commits": [
+        "aeb43b31c8bbe1e157d61f375d5eb73f72ab5b7b",
+        "cc4cb05743ee6d78de1671f871e7e38bebb8a29e"
+      ],
+      "validation_commit": "0e1377f67e140d2e783c25a3e0a89d8e934260d1",
+      "validation_protocol_commit": "927f62c4827c5e922c0b43a019e02a00c606101d",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/004-deforming-boundary.md",
+      "measurement_commit": "6a401247f91d3cb1b843a2c9c8cf0819414b9cc2",
+      "selected_policies": [
+        "deforming-local-hwrt",
+        "deforming-local-software-quantized"
+      ],
+      "result_commit": "4a0fdae208c81d4624d790862f88709622c003be"
+    },
+    {
+      "id": "E005",
+      "experiment": "005-integration-replay",
+      "status": "complete",
+      "protocol": "research/lanes/lane-e-dynamic-geometry/experiments/005-integration-replay.md",
+      "protocol_commit": "a18730afa4aa293713e513783fbaf6b683057abe",
+      "implementation_checkpoint": "156707f751ffddec64546c98d2aa28f4476ee280",
+      "validation_commit": "5f1de18c031f7590c1514c9d262ea34f6bb1b58c",
+      "validation_protocol_commit": "e0c83ba48e52d2bd03c546ef28503f22431616fa",
+      "result": "research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md",
+      "measurement_commit": "2911790d8fd1716615a59dc86034e4fea783c9ec",
+      "final_hwrt_accepted": true,
+      "final_software_accepted": true,
+      "result_commit": "33872b4874cdee746fadfa07935023d0589d255d"
+    }
+  ]
+}

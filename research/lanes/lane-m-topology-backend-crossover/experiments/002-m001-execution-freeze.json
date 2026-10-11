@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-m-m001-v1",
+  "experiment": "M001-topology-backend-crossover",
+  "issue": 25,
+  "status": "gpu-independent-preparation-frozen",
+  "accepted_target_timing_started": false,
+  "implementation_commit": "fc81e5f79d998fa7b10946aece86de6e3b211f31",
+  "base_program_commit": "e1376fb000a73d4b8d5a9b900d4303421aedd68e",
+  "lane_entry_commit": "d2bcb942e91691ebf2561009392d48acee572a65",
+  "source_fingerprint": {
+    "config_blob": "a8c78dfe801f934c8ad4b408a0a4d7e4c049c293",
+    "runner_blob": "c4d5c6901c18b3bd6b532d0c2a6dc17dacded019",
+    "analysis_blob": "d62face01841e65e6d6b4b9be4c673ca79feb40d",
+    "analysis_test_blob": "47306e909c4ba7271046e8294456b795ac76ea10",
+    "protocol_test_blob": "0834ddf37b4db3303208e946b6a190bc6266e39f",
+    "lane_m_source_tree": "3aa3f135b9afc3a8b43109240349254d72363b1f",
+    "lane_m_scripts_tree": "1ee8aa3e454596e54b65530f8bb74c28d11a8b62",
+    "lane_m_shader_tree": "d8089f9cd0ab22d84795f57230d9d72600fccd4a",
+    "qualified_j_source_tree": "030c0bc016dc7956f24ba1a655c05a3bf3a97abe",
+    "qualified_j_formal_shader_tree": "83e6f0f5286e7edb14b15a3e722dca379e126ce5",
+    "common_formal_runtime_blob": "10003868cdad58f2a149b00397e7176491efb9ed",
+    "allocation_context_header_blob": "64249112d157104b66b5f334d29558b0a01bc674",
+    "allocation_context_source_blob": "faf6c585a2f8ffbf26c6e9181e49ea8a7e84f81f",
+    "lane_g_lbvh_source_blob": "17f55f17a35aaa5373074591af552636b1dfe82d",
+    "lane_g_lbvh_header_blob": "ded4856b0fcb268ef8ca984338c073b4dace74eb",
+    "lane_j_transition_blob": "f2c6a26ec1ef09411e863eac94bed4c1ff1d43ee",
+    "lane_j_persistent_layout_blob": "b6812c09815d37aa7068cbbe9133e2e38fdd51f2",
+    "root_cmake_blob": "6ebf86f9c882d9eb2d5d65b6e5649df7485df396",
+    "research_runner_blob": "ae891d42fe3ef804256f87d1d44988d3515ef7fe"
+  },
+  "workload": {
+    "source": "J002 deterministic topology materialization",
+    "scenarios": [
+      "topology-changing-object-local",
+      "high-churn-global",
+      "high-churn-local",
+      "stable-no-change-guard"
+    ],
+    "mutation_evidence": "actual primitive-id/count/geometry-digest delta per transition",
+    "stable_guard_update_count": 0,
+    "mutating_sample_update_count": 16
+  },
+  "candidates": [
+    "lane-e-object-local-rebuild",
+    "hardened-transient-lbvh",
+    "clustered-two-level-object-local-bvh"
+  ],
+  "measurement": {
+    "environment": "dual-context",
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-health-provenance-only",
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "complete_transitions_per_role_sample": 16,
+    "demonstrated_effect_floor": 0.2,
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0
+  },
+  "performance_gate": {
+    "promotion_ratio_max": 0.8,
+    "regression_ratio_min": 1.2,
+    "effect_must_strictly_exceed_fresh_control_noise": true,
+    "all_fresh_process_medians_directional": true,
+    "ab_ba_strata_directional": true,
+    "minimum_directional_pair_fraction": 0.75,
+    "middle": "<20% difference / measurement-limited",
+    "sub20_ranking_forbidden": true
+  },
+  "memory_gate": {
+    "persistent_ratio_max": 1.25,
+    "true_peak_ratio_max": 1.25,
+    "allocation_lifetime_complete": true,
+    "applies_to_conditional_direct_comparison": true
+  },
+  "validation_gate": {
+    "exact_hit_mismatch_zero": true,
+    "nearest_hit_tie_mismatch_zero": true,
+    "visibility_mismatch_zero": true,
+    "producer_semantic_error_zero": true,
+    "traversal_runtime_error_zero": true,
+    "storage_failure_zero": true,
+    "static_unrelated_owner_mutation_zero": true,
+    "workload_identity_match": true,
+    "resolved_output_identity_match": true,
+    "geometry_input_identity_match": true,
+    "allocation_lifetime_accounting_complete": true,
+    "device_driver_api_timestamp_provenance_match": true,
+    "formal_input_sha_must_equal_validation_input_sha": true
+  },
+  "execution_policy": {
+    "accepted_timing_requires_completed_validation": true,
+    "formal_source_fingerprint_must_equal_validation_fingerprint": true,
+    "future_state_prebuild": false,
+    "recurrent_work_moved_to_setup": false,
+    "no_github_actions": true,
+    "no_pull_request": true
+  },
+  "self_review": {
+    "duplicate_formal_runtime_rejected": true,
+    "qualified_common_runtime_reuse_selected": true,
+    "direct_pair_memory_guard_added_before_freeze": true,
+    "validation_to_formal_input_sha_handoff_added_before_freeze": true,
+    "full_j002_materialized_profile_contract_pinned": true,
+    "stable_lbvh_setup_priming_outside_recurrent_boundary": true,
+    "validation_child_stderr_exposed": true
+  }
+}

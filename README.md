@@ -1,65 +1,40 @@
 # phos-gi-lab
 
-Measurement-driven research sandbox for a GPU-locality-aware real-time global
-illumination architecture.
+**Evidence-driven research toward a competitive real-time global illumination architecture.**
 
-## Current program
+The objective is to establish a new light-transport architecture that can outperform representative existing real-time GI techniques **in a defensible combination of image quality, end-to-end GPU cost, GPU memory, and dynamic-scene coverage**. This is not merely a Split Radiance Cascades optimization project. Producer, traversal, storage and reuse components are replaceable hypotheses, not permanent commitments.
 
-The original M0 cache/scheduler study and research Lanes A-F are concluded.
-Integration #13 is also complete.
+## Current position (2026-10-11)
 
-The current evidence-backed Split Radiance Cascades architecture is:
+The laboratory has a functioning GPU image-producing Renderer and substantial measured performance results, **but has not established a generally superior GI solution**.
 
-- A001 GPU visibility-driven producer with its natural append order;
-- HWRT/TLAS as primary traversal on the measured AMD Radeon 8060S target;
-- segment DDA/hash + conservative quantized Micro BVH8 as the software fallback;
-- per-probe open-addressed sparse hash radiance storage;
-- Lane E object-local dynamic-geometry ownership:
-  - immutable static acceleration data;
-  - transform-only rigid instances;
-  - object-local UPDATE for stable-topology deformation;
-  - object-local rebuild boundaries for topology changes.
+- **Current measured design:** visibility-driven Split RC producer with natural append order; HWRT/TLAS on the measured Radeon 8060S; segment-DDA/hash plus conservative quantized Micro BVH8 as software fallback; per-probe sparse hash storage; and object-local geometry ownership/updates.
+- **Dynamic updates:** accepted Lane E heavy-boundary revalidation, including substantial GPU-time improvements on moving-rigid and stable-topology-deforming workloads. Lane M retained the Lane E incumbent for topology-changing/high-churn regimes.
+- **N003 renderer comparison:** approximately **2.35–3.11x** faster than the tested vanilla Split RC in reported cases; **approximately 24–27% more GPU memory**. These are bounded cases, not cross-GPU or universal claims.
+- **Known weaknesses:** N004 reports quality issues under camera and dynamic-geometry motion. N005 adaptive tracing is REFINE/conditional, not one universally accepted rule. N006 demonstrated reproducible Q8 image influence, **not** detectable signed quality lift from the tested extra four rays; its P1/P2/P3 progression stopped.
+- **Next independent issue:** [N007 #43](https://github.com/owoDra/phos-gi-lab/issues/43) must establish adequate HDR reference signal and convergence eligibility before future quality claims. No new GI algorithm research is authorized by this consolidation.
 
-Lane D did not replace A001. Renderer depth reuse remains a conditional
-integration optimization and bounded-capacity/safe-overflow remains
-non-promoted memory-policy evidence.
+**Read [research/status.md](research/status.md) first.** It is the single current architecture/status synthesis. [research/roadmap.md](research/roadmap.md) defines the next major gates; [research/branch-inventory.md](research/branch-inventory.md) locates all 25 original refs and preserves abandoned/negative experiments.
 
-Lane F did not promote a transient architecture. The sorted two-level grid is
-not retained as the next direction. Transient LBVH remains promising, but its
-sparse-memory gate failed and required timing remained inconclusive after the
-permitted rerun.
+## Repository navigation
 
-The next proposed work is Issue #17 / Lane G, after its plan is amended to
-diagnose memory ownership and timing repeatability first and to compare against
-the accepted Lane E incumbent under a common boundary.
+| Path | Purpose |
+| --- | --- |
+| [docs/research.md](docs/research.md) | Stable objective, fairness rules, end-state criteria |
+| [research/status.md](research/status.md) | Current decision-grade synthesis and limitations |
+| [research/roadmap.md](research/roadmap.md) | Three-phase forward plan; N007 remains a separate issue |
+| [research/protocol.md](research/protocol.md) | Frozen measurement, correctness, provenance rules |
+| [research/decisions/](research/decisions/) | Cross-lane adoption decisions |
+| [research/lanes/](research/lanes/) | Frozen plans, results, and per-lane evidence |
+| [research/integration/](research/integration/) | Historical I001 evidence |
+| [src/](src/), [shaders/](shaders/) | Renderer and isolated historical research implementations |
+| [scripts/](scripts/) | Experimental runners, evidence checks, reproducibility scripts |
 
-See:
+Earlier branches remain immutable historical provenance. Imported historical lane sources are **not automatically activated in the production Renderer**. N001–N006 research variants may have separate targets; being present is not equivalent to being adopted.
 
-- [research/status.md](research/status.md) — canonical A-F synthesis, current
-  architecture, unresolved questions and roadmap;
-- [research/README.md](research/README.md) — branch/program topology and
-  evidence flow;
-- [research/protocol.md](research/protocol.md) — shared methodology.
+## Building and validating
 
-## Source of truth
-
-- [Current research status](research/status.md)
-- [Research program](research/README.md)
-- [Research protocol](research/protocol.md)
-- [Historical charter](docs/research.md)
-- [M0 status/evidence](docs/status.md)
-- [Codex instructions](AGENTS.md)
-
-Implementation behavior remains authoritative in source code, doc comments, and
-executable correctness guards. Lane result documents preserve detailed
-hypotheses, protocols, evidence, limitations, and architectural decisions.
-`research/status.md` preserves only cross-lane synthesis rather than copying
-experiment details.
-
-## Environment
-
-The workflow is managed by mise. A host C++20 compiler and Vulkan 1.3
-driver/loader are required.
+Requires a host C++20 compiler, Vulkan 1.3 loader/driver, and dependencies resolved by CMake/mise. The measured GPU for the historical results was AMD Radeon 8060S Graphics (RADV STRIX_HALO).
 
 ```bash
 mise install
@@ -67,36 +42,10 @@ mise run build
 mise run research:check
 ```
 
-Run a lane experiment through the artifact recorder when practical:
+To launch a particular renderer or historical experiment, follow its lane-specific README and scripts, and confirm prerequisites and expected output before claiming a pass. Existing M0 controls are available as `mise run bench` and `mise run bench:sweep` (the Sponza scene may need downloading via `mise run assets`).
 
-```bash
-mise run research:record \
-  --lane <lane> \
-  --experiment <experiment> \
-  --command "<lane runner>"
-```
+Raw runs under `out/research/` are local/ignored; retained results include experiment IDs, source SHAs, decision labels and artifact provenance. **Do not mistake an absent historical raw artifact for a newly reproduced result.**
 
-The command receives `PHOS_RESEARCH_ARTIFACT_DIR` and may write structured
-CSV/JSON data there. The harness records command/stdout/stderr, Git
-commit/branch/dirty state, host metadata, and timestamps.
+## Workflow
 
-Raw artifacts are intentionally ignored by Git:
-
-```text
-out/research/<lane>/<experiment>/<timestamp>/
-  metadata.json
-  stdout.log
-  stderr.log
-  ... lane-specific CSV/JSON
-```
-
-Detailed accepted/rejected/inconclusive conclusions remain in the corresponding
-lane branch's `research/lanes/<lane>/results/` directory and
-`results/index.json`.
-
-The existing M0 commands remain available for historical controls:
-
-```bash
-mise run bench
-mise run bench:sweep
-```
+Run studies on dedicated lane branches; integrate validated findings and their records into `research`; advance `main` only at a verified program checkpoint. No PR requirement and **no GitHub Actions/CI**. Follow [AGENTS.md](AGENTS.md) for evidence immutability and promotion gates.

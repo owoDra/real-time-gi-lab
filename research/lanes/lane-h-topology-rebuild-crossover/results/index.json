@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "lane": "lane-h-topology-rebuild-crossover",
+  "experiments": [
+    {
+      "id": "H001",
+      "name": "safe-timing-methodology",
+      "result": "001-safe-timing-methodology.md",
+      "status": "closed-inconclusive",
+      "decision": "safe-repeatability-gate-failed-h003-forbidden",
+      "measurement_commit": "5664abba21875fbe273474fe14034b31156d74b1"
+    },
+    {
+      "id": "H002",
+      "name": "same-boundary-topology-comparator",
+      "status": "contract-prepared-not-promoted",
+      "decision": "preserve-correctness-and-boundary-scaffolding-no-timing-winner"
+    },
+    {
+      "id": "H003",
+      "name": "frozen-topology-crossover",
+      "status": "not-run-gated",
+      "decision": "forbidden-because-h001-did-not-pass"
+    },
+    {
+      "id": "H004",
+      "name": "final-lane-decision",
+      "result": "004-final-decision.md",
+      "status": "complete-measurement-limited",
+      "decision": "measurement-limited"
+    }
+  ]
+}

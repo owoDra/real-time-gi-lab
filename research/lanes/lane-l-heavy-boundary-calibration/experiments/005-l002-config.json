@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-l-l002-v1",
+  "issue": 24,
+  "branch": "research-lane-l-heavy-boundary-calibration",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "experiment_role": "heavy-boundary-detectable-effect-floor-calibration-only",
+  "architecture_ranking_allowed": false,
+  "environments": [
+    {
+      "id": "dual-context",
+      "vulkan_contexts": 2,
+      "runtimes": 2,
+      "runtime_resource_ownership": "independent",
+      "purpose": "J004 environment reproduction"
+    },
+    {
+      "id": "single-context-independent-runtime",
+      "vulkan_contexts": 1,
+      "runtimes": 2,
+      "runtime_resource_ownership": "independent-no-aliasing",
+      "purpose": "shared device/queue/context calibration"
+    }
+  ],
+  "axis_roles": {
+    "primary_performance": "gpu_timestamp",
+    "cpu_wall": "diagnostic-health-provenance-only",
+    "timed_memory": "diagnostic-only"
+  },
+  "j004_import": {
+    "result_commit": "ccddbf3d63a7f71bda795d562efeffabad173ce7",
+    "accepted_runtime_commit": "e1b3c9f0a23f96fa7f54518a2af1a15138f424b3",
+    "result_document": "research/lanes/lane-j-topology-backend-alternatives/results/027-formal-crossover-final.md",
+    "gate_v7": "research/lanes/lane-j-topology-backend-alternatives/experiments/011-formal-crossover-gate-v7-exact-tie-pruning.md",
+    "execution_freeze_v7": "research/lanes/lane-j-topology-backend-alternatives/experiments/012-formal-execution-freeze-v7.json",
+    "j004_config_blob": "22951382f8a510bf176c7a427a12d7a2ae24e5d9",
+    "j004_formal_process_blob": "5d66a377779a76e226864965702cf7d402e0f236",
+    "j004_analysis_blob": "9dd6e87d2f5ba807410297d11d9fba32790af2b9"
+  },
+  "lane_k_import": {
+    "issue": 21,
+    "result_commit": "eff91667ba5d8dd33e1730216cfa26b21c994f27",
+    "k002_config_blob": "08657f3e176128a73c6f7f4d1769bab3f1eff7ad",
+    "smallest_demonstrated_effect": "5%"
+  },
+  "j002": {
+    "materialized_root": "out/research/lane-j-topology-backend-alternatives/002-deterministic-topology-contract/materialized",
+    "producer_contract": "A001-schema-v1-natural-append",
+    "hit_contract": "B001-exact-hit-v1",
+    "storage_contract": "C001-per-probe-sparse-hash",
+    "validation_ray_prefix_count": 0,
+    "frozen_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19",
+    "profiles": [
+      {
+        "name": "small-global-high",
+        "expected_topology_digest": "45819e4759e2cbe2ff90b617043a8baa5ed3242c5b648e447b43ef21853309c5"
+      },
+      {
+        "name": "medium-global-representative",
+        "expected_topology_digest": "3c7de01e9628d46d0b516dc0e3b7edd5a66f7e47c23e7cec8a89b4ca9a3cc358"
+      },
+      {
+        "name": "medium-local-high",
+        "expected_topology_digest": "b0e58dc496f5c8d5efb1e5ab549bd310e51f26fd5e5d65a4bd5cecdb712407bb"
+      },
+      {
+        "name": "large-global-high",
+        "expected_topology_digest": "8d1473fb238de7f6281710eb4a493d6e558ec68339a090dc7b1fa15f1c782c87"
+      },
+      {
+        "name": "large-local-high",
+        "expected_topology_digest": "042896ddfc2ff2b928bf7ed9792c851f28803c24cb760a826e3495e0ebdfa69e"
+      }
+    ],
+    "required_correctness_zero_fields": [
+      "visibility_mismatch_count",
+      "producer_semantic_error_count",
+      "hit_mismatch_count",
+      "nearest_hit_tie_mismatch_count",
+      "traversal_runtime_error_count",
+      "storage_failure_count",
+      "immutable_owner_mutation_count"
+    ],
+    "resolved_output_identity": "role-a-and-role-b-digests-must-match",
+    "snapshot_count": 8
+  },
+  "controls": {
+    "primary": "lane-e-object-local-hwrt-rebuild",
+    "software": "lane-e-object-local-software-b003-rebuild"
+  },
+  "recurring_boundary": {
+    "batch_transitions": 16,
+    "topology_steps_per_cycle": 8,
+    "future_snapshot_prebuild": false,
+    "recurrent_work_moved_to_setup": false
+  },
+  "timing": {
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "settle_seconds": 1,
+    "start_order_by_block": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "BA",
+      "AB",
+      "BA",
+      "AB"
+    ],
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0,
+    "accepted_timing_validation": false,
+    "environment_order_by_block": [
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ]
+    ]
+  },
+  "cpu_wall_health": {
+    "decision_use": "diagnostic-health-provenance-only",
+    "structural_invalidation": [
+      "non-positive-or-non-finite-timing",
+      "incomplete-pair-structure",
+      "complete-wall-smaller-than-gpu-timestamp",
+      "device-provenance-inconsistency",
+      "process-failure"
+    ]
+  },
+  "allocation_lifetime": {
+    "evidence_pass": "pre-timing-paired-validation",
+    "timing_memory_decision_use": "diagnostic-only",
+    "single_context_required_sequence": [
+      "record-baseline-live-bytes",
+      "create-runtime-a-and-record-live-bytes",
+      "create-runtime-b-and-record-live-bytes",
+      "destroy-runtime-b-and-require-return-to-post-a-live-bytes",
+      "destroy-runtime-a-and-require-return-to-baseline-live-bytes"
+    ],
+    "no_extra_gpu_bookkeeping_in_timed_boundary": true
+  },
+  "artifact_schema": {
+    "version": 1,
+    "required": [
+      "l002-config.json",
+      "l002-input-provenance.json",
+      "l002-source-provenance.json",
+      "l002-progress.json",
+      "l002-validation-summary.csv",
+      "l002-raw.csv",
+      "l002-process-summary.csv",
+      "l002-synthetic-process-summary.csv",
+      "l002-host-observations.json",
+      "l002-devices.json",
+      "l002-summary.json"
+    ]
+  },
+  "l001_import": {
+    "measurement_commit": "a542ea4f2cd8219b76f069f552435b492e163b9c",
+    "result_document": "research/lanes/lane-l-heavy-boundary-calibration/results/002-l001-target-result.md",
+    "outcome": "measurement-limited",
+    "usable_environments": [],
+    "entry_condition_satisfied": true
+  },
+  "synthetic_effect_calibration": {
+    "injection_domain": "analysis-only-gpu-timestamp-b-role",
+    "measured_gpu_work_modified": false,
+    "formula": "synthetic_b_gpu_us = measured_b_gpu_us * factor",
+    "factors": [
+      {
+        "id": "plus20",
+        "percent": 20,
+        "factor": 1.2
+      },
+      {
+        "id": "plus10",
+        "percent": 10,
+        "factor": 1.1
+      },
+      {
+        "id": "plus5",
+        "percent": 5,
+        "factor": 1.05
+      }
+    ],
+    "cpu_wall_injection": "none-diagnostic-only",
+    "raw_samples": "retain-unmodified-measured-values",
+    "interpretation": "multiplicative-detectability-floor-not-physical-workload-calibration"
+  },
+  "detection_gate": {
+    "process_count_per_control": 8,
+    "minimum_positive_pair_fraction": 0.75,
+    "require_all_process_medians_above_unity": true,
+    "require_all_ab_stratum_medians_above_unity": true,
+    "require_all_ba_stratum_medians_above_unity": true,
+    "control_noise_envelope": {
+      "definition": "max(control_max_abs_process_median_ratio, control_process_median_span_ratio, control_max_within_process_order_bias_ratio)",
+      "injected_factor_must_exceed_envelope_strictly": true
+    },
+    "profile_averaging_allowed": false,
+    "effect_pass_rule": "all-five-profiles-times-both-tracks-pass-independently",
+    "contiguous_order": [
+      "plus20",
+      "plus10",
+      "plus5"
+    ]
+  },
+  "decision_mapping": {
+    "environment_floor": "smallest-contiguous-passing-effect",
+    "environment_unusable": "plus20-fails-any-required-control",
+    "accepted_environment": "environment-with-smallest-floor; tie-prefer-single-context-independent-runtime-after-validation",
+    "success_outcome": "measurement-floor-established",
+    "failure_outcome": "target-timing-unsuitable-up-to-20-percent",
+    "architecture_ranking_allowed": false
+  }
+}

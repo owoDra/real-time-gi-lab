@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-l-l001-v1",
+  "issue": 24,
+  "status": "frozen-before-target-execution",
+  "formal_timing_started": false,
+  "source_freeze_parent_commit": "6b222595ef94d5de85fc854f384cfda16a6331dd",
+  "frozen_inputs": {
+    "plan_blob": "f2378222c5c46abacb98857640641b0c2e368ade",
+    "config_blob": "f3ec006e1e4c0b236463289af73b5405fdc4d5d3",
+    "j004_config_blob": "22951382f8a510bf176c7a427a12d7a2ae24e5d9",
+    "j002_contract_blob": "a40a31fd56c2e1bb8cd5a2e74d271f798f5adf19"
+  },
+  "frozen_harness": {
+    "l001_runtime_blob": "f8803228893cd3cd20a788919758e203563810e2",
+    "l001_cmake_blob": "dd605f90bc928718107ae9840ba69b128e3bb6d9",
+    "l001_analysis_blob": "cb17b26073d9c256103064f3edd8236d9c51dbfd",
+    "l001_runner_blob": "f5990abdb4225a469c7c48e807655a3d81647b1e",
+    "l001_analysis_test_blob": "3a86fa17dfde27f35df3348987bc2cf39c29752e",
+    "l001_protocol_test_blob": "9a8f35e90f5b717244db0a20bf5c44435e3aa77e",
+    "l001_runtime_contract_test_blob": "1b3a52cca7df954be35800d2f719c961698b5c73",
+    "root_cmake_blob": "240bc46efb67ab7840a14afee17f4b498c052cc5",
+    "mise_blob": "20b6bfefd44e8401b316069633766504e23ca563",
+    "gitignore_blob": "c22a8a485d4452afafff994ce3e290d0fd9f8604"
+  },
+  "imported_j004": {
+    "result_commit": "ccddbf3d63a7f71bda795d562efeffabad173ce7",
+    "runtime_commit": "e1b3c9f0a23f96fa7f54518a2af1a15138f424b3",
+    "j004_runner_blob": "788153017adab4357e38e5cdaad57cef9471da45",
+    "j004_analysis_blob": "9dd6e87d2f5ba807410297d11d9fba32790af2b9",
+    "j004_formal_process_blob": "5d66a377779a76e226864965702cf7d402e0f236",
+    "result_document": "research/lanes/lane-j-topology-backend-alternatives/results/027-formal-crossover-final.md",
+    "gate_v7": "research/lanes/lane-j-topology-backend-alternatives/experiments/011-formal-crossover-gate-v7-exact-tie-pruning.md",
+    "source_tree": "7b697d2e2b8151e85e0bb451794de0b64e5e842b",
+    "formal_shader_tree": "83e6f0f5286e7edb14b15a3e722dca379e126ce5"
+  },
+  "environments": [
+    "dual-context",
+    "single-context-independent-runtime"
+  ],
+  "optional_single_runtime_diagnostic_enabled": false,
+  "controls": {
+    "primary": "lane-e-object-local-hwrt-rebuild",
+    "software": "lane-e-object-local-software-b003-rebuild"
+  },
+  "timing": {
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "batch_transitions": 16,
+    "settle_seconds": 1,
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0,
+    "environment_order_by_block": [
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ],
+      [
+        "single-context-independent-runtime",
+        "dual-context"
+      ],
+      [
+        "dual-context",
+        "single-context-independent-runtime"
+      ]
+    ]
+  },
+  "gate": {
+    "max_abs_process_median_ratio": 1.02,
+    "process_median_span_ratio": 1.03,
+    "max_within_process_order_bias_ratio": 1.02,
+    "pass_rule": "all 5 profiles x both control families independently"
+  },
+  "evidence_roles": {
+    "gpu_timestamp": "primary-decision-axis",
+    "cpu_wall": "diagnostic-health-provenance-only",
+    "timed_memory": "diagnostic-only",
+    "allocation_lifetime": "pre-timing-validation-evidence"
+  },
+  "architecture_ranking_allowed": false,
+  "l002_entry": "only-if-no-L001-environment-passes",
+  "artifact_schema": [
+    "l001-config.json",
+    "l001-input-provenance.json",
+    "l001-source-provenance.json",
+    "l001-progress.json",
+    "l001-validation-summary.csv",
+    "l001-raw.csv",
+    "l001-process-summary.csv",
+    "l001-host-observations.json",
+    "l001-devices.json",
+    "l001-summary.json"
+  ],
+  "pre_target_amendments": [
+    "counterbalance dual-context and single-context-independent-runtime fresh-process position 4/4 per environment before any target timing",
+    "retain timed memory as diagnostic-only because single-context shares context-level allocation counters; use paired validation lifetime evidence instead",
+    "reuse J004 v7 runtime/source-tree verification rather than copying or weakening B001 tie semantics"
+  ]
+}

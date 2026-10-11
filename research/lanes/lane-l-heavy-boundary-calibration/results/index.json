@@ -1,0 +1,41 @@
+{
+  "lane": "lane-l-heavy-boundary-calibration",
+  "issue": 24,
+  "results": [
+    {
+      "id": "L001-pretarget-freeze",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/001-l001-pretarget-freeze.md",
+      "status": "complete",
+      "evidence_class": "pre-target-measurement-environment-freeze",
+      "decision": "L001 dual-context and single-context-independent-runtime calibration frozen before target execution"
+    },
+    {
+      "id": "L001-target-result",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/002-l001-target-result.md",
+      "status": "complete",
+      "evidence_class": "target-heavy-boundary-measurement-environment-calibration",
+      "decision": "measurement-limited; both environments fail all required same-variant GPU control gates; L002 required"
+    },
+    {
+      "id": "L002-pretarget-freeze",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/004-l002-pretarget-freeze.md",
+      "status": "complete",
+      "evidence_class": "pre-target-detectable-effect-floor-freeze",
+      "decision": "fresh heavy-boundary +20/+10/+5 analysis-only multiplicative detection campaign frozen; no architecture ranking"
+    },
+    {
+      "id": "L002-target-result",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/005-l002-target-result.md",
+      "status": "complete",
+      "evidence_class": "target-heavy-boundary-detectable-effect-floor-calibration",
+      "decision": "measurement-floor-established; dual-context accepted; minimum demonstrated heavy-boundary effect 20%"
+    },
+    {
+      "id": "Lane-L-final",
+      "path": "research/lanes/lane-l-heavy-boundary-calibration/results/007-lane-l-final.md",
+      "status": "complete",
+      "evidence_class": "lane-final-decision",
+      "decision": "Lane L complete; downstream timing contract is dual-context with 20% promotion floor"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "lane": "lane-g-transient-lbvh-hardening",
+  "experiments": [
+    {
+      "id": "G001",
+      "name": "memory-ownership-lifetime-census",
+      "result": "001-memory-ownership-lifetime-census.md",
+      "status": "complete",
+      "correctness": "pass",
+      "decision": "static-hwrt-lifetime-dominates-sparse-memory-failure-lbvh-not-primary-cause"
+    },
+    {
+      "id": "G002",
+      "name": "timing-repeatability-diagnosis",
+      "result": "002-timing-repeatability-diagnosis.md",
+      "status": "closed-diagnostic-inconclusive",
+      "decision": "no-decision-valid-timing-protocol-g002c-abandoned-for-host-safety"
+    },
+    {
+      "id": "G003",
+      "name": "memory-reduction-candidates",
+      "result": "003-memory-reduction-candidates.md",
+      "status": "memory-correctness-retained-timing-inconclusive",
+      "decision": "retain-g003a-for-g004-semantic-hardening-no-formal-timing-promotion"
+    },
+    {
+      "id": "G004",
+      "name": "integration-hardening",
+      "result": "004-integration-hardening.md",
+      "status": "accepted-semantic-hardening",
+      "decision": "all-16-semantic-cases-pass-proceed-g005-deterministic"
+    },
+    {
+      "id": "G005",
+      "name": "final-deterministic-replay",
+      "result": "005-final-deterministic-replay.md",
+      "status": "complete-deterministic-pass-timing-measurement-limited",
+      "decision": "mechanism-retained-memory-correctness-pass-production-promotion-measurement-limited",
+      "measurement_commit": "81ca547fa7c1541db15cef3ad3ac83609a34d716",
+      "result_commit": "1fe3492652e37c938b3e02efbe58ed94604f3295"
+    }
+  ]
+}

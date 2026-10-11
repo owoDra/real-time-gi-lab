@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-f-plan-v1",
+  "experiment": "F007",
+  "name": "final-integration-replay",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "variants": [
+    "transient-lbvh",
+    "transient-grid",
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "representative_scenarios": [
+    "static",
+    "camera-motion",
+    "light-motion",
+    "moving-rigid"
+  ],
+  "stable_stress_scenarios": [
+    "sparse-stress",
+    "dense-stress",
+    "large-world-stress",
+    "vertical-world-stress"
+  ],
+  "dynamic_stress_scenarios": [
+    "sparse-moving",
+    "dense-moving",
+    "large-world-moving",
+    "vertical-world-moving"
+  ],
+  "dynamic_stress_rule": "apply the frozen representative moving-rigid transition after the matching I001 stress scene transform; Nrep remains 796 and classification is fixed before warmup",
+  "run_local_controls": [
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "historical_i001": {
+    "source_result": "research/integration/results/001-dynamic-end-to-end.md",
+    "measurement_commit": "3a1aa9c25ffcec583459409aca4c526b17b53e3c",
+    "purpose": "reported anchor only; formal gates use F007 run-local medians"
+  },
+  "candidate_gates": {
+    "correctness_required": true,
+    "stable_representative_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "moving_rigid_gpu_max_ratio_vs_vanilla": 0.9,
+    "moving_rigid_wall_max_ratio_vs_vanilla": 0.9,
+    "stable_stress_gpu_max_ratio_vs_combined_hwrt": 1.05,
+    "dynamic_stress_gpu_max_ratio_vs_extended_vanilla": 1.05,
+    "peak_resident_max_ratio_vs_vanilla": 3
+  },
+  "tie_rule": [
+    "if both candidates are rigid-primary and moving-rigid complete GPU differs by >=5%, select the faster",
+    "else if maximum peak resident memory differs by >=10%, select lower-memory",
+    "else retain transient-lbvh"
+  ],
+  "general_dynamic_rule": "F006 was timing-inconclusive after its permitted rerun, so F007 cannot establish the formal general-dynamic claim; F007 decides rigid-primary only",
+  "accepted_timing": {
+    "process_repeats": 5,
+    "warmup_frames_per_process": 1,
+    "measured_frames_per_process": 1,
+    "decision_statistic": "median of process-level measured target frames",
+    "instability_rule": "complete_gpu_us max/min > 1.20",
+    "identical_full_reruns_allowed": 1,
+    "outlier_deletion": false,
+    "correctness_source": "prior same-commit target-GPU validation artifact"
+  },
+  "post_first_timing_changes_forbidden": [
+    "algorithm",
+    "layout",
+    "workload",
+    "threshold",
+    "candidate-specific special case"
+  ]
+}

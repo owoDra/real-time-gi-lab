@@ -1,112 +1,48 @@
-# Codex research instructions
+# Research repository operation
 
-This repository is a measurement-driven GI research lab.
+## Purpose and sources of truth
 
-## Program source of truth
+- `docs/research.md`: stable mission, evaluation criteria.
+- `research/status.md`: **the single current** architecture, status and limitations.
+- `research/roadmap.md`: open, large research questions and exit gates.
+- `research/protocol.md`: reusable correctness, GPU timestamp, memory and evidence rules.
+- `research/decisions/`: cross-lane decisions, with reasons.
+- `research/lanes/<lane>/results/`: detailed outcome records; historical branches and source SHAs remain provenance, not competing current summaries.
+- Source, shader, tests: executable behavior. Do not replace source truth with prose.
 
-- `research` is the long-lived program integration/source-of-truth branch.
-- `research/status.md` is the canonical cross-lane architecture/status/roadmap.
-- Detailed experiment evidence remains canonical on each lane branch under
-  `research/lanes/<lane>/results/`.
-- `research/protocol.md` is the shared evidence and measurement methodology.
-- Do not copy complete lane result documents into `research`.
+## Branch roles
 
-## Branch discipline
+- `main`: verified, published research-result checkpoint; **not** an active experimental branch.
+- `research`: integrated, reviewed research assets and cross-lane decisions.
+- A dedicated `research-lane-*` (or explicit `research-n*`) branch per experiment. Experiment commits normally go directly to that branch.
+- Promotion to `research` requires complete evidence inventory, schema/reference validation, test/build checks, explicit acceptance/rejection and no unapproved code activation. Promote to `main` only after the full verified checkpoint.
+- Preserve historical Git refs, non-promotion results, failed runs, and the exact accepted evidence bytes. No force push or ref deletion during consolidation.
+- Never use `git merge -s ours`, synthetic empty merges or misleading commit ancestry to present missing files as integrated. Preserve actual records and explain any branch kept as a historical ref.
+- No pull-request requirement for routine studies. Do not add GitHub Actions, CI workflows or secret-bearing logs.
 
-Routine experiment work happens directly on exactly one lane branch using the
-`research-lane-*` naming convention.
+## Current-vs-historical separation
 
-Completed branches currently include:
+- Historical standalone study files may be in `src/research/`, `shaders/research/`, and `scripts/research/`, but that does **not** authorize linking them into the current Renderer or default CMake build.
+- The N-series Renderer contains pinned imported source/shader copies. Do not casually deduplicate them against historical Lane A/B/I001 trees: compare exact semantics, shader names, provenance and tests first.
+- Do not enable old A/B targets wholesale: they register overlapping shader output names with the N-series CMake definition. Keep the historical code accessible without changing the default build graph.
+- Before deleting or rewriting historical experiments, verify that their adopted/rejected results, hashes, configs and references remain reachable. Prefer retaining the original branch to destructive archival operations.
 
-- `research-lane-a-split-rc`
-- `research-lane-b-traversal`
-- `research-lane-c-storage-locality`
-- `research-lane-d-producer-optimization`
-- `research-lane-e-dynamic-geometry`
-- `research-lane-f-dynamic-geometry-alternatives`
-- `research-integration-gate`
+## Measurement and quality
 
-Issue #17 proposes
-`research-lane-g-transient-lbvh-hardening`, but implementation must not begin
-until the post-A-F synthesis amendments described by `research/status.md` are
-reflected in the lane plan.
+1. Pre-register a falsifiable question, exact comparison boundary, quality/semantic parity, evidence classifier, memory constraints, minimal detectable effect and stop conditions.
+2. GPU timestamp is the primary performance decision axis; CPU wall is health/provenance/diagnostic. Confirm the precision of the actual workload boundary (Lane K 5% is **not** transferable to Lane L's heavy boundary, which demonstrated 20%).
+3. Include end-to-end costs, persistent and true-peak memory, correctness and movement/dynamic regimes. Preserve all samples; no post-hoc threshold changes or cherry-picked scenes.
+4. Treat black/low-signal CPU HDR references as **ineligible until validated**; zero whole-frame p99 under sparse illumination is not proof of convergence. N007 remains separate; do not rewrite N006's negative result.
+5. No general superiority claims from only a single GPU/Sponza or a non-equivalent quality budget.
+6. Never request privileged GPU clock/power forcing (prior Lane G safety incident).
+7. Compare representative existing GI families fairly; report both wins and losses.
 
-- Push normal experiment commits directly to the active lane branch.
-- Do not create pull requests for normal research iterations.
-- Do not merge lane implementation branches wholesale into `research`.
-- Do not merge another active lane into the current lane unless explicitly
-  requested.
-- A new lane must fork from the explicit program checkpoint named by its plan.
-- If a common harness/methodology change is discovered inside a lane, record the
-  evidence first; promote only genuinely shared rules back to `research` at an
-  explicit synthesis checkpoint.
+## Basic commands
 
-## Lane ownership
+```bash
+mise install
+mise run build
+mise run research:check
+```
 
-Each lane owns disjoint paths based on its lane slug:
-
-- `src/research/<lane_snake_case>/**`
-- `shaders/research/<lane_snake_case>/**`
-- `scripts/research/<lane_snake_case>/**`
-- `research/lanes/<lane-kebab-case>/**`
-
-Integration work uses its dedicated integration paths.
-
-Shared roots such as `CMakeLists.txt`, `mise.toml`, common `src/` or
-`shaders/` files, and `research/protocol.md` are read-mostly from lane
-branches. Change them only when unavoidable and document why.
-
-## Environment
-
-Use mise. Do not introduce a second environment/bootstrap path.
-
-Normal commands:
-
-- `mise install`
-- `mise run build`
-- `mise run research:check`
-- `mise run research:record --lane ... --experiment ... --command "..."`
-
-Vulkan validation layers are diagnostics, not a prerequisite for accepted
-performance timing. Semantic/correctness guards are always required.
-
-## Research method
-
-1. State a falsifiable question and freeze decision gates before optimizing.
-2. Preserve semantic parity before comparing performance.
-3. Include all costs required by the candidate architecture. Isolated kernel
-   wins do not promote an architecture if producer, allocation, update,
-   invalidation, scheduling, build, transfer, merge, or synchronization costs
-   erase the win.
-4. Do not manufacture favorable ordering in synthetic producers. Synthetic
-   distributions are allowed only for bring-up or isolated controls and must be
-   labeled as such.
-5. Prefer the simplest experiment that can reject a hypothesis.
-6. Do not infer a cache/memory mechanism from timestamps alone.
-7. Results on one GPU are not universal claims.
-8. Keep accepted/rejected/inconclusive/diagnostic-only distinctions exact.
-9. Never turn unstable timing into PASS/FAIL by deleting outliers or relaxing a
-   threshold after measurement.
-10. Historical numbers with different boundaries are context, not formal
-    run-local gates.
-
-## Result lifecycle
-
-For every experiment:
-
-1. Create/update `research/lanes/<lane>/experiments/NNN-name.md` with question,
-   hypothesis, protocol, correctness gate, timing/repeatability rules, and
-   decision gate.
-2. Run through `mise run research:record` when practical. Raw artifacts go to
-   `out/research/<lane>/<experiment>/<timestamp>/` and stay out of Git.
-3. Record the concluded evidence class and decision in
-   `research/lanes/<lane>/results/NNN-name.md`.
-4. Add one entry to that lane's `results/index.json`.
-5. Update the lane README only when the lane-level conclusion/next decision gate
-   changes.
-6. Update `research/status.md` only at an explicit cross-lane synthesis or
-   program checkpoint.
-
-Implementation behavior belongs in source/doc comments/tests. Research docs
-record rationale, protocols, evidence, limitations, and decisions that cannot
-be reconstructed from code alone.
+Perform explicit GPU/runtime smoke tests only on an environment that can execute them. Report unexecuted checks as **not run**, never PASS. Keep independent research outcomes distinct from release-level acceptance.

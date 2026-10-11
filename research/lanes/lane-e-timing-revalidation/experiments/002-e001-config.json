@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-e-timing-revalidation-e001-v8",
+  "issue": 22,
+  "branch": "research-lane-e-timing-revalidation",
+  "base_commit": "ff375b43f34db8b49371ab1a73299999f9677778",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "scope": {
+    "formal_performance_classes": [
+      "moving-rigid",
+      "stable-topology-deforming"
+    ],
+    "guard_classes": [
+      "static",
+      "camera-motion",
+      "light-motion"
+    ],
+    "excluded": [
+      "primitive-count-changing-topology",
+      "topology-backend-selection",
+      "J004/J005-candidate-reevaluation"
+    ]
+  },
+  "imported_evidence": {
+    "lane_e_final": {
+      "branch": "research-lane-e-dynamic-geometry",
+      "final_commit": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
+      "result_document": "research/lanes/lane-e-dynamic-geometry/results/005-integration-replay.md",
+      "result_blob": "58cdfe1d7e5f781e50d2b8bd873fedbfccbb1b19",
+      "role": "architecture-and-historical-control-definition-context-only"
+    },
+    "lane_l": {
+      "issue": 24,
+      "measurement_commit": "b8bb76f728ee329cf4daef5855a05972757072f6",
+      "target_result_document": "research/lanes/lane-l-heavy-boundary-calibration/results/005-l002-target-result.md",
+      "target_result_blob": "acb84da701ea786ee6231368fc625ab5178ca3c7",
+      "final_document": "research/lanes/lane-l-heavy-boundary-calibration/results/007-lane-l-final.md",
+      "final_blob": "136178825f24aeab5d60a34a25329ec52158ae34",
+      "accepted_environment": "dual-context",
+      "heavy_boundary_minimum_demonstrated_effect_percent": 20
+    },
+    "lane_k": {
+      "issue": 21,
+      "result_document": "research/lanes/lane-k-gpu-primary-calibration/results/004-program-timing-capability.md",
+      "result_blob": "e4d3177cdb22d7a1773f311ff6cec81bd8dd1a44",
+      "historical_minimum_effect_percent": 5,
+      "transferable_to_this_heavy_boundary": false
+    }
+  },
+  "preserved_architecture": {
+    "static_world": "immutable",
+    "rigid_hwrt": "immutable-object-local-BLAS + instance-transform + TLAS-UPDATE",
+    "deforming_hwrt": "changed-object-local-geometry-and-BLAS-maintenance + TLAS-UPDATE",
+    "rigid_software": "immutable-object-local-StrataBrick + conservative-quantized-Micro-BVH8 + instance-state-update-only",
+    "deforming_software": "changed-object-local-StrataBrick/quantized-hierarchy-maintenance-only + instance-bounds-update",
+    "primary_traversal": "HWRT/TLAS",
+    "software_fallback": "B003 conservative quantized Micro BVH8",
+    "producer": "A001 schema/natural append order",
+    "hit_semantics": "B001 exact Hit/tie semantics including candidate continuation through best_t + tolerance",
+    "storage": "C001 per-probe sparse hash"
+  },
+  "variants": {
+    "hwrt": {
+      "control": "combined-hwrt",
+      "candidate": "lane-e-final-hwrt",
+      "rigid_control_semantics": "pre-E world-space dynamic geometry upload/BLAS maintenance/TLAS update",
+      "deforming_control_semantics": "pre-E world-space stable-topology dynamic geometry maintenance"
+    },
+    "software": {
+      "control": "combined-software",
+      "candidate": "lane-e-final-software",
+      "rigid_control_semantics": "pre-E world-space membership/hierarchy update and upload",
+      "deforming_control_semantics": "pre-E world-space stable-topology membership/hierarchy maintenance"
+    }
+  },
+  "timing": {
+    "environment": "dual-context",
+    "primary_axis": "gpu_timestamp",
+    "cpu_wall_role": "diagnostic-health-provenance-only",
+    "warmup_pairs": 4,
+    "measured_pairs": 12,
+    "fresh_process_blocks": 8,
+    "complete_transitions_per_sample": 16,
+    "settle_seconds_before_process": 1,
+    "start_order_by_block": [
+      "AB",
+      "BA",
+      "AB",
+      "BA",
+      "BA",
+      "AB",
+      "BA",
+      "AB"
+    ],
+    "pair_order": "alternate-within-process-from-frozen-start-order",
+    "sample_exclusion": "forbidden",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0,
+    "accepted_timing_validation_layers": false,
+    "future_state_prebuild": false,
+    "recurrent_work_moved_to_setup": false,
+    "historical_lane_e_timing_role": "context-only",
+    "expected_fresh_timing_processes": 160,
+    "comparison_order_by_block": [
+      [
+        "control",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "control",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "control",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "control"
+      ],
+      [
+        "control",
+        "candidate"
+      ]
+    ]
+  },
+  "fresh_run_local_control": {
+    "required": true,
+    "comparison": "same-variant-control-vs-same-variant-control",
+    "process_blocks": 8,
+    "measured_with_same_boundary_and_order_policy": true,
+    "noise_envelope": "max(max-abs-process-median-ratio, process-median-span-ratio, max-within-process-order-bias-ratio)",
+    "candidate_effect_must_strictly_exceed_noise_envelope": true
+  },
+  "correctness_gate": {
+    "required_zero": [
+      "exact_hit_mismatch",
+      "nearest_hit_tie_mismatch",
+      "visibility_mismatch",
+      "producer_semantic_error",
+      "traversal_runtime_error",
+      "storage_failure",
+      "static_owner_mutation",
+      "unrelated_owner_mutation"
+    ],
+    "required_true": [
+      "workload_identity_match",
+      "resolved_output_identity_match",
+      "geometry_input_digest_match",
+      "allocation_lifetime_accounting_complete",
+      "device_driver_api_timestamp_provenance_consistent"
+    ],
+    "timing_may_start_only_after_pass": true
+  },
+  "recurring_boundary": {
+    "required_components": [
+      "geometry_preparation",
+      "allocation_reallocation",
+      "upload",
+      "blas_or_local_hierarchy_update_or_rebuild",
+      "tlas_or_instance_update",
+      "traversal",
+      "exact_hit_merge",
+      "storage_resolve",
+      "synchronization",
+      "complete_gpu_time",
+      "complete_cpu_wall",
+      "persistent_memory",
+      "transient_memory",
+      "scratch_memory",
+      "old_new_overlap",
+      "true_peak_memory"
+    ],
+    "inapplicable_component_value": 0
+  },
+  "memory": {
+    "bookkeeping_gpu_work_inside_timed_boundary": false,
+    "allocation_lifetime_evidence": "pre-timing-validation-separate-from-timing-when-needed",
+    "required_fields": [
+      "persistent_bytes",
+      "transient_bytes",
+      "scratch_bytes",
+      "old_new_overlap_bytes",
+      "true_peak_bytes",
+      "allocation_count",
+      "allocation_lifetimes"
+    ],
+    "hard_regression_guard": {
+      "persistent_ratio_max": 1.25,
+      "true_peak_ratio_max": 1.25
+    }
+  },
+  "performance_gate": {
+    "promotion_threshold_percent": 20,
+    "non_regression_threshold_percent": 20,
+    "profile_averaging_allowed": false,
+    "minimum_directional_pair_fraction": 0.75,
+    "require_all_process_medians_directional": true,
+    "require_all_ab_stratum_medians_directional": true,
+    "require_all_ba_stratum_medians_directional": true,
+    "lane_k_5_percent_floor_forbidden": true,
+    "detected_improvement": "candidate/control <= 0.80 and fresh-control/direction gates pass",
+    "detected_regression": "candidate/control >= 1.20 and fresh-control/direction gates pass",
+    "middle_outcome": "<20% difference / measurement-limited",
+    "sub_20_percent_architecture_conclusion_forbidden": true
+  },
+  "provenance": {
+    "required_fields": [
+      "device_name",
+      "driver_name",
+      "driver_info",
+      "api_version",
+      "timestamp_period",
+      "git_commit",
+      "source_blob_manifest",
+      "input_digest"
+    ],
+    "intra_campaign_exact_match": true,
+    "target_device_exact_match": true,
+    "lane_l_environment_contract_match": true
+  },
+  "interruption_resume": {
+    "completed_process_is_immutable": true,
+    "partial_process_is_not_evidence": true,
+    "resume_may_only_continue_missing_predeclared_process_ids": true,
+    "completed_campaign_may_not_resume_or_rerun": true,
+    "compile_or_test_failure_before_first_accepted_target_timing_allows_fix_and_refreeze": true,
+    "partial_process_with_any_measured_row": "campaign-invalid-no-rerun",
+    "failure_before_first_measured_row": "fix-and-refreeze-allowed"
+  },
+  "artifact_schema": {
+    "version": 2,
+    "required": [
+      "e001-config.json",
+      "e001-source-provenance.json",
+      "e001-input-provenance.json",
+      "e001-device-provenance.json",
+      "e001-validation-summary.csv",
+      "e001-validation-summary.json",
+      "e001-memory-summary.csv",
+      "e001-progress.json",
+      "e001-control-raw.csv",
+      "e001-candidate-raw.csv",
+      "e001-raw.csv",
+      "e001-process-summary.csv",
+      "e001-summary.json"
+    ]
+  },
+  "refreeze_history": [
+    {
+      "version": "v1",
+      "reason": "initial prospective freeze before implementation"
+    },
+    {
+      "version": "v2",
+      "reason": "added predeclared 4/4 control-candidate process-position counterbalance before target timing"
+    },
+    {
+      "version": "v3",
+      "reason": "pre-target compile/lifetime-accounting defect fixes only; no threshold, workload, control, sample-shape, or decision-rule change"
+    },
+    {
+      "version": "v4",
+      "reason": "pre-target self-review aligned memory-classification implementation with the already frozen persistent/true-peak non-worse rule; no threshold, workload, control, sample-shape, or performance decision-rule change"
+    },
+    {
+      "version": "v5",
+      "reason": "pre-target compile-only fix: renamed a local allocation-stats variable to avoid collision with VkCommandBufferAllocateInfo; no workload, control, threshold, sample-shape, memory rule, performance decision rule, environment, or rerun-policy change"
+    },
+    {
+      "version": "v6",
+      "reason": "pre-target validation-diagnostic and warning-cleanup only: report exact correctness-gate failure fields and remove an unused helper; no workload, control, threshold, sample-shape, memory rule, performance decision rule, environment, or rerun-policy change"
+    },
+    {
+      "version": "v7",
+      "reason": "pre-target validation identity defect fix: canonicalize workload/resolved digests by stable semantic identity because A001 GPU atomic append/output allocation order is intentionally nondeterministic across independent correct executions; workload/control/threshold/sample-shape/memory rule/performance decision/environment/rerun-policy unchanged"
+    },
+    {
+      "version": "v8",
+      "reason": "pre-target reversible-state correctness fix: derive target/base geometry and surface state from immutable baseline instead of cumulative +/- float deltas, preventing round-trip drift between mutable controls/reference geometry and immutable rigid-instance candidates; workload/control/threshold/sample-shape/memory rule/performance decision/environment/rerun-policy unchanged"
+    }
+  ]
+}

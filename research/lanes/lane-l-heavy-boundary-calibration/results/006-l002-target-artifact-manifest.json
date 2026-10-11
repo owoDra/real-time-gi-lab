@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "experiment": "L002",
+  "measurement_commit": "b8bb76f728ee329cf4daef5855a05972757072f6",
+  "outer_metadata_supplied": false,
+  "campaign": {
+    "validation_rows": 20,
+    "timing_processes": 160,
+    "raw_rows": 5120,
+    "all_samples_retained": true,
+    "sample_exclusion": "none",
+    "instability_rerun_budget": 0,
+    "completed_campaign_rerun_budget": 0,
+    "device_provenance_consistent": true
+  },
+  "decision": {
+    "outcome": "measurement-floor-established",
+    "accepted_environment": "dual-context",
+    "accepted_floor_percent": 20
+  },
+  "files": {
+    "l002-config.json": {
+      "sha256": "458b9a6a86cf4a35142bf9c201bbd48397e6bd74a40040208b5f6820dbf9b7fb",
+      "size_bytes": 8383
+    },
+    "l002-devices.json": {
+      "sha256": "41b74a24fd0778c3cb6f5d992b23834377d13bb7fd87a54b4441aee0b2fc98e3",
+      "size_bytes": 57243
+    },
+    "l002-host-observations.json": {
+      "sha256": "830bfba2f7f724bf0271048e725f562d5037369e07575ac9d9a3cb83273f7fbd",
+      "size_bytes": 103376
+    },
+    "l002-input-provenance.json": {
+      "sha256": "07ec61bc2fedfe0d539eec6d795f9d43146a04835a0f9a210657126412f67bbc",
+      "size_bytes": 3306318
+    },
+    "l002-process-summary.csv": {
+      "sha256": "6af59639a19a55042e4697c92dbd8a6f1c08f833ffb43ebcf246aba824182bb6",
+      "size_bytes": 86894
+    },
+    "l002-progress.json": {
+      "sha256": "0932e6bf958bbbfa1ee5f4c271cc792b1804ab0202b5e9ec418cada8f7798ac0",
+      "size_bytes": 11536
+    },
+    "l002-raw.csv": {
+      "sha256": "ceac2a6746481c4080c6343e5793a2bfb6be22af227d326dc08436b283f6ff53",
+      "size_bytes": 2117708,
+      "rows": 5120,
+      "repository_copy": false
+    },
+    "l002-source-provenance.json": {
+      "sha256": "2e4eb186b8b0e38071aadb34bc1193ae19795e34bc8c1035b358bb527887e906",
+      "size_bytes": 844
+    },
+    "l002-summary.json": {
+      "sha256": "8c9b2f8a2a4180b09f22593af0b121a0e1f29dddcbcc0531a834cc035dedb15c",
+      "size_bytes": 67373
+    },
+    "l002-synthetic-process-summary.csv": {
+      "sha256": "28c63cd85de82296126c0de241f41bdc32067c8a0592976889971ef86ebdea4b",
+      "size_bytes": 142347
+    },
+    "l002-validation-summary.csv": {
+      "sha256": "bb619ad7c7cb777fd33564eaab8d27c961e84a8864475bbe17116a24c2789377",
+      "size_bytes": 3080
+    },
+    "l002-vulkaninfo-summary.txt": {
+      "sha256": "09731843c726781deb7108d0f117bd022ceb3bd5580b2eccaf498fdbe0730a9c",
+      "size_bytes": 4553
+    }
+  }
+}

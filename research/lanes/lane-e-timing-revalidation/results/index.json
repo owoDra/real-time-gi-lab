@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "lane": "lane-e-timing-revalidation",
+  "experiments": [
+    {
+      "id": "E001",
+      "document": "001-e001-heavy-boundary-revalidation.md",
+      "status": "accepted",
+      "disposition": "moving-rigid-and-stable-topology-deforming-timing-revalidated",
+      "measured_source_commit": "816b0b68fa416422eab1451c7929b6fc0ff93dc4",
+      "plan_version": "lane-e-timing-revalidation-e001-v8"
+    }
+  ]
+}

@@ -1,6 +1,14 @@
 {
   "schema_version": 1,
   "lane": "lane-a-split-rc",
-  "note": "Seed index on research only; canonical concluded index lives on research-lane-a-split-rc.",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "001-representative-producer",
+      "status": "accepted",
+      "result": "001-representative-producer.md",
+      "artifact": "out/research/lane-a-split-rc/001-representative-producer/20260928T143212Z",
+      "git_commit": "8b647ef8dcf1150f86a9d25c039ca48bd7f30b8f",
+      "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)"
+    }
+  ]
 }

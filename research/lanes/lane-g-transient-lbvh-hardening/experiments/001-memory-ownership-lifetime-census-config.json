@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g001-v1",
+  "experiment": "G001",
+  "name": "memory-ownership-lifetime-census",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "variants": [
+    "transient-lbvh",
+    "vanilla-software",
+    "combined-hwrt",
+    "combined-software"
+  ],
+  "scenarios": [
+    "static",
+    "moving-rigid",
+    "sparse-stress",
+    "sparse-moving",
+    "dense-moving"
+  ],
+  "frozen_f007_sparse_memory_ratios": {
+    "sparse-stress": 3.0836,
+    "sparse-moving": 3.2025
+  },
+  "anchor_absolute_tolerance": 0.002,
+  "invariants": [
+    "no memory optimization",
+    "counted allocation bytes must equal F007-derived peak_resident_bytes exactly",
+    "host mirrors are reported but excluded from the historical F007 device peak",
+    "no historical timing is used as a G001 decision gate"
+  ]
+}

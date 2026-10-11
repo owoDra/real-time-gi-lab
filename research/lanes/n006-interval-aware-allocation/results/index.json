@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "lane": "n006-interval-aware-allocation",
+  "note": "Index-only addition. Original 001-045 source results are unchanged. The frozen final STOP classification is in 045; other ids denote historical study records.",
+  "results": [
+    {
+      "id": "001",
+      "result": "001-p0-work-unit-feasibility.md"
+    },
+    {
+      "id": "002",
+      "result": "002-p1a-cli-parser-failure-and-repair.md"
+    },
+    {
+      "id": "003",
+      "result": "003-p1a-causal-pilot-calibration.md"
+    },
+    {
+      "id": "004",
+      "result": "004-p1a-image-influence-audit.md"
+    },
+    {
+      "id": "005",
+      "result": "005-p1b-causality-and-p1c-multiplicity-contract.md"
+    },
+    {
+      "id": "006",
+      "result": "006-p1c-exact-ray-input-multiplicity.md"
+    },
+    {
+      "id": "007",
+      "result": "007-p1d-hash-cost-preflight.md"
+    },
+    {
+      "id": "008",
+      "result": "008-p1d-stage-audit-correction.md"
+    },
+    {
+      "id": "009",
+      "result": "009-p1e-disjoint-timing-and-primary-visibility-variance.md"
+    },
+    {
+      "id": "010",
+      "result": "010-p1f-owner-output-equivalence.md"
+    },
+    {
+      "id": "011",
+      "result": "011-p1g-compact-rays-image-parity-failure.md"
+    },
+    {
+      "id": "012",
+      "result": "012-p1g-owner-weight-restored-bit-exact.md"
+    },
+    {
+      "id": "013",
+      "result": "013-p1h-matched-canonical-net-gi-work.md"
+    },
+    {
+      "id": "014",
+      "result": "014-p1i-cross-backend-partial-hwrt-pass-software-blocked.md"
+    },
+    {
+      "id": "015",
+      "result": "015-p1i-cross-backend-complete.md"
+    },
+    {
+      "id": "016",
+      "result": "016-p1j-a-lean-hash-cross-backend-pass.md"
+    },
+    {
+      "id": "017",
+      "result": "017-p1j-b-direct-compact-cross-backend-pass.md"
+    },
+    {
+      "id": "018",
+      "result": "018-p1k-three-arm-hwrt-software-gpu-timing.md"
+    },
+    {
+      "id": "019",
+      "result": "019-p1l-a1b-hwrt-software-stage-isolation.md"
+    },
+    {
+      "id": "020",
+      "result": "020-p1l-b0-two-case-software-count-smoke.md"
+    },
+    {
+      "id": "021",
+      "result": "021-p1l-b0-five-scene-software-work-counts.md"
+    },
+    {
+      "id": "022",
+      "result": "022-p1l-b1a-five-scene-preflight.md"
+    },
+    {
+      "id": "023",
+      "result": "023-p1l-b1a-matched-near-first-reject.md"
+    },
+    {
+      "id": "024",
+      "result": "024-p1l-b1b-five-scene-near-first-work-reduction.md"
+    },
+    {
+      "id": "025",
+      "result": "025-p1l-b1c-packed-axis-performance-reject.md"
+    },
+    {
+      "id": "026",
+      "result": "026-p1l-c0a-e003-source-layout-audit.md"
+    },
+    {
+      "id": "027",
+      "result": "027-p1l-c0b-f32-slab-rounding-risk.md"
+    },
+    {
+      "id": "028",
+      "result": "028-p1l-c0-static-spv-provenance-pass.md"
+    },
+    {
+      "id": "029",
+      "result": "029-p1m0-first-gpu-timeout-and-diagnostic-repair.md"
+    },
+    {
+      "id": "030",
+      "result": "030-p1m0-five-scene-coverage-pass.md"
+    },
+    {
+      "id": "031",
+      "result": "031-p1m0b-presecondary-gpu-cost-pass.md"
+    },
+    {
+      "id": "032",
+      "result": "032-p1m1a-first-build-and-static-test-regression.md"
+    },
+    {
+      "id": "033",
+      "result": "033-p1m1a-first-gpu-zero-postframe-guard-failure.md"
+    },
+    {
+      "id": "034",
+      "result": "034-p1m1a-canonical-key-causal-null-4of4.md"
+    },
+    {
+      "id": "035",
+      "result": "035-p1m1c-gpu-ray-fate-4of4.md"
+    },
+    {
+      "id": "036",
+      "result": "036-p1l-archived-static-audit-original-json-provenance.md"
+    },
+    {
+      "id": "037",
+      "result": "037-p1m2a-fixed-tetra-octant-null-image.md"
+    },
+    {
+      "id": "038",
+      "result": "038-p1m2b-bounded-screen-implementation-handoff.md"
+    },
+    {
+      "id": "039",
+      "result": "039-p1m2b-bounded-screen-32of32-exact-hdr-null-stop.md"
+    },
+    {
+      "id": "040",
+      "result": "040-p1m3a-q8-fractional-storage-ready-unmeasured.md"
+    },
+    {
+      "id": "041",
+      "result": "041-p1m3a-q8-gpu-replicated-image-mechanism.md"
+    },
+    {
+      "id": "042",
+      "result": "042-p1m3b-moving-rigid-heldout-quality-implementation.md"
+    },
+    {
+      "id": "043",
+      "result": "043-p1m3b-moving-rigid-identical-reference-invalid.md"
+    },
+    {
+      "id": "044",
+      "result": "044-p1m3c-deforming-reference-eligibility-implementation.md"
+    },
+    {
+      "id": "045",
+      "result": "045-p1m3c-deforming-signed-quality-no-detectable-lift-stop.md"
+    }
+  ]
+}

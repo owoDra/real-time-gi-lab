@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-g-g003a-v1",
+  "experiment": "G003",
+  "candidate": "immutable-static-hwrt-build-input-release",
+  "justification": "G001 identified static-hwrt.vertices, static-hwrt.instance, and static-hwrt.scratch as runtime-resident setup-only allocations on the transient candidate path.",
+  "variants": [
+    "transient-lbvh",
+    "hardened-transient-lbvh",
+    "vanilla-software"
+  ],
+  "scenarios": [
+    "static",
+    "moving-rigid",
+    "sparse-stress",
+    "sparse-moving",
+    "dense-moving"
+  ],
+  "released_allocations": [
+    "static-hwrt.vertices",
+    "static-hwrt.instance",
+    "static-hwrt.scratch"
+  ],
+  "memory_gates": {
+    "sparse_peak_ratio_vs_run_local_vanilla_lte": 3,
+    "sparse_improvement_vs_unchanged_lbvh_gte": 0.1,
+    "required_peak_regression_vs_unchanged_lbvh_lte": 0.1
+  },
+  "correctness": "exact validation required",
+  "timing": "recording is non-decision-valid because G002 closed without a safe repeatable timing protocol",
+  "outlier_deletion": false,
+  "g001_sparse_anchors": {
+    "sparse-stress": {
+      "baseline_peak_bytes": 119078592,
+      "vanilla_peak_bytes": 38616288,
+      "released_setup_only_bytes": 46202400,
+      "expected_hardened_runtime_resident_bytes": 72876192,
+      "expected_hardened_setup_peak_bytes": 104595424,
+      "expected_hardened_peak_bytes": 104595424,
+      "expected_hardened_peak_ratio_vs_vanilla": 2.70858307251075,
+      "expected_peak_improvement_vs_unchanged_lbvh": 0.12162696717139551
+    },
+    "sparse-moving": {
+      "baseline_peak_bytes": 123668160,
+      "vanilla_peak_bytes": 38616288,
+      "released_setup_only_bytes": 46017696,
+      "expected_hardened_runtime_resident_bytes": 77650464,
+      "expected_hardened_setup_peak_bytes": 104233440,
+      "expected_hardened_peak_bytes": 104233440,
+      "expected_hardened_peak_ratio_vs_vanilla": 2.6992092041575826,
+      "expected_peak_improvement_vs_unchanged_lbvh": 0.1571521723942525
+    }
+  },
+  "anchor_rule": "The G001 sparse baseline, vanilla and released bytes, plus both hardened runtime-resident and setup-peak values, must reproduce exactly. peak_resident_bytes is max(runtime_resident_bytes, setup_peak_bytes). Any mismatch invalidates the evidence for investigation rather than permitting post-hoc re-baselining."
+}

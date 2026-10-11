@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-j-j004-formal-v2",
+  "harness_freeze_revision": "v6-validation-component-diagnostic",
+  "issue": 23,
+  "formal_timing_started": false,
+  "freeze_reason": "validation-only component decomposition after retained large-global-high primary/control hard failure; additional readbacks classify static, dynamic, and merge-only Hit/tie mismatches; formal timing path and all decision semantics remain unchanged",
+  "parent_freeze": "research/lanes/lane-j-topology-backend-alternatives/experiments/009-formal-validation-diagnostic-v5.json",
+  "diagnostic_source_commit": "9dd9f7f84de6d2cb642c24f81217c48995cc79ee",
+  "retained_failure": {
+    "profile": "large-global-high",
+    "track": "primary",
+    "variant": "control",
+    "hit_mismatch_count": 445,
+    "nearest_hit_tie_mismatch_count": 445,
+    "traversal_runtime_error_count": 0,
+    "storage_failure_count": 0,
+    "immutable_owner_mutation_count": 0
+  },
+  "frozen_harness": {
+    "runner_blob": "cfd59799b7014e613e9c696a6ef7587456e217f0",
+    "lane_j_source_tree": "ded9ba79a46193db8cd5e5f190afe35f5ded2a56",
+    "j004_formal_process_blob": "5d66a377779a76e226864965702cf7d402e0f236",
+    "formal_shader_tree": "021faf5c71fc2bfed323887602148df0f7809dc9"
+  },
+  "decision_semantics": {
+    "changed": false
+  },
+  "diagnostic_fields": [
+    "static_hit_mismatch_count",
+    "static_nearest_hit_tie_mismatch_count",
+    "dynamic_hit_mismatch_count",
+    "dynamic_nearest_hit_tie_mismatch_count",
+    "merge_only_hit_mismatch_count",
+    "merge_only_nearest_hit_tie_mismatch_count"
+  ]
+}

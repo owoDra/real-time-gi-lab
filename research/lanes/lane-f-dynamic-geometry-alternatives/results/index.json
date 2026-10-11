@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "lane": "lane-f-dynamic-geometry-alternatives",
+  "experiments": [
+    {
+      "id": "F001",
+      "name": "workload-census-baseline-replay",
+      "result": "001-workload-census-baseline-replay.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "decision": "baseline-repeatability-inconclusive"
+    },
+    {
+      "id": "F002",
+      "name": "pure-gpu-transient-lbvh-builder",
+      "result": "002-pure-gpu-transient-lbvh-builder.md",
+      "status": "complete-gate-pending",
+      "correctness": "pass",
+      "repeatability": "pass",
+      "decision": "f003-may-proceed-formal-f002-gate-pending"
+    },
+    {
+      "id": "F003",
+      "name": "end-to-end-transient-lbvh",
+      "result": "003-end-to-end-transient-lbvh.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "f005-next-f004-not-activated"
+    },
+    {
+      "id": "F005",
+      "name": "end-to-end-sorted-two-level-grid",
+      "result": "005-end-to-end-sorted-two-level-grid.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "f006-controlled-generalization-next"
+    },
+    {
+      "id": "F006",
+      "name": "geometry-class-crossover-controls",
+      "result": "006-geometry-class-crossover-controls.md",
+      "status": "inconclusive",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "f007-final-integration-next"
+    },
+    {
+      "id": "F007",
+      "name": "final-integration-replay",
+      "result": "007-final-integration-replay.md",
+      "status": "complete-no-promotion",
+      "correctness": "pass",
+      "repeatability": "inconclusive-after-permitted-rerun",
+      "decision": "no-rigid-primary-hard-memory-gate-failed"
+    }
+  ]
+}

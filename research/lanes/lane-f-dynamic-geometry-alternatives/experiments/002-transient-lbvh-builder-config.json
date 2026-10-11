@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-f-plan-v1",
+  "experiment": "F002",
+  "name": "pure-gpu-transient-lbvh-builder",
+  "candidate": "frame-local-dynamic-lbvh",
+  "target_gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "workgroup_size": 256,
+  "builder": {
+    "dynamic_input": "GPU current-frame triangle generation from the exact F001 moving-rigid target subset; diagnostic sizes repeat that immutable template with deterministic page-spaced offsets",
+    "aabb": "one primitive per invocation",
+    "page_extent_rule": "B002/I001 scene diagonal divided by 16",
+    "page_key": "30-bit Morton, 10 bits per page coordinate axis",
+    "local_morton": "30-bit Morton, 10 bits per local coordinate axis",
+    "sort_key_order": ["page_key", "local_morton", "primitive_id_tie"],
+    "radix": {
+      "digit_bits": 4,
+      "local_morton_passes": 8,
+      "page_key_passes": 8,
+      "total_passes": 16,
+      "stable": true
+    },
+    "topology": "Karras binary LBVH over sorted page/local keys",
+    "bounds": "leaf initialization plus atomic bottom-up internal bounds",
+    "refit_or_update": false,
+    "persistent_dynamic_nodes": false
+  },
+  "sweep_primitive_counts": [1000, 4000, 16000, 64000, 256000, 1000000],
+  "representative_count": "derived by reproducing the frozen F001/I001 moving-instance selection",
+  "accepted_timing": {
+    "process_repeats": 5,
+    "warmup_builds_per_size_per_process": 10,
+    "measured_builds_per_size_per_process": 100,
+    "decision_statistic": "median of process-level medians",
+    "outlier_deletion": false
+  },
+  "phase_boundary": [
+    "scratch_reset_management",
+    "current_frame_dynamic_input",
+    "aabb",
+    "page_local_morton",
+    "radix_sort",
+    "topology",
+    "bottom_up_bounds"
+  ],
+  "f002_gate": {
+    "formula": "median_builder_gpu_at_Nrep < 0.90 * stable_run_local_vanilla_moving_complete_gpu",
+    "current_status": "pending-f001-baseline-repeatability-inconclusive",
+    "historical_ceiling_us_reference_only": 2972.4075
+  }
+}

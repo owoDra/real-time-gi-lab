@@ -1,103 +1,26 @@
-# Research charter
+# Research charter — phos-gi-lab
 
-## Final research question
+## Final objective
 
-Can a real-time global-illumination architecture be built around **GPU locality
-as a first-class constraint**, rather than accepting random sparse-cache access
-as an unavoidable cost, while retaining enough spatial and directional
-adaptivity to cover diffuse indirect lighting, glossy transport, dynamic
-geometry, and large worlds?
+Establish a novel, demonstrably competitive **real-time global illumination light-transport architecture** that, across practical workloads, surpasses representative alternatives on a combination of **image fidelity, end-to-end performance, GPU memory efficiency, dynamic geometry/light/camera response, and deployability**.
 
-The goal is not merely to build a faster lookup table. The final target is a
-complete real-time light-transport architecture whose quality/performance/memory
-trade-off can be shown experimentally to improve on representative existing
-approaches on the same hardware.
+A win means defensible **same-quality GPU-time and/or memory superiority**, or **same-cost image-quality and/or supported-feature superiority**. A partial tradeoff must be reported with its full costs. A faster but materially degraded renderer is not a GI architecture win.
 
-No specific representation is an absolute requirement. Page-local surface
-caches, surfels, Radiance-Cascade-style spatial/angular scaling, ReSTIR/path
-guiding, or any other component may be replaced if evidence shows a better
-design.
+**Split Radiance Cascades, StrataBrick, sparse hash, HWRT, software BVH, temporal reuse and path guiding are replaceable techniques**, not the research objective. Previously accepted components remain the incumbent only while measurements justify them.
 
-## Current architecture hypothesis
+## Boundaries and fairness
 
-The working hypothesis is that the following ideas can compose into a stronger
-GI architecture:
+- Validate the actual **image-producing Renderer**, including allocation, tracing, invalidation, synchronization, dynamic updates and compositing, not isolated kernel time alone.
+- Require credible independent physical HDR references, meaningful signal and demonstrated convergence. A sparse mostly-black reference is not automatically eligible; [N007 #43](https://github.com/owoDra/phos-gi-lab/issues/43) is the independent investigation.
+- Compare to representative families, as applicable: vanilla/Split RC, DDGI/probe GI, sparse cache or SHaRC-like GI, and ReSTIR/path-tracing-based approaches. Match scene, hardware, quality target, dynamic coverage and cost boundary; document deviations.
+- Test static, moving-camera, changing-light, moving-rigid, stable-deforming, topology-changing and high-churn scenes where supported. Extend beyond Sponza and beyond one GPU before general claims.
+- Always report quality, GPU time, persistent and **true-peak** GPU memory, artifact provenance and limitations together.
+- HWRT-capable and software-only devices may have distinct winners; do not hide the software fallback cost.
+- A measured negative, rejected or inconclusive study remains part of the research record. Do not optimize thresholds after results.
+- Prefer resolving architectural bottlenecks over indefinite micro-optimizations. Every new direction needs a falsifiable hypothesis, predeclared gate and stopping criterion.
 
-1. **Store radiance near useful surfaces rather than uniformly through empty
-   volume.**
-2. **Use hierarchical/virtual pages with contiguous local payloads** so the hot
-   lookup/update path is cache-friendly; hashing may still be used for cold
-   allocation or indirection.
-3. **Schedule work by spatial page or another locality key** so neighboring
-   lanes/waves tend to access neighboring memory.
-4. **Adapt both spatial and directional resolution.** Nearby or geometrically
-   complex regions receive finer spatial representation; directionally complex
-   transport receives richer angular representation.
-5. **Treat exact ray tracing as a confidence fallback, not the default for every
-   bounce.** Cached transport is used when reliable; uncertain/disoccluded/high
-   frequency cases continue tracing.
-6. **Use temporal reuse and importance/path guiding only after the cache
-   representation itself is proven sound.**
+## Successful end state
 
-This is a hypothesis, not an architecture commitment.
+The project has succeeded when reproducible Renderer demonstrations across representative scenes and multiple GPU classes substantiate competitive advantage against fair external baselines, with valid image references, sufficiently stable dynamic/lighting behavior and honest full-system memory/performance accounting. One AMD GPU, a single synthetic workload or a large isolated speedup is **insufficient**.
 
-## Representative baselines
-
-Later end-to-end stages should compare against representative members of these
-families where practical:
-
-- sparse hash radiance caches / SHaRC-like layouts;
-- DDGI / volume-probe GI;
-- Split Radiance Cascades or equivalent sparse RC-style transport;
-- ReSTIR-based GI/path-tracing approaches for the transport regimes they cover.
-
-A baseline may be simplified only when the simplification is documented and
-does not make the proposed method artificially favorable.
-
-## Research principles
-
-### Evidence before implementation depth
-
-Each major architectural premise gets an isolated experiment before expensive
-end-to-end integration. A failed premise should stop or redirect the branch
-rather than be hidden by later complexity.
-
-### Semantic parity before performance comparison
-
-Two variants are comparable only when they compute the same logical result.
-Executable correctness guards are mandatory. A faster result with mismatched
-semantics is invalid evidence.
-
-### End-to-end costs eventually count
-
-M0 may measure an upper-bound benefit such as CPU-pre-sorted queries. The next
-milestone must include the GPU cost required to obtain that ordering before the
-idea can be accepted.
-
-### GPU locality is measured, not inferred
-
-Timestamp improvements are necessary but not sufficient. Later experiments must
-also inspect cache/memory behavior (for example L2 hit/miss behavior, memory
-transactions, stalls, and occupancy) to establish why a design wins.
-
-### No vendor-specific result is universal
-
-A result on one GPU is exploratory evidence. Architectural claims require
-repeatable behavior across workloads and, before broad conclusions, more than
-one GPU architecture when available.
-
-## End-state success criteria
-
-The research is successful only if an end-to-end implementation demonstrates:
-
-- reproducible correctness against an appropriate reference;
-- competitive or better visual quality for the tested transport regimes;
-- a measurable frame-time and/or memory advantage over representative
-  baselines on the same hardware and scene;
-- stable behavior under camera motion, dynamic geometry, disocclusion, and
-  changing lighting;
-- a design whose benefits survive the cost of allocation, scheduling, updates,
-  tracing, and temporal maintenance.
-
-Until those conditions are met, this repository should describe results as
-experimental evidence rather than a replacement for existing GI methods.
+The original GPU-locality/page scheduling hypothesis is retained as history in [the earlier charter](archive/research-charter-2026-09.md), not adopted as an unconditional premise.

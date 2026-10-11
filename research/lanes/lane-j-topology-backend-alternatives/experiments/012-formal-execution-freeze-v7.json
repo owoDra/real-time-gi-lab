@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-j-j004-formal-v2",
+  "harness_freeze_revision": "v7-exact-tie-pruning",
+  "issue": 23,
+  "formal_timing_started": false,
+  "parent_freeze": "research/lanes/lane-j-topology-backend-alternatives/experiments/010-formal-validation-component-diagnostic-v6.json",
+  "amendment": "research/lanes/lane-j-topology-backend-alternatives/experiments/011-formal-crossover-gate-v7-exact-tie-pruning.md",
+  "correction_commit": "0f9405c14d3d560ecdcb0373d246d32544cd1e96",
+  "retained_failure": {
+    "profile": "large-global-high",
+    "track": "primary",
+    "variant": "lane-e-object-local-hwrt-rebuild",
+    "hit_mismatch_count": 445,
+    "nearest_hit_tie_mismatch_count": 445,
+    "static_hit_mismatch_count": 0,
+    "dynamic_hit_mismatch_count": 445,
+    "merge_only_hit_mismatch_count": 0,
+    "traversal_runtime_error_count": 0,
+    "storage_failure_count": 0,
+    "immutable_owner_mutation_count": 0
+  },
+  "corrected_blobs": {
+    "cpu_gpu_software_bvh_hpp": "7e009a84dc0dcd2936821ddb1acac9144fdd7cdc",
+    "f003_dynamic_traversal_glsl": "c03a07dd9701c2ea8472481a5ad0acf0f12bb2a4",
+    "i001_software_bvh_glsl": "749589cddf7277202a11c4493fccb2e93b154bf9",
+    "i001_quantized_bvh8_glsl": "f8470110bf10b034739399e5f91671534860e02e"
+  },
+  "frozen_harness": {
+    "runner_blob": "788153017adab4357e38e5cdaad57cef9471da45",
+    "lane_j_source_tree": "7b697d2e2b8151e85e0bb451794de0b64e5e842b",
+    "formal_shader_tree": "83e6f0f5286e7edb14b15a3e722dca379e126ce5",
+    "j004_formal_process_blob": "5d66a377779a76e226864965702cf7d402e0f236"
+  },
+  "decision_semantics": {
+    "changed": false,
+    "primary_axis": "gpu_timestamp",
+    "promotion_ratio_max": 0.95,
+    "nonregression_ratio_max": 1.05,
+    "rerun_budget": 0
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "plan_version": "lane-h-h002-object-local-comparator-v1",
+  "experiment": "H002",
+  "formal_timing_decision": false,
+  "base_primitive_count": 796,
+  "topology_seed": 1211117618,
+  "replacement_fraction": 0.25,
+  "primitive_count_factors": [
+    1,
+    1.25,
+    0.75,
+    1.1,
+    0.9,
+    1.3,
+    0.8,
+    1.05
+  ],
+  "producer_contract": "A001-schema-v1-natural-append",
+  "hit_contract": "exact-hit",
+  "storage_contract": "C001-per-probe-sparse-hash",
+  "changed_object_id": "topology-object-0",
+  "immutable_owner_ids": [
+    "static-world",
+    "unrelated-object-0"
+  ],
+  "candidate_set": [
+    "lane-e-object-local-hwrt-rebuild",
+    "lane-e-object-local-software-b003-rebuild",
+    "hardened-transient-lbvh-object-local-rebuild",
+    "transient-lbvh-object-local-control",
+    "vanilla-run-local-control"
+  ],
+  "required_boundary_fields": [
+    "allocation_reallocation_us",
+    "geometry_upload_us",
+    "build_rebuild_maintenance_us",
+    "instance_tlas_update_us",
+    "traversal_us",
+    "synchronization_us",
+    "merge_us",
+    "complete_gpu_us",
+    "complete_update_wall_us",
+    "persistent_bytes",
+    "transient_bytes",
+    "scratch_bytes",
+    "true_peak_resident_bytes"
+  ],
+  "boundary_rule": "Every required field is reported by every variant; non-applicable stages are explicit zero, never omitted or moved outside the measured update/frame boundary.",
+  "workload_rule": "All variants consume the identical primitive-count sequence, topology seed, generated geometry identity, producer stream identity, exact Hit semantics, and C001 storage identity.",
+  "ownership_rule": "Only topology-object-0 may mutate/reallocate/rebuild. static-world and unrelated-object-0 remain immutable across the sequence.",
+  "expected_workload_digest": "0b99617645b5d44762c7b293c6264954e43a8e3e913025690fd8720611c99579"
+}
