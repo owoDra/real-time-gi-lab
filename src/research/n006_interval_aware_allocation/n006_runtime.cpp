@@ -1268,6 +1268,64 @@ N006FrameResult N006Runtime::run_candidate_frame(
     }
     extra.extra_work_correct = extra_ok;
 
+    if (request.p1m1_canonical_key_intervention) {
+        if (!extra_ok) {
+            throw std::runtime_error("P1m1a appended ray identity/base-prefix check failed");
+        }
+        N006CanonicalM1Trace trace{};
+        trace.executed = true;
+        trace.selected_token = m1_values[4];
+        trace.output_id = m1_values[3];
+        trace.extra_injection_gpu_us = m1_extra_gpu_us;
+        if (trace.output_id >= result.stats.outputs ||
+            extra.base_traced_rays != trace.output_id * 0U +
+                result.stats.outputs * impl.settings.rays_per_probe) {
+            throw std::runtime_error("P1m1a output or base ray count mismatch");
+        }
+        std::vector<std::array<std::uint32_t, 2>> contributions(total_work);
+        impl.context.download_device_buffer(
+            impl.contributions, contributions.data(),
+            contributions.size() * sizeof(contributions[0]));
+        std::array<std::uint32_t, 2> merged{};
+        // Only the one changed canonical output is read back.
+        impl.context.download_device_buffer(
+            impl.accum, &merged, sizeof(merged),
+            VkDeviceSize(trace.output_id) * sizeof(merged));
+        for (std::uint32_t ray = 0U; ray < 8U; ++ray) {
+            const auto index = trace.output_id * 8U + ray;
+            const auto& c = contributions.at(index);
+            if (c[0] != trace.output_id || c[1] > 65535U) {
+                throw std::runtime_error("P1m1a base contribution output/value invalid");
+            }
+            trace.base_radiance_sum16 += c[1];
+            ++trace.base_ray_count;
+        }
+        for (std::uint32_t ray = 0U; ray < 4U; ++ray) {
+            const auto index = extra.base_traced_rays + ray;
+            const auto& c = contributions.at(index);
+            const auto& item = work_items.at(index);
+            if (c[0] != trace.output_id || c[1] > 65535U ||
+                item.ray_index != 8U + ray ||
+                item.output_id != trace.output_id) {
+                throw std::runtime_error("P1m1a extra contribution/index mismatch");
+            }
+            trace.extra_radiance_sum16 += c[1];
+            ++trace.extra_ray_count;
+        }
+        trace.merged_sample_count = merged[1];
+        if (trace.base_ray_count != 8U || trace.extra_ray_count != 4U ||
+            trace.merged_sample_count != 12U ||
+            std::uint64_t(merged[0]) !=
+                trace.base_radiance_sum16 + trace.extra_radiance_sum16) {
+            throw std::runtime_error("P1m1a 8+4 integer radiance sum mismatch");
+        }
+        trace.baseline_mean16 = static_cast<std::uint32_t>(
+            (trace.base_radiance_sum16 + 4U) / 8U);
+        trace.candidate_mean16 = static_cast<std::uint32_t>(
+            (trace.base_radiance_sum16 + trace.extra_radiance_sum16 + 6U) / 12U);
+        extra.canonical_m1 = trace;
+    }
+
     // Non-formal forensic readback only. The original N006 candidate produces
     // identical RGB on 11/12 probes; identify where integer quantization or
     // shared-probe averaging can erase the additional-ray contribution.
