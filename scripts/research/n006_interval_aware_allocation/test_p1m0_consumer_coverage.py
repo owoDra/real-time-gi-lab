@@ -13,23 +13,40 @@ CMAKE = ROOT / "src/research/lane_n_end_to_end_renderer/CMakeLists.txt"
 
 class TestP1m0CoverageStaticContracts(unittest.TestCase):
     def test_source_pixel_to_key_arithmetic_exactly_mirrors_composite(self):
-        diagnostic = SHADER.read_text()
-        composite = COMPOSITE.read_text()
-        steps = [
-            "float nx = (2.0 * (float(pixel.x) + 0.5) / float(p.counts.y)) - 1.0;",
-            "float ny = 1.0 - (2.0 * (float(pixel.y) + 0.5) / float(p.counts.z));",
-            "vec3 view_direction = normalize(p.camera_forward_far.xyz + p.camera_right_tan_x.xyz * (nx * p.camera_right_tan_x.w) + p.camera_up_tan_y.xyz * (ny * p.camera_up_tan_y.w));",
-            "vec3 position = p.camera_pos_near.xyz + view_direction * hit.normal_t.w;",
-            "float spacing = p.scene_origin_spacing.w * float(1u << cascade);",
-            "ivec3 probe = ivec3(floor((position - p.scene_origin_spacing.xyz) / spacing));",
-        ]
-        for expr in steps:
-            with self.subTest(expression=expr):
-                self.assertIn(expr, composite)
-                self.assertIn(expr, diagnostic)
-        self.assertIn(
-            "hit.metadata.w != 1u || isnan(hit.normal_t.w) || isinf(hit.normal_t.w)",
-            diagnostic)
+        import re
+        def compact(value: str) -> str:
+            return re.sub(r"\\s+", "", value)
+        diagnostic = compact(SHADER.read_text())
+        for relative in (
+            "shaders/research/lane_n_end_to_end_renderer/n001_composite.comp.glsl",
+            "shaders/research/lane_n_end_to_end_renderer/n003_composite_software.comp.glsl",
+        ):
+            composite = compact((ROOT / relative).read_text())
+            steps = [
+                "float nx = (2.0 * (float(pixel.x) + 0.5) / float(p.counts.y)) - 1.0;",
+                "float ny = 1.0 - (2.0 * (float(pixel.y) + 0.5) / float(p.counts.z));",
+                "vec3 view_direction = normalize(p.camera_forward_far.xyz + p.camera_right_tan_x.xyz * (nx * p.camera_right_tan_x.w) + p.camera_up_tan_y.xyz * (ny * p.camera_up_tan_y.w));",
+                "vec3 position = p.camera_pos_near.xyz + view_direction * hit.normal_t.w;",
+                "float spacing = p.scene_origin_spacing.w * float(1u << cascade);",
+                "ivec3 probe = ivec3(floor((position - p.scene_origin_spacing.xyz) / spacing));",
+            ]
+            for expr in steps:
+                with self.subTest(shader=relative, expression=expr):
+                    self.assertIn(compact(expr), composite)
+                    self.assertIn(compact(expr), diagnostic)
+            self.assertIn(compact(
+                "hit.metadata.w != 1u || isnan(hit.normal_t.w) || isinf(hit.normal_t.w)"),
+                diagnostic)
+
+    def test_diagnostic_checks_postframe_byte_equality(self):
+        runtime = (ROOT / "src/research/n006_interval_aware_allocation"
+                   / "n006_runtime.cpp").read_text()
+        self.assertIn("hits_before != hits_after || image_before != image_after", runtime)
+        self.assertIn("state_->last_canonical_frame", runtime)
+        cli = (ROOT / "src/research/n006_interval_aware_allocation"
+               / "n006_intervention_main.cpp").read_text()
+        self.assertIn('--p1m0-consumer-coverage', cli)
+        self.assertIn('runtime.p1m0_consumer_coverage()', cli)
 
     def test_diagnostic_uses_existing_key_packing_and_bounded_slots(self):
         diagnostic = SHADER.read_text()
