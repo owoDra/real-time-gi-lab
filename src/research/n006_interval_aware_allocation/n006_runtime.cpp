@@ -699,6 +699,26 @@ N006FrameResult N006Runtime::run_candidate_frame(
         stamp(21);
     }
 
+    if (request.p1m1_canonical_key_intervention) {
+        // Exactly one immutable canonical output key, four additional rays,
+        // and no change to the compact base prefix or canonical output count.
+        // Query20/21 is isolated here; P1m0b and M1 cannot be combined.
+        stamp(20);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->p1m1_stats.buffer, 0,
+            state_->p1m1_stats.size, 0U);
+        i001_transfer_to_compute_barrier(impl.context, command);
+        const std::array<std::uint32_t, 4> m1_push{{
+            request.p1m1_selected_token, 8U, 4U, kN006CanonicalCapacity,
+        }};
+        state_->p1m1_extra_stage->record(
+            command, 1U, 1U, 1U, m1_push.data(), sizeof(m1_push));
+        i001_compute_barrier(impl.context, command);
+        impl.finalize_stage->record(command, 1U);
+        i001_compute_barrier(impl.context, command);
+        stamp(21);
+    }
+
     (direct_canonical ? state_->direct_ray_stage.get() : impl.ray_stage.get())
         ->record_indirect(command, impl.indirect.buffer, 0);
     i001_compute_barrier(impl.context, command);
@@ -813,7 +833,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
 
     std::array<std::uint64_t, 24> timestamps{};
     const auto timestamp_count =
-        request.p1m0_pretrace_coverage ? 22U
+        (request.p1m0_pretrace_coverage ||
+         request.p1m1_canonical_key_intervention) ? 22U
         : (request.capture_hash_probe || request.canonical_probe_pilot)
             ? 20U : (active_extra ? 18U : 16U);
     if (impl.context.vk().getQueryPoolResults(
@@ -850,6 +871,26 @@ N006FrameResult N006Runtime::run_candidate_frame(
     if (active_extra) {
         extra_producer_gpu_us =
             timestamp_us(timestamps[16], timestamps[17], period);
+    }
+
+    std::array<std::uint32_t, 6> m1_values{};
+    double m1_extra_gpu_us = 0.0;
+    if (request.p1m1_canonical_key_intervention) {
+        impl.context.download_device_buffer(
+            state_->p1m1_stats, m1_values.data(), sizeof(m1_values));
+        m1_extra_gpu_us =
+            timestamp_us(timestamps[20], timestamps[21], period);
+        if (m1_values[0] == 0U ||
+            m1_values[1] != 1U || m1_values[2] != 4U ||
+            m1_values[3] >= kN006CanonicalCapacity ||
+            m1_values[4] != request.p1m1_selected_token ||
+            m1_values[5] != 0U ||
+            counter_values[0] != m1_values[0] + 4U ||
+            counter_values[1] * 8U != m1_values[0] ||
+            !std::isfinite(m1_extra_gpu_us) || m1_extra_gpu_us <= 0.0) {
+            throw std::runtime_error(
+                "P1m1a GPU single-key injection stats/counts failed");
+        }
     }
 
     I001FrameResult result{};
