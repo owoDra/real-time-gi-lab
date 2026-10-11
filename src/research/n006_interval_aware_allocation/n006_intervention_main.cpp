@@ -520,6 +520,7 @@ int main(int argc, char** argv) {
     bool p1m0_coverage = false;
     bool p1m0_pretrace_coverage = false;
     std::uint32_t p1m1_canonical_token = 0U;
+    bool p1m2_tetra_octant_directions = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -571,6 +572,9 @@ int main(int argc, char** argv) {
         else if (arg == "--p1m1-canonical-token" && index + 1 < argc) {
             p1m1_canonical_token = static_cast<std::uint32_t>(std::stoul(argv[++index]));
         }
+        else if (arg == "--p1m2-tetra-octant-directions") {
+            p1m2_tetra_octant_directions = true;
+        }
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -602,6 +606,10 @@ int main(int argc, char** argv) {
         if (artifact_dir.empty() || scene.empty() || source_warmup_frames == 0U ||
             target_frames == 0U) {
             throw std::runtime_error("invalid N006 candidate arguments");
+        }
+        if (p1m2_tetra_octant_directions && p1m1_canonical_token == 0U) {
+            throw std::runtime_error(
+                "P1m2a directions require a frozen P1m1 canonical token");
         }
         // M1a first prospective pilot: only three unchanged calibration
         // tokens from static cascade-3; no post-hoc scene/token tuning.
@@ -934,7 +942,7 @@ int main(int argc, char** argv) {
         lane_n::N006Runtime runtime(
             options, canonical_lean_hash, canonical_zero_copy, p1l_b1,
             p1l_b1c_axis_proxy, p1m0_pretrace_coverage,
-            p1m1_canonical_token != 0U);
+            p1m1_canonical_token != 0U, p1m2_tetra_octant_directions);
         trace_p1m0("runtime construction complete");
 
         const lane_n::N006ExtraRequest current_request{};
@@ -1072,6 +1080,7 @@ int main(int argc, char** argv) {
                 p1m0_pretrace_coverage && index == 0U,
                 p1m1_canonical_token != 0U && index == 0U,
                 p1m1_canonical_token,
+                p1m2_tetra_octant_directions && index == 0U,
             };
             trace_p1m0("canonical target render begin");
             lane_n::N006FrameResult result =
@@ -1295,6 +1304,8 @@ int main(int argc, char** argv) {
             << "  \"p1m0_consumer_coverage\":" << (p1m0_coverage ? "true" : "false") << ",\n"
             << "  \"p1m0_pretrace_coverage\":" << (p1m0_pretrace_coverage ? "true" : "false") << ",\n"
             << "  \"p1m1_canonical_token\":" << p1m1_canonical_token << ",\n"
+            << "  \"p1m2_tetra_octant_directions\":"
+            << (p1m2_tetra_octant_directions ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
