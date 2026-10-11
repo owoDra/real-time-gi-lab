@@ -54,7 +54,10 @@ void main() {
     // Keep the *exact operation sequence* from accepted N001 composite.
     float nx = (2.0 * (float(pixel.x) + 0.5) / float(p.counts.y)) - 1.0;
     float ny = 1.0 - (2.0 * (float(pixel.y) + 0.5) / float(p.counts.z));
-    vec3 view_direction = normalize(p.camera_forward_far.xyz + p.camera_right_tan_x.xyz * (nx * p.camera_right_tan_x.w) + p.camera_up_tan_y.xyz * (ny * p.camera_up_tan_y.w));
+    vec3 view_direction = normalize(
+        p.camera_forward_far.xyz +
+        p.camera_right_tan_x.xyz * (nx * p.camera_right_tan_x.w) +
+        p.camera_up_tan_y.xyz * (ny * p.camera_up_tan_y.w));
     vec3 position = p.camera_pos_near.xyz + view_direction * hit.normal_t.w;
     for (uint cascade = 0u; cascade < p.counts.w; ++cascade) {
         atomicAdd(stats.data[1], 1u);
