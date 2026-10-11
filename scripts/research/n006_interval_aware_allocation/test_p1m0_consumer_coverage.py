@@ -73,6 +73,28 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
         self.assertIn("source_warmup_frames != 32U", cli)
         self.assertIn("target_state_warmup_frames != 8U", cli)
 
+    def test_m0_performs_n004_oracle_once_not_eight_warmups(self):
+        cli = (ROOT / "src/research/n006_interval_aware_allocation"
+               / "n006_intervention_main.cpp").read_text()
+        self.assertIn(
+            "p1l_stage_fast || p1l_b0_counts || p1l_b1 || p1l_b1b_counts ||",
+            cli)
+        self.assertIn("p1m0_coverage;\n", cli)
+        self.assertIn("const auto warm_hits = p1l_sampled_hit", cli)
+        self.assertIn("? frame_core_correct(warm_frame)", cli)
+        self.assertIn("p1l_b1 ? index == 1U : (!p1l_sampled_hit || index == 0U)", cli)
+        self.assertIn("runtime.n004_hit_diagnostics()", cli)
+        self.assertIn('trace_p1m0("target N004 sampled hit oracle begin")', cli)
+        self.assertIn('trace_p1m0("target N004 sampled hit oracle complete")', cli)
+        runtime = (ROOT / "src/research/n006_interval_aware_allocation"
+                   / "n006_runtime.cpp").read_text()
+        for mark in ("pre-diagnostic primary/image readback begin",
+                     "compute pipeline constructed",
+                     "diagnostic GPU fence wait begin",
+                     "diagnostic GPU fence signaled",
+                     "consumer count invariants verified"):
+            self.assertIn(mark, runtime)
+
     def test_post_failure_log_diagnostic_is_discoverable(self):
         runner = (ROOT / "scripts/research/n006_interval_aware_allocation"
                   / "run_p1m0_consumer_coverage.py").read_text()
