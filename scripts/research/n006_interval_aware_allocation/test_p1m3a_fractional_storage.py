@@ -50,6 +50,21 @@ class TestP1m3aQuantizationBoundary(unittest.TestCase):
             ),
         })
 
+    def test_new_glsl_version_is_first_real_line(self):
+        # glslang fails if a comment or literal '\\n' precedes #version.
+        # Guard all P1m3a entrypoints before the user-local GPU build.
+        for name in (
+            "n006_p1m3_fractional_storage_update.comp.glsl",
+            "n006_p1m3_fractional_weight_storage.comp.glsl",
+        ):
+            with self.subTest(shader=name):
+                body = (SHADERS / name).read_bytes()
+                self.assertTrue(
+                    body.startswith(b"#version 460\\n"),
+                    f"{name}: GLSL #version must be byte 0 followed by a newline",
+                )
+                self.assertNotIn(b"\\\\n#version", body)
+
     def test_production_storage_is_intact_new_shader_is_Q8_only(self):
         orig = (ACCEPTED / "i001_storage_update.comp.glsl").read_text()
         q8 = (SHADERS / "n006_p1m3_fractional_storage_update.comp.glsl").read_text()
