@@ -20,6 +20,19 @@ P1a tested one owner×cascade, mostly no final pixel change; P1b observed intege
 - Extra direction rule should be the existing deterministic `extra_direction(probe key,ordinal)` from N006 P1a; no post-hoc direction search. Verify distinct direction seeds and GPU exact work IDs. A zero-consumer key can still affect other pixels indirectly only if storage/probe routing differs from the documented lookup; preserve contradictory evidence.
 - Paired original/candidate images against an **independent converged HDR reference**, and a candidate-no-extra control proving bit exact. Per-key signed global RGB RMS gain = `RMS(current,reference)-RMS(intervention,reference)`; store negative/zero outcomes as-is. Also record affected-pixel fraction, p99 relative and absolute and local impact, with raw normalization. Never infer signed global benefit just from `consumer_count>0`.
 
+## Prospective M0→M1 calibration-key selection (frozen BEFORE M0 GPU evidence)
+
+This selection is **calibration sampling ONLY**, not a predictive threshold, quality-outcome optimization, statistical significance test, or P1 held-out split. Selection must use *only* the verified M0 `p1m0_consumer_coverage.key_rows` counters: no reference HDR, no RGB error or interventions.
+
+For each one of the frozen five scenario frames and *each* cascade 0–3, select **exactly one canonical probe key per predeclared coverage stratum**, in canonical token numerical order:
+- `zero`: all rows with `consumer_pixels == 0`; select the smallest integer `token`;
+- `low_positive`: among rows with `consumer_pixels > 0`, select one with **minimum positive count**; ties broken by smallest `token`;
+- `high_positive`: among rows with `consumer_pixels > 0`, select one with **maximum positive count**; ties broken by smallest `token`.
+
+If a stratum has no key, or minimum and maximum positive counts are equal (the low/high groups are not separable), preserve `stratum_missing` / `insufficient_positive_variation` in the manifest rather than substituting a different key or silently deleting that scene. No M1 intervention study is allowed for such incomplete 5×4×3 calibration strata without a *new, prospective* design. Rows must be revalidated as sorted, unique, nonnegative, one owner minimum, correct SHA/cascade conservation before selection. Freeze the result in M0 output: **60 expected selections = 5 scenarios ×4 cascades ×3 strata, if all available**, with `token`, `consumer_pixels`, `producer_owner_outputs`, scenario/cascade/stratum, full per-case row hash. This is NOT an authorization to trace 60 extra-ray interventions until M0 correctness and pre-secondary GPU-cost gate are passed.
+
+Calibration set uses existing five-scene source and cannot be relabeled evaluation/holdout. Formal P1 must freeze and generate **independent trajectories** for evaluation and sealed holdout, without retrofitting source-set outcomes.
+
 ## Sampling and evidence separation (to freeze numerically before GPU)
 
 - **Calibration** only: choose keys deterministically from source M0 **coverage strata** (zero, low nonzero, upper-tail nonzero), across **all four cascades** and at least stable-deformation + illumination/camera-control regimes, without consulting reference error or observed outcomes. Freeze sorted key tokens and inclusion/failure handling before candidate rays run. Sealed evaluation/holdout must use *different geometric/light/camera trajectories*, not only seeds on the same fixed frame.
