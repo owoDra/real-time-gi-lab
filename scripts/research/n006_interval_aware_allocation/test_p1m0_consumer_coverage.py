@@ -107,6 +107,38 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
         self.assertIn("p1m0_coverage;", (ROOT / "src/research/n006_interval_aware_allocation" / "n006_intervention_main.cpp").read_text())
         self.assertIn("failure report: {summary_file.resolve()}", runner)
 
+    def test_pretrace_runs_after_primary_and_hash_before_secondary(self):
+        runtime = (ROOT / "src/research/n006_interval_aware_allocation"
+                   / "n006_runtime.cpp").read_text()
+        header = (ROOT / "src/research/n006_interval_aware_allocation"
+                  / "n006_runtime.hpp").read_text()
+        cli = (ROOT / "src/research/n006_interval_aware_allocation"
+               / "n006_intervention_main.cpp").read_text()
+        self.assertIn("bool p1m0_pretrace_coverage{}", header)
+        self.assertIn("--p1m0-pretrace-coverage", cli)
+        self.assertIn("p1m0_pretrace_coverage && index == 0U", cli)
+        self.assertIn("p1m0_pretrace_coverage && !p1m0_coverage", cli)
+        self.assertIn("pretrace_slot_byte_equal", cli)
+        self.assertIn("pretrace_stats_byte_equal", cli)
+        self.assertIn("pretrace_clear_and_count_gpu_us", cli)
+        self.assertIn("pretrace_scratch_bytes", cli)
+        canonical = runtime.index("state_->canonical_compact_stage->record_indirect(")
+        pretrace = runtime.index("state_->p1m0_pretrace_stage->record(")
+        secondary = runtime.index(
+            "(direct_canonical ? state_->direct_ray_stage.get() : impl.ray_stage.get())")
+        self.assertLess(canonical, pretrace)
+        self.assertLess(pretrace, secondary)
+        self.assertIn("stamp(20);", runtime)
+        self.assertIn("stamp(21);", runtime)
+        self.assertIn("request.p1m0_pretrace_coverage ? 22U", runtime)
+        self.assertIn("pretrace_counts == raw_counts", runtime)
+        self.assertIn("pretrace_stats == raw_stats", runtime)
+        self.assertIn("state_->p1m0_pretrace_counts.size, 0U", runtime)
+        self.assertIn("state_->p1m0_pretrace_stats.size, 0U", runtime)
+        self.assertIn("i001_transfer_to_compute_barrier(impl.context, command);", runtime)
+        self.assertIn("last_p1m0_pretrace_frame = false", runtime)
+        self.assertIn("p1m0_pretrace_stage.reset()", runtime)
+
     def test_diagnostic_uses_existing_key_packing_and_bounded_slots(self):
         diagnostic = SHADER.read_text()
         canonical = CANONICAL.read_text()
