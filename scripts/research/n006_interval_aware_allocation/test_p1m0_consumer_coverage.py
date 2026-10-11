@@ -47,6 +47,10 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
                / "n006_intervention_main.cpp").read_text()
         self.assertIn('--p1m0-consumer-coverage', cli)
         self.assertIn('runtime.p1m0_consumer_coverage()', cli)
+        # The legacy software-variant/lean-hash/target-warmup gates have
+        # three independent discriminators; M0 is narrowly opted in.
+        self.assertGreaterEqual(cli.count("!p1m0_coverage"), 3)
+        self.assertIn("p1l_stage_any || p1m0_coverage", cli)
 
     def test_diagnostic_uses_existing_key_packing_and_bounded_slots(self):
         diagnostic = SHADER.read_text()
