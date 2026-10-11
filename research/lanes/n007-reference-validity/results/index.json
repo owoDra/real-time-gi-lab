@@ -69,6 +69,18 @@
       "black_reference_rows": 96,
       "gpu_run": false,
       "physical_correctness_proven": false
+    },
+    {
+      "id": "N007-P1A-007",
+      "status": "complete",
+      "classification": "CPU-only static source contract + analytic occluder; not historic causal proof",
+      "result": "007-p1a-cpu-source-shadow-contract.md",
+      "source_files_checked": 7,
+      "source_checks_passed": 10,
+      "synthetic_cpu_unit_tests_passed": 8,
+      "gpu_run": false,
+      "historic_m3b_root_cause_proven": false,
+      "physical_correctness_proven": false
     }
   ]
 }
