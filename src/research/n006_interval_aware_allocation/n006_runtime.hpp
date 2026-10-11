@@ -259,7 +259,8 @@ public:
                          bool p1l_b1c_axis_proxy = false,
                          bool p1m0_pretrace_enabled = false,
                          bool p1m1_canonical_extra_enabled = false,
-                         bool p1m2_tetra_octant_enabled = false);
+                         bool p1m2_tetra_octant_enabled = false,
+                         bool p1m3_fractional_storage = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
