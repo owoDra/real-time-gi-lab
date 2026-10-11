@@ -141,6 +141,14 @@ struct N006CanonicalM1Trace {
     std::uint32_t baseline_mean16{};
     std::uint32_t candidate_mean16{};
     std::uint32_t merged_sample_count{};
+    // P1m1c: from finished, unmodified GPU hit/contribution streams.
+    // Extra hit-with-zero energy is not equivalent to no hit.
+    std::uint32_t base_hit_count{};
+    std::uint32_t extra_hit_count{};
+    std::uint32_t extra_miss_count{};
+    std::uint32_t base_positive_radiance_rays{};
+    std::uint32_t extra_positive_radiance_rays{};
+    std::uint32_t extra_hit_zero_radiance_rays{};
     double extra_injection_gpu_us{};
 };
 
