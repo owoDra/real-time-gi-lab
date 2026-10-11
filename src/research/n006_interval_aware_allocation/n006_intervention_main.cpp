@@ -1323,6 +1323,7 @@ int main(int argc, char** argv) {
             fractions.end(),
             [&](float value) { return value == fractions.front(); });
         std::vector<ReferenceMeta> references;
+        std::vector<ReferenceMeta> independent_references;
         if (!skip_reference) {
             references.reserve(frames.size());
             if (varying_state) {
@@ -1338,6 +1339,18 @@ int main(int argc, char** argv) {
                     artifact_dir,
                     "frames/reference-8bounce.pfm");
                 references.assign(frames.size(), shared);
+                if (p1m3b_holdout_quality) {
+                    // Distinct seeds from default reference, same source
+                    // state, 8 diffuse bounces and original convergence.
+                    lane_n::N001ReferenceSettings independent_settings{};
+                    independent_settings.seed_a = 0x517cc1b727220a95ULL;
+                    independent_settings.seed_b = 0x8b8b8b8b4f1bbcddULL;
+                    const auto independent = render_reference(
+                        frames.front().readback, artifact_dir,
+                        "frames/reference-8bounce-independent.pfm",
+                        independent_settings);
+                    independent_references.assign(frames.size(), independent);
+                }
             }
         }
 
@@ -1418,6 +1431,9 @@ int main(int argc, char** argv) {
                 << ",\"image\":\"" << frame.image_path << "\",\"reference\":";
             if (skip_reference) out << "null";
             else write_reference(out, references[index]);
+            out << ",\\\"reference_independent\\\":";
+            if (skip_reference || !p1m3b_holdout_quality) out << "null";
+            else write_reference(out, independent_references[index]);
             out << ",\"hit_diagnostics\":";
             if (frame.hit_diagnostics_executed) write_hit(out, frame.hits);
             else out << "null";
