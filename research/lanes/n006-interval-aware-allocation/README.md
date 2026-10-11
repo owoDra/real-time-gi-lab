@@ -1,3 +1,18 @@
+### 2026-10-11 — P1m0b pre-secondary eligibility PASS; P1m1a canonical-key causality pilot now implemented
+
+The user-supplied P1m0b GPU summary, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, demonstrates same postframe lookup counter results available before secondary ray dispatch for **all five frozen SW scenes**, full-slot and eight-counter byte equality, all original key-row hashes, no invalid cases. GPU cost only 14.387–22.683 µs (0.82–1.37% of instrumented GI), 131104 byte scratch, all under pre-registered bound. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md). **Feasibility stage PASSED**; does not prove signed marginal benefit, a valid predictor or P2 net performance.
+
+Per frozen [P1m1a protocol 023](./experiments/023-p1m1a-single-canonical-key-extraray-preflight.md), the research branch now contains the N006-only shader/runtime/CLI and independent four-run Python launcher to add **four deterministic P1a directions to ONE canonical-key output**, preserving all 8 base ray indices and existing storage owner weights. Three original M0 calibration-only static/C3 keys (zero, low, high) are whitelisted; per-output GPU radiance sums of 8+4, extra contribution indices/metadata, unchanged input key SHA, original accepted control PFM hash, N004 correctness and signed/unsigned outcome separation fail closed. Image **change is not quality gain** until a later independent HDR reference comparison. New unit contracts guard direction seed identity, shader placement, frozen keys, and PFM diff semantics. **Not locally GPU verified yet**.
+
+Next single process batch (four separately warmed static runs, no re-running M0b/B1/C0):
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m1a_canonical_pilot.sh
+```
+
+Upload `out/research/n006-interval-aware-allocation/p1m1a-canonical-key-pilot/<UTC>/n006-p1m1a-canonical-key-pilot-summary.json`. If 4/4 PASS, advance to signed reference-quality P1m1b (still NO P2 GO). No PR, no GitHub Actions, no accepted shaders changed.
+
 ## 2026-10-11 P1m0b target GPU PASS (newest)
 
 User uploaded `n006-p1m0-consumer-coverage-summary(2).json`, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, clean HEAD `359e6b87fe38919349b994136005251187137b4b`. Five frozen software scenes COMPLETE, zero failures. In-frame before-secondary count and independent postframe GPU count matched **every slot of 32768 values and all 8 counters**, all old M0 per-key SHA fingerprints matched, accepted HDR PFM and N004 gate intact. GPU timestamp pretrace clear+dispatch+barriers **21.280/14.387/14.868/22.683/20.439 µs** for static/camera/light/moving/deforming, respectively, **0.82–1.37%** of instrumented GI, 131104-byte scratch. All five passed predeclared cost cap `min(10% of instrumented complete GI, 50% of traversal)`. C0 source provenance still MATCHED. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md).
