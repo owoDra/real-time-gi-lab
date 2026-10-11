@@ -72,6 +72,59 @@ class TestP1m0CoverageAudit(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     m0.audit_coverage(a,"static")
 
+    def test_pretrace_frozen_counter_and_cost_gates(self):
+        fingerprint, matched, keys = m0.FROZEN_M0["static"]
+        audited = {
+            "key_rows_sha256": fingerprint,
+            "matched_lookups": matched,
+            "keys_with_consumers": keys,
+        }
+        timing = {"complete_gi_gpu": 2000.0, "traversal_gpu": 400.0}
+        cov = {
+            "pretrace_executed": True,
+            "pretrace_slot_byte_equal": True,
+            "pretrace_stats_byte_equal": True,
+            "pretrace_clear_and_count_gpu_us": 50.0,
+            "pretrace_scratch_bytes": (m0.HASH_SLOTS + 8)*4,
+        }
+        ok = m0.audit_pretrace(cov, audited, "static", timing)
+        self.assertEqual(ok["cost_gate"], "within_predeclared_limit")
+        self.assertEqual(ok["predeclared_limit_gpu_us"], 200.0)
+        self.assertEqual(ok["pretrace_scratch_bytes"], 131104)
+        cov["pretrace_clear_and_count_gpu_us"] = 250.0
+        slow = m0.audit_pretrace(cov, audited, "static", timing)
+        self.assertEqual(slow["cost_gate"], "over_predeclared_limit")
+        # Slow-but-correct is retained as evidence, never erased or tuned.
+        cov["pretrace_slot_byte_equal"] = False
+        with self.assertRaises(ValueError):
+            m0.audit_pretrace(cov, audited, "static", timing)
+        cov["pretrace_slot_byte_equal"] = True
+        audited["matched_lookups"] = matched + 1
+        with self.assertRaises(ValueError):
+            m0.audit_pretrace(cov, audited, "static", timing)
+
+    def test_pretrace_cost_rejects_missing_nonfinite_and_wrong_scratch(self):
+        h, m, k = m0.FROZEN_M0["camera-motion"]
+        audit = {"key_rows_sha256": h, "matched_lookups": m,
+                 "keys_with_consumers": k}
+        timing = {"complete_gi_gpu": 2000.0, "traversal_gpu": 400.0}
+        good = {
+            "pretrace_executed": True, "pretrace_slot_byte_equal": True,
+            "pretrace_stats_byte_equal": True,
+            "pretrace_clear_and_count_gpu_us": 40.0,
+            "pretrace_scratch_bytes": 131104,
+        }
+        for key, invalid in (("pretrace_clear_and_count_gpu_us", 0.0),
+                             ("pretrace_clear_and_count_gpu_us", float("nan")),
+                             ("pretrace_clear_and_count_gpu_us", True),
+                             ("pretrace_scratch_bytes", 0),
+                             ("pretrace_stats_byte_equal", False)):
+            with self.subTest(key=key, invalid=invalid):
+                c = good.copy()
+                c[key] = invalid
+                with self.assertRaises(ValueError):
+                    m0.audit_pretrace(c, audit, "camera-motion", timing)
+
     def test_wrong_device_frame_rejected_before_pfm_read(self):
         data = {
             "protocol_version": "n006-p1-intervention-v1",
