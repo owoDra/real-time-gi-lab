@@ -1908,6 +1908,16 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
     const std::size_t size = std::size_t(capacity);
     const std::vector<std::uint32_t> zeros(size, 0U);
     const std::array<std::uint32_t, 8> empty_stats{};
+    // Prove independent diagnostic dispatch cannot alter either accepted GPU
+    // primary hits or the final image, even though its bindings are readonly.
+    const auto hit_bytes = VkDeviceSize(320U * 180U * sizeof(GpuHit));
+    const auto image_bytes = VkDeviceSize(320U * 180U * 4U * sizeof(float));
+    std::vector<std::uint8_t> hits_before(static_cast<std::size_t>(hit_bytes));
+    std::vector<std::uint8_t> image_before(static_cast<std::size_t>(image_bytes));
+    impl.context.download_device_buffer(
+        impl.primary_hits, hits_before.data(), hit_bytes);
+    impl.context.download_device_buffer(
+        impl.image, image_before.data(), image_bytes);
     B002Buffer consumer_counts{}, consumer_stats{};
     std::unique_ptr<I001ComputeStage> coverage;
     const auto cleanup = [&]() noexcept {
@@ -1970,6 +1980,16 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
                 1U, &impl.fence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) {
             throw std::runtime_error("P1m0 GPU submit/fence failed");
         }
+
+        std::vector<std::uint8_t> hits_after(hits_before.size());
+        std::vector<std::uint8_t> image_after(image_before.size());
+        impl.context.download_device_buffer(
+            impl.primary_hits, hits_after.data(), hit_bytes);
+        impl.context.download_device_buffer(
+            impl.image, image_after.data(), image_bytes);
+        if (hits_before != hits_after || image_before != image_after)
+            throw std::runtime_error(
+                "P1m0 diagnostic changed accepted primary hits or output image");
 
         std::array<std::uint32_t, 8> raw_stats{};
         std::vector<std::uint32_t> raw_keys(size), raw_counts(size),
