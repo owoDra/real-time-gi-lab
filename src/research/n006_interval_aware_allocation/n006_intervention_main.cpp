@@ -613,7 +613,8 @@ int main(int argc, char** argv) {
         // accepted P1i behavior and allocations remain the default.
         if (canonical_lean_hash &&
             !((canonical_matrix_case && canonical_probe_pilot) ||
-              !three_arm_pattern.empty() || p1l_stage_any)) {
+              !three_arm_pattern.empty() || p1l_stage_any ||
+              p1m0_coverage)) {
             throw std::runtime_error(
                 "N006 P1j-A lean hash requires canonical matrix correctness pilot");
         }
@@ -650,7 +651,8 @@ int main(int argc, char** argv) {
                     "LaneEFinal HWRT/software five-scenario protocol");
             }
         } else if (variant_name != "lane-e-final-hwrt" &&
-                   three_arm_pattern.empty() && !p1l_stage_any) {
+                   three_arm_pattern.empty() && !p1l_stage_any &&
+                   !p1m0_coverage) {
             throw std::runtime_error(
                 "N006 variant override is reserved for P1i matrix study");
         }
@@ -692,7 +694,8 @@ int main(int argc, char** argv) {
                     "no hash/extra/reference/topology");
             }
         } else if (target_state_warmup_frames != 0U &&
-                   three_arm_pattern.empty() && !p1l_stage_any) {
+                   three_arm_pattern.empty() && !p1l_stage_any &&
+                   !p1m0_coverage) {
             throw std::runtime_error(
                 "N006 target-state warmup only valid with a frozen P1h/P1k pattern");
         }
