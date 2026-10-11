@@ -158,7 +158,7 @@ def verify_frame(data: dict[str, Any], scenario: str, gpu: str,
         raise ValueError("P1m2b original accepted M0 rows fingerprint mismatch")
     if intervention:
         matching = [r for r in raw_coverage["key_rows"] if r["token"] == token]
-        if len(matching) != 1 or
+        if (len(matching) != 1 or
             trace.get("executed") is not True or
             trace.get("selected_token") != token or
             type(trace.get("output_id")) is not int or
