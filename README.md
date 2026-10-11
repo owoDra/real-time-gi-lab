@@ -2,6 +2,10 @@
 
 **Evidence-driven research toward a competitive real-time global illumination architecture.**
 
+> **AI-driven, human-supervised research.** Most of this repository's research and development was conducted through near-autonomous, iterative workflows using **ChatGPT** and **OpenAI Codex CLI**. AI assisted with designing experiments, implementing C++/GLSL/Python code, preparing tests, analyzing reported results, and maintaining research records. A human set the research objectives and constraints, operated the GPU environment, reviewed experimental evidence, and made decisions on what to accept, reject, or investigate next. **The AI did not independently verify every scientific claim**, and this is not a fully unattended research system. See [How this project was researched](docs/ai-research-workflow.md).
+
+
+
 The objective is to establish a new light-transport architecture that can outperform representative existing real-time GI techniques **in a defensible combination of image quality, end-to-end GPU cost, GPU memory, and dynamic-scene coverage**. This is not merely a Split Radiance Cascades optimization project. Producer, traversal, storage and reuse components are replaceable hypotheses, not permanent commitments.
 
 ## Current position (2026-10-11)
