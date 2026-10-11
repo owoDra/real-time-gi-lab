@@ -1,3 +1,17 @@
+# 2026-10-11 LATEST — P1m3b local build PASS; 244/245 unit tests PASS; old P1m3a string assertion FIXED (GPU pending)
+
+User supplied first user-local stdout `bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3b_moving_rigid_signed_quality.sh`: CMake configured, N006 `phos-n006-intervention` linked successfully in 2.74s; **245 N006 unittest cases run, exactly one fails** *before GPU* (`test_p1m3a_fractional_storage.TestP1m3aQuantizationBoundary.test_new_stage_attaches_to_same_work_accum_instrumented_pipeline`). Old brittle source assertion expected one literal `!p1m2b_independent_state || !valid_calibration_key`, but the intentionally separate P1m3b opt-in has changed guard to `!p1m2b_independent_state || (!p1m3b_holdout_quality && !valid_calibration_key)` across two C++ lines. No indication of GPU data or algorithm failure.
+
+FIXED via direct GitHub commit `701c845f9338f3b48c5b2807d2b6ca724867d1e6`: source-inspection test now checks **both** old M2b authorization `!p1m2b_independent_state ||` and original M3a frozen token authorization conditional `(!p1m3b_holdout_quality && !valid_calibration_key)`. Independently refetched updated test + CLI from GitHub and verified both strings and separate M3b moving-rigid gate. **No post-fix local unittest or GPU result claimed.** The only changed production file for this fix is NONE: test file only. Existing Q8 GPU M3a result 041 and frozen P1m3b 029 unchanged.
+
+Next single user-local action:
+```bash
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3b_moving_rigid_signed_quality.sh
+```
+Script fast-forward pulls, builds, runs full N006 tests, then real moving-rigid GPU and two converged independent N001 CPU references; upload `n006-p1m3b-moving-rigid-signed-quality-summary.json` or first actual error. No PR/GitHub Actions.
+
+---
+
 # 2026-10-11 CURRENT — P1m3a Q8 GPU mechanism GO, P1m3b moving-rigid signed quality HOLDOUT IMPLEMENTED, GPU pending
 
 **Correct user-uploaded P1m3a** `n006-p1m3a-fractional-storage-summary.json` original SHA256 **`bfb3b537f761e26e011a2ea748bee0253014ae8192bca470d38d8b41b7ce074a`**, clean actual GPU-run HEAD **`5e41572dc012f32baf65894706b8e363805f5764`**, Radeon 8060S RADV. 4/4 Q8 control processes byte-equal per scenario, `failures=[]`, original M0 owner/key/hit oracle preserved. Frozen Q8 calibration: 3/3 arithmetic-positive consumer keys produce **replicated real float HDR image differences** (camera C1: 36 px, max RGB delta 2.563e-6; camera C3: 919 px, max 6.378e-6; light C3: 875 px, max 6.557e-7); 1/1 arithmetic-null negative control stays PFM exact. Q8 control images differ from old integer-storage baseline by design. The removed integer storage-mean quantization indeed controls visibility of tiny added-ray influence. **Mechanism GO ONLY; no signed HDR improvement, no P1 predictor/ROI/P2 GO.** [Result 041](./results/041-p1m3a-q8-gpu-replicated-image-mechanism.md).
