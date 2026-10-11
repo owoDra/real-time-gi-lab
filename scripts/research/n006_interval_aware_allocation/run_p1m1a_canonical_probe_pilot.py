@@ -37,7 +37,9 @@ CASES = ("control", "zero", "low_positive", "high_positive")
 
 
 def verify_envelope(data: dict[str, Any], label: str, gpu: str,
-                    require_ray_fate: bool = False) -> dict[str, Any]:
+                    require_ray_fate: bool = False,
+                    direction_mode: str = "p1m1a-original",
+                    frozen_null: bool = True) -> dict[str, Any]:
     owners, cascades = SCENE_EXPECTATIONS[SCENE]
     expected_outputs = sum(cascades)
     expected_base_work = expected_outputs * 8
@@ -56,7 +58,10 @@ def verify_envelope(data: dict[str, Any], label: str, gpu: str,
         data.get("reference_generation") != "skipped" or
         data.get("p1m0_consumer_coverage") is not True or
         data.get("p1m0_pretrace_coverage") is not False or
-        data.get("p1m1_canonical_token") != selected_token):
+        data.get("p1m1_canonical_token") != selected_token or
+        (direction_mode == "p1m2a-tetra" and intervention) !=
+            data.get("p1m2_tetra_octant_directions", False)):
+
         raise ValueError(f"P1m1a {label}: renderer/scene/source/gate drift")
     frames = data.get("frames")
     if not isinstance(frames, list) or len(frames) != 1:
@@ -148,7 +153,7 @@ def verify_envelope(data: dict[str, Any], label: str, gpu: str,
             # Pre-registered fidelity to M1a exactly: all 3 frozen interventions
             # had zero new radiance. A mismatch here means a changed trajectory,
             # workload or nondeterminism, not grounds to reselect tokens.
-            if trace["extra_radiance_sum16"] != 0:
+            if frozen_null and trace["extra_radiance_sum16"] != 0:
                 raise ValueError("P1m1c original frozen M1a zero energy not reproduced")
     elif trace != {"executed": False}:
         raise ValueError("P1m1a control unexpectedly injected extra rays")
@@ -204,7 +209,13 @@ def image_delta(base: bytes, changed: bytes) -> dict[str, Any]:
 def main(*, protocol_version: str = PROTOCOL,
          output_tag: str = "p1m1a-canonical-key-pilot",
          summary_file_name: str = "n006-p1m1a-canonical-key-pilot-summary.json",
-         require_ray_fate: bool = False) -> int:
+         require_ray_fate: bool = False,
+         direction_mode: str = "p1m1a-original",
+         frozen_null: bool = True) -> int:
+    if direction_mode not in ("p1m1a-original", "p1m2a-tetra"):
+        raise ValueError("unsupported direction arm")
+    if direction_mode == "p1m2a-tetra" and not require_ray_fate:
+        raise ValueError("P1m2a must capture GPU hit/energy fate")
     head = pilot.require_clean_branch()
     cfg = json.loads(pilot.CONFIG_PATH.read_text(encoding="utf-8"))
     scene = pilot.ROOT / cfg["baseline"]["scene"]
@@ -223,6 +234,7 @@ def main(*, protocol_version: str = PROTOCOL,
         "predictive_quality_established": False,
         "scene": SCENE, "case_matrix": list(CASES),
         "calibration_only": True, "candidate_rays_per_selected_key": 4,
+        "direction_mode": direction_mode,
         "git": {"head": head, "branch": pilot.EXPECTED_BRANCH, "dirty": False},
         "source_scene_sha256": cfg["baseline"]["scene_sha256"],
         "target_gpu": cfg["target_gpu"], "cases": [], "failures": [],
@@ -248,6 +260,8 @@ def main(*, protocol_version: str = PROTOCOL,
         ]
         if label != "control":
             cmd += ["--p1m1-canonical-token", str(CALIBRATION_C3[label][0])]
+            if direction_mode == "p1m2a-tetra":
+                cmd += ["--p1m2-tetra-octant-directions"]
         print(f"[P1m1a] {label}: control or exact +4 rays; "
               f"log={folder.resolve() / 'stderr.log'}", flush=True)
         try:
@@ -271,7 +285,9 @@ def main(*, protocol_version: str = PROTOCOL,
             data = json.loads(raw)
             checked = verify_envelope(
                 data, label, cfg["target_gpu"],
-                require_ray_fate=require_ray_fate)
+                require_ray_fate=require_ray_fate,
+                direction_mode=direction_mode,
+                frozen_null=frozen_null)
             frame = data["frames"][0]
             image_rel = Path(frame["image"])
             if image_rel.is_absolute() or ".." in image_rel.parts:
@@ -288,7 +304,7 @@ def main(*, protocol_version: str = PROTOCOL,
                     raise ValueError("P1m1a control payload unavailable")
                 checked["image_delta_vs_control"] = image_delta(
                     base_payload, read_pfm_payload(image))
-            if require_ray_fate and label != "control":
+            if require_ray_fate and frozen_null and label != "control":
                 diff = checked["image_delta_vs_control"]
                 if (diff["changed_rgb_pixels"] != 0 or
                     diff["changed_channel_values"] != 0 or
@@ -308,12 +324,16 @@ def main(*, protocol_version: str = PROTOCOL,
             print(f"[P1m1a] failure summary: {summary_file}", file=sys.stderr)
             raise
     result["status"] = (
-        "ray-fate-audit-complete" if require_ray_fate
+        "direction-calibration-complete" if direction_mode == "p1m2a-tetra"
+        else "ray-fate-audit-complete" if require_ray_fate
         else "mechanism-preflight-complete")
     result["next_gate"] = (
         "diagnose added-ray misses vs hits with zero radiance before freezing "
         "a distinct nonzero-signal sampling protocol; no P2 GO"
-        if require_ray_fate else
+        if require_ray_fate and direction_mode == "p1m1a-original" else
+        "if nonzero RGB effects, independently converged HDR reference and "
+        "paired signed marginal RGB RMS; no P1 predictor/P2 GO"
+        if direction_mode == "p1m2a-tetra" else
         "independent converged HDR reference and paired signed marginal "
         "gain with calibrated repeat noise on independent trajectories")
     save()
