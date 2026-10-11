@@ -1,3 +1,9 @@
+# Latest static audits received (2026-10-11)
+
+Original historical B1c/C0 audit JSONs were received and reconciled in [result 036](./results/036-p1l-archived-static-audit-original-json-provenance.md). B1c remains REJECTED, C0 remains STATIC ONLY, and P1m2a GPU remains unmeasured. Next batch: `bash scripts/research/n006_interval_aware_allocation/run_n006_p1m2a_tetra_octant.sh`. No PR or CI.
+
+---
+
 # 2026-10-11 newest: P1m2a shader/C++ build PASS; stale M1a source-placement test repaired (GPU pending)
 
 User-local P1m2a build successfully generated `n006_p1m2a_tetra_octant_extra.spv`, compiled N006 C++ and linked `phos-n006-intervention`. **227 Python unit tests ran: 1 error**, `test_p1m1a_canonical_probe.TestCanonicalM1Mechanism.test_placement_parity_and_buffer_lifetime`; it looked for removed literal `state_->p1m1_extra_stage->record(`. Current N006 code correctly selects `(request.p1m2_tetra_octant_directions ? state_->p1m2_tetra_octant_stage.get() : state_->p1m1_extra_stage.get())->record(` at the same canonical-to-secondary boundary. Replaced the stale source string with a whitespace-tolerant regex asserting **both arms and their one shared pre-secondary `record`**. Checked regex against current runtime source before pushing. **Test-only fix; no runtime/GLSL behavior changed; unit test suite has not yet been rerun on user's system after fix.** `set -e` stopped before any M2a GPU case: *NO M2a causal/image results yet*.
