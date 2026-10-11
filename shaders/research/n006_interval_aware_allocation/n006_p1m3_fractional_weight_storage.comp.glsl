@@ -72,13 +72,11 @@ void main() {
             // After canonical storage accumulation exactly one owner exists
             // at this key. Multiply integer counters before composite runs.
             if (slot.data.z != 256u ||
+                owner_count > 0xffffffffu / 256u ||
                 (owner_count != 0u && slot.data.y > 0xffffffffu / owner_count)) {
                 fail(); return;
             }
             storage.values[storage_index].data.y = slot.data.y * owner_count;
-            if (owner_count > 0xffffffffu / 256u) {
-                fail(); return;
-            }
             storage.values[storage_index].data.z = owner_count * 256u;
             atomicAdd(stats.data[15], owner_count);
             return;
