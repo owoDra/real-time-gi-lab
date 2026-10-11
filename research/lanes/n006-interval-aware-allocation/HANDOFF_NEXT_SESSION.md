@@ -1,3 +1,16 @@
+# 2026-10-11 newest: first M1a attempt stopped by obsolete M0b static source assertion (fixed)
+
+User pasted **successful M1a SPIR-V/C++ build/link**, `222` N006 unit tests with **one failure** at `test_p1m0_consumer_coverage.py:133`: assertion still searched for the old literal `request.p1m0_pretrace_coverage ? 22U`; M1a deliberately changed it to a two-arm query-count guard with `|| request.p1m1_canonical_key_intervention`. Updated test to verify *both* arms by whitespace-tolerant regex; no production shader/runtime changed in this fix. Shell `set -e` stopped **before M1a GPU execution**. [Result 032](./results/032-p1m1a-first-build-and-static-test-regression.md). Original P1m0b accepted 5/5 remains valid. Next exactly same command:
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m1a_canonical_pilot.sh
+```
+
+Still awaiting **4/4** M1a causal mechanism GPU samples, no signed quality labels, no P1 ranking or P2 scheduler decision. No PR / GitHub Actions.
+
+---
+
 # LATEST 2026-10-11 — P1m0b 5/5 PASS; P1m1a canonical key+4 ray PRE-FLIGHT CODE READY (not GPU-proven)
 
 Immutable user-upload M0b `n006-p1m0-consumer-coverage-summary(2).json`, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, clean executed HEAD `359e6b87fe38919349b994136005251187137b4b`, AMD Radeon 8060S RADV: five of five full-slot/stats GPU parities and matched exact M0 per-key hashes. Pre-secondary GPU pass cost static/camera/light/moving/deforming **21.280/14.387/14.868/22.683/20.439 µs**, only **0.82–1.37%** measured instrumented GI on these five scenes, all below prospectively frozen caps; scratch **131104 B**. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md). **P1m0b PASS only for feasibility**; no signed marginal gain or P2 scheduler GO.
