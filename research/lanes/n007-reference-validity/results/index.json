@@ -23,6 +23,15 @@
       "gpu_run": false,
       "PFM_read": false,
       "physical_correctness_proven": false
+    },
+    {
+      "id": "N007-P0-003",
+      "status": "partial",
+      "classification": "diagnostic-only; real-archive CPU confirmation",
+      "result": "003-authentic-m3b-archive-cpu-inspection.md",
+      "source": "local archived M3b PFMs, user-reported console summary",
+      "gpu_run": false,
+      "physical_correctness_proven": false
     }
   ]
 }
