@@ -398,6 +398,11 @@ void write_p1m0_coverage(
     std::ostream& out,
     const lane_n::N006P1m0Coverage& data) {
     out << "{\"diagnostic_only\":true,\"hash_capacity\":" << data.hash_capacity
+        << ",\"pretrace_executed\":" << (data.pretrace_executed ? "true" : "false")
+        << ",\"pretrace_slot_byte_equal\":" << (data.pretrace_slot_byte_equal ? "true" : "false")
+        << ",\"pretrace_stats_byte_equal\":" << (data.pretrace_stats_byte_equal ? "true" : "false")
+        << ",\"pretrace_clear_and_count_gpu_us\":" << data.pretrace_clear_and_count_gpu_us
+        << ",\"pretrace_scratch_bytes\":" << data.pretrace_scratch_bytes
         << ",\"valid_primary_pixels\":" << data.valid_primary_pixels
         << ",\"lookup_attempts\":" << data.lookup_attempts
         << ",\"matched_lookups\":" << data.matched_lookups
@@ -492,6 +497,7 @@ int main(int argc, char** argv) {
     bool p1l_b1b_counts = false;
     bool p1l_b1c_axis_proxy = false;
     bool p1m0_coverage = false;
+    bool p1m0_pretrace_coverage = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -539,6 +545,7 @@ int main(int argc, char** argv) {
         else if (arg == "--p1l-b1b-counts") p1l_b1b_counts = true;
         else if (arg == "--p1l-b1c-axis-proxy") p1l_b1c_axis_proxy = true;
         else if (arg == "--p1m0-consumer-coverage") p1m0_coverage = true;
+        else if (arg == "--p1m0-pretrace-coverage") p1m0_pretrace_coverage = true;
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -570,6 +577,10 @@ int main(int argc, char** argv) {
         if (artifact_dir.empty() || scene.empty() || source_warmup_frames == 0U ||
             target_frames == 0U) {
             throw std::runtime_error("invalid N006 candidate arguments");
+        }
+        if (p1m0_pretrace_coverage && !p1m0_coverage) {
+            throw std::runtime_error(
+                "P1m0b pretrace requires --p1m0-consumer-coverage for exact postframe parity");
         }
         const bool p1l_b1 = !p1l_b1_pattern.empty();
         if (p1l_b1c_axis_proxy && !p1l_b1)
@@ -873,7 +884,7 @@ int main(int argc, char** argv) {
         trace_p1m0("runtime construction begin");
         lane_n::N006Runtime runtime(
             options, canonical_lean_hash, canonical_zero_copy, p1l_b1,
-            p1l_b1c_axis_proxy);
+            p1l_b1c_axis_proxy, p1m0_pretrace_coverage);
         trace_p1m0("runtime construction complete");
 
         const lane_n::N006ExtraRequest current_request{};
@@ -1008,6 +1019,7 @@ int main(int argc, char** argv) {
                     (!three_arm_pattern.empty() &&
                      three_arm_pattern[index] == '2'),
                 p1l_b1 && p1l_b1_pattern[index] == '1',
+                p1m0_pretrace_coverage && index == 0U,
             };
             trace_p1m0("canonical target render begin");
             lane_n::N006FrameResult result =
@@ -1229,6 +1241,7 @@ int main(int argc, char** argv) {
             << "  \"p1l_b1_pattern\":\"" << p1l_b1_pattern << "\",\n"
             << "  \"p1l_b1c_axis_proxy\":" << (p1l_b1c_axis_proxy ? "true" : "false") << ",\n"
             << "  \"p1m0_consumer_coverage\":" << (p1m0_coverage ? "true" : "false") << ",\n"
+            << "  \"p1m0_pretrace_coverage\":" << (p1m0_pretrace_coverage ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
