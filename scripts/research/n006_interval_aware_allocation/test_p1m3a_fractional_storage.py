@@ -89,12 +89,11 @@ class TestP1m3aQuantizationBoundary(unittest.TestCase):
             "--p1m3-fractional-storage",
             "if (p1m3_fractional_storage)",
             "!p1m2b_independent_state || !valid_calibration_key",
-            "p1m3_fractional_storage ?",
             "p1m1_canonical_token == 2152730633U",
             "p1m1_canonical_token == 1084233745U",
         ):
-            # Selection happens in main; stage dispatch predicate is in cpp.
-            self.assertIn(must, cpp if must.endswith("?") else cli)
+            self.assertIn(must, cli)
+        self.assertIn("state_->p1m3_fractional_storage", cpp)
         self.assertIn("phos-n006-p1m3a-shaders", cmake)
         self.assertIn("phos-n006-p1m2a-shaders", cmake)
 
