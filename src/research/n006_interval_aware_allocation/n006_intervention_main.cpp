@@ -863,12 +863,23 @@ int main(int argc, char** argv) {
         options.variant = lane_n::i001_parse_variant(variant_name);
         options.scenario = lane_n::i001_parse_scenario(scenario_name);
         options.validation = true;
+        // M0 diagnostic stage markers are flushed directly to the runner's
+        // stderr log, including when Vulkan/CPU work does not return.
+        const auto trace_p1m0 = [&](const char* stage) {
+            if (p1m0_coverage) {
+                std::cerr << "[P1m0-stage] " << stage << std::endl;
+            }
+        };
+        trace_p1m0("runtime construction begin");
         lane_n::N006Runtime runtime(
             options, canonical_lean_hash, canonical_zero_copy, p1l_b1,
             p1l_b1c_axis_proxy);
+        trace_p1m0("runtime construction complete");
 
         const lane_n::N006ExtraRequest current_request{};
+        trace_p1m0("initial source frame begin");
         auto source = runtime.run_frame(false, current_request);
+        trace_p1m0("initial source frame complete");
         const auto source_hits = p1l_sampled_hit
             ? lane_n::I001N004HitDiagnostics{}
             : runtime.n004_hit_diagnostics();
@@ -877,6 +888,11 @@ int main(int argc, char** argv) {
             : frame_correct(source, source_hits);
         bool source_warmups_correct = source_correct;
         for (std::uint32_t index = 1; index < source_warmup_frames; ++index) {
+            if (p1m0_coverage && (index == 1U || index == 16U ||
+                                  index + 1U == source_warmup_frames))
+                std::cerr << "[P1m0-stage] source warmup "
+                          << (index + 1U) << "/" << source_warmup_frames
+                          << " begin" << std::endl;
             const auto warm_source = runtime.run_frame(false, current_request);
             const bool warm_correct =
                 p1l_sampled_hit ? frame_core_correct(warm_source)
@@ -894,6 +910,7 @@ int main(int argc, char** argv) {
         // P1m0 spans five frozen scenes, not P1h's one hardcoded scene.
         // Freeze per-target-state stable counts before measuring each case.
         const bool scenario_counted_target = p1l_stage_any || p1m0_coverage;
+        trace_p1m0("source warmup complete");
         bool target_warmup_correct = true;
         double last_target_warmup_maintenance_us = 0.0;
         std::uint32_t last_target_warmup_owners = 0U;
@@ -905,6 +922,10 @@ int main(int argc, char** argv) {
         if (target_state_warmup_frames != 0U) {
             runtime.set_motion_fraction(1.0F);
             for (std::uint32_t warm = 0; warm < target_state_warmup_frames; ++warm) {
+                if (p1m0_coverage)
+                    std::cerr << "[P1m0-stage] target warmup "
+                              << (warm + 1U) << "/" << target_state_warmup_frames
+                              << " begin" << std::endl;
                 const auto warm_frame = runtime.run_frame(true, current_request);
                 const auto warm_hits = p1l_sampled_hit
                     ? lane_n::I001N004HitDiagnostics{}
@@ -940,6 +961,9 @@ int main(int argc, char** argv) {
                 last_target_warmup_maintenance_us = maintenance;
                 last_target_warmup_owners = stats.visible_owners;
                 last_target_warmup_work = stats.work_items;
+                if (p1m0_coverage)
+                    std::cerr << "[P1m0-stage] target warmup "
+                              << (warm + 1U) << " complete" << std::endl;
             }
             if (last_target_warmup_maintenance_us != 0.0 ||
                 (scenario_counted_target
@@ -959,6 +983,7 @@ int main(int argc, char** argv) {
         }
         warmup_maintenance_json << ']';
 
+        trace_p1m0("all warmups complete");
         fs::create_directories(artifact_dir / "frames");
         std::vector<FrameEvidence> frames;
         frames.reserve(target_frames);
@@ -984,22 +1009,28 @@ int main(int argc, char** argv) {
                      three_arm_pattern[index] == '2'),
                 p1l_b1 && p1l_b1_pattern[index] == '1',
             };
+            trace_p1m0("canonical target render begin");
             lane_n::N006FrameResult result =
                 (index == 0U && topology)
                 ? runtime.run_topology_churn_frame(request)
                 : runtime.run_frame(true, request);
+            trace_p1m0("canonical target render complete");
             const bool hit_executed =
                 p1l_b1 ? index == 1U : (!p1l_sampled_hit || index == 0U);
+            trace_p1m0("target N004 sampled hit oracle begin");
             const auto hits = hit_executed
                 ? runtime.n004_hit_diagnostics()
                 : lane_n::I001N004HitDiagnostics{};
+            trace_p1m0("target N004 sampled hit oracle complete");
             auto readback = runtime.renderer_readback();
+            trace_p1m0("target HDR readback complete");
             const auto image_path = indexed_path("candidate", index);
             write_pfm(
                 artifact_dir / image_path,
                 readback.width,
                 readback.height,
                 rgb_from_rgba(readback));
+            trace_p1m0("target PFM written");
             bool b1_primary_exact = false;
             if (p1l_b1) {
                 const auto hit_bytes = runtime.p1l_b1_primary_hit_bytes();
@@ -1030,7 +1061,9 @@ int main(int argc, char** argv) {
             std::optional<lane_n::N006P1m0Coverage> consumer_profile;
             if (p1m0_coverage) {
                 // Postframe diagnostic, after accepted render and CPU oracle.
+                trace_p1m0("consumer GPU diagnostic begin");
                 consumer_profile = runtime.p1m0_consumer_coverage();
+                trace_p1m0("consumer GPU diagnostic complete");
             }
             frames.push_back({
                 result,
