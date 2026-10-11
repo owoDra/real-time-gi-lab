@@ -119,12 +119,16 @@ struct N006Runtime::State {
     double last_p1m0_pretrace_gpu_us{};
     B002Buffer p1m0_pretrace_counts{}, p1m0_pretrace_stats{};
     std::unique_ptr<I001ComputeStage> p1m0_pretrace_stage;
+    bool p1m1_canonical_extra_enabled{};
+    B002Buffer p1m1_stats{};
+    std::unique_ptr<I001ComputeStage> p1m1_extra_stage;
 };
 
 N006Runtime::N006Runtime(
     I001Options options, bool p1j_lean_hash, bool p1j_direct_compact,
     bool p1l_b1_enabled, bool p1l_b1c_axis_proxy,
-    bool p1m0_pretrace_enabled)
+    bool p1m0_pretrace_enabled,
+    bool p1m1_canonical_extra_enabled)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     if (p1j_direct_compact && !p1j_lean_hash) {
@@ -134,6 +138,7 @@ N006Runtime::N006Runtime(
     state_->p1l_b1_enabled = p1l_b1_enabled;
     state_->p1l_b1c_axis_proxy = p1l_b1c_axis_proxy;
     state_->p1m0_pretrace_enabled = p1m0_pretrace_enabled;
+    state_->p1m1_canonical_extra_enabled = p1m1_canonical_extra_enabled;
     if (p1l_b1c_axis_proxy && !p1l_b1_enabled)
         throw std::runtime_error("N006 P1l-B1c requires explicit B1 A/B pattern");
     auto& impl = *runtime_.impl_;
@@ -309,6 +314,27 @@ N006Runtime::N006Runtime(
             pretrace_bindings, 4U * sizeof(std::uint32_t));
     }
 
+    if (p1m1_canonical_extra_enabled) {
+        if (p1j_direct_compact || !p1j_lean_hash ||
+            impl.options.variant != I001Variant::LaneEFinalSoftware) {
+            throw std::runtime_error(
+                "P1m1a requires isolated software lean-copyback canonical path");
+        }
+        state_->p1m1_stats = impl.context.create_device_buffer(
+            6U * sizeof(std::uint32_t), VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+        const std::array<I001Binding, 4> m1_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->p1m1_stats},
+            {3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+        }};
+        state_->p1m1_extra_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR,
+                        "n006_p1m1_canonical_key_extra.spv"),
+            m1_bindings, 4U * sizeof(std::uint32_t));
+    }
+
     // P1j-B: duplicate ONLY the descriptor bindings whose shaders read work.
     // The original stages are retained for all current/historical frames.
     if (state_->direct_compact) {
@@ -370,6 +396,7 @@ N006Runtime::N006Runtime(
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
+    state_->p1m1_extra_stage.reset();
     state_->p1m0_pretrace_stage.reset();
     state_->p1l_b1_primary_stage.reset();
     state_->extra_stage.reset();
@@ -385,6 +412,7 @@ N006Runtime::~N006Runtime() {
     state_->direct_storage_update_stage.reset();
     state_->direct_resolve_stage.reset();
     state_->direct_weight_stage.reset();
+    runtime_.impl_->context.destroy_buffer(state_->p1m1_stats);
     runtime_.impl_->context.destroy_buffer(state_->p1m0_pretrace_stats);
     runtime_.impl_->context.destroy_buffer(state_->p1m0_pretrace_counts);
     runtime_.impl_->context.destroy_buffer(state_->canonical_indirect);
@@ -413,6 +441,16 @@ N006FrameResult N006Runtime::run_candidate_frame(
     state_->last_p1m0_pretrace_frame = false;
     state_->last_p1m0_pretrace_gpu_us = 0.0;
     auto& impl = *runtime_.impl_;
+    if (request.p1m1_canonical_key_intervention &&
+        (!state_->p1m1_canonical_extra_enabled ||
+         request.p1m1_selected_token == 0U ||
+         request.p1m1_selected_token == 0xffffffffU ||
+         request.extra_rays_per_probe != 4U ||
+         request.mode != N006ExtraMode::Current ||
+         !request.canonical_probe_pilot || request.direct_compact_work ||
+         request.p1m0_pretrace_coverage)) {
+        throw std::runtime_error("P1m1a invalid isolated canonical-key target request");
+    }
     if (request.p1l_b1_near_first &&
         (!state_->p1l_b1_enabled || !state_->p1l_b1_primary_stage)) {
         throw std::runtime_error("N006 P1l-B1 candidate was not enabled");
