@@ -60,10 +60,10 @@ class TestP1m3aQuantizationBoundary(unittest.TestCase):
             with self.subTest(shader=name):
                 body = (SHADERS / name).read_bytes()
                 self.assertTrue(
-                    body.startswith(b"#version 460\\n"),
+                    body.startswith(b"#version 460\n"),
                     f"{name}: GLSL #version must be byte 0 followed by a newline",
                 )
-                self.assertNotIn(b"\\\\n#version", body)
+                self.assertNotIn(b"\\n#version", body)
 
     def test_production_storage_is_intact_new_shader_is_Q8_only(self):
         orig = (ACCEPTED / "i001_storage_update.comp.glsl").read_text()
