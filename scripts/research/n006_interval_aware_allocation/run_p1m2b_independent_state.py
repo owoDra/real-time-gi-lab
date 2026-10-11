@@ -88,8 +88,11 @@ def select_frozen_keys(rows: list[dict[str, int]]) -> dict[str, Any]:
 
 
 def verify_frame(data: dict[str, Any], scenario: str, gpu: str,
-                 token: int, arm: str) -> dict[str, Any]:
-    if scenario not in SCENARIOS or arm not in ("control", *ARMS):
+                 token: int, arm: str, *,
+                 holdout: bool = False,
+                 require_reference: bool = False) -> dict[str, Any]:
+    allowed_scenarios = ("moving-rigid",) if holdout else SCENARIOS
+    if scenario not in allowed_scenarios or arm not in ("control", *ARMS):
         raise ValueError("P1m2b invalid predeclared scenario or arm")
     owners, cascades = SCENE_EXPECTATIONS[scenario]
     outputs = sum(cascades)
@@ -100,6 +103,9 @@ def verify_frame(data: dict[str, Any], scenario: str, gpu: str,
         data.get("variant") != VARIANT or data.get("scenario") != scenario or
         data.get("mode") != "current" or
         data.get("p1m2b_independent_state") is not True or
+        (holdout and (data.get("p1m3_fractional_storage") is not True or
+                      data.get("p1m3b_holdout_quality") is not True)) or
+        (require_reference and (not holdout or token != 0)) or
         data.get("p1m1_canonical_token") != token or
         data.get("p1m2_tetra_octant_directions") is not (
             intervention and arm == "p1m2a-tetra") or
@@ -112,7 +118,8 @@ def verify_frame(data: dict[str, Any], scenario: str, gpu: str,
         data.get("target_state_warmup", {}).get("last_visible_owners") != owners or
         data.get("device", {}).get("name") != gpu or
         data.get("source", {}).get("internal_correctness") is not True or
-        data.get("reference_generation") != "skipped"):
+        data.get("reference_generation") !=
+            ("rendered" if require_reference else "skipped")):
         raise ValueError("P1m2b scene/device/state/branch arm contract drift")
     frames = data.get("frames")
     if not isinstance(frames, list) or len(frames) != 1:
