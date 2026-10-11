@@ -1,3 +1,30 @@
+# 2026-10-11 LATEST — M0 5/5 accepted; P1m0b pretrace cost proof implementation added (awaiting real GPU)
+
+**User uploaded** `n006-p1m0-consumer-coverage-summary(1).json`, raw upload SHA `f355b7202e52127b044120ac8406e5dba4626dd88f4cf29a78f16abbc2c66cec`, clean executed HEAD `8a5cb251384ba14deb6c158057583fcd8214e335`, AMD Radeon 8060S RADV, exact Sponza SHA. Protocol `n006-p1m0-consumer-coverage-five-scenes-v1`, `status=complete`, **5/5 cases PASS**, failures none. M0 is DIAGNOSTIC ONLY and ran GPU consumer counting *after* the normal frame; accepted image and hit byte parity, N004 hit sampled, owner/cardinality count closure, exact per-cascade zero/positive stats, no invalid/overflow. Frozen [research result 030](./results/030-p1m0-five-scene-coverage-pass.md).
+
+| scene | canonical keys | matched/consumed keys | matched pixel-cascade lookups | cascade-3 matches |
+|---|---:|---:|---:|---:|
+| static | 3008 | 100 | 11400 | 9626 |
+| camera-motion | 3220 | 42 | 12437 | 11354 |
+| light-motion | 3008 | 100 | 11400 | 9626 |
+| moving-rigid | 3104 | 38 | 11032 | 10353 |
+| deforming-control | 3029 | 100 | 11403 | 9628 |
+
+**Interpretation:** only 1.22–3.32% of canonical key set is referenced by valid screen-pixel composite in one frame; 84.4–93.8% of *successful lookup attempts* are cascade-3. **Not** proof of image error/extra-ray utility, storage success, global/temporal key usefulness or a throughput speedup. Prospective M1 calibration-only manifest complete **60 keys** = 5×4×(zero,min-positive,max-positive), no missing strata; no signed gain labels.
+
+**Next independently required feasibility test P1m0b**: pretrace cost/placement and frame parity. Prospective protocol [022](./experiments/022-p1m0b-presecondary-coverage-cost.md) locks opt-in same M0 GLSL after *primary visibility + canonical hash/compact*, before secondary ray conversion/tracing. New request/CLI `--p1m0-pretrace-coverage`, constructor-only scratch allocation, full GPU slot byte/stat comparison against independent after-frame M0 pass, +131104 requested scratch bytes, disjoint existing Vulkan query indices20/21 for clear+count+barriers (pool24 queries), original 0..19 retained. In-renderer measured `ray_prepare_gpu`/`complete_gi_gpu` now INCLUDES diagnostic and must not be called prior uninstrumented baseline. Cost preregistered pass iff `C <= min(0.1*instrumented complete_gi,0.5*instrumented traversal)` **for all five**; failed cost persists without post-hoc relaxation. Frozen M0 per-key SHA/matched count checked per scene. No extra rays/quality labels.
+
+**Ready one-batch user command** (do NOT need to rerun B1a/B1c/C0 or original postframe M0):
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m0b_pretrace.sh
+```
+
+Outputs `out/research/n006-interval-aware-allocation/p1m0b-pretrace-coverage-five-scenes/<UTC>/n006-p1m0-consumer-coverage-summary.json`. This runs build, full N006 tests, then 5 SW scene pretrace GPU passes with independent postframe parity/accepted HDR SHA/oracle. **No local build or GPU verification yet** of new code. If failure, inspect streamed last `[P1m0-stage]`/`[P1m0-GPU]` log. If five valid and cost gate PASS, proceed to new N006-only *canonical key +4 rays* causal intervention without reusing old owner-target stage, independent converged HDR reference, signed global RGB RMS gains, holdout; **do not declare P1 or P2 achieved**. If cost gate failed, label P1m0b rejection, design a prospectively lower-cost way to obtain the signal before attempting scheduler P2. No PR, no GitHub Actions, original accepted N001/N003/E003 untouched.
+
+---
+
 # 2026-10-11 latest second rerun — M0 static GPU 600s timeout; root candidate repaired, trace streamed
 
 User-uploaded `n006-p1m0-consumer-coverage-summary.json` from clean HEAD `bd4aae067cb51a6729d06ee885c884bf63c46ba5`:
