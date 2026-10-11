@@ -393,6 +393,44 @@ void write_p1l_b1b_profile(
     out << "}}";
 }
 
+
+void write_p1m0_coverage(
+    std::ostream& out,
+    const lane_n::N006P1m0Coverage& data) {
+    out << "{\"diagnostic_only\":true,\"hash_capacity\":" << data.hash_capacity
+        << ",\"valid_primary_pixels\":" << data.valid_primary_pixels
+        << ",\"lookup_attempts\":" << data.lookup_attempts
+        << ",\"matched_lookups\":" << data.matched_lookups
+        << ",\"absent_keys\":" << data.absent_keys
+        << ",\"invalid_keys\":" << data.invalid_keys
+        << ",\"probe_exhaustions\":" << data.probe_exhaustions
+        << ",\"uint32_overflows\":" << data.uint32_overflows
+        << ",\"invalid_launch\":" << data.invalid_launch
+        << ",\"canonical_keys\":" << data.canonical_keys
+        << ",\"keys_with_consumers\":" << data.keys_with_consumers
+        << ",\"max_consumer_pixels\":" << data.max_consumer_pixels
+        << ",\"consumer_lookups_by_cascade\":[";
+    for (std::size_t i = 0; i < 4U; ++i) {
+        if (i) out << ',';
+        out << data.consumer_lookups_by_cascade[i];
+    }
+    out << "],\"keys_with_consumers_by_cascade\":[";
+    for (std::size_t i = 0; i < 4U; ++i) {
+        if (i) out << ',';
+        out << data.keys_with_consumers_by_cascade[i];
+    }
+    out << "],\"key_rows\":[";
+    for (std::size_t i = 0; i < data.key_rows.size(); ++i) {
+        const auto& row = data.key_rows[i];
+        if (i) out << ',';
+        out << "{\"token\":" << row.token
+            << ",\"consumer_pixels\":" << row.consumer_pixels
+            << ",\"producer_owner_outputs\":" << row.producer_owner_outputs
+            << '}';
+    }
+    out << "]}";
+}
+
 struct FrameEvidence {
     lane_n::N006FrameResult result;
     lane_n::I001N004HitDiagnostics hits;
@@ -406,6 +444,7 @@ struct FrameEvidence {
     std::optional<lane_n::N006P1lB1bProfile> p1l_b1b_profile;
     int p1l_b1_arm{-1};
     bool p1l_b1_primary_exact{};
+    std::optional<lane_n::N006P1m0Coverage> p1m0_coverage;
 };
 
 [[nodiscard]] bool frame_core_correct(
@@ -452,6 +491,7 @@ int main(int argc, char** argv) {
     bool p1l_b0_counts = false;
     bool p1l_b1b_counts = false;
     bool p1l_b1c_axis_proxy = false;
+    bool p1m0_coverage = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -498,6 +538,7 @@ int main(int argc, char** argv) {
         else if (arg == "--p1l-b0-counts") p1l_b0_counts = true;
         else if (arg == "--p1l-b1b-counts") p1l_b1b_counts = true;
         else if (arg == "--p1l-b1c-axis-proxy") p1l_b1c_axis_proxy = true;
+        else if (arg == "--p1m0-consumer-coverage") p1m0_coverage = true;
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -738,6 +779,27 @@ int main(int argc, char** argv) {
                     "32 source/8 target warmups, lean-copyback, no reference");
             }
         }
+        if (p1m0_coverage) {
+            const bool supported_scenario =
+                scenario_name == "static" || scenario_name == "camera-motion" ||
+                scenario_name == "light-motion" || scenario_name == "moving-rigid" ||
+                scenario_name == "deforming-control";
+            if (variant_name != "lane-e-final-software" || !supported_scenario ||
+                !canonical_lean_hash || canonical_zero_copy || p1l_stage_any ||
+                canonical_probe_pilot || canonical_matrix_case ||
+                !canonical_frame_pattern.empty() || !three_arm_pattern.empty() ||
+                topology || !skip_reference || capture_gpu_unique_hash ||
+                capture_probe_equivalence || capture_probe_multiplicity ||
+                capture_visible_tiles || !hash_frame_pattern.empty() ||
+                mode != lane_n::N006ExtraMode::Current ||
+                source_warmup_frames != 32U ||
+                target_state_warmup_frames != 8U || target_frames != 1U ||
+                fractions[0] != 1.0F || budgets[0] != 0U) {
+                throw std::runtime_error(
+                    "P1m0 requires software, canonical lean hash, 32+8 warmups, "
+                    "one current target, no reference/other probes");
+            }
+        }
         if (p1l_b1) {
             const bool supported_scenario =
                 scenario_name == "static" || scenario_name == "camera-motion" ||
@@ -906,7 +968,7 @@ int main(int argc, char** argv) {
                      canonical_frame_pattern[index] == '1') ||
                     (!three_arm_pattern.empty() &&
                      three_arm_pattern[index] != '0') ||
-                    p1l_stage_any,
+                    p1l_stage_any || p1m0_coverage,
                 (canonical_probe_pilot && canonical_zero_copy && index == 1U) ||
                     (!three_arm_pattern.empty() &&
                      three_arm_pattern[index] == '2'),
@@ -955,6 +1017,11 @@ int main(int argc, char** argv) {
                 // image readback; no diagnostic work enters accepted GPU timers.
                 b0_profile = runtime.p1l_b0_work_counts();
             }
+            std::optional<lane_n::N006P1m0Coverage> consumer_profile;
+            if (p1m0_coverage) {
+                // Postframe diagnostic, after accepted render and CPU oracle.
+                consumer_profile = runtime.p1m0_consumer_coverage();
+            }
             frames.push_back({
                 result,
                 hits,
@@ -969,6 +1036,7 @@ int main(int argc, char** argv) {
                 std::move(b1b_profile),
                 p1l_b1 ? int(p1l_b1_pattern[index] - '0') : -1,
                 b1_primary_exact,
+                std::move(consumer_profile),
             });
         }
 
@@ -1117,6 +1185,7 @@ int main(int argc, char** argv) {
             << (p1l_b1b_counts ? "true" : "false") << ",\n"
             << "  \"p1l_b1_pattern\":\"" << p1l_b1_pattern << "\",\n"
             << "  \"p1l_b1c_axis_proxy\":" << (p1l_b1c_axis_proxy ? "true" : "false") << ",\n"
+            << "  \"p1m0_consumer_coverage\":" << (p1m0_coverage ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
@@ -1174,6 +1243,12 @@ int main(int argc, char** argv) {
             out << ",\"p1l_b1b_counts\":";
             if (frame.p1l_b1b_profile) {
                 write_p1l_b1b_profile(out, *frame.p1l_b1b_profile);
+            } else {
+                out << "null";
+            }
+            out << ",\"p1m0_consumer_coverage\":";
+            if (frame.p1m0_coverage) {
+                write_p1m0_coverage(out, *frame.p1m0_coverage);
             } else {
                 out << "null";
             }
