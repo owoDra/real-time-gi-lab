@@ -76,6 +76,29 @@ class TestCanonicalM1Mechanism(unittest.TestCase):
         self.assertIn('"canonical_m1"', main.replace('\\\"', '"'))
         self.assertIn("n006_p1m1_canonical_key_extra.spv", build)
 
+    def test_m1_validates_immutable_eight_ray_prefix_plus_exact_tail(self):
+        runtime = RUNTIME.read_text()
+        self.assertIn(
+            "const std::uint32_t expected_tail =\n"
+            "            request.p1m1_canonical_key_intervention ? 4U : 0U;",
+            runtime)
+        self.assertIn(
+            "result.stats.outputs * impl.settings.rays_per_probe +\n"
+            "            expected_tail", runtime)
+        self.assertIn(
+            "extra.base_traced_rays ==\n"
+            "                result.stats.outputs * impl.settings.rays_per_probe",
+            runtime)
+        self.assertIn("extra.extra_work_items == expected_tail", runtime)
+        self.assertIn("unique.size() == result.stats.outputs", runtime)
+        self.assertIn(
+            "extra.base_prefix_correct && extra.extra_work_correct", runtime)
+        self.assertIn(
+            "if (!state_->last_canonical_frame || !impl.have_last ||", runtime)
+        self.assertEqual(3008 * 8, 24064)
+        self.assertEqual(3008 * 8 + 4, 24068)
+        self.assertNotEqual(3008 * 8 + 4, 3008 * 8)
+
     def test_image_delta_detects_pixel_and_channels_without_signed_gain(self):
         zeros = struct.pack("<f", 0.0) * (320 * 180 * 3)
         changed = bytearray(zeros)
