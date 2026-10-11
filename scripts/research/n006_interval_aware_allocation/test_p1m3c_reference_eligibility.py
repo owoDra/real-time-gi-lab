@@ -58,6 +58,16 @@ class TestP1m3cReferenceEligibility(unittest.TestCase):
         self.assertLess(text.index('selection = select_prospective_holdout'),
                         text.index('for row in selection["selected"]:'))
 
+    def test_reused_gpu_runner_reports_actual_deforming_scenario(self):
+        # M3c accepted JSON exposed a metadata-only bug: the shared M3b
+        # helper read the correct deforming GPU scene but hardcoded the
+        # per-control/case label to moving-rigid. Preserve immutable evidence.
+        src = (SRC / "run_p1m3b_moving_rigid_signed_quality.py").read_text()
+        self.assertIn('"--scenario", scenario, "--variant", VARIANT', src)
+        self.assertIn('evidence, scenario, gpu, token,', src)
+        self.assertIn('"label": label, "scenario": scenario, "selected_token": token', src)
+        self.assertNotIn('"label": label, "scenario": SCENARIO, "selected_token": token', src)
+
     def test_separate_opt_in_mode_and_old_scenarios_unchanged(self):
         main = CPP.read_text()
         for check in (
