@@ -211,8 +211,10 @@ def main() -> int:
             report["status"] = "quality-not-detectable-stop"
         else:
             report["status"] = "quality-signal-unvalidated"
-        report["signed_quality_gain_established"] = bool(
+        report["reference_noise_exceeding_signal_seen"] = bool(
             report["qualifying_quality_cells"])
+        # A single same-geometry trajectory cannot establish global quality gain.
+        report["signed_quality_gain_established"] = False
         report["next_gate"] = (
             "Independent other geometry and repeated sign/ROI validation; "
             "P1 predictor/P2 scheduler NO GO."
