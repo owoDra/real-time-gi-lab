@@ -192,6 +192,30 @@ struct N006P1lB1bProfile {
 
 
 
+// P1m0: post-render, read-only key-lookup diagnostic. Not predictor evidence.
+struct N006P1m0KeyRow {
+    std::uint32_t token{};
+    std::uint32_t consumer_pixels{};
+    std::uint32_t producer_owner_outputs{};
+};
+struct N006P1m0Coverage {
+    std::uint32_t hash_capacity{};
+    std::uint32_t valid_primary_pixels{};
+    std::uint32_t lookup_attempts{};
+    std::uint32_t matched_lookups{};
+    std::uint32_t absent_keys{};
+    std::uint32_t invalid_keys{};
+    std::uint32_t probe_exhaustions{};
+    std::uint32_t uint32_overflows{};
+    std::uint32_t invalid_launch{};
+    std::uint32_t canonical_keys{};
+    std::uint32_t keys_with_consumers{};
+    std::uint32_t max_consumer_pixels{};
+    std::array<std::uint64_t, 4> consumer_lookups_by_cascade{};
+    std::array<std::uint32_t, 4> keys_with_consumers_by_cascade{};
+    std::vector<N006P1m0KeyRow> key_rows; // sorted by token, includes zeros
+};
+
 class N006Runtime {
 public:
     explicit N006Runtime(I001Options options, bool p1j_lean_hash = false,
@@ -218,6 +242,9 @@ public:
     // Separate compute-only command after an uninstrumented frame has finished
     // and its PFM/correctness evidence has been captured. Software backend only.
     [[nodiscard]] N006P1lB0Profile p1l_b0_work_counts();
+    // Requires the last successful frame to use canonical probe mode; records
+    // all consumer counts after the accepted image and GPU timestamps.
+    [[nodiscard]] N006P1m0Coverage p1m0_consumer_coverage();
     // B1b runs both independent primary count shaders AFTER a measured frame.
     // Only count outputs, not instrumented GPU shader time.
     [[nodiscard]] N006P1lB1bProfile p1l_b1b_work_counts();

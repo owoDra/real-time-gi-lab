@@ -110,6 +110,7 @@ struct N006Runtime::State {
     std::unique_ptr<I001ComputeStage> direct_weight_stage;
     std::uint32_t hash_capacity{};
     bool direct_compact{};
+    bool last_canonical_frame{}; // invalidated before each frame
 };
 
 N006Runtime::N006Runtime(
@@ -367,6 +368,7 @@ N006FrameResult N006Runtime::run_frame(
 N006FrameResult N006Runtime::run_candidate_frame(
     bool target_state,
     N006ExtraRequest request) {
+    state_->last_canonical_frame = false;
     auto& impl = *runtime_.impl_;
     if (request.p1l_b1_near_first &&
         (!state_->p1l_b1_enabled || !state_->p1l_b1_primary_stage)) {
@@ -1216,6 +1218,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
         extra.influence_trace = trace;
     }
 
+    state_->last_canonical_frame =
+        request.canonical_probe_pilot && extra.canonical.executed &&
+        extra.base_prefix_correct && extra.extra_work_correct;
     return {result, extra};
 }
 
@@ -1886,6 +1891,161 @@ N006P1lB1bProfile N006Runtime::p1l_b1b_work_counts() {
     }
     cleanup();
     return result;
+}
+
+N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
+    auto& impl = *runtime_.impl_;
+    if (!state_->last_canonical_frame || !impl.have_last ||
+        impl.options.variant != I001Variant::LaneEFinalSoftware ||
+        !lane_e_final_supported_scenario(impl.options.scenario) ||
+        state_->hash_capacity != 32768U ||
+        impl.params.counts[1] != 320U || impl.params.counts[2] != 180U ||
+        impl.settings.cascade_count != 4U || impl.settings.rays_per_probe != 8U) {
+        throw std::runtime_error(
+            "P1m0 requires finished Lane-E-final software canonical lean-hash frame");
+    }
+    const std::uint32_t capacity = state_->hash_capacity;
+    const std::size_t size = std::size_t(capacity);
+    const std::vector<std::uint32_t> zeros(size, 0U);
+    const std::array<std::uint32_t, 8> empty_stats{};
+    B002Buffer consumer_counts{}, consumer_stats{};
+    std::unique_ptr<I001ComputeStage> coverage;
+    const auto cleanup = [&]() noexcept {
+        coverage.reset();
+        impl.context.destroy_buffer(consumer_stats);
+        impl.context.destroy_buffer(consumer_counts);
+    };
+    try {
+        constexpr auto storage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        consumer_counts = impl.context.upload_device_buffer(
+            zeros.data(), VkDeviceSize(zeros.size() * sizeof(std::uint32_t)),
+            storage);
+        consumer_stats = impl.context.upload_device_buffer(
+            empty_stats.data(), VkDeviceSize(sizeof(empty_stats)), storage);
+        const std::array<I001Binding, 5> bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.primary_hits},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &consumer_counts},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &consumer_stats},
+            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+        }};
+        coverage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR,
+                        "n006_p1m0_consumer_coverage.spv"),
+            bindings, 4U * sizeof(std::uint32_t));
+        impl.context.vk().resetFences(1, &impl.fence);
+        impl.context.vk().resetCommandPool(impl.command_pool, 0);
+        VkCommandBuffer command{};
+        auto allocate = detail::make_vk_info<VkCommandBufferAllocateInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO);
+        allocate.commandPool = impl.command_pool;
+        allocate.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+        allocate.commandBufferCount = 1;
+        if (impl.context.vk().allocateCommandBuffers(&allocate, &command)
+            != VK_SUCCESS) {
+            throw std::runtime_error("P1m0 command allocation failed");
+        }
+        auto begin = detail::make_vk_info<VkCommandBufferBeginInfo>(
+            VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
+        begin.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+        if (impl.context.vk().beginCommandBuffer(command, &begin) != VK_SUCCESS)
+            throw std::runtime_error("P1m0 command begin failed");
+        const std::array<std::uint32_t, 4> push{{
+            capacity - 1U, 128U, capacity, capacity,
+        }};
+        coverage->record(command, (impl.params.counts[1] + 7U) / 8U,
+                         (impl.params.counts[2] + 7U) / 8U, 1U,
+                         push.data(), sizeof(push));
+        i001_compute_barrier(impl.context, command);
+        if (impl.context.vk().endCommandBuffer(command) != VK_SUCCESS)
+            throw std::runtime_error("P1m0 command end failed");
+        auto submit = detail::make_vk_info<VkSubmitInfo>(
+            VK_STRUCTURE_TYPE_SUBMIT_INFO);
+        submit.commandBufferCount = 1;
+        submit.pCommandBuffers = &command;
+        if (impl.context.vk().queueSubmit(
+                impl.context.queue(), 1U, &submit, impl.fence) != VK_SUCCESS ||
+            impl.context.vk().waitForFences(
+                1U, &impl.fence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) {
+            throw std::runtime_error("P1m0 GPU submit/fence failed");
+        }
+
+        std::array<std::uint32_t, 8> raw_stats{};
+        std::vector<std::uint32_t> raw_keys(size), raw_counts(size),
+            raw_multiplicity(size);
+        impl.context.download_device_buffer(
+            consumer_stats, raw_stats.data(), VkDeviceSize(sizeof(raw_stats)));
+        impl.context.download_device_buffer(
+            consumer_counts, raw_counts.data(), VkDeviceSize(size * 4U));
+        impl.context.download_device_buffer(
+            state_->hash_keys, raw_keys.data(), VkDeviceSize(size * 4U));
+        impl.context.download_device_buffer(
+            state_->canonical_multiplicity, raw_multiplicity.data(),
+            VkDeviceSize(size * 4U));
+        N006P1m0Coverage out{};
+        out.hash_capacity = capacity;
+        out.valid_primary_pixels = raw_stats[0];
+        out.lookup_attempts = raw_stats[1];
+        out.matched_lookups = raw_stats[2];
+        out.absent_keys = raw_stats[3];
+        out.invalid_keys = raw_stats[4];
+        out.probe_exhaustions = raw_stats[5];
+        out.uint32_overflows = raw_stats[6];
+        out.invalid_launch = raw_stats[7];
+        std::uint64_t count_sum = 0U;
+        std::uint64_t owner_sum = 0U;
+        for (std::size_t slot = 0U; slot < size; ++slot) {
+            const auto token = raw_keys[slot];
+            const auto consumers = raw_counts[slot];
+            const auto multiplicity = raw_multiplicity[slot];
+            if (token == 0U) {
+                if (consumers != 0U || multiplicity != 0U)
+                    throw std::runtime_error("P1m0 consumer output at empty key");
+                continue;
+            }
+            const auto raw_key = token - 1U;
+            const auto cascade = raw_key >> 30U;
+            if (cascade >= 4U || multiplicity == 0U) {
+                throw std::runtime_error("P1m0 malformed canonical key/owner count");
+            }
+            ++out.canonical_keys;
+            count_sum += consumers;
+            owner_sum += multiplicity;
+            out.key_rows.push_back({token, consumers, multiplicity});
+            if (consumers != 0U) {
+                ++out.keys_with_consumers;
+                ++out.keys_with_consumers_by_cascade[cascade];
+                out.consumer_lookups_by_cascade[cascade] += consumers;
+                out.max_consumer_pixels = std::max(out.max_consumer_pixels, consumers);
+            }
+        }
+        std::sort(out.key_rows.begin(), out.key_rows.end(),
+            [](const auto& a, const auto& b) { return a.token < b.token; });
+        for (std::size_t i = 1U; i < out.key_rows.size(); ++i) {
+            if (out.key_rows[i-1U].token == out.key_rows[i].token)
+                throw std::runtime_error("P1m0 duplicated canonical key");
+        }
+        if (out.invalid_launch || out.uint32_overflows || out.probe_exhaustions ||
+            out.valid_primary_pixels > 320U * 180U ||
+            out.lookup_attempts != 4U * out.valid_primary_pixels ||
+            std::uint64_t(out.lookup_attempts) !=
+                std::uint64_t(out.matched_lookups) + out.absent_keys +
+                out.invalid_keys + out.probe_exhaustions ||
+            count_sum != out.matched_lookups ||
+            out.canonical_keys != impl.last.stats.outputs ||
+            out.canonical_keys == 0U ||
+            owner_sum < out.canonical_keys) {
+            throw std::runtime_error("P1m0 coverage accounting/overflow mismatch");
+        }
+        // All diagnostics are read-only with respect to existing renderer
+        // buffers, but their GPU execution occurs *after* accepted timestamps.
+        cleanup();
+        return out;
+    } catch (...) {
+        cleanup();
+        throw;
+    }
 }
 
 N006P1lB0Profile N006Runtime::p1l_b0_work_counts() {
