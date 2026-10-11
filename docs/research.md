@@ -8,6 +8,10 @@ A win means defensible **same-quality GPU-time and/or memory superiority**, or *
 
 **Split Radiance Cascades, StrataBrick, sparse hash, HWRT, software BVH, temporal reuse and path guiding are replaceable techniques**, not the research objective. Previously accepted components remain the incumbent only while measurements justify them.
 
+## Research execution model
+
+The research program was developed primarily using **ChatGPT and OpenAI Codex CLI in a near-autonomous, iterative workflow**, while a human guided objectives, executed/observed the GPU experiments, and approved evidence-based conclusions. For attribution, validation boundaries, and limitations, see [AI-driven research and human oversight](ai-research-workflow.md). Historical experimental outputs—not AI claims—remain the basis for results.
+
 ## Boundaries and fairness
 
 - Validate the actual **image-producing Renderer**, including allocation, tracing, invalidation, synchronization, dynamic updates and compositing, not isolated kernel time alone.
