@@ -1,3 +1,7 @@
+### Historical C0/B1c original audit attachments reconciled (2026-10-11)
+
+The original B1c shader static-instruction audit, E003 static shader provenance audit and synthetic float32 divide/reciprocal risk audit were received after the M2a source was prepared. Full original-file SHA256 and metadata are in [result 036](./results/036-p1l-archived-static-audit-original-json-provenance.md). They confirm historical reports without changing conclusions: B1c GPU REJECT, C0 provenance STATIC PASS only, and M2a GPU execution still pending.
+
 ### 2026-10-11 P1m2a initial build PASSED; old unit assertion repaired
 
 New M2a shader and N006 binary built successfully. The test run stopped **before GPU pilot** after 226/227 tests passed and one stale source test `test_placement_parity_and_buffer_lifetime` searched for direct `state_->p1m1_extra_stage->record(`. P1m2a now branches between M1a and M2a stages at the same pre-secondary GPU boundary; updated the static assertion to cover both arms with a whitespace-tolerant regex and retained ordering checks. Runtime/shaders untouched. Re-run `bash scripts/research/n006_interval_aware_allocation/run_n006_p1m2a_tetra_octant.sh` on latest HEAD; GPU result remains pending.
