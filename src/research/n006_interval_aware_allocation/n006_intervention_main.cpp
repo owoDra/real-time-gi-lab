@@ -298,6 +298,21 @@ void write_extra(
         }
         out << ']';
     }
+    const auto& m1 = e.canonical_m1;
+    out << "},\"canonical_m1\":{\"executed\":"
+        << (m1.executed ? "true" : "false");
+    if (m1.executed) {
+        out << ",\"selected_token\":" << m1.selected_token
+            << ",\"output_id\":" << m1.output_id
+            << ",\"base_ray_count\":" << m1.base_ray_count
+            << ",\"extra_ray_count\":" << m1.extra_ray_count
+            << ",\"base_radiance_sum16\":" << m1.base_radiance_sum16
+            << ",\"extra_radiance_sum16\":" << m1.extra_radiance_sum16
+            << ",\"baseline_mean16\":" << m1.baseline_mean16
+            << ",\"candidate_mean16\":" << m1.candidate_mean16
+            << ",\"merged_sample_count\":" << m1.merged_sample_count
+            << ",\"extra_injection_gpu_us\":" << m1.extra_injection_gpu_us;
+    }
     out << "}}";
 }
 
@@ -498,6 +513,7 @@ int main(int argc, char** argv) {
     bool p1l_b1c_axis_proxy = false;
     bool p1m0_coverage = false;
     bool p1m0_pretrace_coverage = false;
+    std::uint32_t p1m1_canonical_token = 0U;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -546,6 +562,9 @@ int main(int argc, char** argv) {
         else if (arg == "--p1l-b1c-axis-proxy") p1l_b1c_axis_proxy = true;
         else if (arg == "--p1m0-consumer-coverage") p1m0_coverage = true;
         else if (arg == "--p1m0-pretrace-coverage") p1m0_pretrace_coverage = true;
+        else if (arg == "--p1m1-canonical-token" && index + 1 < argc) {
+            p1m1_canonical_token = static_cast<std::uint32_t>(std::stoul(argv[++index]));
+        }
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -577,6 +596,30 @@ int main(int argc, char** argv) {
         if (artifact_dir.empty() || scene.empty() || source_warmup_frames == 0U ||
             target_frames == 0U) {
             throw std::runtime_error("invalid N006 candidate arguments");
+        }
+        // M1a first prospective pilot: only three unchanged calibration
+        // tokens from static cascade-3; no post-hoc scene/token tuning.
+        if (p1m1_canonical_token != 0U) {
+            const bool accepted_token =
+                p1m1_canonical_token == 3221225474U ||
+                p1m1_canonical_token == 3223322625U ||
+                p1m1_canonical_token == 3223324678U;
+            if (!accepted_token || !p1m0_coverage || p1m0_pretrace_coverage ||
+                scenario_name != "static" ||
+                variant_name != "lane-e-final-software" ||
+                !canonical_lean_hash || canonical_zero_copy ||
+                !skip_reference || topology ||
+                mode_text != "current" || source_warmup_frames != 32U ||
+                target_state_warmup_frames != 8U || target_frames != 1U ||
+                capture_visible_tiles || capture_probe_multiplicity ||
+                capture_probe_equivalence || capture_gpu_unique_hash ||
+                !hash_frame_pattern.empty() || !three_arm_pattern.empty() ||
+                !canonical_frame_pattern.empty() || canonical_probe_pilot) {
+                throw std::runtime_error(
+                    "P1m1a requires frozen static C3 zero/low/high token, "
+                    "N006 SW lean-copyback, 32+8 warmups, one target, "
+                    "postframe M0 parity and zero reference");
+            }
         }
         if (p1m0_pretrace_coverage && !p1m0_coverage) {
             throw std::runtime_error(
@@ -884,7 +927,8 @@ int main(int argc, char** argv) {
         trace_p1m0("runtime construction begin");
         lane_n::N006Runtime runtime(
             options, canonical_lean_hash, canonical_zero_copy, p1l_b1,
-            p1l_b1c_axis_proxy, p1m0_pretrace_coverage);
+            p1l_b1c_axis_proxy, p1m0_pretrace_coverage,
+            p1m1_canonical_token != 0U);
         trace_p1m0("runtime construction complete");
 
         const lane_n::N006ExtraRequest current_request{};
@@ -1020,6 +1064,8 @@ int main(int argc, char** argv) {
                      three_arm_pattern[index] == '2'),
                 p1l_b1 && p1l_b1_pattern[index] == '1',
                 p1m0_pretrace_coverage && index == 0U,
+                p1m1_canonical_token != 0U && index == 0U,
+                p1m1_canonical_token,
             };
             trace_p1m0("canonical target render begin");
             lane_n::N006FrameResult result =
@@ -1242,6 +1288,7 @@ int main(int argc, char** argv) {
             << "  \"p1l_b1c_axis_proxy\":" << (p1l_b1c_axis_proxy ? "true" : "false") << ",\n"
             << "  \"p1m0_consumer_coverage\":" << (p1m0_coverage ? "true" : "false") << ",\n"
             << "  \"p1m0_pretrace_coverage\":" << (p1m0_pretrace_coverage ? "true" : "false") << ",\n"
+            << "  \"p1m1_canonical_token\":" << p1m1_canonical_token << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
