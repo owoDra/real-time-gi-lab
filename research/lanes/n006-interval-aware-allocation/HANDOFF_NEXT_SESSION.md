@@ -1,3 +1,26 @@
+# 2026-10-11 latest — 210 N006 tests PASS, E003 C0 static MATCHED, M0 static GPU exit 1 FIXED IN SOURCE (needs rerun)
+
+User supplied stdout from one local `run_n006_next_verified.sh` execution:
+- `Ran 210 tests in 0.417s OK`: unit tests at prior HEAD passed.
+- B1c rejected variants' static compiler histogram: B1a +1136 SPV bytes/+61 instructions/+18 OpLoad/+1 conditional branch; B1c +1100 bytes/+74 instructions/+16 OpLoad/+3 branches, versus original. **No candidate GPU speedup.**
+- CPU float32 direct-division/reciprocal numerical risk: 51,445/200,000 different f32 entries, constructed boundary difference. Synthetic only.
+- E003 C0 `status=ready_static_only`, `provenance=MATCHED`; both original E003 static rebuild and active runtime-named binary SHA matched. Original **36,072 SPV bytes / 7 static OpFDiv**, B0 instrumentation **38,404 bytes / 7 OpFDiv**. C0 active binary provenance blocker CLOSED for this local environment; **GPU hotpath gain unproven**, no E003 C1 intervention warranted yet. Record: [028](./results/028-p1l-c0-static-spv-provenance-pass.md).
+- P1m0 first case `[P1m0] static (1/5)` renderer **exit 1**, user couldn't locate `stderr.log`. Existing runner had actually saved it under `out/research/n006-interval-aware-allocation/p1m0-consumer-coverage-five-scenes/<UTC>/static/stderr.log`, but printed just basename and no child output. No GPU M0 result can be accepted from this failed run.
+- Deterministic C++ source bug identified: P1m0 was admitted in CLI gate but **target warmup had the P1h deforming-only 4172-owner hardcoded condition**, whereas static has accepted 4167 owners. C++ fixed both dynamic count and stabilization checks by `const bool scenario_counted_target = p1l_stage_any || p1m0_coverage;`. This preserves original P1h fallback and uses existing P1l per-scene dynamic contract for M0. New Python static regression test added. Runner now prints absolute timestamped evidence root/stdout/stderr paths and last 6,000 characters of subprocess error inline, persists failure summary with absolute paths. **Rerun pending; precise prior fault location not proven without stderr.**
+
+Already prepared parent lane P1m1: deterministic zero/min-positive/max-positive key selection per cascade×5 scenes (60 expected) in M0 JSON, **calibration only**; no signed reference-quality predictions or P2 scheduler yet.
+
+Single user rerun; no manual file edits, do not repeat already-rejected GPU campaigns:
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_next_verified.sh
+```
+
+If still failed, new script prints exact `stderr` location and renderer's terminal error directly. If 5/5 succeeds, upload `.../p1m0-consumer-coverage-five-scenes/*/n006-p1m0-consumer-coverage-summary.json` (contains calibration-only selector, PFM SHA and provenance). Reuse C0/B1c results; no repeated post-hoc optimization. Next research conditional: cost the pre-secondary consumer pass and test canonical-key +4 marginal quality versus independent reference before P2. The child failure is *not* N006 closure. GitHub only branch direct push, no PR/Actions.
+
+---
+
 # 2026-10-11 follow-up — local build PASS, test harness repair + prospective M1 calibration strata
 
 **Read before older handoff notes.** User-provided N006 full batch log stopped after compilation: C++ link PASS, 206 Python unit tests ran with exactly **3 failures**, all in `test_p1m0_consumer_coverage.py`. Failing assertions:
