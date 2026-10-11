@@ -1386,6 +1386,8 @@ int main(int argc, char** argv) {
             << (p1m2b_independent_state ? "true" : "false") << ",\n"
             << "  \"p1m3_fractional_storage\":"
             << (p1m3_fractional_storage ? "true" : "false") << ",\n"
+            << "  \"p1m3b_holdout_quality\":"
+            << (p1m3b_holdout_quality ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
@@ -1431,7 +1433,7 @@ int main(int argc, char** argv) {
                 << ",\"image\":\"" << frame.image_path << "\",\"reference\":";
             if (skip_reference) out << "null";
             else write_reference(out, references[index]);
-            out << ",\\\"reference_independent\\\":";
+            out << ",\"reference_independent\":";
             if (skip_reference || !p1m3b_holdout_quality) out << "null";
             else write_reference(out, independent_references[index]);
             out << ",\"hit_diagnostics\":";
