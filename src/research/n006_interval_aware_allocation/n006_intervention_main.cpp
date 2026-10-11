@@ -521,6 +521,7 @@ int main(int argc, char** argv) {
     bool p1m0_pretrace_coverage = false;
     std::uint32_t p1m1_canonical_token = 0U;
     bool p1m2_tetra_octant_directions = false;
+    bool p1m2b_independent_state = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -575,6 +576,9 @@ int main(int argc, char** argv) {
         else if (arg == "--p1m2-tetra-octant-directions") {
             p1m2_tetra_octant_directions = true;
         }
+        else if (arg == "--p1m2b-independent-state") {
+            p1m2b_independent_state = true;
+        }
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -611,6 +615,24 @@ int main(int argc, char** argv) {
             throw std::runtime_error(
                 "P1m2a directions require a frozen P1m1 canonical token");
         }
+        // P1m2b is a NEW, explicit bounded study; it cannot weaken the
+        // original M1a/M2a frozen static/C3 token whitelist.
+        if (p1m2b_independent_state &&
+            (!p1m0_coverage || p1m0_pretrace_coverage ||
+             (scenario_name != "camera-motion" && scenario_name != "light-motion") ||
+             variant_name != "lane-e-final-software" ||
+             !canonical_lean_hash || canonical_zero_copy || !skip_reference ||
+             topology || mode_text != "current" ||
+             source_warmup_frames != 32U ||
+             target_state_warmup_frames != 8U || target_frames != 1U ||
+             capture_visible_tiles || capture_probe_multiplicity ||
+             capture_probe_equivalence || capture_gpu_unique_hash ||
+             !hash_frame_pattern.empty() || !three_arm_pattern.empty() ||
+             !canonical_frame_pattern.empty() || canonical_probe_pilot)) {
+            throw std::runtime_error(
+                "P1m2b requires separate camera/light SW + M0, 32+8 "
+                "warmups, one target and no reference/other capture");
+        }
         // M1a first prospective pilot: only three unchanged calibration
         // tokens from static cascade-3; no post-hoc scene/token tuning.
         if (p1m1_canonical_token != 0U) {
@@ -618,8 +640,9 @@ int main(int argc, char** argv) {
                 p1m1_canonical_token == 3221225474U ||
                 p1m1_canonical_token == 3223322625U ||
                 p1m1_canonical_token == 3223324678U;
-            if (!accepted_token || !p1m0_coverage || p1m0_pretrace_coverage ||
-                scenario_name != "static" ||
+            if ((!p1m2b_independent_state && !accepted_token) ||
+                (!p1m2b_independent_state && scenario_name != "static") ||
+                !p1m0_coverage || p1m0_pretrace_coverage ||
                 variant_name != "lane-e-final-software" ||
                 !canonical_lean_hash || canonical_zero_copy ||
                 !skip_reference || topology ||
@@ -1306,6 +1329,8 @@ int main(int argc, char** argv) {
             << "  \"p1m1_canonical_token\":" << p1m1_canonical_token << ",\n"
             << "  \"p1m2_tetra_octant_directions\":"
             << (p1m2_tetra_octant_directions ? "true" : "false") << ",\n"
+            << "  \"p1m2b_independent_state\":"
+            << (p1m2b_independent_state ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
