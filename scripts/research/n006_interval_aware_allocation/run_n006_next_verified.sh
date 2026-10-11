@@ -26,7 +26,11 @@ mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1l_c0
 # This stops *E003 C1*, but not the independently frozen P1m0 coverage probe.
 c0_status=0
 mise exec -- python scripts/research/n006_interval_aware_allocation/audit_p1l_c0_e003_spirv.py || c0_status=$?
-echo "[N006] C0 static audit exit=$c0_status (blocked evidence retained)"
+if [ "$c0_status" -eq 0 ]; then
+  echo "[N006] C0 static source/runtime binary audit PASSED (GPU cost not measured)"
+else
+  echo "[N006] C0 static source/runtime binary audit BLOCKED (evidence retained)"
+fi
 
 # M0: 5 frozen scenes, each one independently warmed software current
 # canonical frame, one N004 hit oracle and a separate post-render diagnostic.
