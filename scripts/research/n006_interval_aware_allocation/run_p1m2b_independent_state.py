@@ -91,7 +91,7 @@ def verify_frame(data: dict[str, Any], scenario: str, gpu: str,
                  token: int, arm: str, *,
                  holdout: bool = False,
                  require_reference: bool = False) -> dict[str, Any]:
-    allowed_scenarios = ("moving-rigid",) if holdout else SCENARIOS
+    allowed_scenarios = ("moving-rigid", "deforming-control") if holdout else SCENARIOS
     if scenario not in allowed_scenarios or arm not in ("control", *ARMS):
         raise ValueError("P1m2b invalid predeclared scenario or arm")
     owners, cascades = SCENE_EXPECTATIONS[scenario]
@@ -104,7 +104,10 @@ def verify_frame(data: dict[str, Any], scenario: str, gpu: str,
         data.get("mode") != "current" or
         data.get("p1m2b_independent_state") is not True or
         (holdout and (data.get("p1m3_fractional_storage") is not True or
-                      data.get("p1m3b_holdout_quality") is not True)) or
+                      (scenario == "moving-rigid" and
+                       data.get("p1m3b_holdout_quality") is not True) or
+                      (scenario == "deforming-control" and
+                       data.get("p1m3c_reference_preflight") is not True))) or
         (require_reference and (not holdout or token != 0)) or
         data.get("p1m1_canonical_token") != token or
         data.get("p1m2_tetra_octant_directions") is not (
