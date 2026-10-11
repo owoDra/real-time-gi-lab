@@ -1154,8 +1154,20 @@ N006FrameResult N006Runtime::run_candidate_frame(
     if (base_count_valid && request.canonical_probe_pilot) {
         using Key = std::array<std::int32_t, 4>;
         std::map<Key, std::uint32_t> unique;
+        // P1m1a appends exactly four rays AFTER the immutable canonical
+        // 8-ray prefix. Validating the total against only outputs*8 silently
+        // rejects an otherwise valid intervention and blocks the independent
+        // postframe P1m0 consumer audit. Base identity/directions are still
+        // checked individually below; extra identities and 8+4 accumulation
+        // are checked separately, not waived.
+        const std::uint32_t expected_tail =
+            request.p1m1_canonical_key_intervention ? 4U : 0U;
         bool valid = result.stats.work_items ==
-            result.stats.outputs * impl.settings.rays_per_probe;
+            result.stats.outputs * impl.settings.rays_per_probe +
+            expected_tail &&
+            extra.base_traced_rays ==
+                result.stats.outputs * impl.settings.rays_per_probe &&
+            extra.extra_work_items == expected_tail;
         const auto rays = impl.settings.rays_per_probe;
         for (std::uint32_t output = 0U; valid &&
              output < result.stats.outputs; ++output) {
