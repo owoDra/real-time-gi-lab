@@ -103,7 +103,8 @@ class TestP1m3aQuantizationBoundary(unittest.TestCase):
         for must in (
             "--p1m3-fractional-storage",
             "if (p1m3_fractional_storage)",
-            "!p1m2b_independent_state || !valid_calibration_key",
+            "!p1m2b_independent_state ||",
+            "(!p1m3b_holdout_quality && !valid_calibration_key)",
             "p1m1_canonical_token == 2152730633U",
             "p1m1_canonical_token == 1084233745U",
         ):
