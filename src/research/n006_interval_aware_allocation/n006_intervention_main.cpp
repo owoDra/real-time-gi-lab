@@ -577,8 +577,12 @@ int main(int argc, char** argv) {
         const bool p1l_stage_any =
             p1l_stage_probe || p1l_stage_fast || p1l_b0_counts ||
             p1l_b1 || p1l_b1b_counts;
+        // M0 retains the N004 sampled oracle on the one target frame, but
+        // must not re-run the CPU hit oracle on all eight warmup frames.
+        // Use the same sampled-fast correctness protocol as P1l-B0.
         const bool p1l_sampled_hit =
-            p1l_stage_fast || p1l_b0_counts || p1l_b1 || p1l_b1b_counts;
+            p1l_stage_fast || p1l_b0_counts || p1l_b1 || p1l_b1b_counts ||
+            p1m0_coverage;
         if (int(p1l_stage_probe) + int(p1l_stage_fast) +
             int(p1l_b0_counts) + int(p1l_b1) + int(p1l_b1b_counts) > 1) {
             throw std::runtime_error(
