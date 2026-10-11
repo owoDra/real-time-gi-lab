@@ -1,3 +1,19 @@
+# 2026-10-11 LATEST — M1a GPU 1/4 (control PASS), zero postframe diagnostic gate false (source fix pushed)
+
+User-uploaded `n006-p1m1a-canonical-key-pilot-summary.json` raw SHA256 `7b9fd8cca73a4764f796ebe8f086595c7086caf5c9cda1a6fb6dc7c7929cc9dd`, GPU Radeon 8060S RADV, original branch HEAD `6f37f288821545082a93463620142f0575cda5d1`. M1a output `status=invalid-retained`, one verified case (control), one zero failure. Control exact accepted HDR SHA `2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e`, 3008 canonical outputs / 24064 rays, zero N004 mismatches, no extra rays. Zero intervention GPU render and CPU/GPU hit oracles completed (0/0/0) then independent postframe coverage `P1m0 requires finished Lane-E-final software canonical lean-hash frame` aborted; no Zero candidate evidence labels serialized. Low/High NOT run.
+
+**Source root cause**: canonical prefix validation `result.stats.work_items == result.stats.outputs * rays_per_probe` did not allow the deliberately appended 4-ray tail. It made `extra.base_prefix_correct` false, `state_->last_canonical_frame` false and M0 postframe guard abort. **Corrected** to require exact base rays = `outputs*8`, overall work = `outputs*8+(m1?4:0)`, extra work = `m1?4:0`, keeping all per-work original identity/direction, uniqueness, owner and 8+4 contribution checks. Regression test added. See [result 033](./results/033-p1m1a-first-gpu-zero-postframe-guard-failure.md).
+
+**Next exact same command; no need to rerun M0b/C0/B1:**
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m1a_canonical_pilot.sh
+```
+
+Four frozen isolated cases Control/Zero/Low/High, 32+8 warmups each; upload `out/research/n006-interval-aware-allocation/p1m1a-canonical-key-pilot/<UTC>/n006-p1m1a-canonical-key-pilot-summary.json`. **Fix not locally recompiled or rerun on user's GPU yet**. Do NOT claim even Zero causal frame passed, P1 quality improvement, or P2 scheduling. If 4/4 mechanism PASS, next independent converged reference and signed quality according to frozen [024](./experiments/024-p1m1b-independent-reference-signed-gain-protocol.md). No PR or GitHub Actions.
+
+---
+
 # 2026-10-11 newest: first M1a attempt stopped by obsolete M0b static source assertion (fixed)
 
 User pasted **successful M1a SPIR-V/C++ build/link**, `222` N006 unit tests with **one failure** at `test_p1m0_consumer_coverage.py:133`: assertion still searched for the old literal `request.p1m0_pretrace_coverage ? 22U`; M1a deliberately changed it to a two-arm query-count guard with `|| request.p1m1_canonical_key_intervention`. Updated test to verify *both* arms by whitespace-tolerant regex; no production shader/runtime changed in this fix. Shell `set -e` stopped **before M1a GPU execution**. [Result 032](./results/032-p1m1a-first-build-and-static-test-regression.md). Original P1m0b accepted 5/5 remains valid. Next exactly same command:
