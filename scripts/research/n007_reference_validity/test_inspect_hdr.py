@@ -41,6 +41,16 @@ class TestHDR(unittest.TestCase):
         self.assertAlmostEqual(result['pairwise'][0]['active_abs_luma_p99'], .1, places=6)
         self.assertIn('insufficient_active_pixel_support', result['problems'])
 
+    def test_n006_support_bound_cannot_make_whole_frame_p99_nonzero(self):
+        # Synthetic stress matching only the recorded 161/169 of 57,600 counts.
+        a, b = self.root / 'n006-a.pfm', self.root / 'n006-b.pfm'
+        make_pfm(a, w=320, h=180, lit={i: .1 for i in range(161)})
+        make_pfm(b, w=320, h=180, lit={i: .2 for i in range(161, 330)})
+        pair = inspect([a, b])
+        self.assertEqual(pair['union_positive_pixels'], 330)
+        self.assertEqual(pair['pairwise'][0]['whole_frame_abs_luma_p99'], 0)
+        self.assertGreater(pair['pairwise'][0]['active_abs_luma_p99'], 0)
+
     def test_black_and_identical(self):
         p = self.refs([{}, {}, {}, {}])
         result = inspect(p)
