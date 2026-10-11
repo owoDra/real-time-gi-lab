@@ -6,7 +6,7 @@
 
 **Question:** Under a valid quality reference and a fair end-to-end measurement boundary, how competitive is the current Renderer?
 
-- Keep [Issue #43 / N007](https://github.com/owoDra/phos-gi-lab/issues/43) as a separate, OPEN study. Diagnose the sparse/black HDR references and calibrate an independent convergence-and-signal eligibility gate without retroactively editing N006/N003 accepted outcomes. Do not start that research during repository consolidation.
+- Keep [Issue #4 / N007](https://github.com/owoDra/real-time-gi-lab/issues/4) as a separate, OPEN study. Diagnose the sparse/black HDR references and calibrate an independent convergence-and-signal eligibility gate without retroactively editing N006/N003 accepted outcomes. The history consolidation is complete; N007 P0 CPU diagnostics are now under investigation on `research-n007-reference-validity` ([protocol](lanes/n007-reference-validity/experiments/001-reference-eligibility-protocol.md)). Physical correctness remains unverified.
 - Compare on several representative scenes and dynamic classes, not just Sponza.
 - Establish fair image quality, GPU time, persistent/true-peak memory comparisons to representative existing GI families.
 - Identify the largest reproducible weaknesses, including HWRT-free devices and renderer motion artifacts.
