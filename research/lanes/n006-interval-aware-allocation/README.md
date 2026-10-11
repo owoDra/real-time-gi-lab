@@ -1,3 +1,9 @@
+### 2026-10-11 M0 GPU preflight timeout — 0/5 INVALID; targeted instrumentation
+
+Second user's unchanged local runner on HEAD `bd4aae0` obtained `status=invalid-retained`, **0/5**, because the `static` child exceeded the **600s bound** with no uploaded stderr/stdout (evidence path `.../p1m0-consumer-coverage-five-scenes/20261011T035058Z/`). Previous 210 Python unit tests and E003 source/runtime SPV MATCHED C0 static audit remain true, but **there is no GPU consumer count, marginal quality gain, coverage-strata evidence or scheduler authorization**. See [result 029](./results/029-p1m0-first-gpu-timeout-and-diagnostic-repair.md).
+
+Independent source audit revealed a likely unbounded CPU-cost regression: P1m0 was *not* in the `p1l_sampled_hit` guard, so all **8 target warmups** executed expensive N004 CPU hit checks; prior successful B0 uses the fast warmup and one target hit oracle. P1m0 now adopts that B0 pattern while retaining the **measured target's** CPU N004 correctness oracle. Last stalled phase is **not directly observed** from the uploaded JSON. To discriminate CPU versus GPU stall if needed, both C++ main and consumer pipeline flush explicit fine-grained stage names; Python streams stderr/stdout to persistent files in real time and includes the exact last stages on failure/timeout. Source/unit contracts were added. The same unchanged one-batch user command now includes these fixes, but **user build and GPU 5/5 rerun still required**. Avoid merely raising the 600s timeout.
+
 ### 2026-10-11 second user batch — C0 static MATCHED, first M0 scenario warmup repaired
 
 - **210 N006 tests OK**, CPU numerical audit confirmed synthetic float32 division-vs-reciprocal non-equivalence, B1c static shader instruction deltas captured (without GPU re-benchmark).
