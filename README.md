@@ -46,6 +46,10 @@ To launch a particular renderer or historical experiment, follow its lane-specif
 
 Raw runs under `out/research/` are local/ignored; retained results include experiment IDs, source SHAs, decision labels and artifact provenance. **Do not mistake an absent historical raw artifact for a newly reproduced result.**
 
+## License and publication security
+
+This project's own source and documentation are provided under the [Apache License 2.0](LICENSE). Downloaded dependencies, test scenes (including Khronos Sponza), and any third-party materials retain their respective original licenses; they are **not** relicensed by this file. A full history secret scan must be completed before making the repository public. See [publication readiness](docs/publication-readiness.md) and the manual [whole-history audit script](scripts/audit_public_release.sh).
+
 ## Workflow
 
 Run studies on dedicated lane branches; integrate validated findings and their records into `research`; advance `main` only at a verified program checkpoint. No PR requirement and **no GitHub Actions/CI**. Follow [AGENTS.md](AGENTS.md) for evidence immutability and promotion gates.
