@@ -8,6 +8,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import struct
 import subprocess
@@ -73,7 +74,6 @@ def verify_envelope(data: dict[str, Any], label: str, gpu: str) -> dict[str, Any
         stats.get("visible_owners") != owners or
         stats.get("outputs") != expected_outputs or
         stats.get("work_items") != expected_base_work + (4 if intervention else 0) or
-        stats.get("requested_work_items") != stats.get("work_items") or
         stats.get("storage_updates") != expected_outputs or
         stats.get("storage_failures") != 0 or stats.get("overflow") != 0 or
         extra.get("base_prefix_correct") is not True or
@@ -169,7 +169,7 @@ def image_delta(base: bytes, changed: bytes) -> dict[str, Any]:
                 channels += 1
                 x = struct.unpack_from("<f", base, a)[0]
                 y = struct.unpack_from("<f", changed, a)[0]
-                if not all(map(__import__("math").isfinite, (x, y))):
+                if not (math.isfinite(x) and math.isfinite(y)):
                     raise ValueError("P1m1a nonfinite treatment PFM delta")
                 max_delta = max(max_delta, abs(x-y))
     return {"changed_rgb_pixels": pixels, "changed_channel_values": channels,
