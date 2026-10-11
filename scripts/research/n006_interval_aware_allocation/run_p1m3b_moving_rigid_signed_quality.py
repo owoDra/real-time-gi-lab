@@ -199,7 +199,7 @@ def run_case(root: Path, scene: Path, gpu: str,
     pfm = safe_image(folder, frame.get("image"))
     data = read_pfm_payload(pfm)
     valid.update({
-        "label": label, "scenario": SCENARIO, "selected_token": token,
+        "label": label, "scenario": scenario, "selected_token": token,
         "image_sha256": hashlib.sha256(pfm.read_bytes()).hexdigest(),
         "renderer_evidence_sha256": hashlib.sha256(binary).hexdigest(),
         "extra_reference_generated": with_reference,
