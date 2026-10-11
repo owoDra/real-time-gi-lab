@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from survey_archive import candidate_for, discover_pairs, survey
+from survey_archive import candidate_for, discover_pairs, survey, summarize_signatures
 
 
 def make_pfm(path, w=3, h=2, lit=None):
@@ -46,6 +46,9 @@ class TestSurvey(unittest.TestCase):
         self.assertEqual(result['reference_all_black_pairs'], 2)
         self.assertEqual(result['gpu_positive_with_black_reference_pairs'], 2)
         self.assertFalse(result['truncated'])
+        self.assertEqual(result['unique_pair_signatures'], 3)
+        self.assertEqual(sum(c['inspected_pairs'] for c in result['cohort_summary'].values()), 3)
+        self.assertEqual(result['schema_version'], 2)
         self.assertEqual(before, sorted(str(x) for x in self.arc.rglob('*')))
         self.assertEqual(result['pairs'][0]['candidate_only_positive_pixels'] + result['pairs'][1]['candidate_only_positive_pixels'] + result['pairs'][2]['candidate_only_positive_pixels'], 2)
 
@@ -54,6 +57,23 @@ class TestSurvey(unittest.TestCase):
         self.assertTrue(result['truncated'])
         self.assertEqual(result['inspected_pairs'], 1)
         self.assertEqual(result['total_discovered_pairs'], 3)
+
+    def test_default_full_archive_and_duplicate_signature_collapse(self):
+        import shutil
+        dup = self.arc / 'out/research/lane-n-end-to-end-renderer/003-n003-preflight-calibration/replica/frames'
+        dup.mkdir(parents=True)
+        shutil.copy2(self.n001 / 'reference-001.pfm', dup / 'reference-001.pfm')
+        shutil.copy2(self.n001 / 'output-001.pfm', dup / 'output-001.pfm')
+        result = survey(self.arc)
+        self.assertEqual(result['inspected_pairs'], 4)
+        self.assertFalse(result['truncated'])
+        self.assertEqual(result['unique_pair_signatures'], 3)
+        self.assertEqual(result['unique_black_reference_signatures'], 2)
+        self.assertEqual(sorted(g['count'] for g in result['signature_groups']), [1, 1, 2])
+
+    def test_invalid_max_pairs(self):
+        with self.assertRaisesRegex(ValueError, 'nonnegative'):
+            survey(self.arc, -1)
 
     def test_invalid_numeric_pair(self):
         make_pfm(self.n001 / 'output-001.pfm', lit={0: float('nan')})
