@@ -36,7 +36,8 @@ CALIBRATION_C3 = {
 CASES = ("control", "zero", "low_positive", "high_positive")
 
 
-def verify_envelope(data: dict[str, Any], label: str, gpu: str) -> dict[str, Any]:
+def verify_envelope(data: dict[str, Any], label: str, gpu: str,
+                    require_ray_fate: bool = False) -> dict[str, Any]:
     owners, cascades = SCENE_EXPECTATIONS[SCENE]
     expected_outputs = sum(cascades)
     expected_base_work = expected_outputs * 8
@@ -125,6 +126,30 @@ def verify_envelope(data: dict[str, Any], label: str, gpu: str) -> dict[str, Any
             not isinstance(trace.get("extra_injection_gpu_us"), (int, float)) or
             trace["extra_injection_gpu_us"] <= 0):
             raise ValueError(f"P1m1a {label}: 8+4 causal trace invalid")
+        if require_ray_fate:
+            fields = (
+                "base_hit_count", "extra_hit_count", "extra_miss_count",
+                "base_positive_radiance_rays", "extra_positive_radiance_rays",
+                "extra_hit_zero_radiance_rays",
+            )
+            if any(type(trace.get(k)) is not int or trace[k] < 0
+                   for k in fields):
+                raise ValueError("P1m1c missing/noninteger ray-fate fields")
+            if (trace["base_hit_count"] > 8 or
+                trace["extra_hit_count"] + trace["extra_miss_count"] != 4 or
+                trace["extra_positive_radiance_rays"] +
+                    trace["extra_hit_zero_radiance_rays"] != trace["extra_hit_count"] or
+                trace["base_positive_radiance_rays"] > trace["base_hit_count"] or
+                trace["extra_positive_radiance_rays"] >
+                    trace["extra_radiance_sum16"] or
+                trace["base_positive_radiance_rays"] >
+                    trace["base_radiance_sum16"]):
+                raise ValueError("P1m1c GPU hit/radiance sample closure failed")
+            # Pre-registered fidelity to M1a exactly: all 3 frozen interventions
+            # had zero new radiance. A mismatch here means a changed trajectory,
+            # workload or nondeterminism, not grounds to reselect tokens.
+            if trace["extra_radiance_sum16"] != 0:
+                raise ValueError("P1m1c original frozen M1a zero energy not reproduced")
     elif trace != {"executed": False}:
         raise ValueError("P1m1a control unexpectedly injected extra rays")
     return {
@@ -176,7 +201,10 @@ def image_delta(base: bytes, changed: bytes) -> dict[str, Any]:
             "max_abs_rgb_delta": max_delta, "not": "signed HDR quality"}
 
 
-def main() -> int:
+def main(*, protocol_version: str = PROTOCOL,
+         output_tag: str = "p1m1a-canonical-key-pilot",
+         summary_file_name: str = "n006-p1m1a-canonical-key-pilot-summary.json",
+         require_ray_fate: bool = False) -> int:
     head = pilot.require_clean_branch()
     cfg = json.loads(pilot.CONFIG_PATH.read_text(encoding="utf-8"))
     scene = pilot.ROOT / cfg["baseline"]["scene"]
@@ -185,12 +213,12 @@ def main() -> int:
     if not pilot.BINARY.is_file():
         raise ValueError("P1m1a intervention binary missing; mise run build")
     root = (pilot.ROOT / "out/research/n006-interval-aware-allocation" /
-            "p1m1a-canonical-key-pilot" /
+            output_tag /
             datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     root.mkdir(parents=True, exist_ok=False)
-    summary_file = root / "n006-p1m1a-canonical-key-pilot-summary.json"
+    summary_file = root / summary_file_name
     result: dict[str, Any] = {
-        "protocol_version": PROTOCOL, "status": "in-progress",
+        "protocol_version": protocol_version, "status": "in-progress",
         "formal": False, "reference_generated": False,
         "predictive_quality_established": False,
         "scene": SCENE, "case_matrix": list(CASES),
@@ -241,7 +269,9 @@ def main() -> int:
                     + stderr.read_text(encoding="utf-8", errors="replace")[-5000:])
             raw = (folder / pilot.EVIDENCE_NAME).read_bytes()
             data = json.loads(raw)
-            checked = verify_envelope(data, label, cfg["target_gpu"])
+            checked = verify_envelope(
+                data, label, cfg["target_gpu"],
+                require_ray_fate=require_ray_fate)
             frame = data["frames"][0]
             image_rel = Path(frame["image"])
             if image_rel.is_absolute() or ".." in image_rel.parts:
@@ -258,6 +288,13 @@ def main() -> int:
                     raise ValueError("P1m1a control payload unavailable")
                 checked["image_delta_vs_control"] = image_delta(
                     base_payload, read_pfm_payload(image))
+            if require_ray_fate and label != "control":
+                diff = checked["image_delta_vs_control"]
+                if (diff["changed_rgb_pixels"] != 0 or
+                    diff["changed_channel_values"] != 0 or
+                    image_sha != expected_sha(VARIANT, SCENE)):
+                    raise ValueError(
+                        "P1m1c original frozen 3/3 null image SHA not reproduced")
             checked["pfm_sha256"] = image_sha
             checked["raw_renderer_evidence_sha256"] = hashlib.sha256(raw).hexdigest()
             result["cases"].append(checked)
@@ -270,8 +307,13 @@ def main() -> int:
             save()
             print(f"[P1m1a] failure summary: {summary_file}", file=sys.stderr)
             raise
-    result["status"] = "mechanism-preflight-complete"
+    result["status"] = (
+        "ray-fate-audit-complete" if require_ray_fate
+        else "mechanism-preflight-complete")
     result["next_gate"] = (
+        "diagnose added-ray misses vs hits with zero radiance before freezing "
+        "a distinct nonzero-signal sampling protocol; no P2 GO"
+        if require_ray_fate else
         "independent converged HDR reference and paired signed marginal "
         "gain with calibrated repeat noise on independent trajectories")
     save()
