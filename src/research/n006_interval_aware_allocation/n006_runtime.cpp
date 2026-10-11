@@ -996,11 +996,19 @@ N006FrameResult N006Runtime::run_candidate_frame(
 
     N006ExtraStats extra{};
     extra.base_traced_rays =
+        request.p1m1_canonical_key_intervention ? m1_values[0] :
         active_extra ? extra_values[0] : result.stats.work_items;
-    extra.eligible_owner_count = active_extra ? extra_values[1] : 0U;
-    extra.selected_owner_count = active_extra ? extra_values[2] : 0U;
-    extra.extra_work_items = active_extra ? extra_values[3] : 0U;
+    extra.eligible_owner_count =
+        request.p1m1_canonical_key_intervention ? 1U :
+        active_extra ? extra_values[1] : 0U;
+    extra.selected_owner_count =
+        request.p1m1_canonical_key_intervention ? 1U :
+        active_extra ? extra_values[2] : 0U;
+    extra.extra_work_items =
+        request.p1m1_canonical_key_intervention ? 4U :
+        active_extra ? extra_values[3] : 0U;
     extra.extra_rays_requested =
+        request.p1m1_canonical_key_intervention ? 4U :
         request.owner_budget * request.extra_rays_per_probe;
     extra.extra_rays_traced = extra.extra_work_items;
     extra.eligible_probe_count = extra.eligible_owner_count;
@@ -1080,7 +1088,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
             data.original_outputs != result.stats.visible_owners *
                 impl.settings.cascade_count ||
             data.canonical_outputs != result.stats.outputs ||
-            data.canonical_work_items != result.stats.work_items ||
+            data.canonical_work_items +
+                (request.p1m1_canonical_key_intervention ? 4U : 0U) !=
+                    result.stats.work_items ||
             std::uint64_t(data.unique_by_cascade[0]) +
             data.unique_by_cascade[1] + data.unique_by_cascade[2] +
             data.unique_by_cascade[3] != data.canonical_outputs ||
@@ -1110,7 +1120,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
         extra.base_traced_rays <= total_work &&
         (request.canonical_probe_pilot
             ? (total_work == result.stats.outputs *
-                impl.settings.rays_per_probe)
+                impl.settings.rays_per_probe +
+                (request.p1m1_canonical_key_intervention ? 4U : 0U))
             : (extra.base_traced_rays % (
                 impl.settings.cascade_count *
                 impl.settings.rays_per_probe) == 0U));
@@ -1190,7 +1201,12 @@ N006FrameResult N006Runtime::run_candidate_frame(
             extra.selected_owner_count *
             request.extra_rays_per_probe &&
         result.stats.overflow == 0U;
-    if (active_extra) {
+    if (request.p1m1_canonical_key_intervention) {
+        extra_ok = extra_ok &&
+            extra.selected_owner_count == 1U &&
+            extra.extra_work_items == 4U &&
+            extra.base_traced_rays == m1_values[0];
+    } else if (active_extra) {
         extra_ok = extra_ok &&
             extra.selected_owner_count == request.owner_budget &&
             extra.eligible_owner_count >= request.owner_budget;
