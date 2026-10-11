@@ -1,4 +1,5 @@
-// Isolated N006 P1m3a alternate storage, unrelated to production renderer.\n#version 460
+#version 460
+// Isolated N006 P1m3a alternate storage, unrelated to production renderer.
 layout(local_size_x = 64) in;
 struct WorkItem {
     int probe_x; int probe_y; int probe_z; uint cascade;
