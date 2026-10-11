@@ -99,6 +99,43 @@ class TestCanonicalM1Mechanism(unittest.TestCase):
         self.assertEqual(3008 * 8 + 4, 24068)
         self.assertNotEqual(3008 * 8 + 4, 3008 * 8)
 
+    def test_p1m1c_gpu_hit_vs_zero_radiance_is_fail_closed(self):
+        runtime = RUNTIME.read_text()
+        header = HEADER.read_text()
+        main = CLI.read_text()
+        runner = (
+            ROOT / "scripts/research/n006_interval_aware_allocation"
+            / "run_p1m1a_canonical_probe_pilot.py"
+        ).read_text()
+        audit_script = (
+            ROOT / "scripts/research/n006_interval_aware_allocation"
+            / "run_p1m1c_ray_fate.py"
+        ).read_text()
+        self.assertIn("std::vector<GpuHit> gpu_hits(total_work)", runtime)
+        self.assertIn("impl.hits, gpu_hits.data()", runtime)
+        self.assertIn("hit.metadata[3] > 1U", runtime)
+        self.assertIn("!std::isfinite(hit.normal_t[3])", runtime)
+        self.assertIn(
+            "trace.extra_hit_count + trace.extra_miss_count != 4U", runtime)
+        self.assertIn(
+            "trace.extra_positive_radiance_rays +", runtime)
+        self.assertIn(
+            "trace.base_positive_radiance_rays > trace.base_hit_count", runtime)
+        self.assertIn("count_ray_fate(index, c[1], false)", runtime)
+        self.assertIn("count_ray_fate(index, c[1], true)", runtime)
+        for key in (
+            "base_hit_count", "extra_hit_count", "extra_miss_count",
+            "base_positive_radiance_rays", "extra_positive_radiance_rays",
+            "extra_hit_zero_radiance_rays",
+        ):
+            self.assertIn(key, header)
+            self.assertIn("m1." + key, main)
+            self.assertIn('"' + key + '"', runner)
+        self.assertIn("trace[\"extra_radiance_sum16\"] != 0", runner)
+        self.assertIn("require_ray_fate=True", audit_script)
+        self.assertIn("n006-p1m1c-ray-fate-static-c3-v1", audit_script)
+        self.assertIn("ray-fate-audit-complete", runner)
+
     def test_image_delta_detects_pixel_and_channels_without_signed_gain(self):
         zeros = struct.pack("<f", 0.0) * (320 * 180 * 3)
         changed = bytearray(zeros)
