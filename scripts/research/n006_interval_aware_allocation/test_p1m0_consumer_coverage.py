@@ -78,7 +78,11 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
                   / "run_p1m0_consumer_coverage.py").read_text()
         self.assertIn("evidence root: {dest.resolve()}", runner)
         self.assertIn("stderr={folder.resolve() / 'stderr.log'}", runner)
-        self.assertIn("child diagnostic tail:", runner)
+        self.assertIn("Stream both child logs directly to durable files", runner)
+        self.assertIn("last stage / stderr:", runner)
+        self.assertIn("stderr tail:", runner)
+        self.assertIn("timeout=TIMEOUT_SECONDS", runner)
+        self.assertIn("p1m0_coverage;", (ROOT / "src/research/n006_interval_aware_allocation" / "n006_intervention_main.cpp").read_text())
         self.assertIn("failure report: {summary_file.resolve()}", runner)
 
     def test_diagnostic_uses_existing_key_packing_and_bounded_slots(self):
