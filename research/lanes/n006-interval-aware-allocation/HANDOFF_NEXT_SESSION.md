@@ -1,3 +1,24 @@
+# 2026-10-11 latest second rerun — M0 static GPU 600s timeout; root candidate repaired, trace streamed
+
+User-uploaded `n006-p1m0-consumer-coverage-summary.json` from clean HEAD `bd4aae067cb51a6729d06ee885c884bf63c46ba5`:
+
+- Runner `status=invalid-retained`, **0/5 cases**, first `static` child `P1m0 static exceeded 600s`; 32 source/8 target warmups, AMD Radeon 8060S. Actual full child stdout/stderr not supplied. Source [029 result](./results/029-p1m0-first-gpu-timeout-and-diagnostic-repair.md); no successful P1m0 GPU coverage data.
+- Prior C0 static source→runtime SPV `MATCHED`, 210 original N006 unit tests `OK`, float32 rounding risk as previous; **do not treat repeated identical outputs as new independent GPU performance data**.
+- Important **new source root-cause candidate**: P1m0's `p1l_sampled_hit` was false, so **eight target warmup frames each ran the expensive N004 CPU primary hit oracle**, whereas earlier accepted B0 used sampled-fast once on the target. Fixed by opt-in `|| p1m0_coverage` to existing sampled-fast gate. Retains `frame_core_correct` and strict frame count/stability on all warmups plus **full N004 CPU hit oracle for the single measured target**. The **precise stall location remains unproven without child stderr**; other causes possible.
+- To make a further long stall diagnosable, C++ main now flushes `[P1m0-stage]` around runtime construction, source warmups, target warmups, target render, target hit-oracle, PFM and diagnostic; C++ GPU method flushes `[P1m0-GPU]` around pre/post readbacks, scratch upload, pipeline, GPU submission/fence wait and GPU counter audit. Python runner streams child stdout/stderr live into timestamped files instead of delaying writing until child exits; timeout/exit error includes absolute path + stderr/stdout tail, stored in `n006-p1m0-consumer-coverage-summary.json`. Existing 600s cap preserved; **never increase it without discovering the stage**.
+- Tests added for sampled-fast M0 behavior, stage probes and log retention. E003 C0 success log no longer says `(blocked evidence retained)` when exit=0. **These changes are pushed, but neither compilation nor GPU outcome verified by user's next run.**
+
+Next single batch same as before:
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_next_verified.sh
+```
+
+If it fails again, last `[P1m0-stage]` or `[P1m0-GPU]` line from newly streamed stderr/error text identifies the stopped stage and permits targeted fix. If all 5 pass, inspect exact key/owner/consumer conservation, 60-key frozen M1 calibration manifest, independent costs and quality intervention prereqs. **No predictor claim, no P2 GO, no Actions, no PR.**
+
+---
+
 # 2026-10-11 latest — 210 N006 tests PASS, E003 C0 static MATCHED, M0 static GPU exit 1 FIXED IN SOURCE (needs rerun)
 
 User supplied stdout from one local `run_n006_next_verified.sh` execution:
