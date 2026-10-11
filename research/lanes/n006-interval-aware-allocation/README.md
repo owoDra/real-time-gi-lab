@@ -4,6 +4,27 @@ Issue: [#42](https://github.com/owoDra/phos-gi-lab/issues/42)
 Branch: `research-n006-interval-aware-allocation`  
 Predecessor HEAD: `research-n005-adaptive-tracing@3a098584ec76bcaa06e5166793b2946cd1f7eb25`.
 
+## 2026-10-11 ongoing research — E003 C0 + original N006 P1m0
+
+**Current focus is not another primary BVH near-first attempt.** B1a and B1c were GPU REJECTED, B1b only reduced work counts. Result [025](./results/025-p1l-b1c-packed-axis-performance-reject.md) retains the frozen GPU 15-process/180-pair evidence; do not rerun B1a/B1c.
+
+**E003 P1l-C0:** [frozen experiment 019](./experiments/019-p1l-c0-e003-wide-child-cost-audit.md), [source/layout result 026](./results/026-p1l-c0a-e003-source-layout-audit.md), [CPU float32 result 027](./results/027-p1l-c0b-f32-slab-rounding-risk.md). Accepted quantized wide child = 176B node and 16B child; 25.53–26.30 child AABB tests/secondary ray is *operation count only*. In a synthetic IEEE float32 CPU model, division versus inverse multiplication changed 51,445/200,000 entry results and at least one constructed slab accept/reject decision, so do not assert arithmetic replacement is GPU byte identical. A separate C0 static audit rebuilds the unchanged E003 GLSL with a N006-specific filename and **retains a status=blocked JSON on missing/stale runtime `e003_instance_quantized.spv`**. It cannot establish physical GPU machine instruction costs; C1 is not written/authorized without a credible static hypothesis and prospective correctness gate. C0 and missing B1c SPIR-V static audit are grouped in one local script; this never repeats GPU B1c.
+
+**P1m0 refocus on Issue #42's actual purpose:** [frozen coverage protocol 020](./experiments/020-p1m0-probe-consumer-coverage.md) adds **N006-only** GPU shader `n006_p1m0_consumer_coverage.comp.glsl`, runtime postframe invocation, 32,768-slot coverage array, primary-hit and rendered-image byte-parity checks and full per-canonical-key producer multiplicity/consumer pixel counts. The hash mirrors accepted probe-key indexing, and the screen pixel→probe reconstruction mirrors **both N001 and actual N003 SOFTWARE composite**. Five-scene fail-closed runner `run_p1m0_consumer_coverage.py` verifies accepted Sponza HDR PFM, GPU/software source, N004 CPU primary oracle, stage-accounting closure, key-count conservation and error-free hash accounting. No M0 GPU output has been supplied yet. M0 count is *potential lookup reachability*, **NOT confirmed storage-hit, actual signed global quality gain or a P1 predictive scheduler**.
+
+Primary visibility precedes the producer in N006 `run_candidate_frame`; the canonical key index is built before ray preparation/secondary traversal. Thus a future *pre-secondary* consumer-count pass has a plausible same-frame data dependency path, but **M0 currently executes AFTER the accepted complete renderer** to preserve frozen baseline data. Additional GPU barriers, key-buffer 131,072 bytes, per-frame clear, dispatch and CPU readback costs are **not measured/accepted as production costs**. Only after five-scene M0 validity plus a separate costed pretrace gate can [conditional P1m1 design 021](./experiments/021-p1m1-canonical-probe-marginal-value-design.md) construct causal **probe-key** +4-ray labels with independent quality references; M0 alone does not authorize P2.
+
+### Next single local batch (build/tests/static audits + five-scene M0 GPU diagnostic)
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_next_verified.sh
+```
+
+This script requires a clean worktree, fast-forwards, builds, runs the full N006 unittest discovery, captures **B1c static SPIR-V** (not its rejected performance candidate), captures **C0 E003 static SPIR-V**, and runs five **separately warmed** AMD Radeon GPU frames for M0 only. C0 `status=blocked` stops E003 C1 but deliberately does **not** suppress the independent M0 diagnostic; the overall script exits nonzero afterward and retains both artifacts. Upload `out/research/n006-interval-aware-allocation/p1m0-consumer-coverage-five-scenes/*/n006-p1m0-consumer-coverage-summary.json`, `out/research/n006-interval-aware-allocation/p1l-c0-e003-static-audit.json` and `out/research/n006-interval-aware-allocation/b1c-spv-audit.json`, or the first build/test failure with stderr. DO NOT rerun N004/N005/B1a/B1b/B1c historical GPU campaigns. **Build/tests/full GPU have not been executed in the GitHub connector environment.**
+
+The lane's RC-native *marginal benefit of extra rays* hypothesis and HWRT-free speed parity are **unproven**, with explicit STOP/REFINE criteria in the frozen M1 plan. No PR or Actions.
+
 ## Research question
 
 Can low-cost **pre-trace** signals associated with the existing Radiance Cascades **owner × cascade / radiance-interval** work units predict the **actual final-image error reduction from an extra ray**, and place identical incremental ray budgets better than N005 uniform / frozen depth-discontinuity allocation **after all scheduling/merge/storage GPU costs**?
