@@ -1,3 +1,16 @@
+# 2026-10-11 LATEST — P1m3a local GLSL build failure FIXED in GitHub; rerun same batch
+
+User first local run of `bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3a_fractional_storage.sh` stopped at CMake Ninja shader [1/5] **before unittest or GPU**. glslang errors: `#version statement must appear first`; first line of new `n006_p1m3_fractional_storage_update.comp.glsl` contained a **literal escaped backslash-n**, `// Isolated ... renderer.\\n#version 460`, so `#version` was not the first real line. Other `n006_p1m3_fractional_weight_storage.comp.glsl` successfully passed shader generation. Fixed storage shader to start with exactly `#version 460` + actual newline, then comment. Added `test_new_glsl_version_is_first_real_line` to Q8 regression tests (two shaders, byte 0 version and literal `\\n#version` forbidden). Checked both GitHub shader sources have `#version 460\n` prefix and no escaped-newline sequence. **No new build success or GPU result claimed**. Original N006/accepted shader stages unchanged; P1m2b 32/32 STOP remains.
+
+**Re-run on latest branch**:
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3a_fractional_storage.sh
+```
+Script pulls fast-forward, builds, runs all N006 unittests, then AMD GPU Q8 pilot. Upload `n006-p1m3a-fractional-storage-summary.json` or **next first actual error**. No PR/Actions.
+
+---
+
 # 2026-10-11 CURRENT — P1m2b 32/32 GPU image-null STOP; new P1m3a Q8 storage mechanism built in source, GPU pending
 
 **Accepted uploaded P1m2b** `n006-p1m2b-independent-state-summary.json`, original SHA256 `e96e5a29d6418cb2666714675f49324d8001caeadedd52a954d6d9881fef09b5`, clean GPU head `24530552e26f5c3091a24759e225234ab70031ce`, 4 stable control processes, 2 frozen scenarios, **32/32 exactly identical treatment PFMs**, no failures, 0 replicated changed cells; 40/128 extra hits, 23 positive contributions, all 32 integer rounded means unchanged. Camera 22 hits/64, 12 positive new rays; light 18 hits/64, 11 positive. C++/shader provenance shows production physical radiance `n001_physical_radiance.comp.glsl` quantizes Lambert into 16-bit, `i001_storage_update.comp.glsl` rounds probe sums to **integer mean before owner weight and composite**, erasing sub-integer influence. Offline, 8/32 unrounded means would differ; 4/32 are consumer-positive. Original exact +4/current-rounding intervention family **STOP under prospectively frozen protocol 027**, not the whole GI project. [Result 039](./results/039-p1m2b-bounded-screen-32of32-exact-hdr-null-stop.md). No need to regenerate CPU reference to prove zero signed RMS against any fixed same target for byte-identical pairs.
