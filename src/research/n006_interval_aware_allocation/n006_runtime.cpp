@@ -627,6 +627,40 @@ N006FrameResult N006Runtime::run_candidate_frame(
         stamp(19);
     }
 
+    // The same M0 lookup shader is now tested in its *actual* scheduling
+    // position: AFTER primary hits and canonical hash keys exist, BEFORE
+    // secondary ray creation and traversal. GPU query 20/21 (within the
+    // existing accepted 24-query pool) measures clear + dispatch + barriers.
+    // Queries 0..19 remain unchanged; this opt-in frame is instrumented and
+    // MUST NOT be mistaken for uninstrumented accepted stage timings.
+    if (request.p1m0_pretrace_coverage) {
+        if (!request.canonical_probe_pilot ||
+            !state_->p1m0_pretrace_enabled || !state_->p1m0_pretrace_stage ||
+            state_->direct_compact || request.mode != N006ExtraMode::Current) {
+            throw std::runtime_error(
+                "P1m0b pretrace requires opt-in canonical lean-copyback current frame");
+        }
+        stamp(20);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->p1m0_pretrace_counts.buffer, 0,
+            state_->p1m0_pretrace_counts.size, 0U);
+        impl.context.vk().cmdFillBuffer(
+            command, state_->p1m0_pretrace_stats.buffer, 0,
+            state_->p1m0_pretrace_stats.size, 0U);
+        i001_transfer_to_compute_barrier(impl.context, command);
+        const std::array<std::uint32_t, 4> coverage_push{{
+            state_->hash_capacity - 1U, 128U,
+            state_->hash_capacity, state_->hash_capacity,
+        }};
+        state_->p1m0_pretrace_stage->record(
+            command,
+            (impl.params.counts[1] + 7U) / 8U,
+            (impl.params.counts[2] + 7U) / 8U,
+            1U, coverage_push.data(), sizeof(coverage_push));
+        i001_compute_barrier(impl.context, command);
+        stamp(21);
+    }
+
     (direct_canonical ? state_->direct_ray_stage.get() : impl.ray_stage.get())
         ->record_indirect(command, impl.indirect.buffer, 0);
     i001_compute_barrier(impl.context, command);
@@ -739,9 +773,10 @@ N006FrameResult N006Runtime::run_candidate_frame(
         fail("N006 fence wait");
     }
 
-    std::array<std::uint64_t, 20> timestamps{};
+    std::array<std::uint64_t, 24> timestamps{};
     const auto timestamp_count =
-        (request.capture_hash_probe || request.canonical_probe_pilot)
+        request.p1m0_pretrace_coverage ? 22U
+        : (request.capture_hash_probe || request.canonical_probe_pilot)
             ? 20U : (active_extra ? 18U : 16U);
     if (impl.context.vk().getQueryPoolResults(
             impl.query_pool,
@@ -765,6 +800,15 @@ N006FrameResult N006Runtime::run_candidate_frame(
         state_->extra_stats, extra_values.data(), sizeof(extra_values));
 
     const auto period = impl.context.timestamp_period_ns();
+    if (request.p1m0_pretrace_coverage) {
+        const double measured =
+            timestamp_us(timestamps[20], timestamps[21], period);
+        if (!std::isfinite(measured) || measured <= 0.0) {
+            throw std::runtime_error("P1m0b invalid pretrace GPU timestamp");
+        }
+        state_->last_p1m0_pretrace_gpu_us = measured;
+        state_->last_p1m0_pretrace_frame = true;
+    }
     if (active_extra) {
         extra_producer_gpu_us =
             timestamp_us(timestamps[16], timestamps[17], period);
