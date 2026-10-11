@@ -10,6 +10,19 @@
       "protocol": "../experiments/001-reference-eligibility-protocol.md",
       "gpu_run": false,
       "physical_correctness_proven": false
+    },
+    {
+      "id": "N007-P0-002",
+      "status": "complete",
+      "classification": "diagnostic-only",
+      "result": "002-historical-summary-audit.json",
+      "source_summary_sha256": [
+        "1c251467f61b9bac777ca860f689c2903c55214cd4bb8ff9e2997b92e6cc98d6",
+        "b2d030bfa8cd653ac4aa64840a0c1cd2a1beab5e75d447e2f6ea783b92b"
+      ],
+      "gpu_run": false,
+      "PFM_read": false,
+      "physical_correctness_proven": false
     }
   ]
 }
