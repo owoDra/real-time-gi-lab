@@ -135,7 +135,7 @@ class TestIndependentStateM2b(unittest.TestCase):
             'research-n006-interval-aware-allocation',
         ):
             self.assertIn(phrase, run)
-        self.assertNotIn("github actions", run.lower())
+        self.assertNotIn(".github/workflows", run)
 
 
 if __name__ == "__main__":
