@@ -1,3 +1,12 @@
+## 2026-10-11 P1m0b target GPU PASS (newest)
+
+User uploaded `n006-p1m0-consumer-coverage-summary(2).json`, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, clean HEAD `359e6b87fe38919349b994136005251187137b4b`. Five frozen software scenes COMPLETE, zero failures. In-frame before-secondary count and independent postframe GPU count matched **every slot of 32768 values and all 8 counters**, all old M0 per-key SHA fingerprints matched, accepted HDR PFM and N004 gate intact. GPU timestamp pretrace clear+dispatch+barriers **21.280/14.387/14.868/22.683/20.439 µs** for static/camera/light/moving/deforming, respectively, **0.82–1.37%** of instrumented GI, 131104-byte scratch. All five passed predeclared cost cap `min(10% of instrumented complete GI, 50% of traversal)`. C0 source provenance still MATCHED. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md).
+
+**P1m0b GO (feasibility only)**. This does NOT establish signed HDR gain or predictive ranking. Canonical-key +4-ray intervention P1m1 is next. Keep one-key contrast, frozen M0 calibration strata and independent reference; no P2 scheduler claim. Need user GPU evidence for next phase; do not rerun B1/C0/M0/M0b; no PR or GitHub Actions.
+
+
+---
+
 ### 2026-10-11 — P1m0 consumer coverage 5/5 PASS; P1m0b pre-secondary feasibility next
 
 User's uploaded summary at clean HEAD `8a5cb25`, SHA256 `f355b7202e52127b044120ac8406e5dba4626dd88f4cf29a78f16abbc2c66cec`, verified five accepted software scene results: [result 030](./results/030-p1m0-five-scene-coverage-pass.md). **5/5, zero failed cases**, exact accepted PFM SHA/primary hit parity checked in original M0 runner, owner/key/lookup closure. Only **38–100 canonical keys among 3008–3220** had successful screen composite lookup attempts per frame (1.22–3.32%); 84.4–93.8% of successful lookup *counts* were cascade 3. No actual signed quality or P1 predictive ranking claims. All **60** previously selected M1 calibration-only key strata are available (zero/low/high ×4 cascades×5 scenarios), but **NOT YET ray-intervened**.
