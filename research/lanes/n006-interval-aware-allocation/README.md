@@ -1,3 +1,16 @@
+### 2026-10-11 — P1m0 consumer coverage 5/5 PASS; P1m0b pre-secondary feasibility next
+
+User's uploaded summary at clean HEAD `8a5cb25`, SHA256 `f355b7202e52127b044120ac8406e5dba4626dd88f4cf29a78f16abbc2c66cec`, verified five accepted software scene results: [result 030](./results/030-p1m0-five-scene-coverage-pass.md). **5/5, zero failed cases**, exact accepted PFM SHA/primary hit parity checked in original M0 runner, owner/key/lookup closure. Only **38–100 canonical keys among 3008–3220** had successful screen composite lookup attempts per frame (1.22–3.32%); 84.4–93.8% of successful lookup *counts* were cascade 3. No actual signed quality or P1 predictive ranking claims. All **60** previously selected M1 calibration-only key strata are available (zero/low/high ×4 cascades×5 scenarios), but **NOT YET ray-intervened**.
+
+Added prospective [experiment 022 P1m0b](./experiments/022-p1m0b-presecondary-coverage-cost.md): N006-only opt-in dispatch of exactly the M0 coverage shader **after primary hit and canonical hash but before secondary ray tracing**. Freeze exact bitwise comparison to postframe M0 scratch counters/stats, the five original key-row SHA fingerprints, accepted final HDR images, N004 sampled target hit oracle, new GPU timestamp clear+dispatch+barrier, 131104 bytes requested scratch, conservative prospectively fixed `C <= min(10% instrumented complete GI, 50% traversal)` per scene. Flag if cost exceeds without changing thresholds. Instrumented complete/prepare timings are NOT the prior uninstrumented baseline. **No corrected GPU evidence yet.** New one-batch:
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m0b_pretrace.sh
+```
+
+Expected output `out/research/n006-interval-aware-allocation/p1m0b-pretrace-coverage-five-scenes/<UTC>/n006-p1m0-consumer-coverage-summary.json`. Only after five-stage parity and bounded GPU cost can P1m1 proceed to causal canonical-key +4-ray / signed reference-quality study. Issue #42 OPEN, no PR/Actions.
+
 ### 2026-10-11 M0 GPU preflight timeout — 0/5 INVALID; targeted instrumentation
 
 Second user's unchanged local runner on HEAD `bd4aae0` obtained `status=invalid-retained`, **0/5**, because the `static` child exceeded the **600s bound** with no uploaded stderr/stdout (evidence path `.../p1m0-consumer-coverage-five-scenes/20261011T035058Z/`). Previous 210 Python unit tests and E003 source/runtime SPV MATCHED C0 static audit remain true, but **there is no GPU consumer count, marginal quality gain, coverage-strata evidence or scheduler authorization**. See [result 029](./results/029-p1m0-first-gpu-timeout-and-diagnostic-repair.md).
