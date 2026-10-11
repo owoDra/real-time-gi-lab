@@ -306,6 +306,11 @@ add_compute_shader(n006_p1m1_canonical_key_extra
   shaders/research/n006_interval_aware_allocation/n006_p1m1_canonical_key_extra.comp.glsl)
 add_custom_target(phos-n006-p1m1a-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_p1m1_canonical_key_extra.spv")
+# P1m2a is a separate opt-in direction-distribution arm. Keep M1 shader SHA.
+add_compute_shader(n006_p1m2a_tetra_octant_extra
+  shaders/research/n006_interval_aware_allocation/n006_p1m2a_tetra_octant_extra.comp.glsl)
+add_custom_target(phos-n006-p1m2a-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1m2a_tetra_octant_extra.spv")
 add_compute_shader(n006_p1l_b1_primary_near_first
   shaders/research/n006_interval_aware_allocation/n006_p1l_b1_primary_near_first.comp.glsl)
 # B1b count-only pair; never replaces the accepted original primary.
@@ -348,4 +353,5 @@ add_dependencies(phos-n006-intervention
   phos-n006-shaders phos-n003-comparison-shaders phos-n006-p1l-b0-shaders
   phos-n006-p1l-b1-shaders phos-n006-p1l-b1b-shaders
   phos-n006-p1l-b1c-shaders phos-n006-p1l-c0-shaders
-  phos-n006-p1m0-shaders phos-n006-p1m1a-shaders)
+  phos-n006-p1m0-shaders phos-n006-p1m1a-shaders
+  phos-n006-p1m2a-shaders)
