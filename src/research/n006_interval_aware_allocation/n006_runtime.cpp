@@ -148,6 +148,7 @@ N006Runtime::N006Runtime(
     state_->p1m1_canonical_extra_enabled = p1m1_canonical_extra_enabled;
     state_->p1m2_tetra_octant_enabled = p1m2_tetra_octant_enabled;
     state_->p1m3_fractional_storage = p1m3_fractional_storage;
+    auto& impl = *runtime_.impl_;
     if (p1m3_fractional_storage &&
         (!p1j_lean_hash || p1j_direct_compact ||
          impl.options.variant != I001Variant::LaneEFinalSoftware)) {
@@ -158,7 +159,6 @@ N006Runtime::N006Runtime(
     }
     if (p1l_b1c_axis_proxy && !p1l_b1_enabled)
         throw std::runtime_error("N006 P1l-B1c requires explicit B1 A/B pattern");
-    auto& impl = *runtime_.impl_;
     if (p1l_b1_enabled) {
         if (impl.options.variant != I001Variant::LaneEFinalSoftware ||
             !p1j_lean_hash || p1j_direct_compact) {
