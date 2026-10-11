@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "lane": "n007-reference-validity",
+  "experiments": [
+    {
+      "id": "N007-P0-001",
+      "status": "partial",
+      "classification": "diagnostic-only",
+      "result": "001-p0-source-audit-and-cpu-synthetic.md",
+      "protocol": "../experiments/001-reference-eligibility-protocol.md",
+      "gpu_run": false,
+      "physical_correctness_proven": false
+    }
+  ]
+}
