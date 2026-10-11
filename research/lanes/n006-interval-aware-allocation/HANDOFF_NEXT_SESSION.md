@@ -1,3 +1,20 @@
+# 2026-10-11 NEWEST — P1m1a 4/4 mechanism PASS, three null HDR effects; M1c hit-fate GPU preflight READY
+
+Uploaded `n006-p1m1a-canonical-key-pilot-summary(1).json` SHA256 **`ea8b9c928bd5f3470bcc85f33b1b6d98127a51da94961e5b27f1329e4d6d6f36`**, clean user-measured HEAD `dd5d8830ec008c527607a3eb29cf159f34ba7983`, AMD Radeon 8060S Graphics RADV. [Accepted result 034](./results/034-p1m1a-canonical-key-causal-null-4of4.md): `mechanism-preflight-complete`, 4/4, zero errors, 3008 canonical keys, 24064 accepted base rays, 24068 with any intervention; N004 hit mismatch=0, original M0 lookup key SHA all matched. **ALL 3 calibration C3 keys yielded 0 additional 16-bit radiance and zero changed RGB pixels/channels, exact same PFM SHA `2309b06c...` as control**. Zero(0 consumers): baseline/extra 0/0; Low(93 consumers): 0/0; High(875 consumers): 10/0 (integer per-output mean 1→1). For any common fixed reference `RMS(control,ref)-RMS(candidate,ref)=exact 0`. No signed quality improvement, predictor or P2 GO.
+
+P1m1a serial single-invocation key search measured 619.016/633.604/627.753 µs respectively, **not deployable** and NOT an estimate of marginal traversal cost. The cause of 12/12 zero extra contributions remains undetermined: extra rays may miss or hit surfaces with dark/rounded-zero shading.
+
+**Next phase P1m1c** source-frozen in [experiment 025](./experiments/025-p1m1c-ray-hit-vs-zero-energy-audit.md): N006-only postframe CPU readback from existing GPU hit buffer, classify per-ray hits/misses, base+extra positive contributions and hit-with-zero-radiance; no new shading/traversal shader, same 3 keys and immutable directions, same exact baseline/three null PFM image SHA mandatory, fail-closed. New result summary distinct from frozen M1a, 4 separately warmed cases; **GPU outcome pending**. One exact command:
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m1c_ray_fate.sh
+```
+
+Upload `out/research/n006-interval-aware-allocation/p1m1c-ray-fate-static-c3/<UTC>/n006-p1m1c-ray-fate-summary.json`. Then choose prospective sampling improvements on separate calibration/evaluation keys or halt if no causal quality signal. Reference-independent 0 signed RMS proof remains limited to the three current frozen identical images. No PR / GitHub Actions; Issue #42 OPEN.
+
+---
+
 # 2026-10-11 LATEST — M1a GPU 1/4 (control PASS), zero postframe diagnostic gate false (source fix pushed)
 
 User-uploaded `n006-p1m1a-canonical-key-pilot-summary.json` raw SHA256 `7b9fd8cca73a4764f796ebe8f086595c7086caf5c9cda1a6fb6dc7c7929cc9dd`, GPU Radeon 8060S RADV, original branch HEAD `6f37f288821545082a93463620142f0575cda5d1`. M1a output `status=invalid-retained`, one verified case (control), one zero failure. Control exact accepted HDR SHA `2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e`, 3008 canonical outputs / 24064 rays, zero N004 mismatches, no extra rays. Zero intervention GPU render and CPU/GPU hit oracles completed (0/0/0) then independent postframe coverage `P1m0 requires finished Lane-E-final software canonical lean-hash frame` aborted; no Zero candidate evidence labels serialized. Low/High NOT run.
