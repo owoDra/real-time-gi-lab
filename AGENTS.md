@@ -10,6 +10,10 @@
 - `research/lanes/<lane>/results/`: detailed outcome records; historical branches and source SHAs remain provenance, not competing current summaries.
 - Source, shader, tests: executable behavior. Do not replace source truth with prose.
 
+## AI research transparency
+
+This project was largely developed through AI-assisted, near-autonomous iterations using ChatGPT and OpenAI Codex CLI, with human oversight. Keep that provenance visible in the [research workflow disclosure](docs/ai-research-workflow.md) and README. Treat human-operated GPU measurements and archived evidence as authoritative; do not imply AI independently performed unavailable hardware verification or that every line has a known AI author.
+
 ## Branch roles
 
 - `main`: verified, published research-result checkpoint; **not** an active experimental branch.
