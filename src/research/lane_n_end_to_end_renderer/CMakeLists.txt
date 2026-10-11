@@ -301,6 +301,11 @@ add_compute_shader(n006_p1m0_consumer_coverage
   shaders/research/n006_interval_aware_allocation/n006_p1m0_consumer_coverage.comp.glsl)
 add_custom_target(phos-n006-p1m0-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_p1m0_consumer_coverage.spv")
+# Isolated P1m1a +4 ray preflight; no accepted shader or target changed.
+add_compute_shader(n006_p1m1_canonical_key_extra
+  shaders/research/n006_interval_aware_allocation/n006_p1m1_canonical_key_extra.comp.glsl)
+add_custom_target(phos-n006-p1m1a-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1m1_canonical_key_extra.spv")
 add_compute_shader(n006_p1l_b1_primary_near_first
   shaders/research/n006_interval_aware_allocation/n006_p1l_b1_primary_near_first.comp.glsl)
 # B1b count-only pair; never replaces the accepted original primary.
@@ -343,4 +348,4 @@ add_dependencies(phos-n006-intervention
   phos-n006-shaders phos-n003-comparison-shaders phos-n006-p1l-b0-shaders
   phos-n006-p1l-b1-shaders phos-n006-p1l-b1b-shaders
   phos-n006-p1l-b1c-shaders phos-n006-p1l-c0-shaders
-  phos-n006-p1m0-shaders)
+  phos-n006-p1m0-shaders phos-n006-p1m1a-shaders)
