@@ -525,6 +525,7 @@ int main(int argc, char** argv) {
     bool p1m2b_independent_state = false;
     bool p1m3_fractional_storage = false;
     bool p1m3b_holdout_quality = false;
+    bool p1m3c_reference_preflight = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -588,6 +589,9 @@ int main(int argc, char** argv) {
         else if (arg == "--p1m3b-holdout-quality") {
             p1m3b_holdout_quality = true;
         }
+        else if (arg == "--p1m3c-reference-preflight") {
+            p1m3c_reference_preflight = true;
+        }
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -635,6 +639,17 @@ int main(int argc, char** argv) {
                 "P1m3b requires moving-rigid SW Q8; "
                 "CPU references are control-only");
         }
+        // P1m3c is a DIFFERENT predeclared deforming-control reference
+        // eligibility study. P1m3b moving-rigid original gate is untouched.
+        if (p1m3c_reference_preflight &&
+            (p1m3b_holdout_quality || !p1m3_fractional_storage ||
+             !p1m2b_independent_state || scenario_name != "deforming-control" ||
+             p1m2_tetra_octant_directions ||
+             (!skip_reference && p1m1_canonical_token != 0U))) {
+            throw std::runtime_error(
+                "P1m3c requires Q8 deforming-control, original directions "
+                "and CPU references only in zero-token baseline");
+        }
         // P1m3a is an independently frozen alternative STORAGE REPRESENTATION.
         // Historical M1a/M2a/M2b storage semantics must remain byte-identical.
         if (p1m3_fractional_storage) {
@@ -646,7 +661,7 @@ int main(int argc, char** argv) {
                 (scenario_name == "light-motion" &&
                  p1m1_canonical_token == 3223324678U);
             if (!p1m2b_independent_state ||
-                (!p1m3b_holdout_quality && !valid_calibration_key) ||
+                (!(p1m3b_holdout_quality || p1m3c_reference_preflight) && !valid_calibration_key) ||
                 p1m2_tetra_octant_directions) {
                 throw std::runtime_error(
                     "P1m3a Q8 requires independent-state camera/light "
@@ -658,9 +673,10 @@ int main(int argc, char** argv) {
         if (p1m2b_independent_state &&
             (!p1m0_coverage || p1m0_pretrace_coverage ||
              (scenario_name != "camera-motion" && scenario_name != "light-motion" &&
-               !(p1m3b_holdout_quality && scenario_name == "moving-rigid")) ||
+               !(p1m3b_holdout_quality && scenario_name == "moving-rigid") &&
+               !(p1m3c_reference_preflight && scenario_name == "deforming-control")) ||
              variant_name != "lane-e-final-software" ||
-             !canonical_lean_hash || canonical_zero_copy || (!skip_reference && !(p1m3b_holdout_quality && p1m1_canonical_token == 0U)) ||
+             !canonical_lean_hash || canonical_zero_copy || (!skip_reference && !((p1m3b_holdout_quality || p1m3c_reference_preflight) && p1m1_canonical_token == 0U)) ||
              topology || mode_text != "current" ||
              source_warmup_frames != 32U ||
              target_state_warmup_frames != 8U || target_frames != 1U ||
@@ -684,7 +700,7 @@ int main(int argc, char** argv) {
                 !p1m0_coverage || p1m0_pretrace_coverage ||
                 variant_name != "lane-e-final-software" ||
                 !canonical_lean_hash || canonical_zero_copy ||
-                (!skip_reference && !(p1m3b_holdout_quality && p1m1_canonical_token == 0U)) || topology ||
+                (!skip_reference && !((p1m3b_holdout_quality || p1m3c_reference_preflight) && p1m1_canonical_token == 0U)) || topology ||
                 mode_text != "current" || source_warmup_frames != 32U ||
                 target_state_warmup_frames != 8U || target_frames != 1U ||
                 capture_visible_tiles || capture_probe_multiplicity ||
@@ -925,7 +941,7 @@ int main(int argc, char** argv) {
                 !canonical_lean_hash || canonical_zero_copy || p1l_stage_any ||
                 canonical_probe_pilot || canonical_matrix_case ||
                 !canonical_frame_pattern.empty() || !three_arm_pattern.empty() ||
-                topology || (!skip_reference && !(p1m3b_holdout_quality && p1m1_canonical_token == 0U)) || capture_gpu_unique_hash ||
+                topology || (!skip_reference && !((p1m3b_holdout_quality || p1m3c_reference_preflight) && p1m1_canonical_token == 0U)) || capture_gpu_unique_hash ||
                 capture_probe_equivalence || capture_probe_multiplicity ||
                 capture_visible_tiles || !hash_frame_pattern.empty() ||
                 mode != lane_n::N006ExtraMode::Current ||
@@ -1339,7 +1355,7 @@ int main(int argc, char** argv) {
                     artifact_dir,
                     "frames/reference-8bounce.pfm");
                 references.assign(frames.size(), shared);
-                if (p1m3b_holdout_quality) {
+                if (p1m3b_holdout_quality || p1m3c_reference_preflight) {
                     // Distinct seeds from default reference, same source
                     // state, 8 diffuse bounces and original convergence.
                     lane_n::N001ReferenceSettings independent_settings{};
@@ -1387,7 +1403,8 @@ int main(int argc, char** argv) {
             << "  \"p1m3_fractional_storage\":"
             << (p1m3_fractional_storage ? "true" : "false") << ",\n"
             << "  \"p1m3b_holdout_quality\":"
-            << (p1m3b_holdout_quality ? "true" : "false") << ",\n"
+            << (p1m3b_holdout_quality ? "true" : "false") << ",\n"            << "  \"p1m3c_reference_preflight\":"
+            << (p1m3c_reference_preflight ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
@@ -1434,7 +1451,7 @@ int main(int argc, char** argv) {
             if (skip_reference) out << "null";
             else write_reference(out, references[index]);
             out << ",\"reference_independent\":";
-            if (skip_reference || !p1m3b_holdout_quality) out << "null";
+            if (skip_reference || !(p1m3b_holdout_quality || p1m3c_reference_preflight)) out << "null";
             else write_reference(out, independent_references[index]);
             out << ",\"hit_diagnostics\":";
             if (frame.hit_diagnostics_executed) write_hit(out, frame.hits);
