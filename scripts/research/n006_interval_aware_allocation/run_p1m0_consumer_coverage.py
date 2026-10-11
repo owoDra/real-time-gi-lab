@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any
 
 import run_p1_pilot as pilot
+from p1m1_calibration_selection import select_calibration_keys
 from run_p1l_a1b_sampled_hit import (
     HASH_SLOTS, SCENE_EXPECTATIONS, SOURCE_WARMUPS, TARGET_WARMUPS,
     validate_frame, expected_sha,
@@ -238,8 +239,14 @@ def main() -> int:
                     f"P1m0 {scenario} exit {process.returncode}; inspect stderr.log")
             evidence_file = folder / pilot.EVIDENCE_NAME
             raw = evidence_file.read_bytes()
+            data = json.loads(raw)
             result = audit_case(
-                json.loads(raw), folder, cfg["target_gpu"], scenario)
+                data, folder, cfg["target_gpu"], scenario)
+            # Prospective M1 calibration strata are decided only after full
+            # M0 SHA/counter/parity validation. No quality reference or gain
+            # values are read to select these candidate canonical keys.
+            key_rows = data["frames"][0]["p1m0_consumer_coverage"]["key_rows"]
+            result["m1_calibration_only_selection"] = select_calibration_keys(key_rows)
             result["raw_evidence_sha256"] = hashlib.sha256(raw).hexdigest()
             summary["cases"].append(result)
             save()
@@ -252,6 +259,15 @@ def main() -> int:
             save()
             raise
     summary["status"] = "complete"
+    summary["m1_calibration_only_key_status"] = (
+        "ready_calibration_only"
+        if all(case["m1_calibration_only_selection"]["status"] ==
+               "ready_calibration_only" for case in summary["cases"])
+        else "incomplete_strata_no_intervention")
+    summary["m1_calibration_only_selection_count"] = sum(
+        case["m1_calibration_only_selection"]["actual_selection_count"]
+        for case in summary["cases"])
+    summary["m1_calibration_only_expected_selection_count"] = 60
     save()
     print(json.dumps({"status": "complete", "cases": len(summary["cases"]),
                       "summary": str(summary_file)},
