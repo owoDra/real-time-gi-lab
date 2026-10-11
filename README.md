@@ -1,4 +1,4 @@
-# phos-gi-lab
+# real-time-gi-lab
 
 **Evidence-driven research toward a competitive real-time global illumination architecture.**
 
