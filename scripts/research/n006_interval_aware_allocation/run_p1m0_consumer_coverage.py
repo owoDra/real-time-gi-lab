@@ -8,6 +8,8 @@ speedup evidence. Retain errors and every attempted run.
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import argparse
+import math
 import hashlib
 import json
 import subprocess
@@ -23,6 +25,18 @@ from run_p1l_a1b_sampled_hit import (
 )
 
 PROTOCOL = "n006-p1m0-consumer-coverage-five-scenes-v1"
+PRETRACE_PROTOCOL = "n006-p1m0b-pretrace-cost-five-scenes-v1"
+# Prospective source-control fingerprints from independent completed M0 5/5:
+# results/030-p1m0-five-scene-coverage-pass.md, original summary SHA256
+# f355b7202e52127b044120ac8406e5dba4626dd88f4cf29a78f16abbc2c66cec.
+# This test checks the same GPU signal is available PRE-SECONDARY, not gain.
+FROZEN_M0 = {
+    "static": ("020ac742cdddf44f627095f54b081ab39646b36a3457a7f98e29044407fb68e2", 11400, 100),
+    "camera-motion": ("ee0cebb3771f6cb2e43622f843b8ca9c7504c39f6f7239f9d887062e93c34e5e", 12437, 42),
+    "light-motion": ("020ac742cdddf44f627095f54b081ab39646b36a3457a7f98e29044407fb68e2", 11400, 100),
+    "moving-rigid": ("189e6c69f3bd96f7b99cbb13cecba777e4094d35f7f47d42521d087380b95ec4", 11032, 38),
+    "deforming-control": ("fea8628c854aa807deb08a222efc50d64be785ea680e859999a78feeea80c4fe", 11403, 100),
+}
 VARIANT = "lane-e-final-software"
 SCENARIOS = ("static", "camera-motion", "light-motion",
              "moving-rigid", "deforming-control")
@@ -172,7 +186,54 @@ def audit_case(data: dict[str, Any], folder: Path,
         "consumer_key_coverage": coverage,
     }
 
+def audit_pretrace(cov: dict[str, Any], audited: dict[str, Any],
+                   scenario: str, timing: dict[str, Any]) -> dict[str, Any]:
+    if (cov.get("pretrace_executed") is not True or
+        cov.get("pretrace_slot_byte_equal") is not True or
+        cov.get("pretrace_stats_byte_equal") is not True):
+        raise ValueError("P1m0b pre-secondary/postframe full-slot/stat parity failed")
+    expected_hash, expected_matched, expected_keys = FROZEN_M0[scenario]
+    if (audited["key_rows_sha256"] != expected_hash or
+        audited["matched_lookups"] != expected_matched or
+        audited["keys_with_consumers"] != expected_keys):
+        raise ValueError("P1m0b pre-secondary counters drifted from accepted M0 5/5")
+    cost = cov.get("pretrace_clear_and_count_gpu_us")
+    bytes_ = nonnegative_int(cov.get("pretrace_scratch_bytes"),
+                             "pretrace_scratch_bytes")
+    if (type(cost) not in (float, int) or
+        not math.isfinite(float(cost)) or cost <= 0 or
+        bytes_ != (HASH_SLOTS + 8) * 4):
+        raise ValueError("P1m0b GPU cost or 131104-byte scratch invalid")
+    # Prospective, conservative illustrative cost feasibility check for
+    # this pretrace counting stage; NOT a P1 predictive-quality or P2 GO.
+    # A full P2 ROI still needs equal-K paired measurements and quality.
+    complete = timing.get("complete_gi_gpu")
+    traversal = timing.get("traversal_gpu")
+    if (type(complete) not in (float, int) or
+        type(traversal) not in (float, int) or
+        complete <= 0 or traversal <= 0 or
+        not math.isfinite(float(complete)) or
+        not math.isfinite(float(traversal))):
+        raise ValueError("P1m0b missing instrumented primary cost denominators")
+    cost_limit = min(0.10 * float(complete), 0.50 * float(traversal))
+    return {
+        "pretrace_clear_dispatch_barrier_gpu_us": float(cost),
+        "pretrace_scratch_bytes": bytes_,
+        "full_slot_byte_equal_to_postframe": True,
+        "eight_stats_byte_equal_to_postframe": True,
+        "previous_m0_key_rows_sha256": expected_hash,
+        "cost_gate": "within_predeclared_limit" if cost <= cost_limit
+                     else "over_predeclared_limit",
+        "predeclared_limit_gpu_us": cost_limit,
+        "not": "marginal quality benefit, predictor, P2 performance, GPU ROI",
+    }
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--pretrace", action="store_true",
+                        help="N006-only pre-secondary hash coverage cost + parity")
+    args = parser.parse_args()
     head = pilot.require_clean_branch()
     if not pilot.BINARY.is_file():
         raise RuntimeError("P1m0 binary missing: mise run build")
@@ -181,12 +242,13 @@ def main() -> int:
     if not scene.is_file() or pilot.sha256(scene) != cfg["baseline"]["scene_sha256"]:
         raise RuntimeError("P1m0 accepted Sponza scene absent/modified")
     dest = (pilot.ROOT / "out/research/n006-interval-aware-allocation" /
-            "p1m0-consumer-coverage-five-scenes" /
+            ("p1m0b-pretrace-coverage-five-scenes" if args.pretrace
+             else "p1m0-consumer-coverage-five-scenes") /
             datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ"))
     dest.mkdir(parents=True, exist_ok=False)
     summary_file = dest / "n006-p1m0-consumer-coverage-summary.json"
     summary: dict[str, Any] = {
-        "protocol_version": PROTOCOL,
+        "protocol_version": PRETRACE_PROTOCOL if args.pretrace else PROTOCOL,
         "status": "in-progress",
         "formal": False,
         "diagnostic_only": True,
@@ -197,7 +259,10 @@ def main() -> int:
         "target_warmup_frames": TARGET_WARMUPS,
         "candidate_rays_added": 0,
         "reference_generated": False,
-        "diagnostic_work_inside_accepted_timing": False,
+        "diagnostic_work_inside_accepted_timing": bool(args.pretrace),
+        "prior_m0_upload_sha256": (
+            "f355b7202e52127b044120ac8406e5dba4626dd88f4cf29a78f16abbc2c66cec"
+            if args.pretrace else None),
         "case_matrix": list(SCENARIOS),
         "cases": [], "failures": [],
         "timeout_seconds_per_process": TIMEOUT_SECONDS,
@@ -221,6 +286,8 @@ def main() -> int:
             "--skip-reference", "--canonical-lean-hash",
             "--p1m0-consumer-coverage",
         ]
+        if args.pretrace:
+            cmd.append("--p1m0-pretrace-coverage")
         print(f"[P1m0] {scenario} ({len(summary['cases'])+1}/5); "
               f"stderr={folder.resolve() / 'stderr.log'}", flush=True)
         try:
@@ -263,6 +330,18 @@ def main() -> int:
             data = json.loads(raw)
             result = audit_case(
                 data, folder, cfg["target_gpu"], scenario)
+            if args.pretrace:
+                if data.get("p1m0_pretrace_coverage") is not True:
+                    raise ValueError("P1m0b opt-in was not serialized by renderer")
+                result["m0b_pretrace_cost"] = audit_pretrace(
+                    data["frames"][0]["p1m0_consumer_coverage"],
+                    result["consumer_key_coverage"], scenario,
+                    data["frames"][0]["timing_us"])
+                # The measured frame includes the opt-in GPU counting stage;
+                # do not present it as accepted baseline stage timestamps.
+                result["accepted_stage_timestamps_gpu_us"] = None
+                result["instrumented_in_renderer_timing_us"] = (
+                    data["frames"][0]["timing_us"])
             # Prospective M1 calibration strata are decided only after full
             # M0 SHA/counter/parity validation. No quality reference or gain
             # values are read to select these candidate canonical keys.
@@ -283,6 +362,12 @@ def main() -> int:
                   file=sys.stderr, flush=True)
             raise
     summary["status"] = "complete"
+    if args.pretrace:
+        summary["pretrace_cost_gate_status"] = (
+            "within_predeclared_limit_5_of_5"
+            if all(case["m0b_pretrace_cost"]["cost_gate"] ==
+                   "within_predeclared_limit" for case in summary["cases"])
+            else "over_predeclared_limit_no_m1_go")
     summary["m1_calibration_only_key_status"] = (
         "ready_calibration_only"
         if all(case["m1_calibration_only_selection"]["status"] ==
