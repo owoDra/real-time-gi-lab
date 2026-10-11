@@ -22,8 +22,8 @@ class TestP1m0CoverageAudit(unittest.TestCase):
         rows[0]["producer_owner_outputs"] += extra_owners
         coverage = {
             "diagnostic_only": True, "hash_capacity": m0.HASH_SLOTS,
-            "valid_primary_pixels": 1, "lookup_attempts": 4,
-            "matched_lookups": 4, "absent_keys": 0,
+            "valid_primary_pixels": 12770, "lookup_attempts": 12770 * 4,
+            "matched_lookups": 4, "absent_keys": 12770 * 4 - 4,
             "invalid_keys": 0, "probe_exhaustions": 0,
             "uint32_overflows": 0, "invalid_launch": 0,
             "canonical_keys": len(rows), "keys_with_consumers": 4,
