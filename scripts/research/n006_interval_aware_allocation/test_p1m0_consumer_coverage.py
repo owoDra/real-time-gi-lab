@@ -55,6 +55,32 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
         self.assertIn("p1m0_coverage))", cli)
         self.assertIn("p1l_stage_any || p1m0_coverage", cli)
 
+    def test_warmup_gates_allow_five_p1m0_scenarios_without_relaxing_legacy(self):
+        cli = (ROOT / "src/research/n006_interval_aware_allocation"
+               / "n006_intervention_main.cpp").read_text()
+        # Regression: previous P1h-only count contract demanded precisely 4172
+        # owners, rejecting the accepted STATIC scenario (4167 owners).
+        self.assertIn(
+            "const bool scenario_counted_target = p1l_stage_any || p1m0_coverage;",
+            cli)
+        self.assertIn("const bool expected_counts = scenario_counted_target", cli)
+        self.assertIn("(scenario_counted_target\n", cli)
+        self.assertIn("stats.outputs == first_target_warmup_outputs", cli)
+        # The historical P1h hardcoded deforming-control check stays intact
+        # for its original protocol: only P1m0/P1l opt in to dynamic counts.
+        self.assertIn("stats.visible_owners == 4172U", cli)
+        self.assertIn("last_target_warmup_owners != 4172U", cli)
+        self.assertIn("source_warmup_frames != 32U", cli)
+        self.assertIn("target_state_warmup_frames != 8U", cli)
+
+    def test_post_failure_log_diagnostic_is_discoverable(self):
+        runner = (ROOT / "scripts/research/n006_interval_aware_allocation"
+                  / "run_p1m0_consumer_coverage.py").read_text()
+        self.assertIn("evidence root: {dest.resolve()}", runner)
+        self.assertIn("stderr={folder.resolve() / 'stderr.log'}", runner)
+        self.assertIn("child diagnostic tail:", runner)
+        self.assertIn("failure report: {summary_file.resolve()}", runner)
+
     def test_diagnostic_uses_existing_key_packing_and_bounded_slots(self):
         diagnostic = SHADER.read_text()
         canonical = CANONICAL.read_text()
