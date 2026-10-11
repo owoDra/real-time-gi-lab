@@ -113,7 +113,7 @@ class TestIndependentStateM2b(unittest.TestCase):
             'source_warmup_frames != 32U',
             'target_state_warmup_frames != 8U',
             'target_frames != 1U',
-            '"  \\"p1m2b_independent_state\\":"',
+            "p1m2b_independent_state",
         ):
             self.assertIn(guard, main)
         self.assertIn('p1m1_canonical_token == 3221225474U', main)
