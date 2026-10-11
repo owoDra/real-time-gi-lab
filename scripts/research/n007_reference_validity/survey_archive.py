@@ -96,30 +96,72 @@ def inspect_pair(archive: Path, reference: Path, candidate: Path) -> dict:
     }
 
 
-def survey(archive: Path, max_pairs: int = 200) -> dict:
+def summarize_signatures(results: list[dict]) -> tuple[list[dict], dict[str, dict]]:
+    """Do not confuse repeated archived runs with independent scene evidence."""
+    signatures: dict[tuple[str, str], dict] = {}
+    cohorts: dict[str, dict] = {}
+    for item in results:
+        key = (item['reference_sha256'], item['candidate_sha256'])
+        signature = signatures.setdefault(key, {
+            'reference_sha256': key[0],
+            'candidate_sha256': key[1],
+            'count': 0,
+            'reference_positive_pixels': item['reference_positive_pixels'],
+            'candidate_positive_pixels': item['candidate_positive_pixels'],
+            'representative_reference': item['reference'],
+        })
+        signature['count'] += 1
+        rel_parts = Path(item['reference']).parts
+        group = rel_parts[3] if len(rel_parts) > 3 else 'unknown'
+        cohort = cohorts.setdefault(group, {
+            'inspected_pairs': 0,
+            'reference_all_black_pairs': 0,
+            'gpu_positive_with_black_reference_pairs': 0,
+            'unique_signature_keys': set(),
+        })
+        cohort['inspected_pairs'] += 1
+        black = item['reference_positive_pixels'] == 0
+        cohort['reference_all_black_pairs'] += int(black)
+        cohort['gpu_positive_with_black_reference_pairs'] += int(
+            black and item['candidate_positive_pixels'] > 0)
+        cohort['unique_signature_keys'].add(key)
+    for cohort in cohorts.values():
+        cohort['unique_pair_signatures'] = len(cohort.pop('unique_signature_keys'))
+    return sorted(signatures.values(), key=lambda x: (-x['count'], x['reference_sha256'], x['candidate_sha256'])), dict(sorted(cohorts.items()))
+
+
+def survey(archive: Path, max_pairs: int = 0) -> dict:
     archive = archive.resolve()
     if not archive.is_dir():
         raise ValueError(f'no private archive at {archive}')
     pairs = discover_pairs(archive)
-    if max_pairs < 1:
-        raise ValueError('--max-pairs must be positive')
+    if max_pairs < 0:
+        raise ValueError('--max-pairs must be nonnegative (0 means all)')
+    selected = pairs[:max_pairs] if max_pairs else pairs
     results, errors = [], []
-    for ref, cand in pairs[:max_pairs]:
+    for ref, cand in selected:
         try:
             results.append(inspect_pair(archive, ref, cand))
         except (OSError, ValueError, struct.error, OverflowError) as e:
             errors.append({'reference': str(ref.relative_to(archive)), 'error': str(e)})
+    signatures, cohorts = summarize_signatures(results)
     return {
-        'schema_version': 1,
+        'schema_version': 2,
         'classification': 'archived-image-survey-only; not physical-validation',
         'archive_root_not_exported': True,
         'total_discovered_pairs': len(pairs),
         'inspected_pairs': len(results),
         'failed_pairs': len(errors),
-        'truncated': len(pairs) > max_pairs,
+        'truncated': bool(max_pairs and len(pairs) > max_pairs),
         'reference_all_black_pairs': sum(x['reference_positive_pixels'] == 0 for x in results),
         'gpu_positive_with_black_reference_pairs': sum(
             x['reference_positive_pixels'] == 0 and x['candidate_positive_pixels'] > 0 for x in results),
+        'unique_pair_signatures': len(signatures),
+        'unique_black_reference_signatures': sum(x['reference_positive_pixels'] == 0 for x in signatures),
+        'unique_gpu_positive_with_black_reference_signatures': sum(
+            x['reference_positive_pixels'] == 0 and x['candidate_positive_pixels'] > 0 for x in signatures),
+        'signature_groups': signatures,
+        'cohort_summary': cohorts,
         'pairs': results,
         'errors': errors,
         'no_gpu_or_cpu_rendering': True,
@@ -129,7 +171,8 @@ def survey(archive: Path, max_pairs: int = 200) -> dict:
 def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--archive', required=True, type=Path)
-    p.add_argument('--max-pairs', type=int, default=200)
+    p.add_argument('--max-pairs', type=int, default=0,
+                   help='Optional diagnostic cap; 0 (default) inspects all discovered pairs')
     p.add_argument('--output', type=Path,
                    default=Path('out/research/n007-reference-validity/p0-archived-reference-survey.json'))
     args = p.parse_args()
@@ -143,7 +186,7 @@ def main() -> int:
             raise ValueError('no paired reference/candidate PFMs discovered in archived N001/N004/N006 directories')
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(result, sort_keys=True, indent=2, allow_nan=False) + '\n')
-        print(json.dumps({k: result[k] for k in ('total_discovered_pairs','inspected_pairs','failed_pairs','truncated','reference_all_black_pairs','gpu_positive_with_black_reference_pairs')}, indent=2))
+        print(json.dumps({k: result[k] for k in ('total_discovered_pairs','inspected_pairs','failed_pairs','truncated','reference_all_black_pairs','gpu_positive_with_black_reference_pairs','unique_pair_signatures','unique_black_reference_signatures')}, indent=2))
         print(f'Full read-only survey: {out}')
         return 0 if not result['failed_pairs'] and not result['truncated'] else 1
     except (OSError, ValueError, json.JSONDecodeError) as e:
