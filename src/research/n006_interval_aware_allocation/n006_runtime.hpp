@@ -26,6 +26,7 @@ struct N006ExtraRequest {
     bool canonical_probe_pilot{};
     bool direct_compact_work{}; // P1k per-frame three-arm selector; requires opt-in stages.
     bool p1l_b1_near_first{}; // N006 isolated near-first software primary arm.
+    bool p1m0_pretrace_coverage{}; // Opt-in N006-only placement/cost probe.
 };
 
 // Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
@@ -199,6 +200,14 @@ struct N006P1m0KeyRow {
     std::uint32_t producer_owner_outputs{};
 };
 struct N006P1m0Coverage {
+    // True only after the same frame's pre-secondary and postframe per-slot
+    // coverage counters/statistics are bit-identical. Extra GPU time is NOT
+    // part of the previously accepted uninstrumented timing baseline.
+    bool pretrace_executed{};
+    bool pretrace_slot_byte_equal{};
+    bool pretrace_stats_byte_equal{};
+    double pretrace_clear_and_count_gpu_us{};
+    std::uint64_t pretrace_scratch_bytes{};
     std::uint32_t hash_capacity{};
     std::uint32_t valid_primary_pixels{};
     std::uint32_t lookup_attempts{};
@@ -221,7 +230,8 @@ public:
     explicit N006Runtime(I001Options options, bool p1j_lean_hash = false,
                          bool p1j_direct_compact = false,
                          bool p1l_b1_enabled = false,
-                         bool p1l_b1c_axis_proxy = false);
+                         bool p1l_b1c_axis_proxy = false,
+                         bool p1m0_pretrace_enabled = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
