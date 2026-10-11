@@ -1306,6 +1306,41 @@ N006FrameResult N006Runtime::run_candidate_frame(
             impl.accum, all_merged.data(),
             all_merged.size() * sizeof(all_merged[0]));
         const auto merged = all_merged.at(trace.output_id);
+        // P1m1c: inspection-only GPU hit readback. Source CPU sample is
+        // 32-byte GpuHit: normal_t[4], metadata[4]; metadata[3]==1 is hit.
+        // No new shader dispatch, ray direction or quality threshold.
+        std::vector<GpuHit> gpu_hits(total_work);
+        impl.context.download_device_buffer(
+            impl.hits, gpu_hits.data(), gpu_hits.size() * sizeof(GpuHit));
+        const auto count_ray_fate = [&](std::uint32_t work_index,
+                                        std::uint32_t value,
+                                        bool extra_ray) {
+            const auto& hit = gpu_hits.at(work_index);
+            if (hit.metadata[3] > 1U ||
+                (hit.metadata[3] == 1U &&
+                 !std::isfinite(hit.normal_t[3]))) {
+                throw std::runtime_error("P1m1c invalid GPU hit flag/distance");
+            }
+            if (hit.metadata[3] == 1U) {
+                if (extra_ray) {
+                    ++trace.extra_hit_count;
+                    if (value == 0U) {
+                        ++trace.extra_hit_zero_radiance_rays;
+                    } else {
+                        ++trace.extra_positive_radiance_rays;
+                    }
+                } else {
+                    ++trace.base_hit_count;
+                    if (value != 0U) ++trace.base_positive_radiance_rays;
+                }
+            } else {
+                if (value != 0U) {
+                    throw std::runtime_error(
+                        "P1m1c nonzero radiance contribution without GPU hit");
+                }
+                if (extra_ray) ++trace.extra_miss_count;
+            }
+        };
         for (std::uint32_t ray = 0U; ray < 8U; ++ray) {
             const auto index = trace.output_id * 8U + ray;
             const auto& c = contributions.at(index);
@@ -1313,6 +1348,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
                 throw std::runtime_error("P1m1a base contribution output/value invalid");
             }
             trace.base_radiance_sum16 += c[1];
+            count_ray_fate(index, c[1], false);
             ++trace.base_ray_count;
         }
         for (std::uint32_t ray = 0U; ray < 4U; ++ray) {
@@ -1325,10 +1361,16 @@ N006FrameResult N006Runtime::run_candidate_frame(
                 throw std::runtime_error("P1m1a extra contribution/index mismatch");
             }
             trace.extra_radiance_sum16 += c[1];
+            count_ray_fate(index, c[1], true);
             ++trace.extra_ray_count;
         }
         trace.merged_sample_count = merged[1];
         if (trace.base_ray_count != 8U || trace.extra_ray_count != 4U ||
+            trace.extra_hit_count + trace.extra_miss_count != 4U ||
+            trace.extra_positive_radiance_rays +
+                trace.extra_hit_zero_radiance_rays != trace.extra_hit_count ||
+            trace.base_hit_count > 8U ||
+            trace.base_positive_radiance_rays > trace.base_hit_count ||
             trace.merged_sample_count != 12U ||
             std::uint64_t(merged[0]) !=
                 trace.base_radiance_sum16 + trace.extra_radiance_sum16) {
