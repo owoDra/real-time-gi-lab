@@ -1,3 +1,12 @@
+### 2026-10-11 second user batch — C0 static MATCHED, first M0 scenario warmup repaired
+
+- **210 N006 tests OK**, CPU numerical audit confirmed synthetic float32 division-vs-reciprocal non-equivalence, B1c static shader instruction deltas captured (without GPU re-benchmark).
+- **E003 C0 gate PASS (static provenance only)**: actively loaded `e003_instance_quantized.spv` SHA matches freshly rebuilt accepted source. The accepted binary has 36,072 bytes and 7 statically declared `OpFDiv` instructions; B0 instrumented has 38,404 bytes and also 7 OpFDiv. [Evidence record 028](./results/028-p1l-c0-static-spv-provenance-pass.md). Do not infer GPU division bottleneck, hoisting or speed.
+- **M0 first GPU case INVALID / result unavailable**: subrenderer exit 1 on `static`; source audit found P1m0 still applied old P1h **4,172**-owner, single-deforming-scene warmup gate despite static's accepted **4,167** owners. Corrected both count and stabilization branches to scene-aware `p1l_stage_any || p1m0_coverage`, preserving old non-M0 branch. Static regression test added; rerun is **pending**, true exception in old stderr not yet inspected.
+- Former runner hid the useful child message behind `stderr.log` basename. The actual old location is `out/research/n006-interval-aware-allocation/p1m0-consumer-coverage-five-scenes/<UTC>/static/stderr.log`. The new runner prints the full path and up to 6,000 characters of stderr/stdout and points at the retained summary. **No evidence of shader pass/fail or M1 predictor quality yet**.
+
+Run the same one-batch command below after branch fast-forward. This is an independent follow-up, not repetition of rejected B1a/B1c GPU measurements.
+
 # N006 — RC-native interval-aware ray allocation
 
 Issue: [#42](https://github.com/owoDra/phos-gi-lab/issues/42)  
