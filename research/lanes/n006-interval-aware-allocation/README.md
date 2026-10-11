@@ -1,3 +1,16 @@
+### 2026-10-11 P1m3b reference-identical INVALID; P1m3c deforming reference eligibility implemented, GPU pending
+
+User P1m3b [result 043](./results/043-p1m3b-moving-rigid-identical-reference-invalid.md): two independent CPU reference PFMs identical, `status=invalid-retained`, no selected keys, zero treatments/quality labels and therefore **no evidence about Q8 signed benefit**. Prior accepted N001 moving-rigid CPU reference was all black, so identical PFMs may reflect legitimate signal-blind reference, not faulty seeds. Source uploaded JSON does NOT report actual reference brightness. Do **not** assume noise=0 or score GI versus a black ideal. Q8 M3a mechanism GO unchanged, P1/P2 still NO GO.
+
+Added zero-rerun forensics tool `diagnose_p1m3b_reference_capture.py` to inspect retained GPU candidate and two CPU PFMs, SHA/nonzero pixels/luminance/full RGB RMS. Separate pre-registered [M3c deforming eligibility protocol 030](./experiments/030-p1m3c-reference-eligible-deforming-quality-protocol.md) and [source implementation 044](./results/044-p1m3c-deforming-reference-eligibility-implementation.md): deforming-control only, requires positive independent converged CPU refs in Q8 first GPU baseline before any selected +4 ray. Black/identical refs => `reference-ineligible-retained` STOP. If valid, second Q8 control byte parity, original M0 source fingerprint, prospective one max-consumer key per cascade+zero negative, ≤5 original-direction single-key +4 GPU interventions, repeated PFM, conservative signed RGB RMS both-reference detection bound. One shared Sponza geometry; no established general quality/ROI/P2. Original accepted shaders unchanged. No new M3c build/unittest/GPU yet.
+
+Next:
+```bash
+mise exec -- python scripts/research/n006_interval_aware_allocation/diagnose_p1m3b_reference_capture.py
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3c_deforming_reference_quality.sh
+```
+Outputs `n006-p1m3b-reference-forensics.json` and `n006-p1m3c-deforming-reference-quality-summary.json`. No PR/CI/Actions.
+
 ### 2026-10-11 P1m3a Q8 GPU 3/3 replicated image influence PASS — distinct M3b signed HDR holdout implemented
 
 Actual [P1m3a GPU result 041](./results/041-p1m3a-q8-gpu-replicated-image-mechanism.md) (`n006-p1m3a-fractional-storage-summary.json` SHA256 `bfb3b537f761e26e011a2ea748bee0253014ae8192bca470d38d8b41b7ce074a`, clean AMD Radeon 8060S): two identical Q8 controls per camera/light scenario, 3/3 predicted arithmetic-nonzero consumer keys produce **reproducible float HDR PFM channel changes** (36, 919, 875 RGB pixels; 108, 2757, 2625 channel values; max change ~6.38e-6), one preselected arithmetic-zero key exact null. Q8 controls DIFFER from old integer-storage PFMs, so image influence **is only relative to the same Q8 control**, not a positive quality/signed RMS label. This confirms rounded integer mean storage was a bottleneck, preserving the original P1m2b 32/32 image-null STOP. P1 predictive utility, GPU ROI and P2 not established.
