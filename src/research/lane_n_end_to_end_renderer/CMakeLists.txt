@@ -342,4 +342,5 @@ target_compile_definitions(phos-n006-intervention PRIVATE
 add_dependencies(phos-n006-intervention
   phos-n006-shaders phos-n003-comparison-shaders phos-n006-p1l-b0-shaders
   phos-n006-p1l-b1-shaders phos-n006-p1l-b1b-shaders
-  phos-n006-p1l-b1c-shaders phos-n006-p1l-c0-shaders)
+  phos-n006-p1l-b1c-shaders phos-n006-p1l-c0-shaders
+  phos-n006-p1m0-shaders)
