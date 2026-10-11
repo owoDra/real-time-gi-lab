@@ -296,6 +296,11 @@ add_compute_shader(n006_p1l_c0_e003_source_rebuild
   shaders/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl)
 add_custom_target(phos-n006-p1l-c0-shaders DEPENDS
   "${CMAKE_BINARY_DIR}/shaders/n006_p1l_c0_e003_source_rebuild.spv")
+# P1m0: build only, diagnostic shader has no attached dispatch or timing claim.
+add_compute_shader(n006_p1m0_consumer_coverage
+  shaders/research/n006_interval_aware_allocation/n006_p1m0_consumer_coverage.comp.glsl)
+add_custom_target(phos-n006-p1m0-shaders DEPENDS
+  "${CMAKE_BINARY_DIR}/shaders/n006_p1m0_consumer_coverage.spv")
 add_compute_shader(n006_p1l_b1_primary_near_first
   shaders/research/n006_interval_aware_allocation/n006_p1l_b1_primary_near_first.comp.glsl)
 # B1b count-only pair; never replaces the accepted original primary.
