@@ -4,6 +4,12 @@ Issue: [#42](https://github.com/owoDra/phos-gi-lab/issues/42)
 Branch: `research-n006-interval-aware-allocation`  
 Predecessor HEAD: `research-n005-adaptive-tracing@3a098584ec76bcaa06e5166793b2946cd1f7eb25`.
 
+### 2026-10-11 user build/test feedback and conditional M1 preparation
+
+User's one-batch log: **C++ build/link passed**, then `206` N006 Python tests reported **3 P1m0 static test failures**: the whitespace comparator accidentally used `r"\\\\s+"` instead of a whitespace regex, and the test incorrectly expected three negated CLI gate occurrences whereas the actual contract has two negations and a positive allowlist. These are harness test bugs, **not measured GPU correctness or performance failures**. Pushed fix `070a720`; revalidated accepted N001 and actual SOFTWARE N003 composite expressions against the M0 shader after whitespace normalization. **Complete unit re-run and GPU M0 still pending**; do not mark them PASS.
+
+To avoid another session boundary, M1 calibration selection now has [prospectively frozen 5×4×3 zero/min-positive/max-positive strata in experiment 021](./experiments/021-p1m1-canonical-probe-marginal-value-design.md), pure `p1m1_calibration_selection.py` + tests. The M0 runner automatically writes the chosen **calibration-only canonical token** per scenario/cascade/stratum into `n006-p1m0-consumer-coverage-summary.json`, plus a **60 expected** selection count and an explicit `incomplete_strata_no_intervention` status where key coverage lacks discrimination. Selection never reads reference error and never justifies P2. The previously documented single batch command remains unchanged.
+
 ## 2026-10-11 ongoing research — E003 C0 + original N006 P1m0
 
 **Current focus is not another primary BVH near-first attempt.** B1a and B1c were GPU REJECTED, B1b only reduced work counts. Result [025](./results/025-p1l-b1c-packed-axis-performance-reject.md) retains the frozen GPU 15-process/180-pair evidence; do not rerun B1a/B1c.
