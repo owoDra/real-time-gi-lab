@@ -15,7 +15,7 @@
 - `main`: verified, published research-result checkpoint; **not** an active experimental branch.
 - `research`: integrated, reviewed research assets and cross-lane decisions.
 - A dedicated `research-lane-*` (or explicit `research-n*`) branch per experiment. Experiment commits normally go directly to that branch.
-- Promotion to `research` requires complete evidence inventory, schema/reference validation, test/build checks, explicit acceptance/rejection and no unapproved code activation. Promote to `main` only after the full verified checkpoint.
+- **New or changed executable Renderer behavior** requires build, applicable tests, and runtime/correctness checks before architecture promotion. A **historical evidence-only consolidation** may publish with explicit user authorization, immutable source/evidence identities, verified Git ancestry, result-index/link checks, and a provably unchanged active build graph; record that tests were **not rerun** and do not claim runtime regression validation. Promote to `main` only after the appropriate checkpoint gates.
 - Preserve historical Git refs, non-promotion results, failed runs, and the exact accepted evidence bytes. No force push or ref deletion during consolidation.
 - Never use `git merge -s ours`, synthetic empty merges or misleading commit ancestry to present missing files as integrated. Preserve actual records and explain any branch kept as a historical ref.
 - No pull-request requirement for routine studies. Do not add GitHub Actions, CI workflows or secret-bearing logs.
