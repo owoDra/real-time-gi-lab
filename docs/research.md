@@ -1,4 +1,4 @@
-# Research charter — phos-gi-lab
+# Research charter — real-time-gi-lab
 
 ## Final objective
 
