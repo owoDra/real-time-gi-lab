@@ -91,7 +91,7 @@ class TestMovingRigidReferenceQuality(unittest.TestCase):
             'reference_independent',
             'p1m3b_holdout_quality',
             'p1m3_fractional_storage',
-            'if (skip_reference || !p1m3b_holdout_quality) out << "null"',
+            'if (skip_reference || !(p1m3b_holdout_quality || p1m3c_reference_preflight)) out << "null"',
         ):
             self.assertIn(guard, source)
         old = OLD.read_text()
