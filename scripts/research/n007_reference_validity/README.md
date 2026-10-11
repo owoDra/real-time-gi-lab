@@ -25,3 +25,16 @@ find ../gi-lab-old-private -type f -name '*.pfm' -print | head -30
 For other captures, `inspect_hdr.py` supports explicit actual `--reference` PFM paths; placeholder `path/to/reference-a.pfm` is **not** an executable example.
 
 A two-reference historical inspection is a **diagnostic** and intentionally cannot satisfy the four-seed N007 statistical eligibility gate. `statistically_eligible=false` for only two references is expected, not a retrospective change to N006's `invalid-retained` decision. The original archive must remain private; upload only the resulting diagnostic JSON when asking for review.
+
+## N001/N004/N006 all-archive signal survey
+
+After retrieving the research branch, run from the **new** checkout (never from the private archive):
+
+```bash
+python3 scripts/research/n007_reference_validity/survey_archive.py \
+  --archive ../gi-lab-old-private
+```
+
+Version 2 scans **all matching PFMs by default** (the initial default of 200 caused a lexically-biased partial N001–N003 sample despite 338 pairs discovered). Output: `out/research/n007-reference-validity/p0-archived-reference-survey.json`. It contains `cohort_summary` and `signature_groups` to show repeated exact SHA-256 image pairs separately from physical scenario diversity. The number of archived pairs must **not** be reported as the number of independent experiments. Optional diagnostic cap `--max-pairs N` is available for partial testing; `--max-pairs 0` is explicitly unlimited.
+
+This is a **read-only comparison of previously rendered images**, not an independent physics oracle; image names are matched within each folder and the script doesn't infer correspondence between scenes. If `failed_pairs > 0` or `truncated=true`, the run cannot establish complete archive coverage. It never writes to `../gi-lab-old-private/` and never initiates Vulkan work. Summary-level data is suitable for sharing; historical artifacts remain private.
