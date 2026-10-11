@@ -311,6 +311,12 @@ void write_extra(
             << ",\"baseline_mean16\":" << m1.baseline_mean16
             << ",\"candidate_mean16\":" << m1.candidate_mean16
             << ",\"merged_sample_count\":" << m1.merged_sample_count
+            << ",\"base_hit_count\":" << m1.base_hit_count
+            << ",\"extra_hit_count\":" << m1.extra_hit_count
+            << ",\"extra_miss_count\":" << m1.extra_miss_count
+            << ",\"base_positive_radiance_rays\":" << m1.base_positive_radiance_rays
+            << ",\"extra_positive_radiance_rays\":" << m1.extra_positive_radiance_rays
+            << ",\"extra_hit_zero_radiance_rays\":" << m1.extra_hit_zero_radiance_rays
             << ",\"extra_injection_gpu_us\":" << m1.extra_injection_gpu_us;
     }
     out << "}}";
