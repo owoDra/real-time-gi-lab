@@ -15,5 +15,11 @@ git pull --ff-only
 mise run build
 mise exec -- python -m unittest discover \
   -s scripts/research/n006_interval_aware_allocation -p 'test_*.py'
+# Inspect the already-retained M3b failure without running GPU/CPU again.
+# Lack of old artifacts must not invalidate the independently frozen M3c pilot.
+if compgen -G "out/research/n006-interval-aware-allocation/p1m3b-moving-rigid-q8-signed/*/n006-p1m3b-moving-rigid-signed-quality-summary.json" > /dev/null; then
+  mise exec -- python scripts/research/n006_interval_aware_allocation/diagnose_p1m3b_reference_capture.py ||
+    echo "[P1m3c] historical M3b forensics unavailable; retaining original failure" >&2
+fi
 mise exec -- python scripts/research/n006_interval_aware_allocation/run_p1m3c_deforming_reference_quality.py
 echo "[P1m3c] Upload out/research/n006-interval-aware-allocation/p1m3c-deforming-reference-q8/*/n006-p1m3c-deforming-reference-quality-summary.json"
