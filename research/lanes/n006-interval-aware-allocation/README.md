@@ -6,9 +6,10 @@ Added zero-rerun forensics tool `diagnose_p1m3b_reference_capture.py` to inspect
 
 Next:
 ```bash
-mise exec -- python scripts/research/n006_interval_aware_allocation/diagnose_p1m3b_reference_capture.py
 bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3c_deforming_reference_quality.sh
 ```
+
+The launcher fast-forwards, builds and tests, then **automatically runs the M3b old-file-only forensics when a retained old summary exists**, before the independent P1m3c deforming GPU trial. Never replays old moving-rigid GPU.
 Outputs `n006-p1m3b-reference-forensics.json` and `n006-p1m3c-deforming-reference-quality-summary.json`. No PR/CI/Actions.
 
 ### 2026-10-11 P1m3a Q8 GPU 3/3 replicated image influence PASS — distinct M3b signed HDR holdout implemented
