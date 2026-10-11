@@ -1,0 +1,41 @@
+{
+  "classification": "diagnostic-only-from-authentic-retained-summary-json",
+  "m3b": {
+    "PFM_read": false,
+    "failure": [
+      {
+        "error": "P1m3b two independent reference images identical; cannot bound noise"
+      }
+    ],
+    "reference_brightness_known": false,
+    "status": "invalid-retained"
+  },
+  "m3c": {
+    "PFM_hashes_independently_verified": false,
+    "PFM_read": false,
+    "forced_full_frame_p99_zero_for_pairwise_luma_error": true,
+    "historical_decision_unmodified": true,
+    "max_luminance_a": 0.00017470112652517855,
+    "max_luminance_b": 0.00017022230895236135,
+    "mean_rgb_channel_a": 6.551668980780967e-8,
+    "mean_rgb_channel_b": 6.531626112119919e-8,
+    "pixels_per_image": 57600,
+    "positive_fraction_a": 0.0027951388888888887,
+    "positive_fraction_b": 0.0029340277777777776,
+    "positive_pixels_a": 161,
+    "positive_pixels_b": 169,
+    "reference_A_B_rgb_rms": 6.328440285901378e-8,
+    "reference_A_sha256_claim": "9302b47c982778dd654d7d404b23c743a7445ca966d49c5a526b1727cf8fbc87",
+    "reference_B_sha256_claim": "6f7eba36d806ab90de443af34f044b38062e726ea9f8e78c1c01e878759eb3f1",
+    "reported_spp_a": 512,
+    "reported_spp_b": 512,
+    "union_fraction_upper_bound": 0.005729166666666666,
+    "union_positive_upper_bound": 330
+  },
+  "physical_correctness_proven": false,
+  "schema_version": 1,
+  "sources": {
+    "m3b_sha256": "1c251467f61b9bac777ca860f689c2903c55214cd4bb8ff9e2997b92e6cc98d6",
+    "m3c_sha256": "b2d030bfa8cd653ac4aa64840a0c1cd2a9de2a1beab5e75d447e2f6ea783b92b"
+  }
+}
