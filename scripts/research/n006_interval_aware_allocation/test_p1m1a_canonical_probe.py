@@ -52,9 +52,9 @@ class TestCanonicalM1Mechanism(unittest.TestCase):
         # Both P1m1a and P1m2a use this one placement; M2a merely
         # selects a separate shader at the same pre-secondary boundary.
         dispatch = re.search(
-            r"\\(request\\.p1m2_tetra_octant_directions\\s*"
-            r"\\?\\s*state_->p1m2_tetra_octant_stage\\.get\\(\\)\\s*"
-            r":\\s*state_->p1m1_extra_stage\\.get\\(\\)\\)->record\\(",
+            r"\(request\.p1m2_tetra_octant_directions\s*"
+            r"\?\s*state_->p1m2_tetra_octant_stage\.get\(\)\s*"
+            r":\s*state_->p1m1_extra_stage\.get\(\)\)->record\(",
             runtime,
         )
         self.assertIsNotNone(dispatch)
