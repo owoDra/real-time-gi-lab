@@ -1,6 +1,6 @@
 # N006 P1m0 — primary-hit → composite-probe consumer coverage (FROZEN, SOURCE-LEVEL)
 
-Issue #42; 2026-10-11. **No GPU measurements or P1 predictor validation yet.** Follows P1a–P1c influence/duplicate-input observations and P1j canonical probe×cascade work. The separate P1l-C0 E003 software traversal investigation remains a performance sub-study, *not* the original N006 predictive allocation goal.
+Issue #42; 2026-10-11. **Freeze source-level protocol remains unchanged.** Subsequent outcome: [M0 five-scene diagnostic 5/5 PASS](../results/030-p1m0-five-scene-coverage-pass.md), signed marginal predictor still unvalidated. Real pre-secondary cost/placement is the separate [P1m0b experiment 022](./022-p1m0b-presecondary-coverage-cost.md). Follows P1a–P1c influence/duplicate-input observations and P1j canonical probe×cascade work. The separate P1l-C0 E003 software traversal investigation remains a performance sub-study, *not* the original N006 predictive allocation goal.
 
 ## Precisely stated uncertainty
 
