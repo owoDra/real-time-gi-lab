@@ -1,3 +1,32 @@
+# 2026-10-11 latest — N006 E003-C0 static gate + P1m0 five-scene diagnostic prepared, NOT GPU-verified
+
+**Read this first.** Previous handoffs below are historical. Private repo `owoDra/phos-gi-lab`, branch `research-n006-interval-aware-allocation`, Issue #42 OPEN. **Continue GitHub work without confirmations; push directly; never PR/Actions.** Actual AMD Radeon 8060S (RADV STRIX_HALO) hardware must run local GPU experiments. Previous supplied P1l-B1c GPU summary was accepted as REJECT, not a research-lane close; B1a GPU REJECT, B1b GPU work counts reduced with no speed gain proved. Result [025](./results/025-p1l-b1c-packed-axis-performance-reject.md).
+
+## Evidence/work completed THIS session (no new AMD GPU test)
+
+1. E003 quantized secondary software traversal source/layout [result 026](./results/026-p1l-c0a-e003-source-layout-audit.md): B003GpuQuantNode 176 bytes with eight 16-byte child records and 48-byte header; up to 8 children/node, 64-stack, slab-division source and preexisting direction sorting. B0 primary work previously ~25.5–26.3 AABB tests/secondary ray; do **not** equate counts to GPU execution. **C0** [protocol 019](./experiments/019-p1l-c0-e003-wide-child-cost-audit.md) builds untouched E003 source into N006-specific `n006_p1l_c0_e003_source_rebuild.spv` then compares SHA to active `e003_instance_quantized.spv`, which current CMake did NOT explicitly declare. Missing/mismatch is `blocked` JSON + nonzero status; NO E003 C1 or arithmetic rewrite on that evidence.
+2. E003 numerical [result 027](./results/027-p1l-c0b-f32-slab-rounding-risk.md): deterministic synthetic CPU IEEE float32 `f32((mn-o)/d)` vs `f32((mn-o)*f32(1/d))` disagreed on 51,445/200,000 samples and a constructed ray/AABB slab accept/reject boundary. **NOT** GPU compiler output, performance or sampled real workload. Script `audit_p1l_c0_division_rounding.py` and tests. Rejected algebraic exactness assumption, not the entire E003 research.
+3. New prospective original-lane [experiment 020](./experiments/020-p1m0-probe-consumer-coverage.md) (P1m0 M0) is a GPU probe-lookup consumer coverage diagnostic. Original N003 software composite computes `probe=floor((primary-hit-world-position-scene_origin)/cascade_spacing)` on every valid pixel × cascade then probes storage key `(probe,cascade)`. N006 canonical hash already indexes unique producer `(probe,cascade)`. Thus potential pre-secondary feature is **count of valid primary pixel lookups of each canonical key**, including zero-consumer keys. This is **not marginal quality gain, nor necessarily a successful storage read**. Previous P1a owner-local interventions did not make measurable global quality (11/12 exact 0, one tiny gain), P1b shared-key storage dilution; P1c 81.85% base ray duplication, later canonical dedup GPU benefit.
+4. New source: `shaders/research/n006_interval_aware_allocation/n006_p1m0_consumer_coverage.comp.glsl` with private 32768 uint32 counters, 8 stats, readonly primary-hit/canonical-key SSBO, source-exact N003/N001 composite key expression and bounded hash lookup. `N006Runtime::p1m0_consumer_coverage()` in N006 runtime cpp/hpp allocates isolated buffers, dispatches **AFTER completed accepted frame timestamps**, saves original primary hit/image bytes then verifies unchanged afterward, captures per-key sorted token/consumer/producer-multiplicity and fail-closes count conservation. N006 CLI `--p1m0-consumer-coverage` requires exactly one lean-copyback SOFTWARE canonical target frame with 32+8 warmups and current zero-extra mode; returns per-key JSON. Python runner `run_p1m0_consumer_coverage.py` checks 5 accepted image SHA, hash/owner/secondary stage invariants (reuses `run_p1l_a1b_sampled_hit.validate_frame`), counted valid pixels×4 match/absent/invalid, sorted full key set, multiplicity sum, by-cascade counts; 600s/process. Tests `test_p1m0_consumer_coverage.py` and `test_run_p1m0_consumer_coverage.py`. All actual GPU/compiler/C++ builds **UNEXECUTED here**; don't claim PASS until upload.
+5. [Experiment 021](./experiments/021-p1m1-canonical-probe-marginal-value-design.md) conditionally defines next P1m1: only after M0 correctness and pre-secondary cost proof, inject canonical output +4 deterministic rays and measure **signed reference-image quality gains** by coverage classes, including zero and negative labels, distinct trajectories/calibration/holdout and variable ray normalization; **no P2 scheduler until prospective P1 predictive gate**. Original N006 Issue #42 research objective remains unresolved.
+
+## Next exact physical experiment (one batch)
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_next_verified.sh
+```
+
+Script will check clean branch, `git pull --ff-only`, `mise run build`, full N006 Python tests, **static-only** B1c SPIR-V report (no rejected GPU rerun), the CPU float32 risk audit, C0 E003 compiled-source binary gate, **then independent** P1m0 five-scene one-frame GPU consumer diagnostic. It intentionally continues to M0 even if C0 is `blocked`; those are scientifically independent but C0 gate remains closed and final shell exits nonzero to mark unresolved E003 provenance. Outputs:
+- `out/research/n006-interval-aware-allocation/p1m0-consumer-coverage-five-scenes/<UTC>/n006-p1m0-consumer-coverage-summary.json`
+- `out/research/n006-interval-aware-allocation/p1l-c0-e003-static-audit.json`
+- `out/research/n006-interval-aware-allocation/b1c-spv-audit.json`
+- `out/research/n006-interval-aware-allocation/p1l-c0-floating-divide-risk.json`
+
+Upon new uploaded evidence: **continue autonomously** auditing five cases and if M0 PASS launch P1m1 implementation gates (prospectively freeze *numeric* thresholds/reference split before results) while separately deciding C0 E003 candidate only if compiled SPIR-V and active shader provenance match. If GPU fails, fix branch issues via GitHub without telling user to manually edit code; only ask a new single GPU command when needed. No PR/GitHub Actions. End of lane requires P1/P2 predictive decision or explicit justified STOP, **not** ancillary BVH optimization alone.
+
+---
+
 # 2026-10-11 latest — B1c GPU REJECT; E003 C0 source/SPIR-V provenance audit prepared
 
 **Read this update first.** Previous B1c pre-run handoff below is historical, **not an instruction to rerun B1c**.
