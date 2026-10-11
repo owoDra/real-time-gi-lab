@@ -887,6 +887,9 @@ int main(int argc, char** argv) {
 
         // P1h: force traversal maintenance / dynamic transition before the
         // FIRST timed target. Warmup samples are not pair statistics.
+        // P1m0 spans five frozen scenes, not P1h's one hardcoded scene.
+        // Freeze per-target-state stable counts before measuring each case.
+        const bool scenario_counted_target = p1l_stage_any || p1m0_coverage;
         bool target_warmup_correct = true;
         double last_target_warmup_maintenance_us = 0.0;
         std::uint32_t last_target_warmup_owners = 0U;
@@ -911,7 +914,7 @@ int main(int argc, char** argv) {
                     first_target_warmup_outputs = stats.outputs;
                     first_target_warmup_work = stats.work_items;
                 }
-                const bool expected_counts = p1l_stage_any
+                const bool expected_counts = scenario_counted_target
                     ? (first_target_warmup_owners != 0U &&
                        stats.visible_owners == first_target_warmup_owners &&
                        stats.outputs == first_target_warmup_owners * 4U &&
@@ -935,7 +938,7 @@ int main(int argc, char** argv) {
                 last_target_warmup_work = stats.work_items;
             }
             if (last_target_warmup_maintenance_us != 0.0 ||
-                (p1l_stage_any
+                (scenario_counted_target
                     ? (last_target_warmup_owners != first_target_warmup_owners ||
                        last_target_warmup_work != first_target_warmup_work)
                     : (last_target_warmup_owners != 4172U ||
