@@ -15,7 +15,7 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
     def test_source_pixel_to_key_arithmetic_exactly_mirrors_composite(self):
         import re
         def compact(value: str) -> str:
-            return re.sub(r"\\s+", "", value)
+            return re.sub(r"\s+", "", value)
         diagnostic = compact(SHADER.read_text())
         for relative in (
             "shaders/research/lane_n_end_to_end_renderer/n001_composite.comp.glsl",
@@ -49,7 +49,10 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
         self.assertIn('runtime.p1m0_consumer_coverage()', cli)
         # The legacy software-variant/lean-hash/target-warmup gates have
         # three independent discriminators; M0 is narrowly opted in.
-        self.assertGreaterEqual(cli.count("!p1m0_coverage"), 3)
+        self.assertGreaterEqual(cli.count("!p1m0_coverage"), 2)
+        # The third gate is a positive allowlist, rather than a negation.
+        self.assertIn("!three_arm_pattern.empty() || p1l_stage_any ||", cli)
+        self.assertIn("p1m0_coverage))", cli)
         self.assertIn("p1l_stage_any || p1m0_coverage", cli)
 
     def test_diagnostic_uses_existing_key_packing_and_bounded_slots(self):
