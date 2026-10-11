@@ -9,9 +9,10 @@
 Next commands on clean research branch:
 
 ```bash
-mise exec -- python scripts/research/n006_interval_aware_allocation/diagnose_p1m3b_reference_capture.py
 bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3c_deforming_reference_quality.sh
 ```
+
+The launcher fast-forwards, builds and tests, then **automatically runs the M3b old-file-only forensics when a retained old summary exists**, before the independent P1m3c deforming GPU trial. Never replays old moving-rigid GPU.
 
 Upload `n006-p1m3b-reference-forensics.json` and `n006-p1m3c-deforming-reference-quality-summary.json` or earliest error. The diagnostic uses previously retained local images (not uploaded); the GPU command fast-forward pulls, builds, unittests, then tests reference eligibility. P1m2b original integer +4 STOP, Q8 P1m3a 3/3 mechanism GO, quality unresolved; GI research ongoing. No PL1 predictor/P2 scheduler or HWRT-free claim.
 
