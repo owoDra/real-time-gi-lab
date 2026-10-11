@@ -124,6 +124,9 @@ struct N006Runtime::State {
     B002Buffer p1m1_stats{};
     std::unique_ptr<I001ComputeStage> p1m1_extra_stage;
     std::unique_ptr<I001ComputeStage> p1m2_tetra_octant_stage;
+    bool p1m3_fractional_storage{};
+    std::unique_ptr<I001ComputeStage> p1m3_fractional_storage_stage;
+    std::unique_ptr<I001ComputeStage> p1m3_fractional_weight_stage;
 };
 
 N006Runtime::N006Runtime(
@@ -131,7 +134,8 @@ N006Runtime::N006Runtime(
     bool p1l_b1_enabled, bool p1l_b1c_axis_proxy,
     bool p1m0_pretrace_enabled,
     bool p1m1_canonical_extra_enabled,
-    bool p1m2_tetra_octant_enabled)
+    bool p1m2_tetra_octant_enabled,
+    bool p1m3_fractional_storage)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     if (p1j_direct_compact && !p1j_lean_hash) {
@@ -143,6 +147,12 @@ N006Runtime::N006Runtime(
     state_->p1m0_pretrace_enabled = p1m0_pretrace_enabled;
     state_->p1m1_canonical_extra_enabled = p1m1_canonical_extra_enabled;
     state_->p1m2_tetra_octant_enabled = p1m2_tetra_octant_enabled;
+    state_->p1m3_fractional_storage = p1m3_fractional_storage;
+    if (p1m3_fractional_storage &&
+        (!p1j_lean_hash || p1j_direct_compact ||
+         impl.options.variant != I001Variant::LaneEFinalSoftware)) {
+        throw std::runtime_error("P1m3a requires SW lean-copyback canonical path");
+    }
     if (p1m2_tetra_octant_enabled && !p1m1_canonical_extra_enabled) {
         throw std::runtime_error("P1m2a requires M1 canonical key injection");
     }
@@ -292,6 +302,27 @@ N006Runtime::N006Runtime(
         impl.context,
         shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_weight_storage.spv"),
         weight_bindings, sizeof(N006WeightPush));
+    if (p1m3_fractional_storage) {
+        // Opt-in Q8 storage, both arms including control use this same
+        // representation. Neither accepted I001 nor P1g stage is modified.
+        const std::array<I001Binding, 5> fractional_storage_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.counters},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.work},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.accum},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_slots},
+            {4, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.storage_stats},
+        }};
+        state_->p1m3_fractional_storage_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR,
+                        "n006_p1m3_fractional_storage_update.spv"),
+            fractional_storage_bindings, sizeof(StoragePush));
+        state_->p1m3_fractional_weight_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR,
+                        "n006_p1m3_fractional_weight_storage.spv"),
+            weight_bindings, sizeof(N006WeightPush));
+    }
 
     // P1m0b: the same accepted M0 shader executes after canonical-key
     // discovery and before secondary ray dispatch. Its scratch is disjoint.
@@ -413,6 +444,8 @@ N006Runtime::N006Runtime(
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
+    state_->p1m3_fractional_weight_stage.reset();
+    state_->p1m3_fractional_storage_stage.reset();
     state_->p1m2_tetra_octant_stage.reset();
     state_->p1m1_extra_stage.reset();
     state_->p1m0_pretrace_stage.reset();
@@ -772,7 +805,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
     const StoragePush storage_reserve_push{
         impl.storage_capacity - 1U, kHashMaxProbe, impl.frame_id, 0U};
     (direct_canonical ? state_->direct_storage_update_stage.get()
-                      : impl.storage_update_stage.get())->record_indirect(
+                      : state_->p1m3_fractional_storage
+                          ? state_->p1m3_fractional_storage_stage.get()
+                          : impl.storage_update_stage.get())->record_indirect(
         command,
         impl.indirect.buffer,
         0,
@@ -783,7 +818,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
     const StoragePush storage_accumulate_push{
         impl.storage_capacity - 1U, kHashMaxProbe, impl.frame_id, 1U};
     (direct_canonical ? state_->direct_storage_update_stage.get()
-                      : impl.storage_update_stage.get())->record_indirect(
+                      : state_->p1m3_fractional_storage
+                          ? state_->p1m3_fractional_storage_stage.get()
+                          : impl.storage_update_stage.get())->record_indirect(
         command,
         impl.indirect.buffer,
         0,
@@ -799,7 +836,9 @@ N006FrameResult N006Runtime::run_candidate_frame(
             impl.frame_id,
         };
         (direct_canonical ? state_->direct_weight_stage.get()
-                          : state_->canonical_weight_stage.get())->record(
+                          : state_->p1m3_fractional_storage
+                              ? state_->p1m3_fractional_weight_stage.get()
+                              : state_->canonical_weight_stage.get())->record(
             command, groups(impl.params.limits[2]), 1U, 1U,
             &weight, sizeof(weight));
         i001_compute_barrier(impl.context, command);
