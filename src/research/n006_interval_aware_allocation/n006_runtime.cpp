@@ -1278,7 +1278,7 @@ N006FrameResult N006Runtime::run_candidate_frame(
         trace.output_id = m1_values[3];
         trace.extra_injection_gpu_us = m1_extra_gpu_us;
         if (trace.output_id >= result.stats.outputs ||
-            extra.base_traced_rays != trace.output_id * 0U +
+            extra.base_traced_rays !=
                 result.stats.outputs * impl.settings.rays_per_probe) {
             throw std::runtime_error("P1m1a output or base ray count mismatch");
         }
@@ -1286,11 +1286,14 @@ N006FrameResult N006Runtime::run_candidate_frame(
         impl.context.download_device_buffer(
             impl.contributions, contributions.data(),
             contributions.size() * sizeof(contributions[0]));
-        std::array<std::uint32_t, 2> merged{};
-        // Only the one changed canonical output is read back.
+        // This staging API has no offset readback overload; capture exactly
+        // the canonical output prefix and inspect the selected slot.
+        std::vector<std::array<std::uint32_t, 2>> all_merged(
+            result.stats.outputs);
         impl.context.download_device_buffer(
-            impl.accum, &merged, sizeof(merged),
-            VkDeviceSize(trace.output_id) * sizeof(merged));
+            impl.accum, all_merged.data(),
+            all_merged.size() * sizeof(all_merged[0]));
+        const auto merged = all_merged.at(trace.output_id);
         for (std::uint32_t ray = 0U; ray < 8U; ++ray) {
             const auto index = trace.output_id * 8U + ray;
             const auto& c = contributions.at(index);
