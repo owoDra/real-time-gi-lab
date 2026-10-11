@@ -112,8 +112,9 @@ struct ReferenceMeta {
 [[nodiscard]] ReferenceMeta render_reference(
     const lane_n::I001RendererReadback& readback,
     const fs::path& artifact_dir,
-    const std::string& relative_path) {
-    const auto result = lane_n::n001_render_reference(readback, {});
+    const std::string& relative_path,
+    const lane_n::N001ReferenceSettings& settings = {}) {
+    const auto result = lane_n::n001_render_reference(readback, settings);
     if (!result.converged) {
         throw std::runtime_error("N006 reference did not converge");
     }
@@ -523,6 +524,7 @@ int main(int argc, char** argv) {
     bool p1m2_tetra_octant_directions = false;
     bool p1m2b_independent_state = false;
     bool p1m3_fractional_storage = false;
+    bool p1m3b_holdout_quality = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -583,6 +585,9 @@ int main(int argc, char** argv) {
         else if (arg == "--p1m3-fractional-storage") {
             p1m3_fractional_storage = true;
         }
+        else if (arg == "--p1m3b-holdout-quality") {
+            p1m3b_holdout_quality = true;
+        }
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -619,6 +624,17 @@ int main(int argc, char** argv) {
             throw std::runtime_error(
                 "P1m2a directions require a frozen P1m1 canonical token");
         }
+        // P1m3b moving-rigid is a distinct prospective Q8 quality holdout.
+        // References can be rendered in a baseline control only.
+        if (p1m3b_holdout_quality &&
+            (!p1m3_fractional_storage || !p1m2b_independent_state ||
+             scenario_name != "moving-rigid" ||
+             p1m2_tetra_octant_directions ||
+             (!skip_reference && p1m1_canonical_token != 0U))) {
+            throw std::runtime_error(
+                "P1m3b requires moving-rigid SW Q8; "
+                "CPU references are control-only");
+        }
         // P1m3a is an independently frozen alternative STORAGE REPRESENTATION.
         // Historical M1a/M2a/M2b storage semantics must remain byte-identical.
         if (p1m3_fractional_storage) {
@@ -629,7 +645,8 @@ int main(int argc, char** argv) {
                   p1m1_canonical_token == 2152730633U)) ||
                 (scenario_name == "light-motion" &&
                  p1m1_canonical_token == 3223324678U);
-            if (!p1m2b_independent_state || !valid_calibration_key ||
+            if (!p1m2b_independent_state ||
+                (!p1m3b_holdout_quality && !valid_calibration_key) ||
                 p1m2_tetra_octant_directions) {
                 throw std::runtime_error(
                     "P1m3a Q8 requires independent-state camera/light "
@@ -640,9 +657,10 @@ int main(int argc, char** argv) {
         // original M1a/M2a frozen static/C3 token whitelist.
         if (p1m2b_independent_state &&
             (!p1m0_coverage || p1m0_pretrace_coverage ||
-             (scenario_name != "camera-motion" && scenario_name != "light-motion") ||
+             (scenario_name != "camera-motion" && scenario_name != "light-motion" &&
+               !(p1m3b_holdout_quality && scenario_name == "moving-rigid")) ||
              variant_name != "lane-e-final-software" ||
-             !canonical_lean_hash || canonical_zero_copy || !skip_reference ||
+             !canonical_lean_hash || canonical_zero_copy || (!skip_reference && !(p1m3b_holdout_quality && p1m1_canonical_token == 0U)) ||
              topology || mode_text != "current" ||
              source_warmup_frames != 32U ||
              target_state_warmup_frames != 8U || target_frames != 1U ||
@@ -666,7 +684,7 @@ int main(int argc, char** argv) {
                 !p1m0_coverage || p1m0_pretrace_coverage ||
                 variant_name != "lane-e-final-software" ||
                 !canonical_lean_hash || canonical_zero_copy ||
-                !skip_reference || topology ||
+                (!skip_reference && !(p1m3b_holdout_quality && p1m1_canonical_token == 0U)) || topology ||
                 mode_text != "current" || source_warmup_frames != 32U ||
                 target_state_warmup_frames != 8U || target_frames != 1U ||
                 capture_visible_tiles || capture_probe_multiplicity ||
@@ -907,7 +925,7 @@ int main(int argc, char** argv) {
                 !canonical_lean_hash || canonical_zero_copy || p1l_stage_any ||
                 canonical_probe_pilot || canonical_matrix_case ||
                 !canonical_frame_pattern.empty() || !three_arm_pattern.empty() ||
-                topology || !skip_reference || capture_gpu_unique_hash ||
+                topology || (!skip_reference && !(p1m3b_holdout_quality && p1m1_canonical_token == 0U)) || capture_gpu_unique_hash ||
                 capture_probe_equivalence || capture_probe_multiplicity ||
                 capture_visible_tiles || !hash_frame_pattern.empty() ||
                 mode != lane_n::N006ExtraMode::Current ||
