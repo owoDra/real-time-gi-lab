@@ -9,7 +9,8 @@ See [prospective protocol](../experiments/001-reference-eligibility-protocol.md)
 ### Actual execution in ChatGPT's CPU sandbox
 
 - Direct `git clone` attempted: failed (`Could not resolve host: github.com`); source and records inspected through the authenticated GitHub connector.
-- Executed `python -m unittest -v test_inspect_hdr.py`: **8 tests PASS** on synthetic PFM files, using CPU/Python only. Coverage: sparse full-frame p99 failure; all-black/identical references; negative and NaN channel flags; four distinct low-noise replicates; dimension mismatch; candidate-only light outside mask; big-endian PFM scale and SHA256; malformed payload.
+- Executed `python -m unittest -v test_inspect_hdr.py`: **15 tests PASS** on synthetic PFM files, using CPU/Python only. Coverage: sparse full-frame p99 failure; all-black/identical references; negative and NaN channel flags; four distinct low-noise replicates; dimension mismatch; candidate-only light outside mask; big-endian PFM scale and SHA256; malformed payload.
+- Executed `python -m unittest discover -q`: **15/15 PASS**, including 6 fixed-four-seed manifest/SPP/SHA/stop tests and a synthetic 320×180 N006-support test. With at most 161+169=330 different positive pixels in 57,600 pixels, the full-frame 99th-percentile difference must be zero, even when the nonzero pixels disagree. This is a mathematical bound on the documented support size, not an analysis of missing real PFMs.
 - `python -m compileall` PASS on the reconstructed diagnostic/test directory. Synthetic data are deliberately **not past physical measurements**.
 - `out/` folder not present in GitHub `main`; retained M3b raw PFMs not available in this checkout. Thus actual M3b reference hashes, luminance, and cause remain **NOT MEASURED**. Existing result 043 stays `invalid-retained`.
 - C++ source was **read and audited** via GitHub; linked N001 Renderer and Vulkan build, physical shadow evaluation, and new real scene rendering **NOT RUN**.
