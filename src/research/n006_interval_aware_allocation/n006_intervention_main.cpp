@@ -522,6 +522,7 @@ int main(int argc, char** argv) {
     std::uint32_t p1m1_canonical_token = 0U;
     bool p1m2_tetra_octant_directions = false;
     bool p1m2b_independent_state = false;
+    bool p1m3_fractional_storage = false;
     std::string p1l_b1_pattern;
     bool capture_gpu_unique_hash = false;
     // P1h: frozen canonical/current balanced schedule after target-state warmup.
@@ -579,6 +580,9 @@ int main(int argc, char** argv) {
         else if (arg == "--p1m2b-independent-state") {
             p1m2b_independent_state = true;
         }
+        else if (arg == "--p1m3-fractional-storage") {
+            p1m3_fractional_storage = true;
+        }
         else if (arg == "--p1l-b1-pattern" && index + 1 < argc)
             p1l_b1_pattern = argv[++index];
         else if (arg == "--three-arm-pattern" && index + 1 < argc)
@@ -614,6 +618,23 @@ int main(int argc, char** argv) {
         if (p1m2_tetra_octant_directions && p1m1_canonical_token == 0U) {
             throw std::runtime_error(
                 "P1m2a directions require a frozen P1m1 canonical token");
+        }
+        // P1m3a is an independently frozen alternative STORAGE REPRESENTATION.
+        // Historical M1a/M2a/M2b storage semantics must remain byte-identical.
+        if (p1m3_fractional_storage) {
+            const bool valid_calibration_key = p1m1_canonical_token == 0U ||
+                (scenario_name == "camera-motion" &&
+                 (p1m1_canonical_token == 1084233745U ||
+                  p1m1_canonical_token == 3223324678U ||
+                  p1m1_canonical_token == 2152730633U)) ||
+                (scenario_name == "light-motion" &&
+                 p1m1_canonical_token == 3223324678U);
+            if (!p1m2b_independent_state || !valid_calibration_key ||
+                p1m2_tetra_octant_directions) {
+                throw std::runtime_error(
+                    "P1m3a Q8 requires independent-state camera/light "
+                    "frozen original-direction calibration only");
+            }
         }
         // P1m2b is a NEW, explicit bounded study; it cannot weaken the
         // original M1a/M2a frozen static/C3 token whitelist.
@@ -965,7 +986,8 @@ int main(int argc, char** argv) {
         lane_n::N006Runtime runtime(
             options, canonical_lean_hash, canonical_zero_copy, p1l_b1,
             p1l_b1c_axis_proxy, p1m0_pretrace_coverage,
-            p1m1_canonical_token != 0U, p1m2_tetra_octant_directions);
+            p1m1_canonical_token != 0U, p1m2_tetra_octant_directions,
+            p1m3_fractional_storage);
         trace_p1m0("runtime construction complete");
 
         const lane_n::N006ExtraRequest current_request{};
@@ -1331,6 +1353,8 @@ int main(int argc, char** argv) {
             << (p1m2_tetra_octant_directions ? "true" : "false") << ",\n"
             << "  \"p1m2b_independent_state\":"
             << (p1m2b_independent_state ? "true" : "false") << ",\n"
+            << "  \"p1m3_fractional_storage\":"
+            << (p1m3_fractional_storage ? "true" : "false") << ",\n"
             << "  \"p1l_b1c_axis_pack_cpu_us\":" << runtime.p1l_b1c_pack_cpu_us() << ",\n"
             << "  \"p1l_b1c_axis_packed_nodes\":" << runtime.p1l_b1c_packed_nodes() << ",\n"
             << "  \"p1l_hit_diagnostic_frame\":"
