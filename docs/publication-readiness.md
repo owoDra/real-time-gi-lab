@@ -10,6 +10,12 @@
 - GitHub's connected **code search returned no results even for known code terms**, so empty search hits are **not** accepted as negative evidence.
 - The GitHub connector cannot run Git/GLSL or Gitleaks locally and the sandbox cannot resolve GitHub's private clone host. **No exhaustive all-commit/all-blob secret-content scan has been completed in this session.**
 
+## Reviewed historical false positive
+
+The owner's local Gitleaks scan (2026-10-11) enumerated 1,881 reachable commits and reported **one** `generic-api-key` finding, on commit `8f5491bb5f5a94e8f9f607c8b0180cbaf6c723fc`, file `research/lanes/n006-interval-aware-allocation/001-literature-and-architecture.md`, line 38. Inspection of the exact historical Git blob confirmed this line discusses the GI storage process `update/invalidation/resolve` and does not contain a real authentication secret.
+
+The root [.gitleaksignore](../.gitleaksignore) exempts **only that exact commit, path, rule and line**, preserving the generic detector for other files and findings. This is not a path-wide ignore or history rewrite. **The local scan must be rerun and must return exit code 0**; until the new run is confirmed, the repository is still not cleared for public release.
+
 ## Mandatory before changing visibility to public
 
 On a workstation that can clone or fetch the private repository, run:
