@@ -1,0 +1,29 @@
+# N006 P1m2b — 32/32 treated GPU cases exact-HDR null; predeclared STOP for +4/current-rounding family
+
+2026-10-11, user-uploaded original **`n006-p1m2b-independent-state-summary.json`**, original bytes SHA256 **`e96e5a29d6418cb2666714675f49324d8001caeadedd52a954d6d9881fef09b5`** (59,602 bytes), `protocol_version=n006-p1m2b-independent-state-observable-v1`, `status=bounded-observable-null-stop`, `failures=[]`, `formal=false`, `reference_generated=false`, `predictive_quality_established=false`. **Clean GPU-executed HEAD `24530552e26f5c3091a24759e225234ab70031ce`** on AMD Radeon 8060S Graphics (RADV STRIX_HALO), accepted Sponza SHA256 `2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6`.
+
+## Coverage, exact source parity and unsigned mechanism evidence
+
+All **4/4 separately-warmed control processes** (2 camera-motion, 2 light-motion) reported exact accepted scenario PFMs and accepted per-key M0 coverage SHA. Both scenario selectors chose **8 distinct keys** (per cascade maximum- and zero-consumer); `missing_strata=[]` for each. **All 32/32 intervention cells** completed: 2 scenarios ×8 selected keys ×2 original direction arms (each +4 extra rays). **0/32 changed RGB pixels/channels** and **all candidate PFM SHA exactly equal to matching scenario original control**; no repeats were triggered, since no candidate changed any pixel. Every treatment reports `cpu_hit_oracle_mismatches=0` indirectly by the strict runner's per-frame correctness (the summary does not expose a separate mismatches field for M2b), `extra_ray_count=4`, `merged_sample_count=12`, `base_rays=outputs×8`; no `failures`. All treatment `baseline_mean16==candidate_mean16`.
+
+| Scenario | Controls | Canonical keys | Original rays | Treatments | New-ray hits | Positive new rays | Extra integer radiance sum | Changed PFM | Accepted PFM SHA |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| camera-motion | 2 | 3220 | 25760 | 16 | 22/64 | 12 | 15 | 0 | `eb889a8796ebae5cfb23ff820c01fcf5e2fd2d21376dc06b8c4a447512362bcd` |
+| light-motion | 2 | 3008 | 24064 | 16 | 18/64 | 11 | 16 | 0 | `7b48345b67311652fcba9f7083a21fa07eb316d6ded75a1807f75070516333ec` |
+| **TOTAL** | **4** | — | — | **32/32** | **40/128** | **23/128** | **31** | **0** | matched controls |
+
+By arm: original M1a uniform `19/64` hits, `13` positive rays, integer sum16 `16`; tetra M2a `21/64` hits, `10` positive rays, sum16 `15`. No dependable superiority ordering of direction heuristics from these non-independent selected keys, no quality evidence. Original three-key static/C3 calibration results [035](./035-p1m1c-gpu-ray-fate-4of4.md) and [037](./037-p1m2a-fixed-tetra-octant-null-image.md) also had exact image nulls.
+
+## Source-verified causal bottleneck — rounding in STORAGE UPDATE
+
+The *actually built* `i001_radiance.spv` source is `shaders/research/lane_n_end_to_end_renderer/n001_physical_radiance.comp.glsl` (not the older imported `i001_radiance.comp.glsl`), which converts a physical point-light Lambert value into unsigned 16-bit `round(value*65535)`. The canonical merge accumulates per-output `uvec2(sum16, ray_count)` via `imported/lane_a_split_rc/merge.comp.glsl`. The accepted `imported/integration/i001_storage_update.comp.glsl` then uses **integer `sample_value = (merged.x + merged.y/2u) / merged.y`**, losing all sub-integer mean information *before* multiplying by key owner multiplicity and before the composite's float normalization. N006's `n006_canonical_weight_storage.comp.glsl` copies/multiplies that already-quantized integer numerator and owner denominator, so it cannot recover a discarded fraction. The final image reads the integer storage numerator/denominator as float; do not misattribute the null exclusively to display-space/PFM quantization.
+
+A counterfactual **offline arithmetic check using only actual uploaded ray integer sums**, `(base_sum16+extra_sum16)/12 - base_sum16/8`, was **nonzero in 8/32 treatments**, of which **4/32 have consumer_pixels>0**. All eight nevertheless had identical integer rounded `baseline_mean16`/`candidate_mean16` and identical final PFM. Thus there is a *testable different-accumulation hypothesis*, but **NO proof** that unrounded per-key variations translate into perceptible/beneficial whole-frame HDR, or that the 8/32 cells are statistically representative. The old P1m2a High `base=10,extra=5` is special because even its **unrounded** means match (10/8=15/12=1.25).
+
+P1m2b extra GPU append timestamp across cells min **615.65µs**, median **662.52µs**, max **1195.51µs**. Still includes 1-thread canonical-key scanning and finalize, **not** a deployable marginal four-ray cost.
+
+## Decision — prospectively declared family STOP, not project STOP
+
+Frozen [P1m2b protocol 027](../experiments/027-p1m2b-independent-state-observable-image-gate.md) declared: if none of up to 32 cells has reproducible *any* PFM influence, **STOP this exact +4-ray/current-integer-storage family**. This criterion was met **32/32**; no exploratory direction/stratum/scenario extension, no reference or P1-ranking fit using exact-null pairs (signed whole-image RMS improvement is exactly zero against any fixed same reference for these cases). `P1 predictor/ROI/P2 scheduler` is **NO GO** under the tested current family; Issue #42 remains unresolved on a different representation.
+
+**Separately motivated possible successor**, not secretly part of M2b: a new protocol must first define a baseline-preserving or explicitly-baseline-shifting fixed-point/fractional storage representation, integer-atomic overflow/owner weighting safety, matched alternative-representation control and candidate, deterministic GPU parity, full PFM influence screen, signed reference RMS before ROI/P2, and a prospective stop rule. Historic accepted E003/N003/N004/N005 and M1a/M2a original shaders cannot change. Do not call static arithmetic counterfactual a GPU experiment or a quality improvement.
