@@ -1,3 +1,18 @@
+# 2026-10-11 CURRENT — P1m2b 32/32 GPU image-null STOP; new P1m3a Q8 storage mechanism built in source, GPU pending
+
+**Accepted uploaded P1m2b** `n006-p1m2b-independent-state-summary.json`, original SHA256 `e96e5a29d6418cb2666714675f49324d8001caeadedd52a954d6d9881fef09b5`, clean GPU head `24530552e26f5c3091a24759e225234ab70031ce`, 4 stable control processes, 2 frozen scenarios, **32/32 exactly identical treatment PFMs**, no failures, 0 replicated changed cells; 40/128 extra hits, 23 positive contributions, all 32 integer rounded means unchanged. Camera 22 hits/64, 12 positive new rays; light 18 hits/64, 11 positive. C++/shader provenance shows production physical radiance `n001_physical_radiance.comp.glsl` quantizes Lambert into 16-bit, `i001_storage_update.comp.glsl` rounds probe sums to **integer mean before owner weight and composite**, erasing sub-integer influence. Offline, 8/32 unrounded means would differ; 4/32 are consumer-positive. Original exact +4/current-rounding intervention family **STOP under prospectively frozen protocol 027**, not the whole GI project. [Result 039](./results/039-p1m2b-bounded-screen-32of32-exact-hdr-null-stop.md). No need to regenerate CPU reference to prove zero signed RMS against any fixed same target for byte-identical pairs.
+
+**NEW SEPARATE EXPERIMENT** P1m3a Q8 fractional canonical storage: frozen **before any new GPU output**, [prospective protocol 028](./experiments/028-p1m3a-fractional-storage-mechanism-calibration.md), [implementation/handoff 040](./results/040-p1m3a-q8-fractional-storage-ready-unmeasured.md). Two new opt-in N006-only shaders preserve 8+4 GPU rays and accepted traversal, but store `(sum16*256 + count/2)/count` and denominator 256, owner-multiply both counters; integer overflow checks. Historical accepted storage, weighting, P1m1/M2a/M2b unchanged without opt-in. CLI `--p1m3-fractional-storage` strict requires P1m2b camera/light software canonical and *pre-listed* original M1a direction calibration tokens. Runner uses 2 Q8 controls/scenario (baseline allowed to DIFFER from original because new representation), 3 previously-exposed consumer-positive nonzero fractional arithmetic keys + 1 previously-exposed negative, and second independent process for any changed PFM. **Calibration only**, no signed quality or holdout, must not call observed image change improvement. After exact zero on all 3 Q8-positive calibration keys, STOP this new Q8 mechanism; otherwise independent SAME-Q8 reference, heldout geometry and ROI needed. Builds/tests/GPU are NOT claimed run yet.
+
+**Next ONE local command:**
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m3a_fractional_storage.sh
+```
+Upload `out/research/n006-interval-aware-allocation/p1m3a-fractional-q8-calibration/<UTC>/n006-p1m3a-fractional-storage-summary.json` (or earliest build/unittest failure). Do not rerun P1m2b/B1/C0 or accepted shaders. Issue #42 remains open; P1 predictive value/P2/HWRT-free superiority unproven; no PR, CI or Actions.
+
+---
+
 # 2026-10-11 NEWEST — P1m2b bounded camera/light independent-state screen IMPLEMENTED, GPU pending
 
 Branch `research-n006-interval-aware-allocation`, Issue #42 OPEN. Previously accepted P1m2a [result 037](./results/037-p1m2a-fixed-tetra-octant-null-image.md): four cases PASS, tetra +4 hit 6/12 (vs P1a uniform 1/12) and High extra sum16=5, **but all three intervention PFMs exactly unchanged** due rounded mean 1→1. C3 calibration exhausted; no HDR gain, P1 predictor or P2 GO. Prior B1a/B1c GPU rejects and C0 static-only retained.
