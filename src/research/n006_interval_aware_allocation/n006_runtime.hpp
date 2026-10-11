@@ -29,6 +29,7 @@ struct N006ExtraRequest {
     bool p1m0_pretrace_coverage{}; // Opt-in N006-only placement/cost probe.
     bool p1m1_canonical_key_intervention{}; // Single-key causal ray preflight.
     std::uint32_t p1m1_selected_token{}; // Frozen canonical packed key.
+    bool p1m2_tetra_octant_directions{}; // Isolated alternate sampling, NOT M1a.
 };
 
 // Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
@@ -257,7 +258,8 @@ public:
                          bool p1l_b1_enabled = false,
                          bool p1l_b1c_axis_proxy = false,
                          bool p1m0_pretrace_enabled = false,
-                         bool p1m1_canonical_extra_enabled = false);
+                         bool p1m1_canonical_extra_enabled = false,
+                         bool p1m2_tetra_octant_enabled = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
