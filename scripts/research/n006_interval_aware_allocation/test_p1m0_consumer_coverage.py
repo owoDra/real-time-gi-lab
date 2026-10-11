@@ -130,7 +130,13 @@ class TestP1m0CoverageStaticContracts(unittest.TestCase):
         self.assertLess(pretrace, secondary)
         self.assertIn("stamp(20);", runtime)
         self.assertIn("stamp(21);", runtime)
-        self.assertIn("request.p1m0_pretrace_coverage ? 22U", runtime)
+        # Query-pool size is shared by M0b pretrace and M1a intervention.
+        # Match the semantic two-arm condition, not an obsolete one-arm literal.
+        self.assertRegex(
+            runtime,
+            r"request\.p1m0_pretrace_coverage\s*\|\|\s*"
+            r"request\.p1m1_canonical_key_intervention\)\s*\?\s*22U",
+        )
         self.assertIn("pretrace_counts == raw_counts", runtime)
         self.assertIn("pretrace_stats == raw_stats", runtime)
         self.assertIn("state_->p1m0_pretrace_counts.size, 0U", runtime)
