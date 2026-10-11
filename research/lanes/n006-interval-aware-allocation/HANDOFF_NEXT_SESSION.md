@@ -1,3 +1,21 @@
+# LATEST 2026-10-11 — P1m0b 5/5 PASS; P1m1a canonical key+4 ray PRE-FLIGHT CODE READY (not GPU-proven)
+
+Immutable user-upload M0b `n006-p1m0-consumer-coverage-summary(2).json`, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, clean executed HEAD `359e6b87fe38919349b994136005251187137b4b`, AMD Radeon 8060S RADV: five of five full-slot/stats GPU parities and matched exact M0 per-key hashes. Pre-secondary GPU pass cost static/camera/light/moving/deforming **21.280/14.387/14.868/22.683/20.439 µs**, only **0.82–1.37%** measured instrumented GI on these five scenes, all below prospectively frozen caps; scratch **131104 B**. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md). **P1m0b PASS only for feasibility**; no signed marginal gain or P2 scheduler GO.
+
+**Next study P1m1a**, source frozen in [023](./experiments/023-p1m1a-single-canonical-key-extraray-preflight.md) before GPU:
+- control original canonical 8-ray stream + separate P1m0 postframe coverage diagnostics, correct SHA HDR and N004 primary oracle.
+- three *single-key* independent 32+8-warmed SW/static/C3 interventions on M0 calibration keys, zero token `3221225474` (0 consumer pixels, 3 producer owners), low `3223322625` (93 pixels, 3 owners), high `3223324678` (875 pixels, 125 owners).
+- N006-only shader `n006_p1m1_canonical_key_extra.comp.glsl` scans canonical compact output prefix (correctness preflight, not efficient P2 scheduler), appends deterministic **P1a-identical +4 direction** work items at ray indices 8–11 to *one* canonical output. Original first 8×canonical rays untouched, counter work +4, output count unchanged; finalize updates indirect dispatch; merge accumulates 8+4 contributions, accepted storage update rounds 12, N006 canonical weight shader restores owner count.
+- New runtime sampled GPU stats, verifies canonical output/key, exact canonical base prefix, 4 extra IDs/directions/target metadata, integer 8+4 accumulated values and mean, owner-weight restore; CLI whitelist only three fixed static/C3 keys, rejects pretrace overlap. Runner compares PFM control accepted SHA, all 4 target hit/oracle/owner counts, M0 per-key hashes unchanged, per-case PFM changed pixel/channel values (UNSIGNED influence, **NOT** HDR quality), retains 0-difference outcomes. New static unit tests added, CMake builds separate shader only for N006. **GPU compilation and correctness not yet independently verified**. No accepted N001/N003/E003 shader changes.
+- One batch after checkout fast-forward:
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m1a_canonical_pilot.sh
+```
+- Expected summary `out/research/n006-interval-aware-allocation/p1m1a-canonical-key-pilot/<UTC>/n006-p1m1a-canonical-key-pilot-summary.json`. If build fails, fix at offending file; if GPU fails, retain stdout/stderr and report. If preflight 4/4 PASS, only then M1b independent converged HDR reference, calibrated variance and prospective signed marginal gain test; DO NOT treat changed pixel count as benefit or attempt P2. Issue #42 stays OPEN, no PR, no GitHub Actions.
+
+---
+
 ## 2026-10-11 P1m0b target GPU PASS (newest)
 
 User uploaded `n006-p1m0-consumer-coverage-summary(2).json`, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, clean HEAD `359e6b87fe38919349b994136005251187137b4b`. Five frozen software scenes COMPLETE, zero failures. In-frame before-secondary count and independent postframe GPU count matched **every slot of 32768 values and all 8 counters**, all old M0 per-key SHA fingerprints matched, accepted HDR PFM and N004 gate intact. GPU timestamp pretrace clear+dispatch+barriers **21.280/14.387/14.868/22.683/20.439 µs** for static/camera/light/moving/deforming, respectively, **0.82–1.37%** of instrumented GI, 131104-byte scratch. All five passed predeclared cost cap `min(10% of instrumented complete GI, 50% of traversal)`. C0 source provenance still MATCHED. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md).
