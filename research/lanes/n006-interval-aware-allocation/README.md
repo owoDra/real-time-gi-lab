@@ -1,3 +1,7 @@
+### P1m1a initial executable build and static test repair (2026-10-11)
+
+The user's first attempt built the new M1a SPIR-V and N006 C++ executable successfully but unit tests stopped at **one stale text assertion out of 222 tests**. Original M0b test expected a single-arm `request.p1m0_pretrace_coverage ? 22U` string, whereas the intentionally shared 22-query pool now uses `(pretrace || m1_key_intervention) ? 22U`. Fixed the test to assert both branches, not production code. No M1a GPU frame ran on the failed attempt. See [result 032](./results/032-p1m1a-first-build-and-static-test-regression.md); rerun the unchanged `run_n006_p1m1a_canonical_pilot.sh` one-batch command to obtain causal measurements. All signed quality predictions and P2 remain NOT established.
+
 ### 2026-10-11 — P1m0b pre-secondary eligibility PASS; P1m1a canonical-key causality pilot now implemented
 
 The user-supplied P1m0b GPU summary, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, demonstrates same postframe lookup counter results available before secondary ray dispatch for **all five frozen SW scenes**, full-slot and eight-counter byte equality, all original key-row hashes, no invalid cases. GPU cost only 14.387–22.683 µs (0.82–1.37% of instrumented GI), 131104 byte scratch, all under pre-registered bound. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md). **Feasibility stage PASSED**; does not prove signed marginal benefit, a valid predictor or P2 net performance.
