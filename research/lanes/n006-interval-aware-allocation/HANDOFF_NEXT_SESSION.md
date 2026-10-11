@@ -1,3 +1,18 @@
+# 2026-10-11 NEWEST — P1m2b bounded camera/light independent-state screen IMPLEMENTED, GPU pending
+
+Branch `research-n006-interval-aware-allocation`, Issue #42 OPEN. Previously accepted P1m2a [result 037](./results/037-p1m2a-fixed-tetra-octant-null-image.md): four cases PASS, tetra +4 hit 6/12 (vs P1a uniform 1/12) and High extra sum16=5, **but all three intervention PFMs exactly unchanged** due rounded mean 1→1. C3 calibration exhausted; no HDR gain, P1 predictor or P2 GO. Prior B1a/B1c GPU rejects and C0 static-only retained.
+
+**Next pre-registered protocol [027](./experiments/027-p1m2b-independent-state-observable-image-gate.md) now has source code and command**. [Implementation record 038](./results/038-p1m2b-bounded-screen-implementation-handoff.md). Separate CLI `--p1m2b-independent-state` permits key interventions only in camera-motion / light-motion with accepted software lean-copyback, same 32+8 warmups, M0 frame correctness, reference skip and immutable shaders. In absence of new flag, original frozen static/C3 M1a/M2a token whitelist unchanged. For each scenario, two independent control frames must match accepted PFM and full M0 rows; then preselect one max-consumer and one zero-consumer key per cascade, lowest token ties, missing strata retained; at most 8 keys × 2 scenarios × 2 direction arms = 32 cells; only nonzero image delta gets a repeated isolated confirmation run. Exact frame/owner/N004/HDR checks throughout. Zero effect all cells ⇒ STOP +4/current-integer-quantization allocation family. Positive reproducible *influence* still requires independent HDR reference and sealed holdout before any quality/ROI decision. No known GPU P1m2b result yet.
+
+**Single next user GPU command (source not yet built/tested on their NixOS):**
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m2b_independent_state.sh
+```
+Upload `out/research/n006-interval-aware-allocation/p1m2b-independent-state/<UTC>/n006-p1m2b-independent-state-summary.json` or build/test error. The script runs build and all N006 Python tests before GPU. Research lane NOT complete. No PR/GitHub Actions.
+
+---
+
 # 2026-10-11 LATEST — P1m2a GPU 4/4 PASS, +4-ray hit recovery but 3/3 exact zero PFM; next study P1m2b DESIGN ONLY
 
 User uploaded correct `n006-p1m2a-tetra-octant-summary.json`, original bytes SHA256 `e0d458a1bf29af2f295d44a941b3e184e58b10fa4a7aa20de6c940012ce1ef08`, clean executed HEAD `fce39c4abeca222227f8a91842221f3179417d95`, AMD Radeon 8060S RADV. `status=direction-calibration-complete`, `failures=[]`, 4/4; target original Sponza static/C3 Zero / Low / High frozen tokens. 3008 canonical outputs, 24064 base rays, 24068 on treatment, 12 merged samples per selected output, zero N004 hit mismatches, M0 key-coverage SHA unchanged, **all control/intervention PFMs exact accepted control SHA `2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e`**. [Result 037](./results/037-p1m2a-fixed-tetra-octant-null-image.md).
