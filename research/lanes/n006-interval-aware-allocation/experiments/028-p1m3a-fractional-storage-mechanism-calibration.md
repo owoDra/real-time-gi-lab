@@ -1,0 +1,27 @@
+# N006 P1m3a — independent quantization-precision mechanism calibration (PROSPECTIVE)
+
+2026-10-11, Issue #42. Registered AFTER P1m2b accepted **32/32 identical image STOP** [039](../results/039-p1m2b-bounded-screen-32of32-exact-hdr-null-stop.md) and BEFORE ANY P1m3a GPU evidence. This is a **NEW storage representation**, not a continuation, retry or retrospective reclassification of the stopped +4/current-integer-storage family. Historical accepted N001/N003/E003 shaders and original M1a/M2a mode are immutable. Any P1m3a baseline PFM may differ from the old accepted baseline by design and is NOT accepted as a global quality improvement.
+
+## Falsifiable mechanism
+
+Accepted `i001_storage_update.comp.glsl` rounds per-canonical-probe sample mean to a whole integer: `(sum16 + count/2)/count`. It is then multiplied by probe-owner multiplicity and divided by `65535.0` at composite. M2b’s *offline-only* exact-ray sums show **8/32 unequal unrounded 8-vs-12 means** despite **all 32 equal rounded integer means**, including **4 cells with nonzero consumer lookup count**. Such signals are suppressed by current integer storage even when changing ray direction. Test isolated **Q8 fractional canonical storage**, preserving the same GPU hit, radiance, work, and merge buffers.
+
+## Precommitted alternative storage semantics (N006 OPT IN ONLY)
+
+- Use entirely separate `n006_p1m3_fractional_storage_update.comp.glsl` source, copied from unchanged accepted `i001_storage_update` and modifying only stage-1 aggregation. Let fixed `S=256`; for merged uvec2 `sum16,count`, write `rounded_scaled_mean = (sum16*S + count/2)/count`, add `rounded_scaled_mean` to slot numerator and **`S`** to slot denominator. `uint` intermediate and storage multiplication are fail-closed on overflow; never clip/wrap silently. `S=256` is frozen now, NOT tuned for output.
+- Separate N006-only `n006_p1m3_fractional_weight_storage.comp.glsl` clones original canonical owner-weight pass, accepts unweighted slot denominator **S instead of 1**, multiplies numerator and denominator by owner count with overflow guards. Final unchanged N003 software composite performs `float(numerator)/(float(denominator)*65535.0)`, thus (up to fractional Q8 rounding) consumes the same physical radiance scale. This changes representation for **both control and +4 candidate**, avoiding comparison of incompatible pipelines.
+- No changes to production or accepted `i001_storage_update`, `n006_canonical_weight_storage`, `n001_physical_radiance`, merge, traversal or composite shaders. Use extra strictly gated N006 CLI `--p1m3-fractional-storage`, only in `camera-motion/light-motion` scenario with `--p1m2b-independent-state`, `lane-e-final-software`, canonical lean copyback, 32+8 warmups, 1 target, M0 per-key coverage, no reference and no other captures. Distinct new SPIR-V targets; no changes to old default mode.
+
+## Frozen small *calibration* matrix (selected from existing M2b exploratory diagnostic; NOT HOLDOUT)
+
+All original M2b selected control tokens/extra-ray sums are **known**, so these keys are calibration only. We will not present them as independent evidence or tune them after outcome:
+- **camera-motion c1 maximum consumer**, token `1084233745`, original M1a direction: base sum0, extra sum2, consumer36. Arithmetic predicts nonzero fractional mean.
+- **camera-motion c3 maximum consumer**, token `3223324678`, original direction: base sum10, extra sum0, consumer919. Arithmetic predicts decreasing mean.
+- **light-motion c3 maximum consumer**, token `3223324678`, original direction: base sum1, extra sum0, consumer875. Arithmetic predicts small decreasing mean.
+- **negative control camera-motion c2 maximum consumer**, token `2152730633`, original direction: base sum0, extra sum0, consumer153. Arithmetic predicts no selected-key change.
+
+For each scenario two **independent process** Q8 storage controls must produce identical Q8 PFM bytes and must preserve original M0 SHA, N004 hit oracle, ray count, full canonical invariants and saved output hashes. **Do not require Q8 control SHA to equal historical unmodified PFM**: report its difference as representation effect. Then execute these four 8+4 treatments (exact original M1a extra directions) on Q8 storage, confirm matching original per-key radiance/fate sums and exact M0 coverage. Compare to same-scenario Q8 control; any nonzero PFM must reproduce in a repeated isolated process. All failures invalid-retained.
+
+**Decision**: If the Q8 alternative fails to produce replicable nonzero HDR PFM for *any of the three arithmetically nonzero, consumer-positive cells*, **REJECT fractional storage as a usable cause-removal in these frozen scenes**, STOP P1m3a, no increased fixed-point S or post-hoc new keys. If at least one yields stable float32 HDR effect, record **mechanism GO ONLY**: image change is not signed quality gain and the different Q8 baseline is not byte-equivalent. A separate prospectively selected holdout with independent converged reference, same-representation baseline, repeated signed RMS and GPU ROI gates is mandatory before any P1 predictor/P2 scheduler GO. The negative-control cell must be exact image null; if it changes, mark mechanism invalid until attribution. Stronger global GI/HWRT-free performance **not established** either way.
+
+Do NOT call these four preselected prior-outcome cells independent evaluation. Real-GPU confirmation mandatory; source and CPU arithmetic alone are not GPU evidence. No PR or GitHub Actions.
