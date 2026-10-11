@@ -207,6 +207,7 @@ def main() -> int:
         summary_file.write_text(
             json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     save()
+    print(f"[P1m0] evidence root: {dest.resolve()}", flush=True)
     for scenario in SCENARIOS:
         folder = dest / scenario
         folder.mkdir(parents=True, exist_ok=False)
@@ -220,7 +221,8 @@ def main() -> int:
             "--skip-reference", "--canonical-lean-hash",
             "--p1m0-consumer-coverage",
         ]
-        print(f"[P1m0] {scenario} ({len(summary['cases'])+1}/5)", flush=True)
+        print(f"[P1m0] {scenario} ({len(summary['cases'])+1}/5); "
+              f"stderr={folder.resolve() / 'stderr.log'}", flush=True)
         try:
             try:
                 process = subprocess.run(
@@ -235,8 +237,17 @@ def main() -> int:
             (folder / "stdout.log").write_text(process.stdout, encoding="utf-8")
             (folder / "stderr.log").write_text(process.stderr, encoding="utf-8")
             if process.returncode:
+                # The old message used a relative basename and concealed the
+                # failing child renderer's actual stderr from the console.
+                # Preserve the full source log, but show a bounded diagnostic
+                # excerpt so a user never needs to guess the UTC output path.
+                detail = (process.stderr or process.stdout or "").strip()
+                excerpt = detail[-6000:] if detail else "(child wrote no stderr/stdout)"
                 raise RuntimeError(
-                    f"P1m0 {scenario} exit {process.returncode}; inspect stderr.log")
+                    f"P1m0 {scenario} exit {process.returncode}; "
+                    f"stderr={folder.resolve() / 'stderr.log'}; "
+                    f"stdout={folder.resolve() / 'stdout.log'}; "
+                    f"child diagnostic tail:\n{excerpt}")
             evidence_file = folder / pilot.EVIDENCE_NAME
             raw = evidence_file.read_bytes()
             data = json.loads(raw)
@@ -254,9 +265,12 @@ def main() -> int:
             summary["status"] = "invalid-retained"
             summary["failures"].append({
                 "scenario": scenario, "error": str(exc),
-                "stderr_path": str(folder / "stderr.log"),
+                "stderr_path": str((folder / "stderr.log").resolve()),
+                "stdout_path": str((folder / "stdout.log").resolve()),
             })
             save()
+            print(f"[P1m0] failure report: {summary_file.resolve()}",
+                  file=sys.stderr, flush=True)
             raise
     summary["status"] = "complete"
     summary["m1_calibration_only_key_status"] = (
