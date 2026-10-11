@@ -112,11 +112,19 @@ struct N006Runtime::State {
     std::uint32_t hash_capacity{};
     bool direct_compact{};
     bool last_canonical_frame{}; // invalidated before each frame
+    // Opt-in pre-secondary lookup coverage: no pipeline/buffer allocation
+    // for historical N006 modes or M0 postframe-only diagnostic.
+    bool p1m0_pretrace_enabled{};
+    bool last_p1m0_pretrace_frame{};
+    double last_p1m0_pretrace_gpu_us{};
+    B002Buffer p1m0_pretrace_counts{}, p1m0_pretrace_stats{};
+    std::unique_ptr<I001ComputeStage> p1m0_pretrace_stage;
 };
 
 N006Runtime::N006Runtime(
     I001Options options, bool p1j_lean_hash, bool p1j_direct_compact,
-    bool p1l_b1_enabled, bool p1l_b1c_axis_proxy)
+    bool p1l_b1_enabled, bool p1l_b1c_axis_proxy,
+    bool p1m0_pretrace_enabled)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     if (p1j_direct_compact && !p1j_lean_hash) {
@@ -125,6 +133,7 @@ N006Runtime::N006Runtime(
     state_->direct_compact = p1j_direct_compact;
     state_->p1l_b1_enabled = p1l_b1_enabled;
     state_->p1l_b1c_axis_proxy = p1l_b1c_axis_proxy;
+    state_->p1m0_pretrace_enabled = p1m0_pretrace_enabled;
     if (p1l_b1c_axis_proxy && !p1l_b1_enabled)
         throw std::runtime_error("N006 P1l-B1c requires explicit B1 A/B pattern");
     auto& impl = *runtime_.impl_;
@@ -272,6 +281,34 @@ N006Runtime::N006Runtime(
         shader_path(PHOS_GI_N006_SHADER_DIR, "n006_canonical_weight_storage.spv"),
         weight_bindings, sizeof(N006WeightPush));
 
+    // P1m0b: the same accepted M0 shader executes after canonical-key
+    // discovery and before secondary ray dispatch. Its scratch is disjoint.
+    if (p1m0_pretrace_enabled) {
+        if (!p1j_lean_hash || p1j_direct_compact ||
+            impl.options.variant != I001Variant::LaneEFinalSoftware ||
+            state_->hash_capacity != 32768U) {
+            throw std::runtime_error(
+                "P1m0b pretrace requires lean-copyback software canonical");
+        }
+        constexpr auto storage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
+        state_->p1m0_pretrace_counts = impl.context.create_device_buffer(
+            VkDeviceSize(state_->hash_capacity) * sizeof(std::uint32_t), storage);
+        state_->p1m0_pretrace_stats = impl.context.create_device_buffer(
+            8U * sizeof(std::uint32_t), storage);
+        const std::array<I001Binding, 5> pretrace_bindings{{
+            {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.primary_hits},
+            {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
+            {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->p1m0_pretrace_counts},
+            {3, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->p1m0_pretrace_stats},
+            {4, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
+        }};
+        state_->p1m0_pretrace_stage = std::make_unique<I001ComputeStage>(
+            impl.context,
+            shader_path(PHOS_GI_N006_SHADER_DIR,
+                        "n006_p1m0_consumer_coverage.spv"),
+            pretrace_bindings, 4U * sizeof(std::uint32_t));
+    }
+
     // P1j-B: duplicate ONLY the descriptor bindings whose shaders read work.
     // The original stages are retained for all current/historical frames.
     if (state_->direct_compact) {
@@ -333,6 +370,7 @@ N006Runtime::N006Runtime(
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
+    state_->p1m0_pretrace_stage.reset();
     state_->p1l_b1_primary_stage.reset();
     state_->extra_stage.reset();
     state_->hash_stage.reset();
@@ -347,6 +385,8 @@ N006Runtime::~N006Runtime() {
     state_->direct_storage_update_stage.reset();
     state_->direct_resolve_stage.reset();
     state_->direct_weight_stage.reset();
+    runtime_.impl_->context.destroy_buffer(state_->p1m0_pretrace_stats);
+    runtime_.impl_->context.destroy_buffer(state_->p1m0_pretrace_counts);
     runtime_.impl_->context.destroy_buffer(state_->canonical_indirect);
     runtime_.impl_->context.destroy_buffer(state_->canonical_work);
     runtime_.impl_->context.destroy_buffer(state_->canonical_reps);
@@ -370,6 +410,8 @@ N006FrameResult N006Runtime::run_candidate_frame(
     bool target_state,
     N006ExtraRequest request) {
     state_->last_canonical_frame = false;
+    state_->last_p1m0_pretrace_frame = false;
+    state_->last_p1m0_pretrace_gpu_us = 0.0;
     auto& impl = *runtime_.impl_;
     if (request.p1l_b1_near_first &&
         (!state_->p1l_b1_enabled || !state_->p1l_b1_primary_stage)) {
