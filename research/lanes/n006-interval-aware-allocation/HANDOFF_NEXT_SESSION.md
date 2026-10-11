@@ -1,3 +1,22 @@
+# 2026-10-11 LATEST — M1c GPU 4/4 PASS (11/12 extra misses), M2a fixed tetra-octant alternative pilot READY, NOT GPU tested
+
+User-uploaded `n006-p1m1c-ray-fate-summary.json` original SHA256 **`5c87c2b12b3983070e129cd163f7e2560d75f772c402fa719d302219262908ef`**, clean executed HEAD **`db32b403b3ed0e3ce1afab7bf29df97a4aaf55e7`**, AMD Radeon 8060S RADV. 4/4 `ray-fate-audit-complete`, failures=[], accepted exact original control static PFM and original M0 per-key coverage SHA; all three candidate images **pixel/byte identical**; no independent reference, no signed quality/predictor/P2.
+- **Zero** (0 consumer pixels): 4/8 base hits, 0/4 extra hits, 4 misses, extra sum16=0.
+- **Low** (93): 5/8 base hits; 1/4 extra hit **but zero radiance**, 3 misses, extra sum16=0.
+- **High** (875): 5/8 base hits, 4 positive base16, 0/4 extra hits, 4 misses, extra sum16=0.
+- Overall **14/24 base hits vs only 1/12 additional** P1a hashed sphere ray hits in these non-independent frozen keys. Mechanism failure mostly missed geometry, also one dark/rounded-zero hit. Original M1a mechanism PASS remains valid; signed gain mathematically 0 in these three same-image samples. M1c per-key GPU append stage 619–637 µs, serial scan overhead **not a P2 decision cost estimate**. [Result 035](./results/035-p1m1c-gpu-ray-fate-4of4.md).
+
+**Prospectively frozen new calibration experiment P1m2a**, [026](./experiments/026-p1m2a-fixed-tetra-octant-jitter-pilot.md). *Different direction distribution from M1a*, original shader untouched. Fixed tetrahedral octant indices [0,3,5,6] (balanced x/y/z), deterministic `normalize(A001_octant_center + 0.125*hashed_jitter_xyz)`. Original 8 rays unchanged; exactly four rays added to one same token each; 3 fixed calibration tokens retained. New independent N006 shader `n006_p1m2a_tetra_octant_extra.comp.glsl`, opt-in `--p1m2-tetra-octant-directions`, CMake only N006 dependency, runtime selected stage, GPU hit/miss/energy diagnostic, PFM pixel delta comparison. Four separate processes control/Zero/Low/High. Test-only direction and isolation contracts added, but **no local build/GPU results yet**; do NOT make quality improvement claim. New exact batch:
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_p1m2a_tetra_octant.sh
+```
+
+Expected user evidence `out/research/n006-interval-aware-allocation/p1m2a-tetra-octant-static-c3/<UTC>/n006-p1m2a-tetra-octant-summary.json`. Freeze hashes/keys/jitter; if effect nonzero, **do not claim positive quality** until independent converged HDR reference and paired RMS, noise calibrations, separate evaluation and holdout. If no effect, preserve all nulls and decide whether P1 marginal allocator has remaining feasible research paths; avoid unbounded cherry-picking. Issue #42 remains OPEN. No PR or GitHub Actions.
+
+---
+
 # 2026-10-11 NEWEST — P1m1a 4/4 mechanism PASS, three null HDR effects; M1c hit-fate GPU preflight READY
 
 Uploaded `n006-p1m1a-canonical-key-pilot-summary(1).json` SHA256 **`ea8b9c928bd5f3470bcc85f33b1b6d98127a51da94961e5b27f1329e4d6d6f36`**, clean user-measured HEAD `dd5d8830ec008c527607a3eb29cf159f34ba7983`, AMD Radeon 8060S Graphics RADV. [Accepted result 034](./results/034-p1m1a-canonical-key-causal-null-4of4.md): `mechanism-preflight-complete`, 4/4, zero errors, 3008 canonical keys, 24064 accepted base rays, 24068 with any intervention; N004 hit mismatch=0, original M0 lookup key SHA all matched. **ALL 3 calibration C3 keys yielded 0 additional 16-bit radiance and zero changed RGB pixels/channels, exact same PFM SHA `2309b06c...` as control**. Zero(0 consumers): baseline/extra 0/0; Low(93 consumers): 0/0; High(875 consumers): 10/0 (integer per-output mean 1→1). For any common fixed reference `RMS(control,ref)-RMS(candidate,ref)=exact 0`. No signed quality improvement, predictor or P2 GO.
