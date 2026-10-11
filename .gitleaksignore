@@ -2,4 +2,4 @@
 # GI storage pipeline ("update/invalidation/resolve"), not an API credential.
 # Scope: only this original historical commit, file, generic rule and line.
 # Do not add path-wide ignores or suppress the generic-api-key rule globally.
-8f5491bb5f5a94e8f9f607c8b0180cbaf6c723fc:research/lanes/n006-interval-aware-allocation/001-literature-and-architecture.md:generic-api-key:38
+07185e6dc180e565e53d2fa81fff0685d1a0b819:research/lanes/n006-interval-aware-allocation/001-literature-and-architecture.md:generic-api-key:38
