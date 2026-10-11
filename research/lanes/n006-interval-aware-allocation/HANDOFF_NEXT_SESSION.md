@@ -1,3 +1,12 @@
+## 2026-10-11 P1m0b target GPU PASS (newest)
+
+User uploaded `n006-p1m0-consumer-coverage-summary(2).json`, SHA256 `d7774a3e4fee8c9a103a7529979d7303ad865d05878143e4522232b8ef14affd`, clean HEAD `359e6b87fe38919349b994136005251187137b4b`. Five frozen software scenes COMPLETE, zero failures. In-frame before-secondary count and independent postframe GPU count matched **every slot of 32768 values and all 8 counters**, all old M0 per-key SHA fingerprints matched, accepted HDR PFM and N004 gate intact. GPU timestamp pretrace clear+dispatch+barriers **21.280/14.387/14.868/22.683/20.439 µs** for static/camera/light/moving/deforming, respectively, **0.82–1.37%** of instrumented GI, 131104-byte scratch. All five passed predeclared cost cap `min(10% of instrumented complete GI, 50% of traversal)`. C0 source provenance still MATCHED. [Result 031](./results/031-p1m0b-presecondary-gpu-cost-pass.md).
+
+**P1m0b GO (feasibility only)**. This does NOT establish signed HDR gain or predictive ranking. Canonical-key +4-ray intervention P1m1 is next. Keep one-key contrast, frozen M0 calibration strata and independent reference; no P2 scheduler claim. Need user GPU evidence for next phase; do not rerun B1/C0/M0/M0b; no PR or GitHub Actions.
+
+
+---
+
 # 2026-10-11 LATEST — M0 5/5 accepted; P1m0b pretrace cost proof implementation added (awaiting real GPU)
 
 **User uploaded** `n006-p1m0-consumer-coverage-summary(1).json`, raw upload SHA `f355b7202e52127b044120ac8406e5dba4626dd88f4cf29a78f16abbc2c66cec`, clean executed HEAD `8a5cb251384ba14deb6c158057583fcd8214e335`, AMD Radeon 8060S RADV, exact Sponza SHA. Protocol `n006-p1m0-consumer-coverage-five-scenes-v1`, `status=complete`, **5/5 cases PASS**, failures none. M0 is DIAGNOSTIC ONLY and ran GPU consumer counting *after* the normal frame; accepted image and hit byte parity, N004 hit sampled, owner/cardinality count closure, exact per-cascade zero/positive stats, no invalid/overflow. Frozen [research result 030](./results/030-p1m0-five-scene-coverage-pass.md).
