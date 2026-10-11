@@ -1,3 +1,19 @@
+# 2026-10-11 LATEST — P1m2a GPU 4/4 PASS, +4-ray hit recovery but 3/3 exact zero PFM; next study P1m2b DESIGN ONLY
+
+User uploaded correct `n006-p1m2a-tetra-octant-summary.json`, original bytes SHA256 `e0d458a1bf29af2f295d44a941b3e184e58b10fa4a7aa20de6c940012ce1ef08`, clean executed HEAD `fce39c4abeca222227f8a91842221f3179417d95`, AMD Radeon 8060S RADV. `status=direction-calibration-complete`, `failures=[]`, 4/4; target original Sponza static/C3 Zero / Low / High frozen tokens. 3008 canonical outputs, 24064 base rays, 24068 on treatment, 12 merged samples per selected output, zero N004 hit mismatches, M0 key-coverage SHA unchanged, **all control/intervention PFMs exact accepted control SHA `2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e`**. [Result 037](./results/037-p1m2a-fixed-tetra-octant-null-image.md).
+
+P1m2a fixed [0,3,5,6] octant 0.125 jitter added-rays:
+- Zero consumer=0: 1 extra hit/4, 1 dark, extra sum16=0; rounded mean 0→0.
+- Low consumer=93: 3 extra hits/4, all 3 dark, extra sum16=0; rounded mean 0→0.
+- High consumer=875: 2 extra hits/4, **2 positive samples, extra sum16=5**; base sum16=10, `floor((10+4)/8)=1`, merged `floor((10+5+6)/12)=1`; **need extra sum16 ≥8 for this output's 12-sample mean to reach 2**. This is not a quality gain threshold or image change guarantee.
+- Across 3 keys **6/12 extra hits versus original uniform-direction M1c's 1/12**; two positive sample rays versus zero; 0 changed RGB pixels/channels for all. Selected-key frame output SHA unchanged. GPU single-thread full-key scan + finalize timestamp ~624.747–632.321us, not a viable P2 runtime or four-ray traversal cost estimate.
+
+**Decision:** M2a *mechanism/GLSL/pass invariants GO*, **no causal image effect in any of 3 convenience calibration keys**, signed global RMS gain exactly 0 against *any common reference* for these 3. P1 predictive value still unknown and P2 scheduler NO GO. Stop tuning directions on same static/C3 triplet.
+
+**NEXT [prospectively preregistered P1m2b 027](./experiments/027-p1m2b-independent-state-observable-image-gate.md)**: bounded independent camera-motion/light-motion state pilot, control-control stability, pre-secondary M0-selected max and zero consumer key per cascade (≤16 keys total), both original uniform and tetra direction arms, full float32 PFM effect/parity (≤32 cells) before independent converged HDR reference; stop this +4/current-quantization family if no replicated nonzero image change. **DESIGN ONLY; no implementation or user GPU command yet.** CLI currently only accepts 3 original static/C3 keys; extending it safely with an explicit different M2b pilot flag, independent case guard, frozen selection and full tests is the next source work. No prior results changed, no PR/Actions.
+
+---
+
 # Latest static audits received (2026-10-11)
 
 Original historical B1c/C0 audit JSONs were received and reconciled in [result 036](./results/036-p1l-archived-static-audit-original-json-provenance.md). B1c remains REJECTED, C0 remains STATIC ONLY, and P1m2a GPU remains unmeasured. Next batch: `bash scripts/research/n006_interval_aware_allocation/run_n006_p1m2a_tetra_octant.sh`. No PR or CI.
