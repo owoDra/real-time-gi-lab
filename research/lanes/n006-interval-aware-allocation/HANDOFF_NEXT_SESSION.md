@@ -14,6 +14,8 @@ bash scripts/research/n006_interval_aware_allocation/run_n006_p1m1a_canonical_pi
 ```
 - Expected summary `out/research/n006-interval-aware-allocation/p1m1a-canonical-key-pilot/<UTC>/n006-p1m1a-canonical-key-pilot-summary.json`. If build fails, fix at offending file; if GPU fails, retain stdout/stderr and report. If preflight 4/4 PASS, only then M1b independent converged HDR reference, calibrated variance and prospective signed marginal gain test; DO NOT treat changed pixel count as benefit or attempt P2. Issue #42 stays OPEN, no PR, no GitHub Actions.
 
+**Post-P1m1a signed-quality methodology is already frozen** in [experiment 024](./experiments/024-p1m1b-independent-reference-signed-gain-protocol.md): same independently converged control HDR reference for all calibration interventions, signed global RGB RMS with repeat/reference uncertainty, later truly distinct evaluation/holdout trajectories. Do not tune quality thresholds or claim gain from unsiged PFM pixel diffs.
+
 ---
 
 ## 2026-10-11 P1m0b target GPU PASS (newest)
