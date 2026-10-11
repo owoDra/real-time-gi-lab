@@ -120,15 +120,18 @@ struct N006Runtime::State {
     B002Buffer p1m0_pretrace_counts{}, p1m0_pretrace_stats{};
     std::unique_ptr<I001ComputeStage> p1m0_pretrace_stage;
     bool p1m1_canonical_extra_enabled{};
+    bool p1m2_tetra_octant_enabled{};
     B002Buffer p1m1_stats{};
     std::unique_ptr<I001ComputeStage> p1m1_extra_stage;
+    std::unique_ptr<I001ComputeStage> p1m2_tetra_octant_stage;
 };
 
 N006Runtime::N006Runtime(
     I001Options options, bool p1j_lean_hash, bool p1j_direct_compact,
     bool p1l_b1_enabled, bool p1l_b1c_axis_proxy,
     bool p1m0_pretrace_enabled,
-    bool p1m1_canonical_extra_enabled)
+    bool p1m1_canonical_extra_enabled,
+    bool p1m2_tetra_octant_enabled)
     : runtime_(std::move(options)),
       state_(std::make_unique<State>()) {
     if (p1j_direct_compact && !p1j_lean_hash) {
@@ -139,6 +142,10 @@ N006Runtime::N006Runtime(
     state_->p1l_b1c_axis_proxy = p1l_b1c_axis_proxy;
     state_->p1m0_pretrace_enabled = p1m0_pretrace_enabled;
     state_->p1m1_canonical_extra_enabled = p1m1_canonical_extra_enabled;
+    state_->p1m2_tetra_octant_enabled = p1m2_tetra_octant_enabled;
+    if (p1m2_tetra_octant_enabled && !p1m1_canonical_extra_enabled) {
+        throw std::runtime_error("P1m2a requires M1 canonical key injection");
+    }
     if (p1l_b1c_axis_proxy && !p1l_b1_enabled)
         throw std::runtime_error("N006 P1l-B1c requires explicit B1 A/B pattern");
     auto& impl = *runtime_.impl_;
@@ -328,11 +335,21 @@ N006Runtime::N006Runtime(
             {2, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->p1m1_stats},
             {3, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl.uniform},
         }};
-        state_->p1m1_extra_stage = std::make_unique<I001ComputeStage>(
-            impl.context,
-            shader_path(PHOS_GI_N006_SHADER_DIR,
-                        "n006_p1m1_canonical_key_extra.spv"),
-            m1_bindings, 4U * sizeof(std::uint32_t));
+        // Allocate only the selected P1m2a alternate pipeline; accepted M1a
+        // always keeps its original shader/directions.
+        if (p1m2_tetra_octant_enabled) {
+            state_->p1m2_tetra_octant_stage = std::make_unique<I001ComputeStage>(
+                impl.context,
+                shader_path(PHOS_GI_N006_SHADER_DIR,
+                            "n006_p1m2a_tetra_octant_extra.spv"),
+                m1_bindings, 4U * sizeof(std::uint32_t));
+        } else {
+            state_->p1m1_extra_stage = std::make_unique<I001ComputeStage>(
+                impl.context,
+                shader_path(PHOS_GI_N006_SHADER_DIR,
+                            "n006_p1m1_canonical_key_extra.spv"),
+                m1_bindings, 4U * sizeof(std::uint32_t));
+        }
     }
 
     // P1j-B: duplicate ONLY the descriptor bindings whose shaders read work.
@@ -396,6 +413,7 @@ N006Runtime::N006Runtime(
 
 N006Runtime::~N006Runtime() {
     if (!runtime_.impl_ || !state_) return;
+    state_->p1m2_tetra_octant_stage.reset();
     state_->p1m1_extra_stage.reset();
     state_->p1m0_pretrace_stage.reset();
     state_->p1l_b1_primary_stage.reset();
@@ -441,8 +459,16 @@ N006FrameResult N006Runtime::run_candidate_frame(
     state_->last_p1m0_pretrace_frame = false;
     state_->last_p1m0_pretrace_gpu_us = 0.0;
     auto& impl = *runtime_.impl_;
+    if (request.p1m2_tetra_octant_directions &&
+        (!request.p1m1_canonical_key_intervention ||
+         !state_->p1m2_tetra_octant_enabled ||
+         !state_->p1m2_tetra_octant_stage)) {
+        throw std::runtime_error("P1m2a isolated direction stage unavailable");
+    }
     if (request.p1m1_canonical_key_intervention &&
         (!state_->p1m1_canonical_extra_enabled ||
+         (request.p1m2_tetra_octant_directions !=
+             state_->p1m2_tetra_octant_enabled) ||
          request.p1m1_selected_token == 0U ||
          request.p1m1_selected_token == 0xffffffffU ||
          request.extra_rays_per_probe != 4U ||
@@ -711,8 +737,10 @@ N006FrameResult N006Runtime::run_candidate_frame(
         const std::array<std::uint32_t, 4> m1_push{{
             request.p1m1_selected_token, 8U, 4U, kN006CanonicalCapacity,
         }};
-        state_->p1m1_extra_stage->record(
-            command, 1U, 1U, 1U, m1_push.data(), sizeof(m1_push));
+        (request.p1m2_tetra_octant_directions
+            ? state_->p1m2_tetra_octant_stage.get()
+            : state_->p1m1_extra_stage.get())->record(
+                command, 1U, 1U, 1U, m1_push.data(), sizeof(m1_push));
         i001_compute_barrier(impl.context, command);
         impl.finalize_stage->record(command, 1U);
         i001_compute_barrier(impl.context, command);
