@@ -1894,6 +1894,10 @@ N006P1lB1bProfile N006Runtime::p1l_b1b_work_counts() {
 }
 
 N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
+    const auto mark = [](const char* stage) {
+        std::cerr << "[P1m0-GPU] " << stage << std::endl;
+    };
+    mark("enter diagnostic");
     auto& impl = *runtime_.impl_;
     if (!state_->last_canonical_frame || !impl.have_last ||
         impl.options.variant != I001Variant::LaneEFinalSoftware ||
@@ -1912,12 +1916,14 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
     // primary hits or the final image, even though its bindings are readonly.
     const auto hit_bytes = VkDeviceSize(320U * 180U * sizeof(GpuHit));
     const auto image_bytes = VkDeviceSize(320U * 180U * 4U * sizeof(float));
+    mark("pre-diagnostic primary/image readback begin");
     std::vector<std::uint8_t> hits_before(static_cast<std::size_t>(hit_bytes));
     std::vector<std::uint8_t> image_before(static_cast<std::size_t>(image_bytes));
     impl.context.download_device_buffer(
         impl.primary_hits, hits_before.data(), hit_bytes);
     impl.context.download_device_buffer(
         impl.image, image_before.data(), image_bytes);
+    mark("pre-diagnostic readback complete");
     B002Buffer consumer_counts{}, consumer_stats{};
     std::unique_ptr<I001ComputeStage> coverage;
     const auto cleanup = [&]() noexcept {
@@ -1932,6 +1938,7 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
             storage);
         consumer_stats = impl.context.upload_device_buffer(
             empty_stats.data(), VkDeviceSize(sizeof(empty_stats)), storage);
+        mark("scratch allocation/upload complete");
         const std::array<I001Binding, 5> bindings{{
             {0, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl.primary_hits},
             {1, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &state_->hash_keys},
@@ -1944,6 +1951,7 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
             shader_path(PHOS_GI_N006_SHADER_DIR,
                         "n006_p1m0_consumer_coverage.spv"),
             bindings, 4U * sizeof(std::uint32_t));
+        mark("compute pipeline constructed");
         impl.context.vk().resetFences(1, &impl.fence);
         impl.context.vk().resetCommandPool(impl.command_pool, 0);
         VkCommandBuffer command{};
@@ -1974,12 +1982,17 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
             VK_STRUCTURE_TYPE_SUBMIT_INFO);
         submit.commandBufferCount = 1;
         submit.pCommandBuffers = &command;
+        mark("diagnostic GPU submission begin");
         if (impl.context.vk().queueSubmit(
-                impl.context.queue(), 1U, &submit, impl.fence) != VK_SUCCESS ||
-            impl.context.vk().waitForFences(
-                1U, &impl.fence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) {
-            throw std::runtime_error("P1m0 GPU submit/fence failed");
+                impl.context.queue(), 1U, &submit, impl.fence) != VK_SUCCESS) {
+            throw std::runtime_error("P1m0 GPU submission failed");
         }
+        mark("diagnostic GPU fence wait begin");
+        if (impl.context.vk().waitForFences(
+                1U, &impl.fence, VK_TRUE, UINT64_MAX) != VK_SUCCESS) {
+            throw std::runtime_error("P1m0 GPU fence returned error");
+        }
+        mark("diagnostic GPU fence signaled");
 
         std::vector<std::uint8_t> hits_after(hits_before.size());
         std::vector<std::uint8_t> image_after(image_before.size());
@@ -1987,6 +2000,7 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
             impl.primary_hits, hits_after.data(), hit_bytes);
         impl.context.download_device_buffer(
             impl.image, image_after.data(), image_bytes);
+        mark("post-diagnostic primary/image readback complete");
         if (hits_before != hits_after || image_before != image_after)
             throw std::runtime_error(
                 "P1m0 diagnostic changed accepted primary hits or output image");
@@ -2003,6 +2017,7 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
         impl.context.download_device_buffer(
             state_->canonical_multiplicity, raw_multiplicity.data(),
             VkDeviceSize(size * 4U));
+        mark("consumer counters and key/multiplicity download complete");
         N006P1m0Coverage out{};
         out.hash_capacity = capacity;
         out.valid_primary_pixels = raw_stats[0];
@@ -2060,9 +2075,11 @@ N006P1m0Coverage N006Runtime::p1m0_consumer_coverage() {
         }
         // All diagnostics are read-only with respect to existing renderer
         // buffers, but their GPU execution occurs *after* accepted timestamps.
+        mark("consumer count invariants verified");
         cleanup();
         return out;
     } catch (...) {
+        mark("consumer diagnostic raised exception");
         cleanup();
         throw;
     }
