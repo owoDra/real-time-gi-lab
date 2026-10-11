@@ -12,6 +12,7 @@ import json
 import os
 from pathlib import Path
 import re
+import subprocess
 import sys
 
 from audit_p1l_b1c_spirv import ROOT, compiler_info, parse_spirv
@@ -61,6 +62,9 @@ def audit(build_dir: Path) -> dict:
         "variants": {},
         "conclusion": "STATIC_COUNTS_ONLY_COMPILER_HOISTING_NOT_ESTABLISHED",
         "active_shader_binary_match_required": True,
+        "provenance_status": "UNCHECKED",
+        "status": "incomplete",
+        "host_git": None,
     }
     for name, (source, spv) in VARIANTS.items():
         raw = (build_dir / "shaders" / spv).read_bytes()
@@ -75,25 +79,36 @@ def audit(build_dir: Path) -> dict:
         }
     baseline = doc["variants"]["accepted_e003_rebuilt"]
     # CMake currently does NOT register generation of the runtime's
-    # e003_instance_quantized.spv. Recompile *separately*, then verify it
+    # e003_instance_quantized.spv. Recompile *separately*, then compare it
     # against the artifact actually loaded by the accepted runtime.
+    # Missing/different active binary is a HARD research gate, not a reason
+    # to delete the diagnostic evidence or silently replace the artifact.
     active_path = build_dir / "shaders" / "e003_instance_quantized.spv"
     if not active_path.is_file():
-        raise RuntimeError(
-            "C0 active E003 SPIR-V absent: baseline runtime artifact provenance missing")
-    actual = parse_spirv(active_path.read_bytes())
-    doc["runtime_e003_binary"] = {
-        "file": "e003_instance_quantized.spv",
-        "sha256": actual["sha256"],
-        "binary_bytes": actual["binary_bytes"],
-        "matches_fresh_source_rebuild": actual["sha256"] == baseline["sha256"],
-    }
-    if actual["sha256"] != baseline["sha256"]:
-        raise ValueError(
-            "C0 active E003 SPIR-V differs from freshly rebuilt shader; "
-            "do not interpret static audit until provenance reconciled")
+        doc["runtime_e003_binary"] = {
+            "file": "e003_instance_quantized.spv",
+            "present": False, "sha256": None,
+            "matches_fresh_source_rebuild": False,
+        }
+        doc["provenance_status"] = "BLOCKED_ACTIVE_BINARY_MISSING"
+    else:
+        actual = parse_spirv(active_path.read_bytes())
+        matches = actual["sha256"] == baseline["sha256"]
+        doc["runtime_e003_binary"] = {
+            "file": "e003_instance_quantized.spv",
+            "present": True,
+            "sha256": actual["sha256"],
+            "binary_bytes": actual["binary_bytes"],
+            "matches_fresh_source_rebuild": matches,
+        }
+        doc["provenance_status"] = (
+            "MATCHED" if matches else "BLOCKED_BINARY_MISMATCH")
     if not all(baseline["source_contract"].values()):
-        raise ValueError("C0 accepted E003 shader source contract changed")
+        doc["provenance_status"] = "BLOCKED_SOURCE_CONTRACT_DRIFT"
+    doc["status"] = ("ready_static_only" if
+                     doc["provenance_status"] == "MATCHED" else "blocked")
+    # Even matching binary SHA does NOT show compiler-hoisting or hardware
+    # throughput, which require a separate stage-specific measurement.
     # Static OpFDiv count is intentionally NOT interpreted as how many
     # divisions are executed per ray or whether compiler hoisted loop invariants.
     counted = doc["variants"]["b0_count_only"]
@@ -116,15 +131,38 @@ def main() -> int:
     if not (args.build_dir / "CMakeCache.txt").is_file():
         raise RuntimeError("C0 missing configured CMake build; run mise run build first")
     result = audit(args.build_dir)
+    def git(*cmd: str) -> str | None:
+        try:
+            proc = subprocess.run(["git", *cmd], cwd=ROOT, check=True,
+                                  capture_output=True, text=True, timeout=8)
+            return proc.stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            return None
+
+    git_head = git("rev-parse", "HEAD")
+    branch = git("branch", "--show-current")
+    dirty = git("status", "--porcelain", "--untracked-files=normal")
+    result["host_git"] = {
+        "head": git_head, "branch": branch,
+        "clean": dirty == "" if dirty is not None else None,
+    }
+    if (branch != "research-n006-interval-aware-allocation" or
+            dirty != "" or not git_head):
+        result["provenance_status"] = "BLOCKED_UNCLEAN_OR_WRONG_BRANCH"
+        result["status"] = "blocked"
+
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n",
                         encoding="utf-8")
-    print(json.dumps({"status": "static-only", "report": str(args.out),
-                      "variants": {k: {"bytes": v["binary_bytes"],
-                                       "OpFDiv": v["opcode_families"]["OpFDiv"]}
-                                   for k, v in result["variants"].items()}},
-                     indent=2))
-    return 0
+    print(json.dumps({
+        "status": result["status"],
+        "provenance": result["provenance_status"],
+        "report": str(args.out),
+        "variants": {k: {"bytes": v["binary_bytes"],
+                         "OpFDiv": v["opcode_families"]["OpFDiv"]}
+                     for k, v in result["variants"].items()},
+    }, indent=2))
+    return 0 if result["status"] == "ready_static_only" else 2
 
 if __name__ == "__main__":
     try:
