@@ -224,30 +224,40 @@ def main() -> int:
         print(f"[P1m0] {scenario} ({len(summary['cases'])+1}/5); "
               f"stderr={folder.resolve() / 'stderr.log'}", flush=True)
         try:
+            # Stream both child logs directly to durable files. capture_output
+            # did not preserve useful partial progress when a long GPU/CPU
+            # operation stalled and subprocess.run timed out.
+            stdout_path = (folder / "stdout.log").resolve()
+            stderr_path = (folder / "stderr.log").resolve()
             try:
-                process = subprocess.run(
-                    cmd, cwd=pilot.ROOT, capture_output=True,
-                    text=True, check=False, timeout=TIMEOUT_SECONDS)
+                with stdout_path.open("wb") as stdout_stream, \
+                     stderr_path.open("wb") as stderr_stream:
+                    process = subprocess.run(
+                        cmd, cwd=pilot.ROOT, stdout=stdout_stream,
+                        stderr=stderr_stream, check=False,
+                        timeout=TIMEOUT_SECONDS)
             except subprocess.TimeoutExpired as exc:
-                for name, log in (("stdout.log", exc.stdout), ("stderr.log", exc.stderr)):
-                    if isinstance(log, bytes):
-                        log = log.decode("utf-8", errors="replace")
-                    (folder / name).write_text(log or "", encoding="utf-8")
-                raise RuntimeError(f"P1m0 {scenario} exceeded 600s") from exc
-            (folder / "stdout.log").write_text(process.stdout, encoding="utf-8")
-            (folder / "stderr.log").write_text(process.stderr, encoding="utf-8")
+                stderr_tail = stderr_path.read_text(
+                    encoding="utf-8", errors="replace")[-6000:]
+                stdout_tail = stdout_path.read_text(
+                    encoding="utf-8", errors="replace")[-2000:]
+                raise RuntimeError(
+                    f"P1m0 {scenario} exceeded {TIMEOUT_SECONDS}s; "
+                    f"last stage / stderr: {stderr_path}; "
+                    f"stdout: {stdout_path}; "
+                    f"stderr tail:\n{stderr_tail or '(no stderr)'}\n"
+                    f"stdout tail:\n{stdout_tail or '(no stdout)'}"
+                ) from exc
             if process.returncode:
-                # The old message used a relative basename and concealed the
-                # failing child renderer's actual stderr from the console.
-                # Preserve the full source log, but show a bounded diagnostic
-                # excerpt so a user never needs to guess the UTC output path.
-                detail = (process.stderr or process.stdout or "").strip()
-                excerpt = detail[-6000:] if detail else "(child wrote no stderr/stdout)"
+                stderr_tail = stderr_path.read_text(
+                    encoding="utf-8", errors="replace")[-6000:]
+                stdout_tail = stdout_path.read_text(
+                    encoding="utf-8", errors="replace")[-2000:]
                 raise RuntimeError(
                     f"P1m0 {scenario} exit {process.returncode}; "
-                    f"stderr={folder.resolve() / 'stderr.log'}; "
-                    f"stdout={folder.resolve() / 'stdout.log'}; "
-                    f"child diagnostic tail:\n{excerpt}")
+                    f"stderr={stderr_path}; stdout={stdout_path}; "
+                    f"stderr tail:\n{stderr_tail or '(no stderr)'}\n"
+                    f"stdout tail:\n{stdout_tail or '(no stdout)'}")
             evidence_file = folder / pilot.EVIDENCE_NAME
             raw = evidence_file.read_bytes()
             data = json.loads(raw)
