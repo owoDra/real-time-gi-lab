@@ -1,3 +1,24 @@
+# 2026-10-11 follow-up — local build PASS, test harness repair + prospective M1 calibration strata
+
+**Read before older handoff notes.** User-provided N006 full batch log stopped after compilation: C++ link PASS, 206 Python unit tests ran with exactly **3 failures**, all in `test_p1m0_consumer_coverage.py`. Failing assertions:
+- `compact()` had `re.sub(r"\\\\s+", ...)` (searched for a literal backslash sequence rather than actual whitespace); corrected to `re.sub(r"\\s+", ...)`. The *actual* N001, N003 SOFTWARE and M0 shader view-direction/position/key formulas were rechecked with whitespace normalization and source expressions match.
+- CLI gate assertion expected three `!p1m0_coverage` occurrences, but actual three gates are **two negated guards plus one positive allowlist**. Test now verifies both negative guards and positive gate explicitly instead of the wrong count.
+
+Fix was pushed in `070a720695c13f8e2cb37dfef25abf0f261d3350`. **No user 206-test rerun or GPU result has been supplied yet**. Do not mark test PASS from source review alone. C++ warning about anonymous-namespace field linkage and unused helper was pre-existing, not the test failure.
+
+**While awaiting real GPU evidence, continued prospectively with M1 calibration selection:** `experiments/021` now freezes exactly one sorted-smallest token for each 5 scenes ×4 cascades ×3 coverage classes: `zero` count, lowest **positive** count, highest **positive** count. All ties smallest canonical token. Missing zero/positive or collapsed low/high coverage classes => `incomplete_strata_no_intervention`, not silently substituted and no quality scheduler GO. New pure `p1m1_calibration_selection.py` and `test_p1m1_calibration_selection.py` added; `run_p1m0_consumer_coverage.py` now adds selections + per-case provenance and an aggregate `m1_calibration_only_key_status` + count (60 expected) to **the same M0 summary**, eliminating need to upload every raw per-key file to choose calibration keys. This is *not* P1 prediction, not a marginal quality measurement and does not authorize M1 GPU interventions before M0 correctness/cost proof.
+
+**User command unchanged (one batch; no manual edits):**
+
+```bash
+git switch research-n006-interval-aware-allocation
+bash scripts/research/n006_interval_aware_allocation/run_n006_next_verified.sh
+```
+
+The first `git pull --ff-only` fetches test repair and the frozen M1 selection. This command runs build, all N006 tests, B1c static shader audit, synthetic float32 risk audit, E003-C0 active-binary provenance audit and independent five-scene M0 GPU coverage. If E003 C0 blocked, M0 still runs; final shell exits nonzero to preserve provenance gate. Need user output: `n006-p1m0-consumer-coverage-summary.json`, `p1l-c0-e003-static-audit.json`, `b1c-spv-audit.json` or first failure. On M0 5/5 PASS, evaluate per-cascade coverage conservation and selection; then continue to pretrace cost, causal key +4 ray and independent reference studies. **Do not stop merely to report progress if another non-GPU prep stage can be completed.** No PR / Actions / historical shader edits.
+
+---
+
 # 2026-10-11 latest — N006 E003-C0 static gate + P1m0 five-scene diagnostic prepared, NOT GPU-verified
 
 **Read this first.** Previous handoffs below are historical. Private repo `owoDra/phos-gi-lab`, branch `research-n006-interval-aware-allocation`, Issue #42 OPEN. **Continue GitHub work without confirmations; push directly; never PR/Actions.** Actual AMD Radeon 8060S (RADV STRIX_HALO) hardware must run local GPU experiments. Previous supplied P1l-B1c GPU summary was accepted as REJECT, not a research-lane close; B1a GPU REJECT, B1b GPU work counts reduced with no speed gain proved. Result [025](./results/025-p1l-b1c-packed-axis-performance-reject.md).
