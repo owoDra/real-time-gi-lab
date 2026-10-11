@@ -43,13 +43,13 @@ Every one of these pairings has an identically hashed all-black CPU reference; t
 | N003 preflight/calibration | 231 | 77 | 6 |
 | N004 atlas | 65 | 8 | 30 |
 | N004 camera probe | 8 | 2 | 8 |
-| Other N004 probes and repeats (10 cohorts) | 11 | 0 | All single-image signatures |
+| Other N004 probes and repeats (11 cohorts) | 11 | 0 | All single-image signatures |
 | N006 `p1-causal-pilot` | 2 | 0 | 1 |
 | N006 `p1m3b-moving-rigid-q8-signed` | 1 | **1** | 1 |
 | N006 `p1m3c-deforming-reference-q8` | 1 | 0 | 1 |
 | **Total** | **338** | **96** | Overall distinct pair signatures: **33** |
 
-**Note:** N004 probe/repeat minor cohorts above comprise `n004-cleanup-probe`, `n004-probe-leak`, `n004-probe-world-sparse`, `n004-probe-world-sparse-3way`, `n004-probe-world-sparse-detail`, `n004-probe-world-sparse-v4`, and `n004-repeat-1` through `n004-repeat-5`. This is **11 cohorts / 11 pairs**, not 10 cohorts. Their image SHA signatures may duplicate signatures in other cohorts. The table's parenthetical row label should be read as 11 cohorts.
+**Note:** N004 probe/repeat minor cohorts above comprise `n004-cleanup-probe`, `n004-probe-leak`, `n004-probe-world-sparse`, `n004-probe-world-sparse-3way`, `n004-probe-world-sparse-detail`, `n004-probe-world-sparse-v4`, and `n004-repeat-1` through `n004-repeat-5`. Their image SHA signatures may duplicate signatures in other cohorts.
 
 ## N006 direct comparison and source-level mechanism bounds
 
