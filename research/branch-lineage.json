@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-10-11",
+  "target": "research-n006-interval-aware-allocation",
+  "target_commit": "fffe594a4731f9cb8a939c4eab3f68b3948b2d69",
+  "scope": "First half of original remote heads; second half follows in next staging commit",
+  "entries": [
+    {
+      "branch": "chore/mise-research-environment",
+      "head": "c7491b6c9c61a4fe98c226b8f84b4afc06207da1",
+      "relationship_to_n006": "diverged",
+      "merge_base": "3f08cfb67b652d74fbee413da1f7f0306dc266a3",
+      "n006_commits_ahead": 847,
+      "branch_commits_ahead": 4
+    },
+    {
+      "branch": "exp/page-local-radiance-cache",
+      "head": "0d7b09a91261ea925b523ac52f646c8dd97b7cfa",
+      "relationship_to_n006": "ahead",
+      "merge_base": "0d7b09a91261ea925b523ac52f646c8dd97b7cfa",
+      "n006_commits_ahead": 769,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "issue/4-layout-vs-scheduling",
+      "head": "b284235eb8b2867ec0d49d612e088cbe0ac14877",
+      "relationship_to_n006": "ahead",
+      "merge_base": "b284235eb8b2867ec0d49d612e088cbe0ac14877",
+      "n006_commits_ahead": 790,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "issue/7-amortized-coherence",
+      "head": "94db4039097aa18d5bc210271b7adb8dc7d020cb",
+      "relationship_to_n006": "ahead",
+      "merge_base": "94db4039097aa18d5bc210271b7adb8dc7d020cb",
+      "n006_commits_ahead": 759,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "main",
+      "head": "2620d102830fa5c23ae725bc7a4b58bc89655ab5",
+      "relationship_to_n006": "ahead",
+      "merge_base": "2620d102830fa5c23ae725bc7a4b58bc89655ab5",
+      "n006_commits_ahead": 852,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "research",
+      "head": "a75cf7857761cfbc783c9f1f847dc1380359481e",
+      "relationship_to_n006": "ahead",
+      "merge_base": "a75cf7857761cfbc783c9f1f847dc1380359481e",
+      "n006_commits_ahead": 693,
+      "branch_commits_ahead": 0
+    },
+    {
+      "branch": "research-integration-gate",
+      "head": "cbb92799f82098952eca4f52d24c18340992c434",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 96
+    },
+    {
+      "branch": "research-lane-a-split-rc",
+      "head": "1e51b360e36b44912e5127c42c45195b4f39ad53",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 17
+    },
+    {
+      "branch": "research-lane-b-traversal",
+      "head": "0ac1dc2b99b5a10769aa7e8c2007ec99d35eacb9",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 85
+    },
+    {
+      "branch": "research-lane-c-storage-locality",
+      "head": "baec31c246b332961e3a7b06a083bd33d870becf",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 35
+    },
+    {
+      "branch": "research-lane-d-producer-optimization",
+      "head": "ea3c787bbb5b8823e10e3d4ad1b9226307538704",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 100
+    },
+    {
+      "branch": "research-lane-e-dynamic-geometry",
+      "head": "30590185fbe28ea8e726b4f0ba8d6c4dfc3214c0",
+      "relationship_to_n006": "diverged",
+      "merge_base": "44bb27fbafeaa32c40fdef93b4c71247a1473fa2",
+      "n006_commits_ahead": 724,
+      "branch_commits_ahead": 215
+    }
+  ]
+}
