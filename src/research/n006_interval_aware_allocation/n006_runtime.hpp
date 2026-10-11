@@ -27,6 +27,8 @@ struct N006ExtraRequest {
     bool direct_compact_work{}; // P1k per-frame three-arm selector; requires opt-in stages.
     bool p1l_b1_near_first{}; // N006 isolated near-first software primary arm.
     bool p1m0_pretrace_coverage{}; // Opt-in N006-only placement/cost probe.
+    bool p1m1_canonical_key_intervention{}; // Single-key causal ray preflight.
+    std::uint32_t p1m1_selected_token{}; // Frozen canonical packed key.
 };
 
 // Debug readback for N006-only causal-chain diagnostics, never a scheduler signal.
@@ -128,6 +130,20 @@ struct N006CanonicalStats {
     std::uint32_t weighted_owner_total{};
 };
 
+struct N006CanonicalM1Trace {
+    bool executed{};
+    std::uint32_t selected_token{};
+    std::uint32_t output_id{};
+    std::uint32_t base_ray_count{};
+    std::uint32_t extra_ray_count{};
+    std::uint64_t base_radiance_sum16{};
+    std::uint64_t extra_radiance_sum16{};
+    std::uint32_t baseline_mean16{};
+    std::uint32_t candidate_mean16{};
+    std::uint32_t merged_sample_count{};
+    double extra_injection_gpu_us{};
+};
+
 struct N006ExtraStats {
     std::uint32_t base_traced_rays{};
     std::uint32_t extra_rays_requested{};
@@ -144,6 +160,7 @@ struct N006ExtraStats {
     N006InfluenceTrace influence_trace{};
     N006GpuHashProbe gpu_hash_probe{};
     N006CanonicalStats canonical{};
+    N006CanonicalM1Trace canonical_m1{};
 };
 
 struct N006FrameResult {
@@ -231,7 +248,8 @@ public:
                          bool p1j_direct_compact = false,
                          bool p1l_b1_enabled = false,
                          bool p1l_b1c_axis_proxy = false,
-                         bool p1m0_pretrace_enabled = false);
+                         bool p1m0_pretrace_enabled = false,
+                         bool p1m1_canonical_extra_enabled = false);
     ~N006Runtime();
 
     N006Runtime(const N006Runtime&) = delete;
