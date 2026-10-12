@@ -73,6 +73,9 @@ def primary_comparison(cpu: list[tuple], gpu: list[tuple]) -> dict:
         if sum(a[i]*b[i] for i in range(3))<0.9999:normals+=1
     return {'mask_mismatches':mask,'identity_mismatches':ids,
             'distance_mismatches':distance,'normal_mismatches':normals,
+            'cpu_hit_pixels':sum(hit[7] for hit in cpu),
+            'gpu_hit_pixels':sum(hit[7] for hit in gpu),
+            'both_hit_pixels':sum(a[7] and b[7] for a,b in zip(cpu,gpu)),
             'match':not (mask or ids or distance or normals)}
 
 def image_comparison(a: dict, b: dict) -> dict:
@@ -153,6 +156,17 @@ def analyze(path: Path) -> dict:
     primary=primary_comparison(cpu['hits'],gpu['hits'])
     comparison={k:image_comparison(cpu['images'][k],gpu['images'][k])
                 for k in ('direct','indirect','total')}
+    def signal_summary(img):
+        # Achromatic PFM channels have already been validated.
+        values=img['rgb'][::3]
+        return {'positive_pixels':sum(v>0 for v in values),
+                'max_value':max(values,default=0),
+                'mean_value':sum(values)/len(values) if values else 0}
+    signal={
+        side:{k:signal_summary(data['images'][k])
+              for k in ('direct','indirect','total')}
+        for side,data in (('cpu',cpu),('gpu',gpu))
+    }
     # A triage-only decomposition guard; not the statistical eligibility threshold.
     direct_match=comparison['direct']['max_abs']<=1e-5
     reconstruction=cpu['reconstruction']['passed'] and gpu['reconstruction']['passed']
@@ -163,7 +177,7 @@ def analyze(path: Path) -> dict:
         'gpu_geometry_upload_and_source_state_not_independently_attested']
     return {
         'schema_version':1,'classification':'diagnostic-only','frame':frame,
-        'primary':primary,'component_comparison':comparison,
+        'primary':primary,'signal':signal,'component_comparison':comparison,
         'reconstruction':{'cpu':cpu['reconstruction'],'gpu':gpu['reconstruction']},
         'indirect_model_difference_testable':testable,
         'indirect_mismatch_detected':testable and comparison['indirect']['max_abs']>1e-5,
