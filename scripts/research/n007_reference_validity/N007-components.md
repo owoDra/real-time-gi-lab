@@ -1,6 +1,6 @@
 # N007 P1-A: matched-state CPU/GPU component capture
 
-**Classification: diagnostic-only. GPU path NOT yet compiled or executed.**
+**Classification: diagnostic-only. GPU host has executed the initial capture; first-hit matching failed. N007-only world-space fix is committed but GPU revalidation remains pending.**
 
 ## Scope
 
@@ -45,7 +45,7 @@ A1 cells: one black moving-rigid, one black camera/disocclusion, positive light-
 - CPU raw post-motion geometry + parameter fingerprints do not alone prove uploaded GPU buffers match. Validate GPU primary-hit identities before attributing indirect-light differences.
 - A GPU-positive/CPU-black image is not automatically light leakage, and CPU blackness is not physical truth.
 - The CPU and probe estimators differ; their disagreement is a diagnostic hypothesis, not proof of which is correct.
-- Software/HWRT integrated GPU compilation and runtime not performed in the assistant sandbox; GLSL compiler/Vulkan hardware unavailable there.
+- Initial software GPU capture and component packing succeeded on the user's Vulkan host, but primary masks/identities did not match. A double-translation defect in N007's generated target-state first-hit BVH upload was identified and corrected; post-fix GPU result is pending. HWRT still unverified; GPU execution remains unavailable in the assistant sandbox.
 - The independent controlled-occluder scene's GPU asset is not automated yet. Original archived private PFMs were not present and are not published.
 - GPU output from the packed diagnostic shader **must not** be treated as an unchanged original RGB radiance image for formal N001/N006 acceptance.
 
