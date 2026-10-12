@@ -105,7 +105,7 @@ def runtime(source: str) -> str:
                       std::streamsize(gpu_geos.size() * sizeof(GpuTriangle)));
         if (!geo_out) fail("N007 GPU primary geometry export write failed");
     }
-#endif''''''
+#endif'''
     return exactly_one(source, marker, replacement)
 
 def generate(root: Path, out: Path) -> dict:
