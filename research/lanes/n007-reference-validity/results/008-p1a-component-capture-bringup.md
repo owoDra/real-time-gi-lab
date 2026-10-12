@@ -37,3 +37,11 @@
 3. Use the unchanged preregistered 512–8192 SPP × 4 seed convergence ladder to classify statistical eligibility (two consecutive passing stages); only then distinguish convergence from physical correctness.
 
 **User CPU run requests:** none; only unavoidable GPU host operations remain. No private raw artifact has been sent to GitHub.
+
+## GPU-host bring-up evidence received (2026-10-12 JST)
+
+- User ran `phos-n007-capture` successfully on the GPU host: `N007 component capture saved; historical causation not proven.`
+- `build_component_manifest.py` completed with `classification=diagnostic-only`, `primary_match=false`, `gpu_reconstruction_passed=true`, `historical_causation_proven=false`.
+- These facts establish GPU execution and internal packed-shader reconstruction on **one moving-rigid / software / target-state / 512-SPP** capture, **not** matching-state eligibility, correct physics or N006 historical cause.
+- Source-level cause isolated: historical N006 calls `n006_refresh_software_primary()` after target-state geometry update, but N007's generated N001 runtime omitted it. Therefore the GPU first-hit BVH could remain source-state while CPU traces post-motion `renderer_readback().triangles`. This is a **strong instrumentation defect hypothesis**, not an empirically verified explanation until rerun.
+- N007-only generator patched to call refresh in target-state software path, and updated the synthetic regression guard. The manifest CLI now prints primary mismatch categories and component absolute deltas. No N001–N006 source touched; the patched GPU path is **NOT yet run**. No raw PFM, detailed mismatch counts or state fingerprints uploaded; a retroactive factual cause conclusion is not warranted.
