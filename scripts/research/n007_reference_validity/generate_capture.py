@@ -53,6 +53,21 @@ def runtime(source: str) -> str:
 #endif
         update_params(target_state);''')
 
+    # n006_refresh_software_primary() was written for an assumed object-space
+    # b_scene; however update_dynamic_geometry() actually assigns the WORLD
+    # translated triangles to b_scene before returning. Applying delta_x again
+    # shifts the GPU BVH twice, while N007 CPU traces b_scene once-translated.
+    # Bind directly to that same authoritative post-update vector; this also
+    # avoids leaving GpuSoftwareBvhData::triangles_ pointing at a dead local.
+    source = exactly_one(source,
+        '''        const auto translated =
+            options.scenario == I001Scenario::MovingRigid
+                ? translated_geometry(
+                    b_scene.triangles, moving.primitives, moving.delta_x)
+                : b_scene.triangles;
+        n006_primary_cpu->rebuild(translated);''',
+        '''        const auto& translated = b_scene.triangles;
+        n006_primary_cpu->rebuild(translated);''')
     marker = '''    impl_->context.download_device_buffer(
         impl_->image,
         out.image_rgba.data(),
