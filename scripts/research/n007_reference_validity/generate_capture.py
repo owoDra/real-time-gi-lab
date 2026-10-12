@@ -31,6 +31,13 @@ def runtime(source: str) -> str:
     source = exactly_one(source, '"n003_composite_software.spv"', '"n007_software_composite.spv"')
     source = exactly_one(source, '#include <filesystem>',
                          '#include <filesystem>\n#include <cstdlib>\n#include <fstream>')
+    # Generated file lives in the build tree: relative includes from the N001
+    # original directory must be rebased to the configured project include root.
+    source = exactly_one(source, '#include "../../vk_init.hpp"',
+                         '#include "vk_init.hpp"')
+    source = exactly_one(source,
+        '#include "../n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"',
+        '#include "research/n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"')
     marker = '''    impl_->context.download_device_buffer(
         impl_->image,
         out.image_rgba.data(),
