@@ -44,7 +44,9 @@ def campaign(root: Path, reference_binary: Path) -> dict:
             done.get('frame_state_sha256')!=frame['frame_state_sha256']):
             raise ValueError('existing eligibility result belongs to a different source state')
         # Pure read-only rerun of the frozen SHA-checked manifest.
-        return assess(manifest_path)
+        result=assess(manifest_path)
+        result['classification']='statistical-eligibility-screen-only'
+        return result
     if manifest_path.exists():
         earlier=json.loads(manifest_path.read_text())
         if (earlier.get('source_commit')!=manifest['source_commit'] or
@@ -53,6 +55,9 @@ def campaign(root: Path, reference_binary: Path) -> dict:
             raise ValueError('existing SPP campaign provenance differs from immutable capture')
         validated=assess(manifest_path)
         if validated['status']=='statistical-screen-pass':
+            validated['classification']='statistical-eligibility-screen-only'
+            final_path.write_text(json.dumps(validated,sort_keys=True,indent=2,
+                                             allow_nan=False)+'\n')
             return validated
         manifest['levels']=earlier['levels']
     if not reference_binary.is_file():
