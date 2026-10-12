@@ -60,6 +60,29 @@ def load_hits(path: Path, n: int) -> list[tuple]:
         hits.append((a,b,c,t,primitive,material,instance,flag))
     return hits
 
+def software_primary_geometry(cpu_path: Path, gpu_path: Path) -> dict:
+    """Compare device-readback std430 triangles with the CPU world-space snapshot."""
+    raw=cpu_path.read_bytes()
+    gpu=gpu_path.read_bytes()
+    if len(raw)<8:
+        raise ValueError('truncated CPU geometry state')
+    version,count=struct.unpack_from('<II',raw,0)
+    if version!=1 or count>100_000_000 or len(raw)!=8+count*52:
+        raise ValueError('malformed CPU geometry state')
+    if len(gpu)!=count*64:
+        raise ValueError('GPU primary triangle readback byte length mismatch')
+    mismatched=0
+    first=None
+    for k in range(count):
+        tri=raw[8+k*52:8+(k+1)*52]
+        packed=(tri[0:12]+bytes(4)+tri[12:24]+bytes(4)+
+                tri[24:36]+bytes(4)+tri[36:52])
+        if gpu[k*64:(k+1)*64]!=packed:
+            mismatched+=1
+            if first is None:first=k
+    return {'match':mismatched==0,'checked_triangles':count,
+            'mismatched_triangles':mismatched,'first_mismatch_index':first}
+
 def primary_comparison(cpu: list[tuple], gpu: list[tuple]) -> dict:
     mask=ids=distance=normals=0
     for a,b in zip(cpu,gpu):
@@ -134,13 +157,21 @@ def analyze(path: Path) -> dict:
     if set(data)!={'schema_version','frame','state_files','cpu','gpu','cpu_counts'}:
         raise ValueError('manifest structure mismatch')
     states=data['state_files']
-    if set(states)!={'frame','geometry'}:
-        raise ValueError('required raw state snapshots missing')
+    required={'frame','geometry'}
+    if frame['backend']=='software':
+        required.add('gpu_primary_geometry')
+    if set(states)!=required:
+        raise ValueError('required CPU/GPU raw state snapshots missing')
     base=path.resolve().parent
     for key,declared in (('frame','frame_state_sha256'),('geometry','geometry_state_sha256')):
         checked_file(base,states[key])
         if states[key]['sha256']!=frame[declared]:
             raise ValueError(f'{key} state SHA differs from recorded fingerprint')
+    geometry_attestation=None
+    if frame['backend']=='software':
+        geometry_attestation=software_primary_geometry(
+            checked_file(base,states['geometry']),
+            checked_file(base,states['gpu_primary_geometry']))
     cpu=components(base,data['cpu'],w*h,(w,h))
     gpu=components(base,data['gpu'],w*h,(w,h))
     counts=data['cpu_counts']
@@ -170,14 +201,20 @@ def analyze(path: Path) -> dict:
     # A triage-only decomposition guard; not the statistical eligibility threshold.
     direct_match=comparison['direct']['max_abs']<=1e-5
     reconstruction=cpu['reconstruction']['passed'] and gpu['reconstruction']['passed']
-    testable=primary['match'] and direct_match and reconstruction
+    geometry_match=geometry_attestation is None or geometry_attestation['match']
+    testable=primary['match'] and direct_match and reconstruction and geometry_match
     blockers=(['primary_hit_mismatch'] if not primary['match'] else []) + (
         ['direct_mismatch'] if not direct_match else []) + (
-        ['component_reconstruction_mismatch'] if not reconstruction else []) + [
-        'gpu_geometry_upload_and_source_state_not_independently_attested']
+        ['component_reconstruction_mismatch'] if not reconstruction else []) + (
+        ['gpu_primary_triangle_bytes_mismatch'] if not geometry_match else []) + [
+        'gpu_camera_ubo_and_secondary_state_not_independently_attested'
+        if geometry_match and geometry_attestation is not None
+        else 'gpu_geometry_upload_and_source_state_not_independently_attested']
     return {
         'schema_version':1,'classification':'diagnostic-only','frame':frame,
-        'primary':primary,'signal':signal,'component_comparison':comparison,
+        'primary':primary,'signal':signal,
+        'primary_geometry_attestation':geometry_attestation,
+        'component_comparison':comparison,
         'reconstruction':{'cpu':cpu['reconstruction'],'gpu':gpu['reconstruction']},
         'indirect_model_difference_testable':testable,
         'indirect_mismatch_detected':testable and comparison['indirect']['max_abs']>1e-5,
