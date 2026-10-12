@@ -105,7 +105,40 @@ def runtime(source: str) -> str:
                       std::streamsize(gpu_geos.size() * sizeof(GpuTriangle)));
         if (!geo_out) fail("N007 GPU primary geometry export write failed");
     }
-#endif'''
+#endif
+    // Read-only secondary producer/traversal payloads used in this exact frame.
+    // These capture the UNMODIFIED historical probe radiance inputs so an
+    // independent CPU pass can evaluate shadow visibility without changing
+    // the measured shader or any historical renderer.
+    if (const char* directory = std::getenv("PHOS_N007_PROBE_DIR")) {
+        if (!*directory || impl_->last.stats.overflow != 0U)
+            fail("N007 probe export requires nonempty dir and no work overflow");
+        const std::size_t count = impl_->last.stats.work_items;
+        if (count > impl_->params.limits[1])
+            fail("N007 work counter exceeds GPU work allocation");
+        std::vector<LaneAWorkItemV1> items(count);
+        std::vector<GpuHit> probe_hits(count);
+        std::vector<std::array<std::uint32_t, 2>> fixed(count);
+        if (count) {
+            impl_->context.download_device_buffer(impl_->work,
+                items.data(), count * sizeof(LaneAWorkItemV1));
+            impl_->context.download_device_buffer(impl_->hits,
+                probe_hits.data(), count * sizeof(GpuHit));
+            impl_->context.download_device_buffer(impl_->contributions,
+                fixed.data(), count * sizeof(fixed[0]));
+        }
+        const auto save = [&](const char* name, const void* data, std::size_t bytes) {
+            const auto filename = std::filesystem::path(directory) / name;
+            std::ofstream stream(filename, std::ios::binary);
+            if (!stream) fail("N007 probe capture output could not open");
+            stream.write(reinterpret_cast<const char*>(data), std::streamsize(bytes));
+            if (!stream) fail("N007 probe capture write failed");
+        };
+        save("probe-work.bin", items.data(), count * sizeof(LaneAWorkItemV1));
+        save("probe-hits.bin", probe_hits.data(), count * sizeof(GpuHit));
+        save("probe-contributions.bin", fixed.data(), count * sizeof(fixed[0]));
+    }
+'''
     return exactly_one(source, marker, replacement)
 
 def generate(root: Path, out: Path) -> dict:
