@@ -33,12 +33,21 @@ class ComponentContractTest(unittest.TestCase):
                           'shadow_clear':1,'positive_samples':1},
             'state_files':{},'cpu':{},'gpu':{}
         }
-        for name,raw in (('frame',b'frame state'),('geometry',b'geometry state')):
+        # CPU serialized triangles: 9 float positions, then 4 identity flags.
+        self.cpu_geo=struct.pack('<II9f4I',1,1,
+            0,0,0, 1,0,0, 0,1,0, 7,2,3,1)
+        self.gpu_geo=struct.pack('<12f4I',
+            0,0,0,0, 1,0,0,0, 0,1,0,0, 7,2,3,1)
+        for name,raw in (('frame',b'frame state'),('geometry',self.cpu_geo)):
             file=self.root/f'{name}-state.bin'
             file.write_bytes(raw)
             h=hashlib.sha256(raw).hexdigest()
             self.manifest['state_files'][name]={'path':file.name,'sha256':h}
             self.frame['frame_state_sha256' if name=='frame' else 'geometry_state_sha256']=h
+        gpu_file=self.root/'gpu_primary_geometry.bin'
+        gpu_file.write_bytes(self.gpu_geo)
+        self.manifest['state_files']['gpu_primary_geometry']={
+            'path':gpu_file.name,'sha256':hashlib.sha256(self.gpu_geo).hexdigest()}
         for side in ('cpu','gpu'):
             for part in ('hits','direct','indirect','total'):
                 val={'direct':.25,'indirect':.125,'total':.375}.get(part)
@@ -63,9 +72,28 @@ class ComponentContractTest(unittest.TestCase):
         self.assertEqual(r['signal']['cpu']['direct']['positive_pixels'],self.w*self.h)
         self.assertEqual(r['signal']['gpu']['indirect']['positive_pixels'],self.w*self.h)
         self.assertTrue(r['reconstruction']['gpu']['passed'])
+        self.assertTrue(r['primary_geometry_attestation']['match'])
         self.assertTrue(r['indirect_model_difference_testable'])
         self.assertFalse(r['physical_correctness_proven'])
         self.assertFalse(r['cross_device_state_independently_verified'])
+    def test_independent_primary_triangle_device_attestation(self):
+        r=self.go()
+        self.assertTrue(r['primary_geometry_attestation']['match'])
+        self.assertEqual(r['primary_geometry_attestation']['checked_triangles'],1)
+        self.assertEqual(r['primary_geometry_attestation']['mismatched_triangles'],0)
+    def test_forged_uploaded_geometry_blocks_attribution(self):
+        raw=bytearray(self.gpu_geo)
+        raw[0]^=0x1
+        file=self.root/'gpu_primary_geometry.bin'
+        file.write_bytes(raw)
+        self.manifest['state_files']['gpu_primary_geometry']['sha256']=hashlib.sha256(raw).hexdigest()
+        result=self.go()
+        self.assertFalse(result['primary_geometry_attestation']['match'])
+        self.assertFalse(result['indirect_model_difference_testable'])
+        self.assertIn('gpu_primary_triangle_bytes_mismatch',result['blockers'])
+    def test_missing_device_geometry_is_rejected(self):
+        del self.manifest['state_files']['gpu_primary_geometry']
+        with self.assertRaisesRegex(ValueError,'raw state snapshots'):self.go()
     def test_indirect_mismatch_is_diagnostic(self):
         self.set_file('gpu','indirect',pfm(self.w,self.h,.25))
         self.set_file('gpu','total',pfm(self.w,self.h,.5))
