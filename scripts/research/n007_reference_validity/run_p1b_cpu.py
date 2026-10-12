@@ -15,6 +15,27 @@ from component_contract import analyze
 from replay_probe_image import replay_capture
 from run_reference_ladder import campaign
 
+def resolve_native_binary(build_dir: Path, name: str) -> Path:
+    """Resolve the N007 CMake subdirectory layout or explicit flat bin dir.
+
+    CMake currently puts CPU-only add_executable targets in its declaring
+    binary subdirectory, unlike phos-n007-capture which sets root RUNTIME_OUTPUT_DIRECTORY.
+    Prefer that current target location so an old executable at build root
+    can never silently shadow it.
+    """
+    if Path(name).name != name or not name.startswith('phos-n007-'):
+        raise ValueError('invalid N007 native binary name')
+    paths = (
+        build_dir / 'src/research/n007_reference_validity' / name,
+        build_dir / name,
+    )
+    for path in paths:
+        if path.is_file():
+            return path.resolve()
+    raise ValueError(
+        'CPU-only native tool not built: ' + name +
+        ' (checked: ' + ', '.join(str(path) for path in paths) + ')')
+
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--capture',type=Path,required=True)
@@ -34,10 +55,7 @@ def main():
     if not diagnostic['probe_shadow_replay_testable']:
         raise ValueError('GPU probe ray/hit/fixed contribution replay invalid')
     def run(binary: str,*opts: str):
-        cmd=[str(native/binary),*opts]
-        if not (native/binary).is_file():
-            raise ValueError('CPU-only native tool not built: '+binary)
-        subprocess.run(cmd,check=True)
+        subprocess.run([str(resolve_native_binary(native,binary)),*opts],check=True)
     for test in ('phos-n007-cpu-test','phos-n007-probe-test'):
         run(test)
     flags=root/'gpu/probe-shadow-flags.bin'
@@ -66,7 +84,7 @@ def main():
     # Statistical eligibility is INDEPENDENT of the GPU estimator's leakage.
     # It is still measured if the original GPU image replay failed; that
     # separate mismatch remains a recorded fail-closed causal blocker.
-    eligibility=campaign(root,native/'phos-n007-cpu-reference')
+    eligibility=campaign(root,resolve_native_binary(native,'phos-n007-cpu-reference'))
     summary={
         'classification':'diagnostic-only',
         'source_commit':diagnostic['frame']['source_commit'],
