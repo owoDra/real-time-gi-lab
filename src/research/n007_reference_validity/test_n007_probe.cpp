@@ -44,7 +44,9 @@ int main() {
     dump(path/"probe-work.bin",work);
     dump(path/"probe-hits.bin",gpu);
     dump(path/"probe-contributions.bin",fixed);
-    const auto outcome=n::audit_gpu_probe_transport(path,triangles,p,1);
+    std::vector<std::uint8_t> labels;
+    const auto outcome=n::audit_gpu_probe_transport(path,triangles,p,1,&labels);
+    assert(labels.size()==1&&labels[0]==1U);
     assert(outcome.work_items==1);
     assert(outcome.gpu_hit_items==1);
     assert(outcome.gpu_traversal_mismatches==0);
