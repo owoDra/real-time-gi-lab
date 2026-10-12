@@ -26,6 +26,21 @@ int main() {
     assert(miss.primary[0].metadata[0]==lane_b::kInvalidId);
     assert(std::isinf(miss.primary[0].normal_t[3]));
     assert(miss.total[0]==0);
+    // Independent known direct-light/occlusion physical sanity control.
+    // Occluder is offset from the camera ray but on the hit-to-light path.
+    p.camera_forward_far={0,0,1,10};
+    p.light_pos_interval={2,0,0,.5F};
+    const auto lit=n007::capture_cpu(triangles,p,1,1,4,305419896,1);
+    assert(lit.primary[0].metadata[0]==7);
+    assert(lit.direct[0]>0.0F);
+    assert(lit.indirect[0]==0.0F);
+    assert(lit.counts.shadow_clear==4);
+    auto occluded=triangles;
+    occluded.push_back({{.35F,-1,2},{.9F,-1,2},{.6F,1,2},8,2,3,true});
+    const auto hidden=n007::capture_cpu(occluded,p,1,1,4,305419896,1);
+    assert(hidden.primary[0].metadata[0]==7);
+    assert(hidden.direct[0]==0.0F);
+    assert(hidden.counts.shadow_blocked==4);
     bool threw=false;
     try {(void)n007::capture_cpu(triangles,p,0,1,1,1);}
     catch(const std::invalid_argument&) {threw=true;}
