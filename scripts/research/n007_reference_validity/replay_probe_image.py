@@ -8,6 +8,7 @@ not infer visibility flags from a count or declare physical/historical truth.
 """
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 import math
 import struct
@@ -153,8 +154,23 @@ def replay_capture(root: Path, shadow_flags: Path | None=None) -> dict:
     if (image['width'],image['height'])!=(state['width'],state['height']):
         raise ValueError('GPU PFM/primary dimensions diverge')
     flags=None
+    flag_sha=None
     if shadow_flags is not None:
+        if not diagnostic['probe_shadow_replay_testable']:
+            raise ValueError('GPU secondary replay mismatches prohibit shadow counterfactual')
         flags=shadow_flags.read_bytes()
+        if len(flags)!=len(work):
+            raise ValueError('independent shadow flag item count differs from work items')
+        expected=diagnostic['gpu_probe_shadow_audit']
+        observed={v:flags.count(v) for v in (0,1,2,3)}
+        for label,field in [(1,'gpu_positive_shadow_blocked'),
+                            (2,'gpu_positive_shadow_clear'),
+                            (3,'gpu_positive_other_zero')]:
+            if observed[label]!=expected[field]:
+                raise ValueError('independent per-work shadow flags disagree with source replay '+field)
+        if any((flag==0)==(contribution[1]>0) for flag,contribution in zip(flags,contrib)):
+            raise ValueError('independent shadow label cannot mask or omit a positive contribution')
+        flag_sha=hashlib.sha256(flags).hexdigest()
     probes,groups=aggregate_probes(work,contrib,flags)
     original=replay_image(state,hits,probes)
     comparison=compare_images(rgb,original)
@@ -166,6 +182,9 @@ def replay_capture(root: Path, shadow_flags: Path | None=None) -> dict:
         input_work_items=len(work),output_groups=groups,unique_probe_keys=len(probes),
         baseline=comparison,baseline_reconstruction_passed=passed,
         shadow_counterfactual_eligible=False,
+        shadow_flag_sha256=flag_sha,
+        source_commit=m['frame']['source_commit'],
+        frame_state_sha256=m['frame']['frame_state_sha256'],
         physical_correctness_proven=False,historical_causation_proven=False)
     if flags is not None:
         if not passed:
