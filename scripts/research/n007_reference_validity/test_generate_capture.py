@@ -31,6 +31,9 @@ class OverlayTest(unittest.TestCase):
         self.assertIn('n007_hwrt_composite.spv',result)
         self.assertIn('n007_software_composite.spv',result)
         self.assertIn('PHOS_N007_GPU_HITS',result)
+        self.assertIn('PHOS_N007_GPU_PRIMARY_GEOMETRY',result)
+        self.assertIn('impl_->n006_primary_triangles, gpu_geos.data()',result)
+        self.assertIn('sizeof(GpuTriangle) == 64',result)
         self.assertIn('(void)n006_refresh_software_primary();',result)
         self.assertLess(result.index('n006_refresh_software_primary();'),
                         result.index('update_params(target_state);'))
