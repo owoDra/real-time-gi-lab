@@ -24,5 +24,31 @@ Source contract supports a specific *candidate transport mismatch*: the original
 
 An opt-in diagnostic now downloads the actual GPU producer work stream (64-byte items), secondary traversal hits (32-byte), and fixed quantized radiance contributions (8-byte). The N007 CPU replay reconstructs identical producer rays, checks first encountered secondary hits versus a separate CPU BVH, predicts the original *unshadowed* Lambert value and tests shadow-to-light occlusion in matched world-space geometry. It records matched-hit / mismatch counts, fixed-value reconstruction mismatches, occluded-positive counts and clear-positive controls. The manifest checks payload length, SHA and self-consistency. Original N001–N006 shaders and acceptances remain untouched.
 
-**This new GPU-probe replay has not been executed on-device.** A positive shadow-blocked probe candidate would support this causal mechanism in this frame only if GPU ray-hit matches, fixed quantization agrees and independent visibility is valid. It still would not establish physically correct full-scene GI, original M3b cause or statistical eligibility. Preregistered light-motion and camera controls, controlled known occlusion, and full 512–8192 × four-seed two-consecutive-level ladder remain pending.
+**This new GPU-probe replay has not been executed on-device.** **Update: this statement applied to the initial result publication only; the following GPU run has now executed the replay.** A positive shadow-blocked probe candidate would support this causal mechanism in this frame only if GPU ray-hit matches, fixed quantization agrees and independent visibility is valid. It still would not establish physically correct full-scene GI, original M3b cause or statistical eligibility. Preregistered light-motion and camera controls, controlled known occlusion, and full 512–8192 × four-seed two-consecutive-level ladder remain pending.
 
+
+## GPU-host actual probe shadow replay (2026-10-12 JST)
+
+User-provided derived JSON from a subsequent N007 software/moving-rigid/target/512-SPP capture, same registered run class (raw evidence remains private, artifact identity not independently checked by assistant):
+
+| Probe item count | Observed |
+|---|---:|
+| Total GPU-produced work items | **134,816** |
+| Secondary traversal hits | **32,276** |
+| Positive fixed-point probe contributions | **18,649** |
+| GPU-positive probe hits with independently shadow-blocked light | **18,363 / 18,649 (98.4664%)** |
+| GPU-positive probe hits with unobstructed light | **286 / 18,649 (1.5336%)** |
+| GPU/CPU secondary traversal mismatches (all/positive) | **0 / 0** |
+| Reconstructed GPU fixed contribution mismatches | **0** |
+| Invalid GPU contribution output IDs / hit flags | **0 / 0** |
+| Positive unshadowed CPU predictions absent from GPU output | **0** |
+
+The same capture again has first-hit pixel mask, ID, t and normal comparison all matching (**15,173 hit pixels**); GPU software primary triangles are exactly matched (**262,241 / 262,241**). CPU direct/indirect/total positive-pixel count is **0/0/0**; GPU is **0/9,247/9,247**. Primary direct delta=0, GPU channel reconstruction=true, indirect max abs delta=**0.00012207217514514923**. Only remaining recorded diagnostic blocker is independent GPU camera UBO and secondary upload/state provenance.
+
+**Narrow empirically supported conclusion:** in this current run, the active GPU physical-radiance stage generates 18,363 strictly positive Lambert fixed-point contributions at matched secondary hit surfaces which the independently replayed CPU scene BVH finds to be in shadow from the light. This directly validates the previously hypothesized *missing secondary shadow visibility* behavior of `n001_physical_radiance.comp.glsl` under matched producer rays. Merely counting occluded probes does **not** prove that all 9,247 resulting positive image pixels owe their positive value to those probes, because 286 light-unobstructed positive contributions also exist, and the storage key/aggregation/lookup path has not been causally ablated. Probe direction sampling differs fundamentally from the CPU cosine path tracer.
+
+This is **not** an assertion that every shadowed sample violates a complete physical light-transport oracle or that original archived N006 M3b frames were identical. Physical validity and statistical reference eligibility remain undetermined. Do **not** retrofit original N006 P1 NO GO or claim historical causal proof.
+
+### Next bounded falsification test
+
+Reconstruct the **actual GPU probe-key accumulation and per-pixel lookup** on CPU from captured work, contributions and verified GPU primary hits, then compare reconstruction against the original GPU indirect image. Perform an independent **occluded-contribution-zeroed counterfactual** using the same key/group/lookup paths without altering historical shader or reselecting frames. Only call it an image-level explanation if baseline reconstruction matches and the counterfactual change is demonstrably attributable to identified shadow-blocked contributions. Independently test known lit and occluded geometry (including positive light-motion control), GPU camera UBO and probe acceleration upload state; then run the preregistered SPP × four-seed ladder. No result of these subsequent tests has been measured yet.
