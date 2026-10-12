@@ -85,6 +85,13 @@ def main():
     print(json.dumps({
         'classification':'diagnostic-only',
         'primary_match':summary['primary']['match'],
+        'cpu_hit_pixels':summary['primary']['cpu_hit_pixels'],
+        'gpu_hit_pixels':summary['primary']['gpu_hit_pixels'],
+        'radiance_positive_pixels':{
+            side:{k:summary['signal'][side][k]['positive_pixels']
+                  for k in ('direct','indirect','total')}
+            for side in ('cpu','gpu')
+        },
         'primary_mismatch_counts':{
             key:summary['primary'][key] for key in (
                 'mask_mismatches','identity_mismatches',
