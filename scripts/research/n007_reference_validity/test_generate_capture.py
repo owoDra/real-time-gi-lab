@@ -15,7 +15,7 @@ class OverlayTest(unittest.TestCase):
         src='image.pixels[id] = vec4(radiance, radiance, radiance, 1.0);'
         with self.assertRaises(ValueError):composite(src+src)
     def test_runtime_isolation(self):
-        src='#include <filesystem>\n"n001_composite.spv"\n"n003_composite_software.spv"\n'+'''    impl_->context.download_device_buffer(
+        src='#include <filesystem>\n#include "../../vk_init.hpp"\n#include "../n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"\n"n001_composite.spv"\n"n003_composite_software.spv"\n'+'''    impl_->context.download_device_buffer(
         impl_->image,
         out.image_rgba.data(),
         out.image_rgba.size() * sizeof(float));'''
@@ -23,6 +23,9 @@ class OverlayTest(unittest.TestCase):
         self.assertIn('n007_hwrt_composite.spv',result)
         self.assertIn('n007_software_composite.spv',result)
         self.assertIn('PHOS_N007_GPU_HITS',result)
+        self.assertIn('#include "vk_init.hpp"',result)
+        self.assertIn('#include "research/n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"',result)
+        self.assertNotIn('#include "../../vk_init.hpp"',result)
         self.assertIn('static_assert(sizeof(GpuHit) == 32)',result)
 if __name__=='__main__':
     unittest.main()
