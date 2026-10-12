@@ -1,6 +1,6 @@
 # N007 P1-A: matched-state CPU/GPU component capture
 
-**Classification: diagnostic-only. GPU host has executed the initial capture; first-hit matching failed. N007-only world-space fix is committed but GPU revalidation remains pending.**
+**Final N007: BOUNDED NO GO (2026-10-12).** Moving-rigid GPU/CPU primary first hits and triangles matched after the N007-only instrumentation correction. Independent GPU probe replay found shadowed-positive secondary energy; baseline-matching pixel ablation removes all 9,247 positive indirect pixels. CPU four-seed reference remains all black at 512–8192 SPP and fails the frozen statistical eligibility screen. Required cross-class reference qualification stopped as NO GO, leaving other cells explicitly unmeasured and physical correctness unknown. [Final result 012](../../../research/lanes/n007-reference-validity/results/012-n007-bounded-no-go-decision.md).
 
 ## Scope
 
@@ -126,3 +126,7 @@ A1 cells: one black moving-rigid, one black camera/disocclusion, positive light-
 - GPU output from the packed diagnostic shader **must not** be treated as an unchanged original RGB radiance image for formal N001/N006 acceptance.
 
 See research/lanes/n007-reference-validity/experiments/002-matched-state-component-isolation.md and 001-reference-eligibility-protocol.md.
+
+## Terminal P1-B outcome (supersedes the prospective text above)
+
+Native CPU-only build and user's real-capture execution succeeded. Matched GPU indirect image was exactly replayable within the previously frozen diagnostic tolerance. Removing independently shadow-blocked positive GPU probe contributions eliminated **9,247/9,247** positive indirect pixels; filtered image sum=0.0. The four registered CPU seeds produced **zero union-active reference pixels at every SPP level** of 512,1024,2048,4096,8192. The complete frozen ladder verdict is **statistical-screen-fail** for this important moving-rigid cell, so the preregistered all-required-class qualification **stopped bounded NO GO** without running unnecessary additional GPU cases. Missing camera/light/deforming/control GPU evidence remains a documented **limitation** and is not treated as a pass/fail for those individual regimes. See [result 011](../../../research/lanes/n007-reference-validity/results/011-p1b-probe-pixel-counterfactual-and-spp-screen.md) and [final decision 012](../../../research/lanes/n007-reference-validity/results/012-n007-bounded-no-go-decision.md). **No N001–N006 source, frozen acceptance outcome, PR, or CI change.**
