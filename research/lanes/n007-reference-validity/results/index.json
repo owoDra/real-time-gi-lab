@@ -214,6 +214,42 @@
       "historical_causation_proven": false,
       "lane_complete": false,
       "raw_capture_inspected_directly_by_assistant": false
+    },
+    {
+      "id": "N007-FINAL-012",
+      "status": "complete",
+      "classification": "final bounded NO GO; moving-rigid reference statistically ineligible, cross-class physical validity not established",
+      "result": "012-n007-bounded-no-go-decision.md",
+      "final_decision": "NO_GO",
+      "bounded_stop_authority": "issue #4 prospective P1 required-dynamic-class resource stop",
+      "mandatory_moving_rigid_reference_statistically_eligible": false,
+      "mandatory_moving_rigid_levels_tested": [
+        512,
+        1024,
+        2048,
+        4096,
+        8192
+      ],
+      "moving_rigid_active_pixel_fractions": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "gpu_shadow_ablation_removed_positive_pixels": 9247,
+      "gpu_shadow_ablation_post_positive_pixels": 0,
+      "other_required_cells_completed": false,
+      "other_required_cells_declared_unmeasured": true,
+      "physically_validated_general_reference": false,
+      "historical_n006_m3b_causation_proven": false,
+      "historical_n006_results_unchanged": true,
+      "raw_captured_evidence_available_to_assistant": false
     }
-  ]
+  ],
+  "lane_status": "completed-bounded-no-go",
+  "lane_decision": "no-go-reference-quality-across-required-dynamic-classes",
+  "lane_decision_result": "012-n007-bounded-no-go-decision.md",
+  "eligibility_protocol_unchanged": true,
+  "historical_n006_outcome_unchanged": true
 }
