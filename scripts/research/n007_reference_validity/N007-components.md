@@ -37,6 +37,33 @@ python scripts/research/n007_reference_validity/build_component_manifest.py \
   --scene "$scene" --repo . --source-commit "$commit"
 ~~~
 
+## Current measured frame and next source-level isolation
+
+On the user's Vulkan host, the corrected software moving-rigid target frame returned:
+CPU/GPU primary-hit count 15,173 each; all primary mismatch types zero;
+262,241 GPU software-primary triangles exactly match serialized CPU triangles.
+GPU packing reconstructs correctly. CPU direct, indirect and total are all
+black; GPU direct is black while GPU indirect/total have 9,247 positive pixels.
+See [result 009](../../../research/lanes/n007-reference-validity/results/009-p1a-matched-primary-indirect-isolation.md).
+This **does not prove original N006 M3b physical causation**.
+
+The original `n001_physical_radiance.comp.glsl` emits per-probe point-light
+Lambert energy without a shadow-to-light test, unlike the CPU path tracer.
+To test this specific hypothesis without altering any historical shader,
+the NEW capture also records exact GPU probe work (64 bytes/item), traversal
+hits (32 bytes/item), and fixed radiance contributions (8 bytes/item).
+A N007 CPU replay checks those real GPU rays against a separate BVH,
+reconstructs unshadowed contribution quantization, and tests
+source-geometry shadow rays. Its result `gpu_probe_shadow_audit` distinguishes
+verified blocked-positive hits from clear hits and traversal/model mismatches.
+`gpu_probe_shadowed_positive_detected=true` is a **current-frame diagnostic**
+only, never historical/physical correctness proof.
+
+CPU-only opt-in deterministic shadow fixture target:
+`cmake --build build/n007 --target phos-n007-probe-test`.
+This fixture has been added but **not compiled in the assistant sandbox**;
+only GPU-host execution can validate this integrated build path.
+
 ## Frozen follow-up
 
 A1 cells: one black moving-rigid, one black camera/disocclusion, positive light-motion and a deterministic controlled occlusion fixture. No post-hoc frame selection. A2 ladder: SPP 512,1024,2048,4096,8192; four seed IDs 305419896,2596069104,81985529216486895,18364758544493064720, with two consecutive eligible levels. Existing N007 eligibility protocol is authoritative; the component analyzer **does not determine statistical convergence**.
