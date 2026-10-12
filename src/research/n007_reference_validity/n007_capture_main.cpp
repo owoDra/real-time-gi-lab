@@ -82,6 +82,18 @@ int main(int argc,char** argv) {
             throw std::invalid_argument(
                 "required: --out DIR --scene GLTF --scenario NAME --backend software|hwrt "
                 "[--spp 512|1024|2048|4096|8192] [--target-state]");
+        // Fail early with an actionable asset setup message rather than a
+        // backend-specific fastgltf error after initializing Vulkan.
+        if(!fs::is_regular_file(scene))
+            throw std::runtime_error(
+                "scene glTF not found: "+fs::absolute(scene).string()+
+                " (fetch Sponza with: bash scripts/fetch_sponza.sh)");
+        if(scene.filename()=="Sponza01.gltf"&&
+           !fs::is_regular_file(scene.parent_path()/"Sponza01.bin"))
+            throw std::runtime_error(
+                "Sponza binary buffer missing next to the glTF: "+
+                (scene.parent_path()/"Sponza01.bin").string()+
+                " (fetch with: bash scripts/fetch_sponza.sh)");
         fs::create_directories(out/"gpu");fs::create_directories(out/"cpu");
         r::I001Options opt{};
         opt.scene=scene;
