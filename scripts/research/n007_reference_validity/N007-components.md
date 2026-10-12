@@ -87,6 +87,12 @@ python scripts/research/n007_reference_validity/run_p1b_cpu.py \
   --capture "$out" --bin-dir build/n007
 ~~~
 
+The native CPU executables are emitted by CMake under
+`build/n007/src/research/n007_reference_validity/`, whereas the GPU capture
+executable explicitly goes to `build/n007/`. The P1-B runner resolves both
+layouts and prefers the CPU target subdirectory; **no extra native rebuild
+is necessary to correct an executable discovery error**.
+
 Keep `$out` pointing to the *existing* capture with 18,363 shadow-blocked
 positive probe work items (NOT the new branch commit's output directory).
 The CPU one-command runner checks the independent lit/blocked fixtures,
