@@ -76,7 +76,7 @@ inline ProbeAudit audit_gpu_probe_transport(
         }
         if(!gpu_hit.hit)continue;
         const auto incoming=ray.direction;
-        const b::Vec3 pos=vec({item.probe_px,item.probe_py,item.probe_pz,0})+
+        const b::Vec3 pos=b::Vec3{item.probe_px,item.probe_py,item.probe_pz}+
             incoming*(item.interval_min+g.normal_t[3]);
         const auto normal=forward({g.normal_t[0],g.normal_t[1],g.normal_t[2]},incoming);
         const auto light=vec(p.light_pos_interval)-pos;
