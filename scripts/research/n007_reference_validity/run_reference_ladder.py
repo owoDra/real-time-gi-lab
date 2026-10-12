@@ -38,11 +38,26 @@ def campaign(root: Path, reference_binary: Path) -> dict:
         'levels':[]}
     manifest_path=root/'eligibility-manifest.json'
     final_path=root/'eligibility-summary.json'
-    if final_path.exists() or manifest_path.exists():
-        raise ValueError('eligibility manifest/summary already present: refuse overwrite')
+    if final_path.exists():
+        done=json.loads(final_path.read_text())
+        if done.get('source_commit')!=frame['source_commit'] or (
+            done.get('frame_state_sha256')!=frame['frame_state_sha256']):
+            raise ValueError('existing eligibility result belongs to a different source state')
+        # Pure read-only rerun of the frozen SHA-checked manifest.
+        return assess(manifest_path)
+    if manifest_path.exists():
+        earlier=json.loads(manifest_path.read_text())
+        if (earlier.get('source_commit')!=manifest['source_commit'] or
+            earlier.get('scene_sha256')!=manifest['scene_sha256'] or
+            earlier.get('frame_state_sha256')!=manifest['frame_state_sha256']):
+            raise ValueError('existing SPP campaign provenance differs from immutable capture')
+        validated=assess(manifest_path)
+        if validated['status']=='statistical-screen-pass':
+            return validated
+        manifest['levels']=earlier['levels']
     if not reference_binary.is_file():
         raise ValueError('CPU-only reference binary missing')
-    for spp in SPP:
+    for spp in SPP[len(manifest['levels']):]:
         if spp==512:
             paths=[root/'cpu'/f'seed-{i}'/'total.pfm' for i in range(4)]
         else:
@@ -65,6 +80,8 @@ def campaign(root: Path, reference_binary: Path) -> dict:
         if summary['status']=='statistical-screen-pass':
             break
     summary=assess(manifest_path)
+    if summary['status']=='incomplete':
+        raise ValueError('N007 frozen ladder ended without PASS or five-level FAIL')
     summary['classification']='statistical-eligibility-screen-only'
     summary['physical_correctness_proven']=False
     summary['historical_causation_proven']=False
