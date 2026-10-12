@@ -81,6 +81,23 @@
       "gpu_run": false,
       "historic_m3b_root_cause_proven": false,
       "physical_correctness_proven": false
+    },
+    {
+      "id": "N007-P1A-008",
+      "status": "partial",
+      "classification": "diagnostic-only; CPU synthetic tests and opt-in GPU capture implementation unverified on device",
+      "result": "008-p1a-component-capture-bringup.md",
+      "protocol": "../experiments/002-matched-state-component-isolation.md",
+      "cpu_python_synthetic_tests_passed": 14,
+      "cpu_native_control_test_compiled_and_passed": true,
+      "cpu_native_test_isolated_mirror": true,
+      "source_contract_checks_passed": 9,
+      "integrated_build_run": false,
+      "spirv_compiled": false,
+      "gpu_run": false,
+      "reference_eligibility_run": false,
+      "physical_correctness_proven": false,
+      "historic_m3b_root_cause_proven": false
     }
   ]
 }
