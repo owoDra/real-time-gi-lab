@@ -18,7 +18,7 @@ primary hit pixels match (15,173), device primary triangles match CPU geometry (
 - `run_reference_ladder.py`: reuse the four retained real 512-SPP seed PFMs, acquire additional SPP levels at exactly 1024/2048/4096/8192 with four frozen seeds, SHA every PFM, call existing `check_convergence.py` on each prefix, and stop only at two consecutive eligible levels or at the complete five-level failure. Strict original 64 active-pixel/1%-active/1e-4 peak and paired active-mask noise thresholds remain **unchanged**. Supports interruption/resumption without overwriting original PFMs.
 - Controlled native CPU fixture `phos-n007-cpu-test` now includes visibly lit and known-occluded direct-light cases. This verifies limited ray/visibility semantics but does not certify an entire physically unbiased reference.
 
-The code is committed. The full integrated native build, newly added Python regression suite, standalone offline probe replay on the user's private capture, and four-seed ladder **have not been executed in this assistant's sandbox or on the GPU host**; no passed results are fabricated.
+The code is committed. **Assistant-sandbox isolated CPU mirror of the probe aggregation, source binary layout, cascade pixel lookup and counterfactual mask logic: 7/7 synthetic tests PASS** (2026-10-12; run on a hand-copied core slice, not the complete checkout or actual capture). The full integrated native build, exact repository Python suites, standalone offline probe replay on the user's private capture, and four-seed ladder **have not yet been run**; these isolated tests are not sufficient to certify the end-to-end code or scientific results.
 
 ## Required measured next outputs
 
