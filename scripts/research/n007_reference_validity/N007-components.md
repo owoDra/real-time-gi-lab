@@ -9,6 +9,7 @@
 - Per seed (four preregistered seeds): direct-first-bounce, secondary bounce, total float32 RGB PFM; primary hit IDs, t and geometric normal; shadow-tested, blocked, clear, secondary and positive sample counts.
 - N007 shader generator copies original HWRT/software composite sources and replaces only the result encoding. Diagnostic GPU RGBA channels encode direct, probe indirect, total, alpha=1. The generated N007-only runtime additionally reads back the existing primary-hit SSBO. Original source files are never overwritten.
 - The analyzer verifies hashes, dimensions, nonfinite/negative values, primary masks/IDs/t/normals, component reconstruction (float32 tolerance), full-frame RMS and explicit attribution blockers. A 1e-5 direct term triage tolerance is **not** the N007 frozen convergence threshold.
+- For the software backend, the generated runtime additionally downloads the *actual GPU primary triangle buffer* (`gpu/primary-geometry.bin`); the manifest compares all 64-byte std430 triangles against the serialized post-update CPU world-space geometry (52 bytes/triangle), detecting any upload mismatch independently. Primary geometry equality alone is not GPU camera UBO or physical correctness certification. Output now includes CPU/GPU hit coverage and positive signal pixel counts to detect black-versus-black comparisons.
 
 ## Opt-in GPU build and one preregistered diagnostic capture
 
