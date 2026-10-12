@@ -48,6 +48,31 @@ class ComponentContractTest(unittest.TestCase):
         gpu_file.write_bytes(self.gpu_geo)
         self.manifest['state_files']['gpu_primary_geometry']={
             'path':gpu_file.name,'sha256':hashlib.sha256(self.gpu_geo).hexdigest()}
+        probe_audit={
+            'work_items':1,'gpu_hit_items':1,
+            'gpu_positive_contributions':1,
+            'gpu_traversal_mismatches':0,
+            'gpu_positive_traversal_mismatches':0,
+            'gpu_positive_matched_traversal':1,
+            'gpu_positive_shadow_blocked':1,
+            'gpu_positive_shadow_clear':0,
+            'gpu_positive_other_zero':0,
+            'gpu_positive_fixed_prediction_mismatches':0,
+            'gpu_positive_replay_candidate':1,
+            'zero_gpu_but_positive_unshadowed':0,
+            'invalid_gpu_hit_flags':0,'invalid_contribution_ids':0}
+        self.manifest['probe_work_items']=1
+        self.manifest['gpu_probe_audit']=probe_audit
+        self.manifest['gpu_probe']={}
+        for kind,raw in (
+                ('work',bytes(64)),
+                ('hits',hit_bytes(1)),
+                ('contributions',struct.pack('<2I',0,42)),
+                ('audit',json.dumps(probe_audit).encode())):
+            filename=self.root/f'gpu_probe_{kind}.bin'
+            filename.write_bytes(raw)
+            self.manifest['gpu_probe'][kind]={
+                'path':filename.name,'sha256':hashlib.sha256(raw).hexdigest()}
         for side in ('cpu','gpu'):
             for part in ('hits','direct','indirect','total'):
                 val={'direct':.25,'indirect':.125,'total':.375}.get(part)
@@ -73,6 +98,8 @@ class ComponentContractTest(unittest.TestCase):
         self.assertEqual(r['signal']['gpu']['indirect']['positive_pixels'],self.w*self.h)
         self.assertTrue(r['reconstruction']['gpu']['passed'])
         self.assertTrue(r['primary_geometry_attestation']['match'])
+        self.assertTrue(r['probe_shadow_replay_testable'])
+        self.assertTrue(r['gpu_probe_shadowed_positive_detected'])
         self.assertTrue(r['indirect_model_difference_testable'])
         self.assertFalse(r['physical_correctness_proven'])
         self.assertFalse(r['cross_device_state_independently_verified'])
@@ -94,6 +121,19 @@ class ComponentContractTest(unittest.TestCase):
     def test_missing_device_geometry_is_rejected(self):
         del self.manifest['state_files']['gpu_primary_geometry']
         with self.assertRaisesRegex(ValueError,'raw state snapshots'):self.go()
+    def test_probe_audit_mismatch_fail_closed(self):
+        self.manifest['gpu_probe_audit']['gpu_positive_contributions']=2
+        with self.assertRaisesRegex(ValueError,'hashed file'):self.go()
+    def test_probe_payload_tamper_rejected(self):
+        (self.root/'gpu_probe_contributions.bin').write_bytes(bytes(8))
+        with self.assertRaisesRegex(ValueError,'SHA mismatch'):self.go()
+    def test_probes_invalid_shadow_sum_rejected(self):
+        self.manifest['gpu_probe_audit']['gpu_positive_shadow_blocked']=2
+        raw=json.dumps(self.manifest['gpu_probe_audit']).encode()
+        file=self.root/'gpu_probe_audit.bin'
+        file.write_bytes(raw)
+        self.manifest['gpu_probe']['audit']['sha256']=hashlib.sha256(raw).hexdigest()
+        with self.assertRaisesRegex(ValueError,'shadow counts invalid'):self.go()
     def test_indirect_mismatch_is_diagnostic(self):
         self.set_file('gpu','indirect',pfm(self.w,self.h,.25))
         self.set_file('gpu','total',pfm(self.w,self.h,.5))
