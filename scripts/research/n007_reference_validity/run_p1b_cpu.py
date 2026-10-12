@@ -44,7 +44,17 @@ def main():
     if not flags.exists():
         run('phos-n007-probe-offline','--capture',str(root))
     # Read-only baseline replay, then independently shadow-filtered replay.
-    image=replay_capture(root,flags)
+    try:
+        image=replay_capture(root,flags)
+    except ValueError as error:
+        # A numerically failed baseline reconstruction does not invalidate
+        # the separate CPU statistical reference screen. Other malformed
+        # source/provenance failures still fail closed.
+        if 'baseline probe-to-image replay failed' not in str(error):
+            raise
+        image={'baseline_reconstruction_passed':False,
+               'shadow_counterfactual_eligible':False,
+               'diagnostic_blocker':str(error)}
     image_path=root/'probe-image-replay.json'
     if image_path.exists():
         old=json.loads(image_path.read_text())
