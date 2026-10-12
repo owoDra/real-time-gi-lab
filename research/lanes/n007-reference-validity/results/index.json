@@ -154,7 +154,9 @@
       "offline_real_probe_pixel_replay_executed": false,
       "statistical_eligibility_run": false,
       "physical_correctness_proven": false,
-      "historic_m3b_root_cause_proven": false
+      "historic_m3b_root_cause_proven": false,
+      "assistant_sandbox_cpu_mirror_tests_passed": 7,
+      "assistant_sandbox_mirror_only": true
     }
   ]
 }
