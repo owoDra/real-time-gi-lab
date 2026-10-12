@@ -133,6 +133,28 @@
       "probe_invalid_contribution_ids": 0,
       "probe_positive_shadow_blocked_percent": 98.46640570539975,
       "full_image_contribution_attribution_complete": false
+    },
+    {
+      "id": "N007-P1B-010",
+      "status": "prepared-unverified",
+      "classification": "diagnostic-only; GPU-free offline image replay and four-seed fixed-SPP reference-screen automation",
+      "result": "010-p1b-reference-screen-readiness.md",
+      "protocol": "../experiments/001-reference-eligibility-protocol.md",
+      "native_cpu_only_tools_added": [
+        "phos-n007-probe-offline",
+        "phos-n007-cpu-reference"
+      ],
+      "python_cpu_only_tools_added": [
+        "replay_probe_image.py",
+        "run_reference_ladder.py",
+        "run_p1b_cpu.py"
+      ],
+      "native_build_passed": null,
+      "synthetic_python_tests_executed": false,
+      "offline_real_probe_pixel_replay_executed": false,
+      "statistical_eligibility_run": false,
+      "physical_correctness_proven": false,
+      "historic_m3b_root_cause_proven": false
     }
   ]
 }
