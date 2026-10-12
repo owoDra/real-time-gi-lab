@@ -87,7 +87,25 @@ def runtime(source: str) -> str:
     if (!n007_out) fail("N007 primary-hit capture could not open");
     n007_out.write(reinterpret_cast<const char*>(n007_bytes.data()),
                    std::streamsize(n007_bytes.size()));
-    if (!n007_out) fail("N007 primary-hit capture write failed");'''
+    if (!n007_out) fail("N007 primary-hit capture write failed");
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+    // Independently retrieve the GPU-visible triangles backing the software
+    // primary traversal. Do NOT substitute the CPU triangle array here.
+    if (uses_lane_e_final_software(impl_->options.variant)) {
+        const char* geo_path = std::getenv("PHOS_N007_GPU_PRIMARY_GEOMETRY");
+        if (!geo_path || !*geo_path) fail("N007 GPU primary geometry export path missing");
+        static_assert(sizeof(GpuTriangle) == 64);
+        std::vector<GpuTriangle> gpu_geos(out.triangles.size());
+        impl_->context.download_device_buffer(
+            impl_->n006_primary_triangles, gpu_geos.data(),
+            gpu_geos.size() * sizeof(GpuTriangle));
+        std::ofstream geo_out(geo_path, std::ios::binary);
+        if (!geo_out) fail("N007 GPU primary geometry export could not open");
+        geo_out.write(reinterpret_cast<const char*>(gpu_geos.data()),
+                      std::streamsize(gpu_geos.size() * sizeof(GpuTriangle)));
+        if (!geo_out) fail("N007 GPU primary geometry export write failed");
+    }
+#endif''''''
     return exactly_one(source, marker, replacement)
 
 def generate(root: Path, out: Path) -> dict:
