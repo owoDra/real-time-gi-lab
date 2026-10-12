@@ -58,3 +58,12 @@ User supplied output from a rerun after adding the missing target-state software
 
 **N007-only correction:** keep the software BVH refresh call, but in the *generated diagnostic runtime only*, let its `translated` reference bind directly to already-updated `b_scene.triangles`. No historical N001–N006 source modification or revised frozen decision. Add generator regression coverage and positive-pixel CPU/GPU signal diagnostics. **The corrected executable has not yet undergone a GPU rerun**; the concrete discrepancy counts above remain the pre-correction result. Uploaded primary geometry is still not independently attested, and other traversal/mismatch causes may remain.
 
+
+## N007-only source hardening before next GPU run (2026-10-12 JST)
+
+The generated diagnostic runtime now consumes the **once-translated** post-motion `b_scene.triangles` when rebuilding the software primary BVH, instead of adding the rigid transform twice; it retains a reference to the live triangle vector rather than a temporary. Source-anchor contracts were reviewed, synthetic overlay checks updated, and N001–N006 source files were left unchanged.
+
+Independent geometry-state evidence was also added to avoid blind reliance on host snapshots: the generated runtime downloads `n006_primary_triangles` **from GPU device memory** to `gpu/primary-geometry.bin` (64-byte std430 `GpuTriangle` records). The CPU snapshot remains `geometry-state.bin` (8-byte header plus 52 bytes per triangle). N007's manifest validates hashes and compares the entire GPU buffer byte-for-byte with correctly padded CPU world-space triangles; a mismatch blocks attribution. Hit coverage and positive direct/indirect/total pixel counts are printed with results. Synthetic fixture bytes have been checked for byte-layout agreement; full Python test suite, integrated CMake build and GPU execution of this revised code **have not yet been run**. HWRT does not use this software-specific triangle attestation.
+
+The first two on-device captures precede this correction and cannot be retroactively used to establish matched GPU/CPU states or N006 causation.
+
