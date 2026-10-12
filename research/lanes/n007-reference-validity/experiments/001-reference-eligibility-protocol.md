@@ -1,6 +1,6 @@
 # N007 P0/P1 — prospective reference eligibility calibration v1
 
-Status: **P0 source audit + CPU diagnostic implemented; physical correctness and P1 GPU calibration NOT evaluated.** Study: [Issue #4](https://github.com/owoDra/real-time-gi-lab/issues/4). No N006 experiment reopening. Original historical records and classifications are immutable.
+Status: **BOUNDED CLOSED / quality-reference NO GO (2026-10-12)**. P1 moving-rigid target exhausted all 512–8192-SPP levels (four frozen seeds, union-active fraction 0.0 each); **the frozen all-required-classes GO condition is not attainable**. Other classes explicitly left unmeasured under the pre-authorized bounded stop; physical correctness unresolved. [Final result 012](../results/012-n007-bounded-no-go-decision.md). Original acceptance criteria below are retained unchanged. Study: [Issue #4](https://github.com/owoDra/real-time-gi-lab/issues/4). No N006 experiment reopening. Original historical records and classifications are immutable.
 
 ## Retained historical inputs (not remeasured)
 
@@ -28,7 +28,7 @@ Status: **P0 source audit + CPU diagnostic implemented; physical correctness and
 
 `scripts/research/n007_reference_validity/check_convergence.py --manifest MANIFEST.json --output summary.json` verifies `schema_version=1`, exact 40-hex source commit, scene SHA256, frame-state SHA256, contiguous `512/1024/2048/4096/8192` prefix, each level's four fixed seeds in declared order, unique relative PFM paths and byte SHA256 fingerprints, and two consecutive statistically eligible levels with union-active fraction change ≤10%. Captures after the first two consecutive passes are rejected; all five failing levels are classified as a statistical-screen failure. A declaration of seed metadata is **not** proof that the producer honored it; the export code/state fingerprint must also be audited. Separate PFM inspector: `inspect_hdr.py --reference A.pfm --reference B.pfm [--reference C.pfm --reference D.pfm] [--candidate GPU.pfm]`. A two-image historical inspection always remains formally ineligible for the four-seed gate, though its diagnostic metrics are valid.
 
-## P1 acquisition (DO NOT CLAIM EXECUTED)
+## P1 acquisition (historically preregistered requirements; only moving-rigid measured, bounded NO GO)
 
 Before the first new GPU/scene-state capture, archive a manifest with source commit and reproducible configuration, including: static, camera-motion, light-motion, moving-rigid, stable-topology deforming, topology churn, and an independent simple non-Sponza controlled point-light occlusion test; retain both lit and occluded pixels. Use N001 original scene SHA for Sponza; record **new geometry and trajectory hashes before capture**, never choose favorable frames after rendering. For each preregistered cell use spp `512/1024/2048/4096/8192` and four mutually distinct 64-bit fixed seeds (decimal): `305419896`, `2596069104`, `81985529216486895`, `18364758544493064720`. At each spp save **four independent per-seed PFMs**, not only two-seed averaged output, plus GPU direct-only, indirect-only and total, primary ray hit IDs/t coordinates, CPU triangle/world transform manifest, light parameters and readback state fingerprints. N001 historical contract must stay unchanged; implement a new N007 export path if required.
 
