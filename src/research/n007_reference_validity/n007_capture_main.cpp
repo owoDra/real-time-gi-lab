@@ -1,5 +1,6 @@
 // N007-only matched-frame CPU/GPU capture; historical renderer unchanged.
 #include "n007_cpu_components.hpp"
+#include "n007_probe_audit.hpp"
 #include "n001_runtime.hpp"
 #include <bit>
 #include <cstdint>
@@ -101,8 +102,10 @@ int main(int argc,char** argv) {
         opt.variant=backend=="software"?
             r::I001Variant::LaneEFinalSoftware:r::I001Variant::LaneEFinalHwrt;
         r::I001Runtime runtime(opt);
-        (void)runtime.run_frame(false);
-        if(target)(void)runtime.run_frame(true);
+        auto gpu_frame=runtime.run_frame(false);
+        if(target)gpu_frame=runtime.run_frame(true);
+        if(gpu_frame.stats.overflow!=0U)
+            throw std::runtime_error("N007 GPU work overflow blocks probe-source audit");
         const auto path=fs::absolute(out/"gpu/hits.bin").string();
         if(setenv("PHOS_N007_GPU_HITS",path.c_str(),1)!=0)
             throw std::runtime_error("could not set GPU hit capture path");
@@ -111,6 +114,9 @@ int main(int argc,char** argv) {
             if(setenv("PHOS_N007_GPU_PRIMARY_GEOMETRY",geometry_path.c_str(),1)!=0)
                 throw std::runtime_error("could not set GPU geometry capture path");
         }
+        const auto work_path=fs::absolute(out/"gpu").string();
+        if(setenv("PHOS_N007_PROBE_DIR",work_path.c_str(),1)!=0)
+            throw std::runtime_error("could not set GPU probe capture path");
         const auto frame=runtime.renderer_readback();
         if(frame.width!=320||frame.height!=180)
             throw std::runtime_error("N007 preregistered 320x180 dimensions mismatch");
@@ -123,7 +129,9 @@ int main(int argc,char** argv) {
                 <<",\"frame_id\":"<<(target?2:1)
                 <<",\"spp\":"<<spp
                 <<",\"width\":"<<frame.width<<",\"height\":"<<frame.height
-                <<",\"triangles\":"<<frame.triangles.size()<<"}\n";
+                <<",\"triangles\":"<<frame.triangles.size()
+                <<",\"work_items\":"<<gpu_frame.stats.work_items
+                <<",\"work_overflow\":"<<gpu_frame.stats.overflow<<"}\n";
         if(!metadata)throw std::runtime_error("capture metadata write failed");
         const auto npx=std::size_t(frame.width)*frame.height;
         if(frame.image_rgba.size()!=npx*4)
@@ -146,6 +154,26 @@ int main(int argc,char** argv) {
             p.camera_forward_far[i]=frame.params.camera_forward_far[i];
             p.light_pos_interval[i]=frame.params.light_pos_interval[i];
         }
+        const auto probe=n::audit_gpu_probe_transport(
+            out/"gpu",frame.triangles,p,gpu_frame.stats.work_items);
+        std::ofstream probe_json(out/"gpu/probe-audit.json");
+        if(!probe_json)throw std::runtime_error("N007 probe-audit.json open failed");
+        probe_json<<"{"
+            <<"\"work_items\":"<<probe.work_items
+            <<",\"gpu_hit_items\":"<<probe.gpu_hit_items
+            <<",\"gpu_positive_contributions\":"<<probe.gpu_positive_contributions
+            <<",\"gpu_traversal_mismatches\":"<<probe.gpu_traversal_mismatches
+            <<",\"gpu_positive_traversal_mismatches\":"<<probe.gpu_positive_traversal_mismatches
+            <<",\"gpu_positive_matched_traversal\":"<<probe.gpu_positive_matched_traversal
+            <<",\"gpu_positive_shadow_blocked\":"<<probe.gpu_positive_shadow_blocked
+            <<",\"gpu_positive_shadow_clear\":"<<probe.gpu_positive_shadow_clear
+            <<",\"gpu_positive_other_zero\":"<<probe.gpu_positive_other_zero
+            <<",\"gpu_positive_fixed_prediction_mismatches\":"<<probe.gpu_positive_fixed_prediction_mismatches
+            <<",\"gpu_positive_replay_candidate\":"<<probe.gpu_positive_replay_candidate
+            <<",\"zero_gpu_but_positive_unshadowed\":"<<probe.zero_gpu_but_positive_unshadowed
+            <<",\"invalid_gpu_hit_flags\":"<<probe.invalid_gpu_hit_flags
+            <<",\"invalid_contribution_ids\":"<<probe.invalid_contribution_ids<<"}\n";
+        if(!probe_json)throw std::runtime_error("N007 probe audit write failed");
         constexpr std::uint64_t seeds[]{
             305419896ULL,2596069104ULL,81985529216486895ULL,18364758544493064720ULL};
         std::vector<float> cpu_d(npx),cpu_i(npx),cpu_t(npx);
