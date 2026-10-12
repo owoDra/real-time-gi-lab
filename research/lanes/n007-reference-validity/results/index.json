@@ -102,7 +102,7 @@
     {
       "id": "N007-P1A-009",
       "status": "partial",
-      "classification": "diagnostic-only; matched GPU software-primary, isolated GPU indirect-only signal",
+      "classification": "diagnostic-only; matched primary and secondary probe replay verifies occluded-positive light-generation behavior",
       "result": "009-p1a-matched-primary-indirect-isolation.md",
       "protocol": "../experiments/002-matched-state-component-isolation.md",
       "gpu_run": true,
@@ -117,11 +117,22 @@
       "gpu_indirect_positive_pixels": 9247,
       "gpu_reconstruction_passed": true,
       "indirect_max_abs_delta": 0.00012207217514514923,
-      "probe_ray_level_replay_gpu_run": false,
+      "probe_ray_level_replay_gpu_run": true,
       "raw_local_artifacts_checked_by_assistant": false,
       "reference_eligibility_run": false,
       "physical_correctness_proven": false,
-      "historic_m3b_root_cause_proven": false
+      "historic_m3b_root_cause_proven": false,
+      "probe_work_items": 134816,
+      "probe_gpu_hit_items": 32276,
+      "probe_gpu_positive_contributions": 18649,
+      "probe_positive_shadow_blocked": 18363,
+      "probe_positive_shadow_clear": 286,
+      "probe_secondary_traversal_mismatches": 0,
+      "probe_fixed_prediction_mismatches": 0,
+      "probe_invalid_hit_flags": 0,
+      "probe_invalid_contribution_ids": 0,
+      "probe_positive_shadow_blocked_percent": 98.46640570539975,
+      "full_image_contribution_attribution_complete": false
     }
   ]
 }
