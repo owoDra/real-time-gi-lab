@@ -93,3 +93,8 @@ target_link_libraries(phos-n007-probe-test PRIVATE Threads::Threads)
 add_executable(phos-n007-probe-offline n007_probe_offline.cpp)
 target_compile_features(phos-n007-probe-offline PRIVATE cxx_std_20)
 target_link_libraries(phos-n007-probe-offline PRIVATE Threads::Threads)
+
+# CPU-only fixed-state/four-seed reference SPP level generator (no Vulkan).
+add_executable(phos-n007-cpu-reference n007_cpu_reference.cpp)
+target_compile_features(phos-n007-cpu-reference PRIVATE cxx_std_20)
+target_link_libraries(phos-n007-cpu-reference PRIVATE Threads::Threads)
