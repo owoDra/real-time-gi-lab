@@ -128,6 +128,49 @@ def components(base: Path, record: dict, n: int, dims: tuple[int,int]) -> dict:
                     'passed':all(x<=0 for x in excess)}
     return {'hits':hits,'images':imgs,'reconstruction':reconstruction}
 
+PROBE_FIELDS = {
+    'work_items','gpu_hit_items','gpu_positive_contributions',
+    'gpu_traversal_mismatches','gpu_positive_traversal_mismatches',
+    'gpu_positive_matched_traversal','gpu_positive_shadow_blocked',
+    'gpu_positive_shadow_clear','gpu_positive_other_zero',
+    'gpu_positive_fixed_prediction_mismatches',
+    'gpu_positive_replay_candidate','zero_gpu_but_positive_unshadowed',
+    'invalid_gpu_hit_flags','invalid_contribution_ids'
+}
+
+def validate_probe_capture(base: Path, files: dict, audit: dict, count: int) -> dict:
+    if set(files)!={'work','hits','contributions','audit'}:
+        raise ValueError('incomplete GPU probe capture files')
+    if not isinstance(count,int) or count<0 or count>100_000_000:
+        raise ValueError('invalid GPU work count')
+    if set(audit)!=PROBE_FIELDS or any(not isinstance(v,int) or v<0 for v in audit.values()):
+        raise ValueError('invalid GPU probe audit')
+    if audit['work_items']!=count:
+        raise ValueError('GPU work count/audit mismatch')
+    for name,size in [('work',64),('hits',32),('contributions',8)]:
+        if checked_file(base,files[name]).stat().st_size!=count*size:
+            raise ValueError('GPU probe payload byte count mismatch: '+name)
+    if audit!=json.loads(checked_file(base,files['audit']).read_text()):
+        raise ValueError('GPU probe audit differs from hashed file')
+    contrib=checked_file(base,files['contributions']).read_bytes()
+    hits=checked_file(base,files['hits']).read_bytes()
+    count_positive=sum(v>0 for _,v in struct.iter_unpack('<2I',contrib))
+    count_hits=sum(fields[7]==1 for fields in struct.iter_unpack('<4f4I',hits))
+    if count_positive!=audit['gpu_positive_contributions'] or count_hits!=audit['gpu_hit_items']:
+        raise ValueError('GPU probe audit disagrees with raw GPU payload')
+    if audit['gpu_traversal_mismatches']>count or (
+        audit['gpu_positive_traversal_mismatches']>audit['gpu_traversal_mismatches']):
+        raise ValueError('GPU probe traversal mismatch counters invalid')
+    if audit['gpu_positive_matched_traversal']+audit['gpu_positive_traversal_mismatches']>count_positive:
+        raise ValueError('GPU probe matched-positive overflow')
+    if (audit['gpu_positive_shadow_blocked']+
+        audit['gpu_positive_shadow_clear']+
+        audit['gpu_positive_other_zero'])!=audit['gpu_positive_matched_traversal']:
+        raise ValueError('GPU probe matched-positive shadow counts invalid')
+    if audit['gpu_positive_replay_candidate']>audit['gpu_positive_shadow_blocked']:
+        raise ValueError('GPU shadow candidate exceeds occluded count')
+    return audit
+
 def analyze(path: Path) -> dict:
     data=json.loads(path.read_text())
     if data.get('schema_version')!=1 or not isinstance(data.get('frame'),dict):
@@ -154,7 +197,8 @@ def analyze(path: Path) -> dict:
         raise ValueError('frozen N007 seed set mismatch')
     if frame['spp'] not in (512,1024,2048,4096,8192):
         raise ValueError('frozen N007 SPP mismatch')
-    if set(data)!={'schema_version','frame','state_files','cpu','gpu','cpu_counts'}:
+    if set(data)!={'schema_version','frame','state_files','cpu','gpu',
+                   'cpu_counts','probe_work_items','gpu_probe','gpu_probe_audit'}:
         raise ValueError('manifest structure mismatch')
     states=data['state_files']
     required={'frame','geometry'}
@@ -174,6 +218,8 @@ def analyze(path: Path) -> dict:
             checked_file(base,states['gpu_primary_geometry']))
     cpu=components(base,data['cpu'],w*h,(w,h))
     gpu=components(base,data['gpu'],w*h,(w,h))
+    probe_audit=validate_probe_capture(base,data['gpu_probe'],
+        data['gpu_probe_audit'],data['probe_work_items'])
     counts=data['cpu_counts']
     if set(counts)!={'primary_hits','secondary_hits','shadow_tested',
                      'shadow_blocked','shadow_clear','positive_samples'}:
@@ -203,10 +249,19 @@ def analyze(path: Path) -> dict:
     reconstruction=cpu['reconstruction']['passed'] and gpu['reconstruction']['passed']
     geometry_match=geometry_attestation is None or geometry_attestation['match']
     testable=primary['match'] and direct_match and reconstruction and geometry_match
+    probe_replay_testable=testable and probe_audit['gpu_positive_matched_traversal']>0 and (
+        probe_audit['gpu_positive_fixed_prediction_mismatches']==0 and
+        probe_audit['invalid_gpu_hit_flags']==0 and
+        probe_audit['invalid_contribution_ids']==0)
     blockers=(['primary_hit_mismatch'] if not primary['match'] else []) + (
         ['direct_mismatch'] if not direct_match else []) + (
         ['component_reconstruction_mismatch'] if not reconstruction else []) + (
-        ['gpu_primary_triangle_bytes_mismatch'] if not geometry_match else []) + [
+        ['gpu_primary_triangle_bytes_mismatch'] if not geometry_match else []) + (
+        ['gpu_probe_replay_fixed_mismatch'] if probe_audit[
+            'gpu_positive_fixed_prediction_mismatches'] else []) + (
+        ['gpu_probe_payload_invalid'] if (
+            probe_audit['invalid_gpu_hit_flags'] or
+            probe_audit['invalid_contribution_ids']) else []) + [
         'gpu_camera_ubo_and_secondary_state_not_independently_attested'
         if geometry_match and geometry_attestation is not None
         else 'gpu_geometry_upload_and_source_state_not_independently_attested']
@@ -214,6 +269,10 @@ def analyze(path: Path) -> dict:
         'schema_version':1,'classification':'diagnostic-only','frame':frame,
         'primary':primary,'signal':signal,
         'primary_geometry_attestation':geometry_attestation,
+        'gpu_probe_shadow_audit':probe_audit,
+        'probe_shadow_replay_testable':probe_replay_testable,
+        'gpu_probe_shadowed_positive_detected':
+            probe_replay_testable and probe_audit['gpu_positive_replay_candidate']>0,
         'component_comparison':comparison,
         'reconstruction':{'cpu':cpu['reconstruction'],'gpu':gpu['reconstruction']},
         'indirect_model_difference_testable':testable,
