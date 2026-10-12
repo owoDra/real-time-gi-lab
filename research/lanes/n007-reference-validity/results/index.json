@@ -136,8 +136,8 @@
     },
     {
       "id": "N007-P1B-010",
-      "status": "prepared-unverified",
-      "classification": "diagnostic-only; GPU-free offline image replay and four-seed fixed-SPP reference-screen automation",
+      "status": "completed-for-moving-rigid-cell",
+      "classification": "diagnostic-only; offline N007 image counterfactual validated, fixed moving-rigid CPU statistical screen failed",
       "result": "010-p1b-reference-screen-readiness.md",
       "protocol": "../experiments/001-reference-eligibility-protocol.md",
       "native_cpu_only_tools_added": [
@@ -149,14 +149,71 @@
         "run_reference_ladder.py",
         "run_p1b_cpu.py"
       ],
-      "native_build_passed": null,
+      "native_build_passed": true,
       "synthetic_python_tests_executed": false,
-      "offline_real_probe_pixel_replay_executed": false,
-      "statistical_eligibility_run": false,
+      "offline_real_probe_pixel_replay_executed": true,
+      "statistical_eligibility_run": true,
       "physical_correctness_proven": false,
       "historic_m3b_root_cause_proven": false,
       "assistant_sandbox_cpu_mirror_tests_passed": 7,
-      "assistant_sandbox_mirror_only": true
+      "assistant_sandbox_mirror_only": true,
+      "statistical_eligibility_status": "statistical-screen-fail",
+      "eligible_at_spp": null,
+      "assessed_spp": [
+        512,
+        1024,
+        2048,
+        4096,
+        8192
+      ],
+      "union_active_fraction_by_level": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "counterfactual_gpu_indirect_positive_pixels_removed": 9247,
+      "counterfactual_gpu_indirect_positive_pixels_remaining": 0,
+      "frame_state_sha256": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+      "acquisition_source_commit": "dabe590b0c6e24ab00c10de3aade50a3a8783e8e",
+      "full_integrated_python_tests_executed": null
+    },
+    {
+      "id": "N007-P1B-011",
+      "status": "complete-for-preregistered-moving-rigid-cell",
+      "classification": "diagnostic-only image causation plus statistical-screen-fail; no physical correctness or historic N006 claim",
+      "result": "011-p1b-probe-pixel-counterfactual-and-spp-screen.md",
+      "scene": "Sponza moving-rigid target-state software",
+      "frame_state_sha256": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+      "source_commit": "dabe590b0c6e24ab00c10de3aade50a3a8783e8e",
+      "gpu_image_baseline_reconstruction_passed": true,
+      "gpu_indirect_original_positive_pixels": 9247,
+      "gpu_indirect_counterfactual_positive_pixels": 0,
+      "gpu_shadow_ablation_positive_pixels_removed": 9247,
+      "original_image_sum": 0.2673380636301213,
+      "filtered_image_sum": 0,
+      "max_abs_shadow_delta": 0.00012207217517357137,
+      "spp_tested": [
+        512,
+        1024,
+        2048,
+        4096,
+        8192
+      ],
+      "union_active_fraction": [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "statistical_eligibility_status": "statistical-screen-fail",
+      "statistically_eligible_at_spp": null,
+      "physical_correctness_proven": false,
+      "historical_causation_proven": false,
+      "lane_complete": false,
+      "raw_capture_inspected_directly_by_assistant": false
     }
   ]
 }
