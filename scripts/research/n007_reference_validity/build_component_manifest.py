@@ -85,7 +85,14 @@ def main():
     print(json.dumps({
         'classification':'diagnostic-only',
         'primary_match':summary['primary']['match'],
+        'primary_mismatch_counts':{
+            key:summary['primary'][key] for key in (
+                'mask_mismatches','identity_mismatches',
+                'distance_mismatches','normal_mismatches')},
         'gpu_reconstruction_passed':summary['reconstruction']['gpu']['passed'],
+        'direct_max_abs_delta':summary['component_comparison']['direct']['max_abs'],
+        'indirect_max_abs_delta':summary['component_comparison']['indirect']['max_abs'],
+        'blockers':summary['blockers'],
         'historical_causation_proven':False
     },indent=2))
 if __name__=='__main__':
