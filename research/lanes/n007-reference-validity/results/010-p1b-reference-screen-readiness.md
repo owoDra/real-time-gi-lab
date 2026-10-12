@@ -28,3 +28,7 @@ The code is committed. **Assistant-sandbox isolated CPU mirror of the probe aggr
 4. Independently verify GPU camera UBO and secondary geometry/camera origin state, plus deterministic known-light and known-shadow oracle cases, before any `physically_valid` conclusion.
 
 N007 can close with a well-grounded **NO GO / ineligible / not-measurable** finding and an explicit limitation decision; it need not force a GO. All historical N006 outcomes remain frozen.
+
+## Follow-up outcome (supersedes original readiness status; 2026-10-12)
+
+The user's CPU-only native build and full `run_p1b_cpu.py` workflow subsequently completed. The unchanged-GPU pixel replay baseline **passed**, and CPU-shadow-filtered contributions removed **9,247 / 9,247** positive indirect pixels (image sum 0.2673380636301213 → 0.0). The full frozen CPU 512–8192-SPP four-seed ladder reported zero active fraction at every level and **statistical-screen-fail**. See [result 011](011-p1b-probe-pixel-counterfactual-and-spp-screen.md). The preregistered cross-class qualification then terminated at the original bounded stop with overall **NO GO** ([result 012](012-n007-bounded-no-go-decision.md)); no other scenario-level results were fabricated. The earlier "not executed" statement above describes the **pre-execution readiness snapshot**, not the terminal state.
