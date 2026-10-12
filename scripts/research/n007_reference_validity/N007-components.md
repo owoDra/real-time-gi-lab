@@ -14,7 +14,15 @@
 
 GPU host only, on a clean checkout; retain all outputs privately in the ignored out/ directory. The capture executable also performs the CPU reference sampling; no separate user CPU jobs are required.
 
+The scene asset is intentionally absent from Git (ignored `assets/`); fetch it
+once with the existing repository helper. Check for both the glTF and the binary
+buffer before running the diagnostic capture. This download is needed only on
+the GPU host; the CPU logic is executed by `phos-n007-capture`.
+
 ~~~bash
+bash scripts/fetch_sponza.sh
+test -f assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf
+test -f assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.bin
 scene=assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf
 commit=$(git rev-parse HEAD)
 cmake -S . -B build/n007 -DCMAKE_BUILD_TYPE=Release -DPHOS_BUILD_N007=ON
