@@ -45,3 +45,16 @@
 - These facts establish GPU execution and internal packed-shader reconstruction on **one moving-rigid / software / target-state / 512-SPP** capture, **not** matching-state eligibility, correct physics or N006 historical cause.
 - Source-level cause isolated: historical N006 calls `n006_refresh_software_primary()` after target-state geometry update, but N007's generated N001 runtime omitted it. Therefore the GPU first-hit BVH could remain source-state while CPU traces post-motion `renderer_readback().triangles`. This is a **strong instrumentation defect hypothesis**, not an empirically verified explanation until rerun.
 - N007-only generator patched to call refresh in target-state software path, and updated the synthetic regression guard. The manifest CLI now prints primary mismatch categories and component absolute deltas. No N001–N006 source touched; the patched GPU path is **NOT yet run**. No raw PFM, detailed mismatch counts or state fingerprints uploaded; a retroactive factual cause conclusion is not warranted.
+
+## Second GPU-host diagnostic and world-space correction (2026-10-12 JST)
+
+User supplied output from a rerun after adding the missing target-state software-primary refresh (prior code, before the world-space correction):
+
+- `primary_match=false`: mask 3,866; identity 3,744; distance 2,300; geometric-normal 2,300 mismatches.
+- `gpu_reconstruction_passed=true`, `direct_max_abs_delta=0.0`, `indirect_max_abs_delta=0.00012207217514514923`.
+- Explicit blockers remain `primary_hit_mismatch` and independent GPU-state attestation; **diagnostic only**, no historical causality or physical correctness claim.
+
+**Confirmed source-level instrumentation defect:** `update_dynamic_geometry(true)` finishes by translating the `b_scene.triangles` CPU world-space geometry for rigid-instance target frames. The subsequently called N006 legacy `n006_refresh_software_primary()` translates `b_scene.triangles` **a second time** before rebuilding/uploading the GPU first-hit BVH. N007's CPU tracer uses the once-translated `renderer_readback().triangles`, so the compared world geometry differs. The earlier stale-GPU-BVH hypothesis was incomplete: an update is required, but the legacy method's geometry argument also needed an N007-only correction.
+
+**N007-only correction:** keep the software BVH refresh call, but in the *generated diagnostic runtime only*, let its `translated` reference bind directly to already-updated `b_scene.triangles`. No historical N001–N006 source modification or revised frozen decision. Add generator regression coverage and positive-pixel CPU/GPU signal diagnostics. **The corrected executable has not yet undergone a GPU rerun**; the concrete discrepancy counts above remain the pre-correction result. Uploaded primary geometry is still not independently attested, and other traversal/mismatch causes may remain.
+
