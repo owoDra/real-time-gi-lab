@@ -126,3 +126,9 @@ add_subdirectory(src/research/lane_n_end_to_end_renderer)
 get_property(SHADER_OUTPUTS GLOBAL PROPERTY PHOS_GI_SHADER_OUTPUTS)
 add_custom_target(phos-gi-shaders ALL DEPENDS ${SHADER_OUTPUTS})
 add_dependencies(phos-gi-lab phos-gi-shaders)
+
+# N007 is explicitly opt-in; the existing default build graph remains unchanged.
+option(PHOS_BUILD_N007 "Build isolated N007 reference-validity component capture" OFF)
+if(PHOS_BUILD_N007)
+  add_subdirectory(src/research/n007_reference_validity)
+endif()
