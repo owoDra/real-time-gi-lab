@@ -59,3 +59,7 @@ Reconstruct the **actual GPU probe-key accumulation and per-pixel lookup** on CP
 
 A per-pixel counterfactual remains pending until those CPU replay prerequisites and an independent per-work visibility mask are available. Do not equate 98.4664% of positive *work items* with 98.4664% of final *pixel energy* or 98.4664% of positive pixels.
 
+
+### Superseding image-level result (P1-B, 2026-10-12)
+
+The formerly pending probe-to-image reconstruction has **now passed** on the original saved GPU indirect PFM, and the independently CPU-shadow-labeled GPU secondary-contribution counterfactual removes **all 9,247** GPU indirect positive pixels (remaining **0**, image sum 0.2673380636301213 → 0). This advances the original *current-frame* GPU probe shadow-omission hypothesis to a controlled image-level causal explanation. See [result 011](011-p1b-probe-pixel-counterfactual-and-spp-screen.md). Frozen CPU SPP statistical screen also **failed at all 512/1024/2048/4096/8192 levels**, and [result 012](012-n007-bounded-no-go-decision.md) records the final bounded reference NO GO. No historical N006 source-state causation or physical correctness proof is claimed.
