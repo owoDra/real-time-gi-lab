@@ -70,3 +70,8 @@ target_compile_definitions(phos-n007-capture PRIVATE
 set_target_properties(phos-n007-capture PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 add_dependencies(phos-n007-capture
   phos-n007-shaders phos-n001-shaders phos-n003-comparison-shaders)
+
+# CPU-only native test: opt-in target, no Vulkan runtime or GPU execution.
+add_executable(phos-n007-cpu-test test_n007_cpu.cpp)
+target_compile_features(phos-n007-cpu-test PRIVATE cxx_std_20)
+target_link_libraries(phos-n007-cpu-test PRIVATE Threads::Threads)
