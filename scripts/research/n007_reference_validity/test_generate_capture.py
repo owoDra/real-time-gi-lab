@@ -18,11 +18,17 @@ class OverlayTest(unittest.TestCase):
         src='#include <filesystem>\n#include "../../vk_init.hpp"\n#include "../n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"\n"n001_composite.spv"\n"n003_composite_software.spv"\n'+'''    impl_->context.download_device_buffer(
         impl_->image,
         out.image_rgba.data(),
-        out.image_rgba.size() * sizeof(float));'''
+        out.image_rgba.size() * sizeof(float));'''+'''
+        const auto dynamic_update = update_dynamic_geometry(target_state);
+        update_params(target_state);'''
         result=runtime(src)
         self.assertIn('n007_hwrt_composite.spv',result)
         self.assertIn('n007_software_composite.spv',result)
         self.assertIn('PHOS_N007_GPU_HITS',result)
+        self.assertIn('(void)n006_refresh_software_primary();',result)
+        self.assertLess(result.index('n006_refresh_software_primary();'),
+                        result.index('update_params(target_state);'))
+        self.assertEqual(result.count('n006_refresh_software_primary();'),1)
         self.assertIn('#include "vk_init.hpp"',result)
         self.assertIn('#include "research/n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"',result)
         self.assertNotIn('#include "../../vk_init.hpp"',result)
