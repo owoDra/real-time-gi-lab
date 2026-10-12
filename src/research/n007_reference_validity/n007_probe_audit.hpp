@@ -43,7 +43,8 @@ struct ProbeAudit {
 // cascade; N001 CPU reference traces cosine rays. No equivalence claim follows.
 inline ProbeAudit audit_gpu_probe_transport(
     const fs::path& gpu_dir,const std::vector<b::Triangle>& triangles,
-    const FrameParams& p,std::size_t work_count) {
+    const FrameParams& p,std::size_t work_count,
+    std::vector<std::uint8_t>* shadow_labels=nullptr) {
     using Work=b::LaneAWorkItemV1;
     using Hit=b::GpuHit;
     using Fixed=std::array<std::uint32_t,2>;
@@ -54,6 +55,7 @@ inline ProbeAudit audit_gpu_probe_transport(
     const b::SoftwareBvh bvh(triangles);
     ProbeAudit out{};
     out.work_items=work_count;
+    if(shadow_labels)shadow_labels->assign(work_count,std::uint8_t{0});
     constexpr float pi=3.14159265358979323846F;
     for(std::size_t k=0;k<work_count;++k) {
         const auto& item=work[k];
@@ -95,9 +97,16 @@ inline ProbeAudit audit_gpu_probe_transport(
                 ++out.gpu_positive_fixed_prediction_mismatches;
             ShadowStats visibility{};
             const auto shadowed=lambert(bvh,p,pos,normal,visibility);
-            if(visibility.shadow_blocked)++out.gpu_positive_shadow_blocked;
-            else if(shadowed>0)++out.gpu_positive_shadow_clear;
-            else ++out.gpu_positive_other_zero;
+            if(visibility.shadow_blocked) {
+                ++out.gpu_positive_shadow_blocked;
+                if(shadow_labels)(*shadow_labels)[k]=1U;
+            } else if(shadowed>0) {
+                ++out.gpu_positive_shadow_clear;
+                if(shadow_labels)(*shadow_labels)[k]=2U;
+            } else {
+                ++out.gpu_positive_other_zero;
+                if(shadow_labels)(*shadow_labels)[k]=3U;
+            }
             if(visibility.shadow_blocked&&predicted>0U)
                 ++out.gpu_positive_replay_candidate;
         } else if(predicted>0U) {
