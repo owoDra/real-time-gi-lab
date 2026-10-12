@@ -39,6 +39,14 @@ foreach(kind hwrt software)
   endif()
   list(APPEND N007_SPIRV "${spirv}")
 endforeach()
+# Lane-E final software traversal loads this exact SPIR-V name at runtime.
+# Build the unchanged imported E003 shader explicitly for this opt-in target;
+# N001/N003 shader targets do not carry that dependency.
+add_compute_shader(
+  e003_instance_quantized
+  shaders/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_quantized.comp.glsl)
+list(APPEND N007_SPIRV
+  "${PROJECT_BINARY_DIR}/shaders/e003_instance_quantized.spv")
 add_custom_target(phos-n007-shaders DEPENDS ${N007_SPIRV})
 add_executable(phos-n007-capture
   n007_capture_main.cpp
