@@ -38,6 +38,9 @@ def build(root: Path, scene: Path, repo: Path, source_commit: str) -> dict:
         raise ValueError('backend or sample count violates frozen protocol')
     if capture['frame_id']!=(2 if capture['target_state'] else 1):
         raise ValueError('inconsistent renderer frame ID')
+    if not isinstance(capture.get('work_items'),int) or capture['work_items']<0 or (
+            capture.get('work_overflow')!=0):
+        raise ValueError('GPU probe work count/overflow invalid')
     def file(path: Path) -> dict:
         if not path.is_file():
             raise ValueError(f'missing capture file: {path}')
@@ -58,6 +61,8 @@ def build(root: Path, scene: Path, repo: Path, source_commit: str) -> dict:
             'geometry':file(root/'geometry-state.bin'),
         },
         'cpu_counts':json.loads((root/'cpu/counts.json').read_text()),
+        'probe_work_items':capture['work_items'],
+        'gpu_probe_audit':json.loads((root/'gpu/probe-audit.json').read_text()),
     }
     if capture['backend']=='software':
         manifest['state_files']['gpu_primary_geometry']=file(
@@ -67,6 +72,13 @@ def build(root: Path, scene: Path, repo: Path, source_commit: str) -> dict:
             part:file(root/side/('hits.bin' if part=='hits' else part+'.pfm'))
             for part in ('hits','direct','indirect','total')
         }
+    manifest['gpu_probe']={
+        part:file(root/'gpu'/filename) for part,filename in (
+            ('work','probe-work.bin'),
+            ('hits','probe-hits.bin'),
+            ('contributions','probe-contributions.bin'),
+            ('audit','probe-audit.json'))
+    }
     for i in range(4):
         for part in ('direct','indirect','total'):
             file(root/'cpu'/f'seed-{i}'/(part+'.pfm'))
@@ -91,6 +103,7 @@ def main():
         'cpu_hit_pixels':summary['primary']['cpu_hit_pixels'],
         'gpu_hit_pixels':summary['primary']['gpu_hit_pixels'],
         'gpu_primary_geometry_attestation':summary['primary_geometry_attestation'],
+        'gpu_probe_shadow_audit':summary['gpu_probe_shadow_audit'],
         'radiance_positive_pixels':{
             side:{k:summary['signal'][side][k]['positive_pixels']
                   for k in ('direct','indirect','total')}
