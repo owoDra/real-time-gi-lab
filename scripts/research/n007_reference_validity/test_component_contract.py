@@ -58,6 +58,10 @@ class ComponentContractTest(unittest.TestCase):
     def test_matched_not_physical_proof(self):
         r=self.go()
         self.assertTrue(r['primary']['match'])
+        self.assertEqual(r['primary']['cpu_hit_pixels'],self.w*self.h)
+        self.assertEqual(r['primary']['gpu_hit_pixels'],self.w*self.h)
+        self.assertEqual(r['signal']['cpu']['direct']['positive_pixels'],self.w*self.h)
+        self.assertEqual(r['signal']['gpu']['indirect']['positive_pixels'],self.w*self.h)
         self.assertTrue(r['reconstruction']['gpu']['passed'])
         self.assertTrue(r['indirect_model_difference_testable'])
         self.assertFalse(r['physical_correctness_proven'])
@@ -72,6 +76,8 @@ class ComponentContractTest(unittest.TestCase):
         self.set_file('gpu','hits',hit_bytes(self.w*self.h,False))
         r=self.go()
         self.assertFalse(r['primary']['match'])
+        self.assertEqual(r['primary']['gpu_hit_pixels'],0)
+        self.assertEqual(r['primary']['mask_mismatches'],self.w*self.h)
         self.assertFalse(r['indirect_model_difference_testable'])
         self.assertIn('primary_hit_mismatch',r['blockers'])
     def test_reconstruction_mismatch_blocks_attribution(self):
