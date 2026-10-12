@@ -106,6 +106,11 @@ int main(int argc,char** argv) {
         const auto path=fs::absolute(out/"gpu/hits.bin").string();
         if(setenv("PHOS_N007_GPU_HITS",path.c_str(),1)!=0)
             throw std::runtime_error("could not set GPU hit capture path");
+        if(backend=="software") {
+            const auto geometry_path=fs::absolute(out/"gpu/primary-geometry.bin").string();
+            if(setenv("PHOS_N007_GPU_PRIMARY_GEOMETRY",geometry_path.c_str(),1)!=0)
+                throw std::runtime_error("could not set GPU geometry capture path");
+        }
         const auto frame=runtime.renderer_readback();
         if(frame.width!=320||frame.height!=180)
             throw std::runtime_error("N007 preregistered 320x180 dimensions mismatch");
