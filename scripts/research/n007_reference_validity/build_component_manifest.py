@@ -59,6 +59,9 @@ def build(root: Path, scene: Path, repo: Path, source_commit: str) -> dict:
         },
         'cpu_counts':json.loads((root/'cpu/counts.json').read_text()),
     }
+    if capture['backend']=='software':
+        manifest['state_files']['gpu_primary_geometry']=file(
+            root/'gpu/primary-geometry.bin')
     for side in ('cpu','gpu'):
         manifest[side]={
             part:file(root/side/('hits.bin' if part=='hits' else part+'.pfm'))
@@ -87,6 +90,7 @@ def main():
         'primary_match':summary['primary']['match'],
         'cpu_hit_pixels':summary['primary']['cpu_hit_pixels'],
         'gpu_hit_pixels':summary['primary']['gpu_hit_pixels'],
+        'gpu_primary_geometry_attestation':summary['primary_geometry_attestation'],
         'radiance_positive_pixels':{
             side:{k:summary['signal'][side][k]['positive_pixels']
                   for k in ('direct','indirect','total')}
