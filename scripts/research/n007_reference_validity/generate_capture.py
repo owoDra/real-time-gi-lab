@@ -38,6 +38,21 @@ def runtime(source: str) -> str:
     source = exactly_one(source,
         '#include "../n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"',
         '#include "research/n006_interval_aware_allocation/n006_primary_axis_proxy.hpp"')
+    # The historical N006 integration refreshes the SOFTWARE primary BVH for
+    # target-state moving geometry *after* updating b_scene. Plain N001's
+    # run_frame omits this step because it is HWRT-only. Without this isolated
+    # overlay, the GPU first hits are still on the original scene while the
+    # N007 CPU reference traces the translated renderer_readback() triangles.
+    source = exactly_one(source,
+        '''        const auto dynamic_update = update_dynamic_geometry(target_state);
+        update_params(target_state);''',
+        '''        const auto dynamic_update = update_dynamic_geometry(target_state);
+#ifdef PHOS_GI_N006_SOFTWARE_PRIMARY
+        if (target_state && uses_lane_e_final_software(options.variant))
+            (void)n006_refresh_software_primary();
+#endif
+        update_params(target_state);''')
+
     marker = '''    impl_->context.download_device_buffer(
         impl_->image,
         out.image_rgba.data(),
