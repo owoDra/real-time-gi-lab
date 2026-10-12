@@ -83,3 +83,8 @@ add_dependencies(phos-n007-capture
 add_executable(phos-n007-cpu-test test_n007_cpu.cpp)
 target_compile_features(phos-n007-cpu-test PRIVATE cxx_std_20)
 target_link_libraries(phos-n007-cpu-test PRIVATE Threads::Threads)
+
+# CPU-only independent occlusion replay fixture; no Vulkan runtime or CI.
+add_executable(phos-n007-probe-test test_n007_probe.cpp)
+target_compile_features(phos-n007-probe-test PRIVATE cxx_std_20)
+target_link_libraries(phos-n007-probe-test PRIVATE Threads::Threads)
