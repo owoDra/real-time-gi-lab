@@ -132,3 +132,9 @@ option(PHOS_BUILD_N007 "Build isolated N007 reference-validity component capture
 if(PHOS_BUILD_N007)
   add_subdirectory(src/research/n007_reference_validity)
 endif()
+
+# N008 CPU HDR oracle is explicitly opt-in; the default build graph remains unchanged.
+option(PHOS_BUILD_N008 "Build isolated N008 CPU HDR reference oracle" OFF)
+if(PHOS_BUILD_N008)
+  add_subdirectory(src/research/n008_hdr_oracle)
+endif()
