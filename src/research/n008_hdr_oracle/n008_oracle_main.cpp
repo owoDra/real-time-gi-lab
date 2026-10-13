@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
     try {
         std::string scene_path, out_prefix, seeds_arg = "305419896";
         std::uint32_t spp = 1;
+        std::vector<std::uint32_t> checkpoints;
         unsigned threads = std::max(1U, std::thread::hardware_concurrency());
         for (int i = 1; i < argc; ++i) {
             const std::string a = argv[i];
@@ -69,6 +70,11 @@ int main(int argc, char** argv) {
             else if (a == "--seeds") seeds_arg = value();
             else if (a == "--spp") spp = std::uint32_t(std::stoul(value()));
             else if (a == "--threads") threads = unsigned(std::stoul(value()));
+            else if (a == "--checkpoints") {
+                std::stringstream ss(value());
+                std::string item;
+                while (std::getline(ss, item, ',')) checkpoints.push_back(std::uint32_t(std::stoul(item)));
+            }
             else throw std::runtime_error("unknown argument " + a);
         }
         if (scene_path.empty() || out_prefix.empty() || spp == 0 || threads == 0)
@@ -79,6 +85,9 @@ int main(int argc, char** argv) {
         const Scene scene = parse_scene(in);
         const Oracle oracle(scene);
         const auto seeds = parse_seeds(seeds_arg);
+        for (std::size_t i = 0; i < checkpoints.size(); ++i)
+            if (checkpoints[i] == 0 || checkpoints[i] >= spp || (i && checkpoints[i] <= checkpoints[i - 1]))
+                throw std::runtime_error("checkpoints must be ascending, positive and < spp");
 
         std::cout << "{\"oracle\":\"n008\",\"version\":1"
                   << ",\"scene_sha256\":\"" << file_sha256(scene_path) << "\""
@@ -94,17 +103,38 @@ int main(int argc, char** argv) {
         for (std::size_t si = 0; si < seeds.size(); ++si) {
             const auto t0 = std::chrono::steady_clock::now();
             RenderCounters counters;
-            const auto stats = oracle.render(seeds[si], spp, threads, counters);
+            std::vector<PrimaryRecord> primary;
+            std::vector<std::vector<PixelStats>> snapshots;
+            const auto stats = oracle.render(seeds[si], spp, threads, counters, si == 0 ? &primary : nullptr,
+                                             checkpoints, &snapshots);
             const double secs = std::chrono::duration<double>(std::chrono::steady_clock::now() - t0).count();
             const std::string base = out_prefix + ".s" + std::to_string(si);
             static const char* names[] = {"emission", "direct", "indirect", "total"};
-            for (int k = 0; k <= kComponents; ++k) {
-                std::vector<float> rgb(stats.size() * 3);
-                for (std::size_t p = 0; p < stats.size(); ++p)
-                    for (int c = 0; c < 3; ++c) rgb[p * 3 + c] = float(stats[p].sum[k][c] / double(spp));
-                write_pfm(base + "." + names[k] + ".pfm", scene.width, scene.height, rgb);
+            auto emit = [&](const std::string& prefix, const std::vector<PixelStats>& st, std::uint32_t n) {
+                for (int k = 0; k <= kComponents; ++k) {
+                    std::vector<float> rgb(st.size() * 3);
+                    for (std::size_t p = 0; p < st.size(); ++p)
+                        for (int c = 0; c < 3; ++c) rgb[p * 3 + c] = float(st[p].sum[k][c] / double(n));
+                    write_pfm(prefix + "." + names[k] + ".pfm", scene.width, scene.height, rgb);
+                }
+                write_sidecar(prefix + ".f64", scene, seeds[si], n, st);
+            };
+            for (std::size_t k = 0; k < checkpoints.size(); ++k)
+                emit(base + ".c" + std::to_string(checkpoints[k]), snapshots[k], checkpoints[k]);
+            emit(base, stats, spp);
+            if (si == 0) {
+                // Per pixel (first sample of first seed): f64 t (-1 = miss), u32 triangle, u32 front flag.
+                std::ofstream hits(out_prefix + ".hits", std::ios::binary);
+                hits.write("N008HIT\0", 8);
+                const std::uint32_t wh[2] = {scene.width, scene.height};
+                hits.write(reinterpret_cast<const char*>(wh), sizeof wh);
+                for (const auto& r : primary) {
+                    hits.write(reinterpret_cast<const char*>(&r.t), 8);
+                    hits.write(reinterpret_cast<const char*>(&r.tri), 4);
+                    hits.write(reinterpret_cast<const char*>(&r.front), 4);
+                }
+                if (!hits) throw std::runtime_error("short write hits");
             }
-            write_sidecar(base + ".f64", scene, seeds[si], spp, stats);
             std::printf("%s{\"seed\":%llu,\"prefix\":\"%s\",\"primary_hits\":%llu,\"shadow_tests\":%llu,"
                         "\"shadow_blocked\":%llu,\"backface_absorbed\":%llu,\"cpu_seconds_diagnostic\":%.3f}",
                         si ? "," : "", static_cast<unsigned long long>(seeds[si]), base.c_str(),

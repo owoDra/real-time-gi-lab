@@ -291,3 +291,39 @@ def gauss_legendre_square(x0, x1, z0, z1, panels, order):
     X, Z = np.meshgrid(xs, zs, indexing="ij")
     W = np.outer(wx, wz)
     return X.ravel(), Z.ravel(), W.ravel()
+
+
+# --------------------------------------------------------------------------- Renderer frame states (Phase B)
+def read_state(state_dir: Path) -> dict:
+    """N007-format state: geometry-state.bin (u32 ver, u32 n, n*(9 f32 + 4 u32)) and
+    frame-state.bin (12 B magic, u32 w, u32 h, 128 B A001ParamsGpu)."""
+    g = (Path(state_dir) / "geometry-state.bin").read_bytes()
+    ver, n = struct.unpack_from("<2I", g, 0)
+    if ver != 1 or len(g) != 8 + 52 * n:
+        raise ValueError("bad geometry-state.bin")
+    rec = np.frombuffer(g, dtype=np.dtype([("v", "<f4", (9,)), ("meta", "<u4", (4,))]), offset=8)
+    f = (Path(state_dir) / "frame-state.bin").read_bytes()
+    if f[:12] != b"N007-STATE1\0" or len(f) != 148:
+        raise ValueError("bad frame-state.bin")
+    w, h = struct.unpack_from("<2I", f, 12)
+    p = np.frombuffer(f, dtype="<f4", count=24, offset=20).reshape(6, 4)
+    return {"width": w, "height": h, "verts": rec["v"].astype(np.float64).reshape(n, 3, 3), "meta": rec["meta"].copy(),
+            "camera_pos_near": p[0], "camera_right_tan_x": p[1], "camera_up_tan_y": p[2], "camera_forward_far": p[3],
+            "scene_origin_spacing": p[4], "light_pos_interval": p[5],
+            "sha256": {"geometry": hashlib.sha256(g).hexdigest(), "frame": hashlib.sha256(f).hexdigest()}}
+
+
+def state_scene(state: dict, max_bounces: int, rho=1.0, two_sided=True, sampling="center") -> Scene:
+    """Phase B transport T_B: Renderer camera/light/geometry; n001_soft falloff with
+    s = light_pos_interval.w and I = s^2 (equals the Renderer direct formula for
+    rho=1); grey Lambert rho; unbounded secondary rays; black background."""
+    pos, fwd, up = state["camera_pos_near"], state["camera_forward_far"], state["camera_up_tan_y"]
+    cam = Camera(tuple(map(float, pos[:3])), tuple(map(float, pos[:3] + fwd[:3])), tuple(map(float, up[:3])),
+                 float(state["camera_right_tan_x"][3]), float(up[3]), 0.0, float(fwd[3]))
+    sc = Scene(cam, width=state["width"], height=state["height"], sampling=sampling, max_bounces=max_bounces,
+               falloff="n001_soft", soft_scale=float(state["light_pos_interval"][3]))
+    sc.material("surface", (rho, rho, rho), two_sided=two_sided)
+    s = float(state["light_pos_interval"][3])
+    sc.point(tuple(map(float, state["light_pos_interval"][:3])), (s * s, s * s, s * s))
+    sc.triangles = [("surface", tuple(t[0]), tuple(t[1]), tuple(t[2])) for t in state["verts"].tolist()]
+    return sc

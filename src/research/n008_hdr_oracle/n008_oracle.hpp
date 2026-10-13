@@ -529,6 +529,13 @@ private:
 // ---------------------------------------------------------------- integrator
 enum Component { kEmission = 0, kDirect = 1, kIndirect = 2, kComponents = 3 };
 
+// Primary hit of a pixel's first sample (diagnostic; transport unaffected).
+struct PrimaryRecord {
+    double t{-1.0};
+    std::uint32_t tri{0xffffffffU};
+    std::uint32_t front{0};
+};
+
 struct PixelStats {
     // Per component and channel: sum and sum of squares over samples; plus total.
     double sum[kComponents + 1][3]{};
@@ -591,7 +598,8 @@ public:
     }
 
     // One camera sample; writes per-component radiance.
-    void sample(std::uint32_t x, std::uint32_t y, Xoshiro256& rng, Rgb out[kComponents], RenderCounters& cnt) const {
+    void sample(std::uint32_t x, std::uint32_t y, Xoshiro256& rng, Rgb out[kComponents], RenderCounters& cnt,
+                PrimaryRecord* primary = nullptr) const {
         for (int c = 0; c < kComponents; ++c) out[c] = {0, 0, 0};
         double u = 0.5, v = 0.5;
         if (scene_.sampling == Sampling::Box) { u = rng.uniform(); v = rng.uniform(); }
@@ -608,6 +616,7 @@ public:
             const Material& m = scene_.materials[tri.material];
             const V3 ng = normalize(cross(tri.v1 - tri.v0, tri.v2 - tri.v0));
             const bool front = dot(ng, ray.dir) < 0.0;
+            if (bounce == 0 && primary) *primary = {hit.t, hit.tri, front ? 1U : 0U};
             if (bounce == 0 && front) out[kEmission] = m.emit;
             if (!front && !m.two_sided) { ++cnt.backface_absorbed; return; }
             const V3 n = front ? ng : ng * -1.0;
@@ -687,8 +696,15 @@ public:
         return e;
     }
 
-    std::vector<PixelStats> render(std::uint64_t seed, std::uint32_t spp, unsigned threads, RenderCounters& total) const {
+    // Nested sample-prefix checkpoints: snapshots[k] holds the statistics of samples
+    // [0, checkpoints[k]) for every pixel (checkpoints ascending, each <= spp).
+    std::vector<PixelStats> render(std::uint64_t seed, std::uint32_t spp, unsigned threads, RenderCounters& total,
+                                   std::vector<PrimaryRecord>* primary = nullptr,
+                                   const std::vector<std::uint32_t>& checkpoints = {},
+                                   std::vector<std::vector<PixelStats>>* snapshots = nullptr) const {
         std::vector<PixelStats> stats(std::size_t(scene_.width) * scene_.height);
+        if (snapshots) snapshots->assign(checkpoints.size(), std::vector<PixelStats>(stats.size()));
+        if (primary) primary->assign(stats.size(), PrimaryRecord{});
         std::atomic<std::uint32_t> next_row{0};
         std::vector<RenderCounters> per_thread(threads);
         std::vector<std::thread> pool;
@@ -700,10 +716,16 @@ public:
                     for (std::uint32_t x = 0; x < scene_.width; ++x) {
                         const auto pixel = std::size_t(y) * scene_.width + x;
                         auto& ps = stats[pixel];
+                        std::size_t next_cp = 0;
                         for (std::uint32_t s = 0; s < spp; ++s) {
+                            while (snapshots && next_cp < checkpoints.size() && checkpoints[next_cp] == s) {
+                                (*snapshots)[next_cp][pixel] = ps;
+                                ++next_cp;
+                            }
                             Xoshiro256 rng(seed, pixel, s);
                             Rgb comp[kComponents];
-                            sample(x, y, rng, comp, per_thread[t]);
+                            sample(x, y, rng, comp, per_thread[t],
+                                   primary && s == 0 ? &(*primary)[pixel] : nullptr);
                             for (int c = 0; c < 3; ++c) {
                                 double tot = 0.0;
                                 for (int k = 0; k < kComponents; ++k) {
