@@ -1,0 +1,11 @@
+# N008 — independently validated HDR light-transport oracle
+
+Study: [Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5). Branch: `research-n008-hdr-oracle`.
+Prerequisite: [N007 bounded NO GO](../n007-reference-validity/results/012-n007-bounded-no-go-decision.md) (frozen; not reopened).
+
+Goal: a small, auditable CPU HDR reference oracle whose physical correctness is established by analytic controls and an independently maintained integrator (Mitsuba 3) **before** any Renderer comparison.
+
+- Phase A protocol: [experiments/001](experiments/001-phase-a-oracle-spec-and-controls.md)
+- Results: [results/index.json](results/index.json)
+- Oracle source: `src/research/n008_hdr_oracle/` (opt-in `PHOS_BUILD_N008`, default OFF; also a standalone CMake project)
+- Controls and cross-check: `scripts/research/n008_hdr_oracle/`
