@@ -42,6 +42,67 @@
       "renderer_scene_reference_validated": false,
       "n007_n006_reopened": false,
       "gpu_run": false
+    },
+    {
+      "id": "N008-B-005",
+      "status": "complete",
+      "classification": "Phase B frozen-state reference ladder (unchanged N007 screen + N008 classes)",
+      "result": "005-phase-b-reference-ladder.json",
+      "protocol": "../experiments/002-phase-b-frozen-states-and-reference-eligibility.md",
+      "source_commit": "9aab73b01c1577026342cced61dc09deaf768cd5",
+      "cell_classifications": {
+        "B1_T_B2": "INELIGIBLE",
+        "B2_T_B2": "NO_SUPPORT",
+        "B3_T_B2": "DIRECT_DETERMINISTIC_PROVED",
+        "B4_T_B2": "NO_SUPPORT",
+        "B5_T_B2": "INELIGIBLE",
+        "B6_T_B2": "INELIGIBLE",
+        "B7_T_B2": "STATISTICALLY_ELIGIBLE",
+        "B1_T_B8": "INELIGIBLE",
+        "B2_T_B8": "NO_SUPPORT",
+        "B3_T_B8": "DIRECT_DETERMINISTIC_PROVED",
+        "B4_T_B8": "NO_SUPPORT",
+        "B5_T_B8": "INELIGIBLE",
+        "B6_T_B8": "INELIGIBLE",
+        "B7_T_B8": "STATISTICALLY_ELIGIBLE"
+      },
+      "gpu_run": false
+    },
+    {
+      "id": "N008-B-EXIT-006",
+      "status": "complete",
+      "classification": "Phase B exit decision",
+      "result": "006-phase-b-exit-decision.md",
+      "final_decision": "GO_TO_PHASE_C_BOUNDED",
+      "statistically_eligible_cells": [
+        "B7"
+      ],
+      "direct_only_proved_cells": [
+        "B3"
+      ],
+      "no_support_cells": [
+        "B2",
+        "B4"
+      ],
+      "ineligible_cells": [
+        "B1",
+        "B5",
+        "B6"
+      ],
+      "moving_rigid_state_gpu_byte_attested": true,
+      "gpu_run": false
+    },
+    {
+      "id": "N008-C-007",
+      "status": "complete",
+      "classification": "Phase C partial: B4 GPU capture vs locked reference, diagnostic only, not scored",
+      "result": "008-phase-c-b4-gpu-diagnostic.md",
+      "data": "007-phase-c-b4-gpu-diagnostic.json",
+      "gpu_only_positive_pixels": 9247,
+      "reference_positive_pixels": 0,
+      "primary_mask_mismatch": 0,
+      "scored": false,
+      "new_gpu_run": false
     }
   ]
 }

@@ -1,0 +1,102 @@
+{
+ "schema": "n008-phase-c-gpu-diagnostic/1",
+ "note": "GPU capture = N007 private p1a software-backend capture (source dabe590), CPU-only comparison",
+ "cells": [
+  {
+   "cell": "B4",
+   "transport": "T_B2",
+   "reference_classification": "NO_SUPPORT",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "d70e8344d9ea493b6fa48d918a2f17f118030b91d708d8bb8d78d0f0422fd53d"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 15173,
+    "gpu_hits": 15173,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 9.86678840014484e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 0,
+     "reference_positive": 0,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 9247,
+     "reference_positive": 0,
+     "gpu_only_positive": 9247,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.2673380619762611,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.2673380619762611
+    },
+    "total": {
+     "gpu_positive": 9247,
+     "reference_positive": 0,
+     "gpu_only_positive": 9247,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.2673380619762611,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.2673380619762611
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_NO_SUPPORT"
+  },
+  {
+   "cell": "B4",
+   "transport": "T_B8",
+   "reference_classification": "NO_SUPPORT",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "d70e8344d9ea493b6fa48d918a2f17f118030b91d708d8bb8d78d0f0422fd53d"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 15173,
+    "gpu_hits": 15173,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 9.86678840014484e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 0,
+     "reference_positive": 0,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 9247,
+     "reference_positive": 0,
+     "gpu_only_positive": 9247,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.2673380619762611,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.2673380619762611
+    },
+    "total": {
+     "gpu_positive": 9247,
+     "reference_positive": 0,
+     "gpu_only_positive": 9247,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.2673380619762611,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.2673380619762611
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_NO_SUPPORT"
+  }
+ ]
+}

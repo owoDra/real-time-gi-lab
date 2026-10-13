@@ -40,6 +40,15 @@ N007 P0 CPU source audit and synthetic PFM diagnostics are in progress on `resea
 
 **N008 Phase A (2026-10-13, [Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5), branch `research-n008-hdr-oracle`): Exit A = GO.** A new, independent CPU HDR oracle (`src/research/n008_hdr_oracle/`, opt-in, double-precision watertight path tracer sharing no N001/Lane B code) passed all preregistered physically known controls A1–A10 (102 checks: exact lit/occluded/back-face/moving-rigid frozen pose, exactly-zero sealed/no-leak rooms, strictly positive lit rooms, analytic multi-bounce sphere furnace ~1e-4, two-bounce quadrature, closed-form area light) and agreed with Mitsuba 3.6.4 on identical meshes in 7/7 cells (≤1.6e-4 relative image mean, per-pixel |z|≤6 in 100%). Injected defects (far truncation, N001 soft falloff, 1 mm light slip, 0.5% albedo, one-sided walls) are all detected. **Scope:** Lambert/point/emissive-triangle transport on controlled scenes; textures, alpha-tested foliage and glossy BSDFs are not validated, and no Renderer/Sponza reference is yet qualified. N007/N006 remain closed and unchanged. [Result 004](lanes/n008-hdr-oracle/results/004-phase-a-exit-decision.md).
 
+**N008 Phase B/C-partial (2026-10-13):**
+- **Exit B = GO, bounded.** The Renderer's own target states were exported CPU-only from verbatim-extracted Renderer code; the moving-rigid state is byte-identical to the GPU-run N007 capture. Rendering them with the validated oracle gives:
+  - **non-Sponza `leak-medium`:** STATISTICALLY_ELIGIBLE.
+  - **Sponza light-motion:** direct deterministic reference only.
+  - **Sponza camera-motion and moving-rigid:** NO_SUPPORT (exactly unlit at the camera within the declared transport).
+  - **Sponza static, deforming and topology-churn:** INELIGIBLE (sparse, non-converged).
+- **Likely cause of the dark Sponza states (a state fact):** the loaders ignore glTF node transforms, and the A001 light and eye lie outside the geometry bounds.
+- **Phase C diagnostic, CPU-only, on the existing N007 GPU capture of the identical state:** primary hits match exactly, and **all 9,247 positive GPU indirect pixels have zero physical support**. This is not scored, and N006/N007 are unchanged. [Result 006](lanes/n008-hdr-oracle/results/006-phase-b-exit-decision.md), [result 008](lanes/n008-hdr-oracle/results/008-phase-c-b4-gpu-diagnostic.md).
+
 ## Unresolved strategic questions
 
 1. **Can independent HDR image quality be evaluated credibly across real dynamic scenes?** N007 first, before claiming quality gain or optimizing new adaptive rules.
