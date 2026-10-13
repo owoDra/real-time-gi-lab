@@ -111,6 +111,38 @@
       "result": "009-phase-c-reference-package.json",
       "source_commit": "9aab73b01c1577026342cced61dc09deaf768cd5",
       "gpu_run": false
+    },
+    {
+      "id": "N008-C-010",
+      "status": "complete",
+      "classification": "Phase C GPU captures (RADV 8060S, software+hwrt) vs locked references; diagnostic, matched-visibility mask",
+      "result": "010-phase-c-gpu-diagnostics.json",
+      "gpu_run": true,
+      "gpu_run_by": "assistant with explicit user authorization",
+      "gpu_attested_states": [
+        "B1",
+        "B2",
+        "B3",
+        "B4",
+        "B5",
+        "B7"
+      ],
+      "unsupported": [
+        "B6"
+      ],
+      "b7_total_relative_bias_of_sum": {
+        "T_B2": -0.298,
+        "T_B8": -0.359
+      },
+      "b7_b3_direct_float32_agreement": true
+    },
+    {
+      "id": "N008-FINAL-011",
+      "status": "complete",
+      "classification": "final decision",
+      "result": "011-n008-final-decision.md",
+      "final_decision": "ORACLE_GO; CROSS_CLASS_REFERENCE_SET_BOUNDED_NO_GO",
+      "n007_n006_reopened": false
     }
   ]
 }

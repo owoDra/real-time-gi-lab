@@ -49,6 +49,9 @@ def compare(capture: Path, cell: str, transport: str, phase_b: Path, summary: di
     h, w = ref.shape[:2]
     gpu = {k: L.read_pfm(capture / "gpu" / f"{k}.pfm") @ LUMA for k in ("direct", "indirect", "total")}
     refY = {k: ref[..., L.COMPONENTS.index(k), :] @ LUMA for k in ("direct", "indirect", "total")}
+    # SE of the pooled reference luma (per-seed sample variance pooled over 4 x 8192).
+    pooled = L.pooled({"runs": [{"prefix": str(B.level_prefix(work, i, B.LEVELS[-1]))} for i in range(4)]})
+    se_y = {k: np.sqrt((pooled["se"][..., L.COMPONENTS.index(k), :] ** 2) @ (LUMA ** 2)) for k in ("direct", "indirect", "total")}
     # Primary visibility agreement (oracle hit sidecar vs GPU hits, both top-down row-major).
     oh = np.frombuffer((work / "o.hits").read_bytes(), dtype=np.dtype([("t", "<f8"), ("tri", "<u4"), ("front", "<u4")]), offset=16)
     gh = gpu_hits(capture / "gpu" / "hits.bin", h * w)
@@ -66,6 +69,13 @@ def compare(capture: Path, cell: str, transport: str, phase_b: Path, summary: di
                                                          oh["t"][both & (o_prim == gh["prim"])])) if (both & (o_prim == gh["prim"])).any() else None,
         "oracle_backface_single_sided": int((o_hit & (meta[np.minimum(oh["tri"], n - 1), 3] == 0) & (oh["front"] == 0)).sum()),
     }
+    # Preregistered (experiments/002) Phase C flag: score only pixels whose primary
+    # visibility matches (both hit the same primitive, or both miss) and that are not
+    # back faces of single-sided triangles (the Renderer culls and sees through them).
+    back_single = o_hit & (meta[np.minimum(oh["tri"], n - 1), 3] == 0) & (oh["front"] == 0)
+    matched = ((both & (o_prim == gh["prim"])) | (~o_hit & ~g_hit)) & ~back_single
+    out["scoring_mask"] = {"matched_pixels": int(matched.sum()), "excluded_back_face_single_sided": int(back_single.sum()),
+                           "excluded_primary_mismatch": int((~matched & ~back_single).sum())}
     comps = {}
     for k in ("direct", "indirect", "total"):
         g, r = gpu[k].ravel(), refY[k].ravel()
@@ -74,12 +84,15 @@ def compare(capture: Path, cell: str, transport: str, phase_b: Path, summary: di
                     "gpu_sum": float(g.sum()), "reference_sum": float(r.sum()),
                     "gpu_sum_on_reference_zero": float(g[r <= 0].sum())}
         if k in SCORABLE.get(row["classification"], ()):
-            act = r > 0
+            act = (r > 0) & matched
             err = np.abs(g[act] - r[act])
             comps[k]["scored_on_reference_active"] = {
                 "pixels": int(act.sum()), "rmse": float(np.sqrt(np.mean((g[act] - r[act]) ** 2))),
                 "mean_signed_bias": float(np.mean(g[act] - r[act])), "relative_bias_of_sum": float((g[act].sum() - r[act].sum()) / r[act].sum()),
-                "p99_abs": float(np.quantile(err, 0.99))}
+                "p99_abs": float(np.quantile(err, 0.99)), "max_abs": float(err.max()),
+                "max_rel": float(np.max(err / r[act])), "gpu_zero_on_reference_positive": int((g[act] <= 0).sum()),
+                "reference_mean": float(r[act].mean()),
+                "reference_se_of_mean_y": float(np.sqrt(np.sum(se_y[k].ravel()[act] ** 2)) / act.sum())}
     out["components_luma"] = comps
     if row["classification"] in SCORABLE:
         out["verdict"] = "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS"

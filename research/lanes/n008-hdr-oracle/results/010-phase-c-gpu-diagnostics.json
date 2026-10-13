@@ -1,0 +1,1401 @@
+{
+ "schema": "n008-phase-c-gpu-diagnostic/2",
+ "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO); B002 refuses any other device",
+ "capture_tool": "phos-n007-capture built at N008 commit 1c3cb7a (Renderer sources unchanged), --target-state",
+ "executed_by": "assistant, with explicit user authorization 2026-10-13",
+ "scoring_mask": "matched primary visibility, back faces of single-sided triangles excluded (experiments/002)",
+ "diagnostics": [
+  {
+   "cell": "B1",
+   "transport": "T_B2",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6603,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6467,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.23657587564230198,
+     "reference_sum": 0.0006643570883886017,
+     "gpu_sum_on_reference_zero": 0.22880903338227654
+    },
+    "total": {
+     "gpu_positive": 6603,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6467,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.23934001995803555,
+     "reference_sum": 0.003428502261694605,
+     "gpu_sum_on_reference_zero": 0.22880903338227654
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B1-static-hwrt",
+    "backend": "hwrt",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e"
+   }
+  },
+  {
+   "cell": "B1",
+   "transport": "T_B8",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6603,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6417,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.23657587564230198,
+     "reference_sum": 0.001012503173559821,
+     "gpu_sum_on_reference_zero": 0.22658121610948
+    },
+    "total": {
+     "gpu_positive": 6603,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6417,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.23934001995803555,
+     "reference_sum": 0.0037766483468658213,
+     "gpu_sum_on_reference_zero": 0.22658121610948
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B1-static-hwrt",
+    "backend": "hwrt",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e"
+   }
+  },
+  {
+   "cell": "B1",
+   "transport": "T_B2",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6603,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6467,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.23657587564230198,
+     "reference_sum": 0.0006643570883886017,
+     "gpu_sum_on_reference_zero": 0.22880903338227654
+    },
+    "total": {
+     "gpu_positive": 6603,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6467,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.23934001995803555,
+     "reference_sum": 0.003428502261694605,
+     "gpu_sum_on_reference_zero": 0.22880903338227654
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B1-static-software",
+    "backend": "software",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e"
+   }
+  },
+  {
+   "cell": "B1",
+   "transport": "T_B8",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6603,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6417,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.23657587564230198,
+     "reference_sum": 0.001012503173559821,
+     "gpu_sum_on_reference_zero": 0.22658121610948
+    },
+    "total": {
+     "gpu_positive": 6603,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6417,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.23934001995803555,
+     "reference_sum": 0.0037766483468658213,
+     "gpu_sum_on_reference_zero": 0.22658121610948
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B1-static-software",
+    "backend": "software",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "2309b06cd9b0a2248e77d66f417df955f4c09051a1cd469eff9ecffffa34e15e"
+   }
+  },
+  {
+   "cell": "B2",
+   "transport": "T_B2",
+   "reference_classification": "NO_SUPPORT",
+   "capture_state_sha256": {
+    "frame": "a3493146e8e11498c3abc5c98ceaed165032a415ddefc4b3308e1f0a5bca46b5",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12628,
+    "gpu_hits": 12629,
+    "mask_mismatch": 5,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.891121025182181e-05,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57595,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 5
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 0,
+     "reference_positive": 0,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    },
+    "total": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_NO_SUPPORT",
+   "capture": {
+    "name": "B2-camera-motion-hwrt",
+    "backend": "hwrt",
+    "scenario": "camera-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "eb889a8796ebae5cfb23ff820c01fcf5e2fd2d21376dc06b8c4a447512362bcd"
+   }
+  },
+  {
+   "cell": "B2",
+   "transport": "T_B8",
+   "reference_classification": "NO_SUPPORT",
+   "capture_state_sha256": {
+    "frame": "a3493146e8e11498c3abc5c98ceaed165032a415ddefc4b3308e1f0a5bca46b5",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12628,
+    "gpu_hits": 12629,
+    "mask_mismatch": 5,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.891121025182181e-05,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57595,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 5
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 0,
+     "reference_positive": 0,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    },
+    "total": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_NO_SUPPORT",
+   "capture": {
+    "name": "B2-camera-motion-hwrt",
+    "backend": "hwrt",
+    "scenario": "camera-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "eb889a8796ebae5cfb23ff820c01fcf5e2fd2d21376dc06b8c4a447512362bcd"
+   }
+  },
+  {
+   "cell": "B2",
+   "transport": "T_B2",
+   "reference_classification": "NO_SUPPORT",
+   "capture_state_sha256": {
+    "frame": "a3493146e8e11498c3abc5c98ceaed165032a415ddefc4b3308e1f0a5bca46b5",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12628,
+    "gpu_hits": 12629,
+    "mask_mismatch": 5,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.891121025182181e-05,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57595,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 5
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 0,
+     "reference_positive": 0,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    },
+    "total": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_NO_SUPPORT",
+   "capture": {
+    "name": "B2-camera-motion-software",
+    "backend": "software",
+    "scenario": "camera-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "eb889a8796ebae5cfb23ff820c01fcf5e2fd2d21376dc06b8c4a447512362bcd"
+   }
+  },
+  {
+   "cell": "B2",
+   "transport": "T_B8",
+   "reference_classification": "NO_SUPPORT",
+   "capture_state_sha256": {
+    "frame": "a3493146e8e11498c3abc5c98ceaed165032a415ddefc4b3308e1f0a5bca46b5",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12628,
+    "gpu_hits": 12629,
+    "mask_mismatch": 5,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.891121025182181e-05,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57595,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 5
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 0,
+     "reference_positive": 0,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    },
+    "total": {
+     "gpu_positive": 8242,
+     "reference_positive": 0,
+     "gpu_only_positive": 8242,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.28566414886154234,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.28566414886154234
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_NO_SUPPORT",
+   "capture": {
+    "name": "B2-camera-motion-software",
+    "backend": "software",
+    "scenario": "camera-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "eb889a8796ebae5cfb23ff820c01fcf5e2fd2d21376dc06b8c4a447512362bcd"
+   }
+  },
+  {
+   "cell": "B3",
+   "transport": "T_B2",
+   "reference_classification": "DIRECT_DETERMINISTIC_PROVED",
+   "capture_state_sha256": {
+    "frame": "8f426ee617c07f9c5c026db3725ea21b07dd28059af14bc36616f7e16c15afcd",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 9546,
+     "reference_positive": 9546,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5098854791822305,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 9546,
+      "rmse": 1.189244556620159e-10,
+      "mean_signed_bias": 5.9052775841618e-12,
+      "relative_bias_of_sum": 1.1055773959755843e-07,
+      "p99_abs": 5.682649129089364e-10,
+      "max_abs": 2.314004751051771e-09,
+      "max_rel": 2.6515987564627823e-06,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 5.341351590304323e-05,
+      "reference_se_of_mean_y": 2.2669089169047924e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 1338,
+     "reference_positive": 0,
+     "gpu_only_positive": 1338,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.03329518577083945,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.03329518577083945
+    },
+    "total": {
+     "gpu_positive": 10039,
+     "reference_positive": 9546,
+     "gpu_only_positive": 493,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5431806648284692,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.007522697793319821
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B3-light-motion-hwrt",
+    "backend": "hwrt",
+    "scenario": "light-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "7b48345b67311652fcba9f7083a21fa07eb316d6ded75a1807f75070516333ec"
+   }
+  },
+  {
+   "cell": "B3",
+   "transport": "T_B8",
+   "reference_classification": "DIRECT_DETERMINISTIC_PROVED",
+   "capture_state_sha256": {
+    "frame": "8f426ee617c07f9c5c026db3725ea21b07dd28059af14bc36616f7e16c15afcd",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 9546,
+     "reference_positive": 9546,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5098854791822305,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 9546,
+      "rmse": 1.189244556620159e-10,
+      "mean_signed_bias": 5.9052775841618e-12,
+      "relative_bias_of_sum": 1.1055773959755843e-07,
+      "p99_abs": 5.682649129089364e-10,
+      "max_abs": 2.314004751051771e-09,
+      "max_rel": 2.6515987564627823e-06,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 5.341351590304323e-05,
+      "reference_se_of_mean_y": 2.2669089169047924e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 1338,
+     "reference_positive": 0,
+     "gpu_only_positive": 1338,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.03329518577083945,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.03329518577083945
+    },
+    "total": {
+     "gpu_positive": 10039,
+     "reference_positive": 9546,
+     "gpu_only_positive": 493,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5431806648284692,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.007522697793319821
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B3-light-motion-hwrt",
+    "backend": "hwrt",
+    "scenario": "light-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "7b48345b67311652fcba9f7083a21fa07eb316d6ded75a1807f75070516333ec"
+   }
+  },
+  {
+   "cell": "B3",
+   "transport": "T_B2",
+   "reference_classification": "DIRECT_DETERMINISTIC_PROVED",
+   "capture_state_sha256": {
+    "frame": "8f426ee617c07f9c5c026db3725ea21b07dd28059af14bc36616f7e16c15afcd",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 9546,
+     "reference_positive": 9546,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5098854791822305,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 9546,
+      "rmse": 1.189244556620159e-10,
+      "mean_signed_bias": 5.9052775841618e-12,
+      "relative_bias_of_sum": 1.1055773959755843e-07,
+      "p99_abs": 5.682649129089364e-10,
+      "max_abs": 2.314004751051771e-09,
+      "max_rel": 2.6515987564627823e-06,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 5.341351590304323e-05,
+      "reference_se_of_mean_y": 2.2669089169047924e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 1338,
+     "reference_positive": 0,
+     "gpu_only_positive": 1338,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.03329518577083945,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.03329518577083945
+    },
+    "total": {
+     "gpu_positive": 10039,
+     "reference_positive": 9546,
+     "gpu_only_positive": 493,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5431806648284692,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.007522697793319821
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B3-light-motion-software",
+    "backend": "software",
+    "scenario": "light-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "7b48345b67311652fcba9f7083a21fa07eb316d6ded75a1807f75070516333ec"
+   }
+  },
+  {
+   "cell": "B3",
+   "transport": "T_B8",
+   "reference_classification": "DIRECT_DETERMINISTIC_PROVED",
+   "capture_state_sha256": {
+    "frame": "8f426ee617c07f9c5c026db3725ea21b07dd28059af14bc36616f7e16c15afcd",
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12770,
+    "gpu_hits": 12770,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 6.073773665566379e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 9546,
+     "reference_positive": 9546,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5098854791822305,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 9546,
+      "rmse": 1.189244556620159e-10,
+      "mean_signed_bias": 5.9052775841618e-12,
+      "relative_bias_of_sum": 1.1055773959755843e-07,
+      "p99_abs": 5.682649129089364e-10,
+      "max_abs": 2.314004751051771e-09,
+      "max_rel": 2.6515987564627823e-06,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 5.341351590304323e-05,
+      "reference_se_of_mean_y": 2.2669089169047924e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 1338,
+     "reference_positive": 0,
+     "gpu_only_positive": 1338,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.03329518577083945,
+     "reference_sum": 0.0,
+     "gpu_sum_on_reference_zero": 0.03329518577083945
+    },
+    "total": {
+     "gpu_positive": 10039,
+     "reference_positive": 9546,
+     "gpu_only_positive": 493,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.5431806648284692,
+     "reference_sum": 0.5098854228104507,
+     "gpu_sum_on_reference_zero": 0.007522697793319821
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B3-light-motion-software",
+    "backend": "software",
+    "scenario": "light-motion",
+    "frame_id": 2,
+    "total_pfm_sha256": "7b48345b67311652fcba9f7083a21fa07eb316d6ded75a1807f75070516333ec"
+   }
+  },
+  {
+   "cell": "B5",
+   "transport": "T_B2",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "937836c47638066d1107aecf3e634644910437badf666242e32f32c425745364"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12772,
+    "gpu_hits": 12772,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.897264774373036e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6605,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6469,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.3777676052195602,
+     "reference_sum": 0.0006643435984615982,
+     "gpu_sum_on_reference_zero": 0.37000076295953477
+    },
+    "total": {
+     "gpu_positive": 6605,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6469,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.3805317495352938,
+     "reference_sum": 0.0034284887717676007,
+     "gpu_sum_on_reference_zero": 0.37000076295953477
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B5-deforming-hwrt",
+    "backend": "hwrt",
+    "scenario": "deforming-control",
+    "frame_id": 2,
+    "total_pfm_sha256": "79de995078c605c8c5c6aef44c8565edf3f808e32934fd43646753bdba815861"
+   }
+  },
+  {
+   "cell": "B5",
+   "transport": "T_B8",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "937836c47638066d1107aecf3e634644910437badf666242e32f32c425745364"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12772,
+    "gpu_hits": 12772,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.897264774373036e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6605,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6419,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.3777676052195602,
+     "reference_sum": 0.001012686216511686,
+     "gpu_sum_on_reference_zero": 0.36777294568673824
+    },
+    "total": {
+     "gpu_positive": 6605,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6419,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.3805317495352938,
+     "reference_sum": 0.003776831389817686,
+     "gpu_sum_on_reference_zero": 0.36777294568673824
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B5-deforming-hwrt",
+    "backend": "hwrt",
+    "scenario": "deforming-control",
+    "frame_id": 2,
+    "total_pfm_sha256": "79de995078c605c8c5c6aef44c8565edf3f808e32934fd43646753bdba815861"
+   }
+  },
+  {
+   "cell": "B5",
+   "transport": "T_B2",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "937836c47638066d1107aecf3e634644910437badf666242e32f32c425745364"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12772,
+    "gpu_hits": 12772,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.897264774373036e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6605,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6469,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.3777676052195602,
+     "reference_sum": 0.0006643435984615982,
+     "gpu_sum_on_reference_zero": 0.37000076295953477
+    },
+    "total": {
+     "gpu_positive": 6605,
+     "reference_positive": 1034,
+     "gpu_only_positive": 6469,
+     "reference_only_positive": 898,
+     "gpu_sum": 0.3805317495352938,
+     "reference_sum": 0.0034284887717676007,
+     "gpu_sum_on_reference_zero": 0.37000076295953477
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B5-deforming-software",
+    "backend": "software",
+    "scenario": "deforming-control",
+    "frame_id": 2,
+    "total_pfm_sha256": "79de995078c605c8c5c6aef44c8565edf3f808e32934fd43646753bdba815861"
+   }
+  },
+  {
+   "cell": "B5",
+   "transport": "T_B8",
+   "reference_classification": "INELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4",
+    "geometry": "937836c47638066d1107aecf3e634644910437badf666242e32f32c425745364"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 12772,
+    "gpu_hits": 12772,
+    "mask_mismatch": 0,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 5.897264774373036e-07,
+    "oracle_backface_single_sided": 0
+   },
+   "scoring_mask": {
+    "matched_pixels": 57600,
+    "excluded_back_face_single_sided": 0,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 27,
+     "reference_positive": 27,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 0,
+     "gpu_sum": 0.0027641443521133624,
+     "reference_sum": 0.002764145173306012,
+     "gpu_sum_on_reference_zero": 0.0
+    },
+    "indirect": {
+     "gpu_positive": 6605,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6419,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.3777676052195602,
+     "reference_sum": 0.001012686216511686,
+     "gpu_sum_on_reference_zero": 0.36777294568673824
+    },
+    "total": {
+     "gpu_positive": 6605,
+     "reference_positive": 1103,
+     "gpu_only_positive": 6419,
+     "reference_only_positive": 917,
+     "gpu_sum": 0.3805317495352938,
+     "reference_sum": 0.003776831389817686,
+     "gpu_sum_on_reference_zero": 0.36777294568673824
+    }
+   },
+   "verdict": "NOT_SCORED_REFERENCE_INELIGIBLE",
+   "capture": {
+    "name": "B5-deforming-software",
+    "backend": "software",
+    "scenario": "deforming-control",
+    "frame_id": 2,
+    "total_pfm_sha256": "79de995078c605c8c5c6aef44c8565edf3f808e32934fd43646753bdba815861"
+   }
+  },
+  {
+   "cell": "B7",
+   "transport": "T_B2",
+   "reference_classification": "STATISTICALLY_ELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949",
+    "geometry": "945b99545ca9f24c5261f1eccec6eb68ce697169bfb052ffbfba87dca02a2c5b"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 7316,
+    "gpu_hits": 2338,
+    "mask_mismatch": 4978,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 1.899065358998051e-06,
+    "oracle_backface_single_sided": 4978
+   },
+   "scoring_mask": {
+    "matched_pixels": 52622,
+    "excluded_back_face_single_sided": 4978,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 2160,
+     "reference_positive": 6943,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 4783,
+     "gpu_sum": 0.10737086759490921,
+     "reference_sum": 0.4196669137400951,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2160,
+      "rmse": 8.468767871881404e-11,
+      "mean_signed_bias": 2.471473569886615e-11,
+      "relative_bias_of_sum": 4.971912480441461e-07,
+      "p99_abs": 1.217355242084689e-10,
+      "max_abs": 1.7399942027300757e-09,
+      "max_rel": 1.0848809147454133e-05,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 4.970871028290745e-05,
+      "reference_se_of_mean_y": 1.7209432218251878e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 125,
+     "reference_positive": 7148,
+     "gpu_only_positive": 11,
+     "reference_only_positive": 7034,
+     "gpu_sum": 0.003128099488094449,
+     "reference_sum": 0.07241835758720513,
+     "gpu_sum_on_reference_zero": 0.0006408789195120335,
+     "scored_on_reference_active": {
+      "pixels": 2307,
+      "rmse": 2.2897921052260683e-05,
+      "mean_signed_bias": -2.0647830488599275e-05,
+      "relative_bias_of_sum": -0.9503764373923431,
+      "p99_abs": 3.766898481423009e-05,
+      "max_abs": 4.772059350318776e-05,
+      "max_rel": 95.24852827528132,
+      "gpu_zero_on_reference_positive": 2193,
+      "reference_mean": 2.172594950402295e-05,
+      "reference_se_of_mean_y": 2.778109765332898e-09
+     }
+    },
+    "total": {
+     "gpu_positive": 2167,
+     "reference_positive": 7252,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 5085,
+     "gpu_sum": 0.11049896713393537,
+     "reference_sum": 0.4920852713273005,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2337,
+      "rmse": 2.315844639271753e-05,
+      "mean_signed_bias": -2.0108520574636686e-05,
+      "relative_bias_of_sum": -0.29838620122554743,
+      "p99_abs": 3.816937795782651e-05,
+      "max_abs": 0.00010681307915116149,
+      "max_rel": 9.654410113039551,
+      "gpu_zero_on_reference_positive": 170,
+      "reference_mean": 6.739091986172927e-05,
+      "reference_se_of_mean_y": 2.7424472522991437e-09
+     }
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B7-leak-medium-hwrt",
+    "backend": "hwrt",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "45d0c2040d58445e7532ec2b1aeca0f33c165a5854bf2b49cb893192eecd3197"
+   }
+  },
+  {
+   "cell": "B7",
+   "transport": "T_B8",
+   "reference_classification": "STATISTICALLY_ELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949",
+    "geometry": "945b99545ca9f24c5261f1eccec6eb68ce697169bfb052ffbfba87dca02a2c5b"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 7316,
+    "gpu_hits": 2338,
+    "mask_mismatch": 4978,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 1.899065358998051e-06,
+    "oracle_backface_single_sided": 4978
+   },
+   "scoring_mask": {
+    "matched_pixels": 52622,
+    "excluded_back_face_single_sided": 4978,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 2160,
+     "reference_positive": 6943,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 4783,
+     "gpu_sum": 0.10737086759490921,
+     "reference_sum": 0.4196669137400951,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2160,
+      "rmse": 8.468767871881404e-11,
+      "mean_signed_bias": 2.471473569886615e-11,
+      "relative_bias_of_sum": 4.971912480441461e-07,
+      "p99_abs": 1.217355242084689e-10,
+      "max_abs": 1.7399942027300757e-09,
+      "max_rel": 1.0848809147454133e-05,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 4.970871028290745e-05,
+      "reference_se_of_mean_y": 1.7209432218251878e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 125,
+     "reference_positive": 7310,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 7185,
+     "gpu_sum": 0.003128099488094449,
+     "reference_sum": 0.10450639702830772,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2332,
+      "rmse": 3.0439219318438242e-05,
+      "mean_signed_bias": -2.657134279538119e-05,
+      "relative_bias_of_sum": -0.9519437586947884,
+      "p99_abs": 5.606538205748887e-05,
+      "max_abs": 0.00010609159865313923,
+      "max_rel": 306.2901441798905,
+      "gpu_zero_on_reference_positive": 2207,
+      "reference_mean": 2.7912723364889956e-05,
+      "reference_se_of_mean_y": 4.0135336041405524e-09
+     }
+    },
+    "total": {
+     "gpu_positive": 2167,
+     "reference_positive": 7316,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 5149,
+     "gpu_sum": 0.11049896713393537,
+     "reference_sum": 0.5241733107684035,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2338,
+      "rmse": 3.0400111968225392e-05,
+      "mean_signed_bias": -2.65031300102945e-05,
+      "relative_bias_of_sum": -0.3592899087411951,
+      "p99_abs": 5.605834772209669e-05,
+      "max_abs": 0.00010609152455229506,
+      "max_rel": 9.171581211568489,
+      "gpu_zero_on_reference_positive": 171,
+      "reference_mean": 7.37653058588554e-05,
+      "reference_se_of_mean_y": 4.003233688988783e-09
+     }
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B7-leak-medium-hwrt",
+    "backend": "hwrt",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "45d0c2040d58445e7532ec2b1aeca0f33c165a5854bf2b49cb893192eecd3197"
+   }
+  },
+  {
+   "cell": "B7",
+   "transport": "T_B2",
+   "reference_classification": "STATISTICALLY_ELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949",
+    "geometry": "945b99545ca9f24c5261f1eccec6eb68ce697169bfb052ffbfba87dca02a2c5b"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 7316,
+    "gpu_hits": 2338,
+    "mask_mismatch": 4978,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 1.899065358998051e-06,
+    "oracle_backface_single_sided": 4978
+   },
+   "scoring_mask": {
+    "matched_pixels": 52622,
+    "excluded_back_face_single_sided": 4978,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 2160,
+     "reference_positive": 6943,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 4783,
+     "gpu_sum": 0.10737086759490921,
+     "reference_sum": 0.4196669137400951,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2160,
+      "rmse": 8.468767871881404e-11,
+      "mean_signed_bias": 2.471473569886615e-11,
+      "relative_bias_of_sum": 4.971912480441461e-07,
+      "p99_abs": 1.217355242084689e-10,
+      "max_abs": 1.7399942027300757e-09,
+      "max_rel": 1.0848809147454133e-05,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 4.970871028290745e-05,
+      "reference_se_of_mean_y": 1.7209432218251878e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 125,
+     "reference_positive": 7148,
+     "gpu_only_positive": 11,
+     "reference_only_positive": 7034,
+     "gpu_sum": 0.003128099488094449,
+     "reference_sum": 0.07241835758720513,
+     "gpu_sum_on_reference_zero": 0.0006408789195120335,
+     "scored_on_reference_active": {
+      "pixels": 2307,
+      "rmse": 2.2897921052260683e-05,
+      "mean_signed_bias": -2.0647830488599275e-05,
+      "relative_bias_of_sum": -0.9503764373923431,
+      "p99_abs": 3.766898481423009e-05,
+      "max_abs": 4.772059350318776e-05,
+      "max_rel": 95.24852827528132,
+      "gpu_zero_on_reference_positive": 2193,
+      "reference_mean": 2.172594950402295e-05,
+      "reference_se_of_mean_y": 2.778109765332898e-09
+     }
+    },
+    "total": {
+     "gpu_positive": 2167,
+     "reference_positive": 7252,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 5085,
+     "gpu_sum": 0.11049896713393537,
+     "reference_sum": 0.4920852713273005,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2337,
+      "rmse": 2.315844639271753e-05,
+      "mean_signed_bias": -2.0108520574636686e-05,
+      "relative_bias_of_sum": -0.29838620122554743,
+      "p99_abs": 3.816937795782651e-05,
+      "max_abs": 0.00010681307915116149,
+      "max_rel": 9.654410113039551,
+      "gpu_zero_on_reference_positive": 170,
+      "reference_mean": 6.739091986172927e-05,
+      "reference_se_of_mean_y": 2.7424472522991437e-09
+     }
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B7-leak-medium-software",
+    "backend": "software",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "45d0c2040d58445e7532ec2b1aeca0f33c165a5854bf2b49cb893192eecd3197"
+   }
+  },
+  {
+   "cell": "B7",
+   "transport": "T_B8",
+   "reference_classification": "STATISTICALLY_ELIGIBLE",
+   "capture_state_sha256": {
+    "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949",
+    "geometry": "945b99545ca9f24c5261f1eccec6eb68ce697169bfb052ffbfba87dca02a2c5b"
+   },
+   "state_bytes_match_reference": true,
+   "primary": {
+    "oracle_hits": 7316,
+    "gpu_hits": 2338,
+    "mask_mismatch": 4978,
+    "primitive_mismatch_on_common": 0,
+    "max_rel_t_diff_on_common_same_primitive": 1.899065358998051e-06,
+    "oracle_backface_single_sided": 4978
+   },
+   "scoring_mask": {
+    "matched_pixels": 52622,
+    "excluded_back_face_single_sided": 4978,
+    "excluded_primary_mismatch": 0
+   },
+   "components_luma": {
+    "direct": {
+     "gpu_positive": 2160,
+     "reference_positive": 6943,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 4783,
+     "gpu_sum": 0.10737086759490921,
+     "reference_sum": 0.4196669137400951,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2160,
+      "rmse": 8.468767871881404e-11,
+      "mean_signed_bias": 2.471473569886615e-11,
+      "relative_bias_of_sum": 4.971912480441461e-07,
+      "p99_abs": 1.217355242084689e-10,
+      "max_abs": 1.7399942027300757e-09,
+      "max_rel": 1.0848809147454133e-05,
+      "gpu_zero_on_reference_positive": 0,
+      "reference_mean": 4.970871028290745e-05,
+      "reference_se_of_mean_y": 1.7209432218251878e-15
+     }
+    },
+    "indirect": {
+     "gpu_positive": 125,
+     "reference_positive": 7310,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 7185,
+     "gpu_sum": 0.003128099488094449,
+     "reference_sum": 0.10450639702830772,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2332,
+      "rmse": 3.0439219318438242e-05,
+      "mean_signed_bias": -2.657134279538119e-05,
+      "relative_bias_of_sum": -0.9519437586947884,
+      "p99_abs": 5.606538205748887e-05,
+      "max_abs": 0.00010609159865313923,
+      "max_rel": 306.2901441798905,
+      "gpu_zero_on_reference_positive": 2207,
+      "reference_mean": 2.7912723364889956e-05,
+      "reference_se_of_mean_y": 4.0135336041405524e-09
+     }
+    },
+    "total": {
+     "gpu_positive": 2167,
+     "reference_positive": 7316,
+     "gpu_only_positive": 0,
+     "reference_only_positive": 5149,
+     "gpu_sum": 0.11049896713393537,
+     "reference_sum": 0.5241733107684035,
+     "gpu_sum_on_reference_zero": 0.0,
+     "scored_on_reference_active": {
+      "pixels": 2338,
+      "rmse": 3.0400111968225392e-05,
+      "mean_signed_bias": -2.65031300102945e-05,
+      "relative_bias_of_sum": -0.3592899087411951,
+      "p99_abs": 5.605834772209669e-05,
+      "max_abs": 0.00010609152455229506,
+      "max_rel": 9.171581211568489,
+      "gpu_zero_on_reference_positive": 171,
+      "reference_mean": 7.37653058588554e-05,
+      "reference_se_of_mean_y": 4.003233688988783e-09
+     }
+    }
+   },
+   "verdict": "DIAGNOSTIC_COMPARISON_ON_ELIGIBLE_COMPONENTS",
+   "capture": {
+    "name": "B7-leak-medium-software",
+    "backend": "software",
+    "scenario": "static",
+    "frame_id": 2,
+    "total_pfm_sha256": "45d0c2040d58445e7532ec2b1aeca0f33c165a5854bf2b49cb893192eecd3197"
+   }
+  }
+ ]
+}

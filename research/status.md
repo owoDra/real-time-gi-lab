@@ -49,6 +49,14 @@ N007 P0 CPU source audit and synthetic PFM diagnostics are in progress on `resea
 - **Likely cause of the dark Sponza states (a state fact):** the loaders ignore glTF node transforms, and the A001 light and eye lie outside the geometry bounds.
 - **Phase C diagnostic, CPU-only, on the existing N007 GPU capture of the identical state:** primary hits match exactly, and **all 9,247 positive GPU indirect pixels have zero physical support**. This is not scored, and N006/N007 are unchanged. [Result 006](lanes/n008-hdr-oracle/results/006-phase-b-exit-decision.md), [result 008](lanes/n008-hdr-oracle/results/008-phase-c-b4-gpu-diagnostic.md).
 
+**N008 final (2026-10-13): oracle GO; cross-class Renderer reference set is a bounded NO GO.** [Result 011](lanes/n008-hdr-oracle/results/011-n008-final-decision.md)
+- **State attestation:** GPU captures (RADV 8060S, software and hwrt) byte-attest the B1–B5 and B7 states.
+- **Direct and shadow:** on matched visibility, the Renderer's direct/shadow term agrees with the validated oracle to float32 (B7, B3).
+- **Indirect, which errs in both directions:**
+  - it leaks light with no physical support in the Sponza target states (B1/B2/B4/B5);
+  - it misses about 95% of the real one-bounce light on the only eligible total reference (non-Sponza `leak-medium`: total −30% for D2, −36% for D8).
+- **Scope:** diagnostic only, with no ranking and no N006/N007 revision. Next: a separately preregistered scene-contract study (glTF node transforms and an interior light).
+
 ## Unresolved strategic questions
 
 1. **Can independent HDR image quality be evaluated credibly across real dynamic scenes?** N007 first, before claiming quality gain or optimizing new adaptive rules.

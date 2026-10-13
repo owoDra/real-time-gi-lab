@@ -17,7 +17,7 @@ The allocation of work varied between experiments; the table describes the progr
 
 ### Later studies with Claude Code
 
-From N008 ([Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5), 2026-10-13) work was also carried out with **Claude Code (Anthropic)** under the same human direction. N008 Phase A (oracle source, analytic controls, Mitsuba cross-check and records) was implemented and executed by the assistant entirely on CPU in its sandbox; no GPU measurement was performed or claimed by the assistant. GPU steps, when needed, are run by the human operator and recorded as such.
+From N008 ([Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5), 2026-10-13) work was also carried out with **Claude Code (Anthropic)** under the same human direction. N008 Phase A (oracle source, analytic controls, Mitsuba cross-check and records) was implemented and executed by the assistant entirely on CPU in its sandbox; Phase A/B were CPU-only. N008 Phase C GPU captures were executed by the assistant on the project workstation after explicit user authorization, and are recorded as such.
 
 ## How the loop worked
 
