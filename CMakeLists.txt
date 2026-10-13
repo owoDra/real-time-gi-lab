@@ -138,3 +138,10 @@ option(PHOS_BUILD_N008 "Build isolated N008 CPU HDR reference oracle" OFF)
 if(PHOS_BUILD_N008)
   add_subdirectory(src/research/n008_hdr_oracle)
 endif()
+
+# N009 scene contract C1 + back-face rule BF-P is explicitly opt-in; the default
+# build graph remains unchanged.
+option(PHOS_BUILD_N009 "Build isolated N009 scene-contract exporter and capture" OFF)
+if(PHOS_BUILD_N009)
+  add_subdirectory(src/research/n009_scene_contract)
+endif()

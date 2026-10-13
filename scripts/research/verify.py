@@ -36,6 +36,11 @@ LANES = {
         "shader": "shaders/research/n008_hdr_oracle/README.md",
         "script": "scripts/research/n008_hdr_oracle/README.md",
     },
+    "n009-scene-contract": {
+        "src": "src/research/n009_scene_contract/CMakeLists.txt",
+        "shader": "shaders/research/n009_scene_contract/README.md",
+        "script": "scripts/research/n009_scene_contract/README.md",
+    },
 }
 
 
