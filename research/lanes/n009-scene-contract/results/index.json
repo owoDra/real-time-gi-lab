@@ -20,6 +20,27 @@
    "status": "interim",
    "result": "006-interim-status-and-resume.md",
    "gpu_run": true
+  },
+  {
+   "id": "N009-LADDER-003",
+   "status": "complete",
+   "result": "003-ladder.json",
+   "classification": "all C1,C2,C4,C5,C6 DIRECT_DETERMINISTIC_PROVED (T_B2,T_B8); total screen fail at 8192 cap",
+   "gpu_run": false
+  },
+  {
+   "id": "N009-GPU-007",
+   "status": "complete",
+   "result": "007-gpu-compare.json",
+   "classification": "BF1-BF3 pass; diagnostic only",
+   "gpu_run": true
+  },
+  {
+   "id": "N009-PT-008",
+   "status": "complete",
+   "result": "008-probe-attribution.json",
+   "classification": "INCOMPLETE per gates (C7 V1, B4 V3); post-hoc sensitivity disclosed",
+   "gpu_run": false
   }
  ]
 }
