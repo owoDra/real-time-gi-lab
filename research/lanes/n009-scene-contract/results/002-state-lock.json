@@ -1,0 +1,207 @@
+{
+ "schema": "n009-state-lock/1",
+ "contract_file": "research/lanes/n009-scene-contract/contract/sponza-c1.n009contract",
+ "contract_sha256": "4aded5a53a1c6ce0d8c467f2cacf095e7a87c9b9b62aa21b72977756933b1880",
+ "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+ "exporter_sha256": "7b45aef3c9895e5556fd679970092b580849a3655c3e84ea92b0c94bff4e44fe",
+ "cells": {
+  "C1": {
+   "regime": "static",
+   "frame_sha256": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+   "geometry_sha256": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+   "exporter": {
+    "regime": "static",
+    "triangles": 262241,
+    "moving_instance": 0,
+    "moving_primitives": 0,
+    "delta_x": 0,
+    "membership_changes": 0,
+    "extracted_sources": [
+     [
+      "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp",
+      "75492142f273b546115f0b9c0632cdf0a6bcef11155c5f4be101adaabe378850"
+     ],
+     [
+      "src/research/lane_n_end_to_end_renderer/n002_runtime.cpp",
+      "f5cb699b49aeeb12a859f9f06c257293bd2a0b58ad0361ec6d5a35cae27e3ced"
+     ],
+     [
+      "generated/n009_a001_runtime.cpp",
+      "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac"
+     ]
+    ],
+    "authored_camera": true,
+    "bf_p_two_sided_all": true,
+    "light": [
+     -60.5199585,
+     651.493958,
+     -38.6898804
+    ],
+    "eye": [
+     -705.01001,
+     195.20282,
+     -119.932266
+    ]
+   }
+  },
+  "C2": {
+   "regime": "camera-motion",
+   "frame_sha256": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042",
+   "geometry_sha256": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+   "exporter": {
+    "regime": "camera-motion",
+    "triangles": 262241,
+    "moving_instance": 0,
+    "moving_primitives": 0,
+    "delta_x": 0,
+    "membership_changes": 0,
+    "extracted_sources": [
+     [
+      "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp",
+      "75492142f273b546115f0b9c0632cdf0a6bcef11155c5f4be101adaabe378850"
+     ],
+     [
+      "src/research/lane_n_end_to_end_renderer/n002_runtime.cpp",
+      "f5cb699b49aeeb12a859f9f06c257293bd2a0b58ad0361ec6d5a35cae27e3ced"
+     ],
+     [
+      "generated/n009_a001_runtime.cpp",
+      "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac"
+     ]
+    ],
+    "authored_camera": true,
+    "bf_p_two_sided_all": true,
+    "light": [
+     -60.5199585,
+     651.493958,
+     -38.6898804
+    ],
+    "eye": [
+     -723.797668,
+     195.202728,
+     -29.1156693
+    ]
+   }
+  },
+  "C4": {
+   "regime": "moving-rigid",
+   "frame_sha256": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+   "geometry_sha256": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+   "exporter": {
+    "regime": "moving-rigid",
+    "triangles": 262241,
+    "moving_instance": 5,
+    "moving_primitives": 796,
+    "delta_x": 362.263977,
+    "membership_changes": 796,
+    "extracted_sources": [
+     [
+      "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp",
+      "75492142f273b546115f0b9c0632cdf0a6bcef11155c5f4be101adaabe378850"
+     ],
+     [
+      "src/research/lane_n_end_to_end_renderer/n002_runtime.cpp",
+      "f5cb699b49aeeb12a859f9f06c257293bd2a0b58ad0361ec6d5a35cae27e3ced"
+     ],
+     [
+      "generated/n009_a001_runtime.cpp",
+      "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac"
+     ]
+    ],
+    "authored_camera": true,
+    "bf_p_two_sided_all": true,
+    "light": [
+     -60.5199585,
+     651.493958,
+     -38.6898804
+    ],
+    "eye": [
+     -705.01001,
+     195.20282,
+     -119.932266
+    ]
+   }
+  },
+  "C5": {
+   "regime": "deforming",
+   "frame_sha256": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+   "geometry_sha256": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+   "exporter": {
+    "regime": "deforming",
+    "triangles": 262241,
+    "moving_instance": 5,
+    "moving_primitives": 796,
+    "delta_x": 23.1848946,
+    "membership_changes": 121,
+    "extracted_sources": [
+     [
+      "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp",
+      "75492142f273b546115f0b9c0632cdf0a6bcef11155c5f4be101adaabe378850"
+     ],
+     [
+      "src/research/lane_n_end_to_end_renderer/n002_runtime.cpp",
+      "f5cb699b49aeeb12a859f9f06c257293bd2a0b58ad0361ec6d5a35cae27e3ced"
+     ],
+     [
+      "generated/n009_a001_runtime.cpp",
+      "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac"
+     ]
+    ],
+    "authored_camera": true,
+    "bf_p_two_sided_all": true,
+    "light": [
+     -60.5199585,
+     651.493958,
+     -38.6898804
+    ],
+    "eye": [
+     -705.01001,
+     195.20282,
+     -119.932266
+    ]
+   }
+  },
+  "C6": {
+   "regime": "topology-churn",
+   "frame_sha256": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+   "geometry_sha256": "38d51b4c2a3d1a1fed34ce2ad1ee0b22d8ddd5b9b5be02101ad16bbbe2193826",
+   "exporter": {
+    "regime": "topology-churn",
+    "triangles": 262241,
+    "moving_instance": 5,
+    "moving_primitives": 796,
+    "delta_x": 23.1848946,
+    "membership_changes": 121,
+    "extracted_sources": [
+     [
+      "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp",
+      "75492142f273b546115f0b9c0632cdf0a6bcef11155c5f4be101adaabe378850"
+     ],
+     [
+      "src/research/lane_n_end_to_end_renderer/n002_runtime.cpp",
+      "f5cb699b49aeeb12a859f9f06c257293bd2a0b58ad0361ec6d5a35cae27e3ced"
+     ],
+     [
+      "generated/n009_a001_runtime.cpp",
+      "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac"
+     ]
+    ],
+    "authored_camera": true,
+    "bf_p_two_sided_all": true,
+    "light": [
+     -60.5199585,
+     651.493958,
+     -38.6898804
+    ],
+    "eye": [
+     -705.01001,
+     195.20282,
+     -119.932266
+    ]
+   }
+  }
+ },
+ "not_constructible": {
+  "C3": "NOT_CONSTRUCTIBLE (Amendment 1)"
+ }
+}

@@ -46,10 +46,12 @@ def install(lock: dict) -> None:
     B.EXPECTED = {c: (v["frame_sha256"], v["geometry_sha256"]) for c, v in lock["cells"].items()}
 
 
-def do_lock(contract: Path, record: Path) -> None:
+def do_lock(contract: Path, record: Path, skip: dict) -> None:
     env = dict(os.environ, PHOS_N009_CONTRACT=str(contract))
     cells = {}
     for cid, (regime, scene) in CELLS.items():
+        if cid in skip:
+            continue
         out = STATES / regime
         proc = subprocess.run([str(EXPORTER), "--scene", str(L.ROOT / scene), "--out", str(out), "--regime", regime],
                               check=True, capture_output=True, text=True, env=env)
@@ -61,7 +63,7 @@ def do_lock(contract: Path, record: Path) -> None:
                       "exporter": info}
     record.write_text(json.dumps({"schema": "n009-state-lock/1", "contract_file": str(contract.relative_to(L.ROOT)),
                                   "contract_sha256": sha(contract), "scene_sha256": sha(L.ROOT / SPONZA),
-                                  "exporter_sha256": sha(EXPORTER), "cells": cells}, indent=1) + "\n")
+                                  "exporter_sha256": sha(EXPORTER), "cells": cells, "not_constructible": skip}, indent=1) + "\n")
 
 
 def main():
@@ -69,18 +71,21 @@ def main():
     ap.add_argument("command", choices=("lock", "render", "analyze"))
     ap.add_argument("--contract", type=Path)
     ap.add_argument("--lock", type=Path, required=True, help="state lock record (written by lock)")
-    ap.add_argument("--cells", nargs="*", default=list(CELLS))
+    ap.add_argument("--cells", nargs="*", default=None, help="default: every locked cell")
+    ap.add_argument("--skip", nargs="*", default=[], help="lock: cells NOT_CONSTRUCTIBLE under the selection (Amendment 1)")
     ap.add_argument("--transports", nargs="*", default=list(B.TRANSPORTS))
     ap.add_argument("--out", type=Path, default=OUT / "ladder")
     ap.add_argument("--commit")
     ap.add_argument("--summary", type=Path)
     a = ap.parse_args()
     if a.command == "lock":
-        do_lock(a.contract.resolve(), a.lock)
+        do_lock(a.contract.resolve(), a.lock, {c: "NOT_CONSTRUCTIBLE (Amendment 1)" for c in a.skip})
         print(a.lock.read_text())
         return 0
     lock = json.loads(a.lock.read_text())
     install(lock)
+    if a.cells is None:
+        a.cells = [c for c in CELLS if c in lock["cells"]]
     if a.command == "render":
         for t in a.transports:
             for c in a.cells:

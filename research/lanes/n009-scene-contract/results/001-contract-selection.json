@@ -1,0 +1,200 @@
+{
+ "schema": "n009-contract-selection/1",
+ "scene_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+ "authored_eye": [
+  -705.010009765625,
+  195.20281982421875,
+  -119.93226623535156
+ ],
+ "world_vertex_bounds": [
+  [
+   -1920.949951171875,
+   -126.4421157836914,
+   -1182.809814453125
+  ],
+  [
+   1799.9100341796875,
+   1429.4300537109375,
+   1105.4300537109375
+  ]
+ ],
+ "diag": 4636.979505308799,
+ "light_scale_s": 36.195098876953125,
+ "authored_eye_min_distance": 124.33565432863762,
+ "exporter": {
+  "regime": "static",
+  "triangles": 262241,
+  "moving_instance": 0,
+  "moving_primitives": 0,
+  "delta_x": 0,
+  "membership_changes": 0,
+  "extracted_sources": [
+   [
+    "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp",
+    "75492142f273b546115f0b9c0632cdf0a6bcef11155c5f4be101adaabe378850"
+   ],
+   [
+    "src/research/lane_n_end_to_end_renderer/n002_runtime.cpp",
+    "f5cb699b49aeeb12a859f9f06c257293bd2a0b58ad0361ec6d5a35cae27e3ced"
+   ],
+   [
+    "generated/n009_a001_runtime.cpp",
+    "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac"
+   ]
+  ],
+  "authored_camera": true,
+  "bf_p_two_sided_all": true,
+  "light": [
+   -705.01001,
+   195.20282,
+   -119.932266
+  ],
+  "eye": [
+   -705.01001,
+   195.20282,
+   -119.932266
+  ]
+ },
+ "lights": [
+  {
+   "name": "L1",
+   "position": [
+    -60.51995849609375,
+    651.4939575195312,
+    -38.68988037109375
+   ],
+   "min_distance": 213.6267279361999,
+   "free_space": true,
+   "direct": {
+    "positive": 39006,
+    "fraction": 0.6771875,
+    "peak_y": 0.006300146521673676,
+    "passes": true
+   }
+  },
+  {
+   "name": "L2",
+   "position": [
+    -60.51995849609375,
+    418.1131286621094,
+    -38.68988037109375
+   ],
+   "min_distance": 202.77505372147408,
+   "free_space": true,
+   "direct": {
+    "positive": 41607,
+    "fraction": 0.72234375,
+    "peak_y": 0.00982736415004555,
+    "passes": true
+   }
+  },
+  {
+   "name": "L3",
+   "position": [
+    869.695068359375,
+    651.4939575195312,
+    -38.68988037109375
+   ],
+   "min_distance": 0.11777704439030748,
+   "free_space": false
+  },
+  {
+   "name": "L4",
+   "position": [
+    -990.7349853515625,
+    651.4939575195312,
+    -38.68988037109375
+   ],
+   "min_distance": 9.446542730170394,
+   "free_space": false
+  },
+  {
+   "name": "L5",
+   "position": [
+    -60.51995849609375,
+    884.8748168945312,
+    -38.68988037109375
+   ],
+   "min_distance": 185.45992576281836,
+   "free_space": true,
+   "direct": {
+    "positive": 36176,
+    "fraction": 0.6280555555555556,
+    "peak_y": 0.0020767631982224455,
+    "passes": true
+   }
+  },
+  {
+   "name": "L6",
+   "position": [
+    869.695068359375,
+    418.1131286621094,
+    -38.68988037109375
+   ],
+   "min_distance": 0.34405517578125,
+   "free_space": false
+  },
+  {
+   "name": "L7",
+   "position": [
+    -990.7349853515625,
+    418.1131286621094,
+    -38.68988037109375
+   ],
+   "min_distance": 7.78302001953125,
+   "free_space": false
+  }
+ ],
+ "camera_offsets": [
+  {
+   "name": "+right",
+   "offset": [
+    -18.787683486938477,
+    -9.258899081032723e-05,
+    90.81659698486328
+   ],
+   "min_distance": 190.33595496619276,
+   "free_space": true
+  },
+  {
+   "name": "-right",
+   "offset": [
+    18.787683486938477,
+    9.258899081032723e-05,
+    -90.81659698486328
+   ],
+   "min_distance": 42.362238418273456,
+   "free_space": false
+  },
+  {
+   "name": "+forward",
+   "offset": [
+    90.8064193725586,
+    -1.3888908624649048,
+    18.785572052001953
+   ],
+   "min_distance": 112.26283720402449,
+   "free_space": true
+  },
+  {
+   "name": "-forward",
+   "offset": [
+    -90.8064193725586,
+    1.3888908624649048,
+    -18.785572052001953
+   ],
+   "min_distance": 129.40722239274356,
+   "free_space": true
+  }
+ ],
+ "selected": {
+  "light_base": "L1",
+  "light_motion": null,
+  "camera_motion_offset": [
+   -18.787683486938477,
+   -9.258899081032723e-05,
+   90.81659698486328
+  ]
+ },
+ "outcome": "INCOMPLETE_CONTRACT"
+}

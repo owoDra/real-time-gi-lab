@@ -140,3 +140,24 @@ C7 is not re-rendered: its reference is the locked N008 B7 reference, valid unde
 - No adoption of C1 or BF-P as the default Renderer contract: that is a separate architecture decision.
 - No quality ranking, multi-GPU or temporal claim; no fix of the probe estimator (diagnosis only).
 - Textures, alpha masks and glossy BSDFs remain unvalidated.
+
+## Amendment 1 (2026-10-13, after the contract selection, before any reference image)
+
+**What happened:** the preregistered selection ([result 001](../results/001-contract-selection.json)) produced:
+- base light **L1** (−60.52, 651.49, −38.69): free space 213.6 ≥ 2s = 72.4; direct support 67.7% of pixels, peak Y 6.3e-3;
+- camera-motion offset **+right** (|offset| = 0.02·diag = 92.7; moved-eye clearance 190.3).
+
+It produced **no light-motion light**. Only L1, L2 and L5 pass both gates, and all three lie on the same vertical line. L2 and L5 are 233 from L1, below the preregistered 0.1·diag = 463.7. L3, L4, L6 and L7 fail free space (they lie within 0.1–9.4 units of geometry).
+
+**Consequence, applied without adding candidates or changing thresholds:**
+- **C3 (light motion) is NOT_CONSTRUCTIBLE** under the preregistered candidate set. It is not exported, rendered or captured.
+- Exit SC **cannot be "GO (cross-class)"**; the best attainable outcome is **Bounded GO**.
+- The contract file (`contract/sponza-c1.n009contract`) sets `light_motion` equal to `light_base`; this value is never used.
+- The remaining cells C1, C2, C4, C5 and C6 proceed under the selected contract.
+- `n009_ladder.py` gained a `--skip` option so the lock records C3 as NOT_CONSTRUCTIBLE. This is a tooling change only; no ladder or classifier code changed.
+
+**Lock:** [result 002](../results/002-state-lock.json).
+- C4/C5/C6 use the Renderer's own selection on the C1 geometry: instance 5 (`bricks`, 796 triangles).
+  - C4 moves it +362.26 along x (796 membership changes).
+  - C5 deforms it with A = 23.18.
+- A light-motion study under C1 would need a new, separately preregistered candidate set; it is not a rescue inside N009.
