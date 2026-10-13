@@ -1,0 +1,48 @@
+{
+ "schema": "n008-phase-a-sensitivity/1",
+ "post_hoc_diagnostic_not_gate": true,
+ "all_detected": true,
+ "cases": [
+  {
+   "id": "N1",
+   "defect": "N001-style secondary rays truncated at camera far (A10 geometry).",
+   "detected": true,
+   "failed_checks": [
+    "N1:indirect:statistical"
+   ]
+  },
+  {
+   "id": "N2",
+   "defect": "N001 soft falloff rendered, judged against inverse-square physics (A2).",
+   "detected": true,
+   "failed_checks": [
+    "N2:direct:exact"
+   ]
+  },
+  {
+   "id": "N3",
+   "defect": "Light position displaced by 1 mm (world-transform / units slip) on A2.",
+   "detected": true,
+   "failed_checks": [
+    "N3:direct:exact"
+   ]
+  },
+  {
+   "id": "N4",
+   "defect": "Floor albedo 0.5% low on A7 two-bounce (BSDF/reflectance scale error).",
+   "detected": true,
+   "failed_checks": [
+    "A7:direct:exact",
+    "A7:indirect:statistical"
+   ]
+  },
+  {
+   "id": "N5",
+   "defect": "X6 room: oracle walls one-sided (wrong orientation semantics) vs Mitsuba two-sided.",
+   "detected": true,
+   "failed_checks": [
+    "N5:crosscheck"
+   ]
+  }
+ ]
+}

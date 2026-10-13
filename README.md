@@ -2,7 +2,7 @@
 
 **Evidence-driven research toward a competitive real-time global illumination architecture.**
 
-> **AI-driven, human-supervised research.** Most of this repository's research and development was conducted through near-autonomous, iterative workflows using **ChatGPT** and **OpenAI Codex CLI**. AI assisted with designing experiments, implementing C++/GLSL/Python code, preparing tests, analyzing reported results, and maintaining research records. A human set the research objectives and constraints, operated the GPU environment, reviewed experimental evidence, and made decisions on what to accept, reject, or investigate next. **The AI did not independently verify every scientific claim**, and this is not a fully unattended research system. See [How this project was researched](docs/ai-research-workflow.md).
+> **AI-driven, human-supervised research.** Most of this repository's research and development was conducted through near-autonomous, iterative workflows using **ChatGPT** and **OpenAI Codex CLI** (later studies from N008 also used **Claude Code**). AI assisted with designing experiments, implementing C++/GLSL/Python code, preparing tests, analyzing reported results, and maintaining research records. A human set the research objectives and constraints, operated the GPU environment, reviewed experimental evidence, and made decisions on what to accept, reject, or investigate next. **The AI did not independently verify every scientific claim**, and this is not a fully unattended research system. See [How this project was researched](docs/ai-research-workflow.md).
 
 
 

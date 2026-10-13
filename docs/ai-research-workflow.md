@@ -15,6 +15,10 @@ This repository is a record of a real-time global illumination research program 
 
 The allocation of work varied between experiments; the table describes the program overall and does not assert that each historical code line or result was authored, verified, or executed by a particular model.
 
+### Later studies with Claude Code
+
+From N008 ([Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5), 2026-10-13) work was also carried out with **Claude Code (Anthropic)** under the same human direction. N008 Phase A (oracle source, analytic controls, Mitsuba cross-check and records) was implemented and executed by the assistant entirely on CPU in its sandbox; no GPU measurement was performed or claimed by the assistant. GPU steps, when needed, are run by the human operator and recorded as such.
+
 ## How the loop worked
 
 1. Define the question, comparable baseline, measurement boundary, quality/correctness constraints, and stopping conditions.

@@ -1,5 +1,47 @@
 {
   "schema_version": 1,
   "lane": "n008-hdr-oracle",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "N008-A-001",
+      "status": "complete",
+      "classification": "Phase A physically known controls A1-A10 (preregistered gates)",
+      "result": "001-phase-a-controls.json",
+      "protocol": "../experiments/001-phase-a-oracle-spec-and-controls.md",
+      "source_commit": "c7d441b269ca5826e934c6ba0d2bdcc283b7e440",
+      "all_pass": true,
+      "gpu_run": false
+    },
+    {
+      "id": "N008-A-002",
+      "status": "complete",
+      "classification": "Phase A independent integrator cross-check X1-X6 (Mitsuba 3.6.4 scalar_rgb, identical meshes)",
+      "result": "002-phase-a-mitsuba-crosscheck.json",
+      "protocol": "../experiments/001-phase-a-oracle-spec-and-controls.md",
+      "source_commit": "c7d441b269ca5826e934c6ba0d2bdcc283b7e440",
+      "all_pass": true,
+      "gpu_run": false
+    },
+    {
+      "id": "N008-A-003",
+      "status": "complete",
+      "classification": "post-hoc sensitivity diagnostic (not a gate): injected transport defects",
+      "result": "003-phase-a-sensitivity-diagnostics.json",
+      "source_commit": "c7d441b269ca5826e934c6ba0d2bdcc283b7e440",
+      "all_detected": true,
+      "gpu_run": false
+    },
+    {
+      "id": "N008-A-EXIT-004",
+      "status": "complete",
+      "classification": "Phase A exit decision",
+      "result": "004-phase-a-exit-decision.md",
+      "final_decision": "GO_TO_PHASE_B",
+      "physical_controls_pass": true,
+      "independent_integrator_agreement": true,
+      "renderer_scene_reference_validated": false,
+      "n007_n006_reopened": false,
+      "gpu_run": false
+    }
+  ]
 }

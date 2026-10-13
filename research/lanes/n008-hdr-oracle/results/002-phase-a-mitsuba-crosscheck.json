@@ -1,0 +1,368 @@
+{
+ "schema": "n008-phase-a-crosscheck/1",
+ "mitsuba_version": "3.6.4",
+ "variant": "scalar_rgb",
+ "mitsuba_seeds": [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12,
+  13,
+  14,
+  15
+ ],
+ "mitsuba_spp_per_seed": 256,
+ "oracle_seeds": [
+  305419896,
+  2596069104,
+  81985529216486895,
+  18364758544493064720
+ ],
+ "oracle_spp_per_seed": 1024,
+ "tau": 0.001,
+ "all_pass": true,
+ "cells": [
+  {
+   "id": "X1",
+   "label": "A1 emitters/handedness",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 0.18000111977259317,
+     "mitsuba": 0.17996827761332193,
+     "rel_diff": 0.0001824886013623166,
+     "bound": 0.00029925640386284586,
+     "min_detectable_rel": 0.0016628286264195138,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.2100069522857666,
+     "mitsuba": 0.20998209714889526,
+     "rel_diff": 0.00011836788568557573,
+     "bound": 0.00030806913733383637,
+     "min_detectable_rel": 0.0014671209665812082,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.28501137097676593,
+     "mitsuba": 0.28498225410779315,
+     "rel_diff": 0.00010217081433346023,
+     "bound": 0.00042002502710118163,
+     "min_detectable_rel": 0.001473863796944736,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 4800,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 3.28442696845222,
+   "zero_disagreements_reported_not_gated": 0,
+   "oracle_geometry_sha256": "a2220c3ece97cadee24d8dd97c018dd172d42488ad8fac5f8376798140904064",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 0.9
+  },
+  {
+   "id": "X2",
+   "label": "A2 lit/occluded floor D=8",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 0.10371390205468527,
+     "mitsuba": 0.10371551341752154,
+     "rel_diff": 1.5536372362991927e-05,
+     "bound": 0.00011885537846972751,
+     "min_detectable_rel": 0.0011459749323252954,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.06482118878417832,
+     "mitsuba": 0.06482219293214597,
+     "rel_diff": 1.5490805266369623e-05,
+     "bound": 7.428458600798631e-05,
+     "min_detectable_rel": 0.001145974590611973,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.025928475513671317,
+     "mitsuba": 0.025928878354380385,
+     "rel_diff": 1.5536372362991927e-05,
+     "bound": 2.9713844617431877e-05,
+     "min_detectable_rel": 0.0011459749323252954,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 20556,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 3.7612552289301218,
+   "zero_disagreements_reported_not_gated": 3,
+   "oracle_geometry_sha256": "33640a933c04f9498c156fd42e66231fdb91c2a5506fdd88d5bbd8ac0adc6879",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 1.6
+  },
+  {
+   "id": "X3",
+   "label": "A3 area light D=8",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 0.03380600226036346,
+     "mitsuba": 0.03380648982887604,
+     "rel_diff": 1.4422334736487086e-05,
+     "bound": 4.797170832402791e-05,
+     "min_detectable_rel": 0.0014190088520533875,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.02704480180829077,
+     "mitsuba": 0.027045191863185974,
+     "rel_diff": 1.442233788451431e-05,
+     "bound": 3.8377390798036186e-05,
+     "min_detectable_rel": 0.0014190097445851604,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.020283601356218078,
+     "mitsuba": 0.02028389388084557,
+     "rel_diff": 1.4421522278294937e-05,
+     "bound": 2.8783040556281856e-05,
+     "min_detectable_rel": 0.0014190096204093326,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 20691,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 4.388426014610874,
+   "zero_disagreements_reported_not_gated": 9,
+   "oracle_geometry_sha256": "790a4bbc3a777949198d418ce572d5daf14953318870b7c70434c73f4a60c939",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 1.7
+  },
+  {
+   "id": "X4",
+   "label": "A6b sphere furnace (same mesh)",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 3.323676047213945,
+     "mitsuba": 3.3235657654731767,
+     "rel_diff": 3.31817537399097e-05,
+     "bound": 0.0038380877574792547,
+     "min_detectable_rel": 0.001154810233439995,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.9790774158146668,
+     "mitsuba": 0.9790530771233534,
+     "rel_diff": 2.485941965972294e-05,
+     "bound": 0.0011278234493575841,
+     "min_detectable_rel": 0.0011519533268526633,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.2928885521184904,
+     "mitsuba": 0.29288477037137756,
+     "rel_diff": 1.2912064727902416e-05,
+     "bound": 0.00032281780289568357,
+     "min_detectable_rel": 0.0011022007135651026,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 36864,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 4.276029753992001,
+   "zero_disagreements_reported_not_gated": 0,
+   "oracle_geometry_sha256": "1be7dfbcfdac48343c3d00f7cda0614c3bb3e08be8a7f66c635a63b576174b60",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 52.7
+  },
+  {
+   "id": "X4-analytic-sphere",
+   "label": "diagnostic only: oracle mesh vs Mitsuba analytic sphere",
+   "gated": false,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 3.323676047213945,
+     "mitsuba": 3.3232508494293143,
+     "rel_diff": 0.00012794634046473205,
+     "bound": 0.0038425977966222487,
+     "min_detectable_rel": 0.0011562767815983916,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.9790774158146668,
+     "mitsuba": 0.9789619881727655,
+     "rel_diff": 0.00011790819592163847,
+     "bound": 0.0011139855433563593,
+     "min_detectable_rel": 0.0011379252277564072,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.2928885521184904,
+     "mitsuba": 0.2928588056214115,
+     "rel_diff": 0.00010157282795650352,
+     "bound": 0.00031950922419073785,
+     "min_detectable_rel": 0.001091000912582353,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 36864,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 4.176851377478754,
+   "zero_disagreements_reported_not_gated": 0
+  },
+  {
+   "id": "X5a",
+   "label": "A7 floor/ceiling D=2",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 0.069773072173879,
+     "mitsuba": 0.06976496814518048,
+     "rel_diff": 0.00011616186338192146,
+     "bound": 0.00012296123120147262,
+     "min_detectable_rel": 0.0017625068063614828,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.07030571923293433,
+     "mitsuba": 0.07029632276183866,
+     "rel_diff": 0.00013366945419757028,
+     "bound": 0.0001262673999182823,
+     "min_detectable_rel": 0.001796216287814536,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.067088933782343,
+     "mitsuba": 0.06707993652169415,
+     "rel_diff": 0.00013412744727235462,
+     "bound": 0.00011248539808494597,
+     "min_detectable_rel": 0.001676885875533996,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 8748,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 4.083771085438532,
+   "zero_disagreements_reported_not_gated": 12,
+   "oracle_geometry_sha256": "54a314849317e47342e7eeab87d6434782e5bee339767a459783974b9e7bbc6b",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 1.1
+  },
+  {
+   "id": "X5b",
+   "label": "A7 floor/ceiling D=8",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 0.07310434462748397,
+     "mitsuba": 0.07309357162972407,
+     "rel_diff": 0.00014738639143902204,
+     "bound": 0.0001413162196060317,
+     "min_detectable_rel": 0.0019333604372475945,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.07388835091452622,
+     "mitsuba": 0.07387635923106133,
+     "rel_diff": 0.00016232098589743097,
+     "bound": 0.00014423959453727537,
+     "min_detectable_rel": 0.0019524458979650124,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.06981168834508004,
+     "mitsuba": 0.06980138188306007,
+     "rel_diff": 0.00014765412577713845,
+     "bound": 0.0001251317471273454,
+     "min_detectable_rel": 0.0017926829491281653,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 8748,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 4.154633069457595,
+   "zero_disagreements_reported_not_gated": 12,
+   "oracle_geometry_sha256": "54a314849317e47342e7eeab87d6434782e5bee339767a459783974b9e7bbc6b",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 1.2
+  },
+  {
+   "id": "X6",
+   "label": "Cornell-like room, area light, pillar, D=8",
+   "gated": true,
+   "pass": true,
+   "region": [
+    {
+     "channel": 0,
+     "oracle": 0.11554508327540168,
+     "mitsuba": 0.11555087482210524,
+     "rel_diff": 5.0121184391539286e-05,
+     "bound": 0.00017903006215748443,
+     "min_detectable_rel": 0.0015493613737940773,
+     "pass": true
+    },
+    {
+     "channel": 1,
+     "oracle": 0.10337911447297393,
+     "mitsuba": 0.1033862211717486,
+     "rel_diff": 6.873932226291517e-05,
+     "bound": 0.00017424848563434155,
+     "min_detectable_rel": 0.0016854130430483017,
+     "pass": true
+    },
+    {
+     "channel": 2,
+     "oracle": 0.06111498226572968,
+     "mitsuba": 0.06112093327953912,
+     "rel_diff": 9.736457691551487e-05,
+     "bound": 0.00010537228227405583,
+     "min_detectable_rel": 0.0017239966181820446,
+     "pass": true
+    }
+   ],
+   "pixel_channels_nonzero": 36864,
+   "pixel_z_le_6_fraction": 1.0,
+   "max_abs_z": 4.39261128009227,
+   "zero_disagreements_reported_not_gated": 0,
+   "oracle_geometry_sha256": "55100c16ab87cb793542ab48e966c8dbb9a8ada4c5fc051f7ce8f74e5e3fecdf",
+   "geometry_hash_match": true,
+   "wall_seconds_diagnostic": 14.5
+  }
+ ]
+}

@@ -5,6 +5,8 @@ Prerequisite: [N007 bounded NO GO](../n007-reference-validity/results/012-n007-b
 
 Goal: a small, auditable CPU HDR reference oracle whose physical correctness is established by analytic controls and an independently maintained integrator (Mitsuba 3) **before** any Renderer comparison.
 
+**Status:** Phase A **complete, Exit A = GO** ([result 004](results/004-phase-a-exit-decision.md)); Phase B next.
+
 - Phase A protocol: [experiments/001](experiments/001-phase-a-oracle-spec-and-controls.md)
 - Results: [results/index.json](results/index.json)
 - Oracle source: `src/research/n008_hdr_oracle/` (opt-in `PHOS_BUILD_N008`, default OFF; also a standalone CMake project)
