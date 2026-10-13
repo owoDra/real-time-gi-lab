@@ -31,6 +31,11 @@ LANES = {
         "shader": "shaders/research/lane_n_end_to_end_renderer/README.md",
         "script": "scripts/research/lane_n_end_to_end_renderer/README.md",
     },
+    "n008-hdr-oracle": {
+        "src": "src/research/n008_hdr_oracle/CMakeLists.txt",
+        "shader": "shaders/research/n008_hdr_oracle/README.md",
+        "script": "scripts/research/n008_hdr_oracle/README.md",
+    },
 }
 
 

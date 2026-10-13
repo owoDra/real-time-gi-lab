@@ -1,0 +1,23 @@
+# N008 independent CPU HDR oracle. Opt-in from the top level (PHOS_BUILD_N008,
+# default OFF) or configured standalone: cmake -S src/research/n008_hdr_oracle -B build/n008
+cmake_minimum_required(VERSION 3.24)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  project(n008_hdr_oracle LANGUAGES CXX)
+  if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+  endif()
+endif()
+find_package(Threads REQUIRED)
+foreach(target n008_oracle test_n008_oracle)
+  if(target STREQUAL "n008_oracle")
+    add_executable(${target} n008_oracle_main.cpp)
+  else()
+    add_executable(${target} test_n008_oracle.cpp)
+  endif()
+  target_compile_features(${target} PRIVATE cxx_std_20)
+  target_link_libraries(${target} PRIVATE Threads::Threads)
+  # No fast-math: IEEE double semantics are part of the oracle contract.
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${target} PRIVATE -Wall -Wextra -fno-fast-math -ffp-contract=off)
+  endif()
+endforeach()

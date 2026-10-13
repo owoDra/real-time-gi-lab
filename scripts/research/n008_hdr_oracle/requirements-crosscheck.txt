@@ -1,0 +1,4 @@
+# N008 Phase A harness (CPU only). Exact versions used for the frozen run.
+numpy==2.5.4
+mitsuba==3.6.4
+drjit==1.0.5
