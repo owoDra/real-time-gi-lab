@@ -1,5 +1,25 @@
 {
  "schema_version": 1,
  "lane": "n009-scene-contract",
- "experiments": []
+ "experiments": [
+  {
+   "id": "N009-SEL-001",
+   "status": "complete",
+   "result": "001-contract-selection.json",
+   "classification": "preregistered contract selection (light motion NOT_CONSTRUCTIBLE)",
+   "gpu_run": false
+  },
+  {
+   "id": "N009-LOCK-002",
+   "status": "complete",
+   "result": "002-state-lock.json",
+   "gpu_run": false
+  },
+  {
+   "id": "N009-INTERIM-003-006",
+   "status": "interim",
+   "result": "006-interim-status-and-resume.md",
+   "gpu_run": true
+  }
+ ]
 }

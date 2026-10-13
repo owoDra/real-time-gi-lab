@@ -103,7 +103,16 @@ def analyse(capture: Path, ref_work: Path, classification: str, out: Path, stage
     if not eligible:  # leak cells: dominant = largest absolute energy change on reference-zero pixels
         tr = [r for r in rows[1:] if "delta_energy_on_reference_zero" in r]
         dominant = max(tr, key=lambda r: abs(r["delta_energy_on_reference_zero"]))["stage"] if tr else None
-    return {"capture": capture.name, "reference": str(ref_work.relative_to(L.ROOT)), "reference_classification": classification,
+    # POST-HOC sensitivity (not a gate; added after V1 failed on C7 at 21 cell-boundary
+    # pixels): the same ladder with the R0-vs-GPU mismatch pixels removed from the mask.
+    v1_bad = d0 > 1e-9
+    posthoc = None
+    if v1_bad.any():
+        m2 = m & ~v1_bad
+        posthoc = {"v1_mismatch_pixels": int(v1_bad.sum()),
+                   "stages": [{"stage": STAGES[k], **metrics(st[k], ref, m2)} for k in range(stages_used)],
+                   "r0_matches_gpu_on_remaining": bool(np.abs(st[0] - gpu)[m2].max() <= 1e-6)}
+    return {"posthoc_excluding_v1_mismatch_pixels": posthoc, "capture": capture.name, "reference": str(ref_work.relative_to(L.ROOT)), "reference_classification": classification,
             "scoring_mask_pixels": int(m.sum()), "model": info, "gates": gates,
             "attribution": "COMPLETE" if gates_pass else "INCOMPLETE", "dominant_transition": dominant, "stages": rows}
 
