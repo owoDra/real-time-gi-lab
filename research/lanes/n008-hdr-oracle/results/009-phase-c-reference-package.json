@@ -1,0 +1,597 @@
+{
+ "schema": "n008-reference-package/1",
+ "source_commit": "9aab73b01c1577026342cced61dc09deaf768cd5",
+ "storage": "private ignored out/research/n008-hdr-oracle/phase-b-9aab73b (not published)",
+ "units": "scene-linear float32 RGB PFM, bottom-up rows, no exposure; T_B transport per experiments/002",
+ "gpu_attested_states": [
+  "B4"
+ ],
+ "cells": [
+  {
+   "cell": "B1",
+   "class": "static",
+   "transport": "T_B2",
+   "classification": "INELIGIBLE",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "591b25ccd746d1ad6ea44fc23a916f4e86181b7012d28ca1695a9af5191df1c5",
+   "oracle_geometry_sha256": "d4a46235c58129e98bbe1b006e3bf6bf6cf5a0f33afd9bab1f479a457216a511",
+   "private_file_sha256": {
+    "seed0.total.pfm": "a6a963670936f68e89f4d81670f530a685380927f7a11bc02a196cf693ca4290",
+    "seed0.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed0.indirect.pfm": "e97cf7b2753f4ac81da8a9e36de13761d4e8fa5bd5510fd6625556a3edba90d7",
+    "seed0.f64": "3b668baca22fa05a3c9de0e6778300678a610013f55e141445bd9fd01fc237d1",
+    "seed1.total.pfm": "6a6ef14f3b9bebbc2ecb8c2f78cf8107fe19fa41243c08c2f6ea1e1d3e649ff8",
+    "seed1.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed1.indirect.pfm": "82dba923ce2af1c7adc3505f419f736cc2ee414ec5803f75e2c7d3c47d9834a3",
+    "seed1.f64": "0cd10dd1bbf6f581f5c782019ee0be52c5c856467ccace1623abad1593209ca5",
+    "seed2.total.pfm": "275d3b3fdf56091f44ba72b7e0214322851d2f277418b7d032d54f560f756b68",
+    "seed2.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed2.indirect.pfm": "5b2a1d4f3423dfe3e6f08fb9d047e1c0b9766ae3033bbad5a79cbad253e4d132",
+    "seed2.f64": "89245f3a3d87c12ed0b8f105548138585af2fed7420ad50c3f9319d4095343cc",
+    "seed3.total.pfm": "d41ddf38fdf5595a43c85dfe18bdb4791bcc0ee291042918dfb600b43c0da831",
+    "seed3.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed3.indirect.pfm": "b6aad4c8cc63d98bc6df6a63a9387b5df99c02e69228825c16388502289fb184",
+    "seed3.f64": "d91c362f1c99059ab118748b84da55209e7e4e88d804488cc680fb396ca2fbc8"
+   }
+  },
+  {
+   "cell": "B2",
+   "class": "camera-motion",
+   "transport": "T_B2",
+   "classification": "NO_SUPPORT",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801",
+    "frame": "a3493146e8e11498c3abc5c98ceaed165032a415ddefc4b3308e1f0a5bca46b5"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "24bd99a4fb183204546168a043cb8fb271925607b8480c4e80c7a6e100fa9d7f",
+   "oracle_geometry_sha256": "d4a46235c58129e98bbe1b006e3bf6bf6cf5a0f33afd9bab1f479a457216a511",
+   "private_file_sha256": {
+    "seed0.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.f64": "3b8500a2fff571bcf59a1473bf74c5efe9a0e5e1ce1160c063cb86edcd7098ee",
+    "seed1.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.f64": "2da4a1d74430624d9ebcebff1b40c79b4fb40ebcb4f5106fc5f5551333db1bd8",
+    "seed2.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.f64": "c4fff2e20288502e3ffe0711a792548f695966f95ff64cfe06f7cdc30d64ccc7",
+    "seed3.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.f64": "cca824d0fafd3fe21250a4774b9d2077ab080978849bed6162fabf75a816ca55"
+   }
+  },
+  {
+   "cell": "B3",
+   "class": "light-motion",
+   "transport": "T_B2",
+   "classification": "DIRECT_DETERMINISTIC_PROVED",
+   "decision": "GO_DIRECT_ONLY",
+   "usable_components": [
+    "direct"
+   ],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801",
+    "frame": "8f426ee617c07f9c5c026db3725ea21b07dd28059af14bc36616f7e16c15afcd"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "66e8706ea8f30e712c3c4c64504ccb6da3052b2cb7dead9c0a8cef2082a05f7d",
+   "oracle_geometry_sha256": "d4a46235c58129e98bbe1b006e3bf6bf6cf5a0f33afd9bab1f479a457216a511",
+   "private_file_sha256": {
+    "seed0.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed0.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.f64": "25b4ac89007e738e70839b08b4473ed1514af5fdf995013ceed8195a5ef5d6f3",
+    "seed1.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed1.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed1.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.f64": "3789d0c4439104917aa3f826f756528baa7d4e57a618dcf1071c2478afef2aff",
+    "seed2.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed2.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed2.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.f64": "a97721534b234a41091d2dfa893f00ddf710bf8f89bca34f44f69a65bc31b7c9",
+    "seed3.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed3.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed3.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.f64": "c4ee286244484a3eae9cb2773da2b85ad231f32c36ba2cc1f46e1bb3de51e59b"
+   }
+  },
+  {
+   "cell": "B4",
+   "class": "moving-rigid",
+   "transport": "T_B2",
+   "classification": "NO_SUPPORT",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "d70e8344d9ea493b6fa48d918a2f17f118030b91d708d8bb8d78d0f0422fd53d",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "9a0440c099951d3005e55e6a864e02276fa791a693a07fd4cdf72ceb64bba557",
+   "oracle_geometry_sha256": "deb8c9cfb5f9cc81b4cc3289f3085816ba1a01a348aba35c1441eed04b774dca",
+   "private_file_sha256": {
+    "seed0.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.f64": "3b8500a2fff571bcf59a1473bf74c5efe9a0e5e1ce1160c063cb86edcd7098ee",
+    "seed1.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.f64": "2da4a1d74430624d9ebcebff1b40c79b4fb40ebcb4f5106fc5f5551333db1bd8",
+    "seed2.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.f64": "c4fff2e20288502e3ffe0711a792548f695966f95ff64cfe06f7cdc30d64ccc7",
+    "seed3.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.f64": "cca824d0fafd3fe21250a4774b9d2077ab080978849bed6162fabf75a816ca55"
+   }
+  },
+  {
+   "cell": "B5",
+   "class": "deforming",
+   "transport": "T_B2",
+   "classification": "INELIGIBLE",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "937836c47638066d1107aecf3e634644910437badf666242e32f32c425745364",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "43b2c310ffbab883de32d0b61bef86603bd64e05edc83fdb584ed6d572e64be8",
+   "oracle_geometry_sha256": "22ff4b770fc3315925ac1c7120e93898121793874a28d964128d51df043a6ebd",
+   "private_file_sha256": {
+    "seed0.total.pfm": "f5338daa2e8cb1ec8ca165716bc70c01cb918a0669725e3ee1664f94ffd4c686",
+    "seed0.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed0.indirect.pfm": "8a1b4e0edf223e15f27df346a7a1a5d05ffaaf412e340d65918c82ec7ba8789b",
+    "seed0.f64": "036b6f8184bbd443431030284a06209d79f2c736532784824dadc734f9fff7f6",
+    "seed1.total.pfm": "71181c7de0130611c2703e2c37a9b349a59e1a61aefad1d3f5586468fd592484",
+    "seed1.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed1.indirect.pfm": "37d92cbd7b668eb3544750d060f2ff6262e6a99da7cedef160a4621f381c154d",
+    "seed1.f64": "0fa0f1eee71f7351c7aa56b53772420901e3b6d6e590b0607c228ad50671a5bf",
+    "seed2.total.pfm": "ba4832580623c3dfa0f90d538b8d1f27b3890a5aa4435974a5d1e41a4ebd7c53",
+    "seed2.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed2.indirect.pfm": "b20f73dd8158933052b23c2d115eab5128aaf4e8e1a3e9b022b5790c2f5ca002",
+    "seed2.f64": "ff6a39891cef0c06e312a5061a9ecabe9dedbd649f99be07726e6cd92054cf51",
+    "seed3.total.pfm": "1594a32fbfe8801c970fec35779d988f0595b5644413e239aeeaa9ea39182bbf",
+    "seed3.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed3.indirect.pfm": "0247fe779d0de7c8d4f656cfbe4be796c21dfe25eb07881e5d493375892f3ece",
+    "seed3.f64": "ac958b282179e54f7f52faeac5d4569281e649ed22f7c291defd24d3eef16016"
+   }
+  },
+  {
+   "cell": "B6",
+   "class": "topology-churn",
+   "transport": "T_B2",
+   "classification": "INELIGIBLE",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "1a5770d411c18111978567919b350aed3ee14921b0a7c2e7b23608017810ea16",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "acda5813c749451268f1b97ed7f9227b3c5c6ecda925f683e66f46c89ee9fea1",
+   "oracle_geometry_sha256": "507d029967080a72b692742c3bd5b53d8fd4701ed0cdd7890b85b0417400122b",
+   "private_file_sha256": {
+    "seed0.total.pfm": "3cb94b46735f34ba3110f19801c2e6b76878fdfb22a0545c29b3e5d21391086e",
+    "seed0.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed0.indirect.pfm": "4ef91d5fbd2ee43f1945a3e70300c11a2216d9122fa44d4528f2929f9e9322d3",
+    "seed0.f64": "3d3f2f1ae968e34c24120263ec0ffbf491729a9a4ed0fe8db38147308a5ffe27",
+    "seed1.total.pfm": "3ad4d9a5d471d8d2fd0d9b6005c2605b669e562496d72c070bff828f747c0055",
+    "seed1.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed1.indirect.pfm": "c8f0224cb82971e30f1621ade4778dee0df44578f1f2d9f3fa7295196d7ccd03",
+    "seed1.f64": "9ab050aeb92ff68e101abe9d67f0fae4cdc81aee983f0bd605461764c9bb16b0",
+    "seed2.total.pfm": "76e8f1fbeae3b49b255fb6378eacfc2d83420defa89f78cf1caa527bea534072",
+    "seed2.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed2.indirect.pfm": "12ba9c00fc667c9edc92c1c8c020b9965c80f8b7a65cb038c36527f4f772d138",
+    "seed2.f64": "5facd8525c248b9f6bce829fb2fc80219233becf92a2d07c605cf344e05a1dca",
+    "seed3.total.pfm": "955e9439c82fe0d15d9d4d8fb9ac2b23d7bda1ebcbf565efb839765a034793a6",
+    "seed3.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed3.indirect.pfm": "0e73658d584c86304032f4508fbefd8ac69e25471b33728c6fc46a6d36a8d3a4",
+    "seed3.f64": "3d501de38405ff3dbcc5dbc3fb94fd0dbbfa6de65bd3e5eb08423ff9af410f92"
+   }
+  },
+  {
+   "cell": "B7",
+   "class": "leak-medium",
+   "transport": "T_B2",
+   "classification": "STATISTICALLY_ELIGIBLE",
+   "decision": "GO",
+   "usable_components": [
+    "total",
+    "direct",
+    "indirect"
+   ],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "945b99545ca9f24c5261f1eccec6eb68ce697169bfb052ffbfba87dca02a2c5b",
+    "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+   },
+   "scene_asset_sha256": "1533aadebfe31f8f4ccd0d90c17ffa98e2fef40b0a8cb28756e687402ca709bc",
+   "oracle_scene_file_sha256": "24920e3b13eb208f6e15db574c633f4d224128bcc49573f2c93dcd39f7997008",
+   "oracle_geometry_sha256": "c482833c9f239cb24b2fe9577408e5125d923cd185553d384a17add58266f44c",
+   "private_file_sha256": {
+    "seed0.total.pfm": "8ddc2a4c931b52dc6d71ffbea114ca412aee383408d8a072efcbed7f04cd8066",
+    "seed0.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed0.indirect.pfm": "a678448481ed4fafa17fe22f6cdbf9f0fa4ddf5eb7199bdcf47454c15f9fe9a8",
+    "seed0.f64": "827c185552f9a02648e6c4a930cf28784c6009e33eb5014bc01337dd087cd03b",
+    "seed1.total.pfm": "586e234eaed51ce9f8da6c50e845f416976276dbc7eef89df844d85139b7fb8f",
+    "seed1.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed1.indirect.pfm": "0f21f34548a9916ce07e2d15915e7d3c0522f66450e046b0e34ae5d1220e892c",
+    "seed1.f64": "eb3b4d7f6b34e14852380bd700178cb945b77d76ee45807466576732e92799f9",
+    "seed2.total.pfm": "c4a813794744d49f0c32ee3c29121f9d066a2467051291237ec455755bcbff56",
+    "seed2.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed2.indirect.pfm": "f34f26b6f6d7286f432ccb89405e3d72293759f671357bceb8cc726d40aba6b7",
+    "seed2.f64": "7c6d520f12b6d0fd34a044362b8d3634691d4e1529e9e4328a3cd3b4db250da3",
+    "seed3.total.pfm": "400b88962882542c028f597b6773422af5bdd352084f14fdd8e8df89d1d8145e",
+    "seed3.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed3.indirect.pfm": "58cf93785767c790d1eb1cdd536deb95bd5dc0dfccf74843f219bc276092da44",
+    "seed3.f64": "a9d5c7b980bb6e192ae30f92a70fb023b8412536fc65e815dacf22f2f41a60cc"
+   }
+  },
+  {
+   "cell": "B1",
+   "class": "static",
+   "transport": "T_B8",
+   "classification": "INELIGIBLE",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "057b7b9c23d7084caa5f40e5eb5bbd426a432d86f70704a38ad418bb14076020",
+   "oracle_geometry_sha256": "d4a46235c58129e98bbe1b006e3bf6bf6cf5a0f33afd9bab1f479a457216a511",
+   "private_file_sha256": {
+    "seed0.total.pfm": "f7785b623768896c4e273d54f82ed18ec7588b0a34e59c00755a86d29140284b",
+    "seed0.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed0.indirect.pfm": "15ada3c2ff761f0cc44b7b45941984b13e3f68dbffa17c76151adbe72d19841e",
+    "seed0.f64": "3a7ef4552c89947f3d5146afee292c94c7cee2aa4b37d4a49d3a11de4e74a5e5",
+    "seed1.total.pfm": "ddf4775d67a54bf4bf82f11366a98b0c5171f7386e6f9320d49811603d29ec30",
+    "seed1.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed1.indirect.pfm": "0f0433de3681bebc7a560ef51bc087a54c9fcd966795ce93eca67f2a83b9b0d7",
+    "seed1.f64": "11b96f458d94eb67c150a93cfa0abf729880b717002056296346cbc46799cd68",
+    "seed2.total.pfm": "fbe72b993c74782646f39fc34a161f7343662656e455e117854b0a2178a52081",
+    "seed2.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed2.indirect.pfm": "e92e7558a7f5a9d27e5e0adc467051e12a2fcd462b0279ea977481edd3680f18",
+    "seed2.f64": "822d86a4490ab8b5a0d1d26375b15d38a49ec053e44c4af145e7aa0df09779f4",
+    "seed3.total.pfm": "f9a3208399fdf738bfa940caa189c1073ab4b3a2c97443fdbe9a1d8541ec30f8",
+    "seed3.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed3.indirect.pfm": "07fe8ca9e5b303c2c315a445145c4d17e5b398c2abe56056fa27741b2611fe96",
+    "seed3.f64": "026d0a4e8e390df9621aebf8099abcfd42ad892699af0f6c363ad170bbb7c2dd"
+   }
+  },
+  {
+   "cell": "B2",
+   "class": "camera-motion",
+   "transport": "T_B8",
+   "classification": "NO_SUPPORT",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801",
+    "frame": "a3493146e8e11498c3abc5c98ceaed165032a415ddefc4b3308e1f0a5bca46b5"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "1e809166610ab9caba9644bc45b209899dcd6407e8587a6c45f652d72642d132",
+   "oracle_geometry_sha256": "d4a46235c58129e98bbe1b006e3bf6bf6cf5a0f33afd9bab1f479a457216a511",
+   "private_file_sha256": {
+    "seed0.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.f64": "3b8500a2fff571bcf59a1473bf74c5efe9a0e5e1ce1160c063cb86edcd7098ee",
+    "seed1.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.f64": "2da4a1d74430624d9ebcebff1b40c79b4fb40ebcb4f5106fc5f5551333db1bd8",
+    "seed2.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.f64": "c4fff2e20288502e3ffe0711a792548f695966f95ff64cfe06f7cdc30d64ccc7",
+    "seed3.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.f64": "cca824d0fafd3fe21250a4774b9d2077ab080978849bed6162fabf75a816ca55"
+   }
+  },
+  {
+   "cell": "B3",
+   "class": "light-motion",
+   "transport": "T_B8",
+   "classification": "DIRECT_DETERMINISTIC_PROVED",
+   "decision": "GO_DIRECT_ONLY",
+   "usable_components": [
+    "direct"
+   ],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "205c5a6085e555981080b6547ee6b492e387890e9988ee153d22b4096409b801",
+    "frame": "8f426ee617c07f9c5c026db3725ea21b07dd28059af14bc36616f7e16c15afcd"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "00f02e4234349a22fee2ddcc7db4aa37f556e9b36ee38340e0c2c418a2d85e0d",
+   "oracle_geometry_sha256": "d4a46235c58129e98bbe1b006e3bf6bf6cf5a0f33afd9bab1f479a457216a511",
+   "private_file_sha256": {
+    "seed0.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed0.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.f64": "25b4ac89007e738e70839b08b4473ed1514af5fdf995013ceed8195a5ef5d6f3",
+    "seed1.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed1.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed1.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.f64": "3789d0c4439104917aa3f826f756528baa7d4e57a618dcf1071c2478afef2aff",
+    "seed2.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed2.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed2.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.f64": "a97721534b234a41091d2dfa893f00ddf710bf8f89bca34f44f69a65bc31b7c9",
+    "seed3.total.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed3.direct.pfm": "e358f65717bc27288ebf7028b4e04b75a51857dc83f47bacc96820fdf0c765ff",
+    "seed3.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.f64": "c4ee286244484a3eae9cb2773da2b85ad231f32c36ba2cc1f46e1bb3de51e59b"
+   }
+  },
+  {
+   "cell": "B4",
+   "class": "moving-rigid",
+   "transport": "T_B8",
+   "classification": "NO_SUPPORT",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "d70e8344d9ea493b6fa48d918a2f17f118030b91d708d8bb8d78d0f0422fd53d",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "49d8280016701037cc93d952946985968dda2234bff3986d091a7b9172280d7e",
+   "oracle_geometry_sha256": "deb8c9cfb5f9cc81b4cc3289f3085816ba1a01a348aba35c1441eed04b774dca",
+   "private_file_sha256": {
+    "seed0.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed0.f64": "3b8500a2fff571bcf59a1473bf74c5efe9a0e5e1ce1160c063cb86edcd7098ee",
+    "seed1.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed1.f64": "2da4a1d74430624d9ebcebff1b40c79b4fb40ebcb4f5106fc5f5551333db1bd8",
+    "seed2.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed2.f64": "c4fff2e20288502e3ffe0711a792548f695966f95ff64cfe06f7cdc30d64ccc7",
+    "seed3.total.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.direct.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "seed3.f64": "cca824d0fafd3fe21250a4774b9d2077ab080978849bed6162fabf75a816ca55"
+   }
+  },
+  {
+   "cell": "B5",
+   "class": "deforming",
+   "transport": "T_B8",
+   "classification": "INELIGIBLE",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "937836c47638066d1107aecf3e634644910437badf666242e32f32c425745364",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "e471a06d5167488862f9418c8bcb3cafc17bfc45cb3364c233e66a2b7220c02c",
+   "oracle_geometry_sha256": "22ff4b770fc3315925ac1c7120e93898121793874a28d964128d51df043a6ebd",
+   "private_file_sha256": {
+    "seed0.total.pfm": "47f7b5249c046debadca3d1b241bd43608063910a9a327cfd5b2f70b6b6c64a6",
+    "seed0.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed0.indirect.pfm": "7dd6d1208a115b6a41d308c03b2dfb6cc3c4351f8e441d99a6c18f31fee8e2a3",
+    "seed0.f64": "6cdf1e483fcf903849bfde74cc1d1400a00b3706ed62842870c73e012348326a",
+    "seed1.total.pfm": "e3f1a83b0a6ae7316f26e8cd9c1d050cd719d17328949a8cbe5ffb57d327502f",
+    "seed1.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed1.indirect.pfm": "ddda3788c009a2c39bd27d72b1935489e30b821735485d8b534d453d6ace6610",
+    "seed1.f64": "de18d0f1f600eddcb71f8b80ebb6c99c614ba280fd7b14549b05a0021ed7e5f8",
+    "seed2.total.pfm": "abd72552505be4d3b703f135793228a34cdc4cd8109fe7c7ece4c0fc47a8cd5d",
+    "seed2.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed2.indirect.pfm": "9deecd4d7ce35e7af6ca10024fbbcaed962345a2345c6724e89c1e667af4967c",
+    "seed2.f64": "ef77076192bd59236165b036d9004b243b18f48826624410f76ea48936cb080f",
+    "seed3.total.pfm": "cfc64dbdf3ccdcdb5f4ea7497392bd396edd720befa267ae5a67be7f58a0aaa0",
+    "seed3.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed3.indirect.pfm": "9beab8156c36e5ace88226580daa532db91f5f6b0e8a1ed38b78af68e16b9b06",
+    "seed3.f64": "ffb9730bccb127d6526e829d4a924dd1507bcd18b920752d4b7a98287aab4830"
+   }
+  },
+  {
+   "cell": "B6",
+   "class": "topology-churn",
+   "transport": "T_B8",
+   "classification": "INELIGIBLE",
+   "decision": "NO_GO",
+   "usable_components": [],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "1a5770d411c18111978567919b350aed3ee14921b0a7c2e7b23608017810ea16",
+    "frame": "77e1d952988d70367557c36755261a2a4eefa49177541f5e0a8a99478a24b8b4"
+   },
+   "scene_asset_sha256": "2a86fdc2dc92d7c6a740682c61ec97f3101f489a06443c6823aff85bb990e5f6",
+   "oracle_scene_file_sha256": "e3f5cab958e5cd12914eb60c3f08863c1661c9565b5838b0407298c22ba67889",
+   "oracle_geometry_sha256": "507d029967080a72b692742c3bd5b53d8fd4701ed0cdd7890b85b0417400122b",
+   "private_file_sha256": {
+    "seed0.total.pfm": "7cbd6728f1cf08512a567cc7a4cb7e5466a3dacd1baf6575de1ca465d20415e9",
+    "seed0.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed0.indirect.pfm": "ac775cea81c0583bac44209ccfc85280e181a97b699ce09f837c335d1eb9b8b1",
+    "seed0.f64": "5d764e5cefaf4aa65d5c03368fae8af969a18441bf38d5b808a17f84c3c8d5f2",
+    "seed1.total.pfm": "dcf9be58418a31474be8d8a4e03a935ef4f07c12f9b4f3676a7e0e1f4a6dbceb",
+    "seed1.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed1.indirect.pfm": "4757d01471a11efabb07768a69240258722f6fb5d3f5d80955598e11afdf9733",
+    "seed1.f64": "41170ff69027970c3979a895a8bf455f8bc11d8aa18d66a0f036225bf5685593",
+    "seed2.total.pfm": "2e0419a3e7507703c84fa6bdb9af065125cc0a58c823aae7b4f0e67bc997c957",
+    "seed2.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed2.indirect.pfm": "cab423b723d391c6293d23e1ada237a1d943e2264c3a75e45d88ad0c01189232",
+    "seed2.f64": "e32ff748601c56f559e47ee2160e0817f8574a8d09a1a01000d866c1fd3b8885",
+    "seed3.total.pfm": "6d73487df1fa22bf9a588070fbda8c8e869239f076bf04c8667896a5781e3764",
+    "seed3.direct.pfm": "38e0363b307d07432b70a002bc65532f3cbd2829f1934f43e10dede374ae49a9",
+    "seed3.indirect.pfm": "d9bc5256795090c9e09a4354c0193d91a81df92a7c664cc9a3732c210358c447",
+    "seed3.f64": "4e72c473ba3c05cee00e8643cd20f5601de5fe4d862c8c31b6111ef198cc6bdf"
+   }
+  },
+  {
+   "cell": "B7",
+   "class": "leak-medium",
+   "transport": "T_B8",
+   "classification": "STATISTICALLY_ELIGIBLE",
+   "decision": "GO",
+   "usable_components": [
+    "total",
+    "direct",
+    "indirect"
+   ],
+   "flag_pixels": "exclude oracle primary hits on back faces of single-sided triangles (Renderer culls them)",
+   "spp": 8192,
+   "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+   ],
+   "state_sha256": {
+    "geometry": "945b99545ca9f24c5261f1eccec6eb68ce697169bfb052ffbfba87dca02a2c5b",
+    "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+   },
+   "scene_asset_sha256": "1533aadebfe31f8f4ccd0d90c17ffa98e2fef40b0a8cb28756e687402ca709bc",
+   "oracle_scene_file_sha256": "04519cfd02c7a8301f9e585de3159b68d96343c3d373986a74c1fb61c7a16a97",
+   "oracle_geometry_sha256": "c482833c9f239cb24b2fe9577408e5125d923cd185553d384a17add58266f44c",
+   "private_file_sha256": {
+    "seed0.total.pfm": "0c3526c62ad2c2f0aad73fff0a6897f30397509a55b5f3b70b73994eb57a89f8",
+    "seed0.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed0.indirect.pfm": "8802ab7091d49d62a07320638aaba732311bebed1ee13716c2b829c889cfc109",
+    "seed0.f64": "9419dcff4141da3e70e702fd423999b258894c31d6511c67e40c82dc8dd52e7b",
+    "seed1.total.pfm": "1e4bf8f305f437a87f508455ab72f5f6d69a18ef15345d36df60cbbe0b7d775d",
+    "seed1.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed1.indirect.pfm": "27d9c869c497c85d0931b7d63a1938b10e63c2584895d87a48c61b8511e0a7da",
+    "seed1.f64": "0ede9830e1a742a219e633a82d4726c74c9edbfd23945a13b2b151e8dc9dd5c7",
+    "seed2.total.pfm": "f495906ce797eebc54e929b81d38fe8d405dd13bbdd4e8db057f3e347414d2cd",
+    "seed2.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed2.indirect.pfm": "20d93d64d4a8179622ebedcbaa96b4198802b012cd63763f72badae709aeac39",
+    "seed2.f64": "1adf9ed54f79d5052ab6850e51bf9a39db91d27c404ab43e1a04f1863c37e2f2",
+    "seed3.total.pfm": "cb70d56887be6db4232358751cc348505fdbf5e879dbb2f03abf314da21ae037",
+    "seed3.direct.pfm": "8d375c67f7775429aad62a111e998ba5927bf1ba3e3329179cc09ca3e27bc581",
+    "seed3.indirect.pfm": "a1ec61efea9cffdd4fa8270b62abb0b84b39a8992cdaa421370ef2d4c5f55b55",
+    "seed3.f64": "6d183fa32dc6c34058e25bd31f93c93a2f988d1a261e5b9b9fef3c7039f564b8"
+   }
+  }
+ ]
+}

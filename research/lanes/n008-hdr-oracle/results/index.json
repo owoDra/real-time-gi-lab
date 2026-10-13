@@ -103,6 +103,14 @@
       "primary_mask_mismatch": 0,
       "scored": false,
       "new_gpu_run": false
+    },
+    {
+      "id": "N008-C-009",
+      "status": "complete",
+      "classification": "Phase C locked reference package manifest (private PFMs, public fingerprints and GO/NO_GO decisions)",
+      "result": "009-phase-c-reference-package.json",
+      "source_commit": "9aab73b01c1577026342cced61dc09deaf768cd5",
+      "gpu_run": false
     }
   ]
 }
