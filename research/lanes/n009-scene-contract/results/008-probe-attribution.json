@@ -1,0 +1,529 @@
+{
+ "schema": "n009-probe-attribution/1",
+ "dense_directions": 256,
+ "cos_spp": 1024,
+ "results": [
+  {
+   "posthoc_excluding_v1_mismatch_pixels": {
+    "v1_mismatch_pixels": 21,
+    "stages": [
+     {
+      "stage": "R0",
+      "sum": 0.006179903868162051,
+      "positive": 317,
+      "energy_on_reference_zero": 0.0006561379415579462,
+      "positive_on_reference_zero": 12,
+      "relative_bias_of_sum": -0.9144081158865006,
+      "rmse": 4.879029930666843e-06,
+      "zero_on_reference_positive": 6825
+     },
+     {
+      "stage": "R1",
+      "sum": 0.005692146237131986,
+      "positive": 317,
+      "energy_on_reference_zero": 0.0006632776067403904,
+      "positive_on_reference_zero": 12,
+      "relative_bias_of_sum": -0.9211635760880226,
+      "rmse": 4.88368814763168e-06,
+      "zero_on_reference_positive": 6825
+     },
+     {
+      "stage": "R2",
+      "sum": 0.002675881077021709,
+      "positive": 131,
+      "energy_on_reference_zero": 0.000650773950941431,
+      "positive_on_reference_zero": 11,
+      "relative_bias_of_sum": -0.9629389537552686,
+      "rmse": 4.969234814093638e-06,
+      "zero_on_reference_positive": 7010
+     },
+     {
+      "stage": "R3",
+      "sum": 0.052535402649952476,
+      "positive": 1891,
+      "energy_on_reference_zero": 0.0020577062998164324,
+      "positive_on_reference_zero": 31,
+      "relative_bias_of_sum": -0.27238284099586163,
+      "rmse": 5.057380911728583e-06,
+      "zero_on_reference_positive": 5270
+     },
+     {
+      "stage": "R4",
+      "sum": 0.08850284400686478,
+      "positive": 3053,
+      "energy_on_reference_zero": 0.0026023144111811574,
+      "positive_on_reference_zero": 73,
+      "relative_bias_of_sum": 0.22576747625098176,
+      "rmse": 6.562160266690557e-06,
+      "zero_on_reference_positive": 4150
+     },
+     {
+      "stage": "R5",
+      "sum": 0.0699444875210488,
+      "positive": 3459,
+      "energy_on_reference_zero": 0.002211318221448495,
+      "positive_on_reference_zero": 75,
+      "relative_bias_of_sum": -0.031266408346220714,
+      "rmse": 5.166474512828766e-06,
+      "zero_on_reference_positive": 3746
+     },
+     {
+      "stage": "R6",
+      "sum": 0.07222225279822485,
+      "positive": 6724,
+      "energy_on_reference_zero": 1.0154545910378803e-07,
+      "positive_on_reference_zero": 4,
+      "relative_bias_of_sum": 0.0002807201853735577,
+      "rmse": 2.4692888216326287e-07,
+      "zero_on_reference_positive": 410
+     }
+    ],
+    "r0_matches_gpu_on_remaining": true
+   },
+   "capture": "C7-leak-medium-software",
+   "reference": "out/research/n008-hdr-oracle/phase-b-9aab73b/B7_T_B2",
+   "reference_classification": "STATISTICALLY_ELIGIBLE",
+   "scoring_mask_pixels": 57600,
+   "model": {
+    "schema": "n009-probe-model/1",
+    "stages": [
+     "R0_gpu_integer_replay",
+     "R1_dequantized",
+     "R2_secondary_shadow",
+     "R3_full_probe_coverage",
+     "R4_unbounded_range",
+     "R5_dense_directions",
+     "R6_pixel_cosine_one_bounce"
+    ],
+    "dense_directions": 256,
+    "cos_spp": 1024,
+    "shadow_eps": 0.000116314,
+    "work_items": 37440,
+    "outputs": 4680,
+    "produced_keys": 1774,
+    "required_keys": 3278,
+    "pixels_hit": 7316,
+    "lookups": 29264,
+    "lookups_missing_produced_key": 20814,
+    "pixels_with_missing_key": 6548,
+    "quantization_check": {
+     "exact": 37440,
+     "off_by_one": 0,
+     "other": 0
+    },
+    "cpu_retrace_matches_gpu_hit": 37440
+   },
+   "gates": {
+    "V1": false,
+    "V1_max_abs": 3.051804378628731e-05,
+    "V2": true,
+    "V3": true,
+    "V4_R6_relative_bias": 0.00029406740353597136,
+    "V4": true
+   },
+   "attribution": "INCOMPLETE",
+   "dominant_transition": "R3",
+   "stages": [
+    {
+     "stage": "R0",
+     "name": "gpu_integer_replay",
+     "sum": 0.006210421911955443,
+     "positive": 319,
+     "energy_on_reference_zero": 0.0006713969634546426,
+     "positive_on_reference_zero": 13,
+     "relative_bias_of_sum": -0.9142424363259419,
+     "rmse": 4.883142375836167e-06,
+     "zero_on_reference_positive": 6842
+    },
+    {
+     "stage": "R1",
+     "name": "dequantized",
+     "sum": 0.005716978057942323,
+     "positive": 319,
+     "energy_on_reference_zero": 0.00067578126253935,
+     "positive_on_reference_zero": 13,
+     "relative_bias_of_sum": -0.9210562314802841,
+     "rmse": 4.887664197633708e-06,
+     "zero_on_reference_positive": 6842,
+     "delta_relative_bias_of_sum": -0.006813795154342217,
+     "delta_sum": -0.0004934438540131203,
+     "delta_energy_on_reference_zero": 4.3842990847074844e-06,
+     "delta_zero_on_reference_positive": 0
+    },
+    {
+     "stage": "R2",
+     "name": "secondary_shadow",
+     "sum": 0.0026882092420330854,
+     "positive": 132,
+     "energy_on_reference_zero": 0.000650773950941431,
+     "positive_on_reference_zero": 11,
+     "relative_bias_of_sum": -0.9628794502996566,
+     "rmse": 4.972838672311044e-06,
+     "zero_on_reference_positive": 7027,
+     "delta_relative_bias_of_sum": -0.041823218819372454,
+     "delta_sum": -0.0030287688159092376,
+     "delta_energy_on_reference_zero": -2.5007311597919084e-05,
+     "delta_zero_on_reference_positive": 185
+    },
+    {
+     "stage": "R3",
+     "name": "full_probe_coverage",
+     "sum": 0.05254773081478732,
+     "positive": 1892,
+     "energy_on_reference_zero": 0.0020577062998164324,
+     "positive_on_reference_zero": 31,
+     "relative_bias_of_sum": -0.2743865980181875,
+     "rmse": 5.060890167573368e-06,
+     "zero_on_reference_positive": 5287,
+     "delta_relative_bias_of_sum": 0.6884928522814691,
+     "delta_sum": 0.04985952157275424,
+     "delta_energy_on_reference_zero": 0.0014069323488750014,
+     "delta_zero_on_reference_positive": -1740
+    },
+    {
+     "stage": "R4",
+     "name": "unbounded_range",
+     "sum": 0.08851517217169963,
+     "positive": 3054,
+     "energy_on_reference_zero": 0.0026023144111811574,
+     "positive_on_reference_zero": 73,
+     "relative_bias_of_sum": 0.2222753335038142,
+     "rmse": 6.564379657236152e-06,
+     "zero_on_reference_positive": 4167,
+     "delta_relative_bias_of_sum": 0.49666193152200167,
+     "delta_sum": 0.03596744135691231,
+     "delta_energy_on_reference_zero": 0.000544608111364725,
+     "delta_zero_on_reference_positive": -1120
+    },
+    {
+     "stage": "R5",
+     "name": "dense_directions",
+     "sum": 0.0699577214972626,
+     "positive": 3461,
+     "energy_on_reference_zero": 0.0022135989662180437,
+     "positive_on_reference_zero": 76,
+     "relative_bias_of_sum": -0.03397807091909625,
+     "rmse": 5.169891316534749e-06,
+     "zero_on_reference_positive": 3763,
+     "delta_relative_bias_of_sum": -0.25625340442291045,
+     "delta_sum": -0.018557450674437023,
+     "delta_energy_on_reference_zero": -0.00038871544496311364,
+     "delta_zero_on_reference_positive": -404
+    },
+    {
+     "stage": "R6",
+     "name": "pixel_cosine_one_bounce",
+     "sum": 0.07243965346558914,
+     "positive": 6741,
+     "energy_on_reference_zero": 1.0154545910378803e-07,
+     "positive_on_reference_zero": 4,
+     "relative_bias_of_sum": 0.00029406740353597136,
+     "rmse": 2.4694364695247707e-07,
+     "zero_on_reference_positive": 411,
+     "delta_relative_bias_of_sum": 0.03427213832263222,
+     "delta_sum": 0.0024819319683265367,
+     "delta_energy_on_reference_zero": -0.00221349742075894,
+     "delta_zero_on_reference_positive": -3352
+    }
+   ]
+  },
+  {
+   "posthoc_excluding_v1_mismatch_pixels": {
+    "v1_mismatch_pixels": 21,
+    "stages": [
+     {
+      "stage": "R0",
+      "sum": 0.006179903868162051,
+      "positive": 317,
+      "energy_on_reference_zero": 0.0006561379415579462,
+      "positive_on_reference_zero": 12,
+      "relative_bias_of_sum": -0.9144081158865006,
+      "rmse": 4.879029930666843e-06,
+      "zero_on_reference_positive": 6825
+     },
+     {
+      "stage": "R1",
+      "sum": 0.005692146237131986,
+      "positive": 317,
+      "energy_on_reference_zero": 0.0006632776067403904,
+      "positive_on_reference_zero": 12,
+      "relative_bias_of_sum": -0.9211635760880226,
+      "rmse": 4.88368814763168e-06,
+      "zero_on_reference_positive": 6825
+     },
+     {
+      "stage": "R2",
+      "sum": 0.002675881077021709,
+      "positive": 131,
+      "energy_on_reference_zero": 0.000650773950941431,
+      "positive_on_reference_zero": 11,
+      "relative_bias_of_sum": -0.9629389537552686,
+      "rmse": 4.969234814093638e-06,
+      "zero_on_reference_positive": 7010
+     },
+     {
+      "stage": "R3",
+      "sum": 0.052535402649952476,
+      "positive": 1891,
+      "energy_on_reference_zero": 0.0020577062998164324,
+      "positive_on_reference_zero": 31,
+      "relative_bias_of_sum": -0.27238284099586163,
+      "rmse": 5.057380911728583e-06,
+      "zero_on_reference_positive": 5270
+     },
+     {
+      "stage": "R4",
+      "sum": 0.08850284400686478,
+      "positive": 3053,
+      "energy_on_reference_zero": 0.0026023144111811574,
+      "positive_on_reference_zero": 73,
+      "relative_bias_of_sum": 0.22576747625098176,
+      "rmse": 6.562160266690557e-06,
+      "zero_on_reference_positive": 4150
+     },
+     {
+      "stage": "R5",
+      "sum": 0.0699444875210488,
+      "positive": 3459,
+      "energy_on_reference_zero": 0.002211318221448495,
+      "positive_on_reference_zero": 75,
+      "relative_bias_of_sum": -0.031266408346220714,
+      "rmse": 5.166474512828766e-06,
+      "zero_on_reference_positive": 3746
+     },
+     {
+      "stage": "R6",
+      "sum": 0.07222225279822485,
+      "positive": 6724,
+      "energy_on_reference_zero": 1.0154545910378803e-07,
+      "positive_on_reference_zero": 4,
+      "relative_bias_of_sum": 0.0002807201853735577,
+      "rmse": 2.4692888216326287e-07,
+      "zero_on_reference_positive": 410
+     }
+    ],
+    "r0_matches_gpu_on_remaining": true
+   },
+   "capture": "C7-leak-medium-hwrt",
+   "reference": "out/research/n008-hdr-oracle/phase-b-9aab73b/B7_T_B2",
+   "reference_classification": "STATISTICALLY_ELIGIBLE",
+   "scoring_mask_pixels": 57600,
+   "model": {
+    "schema": "n009-probe-model/1",
+    "stages": [
+     "R0_gpu_integer_replay",
+     "R1_dequantized",
+     "R2_secondary_shadow",
+     "R3_full_probe_coverage",
+     "R4_unbounded_range",
+     "R5_dense_directions",
+     "R6_pixel_cosine_one_bounce"
+    ],
+    "dense_directions": 256,
+    "cos_spp": 1024,
+    "shadow_eps": 0.000116314,
+    "work_items": 37440,
+    "outputs": 4680,
+    "produced_keys": 1774,
+    "required_keys": 3278,
+    "pixels_hit": 7316,
+    "lookups": 29264,
+    "lookups_missing_produced_key": 20814,
+    "pixels_with_missing_key": 6548,
+    "quantization_check": {
+     "exact": 37440,
+     "off_by_one": 0,
+     "other": 0
+    },
+    "cpu_retrace_matches_gpu_hit": 37439
+   },
+   "gates": {
+    "V1": false,
+    "V1_max_abs": 3.051804378628731e-05,
+    "V2": true,
+    "V3": true,
+    "V4_R6_relative_bias": 0.00029406740353597136,
+    "V4": true
+   },
+   "attribution": "INCOMPLETE",
+   "dominant_transition": "R3",
+   "stages": [
+    {
+     "stage": "R0",
+     "name": "gpu_integer_replay",
+     "sum": 0.006210421911955443,
+     "positive": 319,
+     "energy_on_reference_zero": 0.0006713969634546426,
+     "positive_on_reference_zero": 13,
+     "relative_bias_of_sum": -0.9142424363259419,
+     "rmse": 4.883142375836167e-06,
+     "zero_on_reference_positive": 6842
+    },
+    {
+     "stage": "R1",
+     "name": "dequantized",
+     "sum": 0.005716978057942323,
+     "positive": 319,
+     "energy_on_reference_zero": 0.00067578126253935,
+     "positive_on_reference_zero": 13,
+     "relative_bias_of_sum": -0.9210562314802841,
+     "rmse": 4.887664197633708e-06,
+     "zero_on_reference_positive": 6842,
+     "delta_relative_bias_of_sum": -0.006813795154342217,
+     "delta_sum": -0.0004934438540131203,
+     "delta_energy_on_reference_zero": 4.3842990847074844e-06,
+     "delta_zero_on_reference_positive": 0
+    },
+    {
+     "stage": "R2",
+     "name": "secondary_shadow",
+     "sum": 0.0026882092420330854,
+     "positive": 132,
+     "energy_on_reference_zero": 0.000650773950941431,
+     "positive_on_reference_zero": 11,
+     "relative_bias_of_sum": -0.9628794502996566,
+     "rmse": 4.972838672311044e-06,
+     "zero_on_reference_positive": 7027,
+     "delta_relative_bias_of_sum": -0.041823218819372454,
+     "delta_sum": -0.0030287688159092376,
+     "delta_energy_on_reference_zero": -2.5007311597919084e-05,
+     "delta_zero_on_reference_positive": 185
+    },
+    {
+     "stage": "R3",
+     "name": "full_probe_coverage",
+     "sum": 0.05254773081478732,
+     "positive": 1892,
+     "energy_on_reference_zero": 0.0020577062998164324,
+     "positive_on_reference_zero": 31,
+     "relative_bias_of_sum": -0.2743865980181875,
+     "rmse": 5.060890167573368e-06,
+     "zero_on_reference_positive": 5287,
+     "delta_relative_bias_of_sum": 0.6884928522814691,
+     "delta_sum": 0.04985952157275424,
+     "delta_energy_on_reference_zero": 0.0014069323488750014,
+     "delta_zero_on_reference_positive": -1740
+    },
+    {
+     "stage": "R4",
+     "name": "unbounded_range",
+     "sum": 0.08851517217169963,
+     "positive": 3054,
+     "energy_on_reference_zero": 0.0026023144111811574,
+     "positive_on_reference_zero": 73,
+     "relative_bias_of_sum": 0.2222753335038142,
+     "rmse": 6.564379657236152e-06,
+     "zero_on_reference_positive": 4167,
+     "delta_relative_bias_of_sum": 0.49666193152200167,
+     "delta_sum": 0.03596744135691231,
+     "delta_energy_on_reference_zero": 0.000544608111364725,
+     "delta_zero_on_reference_positive": -1120
+    },
+    {
+     "stage": "R5",
+     "name": "dense_directions",
+     "sum": 0.0699577214972626,
+     "positive": 3461,
+     "energy_on_reference_zero": 0.0022135989662180437,
+     "positive_on_reference_zero": 76,
+     "relative_bias_of_sum": -0.03397807091909625,
+     "rmse": 5.169891316534749e-06,
+     "zero_on_reference_positive": 3763,
+     "delta_relative_bias_of_sum": -0.25625340442291045,
+     "delta_sum": -0.018557450674437023,
+     "delta_energy_on_reference_zero": -0.00038871544496311364,
+     "delta_zero_on_reference_positive": -404
+    },
+    {
+     "stage": "R6",
+     "name": "pixel_cosine_one_bounce",
+     "sum": 0.07243965346558914,
+     "positive": 6741,
+     "energy_on_reference_zero": 1.0154545910378803e-07,
+     "positive_on_reference_zero": 4,
+     "relative_bias_of_sum": 0.00029406740353597136,
+     "rmse": 2.4694364695247707e-07,
+     "zero_on_reference_positive": 411,
+     "delta_relative_bias_of_sum": 0.03427213832263222,
+     "delta_sum": 0.0024819319683265367,
+     "delta_energy_on_reference_zero": -0.00221349742075894,
+     "delta_zero_on_reference_positive": -3352
+    }
+   ]
+  },
+  {
+   "posthoc_excluding_v1_mismatch_pixels": null,
+   "capture": "probe-shadow-dabe590b0c6e",
+   "reference": "out/research/n008-hdr-oracle/phase-b-9aab73b/B4_T_B2",
+   "reference_classification": "NO_SUPPORT",
+   "scoring_mask_pixels": 57600,
+   "model": {
+    "schema": "n009-probe-model/1",
+    "stages": [
+     "R0_gpu_integer_replay",
+     "R1_dequantized",
+     "R2_secondary_shadow",
+     "R3_full_probe_coverage",
+     "R4_unbounded_range",
+     "R5_dense_directions",
+     "R6_pixel_cosine_one_bounce"
+    ],
+    "dense_directions": 256,
+    "cos_spp": 1024,
+    "shadow_eps": 0.0488845,
+    "work_items": 134816,
+    "outputs": 16852,
+    "produced_keys": 3104,
+    "required_keys": 2903,
+    "pixels_hit": 15173,
+    "lookups": 60692,
+    "lookups_missing_produced_key": 47728,
+    "pixels_with_missing_key": 15125,
+    "quantization_check": {
+     "exact": 134816,
+     "off_by_one": 0,
+     "other": 0
+    },
+    "cpu_retrace_matches_gpu_hit": 117191
+   },
+   "gates": {
+    "V1": true,
+    "V1_max_abs": 1.8225421714347656e-12,
+    "V2": true,
+    "V3": false
+   },
+   "attribution": "INCOMPLETE",
+   "dominant_transition": "R2",
+   "stages": [
+    {
+     "stage": "R0",
+     "name": "gpu_integer_replay",
+     "sum": 0.2673380636301213,
+     "positive": 9247,
+     "energy_on_reference_zero": 0.2673380636301213,
+     "positive_on_reference_zero": 9247
+    },
+    {
+     "stage": "R1",
+     "name": "dequantized",
+     "sum": 0.24047480889096767,
+     "positive": 10942,
+     "energy_on_reference_zero": 0.24047480889096767,
+     "positive_on_reference_zero": 10942,
+     "delta_sum": -0.02686325473915363,
+     "delta_energy_on_reference_zero": -0.02686325473915363
+    },
+    {
+     "stage": "R2",
+     "name": "secondary_shadow",
+     "sum": 0.0,
+     "positive": 0,
+     "energy_on_reference_zero": 0.0,
+     "positive_on_reference_zero": 0,
+     "delta_sum": -0.24047480889096767,
+     "delta_energy_on_reference_zero": -0.24047480889096767
+    }
+   ]
+  }
+ ]
+}
