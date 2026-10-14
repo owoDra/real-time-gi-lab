@@ -136,9 +136,10 @@ proof of population bias or a repair of the Renderer's unresolved direct pixels.
 
 A separate streamed hybrid recomputes every ambiguously intersecting whole path
 with the original independent CPU oracle, retaining every sample. It currently
-passes 14/16 complete numerical cases; the remaining Sponza seeds are running.
+passes 15/16 complete numerical cases; the last Sponza seed is running.
 Full-frame C1 B8 seed 0 [096](lanes/n010-comparison-readiness/results/096-hybrid-full-frame-deep-conformance.json)
-and seed 1 [107](lanes/n010-comparison-readiness/results/107-hybrid-full-frame-deep-seed1-conformance.json)
+and seeds 1 [107](lanes/n010-comparison-readiness/results/107-hybrid-full-frame-deep-seed1-conformance.json) /
+2 [110](lanes/n010-comparison-readiness/results/110-hybrid-full-frame-deep-seed2-conformance.json)
 pass the unchanged gates, with exact counters/primary/direct/emission. Seed-0
 fallback covers about 8.66% of paths; acquisition timings are loaded diagnostics.
 [Raw-export audit 108](lanes/n010-comparison-readiness/results/108-hybrid-deep-raw-prefix-export-audit.json)

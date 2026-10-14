@@ -182,3 +182,10 @@ delegation: C1/C2/C3 B2 and C7–C12 both transports. Every canonical scene,
 payload/header, convergence screen and imported-prefix chain is checked; all
 recorded inputs remain unchanged after the audit. This is a selected fifteen-slot
 audit, not whole-corpus readiness or execution of the new hybrid-variant branch.
+
+C1 B8 / 8192 spp seed 2 [110](results/110-hybrid-full-frame-deep-seed2-conformance.json) passes
+unchanged full-frame numerical gates, with exact counters/primary/direct/emission,
+finite output, zero faults and owned-memory replay. This exact-byte copy of
+the completed 098 child is not a repeat acquisition. Suite 098 now has 15/16
+cases passing and executes the final seed; full physical/all-state/prefix
+and statistical qualification are still required before reference use.

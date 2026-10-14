@@ -547,6 +547,12 @@
       "status": "fifteen-eligible-cpu-slots-subset-audit",
       "result": "109-existing-eligible-cpu-provenance-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-110",
+      "status": "full-frame-feasibility-only",
+      "result": "110-hybrid-full-frame-deep-seed2-conformance.json",
+      "gpu_run": true
     }
   ]
 }
