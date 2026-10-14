@@ -202,8 +202,9 @@ Conditional complete numerical suite 098 now executes after full-frame feasibili
 it runs all sixteen frozen cases with the new candidate and reuses only
 096's identical C1 T_B8 seed-0 case. Conditional physical controls 099 wait
 for complete 098 PASS and otherwise refuse dispatch. They preserve all 68
-original applicable point-light runs and independent analytic gates. Both
-workers are waiting, not physical/numerical PASS evidence.
+original applicable point-light runs and independent analytic gates. The numerical
+suite is running and the physical worker is waiting; completion of these
+gates is not yet established.
 
 Full-frame C1 T_B8 seed-0 feasibility 096 **PASS** at unchanged gates:
 max mean difference 1.38561e-16, moment difference 3.59820e-18, indirect
@@ -213,3 +214,7 @@ faults and owned-memory replay PASS. CPU fallback recomputed 40861185 of
 The new complete numerical suite 098 is executing; physical worker 099 waits
 for that complete PASS. Separate prefix host build 100 succeeds, but prefix
 runtime validation is NOT RUN. No reference admission or N010 READY yet.
+
+The all-state/prefix validation worker 101 is prepared and waiting for
+098/099/100/078 to pass. It preserves all 96 locked low-dose cases and
+eight actual C7 dyadic-prefix cases. Its runtime checks are NOT RUN yet.
