@@ -22,10 +22,11 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--work',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--conformance',type=Path,default=RESULTS/'075-gpu-reference-full-conformance-resource-followup.json')
     args=parser.parse_args()
     if args.work.exists() or args.output.exists():raise ValueError('refuse existing prefix diagnostic')
     ctypes.CDLL(None).prctl(15,b'n010_prefix_chk',0,0,0)
-    proofs=[RESULTS/name for name in ('075-gpu-reference-full-conformance-resource-followup.json',
+    proofs=[args.conformance]+[RESULTS/name for name in (
         '076-gpu-reference-prefix-build.json','077-gpu-reference-physical-controls.json','078-all-state-cpu-port-controls.json')]
     while True:
         ready=True

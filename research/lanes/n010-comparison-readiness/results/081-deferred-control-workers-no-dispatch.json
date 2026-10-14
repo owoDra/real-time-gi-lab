@@ -1,0 +1,21 @@
+{
+  "schema": "n010-conditional-diagnostics/1",
+  "complete": true,
+  "all_pass": false,
+  "gpu_run": false,
+  "classification": "DEPENDENCY_FAILED_NO_DISPATCH",
+  "dependency_sha256": "4296019ac4cf1130549a8dfaa25e7d2213a3c4af1a550486c80cfb7d5ad4ccce",
+  "terminal_sessions": {
+    "physical-control": {
+      "session_id": 99422,
+      "exit_code": 1
+    },
+    "all-state-prefix": {
+      "session_id": 46121,
+      "exit_code": 1
+    }
+  },
+  "scientific_outputs_produced": false,
+  "reason": "Both conditional workers refused dispatch because complete numerical conformance 075 failed at its 900-second wall guard. No 077/079 result/work directory was produced. Runtime checks are NOT RUN, not PASS.",
+  "scope": "Terminal waiting workers only; no reference admission or accepted-timing retry."
+}

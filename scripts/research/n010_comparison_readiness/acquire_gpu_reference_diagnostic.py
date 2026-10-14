@@ -30,7 +30,7 @@ if __name__=='__main__':
     if args.work.exists() or args.output.exists():raise ValueError('refuse existing diagnostic attempt')
     if not 1<=args.spp<=8192:raise ValueError('diagnostic sample interval only')
     if not 1<=args.batch<=64:raise ValueError('bounded diagnostic batch required')
-    if not 60<=args.elapsed_limit<=900:raise ValueError('explicit elapsed budget must be 60..900 seconds')
+    if not 60<=args.elapsed_limit<=1800:raise ValueError('explicit elapsed budget must be 60..1800 seconds')
     for proc in Path('/proc').iterdir():
         if not proc.name.isdigit():continue
         try:comm=(proc/'comm').read_text().strip()

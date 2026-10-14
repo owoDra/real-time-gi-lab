@@ -15,8 +15,9 @@ if __name__=='__main__':
     parser.add_argument('--work',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--elapsed-limit',type=int,default=120)
+    parser.add_argument('--prior',type=Path,help='Retain the completed ordered prefix of a terminal resource-limited diagnostic')
     args=parser.parse_args()
-    if not 60<=args.elapsed_limit<=900:raise ValueError('explicit elapsed limit required')
+    if not 60<=args.elapsed_limit<=1800:raise ValueError('explicit elapsed limit required')
     ctypes.CDLL(None).prctl(15,b'n010_num_check',0,0,0)
     if args.work.exists() or args.output.exists():raise ValueError('refuse existing conformance acquisition')
     args.work.mkdir(parents=True)
@@ -26,6 +27,15 @@ if __name__=='__main__':
         Q.NET,Q.BINARY,RESULTS/'009-iid-precision-confirmation.json',
         RESULTS.parent/'experiments/016-amendment-7-gpu-reference-feasibility.md']
     inputs={str(p.resolve()):sha(p) for p in paths}
+    prior=None
+    if args.prior:
+        prior=json.loads(args.prior.read_text())
+        if not prior['complete'] or prior['all_pass'] or len(prior['rows'])!=13 or not all(r['pass'] for r in prior['rows'][:12]) or prior['rows'][12]['pass']:
+            raise ValueError('expected terminal twelve-case prefix followed by resource failure')
+        if prior['input_sha256'][str(paths[2])]!=sha(paths[2]) or prior['input_sha256'][str(paths[3])]!=sha(paths[3]):raise ValueError('retained prefix numerical implementation differs')
+        stopped=json.loads(Path(prior['rows'][12]['result']).read_text())
+        if not stopped.get('gpu_timeout') or stopped.get('max_abs_mean') is not None:raise ValueError('expected unfinished resource-limited case')
+        inputs[str(args.prior.resolve())]=sha(args.prior)
     result={'schema':'n010-gpu-reference-full-conformance/1','complete':False,'all_pass':False,
         'gpu_run':True,'eligible_for_references':False,'classification':'DIAGNOSTIC_ONLY_NOT_REFERENCE_ELIGIBILITY',
         'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
@@ -37,11 +47,25 @@ if __name__=='__main__':
     env=os.environ.copy();env['LD_LIBRARY_PATH']=':'.join(filter(None,[env.get('NIX_LD_LIBRARY_PATH'),env.get('LD_LIBRARY_PATH')]))
     python=str(ROOT/'out/research/n010-comparison-readiness/venv/bin/python')
     lock=json.loads((RESULTS/'016-corpus-state-lock.json').read_text())
-    for cell,vertices,index in result['frozen_cases']:
+    if prior and prior['frozen_cases']!=result['frozen_cases']:raise ValueError('retained fixed case schedule differs')
+    for position,(cell,vertices,index) in enumerate(result['frozen_cases']):
         if any(sha(Path(p))!=digest for p,digest in inputs.items()):raise ValueError('frozen numerical acquisition dependency changed')
         # Retain and audit the already executed first 8192 case, without re-running
         # its GPU calculation. Its historical wrapper hash remains historical.
-        if (cell,vertices,index)==('C7',2,0):
+        if prior and position<12:
+            retained=prior['rows'][position]
+            if (retained['cell'],retained['vertices'],retained['seed_index'])!=(cell,vertices,index):raise ValueError('completed prefix is not in fixed schedule order')
+            path=Path(retained['result'])
+            if sha(path)!=retained['sha256']:raise ValueError('retained numerical result changed')
+            row=json.loads(path.read_text());gpu=Path(row['gpu_command'][-1]).parent
+            for name,digest in row['payload_sha256'].items():
+                if sha(gpu/name)!=digest:raise ValueError('retained complete numerical payload changed')
+            audit=result.setdefault('retained_case_provenance_audit',{})
+            directory=ROOT/'out/research/n010-comparison-readiness/references-v1'/f'{cell}_T_B{vertices}'
+            if not str(directory) in result.setdefault('audited_cpu_directories',[]):
+                verify_reference(directory,cell,vertices,lock['cells'][cell],audit,require_eligible=False)
+                result['audited_cpu_directories'].append(str(directory))
+        elif (cell,vertices,index)==('C7',2,0):
             path=RESULTS/'073-gpu-reference-c7-b2-8192-seed0.json';row=json.loads(path.read_text())
             audit={};directory=ROOT/'out/research/n010-comparison-readiness/references-v1/C7_T_B2'
             verify_reference(directory,cell,vertices,lock['cells'][cell],audit,require_eligible=False)

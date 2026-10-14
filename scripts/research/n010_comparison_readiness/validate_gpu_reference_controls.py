@@ -23,10 +23,11 @@ if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--work',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--conformance',type=Path,default=RESULTS/'075-gpu-reference-full-conformance-resource-followup.json')
     args=parser.parse_args()
     if args.work.exists() or args.output.exists():raise ValueError('refuse existing control acquisition')
     ctypes.CDLL(None).prctl(15,b'n010_phys_check',0,0,0)
-    full=RESULTS/'075-gpu-reference-full-conformance-resource-followup.json'
+    full=args.conformance
     while True:
         if full.exists():
             data=json.loads(full.read_text())

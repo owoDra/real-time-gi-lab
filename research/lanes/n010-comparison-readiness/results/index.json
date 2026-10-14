@@ -385,6 +385,18 @@
       "status": "numerical-controls-only",
       "result": "078-all-state-cpu-port-controls.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-075",
+      "status": "complete-negative",
+      "result": "075-gpu-reference-full-conformance-resource-followup.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-081",
+      "status": "dependency-failed-not-run",
+      "result": "081-deferred-control-workers-no-dispatch.json",
+      "gpu_run": false
     }
   ]
 }

@@ -156,3 +156,11 @@ references. GPU full-level conformance has passed C1 T_B2, C7 T_B2 and C7
 T_B8, all four fixed seeds (12/16 cases); C1 T_B8 is still acquiring in 075.
 No GPU reference is admitted while its remaining physical/all-state/prefix
 gates are pending. Recovery C2 T_B8 and C1 T_B8 CPU jobs continue.
+
+GPU conformance 075 is now terminal: 12 cases pass, but the first C1 T_B8
+case exceeds the 900-second execution guard without a numerical output.
+075 is retained as failed; conditional physical/prefix workers correctly
+refused dispatch (081, NOT RUN). Plan 021 prepares fresh 082 with unchanged
+numerical gates and an explicit 1800-second guard for the remaining four
+cases, retaining the ordered twelve completed cases. GPU references remain
+ineligible; CPU recovery continues.
