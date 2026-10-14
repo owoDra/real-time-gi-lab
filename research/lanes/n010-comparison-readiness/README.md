@@ -72,3 +72,11 @@ two 16-thread qualifiers, followed by all remaining selected slots. The new
 continuation-v3 uses view 067 and waits for eligible references. C7 T_B2
 GPU numerical-port conformance at 16 spp passes (070), with exact counters and
 max mean discrepancy 2.71051e-20; this does not grant reference eligibility.
+
+C2 T_B2 recovery is now eligible at 16384/32768; independent canonical/
+payload/prefix-chain audit 080 passes, scoped to this one transport. C1/C3
+T_B8 and the remaining slots still run. GPU conformance 074 preserves its
+120-second Sponza guard failure; prospective 075 uses the recorded 900-second
+guard. First C1 T_B2 8192 numerical comparison passes with exact counters and
+max mean difference 1.73472e-18. GPU references remain ineligible pending
+full numerical, physical-control, all-state and actual-level prefix proof.

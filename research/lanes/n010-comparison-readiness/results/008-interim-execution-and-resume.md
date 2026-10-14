@@ -164,3 +164,15 @@ Result 070 is the first actual AMD numerical-port dispatch: C7 T_B2 16 spp,
 original CPU oracle comparison, exact counters/primary/direct terms, finite
 all-component moments, independent memory replay and max mean discrepancy
 2.71051e-20. No reference admission or GPU performance claim follows.
+
+C2 T_B2 recovery has qualified at 16384/32768, and audit 080 verifies every
+retained payload/header/canonical scene, unchanged screen and imported prefix
+chain. Other slots remain unfinished. Original control CPU acquisition 078
+uses 16 spp/four seeds/each locked transport as a numerical control only;
+those low-spp images are not statistically eligible references.
+GPU 074 retains the 120-second C1 timeout. 075 is its preregistered bounded
+resource follow-up, with unchanged host/shader/seeds/numerical thresholds.
+The first completed C1 T_B2 8192 case passes; max mean error 1.73472e-18,
+all counters exact. Physical control 077 waits for full 075; all-state/prefix
+079 waits for 075/076/077/078. Separate prefix host build 076 is complete,
+but no prefix runtime or reference eligibility is claimed from that build.
