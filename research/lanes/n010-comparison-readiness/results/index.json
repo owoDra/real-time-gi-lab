@@ -115,6 +115,36 @@
       "status": "source-pinned",
       "result": "021-ddgi-source-provenance.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-023",
+      "status": "host-build-complete",
+      "result": "023-ddgi-vulkan-host-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-024",
+      "status": "complete",
+      "result": "024-c8-pt-quality-ladder.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-025",
+      "status": "complete",
+      "result": "025-c9-pt-quality-ladder.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-026",
+      "status": "complete",
+      "result": "026-dynamic-execution-state-lock.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-027",
+      "status": "complete-negative",
+      "result": "027-calibration-sizing.json",
+      "gpu_run": true
     }
   ]
 }

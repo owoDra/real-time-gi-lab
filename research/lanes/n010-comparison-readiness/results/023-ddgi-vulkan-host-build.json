@@ -1,0 +1,23 @@
+{
+  "schema": "n010-ddgi-host-build/1",
+  "sdk_commit": "f33e496ca31b3f0eec1c4e2cbaa8bb620e337fa6",
+  "sdk_source_modified": false,
+  "cuda_used": false,
+  "runtime_on_amd": "NOT_RUN",
+  "shader_compilation": "NOT_RUN",
+  "integration": "NOT_IMPLEMENTED",
+  "attempts": [
+    {
+      "configuration": "Standalone unmodified rtxgi-sdk Vulkan static library; current Vulkan headers; GCC 15.2.0",
+      "status": "FAIL",
+      "reason": "SDK VulkanExtensions.h forces Xlib platform headers on Linux; X11/Xlib.h was absent from include search path."
+    },
+    {
+      "configuration": "Same SDK source; add installed libx11 and xorgproto header directories using CMAKE_CXX_FLAGS",
+      "status": "PASS",
+      "artifact": "build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+      "sha256": "39c606e0d117f9afa0c1f3558b36277aa593b002c19a9b5e7d8faf7f805d9123"
+    }
+  ],
+  "meaning": "Vulkan host SDK builds without CUDA or NVIDIA-only compiler. This is not a DDGI GPU/runtime or semantic parity result."
+}

@@ -111,9 +111,10 @@ if __name__=='__main__':
   if a.mode=='sizing':
    evidence=execute(boundary,lock,[0,256,1024]*3,a.work/boundary['id']/'sizing');samples=evidence['samples']
    med={dose:statistics.median(s['gpu_us'] for s in samples if s['dose']==dose) for dose in (0,256,1024)}
-   slopes=[(med[d]-med[0])/d for d in (256,1024)]
+   inner={dose:statistics.median(s['known_work_gpu_us'] for s in samples if s['dose']==dose) for dose in (0,256,1024)}
+   slopes=[(inner[d]-inner[0])/d for d in (256,1024)]
    valid=min(slopes)>0;dose=math.ceil(.2*med[0]/statistics.median(slopes)) if valid else None
-   row.update(evidence=evidence,medians_us=med,sizing_pass=valid and dose<=10000000,frozen_dose=dose)
+   row.update(evidence=evidence,medians_us=med,known_work_medians_us=inner,amendment='4',sizing_pass=valid and dose<=10000000,frozen_dose=dose)
   else:
    sizing=next(r for r in plan['rows'] if r['boundary']['id']==boundary['id']);blocks=[]
    for block in range(8):

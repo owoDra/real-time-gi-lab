@@ -137,7 +137,7 @@ int main(int argc,char** argv) {
         alloc.commandPool=pool;alloc.level=VK_COMMAND_BUFFER_LEVEL_PRIMARY;alloc.commandBufferCount=1;
         VkCommandBuffer command{};check(context.vk().allocateCommandBuffers(&alloc,&command));
         auto qi=phos::gi::detail::make_vk_info<VkQueryPoolCreateInfo>(VK_STRUCTURE_TYPE_QUERY_POOL_CREATE_INFO);
-        qi.queryType=VK_QUERY_TYPE_TIMESTAMP;qi.queryCount=2;
+        qi.queryType=VK_QUERY_TYPE_TIMESTAMP;qi.queryCount=4;
         VkQueryPool query{};check(context.vk().createQueryPool(&qi,nullptr,&query));
         auto fi=phos::gi::detail::make_vk_info<VkFenceCreateInfo>(VK_STRUCTURE_TYPE_FENCE_CREATE_INFO);
         VkFence fence{};check(context.vk().createFence(&fi,nullptr,&fence));
@@ -152,20 +152,23 @@ int main(int argc,char** argv) {
             check(context.vk().resetFences(1,&fence));check(context.vk().resetCommandPool(pool,0));
             auto begin=phos::gi::detail::make_vk_info<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
             begin.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;check(context.vk().beginCommandBuffer(command,&begin));
-            context.vk().cmdResetQueryPool(command,query,0,2);
+            context.vk().cmdResetQueryPool(command,query,0,4);
             context.vk().cmdWriteTimestamp(command,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,query,0);
             const std::array<uint32_t,4> push{spp,vertices,image_seed,0};
             stage->record(command,(width+7)/8,(height+7)/8,1,push.data(),sizeof(push));
             i::i001_compute_barrier(context,command);
+            context.vk().cmdWriteTimestamp(command,VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,query,2);
             if(neutral)neutral->record(command);
+            context.vk().cmdWriteTimestamp(command,VK_PIPELINE_STAGE_ALL_COMMANDS_BIT,query,3);
             context.vk().cmdWriteTimestamp(command,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,query,1);
             check(context.vk().endCommandBuffer(command));
             auto submit=phos::gi::detail::make_vk_info<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
             submit.commandBufferCount=1;submit.pCommandBuffers=&command;
             check(context.vk().queueSubmit(context.queue(),1,&submit,fence));
             check(context.vk().waitForFences(1,&fence,VK_TRUE,UINT64_MAX));
-            std::array<uint64_t,2> ts{};
-            check(context.vk().getQueryPoolResults(query,0,2,sizeof(ts),ts.data(),8,VK_QUERY_RESULT_64_BIT|VK_QUERY_RESULT_WAIT_BIT));
+            std::array<uint64_t,4> ts{};
+            check(context.vk().getQueryPoolResults(query,0,4,sizeof(ts),ts.data(),8,VK_QUERY_RESULT_64_BIT|VK_QUERY_RESULT_WAIT_BIT));
+            n::NeutralWork::last_gpu_us=(ts[3]-ts[2])*context.timestamp_period_ns()/1000.;
             return (ts[1]-ts[0])*context.timestamp_period_ns()/1000.;
         };
         for(uint32_t f=0;f<frames;++f) {
@@ -211,7 +214,7 @@ int main(int argc,char** argv) {
             double wall=std::chrono::duration<double,std::micro>(Clock::now()-start).count();
             times<<(f?",":"")<<"{\"index\":"<<f<<",\"state\":\""<<label<<"\",\"seed\":"<<(doses.empty()?seed+f:seed)
                  <<",\"dose\":"<<(doses.empty()?0:doses[f])<<",\"gpu_us\":"<<gpu+maintenance_gpu<<",\"image_gpu_us\":"<<gpu
-                 <<",\"maintenance_gpu_us\":"<<maintenance_gpu<<",\"uniform_upload_gpu_us\":"<<uniform_gpu
+                 <<",\"known_work_gpu_us\":"<<n::NeutralWork::last_gpu_us<<",\"maintenance_gpu_us\":"<<maintenance_gpu<<",\"uniform_upload_gpu_us\":"<<uniform_gpu
                  <<",\"geometry_upload_gpu_us\":"<<geometry_gpu<<",\"blas_update_us\":"<<blas
                  <<",\"tlas_update_us\":"<<tlas<<",\"changed_slots\":"<<changed_count<<",\"wall_us\":"<<wall<<"}";
             n::AllocationLedger::instance().phase("diagnostic-readback-"+std::to_string(f));

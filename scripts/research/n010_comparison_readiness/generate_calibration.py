@@ -8,7 +8,9 @@ def runtime(s):
  s=once(s,'    B002Buffer primary_hits{}, image{}, n010_lookup_audit{};','    B002Buffer primary_hits{}, image{}, n010_lookup_audit{};\n    std::unique_ptr<phos::gi::research::n010::NeutralWork> n010_neutral;')
  s=once(s,'        n010_lookup_audit = context.create_device_buffer(', '        if(std::getenv("PHOS_N010_CALIBRATION")) n010_neutral=std::make_unique<phos::gi::research::n010::NeutralWork>(context);\n        n010_lookup_audit = context.create_device_buffer(')
  s=once(s,'        depth_stage.reset();','        depth_stage.reset();\n        n010_neutral.reset();')
- s=once(s,'        stamp(15);','        if(n010_neutral)n010_neutral->record(command);\n        stamp(15);')
+ s=once(s,'        stamp(15);','        stamp(16);\n        if(n010_neutral)n010_neutral->record(command);\n        stamp(17);\n        stamp(15);')
+ s=once(s,'        std::array<std::uint64_t, 16> timestamps{};','        std::array<std::uint64_t, 18> timestamps{};')
+ s=once(s,'        const auto period = context.timestamp_period_ns();','        const auto period = context.timestamp_period_ns();\n        phos::gi::research::n010::NeutralWork::last_gpu_us=timestamp_us(timestamps[16],timestamps[17],period);')
  s=once(s,'        save("composite-lookup.bin", audit_bytes.data(), audit_bytes.size());','        save("composite-lookup.bin", audit_bytes.data(), audit_bytes.size());\n        if(impl_->n010_neutral)impl_->n010_neutral->save(std::filesystem::path(directory)/"neutral-work.bin");')
  return s
 LOOP=r'''
@@ -39,7 +41,7 @@ LOOP=r'''
                 const auto wall=std::chrono::duration<double,std::micro>(std::chrono::steady_clock::now()-start).count();
                 if(f.stats.overflow)throw std::runtime_error("calibration Renderer overflow");
                 timings<<"{\"index\":"<<index<<",\"dose\":"<<doses[index]<<",\"gpu_us\":"<<f.timings.complete_renderer_gpu_us
-                       <<",\"wall_us\":"<<wall<<",\"maintenance_gpu_us\":"<<f.timings.traversal_maintenance_gpu_us<<"}\n";
+                       <<",\"known_work_gpu_us\":"<<phos::gi::research::n010::NeutralWork::last_gpu_us<<",\"wall_us\":"<<wall<<",\"maintenance_gpu_us\":"<<f.timings.traversal_maintenance_gpu_us<<"}\n";
                 const auto directory=out/"frames"/std::to_string(index);fs::create_directories(directory/"gpu");
                 const auto gpu=fs::absolute(directory/"gpu");
                 setenv("PHOS_N007_GPU_HITS",(gpu/"hits.bin").c_str(),1);
@@ -58,6 +60,7 @@ LOOP=r'''
         }
 '''
 def main(s):
+ s=once(s,'#include "allocation_ledger.hpp"','#include "allocation_ledger.hpp"\n#include "neutral_work.hpp"')
  s=once(s,'        fs::path out,scene;','        fs::path out,scene,calibration_doses;')
  s=once(s,'            else if(arg=="--direct-profile")profile=arg_value(argc,argv,i);','            else if(arg=="--direct-profile")profile=arg_value(argc,argv,i);\n            else if(arg=="--calibration-doses")calibration_doses=arg_value(argc,argv,i);')
  s=once(s,'        r::I001Runtime runtime(opt);',LOOP+'        r::I001Runtime runtime(opt);')

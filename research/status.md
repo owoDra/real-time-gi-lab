@@ -12,11 +12,21 @@ incumbent fails with roughly 91% missing one-bounce indirect energy. A separate
 dense repository RC control also fails. These are measured quality outcomes;
 pilot timings remain uncalibrated. Sampler precision Amendment 2 passes without
 changing thresholds; original failed crosscheck remains retained. C7 references
-are eligible; the full construction corpus includes local Sponza light motion
-and actual controlled dynamic states. Remaining work is full-corpus reference
-qualification, dynamic comparative execution and complete timing calibration.
+and C8–C12 references are eligible; all 145 controlled dynamic source/target/
+recovery images are scored. C9 RC indirect sum reaches about 7.645 times the
+reference; fixed PT 256-spp losses remain. The C8/C9 complete budget ladders
+both select 1024 spp as a passing budget for T_B2 and T_B8. All 29 dynamic
+allocation ledgers independently replay to zero teardown within the cap.
+RTXGI Vulkan host SDK builds without CUDA; its GPU adapter remains a Lane M
+requirement. Remaining N010 work is Sponza reference qualification and its
+pilot, actual full Renderer timing calibration and fail-closed handoff.
+Diagnostic sizing result 027 failed under concurrent CPU work and remains
+retained; Amendment 4 measures inner known-work cost to size the prospective
+calibration dose, without changing full-boundary acceptance thresholds.
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
-[PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json).
+[PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
+[dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),
+[AMD/Vulkan SDK build](lanes/n010-comparison-readiness/results/023-ddgi-vulkan-host-build.json).
 
 | Subsystem | Current incumbent / classification | Evidence and boundary |
 | --- | --- | --- |
@@ -90,16 +100,3 @@ See [roadmap](roadmap.md) for gates. Old status, stale next-step commands and br
 **N007 P1-B tooling (2026-10-12):** the current matched frame's 18,363 independently shadow-blocked positive GPU probe contributions are retained as **diagnostic-only**, not a full-image attribution. [Result 010](lanes/n007-reference-validity/results/010-p1b-reference-screen-readiness.md) adds CPU-only, GPU-free derived shadow-label reproduction, captured-probe-to-pixel replay with strict unchanged-GPU baseline image match before the occluded-sample counterfactual, and a resumable frozen four-seed 512–8192-SPP statistical screen reusing the captured real 512-SPP data. Existing N001–N006 code/shaders untouched. **Superseded by subsequent completed real local P1-B execution**: original GPU indirect image reconstructed, shadow-positive contribution ablation eliminated all **9,247** positive pixels (original sum 0.2673380636301213 → 0.0), and four-seed CPU reference SPP 512/1024/2048/4096/8192 returned zero union-active signal at every level, `statistical-screen-fail`. See [result 011](lanes/n007-reference-validity/results/011-p1b-probe-pixel-counterfactual-and-spp-screen.md). Physical correctness and original archived M3b causation remain unknown; no N001–N006 historical GO/NO GO is altered.
 
 **N007 final bounded stop (2026-10-12):** [result 012](lanes/n007-reference-validity/results/012-n007-bounded-no-go-decision.md) applies Issue #4's frozen rule to **stop when a reliable, nontrivial HDR reference across all required dynamic classes cannot be demonstrated within resources**. Moving-rigid is mandatory and has exhausted the complete frozen four-seed 512–8192-SPP ladder with active fraction **0.0** at every level; consequently **cross-class HDR reference qualification = NO GO**. N007 P1-B isolated the image-level GPU secondary shadow omission mechanism for its **new matched diagnostic frame** (9,247/9,247 positive indirect pixels disappear when just CPU-shadowed GPU probe contributions are suppressed). Camera/disocclusion, light-motion, controlled-GPU-light, static/deforming/churn, and independent GPU camera/secondary allocation attestation remain **explicitly unmeasured or unverified**; the stop does not declare them individually wrong or correct. Physical accuracy and historical original N006 M3b frame causation are **unproven**. No original N001–N006 sources or outcomes changed. [Issue #4](https://github.com/owoDra/real-time-gi-lab/issues/4) closed as negative research outcome, not a positive GI quality pass.
-
-### N010 dynamic cohort update
-
-Controlled non-Sponza C8–C12 references qualify in both T_B2/T_B8. The complete
-5-frame dynamic pilot retains 145 executed images and two unsupported software
-churn capture records. Current RC fails indirect quality across these states;
-C9 light-motion indirect sum is about 7.645 times reference (+664.5% bias).
-Pixel PT at fixed 256 spp fails some T_B2 camera/light frames; those failures
-remain, while the 1024-spp T_B8 pilot passes those target frames. No quality
-matched speed claim follows. All 29 owned Vulkan allocation ledgers independently
-replay to zero teardown below 8 GiB. Timings remain uncalibrated; Sponza reference
-work is active. RTXGI source is pinned for a Vulkan/AMD DDGI adapter, without
-CUDA; its integrated runtime remains unverified. See N010 results 019–021.

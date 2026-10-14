@@ -9,6 +9,7 @@
 namespace phos::gi::research::n010 {
 class NeutralWork {
 public:
+    inline static double last_gpu_us{};
     explicit NeutralWork(lane_b::B002VulkanContext& context):context_(context) {
         scratch_=context_.create_device_buffer(16384U*4U,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
         const std::array<integration::I001Binding,1> binding{{{0,VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,&scratch_}}};
