@@ -1,0 +1,32 @@
+{
+  "schema": "n010-hybrid-queue-startup-refusal/1",
+  "complete": true,
+  "gpu_run": false,
+  "acquisition_run": false,
+  "classification": "STARTUP_CONFIGURATION_REFUSAL_NO_ACQUISITION",
+  "source_commit": "27488d4e41a074a0f6567b84031081f9e592bc26",
+  "observed_returncode": 1,
+  "failure": "FileNotFoundError: missing experiments/029-prospective-hybrid-reference-qualification.md during startup input hashing, before queue creation",
+  "retained_source": {
+    "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-queue-startup-refusal-v1/launch-hybrid-startup-v1.py",
+    "sha256": "3d819497f2b957b1256b4b94f3a6c4135957a5ebb800f540d492650f7cdcad1f"
+  },
+  "observed_command": [
+    "out/research/n010-comparison-readiness/venv/bin/python",
+    "scripts/research/n010_comparison_readiness/launch_hybrid_qualification.py",
+    "--queue",
+    "out/research/n010-comparison-readiness/hybrid-qualification-queue-v1",
+    "--lock",
+    "research/lanes/n010-comparison-readiness/results/016-corpus-state-lock.json",
+    "--work",
+    "out/research/n010-comparison-readiness/hybrid-reference-ladders-v1",
+    "--output",
+    "research/lanes/n010-comparison-readiness/results/121-hybrid-reference-qualification.json"
+  ],
+  "paths_confirmed_absent": [
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-reference-ladders-v1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-qualification-queue-v1",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/121-hybrid-reference-qualification.json"
+  ],
+  "scope": "Launcher configuration failure only; no reference/shader/GPU execution or scientific acquisition retry"
+}

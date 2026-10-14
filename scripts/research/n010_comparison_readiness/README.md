@@ -1,5 +1,42 @@
 # N010 execution tools
 
+## Current execution: plans 034–037
+
+The current record is [130](../../../research/lanes/n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md).
+Earlier command/status descriptions below are historical execution checkpoints.
+The old idle finisher is retired (120), both old CPU recovery jobs were stopped
+at the user's request (124), and the old point-guided queue terminated on the
+113 analysis error. Do not restart them or overwrite their results.
+
+`launch_hybrid_qualification.py` now runs the fixed nine-slot hybrid ladder
+after complete 098/099/101 proof. Actual C4 B2 provenance 123 passes; acquisition
+121 remains mutable. `audit_reference_slots.py --references ROOT --lock LOCK
+--slots SLOT... --output NEW_JSON` replays selected complete hybrid/original
+references without GPU dispatch. It is not whole-corpus admission by default.
+
+`replay_point_guided_physical.py --output NEW_JSON` rechecks all retained 113
+outputs and reuses its exact physical/iid analysis with the missing wrapper
+fields derived from canonical geometry. Actual post-hoc replay 125 passes;
+113 remains FAIL. Plan-036 guarded adapters pin their original sources and
+retain all counts/seeds/thresholds/resources. `validate_replayed_point_guided_prefix.py`
+executes fresh 126; `launch_replayed_point_guided_qualification.py` waits for
+125/126 before one fresh 128 acquisition. Their roots are separate from the
+terminal old attempts. Never import original/hybrid moments into those prefixes.
+
+`assemble_replayed_reference_view.py` fixes plan-037 view 127 (fifteen original
+plus nine pending point-guided targets). `finish_replayed_readiness.py` accepts
+the original finisher CLI; it runs under `continuation-replayed-point-guided-v1`.
+It requires full eligibility/provenance and actual reference-work quiescence
+before the unchanged pilots, sizing, accepted calibration and final 047.
+`readiness_preflight_replayed.py` preserves all six original gates and accepts
+the original preflight CLI; actual interim 129 is NOT_READY. Neither a waiting
+queue, a scheduling view nor a subset provenance PASS is readiness evidence.
+
+The frozen inputs of each active worker must remain unchanged. Do not relaunch
+existing work roots or infer failure from an observation timeout. Terminal
+results are indexed only after completion and identity verification; mutable
+121/126/128 are explicitly not published as completed results.
+
 ## Continuous completion of existing acquisitions
 
 `finish_readiness.py` waits for the already running original CPU reference

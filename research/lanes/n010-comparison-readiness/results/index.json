@@ -589,6 +589,72 @@
       "status": "not-ready-adapter-interim-preflight",
       "result": "119-point-guided-adapter-interim-preflight.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-099",
+      "status": "complete-physical-suite-only",
+      "result": "099-hybrid-physical-controls.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-101",
+      "status": "complete-all-state-and-prefix-only",
+      "result": "101-hybrid-all-state-and-prefix.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-113",
+      "status": "terminal-analysis-adapter-failure",
+      "result": "113-point-guided-physical-controls.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-120",
+      "status": "idle-comparison-driver-retired",
+      "result": "120-idle-comparison-driver-retirement.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-122",
+      "status": "startup-refusal-no-acquisition",
+      "result": "122-hybrid-queue-startup-refusal.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-123",
+      "status": "first-qualified-hybrid-slot-provenance-pass",
+      "result": "123-first-qualified-hybrid-provenance-audit.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-124",
+      "status": "user-requested-old-cpu-stop-partials-retained",
+      "result": "124-user-requested-old-cpu-process-stop.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-125",
+      "status": "posthoc-retained-physical-analysis-replay-pass",
+      "result": "125-point-guided-physical-analysis-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-127",
+      "status": "prospective-full-scheduling-view-only",
+      "result": "127-replayed-point-guided-reference-view.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-129",
+      "status": "not-ready-replayed-view-interim-preflight",
+      "result": "129-replayed-view-interim-preflight.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-130",
+      "status": "interim-execution-and-comparison-transition",
+      "result": "130-validated-reference-acquisition-and-comparison-transition.md",
+      "gpu_run": false
     }
   ]
 }

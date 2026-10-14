@@ -53,8 +53,10 @@ RTXGI Vulkan on AMD (result 021); CUDA is not part of the comparator.
 
 065 retains terminal/partial attempts with unestablished cause. Prospective
 Amendment 8 and view 067 recover complete prefixes into fresh directories with
-unchanged 24-slot corpus, screens and cap. Recovery and continuation-v3 are
-executing; READY still requires the full pilots and accepted calibration.
+unchanged 24-slot corpus, screens and cap. The idle continuation-v3 was retired
+without jobs (120); the user requested stopping both old CPU recovery jobs (124).
+Complete 65536 levels and partial 131072 outputs remain; no cap failure is claimed.
+READY still requires all references, full pilots and accepted calibration.
 GPU binary64 execution feasibility 070 is only a small numerical diagnostic,
 not admitted reference evidence. N010 remains the last preparation study;
 continue directly to the distinct Lane M GI comparison lane after its gate.
@@ -83,24 +85,29 @@ historical prerequisite checks 104–106 refused dispatch while 098 was incomple
 from prepared code. Any scheduling transition must retain the original CPU
 evidence and occur with an executed completed-boundary provenance record.
 
-Full numerical suite 098 now completes all 16 fixed cases with PASS; physical
-099 is executing and all-state/prefix 101 still waits for that proof. Numerical
-completion admits no reference and does not complete the N010 gates.
+Full numerical 098, physical 099 (68 cases/eight controls) and all-state/prefix
+101 (96 low-dose/eight actual-level cases, 304 attempts) now complete PASS.
+Fresh hybrid acquisition 121 runs. Its first qualified C4 B2 reference passes
+complete new-variant provenance 123 with 5,413 unchanged read identities.
+This single reference does not complete the full-corpus N010 gate.
 
 A separate prospective CPU sampling proposal (plan 030, build 112) preserves
 the finite-transport physical target while mixing cosine and geometry/direct
 surface sampling with explicit null samples and importance weights. Physical
-controls 113 are executing. It is unadmitted: corpus identities, its own exact
-prefix proof and a recorded acquisition/provenance transition are required
-before any new qualification. The existing acquisitions, four seeds, six
-levels, support-aware absolute/relative screens and cap remain unchanged.
+controls 113 acquired all seventeen scenes but failed in the analysis adapter
+on an omitted metadata field. Original FAIL is retained. CPU-only post-hoc
+replay 125 passes the unchanged eight physical/two iid gates on those same bytes.
+Plan 036 starts a fresh all-state/own-prefix proof 126 and a conditional single
+acquisition queue; four seeds, six levels, support-aware screens and cap remain
+unchanged. No point-guided corpus reference is yet qualified.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
 24-slot corpus. Actual 116 refuses acquisition at incomplete physical 113;
 its exact read bytes are retained. API delegation 117 passes the existing
-fifteen-slot subset; the new-variant branch remains unexecuted. One queued
-acquisition waits for full physical/all-state/prefix proof. Neither queue,
+fifteen-slot subset; the new-variant branch remains unexecuted. The
+old acquisition queue terminated on the 113 failure without dispatch. A fresh
+plan-036 queue waits for the complete 125/126 chain. Neither queue,
 prepared provenance nor a subset audit passes final comparison readiness.
 
 Separate final-preflight adapter 033 reuses the exact original six-gate source
@@ -109,3 +116,12 @@ the same six gate classifications as 103. This prepares final integration
 without changing the frozen current driver, reference view, scoring/timing
 thresholds or absent final 047. A recorded reference/scheduling transition
 and complete actual comparison/calibration evidence are still required.
+
+Plan 037 fixes fresh full view 127: fifteen unchanged original eligible targets
+and all nine plan-036 point-guided targets, before their qualification outcomes
+or new GI scores. A fresh comparison driver waits for complete eligibility,
+all-payload provenance and actual quiescence before the unchanged C1 B8 ladder,
+Sponza dynamics, quiet sizing, accepted calibration and final six-gate preflight.
+Executed current-view interim 129 remains NOT_READY. See
+[130](lanes/n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
+for current execution and remaining gates. N010 remains the final preparation.

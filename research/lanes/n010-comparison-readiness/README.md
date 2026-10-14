@@ -14,6 +14,24 @@ replay passes on all 10 captures; the C7 key-driven counterfactual validation
 passes V1–V4 on both backends. Direct shadow-offset diagnosis is post-hoc;
 new physical sampler validation and comparison harness work continue.
 
+**Current execution:** [130](results/130-validated-reference-acquisition-and-comparison-transition.md).
+Hybrid numerical/physical/state/prefix proofs 098/099/101 are complete PASS;
+actual first-reference provenance [123](results/123-first-qualified-hybrid-provenance-audit.json)
+passes C4 B2 at 16384/32768 with 5,413 unchanged read identities. The hybrid
+queue continues. At the user's request, both old CPU recovery jobs were stopped
+with all complete/partial files retained (124); idle comparison waiter 120 was
+retired without jobs. Point-guided 113 remains FAIL after an analysis wrapper
+error; post-hoc replay 125 passes the original physical/iid checks without new
+rendering. Fresh 125/126 proof/acquisition runs and comparison view 127 are
+separate from those historical attempts. New comparison execution waits for
+all 24 eligible references, complete provenance and quiescence. Interim
+preflight 129 is **NOT_READY**; final pilots/calibration/047 remain pending.
+
+## Earlier execution checkpoints
+
+The progression below records earlier checkpoints. Use the current section
+above and `research/status.md` for present process and reference status.
+
 New executable cohort: native GPU pixel PT and the separately frozen dense
 repository RC estimator control. [C7 budget/quality results](results/013-c7-pt-cohort-pilot.json)
 include all losses and passing PT levels. [Construction lock](results/016-corpus-state-lock.json)
@@ -67,9 +85,9 @@ This is resource/dispatch normalization wiring: scene tracing, finite-depth
 transport, surface gather and dynamic histories remain unimplemented. It is
 not DDGI frame-quality qualification or a calibrated timing result.
 
-Recovery now executes C1 T_B8 16384→32768 and C2 T_B2 8192→16384 in
-two 16-thread qualifiers, followed by all remaining selected slots. The new
-continuation-v3 uses view 067 and waits for eligible references. C7 T_B2
+Historically, recovery executed C1 T_B8 16384→32768 and C2 T_B2 8192→16384 in
+two 16-thread qualifiers. Continuation-v3 used view 067; its later retirement
+and the user-requested CPU stops are recorded in 120/124. C7 T_B2
 GPU numerical-port conformance at 16 spp passes (070), with exact counters and
 max mean discrepancy 2.71051e-20; this does not grant reference eligibility.
 

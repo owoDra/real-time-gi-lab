@@ -19,18 +19,18 @@ Lane M starts. All scored pixels and earlier failed budgets remain retained.
 | Controlled C7 | Incumbent misses roughly 91% of one-bounce indirect energy; dense repository RC also fails. PT passes at 256 spp T_B2 / 1024 spp T_B8 ([013](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json), [015](lanes/n010-comparison-readiness/results/015-dense-rc-pilot.json)). |
 | Controlled dynamics | All 145 original cohort images are scored; all 29 memory ledgers replay to zero within the cap. C9 incumbent energy is about 7.645× the reference. C8/C9 complete ladders select 1024 spp for both transports; T_B2 PT 1024 confirmation passes all 25 dynamic frames. Earlier PT 256 losses remain ([033](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md), [042](lanes/n010-comparison-readiness/results/042-controlled-pt-budget-confirmation-summary.json)). |
 
-Current checkpoint: **NOT READY**. [Full-gate preflight 103](lanes/n010-comparison-readiness/results/103-interim-full-gate-preflight.json)
-and the [completion inventory](lanes/n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
+Current checkpoint: **NOT READY**. [Current-view preflight 129](lanes/n010-comparison-readiness/results/129-replayed-view-interim-preflight.json)
+and the [current execution record 130](lanes/n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
 identify the remaining requirements. No pilot timing is yet accepted as a
 calibrated superiority comparison.
 
 | Completion requirement | Current state / next action |
 | --- | --- |
-| All 24 locked references | 15 eligible: C1/C2/C3 T_B2 and C7–C12 both transports, with full selected-slot provenance replay [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json) PASS. Complete C1/C2/C3 T_B8 and C4/C5/C6 both transports. Current CPU levels are C1 B8 65536 and C2 B8 32768; partial seeds do not qualify a level. The 262144 cap outcome is still unmeasured. |
+| All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
 | Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
 | Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
 | Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Quiet sizing 046 and accepted eight-process calibration 029 are still required. CPU wall time is diagnostic. |
-| Final handoff | Continuation-v3 waits on view 067. Final preflight 047 and the final N010 decision remain pending. Then register and execute the distinct Lane M GI competitiveness campaign; no N011. |
+| Final handoff | Idle continuation-v3 was retired without jobs (120). A fresh plan-037 driver waits on view 127 for all 24 eligible references, full provenance and actual reference-work quiescence before the unchanged pilots/calibration. Final 047 and the N010 decision remain pending. Then register and execute the distinct Lane M GI competitiveness campaign; no N011. |
 
 The additional DDGI family is pinned to RTXGI Vulkan on AMD, without CUDA:
 [source](lanes/n010-comparison-readiness/results/021-ddgi-source-provenance.json),
@@ -146,13 +146,16 @@ fallback covers about 8.66% of paths; acquisition timings are loaded diagnostics
 passes both cases' complete binary64 sum/moment reconstruction, per-pixel
 counter totals, all four PFM components and owned-memory replay.
 
-No hybrid reference is admitted. Physical 099 is now executing after complete 098 PASS;
-all-state/prefix 101 waits for physical proof and is **NOT RUN**.
-Prefix build 100 is build evidence only. Plan 029 and separate qualification/
-provenance helpers prepare high-sample ladders and future audits; historical prerequisite
-checks 104–106 refused acquisition while 098 was incomplete. Their success paths remain
-unexecuted. No CPU-view replacement has occurred; the frozen current driver
-and comparison inputs remain unchanged. All original failures stay failed.
+Hybrid physical [099](lanes/n010-comparison-readiness/results/099-hybrid-physical-controls.json)
+completes 68 numerical cases and all eight physical controls PASS. All-state/prefix
+[101](lanes/n010-comparison-readiness/results/101-hybrid-all-state-and-prefix.json)
+completes 96 low-dose and eight actual-level cases, with all 304 native attempts
+PASS. Fresh statistical acquisition 121 now runs under plan 034. C4 B2 completes
+the first qualifying pair at 16384/32768; actual new-variant provenance 123 checks
+5,413 read identities, all unchanged, including complete prerequisite payloads.
+That reference is separate from the prospectively fixed comparison map 127.
+No whole-corpus admission or accepted timing follows. Historical refusals
+104–106 and failed original port 082 remain unchanged.
 
 For exact source/evidence identities and historical attempts, use the
 [N010 result index](lanes/n010-comparison-readiness/results/index.json),
@@ -164,10 +167,15 @@ in [plan 030](lanes/n010-comparison-readiness/experiments/030-prospective-point-
 It mixes cosine continuation with geometry/direct-light surface guidance and
 explicit null events, preserving the original finite-transport integral as the
 validation target. Build [112](lanes/n010-comparison-readiness/results/112-point-guided-oracle-build.json)
-passes; independent physical/iid controls 113 are executing. Separate prefix
-build 114 also passes, and plan 031 prepares all-state/own-prefix verification
-115, which is waiting for complete physical PASS (**NOT RUN**). No corpus reference
-or sampling-method transition has occurred; existing CPU acquisitions continue.
+passes. Physical acquisition 113 exported all seventeen scenes, then its analysis
+adapter failed on missing `geometry_hash_match`; 113 remains terminal FAIL.
+Post-hoc CPU-only [125](lanes/n010-comparison-readiness/results/125-point-guided-physical-analysis-replay.json)
+rechecks the retained bytes, derives wrapper geometry/name fields from actual
+metadata and canonical scenes, and passes all eight original physical and two
+iid checks with unchanged gates and no rerender. Separate prefix build 114
+passes. Plan 036 uses a fresh 125/126 proof chain: all-state/own-prefix 126 is
+executing, and one fresh nine-slot acquisition queue waits for complete PASS.
+No point-guided corpus reference or full comparison admission exists yet.
 All four seeds, levels, absolute/relative screens and cap remain fixed.
 
 Prospective point-guided acquisition [plan 032](lanes/n010-comparison-readiness/experiments/032-point-guided-reference-qualification.md)
@@ -175,9 +183,11 @@ prepares separate ladders for all nine currently unfinished transports; the
 other fifteen remain included through original-method evidence. Executed
 prerequisite check [116](lanes/n010-comparison-readiness/results/116-point-guided-qualification-prerequisite-check.json)
 refuses dispatch because 113 is incomplete. Exact read input bytes are archived;
-no acquisition root or samples were created. The separate queue waits for
-complete 113/115 PASS before one fresh acquisition (no retry). Its acquisition,
-new-variant provenance and view-transition success paths remain unexecuted.
+no acquisition root or samples were created. The old 113/115 queue terminated
+on 113 failure with no acquisition. A separate plan-036 queue waits on 125/126,
+retaining the original nine-slot/four-seed/six-level/screens/cap rules. Its new
+sampling-reference success path remains unexecuted. Plan-037 view 127 is a
+scheduling map, not eligibility or comparison readiness.
 Existing-CPU delegation [117](lanes/n010-comparison-readiness/results/117-point-guided-api-existing-cpu-provenance-audit.json)
 passes all fifteen previously eligible slots through the new API; this audits
 original-method references only and does not attest the point-guided branch.

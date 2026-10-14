@@ -1,0 +1,46 @@
+{
+  "schema": "n010-user-requested-old-cpu-stop/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "USER_REQUESTED_OLD_CPU_ACQUISITION_STOPPED_PARTIALS_RETAINED",
+  "source_commit": "27488d4e41a074a0f6567b84031081f9e592bc26",
+  "authority": "User: \u53e4\u3044\u30d7\u30ed\u30bb\u30b9\u304c\u6b8b\u3063\u3066\u3044\u308b\u53ef\u80fd\u6027\u304c\u3042\u308b\u306e\u3067\u78ba\u8a8d\u3057\u3066\u6b62\u3081\u3066",
+  "record_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/old-cpu-process-stop-20261014T234245Z.json",
+  "record_sha256": "10e6571efb0e1447b638dea9f62ebe7b2a6ca640dd807b379754537c2bc1d427",
+  "terminated_pids": [
+    523073,
+    523123,
+    988347,
+    1287824
+  ],
+  "all_old_processes_stopped": true,
+  "current_hybrid_preserved": true,
+  "retained_file_count": 298,
+  "scientific_qualification_complete": false,
+  "cap_failure_claimed": false,
+  "power_settings_changed": false,
+  "last_complete_levels": [
+    {
+      "slot": "C1_T_B8",
+      "qualification_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/qualification.json",
+      "qualification_sha256": "9da5eece00c7e1e490a35aefceb0a54f7ea42b0a90b4ad655d6713c482a9fa8f",
+      "classification": "INELIGIBLE",
+      "spp": 65536,
+      "max_active_abs_p99": 2.451940439641476e-05,
+      "max_active_rel_p99": 0.017625394267038057,
+      "interrupted_next_spp": 131072,
+      "frozen_cap": 262144
+    },
+    {
+      "slot": "C2_T_B8",
+      "qualification_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C2_T_B8/qualification.json",
+      "qualification_sha256": "690fed9846b0a55d3d04aedab27adddd91ad6ce926105565e7a7a970b2c23c61",
+      "classification": "INELIGIBLE",
+      "spp": 65536,
+      "max_active_abs_p99": 2.423680853098589e-05,
+      "max_active_rel_p99": 0.017546070308359765,
+      "interrupted_next_spp": 131072,
+      "frozen_cap": 262144
+    }
+  ]
+}
