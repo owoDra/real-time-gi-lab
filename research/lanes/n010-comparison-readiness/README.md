@@ -80,3 +80,10 @@ T_B8 and the remaining slots still run. GPU conformance 074 preserves its
 guard. First C1 T_B2 8192 numerical comparison passes with exact counters and
 max mean difference 1.73472e-18. GPU references remain ineligible pending
 full numerical, physical-control, all-state and actual-level prefix proof.
+
+The resource follow-up 075 is now terminal: twelve cases pass, then the first
+C1 T_B8 case times out at 900 seconds without numerical output. 075 remains
+failed; 081 records that conditional physical/prefix workers refused dispatch
+(NOT RUN). Plan 021 starts 082 with the twelve unchanged completed cases and
+a fresh 1800-second guard for the remaining four. New conditional workers
+use 082 and fresh work roots; no GPU reference is admitted.

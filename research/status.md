@@ -152,15 +152,17 @@ nested-prefix checks are required before any GPU reference admission.
 Original CPU low-dose controls for all 24 locked state/transport slots and
 all four seeds complete with finite outputs and canonical identities (078).
 They are numerical admission controls at 16 spp, not statistically eligible
-references. GPU full-level conformance has passed C1 T_B2, C7 T_B2 and C7
-T_B8, all four fixed seeds (12/16 cases); C1 T_B8 is still acquiring in 075.
+references. GPU full-level conformance retained twelve completed passing cases (C1 T_B2,
+C7 T_B2/T_B8, four fixed seeds); 075 then stopped at the C1 T_B8 wall guard.
+082 now reuses that ordered completed prefix and acquires the remaining
+four C1 T_B8 cases under the prospective 1800-second execution guard.
 No GPU reference is admitted while its remaining physical/all-state/prefix
 gates are pending. Recovery C2 T_B8 and C1 T_B8 CPU jobs continue.
 
 GPU conformance 075 is now terminal: 12 cases pass, but the first C1 T_B8
 case exceeds the 900-second execution guard without a numerical output.
 075 is retained as failed; conditional physical/prefix workers correctly
-refused dispatch (081, NOT RUN). Plan 021 prepares fresh 082 with unchanged
+refused dispatch (081, NOT RUN). Plan 021 executes fresh 082 with unchanged
 numerical gates and an explicit 1800-second guard for the remaining four
 cases, retaining the ordered twelve completed cases. GPU references remain
 ineligible; CPU recovery continues.

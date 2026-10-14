@@ -176,3 +176,12 @@ The first completed C1 T_B2 8192 case passes; max mean error 1.73472e-18,
 all counters exact. Physical control 077 waits for full 075; all-state/prefix
 079 waits for 075/076/077/078. Separate prefix host build 076 is complete,
 but no prefix runtime or reference eligibility is claimed from that build.
+
+075 terminated at its first C1 T_B8 seed's 900-second wall guard (twelve
+earlier cases PASS, thirteenth unfinished). 081 records old physical/prefix
+workers' terminal refusal to dispatch, with no 077/079 acquisition. Plan 021
+starts fresh `gpu-reference-full-conformance-v3` / 082, retaining all twelve
+completed cases and executing the remaining four with a 1800-second guard.
+New physical/prefix conditional workers wait for 082 using
+`gpu-reference-physical-controls-v2` and `gpu-reference-all-state-prefix-v2`.
+Existing CPU recovery and continuation-v3 inputs remain frozen and unchanged.
