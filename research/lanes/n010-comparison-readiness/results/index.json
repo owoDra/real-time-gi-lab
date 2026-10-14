@@ -367,6 +367,12 @@
       "status": "complete-negative",
       "result": "074-gpu-reference-full-conformance.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-076",
+      "status": "host-build-complete",
+      "result": "076-gpu-reference-prefix-build.json",
+      "gpu_run": false
     }
   ]
 }
