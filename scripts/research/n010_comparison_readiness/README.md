@@ -61,3 +61,18 @@ be presented as an independent GI baseline. Both source/target capture tools
 retain errors, source/binary identities and allocation lifetimes. Pilot GPU
 timings are DIAGNOSTIC_UNCALIBRATED and were taken while CPU references ran;
 no speed comparison follows from them.
+
+
+Calibration: `calibrate_renderer.py --mode sizing|accepted --lock LOCK --work
+NEW_DIR --output JSON`; accepted mode additionally requires `--plan SIZING_JSON`
+and rejects active reference/GPU jobs. `--boundaries` may select named frozen
+boundaries, but readiness requires all declared boundaries. Both GPU binaries
+accept `--calibration-doses FILE` for exact per-sample known-work schedules.
+No image/transport state is modified by the extra stage.
+
+Amendment 3 computational cache: `generate_cached_oracle.py --out NEW_SOURCE_DIR`,
+compile its main with the original O3/no-fast-math/ffp-contract=off/thread flags
+to a separate `build/n010-cpu/n010_cached_oracle`; then run
+`validate_cached_oracle.py --work NEW_DIR --output JSON`. Only complete exact
+payload/counter equivalence may authorize cached qualification. The original
+oracle and active reference outputs remain intact.
