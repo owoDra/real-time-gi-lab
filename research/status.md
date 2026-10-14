@@ -1,4 +1,4 @@
-# Current research status (2026-10-11)
+# Current research status (2026-10-14)
 
 **Status: empirical architecture and image-producing renderer demonstrated; general real-time GI superiority NOT established.** This is the sole cross-lane status/adoption synthesis. For the long research history see [archived 2026-10-02 status](archive/status-2026-10-02.md); for exact decision evidence use the linked lane results and [branch inventory](branch-inventory.md).
 
@@ -15,6 +15,7 @@
 | Full Renderer | **Working research implementation:** N001–N004 and separate N005/N006 experimental variants | [Lane N](lanes/lane-n-end-to-end-renderer/results/index.json), [N005](lanes/n005-adaptive-tracing/), [N006](lanes/n006-interval-aware-allocation/) |
 | N005 adaptive tracing | **REFINE / conditional:** no universal policy accepted | [N005 evidence](lanes/n005-adaptive-tracing/results/) |
 | N006 interval-aware allocation | **STOP:** Q8 influence exists; +4-ray signed HDR quality lift not detectably proven; do not initiate P2/P3 | [N006 final result 045](lanes/n006-interval-aware-allocation/results/045-p1m3c-deforming-signed-quality-no-detectable-lift-stop.md) |
+| N009 scene contract / back faces / probe attribution | **Concluded:** SC NO GO, BF1–BF3 PASS, PT INCOMPLETE; C1/BF-P remain opt-in | [N009 final result 009](lanes/n009-scene-contract/results/009-n009-final-decision.md); no architecture promotion |
 
 The current production-style Renderer uses **N-series pinned imports**, not whatever historical code happens to be stored in other lane folders. Presence of old experiment sources does not activate them.
 
@@ -57,9 +58,16 @@ N007 P0 CPU source audit and synthetic PFM diagnostics are in progress on `resea
   - it misses about 95% of the real one-bounce light on the only eligible total reference (non-Sponza `leak-medium`: total −30% for D2, −36% for D8).
 - **Scope:** diagnostic only, with no ranking and no N006/N007 revision. Next: a separately preregistered scene-contract study (glTF node transforms and an interior light).
 
+**N009 final (2026-10-14, branch `research-n009-scene-contract`): Exit SC = NO GO; BF1–BF3 = PASS; Exit PT = INCOMPLETE.** [Result 009](lanes/n009-scene-contract/results/009-n009-final-decision.md)
+
+- **Scene contract:** transformed Sponza with authored camera/interior light has full total support, but C1/C2/C4/C5/C6 are only DIRECT_DETERMINISTIC_PROVED under both T_B2/T_B8; no total reference passes the unchanged four-seed 8192-SPP screen. C3 light motion is NOT_CONSTRUCTIBLE under the disclosed pre-reference Amendment 1. This is not Bounded GO for total references.
+- **Back faces:** all 10 captures are byte-attested and two-sided. C7 has zero primary mismatches and direct max relative error 1.08488e-5 on both backends, passing the C7-specific gates. Sponza has 74/108 primitive mismatches and direct max-relative-error-1.0 pixels even on matched visibility; their cause remains **unresolved (未解決)**. Small direct sum bias does not prove per-pixel agreement.
+- **Probe attribution:** C7 fails V1 (21 replay mismatch pixels); old B4 fails V3 (86.93% secondary re-trace match). Coverage/range observations and complete shadow removal on old B4 remain diagnostic. Excluding the 21 pixels is explicitly post-hoc sensitivity and does not complete attribution.
+- **Scope:** computation is complete; N009's opt-in C1/BF-P overlay is not adopted. No total-quality ranking or performance/memory/temporal claim; this evidence-only write-up reruns no build, executable test or GPU/runtime check. N001–N008 results remain unchanged. Next work needs new preregistration or explicitly labelled diagnostics.
+
 ## Unresolved strategic questions
 
-1. **Can independent HDR image quality be evaluated credibly across real dynamic scenes?** N007 first, before claiming quality gain or optimizing new adaptive rules.
+1. **Can independent HDR image quality be evaluated credibly across real dynamic scenes?** N007/N008/N009 have concluded; N009 still lacks eligible Sponza total references at its frozen cap. A new reference-qualification protocol is needed before claiming quality gain or optimizing adaptive rules.
 2. **Does this architecture actually beat fair existing GI baselines** under equivalent quality/cost across multiple scenes and hardware classes? Not yet established.
 3. **Which structural light-transport/storage/reuse changes** can change the total quality/performance/memory frontier beyond a locally optimized Split RC pipeline? Evaluate only after reliable baselines and bottlenecks.
 

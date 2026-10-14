@@ -41,6 +41,13 @@
    "result": "008-probe-attribution.json",
    "classification": "INCOMPLETE per gates (C7 V1, B4 V3); post-hoc sensitivity disclosed",
    "gpu_run": false
+  },
+  {
+   "id": "N009-FINAL-009",
+   "status": "complete",
+   "result": "009-n009-final-decision.md",
+   "classification": "Exit SC NO GO; BF1-BF3 PASS (C7 scope); Exit PT INCOMPLETE (C7 V1, old B4 V3); Sponza direct max-rel 1.0 unresolved; post-hoc sensitivity only",
+   "gpu_run": false
   }
  ]
 }
