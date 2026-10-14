@@ -143,3 +143,12 @@ faults and owned-memory replay PASS. CPU fallback recomputed 40861185 of
 The new complete numerical suite 098 is executing; physical worker 099 waits
 for that complete PASS. Separate prefix host build 100 succeeds, but prefix
 runtime validation is NOT RUN. No reference admission or N010 READY yet.
+
+### Completion evidence inventory
+
+[102](results/102-completion-evidence-and-handoff.md) maps each unchanged
+completion requirement to executed evidence, pending work and the runnable
+final verification command. Actual full-gate preflight [103](results/103-interim-full-gate-preflight.json)
+is NOT_READY: correctness accounting and additional-family source/device
+boundaries pass, while full references, Sponza pilots and accepted timing
+calibration remain pending. It is an interim check, not final result 047.

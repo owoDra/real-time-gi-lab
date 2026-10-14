@@ -218,3 +218,14 @@ runtime validation is NOT RUN. No reference admission or N010 READY yet.
 The all-state/prefix validation worker 101 is prepared and waiting for
 098/099/100/078 to pass. It preserves all 96 locked low-dose cases and
 eight actual C7 dyadic-prefix cases. Its runtime checks are NOT RUN yet.
+
+### N010 completion audit
+
+[Completion inventory](lanes/n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
+now maps every gate to evidence and remaining work. Actual full-gate
+[preflight 103](lanes/n010-comparison-readiness/results/103-interim-full-gate-preflight.json)
+records NOT_READY; correctness accounting and DDGI source/Vulkan boundaries
+pass, but full reference eligibility, complete Sponza pilots and accepted
+Renderer timing calibration remain incomplete. This is not final 047 or a
+reference-admission decision. N010 remains active; the next research lane is
+Lane M GI competitiveness, with no N011.

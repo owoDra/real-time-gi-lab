@@ -70,3 +70,9 @@ on eight retained paths; it does not repair the Renderer's unresolved direct
 pixels. Whole-path CPU fallback candidate 093 passes selected feasibility.
 Separate streamed build 095 and full-frame plan 025 preserve all original
 admission gates; no GPU reference transition before complete validation.
+
+The [N010 completion inventory](lanes/n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
+provides the remaining gate sequence and runnable final preflight. Executed
+full-gate interim preflight 103 is NOT_READY, retaining missing full references,
+Sponza pilots and accepted calibration as explicit unfinished work. Complete
+these gates in N010, then register and execute the distinct Lane M comparison.

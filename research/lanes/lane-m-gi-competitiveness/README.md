@@ -25,3 +25,7 @@ be locked before viewing their indirect output. Compare linear HDR total and
 indirect quality, GPU Renderer time and persistent/true-peak owned memory;
 report quality FAIL without a same-quality speed ranking. No scene omissions,
 single-GPU generality or quality-unmatched superiority claims.
+
+The [N010 completion inventory](../n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
+lists remaining gates and a runnable evidence-verification command. Interim
+full-gate preflight 103 is NOT_READY; it does not authorize an accepted campaign.

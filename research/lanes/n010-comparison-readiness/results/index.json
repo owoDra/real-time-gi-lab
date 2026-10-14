@@ -499,6 +499,18 @@
       "status": "full-frame-feasibility-only",
       "result": "096-hybrid-full-frame-deep-conformance.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-102",
+      "status": "interim-completion-evidence",
+      "result": "102-completion-evidence-and-handoff.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-103",
+      "status": "not-ready-full-gate-preflight",
+      "result": "103-interim-full-gate-preflight.json",
+      "gpu_run": false
     }
   ]
 }
