@@ -55,9 +55,9 @@ def execute(b,lock,doses,out):
    for _ in range(dose):
     expected=(expected*1664525+1013904223)&0xffffffff;expected^=expected>>13
    if struct.unpack_from('<I',data,item*4)[0]!=expected:raise ValueError('known-work result mismatch')
-  payloads.append({'image':sha(directory/'total.pfm'),'scratch':sha(scratch)})
+  payloads.append({'images':{name:sha(directory/(name+'.pfm')) for name in ('direct','indirect','total')},'scratch':sha(scratch)})
  # Exact image identity required; retain any image divergence as a failure.
- identical=len({p['image'] for p in payloads})==1
+ identical=all(len({p['images'][name] for p in payloads})==1 for name in ('direct','indirect','total'))
  result.update(samples=samples,known_work_probe_validation=True,images_byte_equal=identical,payloads=payloads,
                allocation_ledger=json.loads((out/'allocation-ledger.json').read_text()),
                payload_sha256={str(p.relative_to(out)):sha(p) for p in sorted(out.rglob('*')) if p.is_file()})
