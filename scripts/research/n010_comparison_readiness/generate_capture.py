@@ -81,6 +81,11 @@ def generate(root, out):
     src = root / "src/research/lane_n_end_to_end_renderer/n001_runtime.cpp"
     sh = root / "shaders/research/lane_n_end_to_end_renderer"
     (out / "n010_runtime.cpp").write_text(runtime(src.read_text()))
+    main = (root / "src/research/n007_reference_validity/n007_capture_main.cpp").read_text()
+    main = once(main, "        n::FrameParams p{};",
+                '        std::cout << "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\\n";\n'
+                "        return 0;\n        n::FrameParams p{};")
+    (out / "n010_capture_main.cpp").write_text(main)
     for name, source, binding in (("hwrt", "n001_composite.comp.glsl", 5),
                                   ("software", "n003_composite_software.comp.glsl", 7)):
         (out / f"n010_{name}_composite.comp.glsl").write_text(shader((sh / source).read_text(), binding))

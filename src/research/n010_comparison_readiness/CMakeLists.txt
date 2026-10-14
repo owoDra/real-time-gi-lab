@@ -6,11 +6,13 @@ set(N010_C1 "${PROJECT_BINARY_DIR}/src/research/n009_scene_contract/generated")
 set(N010_GENERATED "${CMAKE_CURRENT_BINARY_DIR}/generated")
 set(N010_SCRIPT "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_capture.py")
 add_custom_command(OUTPUT
+  "${N010_GENERATED}/n010_capture_main.cpp"
   "${N010_GENERATED}/n010_runtime.cpp"
   "${N010_GENERATED}/n010_hwrt_composite.comp.glsl"
   "${N010_GENERATED}/n010_software_composite.comp.glsl"
   COMMAND ${Python3_EXECUTABLE} "${N010_SCRIPT}" --root "${PROJECT_SOURCE_DIR}" --out "${N010_GENERATED}"
   DEPENDS "${N010_SCRIPT}" "${PROJECT_SOURCE_DIR}/scripts/research/n007_reference_validity/generate_capture.py"
+    "${PROJECT_SOURCE_DIR}/src/research/n007_reference_validity/n007_capture_main.cpp"
     "${N010_N}/n001_runtime.cpp"
     "${PROJECT_SOURCE_DIR}/shaders/research/lane_n_end_to_end_renderer/n001_composite.comp.glsl"
     "${PROJECT_SOURCE_DIR}/shaders/research/lane_n_end_to_end_renderer/n003_composite_software.comp.glsl"
@@ -37,7 +39,7 @@ foreach(kind hwrt software)
 endforeach()
 add_custom_target(phos-n010-shaders DEPENDS ${N010_SPIRV})
 add_executable(phos-n010-capture
-  "${PROJECT_SOURCE_DIR}/src/research/n007_reference_validity/n007_capture_main.cpp"
+  "${N010_GENERATED}/n010_capture_main.cpp"
   "${N010_GENERATED}/n010_runtime.cpp"
   "${N010_N}/n001_reference.cpp"
   "${N010_N}/imported/integration/i001_compute.cpp"
