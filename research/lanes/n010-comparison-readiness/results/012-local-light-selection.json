@@ -1,0 +1,39 @@
+{
+  "schema": "n010-local-light-selection/1",
+  "source_state_sha256": {
+    "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+    "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+  },
+  "source_commit": "5bc042150b61f82653348626afb4091dbb9e0c90",
+  "diag": 4636.979505308799,
+  "light_scale": 36.195098876953125,
+  "candidates": [
+    {
+      "tag": "f0.01-a0-s1",
+      "position": [
+        -14.150163650512695,
+        651.4939575195312,
+        -38.68988037109375
+      ],
+      "min_triangle_distance": 215.37786831495023,
+      "free_space": true,
+      "direct": {
+        "positive_pixels": 37498,
+        "fraction": 0.6510069444444444,
+        "peak": 0.006371968871843127,
+        "passes": true
+      },
+      "payload_sha256": {
+        "direct.hits": "927964ea5001b8432af9711f5b898ee704d50f07124cadf0b3de304f97e2d26a",
+        "direct.n008": "b8fa4950ff82907203960b6aad6a472888a0cdff09265757a5b86491ef461c57",
+        "direct.s0.direct.pfm": "eee743adb6eea1491b58e8bf20f6377c2e2ec239343b9c2c5b59468e0475adf8",
+        "direct.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "direct.s0.f64": "c9c22fd2c66922157bd7fe8742bda859eb223225922ad1060fb6db87ffff1ca5",
+        "direct.s0.indirect.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "direct.s0.total.pfm": "eee743adb6eea1491b58e8bf20f6377c2e2ec239343b9c2c5b59468e0475adf8"
+      }
+    }
+  ],
+  "selected": "f0.01-a0-s1",
+  "contract_sha256": "36b1516126b402d72c0bcd02bdce22a1bd5510ca8ea83ddc2437c7fedd58f864"
+}

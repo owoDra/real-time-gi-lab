@@ -54,8 +54,14 @@ def score(capture, row, reference_work, output):
             raise ValueError("reference bytes changed after qualification")
     ref = np.mean([r["mean"] for r in runs], axis=0)
     values = {}
+    image_dir = capture / "gpu" if (capture / "gpu").is_dir() else capture
+    if (capture / "frames.json").exists():
+        meta = json.loads((capture / "frames.json").read_text())
+        required = {"T_B2": 2, "T_B8": 8}[row["transport"]]
+        if meta["vertices"] != required:
+            raise ValueError("path tracer/reference finite vertex boundary mismatch")
     for component in ("direct", "indirect", "total"):
-        g = L.read_pfm(capture / "gpu" / f"{component}.pfm") @ LUMA
+        g = L.read_pfm(image_dir / f"{component}.pfm") @ LUMA
         r = ref[..., L.COMPONENTS.index(component), :] @ LUMA
         values[component] = metrics(g, r)
         np.save(output.parent / f"{output.stem}.{component}.error.npy", g-r)
@@ -68,6 +74,9 @@ def score(capture, row, reference_work, output):
             "components": values, "pilot_quality_target": "PASS" if passed else "FAIL",
             "normalization": "whole-image reference RMS; linear luma",
             "scoring_exclusions": 0,
+            "capture_directory": str(capture),
+            "capture_payload_sha256": {c + ".pfm": hashlib.sha256((image_dir / (c+".pfm")).read_bytes()).hexdigest()
+                                       for c in ("direct", "indirect", "total")},
             "superiority_claim": False}
 
 
@@ -78,6 +87,8 @@ if __name__ == "__main__":
     ap.add_argument("--reference-work", type=Path, required=True)
     ap.add_argument("--output", type=Path, required=True)
     a = ap.parse_args()
+    if a.output.exists():
+        raise ValueError("refuse to overwrite score")
     row = json.loads(a.qualification.read_text())
     a.output.parent.mkdir(parents=True, exist_ok=True)
     result = score(a.capture, row, a.reference_work, a.output)
