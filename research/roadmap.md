@@ -40,3 +40,11 @@
 **Exit:** practical demo plus defensible, independently repeatable advantage with clearly declared scope, or a qualified failure/partial tradeoff.
 
 For current conclusions use [status.md](status.md); for measurement details use [protocol.md](protocol.md).
+
+N010 has executed the controlled dynamic cohort (results 019/020) with all
+source, first changed and recovery frames retained. Quality failures are
+comparison outcomes, including overestimation after light motion; they do not
+create an N011 preparation lane. Complete Sponza reference qualification,
+fixed-ladder quality matching, actual full Renderer timing calibration and
+fail-closed Lane M handoff here. The required DDGI integration is pinned to
+RTXGI Vulkan on AMD (result 021); CUDA is not part of the comparator.

@@ -97,6 +97,24 @@
       "status": "interim",
       "result": "017-comparison-pilot-summary.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-019",
+      "status": "complete",
+      "result": "019-controlled-dynamic-cohort.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-020",
+      "status": "complete",
+      "result": "020-controlled-dynamic-summary.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-021",
+      "status": "source-pinned",
+      "result": "021-ddgi-source-provenance.json",
+      "gpu_run": false
     }
   ]
 }

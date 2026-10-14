@@ -17,6 +17,14 @@ new physical sampler validation and comparison harness work continue.
 New executable cohort: native GPU pixel PT and the separately frozen dense
 repository RC estimator control. [C7 budget/quality results](results/013-c7-pt-cohort-pilot.json)
 include all losses and passing PT levels. [Construction lock](results/016-corpus-state-lock.json)
-contains source/target dynamics and local light motion. References beyond C7,
-dynamic comparison execution and calibrated timing are still in progress.
+contains source/target dynamics and local light motion. C7 and C8–C12 references
+are eligible in both finite transports. The [dynamic cohort](results/019-controlled-dynamic-cohort.json)
+retains all 145 executed source/target/recovery images, all losses and two
+explicit software-churn capture limitations; [independent memory replay](results/020-controlled-dynamic-summary.json)
+passes for all 29 roles. Sponza reference acquisition and calibrated timing
+remain in progress.
 Historical vanilla-software is a traversal control, not a separate GI baseline.
+
+[RTXGI provenance](results/021-ddgi-source-provenance.json) pins the fetched SDK
+for the required additional Lane M DDGI comparator. The chosen path is Vulkan
+on AMD, without CUDA; integrated DDGI runtime is not yet demonstrated.

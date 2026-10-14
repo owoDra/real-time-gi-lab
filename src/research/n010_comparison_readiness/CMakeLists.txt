@@ -13,7 +13,7 @@ add_custom_command(OUTPUT
   "${N010_GENERATED}/n010_hwrt_corrected_composite.comp.glsl"
   "${N010_GENERATED}/n010_software_corrected_composite.comp.glsl"
   COMMAND ${Python3_EXECUTABLE} "${N010_SCRIPT}" --root "${PROJECT_SOURCE_DIR}" --out "${N010_GENERATED}"
-  DEPENDS "${N010_SCRIPT}" "${PROJECT_SOURCE_DIR}/scripts/research/n007_reference_validity/generate_capture.py"
+  DEPENDS "${N010_SCRIPT}" "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_calibration.py" "${PROJECT_SOURCE_DIR}/scripts/research/n007_reference_validity/generate_capture.py"
     "${PROJECT_SOURCE_DIR}/src/research/n007_reference_validity/n007_capture_main.cpp"
     "${N010_N}/n001_runtime.cpp"
     "${N010_N}/n002_runtime.cpp" "${N010_N}/n003_comparison_runtime.cpp"
@@ -132,3 +132,17 @@ target_link_libraries(phos-n010-pixel-pt PRIVATE vk-bootstrap::vk-bootstrap Thre
 target_compile_definitions(phos-n010-pixel-pt PRIVATE PHOS_GI_INTEGRATION_SHADER_DIR="${PROJECT_BINARY_DIR}/shaders")
 set_target_properties(phos-n010-pixel-pt PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
 add_dependencies(phos-n010-pixel-pt phos-n010-pixel-pt-shader phos-n010-dense-rc-shader)
+
+# Calibration-only integer work, never linked into the default Renderer.
+set(N010_NEUTRAL_GLSL "${PROJECT_SOURCE_DIR}/shaders/research/n010_comparison_readiness/n010_neutral_work.comp.glsl")
+set(N010_NEUTRAL_SPV "${PROJECT_BINARY_DIR}/shaders/n010_neutral_work.spv")
+if(GLSLC)
+  add_custom_command(OUTPUT "${N010_NEUTRAL_SPV}" COMMAND "${GLSLC}" --target-env=vulkan1.3 -O "${N010_NEUTRAL_GLSL}" -o "${N010_NEUTRAL_SPV}" DEPENDS "${N010_NEUTRAL_GLSL}" VERBATIM)
+elseif(GLSLANG_VALIDATOR)
+  add_custom_command(OUTPUT "${N010_NEUTRAL_SPV}" COMMAND "${GLSLANG_VALIDATOR}" -V --target-env vulkan1.3 -S comp "${N010_NEUTRAL_GLSL}" -o "${N010_NEUTRAL_SPV}" DEPENDS "${N010_NEUTRAL_GLSL}" VERBATIM)
+else()
+  add_custom_command(OUTPUT "${N010_NEUTRAL_SPV}" COMMAND $<TARGET_FILE:glslang-standalone> -V --target-env vulkan1.3 -S comp "${N010_NEUTRAL_GLSL}" -o "${N010_NEUTRAL_SPV}" DEPENDS glslang-standalone "${N010_NEUTRAL_GLSL}" VERBATIM)
+endif()
+add_custom_target(phos-n010-neutral-work-shader DEPENDS "${N010_NEUTRAL_SPV}")
+add_dependencies(phos-n010-capture phos-n010-neutral-work-shader)
+add_dependencies(phos-n010-pixel-pt phos-n010-neutral-work-shader)

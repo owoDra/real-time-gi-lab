@@ -3,6 +3,7 @@
 import argparse
 from pathlib import Path
 import sys
+import generate_calibration as calibration
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts/research/n007_reference_validity"))
@@ -118,7 +119,7 @@ def generate(root, out):
     n3 = once(n3, "        {6, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl_->uniform},", "        {6, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, &impl_->uniform},\n"
               "        {7, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, &impl_->n010_lookup_audit},")
     n3 = once(n3, '"n003_composite_software.spv"', '(std::getenv("PHOS_N010_DIRECT_PROFILE") ? "n010_software_corrected_composite.spv" : "n010_software_composite.spv")')
-    (out / "n010_runtime.cpp").write_text(runtime(src.read_text()) + "\n" + n2 + "\n" + n3)
+    (out / "n010_runtime.cpp").write_text(calibration.runtime(runtime(src.read_text())) + "\n" + n2 + "\n" + n3)
     main = (root / "src/research/n007_reference_validity/n007_capture_main.cpp").read_text()
     main = once(main, '#include "n001_runtime.hpp"',
                 '#include "n001_runtime.hpp"\n#include "allocation_ledger.hpp"')
@@ -206,7 +207,7 @@ def generate(root, out):
                 '        std::cout << "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\\n";\n'
                 "        return 0;\n        n::FrameParams p{};")
     main = once(main, '<<(target?2:1)', '<<frame.params.limits[3]')
-    (out / "n010_capture_main.cpp").write_text(main)
+    (out / "n010_capture_main.cpp").write_text(calibration.main(main))
     for name, source, binding in (("hwrt", "n001_composite.comp.glsl", 5),
                                   ("software", "n003_composite_software.comp.glsl", 7)):
         value=shader((sh / source).read_text(), binding)

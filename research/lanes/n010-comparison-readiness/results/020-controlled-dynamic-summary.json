@@ -1,0 +1,1922 @@
+{
+  "schema": "n010-dynamic-summary/1",
+  "complete": true,
+  "source_evidence_sha256": "346de6b0594cadea45d04ea3acd8af2e75786ac841e100fbf79e17db2c2788d9",
+  "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+  "scoring_exclusions": [],
+  "rows": [
+    {
+      "cell": "C8",
+      "role": "incumbent-hwrt",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266937920,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        }
+      ]
+    },
+    {
+      "cell": "C8",
+      "role": "incumbent-software",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266694400,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        }
+      ]
+    },
+    {
+      "cell": "C8",
+      "role": "vanilla-traversal",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266552640,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.027113427366438,
+          "indirect_signed_sum_bias": -0.866758526552308
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9989466923143506,
+          "indirect_signed_sum_bias": -0.910630899622914
+        }
+      ]
+    },
+    {
+      "cell": "C8",
+      "role": "pixel-pt-B2",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09958057320076397,
+          "indirect_signed_sum_bias": 0.0023427437671393217
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.10401169499818012,
+          "indirect_signed_sum_bias": 0.0004471417518556592
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.10102980876381346,
+          "indirect_signed_sum_bias": 0.0013713953007452426
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.10261508257843051,
+          "indirect_signed_sum_bias": 2.5682170571518335e-05
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.10438418596557902,
+          "indirect_signed_sum_bias": -0.0021099611837591685
+        }
+      ]
+    },
+    {
+      "cell": "C8",
+      "role": "pixel-pt-B8",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.055749772168803585,
+          "indirect_signed_sum_bias": -0.0005987765450352694
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.058712044252437715,
+          "indirect_signed_sum_bias": 0.00035357075024541537
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05872956872141428,
+          "indirect_signed_sum_bias": 0.002829709016968606
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05725638757386627,
+          "indirect_signed_sum_bias": -0.0004911561585312634
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05915294148587857,
+          "indirect_signed_sum_bias": -0.0011016965554390397
+        }
+      ]
+    },
+    {
+      "cell": "C8",
+      "role": "dense-rc",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781950080867,
+          "indirect_signed_sum_bias": -0.19009784247926362
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874042979948491,
+          "indirect_signed_sum_bias": -0.43882070762685055
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.1403085870983432,
+          "indirect_signed_sum_bias": -0.1767952158057355
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9715918262237163,
+          "indirect_signed_sum_bias": -0.4478515653878871
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.1403085870983432,
+          "indirect_signed_sum_bias": -0.1767952158057355
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9715918262237163,
+          "indirect_signed_sum_bias": -0.4478515653878871
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.1403085870983432,
+          "indirect_signed_sum_bias": -0.1767952158057355
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9715918262237163,
+          "indirect_signed_sum_bias": -0.4478515653878871
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 1.1403085870983432,
+          "indirect_signed_sum_bias": -0.1767952158057355
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9715918262237163,
+          "indirect_signed_sum_bias": -0.4478515653878871
+        }
+      ]
+    },
+    {
+      "cell": "C9",
+      "role": "incumbent-hwrt",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266937920,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        }
+      ]
+    },
+    {
+      "cell": "C9",
+      "role": "incumbent-software",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266694400,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        }
+      ]
+    },
+    {
+      "cell": "C9",
+      "role": "vanilla-traversal",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266552640,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.170521171970696,
+          "indirect_signed_sum_bias": 6.644617580059184
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 3.8712853576301205,
+          "indirect_signed_sum_bias": 3.90022158381429
+        }
+      ]
+    },
+    {
+      "cell": "C9",
+      "role": "pixel-pt-B2",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09958057320076397,
+          "indirect_signed_sum_bias": 0.0023427437671393217
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.15548782963950442,
+          "indirect_signed_sum_bias": 0.00835097470437215
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.1560799454296761,
+          "indirect_signed_sum_bias": -0.000489709954179071
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.15214822681391052,
+          "indirect_signed_sum_bias": 0.0012580395952636115
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.15452231313105985,
+          "indirect_signed_sum_bias": 0.003531702231596616
+        }
+      ]
+    },
+    {
+      "cell": "C9",
+      "role": "pixel-pt-B8",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.055749772168803585,
+          "indirect_signed_sum_bias": -0.0005987765450352694
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09218615143180835,
+          "indirect_signed_sum_bias": 0.0009474717438110317
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.08925610418874387,
+          "indirect_signed_sum_bias": 0.0040078650797566945
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09183990641382087,
+          "indirect_signed_sum_bias": -0.0009830286857404416
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09299983447185182,
+          "indirect_signed_sum_bias": 0.003020529543953716
+        }
+      ]
+    },
+    {
+      "cell": "C9",
+      "role": "dense-rc",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781950080867,
+          "indirect_signed_sum_bias": -0.19009784247926362
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874042979948491,
+          "indirect_signed_sum_bias": -0.43882070762685055
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.7022548477377155,
+          "indirect_signed_sum_bias": 7.809528782092153
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 4.242660759117329,
+          "indirect_signed_sum_bias": 4.6469329733178055
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.7022548477377155,
+          "indirect_signed_sum_bias": 7.809528782092153
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 4.242660759117329,
+          "indirect_signed_sum_bias": 4.6469329733178055
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.7022548477377155,
+          "indirect_signed_sum_bias": 7.809528782092153
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 4.242660759117329,
+          "indirect_signed_sum_bias": 4.6469329733178055
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 5.7022548477377155,
+          "indirect_signed_sum_bias": 7.809528782092153
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 4.242660759117329,
+          "indirect_signed_sum_bias": 4.6469329733178055
+        }
+      ]
+    },
+    {
+      "cell": "C10",
+      "role": "incumbent-hwrt",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266937920,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        }
+      ]
+    },
+    {
+      "cell": "C10",
+      "role": "incumbent-software",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266694400,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        }
+      ]
+    },
+    {
+      "cell": "C10",
+      "role": "vanilla-traversal",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266552640,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189005791527,
+          "indirect_signed_sum_bias": -0.9102568849222507
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465111976982,
+          "indirect_signed_sum_bias": -0.9378173561640231
+        }
+      ]
+    },
+    {
+      "cell": "C10",
+      "role": "pixel-pt-B2",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09958057320076397,
+          "indirect_signed_sum_bias": 0.0023427437671393217
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.0981429026262214,
+          "indirect_signed_sum_bias": 0.0034782463317016028
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09663608405942925,
+          "indirect_signed_sum_bias": 0.0005117748403965239
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09904712026637112,
+          "indirect_signed_sum_bias": 0.0008710030667172719
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09787432905602053,
+          "indirect_signed_sum_bias": 0.0015590532233763152
+        }
+      ]
+    },
+    {
+      "cell": "C10",
+      "role": "pixel-pt-B8",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.055749772168803585,
+          "indirect_signed_sum_bias": -0.0005987765450352694
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05466755448571048,
+          "indirect_signed_sum_bias": 0.0004919751996087266
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05630869273541815,
+          "indirect_signed_sum_bias": 0.0009661149411032379
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.0545391620686064,
+          "indirect_signed_sum_bias": 0.0003860634605670007
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05550829656591618,
+          "indirect_signed_sum_bias": -0.0005813867867210434
+        }
+      ]
+    },
+    {
+      "cell": "C10",
+      "role": "dense-rc",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781950080867,
+          "indirect_signed_sum_bias": -0.19009784247926362
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874042979948491,
+          "indirect_signed_sum_bias": -0.43882070762685055
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781949542606,
+          "indirect_signed_sum_bias": -0.19009998611171816
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874031631462187,
+          "indirect_signed_sum_bias": -0.4388235346774333
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781949542606,
+          "indirect_signed_sum_bias": -0.19009998611171816
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874031631462187,
+          "indirect_signed_sum_bias": -0.4388235346774333
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781949542606,
+          "indirect_signed_sum_bias": -0.19009998611171816
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874031631462187,
+          "indirect_signed_sum_bias": -0.4388235346774333
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781949542606,
+          "indirect_signed_sum_bias": -0.19009998611171816
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874031631462187,
+          "indirect_signed_sum_bias": -0.4388235346774333
+        }
+      ]
+    },
+    {
+      "cell": "C11",
+      "role": "incumbent-hwrt",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266937920,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        }
+      ]
+    },
+    {
+      "cell": "C11",
+      "role": "incumbent-software",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266694400,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        }
+      ]
+    },
+    {
+      "cell": "C11",
+      "role": "vanilla-traversal",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266552640,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189092571306,
+          "indirect_signed_sum_bias": -0.9102567894339454
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465263650233,
+          "indirect_signed_sum_bias": -0.9378172883194192
+        }
+      ]
+    },
+    {
+      "cell": "C11",
+      "role": "pixel-pt-B2",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09958057320076397,
+          "indirect_signed_sum_bias": 0.0023427437671393217
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09814301204642573,
+          "indirect_signed_sum_bias": 0.0034765962246215533
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09663615264320341,
+          "indirect_signed_sum_bias": 0.0005178740343146764
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09904734670910313,
+          "indirect_signed_sum_bias": 0.0008717933545078434
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09787448543956848,
+          "indirect_signed_sum_bias": 0.0015578320741828522
+        }
+      ]
+    },
+    {
+      "cell": "C11",
+      "role": "pixel-pt-B8",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.055749772168803585,
+          "indirect_signed_sum_bias": -0.0005987765450352694
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05466709425060724,
+          "indirect_signed_sum_bias": 0.000502787919600237
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05630860535023869,
+          "indirect_signed_sum_bias": 0.0009736468946222657
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.054544621141238155,
+          "indirect_signed_sum_bias": 0.0003946622204272438
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.055507267827432316,
+          "indirect_signed_sum_bias": -0.0005805193800102846
+        }
+      ]
+    },
+    {
+      "cell": "C11",
+      "role": "dense-rc",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781950080867,
+          "indirect_signed_sum_bias": -0.19009784247926362
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874042979948491,
+          "indirect_signed_sum_bias": -0.43882070762685055
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781991025948,
+          "indirect_signed_sum_bias": -0.19009912436338802
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874037691835932,
+          "indirect_signed_sum_bias": -0.4388229224037734
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781991025948,
+          "indirect_signed_sum_bias": -0.19009912436338802
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874037691835932,
+          "indirect_signed_sum_bias": -0.4388229224037734
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781991025948,
+          "indirect_signed_sum_bias": -0.19009912436338802
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874037691835932,
+          "indirect_signed_sum_bias": -0.4388229224037734
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781991025948,
+          "indirect_signed_sum_bias": -0.19009912436338802
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874037691835932,
+          "indirect_signed_sum_bias": -0.4388229224037734
+        }
+      ]
+    },
+    {
+      "cell": "C12",
+      "role": "incumbent-hwrt",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266937920,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        }
+      ]
+    },
+    {
+      "cell": "C12",
+      "role": "vanilla-traversal",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 266552640,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.980718901229428,
+          "indirect_signed_sum_bias": -0.9102566473913816
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9744653672399431,
+          "indirect_signed_sum_bias": -0.9378170429051992
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9807189013246865,
+          "indirect_signed_sum_bias": -0.9102566119964941
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.974465279213193,
+          "indirect_signed_sum_bias": -0.9378169756519718
+        }
+      ]
+    },
+    {
+      "cell": "C12",
+      "role": "pixel-pt-B2",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09958057320076397,
+          "indirect_signed_sum_bias": 0.0023427437671393217
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09814295014465366,
+          "indirect_signed_sum_bias": 0.0034774855381365564
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09663620182094829,
+          "indirect_signed_sum_bias": 0.000516201066611295
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.09904731528584224,
+          "indirect_signed_sum_bias": 0.000871998714875552
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "PASS",
+          "indirect_nrmse": 0.0978744677014017,
+          "indirect_signed_sum_bias": 0.0015594476639323473
+        }
+      ]
+    },
+    {
+      "cell": "C12",
+      "role": "pixel-pt-B8",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.055749772168803585,
+          "indirect_signed_sum_bias": -0.0005987765450352694
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05466418907751014,
+          "indirect_signed_sum_bias": 0.0005073972096332471
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05630797753812406,
+          "indirect_signed_sum_bias": 0.0009703779327112538
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.05454439745947808,
+          "indirect_signed_sum_bias": 0.00038833826352463306
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "PASS",
+          "indirect_nrmse": 0.0555103520779881,
+          "indirect_signed_sum_bias": -0.0005812551286298722
+        }
+      ]
+    },
+    {
+      "cell": "C12",
+      "role": "dense-rc",
+      "ledger_independent_replay": "PASS",
+      "owned_peak_bytes": 2370160,
+      "all_frame_quality": [
+        {
+          "frame": 0,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781950080867,
+          "indirect_signed_sum_bias": -0.19009784247926362
+        },
+        {
+          "frame": 0,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874042979948491,
+          "indirect_signed_sum_bias": -0.43882070762685055
+        },
+        {
+          "frame": 1,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781957561861,
+          "indirect_signed_sum_bias": -0.1900975230528677
+        },
+        {
+          "frame": 1,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874044105925358,
+          "indirect_signed_sum_bias": -0.43882010069015304
+        },
+        {
+          "frame": 2,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781957561861,
+          "indirect_signed_sum_bias": -0.1900975230528677
+        },
+        {
+          "frame": 2,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874044105925358,
+          "indirect_signed_sum_bias": -0.43882010069015304
+        },
+        {
+          "frame": 3,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781957561861,
+          "indirect_signed_sum_bias": -0.1900975230528677
+        },
+        {
+          "frame": 3,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874044105925358,
+          "indirect_signed_sum_bias": -0.43882010069015304
+        },
+        {
+          "frame": 4,
+          "transport": "T_B2",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.9998781957561861,
+          "indirect_signed_sum_bias": -0.1900975230528677
+        },
+        {
+          "frame": 4,
+          "transport": "T_B8",
+          "classification": "FAIL",
+          "indirect_nrmse": 0.8874044105925358,
+          "indirect_signed_sum_bias": -0.43882010069015304
+        }
+      ]
+    }
+  ],
+  "interpretation": "All first-target and recovery frames retained. C9 incumbent HWRT indirect signed sum bias +6.645 means predicted sum is approximately 7.645 times reference, not 6.645 times. Fixed PT B2 256 spp fails some camera/light frames; keep failures. No quality-matched speed claim."
+}

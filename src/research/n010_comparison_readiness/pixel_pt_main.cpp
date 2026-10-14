@@ -3,6 +3,7 @@
 #include "i001_compute.hpp"
 #include "a001_runtime.hpp"
 #include "allocation_ledger.hpp"
+#include "neutral_work.hpp"
 #include "vk_init.hpp"
 #include <array>
 #include <chrono>
@@ -72,7 +73,7 @@ void pfm(const fs::path& path,uint32_t w,uint32_t h,const std::vector<float>& im
 }
 int main(int argc,char** argv) {
     try {
-        fs::path state,target_path,out; uint32_t spp=16,vertices=2,seed=0x13579bdfu,frames=1;
+        fs::path state,target_path,out,calibration_doses; uint32_t spp=16,vertices=2,seed=0x13579bdfu,frames=1;
         std::string family="pixel-pt";
         for(int k=1;k<argc;++k) {
             std::string arg=argv[k];
@@ -86,12 +87,20 @@ int main(int argc,char** argv) {
             else if(arg=="--seed") seed=std::stoul(value);
             else if(arg=="--frames") frames=std::stoul(value);
             else if(arg=="--family") family=value;
+            else if(arg=="--calibration-doses") calibration_doses=value;
             else throw std::runtime_error("unknown option "+arg);
         }
         if(state.empty()||out.empty()||spp==0||spp>16384||
            (family!="pixel-pt"&&family!="dense-rc")||(family=="dense-rc"&&spp!=1)||
            (vertices!=1&&vertices!=2&&vertices!=8)||frames==0||frames>256)
             throw std::runtime_error("required --state DIR --out NEWDIR; bounded spp/vertices/frames");
+        std::vector<uint32_t> doses;
+        if(!calibration_doses.empty()) {
+            std::ifstream in(calibration_doses);uint32_t dose;
+            while(in>>dose)doses.push_back(dose);
+            if(!in.eof()||doses.empty()||doses.size()>256)throw std::runtime_error("invalid calibration doses");
+            frames=uint32_t(doses.size());
+        }
         if(!target_path.empty()&&frames<2) throw std::runtime_error("transition requires source and target frames");
         if(fs::exists(out)) throw std::runtime_error("refuse to overwrite output directory");
         fs::create_directories(out);
@@ -109,16 +118,18 @@ int main(int argc,char** argv) {
         copy_state(target ? target_path : state,out);
         const auto setup_start=Clock::now();
         b::B002VulkanContext context(false,b::kB002TargetDeviceName,true);
-        b::B002HwrtTraversal hwrt(context,triangles,"",false);
+        auto hwrt=std::make_unique<b::B002HwrtTraversal>(context,triangles,"",false);
         auto uniform=context.upload_device_buffer(&params,sizeof(params),VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
         auto image=context.create_device_buffer(VkDeviceSize(width)*height*16,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
-        const std::array<i::I001Binding,4> bindings{{
+        std::array<i::I001Binding,4> bindings{{
             {0,VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,&image},
-            {1,VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR,nullptr,hwrt.top_level()},
-            {2,VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,&hwrt.triangle_buffer()},
+            {1,VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR,nullptr,hwrt->top_level()},
+            {2,VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,&hwrt->triangle_buffer()},
             {3,VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,&uniform}}};
-        i::I001ComputeStage stage(context,std::string(PHOS_GI_INTEGRATION_SHADER_DIR)+
+        auto stage=std::make_unique<i::I001ComputeStage>(context,std::string(PHOS_GI_INTEGRATION_SHADER_DIR)+
                                  (family=="pixel-pt"?"/n010_pixel_pt.spv":"/n010_dense_rc.spv"),bindings,16);
+        std::unique_ptr<n::NeutralWork> neutral;
+        if(!doses.empty())neutral=std::make_unique<n::NeutralWork>(context);
         auto pool_info=phos::gi::detail::make_vk_info<VkCommandPoolCreateInfo>(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
         pool_info.queueFamilyIndex=context.queue_family(); pool_info.flags=VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
         VkCommandPool pool{}; check(context.vk().createCommandPool(&pool_info,nullptr,&pool));
@@ -137,37 +148,16 @@ int main(int argc,char** argv) {
              <<"\"family\":\""<<family<<"\",\"spp\":"<<spp<<",\"vertices\":"<<vertices<<",\"seed\":"<<seed
              <<",\"setup_wall_us\":"<<setup_wall<<",\"timestamp_period_ns\":"<<context.timestamp_period_ns()
              <<",\"width\":"<<width<<",\"height\":"<<height<<",\"frames\":[";
-        for(uint32_t f=0;f<frames;++f) {
-            const std::string label=(target ? (f==0 ? "source" : (f==1 ? "first-target" : "recovery")) : "static");
-            n::AllocationLedger::instance().phase("frame-"+label+"-"+std::to_string(f));
-            const auto start=Clock::now();
-            double maintenance_gpu=0,blas=0,tlas=0,uniform_gpu=0,geometry_gpu=0;
-            size_t changed_count=0;
-            if(target&&f==1) {
-                std::vector<uint32_t> changed;
-                for(size_t index=0;index<triangles.size();++index) {
-                    const auto old=b::to_gpu_triangle(triangles[index]),next=b::to_gpu_triangle(target->triangles[index]);
-                    if(std::memcmp(&old,&next,sizeof(old))!=0) changed.push_back(uint32_t(index));
-                }
-                changed_count=changed.size();
-                if(!changed.empty()) {
-                    const auto update=hwrt.update_geometry(target->triangles,changed);
-                    blas=update.blas_update_us;tlas=update.tlas_update_us;geometry_gpu=update.geometry_upload_gpu_us;
-                    maintenance_gpu+=blas+tlas+geometry_gpu;
-                }
-                params=target->params;
-                const b::B002BufferUpdate update{0,&params,sizeof(params)};
-                uniform_gpu=context.update_device_buffer_timed(uniform,std::span(&update,1));
-                maintenance_gpu+=uniform_gpu;
-            }
+        const auto run_image=[&](uint32_t image_seed) {
             check(context.vk().resetFences(1,&fence));check(context.vk().resetCommandPool(pool,0));
             auto begin=phos::gi::detail::make_vk_info<VkCommandBufferBeginInfo>(VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO);
             begin.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;check(context.vk().beginCommandBuffer(command,&begin));
             context.vk().cmdResetQueryPool(command,query,0,2);
             context.vk().cmdWriteTimestamp(command,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,query,0);
-            const std::array<uint32_t,4> push{spp,vertices,seed+f,0};
-            stage.record(command,(width+7)/8,(height+7)/8,1,push.data(),sizeof(push));
+            const std::array<uint32_t,4> push{spp,vertices,image_seed,0};
+            stage->record(command,(width+7)/8,(height+7)/8,1,push.data(),sizeof(push));
             i::i001_compute_barrier(context,command);
+            if(neutral)neutral->record(command);
             context.vk().cmdWriteTimestamp(command,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,query,1);
             check(context.vk().endCommandBuffer(command));
             auto submit=phos::gi::detail::make_vk_info<VkSubmitInfo>(VK_STRUCTURE_TYPE_SUBMIT_INFO);
@@ -176,10 +166,51 @@ int main(int argc,char** argv) {
             check(context.vk().waitForFences(1,&fence,VK_TRUE,UINT64_MAX));
             std::array<uint64_t,2> ts{};
             check(context.vk().getQueryPoolResults(query,0,2,sizeof(ts),ts.data(),8,VK_QUERY_RESULT_64_BIT|VK_QUERY_RESULT_WAIT_BIT));
-            double gpu=(ts[1]-ts[0])*context.timestamp_period_ns()/1000.;
+            return (ts[1]-ts[0])*context.timestamp_period_ns()/1000.;
+        };
+        for(uint32_t f=0;f<frames;++f) {
+            const std::string label=(!doses.empty()&&target ? "first-target" : (target ? (f==0 ? "source" : (f==1 ? "first-target" : "recovery")) : "static"));
+            n::AllocationLedger::instance().phase("frame-"+label+"-"+std::to_string(f));
+            if(!doses.empty()&&target) {
+                // Fresh source AS and source image outside the measured first-target sample.
+                stage.reset();hwrt.reset();
+                hwrt=std::make_unique<b::B002HwrtTraversal>(context,triangles,"",false);
+                bindings[1].acceleration=hwrt->top_level();bindings[2].buffer=&hwrt->triangle_buffer();
+                stage=std::make_unique<i::I001ComputeStage>(context,std::string(PHOS_GI_INTEGRATION_SHADER_DIR)+
+                    (family=="pixel-pt"?"/n010_pixel_pt.spv":"/n010_dense_rc.spv"),bindings,16);
+                params=source.params;
+                const b::B002BufferUpdate update{0,&params,sizeof(params)};
+                const auto source_uniform_gpu=context.update_device_buffer_timed(uniform,std::span(&update,1));
+                (void)source_uniform_gpu;
+                setenv("PHOS_N010_CALIBRATION_DOSE","0",1);run_image(seed);
+            }
+            if(!doses.empty()) {
+                const auto dose=std::to_string(doses[f]);setenv("PHOS_N010_CALIBRATION_DOSE",dose.c_str(),1);
+            }
+            const auto start=Clock::now();
+            double maintenance_gpu=0,blas=0,tlas=0,uniform_gpu=0,geometry_gpu=0;
+            size_t changed_count=0;
+            if(target&&(f==1||!doses.empty())) {
+                std::vector<uint32_t> changed;
+                for(size_t index=0;index<triangles.size();++index) {
+                    const auto old=b::to_gpu_triangle(triangles[index]),next=b::to_gpu_triangle(target->triangles[index]);
+                    if(std::memcmp(&old,&next,sizeof(old))!=0) changed.push_back(uint32_t(index));
+                }
+                changed_count=changed.size();
+                if(!changed.empty()) {
+                    const auto update=hwrt->update_geometry(target->triangles,changed);
+                    blas=update.blas_update_us;tlas=update.tlas_update_us;geometry_gpu=update.geometry_upload_gpu_us;
+                    maintenance_gpu+=blas+tlas+geometry_gpu;
+                }
+                params=target->params;
+                const b::B002BufferUpdate update{0,&params,sizeof(params)};
+                uniform_gpu=context.update_device_buffer_timed(uniform,std::span(&update,1));
+                maintenance_gpu+=uniform_gpu;
+            }
+            const double gpu=run_image(doses.empty() ? seed+f : seed);
             double wall=std::chrono::duration<double,std::micro>(Clock::now()-start).count();
-            times<<(f?",":"")<<"{\"index\":"<<f<<",\"state\":\""<<label<<"\",\"seed\":"<<seed+f
-                 <<",\"gpu_us\":"<<gpu+maintenance_gpu<<",\"image_gpu_us\":"<<gpu
+            times<<(f?",":"")<<"{\"index\":"<<f<<",\"state\":\""<<label<<"\",\"seed\":"<<(doses.empty()?seed+f:seed)
+                 <<",\"dose\":"<<(doses.empty()?0:doses[f])<<",\"gpu_us\":"<<gpu+maintenance_gpu<<",\"image_gpu_us\":"<<gpu
                  <<",\"maintenance_gpu_us\":"<<maintenance_gpu<<",\"uniform_upload_gpu_us\":"<<uniform_gpu
                  <<",\"geometry_upload_gpu_us\":"<<geometry_gpu<<",\"blas_update_us\":"<<blas
                  <<",\"tlas_update_us\":"<<tlas<<",\"changed_slots\":"<<changed_count<<",\"wall_us\":"<<wall<<"}";
@@ -187,7 +218,8 @@ int main(int argc,char** argv) {
             std::vector<float> values(size_t(width)*height*4);
             context.download_device_buffer(image,values.data(),values.size()*sizeof(float));
             auto frame_out=out/"frames"/std::to_string(f);
-            copy_state(target&&f>0 ? target_path : state,frame_out);
+            copy_state(target&&(f>0||!doses.empty()) ? target_path : state,frame_out);
+            if(neutral)neutral->save(frame_out/"neutral-work.bin");
             for(size_t c=0;c<3;++c) {
                 const char* name=std::array<const char*,3>{"direct.pfm","indirect.pfm","total.pfm"}[c];
                 pfm(frame_out/name,width,height,values,c);
@@ -196,6 +228,7 @@ int main(int argc,char** argv) {
         }
         times<<"]}\n"; if(!times) throw std::runtime_error("timing output failed");
         context.vk().destroyFence(fence,nullptr);context.vk().destroyQueryPool(query,nullptr);context.vk().destroyCommandPool(pool,nullptr);
+        neutral.reset();stage.reset();hwrt.reset();
         context.destroy_buffer(image);context.destroy_buffer(uniform);
         std::cout<<"N010 independent HWRT pixel path tracer captured "<<out<<"\n";
     } catch(const std::exception& e) { std::cerr<<e.what()<<"\n";return 1; }
