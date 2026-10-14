@@ -37,6 +37,7 @@ void pfm(const fs::path& path,uint32_t w,uint32_t h,const std::vector<float>& im
 int main(int argc,char** argv) {
     try {
         fs::path state,out; uint32_t spp=16,vertices=2,seed=0x13579bdfu,frames=1;
+        std::string family="pixel-pt";
         for(int k=1;k<argc;++k) {
             std::string arg=argv[k];
             if(k+1>=argc) throw std::runtime_error("missing argument value");
@@ -47,9 +48,11 @@ int main(int argc,char** argv) {
             else if(arg=="--vertices") vertices=std::stoul(value);
             else if(arg=="--seed") seed=std::stoul(value);
             else if(arg=="--frames") frames=std::stoul(value);
+            else if(arg=="--family") family=value;
             else throw std::runtime_error("unknown option "+arg);
         }
         if(state.empty()||out.empty()||spp==0||spp>16384||
+           (family!="pixel-pt"&&family!="dense-rc")||(family=="dense-rc"&&spp!=1)||
            (vertices!=1&&vertices!=2&&vertices!=8)||frames==0||frames>256)
             throw std::runtime_error("required --state DIR --out NEWDIR; bounded spp/vertices/frames");
         if(fs::exists(out)) throw std::runtime_error("refuse to overwrite output directory");
@@ -86,7 +89,8 @@ int main(int argc,char** argv) {
             {1,VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR,nullptr,hwrt.top_level()},
             {2,VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,&hwrt.triangle_buffer()},
             {3,VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,&uniform}}};
-        i::I001ComputeStage stage(context,std::string(PHOS_GI_INTEGRATION_SHADER_DIR)+"/n010_pixel_pt.spv",bindings,16);
+        i::I001ComputeStage stage(context,std::string(PHOS_GI_INTEGRATION_SHADER_DIR)+
+                                 (family=="pixel-pt"?"/n010_pixel_pt.spv":"/n010_dense_rc.spv"),bindings,16);
         auto pool_info=phos::gi::detail::make_vk_info<VkCommandPoolCreateInfo>(VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO);
         pool_info.queueFamilyIndex=context.queue_family(); pool_info.flags=VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
         VkCommandPool pool{}; check(context.vk().createCommandPool(&pool_info,nullptr,&pool));
@@ -102,7 +106,7 @@ int main(int argc,char** argv) {
         std::ofstream times(out/"frames.json");times<<std::setprecision(17);
         times<<"{\"schema\":\"n010-pixel-pt/1\",\"timing_classification\":\"DIAGNOSTIC_UNCALIBRATED\","
              <<"\"boundary\":\"static complete pixel Renderer: primary+NEE+all finite bounces+composite; initial AS setup/readback separate\","
-             <<"\"spp\":"<<spp<<",\"vertices\":"<<vertices<<",\"seed\":"<<seed
+             <<"\"family\":\""<<family<<"\",\"spp\":"<<spp<<",\"vertices\":"<<vertices<<",\"seed\":"<<seed
              <<",\"setup_wall_us\":"<<setup_wall<<",\"timestamp_period_ns\":"<<context.timestamp_period_ns()
              <<",\"width\":"<<width<<",\"height\":"<<height<<",\"frames\":[";
         for(uint32_t f=0;f<frames;++f) {

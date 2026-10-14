@@ -58,7 +58,7 @@ def score(capture, row, reference_work, output):
     if (capture / "frames.json").exists():
         meta = json.loads((capture / "frames.json").read_text())
         required = {"T_B2": 2, "T_B8": 8}[row["transport"]]
-        if meta["vertices"] != required:
+        if meta.get("family","pixel-pt") == "pixel-pt" and meta["vertices"] != required:
             raise ValueError("path tracer/reference finite vertex boundary mismatch")
     for component in ("direct", "indirect", "total"):
         g = L.read_pfm(image_dir / f"{component}.pfm") @ LUMA

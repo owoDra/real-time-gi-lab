@@ -107,6 +107,19 @@ else()
   add_custom_command(OUTPUT "${N010_PT_SPV}" COMMAND $<TARGET_FILE:glslang-standalone> -V --target-env vulkan1.3 -S comp "${N010_PT_GLSL}" -o "${N010_PT_SPV}" DEPENDS glslang-standalone "${N010_PT_GLSL}" VERBATIM)
 endif()
 add_custom_target(phos-n010-pixel-pt-shader DEPENDS "${N010_PT_SPV}")
+set(N010_RC_GLSL "${N010_GENERATED}/n010_dense_rc.comp.glsl")
+set(N010_RC_SPV "${PROJECT_BINARY_DIR}/shaders/n010_dense_rc.spv")
+add_custom_command(OUTPUT "${N010_RC_GLSL}"
+  COMMAND ${Python3_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_dense_rc.py" --out "${N010_RC_GLSL}"
+  DEPENDS "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_dense_rc.py" "${N010_PT_GLSL}" VERBATIM)
+if(GLSLC)
+  add_custom_command(OUTPUT "${N010_RC_SPV}" COMMAND "${GLSLC}" --target-env=vulkan1.3 -O "${N010_RC_GLSL}" -o "${N010_RC_SPV}" DEPENDS "${N010_RC_GLSL}" VERBATIM)
+elseif(GLSLANG_VALIDATOR)
+  add_custom_command(OUTPUT "${N010_RC_SPV}" COMMAND "${GLSLANG_VALIDATOR}" -V --target-env vulkan1.3 -S comp "${N010_RC_GLSL}" -o "${N010_RC_SPV}" DEPENDS "${N010_RC_GLSL}" VERBATIM)
+else()
+  add_custom_command(OUTPUT "${N010_RC_SPV}" COMMAND $<TARGET_FILE:glslang-standalone> -V --target-env vulkan1.3 -S comp "${N010_RC_GLSL}" -o "${N010_RC_SPV}" DEPENDS glslang-standalone "${N010_RC_GLSL}" VERBATIM)
+endif()
+add_custom_target(phos-n010-dense-rc-shader DEPENDS "${N010_RC_SPV}")
 add_executable(phos-n010-pixel-pt pixel_pt_main.cpp
   "${N010_GENERATED}/n010_b002_vulkan.cpp"
   "${N010_N}/imported/lane_b_traversal/b002_compute.cpp"
@@ -118,4 +131,4 @@ target_compile_features(phos-n010-pixel-pt PRIVATE cxx_std_20)
 target_link_libraries(phos-n010-pixel-pt PRIVATE vk-bootstrap::vk-bootstrap Threads::Threads ${CMAKE_DL_LIBS})
 target_compile_definitions(phos-n010-pixel-pt PRIVATE PHOS_GI_INTEGRATION_SHADER_DIR="${PROJECT_BINARY_DIR}/shaders")
 set_target_properties(phos-n010-pixel-pt PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
-add_dependencies(phos-n010-pixel-pt phos-n010-pixel-pt-shader)
+add_dependencies(phos-n010-pixel-pt phos-n010-pixel-pt-shader phos-n010-dense-rc-shader)
