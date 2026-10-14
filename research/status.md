@@ -164,6 +164,8 @@ in [plan 030](lanes/n010-comparison-readiness/experiments/030-prospective-point-
 It mixes cosine continuation with geometry/direct-light surface guidance and
 explicit null events, preserving the original finite-transport integral as the
 validation target. Build [112](lanes/n010-comparison-readiness/results/112-point-guided-oracle-build.json)
-passes; independent physical/iid controls 113 are executing. No corpus reference
+passes; independent physical/iid controls 113 are executing. Separate prefix
+build 114 also passes, and plan 031 prepares all-state/own-prefix verification
+115, which is waiting for complete physical PASS (**NOT RUN**). No corpus reference
 or sampling-method transition has occurred; existing CPU acquisitions continue.
 All four seeds, levels, absolute/relative screens and cap remain fixed.

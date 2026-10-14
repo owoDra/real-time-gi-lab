@@ -277,3 +277,14 @@ alone. All locked-state primary/direct identities, its own exact prefix proof,
 a recorded acquisition/provenance transition and the unchanged full corpus
 qualification screens remain required. Old cosine moments/prefixes cannot be
 imported into this sampler. Existing CPU acquisitions continue independently.
+
+`generate_point_guided_prefix.py --work NEW_DIRECTORY --output NEW_JSON`
+copies exact 112 sources and overlays the original strict dyadic-prefix loader
+and render continuation, restoring all five counters. Sampling/intersection
+source bytes outside render are verified unchanged. Actual build 114 passes.
+`validate_point_guided_prefix.py --wait-for-physical-proof --work NEW_DIRECTORY
+--output NEW_JSON` waits for complete 113 PASS before launching the fixed plan
+031 corpus. It requires 24 low-dose rows, two actual-level C7 rows, all four
+seeds and 78 native attempts with zero byte/counter disagreement. Current 115
+is waiting (**NOT RUN**); passing build 114 admits no reference. No original
+cosine prefix may be used by this sampler.

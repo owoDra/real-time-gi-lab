@@ -201,3 +201,11 @@ retains the original physical target and exact convergence gates. CPU build
 control acquisition 113 is executing. It changes continuation sampling and
 importance weights only; it does not change the current Renderer or replace
 any pending/accepted original reference.
+
+Prospective [state/prefix plan 031](experiments/031-point-guided-state-and-prefix-validation.md)
+requires all 24 original locked scenes/four seeds at 16 spp, exact direct/emission
+and primary identities, zero own-prefix payload/counter disagreement at 8→16,
+and both C7 transports at 8192→16384. Separate prefix build
+[114](results/114-point-guided-prefix-build.json) passes. Runner 115 waits for
+complete physical 113 PASS and has executed no state/prefix acquisition yet.
+Neither build proves convergence or reference admission.

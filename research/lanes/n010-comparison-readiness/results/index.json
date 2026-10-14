@@ -565,6 +565,12 @@
       "status": "cpu-host-build-complete",
       "result": "112-point-guided-oracle-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-114",
+      "status": "cpu-prefix-host-build-only",
+      "result": "114-point-guided-prefix-build.json",
+      "gpu_run": false
     }
   ]
 }
