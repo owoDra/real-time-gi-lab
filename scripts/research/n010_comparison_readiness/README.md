@@ -227,3 +227,22 @@ proofs. Source review corrected the later proof filename/payload-root handling
 and extended provenance/attempt logging between these revisions. Those later
 branches have not been executed. The live CPU qualifiers and continuation-v3
 remain unchanged.
+
+### Hybrid raw export and reference provenance
+
+`hybrid_reference_provenance.py --raw-results COMPLETE_DIAGNOSTIC_JSON ...
+--output NEW_JSON` performs CPU-only checks of retained raw exports. It checks
+every pixel's GStats ABI/length, finite nonnegative sums, exact binary64
+mean/moment ↔ raw-sum reconstruction, all four PFM components, primary header,
+per-pixel integer-counter sums, fallback metadata and owned-memory replay.
+Actual result 108 passes both full C1 B8 8192-spp seed-0/seed-1 exports from
+096/107. It launches no GPU work and provides no statistical eligibility.
+
+Its `verify_reference()` API prepares a separate full ladder audit for the
+new numerical hybrid variant: prerequisites 098/099/101, canonical scene,
+all level/seed/interval commands, raw/copy identities, prefix inputs, moment
+exports, counters, support-aware convergence and first qualifying stop. Old
+CPU variants delegate to the unchanged original provenance helper. This full
+hybrid qualification path remains unexecuted because no such acquired ladder
+exists. The existing frozen preflight/continuation do not import this new API,
+and a recorded transition/integration is still required before comparison use.

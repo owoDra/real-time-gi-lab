@@ -535,6 +535,12 @@
       "status": "full-frame-feasibility-only",
       "result": "107-hybrid-full-frame-deep-seed1-conformance.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-108",
+      "status": "raw-prefix-export-audit-only",
+      "result": "108-hybrid-deep-raw-prefix-export-audit.json",
+      "gpu_run": false
     }
   ]
 }

@@ -244,3 +244,11 @@ finite output, zero faults and memory replay PASS. It is an exact-byte copy
 of the completed 098 child result, not a repeat acquisition. The suite now
 has 14/16 passing cases and proceeds to seed 2. Physical/all-state/prefix
 proof and statistical qualification remain required; no reference is admitted.
+
+CPU-only [raw-prefix export audit 108](lanes/n010-comparison-readiness/results/108-hybrid-deep-raw-prefix-export-audit.json)
+passes all pixels of both retained C1 B8 8192-spp seed-0/seed-1 cases: raw
+sums/moments reconstruct saved binary64 values exactly, per-pixel counters
+reproduce global metadata, all four PFM components agree, and memory replay
+passes. This is a two-export consistency audit, not full prefix/runtime or
+reference eligibility. A separate hybrid provenance API is prepared; the
+existing frozen CPU view/preflight remains unchanged.
