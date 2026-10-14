@@ -15,11 +15,15 @@ if __name__=='__main__':
     ap.add_argument('--references',type=Path,required=True)
     ap.add_argument('--work',type=Path,required=True)
     ap.add_argument('--output',type=Path,required=True)
+    ap.add_argument('--roles',nargs='+',choices=['incumbent-hwrt','incumbent-software','vanilla-traversal','pixel-pt-B2','pixel-pt-B8','dense-rc'])
+    ap.add_argument('--pt-spp-b2',type=int,choices=[1,4,16,64,256,1024],default=256)
+    ap.add_argument('--pt-spp-b8',type=int,choices=[1,4,16,64,256,1024],default=1024)
     a=ap.parse_args()
     lock=json.loads(a.lock.read_text())
     source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
     contract=ROOT/'out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract'
-    result={'schema':'n010-dynamic-cohort-pilot/1','complete':False,'lock_sha256':sha(a.lock),'rows':[]}
+    result={'schema':'n010-dynamic-cohort-pilot/1','complete':False,'lock_sha256':sha(a.lock),
+            'selected_roles':a.roles,'pt_spp_b2':a.pt_spp_b2,'pt_spp_b8':a.pt_spp_b8,'rows':[]}
     for cell in a.cells:
         spec=lock['cells'][cell]
         if 'source_directory' not in spec:raise ValueError('missing source transition state')
@@ -31,7 +35,9 @@ if __name__=='__main__':
             if any(q['classification']!='STATISTICALLY_ELIGIBLE' for q in qualification):raise ValueError('reference not eligible')
         roles=['incumbent-hwrt','vanilla-traversal','pixel-pt-B2','pixel-pt-B8','dense-rc']
         if cell not in ('C6','C12'):roles.insert(1,'incumbent-software')
-        else:result['rows'].append({'cell':cell,'role':'incumbent-software','classification':'UNSUPPORTED_IN_CAPTURE_API','reason':'N002 integrated churn entry point is HWRT-only; no software topology result inferred'})
+        elif a.roles is None or 'incumbent-software' in a.roles:result['rows'].append({'cell':cell,'role':'incumbent-software','classification':'UNSUPPORTED_IN_CAPTURE_API','reason':'N002 integrated churn entry point is HWRT-only; no software topology result inferred'})
+        if a.roles:
+            roles=[role for role in roles if role in a.roles]
         for role in roles:
             out=(a.work/f'{cell}-{role}').resolve()
             if out.exists():raise ValueError('refuse to overwrite '+str(out))
@@ -47,7 +53,7 @@ if __name__=='__main__':
             else:
                 binary=ROOT/'build/n009/phos-n010-pixel-pt'
                 vertices=8 if role=='pixel-pt-B8' else 2
-                spp=1 if role=='dense-rc' else (1024 if vertices==8 else 256)
+                spp=1 if role=='dense-rc' else (a.pt_spp_b8 if vertices==8 else a.pt_spp_b2)
                 cmd=['bash','scripts/run_with_vulkan.sh',str(binary),'--state',str(state),'--target-state',str(target),
                      '--family','dense-rc' if role=='dense-rc' else 'pixel-pt','--spp',str(spp),'--vertices',str(vertices),
                      '--seed','305419896','--frames','5','--out',str(out)]
