@@ -145,3 +145,11 @@ option(PHOS_BUILD_N009 "Build isolated N009 scene-contract exporter and capture"
 if(PHOS_BUILD_N009)
   add_subdirectory(src/research/n009_scene_contract)
 endif()
+
+option(PHOS_BUILD_N010 "Build isolated N010 comparison-readiness tools" OFF)
+if(PHOS_BUILD_N010)
+  if(NOT PHOS_BUILD_N009 OR NOT PHOS_BUILD_N007)
+    message(FATAL_ERROR "N010 requires PHOS_BUILD_N009=ON and PHOS_BUILD_N007=ON")
+  endif()
+  add_subdirectory(src/research/n010_comparison_readiness)
+endif()
