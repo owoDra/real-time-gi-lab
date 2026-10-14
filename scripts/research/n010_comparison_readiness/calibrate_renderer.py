@@ -4,6 +4,8 @@ import argparse,hashlib,json,math,os,statistics,struct,subprocess,time
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3]
 LANE=ROOT/'research/lanes/n010-comparison-readiness'
+WITNESSES={}
+def shader_hashes():return {p.name:sha(p) for p in sorted((ROOT/'build/n009/shaders').glob('*.spv'))}
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def quiescent():
  running=[]
@@ -11,7 +13,12 @@ def quiescent():
   if not p.name.isdigit():continue
   try:name=(p/'comm').read_text().strip()
   except (OSError,PermissionError):continue
-  if name.startswith(('n010_rqmc','n010_cached','n008_oracle','phos-n0')):running.append(name)
+  if name.startswith(('n010_','n008_oracle','phos-')):running.append(name)
+  if name.startswith('python') and int(p.name)!=os.getpid():
+   try:words=(p/'cmdline').read_bytes().split(b'\0')
+   except OSError:continue
+   scripts={'qualify_references.py','validate_cached_oracle.py','acquire_pt_pilot.py','acquire_dynamic_pilot.py','acquire_rc_pilot.py','acquire_corpus.py'}
+   running.extend(Path(w.decode(errors='replace')).name for w in words if w and Path(w.decode(errors='replace')).name in scripts)
  if running:raise ValueError('accepted calibration requires completed reference/GPU work: '+','.join(running))
 def boundaries(lock):
  result=[]
@@ -38,8 +45,12 @@ def execute(b,lock,doses,out):
        '--family','dense-rc' if b['role']=='dense-rc' else 'pixel-pt','--seed','305419896',
        '--calibration-doses',str(dosefile),'--out',str(out)]
   if b['dynamic']:cmd+=['--target-state',str(ROOT/spec['state_directory'])]
+ shaders=shader_hashes();binary_before=sha(binary)
+ attempt={'command':cmd,'binary_sha256':binary_before,'shader_sha256':shaders,'doses':doses}
+ (out.parent/(out.name+'.attempt.json')).write_text(json.dumps(attempt,indent=2)+'\n')
  proc=subprocess.run(cmd,env=env,text=True,capture_output=True)
- result={'boundary':b,'command':cmd,'binary_sha256':sha(binary),'returncode':proc.returncode,'stdout':proc.stdout,'stderr':proc.stderr,'doses_file_sha256':sha(dosefile)}
+ if sha(binary)!=binary_before or shader_hashes()!=shaders:raise ValueError('executable/shader changed during acquisition')
+ result={'boundary':b,'command':cmd,'binary_sha256':binary_before,'shader_sha256':shaders,'returncode':proc.returncode,'stdout':proc.stdout,'stderr':proc.stderr,'doses_file_sha256':sha(dosefile)}
  if proc.returncode:
   (out.parent/(out.name+'.failure.json')).write_text(json.dumps(result,indent=2)+'\n');raise ValueError('failed calibration process retained')
  if (out/'frames.json').exists():samples=json.loads((out/'frames.json').read_text())['frames']
@@ -50,11 +61,13 @@ def execute(b,lock,doses,out):
   directory=out/'frames'/str(index);directory=directory/'gpu' if (directory/'gpu').exists() else directory
   scratch=directory/'neutral-work.bin';data=scratch.read_bytes()
   if len(data)!=65536:raise ValueError('known-work payload shape')
-  for item in (0,1,64,127,8191,16383):
-   expected=item^0x4e303130
-   for _ in range(dose):
-    expected=(expected*1664525+1013904223)&0xffffffff;expected^=expected>>13
-   if struct.unpack_from('<I',data,item*4)[0]!=expected:raise ValueError('known-work result mismatch')
+  digest=sha(scratch)
+  if dose in WITNESSES:
+   if WITNESSES[dose]!=digest:raise ValueError('known-work scratch differs at repeated dose')
+  else:
+   verifier=ROOT/'build/n009/n010-neutral-work-verify'
+   subprocess.run([str(verifier),str(dose),str(scratch)],check=True,capture_output=True,text=True)
+   WITNESSES[dose]=digest
   payloads.append({'images':{name:sha(directory/(name+'.pfm')) for name in ('direct','indirect','total')},'scratch':sha(scratch)})
  # Exact image identity required; retain any image divergence as a failure.
  identical=all(len({p['images'][name] for p in payloads})==1 for name in ('direct','indirect','total'))
@@ -109,18 +122,18 @@ if __name__=='__main__':
  for boundary in cohort:
   row={'boundary':boundary}
   if a.mode=='sizing':
-   evidence=execute(boundary,lock,[0,256,1024]*3,a.work/boundary['id']/'sizing');samples=evidence['samples']
-   med={dose:statistics.median(s['gpu_us'] for s in samples if s['dose']==dose) for dose in (0,256,1024)}
-   inner={dose:statistics.median(s['known_work_gpu_us'] for s in samples if s['dose']==dose) for dose in (0,256,1024)}
-   slopes=[(inner[d]-inner[0])/d for d in (256,1024)]
+   evidence=execute(boundary,lock,[0,65536,262144]*3,a.work/boundary['id']/'sizing');samples=evidence['samples']
+   med={dose:statistics.median(s['gpu_us'] for s in samples if s['dose']==dose) for dose in (0,65536,262144)}
+   inner={dose:statistics.median(s['known_work_gpu_us'] for s in samples if s['dose']==dose) for dose in (0,65536,262144)}
+   slopes=[(inner[d]-inner[0])/d for d in (65536,262144)]
    valid=min(slopes)>0;dose=math.ceil(.2*med[0]/statistics.median(slopes)) if valid else None
-   row.update(evidence=evidence,medians_us=med,known_work_medians_us=inner,amendment='4',sizing_pass=valid and dose<=10000000,frozen_dose=dose)
+   row.update(evidence=evidence,medians_us=med,known_work_medians_us=inner,amendment='5',sizing_pass=valid and dose<=100000000,frozen_dose=dose)
   else:
    sizing=next(r for r in plan['rows'] if r['boundary']['id']==boundary['id']);blocks=[]
    for block in range(8):
     quiescent();time.sleep(1);records=schedule(sizing['frozen_dose'],block)
     evidence=execute(boundary,lock,[r['dose'] for r in records],a.work/boundary['id']/f'block-{block}')
-    if evidence['binary_sha256']!=sizing['evidence']['binary_sha256']:raise ValueError('sized binary changed')
+    if evidence['binary_sha256']!=sizing['evidence']['binary_sha256'] or evidence['shader_sha256']!=sizing['evidence']['shader_sha256']:raise ValueError('sized binary changed')
     evidence['tagged_samples']=[dict(s,**{k:v for k,v in r.items() if k not in s}) for s,r in zip(evidence['samples'],records)]
     blocks.append(evidence);row.update(blocks=blocks)
     result['rows'].append(row) if block==0 else None

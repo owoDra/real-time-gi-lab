@@ -19,7 +19,7 @@ public:
     void record(VkCommandBuffer command) const {
         const char* value=std::getenv("PHOS_N010_CALIBRATION_DOSE");
         const auto dose=value ? std::stoul(value) : 0UL;
-        if(dose>10000000UL) throw std::runtime_error("calibration dose exceeds bound");
+        if(dose>100000000UL) throw std::runtime_error("calibration dose exceeds bound");
         const std::array<uint32_t,2> push{16384U,uint32_t(dose)};
         stage_->record(command,256,1,1,push.data(),sizeof(push));
         integration::i001_compute_barrier(context_,command);

@@ -11,6 +11,7 @@ def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 if __name__=='__main__':
     ap=argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--cell',required=True)
+    ap.add_argument('--vertices',type=int,nargs='+',choices=(2,8),default=[2,8])
     ap.add_argument('--state',type=Path,required=True)
     ap.add_argument('--references',type=Path,required=True)
     ap.add_argument('--work',type=Path,required=True)
@@ -18,8 +19,8 @@ if __name__=='__main__':
     a=ap.parse_args()
     binary=ROOT/'build/n009/phos-n010-pixel-pt'
     source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
-    result={'schema':'n010-pt-cohort-pilot/1','complete':False,'cell':a.cell,'rows':[]}
-    for vertices in (2,8):
+    result={'schema':'n010-pt-cohort-pilot/1','complete':False,'cell':a.cell,'selected_vertices':a.vertices,'full_two_transport_ladder':set(a.vertices)=={2,8},'rows':[]}
+    for vertices in a.vertices:
         ref=a.references/f'{a.cell}_T_B{vertices}'
         qfile=ref/'qualification.json'
         row=json.loads(qfile.read_text())

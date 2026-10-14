@@ -2,7 +2,7 @@
 """Fail-closed N010 handoff: actual eligible corpus, complete pilots and calibration."""
 import argparse,hashlib,json,subprocess
 from pathlib import Path
-from calibrate_renderer import boundaries
+from calibrate_renderer import boundaries,shader_hashes
 ROOT=Path(__file__).resolve().parents[3]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def replay(memory):
@@ -43,6 +43,23 @@ if __name__=='__main__':
   if not(validation['complete'] and validation['all_pass']):raise ValueError('physical validation missing')
   return '24 eligible cell/transport references; payload, locked-state and physical-validation identities checked'
  gate('eligible_locked_physical_references',refs)
+ def correctness():
+  base=ROOT/'research/lanes/n010-comparison-readiness/results'
+  replay_data=read(base/'002-gpu-key-replay.json')
+  if {r['capture'] for r in replay_data['rows']}!={cell+'-'+backend for cell in ('C1','C2','C4','C5','C7') for backend in ('hwrt','software')}:raise ValueError('missing actual GPU-key replay')
+  for row in replay_data['rows']:
+   if not row['V1'] or row['max_absolute_error']>1e-6 or row['positivity_disagreements'] or row['scoring_exclusions']:raise ValueError('GPU-key replay gate failure')
+  models=read(base/'007-c7-probe-replay-validation.json')
+  if {r['backend'] for r in models['rows']}!={'hwrt','software'}:raise ValueError('missing BF-P probe model')
+  for row in models['rows']:
+   if not all(row['gates'][v] for v in ('V1','V2','V3','V4')) or row['V1_scoring_exclusions'] or row['scoring_mask_pixels']!=57600:raise ValueError('probe-model gate failure/exclusions')
+  measured=read(base/'017-comparison-pilot-summary.json')
+  if measured['historical_outcomes_revised'] or measured['comparison_exclusions']:raise ValueError('historical outcome revised/exclusion')
+  for row in measured['direct_rows']:
+   if row['direct']['scoring_exclusions']:raise ValueError('excluded direct pixels')
+   if row['direct']['gpu_zero_reference_positive'] and row.get('remaining_disagreements')!='UNRESOLVED':raise ValueError('unreported remaining correctness disagreement')
+  return 'All-pixel key/BF-P validations pass; measured direct discrepancies remain explicit and included. N009 unresolved max-relative-error-1.0 outcome is unchanged.'
+ gate('correctness_validations_and_explicit_remaining_discrepancies',correctness)
  def verify_payloads(row):
   command=row['command'];directory=Path(command[command.index('--out')+1])
   if not directory.is_absolute():directory=ROOT/directory
@@ -103,7 +120,7 @@ if __name__=='__main__':
    for block in row['blocks']:
     if len(block['tagged_samples'])!=64 or not block['images_byte_equal'] or not block['known_work_probe_validation'] or not replay(block['allocation_ledger']):raise ValueError('invalid calibrated sample block')
     role=row['boundary']['role'];binary=ROOT/('build/n009/phos-n010-capture' if role in ('hwrt','software') else 'build/n009/phos-n010-pixel-pt')
-    if block['binary_sha256']!=sha(binary):raise ValueError('current comparator differs from calibrated binary')
+    if block['binary_sha256']!=sha(binary) or block['shader_sha256']!=shader_hashes():raise ValueError('current comparator differs from calibrated binary')
   return 'Actual complete boundaries pass unchanged eight-process control/effect gates'
  gate('demonstrated_full_renderer_timing_capability',calibration)
  def provenance():
