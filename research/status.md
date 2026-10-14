@@ -45,7 +45,11 @@ is unverified; both pixels remain UNRESOLVED and included in all scores.
 Cache equivalence 022 now passes all 20 declared cases. Controlled reference
 provenance audit 051 passes all 12 C7–C12 transports, including re-execution
 of their convergence screens; this subset does not establish whole-corpus
-readiness. Exact-prefix proof 050 is running before any incremental use.
+readiness. Exact-prefix proof 050 passes all three declared cases, all four seeds and
+all 21 payloads/counters each. Fresh incremental C2/C4/C5/C6 qualification is
+running with the unchanged levels, cap and thresholds. Fixed full-corpus view
+061 retains original C1/C3/C7–C12 and all pending incremental transports. The
+idle original-only driver was retired before acquiring any samples (059).
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
 [PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
 [dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),

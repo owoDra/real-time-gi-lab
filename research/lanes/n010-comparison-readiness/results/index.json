@@ -289,6 +289,36 @@
       "status": "complete",
       "result": "058-ddgi-volume-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-050",
+      "status": "complete",
+      "result": "050-incremental-oracle-equivalence.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-059",
+      "status": "complete",
+      "result": "059-idle-driver-reschedule.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-061",
+      "status": "diagnostic-only",
+      "result": "061-full-corpus-reference-view.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-063",
+      "status": "complete-negative",
+      "result": "063-interim-rescheduled-preflight.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-064",
+      "status": "complete-negative",
+      "result": "064-interim-rescheduled-preflight-correct-path.json",
+      "gpu_run": false
     }
   ]
 }

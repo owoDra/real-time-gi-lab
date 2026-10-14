@@ -17,7 +17,7 @@ def quiescent():
   if name.startswith('python') and int(p.name)!=os.getpid():
    try:words=(p/'cmdline').read_bytes().split(b'\0')
    except OSError:continue
-   scripts={'qualify_references.py','validate_cached_oracle.py','acquire_pt_pilot.py','acquire_dynamic_pilot.py','acquire_rc_pilot.py','acquire_corpus.py'}
+   scripts={'qualify_references.py','qualify_incremental_references.py','retire_original_qualifier.py','validate_cached_oracle.py','validate_incremental_oracle.py','reference_provenance.py','acquire_ddgi_bringup.py','acquire_pt_pilot.py','acquire_dynamic_pilot.py','acquire_rc_pilot.py','acquire_corpus.py'}
    running.extend(Path(w.decode(errors='replace')).name for w in words if w and Path(w.decode(errors='replace')).name in scripts)
  if running:raise ValueError('accepted calibration requires completed reference/GPU work: '+','.join(running))
 def boundaries(lock):

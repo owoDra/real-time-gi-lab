@@ -71,18 +71,27 @@ queues the remaining qualified pilots and then quiet sizing / one accepted
 calibration campaign. Existing original CPU acquisitions remain active. Cache equivalence 022 is
 now complete and PASS for all 20 declared cases: all f64/component PFM bytes
 and integer counters match. Incremental proof 050 is still running, so the
-new prefix variant has not acquired or qualified any references.
-Driver status is `out/research/n010-comparison-readiness/continuation-v1/status.json`.
+new prefix variant has now passed complete proof 050 and started fresh
+C2/C4/C5/C6 acquisition. No incremental reference is qualified yet.
+The original-only driver was retired while idle with no acquired jobs (059).
+Its retained snapshot is `out/research/n010-comparison-readiness/continuation-reschedule-v1/old-driver-status.json`.
+The updated driver uses the fixed full-corpus reference view 061 and lives at
+`out/research/n010-comparison-readiness/continuation-v2/status.json`.
 New output identifiers in that script are reservations until actual acquisition;
 no READY or completed calibration is implied. The driver stops on a failure,
 preserves it and requires review before any repair or new accepted acquisition.
 
 Prospective [Amendment 6](../experiments/014-amendment-6-incremental-reference-prefix.md)
 adds a separately built oracle that resumes exact prefix sums. Build 049
-passes; prefix equality acquisition is running after complete cache proof 022.
-No incremental reference is accepted, and no original job is stopped or
-overwritten by this preparation. Exact 16384-SPP payload/counter equality in
-all three declared transports is required before using the variant.
+passes; complete equality proof 050 passes all three declared cases, all four
+seeds and all 21 payloads/counters per case. Fresh incremental C2/C4/C5/C6
+acquisition is running with 12 threads in `references-incremental-v1` (060
+is reserved until an actual result is written). The original C1/C3 jobs remain
+active. A separate retirement watcher is prepared to stop the C7/C1/C2/C4/C5/C6
+original runner only after C1 T_B8 reaches its eligible pair or full frozen cap;
+any subsequent original partial attempt and all prior evidence will be retained.
+No original binary/output is overwritten. New fixed scheduling view 061
+contains all 24 transports, with pending links explicitly not eligibility.
 
 - Complete both active reference ladders over all locked T_B2/T_B8 cells; retain failed/capped levels.
 - Carry the shared numerical profile into all scored roles; measure all residual discrepancies without exclusions.
@@ -111,4 +120,22 @@ identities. This lets the eight-thread prefix equivalence process retain its
 CPU share. Both original acquisitions continue with their binaries and outputs
 intact. No transport, sampling, output, GPU, clock or power settings changed;
 CPU wall times throughout remain acquisition diagnostics. The fixed incremental
-C2/C4/C5/C6 scheduling view is prepared but not executed; proof 050 is required.
+C2/C4/C5/C6 scheduling view was subsequently executed only after 050 passed
+(061); it records scheduling and does not assert readiness.
+
+## Executed rescheduled preflight (063/064)
+
+Both interim executions are NOT_READY. The first 063 invocation used a
+nonexistent diagnostic sizing path; it is retained, and 064 uses actual 035.
+The corrected invocation passes correctness/disclosed discrepancies and
+additional-family source gates. Reference eligibility, full Sponza dynamic
+cohort, complete C1 two-transport ladder and accepted timing remain missing.
+No GPU acquisition/calibration was attempted or retried by either preflight.
+The updated final driver still requires the original accepted calibration
+029 and full pilots before 047 can assert readiness.
+
+C1 T_B8 16384 has now completed: maximum active absolute p99 noise
+5.0374791e-5 and relative 3.6234475%. Absolute 1e-5 remains unmet, so this
+level is retained as ineligible and the unchanged next level proceeds.
+This does not change a threshold, drop the deep-transport stratum or
+qualify a reference from a relative-only pass.

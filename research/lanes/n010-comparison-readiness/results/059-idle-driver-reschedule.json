@@ -1,0 +1,14 @@
+{
+  "schema": "n010-continuation-reschedule/1",
+  "complete": true,
+  "classification": "IDLE_DRIVER_RETIRED_BEFORE_ANY_ACQUISITION",
+  "utc": "2026-10-14T10:36:30Z",
+  "source_commit": "4a94e2563966aa198d00a1b6324cb1e8a4172468",
+  "old_driver_pid": 473054,
+  "old_driver_jobs": [],
+  "old_status_artifact": "out/research/n010-comparison-readiness/continuation-reschedule-v1/old-driver-status.json",
+  "old_status_sha256": "18d11168407e3634fac56f0fe319a1dc8efde32ef6fb43509fbb50271b61b24d",
+  "old_status_phase": "WAITING_FOR_ELIGIBLE_REFERENCES",
+  "incremental_proof_sha256": "4bf5b5c265f96e0c188649317411b5142a5f877c42881f644a5da48ab89b215e",
+  "reason": "Complete prefix proof passed; fixed full-corpus view 061 created and fresh C2/C4/C5/C6 acquisition started. Retire idle original-only driver before updating frozen provenance/quiescence checks. No GPU sample/calibration acquired or retried."
+}

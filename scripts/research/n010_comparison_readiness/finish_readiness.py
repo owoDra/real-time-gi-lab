@@ -48,12 +48,18 @@ if __name__ == '__main__':
              RESULTS/'037-controlled-dynamic-pt1024.json',
              RESULTS/'024-c8-pt-quality-ladder.json', RESULTS/'025-c9-pt-quality-ladder.json']
     paths += list(SCRIPTS.glob('*.py'))
+    if args.references.name=='reference-view-v1':
+        paths += [RESULTS/'061-full-corpus-reference-view.json',
+                  RESULTS/'050-incremental-oracle-equivalence.json',
+                  RESULTS/'022-cached-oracle-equivalence.json',
+                  ROOT/'build/n010-cpu/n010_cached_oracle',
+                  ROOT/'build/n010-cpu/n010_incremental_oracle']
     identities = {str(path):sha(path) for path in paths}
     shaders = shader_hashes()
     status = {'schema':'n010-continuation/1', 'phase':'STARTING', 'complete':False,
               'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
               'input_sha256':identities, 'shader_sha256':shaders, 'jobs':[],
-              'scope':'Existing original CPU oracle only; one GPU acquisition at a time; no accepted retries'}
+              'scope':'Full locked corpus with physically proved original/exact-prefix references; one GPU acquisition at a time; no accepted retries'}
     def save(phase):
         status['phase'] = phase
         status['updated_utc'] = time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())

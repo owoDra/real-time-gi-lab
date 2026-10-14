@@ -169,3 +169,19 @@ independently scores every RGB/distance component and memory event. Protocol
 actual diagnostic runtime/build evidence; no scene GI, architecture promotion
 or performance comparison follows. Existing frozen GPU binaries/shaders remain
 unchanged. Validation layers were not run in this diagnostic.
+
+Current transition: 050 is complete/PASS; fresh incremental C2/C4/C5/C6
+acquisition runs with 12 threads, and fixed full 24-transport view 061 is
+created. Original C1/C3 acquisitions continue. Driver retirement 059 occurred
+while idle, before any pilot/calibration. The updated `finish_readiness.py`
+freezes all current helpers and proof/binary/view identities; preflight
+re-executes convergence and verifies incremental chains, and quiet calibration
+rejects both original and incremental qualifier/validation/watcher activity.
+
+`retire_original_qualifier.py --pid ORIGINAL_PID --references ORIGINAL_ROOT
+--work NEW_DIR --output NEW_JSON` privately verifies the exact original
+C7/C1/C2/C4/C5/C6 parent, waits for a fully completed C1 T_B8 eligible pair or
+frozen cap, then retires it at that transport boundary. All original files
+and any subsequent partial child are inventoried and retained. It never
+changes outcomes or uses partial results; the independent C3 runner finishes
+naturally. Its eventual 062 record must be executed before listing complete.

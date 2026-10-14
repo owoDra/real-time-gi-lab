@@ -3,6 +3,7 @@
 import argparse,hashlib,json,subprocess
 from pathlib import Path
 from calibrate_renderer import boundaries,shader_hashes
+from reference_provenance import physical_proof,verify_reference
 ROOT=Path(__file__).resolve().parents[3]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def replay(memory):
@@ -31,17 +32,21 @@ if __name__=='__main__':
  lock=read(a.lock)
  def refs():
   if set(lock['cells'])!={f'C{i}' for i in range(1,13)}:raise ValueError('full locked corpus required')
+  physical_proof(result['inputs'])
+  incremental=False
   for cell in lock['cells']:
    for v in (2,8):
-    directory=a.references/f'{cell}_T_B{v}';q=read(directory/'qualification.json')
-    if q['classification']!='STATISTICALLY_ELIGIBLE' or q['state_sha256']!=lock['cells'][cell]['state_sha256']:raise ValueError('reference not eligible/locked: '+cell)
-    if len(q['levels'])<2 or not q['levels'][-1]['screen']['status']=='statistical-screen-pass':raise ValueError('missing consecutive qualification')
-    for level in q['levels']:
-     for name,digest in level['all_payload_sha256'].items():
-      if sha(directory/name)!=digest:raise ValueError('reference payload changed')
-  validation=read(ROOT/'research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json')
-  if not(validation['complete'] and validation['all_pass']):raise ValueError('physical validation missing')
-  return '24 eligible cell/transport references; payload, locked-state and physical-validation identities checked'
+    row=verify_reference(a.references/f'{cell}_T_B{v}',cell,v,lock['cells'][cell],result['inputs'])
+    incremental=incremental or row['computational_variant']=='exact-prefix-continuation'
+  if incremental:
+   view=read(ROOT/'research/lanes/n010-comparison-readiness/results/061-full-corpus-reference-view.json')
+   if view['work']!=str(a.references.resolve()) or len(view['rows'])!=24 or {r['name'] for r in view['rows']}!={f'C{i}_T_B{v}' for i in range(1,13) for v in (2,8)}:raise ValueError('fixed full-corpus scheduling view mismatch')
+   for row in view['rows']:
+    path=a.references/row['name']
+    if not path.is_symlink() or str(path.resolve())!=row['target']:raise ValueError('reference view target changed')
+    q=read(path/'qualification.json')
+    if q.get('computational_variant','original-full-prefix')!=row['computational_variant']:raise ValueError('reference variant differs from prospective scheduling map')
+  return '24 eligible canonical scene/seed references; every payload/header and original convergence screen verified; incremental metadata and 009/022/050 proof chains checked when used'
  gate('eligible_locked_physical_references',refs)
  def correctness():
   base=ROOT/'research/lanes/n010-comparison-readiness/results'
