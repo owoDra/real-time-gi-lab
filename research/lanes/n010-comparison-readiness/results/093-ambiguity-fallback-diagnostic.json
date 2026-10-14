@@ -1,0 +1,338 @@
+{
+  "schema": "n010-ambiguity-fallback-diagnostic/1",
+  "complete": true,
+  "gpu_run": true,
+  "eligible_for_references": false,
+  "classification": "SELECTED_POSTHOC_FEASIBILITY_NOT_ADMISSION",
+  "selected_pixels": [
+    7826,
+    13450,
+    33365,
+    55934,
+    17035,
+    16762,
+    8143,
+    14210
+  ],
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/087-deep-sampling-intervention.json": "4c18e25d456e51274a1ba93b7bd786f65497cf03c0f9c3c1d0a4e3dbc30bb343",
+    "research/lanes/n010-comparison-readiness/experiments/024-prospective-ambiguity-fallback-diagnostic.md": "7c3e83fbb0a929672a6f614fde5ceae7bd8904bee78baf3caa4aa491b7c290c0",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.comp.glsl": "6badf11584ff47f7dc0e946a3f56f78b8cb5b0527c040b60e3ef54f14c6c2058",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/polynomial.cpp": "220c24c4c5b8167d0b2cbc91e6529e801b2acda71658b833db5b5aec9ca31fc7",
+    "scripts/research/n010_comparison_readiness/diagnose_ambiguity_fallback.py": "35d0bd91f91c5cf56c925e90550674f5d98573e1e56b37d5e326e17a29e127b3"
+  },
+  "steps": [
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+        "-V",
+        "--target-env",
+        "vulkan1.2",
+        "-S",
+        "comp",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.comp.glsl",
+        "-o",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/raw.spv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.comp.glsl\n",
+      "wall_seconds_diagnostic": 0.2018356210028287
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/phos-n010-fallback-diagnostic"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 8.540711704001296
+    },
+    {
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/phos-n010-fallback-diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.spv",
+        "305419896",
+        "8192",
+        "16",
+        "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/gpu"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 56.84014238900272
+    }
+  ],
+  "guard_binary64_epsilon_multiplier": 64,
+  "guard_scale": "max(abs(best_t), scene_diagonal)",
+  "scoring_exclusions": 0,
+  "no_contraction_results": 186,
+  "generated_sha256": {
+    "source": "0fd79bb891b2a6f66ca3deda8bb34635a3221c4eea393f91a13d82b9dd089f35",
+    "binary": "3eb657ec40bb80415d7d6a4356e85599e39bf9d37bfc5bd3a6604b45b5ae67bb",
+    "shader": "2e36d34756aa1f753ff13acb096e4cd2a590c15b0e3816422d3063bdcf28a533"
+  },
+  "flag_counts": [
+    {
+      "pixel": 7826,
+      "flagged_samples": 2019
+    },
+    {
+      "pixel": 13450,
+      "flagged_samples": 585
+    },
+    {
+      "pixel": 33365,
+      "flagged_samples": 668
+    },
+    {
+      "pixel": 55934,
+      "flagged_samples": 594
+    },
+    {
+      "pixel": 17035,
+      "flagged_samples": 746
+    },
+    {
+      "pixel": 16762,
+      "flagged_samples": 2439
+    },
+    {
+      "pixel": 8143,
+      "flagged_samples": 2243
+    },
+    {
+      "pixel": 14210,
+      "flagged_samples": 2570
+    }
+  ],
+  "rows": [
+    {
+      "pixel": 7826,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 0.0,
+      "max_abs_moment": 1.6940658945086007e-21,
+      "indirect_nrmse": 0.0,
+      "cpu_counters": [
+        8192,
+        51922,
+        22945,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        51922,
+        22945,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 13450,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 4.336808689942018e-19,
+      "max_abs_moment": 0.0,
+      "indirect_nrmse": 2.1243877521194928e-16,
+      "cpu_counters": [
+        8192,
+        49300,
+        15274,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        49300,
+        15274,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 33365,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 8.673617379884035e-19,
+      "max_abs_moment": 3.3881317890172014e-21,
+      "indirect_nrmse": 1.720761819559852e-16,
+      "cpu_counters": [
+        8192,
+        49526,
+        13287,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        49526,
+        13287,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 55934,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 4.336808689942018e-19,
+      "max_abs_moment": 3.3881317890172014e-21,
+      "indirect_nrmse": 2.342664043665765e-16,
+      "cpu_counters": [
+        8192,
+        45879,
+        12932,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        45879,
+        12932,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 17035,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 4.336808689942018e-19,
+      "max_abs_moment": 1.0164395367051604e-20,
+      "indirect_nrmse": 1.7977937761587114e-16,
+      "cpu_counters": [
+        8192,
+        49465,
+        14481,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        49465,
+        14481,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 16762,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 4.336808689942018e-19,
+      "max_abs_moment": 8.470329472543003e-22,
+      "indirect_nrmse": 5.515266075688875e-16,
+      "cpu_counters": [
+        8192,
+        52744,
+        28603,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        52744,
+        28603,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 8143,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 1.0842021724855044e-19,
+      "max_abs_moment": 8.470329472543003e-22,
+      "indirect_nrmse": 1.4912284569165786e-16,
+      "cpu_counters": [
+        8192,
+        53926,
+        37136,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        53926,
+        37136,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    },
+    {
+      "pixel": 14210,
+      "cpu_reproduces_original": true,
+      "max_abs_mean": 3.2526065174565133e-19,
+      "max_abs_moment": 0.0,
+      "indirect_nrmse": 4.204201229564137e-16,
+      "cpu_counters": [
+        8192,
+        51637,
+        35604,
+        0
+      ],
+      "corrected_counters": [
+        8192,
+        51637,
+        35604,
+        0
+      ],
+      "counters_equal": true,
+      "direct_emission_byte_equal": true,
+      "finite": true,
+      "passes_selected_numerical_gates": true
+    }
+  ],
+  "all_selected_pass": true,
+  "artifact_sha256": {
+    "cpu.f64": "ceb9f3615c3b9092f2359cf562167d1362c012210f98360ae24804491b43e4e1",
+    "cpu.stats": "902639188bc96279664cf33f3c5f89a16a1dba1bcfcfb730a6fe952442340757",
+    "gpu.stats": "758927c1961af7c58af0fe7995b0462239997d631da56532b1461f4549c354f8",
+    "o.indirect.pfm": "4b9de9e0c4553217ffe082d99e92c6b51cd5a76689bd809a62591d47c80c5acc",
+    "corrected.stats": "38fcaa3ace83c7e5f9644d6b6de93409ecbb51127fbb24c4859cefbbeda14e22",
+    "corrected.f64": "53b7fe01e7f240cfb76a1840b357791c0ee9cb9ef467255c90b9e8cd43e93dd5",
+    "fallback-counts.json": "3f106df33e5392cfdfbceed1fa4ed63e5fe7ed017cf1321a4f1b4b489e44bbc9",
+    "o.direct.pfm": "99dfd5a46920d0b75603edad754230de57545661336f3eca1d7458104d9124f6",
+    "allocation-ledger.json": "8f058fa304288aef0a4f40fdafbc7877fb916b0c6f343b201423c66f928be779",
+    "o.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "path-flags.bin": "76b4da863c7681feda543d621560d70afa5ded40dcbd93c4d64e1fbf9bc611da",
+    "o.total.pfm": "f280ae90a6dec8e97a1ac03031762d98ed3c49baa9e854180c676a34286ba9ed",
+    "o.hits": "927964ea5001b8432af9711f5b898ee704d50f07124cadf0b3de304f97e2d26a",
+    "o.f64": "1839395b472aac054bde3d96a6c050205c04bd33d3a6623d5aae9494031a4997",
+    "gpu.json": "e75d97597cb662b62f822be5fd9f3b1a93e845adcc682bc2b14cbb3cf4a22de7"
+  },
+  "scope": "Selected-pixel feasibility only. No stored reference values or forced hit/sign used by fallback; every flagged whole path recomputed with original CPU oracle. Full admission and prefix gates remain required."
+}

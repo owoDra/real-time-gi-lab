@@ -1,0 +1,135 @@
+{
+  "schema": "n010-signed-zero-basis-diagnostic/1",
+  "complete": true,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "classification": "POSTHOC_DIAGNOSTIC_NOT_ADMISSION",
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/089-deep-path-diagnostic.json": "16ca4e13494a28b2bce83dbc23f31fc00c45c17ad845c9f38bf55c83e7d8e9ee",
+    "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial/cpu.trace": "17bb1c409dc5142cdbd7725bb4b3b65a95578c9be03fec05c85c40318ee9faf3",
+    "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial/gpu.trace": "8033c1fa03394c9187c811871bdef80a63afcd5b2d318e51aca6d5a1493296ed",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_snapshot.hpp": "b4ca6cbf5744e1d89bf4b23464ea4c213ee9fff85c101cfb6e873f68bc8af7af",
+    "out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "scripts/research/n010_comparison_readiness/diagnose_signed_zero_basis.py": "af156dbe41948129a956d8137579749afe3778cc8e1608081c2f695de83f764f"
+  },
+  "intervention": "Replace only the sign bit of zero normal.z in the captured GPU normal with the captured CPU sign; keep GPU normal.x/y and identical uniform words. Calculate the next direction on CPU; no image repair or excluded samples.",
+  "steps": [
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "out/research/n010-comparison-readiness/signed-zero-diagnostic-v1/basis.cpp",
+        "-o",
+        "out/research/n010-comparison-readiness/signed-zero-diagnostic-v1/n010-basis-diagnostic"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 1.3545273540075868
+    },
+    {
+      "command": [
+        "out/research/n010-comparison-readiness/signed-zero-diagnostic-v1/n010-basis-diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial/cpu.trace",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial/gpu.trace"
+      ],
+      "returncode": 0,
+      "stdout": "[{\"pixel\":7826,\"sample\":5217,\"hit_bounce\":2,\"cpu_negative_zero\":false,\"gpu_negative_zero\":true,\"actual_direction_max_difference\":0.21700106455284557,\"predicted_gpu_direction_max_error\":0,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":13450,\"sample\":3114,\"hit_bounce\":5,\"cpu_negative_zero\":true,\"gpu_negative_zero\":false,\"actual_direction_max_difference\":0.4297602923884562,\"predicted_gpu_direction_max_error\":2.2204460492503131e-16,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":33365,\"sample\":3339,\"hit_bounce\":2,\"cpu_negative_zero\":false,\"gpu_negative_zero\":true,\"actual_direction_max_difference\":1.1836907189507428,\"predicted_gpu_direction_max_error\":0,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":55934,\"sample\":486,\"hit_bounce\":4,\"cpu_negative_zero\":true,\"gpu_negative_zero\":false,\"actual_direction_max_difference\":0.32936420701053915,\"predicted_gpu_direction_max_error\":0,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":17035,\"sample\":2266,\"hit_bounce\":3,\"cpu_negative_zero\":true,\"gpu_negative_zero\":false,\"actual_direction_max_difference\":0.59036809807298973,\"predicted_gpu_direction_max_error\":0,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":16762,\"sample\":5988,\"hit_bounce\":2,\"cpu_negative_zero\":false,\"gpu_negative_zero\":true,\"actual_direction_max_difference\":0.40320968217662628,\"predicted_gpu_direction_max_error\":0,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":8143,\"sample\":4235,\"hit_bounce\":4,\"cpu_negative_zero\":true,\"gpu_negative_zero\":false,\"actual_direction_max_difference\":0.64120907087667089,\"predicted_gpu_direction_max_error\":5.5511151231257827e-17,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0},{\"pixel\":14210,\"sample\":2957,\"hit_bounce\":2,\"cpu_negative_zero\":true,\"gpu_negative_zero\":false,\"actual_direction_max_difference\":0.57959624142830057,\"predicted_gpu_direction_max_error\":0,\"zero_sign_only_counterfactual_cpu_direction_max_error\":0}]\n",
+      "stderr": "",
+      "wall_seconds_diagnostic": 0.18194569200568367
+    }
+  ],
+  "rows": [
+    {
+      "pixel": 7826,
+      "sample": 5217,
+      "hit_bounce": 2,
+      "cpu_negative_zero": false,
+      "gpu_negative_zero": true,
+      "actual_direction_max_difference": 0.21700106455284557,
+      "predicted_gpu_direction_max_error": 0,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 13450,
+      "sample": 3114,
+      "hit_bounce": 5,
+      "cpu_negative_zero": true,
+      "gpu_negative_zero": false,
+      "actual_direction_max_difference": 0.4297602923884562,
+      "predicted_gpu_direction_max_error": 2.220446049250313e-16,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 33365,
+      "sample": 3339,
+      "hit_bounce": 2,
+      "cpu_negative_zero": false,
+      "gpu_negative_zero": true,
+      "actual_direction_max_difference": 1.1836907189507428,
+      "predicted_gpu_direction_max_error": 0,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 55934,
+      "sample": 486,
+      "hit_bounce": 4,
+      "cpu_negative_zero": true,
+      "gpu_negative_zero": false,
+      "actual_direction_max_difference": 0.32936420701053915,
+      "predicted_gpu_direction_max_error": 0,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 17035,
+      "sample": 2266,
+      "hit_bounce": 3,
+      "cpu_negative_zero": true,
+      "gpu_negative_zero": false,
+      "actual_direction_max_difference": 0.5903680980729897,
+      "predicted_gpu_direction_max_error": 0,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 16762,
+      "sample": 5988,
+      "hit_bounce": 2,
+      "cpu_negative_zero": false,
+      "gpu_negative_zero": true,
+      "actual_direction_max_difference": 0.4032096821766263,
+      "predicted_gpu_direction_max_error": 0,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 8143,
+      "sample": 4235,
+      "hit_bounce": 4,
+      "cpu_negative_zero": true,
+      "gpu_negative_zero": false,
+      "actual_direction_max_difference": 0.6412090708766709,
+      "predicted_gpu_direction_max_error": 5.551115123125783e-17,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    },
+    {
+      "pixel": 14210,
+      "sample": 2957,
+      "hit_bounce": 2,
+      "cpu_negative_zero": true,
+      "gpu_negative_zero": false,
+      "actual_direction_max_difference": 0.5795962414283006,
+      "predicted_gpu_direction_max_error": 0,
+      "zero_sign_only_counterfactual_cpu_direction_max_error": 0
+    }
+  ],
+  "generated_sha256": {
+    "source": "ab62e1bba290317e44731d5588156183fc90aedebfc017d0d7b3934a0ffe4b01",
+    "binary": "c79d1b7e01239d81a089ef3b35b6e4f098e750605234ed589177229b7631db73"
+  },
+  "scope": "Eight post-hoc paths only. This diagnoses a deterministic basis-sign mechanism, not population bias, the other 46 pixels, CPU reference eligibility, or full GPU conformance."
+}

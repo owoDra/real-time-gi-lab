@@ -64,3 +64,9 @@ numerical conformance on C1 T_B8 seed 0. No GPU reference is admitted;
 post-hoc sampling diagnosis (plan 022 / map 084) runs separately from the
 live unchanged CPU qualification. This failure does not create another
 preparation lane or relax the all-24-reference readiness requirement.
+
+Post-hoc deep-port diagnosis 091/092 establishes a signed-zero basis mechanism
+on eight retained paths; it does not repair the Renderer's unresolved direct
+pixels. Whole-path CPU fallback candidate 093 passes selected feasibility.
+Separate streamed build 095 and full-frame plan 025 preserve all original
+admission gates; no GPU reference transition before complete validation.

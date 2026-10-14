@@ -1,0 +1,37 @@
+{
+  "schema": "n010-diagnostic-artifact-audit/1",
+  "complete": true,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "memory_checks": [
+    {
+      "path": "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial/allocation-ledger.json",
+      "sha256": "5b1a89ae75a67a47ea0369c1de745ec19474f1b93f8b9038768d23dceeaaa3ac",
+      "memory_replay_pass": true
+    },
+    {
+      "path": "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/cpu-trigonometry/allocation-ledger.json",
+      "sha256": "5b1a89ae75a67a47ea0369c1de745ec19474f1b93f8b9038768d23dceeaaa3ac",
+      "memory_replay_pass": true
+    },
+    {
+      "path": "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/gpu/allocation-ledger.json",
+      "sha256": "8f058fa304288aef0a4f40fdafbc7877fb916b0c6f343b201423c66f928be779",
+      "memory_replay_pass": true
+    }
+  ],
+  "selected_fallback_gpu_fault_flags": 0,
+  "selected_fallback_all_finite": true,
+  "flagged_path_count": 11864,
+  "selected_path_count": 65536,
+  "hybrid_build_identity_checks": {
+    "hybrid.cpp": true,
+    "hybrid.comp.glsl": true,
+    "hybrid.spv": true,
+    "phos-n010-hybrid-reference": true
+  },
+  "continuation_frozen_input_count": 53,
+  "continuation_frozen_input_mismatches": [],
+  "scope": "CPU audit of completed post-hoc diagnostic memory ledgers and separate hybrid build identities. No new GPU run, full numerical/physical/state/prefix admission or whole-corpus READY.",
+  "all_pass": true
+}

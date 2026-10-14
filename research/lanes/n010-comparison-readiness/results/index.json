@@ -445,6 +445,42 @@
       "status": "failed-attempt-clarification",
       "result": "090-path-diagnostic-launch-clarification.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-089",
+      "status": "posthoc-diagnostic",
+      "result": "089-deep-path-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-091",
+      "status": "posthoc-diagnostic",
+      "result": "091-deep-path-signed-zero-diagnosis.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-092",
+      "status": "posthoc-diagnostic",
+      "result": "092-signed-zero-basis-counterfactual.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-093",
+      "status": "selected-feasibility-only",
+      "result": "093-ambiguity-fallback-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-094",
+      "status": "diagnostic-artifact-audit",
+      "result": "094-diagnostic-artifact-and-memory-audit.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-095",
+      "status": "host-build-complete",
+      "result": "095-hybrid-oracle-build.json",
+      "gpu_run": false
     }
   ]
 }

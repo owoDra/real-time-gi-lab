@@ -1,0 +1,1882 @@
+{
+  "schema": "n010-selected-path-trace/1",
+  "complete": true,
+  "gpu_run": true,
+  "eligible_for_references": false,
+  "classification": "POSTHOC_DIAGNOSTIC_NOT_ADMISSION",
+  "selected_pixels": [
+    7826,
+    13450,
+    33365,
+    55934,
+    17035,
+    16762,
+    8143,
+    14210
+  ],
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/087-deep-sampling-intervention.json": "4c18e25d456e51274a1ba93b7bd786f65497cf03c0f9c3c1d0a4e3dbc30bb343",
+    "research/lanes/n010-comparison-readiness/experiments/023-posthoc-deep-path-trace.md": "a51b233a3c7f98203a6858388c079df632d5c945f1b743086ff6ad36fa9fc745",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.comp.glsl": "6badf11584ff47f7dc0e946a3f56f78b8cb5b0527c040b60e3ef54f14c6c2058",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/polynomial.cpp": "220c24c4c5b8167d0b2cbc91e6529e801b2acda71658b833db5b5aec9ca31fc7",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/cpu-trigonometry.cpp": "0cd8251ab52943122ea656f2ab9efb664bd024037a98bdd43909f19db54f1ef3",
+    "scripts/research/n010_comparison_readiness/diagnose_gpu_deep_paths.py": "7964a844850efde1d99df27d4b272a28ca262969619d215330460e745aa1aa20"
+  },
+  "steps": [
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+        "-V",
+        "--target-env",
+        "vulkan1.2",
+        "-S",
+        "comp",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/trace.comp.glsl",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/raw.spv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/trace.comp.glsl\n",
+      "wall_seconds_diagnostic": 0.2444639739987906
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/phos-n010-trace-polynomial"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial.cpp: In lambda function:\nout/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial.cpp:70:14: note: the ABI for passing parameters with 32-byte alignment has changed in GCC 4.6\n   70 |     auto vec=[](D4 a){return N::V3{a.v[0],a.v[1],a.v[2]};};\n      |              ^\n",
+      "wall_seconds_diagnostic": 6.555510297999717
+    },
+    {
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/phos-n010-trace-polynomial",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/trace.spv",
+        "305419896",
+        "8192",
+        "16",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/polynomial"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 58.63346565500251
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/cpu-trigonometry.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/phos-n010-trace-cpu-trigonometry"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/cpu-trigonometry.cpp: In lambda function:\nout/research/n010-comparison-readiness/deep-path-diagnostic-v2/cpu-trigonometry.cpp:70:14: note: the ABI for passing parameters with 32-byte alignment has changed in GCC 4.6\n   70 |     auto vec=[](D4 a){return N::V3{a.v[0],a.v[1],a.v[2]};};\n      |              ^\n",
+      "wall_seconds_diagnostic": 6.0530857289995765
+    },
+    {
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/phos-n010-trace-cpu-trigonometry",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/trace.spv",
+        "305419896",
+        "8192",
+        "16",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v2/cpu-trigonometry"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 60.56143116900057
+    }
+  ],
+  "shader_sha256": "ed25f140c9580fa4ad60d11fdcce2da7a0310b592e5d43a1c05a74dcf0257f89",
+  "no_contraction_results": 183,
+  "artifact_sha256": {
+    "polynomial": {
+      "cpu.trace": "17bb1c409dc5142cdbd7725bb4b3b65a95578c9be03fec05c85c40318ee9faf3",
+      "gpu.trace": "8033c1fa03394c9187c811871bdef80a63afcd5b2d318e51aca6d5a1493296ed",
+      "manual.f64": "ceb9f3615c3b9092f2359cf562167d1362c012210f98360ae24804491b43e4e1",
+      "manual.stats": "902639188bc96279664cf33f3c5f89a16a1dba1bcfcfb730a6fe952442340757",
+      "cpu.f64": "ceb9f3615c3b9092f2359cf562167d1362c012210f98360ae24804491b43e4e1",
+      "cpu.stats": "902639188bc96279664cf33f3c5f89a16a1dba1bcfcfb730a6fe952442340757",
+      "o.f64": "1839395b472aac054bde3d96a6c050205c04bd33d3a6623d5aae9494031a4997",
+      "gpu.stats": "758927c1961af7c58af0fe7995b0462239997d631da56532b1461f4549c354f8",
+      "allocation-ledger.json": "5b1a89ae75a67a47ea0369c1de745ec19474f1b93f8b9038768d23dceeaaa3ac"
+    },
+    "cpu-trigonometry": {
+      "cpu.trace": "17bb1c409dc5142cdbd7725bb4b3b65a95578c9be03fec05c85c40318ee9faf3",
+      "gpu.trace": "be212d27eb8e7c3f7c0822abe973568b2e7b7dcad14991d1568020bce25e8b2b",
+      "manual.f64": "ceb9f3615c3b9092f2359cf562167d1362c012210f98360ae24804491b43e4e1",
+      "manual.stats": "902639188bc96279664cf33f3c5f89a16a1dba1bcfcfb730a6fe952442340757",
+      "cpu.f64": "ceb9f3615c3b9092f2359cf562167d1362c012210f98360ae24804491b43e4e1",
+      "cpu.stats": "902639188bc96279664cf33f3c5f89a16a1dba1bcfcfb730a6fe952442340757",
+      "o.f64": "94a47e1a8a4461016e58ae3a8b8be0e81075743ec9bf195bd074667b401f268d",
+      "gpu.stats": "03a56be89b05c595deab3eae6758ae68236eaed7c3cb2fd949930422ba57e1fc",
+      "allocation-ledger.json": "5b1a89ae75a67a47ea0369c1de745ec19474f1b93f8b9038768d23dceeaaa3ac"
+    }
+  },
+  "replays": [
+    {
+      "mode": "polynomial",
+      "pixel": 7826,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 13450,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 33365,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 55934,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 17035,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 16762,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 8143,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 14210,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 7826,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 13450,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 33365,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 55934,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 17035,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 16762,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 8143,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 14210,
+      "cpu_manual_payload_equal": true,
+      "cpu_manual_counters_equal": true,
+      "gpu_payload_reproduces_087": true
+    }
+  ],
+  "replay_valid": true,
+  "first_semantic_divergences": [
+    {
+      "mode": "polynomial",
+      "pixel": 7826,
+      "sample": 5217,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          1030.1617675110394,
+          415.52997188288913,
+          -67.16227410314525
+        ],
+        "direction": [
+          0.8539403383101183,
+          0.5187587348736119,
+          -0.040930106268256314
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.8699832301891,
+          -80.44431465581788
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006962448420491992,
+          0.0006962448420491992,
+          0.0006962448420491992
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.8699832301891,
+          -80.44431465581788
+        ],
+        "indirect": [
+          0.00022162161642873192,
+          0.00022162161642873192,
+          0.00022162161642873192
+        ],
+        "t": 324.50540112507895,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          1030.1617675110394,
+          415.5299718828892,
+          -67.16227410314522
+        ],
+        "direction": [
+          0.8539403383101181,
+          0.5187587348736118,
+          -0.04093010626825631
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.8699832301891,
+          -80.44431465581785
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006962448420491992,
+          0.0006962448420491992,
+          0.0006962448420491992
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.8699832301891,
+          -80.44431465581785
+        ],
+        "indirect": [
+          0.00022162161642873192,
+          0.00022162161642873192,
+          0.00022162161642873192
+        ],
+        "t": 324.505401125079,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 5.684341886080802e-14
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 13450,
+      "sample": 3114,
+      "bounce": 5,
+      "cpu": {
+        "origin": [
+          1044.6536739359954,
+          852.2527696437891,
+          -400.6018126083034
+        ],
+        "direction": [
+          0.5329169006512599,
+          -0.5397562992633621,
+          0.6516615029336743
+        ],
+        "hit_position": [
+          1307.27001953125,
+          586.266033904434,
+          -79.46926406947478
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.000696466668388109,
+          0.000696466668388109,
+          0.000696466668388109
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          586.266033904434,
+          -79.46926406947478
+        ],
+        "indirect": [
+          0.0008433325115133512,
+          0.0008433325115133512,
+          0.0008433325115133512
+        ],
+        "t": 492.7904243125335,
+        "primitive": 85951,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          1044.6536739359951,
+          852.252769643789,
+          -400.60181260830376
+        ],
+        "direction": [
+          0.5329169006512599,
+          -0.5397562992633621,
+          0.6516615029336743
+        ],
+        "hit_position": [
+          1307.27001953125,
+          586.2660339044337,
+          -79.46926406947483
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.000696466668388109,
+          0.000696466668388109,
+          0.000696466668388109
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          586.2660339044337,
+          -79.46926406947483
+        ],
+        "indirect": [
+          0.0008433325115133512,
+          0.0008433325115133512,
+          0.0008433325115133512
+        ],
+        "t": 492.7904243125339,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 1.1368683772161603e-13
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 3.410605131648481e-13
+        },
+        {
+          "bounce": 3,
+          "max_abs_finite_numeric_difference": 4.547473508864641e-13
+        },
+        {
+          "bounce": 4,
+          "max_abs_finite_numeric_difference": 5.684341886080801e-13
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 33365,
+      "sample": 3339,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          62.81971135132114,
+          396.24497205671895,
+          160.01987369341452
+        ],
+        "direction": [
+          0.9710402874319155,
+          0.14901180927457308,
+          -0.1867518162719214
+        ],
+        "hit_position": [
+          1307.2700195312498,
+          587.2131475014409,
+          -79.31453737142914
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006965419295984308,
+          0.0006965419295984308,
+          0.0006965419295984308
+        ],
+        "nudged_origin": [
+          1307.2700195266127,
+          587.2131475014409,
+          -79.31453737142914
+        ],
+        "indirect": [
+          0.0021810003498796138,
+          0.0021810003498796138,
+          0.0021810003498796138
+        ],
+        "t": 1281.5640342493857,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          62.81971135132111,
+          396.24497205671884,
+          160.0198736934144
+        ],
+        "direction": [
+          0.9710402874319153,
+          0.14901180927457305,
+          -0.18675181627192136
+        ],
+        "hit_position": [
+          1307.2700195312498,
+          587.2131475014407,
+          -79.31453737142925
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006965419295984308,
+          0.0006965419295984308,
+          0.0006965419295984308
+        ],
+        "nudged_origin": [
+          1307.2700195266127,
+          587.2131475014407,
+          -79.31453737142925
+        ],
+        "indirect": [
+          0.0021810003498796138,
+          0.0021810003498796138,
+          0.0021810003498796138
+        ],
+        "t": 1281.564034249386,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 1.1368683772161603e-13
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 55934,
+      "sample": 486,
+      "bounce": 4,
+      "cpu": {
+        "origin": [
+          357.92044284439777,
+          478.81505318292614,
+          162.92554685277938
+        ],
+        "direction": [
+          0.9630560607772503,
+          0.11322521558688801,
+          -0.24434212562615648
+        ],
+        "hit_position": [
+          1307.27001953125,
+          590.4288157305996,
+          -77.93903307909423
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006968274718832625,
+          0.0006968274718832625,
+          0.0006968274718832625
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          590.4288157305996,
+          -77.93903307909423
+        ],
+        "indirect": [
+          0.0013743612656595427,
+          0.0013743612656595427,
+          0.0013743612656595427
+        ],
+        "t": 985.7677194001188,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          357.920442844398,
+          478.81505318292614,
+          162.92554685277926
+        ],
+        "direction": [
+          0.96305606077725,
+          0.11322521558688799,
+          -0.24434212562615643
+        ],
+        "hit_position": [
+          1307.27001953125,
+          590.4288157305995,
+          -77.93903307909432
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006968274718832625,
+          0.0006968274718832625,
+          0.0006968274718832625
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          590.4288157305995,
+          -77.93903307909432
+        ],
+        "indirect": [
+          0.0013743612656595418,
+          0.0013743612656595418,
+          0.0013743612656595418
+        ],
+        "t": 985.767719400119,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 7.105427357601002e-15
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        },
+        {
+          "bounce": 3,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 17035,
+      "sample": 2266,
+      "bounce": 3,
+      "cpu": {
+        "origin": [
+          -220.84599303735538,
+          654.3086583522454,
+          -275.316685050736
+        ],
+        "direction": [
+          0.9909558371369911,
+          -0.045755572905532435,
+          0.12614656710434924
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.7506970376398,
+          -80.79077188830328
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006962197074843504,
+          0.0006962197074843504,
+          0.0006962197074843504
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.7506970376398,
+          -80.79077188830328
+        ],
+        "indirect": [
+          0.0035398109040640684,
+          0.0035398109040640684,
+          0.0035398109040640684
+        ],
+        "t": 1542.0626785786383,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          -220.84599303735538,
+          654.3086583522454,
+          -275.31668505073606
+        ],
+        "direction": [
+          0.9909558371369909,
+          -0.04575557290553244,
+          0.1261465671043492
+        ],
+        "hit_position": [
+          1307.2700195312495,
+          583.7506970376398,
+          -80.79077188830337
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006962197074843508,
+          0.0006962197074843508,
+          0.0006962197074843508
+        ],
+        "nudged_origin": [
+          1307.2700195266125,
+          583.7506970376398,
+          -80.79077188830337
+        ],
+        "indirect": [
+          0.0035398109040640667,
+          0.0035398109040640667,
+          0.0035398109040640667
+        ],
+        "t": 1542.0626785786383,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 2.168404344971009e-19
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 16762,
+      "sample": 5988,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          1142.8479338994234,
+          415.5299825644938,
+          -160.31520793163494
+        ],
+        "direction": [
+          0.6614906609672436,
+          0.6776946948550447,
+          0.3211853141388122
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006962514161766317,
+          0.0006962514161766317,
+          0.0006962514161766317
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "indirect": [
+          0.00022162370903848673,
+          0.00022162370903848673,
+          0.00022162370903848673
+        ],
+        "t": 248.56297349898426,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          1142.8479338994234,
+          415.5299825644938,
+          -160.31520793163494
+        ],
+        "direction": [
+          0.6614906609672436,
+          0.6776946948550447,
+          0.3211853141388122
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006962514161766317,
+          0.0006962514161766317,
+          0.0006962514161766317
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "indirect": [
+          0.00022162370903848673,
+          0.00022162370903848673,
+          0.00022162370903848673
+        ],
+        "t": 248.56297349898426,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 1.734723475976807e-18
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 8143,
+      "sample": 4235,
+      "bounce": 4,
+      "cpu": {
+        "origin": [
+          917.6835963362104,
+          504.7066715551804,
+          161.677380710318
+        ],
+        "direction": [
+          0.836670778323928,
+          0.16774413939438293,
+          -0.5213865287842316
+        ],
+        "hit_position": [
+          1307.27001953125,
+          582.8148605485892,
+          -81.10044554296584
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006961341718100142,
+          0.0006961341718100142,
+          0.0006961341718100142
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          582.8148605485892,
+          -81.10044554296584
+        ],
+        "indirect": [
+          0.000221586388997493,
+          0.000221586388997493,
+          0.000221586388997493
+        ],
+        "t": 465.6388549573631,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          917.6835963362104,
+          504.7066715551804,
+          161.67738071031806
+        ],
+        "direction": [
+          0.836670778323928,
+          0.16774413939438293,
+          -0.5213865287842316
+        ],
+        "hit_position": [
+          1307.27001953125,
+          582.8148605485892,
+          -81.10044554296582
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006961341718100142,
+          0.0006961341718100142,
+          0.0006961341718100142
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          582.8148605485892,
+          -81.10044554296582
+        ],
+        "indirect": [
+          0.000221586388997493,
+          0.000221586388997493,
+          0.000221586388997493
+        ],
+        "t": 465.63885495736315,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 1.1368683772161603e-13
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 5.684341886080802e-14
+        },
+        {
+          "bounce": 3,
+          "max_abs_finite_numeric_difference": 5.684341886080802e-14
+        }
+      ]
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 14210,
+      "sample": 2957,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          519.7730102585432,
+          522.9695339676015,
+          -265.41024605667417
+        ],
+        "direction": [
+          0.9690571531052277,
+          0.08509645338170364,
+          0.23170418131196288
+        ],
+        "hit_position": [
+          1307.27001953125,
+          592.1225269805215,
+          -77.11758526318002
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006969766240511049,
+          0.0006969766240511049,
+          0.0006969766240511049
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          592.1225269805215,
+          -77.11758526318002
+        ],
+        "indirect": [
+          0.00022185454987446989,
+          0.00022185454987446989,
+          0.00022185454987446989
+        ],
+        "t": 812.6424811470272,
+        "primitive": 85951,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          519.7730102585432,
+          522.9695339676015,
+          -265.41024605667417
+        ],
+        "direction": [
+          0.9690571531052277,
+          0.08509645338170364,
+          0.23170418131196288
+        ],
+        "hit_position": [
+          1307.27001953125,
+          592.1225269805215,
+          -77.11758526317999
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.000696976624051105,
+          0.000696976624051105,
+          0.000696976624051105
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          592.1225269805215,
+          -77.11758526317999
+        ],
+        "indirect": [
+          0.0002218545498744699,
+          0.0002218545498744699,
+          0.0002218545498744699
+        ],
+        "t": 812.6424811470273,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 0.0
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 7826,
+      "sample": 5217,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          1030.1617675110394,
+          415.52997188288913,
+          -67.16227410314525
+        ],
+        "direction": [
+          0.8539403383101183,
+          0.5187587348736119,
+          -0.040930106268256314
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.8699832301891,
+          -80.44431465581788
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006962448420491992,
+          0.0006962448420491992,
+          0.0006962448420491992
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.8699832301891,
+          -80.44431465581788
+        ],
+        "indirect": [
+          0.00022162161642873192,
+          0.00022162161642873192,
+          0.00022162161642873192
+        ],
+        "t": 324.50540112507895,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          1030.1617675110394,
+          415.5299718828892,
+          -67.16227410314522
+        ],
+        "direction": [
+          0.8539403383101181,
+          0.5187587348736118,
+          -0.04093010626825631
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.8699832301891,
+          -80.44431465581785
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006962448420491992,
+          0.0006962448420491992,
+          0.0006962448420491992
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.8699832301891,
+          -80.44431465581785
+        ],
+        "indirect": [
+          0.00022162161642873192,
+          0.00022162161642873192,
+          0.00022162161642873192
+        ],
+        "t": 324.505401125079,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 5.684341886080802e-14
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 13450,
+      "sample": 3114,
+      "bounce": 5,
+      "cpu": {
+        "origin": [
+          1044.6536739359954,
+          852.2527696437891,
+          -400.6018126083034
+        ],
+        "direction": [
+          0.5329169006512599,
+          -0.5397562992633621,
+          0.6516615029336743
+        ],
+        "hit_position": [
+          1307.27001953125,
+          586.266033904434,
+          -79.46926406947478
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.000696466668388109,
+          0.000696466668388109,
+          0.000696466668388109
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          586.266033904434,
+          -79.46926406947478
+        ],
+        "indirect": [
+          0.0008433325115133512,
+          0.0008433325115133512,
+          0.0008433325115133512
+        ],
+        "t": 492.7904243125335,
+        "primitive": 85951,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          1044.6536739359951,
+          852.2527696437891,
+          -400.60181260830336
+        ],
+        "direction": [
+          0.5329169006512599,
+          -0.5397562992633621,
+          0.6516615029336743
+        ],
+        "hit_position": [
+          1307.27001953125,
+          586.2660339044338,
+          -79.46926406947443
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.000696466668388109,
+          0.000696466668388109,
+          0.000696466668388109
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          586.2660339044338,
+          -79.46926406947443
+        ],
+        "indirect": [
+          0.0008433325115133514,
+          0.0008433325115133514,
+          0.0008433325115133514
+        ],
+        "t": 492.79042431253396,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 1.7053025658242404e-13
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 1.8474111129762605e-13
+        },
+        {
+          "bounce": 3,
+          "max_abs_finite_numeric_difference": 4.547473508864641e-13
+        },
+        {
+          "bounce": 4,
+          "max_abs_finite_numeric_difference": 4.547473508864641e-13
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 33365,
+      "sample": 3339,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          62.81971135132114,
+          396.24497205671895,
+          160.01987369341452
+        ],
+        "direction": [
+          0.9710402874319155,
+          0.14901180927457308,
+          -0.1867518162719214
+        ],
+        "hit_position": [
+          1307.2700195312498,
+          587.2131475014409,
+          -79.31453737142914
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006965419295984308,
+          0.0006965419295984308,
+          0.0006965419295984308
+        ],
+        "nudged_origin": [
+          1307.2700195266127,
+          587.2131475014409,
+          -79.31453737142914
+        ],
+        "indirect": [
+          0.0021810003498796138,
+          0.0021810003498796138,
+          0.0021810003498796138
+        ],
+        "t": 1281.5640342493857,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          62.81971135132111,
+          396.24497205671884,
+          160.0198736934144
+        ],
+        "direction": [
+          0.9710402874319153,
+          0.14901180927457305,
+          -0.18675181627192136
+        ],
+        "hit_position": [
+          1307.2700195312498,
+          587.2131475014407,
+          -79.31453737142925
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006965419295984308,
+          0.0006965419295984308,
+          0.0006965419295984308
+        ],
+        "nudged_origin": [
+          1307.2700195266127,
+          587.2131475014407,
+          -79.31453737142925
+        ],
+        "indirect": [
+          0.0021810003498796138,
+          0.0021810003498796138,
+          0.0021810003498796138
+        ],
+        "t": 1281.564034249386,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 1.1368683772161603e-13
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 55934,
+      "sample": 486,
+      "bounce": 4,
+      "cpu": {
+        "origin": [
+          357.92044284439777,
+          478.81505318292614,
+          162.92554685277938
+        ],
+        "direction": [
+          0.9630560607772503,
+          0.11322521558688801,
+          -0.24434212562615648
+        ],
+        "hit_position": [
+          1307.27001953125,
+          590.4288157305996,
+          -77.93903307909423
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006968274718832625,
+          0.0006968274718832625,
+          0.0006968274718832625
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          590.4288157305996,
+          -77.93903307909423
+        ],
+        "indirect": [
+          0.0013743612656595427,
+          0.0013743612656595427,
+          0.0013743612656595427
+        ],
+        "t": 985.7677194001188,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          357.920442844398,
+          478.8150531829262,
+          162.92554685277932
+        ],
+        "direction": [
+          0.96305606077725,
+          0.11322521558688799,
+          -0.24434212562615643
+        ],
+        "hit_position": [
+          1307.27001953125,
+          590.4288157305996,
+          -77.93903307909423
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006968274718832625,
+          0.0006968274718832625,
+          0.0006968274718832625
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          590.4288157305996,
+          -77.93903307909423
+        ],
+        "indirect": [
+          0.0013743612656595423,
+          0.0013743612656595423,
+          0.0013743612656595423
+        ],
+        "t": 985.7677194001188,
+        "primitive": 85951,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 7.105427357601002e-15
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        },
+        {
+          "bounce": 3,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 17035,
+      "sample": 2266,
+      "bounce": 3,
+      "cpu": {
+        "origin": [
+          -220.84599303735538,
+          654.3086583522454,
+          -275.316685050736
+        ],
+        "direction": [
+          0.9909558371369911,
+          -0.045755572905532435,
+          0.12614656710434924
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.7506970376398,
+          -80.79077188830328
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006962197074843504,
+          0.0006962197074843504,
+          0.0006962197074843504
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.7506970376398,
+          -80.79077188830328
+        ],
+        "indirect": [
+          0.0035398109040640684,
+          0.0035398109040640684,
+          0.0035398109040640684
+        ],
+        "t": 1542.0626785786383,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          -220.84599303735538,
+          654.3086583522454,
+          -275.31668505073606
+        ],
+        "direction": [
+          0.9909558371369909,
+          -0.04575557290553243,
+          0.1261465671043492
+        ],
+        "hit_position": [
+          1307.2700195312498,
+          583.7506970376398,
+          -80.79077188830334
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006962197074843508,
+          0.0006962197074843508,
+          0.0006962197074843508
+        ],
+        "nudged_origin": [
+          1307.2700195266127,
+          583.7506970376398,
+          -80.79077188830334
+        ],
+        "indirect": [
+          0.0035398109040640667,
+          0.0035398109040640667,
+          0.0035398109040640667
+        ],
+        "t": 1542.0626785786385,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 2.168404344971009e-19
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 16762,
+      "sample": 5988,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          1142.8479338994234,
+          415.5299825644938,
+          -160.31520793163494
+        ],
+        "direction": [
+          0.6614906609672436,
+          0.6776946948550447,
+          0.3211853141388122
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006962514161766317,
+          0.0006962514161766317,
+          0.0006962514161766317
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "indirect": [
+          0.00022162370903848673,
+          0.00022162370903848673,
+          0.00022162370903848673
+        ],
+        "t": 248.56297349898426,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          1142.8479338994234,
+          415.5299825644938,
+          -160.31520793163494
+        ],
+        "direction": [
+          0.6614906609672436,
+          0.6776946948550447,
+          0.3211853141388122
+        ],
+        "hit_position": [
+          1307.27001953125,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006962514161766317,
+          0.0006962514161766317,
+          0.0006962514161766317
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          583.9797910421505,
+          -80.48043120508643
+        ],
+        "indirect": [
+          0.00022162370903848673,
+          0.00022162370903848673,
+          0.00022162370903848673
+        ],
+        "t": 248.56297349898426,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 0.0
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 8143,
+      "sample": 4235,
+      "bounce": 4,
+      "cpu": {
+        "origin": [
+          917.6835963362104,
+          504.7066715551804,
+          161.677380710318
+        ],
+        "direction": [
+          0.836670778323928,
+          0.16774413939438293,
+          -0.5213865287842316
+        ],
+        "hit_position": [
+          1307.27001953125,
+          582.8148605485892,
+          -81.10044554296584
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006961341718100142,
+          0.0006961341718100142,
+          0.0006961341718100142
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          582.8148605485892,
+          -81.10044554296584
+        ],
+        "indirect": [
+          0.000221586388997493,
+          0.000221586388997493,
+          0.000221586388997493
+        ],
+        "t": 465.6388549573631,
+        "primitive": 85947,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          917.6835963362104,
+          504.7066715551804,
+          161.67738071031812
+        ],
+        "direction": [
+          0.836670778323928,
+          0.16774413939438293,
+          -0.5213865287842316
+        ],
+        "hit_position": [
+          1307.27001953125,
+          582.8148605485892,
+          -81.10044554296573
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.0006961341718100142,
+          0.0006961341718100142,
+          0.0006961341718100142
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          582.8148605485892,
+          -81.10044554296573
+        ],
+        "indirect": [
+          0.000221586388997493,
+          0.000221586388997493,
+          0.000221586388997493
+        ],
+        "t": 465.6388549573631,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 5.684341886080802e-14
+        },
+        {
+          "bounce": 2,
+          "max_abs_finite_numeric_difference": 2.2737367544323206e-13
+        },
+        {
+          "bounce": 3,
+          "max_abs_finite_numeric_difference": 1.1368683772161603e-13
+        }
+      ]
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 14210,
+      "sample": 2957,
+      "bounce": 2,
+      "cpu": {
+        "origin": [
+          519.7730102585432,
+          522.9695339676015,
+          -265.41024605667417
+        ],
+        "direction": [
+          0.9690571531052277,
+          0.08509645338170364,
+          0.23170418131196288
+        ],
+        "hit_position": [
+          1307.27001953125,
+          592.1225269805215,
+          -77.11758526318002
+        ],
+        "normal": [
+          -1.0,
+          0.0,
+          -0.0
+        ],
+        "irradiance": [
+          0.0006969766240511049,
+          0.0006969766240511049,
+          0.0006969766240511049
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          592.1225269805215,
+          -77.11758526318002
+        ],
+        "indirect": [
+          0.00022185454987446989,
+          0.00022185454987446989,
+          0.00022185454987446989
+        ],
+        "t": 812.6424811470272,
+        "primitive": 85951,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "gpu": {
+        "origin": [
+          519.7730102585432,
+          522.9695339676015,
+          -265.41024605667417
+        ],
+        "direction": [
+          0.9690571531052277,
+          0.08509645338170364,
+          0.23170418131196288
+        ],
+        "hit_position": [
+          1307.27001953125,
+          592.1225269805215,
+          -77.11758526317999
+        ],
+        "normal": [
+          -1.0,
+          -0.0,
+          0.0
+        ],
+        "irradiance": [
+          0.000696976624051105,
+          0.000696976624051105,
+          0.000696976624051105
+        ],
+        "nudged_origin": [
+          1307.270019526613,
+          592.1225269805215,
+          -77.11758526317999
+        ],
+        "indirect": [
+          0.0002218545498744699,
+          0.0002218545498744699,
+          0.0002218545498744699
+        ],
+        "t": 812.6424811470273,
+        "primitive": 85946,
+        "flag": 2,
+        "shadow_tests": 1,
+        "shadow_blocked": 0
+      },
+      "prior_bounces": [
+        {
+          "bounce": 1,
+          "max_abs_finite_numeric_difference": 0.0
+        }
+      ]
+    }
+  ],
+  "scope": "Post-hoc selected-path diagnosis. Full frame and all admission gates remain required. No threshold changes or excluded paths."
+}

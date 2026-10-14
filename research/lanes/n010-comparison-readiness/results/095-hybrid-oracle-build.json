@@ -1,0 +1,70 @@
+{
+  "schema": "n010-hybrid-reference-build/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/093-ambiguity-fallback-diagnostic.json": "6fb472de5476a9c3e15a1bc2c45b9cfb0ead1a06f54752b821368a966e597058",
+    "research/lanes/n010-comparison-readiness/experiments/025-prospective-full-hybrid-conformance.md": "3f8da519b5008c9ab4d094e3feaa008f794f74b8469a54dbe021080fe914470a",
+    "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.cpp": "0fd79bb891b2a6f66ca3deda8bb34635a3221c4eea393f91a13d82b9dd089f35",
+    "out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.comp.glsl": "1d4d41c108a9d4d4b04fd09c43a308fc65bcc65f8de2e8c70251ebdd39b4aa53",
+    "scripts/research/n010_comparison_readiness/generate_hybrid_oracle.py": "bd2b1b14c8d618ed0f8ce02a5492a46404c4f4fe1c46afd699815cd6be4a82ba"
+  },
+  "steps": [
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+        "-V",
+        "--target-env",
+        "vulkan1.2",
+        "-S",
+        "comp",
+        "out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.comp.glsl",
+        "-o",
+        "out/research/n010-comparison-readiness/hybrid-oracle-build-v1/raw.spv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.comp.glsl\n",
+      "wall_seconds_diagnostic": 0.1746823800058337
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/hybrid-oracle-build-v1/phos-n010-hybrid-reference"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 6.247202319995267
+    }
+  ],
+  "no_contraction_results": 186,
+  "generated_sha256": {
+    "hybrid.cpp": "c06812d0a54a70d37580f6b18cfeb92372923dfe186ee5c92f1295d10ac09250",
+    "hybrid.comp.glsl": "6d343094e430ec195f6ac22dae924e1b5ecb9b95e19ae3ef9c9b73e542241cb2",
+    "hybrid.spv": "4e09d14029ced0e94b198a145e14368524ee109259367e434109715f1221a3ae",
+    "phos-n010-hybrid-reference": "f436461a2cc361695e322fb1576f53966f95abdb9e5a8f509c91f40ee13c465e"
+  },
+  "scope": "Standalone streamed hybrid candidate build only. CPU whole-path recomputation for ambiguous intersections, deterministic per-pixel accumulation. No GPU execution, reference admission, default build/Renderer change or CUDA."
+}

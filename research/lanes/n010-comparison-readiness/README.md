@@ -105,3 +105,24 @@ in two pixels (13450, 55934), with exact counters and mean error <=4.34e-19.
 Six pixels retain mean/moment/counter discrepancies. Trigonometry alone is
 insufficient; full causation is unestablished and no GPU reference is admitted.
 Plan 023 records path/bounce diagnostics with aggregate replay required.
+
+Deep-path diagnosis 089/091/092 reproduces every selected aggregate/counter
+and establishes a signed-zero sampling-basis mechanism in all eight traced
+original paths: nearby coplanar closest primitives have opposite zero signs
+in normal.z, producing large next-direction changes under identical uniforms.
+CPU sign-bit-only direction intervention matches the original CPU direction
+exactly (8/8); the other 46 above-gate pixels are not individually traced.
+Plan 024 tests a general ambiguity flag and independent complete CPU-path
+recomputation, with all samples retained and unchanged admission gates.
+It is a separate candidate; 082 remains failed, GPU references unadmitted.
+The Renderer direct-zero pixels remain unresolved.
+
+The general ambiguity-guard/whole-path CPU fallback feasibility 093 passes
+unchanged numerical/counter/finite/direct/emission gates on all eight selected
+pixels (mean <=8.674e-19, moment <=1.017e-20). It recomputes 11864/65536
+paths without reference-radiance or hit/sign overrides. Audit 094 replays
+all diagnostic GPU memory ledgers, verifies separate build 095 and confirms
+53 frozen continuation inputs remain unchanged. Plan 025 streams the same
+guard over complete frames with bounded per-dispatch storage. Its first full
+C1 T_B8 seed-0 trial is planned as 096; full sixteen-case/physical/all-state/
+prefix admission remains unexecuted. CPU acquisition remains independent.
