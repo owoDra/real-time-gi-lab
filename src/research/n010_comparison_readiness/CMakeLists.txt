@@ -79,3 +79,14 @@ add_executable(n010_direct_diagnostic direct_diagnostic.cpp)
 target_include_directories(n010_direct_diagnostic PRIVATE "${PROJECT_SOURCE_DIR}/src/research/n008_hdr_oracle")
 target_compile_features(n010_direct_diagnostic PRIVATE cxx_std_20)
 target_compile_options(n010_direct_diagnostic PRIVATE -fno-fast-math -ffp-contract=off)
+add_custom_command(OUTPUT "${N010_GENERATED}/n010_probe_model.cpp"
+  COMMAND ${Python3_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_probe_model.py"
+    --out "${N010_GENERATED}/n010_probe_model.cpp"
+  DEPENDS "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_probe_model.py"
+    "${N010_SCRIPT}" "${PROJECT_SOURCE_DIR}/src/research/n009_scene_contract/n009_probe_model.cpp"
+  VERBATIM)
+add_executable(n010_probe_model "${N010_GENERATED}/n010_probe_model.cpp")
+target_include_directories(n010_probe_model PRIVATE "${PROJECT_SOURCE_DIR}/src/research/n008_hdr_oracle")
+target_compile_features(n010_probe_model PRIVATE cxx_std_20)
+target_link_libraries(n010_probe_model PRIVATE Threads::Threads)
+target_compile_options(n010_probe_model PRIVATE -fno-fast-math -ffp-contract=off)
