@@ -145,6 +145,42 @@
       "status": "complete-negative",
       "result": "027-calibration-sizing.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-028",
+      "status": "complete-negative",
+      "result": "028-calibration-inner-work-sizing.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-030",
+      "status": "interim-not-ready",
+      "result": "030-readiness-preflight-interim.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-031",
+      "status": "single-transport-complete",
+      "result": "031-c1-b2-pt-quality-ladder.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-032",
+      "status": "single-transport-complete",
+      "result": "032-c1-b2-cohort-scores.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-034",
+      "status": "compiler-ready",
+      "result": "034-dxc-cpu-compiler-provenance.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-033",
+      "status": "interim",
+      "result": "033-interim-comparison-findings.md",
+      "gpu_run": false
     }
   ]
 }

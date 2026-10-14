@@ -24,11 +24,11 @@ For C7, the new key-driven R0–R6 model passes V1/V2/V3/V4 on both backends. R0
 
 ## Memory instrumentation pilot
 
-Both owned Vulkan allocation factories are instrumented with an allocation/free lifetime ledger. A C7 software capture has 92 events, one device context, exactly zero live allocations at teardown, and independently replayed high-water mark 266,694,400 bytes. Startup peak 262,341,952 bytes; source and target-frame peaks 262,086,432 bytes; the higher final peak includes explicitly separate diagnostic readback staging. Persistent live memory before readback is 262,086,400 bytes. Driver-private and CPU heap allocations are outside this owned Vulkan measure. New RC topology captures and the independent native PT/dense RC roles also have allocation ledgers with zero teardown. Result 017 independently replays every RC pilot allocation event. Accepted comparative-role dynamic timing and memory accounting remain unfinished.
+Both owned Vulkan allocation factories are instrumented with an allocation/free lifetime ledger. A C7 software capture has 92 events, one device context, exactly zero live allocations at teardown, and independently replayed high-water mark 266,694,400 bytes. Startup peak 262,341,952 bytes; source and target-frame peaks 262,086,432 bytes; the higher final peak includes explicitly separate diagnostic readback staging. Persistent live memory before readback is 262,086,400 bytes. Driver-private and CPU heap allocations are outside this owned Vulkan measure. New RC topology captures and the independent native PT/dense RC roles also have allocation ledgers with zero teardown. Result 017 independently replays every RC pilot allocation event. The controlled dynamic cohort and all 29 independent memory replays are complete (019/020); accepted comparative timing remains unfinished.
 
 ## Reference validation: original crosscheck failed
 
-The sampling-only randomized Sobol oracle compiled. New analytic A2/A2b/A4/A8 controls and sealed-room/no-leak/positive-room controls passed. A6/A10 multi-bounce furnace and A7 quadrature also passed. Result 003 completed: A7 RQMC/iid indirect NRMSE 1.0117949% fails the fixed 1% gate; A6b passes. All independent physical controls pass. Post-hoc quadrature diagnosis gives RQMC 0.0344588% and iid 1.0115377% NRMSE, supporting an iid precision explanation. Original failure remains preserved. Prospective Amendment 2 fixes both iid controls at 16384 samples with unchanged thresholds and an exact 8192 checkpoint identity requirement; result 009 confirms both controls PASS (A7 0.7127081%, A6b 0.0882790% NRMSE), with exact equality of every original 8192 checkpoint. Qualification uses this disclosed amendment; result 003 remains FAIL. Do not claim total-reference eligibility from these controls. Initial lock 004 remains its historical partial snapshot; complete construction lock 016 now records C1–C12. Camera precision Amendment 1 applies prospectively to new Renderer-state reference images. C7 T_B2 and T_B8 pass at 8192 and 16384 consecutively; the Sponza and additional-cell ladders are active.
+The sampling-only randomized Sobol oracle compiled. New analytic A2/A2b/A4/A8 controls and sealed-room/no-leak/positive-room controls passed. A6/A10 multi-bounce furnace and A7 quadrature also passed. Result 003 completed: A7 RQMC/iid indirect NRMSE 1.0117949% fails the fixed 1% gate; A6b passes. All independent physical controls pass. Post-hoc quadrature diagnosis gives RQMC 0.0344588% and iid 1.0115377% NRMSE, supporting an iid precision explanation. Original failure remains preserved. Prospective Amendment 2 fixes both iid controls at 16384 samples with unchanged thresholds and an exact 8192 checkpoint identity requirement; result 009 confirms both controls PASS (A7 0.7127081%, A6b 0.0882790% NRMSE), with exact equality of every original 8192 checkpoint. Qualification uses this disclosed amendment; result 003 remains FAIL. Do not claim total-reference eligibility from these controls. Initial lock 004 remains its historical partial snapshot; complete construction lock 016 now records C1–C12. Camera precision Amendment 1 applies prospectively to new Renderer-state reference images. C7 T_B2 and T_B8 pass at 8192 and 16384 consecutively; C8–C12 pass both transports at 8192/16384. Sponza C1/C3 T_B2 pass at 16384/32768; their T_B8 ladders and the remaining Sponza cells are active.
 
 ## Executed comparison cohort and measured losses
 
@@ -60,11 +60,15 @@ All 24 additional source/target acquisitions succeeded; raw state bytes agree
 between HWRT incumbent and historical vanilla control. Sponza C6 GPU target
 bytes exactly match N009's CPU-exported target state.
 
+C1 T_B2 now has eligible quality comparisons: incumbent/dense RC FAIL, pixel
+PT PASS at 256/1024 spp. [Current findings](033-interim-comparison-findings.md)
+include the retained losses, remaining gates and AMD/Vulkan SDK status.
+
 ## Required work before READY
 
 - Complete both active reference ladders over all locked T_B2/T_B8 cells; retain failed/capped levels.
 - Carry the shared numerical profile into all scored roles; measure all residual discrepancies without exclusions.
-- Validate actual source/target plus recovery sequences for pixel PT and dense RC, including their update/rebuild/upload costs and allocation overlap.
+- Complete the Sponza source/target/recovery sequences; controlled C8–C12 sequences, update costs and memory replays are executed in 019/020.
 - Execute the full corpus quality/time/memory pilot, with fixed-cost and same-quality selection; specify DDGI/RTXGI integration for Lane M.
 - Calibrate the actual complete Renderer timing boundary after reference computation ends and produce a fail-closed Lane M readiness preflight.
 

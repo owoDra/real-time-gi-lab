@@ -1,0 +1,49 @@
+{
+  "schema": "n010-readiness-preflight/1",
+  "classification": "NOT_READY",
+  "source_commit": "a75ca86d80e0902d4997ab11c47861f6342fc05d",
+  "gates": [
+    {
+      "name": "eligible_locked_physical_references",
+      "pass": false,
+      "reason": "[Errno 2] No such file or directory: 'out/research/n010-comparison-readiness/references-v1/C1_T_B8/qualification.json'"
+    },
+    {
+      "name": "correctness_validations_and_explicit_remaining_discrepancies",
+      "pass": true,
+      "detail": "All-pixel key/BF-P validations pass; measured direct discrepancies remain explicit and included. N009 unresolved max-relative-error-1.0 outcome is unchanged."
+    },
+    {
+      "name": "whole_corpus_dynamic_quality_memory_pilot",
+      "pass": false,
+      "reason": "missing required dynamic cell"
+    },
+    {
+      "name": "fixed_ladders_and_quality_selection",
+      "pass": false,
+      "reason": "missing declared static budget selection pilot"
+    },
+    {
+      "name": "demonstrated_full_renderer_timing_capability",
+      "pass": false,
+      "reason": "[Errno 2] No such file or directory: 'research/lanes/n010-comparison-readiness/results/029-full-renderer-calibration.json'"
+    },
+    {
+      "name": "additional_family_source_and_supported_device_boundary",
+      "pass": true,
+      "detail": "DDGI source and Vulkan integration boundary specified; actual DDGI qualification required before its Lane M campaign"
+    }
+  ],
+  "inputs": {
+    "research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json": "73d12dd8d7171e215fa2dc149485776dfa7749985946d3be9209cb86b069be3f",
+    "out/research/n010-comparison-readiness/references-v1/C1_T_B2/qualification.json": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/002-gpu-key-replay.json": "ff90394cf4f73a148ec9d8fd3505f579fffb462199bb67bd17ced48ac649fcc9",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/007-c7-probe-replay-validation.json": "3f92b748d10a4da2d1b0879325d6272cae45e119bc0460f97f066c8c0d9a7436",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/017-comparison-pilot-summary.json": "e8761a5e3dbc7e569cb7d8a82b35e6ff67aef66af59a0b8c463d2ea901365c79",
+    "research/lanes/n010-comparison-readiness/results/019-controlled-dynamic-cohort.json": "346de6b0594cadea45d04ea3acd8af2e75786ac841e100fbf79e17db2c2788d9",
+    "research/lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json": "6723dbd5e01fa42cd31f0ffe472715b35e82de800cc715809d94ee96113a6f4e",
+    "research/lanes/n010-comparison-readiness/results/024-c8-pt-quality-ladder.json": "72ffb72decd1bbd1c321a9cff5b0d90754467d437e0beec1427edff414fe99a4",
+    "research/lanes/n010-comparison-readiness/results/025-c9-pt-quality-ladder.json": "870c9b0d8ed19a33644c85f3e860607c1fcbc4f2603334342fcf9d8d75434b4b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/021-ddgi-source-provenance.json": "632c24a7cc5863e97bde595ab937fd15d232e680ce85c7c470bff6bd6bb7c7b3"
+  }
+}

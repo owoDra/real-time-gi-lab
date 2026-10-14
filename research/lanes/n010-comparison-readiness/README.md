@@ -21,10 +21,13 @@ contains source/target dynamics and local light motion. C7 and C8–C12 referenc
 are eligible in both finite transports. The [dynamic cohort](results/019-controlled-dynamic-cohort.json)
 retains all 145 executed source/target/recovery images, all losses and two
 explicit software-churn capture limitations; [independent memory replay](results/020-controlled-dynamic-summary.json)
-passes for all 29 roles. Sponza reference acquisition and calibrated timing
-remain in progress.
+passes for all 29 roles. Sponza C1/C3 T_B2 references now qualify. [C1 quality comparisons](results/033-interim-comparison-findings.md)
+show incumbent/dense RC FAIL and pixel PT PASS at 256/1024 spp. Remaining
+Sponza reference acquisition and calibrated timing are in progress.
 Historical vanilla-software is a traversal control, not a separate GI baseline.
 
 [RTXGI provenance](results/021-ddgi-source-provenance.json) pins the fetched SDK
 for the required additional Lane M DDGI comparator. The chosen path is Vulkan
-on AMD, without CUDA; integrated DDGI runtime is not yet demonstrated.
+on AMD, without CUDA. The [Vulkan host SDK builds](results/023-ddgi-vulkan-host-build.json)
+and the [pinned CPU DXC runs](results/034-dxc-cpu-compiler-provenance.json);
+integrated DDGI runtime is not yet demonstrated.

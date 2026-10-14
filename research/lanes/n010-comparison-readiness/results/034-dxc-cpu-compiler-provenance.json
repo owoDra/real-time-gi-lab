@@ -1,0 +1,22 @@
+{
+  "schema": "n010-dxc-provenance/1",
+  "purpose": "RTXGI prescribed CPU HLSL-to-SPIR-V compiler for Vulkan on AMD",
+  "cuda_used": false,
+  "source": "RTXGI pinned root CMakeLists.txt Linux DXC download declaration",
+  "url": "https://github.com/microsoft/DirectXShaderCompiler/releases/download/v1.7.2308/linux_dxc_2023_08_14.x86_64.tar.gz",
+  "archive_sha256": "4fad86d15a5a68c9063a272af069dc40b7a24c325f665f474ed2dbd8623f7448",
+  "version_output": "libdxcompiler.so: 1.7(dev;4006-69e54e29); libdxil.so: 1.7",
+  "files": {
+    "LICENSE-LLVM.txt": "b2551288a0381a79527d63c1590ae8bac98de4dafa1afd0702625d6e82524b85",
+    "LICENSE-MS.txt": "e249948c6c7b0007e90638ad749d0e89c84634dcc8c28436a52b8b2dbce4a31e",
+    "README.md": "369406d9c9e6bbbfb08d3527574faa2792a9bd2ab59e4d0b90332b621316e48c",
+    "bin/dxc": "5d43b7eb1311bf2e75064d8f675693e97d2343347f6271717c5b8377a9a4363f",
+    "include/dxc/WinAdapter.h": "067a36d6ec1a116a087b87797b7651b1cdb9b9640c9e1e512d2380191026584e",
+    "include/dxc/dxcapi.h": "8e4c70ae373f7220269aac38ab51565479f0abcd072a53267bee0856ac79d868",
+    "include/dxc/dxcerrors.h": "a6ab8b8e93c10f02b123c2789fdfbc61d17657b2aebe1ef286064be1efef751d",
+    "include/dxc/dxcisense.h": "7f9cf8db07b199b93df3ba185cedbe825ecba6864da0a1b2119f5d7836b89e8c",
+    "lib/libdxcompiler.so": "4252c5bd957dd9117b1346a5cc99065081a02477d5ab4dc8356ce4f07e9fb241",
+    "lib/libdxil.so": "4fd81d186a0e917b4f37e3c438d1b1804f02bea6e198d94b04ceede65afc6af5"
+  },
+  "notes": "Tar data filter stripped executable permission; user execute bit restored only for the fetched workspace-local dxc. No system files/power settings modified."
+}

@@ -1,0 +1,344 @@
+{
+  "schema": "n010-c1-b2-eligible-cohort/1",
+  "scope": "Sponza static T_B2 only; T_B8 and whole-corpus timing still incomplete",
+  "scoring_exclusions": [],
+  "superiority_claim": false,
+  "rows": [
+    {
+      "schema": "n010-full-image-hdr-score/1",
+      "cell": "C1",
+      "transport": "T_B2",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "reference_state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "state_bytes_equal": true,
+      "complete_oracle_scene_sha256": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+      "complete_physical_scene_bytes_equal": true,
+      "components": {
+        "direct": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 1.8438918769084767e-06,
+          "reference_rms": 0.0007172001597728917,
+          "nrmse": 0.002570958541744278,
+          "signed_sum_bias": -2.4123718007315895e-05,
+          "reference_sum": 24.27107518736661,
+          "gpu_sum": 24.270489678793055,
+          "active_pixels": 39009,
+          "active_p99_absolute": 1.2007858382623303e-09,
+          "active_p99_relative": 1.8754572175304616e-06,
+          "active_max_relative": 1.0,
+          "gpu_zero_reference_positive": 2,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0004036940386722419
+        },
+        "indirect": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040929672860277015,
+          "reference_rms": 0.0004607128980033069,
+          "nrmse": 0.8883986760011053,
+          "signed_sum_bias": 0.35854355462978726,
+          "reference_sum": 23.582458378582395,
+          "gpu_sum": 32.03779683254834,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014483592689549225,
+          "active_p99_relative": 26.118490616557384,
+          "active_max_relative": 931.522955557379,
+          "gpu_zero_reference_positive": 7,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0025033082966942587
+        },
+        "total": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040930450819461897,
+          "reference_rms": 0.0011118628653081517,
+          "nrmse": 0.3681249918182857,
+          "signed_sum_bias": 0.17667980421371746,
+          "reference_sum": 47.85353356594918,
+          "gpu_sum": 56.30828650731564,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014483579591736873,
+          "active_p99_relative": 26.061942963482828,
+          "active_max_relative": 931.522955557379,
+          "gpu_zero_reference_positive": 4,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0025033082966942587
+        }
+      },
+      "pilot_quality_target": "FAIL",
+      "normalization": "whole-image reference RMS; linear luma",
+      "scoring_exclusions": 0,
+      "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/rc-corrected-pilot/C1-hwrt",
+      "capture_payload_sha256": {
+        "direct.pfm": "824330de113419664dde5cd83ef7241f58fd7907e6bcaa0fd99e1bde0d3a492c",
+        "indirect.pfm": "64753950162f976fa81d62bc829797f48eb27f813fc67d51e7ac0f4bf2f7f86a",
+        "total.pfm": "41638e62add92f45fa8a554cf18046130812744224bcc8c8e8ca90008d880b94"
+      },
+      "superiority_claim": false,
+      "role": "incumbent-hwrt",
+      "qualification_sha256": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db"
+    },
+    {
+      "schema": "n010-full-image-hdr-score/1",
+      "cell": "C1",
+      "transport": "T_B2",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "reference_state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "state_bytes_equal": true,
+      "complete_oracle_scene_sha256": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+      "complete_physical_scene_bytes_equal": true,
+      "components": {
+        "direct": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 1.8438918769076905e-06,
+          "reference_rms": 0.0007172001597728917,
+          "nrmse": 0.0025709585417431815,
+          "signed_sum_bias": -2.412367753715665e-05,
+          "reference_sum": 24.27107518736661,
+          "gpu_sum": 24.27048967977531,
+          "active_pixels": 39009,
+          "active_p99_absolute": 1.2007858382623303e-09,
+          "active_p99_relative": 1.8754572175304616e-06,
+          "active_max_relative": 1.0,
+          "gpu_zero_reference_positive": 2,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0004036940386722419
+        },
+        "indirect": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040929672860277015,
+          "reference_rms": 0.0004607128980033069,
+          "nrmse": 0.8883986760011053,
+          "signed_sum_bias": 0.35854355462978726,
+          "reference_sum": 23.582458378582395,
+          "gpu_sum": 32.03779683254834,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014483592689549225,
+          "active_p99_relative": 26.118490616557384,
+          "active_max_relative": 931.522955557379,
+          "gpu_zero_reference_positive": 7,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0025033082966942587
+        },
+        "total": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040930450819599395,
+          "reference_rms": 0.0011118628653081517,
+          "nrmse": 0.3681249918195223,
+          "signed_sum_bias": 0.17667980423135485,
+          "reference_sum": 47.85353356594918,
+          "gpu_sum": 56.308286508159654,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014483579591736873,
+          "active_p99_relative": 26.061942963482828,
+          "active_max_relative": 931.522955557379,
+          "gpu_zero_reference_positive": 4,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0025033082966942587
+        }
+      },
+      "pilot_quality_target": "FAIL",
+      "normalization": "whole-image reference RMS; linear luma",
+      "scoring_exclusions": 0,
+      "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/rc-corrected-pilot/C1-software",
+      "capture_payload_sha256": {
+        "direct.pfm": "a58f8dd2836e4fe903cf8c3ccb44d104efd0979e08b8ede7aafbfcc347477a25",
+        "indirect.pfm": "64753950162f976fa81d62bc829797f48eb27f813fc67d51e7ac0f4bf2f7f86a",
+        "total.pfm": "d2aaeab7325fa3cb690256536f91065f0f6f234e4bfc44ab2114b75ba0b224ad"
+      },
+      "superiority_claim": false,
+      "role": "incumbent-software",
+      "qualification_sha256": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db"
+    },
+    {
+      "schema": "n010-full-image-hdr-score/1",
+      "cell": "C1",
+      "transport": "T_B2",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "reference_state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "state_bytes_equal": true,
+      "complete_oracle_scene_sha256": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+      "complete_physical_scene_bytes_equal": true,
+      "components": {
+        "direct": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 1.8438918769076905e-06,
+          "reference_rms": 0.0007172001597728917,
+          "nrmse": 0.0025709585417431815,
+          "signed_sum_bias": -2.412367753715665e-05,
+          "reference_sum": 24.27107518736661,
+          "gpu_sum": 24.27048967977531,
+          "active_pixels": 39009,
+          "active_p99_absolute": 1.2007858382623303e-09,
+          "active_p99_relative": 1.8754572175304616e-06,
+          "active_max_relative": 1.0,
+          "gpu_zero_reference_positive": 2,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0004036940386722419
+        },
+        "indirect": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040929672860277015,
+          "reference_rms": 0.0004607128980033069,
+          "nrmse": 0.8883986760011053,
+          "signed_sum_bias": 0.35854355462978726,
+          "reference_sum": 23.582458378582395,
+          "gpu_sum": 32.03779683254834,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014483592689549225,
+          "active_p99_relative": 26.118490616557384,
+          "active_max_relative": 931.522955557379,
+          "gpu_zero_reference_positive": 7,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0025033082966942587
+        },
+        "total": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040930450819599395,
+          "reference_rms": 0.0011118628653081517,
+          "nrmse": 0.3681249918195223,
+          "signed_sum_bias": 0.17667980423135485,
+          "reference_sum": 47.85353356594918,
+          "gpu_sum": 56.308286508159654,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014483579591736873,
+          "active_p99_relative": 26.061942963482828,
+          "active_max_relative": 931.522955557379,
+          "gpu_zero_reference_positive": 4,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.0025033082966942587
+        }
+      },
+      "pilot_quality_target": "FAIL",
+      "normalization": "whole-image reference RMS; linear luma",
+      "scoring_exclusions": 0,
+      "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/rc-corrected-pilot/C1-vanilla",
+      "capture_payload_sha256": {
+        "direct.pfm": "a58f8dd2836e4fe903cf8c3ccb44d104efd0979e08b8ede7aafbfcc347477a25",
+        "indirect.pfm": "64753950162f976fa81d62bc829797f48eb27f813fc67d51e7ac0f4bf2f7f86a",
+        "total.pfm": "d2aaeab7325fa3cb690256536f91065f0f6f234e4bfc44ab2114b75ba0b224ad"
+      },
+      "superiority_claim": false,
+      "role": "vanilla-traversal",
+      "qualification_sha256": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db"
+    },
+    {
+      "schema": "n010-full-image-hdr-score/1",
+      "cell": "C1",
+      "transport": "T_B2",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "reference_state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "state_bytes_equal": true,
+      "complete_oracle_scene_sha256": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+      "complete_physical_scene_bytes_equal": true,
+      "components": {
+        "direct": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 2.805696805325426e-10,
+          "reference_rms": 0.0007172001597728917,
+          "nrmse": 3.91201363677035e-07,
+          "signed_sum_bias": -6.241036710446176e-08,
+          "reference_sum": 24.27107518736661,
+          "gpu_sum": 24.271073672599897,
+          "active_pixels": 39009,
+          "active_p99_absolute": 1.1329606569403158e-09,
+          "active_p99_relative": 5.718525611536589e-06,
+          "active_max_relative": 0.0005459971328991233,
+          "gpu_zero_reference_positive": 0,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 3.5806483960135194e-08
+        },
+        "indirect": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.00040919786141157795,
+          "reference_rms": 0.0004607128980033069,
+          "nrmse": 0.8881840799009729,
+          "signed_sum_bias": 0.3624419507780745,
+          "reference_sum": 23.582458378582395,
+          "gpu_sum": 32.12973059745855,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014425159025402868,
+          "active_p99_relative": 25.900745892538502,
+          "active_max_relative": 936.8213814412275,
+          "gpu_zero_reference_positive": 4,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.002499493599428634
+        },
+        "total": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 0.0004091978448515382,
+          "reference_rms": 0.0011118628653081517,
+          "nrmse": 0.368029059715138,
+          "signed_sum_bias": 0.17861315737378516,
+          "reference_sum": 47.85353356594918,
+          "gpu_sum": 56.400804287655774,
+          "active_pixels": 57600,
+          "active_p99_absolute": 0.0014425158944681746,
+          "active_p99_relative": 25.880391330584757,
+          "active_max_relative": 936.8213814412275,
+          "gpu_zero_reference_positive": 4,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 0.002499493599428634
+        }
+      },
+      "pilot_quality_target": "FAIL",
+      "normalization": "whole-image reference RMS; linear luma",
+      "scoring_exclusions": 0,
+      "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dense-rc-pilot/C1",
+      "capture_payload_sha256": {
+        "direct.pfm": "110769e6ed0e315a3ac82d16c585df620027632dbc0d222831d48f07dfdb8705",
+        "indirect.pfm": "dee97e3692bd97c936ce427b261b720e7cb6755fc4a336c6b0ab0b2c686be3a2",
+        "total.pfm": "3191720c028f54510f5df932abdbd477b82b1de532e40f9c8eb831714b6c69ff"
+      },
+      "superiority_claim": false,
+      "role": "dense-rc",
+      "qualification_sha256": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db"
+    }
+  ]
+}

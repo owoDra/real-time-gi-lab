@@ -18,11 +18,17 @@ reference; fixed PT 256-spp losses remain. The C8/C9 complete budget ladders
 both select 1024 spp as a passing budget for T_B2 and T_B8. All 29 dynamic
 allocation ledgers independently replay to zero teardown within the cap.
 RTXGI Vulkan host SDK builds without CUDA; its GPU adapter remains a Lane M
-requirement. Remaining N010 work is Sponza reference qualification and its
-pilot, actual full Renderer timing calibration and fail-closed handoff.
+requirement. Sponza C1 T_B2 is now eligible at 16384/32768 consecutively. Its incumbent
+indirect NRMSE is 88.8399% with +35.8544% sum bias (FAIL), whereas GPU PT
+passes at 256 and 1024 spp. Sponza C3 T_B2 also qualified; T_B8 and the
+remaining Sponza cells are in progress. Remaining N010 work is the full
+Sponza pilot, complete Renderer timing calibration and fail-closed handoff.
 Diagnostic sizing result 027 failed under concurrent CPU work and remains
 retained; Amendment 4 measures inner known-work cost to size the prospective
 calibration dose, without changing full-boundary acceptance thresholds.
+Result 028 also failed sizing; prospective Amendment 5 uses larger observable
+probe doses and records binary/shader identity and CPU known-work witnesses.
+[Interim comparison findings](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md).
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
 [PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
 [dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),
