@@ -41,10 +41,16 @@ if __name__=='__main__':
     source=base.read_text()
     source=once(source,'#include <cstring>','#include <cstring>\n#include <bit>')
     source=once(source,'int main(int argc,char** argv){try{',HELPER+'\nint main(int argc,char** argv){try{')
+    source=once(source,'if(argc!=3)', 'if(argc!=4)')
+    source=once(source,'fs::path cap=argv[1];',
+                'std::ifstream canonical_input(argv[3]);if(!canonical_input)throw std::runtime_error("canonical scene open");\n'
+                ' const auto canonical=o::parse_scene(canonical_input);\n'
+                ' fs::path cap=argv[1];')
     source=once(source,'float target[3];for(int a=0;a<3;++a)target[a]=p.cam[a]+p.fwd[a];\n  auto fwd=o::normalize(v3(target)-cam)',
-                'auto fwd=o::normalize(v3(p.fwd))')
+                'auto fwd=o::normalize(canonical.camera.forward)')
     source=source.replace('N008 float32 target addition then float64 forward subtraction',
-                          'N010 Amendment 1 double camera forward')
+                          'N010 canonical scene camera basis')
+    source=source.replace('n010-direct-ray-diagnostic/2','n010-direct-ray-diagnostic/3')
     source=once(source,'for(int source=0;source<2;++source){auto pos0=source?oracle_pos:gpu_pos,n=source?oracle_n:gpu_n;',
                 'auto plane_n=o::normalize(o::cross(tris[self].v1-tris[self].v0,tris[self].v2-tris[self].v0));\n'
                 '  auto projected=gpu_pos-plane_n*o::dot(gpu_pos-tris[self].v0,plane_n);\n'
@@ -58,6 +64,32 @@ if __name__=='__main__':
                           '(source==1?"oracle_double":source==2?"projected_point_counterfactual":"gpu_float_reconstructed")')
     source=source.replace('mode==2?"zero_offset_ignore_self":"zero_offset_include_self"',
                           'mode==2?"zero_offset_ignore_self":mode==3?"zero_offset_include_self":"ulp4_recomputed_shadow"')
+    source=once(source,'  std::cout<<"]}";first=false;',r'''
+  std::cout<<"],\"gpu_captured_normal\":";vec(v3(hit.n));
+  std::cout<<",\"oracle_normal\":";vec(oracle_n);
+  std::cout<<",\"gpu_source_cosine\":"<<o::dot(gpu_n,o::normalize(light-gpu_pos))
+           <<",\"oracle_source_cosine\":"<<o::dot(oracle_n,o::normalize(light-oracle_pos))
+           <<",\"captured_gpu_t\":"<<hit.t<<",\"canonical_reference_t\":"<<ot
+           <<",\"pairwise_primary_hypothesis\":[";
+  for(int camera=0;camera<2;++camera) {
+   o::WatertightRay ray({cam,camera?od:v3(d)});
+   double selected=ray.intersect(tris[self]),nearest=ray.intersect(tris[oi]);
+   bool both=std::isfinite(selected)&&std::isfinite(nearest);
+   double delta=selected-nearest;
+   double selected_tol=both?std::max(2e-4,std::abs(selected)*2e-5):0;
+   double nearest_tol=both?std::max(2e-4,std::abs(nearest)*2e-5):0;
+   bool preferred=both&&delta>=0&&std::abs(delta)<=selected_tol&&std::abs(delta)<=nearest_tol&&hit.prim<at<uint32_t>(g,44+52*size_t(oi));
+   std::cout<<(camera?",":"")<<"{\"ray\":\""<<(camera?"canonical_double":"gpu_float_reconstructed")
+    <<"\",\"both_triangles_intersect\":"<<(both?"true":"false")<<",\"selected_triangle_t\":";
+   if(std::isfinite(selected))std::cout<<selected;else std::cout<<"null";
+   std::cout<<",\"reference_triangle_t\":";
+   if(std::isfinite(nearest))std::cout<<nearest;else std::cout<<"null";
+   std::cout<<",\"distance_difference\":";
+   if(both)std::cout<<delta;else std::cout<<"null";
+   std::cout<<",\"selected_tolerance\":"<<selected_tol<<",\"reference_tolerance\":"<<nearest_tol
+    <<",\"legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders\":"<<(preferred?"true":"false")<<'}';
+  }
+  std::cout<<"]}";first=false;''')
     generated=args.work/'direct_n010.cpp'
     generated.write_text(source)
     binary=args.work/'direct_n010'
@@ -75,14 +107,22 @@ if __name__=='__main__':
     result['binary_sha256']=sha(binary)
     evidence=ROOT/'research/lanes/n010-comparison-readiness/results/011-rc-correctness-pilot.json'
     result['capture_evidence_sha256']=sha(evidence)
+    result['primary_shader_source_sha256']={name:sha(ROOT/'shaders/research/lane_n_end_to_end_renderer'/name)
+        for name in ('n001_primary.comp.glsl','n003_primary_software.comp.glsl')}
     corpus=json.loads(evidence.read_text())
     for row in corpus['rows']:
         if row['cell']!='C1' or row['backend'] not in ('hwrt','software'):
             continue
         capture=Path(row['command'][row['command'].index('--out')+1])
+        for name,digest in row['payload_sha256'].items():
+            if sha(capture/name)!=digest:
+                raise ValueError('original capture payload changed: '+name)
         reference=ROOT/'out/research/n010-comparison-readiness/references-v1/C1_T_B2'
         qualification=reference/'qualification.json'
         q=json.loads(qualification.read_text())
+        for name,digest in q['levels'][-1]['all_payload_sha256'].items():
+            if sha(reference/name)!=digest:
+                raise ValueError('reference payload changed: '+name)
         state=L.read_state(capture)
         scene=scene_for_state(state,2)
         if hashlib.sha256(scene.text().encode()).hexdigest()!=q['scene_sha256']:
@@ -97,12 +137,14 @@ if __name__=='__main__':
         hits=gpu_hits(capture/'gpu/hits.bin',len(r))
         path=args.work/(row['backend']+'.pixels.tsv')
         path.write_text(''.join(f'{i} {oracle_hits["t"][i]:.17g} {oracle_hits["tri"][i]} {g[i]:.17g} {r[i]:.17g}\n' for i in ids))
-        process=subprocess.run([str(binary),str(capture),str(path)],capture_output=True,text=True)
+        process=subprocess.run([str(binary),str(capture),str(path),str(reference/'scene.n008')],capture_output=True,text=True)
         (args.work/(row['backend']+'.stdout.json')).write_text(process.stdout)
         (args.work/(row['backend']+'.stderr.log')).write_text(process.stderr)
         value={'backend':row['backend'],'returncode':process.returncode,
                'qualification_sha256':sha(qualification),'direct_image_sha256':sha(capture/'gpu/direct.pfm'),
                'gpu_hit_sha256':sha(capture/'gpu/hits.bin'),
+               'reference_scene_sha256':sha(reference/'scene.n008'),
+               'reference_f64_sha256':{f'o.n{spp}.s{i}.f64':sha(reference/f'o.n{spp}.s{i}.f64') for i in range(4)},
                'reference_primary_hit_sha256':sha(reference/f'o.n{spp}.hits'),
                'pixels':[{'id':int(i),'x':int(i%state['width']),'y':int(i//state['width']),
                           'primary_primitive_matches':bool(hits['prim'][i]==state['meta'][oracle_hits['tri'][i],0])} for i in ids]}

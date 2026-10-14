@@ -1,0 +1,1552 @@
+{
+  "schema": "n010-residual-direct-cpu-diagnostic/1",
+  "classification": "POST_HOC_CPU_DIAGNOSIS",
+  "complete": true,
+  "gpu_run": false,
+  "historical_outcomes_revised": false,
+  "remaining_max_relative_error_1_pixels": "UNRESOLVED",
+  "limitations": "GPU float hit positions/rays are reconstructed, not exported. Double BVH hypotheses and point projection do not emulate GPU intersection or prove a repair.",
+  "build_command": [
+    "c++",
+    "-std=c++20",
+    "-O2",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-I",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+    "out/research/n010-comparison-readiness/residual-direct-diagnostic-v2/direct_n010.cpp",
+    "-o",
+    "out/research/n010-comparison-readiness/residual-direct-diagnostic-v2/direct_n010"
+  ],
+  "build_returncode": 0,
+  "build_stderr": "",
+  "base_source_sha256": "a7462eda7b8e15ad7bbd0a486dec13fc75fef5655ae2c62e1964bbc8cfbc9ab0",
+  "generated_source_sha256": "a0cef9af37d279c2737061c2f9568fa19a5af1e6ad635d44315b763777c2ec8f",
+  "script_sha256": "2a545a8b0abece89eb1a278cbe6a2513e3c3df43f994490bdd8b4d9f5f94cc04",
+  "rows": [
+    {
+      "backend": "hwrt",
+      "returncode": 0,
+      "qualification_sha256": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db",
+      "direct_image_sha256": "824330de113419664dde5cd83ef7241f58fd7907e6bcaa0fd99e1bde0d3a492c",
+      "gpu_hit_sha256": "ddb04f9852e7b44ef0097f2996dd2379ffe3f6685bd146df278fe88fa5620cbc",
+      "reference_scene_sha256": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+      "reference_f64_sha256": {
+        "o.n32768.s0.f64": "578d2d4e5602eb0b43902fd6c3e6544f829d7c9784b0d362a9bbdecc2af4125d",
+        "o.n32768.s1.f64": "e3da1f2598b335b5e67e0dfaba2360ad0d5f6cac4a4a6f5b3b4d0cfb415d7cad",
+        "o.n32768.s2.f64": "92fdde0070af8c15e8f272ac7d299bf5aad50513f9c96e44cd6324b6dcb7afc4",
+        "o.n32768.s3.f64": "babd5a4aecb7480ff02f12812f4d802617a813113c7ea2a50c897e3c3c921550"
+      },
+      "reference_primary_hit_sha256": "927964ea5001b8432af9711f5b898ee704d50f07124cadf0b3de304f97e2d26a",
+      "pixels": [
+        {
+          "id": 34987,
+          "x": 107,
+          "y": 109,
+          "primary_primitive_matches": false
+        },
+        {
+          "id": 51781,
+          "x": 261,
+          "y": 161,
+          "primary_primitive_matches": false
+        }
+      ],
+      "diagnostic": {
+        "schema": "n010-direct-ray-diagnostic/3",
+        "independent_double_geometry": true,
+        "oracle_camera": "N010 canonical scene camera basis",
+        "oracle_edge_nudge": true,
+        "diagonal": 4636.979505308799,
+        "pixels": [
+          {
+            "id": 34987,
+            "x": 107,
+            "y": 109,
+            "gpu_primary_primitive": 49893,
+            "oracle_triangle": 51389,
+            "gpu_direct": 0,
+            "reference_direct": 0.00018129397474519365,
+            "gpu_position": [
+              476.8958740234375,
+              43.96989440917969,
+              -244.55133056640625
+            ],
+            "oracle_position": [
+              476.87552755804495,
+              43.97250678603487,
+              -244.5492199761427
+            ],
+            "position_distance": 0.020621778731824223,
+            "rays": [
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  476.8498598693922,
+                  43.98441604338391,
+                  -244.4722256092469
+                ],
+                "direction": [
+                  -0.642206257553039,
+                  0.7259848544364121,
+                  0.24600226399092592
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 836.6421429837159,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.0003820150366188534
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  476.89587402113483,
+                  43.969894409906395,
+                  -244.5513305624476
+                ],
+                "direction": [
+                  -0.6422062575525743,
+                  0.7259848544381291,
+                  0.24600226398707142
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 836.8274618839534,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020949836165834883,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  476.8958740234375,
+                  43.96989440917969,
+                  -244.55133056640625
+                ],
+                "direction": [
+                  -0.6422062575525743,
+                  0.7259848544381291,
+                  0.24600226398707142
+                ],
+                "offset": 0,
+                "tmax": 836.8274618894272,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020949850183230243,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  476.8958740234375,
+                  43.96989440917969,
+                  -244.55133056640625
+                ],
+                "direction": [
+                  -0.6422062575525743,
+                  0.7259848544381291,
+                  0.24600226398707142
+                ],
+                "offset": 0,
+                "tmax": 836.8274618894272,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020949850183230243,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  476.8958435058594,
+                  43.96989440917969,
+                  -244.55128479003906
+                ],
+                "direction": [
+                  -0.6422062447674807,
+                  0.7259848812085411,
+                  0.246002218360468
+                ],
+                "offset": 0,
+                "tmax": 836.8272636672527,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020781850000078723,
+                "predicted_direct": 0
+              },
+              {
+                "source": "oracle_double",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  476.8544296063291,
+                  43.96239143995476,
+                  -244.45956323804276
+                ],
+                "direction": [
+                  -0.6421938250671995,
+                  0.7259951644208895,
+                  0.24600429322075784
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 836.626660711177,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.0001812939747475329
+              },
+              {
+                "source": "oracle_double",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  476.87552755698914,
+                  43.972506785528665,
+                  -244.549219971656
+                ],
+                "direction": [
+                  -0.6421938250670233,
+                  0.7259951644227215,
+                  0.246004293215812
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 836.8119796129802,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129397474515735
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  476.87552755804495,
+                  43.97250678603487,
+                  -244.5492199761427
+                ],
+                "direction": [
+                  -0.6421938250670233,
+                  0.7259951644227215,
+                  0.246004293215812
+                ],
+                "offset": 0,
+                "tmax": 836.811979618454,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129397474515735
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  476.87552755804495,
+                  43.97250678603487,
+                  -244.5492199761427
+                ],
+                "direction": [
+                  -0.6421938250670233,
+                  0.7259951644227215,
+                  0.246004293215812
+                ],
+                "offset": 0,
+                "tmax": 836.811979618454,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129397474515735
+              },
+              {
+                "source": "oracle_double",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  476.8755187988281,
+                  43.97250747680664,
+                  -244.54917907714844
+                ],
+                "direction": [
+                  -0.6421938270229289,
+                  0.7259951776396224,
+                  0.24600424910488317
+                ],
+                "offset": 0,
+                "tmax": 836.8117960695364,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129395578264732
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  476.84990117626944,
+                  43.98440300732232,
+                  -244.47229662172273
+                ],
+                "direction": [
+                  -0.6422062658869531,
+                  0.7259848236348035,
+                  0.24600233313421904
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 836.6421964444663,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.0003820150225762751
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  476.89591532801205,
+                  43.96988137384481,
+                  -244.55140157492343
+                ],
+                "direction": [
+                  -0.6422062658864885,
+                  0.7259848236365206,
+                  0.24600233313036457
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 836.8275153447038,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.021201282630597947,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  476.8959153303147,
+                  43.9698813731181,
+                  -244.5514015788821
+                ],
+                "direction": [
+                  -0.6422062658864885,
+                  0.7259848236365206,
+                  0.24600233313036457
+                ],
+                "offset": 0,
+                "tmax": 836.8275153501776,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.021201296647990215,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  476.8959153303147,
+                  43.9698813731181,
+                  -244.5514015788821
+                ],
+                "direction": [
+                  -0.6422062658864885,
+                  0.7259848236365206,
+                  0.24600233313036457
+                ],
+                "offset": 0,
+                "tmax": 836.8275153501776,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.021201296647990215,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  476.8958740234375,
+                  43.96988296508789,
+                  -244.55136108398438
+                ],
+                "direction": [
+                  -0.6422062454156541,
+                  0.7259848543912215,
+                  0.2460022958097868
+                ],
+                "offset": 0,
+                "tmax": 836.8273103425428,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.02104256639885858,
+                "predicted_direct": 0
+              }
+            ],
+            "gpu_captured_normal": [
+              -0.49659425020217896,
+              0.15672047436237335,
+              0.853717029094696
+            ],
+            "oracle_normal": [
+              -0.22769345950501196,
+              -0.10916690748438676,
+              0.967594065095965
+            ],
+            "gpu_source_cosine": 0.642708972683133,
+            "oracle_source_cosine": 0.3050009808623925,
+            "captured_gpu_t": 1198.041259765625,
+            "canonical_reference_t": 1198.0206242281981,
+            "pairwise_primary_hypothesis": [
+              {
+                "ray": "gpu_float_reconstructed",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 1198.0414016440302,
+                "reference_triangle_t": 1198.0207341618727,
+                "distance_difference": 0.020667482157477934,
+                "selected_tolerance": 0.023960828032880604,
+                "reference_tolerance": 0.023960414683237456,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              },
+              {
+                "ray": "canonical_double",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 1198.0413402487684,
+                "reference_triangle_t": 1198.0206242281981,
+                "distance_difference": 0.020716020570262117,
+                "selected_tolerance": 0.02396082680497537,
+                "reference_tolerance": 0.023960412484563966,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              }
+            ]
+          },
+          {
+            "id": 51781,
+            "x": 261,
+            "y": 161,
+            "gpu_primary_primitive": 172940,
+            "oracle_triangle": 172941,
+            "gpu_direct": 0,
+            "reference_direct": 0.0004036940386722419,
+            "gpu_position": [
+              -379.50469970703125,
+              22.873794555664062,
+              188.9143829345703
+            ],
+            "oracle_position": [
+              -379.5069003087112,
+              22.87496844446963,
+              188.91233018762125
+            ],
+            "position_distance": 0.0032302372542018544,
+            "rays": [
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  -379.5704862121171,
+                  22.87351667830335,
+                  188.97963500742938
+                ],
+                "direction": [
+                  0.4306209914764096,
+                  0.8486206481536894,
+                  -0.307259755300114
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 740.5698870028443,
+                "blocked": true,
+                "blocker_triangle": 172941,
+                "blocker_t": 0.17390767042933983,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  -379.5046997103234,
+                  22.873794555650157,
+                  188.91438293783574
+                ],
+                "direction": [
+                  0.4306209914794397,
+                  0.8486206481509212,
+                  -0.3072597553035132
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 740.7552059085908,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  -379.50469970703125,
+                  22.873794555664062,
+                  188.9143829345703
+                ],
+                "direction": [
+                  0.4306209914794397,
+                  0.8486206481509212,
+                  -0.3072597553035132
+                ],
+                "offset": 0,
+                "tmax": 740.7552059139686,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  -379.50469970703125,
+                  22.873794555664062,
+                  188.9143829345703
+                ],
+                "direction": [
+                  0.4306209914794397,
+                  0.8486206481509212,
+                  -0.3072597553035132
+                ],
+                "offset": 0,
+                "tmax": 740.7552059139686,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  -379.5047607421875,
+                  22.873794555664062,
+                  188.91441345214844
+                ],
+                "direction": [
+                  0.43062105314222815,
+                  0.8486206073012197,
+                  -0.30725978170659984
+                ],
+                "offset": 0,
+                "tmax": 740.7550934203329,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "oracle_double",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  -379.4438712996475,
+                  22.876538410042198,
+                  188.84442839306325
+                ],
+                "direction": [
+                  0.4306243571180087,
+                  0.8486198416286191,
+                  -0.30725726590419167
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 740.5692077220489,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00040369403867294664
+              },
+              {
+                "source": "oracle_double",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  -379.506900305557,
+                  22.874968444548195,
+                  188.91233018422324
+                ],
+                "direction": [
+                  0.43062435711518604,
+                  0.8486198416313416,
+                  -0.3072572659006286
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 740.7545266228935,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.000403694038672231
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  -379.5069003087112,
+                  22.87496844446963,
+                  188.91233018762125
+                ],
+                "direction": [
+                  0.43062435711518604,
+                  0.8486198416313416,
+                  -0.3072572659006286
+                ],
+                "offset": 0,
+                "tmax": 740.7545266282713,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.000403694038672231
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  -379.5069003087112,
+                  22.87496844446963,
+                  188.91233018762125
+                ],
+                "direction": [
+                  0.43062435711518604,
+                  0.8486198416313416,
+                  -0.3072572659006286
+                ],
+                "offset": 0,
+                "tmax": 740.7545266282713,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.000403694038672231
+              },
+              {
+                "source": "oracle_double",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  -379.5068359375,
+                  22.874967575073242,
+                  188.91229248046875
+                ],
+                "direction": [
+                  0.4306242926391968,
+                  0.8486198869861737,
+                  -0.3072572309980108
+                ],
+                "offset": 0,
+                "tmax": 740.7543399120245,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00040369402854579953
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  -379.5704924995089,
+                  22.873516651745838,
+                  188.9796412437443
+                ],
+                "direction": [
+                  0.43062099726326786,
+                  0.8486206428667956,
+                  -0.30725976179177017
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 740.569891649033,
+                "blocked": true,
+                "blocker_triangle": 172941,
+                "blocker_t": 0.17392428354527364,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  -379.5047059977152,
+                  22.873794529092645,
+                  188.91438917415067
+                ],
+                "direction": [
+                  0.4306209972662979,
+                  0.8486206428640273,
+                  -0.3072597617951693
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 740.7552105547796,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  -379.50470599442303,
+                  22.87379452910655,
+                  188.91438917088524
+                ],
+                "direction": [
+                  0.4306209972662979,
+                  0.8486206428640273,
+                  -0.3072597617951693
+                ],
+                "offset": 0,
+                "tmax": 740.7552105601574,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  -379.50470599442303,
+                  22.87379452910655,
+                  188.91438917088524
+                ],
+                "direction": [
+                  0.4306209972662979,
+                  0.8486206428640273,
+                  -0.3072597617951693
+                ],
+                "offset": 0,
+                "tmax": 740.7552105601574,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  -379.5047607421875,
+                  22.873794555664062,
+                  188.91441345214844
+                ],
+                "direction": [
+                  0.43062105314222815,
+                  0.8486206073012197,
+                  -0.30725978170659984
+                ],
+                "offset": 0,
+                "tmax": 740.7550934203329,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              }
+            ],
+            "gpu_captured_normal": [
+              0.7099815607070923,
+              0.0029989099130034447,
+              -0.7042138576507568
+            ],
+            "oracle_normal": [
+              0.6802221047892408,
+              0.016943393241996337,
+              -0.7328102138900235
+            ],
+            "gpu_source_cosine": -0.5246544866314304,
+            "oracle_source_cosine": 0.5324599690085146,
+            "captured_gpu_t": 480.663330078125,
+            "canonical_reference_t": 480.6601162640286,
+            "pairwise_primary_hypothesis": [
+              {
+                "ray": "gpu_float_reconstructed",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 480.6629025868854,
+                "reference_triangle_t": 480.6618647184826,
+                "distance_difference": 0.001037868402818276,
+                "selected_tolerance": 0.009613258051737709,
+                "reference_tolerance": 0.009613237294369652,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              },
+              {
+                "ray": "canonical_double",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 480.6639506611995,
+                "reference_triangle_t": 480.6601162640286,
+                "distance_difference": 0.003834397170919601,
+                "selected_tolerance": 0.009613279013223992,
+                "reference_tolerance": 0.009613202325280573,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "backend": "software",
+      "returncode": 0,
+      "qualification_sha256": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db",
+      "direct_image_sha256": "a58f8dd2836e4fe903cf8c3ccb44d104efd0979e08b8ede7aafbfcc347477a25",
+      "gpu_hit_sha256": "a5d3a7367c25228b85848d76401df829428c0664970d6e4fc05c844d5796408e",
+      "reference_scene_sha256": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+      "reference_f64_sha256": {
+        "o.n32768.s0.f64": "578d2d4e5602eb0b43902fd6c3e6544f829d7c9784b0d362a9bbdecc2af4125d",
+        "o.n32768.s1.f64": "e3da1f2598b335b5e67e0dfaba2360ad0d5f6cac4a4a6f5b3b4d0cfb415d7cad",
+        "o.n32768.s2.f64": "92fdde0070af8c15e8f272ac7d299bf5aad50513f9c96e44cd6324b6dcb7afc4",
+        "o.n32768.s3.f64": "babd5a4aecb7480ff02f12812f4d802617a813113c7ea2a50c897e3c3c921550"
+      },
+      "reference_primary_hit_sha256": "927964ea5001b8432af9711f5b898ee704d50f07124cadf0b3de304f97e2d26a",
+      "pixels": [
+        {
+          "id": 34987,
+          "x": 107,
+          "y": 109,
+          "primary_primitive_matches": false
+        },
+        {
+          "id": 51781,
+          "x": 261,
+          "y": 161,
+          "primary_primitive_matches": false
+        }
+      ],
+      "diagnostic": {
+        "schema": "n010-direct-ray-diagnostic/3",
+        "independent_double_geometry": true,
+        "oracle_camera": "N010 canonical scene camera basis",
+        "oracle_edge_nudge": true,
+        "diagonal": 4636.979505308799,
+        "pixels": [
+          {
+            "id": 34987,
+            "x": 107,
+            "y": 109,
+            "gpu_primary_primitive": 49893,
+            "oracle_triangle": 51389,
+            "gpu_direct": 0,
+            "reference_direct": 0.00018129397474519365,
+            "gpu_position": [
+              476.8958740234375,
+              43.96989440917969,
+              -244.55133056640625
+            ],
+            "oracle_position": [
+              476.87552755804495,
+              43.97250678603487,
+              -244.5492199761427
+            ],
+            "position_distance": 0.020621778731824223,
+            "rays": [
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  476.8498598693922,
+                  43.98441604338391,
+                  -244.4722256092469
+                ],
+                "direction": [
+                  -0.642206257553039,
+                  0.7259848544364121,
+                  0.24600226399092592
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 836.6421429837159,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.0003820150366188534
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  476.89587402113483,
+                  43.969894409906395,
+                  -244.5513305624476
+                ],
+                "direction": [
+                  -0.6422062575525743,
+                  0.7259848544381291,
+                  0.24600226398707142
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 836.8274618839534,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020949836165834883,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  476.8958740234375,
+                  43.96989440917969,
+                  -244.55133056640625
+                ],
+                "direction": [
+                  -0.6422062575525743,
+                  0.7259848544381291,
+                  0.24600226398707142
+                ],
+                "offset": 0,
+                "tmax": 836.8274618894272,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020949850183230243,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  476.8958740234375,
+                  43.96989440917969,
+                  -244.55133056640625
+                ],
+                "direction": [
+                  -0.6422062575525743,
+                  0.7259848544381291,
+                  0.24600226398707142
+                ],
+                "offset": 0,
+                "tmax": 836.8274618894272,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020949850183230243,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  476.8958435058594,
+                  43.96989440917969,
+                  -244.55128479003906
+                ],
+                "direction": [
+                  -0.6422062447674807,
+                  0.7259848812085411,
+                  0.246002218360468
+                ],
+                "offset": 0,
+                "tmax": 836.8272636672527,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.020781850000078723,
+                "predicted_direct": 0
+              },
+              {
+                "source": "oracle_double",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  476.8544296063291,
+                  43.96239143995476,
+                  -244.45956323804276
+                ],
+                "direction": [
+                  -0.6421938250671995,
+                  0.7259951644208895,
+                  0.24600429322075784
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 836.626660711177,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.0001812939747475329
+              },
+              {
+                "source": "oracle_double",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  476.87552755698914,
+                  43.972506785528665,
+                  -244.549219971656
+                ],
+                "direction": [
+                  -0.6421938250670233,
+                  0.7259951644227215,
+                  0.246004293215812
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 836.8119796129802,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129397474515735
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  476.87552755804495,
+                  43.97250678603487,
+                  -244.5492199761427
+                ],
+                "direction": [
+                  -0.6421938250670233,
+                  0.7259951644227215,
+                  0.246004293215812
+                ],
+                "offset": 0,
+                "tmax": 836.811979618454,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129397474515735
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  476.87552755804495,
+                  43.97250678603487,
+                  -244.5492199761427
+                ],
+                "direction": [
+                  -0.6421938250670233,
+                  0.7259951644227215,
+                  0.246004293215812
+                ],
+                "offset": 0,
+                "tmax": 836.811979618454,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129397474515735
+              },
+              {
+                "source": "oracle_double",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  476.8755187988281,
+                  43.97250747680664,
+                  -244.54917907714844
+                ],
+                "direction": [
+                  -0.6421938270229289,
+                  0.7259951776396224,
+                  0.24600424910488317
+                ],
+                "offset": 0,
+                "tmax": 836.8117960695364,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00018129395578264732
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  476.84990117626944,
+                  43.98440300732232,
+                  -244.47229662172273
+                ],
+                "direction": [
+                  -0.6422062658869531,
+                  0.7259848236348035,
+                  0.24600233313421904
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 836.6421964444663,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.0003820150225762751
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  476.89591532801205,
+                  43.96988137384481,
+                  -244.55140157492343
+                ],
+                "direction": [
+                  -0.6422062658864885,
+                  0.7259848236365206,
+                  0.24600233313036457
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 836.8275153447038,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.021201282630597947,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  476.8959153303147,
+                  43.9698813731181,
+                  -244.5514015788821
+                ],
+                "direction": [
+                  -0.6422062658864885,
+                  0.7259848236365206,
+                  0.24600233313036457
+                ],
+                "offset": 0,
+                "tmax": 836.8275153501776,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.021201296647990215,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  476.8959153303147,
+                  43.9698813731181,
+                  -244.5514015788821
+                ],
+                "direction": [
+                  -0.6422062658864885,
+                  0.7259848236365206,
+                  0.24600233313036457
+                ],
+                "offset": 0,
+                "tmax": 836.8275153501776,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.021201296647990215,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  476.8958740234375,
+                  43.96988296508789,
+                  -244.55136108398438
+                ],
+                "direction": [
+                  -0.6422062454156541,
+                  0.7259848543912215,
+                  0.2460022958097868
+                ],
+                "offset": 0,
+                "tmax": 836.8273103425428,
+                "blocked": true,
+                "blocker_triangle": 51389,
+                "blocker_t": 0.02104256639885858,
+                "predicted_direct": 0
+              }
+            ],
+            "gpu_captured_normal": [
+              -0.49659425020217896,
+              0.15672047436237335,
+              0.853717029094696
+            ],
+            "oracle_normal": [
+              -0.22769345950501196,
+              -0.10916690748438676,
+              0.967594065095965
+            ],
+            "gpu_source_cosine": 0.642708972683133,
+            "oracle_source_cosine": 0.3050009808623925,
+            "captured_gpu_t": 1198.041259765625,
+            "canonical_reference_t": 1198.0206242281981,
+            "pairwise_primary_hypothesis": [
+              {
+                "ray": "gpu_float_reconstructed",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 1198.0414016440302,
+                "reference_triangle_t": 1198.0207341618727,
+                "distance_difference": 0.020667482157477934,
+                "selected_tolerance": 0.023960828032880604,
+                "reference_tolerance": 0.023960414683237456,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              },
+              {
+                "ray": "canonical_double",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 1198.0413402487684,
+                "reference_triangle_t": 1198.0206242281981,
+                "distance_difference": 0.020716020570262117,
+                "selected_tolerance": 0.02396082680497537,
+                "reference_tolerance": 0.023960412484563966,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              }
+            ]
+          },
+          {
+            "id": 51781,
+            "x": 261,
+            "y": 161,
+            "gpu_primary_primitive": 172940,
+            "oracle_triangle": 172941,
+            "gpu_direct": 0,
+            "reference_direct": 0.0004036940386722419,
+            "gpu_position": [
+              -379.50469970703125,
+              22.873794555664062,
+              188.9143829345703
+            ],
+            "oracle_position": [
+              -379.5069003087112,
+              22.87496844446963,
+              188.91233018762125
+            ],
+            "position_distance": 0.0032302372542018544,
+            "rays": [
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  -379.5704862121171,
+                  22.87351667830335,
+                  188.97963500742938
+                ],
+                "direction": [
+                  0.4306209914764096,
+                  0.8486206481536894,
+                  -0.307259755300114
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 740.5698870028443,
+                "blocked": true,
+                "blocker_triangle": 172941,
+                "blocker_t": 0.17390767042933983,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  -379.5046997103234,
+                  22.873794555650157,
+                  188.91438293783574
+                ],
+                "direction": [
+                  0.4306209914794397,
+                  0.8486206481509212,
+                  -0.3072597553035132
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 740.7552059085908,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  -379.50469970703125,
+                  22.873794555664062,
+                  188.9143829345703
+                ],
+                "direction": [
+                  0.4306209914794397,
+                  0.8486206481509212,
+                  -0.3072597553035132
+                ],
+                "offset": 0,
+                "tmax": 740.7552059139686,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  -379.50469970703125,
+                  22.873794555664062,
+                  188.9143829345703
+                ],
+                "direction": [
+                  0.4306209914794397,
+                  0.8486206481509212,
+                  -0.3072597553035132
+                ],
+                "offset": 0,
+                "tmax": 740.7552059139686,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "gpu_float_reconstructed",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  -379.5047607421875,
+                  22.873794555664062,
+                  188.91441345214844
+                ],
+                "direction": [
+                  0.43062105314222815,
+                  0.8486206073012197,
+                  -0.30725978170659984
+                ],
+                "offset": 0,
+                "tmax": 740.7550934203329,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "oracle_double",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  -379.4438712996475,
+                  22.876538410042198,
+                  188.84442839306325
+                ],
+                "direction": [
+                  0.4306243571180087,
+                  0.8486198416286191,
+                  -0.30725726590419167
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 740.5692077220489,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00040369403867294664
+              },
+              {
+                "source": "oracle_double",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  -379.506900305557,
+                  22.874968444548195,
+                  188.91233018422324
+                ],
+                "direction": [
+                  0.43062435711518604,
+                  0.8486198416313416,
+                  -0.3072572659006286
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 740.7545266228935,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.000403694038672231
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  -379.5069003087112,
+                  22.87496844446963,
+                  188.91233018762125
+                ],
+                "direction": [
+                  0.43062435711518604,
+                  0.8486198416313416,
+                  -0.3072572659006286
+                ],
+                "offset": 0,
+                "tmax": 740.7545266282713,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.000403694038672231
+              },
+              {
+                "source": "oracle_double",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  -379.5069003087112,
+                  22.87496844446963,
+                  188.91233018762125
+                ],
+                "direction": [
+                  0.43062435711518604,
+                  0.8486198416313416,
+                  -0.3072572659006286
+                ],
+                "offset": 0,
+                "tmax": 740.7545266282713,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.000403694038672231
+              },
+              {
+                "source": "oracle_double",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  -379.5068359375,
+                  22.874967575073242,
+                  188.91229248046875
+                ],
+                "direction": [
+                  0.4306242926391968,
+                  0.8486198869861737,
+                  -0.3072572309980108
+                ],
+                "offset": 0,
+                "tmax": 740.7543399120245,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0.00040369402854579953
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "shader_offset_ignore_self",
+                "origin": [
+                  -379.5704924995089,
+                  22.873516651745838,
+                  188.9796412437443
+                ],
+                "direction": [
+                  0.43062099726326786,
+                  0.8486206428667956,
+                  -0.30725976179177017
+                ],
+                "offset": 0.09265945434570312,
+                "tmax": 740.569891649033,
+                "blocked": true,
+                "blocker_triangle": 172941,
+                "blocker_t": 0.17392428354527364,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "oracle_offset_ignore_self",
+                "origin": [
+                  -379.5047059977152,
+                  22.873794529092645,
+                  188.91438917415067
+                ],
+                "direction": [
+                  0.4306209972662979,
+                  0.8486206428640273,
+                  -0.3072597617951693
+                ],
+                "offset": 4.636979505308799e-09,
+                "tmax": 740.7552105547796,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_ignore_self",
+                "origin": [
+                  -379.50470599442303,
+                  22.87379452910655,
+                  188.91438917088524
+                ],
+                "direction": [
+                  0.4306209972662979,
+                  0.8486206428640273,
+                  -0.3072597617951693
+                ],
+                "offset": 0,
+                "tmax": 740.7552105601574,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "zero_offset_include_self",
+                "origin": [
+                  -379.50470599442303,
+                  22.87379452910655,
+                  188.91438917088524
+                ],
+                "direction": [
+                  0.4306209972662979,
+                  0.8486206428640273,
+                  -0.3072597617951693
+                ],
+                "offset": 0,
+                "tmax": 740.7552105601574,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              },
+              {
+                "source": "projected_point_counterfactual",
+                "mode": "ulp4_recomputed_shadow",
+                "origin": [
+                  -379.5047607421875,
+                  22.873794555664062,
+                  188.91441345214844
+                ],
+                "direction": [
+                  0.43062105314222815,
+                  0.8486206073012197,
+                  -0.30725978170659984
+                ],
+                "offset": 0,
+                "tmax": 740.7550934203329,
+                "blocked": false,
+                "blocker_triangle": -1,
+                "blocker_t": -1,
+                "predicted_direct": 0
+              }
+            ],
+            "gpu_captured_normal": [
+              0.7099815607070923,
+              0.0029989099130034447,
+              -0.7042138576507568
+            ],
+            "oracle_normal": [
+              0.6802221047892408,
+              0.016943393241996337,
+              -0.7328102138900235
+            ],
+            "gpu_source_cosine": -0.5246544866314304,
+            "oracle_source_cosine": 0.5324599690085146,
+            "captured_gpu_t": 480.663330078125,
+            "canonical_reference_t": 480.6601162640286,
+            "pairwise_primary_hypothesis": [
+              {
+                "ray": "gpu_float_reconstructed",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 480.6629025868854,
+                "reference_triangle_t": 480.6618647184826,
+                "distance_difference": 0.001037868402818276,
+                "selected_tolerance": 0.009613258051737709,
+                "reference_tolerance": 0.009613237294369652,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              },
+              {
+                "ray": "canonical_double",
+                "both_triangles_intersect": true,
+                "selected_triangle_t": 480.6639506611995,
+                "reference_triangle_t": 480.6601162640286,
+                "distance_difference": 0.003834397170919601,
+                "selected_tolerance": 0.009613279013223992,
+                "reference_tolerance": 0.009613202325280573,
+                "legacy_pair_rule_prefers_farther_gpu_primitive_in_both_orders": true
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "binary_sha256": "83155e750a2f14c5fb4571bdf1e2892171fb7edce380b5b89d3dadedd60426ef",
+  "capture_evidence_sha256": "36ee6f3c416c8f2080ab56da8f8f28536b586186ba69e6e354f542c59307e82e",
+  "primary_shader_source_sha256": {
+    "n001_primary.comp.glsl": "90c995c5d56ef7754b22905955b545b210f28eaf37a22fe136b115fdac216fda",
+    "n003_primary_software.comp.glsl": "a85abf20fdf4a6c21538da2fb344178cde34f1ab935b1facc981a7769490779e"
+  },
+  "payload_sha256": {
+    "direct_n010": "83155e750a2f14c5fb4571bdf1e2892171fb7edce380b5b89d3dadedd60426ef",
+    "direct_n010.cpp": "a0cef9af37d279c2737061c2f9568fa19a5af1e6ad635d44315b763777c2ec8f",
+    "hwrt.pixels.tsv": "2b0a140cc243c3c4ddb5018a5212796abc965f5c53b366120863f3229682056d",
+    "hwrt.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "hwrt.stdout.json": "9fa51e78c2d456873da28c0ad51a9418372ba741c50b34b8c14c966f4d4e32e2",
+    "software.pixels.tsv": "2b0a140cc243c3c4ddb5018a5212796abc965f5c53b366120863f3229682056d",
+    "software.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "software.stdout.json": "9fa51e78c2d456873da28c0ad51a9418372ba741c50b34b8c14c966f4d4e32e2"
+  }
+}

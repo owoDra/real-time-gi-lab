@@ -241,6 +241,18 @@
       "status": "diagnostic-only",
       "result": "052-residual-direct-cpu-diagnostic.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-053",
+      "status": "diagnostic-only",
+      "result": "053-residual-primary-contract-diagnosis.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-054",
+      "status": "diagnostic-only",
+      "result": "054-primary-tie-cpu-diagnostic.json",
+      "gpu_run": false
     }
   ]
 }

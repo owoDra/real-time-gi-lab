@@ -31,3 +31,8 @@ for the required additional Lane M DDGI comparator. The chosen path is Vulkan
 on AMD, without CUDA. The [Vulkan host SDK builds](results/023-ddgi-vulkan-host-build.json)
 and the [pinned CPU DXC runs](results/034-dxc-cpu-compiler-provenance.json);
 integrated DDGI runtime is not yet demonstrated.
+
+[Post-hoc CPU primary diagnosis](results/053-residual-primary-contract-diagnosis.md)
+localizes both residual C1 direct-zero pixels to differing primary primitives
+and supports a legacy tie-interval mechanism. No GPU repair is claimed; both
+pixels remain unresolved and included in scoring.

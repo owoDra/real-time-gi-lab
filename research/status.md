@@ -34,6 +34,10 @@ and accepted blocks remain required. Controlled T_B2 PT 1024-spp confirmation
 passes all 25 dynamic frames and five memory replays (037/042). Ten official
 RTXGI shaders compile to SPIR-V on the CPU (038); DDGI GPU runtime is unfinished.
 [Interim comparison findings](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md).
+[Residual direct diagnosis](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md)
+finds different primary primitives at both remaining direct-zero pixels and
+supports a legacy primary tie-interval mechanism in CPU geometry. A GPU repair
+is unverified; both pixels remain UNRESOLVED and included in all scores.
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
 [PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
 [dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),
