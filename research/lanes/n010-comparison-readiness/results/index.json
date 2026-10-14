@@ -379,6 +379,12 @@
       "status": "single-transport-complete",
       "result": "080-recovered-c2-b2-provenance.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-078",
+      "status": "numerical-controls-only",
+      "result": "078-all-state-cpu-port-controls.json",
+      "gpu_run": false
     }
   ]
 }

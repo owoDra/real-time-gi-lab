@@ -148,3 +148,11 @@ first Sponza C1 T_B2 seed now agrees with the original CPU 8192 output: exact
 counters/primary/direct, max mean difference 1.73472e-18. Full conformance,
 original physical controls (planned 077), all-state checks (078/079) and
 nested-prefix checks are required before any GPU reference admission.
+
+Original CPU low-dose controls for all 24 locked state/transport slots and
+all four seeds complete with finite outputs and canonical identities (078).
+They are numerical admission controls at 16 spp, not statistically eligible
+references. GPU full-level conformance has passed C1 T_B2, C7 T_B2 and C7
+T_B8, all four fixed seeds (12/16 cases); C1 T_B8 is still acquiring in 075.
+No GPU reference is admitted while its remaining physical/all-state/prefix
+gates are pending. Recovery C2 T_B8 and C1 T_B8 CPU jobs continue.
