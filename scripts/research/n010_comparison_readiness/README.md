@@ -120,3 +120,12 @@ original acquisitions. `--wait-for-cache-proof` polls the live cache acquisition
 and never treats waiting as a passing proof. Build 049 is not eligibility;
 complete all-pass proof 050 is required before any reference use. The running
 original reference and continuation jobs are unchanged.
+
+`qualify_incremental_references.py` implements the unchanged complete ladder
+using that variant. It refuses to start unless 009, 022 and 050 are complete
+and PASS with matching binary/sampler/proof identities. Each level records the
+prior metadata/payload hashes and its actual sample interval; every level
+remains scored by the original support-aware assessor. It requires a fresh
+directory and never overwrites an existing acquisition. This runner has not
+yet acquired references; coordinate any scheduling change only after proof
+050 passes and at the completed transport boundary specified by Amendment 6.
