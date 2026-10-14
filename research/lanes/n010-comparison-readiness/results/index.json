@@ -355,6 +355,18 @@
       "status": "diagnostic-only",
       "result": "070-gpu-reference-first-conformance.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-073",
+      "status": "diagnostic-only",
+      "result": "073-gpu-reference-c7-b2-8192-seed0.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-074",
+      "status": "complete-negative",
+      "result": "074-gpu-reference-full-conformance.json",
+      "gpu_run": true
     }
   ]
 }
