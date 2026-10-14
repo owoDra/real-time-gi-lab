@@ -141,7 +141,7 @@ See [roadmap](roadmap.md) for gates. Old status, stale next-step commands and br
 CPU recovery continues with the unchanged four-seed ladder/screens and view 067.
 C2 T_B2 qualified at consecutive 16384/32768 levels (audit 080): 15 of the
 24 required slots are eligible. C2 T_B8 completed its first 8192-spp screen
-without eligibility and continues; C1 T_B8 recovery is acquiring 32768 spp.
+without eligibility and continues; C1 T_B8 completed 32768 spp without eligibility and is acquiring 65536 spp.
 Continuation-v3 waits for eligible references; accepted quiet calibration and
 whole-corpus READY remain unexecuted.
 
@@ -187,5 +187,13 @@ paths without reference-radiance or hit/sign overrides. Audit 094 replays
 all diagnostic GPU memory ledgers, verifies separate build 095 and confirms
 53 frozen continuation inputs remain unchanged. Plan 025 streams the same
 guard over complete frames with bounded per-dispatch storage. Its first full
-C1 T_B8 seed-0 trial is planned as 096; full sixteen-case/physical/all-state/
+C1 T_B8 seed-0 trial is running as 096; full sixteen-case/physical/all-state/
 prefix admission remains unexecuted. CPU acquisition remains independent.
+
+C1 T_B8 recovery now completes all four 32768-spp seeds with verified prefix
+provenance (097). Active absolute p99 3.54031e-5 exceeds the fixed 1e-5 gate;
+relative p99 2.51347% alone does not qualify the reference. The original
+qualifier continues at 65536 spp. The remaining cap outcome is unmeasured.
+Full-frame hybrid deep trial 096 is executing with the frozen 64-epsilon
+guard and original CPU fallback, 16-sample batches / 16 CPU workers. No GPU
+reference is admitted from the selected success or the standalone build.

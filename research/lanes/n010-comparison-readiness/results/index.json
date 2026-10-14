@@ -481,6 +481,12 @@
       "status": "host-build-complete",
       "result": "095-hybrid-oracle-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-097",
+      "status": "complete-prefix-ineligible",
+      "result": "097-recovered-c1-b8-32768-prefix-audit.json",
+      "gpu_run": false
     }
   ]
 }
