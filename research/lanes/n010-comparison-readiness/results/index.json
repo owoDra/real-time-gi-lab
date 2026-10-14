@@ -553,6 +553,18 @@
       "status": "full-frame-feasibility-only",
       "result": "110-hybrid-full-frame-deep-seed2-conformance.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-098",
+      "status": "complete-numerical-suite-only",
+      "result": "098-hybrid-full-numerical-conformance.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-112",
+      "status": "cpu-host-build-complete",
+      "result": "112-point-guided-oracle-build.json",
+      "gpu_run": false
     }
   ]
 }

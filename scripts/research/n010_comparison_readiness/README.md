@@ -254,3 +254,26 @@ input bytes after the audit. The exact CPU-only invocation source is retained
 as `out/research/n010-comparison-readiness/hybrid-provenance-existing-cpu-audit-v1.py`
 and hashed in 109. This does not exercise the new hybrid-variant branch or
 verify the nine unfinished transports.
+
+### Separate CPU point-guided sampling prototype
+
+Prospective plan 030 registers a sampling/importance-weight candidate for the
+same independently validated finite-transport integral. It retains the
+canonical geometry/intersection/primary/direct behavior, with cosine branch
+0.75 and a geometry/direct-only triangle CDF (area floor 0.10). Null events
+remain samples; the deferred visible-surface mixture weight is explicit.
+
+`generate_point_guided_oracle.py --work NEW_DIRECTORY --output NEW_JSON`
+builds a standalone CPU executable with O3, no fast math or FP contraction.
+Actual build 112 passes; it changes no default Renderer/build graph.
+`validate_point_guided_oracle.py --work NEW_DIRECTORY --output NEW_JSON`
+executes all seventeen original point-light controls, four seeds and original
+counts, then eight fixed analytic/support checks and two retained iid checks.
+Actual 113 is executing, not a completed physical proof. Existing output
+paths are refused and original/frozen inputs are hashed before and after runs.
+
+No new reference or sampler transition follows from build/control success
+alone. All locked-state primary/direct identities, its own exact prefix proof,
+a recorded acquisition/provenance transition and the unchanged full corpus
+qualification screens remain required. Old cosine moments/prefixes cannot be
+imported into this sampler. Existing CPU acquisitions continue independently.

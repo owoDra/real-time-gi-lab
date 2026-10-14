@@ -136,7 +136,7 @@ proof of population bias or a repair of the Renderer's unresolved direct pixels.
 
 A separate streamed hybrid recomputes every ambiguously intersecting whole path
 with the original independent CPU oracle, retaining every sample. It currently
-passes 15/16 complete numerical cases; the last Sponza seed is running.
+passes all 16/16 complete numerical cases ([098](lanes/n010-comparison-readiness/results/098-hybrid-full-numerical-conformance.json)).
 Full-frame C1 B8 seed 0 [096](lanes/n010-comparison-readiness/results/096-hybrid-full-frame-deep-conformance.json)
 and seeds 1 [107](lanes/n010-comparison-readiness/results/107-hybrid-full-frame-deep-seed1-conformance.json) /
 2 [110](lanes/n010-comparison-readiness/results/110-hybrid-full-frame-deep-seed2-conformance.json)
@@ -146,11 +146,11 @@ fallback covers about 8.66% of paths; acquisition timings are loaded diagnostics
 passes both cases' complete binary64 sum/moment reconstruction, per-pixel
 counter totals, all four PFM components and owned-memory replay.
 
-No hybrid reference is admitted. Physical 099 waits for complete numerical 098;
-all-state/prefix 101 waits for its predecessor proofs and is **NOT RUN**.
+No hybrid reference is admitted. Physical 099 is now executing after complete 098 PASS;
+all-state/prefix 101 waits for physical proof and is **NOT RUN**.
 Prefix build 100 is build evidence only. Plan 029 and separate qualification/
-provenance helpers prepare high-sample ladders and future audits; prerequisite
-checks 104–106 currently refuse acquisition. Their success paths remain
+provenance helpers prepare high-sample ladders and future audits; historical prerequisite
+checks 104–106 refused acquisition while 098 was incomplete. Their success paths remain
 unexecuted. No CPU-view replacement has occurred; the frozen current driver
 and comparison inputs remain unchanged. All original failures stay failed.
 
@@ -158,3 +158,12 @@ For exact source/evidence identities and historical attempts, use the
 [N010 result index](lanes/n010-comparison-readiness/results/index.json),
 [execution record](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md)
 and [tooling documentation](../scripts/research/n010_comparison_readiness/README.md).
+
+A separate CPU sampling/importance-weight prototype is registered prospectively
+in [plan 030](lanes/n010-comparison-readiness/experiments/030-prospective-point-guided-reference-sampling.md).
+It mixes cosine continuation with geometry/direct-light surface guidance and
+explicit null events, preserving the original finite-transport integral as the
+validation target. Build [112](lanes/n010-comparison-readiness/results/112-point-guided-oracle-build.json)
+passes; independent physical/iid controls 113 are executing. No corpus reference
+or sampling-method transition has occurred; existing CPU acquisitions continue.
+All four seeds, levels, absolute/relative screens and cap remain fixed.

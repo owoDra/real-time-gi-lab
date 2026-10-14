@@ -186,6 +186,18 @@ audit, not whole-corpus readiness or execution of the new hybrid-variant branch.
 C1 B8 / 8192 spp seed 2 [110](results/110-hybrid-full-frame-deep-seed2-conformance.json) passes
 unchanged full-frame numerical gates, with exact counters/primary/direct/emission,
 finite output, zero faults and owned-memory replay. This exact-byte copy of
-the completed 098 child is not a repeat acquisition. Suite 098 now has 15/16
-cases passing and executes the final seed; full physical/all-state/prefix
+the completed 098 child is not a repeat acquisition. At publication of 110, suite 098 had 15/16
+cases passing and was executing the final seed; full physical/all-state/prefix
 and statistical qualification are still required before reference use.
+
+Full numerical suite [098](results/098-hybrid-full-numerical-conformance.json)
+now completes all sixteen fixed cases with PASS. Physical 099 has started;
+all-state/prefix 101 remains waiting. Numerical completion alone admits no
+reference. All sixteen child result hashes were verified before publication.
+
+Separate prospective [point-guided CPU sampling plan 030](experiments/030-prospective-point-guided-reference-sampling.md)
+retains the original physical target and exact convergence gates. CPU build
+[112](results/112-point-guided-oracle-build.json) passes and physical/iid
+control acquisition 113 is executing. It changes continuation sampling and
+importance weights only; it does not change the current Renderer or replace
+any pending/accepted original reference.

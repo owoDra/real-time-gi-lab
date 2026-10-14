@@ -79,6 +79,18 @@ these gates in N010, then register and execute the distinct Lane M comparison.
 
 Prospective N010 plan 029 provides a gated high-sample hybrid acquisition
 command after complete numerical, physical and all-state/prefix proof. Its
-current prerequisite checks refuse dispatch; no reference admission follows
+historical prerequisite checks 104–106 refused dispatch while 098 was incomplete; no reference admission follows
 from prepared code. Any scheduling transition must retain the original CPU
 evidence and occur with an executed completed-boundary provenance record.
+
+Full numerical suite 098 now completes all 16 fixed cases with PASS; physical
+099 is executing and all-state/prefix 101 still waits for that proof. Numerical
+completion admits no reference and does not complete the N010 gates.
+
+A separate prospective CPU sampling proposal (plan 030, build 112) preserves
+the finite-transport physical target while mixing cosine and geometry/direct
+surface sampling with explicit null samples and importance weights. Physical
+controls 113 are executing. It is unadmitted: corpus identities, its own exact
+prefix proof and a recorded acquisition/provenance transition are required
+before any new qualification. The existing acquisitions, four seeds, six
+levels, support-aware absolute/relative screens and cap remain unchanged.
