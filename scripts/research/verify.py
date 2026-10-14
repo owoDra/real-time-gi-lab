@@ -41,6 +41,11 @@ LANES = {
         "shader": "shaders/research/n009_scene_contract/README.md",
         "script": "scripts/research/n009_scene_contract/README.md",
     },
+    "n010-comparison-readiness": {
+        "src": "src/research/n010_comparison_readiness/CMakeLists.txt",
+        "shader": "shaders/research/n010_comparison_readiness/README.md",
+        "script": "scripts/research/n010_comparison_readiness/README.md",
+    },
 }
 
 

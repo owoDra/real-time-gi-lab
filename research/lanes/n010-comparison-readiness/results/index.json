@@ -1,5 +1,54 @@
 {
   "schema_version": 1,
   "lane": "n010-comparison-readiness",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "N010-001",
+      "status": "diagnostic-only",
+      "result": "001-n009-posthoc-direct-rays.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-002",
+      "status": "complete",
+      "result": "002-gpu-key-replay.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-003",
+      "status": "interim",
+      "result": "003-sampler-validation.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-004",
+      "status": "partial",
+      "result": "004-initial-state-lock.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-005",
+      "status": "diagnostic-only",
+      "result": "005-corrected-posthoc-direct-rays.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-006",
+      "status": "diagnostic-only",
+      "result": "006-allocation-ledger-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-007",
+      "status": "complete",
+      "result": "007-c7-probe-replay-validation.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-008",
+      "status": "interim",
+      "result": "008-interim-execution-and-resume.md",
+      "gpu_run": false
+    }
+  ]
 }

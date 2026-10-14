@@ -1,0 +1,244 @@
+{
+  "schema": "n010-c7-replay-validation/1",
+  "scope": "new captures with actual GPU keys; N009 PT INCOMPLETE unchanged",
+  "rows": [
+    {
+      "backend": "software",
+      "model": {
+        "schema": "n010-probe-model/1",
+        "stages": [
+          "R0_gpu_integer_replay",
+          "R1_dequantized",
+          "R2_secondary_shadow",
+          "R3_full_probe_coverage",
+          "R4_unbounded_range",
+          "R5_dense_directions",
+          "R6_pixel_cosine_one_bounce"
+        ],
+        "dense_directions": 256,
+        "cos_spp": 1024,
+        "shadow_eps": 0.000116314,
+        "work_items": 37440,
+        "outputs": 4680,
+        "produced_keys": 1774,
+        "required_keys": 3544,
+        "pixels_hit": 7316,
+        "lookups": 29264,
+        "lookups_missing_produced_key": 16928,
+        "pixels_with_missing_key": 5980,
+        "quantization_check": {
+          "exact": 37440,
+          "off_by_one": 0,
+          "other": 0
+        },
+        "reconstructed_key_mismatch_lookups": 6824,
+        "cpu_retrace_matches_gpu_hit": 37440
+      },
+      "gates": {
+        "V1": true,
+        "V1_max_abs": 2.4869375222363876e-14,
+        "V1_positivity_disagreements": 0,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "V4_sum_bias": 0.0002951345248463571
+      },
+      "source_commit": "eadb64a",
+      "reference": "N008 eligible B7_T_B2; BF-P equivalence previously proved",
+      "stages": [
+        {
+          "stage": "R0",
+          "sum": 0.006500343327992675,
+          "positive": 336,
+          "energy_on_reference_zero": 0.0006866559853513389,
+          "positive_on_reference_zero": 14,
+          "relative_bias_of_sum": -0.9102390119775216,
+          "rmse": 4.881020300847814e-06,
+          "zero_on_reference_positive": 6826
+        },
+        {
+          "stage": "R1",
+          "sum": 0.005910611134502943,
+          "positive": 336,
+          "energy_on_reference_zero": 0.0006896796515189115,
+          "positive_on_reference_zero": 14,
+          "relative_bias_of_sum": -0.9183824194385315,
+          "rmse": 4.884280675440381e-06,
+          "zero_on_reference_positive": 6826
+        },
+        {
+          "stage": "R2",
+          "sum": 0.0028554402738151844,
+          "positive": 147,
+          "energy_on_reference_zero": 0.000650773950941431,
+          "positive_on_reference_zero": 11,
+          "relative_bias_of_sum": -0.9605702149434043,
+          "rmse": 4.96890435153609e-06,
+          "zero_on_reference_positive": 7012
+        },
+        {
+          "stage": "R3",
+          "sum": 0.05284061271810224,
+          "positive": 1918,
+          "energy_on_reference_zero": 0.0020577062998164324,
+          "positive_on_reference_zero": 31,
+          "relative_bias_of_sum": -0.2703422933270429,
+          "rmse": 5.053583944669212e-06,
+          "zero_on_reference_positive": 5261
+        },
+        {
+          "stage": "R4",
+          "sum": 0.119313463188235,
+          "positive": 4177,
+          "energy_on_reference_zero": 0.003019411227146161,
+          "positive_on_reference_zero": 125,
+          "relative_bias_of_sum": 0.6475582595829996,
+          "rmse": 7.4225586485198925e-06,
+          "zero_on_reference_positive": 3096
+        },
+        {
+          "stage": "R5",
+          "sum": 0.09435893917733636,
+          "positive": 4617,
+          "energy_on_reference_zero": 0.0025423644082426884,
+          "positive_on_reference_zero": 132,
+          "relative_bias_of_sum": 0.3029698866576847,
+          "rmse": 5.684591693915999e-06,
+          "zero_on_reference_positive": 2663
+        },
+        {
+          "stage": "R6",
+          "sum": 0.07243973074476179,
+          "positive": 6741,
+          "energy_on_reference_zero": 1.0154547911256e-07,
+          "positive_on_reference_zero": 4,
+          "relative_bias_of_sum": 0.0002951345248463571,
+          "rmse": 2.4694918255226656e-07,
+          "zero_on_reference_positive": 411
+        }
+      ],
+      "scoring_mask_pixels": 57600,
+      "V1_scoring_exclusions": 0,
+      "raw_stages_sha256": "1439df9e23a50381aa0f2e851f1243ee911ac968bf5c1646ca1aae6814d2c8ce"
+    },
+    {
+      "backend": "hwrt",
+      "model": {
+        "schema": "n010-probe-model/1",
+        "stages": [
+          "R0_gpu_integer_replay",
+          "R1_dequantized",
+          "R2_secondary_shadow",
+          "R3_full_probe_coverage",
+          "R4_unbounded_range",
+          "R5_dense_directions",
+          "R6_pixel_cosine_one_bounce"
+        ],
+        "dense_directions": 256,
+        "cos_spp": 1024,
+        "shadow_eps": 0.000116314,
+        "work_items": 37440,
+        "outputs": 4680,
+        "produced_keys": 1774,
+        "required_keys": 3544,
+        "pixels_hit": 7316,
+        "lookups": 29264,
+        "lookups_missing_produced_key": 16928,
+        "pixels_with_missing_key": 5980,
+        "quantization_check": {
+          "exact": 37440,
+          "off_by_one": 0,
+          "other": 0
+        },
+        "reconstructed_key_mismatch_lookups": 6824,
+        "cpu_retrace_matches_gpu_hit": 37439
+      },
+      "gates": {
+        "V1": true,
+        "V1_max_abs": 2.4869375222363876e-14,
+        "V1_positivity_disagreements": 0,
+        "V2": true,
+        "V3": true,
+        "V4": true,
+        "V4_sum_bias": 0.0002951345248463571
+      },
+      "source_commit": "eadb64a",
+      "reference": "N008 eligible B7_T_B2; BF-P equivalence previously proved",
+      "stages": [
+        {
+          "stage": "R0",
+          "sum": 0.006500343327992675,
+          "positive": 336,
+          "energy_on_reference_zero": 0.0006866559853513389,
+          "positive_on_reference_zero": 14,
+          "relative_bias_of_sum": -0.9102390119775216,
+          "rmse": 4.881020300847814e-06,
+          "zero_on_reference_positive": 6826
+        },
+        {
+          "stage": "R1",
+          "sum": 0.005910611134502943,
+          "positive": 336,
+          "energy_on_reference_zero": 0.0006896796515189115,
+          "positive_on_reference_zero": 14,
+          "relative_bias_of_sum": -0.9183824194385315,
+          "rmse": 4.884280675440381e-06,
+          "zero_on_reference_positive": 6826
+        },
+        {
+          "stage": "R2",
+          "sum": 0.0028554402738151844,
+          "positive": 147,
+          "energy_on_reference_zero": 0.000650773950941431,
+          "positive_on_reference_zero": 11,
+          "relative_bias_of_sum": -0.9605702149434043,
+          "rmse": 4.96890435153609e-06,
+          "zero_on_reference_positive": 7012
+        },
+        {
+          "stage": "R3",
+          "sum": 0.05284061271810224,
+          "positive": 1918,
+          "energy_on_reference_zero": 0.0020577062998164324,
+          "positive_on_reference_zero": 31,
+          "relative_bias_of_sum": -0.2703422933270429,
+          "rmse": 5.053583944669212e-06,
+          "zero_on_reference_positive": 5261
+        },
+        {
+          "stage": "R4",
+          "sum": 0.119313463188235,
+          "positive": 4177,
+          "energy_on_reference_zero": 0.003019411227146161,
+          "positive_on_reference_zero": 125,
+          "relative_bias_of_sum": 0.6475582595829996,
+          "rmse": 7.4225586485198925e-06,
+          "zero_on_reference_positive": 3096
+        },
+        {
+          "stage": "R5",
+          "sum": 0.09435893917733636,
+          "positive": 4617,
+          "energy_on_reference_zero": 0.0025423644082426884,
+          "positive_on_reference_zero": 132,
+          "relative_bias_of_sum": 0.3029698866576847,
+          "rmse": 5.684591693915999e-06,
+          "zero_on_reference_positive": 2663
+        },
+        {
+          "stage": "R6",
+          "sum": 0.07243973074476179,
+          "positive": 6741,
+          "energy_on_reference_zero": 1.0154547911256e-07,
+          "positive_on_reference_zero": 4,
+          "relative_bias_of_sum": 0.0002951345248463571,
+          "rmse": 2.4694918255226656e-07,
+          "zero_on_reference_positive": 411
+        }
+      ],
+      "scoring_mask_pixels": 57600,
+      "V1_scoring_exclusions": 0,
+      "raw_stages_sha256": "1439df9e23a50381aa0f2e851f1243ee911ac968bf5c1646ca1aae6814d2c8ce"
+    }
+  ]
+}

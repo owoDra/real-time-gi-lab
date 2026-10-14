@@ -8,4 +8,8 @@ The historical Lane M topology study retains its existing identity and results.
 Protocol: [001](experiments/001-comparison-readiness.md). N001–N009 are immutable
 inputs. The default Renderer is not promoted by this study.
 
-Status: active; readiness has not been demonstrated.
+Status: active; readiness has not been demonstrated. [Execution evidence and
+remaining gates](results/008-interim-execution-and-resume.md). Actual GPU-key
+replay passes on all 10 captures; the C7 key-driven counterfactual validation
+passes V1–V4 on both backends. Direct shadow-offset diagnosis is post-hoc;
+new physical sampler validation and comparison harness work continue.
