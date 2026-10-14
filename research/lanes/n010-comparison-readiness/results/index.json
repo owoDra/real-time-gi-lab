@@ -229,6 +229,12 @@
       "status": "complete",
       "result": "042-controlled-pt-budget-confirmation-summary.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-049",
+      "status": "build-complete-equivalence-pending",
+      "result": "049-incremental-oracle-build.json",
+      "gpu_run": false
     }
   ]
 }

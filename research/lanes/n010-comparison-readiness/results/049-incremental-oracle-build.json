@@ -1,0 +1,29 @@
+{
+  "schema": "n010-incremental-oracle-build/1",
+  "amendment": "6",
+  "build_pass": true,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "command": [
+    "c++",
+    "-std=c++20",
+    "-O3",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-pthread",
+    "-I",
+    "src/research/n008_hdr_oracle",
+    "out/research/n010-comparison-readiness/incremental-oracle-source-v1/n010_rqmc_main.cpp",
+    "-o",
+    "build/n010-cpu/n010_incremental_oracle"
+  ],
+  "compiler_version": "g++ (GCC) 15.2.0\nCopyright (C) 2025 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+  "binary_sha256": "83da95f6908d90efe0bc52a885a4cb5e3423bd5f5330adced0b6687c986c5b8e",
+  "source_sha256": {
+    "n010_rqmc_main.cpp": "40fb36866ddd1291d4bb301fc0644ceb8b44bf7739facfde156682c3cb996a87",
+    "n010_rqmc_oracle.hpp": "01b7f3c154fdbe0a831b19a1c106ea681200e055d295220a2e6063fe06593d40",
+    "source-manifest.json": "ebc7fd600897fa14f275a2dc476198cd735498bd05dc7f9b4abdc65dfb75ac8a"
+  },
+  "generator_sha256": "34267414f93e37eb0f60bcab63c231884540ea45cfef3c37e7e30898c7819348",
+  "warnings": "GCC 15.2 vector-copy/stringop-overread diagnostic also seen in earlier oracle build; compilation succeeded. Exact payload/counter equivalence proof is required before use."
+}

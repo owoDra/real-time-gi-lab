@@ -108,3 +108,15 @@ to a separate `build/n010-cpu/n010_cached_oracle`; then run
 `validate_cached_oracle.py --work NEW_DIR --output JSON`. Only complete exact
 payload/counter equivalence may authorize cached qualification. The original
 oracle and active reference outputs remain intact.
+
+Amendment 6 continues the exact previous sample prefix instead of recomputing
+it. `generate_incremental_oracle.py --out NEW_SOURCE_DIR` generates a separate
+cached variant; compile with the same flags to
+`build/n010-cpu/n010_incremental_oracle`. `validate_incremental_oracle.py`
+requires complete cached proof 022 and physical validation 009, then resumes
+the original 8192-SPP C1 T_B2 / C7 T_B2 / C7 T_B8 prefixes to 16384 and requires
+every f64/PFM/primary-hit byte and integer counter to equal the existing full
+original acquisitions. `--wait-for-cache-proof` polls the live cache acquisition
+and never treats waiting as a passing proof. Build 049 is not eligibility;
+complete all-pass proof 050 is required before any reference use. The running
+original reference and continuation jobs are unchanged.

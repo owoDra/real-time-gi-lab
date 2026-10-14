@@ -75,6 +75,13 @@ New output identifiers in that script are reservations until actual acquisition;
 no READY or completed calibration is implied. The driver stops on a failure,
 preserves it and requires review before any repair or new accepted acquisition.
 
+Prospective [Amendment 6](../experiments/014-amendment-6-incremental-reference-prefix.md)
+adds a separately built oracle that resumes exact prefix sums. Build 049
+passes; prefix equality acquisition waits for the complete cache proof 022.
+No incremental reference is accepted, and no original job is stopped or
+overwritten by this preparation. Exact 16384-SPP payload/counter equality in
+all three declared transports is required before using the variant.
+
 - Complete both active reference ladders over all locked T_B2/T_B8 cells; retain failed/capped levels.
 - Carry the shared numerical profile into all scored roles; measure all residual discrepancies without exclusions.
 - Complete the Sponza source/target/recovery sequences; controlled C8–C12 sequences, update costs and memory replays are executed in 019/020.
