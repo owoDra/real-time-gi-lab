@@ -1,4 +1,4 @@
-# Current research status (2026-10-14)
+# Current research status (2026-10-15)
 
 **Status: empirical architecture and image-producing renderer demonstrated; general real-time GI superiority NOT established.** This is the sole cross-lane status/adoption synthesis. For the long research history see [archived 2026-10-02 status](archive/status-2026-10-02.md); for exact decision evidence use the linked lane results and [branch inventory](branch-inventory.md).
 
@@ -140,8 +140,8 @@ See [roadmap](roadmap.md) for gates. Old status, stale next-step commands and br
 
 CPU recovery continues with the unchanged four-seed ladder/screens and view 067.
 C2 T_B2 qualified at consecutive 16384/32768 levels (audit 080): 15 of the
-24 required slots are eligible. C2 T_B8 completed its first 8192-spp screen
-without eligibility and continues; C1 T_B8 completed 32768 spp without eligibility and is acquiring 65536 spp.
+24 required slots are eligible. C2 T_B8 completed its 16384-spp screen
+without eligibility and continues at 32768 spp; C1 T_B8 completed 32768 spp without eligibility and is acquiring 65536 spp.
 Continuation-v3 waits for eligible references; accepted quiet calibration and
 whole-corpus READY remain unexecuted.
 
@@ -197,3 +197,10 @@ qualifier continues at 65536 spp. The remaining cap outcome is unmeasured.
 Full-frame hybrid deep trial 096 is executing with the frozen 64-epsilon
 guard and original CPU fallback, 16-sample batches / 16 CPU workers. No GPU
 reference is admitted from the selected success or the standalone build.
+
+Conditional complete numerical suite 098 waits for full-frame feasibility 096;
+it runs all sixteen frozen cases with the new candidate and reuses only
+096's identical C1 T_B8 seed-0 case. Conditional physical controls 099 wait
+for complete 098 PASS and otherwise refuse dispatch. They preserve all 68
+original applicable point-light runs and independent analytic gates. Both
+workers are waiting, not physical/numerical PASS evidence.
