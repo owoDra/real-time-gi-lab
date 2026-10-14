@@ -14,7 +14,9 @@ commit `f33e496ca31b3f0eec1c4e2cbaa8bb620e337fa6`, Vulkan on AMD, without CUDA.
 N010 pins source, library build and exact required adapter semantics. Its GPU
 adapter, finite-depth transport, full allocation ledger, dynamic history and
 full-boundary calibration must be executed here before an accepted DDGI
-campaign. A host library build does not constitute that execution.
+campaign. N010 057 now verifies official-SDK volume dispatch/normalization on AMD in two
+constant-field controls, with complete owned memory replay. This does not
+constitute scene tracing/gather, finite-depth GI or dynamic qualification.
 
 Before accepted timing, register the hypotheses, held-out states, family budget
 ladders and tuning split. N010 pilot states/results are already observed and

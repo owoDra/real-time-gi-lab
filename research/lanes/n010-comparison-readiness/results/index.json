@@ -277,6 +277,18 @@
       "status": "complete",
       "result": "056-ddgi-reduction-shader-compilation.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-057",
+      "status": "diagnostic-only",
+      "result": "057-ddgi-volume-runtime-bringup.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-058",
+      "status": "complete",
+      "result": "058-ddgi-volume-build.json",
+      "gpu_run": false
     }
   ]
 }

@@ -158,3 +158,14 @@ after compilation, inherits the bound resource configuration from 038 and
 retains commands, diagnostics and SPIR-V bindings/hashes. Actual result 056
 is complete/PASS (four CPU compilations); runtime subgroup selection and GPU
 validation are still required. Existing frozen compilation helpers are unchanged.
+
+`acquire_ddgi_bringup.py --binary BINARY --shaders SHADERS --reduction REDUCTION
+--work NEW_DIR --output NEW_JSON` runs the isolated official-SDK volume adapter
+with an AMD physical GPU and no concurrent GPU image producer. The binary name
+must begin with `phos-` so the completion driver's concurrency check detects it.
+It verifies pinned official shader/SDK files, retains all raw readbacks and
+independently scores every RGB/distance component and memory event. Protocol
+015 fixes both controls and tolerances before dispatch. Results 057/058 are
+actual diagnostic runtime/build evidence; no scene GI, architecture promotion
+or performance comparison follows. Existing frozen GPU binaries/shaders remain
+unchanged. Validation layers were not run in this diagnostic.

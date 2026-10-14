@@ -1,0 +1,419 @@
+{
+  "schema": "n010-ddgi-volume-bringup/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": true,
+  "cuda_used": false,
+  "command": [
+    "bash",
+    "scripts/run_with_vulkan.sh",
+    "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/phos-n010-ddgi-volume-bringup",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/ddgi-shaders-v2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/ddgi-reduction-shaders-v1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/ddgi-volume-bringup-v1/gpu"
+  ],
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/038-ddgi-shader-compilation.json": "c42054c9280e22dcf5b788938b43f0ce0403e48448d3c3d4f4a9c2ce8322dcc3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/056-ddgi-reduction-shader-compilation.json": "37c6cf61cb6a734d5ca13542da6e6b38c8d9efa13bea3163bd093f137bccf9c3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/021-ddgi-source-provenance.json": "632c24a7cc5863e97bde595ab937fd15d232e680ce85c7c470bff6bd6bb7c7b3",
+    "build/n010-cpu/phos-n010-ddgi-volume-bringup": "1574c1e2341b9abb95625b92f9d5386400779e52e8d75ac7380c35f7b7238290",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/ddgi_volume_bringup.cpp": "a04520eba6d52f48d62226f2dd7d75c40b26d7ac70ef8b6596346c7c5b8bc66f",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/015-ddgi-volume-runtime-bringup.md": "50a519b17f4621ff29535949ca036416b336e358ee28300dc928fca95be2bc44",
+    "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a": "39c606e0d117f9afa0c1f3558b36277aa593b002c19a9b5e7d8faf7f805d9123",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/acquire_ddgi_bringup.py": "d445c4693a468aa36e420c886a73129a12f7f60fe00e187bed58375d7d4e143f",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/blend-128-irradiance.spv": "10aaad6d434ded5c9ad8a24665fbc229667760e2d33a3f86d22cee9389e71c49",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/blend-128-distance.spv": "46395d7e4edc4805f78c168bebbe5e9ed364d989cf8da68f961be157ae949775",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/blend-256-irradiance.spv": "1fd648f33a1487ce2660516cf4968eda7994167fa0a0e7f3ffda219c066033cf",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/blend-256-distance.spv": "d2cb4a88800eab2eef6c77dd083ea727765bf6f1fa460dbd67366815ceed4ee0",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/blend-512-irradiance.spv": "2bd7696ff1241485c9d700b0c6b3aa91dfb4d7874c3d3d2eca015ceda208e7fb",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/blend-512-distance.spv": "315627cd8d523ecc9db8f3eb3c8e5f81e61da38dcb6877e7edc1fc2308d36ab1",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/relocation.spv": "4d84146ec574c2938e0c6d06c1f078ea1b37e81eb9be36e2bfa8d8bc4a623337",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/relocation-reset.spv": "74595970af7e109bb458a72fbca0f1d9cd8c4a8fdc19f5f086073b2beaf6863c",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/classification.spv": "bb4f81e06fae6c916997561ecb2a9c2a258282ad5c9ac1aa89a4648272a3b285",
+    "out/research/n010-comparison-readiness/ddgi-shaders-v2/classification-reset.spv": "a616e75904cf748ce7edaead61e5b8ab45e09aa6663084cf592eccacd2813e2d",
+    "out/research/n010-comparison-readiness/ddgi-reduction-shaders-v1/reduction-wave32.spv": "8e1f3bd01a0bff4c9655f1a216ef809bfe1271376de5d7184a328cb309eb3c54",
+    "out/research/n010-comparison-readiness/ddgi-reduction-shaders-v1/extra-reduction-wave32.spv": "9c968222d20437a22ee2cfe0510a7ac75fb6fadc2ff66303c334ce66fba70734",
+    "out/research/n010-comparison-readiness/ddgi-reduction-shaders-v1/reduction-wave64.spv": "a18443e5b891d485e88cfbed2b18cd79533c9dc7a2b3117769d83c9986364a92",
+    "out/research/n010-comparison-readiness/ddgi-reduction-shaders-v1/extra-reduction-wave64.spv": "f2e7e60d756cea3b62e822a754c9da14c444cc6a39a5d0abca9f60c59defb5e5"
+  },
+  "source_commit": "5eee767c1fedd409733596aad8ece448c7f25a8a",
+  "scope": "SDK volume resource/constant-field dispatch diagnostic only. No scene ray tracing, finite-depth GI, surface gather, temporal qualification or performance comparison.",
+  "thresholds": {
+    "irradiance_max_abs_error": 1e-05,
+    "distance_max_abs_error": 1e-05
+  },
+  "scoring_exclusions": 0,
+  "rows": [
+    {
+      "radiance": 0,
+      "all_finite": true,
+      "irradiance_max_abs_error": 0.0,
+      "irradiance_scored_texels": 512,
+      "distance_max_abs_error": 2.9802322387695312e-08,
+      "distance_scored_texels": 2048,
+      "pass": true
+    },
+    {
+      "radiance": 1,
+      "all_finite": true,
+      "irradiance_max_abs_error": 5.960464477539063e-08,
+      "irradiance_scored_texels": 512,
+      "distance_max_abs_error": 2.9802322387695312e-08,
+      "distance_scored_texels": 2048,
+      "pass": true
+    }
+  ],
+  "returncode": 0,
+  "stdout": "constant-field SDK diagnostic PASS\n",
+  "stderr": "",
+  "measurements": {
+    "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+    "subgroup_width": 64,
+    "validation_layer_run": false,
+    "image_layouts": [
+      {
+        "type": 0,
+        "width": 128,
+        "height": 4,
+        "layers": 2,
+        "float32_channels": 4
+      },
+      {
+        "type": 1,
+        "width": 16,
+        "height": 16,
+        "layers": 2,
+        "float32_channels": 4
+      },
+      {
+        "type": 2,
+        "width": 32,
+        "height": 32,
+        "layers": 2,
+        "float32_channels": 2
+      },
+      {
+        "type": 3,
+        "width": 2,
+        "height": 2,
+        "layers": 2,
+        "float32_channels": 4
+      },
+      {
+        "type": 4,
+        "width": 12,
+        "height": 12,
+        "layers": 2,
+        "float32_channels": 1
+      },
+      {
+        "type": 5,
+        "width": 1,
+        "height": 1,
+        "layers": 1,
+        "float32_channels": 2
+      }
+    ],
+    "rows": [
+      {
+        "radiance": 0,
+        "irradiance_max_abs_error": 0,
+        "distance_max_abs_error": 2.9802322387695312e-08,
+        "all_finite": true,
+        "pass": true
+      },
+      {
+        "radiance": 1,
+        "irradiance_max_abs_error": 5.960464477539063e-08,
+        "distance_max_abs_error": 2.9802322387695312e-08,
+        "all_finite": true,
+        "pass": true
+      }
+    ],
+    "all_pass": true
+  },
+  "allocation_ledger": {
+    "schema": "n010-allocation-lifetimes/1",
+    "scope": "all owned Vulkan allocations; driver-private and CPU memory excluded",
+    "live_bytes_at_teardown": 0,
+    "teardown_zero": true,
+    "true_peak_owned_bytes": 131472,
+    "device_contexts": 1,
+    "phases": [
+      {
+        "name": "startup",
+        "peak_bytes": 0,
+        "live_bytes_at_end": 0
+      },
+      {
+        "name": "startup",
+        "peak_bytes": 131472,
+        "live_bytes_at_end": 131472
+      },
+      {
+        "name": "constant-zero",
+        "peak_bytes": 131472,
+        "live_bytes_at_end": 131472
+      },
+      {
+        "name": "constant-positive",
+        "peak_bytes": 131472,
+        "live_bytes_at_end": 0
+      }
+    ],
+    "events": [
+      {
+        "sequence": 0,
+        "allocation_id": 1,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 128,
+        "live_bytes": 128,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 32,
+        "phase": "startup"
+      },
+      {
+        "sequence": 1,
+        "allocation_id": 2,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 16,
+        "live_bytes": 144,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 2,
+        "phase": "startup"
+      },
+      {
+        "sequence": 2,
+        "allocation_id": 3,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 65536,
+        "live_bytes": 65680,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "startup"
+      },
+      {
+        "sequence": 3,
+        "allocation_id": 4,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 8192,
+        "live_bytes": 73872,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "startup"
+      },
+      {
+        "sequence": 4,
+        "allocation_id": 5,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 16384,
+        "live_bytes": 90256,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "startup"
+      },
+      {
+        "sequence": 5,
+        "allocation_id": 6,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 8192,
+        "live_bytes": 98448,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "startup"
+      },
+      {
+        "sequence": 6,
+        "allocation_id": 7,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 8192,
+        "live_bytes": 106640,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "startup"
+      },
+      {
+        "sequence": 7,
+        "allocation_id": 8,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 256,
+        "live_bytes": 106896,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "startup"
+      },
+      {
+        "sequence": 8,
+        "allocation_id": 9,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 8192,
+        "live_bytes": 115088,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 2,
+        "phase": "startup"
+      },
+      {
+        "sequence": 9,
+        "allocation_id": 10,
+        "device_context": 1,
+        "action": "allocate",
+        "bytes": 16384,
+        "live_bytes": 131472,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 2,
+        "phase": "startup"
+      },
+      {
+        "sequence": 10,
+        "allocation_id": 3,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 65536,
+        "live_bytes": 65936,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 11,
+        "allocation_id": 4,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 8192,
+        "live_bytes": 57744,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 12,
+        "allocation_id": 5,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 16384,
+        "live_bytes": 41360,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 13,
+        "allocation_id": 6,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 8192,
+        "live_bytes": 33168,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 14,
+        "allocation_id": 7,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 8192,
+        "live_bytes": 24976,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 15,
+        "allocation_id": 8,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 256,
+        "live_bytes": 24720,
+        "memory_type": 0,
+        "requested_properties": 1,
+        "buffer_usage": 11,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 16,
+        "allocation_id": 1,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 128,
+        "live_bytes": 24592,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 32,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 17,
+        "allocation_id": 2,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 16,
+        "live_bytes": 24576,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 2,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 18,
+        "allocation_id": 9,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 8192,
+        "live_bytes": 16384,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 2,
+        "phase": "constant-positive"
+      },
+      {
+        "sequence": 19,
+        "allocation_id": 10,
+        "device_context": 1,
+        "action": "free",
+        "bytes": 16384,
+        "live_bytes": 0,
+        "memory_type": 2,
+        "requested_properties": 6,
+        "buffer_usage": 2,
+        "phase": "constant-positive"
+      }
+    ]
+  },
+  "independent_memory_replay_pass": true,
+  "payload_sha256": {
+    "attempt.json": "8709dd868965ea76c53f53cba039dc6add649b2cf29199fe4cc1db57e1470e2b",
+    "gpu/allocation-ledger.json": "2db57356a197ef6f8216ff437fcda050a3ec029df889de5404ed5003f1fbb741",
+    "gpu/control0.distance.f32": "477a6c80a1335b7c2fda5404faea9efea2af0b533571d46d68e6aed6a51e4e86",
+    "gpu/control0.irradiance.f32": "38ad173ce8d99995298d38f8a4ce82fe9b65e024815ce30ade581458b83ed5f5",
+    "gpu/control1.distance.f32": "477a6c80a1335b7c2fda5404faea9efea2af0b533571d46d68e6aed6a51e4e86",
+    "gpu/control1.irradiance.f32": "7cf77c6e06d1e638aee16ab391d8a854b7ffd78362ec47b39bfa88fea7a9f1c6",
+    "gpu/measurements.json": "4bca3e9433606f6abe62de9a9f3213a81f27d744d3fb2f6c085b9c99c93b4ad4",
+    "stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout.log": "5f8a718fada6de9162c4a07ed663af70d0b27a436a5773dcfc8e00bba9d67aa3"
+  }
+}

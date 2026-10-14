@@ -1,0 +1,42 @@
+{
+  "schema": "n010-ddgi-volume-build/1",
+  "build_pass": true,
+  "gpu_run": false,
+  "command": [
+    "c++",
+    "-std=c++20",
+    "-O2",
+    "-pthread",
+    "-DRTXGI_COORDINATE_SYSTEM=2",
+    "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+    "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+    "-DRTXGI_GFX_NAME_OBJECTS",
+    "-I",
+    "out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+    "-I",
+    "build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+    "-I",
+    "/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+    "-I",
+    "/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+    "src/research/n010_comparison_readiness/ddgi_volume_bringup.cpp",
+    "build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+    "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+    "-o",
+    "build/n010-cpu/phos-n010-ddgi-volume-bringup"
+  ],
+  "compiler_version": "g++ (GCC) 15.2.0",
+  "source_commit": "5eee767",
+  "returncode": 0,
+  "compiler_stdout": "",
+  "compiler_stderr": "",
+  "sha256": {
+    "src/research/n010_comparison_readiness/ddgi_volume_bringup.cpp": "a04520eba6d52f48d62226f2dd7d75c40b26d7ac70ef8b6596346c7c5b8bc66f",
+    "src/research/n010_comparison_readiness/allocation_ledger.hpp": "beb83fb64a5db6eab278f4d9da3843123ee4302445451a44f99916b7f4b19598",
+    "build/n010-ddgi-sdk/lib/librtxgi-vulkan.a": "39c606e0d117f9afa0c1f3558b36277aa593b002c19a9b5e7d8faf7f805d9123",
+    "/run/current-system/sw/share/nix-ld/lib/libvulkan.so": "f650c1ddaed9102879f896c31691120a6b715d7e5767970cd98ae4819ea75d5c",
+    "build/n010-cpu/phos-n010-ddgi-volume-bringup": "1574c1e2341b9abb95625b92f9d5386400779e52e8d75ac7380c35f7b7238290"
+  },
+  "default_cmake_or_renderer_modified": false,
+  "scope": "Standalone manually compiled diagnostic; runtime evidence is result 057. No scene GI or architecture promotion."
+}

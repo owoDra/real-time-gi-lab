@@ -32,7 +32,11 @@ probe doses and records binary/shader identity and CPU known-work witnesses.
 Diagnostic sizing 035 passes all 16 boundaries under CPU load; quiet sizing
 and accepted blocks remain required. Controlled T_B2 PT 1024-spp confirmation
 passes all 25 dynamic frames and five memory replays (037/042). Ten official
-RTXGI shaders compile to SPIR-V on the CPU (038); DDGI GPU runtime is unfinished.
+RTXGI shaders compile to SPIR-V on the CPU (038), with four additional reduction
+variants in 056. An isolated official-SDK volume adapter now dispatches on AMD:
+both constant-field controls and independent memory replay pass (057), peak
+131,472 bytes / zero teardown. This is diagnostic resource/normalization wiring;
+scene GI tracing/gather and temporal qualification remain unfinished.
 [Interim comparison findings](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md).
 [Residual direct diagnosis](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md)
 finds different primary primitives at both remaining direct-zero pixels and

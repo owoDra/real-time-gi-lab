@@ -51,3 +51,13 @@ compiles both official reduction entry points for 32/64-lane configurations,
 using the pinned DXC and SDK. All four compile. Runtime must select the shader
 against supported subgroup configuration; this is CPU compilation, not an
 integrated DDGI GPU execution or quality result.
+
+[Official SDK GPU volume bring-up](results/057-ddgi-volume-runtime-bringup.json)
+now executes on Radeon 8060S/RADV with subgroup width 64. Both preregistered
+constant-field controls pass every irradiance/distance texel, including borders:
+maximum errors 5.96046e-8 / 2.98023e-8. Owned Vulkan peak is 131,472 bytes,
+20 lifetime events independently replay to zero teardown. The standalone build
+is [058](results/058-ddgi-volume-build.json). No default CMake/Renderer changes.
+This is resource/dispatch normalization wiring: scene tracing, finite-depth
+transport, surface gather and dynamic histories remain unimplemented. It is
+not DDGI frame-quality qualification or a calibrated timing result.
