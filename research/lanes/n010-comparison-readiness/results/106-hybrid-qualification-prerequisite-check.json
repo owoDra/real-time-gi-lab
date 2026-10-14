@@ -1,0 +1,71 @@
+{
+  "schema": "n010-hybrid-reference-qualification/1",
+  "complete": true,
+  "gpu_run": false,
+  "proof_only": true,
+  "cells": [],
+  "classification": "STOPPED_RETAINED_FAILURE",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json": "73d12dd8d7171e215fa2dc149485776dfa7749985946d3be9209cb86b069be3f",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_hybrid_references.py": "e5ecf3d6f8ddce9ddaa4bb755b0e25c2f5eb657e2984652103967a014e534cd1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_references.py": "2d26cca6db3ecfb7db714333f5502a280c6c00e2c2ca645ee9769554648404ca",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/n008lib.py": "28fd7658ab3b728afcc70675e1c7a7aa913af254d81d35df71b37da80079386c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n007_reference_validity/check_convergence.py": "8a5dec1373eeba0dfa3ef88ab89518ebe48717ebe53d1a743c9445ead3052d55",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/reference_provenance.py": "fa56d08c293fd0373f180314373d454cc58869c12d006b8f309297511ab9ad6a",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight.py": "87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c",
+    "/nix/store/60m4rxhg2fldqaak400c0lry96ijrzqn-python3-3.13.13/bin/python3.13": "5457a2c3c4e77ce7b53ac4a44f9793abe26b1642984d791147d0923bd6adb192",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/029-hybrid-reference-acquisition.md": "721fca0eb8879d36a51d8e96f8cf7c7a1dd603bd4477440b12f034b8adb140c7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/095-hybrid-oracle-build.json": "31fdd0d8c479c16aea37dca88479dfeaf0bd9bc0394b79753052f9845150b1b0",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/100-hybrid-prefix-build.json": "b58a623e1385ea6388710a9b1ea2bd8b91c6d1e844978dc5293d7b267a128384",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/093-ambiguity-fallback-diagnostic.json": "6fb472de5476a9c3e15a1bc2c45b9cfb0ead1a06f54752b821368a966e597058",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/025-prospective-full-hybrid-conformance.md": "3f8da519b5008c9ab4d094e3feaa008f794f74b8469a54dbe021080fe914470a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.cpp": "0fd79bb891b2a6f66ca3deda8bb34635a3221c4eea393f91a13d82b9dd089f35",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/ambiguity-fallback-diagnostic-v1/fallback.comp.glsl": "1d4d41c108a9d4d4b04fd09c43a308fc65bcc65f8de2e8c70251ebdd39b4aa53",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_hybrid_oracle.py": "bd2b1b14c8d618ed0f8ce02a5492a46404c4f4fe1c46afd699815cd6be4a82ba",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.cpp": "c06812d0a54a70d37580f6b18cfeb92372923dfe186ee5c92f1295d10ac09250",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.comp.glsl": "6d343094e430ec195f6ac22dae924e1b5ecb9b95e19ae3ef9c9b73e542241cb2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.spv": "4e09d14029ced0e94b198a145e14368524ee109259367e434109715f1221a3ae",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-oracle-build-v1/phos-n010-hybrid-reference": "f436461a2cc361695e322fb1576f53966f95abdb9e5a8f509c91f40ee13c465e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/028-hybrid-state-and-prefix-validation.md": "7e7796cd166ed8d5231bdc765f71fed765743621fe0b64a0ed5ce4b4e7f72ab2",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_hybrid_prefix.py": "c880696c82beafbb52ee9f0e46ad26b89f1068d5aaf381a54201bff4acda3b53",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-prefix-build-v1/hybrid-prefix.cpp": "0d26c41baffcd78edcfb1a6464388517ae57cec5d93416108871932b80104084",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-prefix-build-v1/phos-n010-hybrid-prefix": "e97ce3e4ebb0f906b4bd94b38fd83d479dc11345a4798bbea67fd58e14dbcd64",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/098-hybrid-full-numerical-conformance.json": "df77757d4019fc731b59649a98566fd7526d7f85be99c271d8151ace029819b3"
+  },
+  "selected_transports": [
+    "C1_T_B8"
+  ],
+  "scoring_exclusions": 0,
+  "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-reference-proof-check-v3",
+  "attempts": [],
+  "levels": [
+    8192,
+    16384,
+    32768,
+    65536,
+    131072,
+    262144
+  ],
+  "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+  ],
+  "batch": 16,
+  "cpu_fallback_threads": 16,
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "cpu_seconds": 172800,
+    "elapsed_seconds_per_seed": 43200
+  },
+  "runtime": {
+    "python": "3.13.13 (main, Apr  7 2026, 18:19:01) [GCC 15.2.0]",
+    "numpy": "2.5.4"
+  },
+  "source_commit": "dc4c80d0e4e2c418b0eb0fe7983860ff7d3b2d76",
+  "scope": "Fresh locked-state acquisition only; no current-view replacement or N010 readiness claim",
+  "failure": "098 full numerical suite is not complete/PASS"
+}

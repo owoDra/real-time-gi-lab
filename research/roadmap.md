@@ -76,3 +76,9 @@ provides the remaining gate sequence and runnable final preflight. Executed
 full-gate interim preflight 103 is NOT_READY, retaining missing full references,
 Sponza pilots and accepted calibration as explicit unfinished work. Complete
 these gates in N010, then register and execute the distinct Lane M comparison.
+
+Prospective N010 plan 029 provides a gated high-sample hybrid acquisition
+command after complete numerical, physical and all-state/prefix proof. Its
+current prerequisite checks refuse dispatch; no reference admission follows
+from prepared code. Any scheduling transition must retain the original CPU
+evidence and occur with an executed completed-boundary provenance record.

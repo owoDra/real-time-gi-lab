@@ -197,3 +197,33 @@ driver and readiness preflight. Neither view nor compiler/build success grants
 reference admission. The separate GPU numerical-port diagnostic uses bounded
 compilation/runtime and is excluded from the driver's comparison dependency
 freeze because it supplies no admitted references or comparison executables.
+
+### Gated high-sample hybrid qualification
+
+`qualify_hybrid_references.py --lock LOCK --transports C1_T_B8 ...
+--work NEW_ROOT --output NEW_RESULT [--proof-only]` implements prospective
+plan 029. It requires complete 098/099/101 coverage and their recorded bytes,
+095/100 build identities and 009 sampler proof before acquisition. It retains
+all raw per-seed outputs/ledgers and runs the unchanged four-seed six-level
+support-aware screen, stopping at the first qualifying pair or the frozen cap.
+It uses only its own complete raw prefix sums/counters; no CPU-prefix import,
+accepted-view replacement or default Renderer change occurs.
+
+Actual prerequisite-only invocations 104, 105 and 106 all exited 2 because
+098 was incomplete. They dispatched no GPU work and created no acquisition
+root. This verifies refusal at that gate, **not** the unexecuted success,
+physical, all-state or high-sample acquisition paths. The current script is
+the revision recorded by 106. Earlier revisions are archived at
+`out/research/n010-comparison-readiness/hybrid-reference-prerequisites-v1/`:
+
+- `attempt-104-script.py`: SHA256 `19d62916181a064a3f8cf0d3e687057ea90c772b466270cd951487b34147a1d3`.
+- `attempt-105-script.py`: SHA256 `b59d94ea3f811362d82d39ef228e292430ac86f196fc8504e9595b2542b4c3ad`.
+
+The exact partial-098 input bytes of all three checks are retained there as
+`pending-098-df77757d4019fc731b59649a98566fd7526d7f85be99c271d8151ace029819b3.json`,
+with SHA256 equal to the filename digest. The live 098 producer may continue
+changing its own file; that does not make these historical refusals current
+proofs. Source review corrected the later proof filename/payload-root handling
+and extended provenance/attempt logging between these revisions. Those later
+branches have not been executed. The live CPU qualifiers and continuation-v3
+remain unchanged.

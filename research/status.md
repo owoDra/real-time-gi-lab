@@ -229,3 +229,10 @@ pass, but full reference eligibility, complete Sponza pilots and accepted
 Renderer timing calibration remain incomplete. This is not final 047 or a
 reference-admission decision. N010 remains active; the next research lane is
 Lane M GI competitiveness, with no N011.
+
+A separate proof-gated hybrid reference ladder is prepared under prospective
+N010 plan 029. Prerequisite-only checks 104–106 refuse dispatch because the
+full numerical suite is incomplete; no high-sample hybrid acquisition or
+reference-view transition has occurred. Its successful path still requires
+098/099/101 and an executed provenance review. Existing CPU references and
+the frozen continuation are unchanged.

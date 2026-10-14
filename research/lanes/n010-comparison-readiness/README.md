@@ -152,3 +152,10 @@ final verification command. Actual full-gate preflight [103](results/103-interim
 is NOT_READY: correctness accounting and additional-family source/device
 boundaries pass, while full references, Sponza pilots and accepted timing
 calibration remain pending. It is an interim check, not final result 047.
+
+Prospective [hybrid acquisition plan 029](experiments/029-hybrid-reference-acquisition.md)
+and `qualify_hybrid_references.py` now prepare a fresh, proof-gated high-sample
+ladder without changing the live CPU view. Prerequisite checks 104–106 refused
+GPU dispatch while 098 was incomplete (exit 2, no work root). Successful proof
+validation/acquisition remains unexecuted; reference admission still requires
+all unchanged gates and a separate completed-boundary provenance transition.

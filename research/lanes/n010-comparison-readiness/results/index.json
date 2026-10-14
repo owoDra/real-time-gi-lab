@@ -511,6 +511,24 @@
       "status": "not-ready-full-gate-preflight",
       "result": "103-interim-full-gate-preflight.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-104",
+      "status": "prerequisite-refusal-no-dispatch",
+      "result": "104-hybrid-qualification-prerequisite-check.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-105",
+      "status": "prerequisite-refusal-no-dispatch",
+      "result": "105-hybrid-qualification-prerequisite-check.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-106",
+      "status": "prerequisite-refusal-no-dispatch",
+      "result": "106-hybrid-qualification-prerequisite-check.json",
+      "gpu_run": false
     }
   ]
 }
