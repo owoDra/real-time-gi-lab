@@ -6,62 +6,40 @@
 
 **Active work: N010, the final comparison-preparation study.** [Protocol](lanes/n010-comparison-readiness/experiments/001-comparison-readiness.md). User-directed sequence is N010 → Lane M GI competitiveness; no further N-series preparation lane. Readiness requires an executed quality/time/memory pilot, physically validated eligible references and full Renderer timing calibration. Historical Lane M topology results retain their identity. N010 has not yet passed its readiness gate.
 
-N010 has now produced an actual first comparison cohort: native GPU pixel
-path tracing passes C7 quality at 256 samples (T_B2) / 1024 (T_B8), while the
-incumbent fails with roughly 91% missing one-bounce indirect energy. A separate
-dense repository RC control also fails. These are measured quality outcomes;
-pilot timings remain uncalibrated. Sampler precision Amendment 2 passes without
-changing thresholds; original failed crosscheck remains retained. C7 references
-and C8–C12 references are eligible; all 145 controlled dynamic source/target/
-recovery images are scored. C9 RC indirect sum reaches about 7.645 times the
-reference; fixed PT 256-spp losses remain. The C8/C9 complete budget ladders
-both select 1024 spp as a passing budget for T_B2 and T_B8. All 29 dynamic
-allocation ledgers independently replay to zero teardown within the cap.
-RTXGI Vulkan host SDK builds without CUDA; its GPU adapter remains a Lane M
-requirement. Sponza C1 T_B2 is now eligible at 16384/32768 consecutively. Its incumbent
-indirect NRMSE is 88.8399% with +35.8544% sum bias (FAIL), whereas GPU PT
-passes at 256 and 1024 spp. Sponza C3 T_B2 also qualified: incumbent indirect NRMSE 87.9404% / bias
-+35.2394% is FAIL, while PT passes at 256/1024 spp. T_B8 and the
-remaining Sponza cells are in progress. Remaining N010 work is the full
-Sponza pilot, complete Renderer timing calibration and fail-closed handoff.
-Diagnostic sizing result 027 failed under concurrent CPU work and remains
-retained; Amendment 4 measures inner known-work cost to size the prospective
-calibration dose, without changing full-boundary acceptance thresholds.
-Result 028 also failed sizing; prospective Amendment 5 uses larger observable
-probe doses and records binary/shader identity and CPU known-work witnesses.
-Diagnostic sizing 035 passes all 16 boundaries under CPU load; quiet sizing
-and accepted blocks remain required. Controlled T_B2 PT 1024-spp confirmation
-passes all 25 dynamic frames and five memory replays (037/042). Ten official
-RTXGI shaders compile to SPIR-V on the CPU (038), with four additional reduction
-variants in 056. An isolated official-SDK volume adapter now dispatches on AMD:
-both constant-field controls and independent memory replay pass (057), peak
-131,472 bytes / zero teardown. This is diagnostic resource/normalization wiring;
-scene GI tracing/gather and temporal qualification remain unfinished.
-[Interim comparison findings](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md).
-[Residual direct diagnosis](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md)
-finds different primary primitives at both remaining direct-zero pixels and
-supports a legacy primary tie-interval mechanism in CPU geometry. A GPU repair
-is unverified; both pixels remain UNRESOLVED and included in all scores.
-Cache equivalence 022 now passes all 20 declared cases. Controlled reference
-provenance audit 051 passes all 12 C7–C12 transports, including re-execution
-of their convergence screens; this subset does not establish whole-corpus
-readiness. Exact-prefix proof 050 passes all three declared cases, all four seeds and
-all 21 payloads/counters each. The original and incremental acquisition processes and waiting driver terminated
-with recorded exits (065); the cause is unestablished. Completed prefixes and
-later partial seeds are retained. Prospective Amendment 8 and fixed full-24
-recovery view 067 schedule byte-identical complete-prefix import into fresh
-acquisitions: C1 T_B8 from 16384, C3 T_B8 and C2 T_B2 from 8192, then the
-unchanged fixed levels/cap/screens. Previous view 061 and driver statuses remain
-historical, not assertions of live computation. Recovery is now executing in two 16-thread qualifiers; continuation-v3 waits
-for eligible references using view 067. Actual first C7 T_B2 GPU binary64
-conformance at 16 spp passes against the original CPU oracle (070), with exact
-counters/primary/direct terms and max mean discrepancy 2.71051e-20. This is
-one diagnostic; no GPU reference is admitted. Full 8192/four-seed/state/physical/
-prefix conformance remains required by Amendment 7.
-[Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
-[PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
-[dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),
-[AMD/Vulkan SDK build](lanes/n010-comparison-readiness/results/023-ddgi-vulkan-host-build.json).
+### N010 findings and remaining completion gates
+
+The RC/path-tracing comparison cohort executes on AMD/Vulkan. Incumbent quality
+failures are measured losses; N010 does not require an incumbent win before
+Lane M starts. All scored pixels and earlier failed budgets remain retained.
+
+| Executed comparison | What the evidence establishes |
+| --- | --- |
+| Sponza C1 T_B2 | Incumbent indirect NRMSE 88.8399% / sum bias +35.8544%: FAIL. GPU pixel PT passes at 256 and 1024 spp ([031](lanes/n010-comparison-readiness/results/031-c1-b2-pt-quality-ladder.json), [032](lanes/n010-comparison-readiness/results/032-c1-b2-cohort-scores.json)). |
+| Sponza C3 T_B2 | Incumbent indirect NRMSE 87.9404% / bias +35.2394%: FAIL; PT 256/1024 passes ([041](lanes/n010-comparison-readiness/results/041-c3-b2-corpus-scores.json)). |
+| Controlled C7 | Incumbent misses roughly 91% of one-bounce indirect energy; dense repository RC also fails. PT passes at 256 spp T_B2 / 1024 spp T_B8 ([013](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json), [015](lanes/n010-comparison-readiness/results/015-dense-rc-pilot.json)). |
+| Controlled dynamics | All 145 original cohort images are scored; all 29 memory ledgers replay to zero within the cap. C9 incumbent energy is about 7.645× the reference. C8/C9 complete ladders select 1024 spp for both transports; T_B2 PT 1024 confirmation passes all 25 dynamic frames. Earlier PT 256 losses remain ([033](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md), [042](lanes/n010-comparison-readiness/results/042-controlled-pt-budget-confirmation-summary.json)). |
+
+Current checkpoint: **NOT READY**. [Full-gate preflight 103](lanes/n010-comparison-readiness/results/103-interim-full-gate-preflight.json)
+and the [completion inventory](lanes/n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
+identify the remaining requirements. No pilot timing is yet accepted as a
+calibrated superiority comparison.
+
+| Completion requirement | Current state / next action |
+| --- | --- |
+| All 24 locked references | 15 eligible: C1/C2/C3 T_B2 and C7–C12 both transports. Complete C1/C2/C3 T_B8 and C4/C5/C6 both transports. Current CPU levels are C1 B8 65536 and C2 B8 32768; partial seeds do not qualify a level. The 262144 cap outcome is still unmeasured. |
+| Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
+| Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
+| Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Quiet sizing 046 and accepted eight-process calibration 029 are still required. CPU wall time is diagnostic. |
+| Final handoff | Continuation-v3 waits on view 067. Final preflight 047 and the final N010 decision remain pending. Then register and execute the distinct Lane M GI competitiveness campaign; no N011. |
+
+The additional DDGI family is pinned to RTXGI Vulkan on AMD, without CUDA:
+[source](lanes/n010-comparison-readiness/results/021-ddgi-source-provenance.json),
+[host SDK](lanes/n010-comparison-readiness/results/023-ddgi-vulkan-host-build.json).
+Fourteen official shader variants compile and the isolated constant-field volume
+controls pass on AMD, with owned peak 131472 bytes / zero teardown ([057](lanes/n010-comparison-readiness/results/057-ddgi-volume-runtime-bringup.json)).
+Scene tracing/gather, finite-depth transport, dynamic history and full-boundary
+memory/timing qualification remain required in Lane M before accepted DDGI
+comparisons. Constant-field controls do not establish scene GI correctness.
 
 | Subsystem | Current incumbent / classification | Evidence and boundary |
 | --- | --- | --- |
@@ -136,119 +114,43 @@ See [roadmap](roadmap.md) for gates. Old status, stale next-step commands and br
 
 **N007 final bounded stop (2026-10-12):** [result 012](lanes/n007-reference-validity/results/012-n007-bounded-no-go-decision.md) applies Issue #4's frozen rule to **stop when a reliable, nontrivial HDR reference across all required dynamic classes cannot be demonstrated within resources**. Moving-rigid is mandatory and has exhausted the complete frozen four-seed 512–8192-SPP ladder with active fraction **0.0** at every level; consequently **cross-class HDR reference qualification = NO GO**. N007 P1-B isolated the image-level GPU secondary shadow omission mechanism for its **new matched diagnostic frame** (9,247/9,247 positive indirect pixels disappear when just CPU-shadowed GPU probe contributions are suppressed). Camera/disocclusion, light-motion, controlled-GPU-light, static/deforming/churn, and independent GPU camera/secondary allocation attestation remain **explicitly unmeasured or unverified**; the stop does not declare them individually wrong or correct. Physical accuracy and historical original N006 M3b frame causation are **unproven**. No original N001–N006 sources or outcomes changed. [Issue #4](https://github.com/owoDra/real-time-gi-lab/issues/4) closed as negative research outcome, not a positive GI quality pass.
 
-### N010 current acquisition checkpoint
+### N010 reference acquisition and acceleration provenance
 
-CPU recovery continues with the unchanged four-seed ladder/screens and view 067.
-C2 T_B2 qualified at consecutive 16384/32768 levels (audit 080): 15 of the
-24 required slots are eligible. C2 T_B8 completed its 16384-spp screen
-without eligibility and continues at 32768 spp; C1 T_B8 completed 32768 spp without eligibility and is acquiring 65536 spp.
-Continuation-v3 waits for eligible references; accepted quiet calibration and
-whole-corpus READY remain unexecuted.
+The independent original sampler proof 009, cache equivalence 022 and exact
+CPU-prefix proof 050 pass. Controlled reference provenance 051 covers twelve
+C7–C12 transports, and recovered C2 B2 provenance 080 passes. Neither subset
+alone proves the full corpus. Interrupted acquisitions 065, complete imports,
+later partial seeds and prior views remain retained. Recovery view 067 preserves
+all 24 slots with unchanged four seeds, levels, support-aware screens and cap.
 
-GPU numerical conformance 082 is **complete and failed**, rather than waiting
-at a resource guard. Twelve preceding cases pass. C1 T_B8 seed 0 completed in
-1198.63 seconds diagnostic acquisition wall, with finite output, zero faults
-and identical primary/direct/emission payloads, but failed the fixed gates:
-max mean difference 6.78235e-7 (limit 1e-10), max moment difference 5.31950e-9
-(limit 1e-10), indirect NRMSE 2.94757e-6 (limit 1e-8), and shadow counters
-+26 tests / +31 blocked. No numerical threshold is changed; this candidate is
-not admitted. Physical/all-state/prefix workers refused dispatch (085, NOT RUN).
-Original CPU low-dose controls 078 cover all 24 slots/four seeds and are not
-statistically eligible references.
+The original GPU numerical port **failed** completed C1 B8 conformance (082):
+mean 6.78235e-7 versus limit 1e-10, moment 5.31950e-9 versus 1e-10, indirect
+NRMSE 2.94757e-6 versus 1e-8 and differing shadow counters. Earlier timeouts and
+failed launches remain recorded. [Post-hoc path diagnosis](lanes/n010-comparison-readiness/results/091-deep-path-signed-zero-diagnosis.md)
+identifies a signed-zero tangent-basis mechanism in all eight selected traced
+paths; the other 46 affected pixels were not individually traced. This is not
+proof of population bias or a repair of the Renderer's unresolved direct pixels.
 
-Post-hoc output mapping 084 finds 54 pixels above the mean gate; the cause is
-unestablished. Plan 022 replays the largest eight with a separate diagnostic
-binary and tests CPU trigonometry as an intervention. These pixels stay in all
-scores; selected-pixel diagnosis cannot replace full admission checks. Earlier
-timeouts 074/075, build failures and all original evidence are retained.
+A separate streamed hybrid recomputes every ambiguously intersecting whole path
+with the original independent CPU oracle, retaining every sample. It currently
+passes 14/16 complete numerical cases; the remaining Sponza seeds are running.
+Full-frame C1 B8 seed 0 [096](lanes/n010-comparison-readiness/results/096-hybrid-full-frame-deep-conformance.json)
+and seed 1 [107](lanes/n010-comparison-readiness/results/107-hybrid-full-frame-deep-seed1-conformance.json)
+pass the unchanged gates, with exact counters/primary/direct/emission. Seed-0
+fallback covers about 8.66% of paths; acquisition timings are loaded diagnostics.
+[Raw-export audit 108](lanes/n010-comparison-readiness/results/108-hybrid-deep-raw-prefix-export-audit.json)
+passes both cases' complete binary64 sum/moment reconstruction, per-pixel
+counter totals, all four PFM components and owned-memory replay.
 
-Post-hoc intervention 087 reproduces all eight selected original CPU/GPU
-payloads byte exactly. Supplying CPU trigonometry removes the discrepancy
-in two pixels (13450, 55934), with exact counters and mean error <=4.34e-19.
-Six pixels retain mean/moment/counter discrepancies. Trigonometry alone is
-insufficient; full causation is unestablished and no GPU reference is admitted.
-Plan 023 records path/bounce diagnostics with aggregate replay required.
+No hybrid reference is admitted. Physical 099 waits for complete numerical 098;
+all-state/prefix 101 waits for its predecessor proofs and is **NOT RUN**.
+Prefix build 100 is build evidence only. Plan 029 and separate qualification/
+provenance helpers prepare high-sample ladders and future audits; prerequisite
+checks 104–106 currently refuse acquisition. Their success paths remain
+unexecuted. No CPU-view replacement has occurred; the frozen current driver
+and comparison inputs remain unchanged. All original failures stay failed.
 
-Deep-path diagnosis 089/091/092 reproduces every selected aggregate/counter
-and establishes a signed-zero sampling-basis mechanism in all eight traced
-original paths: nearby coplanar closest primitives have opposite zero signs
-in normal.z, producing large next-direction changes under identical uniforms.
-CPU sign-bit-only direction intervention matches the original CPU direction
-exactly (8/8); the other 46 above-gate pixels are not individually traced.
-Plan 024 tests a general ambiguity flag and independent complete CPU-path
-recomputation, with all samples retained and unchanged admission gates.
-It is a separate candidate; 082 remains failed, GPU references unadmitted.
-The Renderer direct-zero pixels remain unresolved.
-
-The general ambiguity-guard/whole-path CPU fallback feasibility 093 passes
-unchanged numerical/counter/finite/direct/emission gates on all eight selected
-pixels (mean <=8.674e-19, moment <=1.017e-20). It recomputes 11864/65536
-paths without reference-radiance or hit/sign overrides. Audit 094 replays
-all diagnostic GPU memory ledgers, verifies separate build 095 and confirms
-53 frozen continuation inputs remain unchanged. Plan 025 streams the same
-guard over complete frames with bounded per-dispatch storage. Its first full
-C1 T_B8 seed-0 trial 096 has now passed; full sixteen-case/physical/all-state/
-prefix admission remains unexecuted. CPU acquisition remains independent.
-
-C1 T_B8 recovery now completes all four 32768-spp seeds with verified prefix
-provenance (097). Active absolute p99 3.54031e-5 exceeds the fixed 1e-5 gate;
-relative p99 2.51347% alone does not qualify the reference. The original
-qualifier continues at 65536 spp. The remaining cap outcome is unmeasured.
-Full-frame hybrid deep trial 096 completed with the frozen 64-epsilon
-guard and original CPU fallback, 16-sample batches / 16 CPU workers. No GPU
-reference is admitted from the selected success or the standalone build.
-
-Conditional complete numerical suite 098 now executes after full-frame feasibility 096 PASS;
-it runs all sixteen frozen cases with the new candidate and reuses only
-096's identical C1 T_B8 seed-0 case. Conditional physical controls 099 wait
-for complete 098 PASS and otherwise refuse dispatch. They preserve all 68
-original applicable point-light runs and independent analytic gates. The numerical
-suite is running and the physical worker is waiting; completion of these
-gates is not yet established.
-
-Full-frame C1 T_B8 seed-0 feasibility 096 **PASS** at unchanged gates:
-max mean difference 1.38561e-16, moment difference 3.59820e-18, indirect
-NRMSE 4.10311e-16, exact counters/primary/direct/emission, finite output, zero
-faults and owned-memory replay PASS. CPU fallback recomputed 40861185 of
-471859200 paths (~8.66%), with every path retained. Original 082 stays failed.
-The new complete numerical suite 098 is executing; physical worker 099 waits
-for that complete PASS. Separate prefix host build 100 succeeds, but prefix
-runtime validation is NOT RUN. No reference admission or N010 READY yet.
-
-The all-state/prefix validation worker 101 is prepared and waiting for
-098/099/100/078 to pass. It preserves all 96 locked low-dose cases and
-eight actual C7 dyadic-prefix cases. Its runtime checks are NOT RUN yet.
-
-### N010 completion audit
-
-[Completion inventory](lanes/n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
-now maps every gate to evidence and remaining work. Actual full-gate
-[preflight 103](lanes/n010-comparison-readiness/results/103-interim-full-gate-preflight.json)
-records NOT_READY; correctness accounting and DDGI source/Vulkan boundaries
-pass, but full reference eligibility, complete Sponza pilots and accepted
-Renderer timing calibration remain incomplete. This is not final 047 or a
-reference-admission decision. N010 remains active; the next research lane is
-Lane M GI competitiveness, with no N011.
-
-A separate proof-gated hybrid reference ladder is prepared under prospective
-N010 plan 029. Prerequisite-only checks 104–106 refuse dispatch because the
-full numerical suite is incomplete; no high-sample hybrid acquisition or
-reference-view transition has occurred. Its successful path still requires
-098/099/101 and an executed provenance review. Existing CPU references and
-the frozen continuation are unchanged.
-
-Full-frame C1 T_B8 seed 1 [107](lanes/n010-comparison-readiness/results/107-hybrid-full-frame-deep-seed1-conformance.json) now passes
-the unchanged numerical gates: maximum mean difference 8.67362e-17, moment
-6.28498e-19 and indirect NRMSE 3.65583e-16; exact counters/primary/direct/emission,
-finite output, zero faults and memory replay PASS. It is an exact-byte copy
-of the completed 098 child result, not a repeat acquisition. The suite now
-has 14/16 passing cases and proceeds to seed 2. Physical/all-state/prefix
-proof and statistical qualification remain required; no reference is admitted.
-
-CPU-only [raw-prefix export audit 108](lanes/n010-comparison-readiness/results/108-hybrid-deep-raw-prefix-export-audit.json)
-passes all pixels of both retained C1 B8 8192-spp seed-0/seed-1 cases: raw
-sums/moments reconstruct saved binary64 values exactly, per-pixel counters
-reproduce global metadata, all four PFM components agree, and memory replay
-passes. This is a two-export consistency audit, not full prefix/runtime or
-reference eligibility. A separate hybrid provenance API is prepared; the
-existing frozen CPU view/preflight remains unchanged.
+For exact source/evidence identities and historical attempts, use the
+[N010 result index](lanes/n010-comparison-readiness/results/index.json),
+[execution record](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md)
+and [tooling documentation](../scripts/research/n010_comparison_readiness/README.md).
