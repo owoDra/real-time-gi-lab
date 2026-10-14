@@ -487,6 +487,12 @@
       "status": "complete-prefix-ineligible",
       "result": "097-recovered-c1-b8-32768-prefix-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-100",
+      "status": "host-build-complete",
+      "result": "100-hybrid-prefix-build.json",
+      "gpu_run": false
     }
   ]
 }

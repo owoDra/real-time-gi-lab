@@ -1,0 +1,50 @@
+{
+  "schema": "n010-hybrid-prefix-build/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "input_sha256": {
+    "out/research/n010-comparison-readiness/hybrid-oracle-build-v1/hybrid.cpp": "c06812d0a54a70d37580f6b18cfeb92372923dfe186ee5c92f1295d10ac09250",
+    "research/lanes/n010-comparison-readiness/results/095-hybrid-oracle-build.json": "31fdd0d8c479c16aea37dca88479dfeaf0bd9bc0394b79753052f9845150b1b0",
+    "research/lanes/n010-comparison-readiness/experiments/028-hybrid-state-and-prefix-validation.md": "7e7796cd166ed8d5231bdc765f71fed765743621fe0b64a0ed5ce4b4e7f72ab2",
+    "scripts/research/n010_comparison_readiness/generate_hybrid_prefix.py": "c880696c82beafbb52ee9f0e46ad26b89f1068d5aaf381a54201bff4acda3b53"
+  },
+  "steps": [
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/hybrid-prefix-build-v1/hybrid-prefix.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/hybrid-prefix-build-v1/phos-n010-hybrid-prefix"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 6.944720154002425
+    }
+  ],
+  "generated_sha256": {
+    "hybrid-prefix.cpp": "0d26c41baffcd78edcfb1a6464388517ae57cec5d93416108871932b80104084",
+    "phos-n010-hybrid-prefix": "e97ce3e4ebb0f906b4bd94b38fd83d479dc11345a4798bbea67fd58e14dbcd64"
+  },
+  "shared_shader_sha256": "4e09d14029ced0e94b198a145e14368524ee109259367e434109715f1221a3ae",
+  "scope": "Separate host build only: exact dyadic mean/moment sum-bit restoration plus per-pixel counters. Kernel/base CPU transport unchanged; no runtime prefix proof, physical admission or reference transition."
+}
