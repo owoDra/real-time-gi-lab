@@ -236,3 +236,11 @@ full numerical suite is incomplete; no high-sample hybrid acquisition or
 reference-view transition has occurred. Its successful path still requires
 098/099/101 and an executed provenance review. Existing CPU references and
 the frozen continuation are unchanged.
+
+Full-frame C1 T_B8 seed 1 [107](lanes/n010-comparison-readiness/results/107-hybrid-full-frame-deep-seed1-conformance.json) now passes
+the unchanged numerical gates: maximum mean difference 8.67362e-17, moment
+6.28498e-19 and indirect NRMSE 3.65583e-16; exact counters/primary/direct/emission,
+finite output, zero faults and memory replay PASS. It is an exact-byte copy
+of the completed 098 child result, not a repeat acquisition. The suite now
+has 14/16 passing cases and proceeds to seed 2. Physical/all-state/prefix
+proof and statistical qualification remain required; no reference is admitted.

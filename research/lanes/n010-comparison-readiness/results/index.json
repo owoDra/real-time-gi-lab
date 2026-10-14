@@ -529,6 +529,12 @@
       "status": "prerequisite-refusal-no-dispatch",
       "result": "106-hybrid-qualification-prerequisite-check.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-107",
+      "status": "full-frame-feasibility-only",
+      "result": "107-hybrid-full-frame-deep-seed1-conformance.json",
+      "gpu_run": true
     }
   ]
 }

@@ -159,3 +159,11 @@ ladder without changing the live CPU view. Prerequisite checks 104–106 refused
 GPU dispatch while 098 was incomplete (exit 2, no work root). Successful proof
 validation/acquisition remains unexecuted; reference admission still requires
 all unchanged gates and a separate completed-boundary provenance transition.
+
+Full-frame C1 T_B8 seed 1 [107](results/107-hybrid-full-frame-deep-seed1-conformance.json) now passes
+the unchanged numerical gates: maximum mean difference 8.67362e-17, moment
+6.28498e-19 and indirect NRMSE 3.65583e-16; exact counters/primary/direct/emission,
+finite output, zero faults and memory replay PASS. It is an exact-byte copy
+of the completed 098 child result, not a repeat acquisition. The suite now
+has 14/16 passing cases and proceeds to seed 2. Physical/all-state/prefix
+proof and statistical qualification remain required; no reference is admitted.
