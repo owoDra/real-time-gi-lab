@@ -1,0 +1,111 @@
+{
+  "schema": "n010-state-lock/1",
+  "corpus_complete": true,
+  "reference_camera": "float64 origin+forward; N010 Amendment 1",
+  "scope": "construction/state parity only; reference/timing/READY gates remain separate",
+  "cells": {
+    "C1": {
+      "state_directory": "out/research/n009-scene-contract/states/static",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    "C2": {
+      "state_directory": "out/research/n009-scene-contract/states/camera-motion",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042"
+      }
+    },
+    "C4": {
+      "state_directory": "out/research/n009-scene-contract/states/moving-rigid",
+      "state_sha256": {
+        "geometry": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    "C5": {
+      "state_directory": "out/research/n009-scene-contract/states/deforming",
+      "state_sha256": {
+        "geometry": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    "C6": {
+      "state_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C6-hwrt",
+      "state_sha256": {
+        "geometry": "38d51b4c2a3d1a1fed34ce2ad1ee0b22d8ddd5b9b5be02101ad16bbbe2193826",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    "C7": {
+      "state_directory": "out/research/n009-scene-contract/gpu-bc2419c/C7-leak-medium-software",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    "C3": {
+      "state_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C3-hwrt-/target",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "5e73154ec84aa7d73b70d70e604e9ce0238fcfacba429a5d2db03454c214aa46"
+      },
+      "scenario": "light-motion",
+      "source_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C3-hwrt-/source",
+      "two_role_state_parity": true
+    },
+    "C8": {
+      "state_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C8-hwrt-/target",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "1c3144beb15e6b20d295f58026bfb31fc850dbb94631371f3617e3d07f053b2c"
+      },
+      "scenario": "camera-motion",
+      "source_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C8-hwrt-/source",
+      "two_role_state_parity": true
+    },
+    "C9": {
+      "state_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C9-hwrt-/target",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "dc6f2c1c4c968395828b722642d21f306a54ff707e727ab0de499ac97f52d287"
+      },
+      "scenario": "light-motion",
+      "source_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C9-hwrt-/source",
+      "two_role_state_parity": true
+    },
+    "C10": {
+      "state_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C10-hwrt-/target",
+      "state_sha256": {
+        "geometry": "e47cf09288c8c171dee50575615b8cc676fa4baa40e9b681b88e6b29485631d2",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      },
+      "scenario": "moving-rigid",
+      "source_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C10-hwrt-/source",
+      "two_role_state_parity": true
+    },
+    "C11": {
+      "state_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C11-hwrt-/target",
+      "state_sha256": {
+        "geometry": "740fb5333432360513ece46cc3833a7fd9ffdca6f21dc808898f47fbf26ada6e",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      },
+      "scenario": "deforming-control",
+      "source_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C11-hwrt-/source",
+      "two_role_state_parity": true
+    },
+    "C12": {
+      "state_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C12-hwrt-/target",
+      "state_sha256": {
+        "geometry": "7a793ae98e9b4bfb34ca0baae7c6d85214fd57604f084e3c359e7e7bc0cb033f",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      },
+      "scenario": "deforming-control",
+      "source_directory": "out/research/n010-comparison-readiness/additional-corpus-v1/C12-hwrt-/source",
+      "two_role_state_parity": true
+    }
+  },
+  "construction_evidence_sha256": "890e43ff865c0620d6a89dd7dc00960381e73d760e73999c87561043868b8c1d"
+}
