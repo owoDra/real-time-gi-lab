@@ -493,6 +493,12 @@
       "status": "host-build-complete",
       "result": "100-hybrid-prefix-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-096",
+      "status": "full-frame-feasibility-only",
+      "result": "096-hybrid-full-frame-deep-conformance.json",
+      "gpu_run": true
     }
   ]
 }
