@@ -20,7 +20,8 @@ allocation ledgers independently replay to zero teardown within the cap.
 RTXGI Vulkan host SDK builds without CUDA; its GPU adapter remains a Lane M
 requirement. Sponza C1 T_B2 is now eligible at 16384/32768 consecutively. Its incumbent
 indirect NRMSE is 88.8399% with +35.8544% sum bias (FAIL), whereas GPU PT
-passes at 256 and 1024 spp. Sponza C3 T_B2 also qualified; T_B8 and the
+passes at 256 and 1024 spp. Sponza C3 T_B2 also qualified: incumbent indirect NRMSE 87.9404% / bias
++35.2394% is FAIL, while PT passes at 256/1024 spp. T_B8 and the
 remaining Sponza cells are in progress. Remaining N010 work is the full
 Sponza pilot, complete Renderer timing calibration and fail-closed handoff.
 Diagnostic sizing result 027 failed under concurrent CPU work and remains
@@ -28,6 +29,10 @@ retained; Amendment 4 measures inner known-work cost to size the prospective
 calibration dose, without changing full-boundary acceptance thresholds.
 Result 028 also failed sizing; prospective Amendment 5 uses larger observable
 probe doses and records binary/shader identity and CPU known-work witnesses.
+Diagnostic sizing 035 passes all 16 boundaries under CPU load; quiet sizing
+and accepted blocks remain required. Controlled T_B2 PT 1024-spp confirmation
+passes all 25 dynamic frames and five memory replays (037/042). Ten official
+RTXGI shaders compile to SPIR-V on the CPU (038); DDGI GPU runtime is unfinished.
 [Interim comparison findings](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md).
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
 [PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),

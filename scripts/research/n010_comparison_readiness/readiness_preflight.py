@@ -74,10 +74,14 @@ if __name__=='__main__':
   expected={f'C{i}' for i in (2,3,4,5,6,8,9,10,11,12)}
   if {r['cell'] for r in corpus}!=expected:raise ValueError('missing required dynamic cell')
   for cell in expected:
-   roles={r['role']:r for r in corpus if r['cell']==cell}
+   cell_rows=[r for r in corpus if r['cell']==cell]
+   roles={r['role'] for r in cell_rows}
    required={'incumbent-hwrt','incumbent-software','vanilla-traversal','pixel-pt-B2','pixel-pt-B8','dense-rc'}
-   if set(roles)!=required:raise ValueError('missing dynamic comparator: '+cell)
-   for role,row in roles.items():
+   if roles!=required:raise ValueError('missing dynamic comparator: '+cell)
+   # Validate every retained budget row; never collapse earlier losses into
+   # the last acquisition for a role.
+   for row in cell_rows:
+    role=row['role']
     if row.get('classification')=='UNSUPPORTED_IN_CAPTURE_API':
      if role!='incumbent-software' or cell not in ('C6','C12'):raise ValueError('unexpected missing regime')
      continue

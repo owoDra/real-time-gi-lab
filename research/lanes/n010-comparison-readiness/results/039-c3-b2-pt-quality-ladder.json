@@ -1,0 +1,40 @@
+{
+  "schema": "n010-pt-cohort-pilot/1",
+  "complete": false,
+  "cell": "C3",
+  "selected_vertices": [
+    2
+  ],
+  "full_two_transport_ladder": false,
+  "rows": [
+    {
+      "vertices": 2,
+      "spp": 1,
+      "source_commit": "b61347bdd536a65ce97d1d558f6942117749bc7e",
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "command": [
+        "bash",
+        "scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt",
+        "--state",
+        "out/research/n010-comparison-readiness/additional-corpus-v1/C3-hwrt/target",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c3-b2-pt-ladder-v1/C3_B2_n1",
+        "--vertices",
+        "2",
+        "--spp",
+        "1",
+        "--seed",
+        "305419896",
+        "--frames",
+        "1"
+      ],
+      "returncode": 1,
+      "stdout": "",
+      "stderr": "truncated state\n",
+      "payload_sha256": {
+        "allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704"
+      }
+    }
+  ]
+}

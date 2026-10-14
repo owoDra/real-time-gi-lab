@@ -1,5 +1,37 @@
 # N010 execution tools
 
+## Continuous completion of existing acquisitions
+
+`finish_readiness.py` waits for the already running original CPU reference
+ladders, executes each qualified remaining GPU pilot sequentially, and waits
+for CPU work to finish before quiet sizing and the single accepted calibration
+campaign. It freezes script, binary, shader, state and sampler identities.
+It records failures and stops; it does not retry accepted blocks, overwrite
+partial work, change thresholds, use an unqualified cached oracle or publish
+an architecture decision. Do not launch another GPU campaign or rebuild the
+frozen executables while this driver is active.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_comparison_readiness/finish_readiness.py \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/references-v1 \
+  --work out/research/n010-comparison-readiness/continuation-v1
+```
+
+Execution status and child logs are in `continuation-v1/status.json` and its
+adjacent files. Future outputs: 043 C1 T_B8 ladder, 044 combined complete C1
+ladder with both source evidence hashes, 048 complete Sponza dynamic cohort,
+046 quiet sizing, 029 accepted calibration and 047 fail-closed preflight.
+These are pending acquisitions, not passing results. Final result index,
+decision, cross-lane summary and Lane M start require review of actual output.
+
+`compile_ddgi_shaders.py` checks both pinned source/compiler file manifests
+before and after CPU DXC compilation of official RTXGI shaders. Source is
+not vendored or modified; compilation is not a DDGI runtime validation.
+`score_corpus_captures.py` validates original payload hashes and scores into
+a separate output directory, retaining the original captures unchanged.
+
 All tools belong to the final preparation study. Default Renderer targets and
 N001–N009 results are preserved. See the [protocol](../../../research/lanes/n010-comparison-readiness/experiments/001-comparison-readiness.md).
 

@@ -36,6 +36,21 @@ ledgers independently replay within the 8 GiB cap and to zero at teardown
 ([memory summary](020-controlled-dynamic-summary.json)). Driver-private
 memory and CPU heap are outside this owned allocation scope.
 
+Prospectively declared [dynamic budget confirmation](../experiments/013-controlled-dynamic-pt-budget-confirmation.md)
+now executes T_B2 at 1024 spp across C8–C12: all 25 source/change/recovery
+frames PASS and all five additional memory ledgers independently replay
+([042](042-controlled-pt-budget-confirmation-summary.json)). This is observed
+pilot budget selection, not a held-out Lane M campaign.
+
+New Sponza light-motion C3 T_B2 also has an eligible reference. Retained HWRT
+and vanilla target images have indirect NRMSE 87.9404% and bias +35.2394%
+(FAIL; [041](041-c3-b2-corpus-scores.json)). The separate complete six-level
+[C3 T_B2 PT ladder](040-c3-b2-pt-quality-ladder.json) retains its losses and
+passes at 256/1024 spp. Its first attempt used a mistyped state path and failed
+before rendering; [039](039-c3-b2-pt-quality-ladder.json) is retained. The
+successful attempt uses the exact state directory from lock 026. C3 T_B8 and
+its full dynamic cohort are still unfinished.
+
 The historical vanilla-software role retains the same work producer and
 sparse radiance storage; it is a traversal control. The separate dense RC
 role is a repository estimator control, not an external production RC.
@@ -62,6 +77,10 @@ demonstration, an infinite-bounce reference, or a multiple-GPU result.
    [028](028-calibration-inner-work-sizing.json) remain retained. Prospective
    Amendments 4/5 change dose sizing and instrumentation; the acceptance
    thresholds remain unchanged. No accepted calibration block has run.
+   The third diagnostic sizing [035](035-calibration-observable-sizing.json)
+   passes all 16 dose-sizing checks and byte identity for all three HDR
+   components, plus CPU known-work witnesses. CPU references were active;
+   a separate quiet sizing plan is required before accepted blocks.
 3. Run the fail-closed handoff check. The executed interim check
    [030](030-readiness-preflight-interim.json) correctly returns NOT_READY.
 4. Proceed to Lane M to measure quality, complete GPU cost and owned true-peak
@@ -70,6 +89,10 @@ demonstration, an infinite-bounce reference, or a multiple-GPU result.
    is still required before the accepted broader Lane M campaign. No CUDA is
    used ([SDK build](023-ddgi-vulkan-host-build.json),
    [compiler provenance](034-dxc-cpu-compiler-provenance.json)).
+   Ten official, unmodified SDK shaders now compile to SPIR-V
+   ([038](038-ddgi-shader-compilation.json)). The first compile omitted the
+   SDK harness's `HLSL=1` define and failed; [036](036-ddgi-shader-compilation.json)
+   is retained. This is CPU compilation, not DDGI GPU runtime verification.
 
 Continuing has a concrete purpose: measure the quality–cost frontier and
 identify whether the incumbent has a useful tradeoff. The existing quality

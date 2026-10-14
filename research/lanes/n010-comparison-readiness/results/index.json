@@ -181,6 +181,54 @@
       "status": "interim",
       "result": "033-interim-comparison-findings.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-035",
+      "status": "diagnostic-sizing-pass",
+      "result": "035-calibration-observable-sizing.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-036",
+      "status": "host-compile-failed",
+      "result": "036-ddgi-shader-compilation.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-037",
+      "status": "complete",
+      "result": "037-controlled-dynamic-pt1024.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-038",
+      "status": "host-compile-complete",
+      "result": "038-ddgi-shader-compilation.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-039",
+      "status": "acquisition-failed",
+      "result": "039-c3-b2-pt-quality-ladder.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-040",
+      "status": "complete",
+      "result": "040-c3-b2-pt-quality-ladder.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-041",
+      "status": "complete",
+      "result": "041-c3-b2-corpus-scores.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-042",
+      "status": "complete",
+      "result": "042-controlled-pt-budget-confirmation-summary.json",
+      "gpu_run": false
     }
   ]
 }

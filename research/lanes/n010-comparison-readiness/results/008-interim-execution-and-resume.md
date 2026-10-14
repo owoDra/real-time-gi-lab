@@ -66,6 +66,15 @@ include the retained losses, remaining gates and AMD/Vulkan SDK status.
 
 ## Required work before READY
 
+The [continuous completion driver](../../../../scripts/research/n010_comparison_readiness/README.md)
+queues the remaining qualified pilots and then quiet sizing / one accepted
+calibration campaign. Existing CPU acquisitions remain active; the cached
+oracle's incomplete equivalence acquisition is not used for references.
+Driver status is `out/research/n010-comparison-readiness/continuation-v1/status.json`.
+New output identifiers in that script are reservations until actual acquisition;
+no READY or completed calibration is implied. The driver stops on a failure,
+preserves it and requires review before any repair or new accepted acquisition.
+
 - Complete both active reference ladders over all locked T_B2/T_B8 cells; retain failed/capped levels.
 - Carry the shared numerical profile into all scored roles; measure all residual discrepancies without exclusions.
 - Complete the Sponza source/target/recovery sequences; controlled C8–C12 sequences, update costs and memory replays are executed in 019/020.
