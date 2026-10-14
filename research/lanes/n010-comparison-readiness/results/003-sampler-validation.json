@@ -1,6 +1,6 @@
 {
   "schema": "n010-sampler-controls/1",
-  "complete": false,
+  "complete": true,
   "controls": [
     {
       "id": "A2",
@@ -1349,5 +1349,32 @@
       ],
       "notes": {}
     }
-  ]
+  ],
+  "iid_crosscheck": [
+    {
+      "name": "A7",
+      "per_channel_mean_relative_difference": [
+        7.712038923724682e-05,
+        7.712038923988125e-05,
+        7.712038923862533e-05
+      ],
+      "nrmse": 0.01011794883962283,
+      "pass": false
+    },
+    {
+      "name": "A6b",
+      "per_channel_mean_relative_difference": [
+        3.6620513606372656e-07,
+        3.284886495682095e-06,
+        1.482934025777104e-05
+      ],
+      "nrmse": 0.0011449641404233815,
+      "pass": true
+    }
+  ],
+  "all_pass": false,
+  "binary_sha256": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+  "sobol_table_sha256": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+  "source_commit": "8416a337021bb5a87764cb8becd1632d453cb3b6",
+  "uncertainty": "replicate-means only; no iid SE for digital-net samples"
 }

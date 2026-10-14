@@ -26,9 +26,9 @@ For C7, the new key-driven R0–R6 model passes V1/V2/V3/V4 on both backends. R0
 
 Both owned Vulkan allocation factories are instrumented with an allocation/free lifetime ledger. A C7 software capture has 92 events, one device context, exactly zero live allocations at teardown, and independently replayed high-water mark 266,694,400 bytes. Startup peak 262,341,952 bytes; source and target-frame peaks 262,086,432 bytes; the higher final peak includes explicitly separate diagnostic readback staging. Persistent live memory before readback is 262,086,400 bytes. Driver-private and CPU heap allocations are outside this owned Vulkan measure. Dynamic replacement coexistence and comparative-role memory are not yet validated.
 
-## Reference validation in progress
+## Reference validation: original crosscheck failed
 
-The sampling-only randomized Sobol oracle compiled. New analytic A2/A2b/A4/A8 controls and sealed-room/no-leak/positive-room controls passed. A6/A10 multi-bounce furnace and A7 quadrature also passed. Independent iid crosschecks run in the existing sampler-validation-v1 process; result 003 remains interim until its complete flag is true. Do not claim total-reference eligibility from these controls. Initial state lock 004 is partial; camera precision Amendment 1 is prospective for new Renderer-state reference images.
+The sampling-only randomized Sobol oracle compiled. New analytic A2/A2b/A4/A8 controls and sealed-room/no-leak/positive-room controls passed. A6/A10 multi-bounce furnace and A7 quadrature also passed. Result 003 completed: A7 RQMC/iid indirect NRMSE 1.0117949% fails the fixed 1% gate; A6b passes. All independent physical controls pass. Post-hoc quadrature diagnosis gives RQMC 0.0344588% and iid 1.0115377% NRMSE, supporting an iid precision explanation. Original failure remains preserved. Prospective Amendment 2 fixes both iid controls at 16384 samples with unchanged thresholds and an exact 8192 checkpoint identity requirement; that confirmation is not yet a PASS. Do not claim total-reference eligibility from these controls. Initial state lock 004 is partial; camera precision Amendment 1 is prospective for new Renderer-state reference images.
 
 ## Required work before READY
 
