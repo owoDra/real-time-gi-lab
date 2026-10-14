@@ -235,6 +235,12 @@
       "status": "build-complete-equivalence-pending",
       "result": "049-incremental-oracle-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-052",
+      "status": "diagnostic-only",
+      "result": "052-residual-direct-cpu-diagnostic.json",
+      "gpu_run": false
     }
   ]
 }
