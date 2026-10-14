@@ -44,3 +44,10 @@ all component/f64/primary-hit hashes, and every original convergence screen.
 All 12 pass. This is a subset audit; remaining Sponza references and the full
 readiness gate are unfinished. Incremental equivalence 050 is running; the
 new variant has not acquired eligible references.
+
+The unmanaged SDK also validates reduction shader modules/pipelines even when
+variability is disabled. [Result 056](results/056-ddgi-reduction-shader-compilation.json)
+compiles both official reduction entry points for 32/64-lane configurations,
+using the pinned DXC and SDK. All four compile. Runtime must select the shader
+against supported subgroup configuration; this is CPU compilation, not an
+integrated DDGI GPU execution or quality result.

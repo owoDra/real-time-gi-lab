@@ -271,6 +271,12 @@
       "status": "diagnostic-only",
       "result": "055-cpu-acquisition-scheduling.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-056",
+      "status": "complete",
+      "result": "056-ddgi-reduction-shader-compilation.json",
+      "gpu_run": false
     }
   ]
 }

@@ -150,3 +150,11 @@ and all 24 actual references still need final provenance/preflight checks.
 This helper has not been executed. Switching the current driver or stopping
 an original generator still requires the completed transport boundary and
 retained status/partial-attempt record specified in Amendment 6.
+
+`compile_ddgi_reduction.py` completes the official SDK module set required by
+unmanaged volume creation: reduction and extra-reduction entry points for
+32/64-lane configurations. It verifies the pinned SDK/DXC files before and
+after compilation, inherits the bound resource configuration from 038 and
+retains commands, diagnostics and SPIR-V bindings/hashes. Actual result 056
+is complete/PASS (four CPU compilations); runtime subgroup selection and GPU
+validation are still required. Existing frozen compilation helpers are unchanged.
