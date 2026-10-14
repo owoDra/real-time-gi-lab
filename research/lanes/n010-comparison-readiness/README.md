@@ -209,3 +209,13 @@ and both C7 transports at 8192→16384. Separate prefix build
 [114](results/114-point-guided-prefix-build.json) passes. Runner 115 waits for
 complete physical 113 PASS and has executed no state/prefix acquisition yet.
 Neither build proves convergence or reference admission.
+
+[Point-guided acquisition plan 032](experiments/032-point-guided-reference-qualification.md)
+prepares all nine unfinished transport ladders, retaining the other fifteen
+in the full corpus. [116](results/116-point-guided-qualification-prerequisite-check.json)
+actually refuses acquisition at incomplete 113; all read bytes are archived.
+The queue waits for complete 113/115 PASS before a single fresh acquisition.
+No new sampling reference, successful new-variant audit or view replacement
+has occurred. [117](results/117-point-guided-api-existing-cpu-provenance-audit.json)
+passes only delegation to the existing audit on the fifteen original CPU
+references. It does not attest new sampling, remaining nine slots or readiness.

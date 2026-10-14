@@ -571,6 +571,18 @@
       "status": "cpu-prefix-host-build-only",
       "result": "114-point-guided-prefix-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-116",
+      "status": "prerequisite-refusal-no-acquisition",
+      "result": "116-point-guided-qualification-prerequisite-check.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-117",
+      "status": "fifteen-original-cpu-slots-delegation-audit",
+      "result": "117-point-guided-api-existing-cpu-provenance-audit.json",
+      "gpu_run": false
     }
   ]
 }

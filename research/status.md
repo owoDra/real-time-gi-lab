@@ -169,3 +169,15 @@ build 114 also passes, and plan 031 prepares all-state/own-prefix verification
 115, which is waiting for complete physical PASS (**NOT RUN**). No corpus reference
 or sampling-method transition has occurred; existing CPU acquisitions continue.
 All four seeds, levels, absolute/relative screens and cap remain fixed.
+
+Prospective point-guided acquisition [plan 032](lanes/n010-comparison-readiness/experiments/032-point-guided-reference-qualification.md)
+prepares separate ladders for all nine currently unfinished transports; the
+other fifteen remain included through original-method evidence. Executed
+prerequisite check [116](lanes/n010-comparison-readiness/results/116-point-guided-qualification-prerequisite-check.json)
+refuses dispatch because 113 is incomplete. Exact read input bytes are archived;
+no acquisition root or samples were created. The separate queue waits for
+complete 113/115 PASS before one fresh acquisition (no retry). Its acquisition,
+new-variant provenance and view-transition success paths remain unexecuted.
+Existing-CPU delegation [117](lanes/n010-comparison-readiness/results/117-point-guided-api-existing-cpu-provenance-audit.json)
+passes all fifteen previously eligible slots through the new API; this audits
+original-method references only and does not attest the point-guided branch.

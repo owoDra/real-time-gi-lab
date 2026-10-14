@@ -94,3 +94,11 @@ controls 113 are executing. It is unadmitted: corpus identities, its own exact
 prefix proof and a recorded acquisition/provenance transition are required
 before any new qualification. The existing acquisitions, four seeds, six
 levels, support-aware absolute/relative screens and cap remain unchanged.
+
+Plan 032 prepares point-guided acquisition of every unfinished transport,
+retaining the fifteen eligible original-method references within the full
+24-slot corpus. Actual 116 refuses acquisition at incomplete physical 113;
+its exact read bytes are retained. API delegation 117 passes the existing
+fifteen-slot subset; the new-variant branch remains unexecuted. One queued
+acquisition waits for full physical/all-state/prefix proof. Neither queue,
+prepared provenance nor a subset audit passes final comparison readiness.

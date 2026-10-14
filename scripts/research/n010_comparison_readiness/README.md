@@ -288,3 +288,38 @@ source bytes outside render are verified unchanged. Actual build 114 passes.
 seeds and 78 native attempts with zero byte/counter disagreement. Current 115
 is waiting (**NOT RUN**); passing build 114 admits no reference. No original
 cosine prefix may be used by this sampler.
+
+### Gated point-guided qualification and provenance
+
+`qualify_point_guided_references.py --lock LOCK --work NEW_ROOT --output NEW_JSON`
+requires completed 112/113/114/115 proofs and every actual proof payload before
+acquiring the fixed nine unfinished transports of prospective plan 032. It
+retains all six levels/four seeds/screens/cap, all twenty-one payloads per level,
+actual commands/outputs, five counters and its own exact prefix intervals.
+Every completed level is replayed by the new provenance API before continuing.
+Original cosine/hybrid moments are not imported and the current view is not
+replaced. The other fifteen original references remain included in the corpus.
+
+Actual `--prerequisites-only --audit-archive NEW_ARCHIVE` invocation 116 exits
+2 at incomplete physical 113, creates no acquisition root and archives every
+exact read input byte (eleven files). These archived partial proof bytes are
+historical refusal evidence, not hashes of later completed live producer files.
+The full acquisition and new sampling variant audit remain unexecuted.
+
+`launch_point_guided_qualification.py --queue NEW_QUEUE --lock LOCK --work
+NEW_ROOT --output NEW_JSON` freezes source/build inputs while waiting for
+complete 113/115 PASS, then invokes exactly one fresh acquisition with no
+retry. The current queue is waiting under `point-guided-qualification-queue-v1`;
+result 118 and its acquisition root are absent. Completed dependency failure
+stops the queue, retaining status/logs. Acquisition success still requires a
+separate recorded view/provenance/scheduling transition before comparison use.
+
+`point_guided_reference_provenance.py` exposes `verify_reference()` for the
+new `validated-point-guided-mixture` variant. It audits actual proof scope,
+canonical state/scene, all headers/values/component rounding/primary records,
+execution outputs/commands/counters, own prefix chains and unchanged first
+qualifying stop. Other variants delegate to the existing CPU/hybrid API.
+Actual 117 exercises that delegation on all fifteen existing eligible CPU
+slots and confirms frozen inputs; it provides no new-variant admission.
+Its exact invocation is retained and hashed as
+`out/research/n010-comparison-readiness/point-guided-provenance-existing-cpu-audit-v1.py`.

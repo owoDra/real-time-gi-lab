@@ -1,0 +1,90 @@
+{
+  "schema": "n010-point-guided-reference-qualification/1",
+  "complete": true,
+  "all_pass": false,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_point_guided_references.py": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/point_guided_reference_provenance.py": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/032-point-guided-reference-qualification.md": "e60357946cbc8378e011969f577c9aa20034dcc4815d441c41688687ffcc5395",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/112-point-guided-oracle-build.json": "42b5c25a9a360cd31b8a749f2adf1902e8725cf476b63453ffea5b57a583814f",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_point_guided_oracle.py": "2216a55b1a8c02b171a1119c07a312e68f24dc09c72796e64dc1716ec69d0846",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/030-prospective-point-guided-reference-sampling.md": "a8f1ad476f0c5788d26fa47870e79ee3a36ad9c5855ac66ef4b5067bac406693",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_cached_oracle.py": "5a6da3f8f5f8a97dc6c4152bdb72ce2bb84a14eab84281864f1fb42b49dddd91",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_rqmc_oracle.py": "fe837aa917f9564266cfd77cbb8efebf92370cae6566a37db36b406a791076ae",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle/n008_oracle.hpp": "dc47c4e1d8145fea21988313547b35e13a917c3929a838aa91ae7a5bc21bba4c",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle/n008_oracle_main.cpp": "53c597bbff3772c5710f297d1eb74d64a15ead5b43ec2bc42d80d63a2761ec03",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/113-point-guided-physical-controls.json": "6356e7d5c9dca12fa4b5b7e3599ef84ba73923cbe688aff83ae52b0a79d69bae"
+  },
+  "selected_transports": [
+    "C1_T_B8",
+    "C2_T_B8",
+    "C3_T_B8",
+    "C4_T_B2",
+    "C4_T_B8",
+    "C5_T_B2",
+    "C5_T_B8",
+    "C6_T_B2",
+    "C6_T_B8"
+  ],
+  "cells": [],
+  "process_attempts": [],
+  "source_commit": "203794fd213e90d00a5a5d12f5b244db85451f02",
+  "computational_variant": "validated-point-guided-mixture",
+  "threads": 16,
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "cpu_seconds": 172800,
+    "elapsed_seconds": 43200
+  },
+  "scope": "Separate ladders for all nine prospectively selected unfinished slots; no view transition or whole-corpus admission",
+  "classification": "PREREQUISITE_REFUSAL_NO_ACQUISITION",
+  "failure": "guided prerequisite incomplete/failed: 113-point-guided-physical-controls.json",
+  "read_input_archives": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_point_guided_references.py": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e-qualify_point_guided_references.py",
+      "sha256": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e"
+    },
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/point_guided_reference_provenance.py": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91-point_guided_reference_provenance.py",
+      "sha256": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91"
+    },
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/032-point-guided-reference-qualification.md": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/e60357946cbc8378e011969f577c9aa20034dcc4815d441c41688687ffcc5395-032-point-guided-reference-qualification.md",
+      "sha256": "e60357946cbc8378e011969f577c9aa20034dcc4815d441c41688687ffcc5395"
+    },
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/112-point-guided-oracle-build.json": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/42b5c25a9a360cd31b8a749f2adf1902e8725cf476b63453ffea5b57a583814f-112-point-guided-oracle-build.json",
+      "sha256": "42b5c25a9a360cd31b8a749f2adf1902e8725cf476b63453ffea5b57a583814f"
+    },
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_point_guided_oracle.py": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/2216a55b1a8c02b171a1119c07a312e68f24dc09c72796e64dc1716ec69d0846-generate_point_guided_oracle.py",
+      "sha256": "2216a55b1a8c02b171a1119c07a312e68f24dc09c72796e64dc1716ec69d0846"
+    },
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/030-prospective-point-guided-reference-sampling.md": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/a8f1ad476f0c5788d26fa47870e79ee3a36ad9c5855ac66ef4b5067bac406693-030-prospective-point-guided-reference-sampling.md",
+      "sha256": "a8f1ad476f0c5788d26fa47870e79ee3a36ad9c5855ac66ef4b5067bac406693"
+    },
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_cached_oracle.py": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/5a6da3f8f5f8a97dc6c4152bdb72ce2bb84a14eab84281864f1fb42b49dddd91-generate_cached_oracle.py",
+      "sha256": "5a6da3f8f5f8a97dc6c4152bdb72ce2bb84a14eab84281864f1fb42b49dddd91"
+    },
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_rqmc_oracle.py": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/fe837aa917f9564266cfd77cbb8efebf92370cae6566a37db36b406a791076ae-generate_rqmc_oracle.py",
+      "sha256": "fe837aa917f9564266cfd77cbb8efebf92370cae6566a37db36b406a791076ae"
+    },
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle/n008_oracle.hpp": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/dc47c4e1d8145fea21988313547b35e13a917c3929a838aa91ae7a5bc21bba4c-n008_oracle.hpp",
+      "sha256": "dc47c4e1d8145fea21988313547b35e13a917c3929a838aa91ae7a5bc21bba4c"
+    },
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle/n008_oracle_main.cpp": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/53c597bbff3772c5710f297d1eb74d64a15ead5b43ec2bc42d80d63a2761ec03-n008_oracle_main.cpp",
+      "sha256": "53c597bbff3772c5710f297d1eb74d64a15ead5b43ec2bc42d80d63a2761ec03"
+    },
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/113-point-guided-physical-controls.json": {
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-prerequisite-check-v1/6356e7d5c9dca12fa4b5b7e3599ef84ba73923cbe688aff83ae52b0a79d69bae-113-point-guided-physical-controls.json",
+      "sha256": "6356e7d5c9dca12fa4b5b7e3599ef84ba73923cbe688aff83ae52b0a79d69bae"
+    }
+  }
+}
