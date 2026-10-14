@@ -246,3 +246,11 @@ CPU variants delegate to the unchanged original provenance helper. This full
 hybrid qualification path remains unexecuted because no such acquired ladder
 exists. The existing frozen preflight/continuation do not import this new API,
 and a recorded transition/integration is still required before comparison use.
+
+Actual result 109 exercises the new API's original-CPU delegation on all fifteen
+currently eligible CPU transports through recovery view 067. It replays every
+scene/payload/header/screen/prefix proof, passes all fifteen and confirms frozen
+input bytes after the audit. The exact CPU-only invocation source is retained
+as `out/research/n010-comparison-readiness/hybrid-provenance-existing-cpu-audit-v1.py`
+and hashed in 109. This does not exercise the new hybrid-variant branch or
+verify the nine unfinished transports.

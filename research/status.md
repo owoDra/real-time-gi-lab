@@ -26,7 +26,7 @@ calibrated superiority comparison.
 
 | Completion requirement | Current state / next action |
 | --- | --- |
-| All 24 locked references | 15 eligible: C1/C2/C3 T_B2 and C7–C12 both transports. Complete C1/C2/C3 T_B8 and C4/C5/C6 both transports. Current CPU levels are C1 B8 65536 and C2 B8 32768; partial seeds do not qualify a level. The 262144 cap outcome is still unmeasured. |
+| All 24 locked references | 15 eligible: C1/C2/C3 T_B2 and C7–C12 both transports, with full selected-slot provenance replay [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json) PASS. Complete C1/C2/C3 T_B8 and C4/C5/C6 both transports. Current CPU levels are C1 B8 65536 and C2 B8 32768; partial seeds do not qualify a level. The 262144 cap outcome is still unmeasured. |
 | Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
 | Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
 | Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Quiet sizing 046 and accepted eight-process calibration 029 are still required. CPU wall time is diagnostic. |
@@ -118,8 +118,11 @@ See [roadmap](roadmap.md) for gates. Old status, stale next-step commands and br
 
 The independent original sampler proof 009, cache equivalence 022 and exact
 CPU-prefix proof 050 pass. Controlled reference provenance 051 covers twelve
-C7–C12 transports, and recovered C2 B2 provenance 080 passes. Neither subset
-alone proves the full corpus. Interrupted acquisitions 065, complete imports,
+C7–C12 transports, and recovered C2 B2 provenance 080 passes. Selected-slot audit 109 now rechecks all fifteen eligible CPU transports
+through the separate provenance API, including canonical scenes, every payload/header,
+unchanged convergence screens and imported-prefix proofs. All pass and input
+bytes remain unchanged after the audit. The remaining nine transports and the
+full hybrid variant branch are not attested by that result. Interrupted acquisitions 065, complete imports,
 later partial seeds and prior views remain retained. Recovery view 067 preserves
 all 24 slots with unchanged four seeds, levels, support-aware screens and cap.
 

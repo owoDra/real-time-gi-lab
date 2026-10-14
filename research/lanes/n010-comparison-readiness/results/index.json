@@ -541,6 +541,12 @@
       "status": "raw-prefix-export-audit-only",
       "result": "108-hybrid-deep-raw-prefix-export-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-109",
+      "status": "fifteen-eligible-cpu-slots-subset-audit",
+      "result": "109-existing-eligible-cpu-provenance-audit.json",
+      "gpu_run": false
     }
   ]
 }

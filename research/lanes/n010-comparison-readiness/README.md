@@ -175,3 +175,10 @@ reproduce global metadata, all four PFM components agree, and memory replay
 passes. This is a two-export consistency audit, not full prefix/runtime or
 reference eligibility. A separate hybrid provenance API is prepared; the
 existing frozen CPU view/preflight remains unchanged.
+
+Existing eligible CPU-slot [provenance audit 109](results/109-existing-eligible-cpu-provenance-audit.json)
+passes all fifteen selected references via the separate API's original-method
+delegation: C1/C2/C3 B2 and C7–C12 both transports. Every canonical scene,
+payload/header, convergence screen and imported-prefix chain is checked; all
+recorded inputs remain unchanged after the audit. This is a selected fifteen-slot
+audit, not whole-corpus readiness or execution of the new hybrid-variant branch.
