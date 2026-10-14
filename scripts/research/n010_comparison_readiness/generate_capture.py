@@ -82,6 +82,19 @@ def generate(root, out):
     sh = root / "shaders/research/lane_n_end_to_end_renderer"
     (out / "n010_runtime.cpp").write_text(runtime(src.read_text()))
     main = (root / "src/research/n007_reference_validity/n007_capture_main.cpp").read_text()
+    main = once(main, '#include "n001_runtime.hpp"',
+                '#include "n001_runtime.hpp"\n#include "allocation_ledger.hpp"')
+    main = once(main, "int main(int argc,char** argv) {",
+                "int main(int argc,char** argv) {\n"
+                "    const char* ledger_path = std::getenv(\"PHOS_N010_MEMORY_LEDGER\");\n"
+                "    phos::gi::research::n010::LedgerOutput ledger(ledger_path ? ledger_path : \"\");")
+    main = once(main, "        auto gpu_frame=runtime.run_frame(false);",
+                "        phos::gi::research::n010::AllocationLedger::instance().phase(\"source-frame\");\n"
+                "        auto gpu_frame=runtime.run_frame(false);")
+    main = once(main, "        if(target)gpu_frame=runtime.run_frame(true);",
+                "        phos::gi::research::n010::AllocationLedger::instance().phase(\"target-frame\");\n"
+                "        if(target)gpu_frame=runtime.run_frame(true);\n"
+                "        phos::gi::research::n010::AllocationLedger::instance().phase(\"diagnostic-readback\");")
     main = once(main, "        n::FrameParams p{};",
                 '        std::cout << "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\\n";\n'
                 "        return 0;\n        n::FrameParams p{};")

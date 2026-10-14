@@ -38,6 +38,13 @@ foreach(kind hwrt software)
   list(APPEND N010_SPIRV "${spirv}")
 endforeach()
 add_custom_target(phos-n010-shaders DEPENDS ${N010_SPIRV})
+add_custom_command(OUTPUT
+  "${N010_GENERATED}/n010_b002_vulkan.cpp" "${N010_GENERATED}/n010_vk_context.cpp"
+  COMMAND ${Python3_EXECUTABLE} "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_memory_hooks.py"
+    --root "${PROJECT_SOURCE_DIR}" --out "${N010_GENERATED}"
+  DEPENDS "${PROJECT_SOURCE_DIR}/scripts/research/n010_comparison_readiness/generate_memory_hooks.py"
+    "${N010_SCRIPT}" "${N010_N}/imported/lane_b_traversal/b002_vulkan.cpp" "${PROJECT_SOURCE_DIR}/src/vk_context.cpp"
+  VERBATIM)
 add_executable(phos-n010-capture
   "${N010_GENERATED}/n010_capture_main.cpp"
   "${N010_GENERATED}/n010_runtime.cpp"
@@ -46,15 +53,15 @@ add_executable(phos-n010-capture
   "${N010_C1}/n009_a001_scene.cpp" "${N010_C1}/n009_a001_runtime.cpp"
   "${N010_C1}/n009_b002_scene.cpp"
   "${N010_N}/imported/lane_a_split_rc/a001_analysis.cpp"
-  "${N010_N}/imported/lane_b_traversal/b002_vulkan.cpp"
+  "${N010_GENERATED}/n010_b002_vulkan.cpp"
   "${N010_N}/imported/lane_b_traversal/b002_compute.cpp"
   "${N010_N}/imported/lane_b_traversal/b002_hwrt.cpp"
-  "${PROJECT_SOURCE_DIR}/src/vk_context.cpp")
+  "${N010_GENERATED}/n010_vk_context.cpp")
 set_source_files_properties(
   "${N010_C1}/n009_a001_scene.cpp" "${N010_C1}/n009_a001_runtime.cpp"
   "${N010_C1}/n009_b002_scene.cpp" PROPERTIES GENERATED TRUE)
 target_include_directories(phos-n010-capture PRIVATE
-  "${PROJECT_SOURCE_DIR}/src" "${N010_N}"
+  "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/src" "${N010_N}"
   "${PROJECT_SOURCE_DIR}/src/research/n009_scene_contract"
   "${PROJECT_SOURCE_DIR}/src/research/n007_reference_validity"
   "${N010_N}/imported/integration" "${N010_N}/imported/lane_a_split_rc"

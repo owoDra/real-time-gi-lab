@@ -4,6 +4,8 @@
 
 ## Current incumbent — adoption versus experiments
 
+**Active work: N010, the final comparison-preparation study.** [Protocol](lanes/n010-comparison-readiness/experiments/001-comparison-readiness.md). User-directed sequence is N010 → Lane M GI competitiveness; no further N-series preparation lane. Readiness requires an executed quality/time/memory pilot, physically validated eligible references and full Renderer timing calibration. Historical Lane M topology results retain their identity. N010 has not yet passed its readiness gate.
+
 | Subsystem | Current incumbent / classification | Evidence and boundary |
 | --- | --- | --- |
 | Work producer | **Adopted:** A001 GPU visibility-driven Split RC, natural append order; no global reorder | [Lane A](lanes/lane-a-split-rc/results/index.json), M0; Lane D does not supersede A001 |
@@ -67,7 +69,7 @@ N007 P0 CPU source audit and synthetic PFM diagnostics are in progress on `resea
 
 ## Unresolved strategic questions
 
-1. **Can independent HDR image quality be evaluated credibly across real dynamic scenes?** N007/N008/N009 have concluded; N009 still lacks eligible Sponza total references at its frozen cap. A new reference-qualification protocol is needed before claiming quality gain or optimizing adaptive rules.
+1. **Finish comparison preparation in N010, then execute Lane M GI comparisons.** N007/N008/N009 remain concluded; N009 still lacks eligible Sponza totals at its frozen cap. N010 preregisters sampling-only reference qualification, explicit correctness diagnostics, executable RC/path-tracing controls, quality matching, full Renderer GPU calibration and allocation-lifetime peak memory. No READY or superiority claim until the corresponding evidence exists.
 2. **Does this architecture actually beat fair existing GI baselines** under equivalent quality/cost across multiple scenes and hardware classes? Not yet established.
 3. **Which structural light-transport/storage/reuse changes** can change the total quality/performance/memory frontier beyond a locally optimized Split RC pipeline? Evaluate only after reliable baselines and bottlenecks.
 
