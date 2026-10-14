@@ -253,6 +253,12 @@
       "status": "diagnostic-only",
       "result": "054-primary-tie-cpu-diagnostic.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-022",
+      "status": "complete",
+      "result": "022-cached-oracle-equivalence.json",
+      "gpu_run": false
     }
   ]
 }
