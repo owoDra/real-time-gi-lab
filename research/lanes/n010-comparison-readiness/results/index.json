@@ -265,6 +265,12 @@
       "status": "complete",
       "result": "051-controlled-reference-provenance-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-055",
+      "status": "diagnostic-only",
+      "result": "055-cpu-acquisition-scheduling.json",
+      "gpu_run": false
     }
   ]
 }

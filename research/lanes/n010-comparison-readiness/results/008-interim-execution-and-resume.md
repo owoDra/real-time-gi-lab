@@ -102,3 +102,13 @@ Builds and the stated GPU/CPU checks were executed by the assistant under user a
 - First v2 campaign stopped on the invalid Renderer scenario name deforming; the empty failed directory was retained as C5-software-invalid-scenario. The corrected scenario is deforming-control. All subsequent captures include acquisition source, binary hash and return code.
 - The initial RQMC overlay failed compilation because it referenced an unavailable fail helper; it was corrected to throw before any validation rendering.
 - A commit authorization review timed out; the permitted retry succeeded. No unsafe-action rejection occurred.
+
+## CPU acquisition scheduling (055)
+
+At 2026-10-14 10:07:35 UTC, the two original qualification parents and their
+current oracle children changed from nice 0 to +5, after checking exact process
+identities. This lets the eight-thread prefix equivalence process retain its
+CPU share. Both original acquisitions continue with their binaries and outputs
+intact. No transport, sampling, output, GPU, clock or power settings changed;
+CPU wall times throughout remain acquisition diagnostics. The fixed incremental
+C2/C4/C5/C6 scheduling view is prepared but not executed; proof 050 is required.

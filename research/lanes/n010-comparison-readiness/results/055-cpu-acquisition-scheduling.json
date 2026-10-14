@@ -1,0 +1,41 @@
+{
+  "schema": "n010-cpu-acquisition-scheduling/1",
+  "utc": "2026-10-14T10:07:35Z",
+  "source_commit": "e402e36c254fcdb4ac3f0a92668d8dfa488ea6f2",
+  "reason": "Give the eight-thread exact-prefix equivalence check its CPU share before scheduling remaining references. Lower original acquisition process priority to nice +5; no sampling, physical, output, GPU, clock or power change. CPU wall times remain diagnostic.",
+  "rows": [
+    {
+      "pid": 410453,
+      "comm": "python",
+      "priority_before": 0,
+      "priority_after": 5,
+      "priority_observed": 5
+    },
+    {
+      "pid": 416571,
+      "comm": "python",
+      "priority_before": 0,
+      "priority_after": 5,
+      "priority_observed": 5
+    },
+    {
+      "pid": 458938,
+      "comm": "n010_rqmc_oracl",
+      "priority_before": 0,
+      "priority_after": 5,
+      "priority_observed": 5
+    },
+    {
+      "pid": 471834,
+      "comm": "n010_rqmc_oracl",
+      "priority_before": 0,
+      "priority_after": 5,
+      "priority_observed": 5
+    }
+  ],
+  "validator_priority": 0,
+  "artifact": {
+    "path": "out/research/n010-comparison-readiness/cpu-priority-scheduling-v1/priority-change.json",
+    "sha256": "1427139c459db1f6d6e37e7dfc6d365ba006ed8fafd0a88e78ea1f6c5aab6a34"
+  }
+}
