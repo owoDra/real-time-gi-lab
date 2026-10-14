@@ -185,3 +185,15 @@ frozen cap, then retires it at that transport boundary. All original files
 and any subsequent partial child are inventoried and retained. It never
 changes outcomes or uses partial results; the independent C3 runner finishes
 naturally. Its eventual 062 record must be executed before listing complete.
+
+### Interruption recovery
+
+The preceding running-job description is historical: 065 records terminal exits.
+Amendment 8 uses `--transports` / `--imports` to copy validated complete prefixes
+into fresh work roots, retaining later partial seeds in the original roots.
+`assemble_reference_view.py --selection` records an explicit full-24 scheduling
+map (067); pass its result using `--reference-view-record` to the continuation
+driver and readiness preflight. Neither view nor compiler/build success grants
+reference admission. The separate GPU numerical-port diagnostic uses bounded
+compilation/runtime and is excluded from the driver's comparison dependency
+freeze because it supplies no admitted references or comparison executables.

@@ -1,0 +1,32 @@
+{
+  "schema": "n010-gpu-reference-compiler/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "source_sha256": "10ecdc8490102f68a6d24d3d7a73fc1fde5f81c345c86905ee46ad07ecf45eb3",
+  "compiler_sha256": "b9a3ba373c803c704ec64bd00e1663dbb3bb2bf658ed9099827b390b8c499f45",
+  "script_sha256": "326c16a2dfe3e2b659401f19f6b38937c6c183af8839585db403afc05970e102",
+  "command": [
+    "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+    "-V",
+    "--target-env",
+    "vulkan1.2",
+    "-S",
+    "comp",
+    "out/research/n010-comparison-readiness/gpu-oracle-compile-v3/input.comp.glsl",
+    "-o",
+    "out/research/n010-comparison-readiness/gpu-oracle-compile-v3/unannotated.spv"
+  ],
+  "limits": {
+    "address_space_bytes": 2147483648,
+    "cpu_seconds": 60,
+    "elapsed_seconds": 75
+  },
+  "scope": "Compiler trial only. No reference eligibility; GLSL precise dataflow replaced by explicit NoContraction on every binary64 arithmetic result.",
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "out/research/n010-comparison-readiness/gpu-oracle-compile-v3/input.comp.glsl\n",
+  "no_contraction_arithmetic_results": 181,
+  "shader_sha256": "18c0968d10c6af7475bbe4729238cd73dcf3ceebdc20c18e5b3ebc4a9d297526",
+  "unannotated_shader_sha256": "ea03f9d76fd82c81fbd5d928631d507b220853d9f4f5e45f430318c2038c76b7"
+}

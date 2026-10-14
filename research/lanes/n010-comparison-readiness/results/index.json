@@ -319,6 +319,36 @@
       "status": "complete-negative",
       "result": "064-interim-rescheduled-preflight-correct-path.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-065",
+      "status": "terminated-partial-retained",
+      "result": "065-interrupted-acquisition-record.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-066",
+      "status": "compiler-diagnostic-only",
+      "result": "066-bounded-gpu-reference-compilation.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-067",
+      "status": "diagnostic-only",
+      "result": "067-recovery-reference-view.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-068",
+      "status": "host-build-complete",
+      "result": "068-gpu-reference-host-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-069",
+      "status": "complete-negative",
+      "result": "069-gpu-reference-prior-compiler-attempts.json",
+      "gpu_run": false
     }
   ]
 }

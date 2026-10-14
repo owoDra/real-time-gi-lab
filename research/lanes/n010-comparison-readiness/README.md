@@ -43,10 +43,12 @@ rechecks C7–C12, both transports: canonical scene/state, four fixed seeds,
 all component/f64/primary-hit hashes, and every original convergence screen.
 All 12 pass. This is a subset audit; remaining Sponza references and the full
 readiness gate are unfinished. Incremental equivalence 050 is now complete/PASS in all three declared
-cases. Fresh C2/C4/C5/C6 acquisition is running; no new reference is yet eligible.
-Fixed view 061 retains all 24 transport slots. The idle original-only driver
-was retired before any GPU acquisition (059); the updated driver checks both
-original and exact-prefix proof/metadata chains.
+cases. Reference jobs and the waiting driver terminated (065), with cause unestablished.
+Complete prefixes and partial later seeds are retained. Amendment 8 prepares
+fresh acquisitions from the validated complete C1 T_B8/C3 T_B8/C2 T_B2
+prefixes; view 067 fixes all 24 slots before recovery output. Prior view 061 and
+statuses are historical. GPU numerical-port compilation/build (066/068) are
+isolated diagnostics and establish no reference eligibility.
 
 The unmanaged SDK also validates reduction shader modules/pipelines even when
 variability is disabled. [Result 056](results/056-ddgi-reduction-shader-compilation.json)

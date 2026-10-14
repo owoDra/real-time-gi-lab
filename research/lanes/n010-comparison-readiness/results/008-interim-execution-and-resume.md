@@ -139,3 +139,17 @@ C1 T_B8 16384 has now completed: maximum active absolute p99 noise
 level is retained as ineligible and the unchanged next level proceeds.
 This does not change a threshold, drop the deep-transport stratum or
 qualify a reference from a relative-only pass.
+
+## Interrupted acquisition and prospective recovery (2026-10-14)
+
+Result 065 records terminal exits of both original qualifiers, the fresh incremental
+qualifier, continuation-v2 and the retirement watcher. The cause is unestablished;
+no attested OOM or completed retirement is claimed. Existing WAITING status files
+are stale. Completed prefixes and partial next-level seed files retain hashes.
+Amendment 8 imports only validated complete prefixes to fresh directories, retaining
+all original bytes. Fixed view 067 preserves all 24 transport slots, with no
+threshold, cap, seed, physics or quality-based selection change.
+
+Amendment 7's separate binary64 GPU execution feasibility port compiles/builds
+(066/068); failed compiler attempts remain 069. It has not produced an eligible
+reference. The frozen Renderer/default graph and N001–N009 results are unchanged.

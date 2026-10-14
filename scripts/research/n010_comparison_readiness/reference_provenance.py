@@ -31,7 +31,7 @@ def incremental_proofs(inputs):
     from qualify_incremental_references import dependencies
     return dependencies()
 
-def verify_reference(directory, cell, vertices, spec, inputs):
+def verify_reference(directory, cell, vertices, spec, inputs, require_eligible=True):
     directory = directory.resolve()
     q = read(directory/'qualification.json', inputs)
     if (q['cell'], q['transport'], q['state_sha256']) != (cell, f'T_B{vertices}', spec['state_sha256']):
@@ -45,12 +45,12 @@ def verify_reference(directory, cell, vertices, spec, inputs):
         raise ValueError('reference physical scene differs from canonical locked state')
     inputs[str(scene_path)] = sha(scene_path)
     levels = q['levels']
-    if [level['spp'] for level in levels] != list(Q.LEVELS[:len(levels)]) or not 2 <= len(levels) <= len(Q.LEVELS):
+    if [level['spp'] for level in levels] != list(Q.LEVELS[:len(levels)]) or not (2 if require_eligible else 1) <= len(levels) <= len(Q.LEVELS):
         raise ValueError('reference levels are not the complete frozen prefix')
     variant = q.get('computational_variant', 'original-full-prefix')
-    if variant not in ('original-full-prefix', 'exact-prefix-continuation'):
+    if variant not in ('original-full-prefix', 'exact-prefix-continuation', 'proved-exact-prefix-recovery'):
         raise ValueError('unknown computational variant')
-    proofs = incremental_proofs(inputs) if variant == 'exact-prefix-continuation' else None
+    proofs = incremental_proofs(inputs) if variant != 'original-full-prefix' else None
     if proofs is not None:
         if q['proof_sha256'] != proofs:
             raise ValueError('qualification proof dependency mismatch')
@@ -70,7 +70,8 @@ def verify_reference(directory, cell, vertices, spec, inputs):
             inputs[str(path)] = digest
         meta_path = directory/f'n{spp}.meta.json'
         meta = read(meta_path, inputs)
-        binary = Q.BINARY if proofs is None else ROOT/'build/n010-cpu/n010_incremental_oracle'
+        imported_original = variant == 'proved-exact-prefix-recovery' and meta['binary_sha256'] == sha(Q.BINARY)
+        binary = Q.BINARY if proofs is None or imported_original else ROOT/'build/n010-cpu/n010_incremental_oracle'
         if (meta['binary_sha256'], meta['net_sha256'], meta['scene_sha256'], meta['geometry_sha256']) != (
                 sha(binary), sha(Q.NET), sha(scene_path), scene.geometry_sha256()):
             raise ValueError('reference metadata binary/net/physical geometry identity mismatch')
@@ -84,8 +85,8 @@ def verify_reference(directory, cell, vertices, spec, inputs):
                 raise ValueError('metadata run seed mismatch')
         if not level['geometry_hash_match']:
             raise ValueError('reference geometry mismatch')
-        if proofs is not None:
-            if level['metadata_sha256'] != inputs[str(meta_path)] or meta['proof_sha256'] != proofs or meta['computational_variant'] != variant:
+        if proofs is not None and not imported_original:
+            if level['metadata_sha256'] != inputs[str(meta_path)] or meta['proof_sha256'] != proofs or meta['computational_variant'] != 'exact-prefix-continuation':
                 raise ValueError('incremental metadata/proof identity mismatch')
             expected_interval = [previous['spp'] if previous else 0, spp]
             if meta['sample_interval'] != expected_interval:
@@ -106,7 +107,22 @@ def verify_reference(directory, cell, vertices, spec, inputs):
         if actual['scene_sha256'] != sha(scene_path) or actual['frame_state_sha256'] != spec['state_sha256']['frame']:
             raise ValueError('convergence manifest physical state mismatch')
         previous = level
-    if q['classification'] != 'STATISTICALLY_ELIGIBLE' or levels[-1]['screen']['status'] != 'statistical-screen-pass':
+    if variant == 'proved-exact-prefix-recovery':
+        record = read(directory/'prefix-import.json', inputs)
+        if q['prefix_import_sha256'] != sha(directory/'prefix-import.json') or record['proof_sha256'] != proofs:
+            raise ValueError('imported prefix provenance changed')
+        source = Path(record['source_directory'])
+        if sha(source/'qualification.json') != record['source_qualification_sha256']:
+            raise ValueError('retained source qualification changed after prefix import')
+        for name, digest in record['file_sha256'].items():
+            if sha(source/name) != digest or sha(directory/name) != digest:
+                raise ValueError('imported prefix no longer matches retained source bytes')
+        if len(record['levels']) > len(levels) or record['levels'] != [level['spp'] for level in levels[:len(record['levels'])]]:
+            raise ValueError('imported frozen prefix differs from retained level sequence')
+    expected_classification = 'STATISTICALLY_ELIGIBLE' if levels[-1]['screen']['status']=='statistical-screen-pass' else 'INELIGIBLE'
+    if q['classification'] != expected_classification or any(level['screen']['status']=='statistical-screen-pass' for level in levels[:-1]):
+        raise ValueError('qualification classifier or first qualifying stop differs from unchanged screens')
+    if require_eligible and (q['classification'] != 'STATISTICALLY_ELIGIBLE' or levels[-1]['screen']['status'] != 'statistical-screen-pass'):
         raise ValueError('reference is not statistically eligible')
     return {'cell':cell, 'transport':f'T_B{vertices}', 'directory':str(directory),
             'computational_variant':variant, 'levels':[level['spp'] for level in levels],

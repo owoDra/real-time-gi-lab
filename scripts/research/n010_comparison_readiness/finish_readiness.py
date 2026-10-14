@@ -22,6 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('--work', type=Path, required=True)
     parser.add_argument('--references', type=Path, required=True)
     parser.add_argument('--lock', type=Path, required=True)
+    parser.add_argument('--reference-view-record', type=Path)
     args = parser.parse_args()
     args.work = args.work.resolve()
     if args.work.exists():
@@ -47,9 +48,16 @@ if __name__ == '__main__':
              RESULTS/'013-c7-pt-cohort-pilot.json', RESULTS/'019-controlled-dynamic-cohort.json',
              RESULTS/'037-controlled-dynamic-pt1024.json',
              RESULTS/'024-c8-pt-quality-ladder.json', RESULTS/'025-c9-pt-quality-ladder.json']
-    paths += list(SCRIPTS.glob('*.py'))
-    if args.references.name=='reference-view-v1':
-        paths += [RESULTS/'061-full-corpus-reference-view.json',
+    # Freeze comparison dependencies. Independent numerical-port experiments
+    # neither supply references nor change these comparison executables.
+    diagnostic_only = {'compile_gpu_reference.py','generate_gpu_reference_snapshot.py','acquire_gpu_reference_diagnostic.py'}
+    paths += [p for p in SCRIPTS.glob('*.py') if p.name not in diagnostic_only]
+    view_record = args.reference_view_record or (RESULTS/'061-full-corpus-reference-view.json' if args.references.name=='reference-view-v1' else None)
+    if view_record:
+        view = json.loads(view_record.read_text())
+        if view['work'] != str(args.references.resolve()):
+            raise ValueError('reference view record describes a different root')
+        paths += [view_record,
                   RESULTS/'050-incremental-oracle-equivalence.json',
                   RESULTS/'022-cached-oracle-equivalence.json',
                   ROOT/'build/n010-cpu/n010_cached_oracle',
@@ -168,7 +176,7 @@ if __name__ == '__main__':
             str(RESULTS/'037-controlled-dynamic-pt1024.json'),str(outputs[48]),
             '--static-pilots',str(outputs[44]),str(RESULTS/'013-c7-pt-cohort-pilot.json'),
             str(RESULTS/'024-c8-pt-quality-ladder.json'),str(RESULTS/'025-c9-pt-quality-ladder.json'),
-            '--output',str(outputs[47])])
+            '--output',str(outputs[47])] + (['--reference-view-record',str(view_record)] if view_record else []))
         status['complete'] = True
         save('READY_EVIDENCE_PENDING_REVIEW')
     except Exception as error:

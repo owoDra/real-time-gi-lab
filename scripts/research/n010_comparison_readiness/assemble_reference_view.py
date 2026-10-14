@@ -19,6 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--lock', type=Path, required=True)
     parser.add_argument('--original', type=Path, required=True)
     parser.add_argument('--incremental', type=Path, required=True)
+    parser.add_argument('--selection', type=Path, help='Prospective Amendment 8 full-slot target/variant map')
     parser.add_argument('--work', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
@@ -33,13 +34,21 @@ if __name__ == '__main__':
     if args.original.resolve() == args.incremental.resolve():
         raise ValueError('original and incremental acquisitions need separate roots')
     rows = []
+    selection = read(args.selection, inputs) if args.selection else None
+    if selection is not None and set(selection) != {f'C{i}_T_B{v}' for i in range(1,13) for v in (2,8)}:
+        raise ValueError('recovery selection requires exactly all 24 slots')
     for cell in sorted(lock['cells'], key=lambda c:int(c[1:])):
         for vertices in (2,8):
             name = f'{cell}_T_B{vertices}'
             variant = 'exact-prefix-continuation' if cell in INCREMENTAL_CELLS else 'original-full-prefix'
             base = args.incremental if cell in INCREMENTAL_CELLS else args.original
             target = (base/name).resolve()
-            if cell not in INCREMENTAL_CELLS and not target.is_dir():
+            if selection is not None:
+                variant = selection[name]['computational_variant']
+                target = Path(selection[name]['target']).resolve()
+                if variant not in ('original-full-prefix','exact-prefix-continuation','proved-exact-prefix-recovery'):
+                    raise ValueError('unknown scheduled reference variant')
+            if variant == 'original-full-prefix' and not target.is_dir():
                 raise ValueError('retained original acquisition missing: '+name)
             if (target/'qualification.json').exists():
                 value = read(target/'qualification.json', inputs)
@@ -60,6 +69,7 @@ if __name__ == '__main__':
               'source_commit':subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip(),
               'script_sha256':sha(Path(__file__)), 'work':str(args.work.resolve()),
               'inputs':inputs, 'proof_sha256':proofs, 'rows':rows,
-              'selection_basis':'Fixed C2/C4/C5/C6 incremental; all other original. No quality-based choice, threshold/corpus changes or overwritten evidence.'}
+              'amendment':'8' if selection else '6',
+              'selection_basis':'Fixed interruption recovery map; all 24 slots preserved. No quality-based choice, threshold/corpus changes or overwritten evidence.' if selection else 'Fixed C2/C4/C5/C6 incremental; all other original. No quality-based choice, threshold/corpus changes or overwritten evidence.'}
     args.output.write_text(json.dumps(result, indent=2)+'\n')
     print(result['classification'])

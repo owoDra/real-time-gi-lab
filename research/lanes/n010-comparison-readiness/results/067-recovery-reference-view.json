@@ -1,0 +1,300 @@
+{
+  "schema": "n010-reference-view/1",
+  "complete": true,
+  "classification": "SCHEDULING_VIEW_ONLY_NOT_READINESS",
+  "source_commit": "c04ec8f8d8e9b5dcf9948e76fd3e3867ba9c6ec5",
+  "script_sha256": "644b803dfc6affbbfc5bb3f36c188807a7f0031f90ff9bdcb0a24a5ba196469e",
+  "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/reference-view-recovery-v1",
+  "inputs": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/016-corpus-state-lock.json": "103bf2a09a2c7589ef72023cd7a1482e3b8e315c077a6132fd5605861a97686c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/recovery-plans-v1/selection.json": "5e4114e74510a07fa00d817c30581f63acbd7bf8c86914af684187460ba60091",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/qualification.json": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C3_T_B2/qualification.json": "b091a27d4ec1eaf3649077b4fb65f81ffb34087b2c8e45efbb490078af698e5b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C7_T_B2/qualification.json": "30e15670cdc1b9314be3bffdd9e0a996ca7797c479f8ae4613a4438e2edfc21e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C7_T_B8/qualification.json": "a427da693e9d44550af91db056c3893f9a944ff49a5ea51a3b1b03ab12f7c65f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C8_T_B2/qualification.json": "89334c2d01be2a27d8e066f92e16f6d809eb82893ded1fac6f7070830bed48ab",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C8_T_B8/qualification.json": "97ed7b5099246f51a30c03bb46357bc4171c459b4878305f00528e18374d5052",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C9_T_B2/qualification.json": "ced5240738b6633592b61514aaf27b04cea7a92a4154aaae8b6bbf1d1d1d7b6a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C9_T_B8/qualification.json": "e7c8443b37677dc540a0b437e793c3ab2a1c1c558b163490e92273876f5d0c9a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C10_T_B2/qualification.json": "53bea9730f1d2b764e71d3dcd3c1771aa5e00c96272858f189d7dcd93e944872",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C10_T_B8/qualification.json": "2961f8f4cae04e1e2886fbaafb3d19ee885bffdee69b8d6c412d8c7fb77745e0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C11_T_B2/qualification.json": "2bc8b4558e425d373d4dbc3cb674daecb768c52c610493d814bd2ce662fcdb13",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C11_T_B8/qualification.json": "0382b9bd303380c5bdfb87c2fe311b2f4f5c8aac67e8815ae9db65b1f1a5d699",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C12_T_B2/qualification.json": "4ce9e4a9d3f91b1a44701ed058f1978cc154c48bd302565b16344fdcb7fb6092",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C12_T_B8/qualification.json": "3bfe5b3992ae0bee6e1e9f354b5eb9a1be3da32732bb050f786a1f75787a1cde"
+  },
+  "proof_sha256": {
+    "009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+    "022-cached-oracle-equivalence.json": "1c353f2623514630e67a7994fa5ebf205da8cafd583e2ab387deae3d9b1e3482",
+    "050-incremental-oracle-equivalence.json": "4bf5b5c265f96e0c188649317411b5142a5f877c42881f644a5da48ab89b215e"
+  },
+  "rows": [
+    {
+      "cell": "C1",
+      "transport": "T_B2",
+      "name": "C1_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C1",
+      "transport": "T_B8",
+      "name": "C1_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8",
+      "computational_variant": "proved-exact-prefix-recovery",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C2",
+      "transport": "T_B2",
+      "name": "C2_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C2_T_B2",
+      "computational_variant": "proved-exact-prefix-recovery",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042"
+      }
+    },
+    {
+      "cell": "C2",
+      "transport": "T_B8",
+      "name": "C2_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C2_T_B8",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042"
+      }
+    },
+    {
+      "cell": "C3",
+      "transport": "T_B2",
+      "name": "C3_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C3_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "5e73154ec84aa7d73b70d70e604e9ce0238fcfacba429a5d2db03454c214aa46"
+      }
+    },
+    {
+      "cell": "C3",
+      "transport": "T_B8",
+      "name": "C3_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C3_T_B8",
+      "computational_variant": "proved-exact-prefix-recovery",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "5e73154ec84aa7d73b70d70e604e9ce0238fcfacba429a5d2db03454c214aa46"
+      }
+    },
+    {
+      "cell": "C4",
+      "transport": "T_B2",
+      "name": "C4_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C4_T_B2",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C4",
+      "transport": "T_B8",
+      "name": "C4_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C4_T_B8",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C5",
+      "transport": "T_B2",
+      "name": "C5_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C5_T_B2",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C5",
+      "transport": "T_B8",
+      "name": "C5_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C5_T_B8",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C6",
+      "transport": "T_B2",
+      "name": "C6_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C6_T_B2",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "38d51b4c2a3d1a1fed34ce2ad1ee0b22d8ddd5b9b5be02101ad16bbbe2193826",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C6",
+      "transport": "T_B8",
+      "name": "C6_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-dynamic-v1/C6_T_B8",
+      "computational_variant": "exact-prefix-continuation",
+      "state_sha256": {
+        "geometry": "38d51b4c2a3d1a1fed34ce2ad1ee0b22d8ddd5b9b5be02101ad16bbbe2193826",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      }
+    },
+    {
+      "cell": "C7",
+      "transport": "T_B2",
+      "name": "C7_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C7_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C7",
+      "transport": "T_B8",
+      "name": "C7_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C7_T_B8",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C8",
+      "transport": "T_B2",
+      "name": "C8_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C8_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "1c3144beb15e6b20d295f58026bfb31fc850dbb94631371f3617e3d07f053b2c"
+      }
+    },
+    {
+      "cell": "C8",
+      "transport": "T_B8",
+      "name": "C8_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C8_T_B8",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "1c3144beb15e6b20d295f58026bfb31fc850dbb94631371f3617e3d07f053b2c"
+      }
+    },
+    {
+      "cell": "C9",
+      "transport": "T_B2",
+      "name": "C9_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C9_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "dc6f2c1c4c968395828b722642d21f306a54ff707e727ab0de499ac97f52d287"
+      }
+    },
+    {
+      "cell": "C9",
+      "transport": "T_B8",
+      "name": "C9_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C9_T_B8",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "dc6f2c1c4c968395828b722642d21f306a54ff707e727ab0de499ac97f52d287"
+      }
+    },
+    {
+      "cell": "C10",
+      "transport": "T_B2",
+      "name": "C10_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C10_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "e47cf09288c8c171dee50575615b8cc676fa4baa40e9b681b88e6b29485631d2",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C10",
+      "transport": "T_B8",
+      "name": "C10_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C10_T_B8",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "e47cf09288c8c171dee50575615b8cc676fa4baa40e9b681b88e6b29485631d2",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C11",
+      "transport": "T_B2",
+      "name": "C11_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C11_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "740fb5333432360513ece46cc3833a7fd9ffdca6f21dc808898f47fbf26ada6e",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C11",
+      "transport": "T_B8",
+      "name": "C11_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C11_T_B8",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "740fb5333432360513ece46cc3833a7fd9ffdca6f21dc808898f47fbf26ada6e",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C12",
+      "transport": "T_B2",
+      "name": "C12_T_B2",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C12_T_B2",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "7a793ae98e9b4bfb34ca0baae7c6d85214fd57604f084e3c359e7e7bc0cb033f",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    },
+    {
+      "cell": "C12",
+      "transport": "T_B8",
+      "name": "C12_T_B8",
+      "target": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C12_T_B8",
+      "computational_variant": "original-full-prefix",
+      "state_sha256": {
+        "geometry": "7a793ae98e9b4bfb34ca0baae7c6d85214fd57604f084e3c359e7e7bc0cb033f",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      }
+    }
+  ],
+  "amendment": "8",
+  "selection_basis": "Fixed interruption recovery map; all 24 slots preserved. No quality-based choice, threshold/corpus changes or overwritten evidence."
+}

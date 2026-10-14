@@ -20,7 +20,7 @@ def replay(memory):
   if current!=event['live_bytes']:raise ValueError('ledger live sum mismatch')
  return not live and peak==memory['true_peak_owned_bytes'] and memory['teardown_zero'] and peak<=8*1024**3
 if __name__=='__main__':
- ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--lock',type=Path,required=True);ap.add_argument('--references',type=Path,required=True);ap.add_argument('--calibration',type=Path,required=True);ap.add_argument('--dynamic-pilots',type=Path,nargs='+',required=True);ap.add_argument('--static-pilots',type=Path,nargs='+',required=True);ap.add_argument('--output',type=Path,required=True);a=ap.parse_args()
+ ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--lock',type=Path,required=True);ap.add_argument('--references',type=Path,required=True);ap.add_argument('--calibration',type=Path,required=True);ap.add_argument('--dynamic-pilots',type=Path,nargs='+',required=True);ap.add_argument('--static-pilots',type=Path,nargs='+',required=True);ap.add_argument('--output',type=Path,required=True);ap.add_argument('--reference-view-record',type=Path);a=ap.parse_args()
  result={'schema':'n010-readiness-preflight/1','classification':'NOT_READY','source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'gates':[],'inputs':{}}
  def gate(name,work):
   try:
@@ -37,9 +37,9 @@ if __name__=='__main__':
   for cell in lock['cells']:
    for v in (2,8):
     row=verify_reference(a.references/f'{cell}_T_B{v}',cell,v,lock['cells'][cell],result['inputs'])
-    incremental=incremental or row['computational_variant']=='exact-prefix-continuation'
+    incremental=incremental or row['computational_variant']!='original-full-prefix'
   if incremental:
-   view=read(ROOT/'research/lanes/n010-comparison-readiness/results/061-full-corpus-reference-view.json')
+   view=read(a.reference_view_record or ROOT/'research/lanes/n010-comparison-readiness/results/061-full-corpus-reference-view.json')
    if view['work']!=str(a.references.resolve()) or len(view['rows'])!=24 or {r['name'] for r in view['rows']}!={f'C{i}_T_B{v}' for i in range(1,13) for v in (2,8)}:raise ValueError('fixed full-corpus scheduling view mismatch')
    for row in view['rows']:
     path=a.references/row['name']

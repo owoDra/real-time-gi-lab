@@ -1,0 +1,32 @@
+{
+  "schema": "n010-gpu-reference-host-build/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "terminal_build_session": 22407,
+  "terminal_exit_code": 0,
+  "input_and_output_sha256": {
+    "src/research/n010_comparison_readiness/gpu_reference_main.cpp": "825a8f6832d7c05f4eea3b7ebcf6d7a9662627be8016afff9b0a2b4dab0ca678",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/snapshot.json": "7830762d9f3ab301c8b8a77c755adcffa8fc7ec7b8893a1b1fe7383c16dfb3e9",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_snapshot.hpp": "b4ca6cbf5744e1d89bf4b23464ea4c213ee9fff85c101cfb6e873f68bc8af7af",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "build/n010-cpu/phos-n010-gpu-reference": "a90e1202a3b1eb89976b8eaf86eb9a2d5bc10622baf308b2fb8af61a3a49ed2a",
+    "build/n010-ddgi-sdk/lib/librtxgi-vulkan.a": "39c606e0d117f9afa0c1f3558b36277aa593b002c19a9b5e7d8faf7f805d9123"
+  },
+  "scope": "Standalone diagnostic host build only; generated read-only N008 snapshot; no default Renderer/build changes or GPU reference eligibility.",
+  "compiler": "g++ (GCC) 15.2.0",
+  "flags": [
+    "-std=c++20",
+    "-O2",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-pthread"
+  ],
+  "sdk_defines": {
+    "RTXGI_COORDINATE_SYSTEM": 2,
+    "RTXGI_DDGI_RESOURCE_MANAGEMENT": 0,
+    "RTXGI_DDGI_USE_SHADER_CONFIG_FILE": 0,
+    "RTXGI_GFX_NAME_OBJECTS": true
+  },
+  "linked_loader": "/run/current-system/sw/share/nix-ld/lib/libvulkan.so"
+}

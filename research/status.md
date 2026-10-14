@@ -46,10 +46,14 @@ Cache equivalence 022 now passes all 20 declared cases. Controlled reference
 provenance audit 051 passes all 12 C7–C12 transports, including re-execution
 of their convergence screens; this subset does not establish whole-corpus
 readiness. Exact-prefix proof 050 passes all three declared cases, all four seeds and
-all 21 payloads/counters each. Fresh incremental C2/C4/C5/C6 qualification is
-running with the unchanged levels, cap and thresholds. Fixed full-corpus view
-061 retains original C1/C3/C7–C12 and all pending incremental transports. The
-idle original-only driver was retired before acquiring any samples (059).
+all 21 payloads/counters each. The original and incremental acquisition processes and waiting driver terminated
+with recorded exits (065); the cause is unestablished. Completed prefixes and
+later partial seeds are retained. Prospective Amendment 8 and fixed full-24
+recovery view 067 schedule byte-identical complete-prefix import into fresh
+acquisitions: C1 T_B8 from 16384, C3 T_B8 and C2 T_B2 from 8192, then the
+unchanged fixed levels/cap/screens. Previous view 061 and driver statuses remain
+historical, not assertions of live computation. GPU binary64 reference feasibility
+(Amendment 7) builds in isolation (066/068); no GPU reference is admitted.
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
 [PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
 [dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),

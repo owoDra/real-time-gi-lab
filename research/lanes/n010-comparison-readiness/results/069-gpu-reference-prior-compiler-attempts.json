@@ -1,0 +1,27 @@
+{
+  "schema": "n010-gpu-reference-prior-compiler-attempts/1",
+  "complete": true,
+  "all_pass": false,
+  "gpu_run": false,
+  "attempts": [
+    {
+      "classification": "COMPILE_ERROR",
+      "directory": "out/research/n010-comparison-readiness/gpu-oracle-compile-failed-v1",
+      "file_sha256": {
+        "error.txt": "d3d0432c314c95b8ad0fee64880317585f9d52c6c6286f52dcc52edc6eb2e7df",
+        "n010_gpu_oracle.comp.glsl": "152b571f5d436d560464f8cc0628197f643dfdbc990200e0c2438d4cce9a5ace"
+      },
+      "error": "glslang returned 2: line 33 UNIFORM reserved-token error; no SPIR-V generated. First compilation only; no GPU dispatch.\n"
+    },
+    {
+      "classification": "TERMINATED_CAUSE_UNESTABLISHED",
+      "directory": "out/research/n010-comparison-readiness/gpu-oracle-source-v1",
+      "terminal_tool_exit_code": 137,
+      "terminal_session": 51374,
+      "spirv_produced": false,
+      "source_sha256": "10ecdc8490102f68a6d24d3d7a73fc1fde5f81c345c86905ee46ad07ecf45eb3",
+      "cause": "Unestablished. No journal attestation of OOM; interruption of reference jobs separately recorded in 065."
+    }
+  ],
+  "scope": "Retained failed diagnostic compilation history. Subsequent bounded successful attempt is 066, not reference admission."
+}
