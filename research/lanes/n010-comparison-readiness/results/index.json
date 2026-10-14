@@ -259,6 +259,12 @@
       "status": "complete",
       "result": "022-cached-oracle-equivalence.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-051",
+      "status": "complete",
+      "result": "051-controlled-reference-provenance-audit.json",
+      "gpu_run": false
     }
   ]
 }

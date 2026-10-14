@@ -129,3 +129,13 @@ remains scored by the original support-aware assessor. It requires a fresh
 directory and never overwrites an existing acquisition. This runner has not
 yet acquired references; coordinate any scheduling change only after proof
 050 passes and at the completed transport boundary specified by Amendment 6.
+
+`reference_provenance.py --lock LOCK --references ROOT --output NEW_JSON`
+validates all 24 reference chains against canonical locked scenes, physical
+validation 009, current binary/net identities, each retained f64/component/hit
+payload, fixed replicate headers, and a fresh execution of the unchanged
+convergence assessor. Exact-prefix variants additionally require the complete
+009/022/050 dependency chain and each preceding metadata/payload identity.
+`--cells` is only a subset audit and cannot assert readiness. Result 051 is the
+executed C7–C12 subset audit (12 transports, PASS); the full corpus is pending.
+This new helper has not changed the frozen running completion driver.

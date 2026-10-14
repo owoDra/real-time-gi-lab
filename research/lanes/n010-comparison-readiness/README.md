@@ -36,3 +36,11 @@ integrated DDGI runtime is not yet demonstrated.
 localizes both residual C1 direct-zero pixels to differing primary primitives
 and supports a legacy tie-interval mechanism. No GPU repair is claimed; both
 pixels remain unresolved and included in scoring.
+
+[Cache equivalence](results/022-cached-oracle-equivalence.json) is complete and
+PASS in all 20 cases. The [controlled reference provenance audit](results/051-controlled-reference-provenance-audit.json)
+rechecks C7–C12, both transports: canonical scene/state, four fixed seeds,
+all component/f64/primary-hit hashes, and every original convergence screen.
+All 12 pass. This is a subset audit; remaining Sponza references and the full
+readiness gate are unfinished. Incremental equivalence 050 is running; the
+new variant has not acquired eligible references.

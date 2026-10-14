@@ -68,8 +68,10 @@ include the retained losses, remaining gates and AMD/Vulkan SDK status.
 
 The [continuous completion driver](../../../../scripts/research/n010_comparison_readiness/README.md)
 queues the remaining qualified pilots and then quiet sizing / one accepted
-calibration campaign. Existing CPU acquisitions remain active; the cached
-oracle's incomplete equivalence acquisition is not used for references.
+calibration campaign. Existing original CPU acquisitions remain active. Cache equivalence 022 is
+now complete and PASS for all 20 declared cases: all f64/component PFM bytes
+and integer counters match. Incremental proof 050 is still running, so the
+new prefix variant has not acquired or qualified any references.
 Driver status is `out/research/n010-comparison-readiness/continuation-v1/status.json`.
 New output identifiers in that script are reservations until actual acquisition;
 no READY or completed calibration is implied. The driver stops on a failure,
@@ -77,7 +79,7 @@ preserves it and requires review before any repair or new accepted acquisition.
 
 Prospective [Amendment 6](../experiments/014-amendment-6-incremental-reference-prefix.md)
 adds a separately built oracle that resumes exact prefix sums. Build 049
-passes; prefix equality acquisition waits for the complete cache proof 022.
+passes; prefix equality acquisition is running after complete cache proof 022.
 No incremental reference is accepted, and no original job is stopped or
 overwritten by this preparation. Exact 16384-SPP payload/counter equality in
 all three declared transports is required before using the variant.
