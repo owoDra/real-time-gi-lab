@@ -8,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <iomanip>
 #include <stdexcept>
 #include <vector>
 
@@ -121,7 +122,9 @@ static void run(const fs::path& shaders,const fs::path& reduction,const fs::path
     D::DDGIVolume volume;sdk_check(volume.Create(desc,res));volume.Update();auto packed=volume.GetDescGPUPacked();std::memcpy(constants.mapped,&packed,sizeof packed);
     auto& irr_read=c.buffer(VkDeviceSize(c.images[1].w)*c.images[1].h*c.images[1].layers*16,VK_BUFFER_USAGE_TRANSFER_DST_BIT);
     auto& dist_read=c.buffer(VkDeviceSize(c.images[2].w)*c.images[2].h*c.images[2].layers*8,VK_BUFFER_USAGE_TRANSFER_DST_BIT);
-    std::ofstream metadata(out/"measurements.json");metadata<<"{\"device\":\""<<c.properties.deviceName<<"\",\"subgroup_width\":"<<c.subgroup<<",\"validation_layer_run\":false,\"rows\":[";
+    std::ofstream metadata(out/"measurements.json");metadata<<std::setprecision(17)<<"{\"device\":\""<<c.properties.deviceName<<"\",\"subgroup_width\":"<<c.subgroup<<",\"validation_layer_run\":false,\"image_layouts\":[";
+    for(size_t j=0;j<c.images.size();++j){auto image=c.images[j];metadata<<(j?",":"")<<"{\"type\":"<<j<<",\"width\":"<<image.w<<",\"height\":"<<image.h<<",\"layers\":"<<image.layers<<",\"float32_channels\":"<<image.channels<<"}";}
+    metadata<<"],\"rows\":[";
     bool all=true;
     for(int control=0;control<2;++control) {
         Ledger::instance().phase(control?"constant-positive":"constant-zero");check(vkResetCommandBuffer(c.command,0));VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};check(vkBeginCommandBuffer(c.command,&bi));
