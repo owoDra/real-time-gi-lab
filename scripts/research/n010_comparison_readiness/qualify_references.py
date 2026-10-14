@@ -13,9 +13,13 @@ ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts/research/n008_hdr_oracle"))
 sys.path.insert(0, str(ROOT / "scripts/research/n007_reference_validity"))
 import n008lib as L
-from check_convergence import assess
+import check_convergence as convergence
 
 LEVELS = (8192, 16384, 32768, 65536, 131072, 262144)
+# N010's prospectively frozen schedule; unchanged N007 scoring/support rules.
+# The imported CLI otherwise rejects any schedule beyond its historical 8192.
+convergence.SPP = LEVELS
+assess = convergence.assess
 NET = ROOT / "out/research/n010-comparison-readiness/sobol16x262144.bin"
 BINARY = ROOT / "build/n010-cpu/n010_rqmc_oracle"
 

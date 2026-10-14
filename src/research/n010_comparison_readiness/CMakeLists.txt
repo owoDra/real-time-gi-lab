@@ -90,3 +90,27 @@ target_include_directories(n010_probe_model PRIVATE "${PROJECT_SOURCE_DIR}/src/r
 target_compile_features(n010_probe_model PRIVATE cxx_std_20)
 target_link_libraries(n010_probe_model PRIVATE Threads::Threads)
 target_compile_options(n010_probe_model PRIVATE -fno-fast-math -ffp-contract=off)
+
+# Native ray-query path tracing comparator, isolated from RC transport.
+set(N010_PT_GLSL "${PROJECT_SOURCE_DIR}/shaders/research/n010_comparison_readiness/n010_pixel_pt.comp.glsl")
+set(N010_PT_SPV "${PROJECT_BINARY_DIR}/shaders/n010_pixel_pt.spv")
+if(GLSLC)
+  add_custom_command(OUTPUT "${N010_PT_SPV}" COMMAND "${GLSLC}" --target-env=vulkan1.3 -O "${N010_PT_GLSL}" -o "${N010_PT_SPV}" DEPENDS "${N010_PT_GLSL}" VERBATIM)
+elseif(GLSLANG_VALIDATOR)
+  add_custom_command(OUTPUT "${N010_PT_SPV}" COMMAND "${GLSLANG_VALIDATOR}" -V --target-env vulkan1.3 -S comp "${N010_PT_GLSL}" -o "${N010_PT_SPV}" DEPENDS "${N010_PT_GLSL}" VERBATIM)
+else()
+  add_custom_command(OUTPUT "${N010_PT_SPV}" COMMAND $<TARGET_FILE:glslang-standalone> -V --target-env vulkan1.3 -S comp "${N010_PT_GLSL}" -o "${N010_PT_SPV}" DEPENDS glslang-standalone "${N010_PT_GLSL}" VERBATIM)
+endif()
+add_custom_target(phos-n010-pixel-pt-shader DEPENDS "${N010_PT_SPV}")
+add_executable(phos-n010-pixel-pt pixel_pt_main.cpp
+  "${N010_GENERATED}/n010_b002_vulkan.cpp"
+  "${N010_N}/imported/lane_b_traversal/b002_compute.cpp"
+  "${N010_N}/imported/lane_b_traversal/b002_hwrt.cpp"
+  "${N010_N}/imported/integration/i001_compute.cpp")
+target_include_directories(phos-n010-pixel-pt PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}" "${PROJECT_SOURCE_DIR}/src"
+  "${N010_N}/imported/lane_a_split_rc" "${N010_N}/imported/lane_b_traversal" "${N010_N}/imported/integration")
+target_compile_features(phos-n010-pixel-pt PRIVATE cxx_std_20)
+target_link_libraries(phos-n010-pixel-pt PRIVATE vk-bootstrap::vk-bootstrap Threads::Threads ${CMAKE_DL_LIBS})
+target_compile_definitions(phos-n010-pixel-pt PRIVATE PHOS_GI_INTEGRATION_SHADER_DIR="${PROJECT_BINARY_DIR}/shaders")
+set_target_properties(phos-n010-pixel-pt PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}")
+add_dependencies(phos-n010-pixel-pt phos-n010-pixel-pt-shader)
