@@ -10,14 +10,18 @@ add_custom_command(OUTPUT
   "${N010_GENERATED}/n010_runtime.cpp"
   "${N010_GENERATED}/n010_hwrt_composite.comp.glsl"
   "${N010_GENERATED}/n010_software_composite.comp.glsl"
+  "${N010_GENERATED}/n010_hwrt_corrected_composite.comp.glsl"
+  "${N010_GENERATED}/n010_software_corrected_composite.comp.glsl"
   COMMAND ${Python3_EXECUTABLE} "${N010_SCRIPT}" --root "${PROJECT_SOURCE_DIR}" --out "${N010_GENERATED}"
   DEPENDS "${N010_SCRIPT}" "${PROJECT_SOURCE_DIR}/scripts/research/n007_reference_validity/generate_capture.py"
     "${PROJECT_SOURCE_DIR}/src/research/n007_reference_validity/n007_capture_main.cpp"
     "${N010_N}/n001_runtime.cpp"
+    "${N010_N}/n002_runtime.cpp" "${N010_N}/n003_comparison_runtime.cpp"
+    "${PROJECT_SOURCE_DIR}/shaders/research/n010_comparison_readiness/n010_pixel_pt.comp.glsl"
     "${PROJECT_SOURCE_DIR}/shaders/research/lane_n_end_to_end_renderer/n001_composite.comp.glsl"
     "${PROJECT_SOURCE_DIR}/shaders/research/lane_n_end_to_end_renderer/n003_composite_software.comp.glsl"
   VERBATIM)
-foreach(kind hwrt software)
+foreach(kind hwrt software hwrt_corrected software_corrected)
   set(shader "${N010_GENERATED}/n010_${kind}_composite.comp.glsl")
   set(spirv "${PROJECT_BINARY_DIR}/shaders/n010_${kind}_composite.spv")
   if(GLSLC)
@@ -56,6 +60,7 @@ add_executable(phos-n010-capture
   "${N010_GENERATED}/n010_b002_vulkan.cpp"
   "${N010_N}/imported/lane_b_traversal/b002_compute.cpp"
   "${N010_N}/imported/lane_b_traversal/b002_hwrt.cpp"
+  "${N010_N}/n002_hwrt_rebuild.cpp"
   "${N010_GENERATED}/n010_vk_context.cpp")
 set_source_files_properties(
   "${N010_C1}/n009_a001_scene.cpp" "${N010_C1}/n009_a001_runtime.cpp"
