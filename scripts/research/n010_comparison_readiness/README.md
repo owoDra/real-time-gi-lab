@@ -139,3 +139,14 @@ convergence assessor. Exact-prefix variants additionally require the complete
 `--cells` is only a subset audit and cannot assert readiness. Result 051 is the
 executed C7–C12 subset audit (12 transports, PASS); the full corpus is pending.
 This new helper has not changed the frozen running completion driver.
+
+The prepared `assemble_reference_view.py` requires the complete 009/022/050
+proof chain before creating a fresh, full 24-transport symlink view. Its fixed
+scheduling map retains original C1/C3/C7–C12 acquisitions and selects fresh
+incremental C2/C4/C5/C6 acquisitions. This map is fixed before incremental
+images exist; it never picks an acquisition based on image quality. Pending
+links do not imply eligibility. A recorded view is only scheduling provenance,
+and all 24 actual references still need final provenance/preflight checks.
+This helper has not been executed. Switching the current driver or stopping
+an original generator still requires the completed transport boundary and
+retained status/partial-attempt record specified in Amendment 6.
