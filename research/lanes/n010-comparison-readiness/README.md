@@ -219,3 +219,11 @@ No new sampling reference, successful new-variant audit or view replacement
 has occurred. [117](results/117-point-guided-api-existing-cpu-provenance-audit.json)
 passes only delegation to the existing audit on the fifteen original CPU
 references. It does not attest new sampling, remaining nine slots or readiness.
+
+[Readiness adapter 033](experiments/033-point-guided-readiness-adapter.md) keeps
+all six exact original gates while dispatching reference audits through the
+separate API. Actual [119](results/119-point-guided-adapter-interim-preflight.json)
+executes against current view 067 and remains NOT_READY, retaining incomplete
+reference/Sponza-pilot/calibration gates. The six gate names/pass classifications
+match 103; all 162 recorded inputs were checked unchanged after execution.
+No new sampling branch, current view/driver replacement or final 047 is attested.

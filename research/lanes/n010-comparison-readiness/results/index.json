@@ -583,6 +583,12 @@
       "status": "fifteen-original-cpu-slots-delegation-audit",
       "result": "117-point-guided-api-existing-cpu-provenance-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-119",
+      "status": "not-ready-adapter-interim-preflight",
+      "result": "119-point-guided-adapter-interim-preflight.json",
+      "gpu_run": false
     }
   ]
 }

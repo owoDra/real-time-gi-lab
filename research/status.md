@@ -181,3 +181,12 @@ new-variant provenance and view-transition success paths remain unexecuted.
 Existing-CPU delegation [117](lanes/n010-comparison-readiness/results/117-point-guided-api-existing-cpu-provenance-audit.json)
 passes all fifteen previously eligible slots through the new API; this audits
 original-method references only and does not attest the point-guided branch.
+
+A separate final-preflight [adapter plan 033](lanes/n010-comparison-readiness/experiments/033-point-guided-readiness-adapter.md)
+changes only reference-provenance dispatch/description and recorded adapter
+identities, retaining all six original readiness gates and thresholds. Actual
+interim execution [119](lanes/n010-comparison-readiness/results/119-point-guided-adapter-interim-preflight.json)
+against view 067 is NOT_READY (162 recorded inputs): reference eligibility,
+full Sponza pilots and accepted calibration remain incomplete. Its six gate
+names/pass classifications equal the earlier 103 audit. It does not execute
+a new sampling-reference branch, change the frozen driver or supply final 047.

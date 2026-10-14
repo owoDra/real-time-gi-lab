@@ -323,3 +323,22 @@ Actual 117 exercises that delegation on all fifteen existing eligible CPU
 slots and confirms frozen inputs; it provides no new-variant admission.
 Its exact invocation is retained and hashed as
 `out/research/n010-comparison-readiness/point-guided-provenance-existing-cpu-audit-v1.py`.
+
+### Exact-source final readiness adapter
+
+`readiness_preflight_point_guided.py` accepts the original preflight CLI,
+rejects an existing output, and verifies original source SHA256
+`87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c`.
+It changes only the reference-provenance import/success description and adds
+adapter/original/plan identities. It executes the exact adapted source in a
+private namespace: no shared-module monkey patch, original source edit, gate
+change or current frozen-driver replacement. All six original gates remain.
+
+Actual interim 119 runs with lock 026/view 067 and the originally declared
+static/dynamic/calibration inputs, classifying NOT_READY. All six gate names
+and pass/fail classifications match 103; 162 recorded inputs remain unchanged.
+The reference gate stops at the first ineligible C1 B8, so this does not attest
+all 24 references or exercise the point-guided-reference branch. Missing 044,
+048 and 029 remain explicit failures. New sampling use requires a separately
+recorded full view/provenance/scheduling transition and a fresh final audit;
+119 is retained and does not manufacture absent final 047.

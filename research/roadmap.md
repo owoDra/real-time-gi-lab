@@ -102,3 +102,10 @@ its exact read bytes are retained. API delegation 117 passes the existing
 fifteen-slot subset; the new-variant branch remains unexecuted. One queued
 acquisition waits for full physical/all-state/prefix proof. Neither queue,
 prepared provenance nor a subset audit passes final comparison readiness.
+
+Separate final-preflight adapter 033 reuses the exact original six-gate source
+with new reference-provenance dispatch. Actual interim 119 is NOT_READY with
+the same six gate classifications as 103. This prepares final integration
+without changing the frozen current driver, reference view, scoring/timing
+thresholds or absent final 047. A recorded reference/scheduling transition
+and complete actual comparison/calibration evidence are still required.
