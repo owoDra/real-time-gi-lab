@@ -58,3 +58,9 @@ executing; READY still requires the full pilots and accepted calibration.
 GPU binary64 execution feasibility 070 is only a small numerical diagnostic,
 not admitted reference evidence. N010 remains the last preparation study;
 continue directly to the distinct Lane M GI comparison lane after its gate.
+
+GPU reference feasibility follow-up 082 has now completed but failed fixed
+numerical conformance on C1 T_B8 seed 0. No GPU reference is admitted;
+post-hoc sampling diagnosis (plan 022 / map 084) runs separately from the
+live unchanged CPU qualification. This failure does not create another
+preparation lane or relax the all-24-reference readiness requirement.

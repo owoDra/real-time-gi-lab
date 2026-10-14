@@ -185,3 +185,14 @@ completed cases and executing the remaining four with a 1800-second guard.
 New physical/prefix conditional workers wait for 082 using
 `gpu-reference-physical-controls-v2` and `gpu-reference-all-state-prefix-v2`.
 Existing CPU recovery and continuation-v3 inputs remain frozen and unchanged.
+
+### Completed deep GPU numerical failure
+
+082 completed C1 T_B8 seed 0 (8192 spp) but failed unchanged Amendment 7
+gates: mean 6.78235e-7, moment 5.31950e-9, indirect NRMSE 2.94757e-6,
+shadow-test/blocked counter differences +26/+31. Primary/direct/emission
+remain byte identical. The candidate is ineligible; dependent physical and
+all-state/prefix runs refused dispatch (085, NOT RUN). 084 maps 54 affected
+pixels as post-hoc diagnosis; plan 022 uses eight selected pixels to replay
+and intervene on sampling arithmetic. No exclusions or relaxed thresholds.
+CPU reference recovery continues independently; 15/24 slots are eligible.

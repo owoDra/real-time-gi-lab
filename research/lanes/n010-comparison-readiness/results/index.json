@@ -403,6 +403,30 @@
       "status": "publication-links-only",
       "result": "083-result-index-link-verification.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-082",
+      "status": "complete-negative",
+      "result": "082-gpu-reference-deep-conformance-resource-followup.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-084",
+      "status": "posthoc-diagnostic",
+      "result": "084-gpu-deep-numerical-failure-map.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-085",
+      "status": "dependency-failed-not-run",
+      "result": "085-deferred-control-workers-after-numerical-failure.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-086",
+      "status": "build-failed-not-run",
+      "result": "086-deep-sampling-intervention.json",
+      "gpu_run": false
     }
   ]
 }

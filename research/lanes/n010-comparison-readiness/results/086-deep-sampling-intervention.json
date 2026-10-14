@@ -1,0 +1,50 @@
+{
+  "schema": "n010-deep-sampling-intervention/1",
+  "complete": true,
+  "gpu_run": false,
+  "eligible_for_references": false,
+  "classification": "POSTHOC_DIAGNOSTIC_NOT_ADMISSION",
+  "selected_pixels": [
+    7826,
+    13450,
+    33365,
+    55934,
+    17035,
+    16762,
+    8143,
+    14210
+  ],
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/082-gpu-reference-deep-conformance-resource-followup.json": "422b75bb8c1244c5c05ce2e5735a59b000313726bb88d378105c00e71a4a5158",
+    "research/lanes/n010-comparison-readiness/results/084-gpu-deep-numerical-failure-map.json": "ea421e21aba88680e1bbecac305423053a564580d3a9f68656c5aa0514ac0989",
+    "research/lanes/n010-comparison-readiness/experiments/022-posthoc-deep-sampling-diagnostic.md": "93796bcf43c056742272b205bef749b2b4f8671eae44a0c200293b6646c855d9",
+    "src/research/n010_comparison_readiness/gpu_reference_main.cpp": "825a8f6832d7c05f4eea3b7ebcf6d7a9662627be8016afff9b0a2b4dab0ca678",
+    "shaders/research/n010_comparison_readiness/n010_gpu_oracle.comp.glsl": "10ecdc8490102f68a6d24d3d7a73fc1fde5f81c345c86905ee46ad07ecf45eb3",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_snapshot.hpp": "b4ca6cbf5744e1d89bf4b23464ea4c213ee9fff85c101cfb6e873f68bc8af7af",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "scripts/research/n010_comparison_readiness/diagnose_gpu_deep_sampling.py": "fb692491c8e4453af59ad96916435515e3e8875bc1f2ae85c5f4ecc5b4a73490"
+  },
+  "steps": [
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+        "-V",
+        "--target-env",
+        "vulkan1.2",
+        "-S",
+        "comp",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v1/roi.comp.glsl",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v1/raw.spv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v1/roi.comp.glsl\n",
+      "wall_seconds_diagnostic": 0.2612248610093957
+    }
+  ],
+  "no_contraction_results": 181,
+  "failure": "retained failed step: polynomial-build"
+}

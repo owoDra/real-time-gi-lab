@@ -1,0 +1,21 @@
+{
+  "schema": "n010-conditional-diagnostics/1",
+  "complete": true,
+  "all_pass": false,
+  "gpu_run": false,
+  "classification": "DEPENDENCY_FAILED_NO_DISPATCH",
+  "dependency_sha256": "422b75bb8c1244c5c05ce2e5735a59b000313726bb88d378105c00e71a4a5158",
+  "terminal_sessions": {
+    "physical-control": {
+      "session_id": 20056,
+      "exit_code": 1
+    },
+    "all-state-prefix": {
+      "session_id": 55104,
+      "exit_code": 1
+    }
+  },
+  "scientific_outputs_produced": false,
+  "reason": "Conditional workers refused dispatch because full conformance 082 completed but failed fixed numerical gates on C1 T_B8 seed 0. Physical, all-state GPU and nested-prefix runtime checks are NOT RUN.",
+  "scope": "No GPU reference admission. CPU recovery is independent."
+}

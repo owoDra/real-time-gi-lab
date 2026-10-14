@@ -87,3 +87,14 @@ failed; 081 records that conditional physical/prefix workers refused dispatch
 (NOT RUN). Plan 021 starts 082 with the twelve unchanged completed cases and
 a fresh 1800-second guard for the remaining four. New conditional workers
 use 082 and fresh work roots; no GPU reference is admitted.
+
+### Completed deep GPU numerical failure
+
+082 completed C1 T_B8 seed 0 (8192 spp) but failed unchanged Amendment 7
+gates: mean 6.78235e-7, moment 5.31950e-9, indirect NRMSE 2.94757e-6,
+shadow-test/blocked counter differences +26/+31. Primary/direct/emission
+remain byte identical. The candidate is ineligible; dependent physical and
+all-state/prefix runs refused dispatch (085, NOT RUN). 084 maps 54 affected
+pixels as post-hoc diagnosis; plan 022 uses eight selected pixels to replay
+and intervene on sampling arithmetic. No exclusions or relaxed thresholds.
+CPU reference recovery continues independently; 15/24 slots are eligible.

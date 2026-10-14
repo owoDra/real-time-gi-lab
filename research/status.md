@@ -136,33 +136,28 @@ See [roadmap](roadmap.md) for gates. Old status, stale next-step commands and br
 
 **N007 final bounded stop (2026-10-12):** [result 012](lanes/n007-reference-validity/results/012-n007-bounded-no-go-decision.md) applies Issue #4's frozen rule to **stop when a reliable, nontrivial HDR reference across all required dynamic classes cannot be demonstrated within resources**. Moving-rigid is mandatory and has exhausted the complete frozen four-seed 512–8192-SPP ladder with active fraction **0.0** at every level; consequently **cross-class HDR reference qualification = NO GO**. N007 P1-B isolated the image-level GPU secondary shadow omission mechanism for its **new matched diagnostic frame** (9,247/9,247 positive indirect pixels disappear when just CPU-shadowed GPU probe contributions are suppressed). Camera/disocclusion, light-motion, controlled-GPU-light, static/deforming/churn, and independent GPU camera/secondary allocation attestation remain **explicitly unmeasured or unverified**; the stop does not declare them individually wrong or correct. Physical accuracy and historical original N006 M3b frame causation are **unproven**. No original N001–N006 sources or outcomes changed. [Issue #4](https://github.com/owoDra/real-time-gi-lab/issues/4) closed as negative research outcome, not a positive GI quality pass.
 
-### N010 recovery checkpoint
+### N010 current acquisition checkpoint
 
-C2 T_B2 recovery qualifies at 16384/32768 consecutively. Its imported 8192
-prefix, complete canonical scene/four-seed payloads and 009/022/050 metadata
-chains independently pass audit 080. C2 T_B8 and the remaining selected slots
-continue; this single-transport audit is not whole-corpus READY. GPU numerical
-trial 074 retains its 120-second Sponza timeout; prospective resource follow-up
-075 uses a recorded 900-second guard with unchanged numerical gates. The
-first Sponza C1 T_B2 seed now agrees with the original CPU 8192 output: exact
-counters/primary/direct, max mean difference 1.73472e-18. Full conformance,
-original physical controls (planned 077), all-state checks (078/079) and
-nested-prefix checks are required before any GPU reference admission.
+CPU recovery continues with the unchanged four-seed ladder/screens and view 067.
+C2 T_B2 qualified at consecutive 16384/32768 levels (audit 080): 15 of the
+24 required slots are eligible. C2 T_B8 completed its first 8192-spp screen
+without eligibility and continues; C1 T_B8 recovery is acquiring 32768 spp.
+Continuation-v3 waits for eligible references; accepted quiet calibration and
+whole-corpus READY remain unexecuted.
 
-Original CPU low-dose controls for all 24 locked state/transport slots and
-all four seeds complete with finite outputs and canonical identities (078).
-They are numerical admission controls at 16 spp, not statistically eligible
-references. GPU full-level conformance retained twelve completed passing cases (C1 T_B2,
-C7 T_B2/T_B8, four fixed seeds); 075 then stopped at the C1 T_B8 wall guard.
-082 now reuses that ordered completed prefix and acquires the remaining
-four C1 T_B8 cases under the prospective 1800-second execution guard.
-No GPU reference is admitted while its remaining physical/all-state/prefix
-gates are pending. Recovery C2 T_B8 and C1 T_B8 CPU jobs continue.
+GPU numerical conformance 082 is **complete and failed**, rather than waiting
+at a resource guard. Twelve preceding cases pass. C1 T_B8 seed 0 completed in
+1198.63 seconds diagnostic acquisition wall, with finite output, zero faults
+and identical primary/direct/emission payloads, but failed the fixed gates:
+max mean difference 6.78235e-7 (limit 1e-10), max moment difference 5.31950e-9
+(limit 1e-10), indirect NRMSE 2.94757e-6 (limit 1e-8), and shadow counters
++26 tests / +31 blocked. No numerical threshold is changed; this candidate is
+not admitted. Physical/all-state/prefix workers refused dispatch (085, NOT RUN).
+Original CPU low-dose controls 078 cover all 24 slots/four seeds and are not
+statistically eligible references.
 
-GPU conformance 075 is now terminal: 12 cases pass, but the first C1 T_B8
-case exceeds the 900-second execution guard without a numerical output.
-075 is retained as failed; conditional physical/prefix workers correctly
-refused dispatch (081, NOT RUN). Plan 021 executes fresh 082 with unchanged
-numerical gates and an explicit 1800-second guard for the remaining four
-cases, retaining the ordered twelve completed cases. GPU references remain
-ineligible; CPU recovery continues.
+Post-hoc output mapping 084 finds 54 pixels above the mean gate; the cause is
+unestablished. Plan 022 replays the largest eight with a separate diagnostic
+binary and tests CPU trigonometry as an intervention. These pixels stay in all
+scores; selected-pixel diagnosis cannot replace full admission checks. Earlier
+timeouts 074/075, build failures and all original evidence are retained.
