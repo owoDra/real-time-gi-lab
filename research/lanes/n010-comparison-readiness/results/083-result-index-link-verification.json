@@ -1,0 +1,59 @@
+{
+  "schema": "n010-result-index-link-verification/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "source_commit": "b513c3f9ae5ca15e38202d1b48f4b18e6977d21c",
+  "validator_sha256": "2694cb44fef19b8e79f5b06b6e0f762448b811b07cd6006361ed04e053cdc3e8",
+  "rows": [
+    {
+      "lane": "lane-a-split-rc",
+      "index_sha256": "bab6f06d71d9c5b9539587a4b2dbe8d12af9f1b72140e737d642797c57f8fa78",
+      "declared_records": 1,
+      "pass": true
+    },
+    {
+      "lane": "lane-b-traversal",
+      "index_sha256": "048dfec5a351ea08a1fce13e94e51afa60ec08c981ab485253c32ef73bd76744",
+      "declared_records": 3,
+      "pass": true
+    },
+    {
+      "lane": "lane-c-storage-locality",
+      "index_sha256": "7e59075c4c9b1e4218fea571806d740cd451ce5b0adbb0a703744bf230ad6a87",
+      "declared_records": 1,
+      "pass": true
+    },
+    {
+      "lane": "lane-k-gpu-primary-calibration",
+      "index_sha256": "a389e92c078013b28b76c7a796aad59e283a32ffa7a51f7144edc3e4e8fc5065",
+      "declared_records": 4,
+      "pass": true
+    },
+    {
+      "lane": "lane-n-end-to-end-renderer",
+      "index_sha256": "add9fc94347c83523614e43842ebb5b7538b7d17dd3c4062ec904dffd6d69975",
+      "declared_records": 5,
+      "pass": true
+    },
+    {
+      "lane": "n008-hdr-oracle",
+      "index_sha256": "debc1c9624529e703c13f5a09840fe0388451d3877e7d96aead797de6a74740a",
+      "declared_records": 10,
+      "pass": true
+    },
+    {
+      "lane": "n009-scene-contract",
+      "index_sha256": "7bcea66b82b5699ccc4db083a6aef864330e32bd4c9692cfc7dd74ee4ac46ebd",
+      "declared_records": 7,
+      "pass": true
+    },
+    {
+      "lane": "n010-comparison-readiness",
+      "index_sha256": "e568db618dd5a79d9108965ac22bff309306c68ed475b6c96f380c71bf043ad1",
+      "declared_records": 66,
+      "pass": true
+    }
+  ],
+  "scope": "Eight explicitly configured lane indexes: schema, unique IDs, status strings, declared local result links and JSON parsing. No runtime, payload authenticity, numerical eligibility or whole N010 readiness claim. Unindexed live partial acquisitions are outside publication verification."
+}
