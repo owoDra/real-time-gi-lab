@@ -17,6 +17,13 @@ std::vector<char> read(const fs::path& p){std::ifstream f(p,std::ios::binary);if
 template<class T>T at(const std::vector<char>& b,std::size_t off){if(off+sizeof(T)>b.size())throw std::runtime_error("short input");T v;std::memcpy(&v,b.data()+off,sizeof(T));return v;}
 o::V3 v3(const float* v){return {v[0],v[1],v[2]};}
 void vec(o::V3 p){std::cout<<'['<<p.x<<','<<p.y<<','<<p.z<<']';}
+o::V3 nudge(const o::Triangle& t,o::V3 p,double inset){
+ const o::V3 v[3]={t.v0,t.v1,t.v2};double margin=o::kInf,max_edge=0;
+ for(int i=0;i<3;++i){auto a=v[(i+1)%3],b=v[(i+2)%3];double len=o::length(b-a);
+  max_edge=std::max(max_edge,len);margin=std::min(margin,o::length(o::cross(b-a,p-a))/len);}
+ if(margin>=inset)return p;double h=o::length(o::cross(t.v1-t.v0,t.v2-t.v0))/max_edge;
+ double alpha=std::min(0.5,3*inset/h);return p+((t.v0+t.v1+t.v2)*(1.0/3.0)-p)*alpha;
+}
 int main(int argc,char** argv){try{
  if(argc!=3)throw std::runtime_error("usage: direct_diagnostic CAPTURE PIXEL_TSV (id oracle_t oracle_triangle gpu_direct ref_direct)");
  fs::path cap=argv[1];auto g=read(cap/"geometry-state.bin"),f=read(cap/"frame-state.bin"),h=read(cap/"gpu/hits.bin");
@@ -26,7 +33,7 @@ int main(int argc,char** argv){try{
  for(std::uint32_t i=0;i<nt;++i){float a[9];std::memcpy(a,g.data()+8+52*std::size_t(i),36);o::Triangle t{v3(a),v3(a+3),v3(a+6),0};tris.push_back(t);box.grow(t.v0);box.grow(t.v1);box.grow(t.v2);ids.emplace(at<std::uint32_t>(g,44+52*std::size_t(i)),i);}
  o::Bvh bvh(tris);double diag=o::length(box.hi-box.lo);const auto invalid=0xffffffffU;
  std::ifstream in(argv[2]);if(!in)throw std::runtime_error("pixel TSV open");std::uint32_t id,oi;double ot,gd,rd;bool first=true;
- std::cout<<std::setprecision(17)<<"{\"schema\":\"n010-direct-ray-diagnostic/1\",\"independent_double_geometry\":true,\"diagonal\":"<<diag<<",\"pixels\":[";
+ std::cout<<std::setprecision(17)<<"{\"schema\":\"n010-direct-ray-diagnostic/2\",\"independent_double_geometry\":true,\"oracle_camera\":\"N008 float32 target addition then float64 forward subtraction\",\"oracle_edge_nudge\":true,\"diagonal\":"<<diag<<",\"pixels\":[";
  while(in>>id>>ot>>oi>>gd>>rd){if(id>=w*ht||oi>=nt)throw std::runtime_error("bad pixel/triangle");auto hit=at<GHit>(h,id*32);auto self=ids.at(hit.prim);auto x=id%w,y=id/w;
   float nx=2.0f*(float(x)+0.5f)/float(w)-1.0f,ny=1.0f-2.0f*(float(y)+0.5f)/float(ht),d[3];
   for(int a=0;a<3;++a)d[a]=p.fwd[a]+p.right[a]*(nx*p.right[3])+p.up[a]*(ny*p.up[3]);
@@ -34,9 +41,12 @@ int main(int argc,char** argv){try{
   o::V3 gpu_pos=v3(pos),gpu_n=o::normalize(v3(hit.n)),cam=v3(p.cam),light=v3(p.light);
   if(o::dot(gpu_n,v3(d))>0)gpu_n=gpu_n*-1;
   double dx=2.0*(double(x)+0.5)/w-1.0,dy=1.0-2.0*(double(y)+0.5)/ht;
-  auto fwd=o::normalize(v3(p.fwd)),right=o::normalize(o::cross(fwd,v3(p.up))),up=o::cross(right,fwd);
+  // Reproduce N008 n008lib.state_scene exactly: numpy float32 pos+forward
+  // rounds the target before Camera.forward subtracts in float64.
+  float target[3];for(int a=0;a<3;++a)target[a]=p.cam[a]+p.fwd[a];
+  auto fwd=o::normalize(v3(target)-cam),right=o::normalize(o::cross(fwd,v3(p.up))),up=o::cross(right,fwd);
   auto od=o::normalize(fwd+right*(dx*p.right[3])+up*(dy*p.up[3]));
-  auto oracle_pos=cam+od*ot,oracle_n=o::normalize(o::cross(tris[oi].v1-tris[oi].v0,tris[oi].v2-tris[oi].v0));if(o::dot(oracle_n,od)>0)oracle_n=oracle_n*-1;
+  auto oracle_pos=nudge(tris[oi],cam+od*ot,diag*1e-11),oracle_n=o::normalize(o::cross(tris[oi].v1-tris[oi].v0,tris[oi].v2-tris[oi].v0));if(o::dot(oracle_n,od)>0)oracle_n=oracle_n*-1;
   std::cout<<(first?"":",")<<"{\"id\":"<<id<<",\"x\":"<<x<<",\"y\":"<<y<<",\"gpu_primary_primitive\":"<<hit.prim<<",\"oracle_triangle\":"<<oi<<",\"gpu_direct\":"<<gd<<",\"reference_direct\":"<<rd<<",\"gpu_position\":";vec(gpu_pos);std::cout<<",\"oracle_position\":";vec(oracle_pos);std::cout<<",\"position_distance\":"<<o::length(gpu_pos-oracle_pos)<<",\"rays\":[";
   bool rf=true;
   for(int source=0;source<2;++source){auto pos0=source?oracle_pos:gpu_pos,n=source?oracle_n:gpu_n;auto lv=light-pos0;double dist=o::length(lv);auto wi=lv*(1/dist);

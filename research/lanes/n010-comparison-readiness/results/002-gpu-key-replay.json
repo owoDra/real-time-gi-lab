@@ -1,0 +1,530 @@
+{
+  "schema": "n010-gpu-key-replay/1",
+  "rows": [
+    {
+      "capture": "C1-hwrt",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "audit_sha256": "e2eb99e12058483c8969765c4a9f2c37c521797c4a01f5d0c920ea4fd625dac4",
+      "work_items": 664064,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 2.9103830456733704e-11,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 47187,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "cbf9d509e46afa0fad2e8ecdc116c0ed087d757f",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "hwrt",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C1-hwrt"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "75fd8c9cd0a965f165893daa7e766df4f2d3217bb38ebbdbac738493958bf55b",
+        "capture.json": "c15f058acf92a8d215b09a4e0ee18d854d88946d0818ce2526ebd57b415bddc1",
+        "frame-state.bin": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+        "geometry-state.bin": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "gpu/composite-lookup.bin": "e2eb99e12058483c8969765c4a9f2c37c521797c4a01f5d0c920ea4fd625dac4",
+        "gpu/direct.pfm": "bc1508075924b8b4953df916acd9bc7681ae016fe7ab1a1bb15d4efc31ee78dc",
+        "gpu/hits.bin": "ddb04f9852e7b44ef0097f2996dd2379ffe3f6685bd146df278fe88fa5620cbc",
+        "gpu/indirect.pfm": "64753950162f976fa81d62bc829797f48eb27f813fc67d51e7ac0f4bf2f7f86a",
+        "gpu/probe-contributions.bin": "05caa564f3a2f94becf3fd3069f328a0059712076f53703179e9b8b0b8b00ecd",
+        "gpu/probe-hits.bin": "8ef3b8d6155331766e71d6163ed9836deed3be9f730c2fe1c9bef44b684cd851",
+        "gpu/probe-work.bin": "5b9655f4e29cffd7a7fa97c198b697c7366dbce5a92e041598baaa04ef351e25",
+        "gpu/total.pfm": "2b242b15b1d38ea5477a4b7cbaecaef0e8c26c23acb2a59ad7975818b2978d18"
+      }
+    },
+    {
+      "capture": "C1-software",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "audit_sha256": "e2eb99e12058483c8969765c4a9f2c37c521797c4a01f5d0c920ea4fd625dac4",
+      "work_items": 664064,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 2.9103830456733704e-11,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 47187,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "cbf9d509e46afa0fad2e8ecdc116c0ed087d757f",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "software",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C1-software"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "639ffd7fed6cfda75c51c6cda4451242e5228fc17457c1cfb48f50dc99aa11bd",
+        "capture.json": "7f882b72ee2c023f9fcb2abaf7b6b2bb8f51d40372e8da6d08bf71ef34b8e8b3",
+        "frame-state.bin": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+        "geometry-state.bin": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "gpu/composite-lookup.bin": "e2eb99e12058483c8969765c4a9f2c37c521797c4a01f5d0c920ea4fd625dac4",
+        "gpu/direct.pfm": "d6d131714434b9d5feaed964acfc632988178fb8e27cd24a2cb3f5ceed850faf",
+        "gpu/hits.bin": "a5d3a7367c25228b85848d76401df829428c0664970d6e4fc05c844d5796408e",
+        "gpu/indirect.pfm": "64753950162f976fa81d62bc829797f48eb27f813fc67d51e7ac0f4bf2f7f86a",
+        "gpu/primary-geometry.bin": "ec954ace2b5e9f0b6dcad4e376ccabe5897a64eb6d21f720519ff0f3671a68ae",
+        "gpu/probe-contributions.bin": "3a48002bc26744a538ad851dd0ec42cca8ddf1531e3e05e6bd65d4f94dfddda3",
+        "gpu/probe-hits.bin": "85a634bca5adbfae038a30b189a8000bec2474d150e48fa001e9aa8b001a25d2",
+        "gpu/probe-work.bin": "5ee61080544a37321784eaa73c22ab6dbe048201fd6c8e85bffe8ef265598c18",
+        "gpu/total.pfm": "0735ff71fe6291bb6563b6174bfcc665a6b064be9090ba39a48db708e27aec0b"
+      }
+    },
+    {
+      "capture": "C2-hwrt",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042"
+      },
+      "audit_sha256": "c0ac2a57cdf2009a47559c0d1eff53bb5ec8a98ed7d377d118c35a094f71388e",
+      "work_items": 666656,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 2.3283064365386963e-10,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 50678,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "cbf9d509e46afa0fad2e8ecdc116c0ed087d757f",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "camera-motion",
+          "--backend",
+          "hwrt",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C2-hwrt"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "e4addc2c4e43e2d6de55bc78c1f728cf6bedf1b2007964777c3f79de2e7de5d4",
+        "capture.json": "38013a2dce59ec51a3dcd5fb3884e068a07b64d4d7f3c1d4935ee9042147b884",
+        "frame-state.bin": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042",
+        "geometry-state.bin": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "gpu/composite-lookup.bin": "c0ac2a57cdf2009a47559c0d1eff53bb5ec8a98ed7d377d118c35a094f71388e",
+        "gpu/direct.pfm": "2175cc3571e85b4cdeea1cb5432c5fcfe0beee4b1b000590a4e520c228461df8",
+        "gpu/hits.bin": "e191b1bc480d1c60cbc49d9efce08dd0d7283d487b2b9e9a0244f7cd5457f63c",
+        "gpu/indirect.pfm": "66830a8b765a948aa9868866010ea479d767e62356984f77fc64ca511eae4746",
+        "gpu/probe-contributions.bin": "ed6c145d7979be764f13958af1f94e494a02d03e887f580270c8a62bf2a41afc",
+        "gpu/probe-hits.bin": "f102258a02089369dc11539e101b9bb5f532e1f46a19e13981cb41d6e7e16df1",
+        "gpu/probe-work.bin": "dd79c04de3d1959502d4417d94fa2210640ede0fc12e9f5c59897303c2b5c4f5",
+        "gpu/total.pfm": "084515a3e315a54db4858de6a8b9abb984a08e6d88d8ae9d4aa522af864805fe"
+      }
+    },
+    {
+      "capture": "C2-software",
+      "state_sha256": {
+        "geometry": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "frame": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042"
+      },
+      "audit_sha256": "c0ac2a57cdf2009a47559c0d1eff53bb5ec8a98ed7d377d118c35a094f71388e",
+      "work_items": 666656,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 2.3283064365386963e-10,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 50678,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "cbf9d509e46afa0fad2e8ecdc116c0ed087d757f",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "camera-motion",
+          "--backend",
+          "software",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C2-software"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "819e7ad420f97f6566818af3c3dd56c7c15f01838e3b2dd52a0f2722030f1347",
+        "capture.json": "b0398077b12480d3a4b9e30900b6576f8b3bc4c26a8e0c07be4d0d01cd4f6282",
+        "frame-state.bin": "b80091452a04ac804561a03674de07f2e4ad08e67a5d2171976af69332284042",
+        "geometry-state.bin": "14c688992a42538b892f64be507f8feab02d682177e3a1693446a9925b8a1053",
+        "gpu/composite-lookup.bin": "c0ac2a57cdf2009a47559c0d1eff53bb5ec8a98ed7d377d118c35a094f71388e",
+        "gpu/direct.pfm": "3a8018fe837334a8c3a70e5c18a208113ef63262ead913b6f77ec6a39a350ad4",
+        "gpu/hits.bin": "ec330f7558cad0a276ab1f2c87865bf372cae905868002b914946a3eaab44fc9",
+        "gpu/indirect.pfm": "66830a8b765a948aa9868866010ea479d767e62356984f77fc64ca511eae4746",
+        "gpu/primary-geometry.bin": "ec954ace2b5e9f0b6dcad4e376ccabe5897a64eb6d21f720519ff0f3671a68ae",
+        "gpu/probe-contributions.bin": "33d209be4d1e1942b4620c1d7e6d2e2d5babe23a4db1d95f74ecbc1469eba744",
+        "gpu/probe-hits.bin": "227bdc6936388516f0a2291a1442c836edc800b8e24eb372487bf7ae9e66fc90",
+        "gpu/probe-work.bin": "a087be8b2a8ee3a9b10c88eb56b99824fe808fe15b8e4ec6799946de027bd8a4",
+        "gpu/total.pfm": "70af261886f213373e4ed91a461f7bc52fa8de21973cf1e5f5f7ab30f6b629e4"
+      }
+    },
+    {
+      "capture": "C4-hwrt",
+      "state_sha256": {
+        "geometry": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "audit_sha256": "b9666c919c4b3e56ff8582d889a11174731fa9f2851ba1f47bd92675af11f780",
+      "work_items": 665440,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 2.9103830456733704e-11,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 38114,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "cbf9d509e46afa0fad2e8ecdc116c0ed087d757f",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "moving-rigid",
+          "--backend",
+          "hwrt",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C4-hwrt"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "50d32e8f2fc662a942ad3d6d64cebb6dc2b88daf753d0cbe85ab5efef542b1dc",
+        "capture.json": "fc89a7389f567b126f6baaefc9b950577b125aa4b7ac3b496a1fadd2fb2c1b52",
+        "frame-state.bin": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+        "geometry-state.bin": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "gpu/composite-lookup.bin": "b9666c919c4b3e56ff8582d889a11174731fa9f2851ba1f47bd92675af11f780",
+        "gpu/direct.pfm": "cbd48adeccb23a17dabc7f480056d5920802587cbbf804749a3cde40d039a791",
+        "gpu/hits.bin": "e87f85513bc5e604f6de32e03d63177335c24faa167b71bb1815794e1c161f58",
+        "gpu/indirect.pfm": "6b86aa641bd533bcd3b2886dc7a11be2b92745faf1cd10722dc696a36a2c22ce",
+        "gpu/probe-contributions.bin": "9c94c09c34ef9050619f713a075bcc6b2e3da8246d41c9ff4c10f4ed3faa6a61",
+        "gpu/probe-hits.bin": "8838d137221a06fd887a2ae5ae28e157933e5a9484102942b03fbffc9b3f386f",
+        "gpu/probe-work.bin": "5dec0ecaf71a6535eb0f9f2de7ae32dc1351e263bfa573ceb9244ecbb027a9a4",
+        "gpu/total.pfm": "291d0aef4987e0ac5779bbe8b403cf72158504778240395a6f346ce87352360d"
+      }
+    },
+    {
+      "capture": "C4-software",
+      "state_sha256": {
+        "geometry": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "audit_sha256": "fe5415f6ce620acb503eec25967a735d6acfb234ce7226ba059163b861816570",
+      "work_items": 665440,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 2.9103830456733704e-11,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 38114,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "cbf9d509e46afa0fad2e8ecdc116c0ed087d757f",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "moving-rigid",
+          "--backend",
+          "software",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C4-software"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "fe559587e46805cad6ede5af2a7633abc39866cecf46106b3053fde82b07e1a5",
+        "capture.json": "39e5347f77f401b943399f1799bccd603dc976a8325bfc208446e00bd9033932",
+        "frame-state.bin": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+        "geometry-state.bin": "d2026e95772beb0c1590011d7e4dd58c6e76bc57af85e2850377c3a36b45f491",
+        "gpu/composite-lookup.bin": "fe5415f6ce620acb503eec25967a735d6acfb234ce7226ba059163b861816570",
+        "gpu/direct.pfm": "6f4e045e10c398d57074165d3bfe3a6f2457282dbda08abdb4ac06cbfcbbfaea",
+        "gpu/hits.bin": "b29db9536df8309463a7421f3ce90812ebb9bc63249a385bb499dac1c90d1cf6",
+        "gpu/indirect.pfm": "6b86aa641bd533bcd3b2886dc7a11be2b92745faf1cd10722dc696a36a2c22ce",
+        "gpu/primary-geometry.bin": "8908e997bc6c515427e06aad0bc577a257ebad9306486011895ce675af131f6b",
+        "gpu/probe-contributions.bin": "a37b28bdccef777265e8aead974a7418db04e36c6cdc06d529ac340130084d67",
+        "gpu/probe-hits.bin": "7c234388a084351c7887a9da21c938d0d064861ccbb54118daf749b0b43f8c30",
+        "gpu/probe-work.bin": "488e96c826e3024f7b6cae4a777765830e4a18a6ac729e241756592252fc324a",
+        "gpu/total.pfm": "e5a47dce8018080791fb3bd0be5296902dabeb405c3d7d7e868878b17f0c5040"
+      }
+    },
+    {
+      "capture": "C5-hwrt",
+      "state_sha256": {
+        "geometry": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "audit_sha256": "76286b92b56ab1c8fc766714134dd17c0cd0a214a854b7082b8474c51ec7e4f7",
+      "work_items": 664224,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 1.1641532182693481e-10,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 52947,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "632883b4a564c18c0da2a686f0e1d856fa2f7b42",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "deforming-control",
+          "--backend",
+          "hwrt",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C5-hwrt"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "fb457d721fc833d3912d5a0537499063b6b9991b8413879b8664608dfe492aaf",
+        "capture.json": "3f93b6f9f4338c52bd07eb77cd4a5048ec95f3fdcbe530c4d42ba3daceb5df91",
+        "frame-state.bin": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+        "geometry-state.bin": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "gpu/composite-lookup.bin": "76286b92b56ab1c8fc766714134dd17c0cd0a214a854b7082b8474c51ec7e4f7",
+        "gpu/direct.pfm": "adcf850f024c8d490f750ad3741b8b6fb76f70075a8d2d0588d85d03c5e96e6b",
+        "gpu/hits.bin": "d12d3b4e7613d3ca2aeb83bd53f9960519ff2c4e858225ece4eec0f404b791a0",
+        "gpu/indirect.pfm": "925cb693c477aef3136ea022e06b57a93e839ea2fba9de2e3ad7b2869e942894",
+        "gpu/probe-contributions.bin": "fa6fd658922bcdc244e9b446cdf8d54d419f9891434c2e81f00738b5e57a8664",
+        "gpu/probe-hits.bin": "0909677058b4aa8e0d3d1ae2278b6363c3fc837da1608273f27b5674d30d4166",
+        "gpu/probe-work.bin": "717f77de3e9dc86295b89e52b87ff40fc0afcc89878ca8b72abd67868f54ed1d",
+        "gpu/total.pfm": "a4aa121129a6b011d2b1a5ecc83107f9a33130b5b9a7d90b873bd1c6846cee3c"
+      }
+    },
+    {
+      "capture": "C5-software",
+      "state_sha256": {
+        "geometry": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "frame": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4"
+      },
+      "audit_sha256": "76286b92b56ab1c8fc766714134dd17c0cd0a214a854b7082b8474c51ec7e4f7",
+      "work_items": 664224,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 1.1641532182693481e-10,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 52947,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "632883b4a564c18c0da2a686f0e1d856fa2f7b42",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "deforming-control",
+          "--backend",
+          "software",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C5-software"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "c1dde45ae34a0a31a732316bc9ceec9dda37a799e14b00d1099583b934c9da0b",
+        "capture.json": "e880ec973fd4e1a5b5b72763f672ea30979a952c5e04009c23ae05ab285e8416",
+        "frame-state.bin": "7436139950dba6310c3477de78b6170bf7b1a8f8df125f3f380bd02e064ff7a4",
+        "geometry-state.bin": "9b15f386cd5a6d626b837670c987bb6e029e3586b633de5b3640fff6f19f51e4",
+        "gpu/composite-lookup.bin": "76286b92b56ab1c8fc766714134dd17c0cd0a214a854b7082b8474c51ec7e4f7",
+        "gpu/direct.pfm": "4578ab42f706824f2ffa397be7d88d22e53f49745fd1385948d8542c243bad6a",
+        "gpu/hits.bin": "3c3caeaec289c3b363914f922fa04d1e4b6bd7da114bb41f64e909b9fabee1cb",
+        "gpu/indirect.pfm": "925cb693c477aef3136ea022e06b57a93e839ea2fba9de2e3ad7b2869e942894",
+        "gpu/primary-geometry.bin": "32f229c84e2debabea84faa27d00d7bb45f8a79a7eb03dcefe9d482564f8597b",
+        "gpu/probe-contributions.bin": "179228b1d102677237476c209a073d0cc009d67b19917b942f7e9d1a9af47394",
+        "gpu/probe-hits.bin": "deb9bcb9d01252007cd2e68eb31e400c8c0cd8eb524dc2bacebf427780efce74",
+        "gpu/probe-work.bin": "c7bc0ad8c340f635514282b6debb102910a6daa0b0b9ddd54d86ad881893e68d",
+        "gpu/total.pfm": "2511bd87cc1cb97825059831951b228ccd1c225696f1355f89bb8dba67f18d80"
+      }
+    },
+    {
+      "capture": "C7-hwrt",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      },
+      "audit_sha256": "7d170ec60706ce6e4a6b92b0a14d6aaa941fc002fb2946cb11f4becb8fefb0ea",
+      "work_items": 37440,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 0.0,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 57600,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "632883b4a564c18c0da2a686f0e1d856fa2f7b42",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n008-hdr-oracle/phase-b-states/n004-scenes/leak-medium.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "hwrt",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C7-hwrt"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "bbfbf81f0d6cd8ddc2f9b39fda08b1ebdc82392fd0b3ee34893b133e1c814678",
+        "capture.json": "8870b15d4ce6f06436e749d9c7ceb8faa33c3ffabc4d2f72b29d9e68960196e0",
+        "frame-state.bin": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949",
+        "geometry-state.bin": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "gpu/composite-lookup.bin": "7d170ec60706ce6e4a6b92b0a14d6aaa941fc002fb2946cb11f4becb8fefb0ea",
+        "gpu/direct.pfm": "555482023f455ad8e994378eebce3dca4bde5eb014f5893468d1ce613b047c03",
+        "gpu/hits.bin": "0eb17a195ecdf931845404b290372088a2a85dcd879482c24fc3099b7f3ae836",
+        "gpu/indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+        "gpu/probe-contributions.bin": "3eace2bfe19c0d16087090253b6b5b8b32984b1d02b36de7ee44610812bca1a0",
+        "gpu/probe-hits.bin": "7079677ba046c31879f20fb3cb152b0fa5248adac9885a04fd4e1aa42aaab24f",
+        "gpu/probe-work.bin": "5b9cbd781fb7a349708f2a7d82b838ce4f888c4d34fcc100fb970ae20e7d68d6",
+        "gpu/total.pfm": "eca457bdf5d7138c5b10182c765e31e6f55a82eb7a66d3965144a7bc7dcb6905"
+      }
+    },
+    {
+      "capture": "C7-software",
+      "state_sha256": {
+        "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+      },
+      "audit_sha256": "7d170ec60706ce6e4a6b92b0a14d6aaa941fc002fb2946cb11f4becb8fefb0ea",
+      "work_items": 37440,
+      "pixels": 57600,
+      "scoring_exclusions": 0,
+      "max_absolute_error": 0.0,
+      "positivity_disagreements": 0,
+      "bit_equal_float32_pixels": 57600,
+      "V1": true,
+      "acquisition": {
+        "source_commit": "632883b4a564c18c0da2a686f0e1d856fa2f7b42",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "build/n009/phos-n010-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n008-hdr-oracle/phase-b-states/n004-scenes/leak-medium.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "software",
+          "--target-state",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-key-pilot-v2/C7-software"
+        ],
+        "returncode": 0,
+        "stdout": "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\n",
+        "stderr": "",
+        "binary_sha256": "563b0b04deece571069e7fddd55aab56f84bf53eda202db761dbb75a201da0b8"
+      },
+      "payload_sha256": {
+        "acquisition.json": "fe50b9f34e0b92794e94d742de8a505aa2f5d9125a560fc084392a18b07cbb63",
+        "capture.json": "0373bc47e0993b51314a592b336cac6c973614f5abf7c52a146e4871472f6d1c",
+        "frame-state.bin": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949",
+        "geometry-state.bin": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+        "gpu/composite-lookup.bin": "7d170ec60706ce6e4a6b92b0a14d6aaa941fc002fb2946cb11f4becb8fefb0ea",
+        "gpu/direct.pfm": "555482023f455ad8e994378eebce3dca4bde5eb014f5893468d1ce613b047c03",
+        "gpu/hits.bin": "5f6a16845ec30c22631193b3a95dd25c4d96480b7dcea75b9de67a0aaa9279b7",
+        "gpu/indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+        "gpu/primary-geometry.bin": "ace00d78b00ee336000c318bdc6b374ddcd33393052bc11cfd08ca0241bf4fbb",
+        "gpu/probe-contributions.bin": "63cdc275f6df0c76079abe015680e92a775ee18cae72f83eb257693a136cfed2",
+        "gpu/probe-hits.bin": "d27d8616c688a414568e5571c9ba6a45afcea013cd70e795b0dabc5d18429472",
+        "gpu/probe-work.bin": "d9be295602a65aaed3fbe99d1843c5e2e401e12dbe3a67055ca4ef9f3b285662",
+        "gpu/total.pfm": "eca457bdf5d7138c5b10182c765e31e6f55a82eb7a66d3965144a7bc7dcb6905"
+      }
+    }
+  ]
+}

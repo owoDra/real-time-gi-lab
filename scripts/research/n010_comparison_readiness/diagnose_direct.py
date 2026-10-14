@@ -47,7 +47,7 @@ def run(binary, work):
                                for i in ids))
         p = subprocess.run([str(binary), str(cap), str(tsv)], capture_output=True, text=True, check=True)
         detail = json.loads(p.stdout)
-        (work / f"{cap.name}.rays.json").write_text(json.dumps(detail, indent=2) + "\n")
+        (work / f"{cap.name}.rays.json").write_text(json.dumps(detail, indent=1) + "\n")
         rows.append({"capture": cap.name, "state_sha256": state["sha256"],
                      "hits_sha256": sha(cap / "gpu/hits.bin"),
                      "direct_pfm_sha256": sha(cap / "gpu/direct.pfm"),
@@ -57,10 +57,11 @@ def run(binary, work):
                      "gpu_zero_reference_positive": int((matched & (r > 0) & (g <= 0)).sum()),
                      "gpu_positive_reference_zero": int((matched & (r <= 0) & (g > 0)).sum()),
                      "diagnostic": detail})
-    return {"schema": "n010-n009-posthoc-direct/1",
+    return {"schema": "n010-n009-posthoc-direct/2",
             "preregistration_commit": "3f2e78e",
             "historical_parent": "6e7e96246cf7e9e38394bdce89519bf09320c6b1",
             "classification": "post-hoc CPU diagnosis; not repaired GPU validation",
+            "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
             "binary_sha256": sha(binary), "rows": rows}
 
 
@@ -71,6 +72,6 @@ if __name__ == "__main__":
     ap.add_argument("--output", type=Path, required=True)
     args = ap.parse_args()
     result = run(args.binary, args.work)
-    args.output.write_text(json.dumps(result, indent=2, allow_nan=False) + "\n")
+    args.output.write_text(json.dumps(result, indent=1, allow_nan=False) + "\n")
     for row in result["rows"]:
         print(row["capture"], row["gpu_zero_reference_positive"], row["gpu_positive_reference_zero"])
