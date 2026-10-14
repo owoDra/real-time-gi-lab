@@ -1,0 +1,76 @@
+{
+  "schema": "n010-selected-path-trace/1",
+  "complete": true,
+  "gpu_run": true,
+  "eligible_for_references": false,
+  "classification": "POSTHOC_DIAGNOSTIC_NOT_ADMISSION",
+  "selected_pixels": [
+    7826,
+    13450,
+    33365,
+    55934,
+    17035,
+    16762,
+    8143,
+    14210
+  ],
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/087-deep-sampling-intervention.json": "4c18e25d456e51274a1ba93b7bd786f65497cf03c0f9c3c1d0a4e3dbc30bb343",
+    "research/lanes/n010-comparison-readiness/experiments/023-posthoc-deep-path-trace.md": "a51b233a3c7f98203a6858388c079df632d5c945f1b743086ff6ad36fa9fc745",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.comp.glsl": "6badf11584ff47f7dc0e946a3f56f78b8cb5b0527c040b60e3ef54f14c6c2058",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/polynomial.cpp": "220c24c4c5b8167d0b2cbc91e6529e801b2acda71658b833db5b5aec9ca31fc7",
+    "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/cpu-trigonometry.cpp": "0cd8251ab52943122ea656f2ab9efb664bd024037a98bdd43909f19db54f1ef3",
+    "scripts/research/n010_comparison_readiness/diagnose_gpu_deep_paths.py": "774f4434290d3e59d978d6892d005934da98c1b318326fe22f285aa716ee1f00"
+  },
+  "steps": [
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+        "-V",
+        "--target-env",
+        "vulkan1.2",
+        "-S",
+        "comp",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v1/trace.comp.glsl",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-path-diagnostic-v1/raw.spv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/deep-path-diagnostic-v1/trace.comp.glsl\n",
+      "wall_seconds_diagnostic": 0.14850305700383615
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/polynomial.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/phos-n010-roi-polynomial"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 5.956033716996899
+    }
+  ],
+  "shader_sha256": "ed25f140c9580fa4ad60d11fdcce2da7a0310b592e5d43a1c05a74dcf0257f89",
+  "no_contraction_results": 183,
+  "failure": "retained failed step: polynomial-runtime"
+}

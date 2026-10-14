@@ -427,6 +427,24 @@
       "status": "build-failed-not-run",
       "result": "086-deep-sampling-intervention.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-087",
+      "status": "posthoc-diagnostic",
+      "result": "087-deep-sampling-intervention.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-088",
+      "status": "launch-failed-not-run",
+      "result": "088-deep-path-diagnostic.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-090",
+      "status": "failed-attempt-clarification",
+      "result": "090-path-diagnostic-launch-clarification.json",
+      "gpu_run": false
     }
   ]
 }

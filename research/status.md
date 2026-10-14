@@ -161,3 +161,10 @@ unestablished. Plan 022 replays the largest eight with a separate diagnostic
 binary and tests CPU trigonometry as an intervention. These pixels stay in all
 scores; selected-pixel diagnosis cannot replace full admission checks. Earlier
 timeouts 074/075, build failures and all original evidence are retained.
+
+Post-hoc intervention 087 reproduces all eight selected original CPU/GPU
+payloads byte exactly. Supplying CPU trigonometry removes the discrepancy
+in two pixels (13450, 55934), with exact counters and mean error <=4.34e-19.
+Six pixels retain mean/moment/counter discrepancies. Trigonometry alone is
+insufficient; full causation is unestablished and no GPU reference is admitted.
+Plan 023 records path/bounce diagnostics with aggregate replay required.

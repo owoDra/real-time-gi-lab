@@ -1,0 +1,562 @@
+{
+  "schema": "n010-deep-sampling-intervention/1",
+  "complete": true,
+  "gpu_run": true,
+  "eligible_for_references": false,
+  "classification": "POSTHOC_DIAGNOSTIC_NOT_ADMISSION",
+  "selected_pixels": [
+    7826,
+    13450,
+    33365,
+    55934,
+    17035,
+    16762,
+    8143,
+    14210
+  ],
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/082-gpu-reference-deep-conformance-resource-followup.json": "422b75bb8c1244c5c05ce2e5735a59b000313726bb88d378105c00e71a4a5158",
+    "research/lanes/n010-comparison-readiness/results/084-gpu-deep-numerical-failure-map.json": "ea421e21aba88680e1bbecac305423053a564580d3a9f68656c5aa0514ac0989",
+    "research/lanes/n010-comparison-readiness/experiments/022-posthoc-deep-sampling-diagnostic.md": "93796bcf43c056742272b205bef749b2b4f8671eae44a0c200293b6646c855d9",
+    "src/research/n010_comparison_readiness/gpu_reference_main.cpp": "825a8f6832d7c05f4eea3b7ebcf6d7a9662627be8016afff9b0a2b4dab0ca678",
+    "shaders/research/n010_comparison_readiness/n010_gpu_oracle.comp.glsl": "10ecdc8490102f68a6d24d3d7a73fc1fde5f81c345c86905ee46ad07ecf45eb3",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_snapshot.hpp": "b4ca6cbf5744e1d89bf4b23464ea4c213ee9fff85c101cfb6e873f68bc8af7af",
+    "out/research/n010-comparison-readiness/gpu-reference-snapshot-v1/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "scripts/research/n010_comparison_readiness/diagnose_gpu_deep_sampling.py": "2849a02d949cc64f3adf7ba4db3a235eb2dbf6248273c023d2548bb8290744af"
+  },
+  "steps": [
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang",
+        "-V",
+        "--target-env",
+        "vulkan1.2",
+        "-S",
+        "comp",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.comp.glsl",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/raw.spv"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.comp.glsl\n",
+      "wall_seconds_diagnostic": 0.18758421899110544
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/polynomial.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/phos-n010-roi-polynomial"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 5.156924634007737
+    },
+    {
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/phos-n010-roi-polynomial",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.spv",
+        "305419896",
+        "8192",
+        "16",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/polynomial"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 54.466894697994576
+    },
+    {
+      "command": [
+        "g++",
+        "-std=c++20",
+        "-O2",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS=1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-snapshot-v1",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/cpu-trigonometry.cpp",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-o",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/phos-n010-roi-cpu-trigonometry"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 6.670218476996524
+    },
+    {
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/phos-n010-roi-cpu-trigonometry",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/roi.spv",
+        "305419896",
+        "8192",
+        "16",
+        "out/research/n010-comparison-readiness/deep-sampling-diagnostic-v2/cpu-trigonometry"
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "wall_seconds_diagnostic": 57.74510231500608
+    }
+  ],
+  "no_contraction_results": 181,
+  "derived_sha256": {
+    "polynomial": {
+      "source": "220c24c4c5b8167d0b2cbc91e6529e801b2acda71658b833db5b5aec9ca31fc7",
+      "binary": "1359f9b04ea873402b1396b44c0c7246eaea21ff14be56e13b15df125bb069d4"
+    },
+    "cpu-trigonometry": {
+      "source": "0cd8251ab52943122ea656f2ab9efb664bd024037a98bdd43909f19db54f1ef3",
+      "binary": "aa1d574234bba8853f2f58fb8d2e31f773fc0ad2a5d01e7a555e95f24165b061"
+    }
+  },
+  "saved_payload_sha256": {
+    "cpu": "ddb90ee92716e17b7f236dfc03e869900fd8564e566737d63e975329fecacf91",
+    "gpu": "4c739cd7b13f32cdb03fe0f3c8e61133519a7fc6963e5f0c4cba4826525d436b"
+  },
+  "shader_sha256": "6d07510b2730cddb63e578c7117dbaa11784053104d15dcd84e3b2d730ba0539",
+  "rows": [
+    {
+      "mode": "polynomial",
+      "pixel": 7826,
+      "x": 146,
+      "y": 24,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 6.782349172623423e-07,
+      "max_abs_moment": 4.4662263569564205e-09,
+      "cpu_counters": [
+        8192,
+        51922,
+        22945,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        51923,
+        22947,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 13450,
+      "x": 10,
+      "y": 42,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 5.980519483927277e-07,
+      "max_abs_moment": 4.421088843856321e-09,
+      "cpu_counters": [
+        8192,
+        49300,
+        15274,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        49301,
+        15273,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 33365,
+      "x": 85,
+      "y": 104,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 4.995504130308505e-07,
+      "max_abs_moment": 4.714421396595904e-09,
+      "cpu_counters": [
+        8192,
+        49526,
+        13287,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        49524,
+        13289,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 55934,
+      "x": 254,
+      "y": 174,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 4.90724513576863e-07,
+      "max_abs_moment": 3.998734192693374e-09,
+      "cpu_counters": [
+        8192,
+        45879,
+        12932,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        45880,
+        12932,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 17035,
+      "x": 75,
+      "y": 53,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 4.2249403138907085e-07,
+      "max_abs_moment": 5.3195017517096465e-09,
+      "cpu_counters": [
+        8192,
+        49465,
+        14481,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        49464,
+        14483,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 16762,
+      "x": 122,
+      "y": 52,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 3.635882021117698e-07,
+      "max_abs_moment": 1.6858083088893025e-09,
+      "cpu_counters": [
+        8192,
+        52744,
+        28603,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        52743,
+        28605,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 8143,
+      "x": 143,
+      "y": 25,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 3.057986219897517e-07,
+      "max_abs_moment": 9.015784595656349e-10,
+      "cpu_counters": [
+        8192,
+        53926,
+        37136,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        53924,
+        37137,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "polynomial",
+      "pixel": 14210,
+      "x": 130,
+      "y": 44,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": true,
+      "max_abs_mean": 1.855445184011659e-07,
+      "max_abs_moment": 3.6825073492331985e-10,
+      "cpu_counters": [
+        8192,
+        51637,
+        35604,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        51637,
+        35602,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 7826,
+      "x": 146,
+      "y": 24,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 6.782349172623423e-07,
+      "max_abs_moment": 4.4662263569581145e-09,
+      "cpu_counters": [
+        8192,
+        51922,
+        22945,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        51923,
+        22947,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 13450,
+      "x": 10,
+      "y": 42,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 4.336808689942018e-19,
+      "max_abs_moment": 5.082197683525802e-21,
+      "cpu_counters": [
+        8192,
+        49300,
+        15274,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        49300,
+        15274,
+        0
+      ],
+      "counters_equal": true,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 33365,
+      "x": 85,
+      "y": 104,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 4.995504130304168e-07,
+      "max_abs_moment": 4.71442139659421e-09,
+      "cpu_counters": [
+        8192,
+        49526,
+        13287,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        49524,
+        13289,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 55934,
+      "x": 254,
+      "y": 174,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 2.168404344971009e-19,
+      "max_abs_moment": 1.6940658945086007e-21,
+      "cpu_counters": [
+        8192,
+        45879,
+        12932,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        45879,
+        12932,
+        0
+      ],
+      "counters_equal": true,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 17035,
+      "x": 75,
+      "y": 53,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 4.2249403138863717e-07,
+      "max_abs_moment": 5.31950175170287e-09,
+      "cpu_counters": [
+        8192,
+        49465,
+        14481,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        49464,
+        14483,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 16762,
+      "x": 122,
+      "y": 52,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 3.6358820211111927e-07,
+      "max_abs_moment": 1.6858083088884555e-09,
+      "cpu_counters": [
+        8192,
+        52744,
+        28603,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        52743,
+        28605,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 8143,
+      "x": 143,
+      "y": 25,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 3.057986219897517e-07,
+      "max_abs_moment": 9.015784595652114e-10,
+      "cpu_counters": [
+        8192,
+        53926,
+        37136,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        53924,
+        37137,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    },
+    {
+      "mode": "cpu-trigonometry",
+      "pixel": 14210,
+      "x": 130,
+      "y": 44,
+      "cpu_reproduces_saved_byte_equal": true,
+      "gpu_reproduces_saved_byte_equal": false,
+      "max_abs_mean": 1.855445184011659e-07,
+      "max_abs_moment": 3.6825073492374337e-10,
+      "cpu_counters": [
+        8192,
+        51637,
+        35604,
+        0
+      ],
+      "gpu_counters": [
+        8192,
+        51637,
+        35602,
+        0
+      ],
+      "counters_equal": false,
+      "faults": 0,
+      "finite": true
+    }
+  ],
+  "replay_valid": true,
+  "scope": "Selected post-hoc pixels only; no exclusion, no reference admission, no full conformance or GPU performance verdict."
+}

@@ -98,3 +98,10 @@ all-state/prefix runs refused dispatch (085, NOT RUN). 084 maps 54 affected
 pixels as post-hoc diagnosis; plan 022 uses eight selected pixels to replay
 and intervene on sampling arithmetic. No exclusions or relaxed thresholds.
 CPU reference recovery continues independently; 15/24 slots are eligible.
+
+Post-hoc intervention 087 reproduces all eight selected original CPU/GPU
+payloads byte exactly. Supplying CPU trigonometry removes the discrepancy
+in two pixels (13450, 55934), with exact counters and mean error <=4.34e-19.
+Six pixels retain mean/moment/counter discrepancies. Trigonometry alone is
+insufficient; full causation is unestablished and no GPU reference is admitted.
+Plan 023 records path/bounce diagnostics with aggregate replay required.

@@ -1,0 +1,14 @@
+{
+  "schema": "n010-diagnostic-attempt-clarification/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "HOST_LAUNCH_FAILED_NOT_RUN",
+  "attempt_sha256": "c47b56b7ba5d778fee94a5dd8824e6ae9dfc784bbe030e3cc3bd2e915573fc11",
+  "reason": "088 reused a relative build argument that failed to select the new source/output. The unchanged original ROI source was rebuilt; the intended trace executable was absent and bash returned 127 before GPU dispatch. Its gpu_run=true records attempted launch and is not evidence of a GPU run.",
+  "original_roi_binary_sha256": {
+    "polynomial": "1359f9b04ea873402b1396b44c0c7246eaea21ff14be56e13b15df125bb069d4",
+    "cpu-trigonometry": "aa1d574234bba8853f2f58fb8d2e31f773fc0ad2a5d01e7a555e95f24165b061"
+  },
+  "original_roi_binaries_byte_unchanged": true,
+  "scope": "No trace runtime or GPU reference admission; failed attempt retained. Fresh follow-up uses normalized new source/output paths and refuses existing binaries."
+}
