@@ -16,7 +16,7 @@
     },
     {
       "id": "N010-003",
-      "status": "interim",
+      "status": "complete-negative",
       "result": "003-sampler-validation.json",
       "gpu_run": false
     },
@@ -49,6 +49,54 @@
       "status": "interim",
       "result": "008-interim-execution-and-resume.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-009",
+      "status": "complete",
+      "result": "009-iid-precision-confirmation.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-011",
+      "status": "diagnostic-only",
+      "result": "011-rc-correctness-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-012",
+      "status": "complete",
+      "result": "012-local-light-selection.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-013",
+      "status": "complete",
+      "result": "013-c7-pt-cohort-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-014",
+      "status": "complete",
+      "result": "014-additional-corpus.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-015",
+      "status": "diagnostic-only",
+      "result": "015-dense-rc-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-016",
+      "status": "complete",
+      "result": "016-corpus-state-lock.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-017",
+      "status": "interim",
+      "result": "017-comparison-pilot-summary.json",
+      "gpu_run": true
     }
   ]
 }

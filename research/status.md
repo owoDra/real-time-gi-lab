@@ -6,6 +6,18 @@
 
 **Active work: N010, the final comparison-preparation study.** [Protocol](lanes/n010-comparison-readiness/experiments/001-comparison-readiness.md). User-directed sequence is N010 → Lane M GI competitiveness; no further N-series preparation lane. Readiness requires an executed quality/time/memory pilot, physically validated eligible references and full Renderer timing calibration. Historical Lane M topology results retain their identity. N010 has not yet passed its readiness gate.
 
+N010 has now produced an actual first comparison cohort: native GPU pixel
+path tracing passes C7 quality at 256 samples (T_B2) / 1024 (T_B8), while the
+incumbent fails with roughly 91% missing one-bounce indirect energy. A separate
+dense repository RC control also fails. These are measured quality outcomes;
+pilot timings remain uncalibrated. Sampler precision Amendment 2 passes without
+changing thresholds; original failed crosscheck remains retained. C7 references
+are eligible; the full construction corpus includes local Sponza light motion
+and actual controlled dynamic states. Remaining work is full-corpus reference
+qualification, dynamic comparative execution and complete timing calibration.
+[Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
+[PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json).
+
 | Subsystem | Current incumbent / classification | Evidence and boundary |
 | --- | --- | --- |
 | Work producer | **Adopted:** A001 GPU visibility-driven Split RC, natural append order; no global reorder | [Lane A](lanes/lane-a-split-rc/results/index.json), M0; Lane D does not supersede A001 |

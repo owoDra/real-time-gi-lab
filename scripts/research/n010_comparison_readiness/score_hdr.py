@@ -10,6 +10,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / "scripts/research/n008_hdr_oracle"))
 import n008lib as L
+from qualify_references import scene_for_state
 LUMA = np.array((0.2126, 0.7152, 0.0722))
 
 
@@ -41,8 +42,16 @@ def score(capture, row, reference_work, output):
     state = L.read_state(capture)
     if row["classification"] != "STATISTICALLY_ELIGIBLE":
         raise ValueError("no total/indirect scoring against ineligible reference")
-    if state["sha256"] != row["state_sha256"]:
-        raise ValueError("capture/reference state identity mismatch")
+    if not (state["meta"][:, 3] == 1).all():
+        raise ValueError("capture violates BF-P two-sided geometry")
+    state_byte_equal = state["sha256"] == row["state_sha256"]
+    # Frame counter/probe configuration changes may leave physical transport
+    # identical. Require the COMPLETE derived oracle input bytes, not a loose
+    # camera tolerance or a selected-pixel equivalence check.
+    derived_scene = scene_for_state(state, {"T_B2": 2, "T_B8": 8}[row["transport"]])
+    physical_scene_equal = hashlib.sha256(derived_scene.text().encode()).hexdigest() == row["scene_sha256"]
+    if not physical_scene_equal:
+        raise ValueError("capture/reference complete physical scene identity mismatch")
     spp = row["levels"][-1]["spp"]
     runs = [L.read_sidecar(reference_work / f"o.n{spp}.s{i}.f64") for i in range(4)]
     for i, run in enumerate(runs):
@@ -71,6 +80,10 @@ def score(capture, row, reference_work, output):
               i["nrmse"] <= .1 and abs(i["signed_sum_bias"]) <= .05)
     return {"schema": "n010-full-image-hdr-score/1", "cell": row["cell"],
             "transport": row["transport"], "state_sha256": state["sha256"],
+            "reference_state_sha256": row["state_sha256"],
+            "state_bytes_equal": state_byte_equal,
+            "complete_oracle_scene_sha256": row["scene_sha256"],
+            "complete_physical_scene_bytes_equal": physical_scene_equal,
             "components": values, "pilot_quality_target": "PASS" if passed else "FAIL",
             "normalization": "whole-image reference RMS; linear luma",
             "scoring_exclusions": 0,

@@ -22,3 +22,13 @@ regimes with quality failures. Topology churn uses N002/N003's 50% delete/insert
 primitive identity mutation with fixed triangle count; verify HWRT incumbent
 and vanilla software state parity. Repair nonconstructible transitions within
 N010 before declaring the corpus complete. Preserve historical Lane M results.
+
+Physical reference reuse for source/recovery frames requires byte identity of
+the **complete derived N010 oracle scene** (all triangles/materials, camera,
+resolution, light/falloff and finite vertex count), not a tolerance or pixel
+subset. Record each raw frame/geometry hash separately. Frame counter and
+probe configuration alone do not change physical transport. Exact derived
+scene equality is the permitted equivalence for such bookkeeping differences;
+BF-P sidedness is independently required. Distinct light/geometry/camera
+states still require distinct qualified references. This changes no quality
+or reference threshold and does not revise historical outcome records.

@@ -41,15 +41,23 @@ is labelled separately from the recurring image-producing boundary.
 
 ## Active computation and resume
 
-Sampler validation v1 was started from source 632883b, with four fixed
-replicates and all specified controls. Raw files are in
-out/research/n010-comparison-readiness/sampler-validation-v1.
-Follow the existing process; the runner deliberately refuses to replace
-existing control images. Do not restart because an observation times out.
-The result 003 has complete=false until all controls and iid crosschecks
-finish. Reference acquisition is fail-closed on that result.
+Original sampler validation 003 completed with A7 crosscheck FAIL. Amendment 2
+confirmation 009 passes both fixed 16384-SPP iid controls with all 8192
+checkpoint bytes unchanged. It carries forward the passing physical controls;
+the original failed acquisition remains preserved.
 
-After validation PASS, use qualify_references.py with initial state lock 004,
-the validation 003, the required cell list and a new output directory. This
-initial subset cannot close corpus readiness: light motion, additional
-non-Sponza dynamics and GPU churn are still required.
+Reference runners acquire distinct cell sets in references-v1. Do not restart
+while either process is active or overwrite partial levels. C7 T_B2/T_B8 are
+eligible at 16384 under unchanged thresholds; Sponza acquisition continues.
+Complete construction state lock 016 includes the locally selected Sponza light
+motion and actual non-Sponza camera/light/rigid/deforming/churn source/targets.
+Reference eligibility remains a separate requirement.
+
+Build phos-n010-pixel-pt for the native HWRT comparator. Its default family is
+pixel-pt; --family dense-rc --spp 1 selects the separate cache-free repository
+RC estimator control. The historical --backend vanilla in phos-n010-capture
+is a traversal control retaining the incumbent producer/storage; it must not
+be presented as an independent GI baseline. Both source/target capture tools
+retain errors, source/binary identities and allocation lifetimes. Pilot GPU
+timings are DIAGNOSTIC_UNCALIBRATED and were taken while CPU references ran;
+no speed comparison follows from them.

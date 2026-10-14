@@ -13,3 +13,10 @@ remaining gates](results/008-interim-execution-and-resume.md). Actual GPU-key
 replay passes on all 10 captures; the C7 key-driven counterfactual validation
 passes V1–V4 on both backends. Direct shadow-offset diagnosis is post-hoc;
 new physical sampler validation and comparison harness work continue.
+
+New executable cohort: native GPU pixel PT and the separately frozen dense
+repository RC estimator control. [C7 budget/quality results](results/013-c7-pt-cohort-pilot.json)
+include all losses and passing PT levels. [Construction lock](results/016-corpus-state-lock.json)
+contains source/target dynamics and local light motion. References beyond C7,
+dynamic comparison execution and calibrated timing are still in progress.
+Historical vanilla-software is a traversal control, not a separate GI baseline.

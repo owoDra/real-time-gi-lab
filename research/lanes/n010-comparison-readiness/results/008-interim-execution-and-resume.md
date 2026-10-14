@@ -24,20 +24,53 @@ For C7, the new key-driven R0–R6 model passes V1/V2/V3/V4 on both backends. R0
 
 ## Memory instrumentation pilot
 
-Both owned Vulkan allocation factories are instrumented with an allocation/free lifetime ledger. A C7 software capture has 92 events, one device context, exactly zero live allocations at teardown, and independently replayed high-water mark 266,694,400 bytes. Startup peak 262,341,952 bytes; source and target-frame peaks 262,086,432 bytes; the higher final peak includes explicitly separate diagnostic readback staging. Persistent live memory before readback is 262,086,400 bytes. Driver-private and CPU heap allocations are outside this owned Vulkan measure. Dynamic replacement coexistence and comparative-role memory are not yet validated.
+Both owned Vulkan allocation factories are instrumented with an allocation/free lifetime ledger. A C7 software capture has 92 events, one device context, exactly zero live allocations at teardown, and independently replayed high-water mark 266,694,400 bytes. Startup peak 262,341,952 bytes; source and target-frame peaks 262,086,432 bytes; the higher final peak includes explicitly separate diagnostic readback staging. Persistent live memory before readback is 262,086,400 bytes. Driver-private and CPU heap allocations are outside this owned Vulkan measure. New RC topology captures and the independent native PT/dense RC roles also have allocation ledgers with zero teardown. Result 017 independently replays every RC pilot allocation event. Accepted comparative-role dynamic timing and memory accounting remain unfinished.
 
 ## Reference validation: original crosscheck failed
 
-The sampling-only randomized Sobol oracle compiled. New analytic A2/A2b/A4/A8 controls and sealed-room/no-leak/positive-room controls passed. A6/A10 multi-bounce furnace and A7 quadrature also passed. Result 003 completed: A7 RQMC/iid indirect NRMSE 1.0117949% fails the fixed 1% gate; A6b passes. All independent physical controls pass. Post-hoc quadrature diagnosis gives RQMC 0.0344588% and iid 1.0115377% NRMSE, supporting an iid precision explanation. Original failure remains preserved. Prospective Amendment 2 fixes both iid controls at 16384 samples with unchanged thresholds and an exact 8192 checkpoint identity requirement; that confirmation is not yet a PASS. Do not claim total-reference eligibility from these controls. Initial state lock 004 is partial; camera precision Amendment 1 is prospective for new Renderer-state reference images.
+The sampling-only randomized Sobol oracle compiled. New analytic A2/A2b/A4/A8 controls and sealed-room/no-leak/positive-room controls passed. A6/A10 multi-bounce furnace and A7 quadrature also passed. Result 003 completed: A7 RQMC/iid indirect NRMSE 1.0117949% fails the fixed 1% gate; A6b passes. All independent physical controls pass. Post-hoc quadrature diagnosis gives RQMC 0.0344588% and iid 1.0115377% NRMSE, supporting an iid precision explanation. Original failure remains preserved. Prospective Amendment 2 fixes both iid controls at 16384 samples with unchanged thresholds and an exact 8192 checkpoint identity requirement; result 009 confirms both controls PASS (A7 0.7127081%, A6b 0.0882790% NRMSE), with exact equality of every original 8192 checkpoint. Qualification uses this disclosed amendment; result 003 remains FAIL. Do not claim total-reference eligibility from these controls. Initial lock 004 remains its historical partial snapshot; complete construction lock 016 now records C1–C12. Camera precision Amendment 1 applies prospectively to new Renderer-state reference images. C7 T_B2 and T_B8 pass at 8192 and 16384 consecutively; the Sponza and additional-cell ladders are active.
+
+## Executed comparison cohort and measured losses
+
+Native HWRT pixel path tracing is executable on the identical frozen states,
+with independent cosine/point-light transport and complete static Renderer
+GPU timestamps plus an allocation ledger. C7's full fixed budget ladder is
+result 013: T_B2 first meets all quality targets at 256 samples (total NRMSE
+1.9431%, indirect 9.9581%, indirect sum bias +0.2343%); T_B8 at 1024 samples
+(total 1.4431%, indirect 5.5750%, sum bias -0.0599%). All failing levels remain.
+
+The incumbent's new C7 output fails: one-bounce indirect NRMSE 98.0719%,
+indirect sum bias -91.0257%. Its historical vanilla-software variant is a
+traversal control retaining the same producer/storage, not an independent GI
+baseline. A separately frozen dense cache-free repository RC estimator is
+now executable (experiment 007 / result 015); it too fails C7's quality gates.
+It is not claimed to be external production RC. No same-quality speed win is
+reported for a quality-failing renderer.
+
+The corrected direct profile removes C7 support disagreements. C1 incumbent
+still has two GPU-zero/reference-positive pixels (max relative error 1.0),
+**unresolved and included in all scoring**. Native independent pixel PT has
+zero direct support disagreements there, direct whole-image NRMSE 3.912e-7.
+This new diagnosis does not revise N009's unresolved final result.
+
+New Sponza local light motion was selected using only geometry/direct support
+under prospective experiment 006; N009 C3 remains NOT_CONSTRUCTIBLE.
+C8–C12 provide actual non-Sponza camera/light/rigid/deforming/churn transitions.
+All 24 additional source/target acquisitions succeeded; raw state bytes agree
+between HWRT incumbent and historical vanilla control. Sponza C6 GPU target
+bytes exactly match N009's CPU-exported target state.
 
 ## Required work before READY
 
-- Finish all sampler controls and iid crosschecks; acquire and qualify the locked T_B2/T_B8 references.
-- Complete light-motion/non-Sponza dynamic states and GPU topology-churn source/target attestation.
-- Validate shared direct-light corrections; score remaining numerical discrepancies without hidden exclusions.
-- Make vanilla RC and independent GPU pixel path tracing executable on the same corpus; specify the additional DDGI/RTXGI integration for Lane M.
-- Execute full-image quality, complete Renderer GPU-time and all-role persistent/true-peak memory pilots.
-- Calibrate the actual complete Renderer timing boundary and produce a fail-closed Lane M readiness preflight.
+- Complete both active reference ladders over all locked T_B2/T_B8 cells; retain failed/capped levels.
+- Carry the shared numerical profile into all scored roles; measure all residual discrepancies without exclusions.
+- Validate actual source/target plus recovery sequences for pixel PT and dense RC, including their update/rebuild/upload costs and allocation overlap.
+- Execute the full corpus quality/time/memory pilot, with fixed-cost and same-quality selection; specify DDGI/RTXGI integration for Lane M.
+- Calibrate the actual complete Renderer timing boundary after reference computation ends and produce a fail-closed Lane M readiness preflight.
+
+Pilot GPU timestamps remain **DIAGNOSTIC_UNCALIBRATED**. CPU reference work was
+active, and the additional-corpus/dense-RC GPU runners briefly overlapped.
+No speed comparison is accepted from those measurements.
 
 Builds and the stated GPU/CPU checks were executed by the assistant under user authorization on Radeon 8060S / RADV Mesa 26.1.2. No human-only measurement is implied. No power/clock changes or CI workflows. No default Renderer promotion. No N001–N009 result edits.
 

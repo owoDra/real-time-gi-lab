@@ -1,0 +1,934 @@
+{
+  "schema": "n010-comparison-pilot-summary/1",
+  "classification": "INTERIM_NOT_READY",
+  "direct_rows": [
+    {
+      "cell": "C1",
+      "role": "incumbent-hwrt",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 1.843891876908457e-06,
+        "reference_rms": 0.000717200159772899,
+        "nrmse": 0.002570958541744224,
+        "signed_sum_bias": -2.4123718010936466e-05,
+        "reference_sum": 24.271075187366698,
+        "gpu_sum": 24.270489678793055,
+        "active_pixels": 39009,
+        "active_p99_absolute": 1.2007861377796858e-09,
+        "active_p99_relative": 1.8754578263821997e-06,
+        "active_max_relative": 1.0,
+        "gpu_zero_reference_positive": 2,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 0.0004036940386722415
+      },
+      "image_sha256": "824330de113419664dde5cd83ef7241f58fd7907e6bcaa0fd99e1bde0d3a492c",
+      "remaining_disagreements": "UNRESOLVED"
+    },
+    {
+      "cell": "C1",
+      "role": "incumbent-software",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 1.8438918769076708e-06,
+        "reference_rms": 0.000717200159772899,
+        "nrmse": 0.002570958541743128,
+        "signed_sum_bias": -2.4123677540777222e-05,
+        "reference_sum": 24.271075187366698,
+        "gpu_sum": 24.27048967977531,
+        "active_pixels": 39009,
+        "active_p99_absolute": 1.2007861377796858e-09,
+        "active_p99_relative": 1.8754578263821997e-06,
+        "active_max_relative": 1.0,
+        "gpu_zero_reference_positive": 2,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 0.0004036940386722415
+      },
+      "image_sha256": "a58f8dd2836e4fe903cf8c3ccb44d104efd0979e08b8ede7aafbfcc347477a25",
+      "remaining_disagreements": "UNRESOLVED"
+    },
+    {
+      "cell": "C1",
+      "role": "historical-vanilla-traversal-control",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 1.8438918769076708e-06,
+        "reference_rms": 0.000717200159772899,
+        "nrmse": 0.002570958541743128,
+        "signed_sum_bias": -2.4123677540777222e-05,
+        "reference_sum": 24.271075187366698,
+        "gpu_sum": 24.27048967977531,
+        "active_pixels": 39009,
+        "active_p99_absolute": 1.2007861377796858e-09,
+        "active_p99_relative": 1.8754578263821997e-06,
+        "active_max_relative": 1.0,
+        "gpu_zero_reference_positive": 2,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 0.0004036940386722415
+      },
+      "image_sha256": "a58f8dd2836e4fe903cf8c3ccb44d104efd0979e08b8ede7aafbfcc347477a25",
+      "remaining_disagreements": "UNRESOLVED"
+    },
+    {
+      "cell": "C1",
+      "role": "independent-native-pixel-pt",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 2.8056967284942377e-10,
+        "reference_rms": 0.000717200159772899,
+        "nrmse": 3.912013529643747e-07,
+        "signed_sum_bias": -6.241037072512809e-08,
+        "reference_sum": 24.271075187366698,
+        "gpu_sum": 24.271073672599897,
+        "active_pixels": 39009,
+        "active_p99_absolute": 1.1329597458461991e-09,
+        "active_p99_relative": 5.718524897686036e-06,
+        "active_max_relative": 0.0005459971321994312,
+        "gpu_zero_reference_positive": 0,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 3.580648416656729e-08
+      },
+      "image_sha256": "110769e6ed0e315a3ac82d16c585df620027632dbc0d222831d48f07dfdb8705",
+      "classification": "DIRECT_DIAGNOSTIC_ONLY"
+    },
+    {
+      "cell": "C7",
+      "role": "incumbent-hwrt",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 6.946597764342822e-12,
+        "reference_rms": 2.228383354638695e-05,
+        "nrmse": 3.117326177240777e-07,
+        "signed_sum_bias": -1.0442949678250648e-07,
+        "reference_sum": 0.4196669534683373,
+        "gpu_sum": 0.41966690964272857,
+        "active_pixels": 6943,
+        "active_p99_absolute": 4.431896915917891e-11,
+        "active_p99_relative": 8.933732617602023e-07,
+        "active_max_relative": 3.015733637292658e-06,
+        "gpu_zero_reference_positive": 0,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 5.955414465069232e-10
+      },
+      "image_sha256": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+      "remaining_disagreements": "none observed",
+      "qualified_quality": [
+        {
+          "schema": "n010-full-image-hdr-score/1",
+          "cell": "C7",
+          "transport": "T_B2",
+          "state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "reference_state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "state_bytes_equal": true,
+          "complete_oracle_scene_sha256": "6f64c08408aa94c2a43613a6441ff61924c2562328a591b29037724e1577bcc6",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.94659756258651e-12,
+              "reference_rms": 2.2283833546386936e-05,
+              "nrmse": 3.11732608670146e-07,
+              "signed_sum_bias": -1.0442949880180452e-07,
+              "reference_sum": 0.41966695346833816,
+              "gpu_sum": 0.41966690964272857,
+              "active_pixels": 6943,
+              "active_p99_absolute": 4.431898256859138e-11,
+              "active_p99_relative": 8.933733287116286e-07,
+              "active_max_relative": 3.0157335042920156e-06,
+              "gpu_zero_reference_positive": 0,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 4.881290178632116e-06,
+              "reference_rms": 4.977257165649542e-06,
+              "nrmse": 0.980718901229428,
+              "signed_sum_bias": -0.9102566473913816,
+              "reference_sum": 0.0724325884595372,
+              "gpu_sum": 0.0065003433264791965,
+              "active_pixels": 7203,
+              "active_p99_absolute": 3.6047860579861817e-05,
+              "active_p99_relative": 1.3145006267860835,
+              "active_max_relative": 28076.767253772257,
+              "gpu_zero_reference_positive": 6881,
+              "reference_zero_leak_pixels": 14,
+              "reference_zero_leak_energy": 0.0006866559851914644,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 4.881290275925231e-06,
+              "reference_rms": 2.55071380044533e-05,
+              "nrmse": 0.19136957956917805,
+              "signed_sum_bias": -0.13398160998886283,
+              "reference_sum": 0.492099541927875,
+              "gpu_sum": 0.42616725302559644,
+              "active_pixels": 7279,
+              "active_p99_absolute": 3.63861627870927e-05,
+              "active_p99_relative": 1.0,
+              "active_max_relative": 28076.767253772257,
+              "gpu_zero_reference_positive": 242,
+              "reference_zero_leak_pixels": 3,
+              "reference_zero_leak_energy": 4.577706567943096e-05,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          },
+          "pilot_quality_target": "FAIL",
+          "normalization": "whole-image reference RMS; linear luma",
+          "scoring_exclusions": 0,
+          "capture_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C7-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+            "indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+            "total.pfm": "09bb0576effce7679da2f459cd3edc615900f722cb2ab4f386c13516c192d467"
+          },
+          "superiority_claim": false
+        },
+        {
+          "schema": "n010-full-image-hdr-score/1",
+          "cell": "C7",
+          "transport": "T_B8",
+          "state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "reference_state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "state_bytes_equal": true,
+          "complete_oracle_scene_sha256": "02bebed9789471414ad8e74dfc4530a86f731564a2541afda0d87ba3d3fe8ae3",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.94659756258651e-12,
+              "reference_rms": 2.2283833546386936e-05,
+              "nrmse": 3.11732608670146e-07,
+              "signed_sum_bias": -1.0442949880180452e-07,
+              "reference_sum": 0.41966695346833816,
+              "gpu_sum": 0.41966690964272857,
+              "active_pixels": 6943,
+              "active_p99_absolute": 4.431898256859138e-11,
+              "active_p99_relative": 8.933733287116286e-07,
+              "active_max_relative": 3.0157335042920156e-06,
+              "gpu_zero_reference_positive": 0,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.850341916420084e-06,
+              "reference_rms": 7.029846464244142e-06,
+              "nrmse": 0.9744653672399431,
+              "signed_sum_bias": -0.9378170429051992,
+              "reference_sum": 0.10453577041325202,
+              "gpu_sum": 0.0065003433264791965,
+              "active_pixels": 7310,
+              "active_p99_absolute": 5.120888744772532e-05,
+              "active_p99_relative": 1.3669422399798827,
+              "active_max_relative": 299.24655421878686,
+              "gpu_zero_reference_positive": 6974,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 0.00010602387318450163
+            },
+            "total": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.850342345021778e-06,
+              "reference_rms": 2.7158447918854358e-05,
+              "nrmse": 0.2522361500734373,
+              "signed_sum_bias": -0.18701824006190806,
+              "reference_sum": 0.5242027238815896,
+              "gpu_sum": 0.42616725302559644,
+              "active_pixels": 7316,
+              "active_p99_absolute": 5.1206645290027586e-05,
+              "active_p99_relative": 1.0,
+              "active_max_relative": 34.432349776704584,
+              "gpu_zero_reference_positive": 276,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 0.00010602383391797115
+            }
+          },
+          "pilot_quality_target": "FAIL",
+          "normalization": "whole-image reference RMS; linear luma",
+          "scoring_exclusions": 0,
+          "capture_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C7-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+            "indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+            "total.pfm": "09bb0576effce7679da2f459cd3edc615900f722cb2ab4f386c13516c192d467"
+          },
+          "superiority_claim": false
+        }
+      ]
+    },
+    {
+      "cell": "C7",
+      "role": "incumbent-software",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 6.946597764342822e-12,
+        "reference_rms": 2.228383354638695e-05,
+        "nrmse": 3.117326177240777e-07,
+        "signed_sum_bias": -1.0442949678250648e-07,
+        "reference_sum": 0.4196669534683373,
+        "gpu_sum": 0.41966690964272857,
+        "active_pixels": 6943,
+        "active_p99_absolute": 4.431896915917891e-11,
+        "active_p99_relative": 8.933732617602023e-07,
+        "active_max_relative": 3.015733637292658e-06,
+        "gpu_zero_reference_positive": 0,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 5.955414465069232e-10
+      },
+      "image_sha256": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+      "remaining_disagreements": "none observed",
+      "qualified_quality": [
+        {
+          "schema": "n010-full-image-hdr-score/1",
+          "cell": "C7",
+          "transport": "T_B2",
+          "state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "reference_state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "state_bytes_equal": true,
+          "complete_oracle_scene_sha256": "6f64c08408aa94c2a43613a6441ff61924c2562328a591b29037724e1577bcc6",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.94659756258651e-12,
+              "reference_rms": 2.2283833546386936e-05,
+              "nrmse": 3.11732608670146e-07,
+              "signed_sum_bias": -1.0442949880180452e-07,
+              "reference_sum": 0.41966695346833816,
+              "gpu_sum": 0.41966690964272857,
+              "active_pixels": 6943,
+              "active_p99_absolute": 4.431898256859138e-11,
+              "active_p99_relative": 8.933733287116286e-07,
+              "active_max_relative": 3.0157335042920156e-06,
+              "gpu_zero_reference_positive": 0,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 4.881290178632116e-06,
+              "reference_rms": 4.977257165649542e-06,
+              "nrmse": 0.980718901229428,
+              "signed_sum_bias": -0.9102566473913816,
+              "reference_sum": 0.0724325884595372,
+              "gpu_sum": 0.0065003433264791965,
+              "active_pixels": 7203,
+              "active_p99_absolute": 3.6047860579861817e-05,
+              "active_p99_relative": 1.3145006267860835,
+              "active_max_relative": 28076.767253772257,
+              "gpu_zero_reference_positive": 6881,
+              "reference_zero_leak_pixels": 14,
+              "reference_zero_leak_energy": 0.0006866559851914644,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 4.881290275925231e-06,
+              "reference_rms": 2.55071380044533e-05,
+              "nrmse": 0.19136957956917805,
+              "signed_sum_bias": -0.13398160998886283,
+              "reference_sum": 0.492099541927875,
+              "gpu_sum": 0.42616725302559644,
+              "active_pixels": 7279,
+              "active_p99_absolute": 3.63861627870927e-05,
+              "active_p99_relative": 1.0,
+              "active_max_relative": 28076.767253772257,
+              "gpu_zero_reference_positive": 242,
+              "reference_zero_leak_pixels": 3,
+              "reference_zero_leak_energy": 4.577706567943096e-05,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          },
+          "pilot_quality_target": "FAIL",
+          "normalization": "whole-image reference RMS; linear luma",
+          "scoring_exclusions": 0,
+          "capture_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C7-software",
+          "capture_payload_sha256": {
+            "direct.pfm": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+            "indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+            "total.pfm": "09bb0576effce7679da2f459cd3edc615900f722cb2ab4f386c13516c192d467"
+          },
+          "superiority_claim": false
+        },
+        {
+          "schema": "n010-full-image-hdr-score/1",
+          "cell": "C7",
+          "transport": "T_B8",
+          "state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "reference_state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "state_bytes_equal": true,
+          "complete_oracle_scene_sha256": "02bebed9789471414ad8e74dfc4530a86f731564a2541afda0d87ba3d3fe8ae3",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.94659756258651e-12,
+              "reference_rms": 2.2283833546386936e-05,
+              "nrmse": 3.11732608670146e-07,
+              "signed_sum_bias": -1.0442949880180452e-07,
+              "reference_sum": 0.41966695346833816,
+              "gpu_sum": 0.41966690964272857,
+              "active_pixels": 6943,
+              "active_p99_absolute": 4.431898256859138e-11,
+              "active_p99_relative": 8.933733287116286e-07,
+              "active_max_relative": 3.0157335042920156e-06,
+              "gpu_zero_reference_positive": 0,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.850341916420084e-06,
+              "reference_rms": 7.029846464244142e-06,
+              "nrmse": 0.9744653672399431,
+              "signed_sum_bias": -0.9378170429051992,
+              "reference_sum": 0.10453577041325202,
+              "gpu_sum": 0.0065003433264791965,
+              "active_pixels": 7310,
+              "active_p99_absolute": 5.120888744772532e-05,
+              "active_p99_relative": 1.3669422399798827,
+              "active_max_relative": 299.24655421878686,
+              "gpu_zero_reference_positive": 6974,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 0.00010602387318450163
+            },
+            "total": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.850342345021778e-06,
+              "reference_rms": 2.7158447918854358e-05,
+              "nrmse": 0.2522361500734373,
+              "signed_sum_bias": -0.18701824006190806,
+              "reference_sum": 0.5242027238815896,
+              "gpu_sum": 0.42616725302559644,
+              "active_pixels": 7316,
+              "active_p99_absolute": 5.1206645290027586e-05,
+              "active_p99_relative": 1.0,
+              "active_max_relative": 34.432349776704584,
+              "gpu_zero_reference_positive": 276,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 0.00010602383391797115
+            }
+          },
+          "pilot_quality_target": "FAIL",
+          "normalization": "whole-image reference RMS; linear luma",
+          "scoring_exclusions": 0,
+          "capture_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C7-software",
+          "capture_payload_sha256": {
+            "direct.pfm": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+            "indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+            "total.pfm": "09bb0576effce7679da2f459cd3edc615900f722cb2ab4f386c13516c192d467"
+          },
+          "superiority_claim": false
+        }
+      ]
+    },
+    {
+      "cell": "C7",
+      "role": "historical-vanilla-traversal-control",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 6.946597764342822e-12,
+        "reference_rms": 2.228383354638695e-05,
+        "nrmse": 3.117326177240777e-07,
+        "signed_sum_bias": -1.0442949678250648e-07,
+        "reference_sum": 0.4196669534683373,
+        "gpu_sum": 0.41966690964272857,
+        "active_pixels": 6943,
+        "active_p99_absolute": 4.431896915917891e-11,
+        "active_p99_relative": 8.933732617602023e-07,
+        "active_max_relative": 3.015733637292658e-06,
+        "gpu_zero_reference_positive": 0,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 5.955414465069232e-10
+      },
+      "image_sha256": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+      "remaining_disagreements": "none observed",
+      "qualified_quality": [
+        {
+          "schema": "n010-full-image-hdr-score/1",
+          "cell": "C7",
+          "transport": "T_B2",
+          "state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "reference_state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "state_bytes_equal": true,
+          "complete_oracle_scene_sha256": "6f64c08408aa94c2a43613a6441ff61924c2562328a591b29037724e1577bcc6",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.94659756258651e-12,
+              "reference_rms": 2.2283833546386936e-05,
+              "nrmse": 3.11732608670146e-07,
+              "signed_sum_bias": -1.0442949880180452e-07,
+              "reference_sum": 0.41966695346833816,
+              "gpu_sum": 0.41966690964272857,
+              "active_pixels": 6943,
+              "active_p99_absolute": 4.431898256859138e-11,
+              "active_p99_relative": 8.933733287116286e-07,
+              "active_max_relative": 3.0157335042920156e-06,
+              "gpu_zero_reference_positive": 0,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 4.881290178632116e-06,
+              "reference_rms": 4.977257165649542e-06,
+              "nrmse": 0.980718901229428,
+              "signed_sum_bias": -0.9102566473913816,
+              "reference_sum": 0.0724325884595372,
+              "gpu_sum": 0.0065003433264791965,
+              "active_pixels": 7203,
+              "active_p99_absolute": 3.6047860579861817e-05,
+              "active_p99_relative": 1.3145006267860835,
+              "active_max_relative": 28076.767253772257,
+              "gpu_zero_reference_positive": 6881,
+              "reference_zero_leak_pixels": 14,
+              "reference_zero_leak_energy": 0.0006866559851914644,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 4.881290275925231e-06,
+              "reference_rms": 2.55071380044533e-05,
+              "nrmse": 0.19136957956917805,
+              "signed_sum_bias": -0.13398160998886283,
+              "reference_sum": 0.492099541927875,
+              "gpu_sum": 0.42616725302559644,
+              "active_pixels": 7279,
+              "active_p99_absolute": 3.63861627870927e-05,
+              "active_p99_relative": 1.0,
+              "active_max_relative": 28076.767253772257,
+              "gpu_zero_reference_positive": 242,
+              "reference_zero_leak_pixels": 3,
+              "reference_zero_leak_energy": 4.577706567943096e-05,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          },
+          "pilot_quality_target": "FAIL",
+          "normalization": "whole-image reference RMS; linear luma",
+          "scoring_exclusions": 0,
+          "capture_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C7-vanilla",
+          "capture_payload_sha256": {
+            "direct.pfm": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+            "indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+            "total.pfm": "09bb0576effce7679da2f459cd3edc615900f722cb2ab4f386c13516c192d467"
+          },
+          "superiority_claim": false
+        },
+        {
+          "schema": "n010-full-image-hdr-score/1",
+          "cell": "C7",
+          "transport": "T_B8",
+          "state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "reference_state_sha256": {
+            "geometry": "16b104178ab35053111f15c5c74f6ad2390e75d8046d5b3055c74bc9a29e5830",
+            "frame": "64e5bae27e1719d66b4daef559f52309878ffcc6bcc72920c8cad7115df9c949"
+          },
+          "state_bytes_equal": true,
+          "complete_oracle_scene_sha256": "02bebed9789471414ad8e74dfc4530a86f731564a2541afda0d87ba3d3fe8ae3",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.94659756258651e-12,
+              "reference_rms": 2.2283833546386936e-05,
+              "nrmse": 3.11732608670146e-07,
+              "signed_sum_bias": -1.0442949880180452e-07,
+              "reference_sum": 0.41966695346833816,
+              "gpu_sum": 0.41966690964272857,
+              "active_pixels": 6943,
+              "active_p99_absolute": 4.431898256859138e-11,
+              "active_p99_relative": 8.933733287116286e-07,
+              "active_max_relative": 3.0157335042920156e-06,
+              "gpu_zero_reference_positive": 0,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.850341916420084e-06,
+              "reference_rms": 7.029846464244142e-06,
+              "nrmse": 0.9744653672399431,
+              "signed_sum_bias": -0.9378170429051992,
+              "reference_sum": 0.10453577041325202,
+              "gpu_sum": 0.0065003433264791965,
+              "active_pixels": 7310,
+              "active_p99_absolute": 5.120888744772532e-05,
+              "active_p99_relative": 1.3669422399798827,
+              "active_max_relative": 299.24655421878686,
+              "gpu_zero_reference_positive": 6974,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 0.00010602387318450163
+            },
+            "total": {
+              "pixels": 57600,
+              "scoring_exclusions": 0,
+              "rmse": 6.850342345021778e-06,
+              "reference_rms": 2.7158447918854358e-05,
+              "nrmse": 0.2522361500734373,
+              "signed_sum_bias": -0.18701824006190806,
+              "reference_sum": 0.5242027238815896,
+              "gpu_sum": 0.42616725302559644,
+              "active_pixels": 7316,
+              "active_p99_absolute": 5.1206645290027586e-05,
+              "active_p99_relative": 1.0,
+              "active_max_relative": 34.432349776704584,
+              "gpu_zero_reference_positive": 276,
+              "reference_zero_leak_pixels": 0,
+              "reference_zero_leak_energy": 0.0,
+              "whole_image_max_absolute": 0.00010602383391797115
+            }
+          },
+          "pilot_quality_target": "FAIL",
+          "normalization": "whole-image reference RMS; linear luma",
+          "scoring_exclusions": 0,
+          "capture_directory": "out/research/n010-comparison-readiness/rc-corrected-pilot/C7-vanilla",
+          "capture_payload_sha256": {
+            "direct.pfm": "e939a3ab21ced4d612fddbb83f10fc45121cc9ede750bb8db8a5ea12ced385be",
+            "indirect.pfm": "3ad78d6d2461a0b39c1f8f89ae9f15282160befd14156becc9ee8f9d9ed2391e",
+            "total.pfm": "09bb0576effce7679da2f459cd3edc615900f722cb2ab4f386c13516c192d467"
+          },
+          "superiority_claim": false
+        }
+      ]
+    },
+    {
+      "cell": "C7",
+      "role": "independent-native-pixel-pt",
+      "direct": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "rmse": 6.297304568027633e-12,
+        "reference_rms": 2.228383354638695e-05,
+        "nrmse": 2.825952076387083e-07,
+        "signed_sum_bias": -3.9754281924941383e-08,
+        "reference_sum": 0.4196669534683373,
+        "gpu_sum": 0.41966693678477895,
+        "active_pixels": 6943,
+        "active_p99_absolute": 4.1509788736989686e-11,
+        "active_p99_relative": 8.561143298471028e-07,
+        "active_max_relative": 2.7553613778128267e-06,
+        "gpu_zero_reference_positive": 0,
+        "reference_zero_leak_pixels": 0,
+        "reference_zero_leak_energy": 0.0,
+        "whole_image_max_absolute": 4.791261246799884e-10
+      },
+      "image_sha256": "5057fea608c03ea1dca772f6778345f5b79967e6ddb5ed8dc419b719217132be",
+      "classification": "DIRECT_DIAGNOSTIC_ONLY"
+    }
+  ],
+  "memory_validation": [
+    {
+      "capture": "C1-hwrt",
+      "ledger_sha256": "9ea3f7fa33433388ce68097a7dec039dc0f6432e3197c714ea5bc44fa75b73d2",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 416697040,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 374196944,
+          "live_bytes_at_end": 374196944
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 374196976,
+          "live_bytes_at_end": 374196944
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 374196976,
+          "live_bytes_at_end": 374196944
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 416697040,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C1-software",
+      "ledger_sha256": "837084d520d4e09a144b971abdfd582bd21774193aadcfa35a2460e29933b9f6",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 363453248,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 330386880,
+          "live_bytes_at_end": 320953152
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 320953184,
+          "live_bytes_at_end": 320953152
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 320953184,
+          "live_bytes_at_end": 320953152
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 363453248,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C1-vanilla",
+      "ledger_sha256": "447d4aed548eb8c26d17ba06f5d741bb2977fc521d9ef7eff6e60dabcafb7c94",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 374196944,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 374196944,
+          "live_bytes_at_end": 297991392
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 297991424,
+          "live_bytes_at_end": 297991392
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 297991424,
+          "live_bytes_at_end": 297991392
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 340491488,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C6-hwrt",
+      "ledger_sha256": "6af1cb49e1d0e98052f39b01a38a8a147dfaad1b36ef57b1ce7634bff97c185a",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 416713424,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 374196944,
+          "live_bytes_at_end": 374196944
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 374196976,
+          "live_bytes_at_end": 374196944
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 374323472,
+          "live_bytes_at_end": 374196944
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 416713424,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C6-vanilla",
+      "ledger_sha256": "bf3e1ed6f8cc24f5fe4643baa6aa940d0595465966c71fa1a348c3ae19760778",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 374196944,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 374196944,
+          "live_bytes_at_end": 297991392
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 297991424,
+          "live_bytes_at_end": 297991392
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 304292112,
+          "live_bytes_at_end": 297991392
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 340507872,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C7-hwrt",
+      "ledger_sha256": "db34715eb325c9db4e3fc0cd5c03f8d264c43b4e80515de639a542c92f57deb0",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 266937920,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 262341952,
+          "live_bytes_at_end": 262329920
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 262329952,
+          "live_bytes_at_end": 262329920
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 262329952,
+          "live_bytes_at_end": 262329920
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 266937920,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C7-software",
+      "ledger_sha256": "25301c74678460d4369eb69f5b573df4f9ddbea2e7e13814a126ee1efac2de81",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 266694400,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 262341952,
+          "live_bytes_at_end": 262086400
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 262086432,
+          "live_bytes_at_end": 262086400
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 262086432,
+          "live_bytes_at_end": 262086400
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 266694400,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    },
+    {
+      "capture": "C7-vanilla",
+      "ledger_sha256": "a9af6ad21c9543cd1b8079318758d682bff5ef03d51b24f04a0beab8894f5a00",
+      "event_replay_pass": true,
+      "peak_owned_bytes": 266552640,
+      "phases": [
+        {
+          "name": "startup",
+          "peak_bytes": 262341952,
+          "live_bytes_at_end": 261944640
+        },
+        {
+          "name": "source-frame",
+          "peak_bytes": 261944672,
+          "live_bytes_at_end": 261944640
+        },
+        {
+          "name": "target-frame",
+          "peak_bytes": 261944672,
+          "live_bytes_at_end": 261944640
+        },
+        {
+          "name": "diagnostic-readback",
+          "peak_bytes": 266552640,
+          "live_bytes_at_end": 0
+        }
+      ],
+      "teardown_zero": true
+    }
+  ],
+  "historical_outcomes_revised": false,
+  "comparison_exclusions": 0,
+  "gpu_timing_classification": "DIAGNOSTIC_UNCALIBRATED; CPU reference acquisitions active; additional GPU runners briefly overlapped",
+  "superiority_claim": false
+}
