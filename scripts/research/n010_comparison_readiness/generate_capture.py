@@ -127,9 +127,11 @@ def generate(root, out):
                 "    const char* ledger_path = std::getenv(\"PHOS_N010_MEMORY_LEDGER\");\n"
                 "    phos::gi::research::n010::LedgerOutput ledger(ledger_path ? ledger_path : \"\");")
     main = once(main, "        bool target=false;", "        bool target=false, topology=false;\n        std::string profile=\"legacy\";")
+    main = once(main, "        std::uint32_t spp=512;", "        std::uint32_t spp=512, recovery=0;")
     main = once(main, '            else if(arg=="--target-state")target=true;',
                 '            else if(arg=="--target-state")target=true;\n'
                 '            else if(arg=="--topology-churn")topology=true;\n'
+                '            else if(arg=="--recovery-frames")recovery=std::stoul(arg_value(argc,argv,i));\n'
                 '            else if(arg=="--direct-profile")profile=arg_value(argc,argv,i);')
     main = once(main, '(backend!="software"&&backend!="hwrt")', '(backend!="software"&&backend!="hwrt"&&backend!="vanilla")')
     main = once(main, '        fs::create_directories(out/"gpu");',
@@ -138,10 +140,30 @@ def generate(root, out):
                 '        if(profile=="ulp4")setenv("PHOS_N010_DIRECT_PROFILE","ulp4",1);\n'
                 '        else unsetenv("PHOS_N010_DIRECT_PROFILE");\n'
                 '        if(topology&&(!target||backend=="software"))throw std::runtime_error("topology requires target hwrt or vanilla");\n'
+                '        if(recovery>3||(!target&&recovery))throw std::runtime_error("recovery requires target and at most three frames");\n'
                 '        fs::create_directories(out/"gpu");')
     main = once(main, "        r::I001Runtime runtime(opt);", "        r::I001Runtime runtime(opt);\n"
                 "        if(backend==\"vanilla\")runtime.configure_n003_vanilla_software_baseline();")
     main = once(main, '#include <bit>', '#include <bit>\n#include <chrono>\n#include <iomanip>')
+    main = once(main, "        r::I001Runtime runtime(opt);", """        r::I001Runtime runtime(opt);
+        const auto save_sequence_frame = [&](std::uint32_t index) {
+            if(!recovery) return;
+            phos::gi::research::n010::AllocationLedger::instance().phase("diagnostic-frame-readback-"+std::to_string(index));
+            const auto directory=out/"frames"/std::to_string(index);
+            fs::create_directories(directory/"gpu");
+            const auto gpu=fs::absolute(directory/"gpu");
+            setenv("PHOS_N007_GPU_HITS",(gpu/"hits.bin").c_str(),1);
+            setenv("PHOS_N007_GPU_PRIMARY_GEOMETRY",(gpu/"primary-geometry.bin").c_str(),1);
+            setenv("PHOS_N007_PROBE_DIR",gpu.c_str(),1);
+            const auto f=runtime.renderer_readback();
+            capture_state(directory,f);
+            for(std::uint32_t component=0;component<3;++component) {
+                std::vector<float> image(std::size_t(f.width)*f.height);
+                for(std::size_t px=0;px<image.size();++px) image[px]=f.image_rgba[4*px+component];
+                const char* names[]{"direct.pfm","indirect.pfm","total.pfm"};
+                pfm(directory/"gpu"/names[component],f.width,f.height,image);
+            }
+        };""")
     main = once(main, "        auto gpu_frame=runtime.run_frame(false);",
                 """        std::ofstream timings(out/"renderer-timings.jsonl");
         timings << std::setprecision(17);
@@ -162,6 +184,7 @@ def generate(root, out):
         };
         auto gpu_frame=runtime.run_frame(false);
         emit_timing("source",gpu_frame);
+        save_sequence_frame(0);
         start=std::chrono::steady_clock::now();""")
     main = once(main, "        auto gpu_frame=runtime.run_frame(false);",
                 "        phos::gi::research::n010::AllocationLedger::instance().phase(\"source-frame\");\n"
@@ -170,10 +193,19 @@ def generate(root, out):
                 "        phos::gi::research::n010::AllocationLedger::instance().phase(\"target-frame\");\n"
                 "        if(target)gpu_frame=topology ? (backend==\"vanilla\" ? runtime.run_n003_vanilla_topology_churn_frame() : runtime.run_topology_churn_frame()) : runtime.run_frame(true);\n"
                 "        if(target)emit_timing(\"first-target\",gpu_frame);\n"
+                "        if(target)save_sequence_frame(1);\n"
+                "        for(std::uint32_t step=0;step<recovery;++step) {\n"
+                "            phos::gi::research::n010::AllocationLedger::instance().phase(\"recovery-frame-\"+std::to_string(step));\n"
+                "            start=std::chrono::steady_clock::now();\n"
+                "            gpu_frame=runtime.run_frame(true);\n"
+                "            emit_timing(\"recovery\",gpu_frame);\n"
+                "            save_sequence_frame(step+2);\n"
+                "        }\n"
                 "        phos::gi::research::n010::AllocationLedger::instance().phase(\"diagnostic-readback\");")
     main = once(main, "        n::FrameParams p{};",
                 '        std::cout << "N010 GPU diagnostics captured; legacy N007 CPU audit not run.\\n";\n'
                 "        return 0;\n        n::FrameParams p{};")
+    main = once(main, '<<(target?2:1)', '<<frame.params.limits[3]')
     (out / "n010_capture_main.cpp").write_text(main)
     for name, source, binding in (("hwrt", "n001_composite.comp.glsl", 5),
                                   ("software", "n003_composite_software.comp.glsl", 7)):
