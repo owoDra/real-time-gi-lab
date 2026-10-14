@@ -349,6 +349,12 @@
       "status": "complete-negative",
       "result": "069-gpu-reference-prior-compiler-attempts.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-070",
+      "status": "diagnostic-only",
+      "result": "070-gpu-reference-first-conformance.json",
+      "gpu_run": true
     }
   ]
 }

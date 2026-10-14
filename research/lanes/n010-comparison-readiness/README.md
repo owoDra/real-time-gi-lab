@@ -66,3 +66,9 @@ is [058](results/058-ddgi-volume-build.json). No default CMake/Renderer changes.
 This is resource/dispatch normalization wiring: scene tracing, finite-depth
 transport, surface gather and dynamic histories remain unimplemented. It is
 not DDGI frame-quality qualification or a calibrated timing result.
+
+Recovery now executes C1 T_B8 16384→32768 and C2 T_B2 8192→16384 in
+two 16-thread qualifiers, followed by all remaining selected slots. The new
+continuation-v3 uses view 067 and waits for eligible references. C7 T_B2
+GPU numerical-port conformance at 16 spp passes (070), with exact counters and
+max mean discrepancy 2.71051e-20; this does not grant reference eligibility.

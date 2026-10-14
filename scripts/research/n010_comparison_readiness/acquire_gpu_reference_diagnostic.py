@@ -22,11 +22,13 @@ if __name__=='__main__':
     parser.add_argument('--vertices',type=int,choices=(2,8),required=True)
     parser.add_argument('--spp',type=int,required=True)
     parser.add_argument('--seed-index',type=int,choices=range(4),default=0)
+    parser.add_argument('--batch',type=int,default=1)
     parser.add_argument('--work',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
     if args.work.exists() or args.output.exists():raise ValueError('refuse existing diagnostic attempt')
     if not 1<=args.spp<=8192:raise ValueError('diagnostic sample interval only')
+    if not 1<=args.batch<=64:raise ValueError('bounded diagnostic batch required')
     for proc in Path('/proc').iterdir():
         if not proc.name.isdigit():continue
         try:comm=(proc/'comm').read_text().strip()
@@ -53,7 +55,7 @@ if __name__=='__main__':
         'classification':'DIAGNOSTIC_ONLY_NOT_REFERENCE_ELIGIBILITY','gpu_run':False,
         'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         'input_sha256':inputs,'scene_sha256':sha(scene),'cell':args.cell,'vertices':args.vertices,
-        'spp':args.spp,'seed':seed,'scoring_exclusions':0,
+        'spp':args.spp,'seed':seed,'batch':args.batch,'scoring_exclusions':0,
         'limits':{'address_space_bytes':4*1024**3,'cpu_seconds':90,'elapsed_seconds':120},
         'thresholds':{'max_absolute_mean_and_moment':1e-10,'indirect_nrmse':1e-8,'counter_disagreements':0},
         'scope':'Bounded numerical execution trial under CPU reference load. No GI performance claim or reference admission.'}
@@ -74,7 +76,7 @@ if __name__=='__main__':
         return json.loads(stdout) if name=='cpu' else None
     try:
         result['gpu_run']=True
-        run('gpu',['bash','scripts/run_with_vulkan.sh',str(binary),str(scene.resolve()),str(Q.NET),str(shader),str(seed),str(args.spp),'1',str((args.work/'gpu').resolve())])
+        run('gpu',['bash','scripts/run_with_vulkan.sh',str(binary),str(scene.resolve()),str(Q.NET),str(shader),str(seed),str(args.spp),str(args.batch),str((args.work/'gpu').resolve())])
         if args.spp==8192:
             directory=ROOT/'out/research/n010-comparison-readiness/references-v1'/f'{args.cell}_T_B{args.vertices}'
             meta_path=directory/'n8192.meta.json';meta=json.loads(meta_path.read_text())

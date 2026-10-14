@@ -153,3 +153,14 @@ threshold, cap, seed, physics or quality-based selection change.
 Amendment 7's separate binary64 GPU execution feasibility port compiles/builds
 (066/068); failed compiler attempts remain 069. It has not produced an eligible
 reference. The frozen Renderer/default graph and N001–N009 results are unchanged.
+
+Recovery execution: two 16-thread qualifiers started from validated imported
+prefixes, C1 T_B8 16384→32768 / C2 T_B2 8192→16384. Commands/previous
+payload hashes are in the fresh `references-recovery-sponza-v1` and
+`references-recovery-dynamic-v1` attempt files. Planned aggregate results are
+071/072, which remain absent until transport completion. The live waiting
+driver is `continuation-v3/status.json`, with explicit view record 067.
+Result 070 is the first actual AMD numerical-port dispatch: C7 T_B2 16 spp,
+original CPU oracle comparison, exact counters/primary/direct terms, finite
+all-component moments, independent memory replay and max mean discrepancy
+2.71051e-20. No reference admission or GPU performance claim follows.

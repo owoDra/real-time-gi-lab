@@ -48,3 +48,13 @@ create an N011 preparation lane. Complete Sponza reference qualification,
 fixed-ladder quality matching, actual full Renderer timing calibration and
 fail-closed Lane M handoff here. The required DDGI integration is pinned to
 RTXGI Vulkan on AMD (result 021); CUDA is not part of the comparator.
+
+### N010 acquisition interruption recovery
+
+065 retains terminal/partial attempts with unestablished cause. Prospective
+Amendment 8 and view 067 recover complete prefixes into fresh directories with
+unchanged 24-slot corpus, screens and cap. Recovery and continuation-v3 are
+executing; READY still requires the full pilots and accepted calibration.
+GPU binary64 execution feasibility 070 is only a small numerical diagnostic,
+not admitted reference evidence. N010 remains the last preparation study;
+continue directly to the distinct Lane M GI comparison lane after its gate.

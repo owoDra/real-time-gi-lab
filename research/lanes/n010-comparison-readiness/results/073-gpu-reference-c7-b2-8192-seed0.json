@@ -1,0 +1,88 @@
+{
+  "schema": "n010-gpu-reference-conformance/1",
+  "complete": true,
+  "all_pass": true,
+  "classification": "DIAGNOSTIC_ONLY_NOT_REFERENCE_ELIGIBILITY",
+  "gpu_run": true,
+  "source_commit": "e6d43ad2584e7a89cdd8cefd1541f43147a57eae",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+    "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/phos-n010-gpu-reference": "a90e1202a3b1eb89976b8eaf86eb9a2d5bc10622baf308b2fb8af61a3a49ed2a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-oracle-compile-v3/n010_gpu_oracle.spv": "18c0968d10c6af7475bbe4729238cd73dcf3ceebdc20c18e5b3ebc4a9d297526",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/066-bounded-gpu-reference-compilation.json": "8db150cfcdd4b975eee4d9f785253fc6802e5d879c502175b7361be0eed7ab29",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/016-corpus-state-lock.json": "103bf2a09a2c7589ef72023cd7a1482e3b8e315c077a6132fd5605861a97686c",
+    "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/n010_rqmc_oracle": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/acquire_gpu_reference_diagnostic.py": "076ffbdb66f8bfd859b7c173764cbce93d90e14a2f77381a899f505fba25e530",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/gpu_reference_main.cpp": "825a8f6832d7c05f4eea3b7ebcf6d7a9662627be8016afff9b0a2b4dab0ca678",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/n010_comparison_readiness/n010_gpu_oracle.comp.glsl": "10ecdc8490102f68a6d24d3d7a73fc1fde5f81c345c86905ee46ad07ecf45eb3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/016-amendment-7-gpu-reference-feasibility.md": "6f16f04eceb2c4164204e8af329c41e4654db3b8d9d10cec6837d12cbcee9b7c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C7_T_B2/n8192.meta.json": "7108e0fe6d864780846822f957a53ffc029c69fa5e400896871a410222c668ab"
+  },
+  "scene_sha256": "6f64c08408aa94c2a43613a6441ff61924c2562328a591b29037724e1577bcc6",
+  "cell": "C7",
+  "vertices": 2,
+  "spp": 8192,
+  "seed": 305419896,
+  "batch": 16,
+  "scoring_exclusions": 0,
+  "limits": {
+    "address_space_bytes": 4294967296,
+    "cpu_seconds": 90,
+    "elapsed_seconds": 120
+  },
+  "thresholds": {
+    "max_absolute_mean_and_moment": 1e-10,
+    "indirect_nrmse": 1e-08,
+    "counter_disagreements": 0
+  },
+  "scope": "Bounded numerical execution trial under CPU reference load. No GI performance claim or reference admission.",
+  "gpu_command": [
+    "bash",
+    "scripts/run_with_vulkan.sh",
+    "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/phos-n010-gpu-reference",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-diagnostic-v2/scene.n008",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-oracle-compile-v3/n010_gpu_oracle.spv",
+    "305419896",
+    "8192",
+    "16",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/gpu-reference-diagnostic-v2/gpu"
+  ],
+  "gpu_returncode": 0,
+  "primary_records_byte_equal": true,
+  "direct_mean_byte_equal": true,
+  "emission_mean_byte_equal": true,
+  "max_abs_mean": 2.710505431213761e-20,
+  "max_abs_moment": 3.308722450212111e-24,
+  "indirect_nrmse": 1.0850217163861882e-16,
+  "cpu_counters": {
+    "primary_hits": 59932672,
+    "shadow_tests": 68885010,
+    "shadow_blocked": 1859850,
+    "backface_absorbed": 0
+  },
+  "gpu_counters": {
+    "primary_hits": 59932672,
+    "shadow_tests": 68885010,
+    "shadow_blocked": 1859850,
+    "backface_absorbed": 0
+  },
+  "all_finite": true,
+  "gpu_fault_flags": 0,
+  "owned_memory_replay_pass": true,
+  "payload_sha256": {
+    "scene.n008": "6f64c08408aa94c2a43613a6441ff61924c2562328a591b29037724e1577bcc6",
+    "attempt.json": "f758220dcc9f15f403be0a634b51943eb10a306890510743357e452a7b28fac7",
+    "gpu.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gpu.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "gpu/o.indirect.pfm": "df606ba6ffc83d7927130a883ab9c678cdeb2e1cad9179bc63ec3202245a995c",
+    "gpu/o.direct.pfm": "ddbe7adf39c3fe582937c9014db22bbcb060e2f4dbd552ce6af1acb4f2adf6f3",
+    "gpu/allocation-ledger.json": "8863631d2bb581f7b41ee0fe2e18a183852dd6794acdf4029153c0c18c4438dd",
+    "gpu/o.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "gpu/o.total.pfm": "f1a4fae1a06e63326615e6ca682a3ef0029bf22db347415ddc57ea2d0e18f219",
+    "gpu/o.hits": "17c4360d5c2b48859ea1844e2808bfe464d0cc464b9b70e97d9c2d56261cb53e",
+    "gpu/o.f64": "97316b884db16a3e3ebbc2e36b26b6960978a67b43aff2d107217d0a185bbde9",
+    "gpu/gpu.json": "c9e2b47117ad88defa9ce9bb4fda1f9c99b6cc7dbeb130b3f66a796cddf98e61"
+  }
+}

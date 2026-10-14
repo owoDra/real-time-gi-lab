@@ -52,8 +52,12 @@ later partial seeds are retained. Prospective Amendment 8 and fixed full-24
 recovery view 067 schedule byte-identical complete-prefix import into fresh
 acquisitions: C1 T_B8 from 16384, C3 T_B8 and C2 T_B2 from 8192, then the
 unchanged fixed levels/cap/screens. Previous view 061 and driver statuses remain
-historical, not assertions of live computation. GPU binary64 reference feasibility
-(Amendment 7) builds in isolation (066/068); no GPU reference is admitted.
+historical, not assertions of live computation. Recovery is now executing in two 16-thread qualifiers; continuation-v3 waits
+for eligible references using view 067. Actual first C7 T_B2 GPU binary64
+conformance at 16 spp passes against the original CPU oracle (070), with exact
+counters/primary/direct terms and max mean discrepancy 2.71051e-20. This is
+one diagnostic; no GPU reference is admitted. Full 8192/four-seed/state/physical/
+prefix conformance remains required by Amendment 7.
 [Current execution evidence](lanes/n010-comparison-readiness/results/008-interim-execution-and-resume.md),
 [PT quality ladder](lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json),
 [dynamic comparisons](lanes/n010-comparison-readiness/results/020-controlled-dynamic-summary.json),
