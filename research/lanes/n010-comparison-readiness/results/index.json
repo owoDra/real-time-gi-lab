@@ -775,6 +775,12 @@
       "status": "complete-isolated-minimal-calibration-fixture-build-no-gpu-validation",
       "result": "156-minimal-calibration-fixture-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-159",
+      "status": "complete-isolated-calibration-directory-fix-build-no-gpu-validation",
+      "result": "159-minimal-calibration-directory-fix-build.json",
+      "gpu_run": false
     }
   ]
 }

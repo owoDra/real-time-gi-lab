@@ -174,6 +174,17 @@ has occurred. Fresh quiet sizing 157 and accepted 158 remain unexecuted until
 the CPU proposal work actually terminates. Existing 029 remains partial/failed
 in its completed scope. Neither build success nor a prepared command is READY.
 
+
+Subsequent CPU review found that pixel PT's removed state-copy call also created
+its frame directory. [045](lanes/n010-comparison-readiness/experiments/045-minimal-capture-output-directory-repair.md)
+registers that filesystem repair before any new GPU run. Corrected isolated
+[build 159](lanes/n010-comparison-readiness/results/159-minimal-calibration-directory-fix-build.json)
+passes all five compile/link steps and unchanged-active-input checks; the
+calibration wrapper now requires its v2 binaries. Build 156 and its known
+source-identified defect are retained unchanged; no runtime failure was observed
+or hidden. GPU sizing 157 / calibration 158 remain unexecuted. Physical 152
+continues in its original process, with actual first-scene seed payloads saved.
+
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
 24-slot corpus. Actual 116 refuses acquisition at incomplete physical 113;

@@ -111,6 +111,17 @@ has occurred. Fresh quiet sizing 157 and accepted 158 remain unexecuted until
 the CPU proposal work actually terminates. Existing 029 remains partial/failed
 in its completed scope. Neither build success nor a prepared command is READY.
 
+
+Subsequent CPU review found that pixel PT's removed state-copy call also created
+its frame directory. [045](experiments/045-minimal-capture-output-directory-repair.md)
+registers that filesystem repair before any new GPU run. Corrected isolated
+[build 159](results/159-minimal-calibration-directory-fix-build.json)
+passes all five compile/link steps and unchanged-active-input checks; the
+calibration wrapper now requires its v2 binaries. Build 156 and its known
+source-identified defect are retained unchanged; no runtime failure was observed
+or hidden. GPU sizing 157 / calibration 158 remain unexecuted. Physical 152
+continues in its original process, with actual first-scene seed payloads saved.
+
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
 current-binary diagnostic ledgers, explicitly separating historical binaries
@@ -341,8 +352,8 @@ No new sampling branch, current view/driver replacement or final 047 is attested
 ### Prepared minimal-output calibration commands (plan 044)
 
 Not executed. First require actual termination of the CPU proposal sequence;
-these commands refuse live research workers, existing work/output paths and
-partial boundary selection. Keep the new build/source/input identities frozen.
+these commands require complete corrected build 159 (v2 binaries), and refuse
+live research workers, existing work/output paths and partial boundary selection. Keep the new build/source/input identities frozen.
 Sizing additionally checks every image against original quiet sizing 046 and
 requires zero-teardown ledger replay within 8 GiB. Only complete full PASS 157
 permits 158. Original failed/partial timing is retained.
