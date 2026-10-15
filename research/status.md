@@ -1,5 +1,37 @@
 # Current research status (2026-10-15)
 
+## Current execution checkpoint — 2026-10-15 14:43 UTC stop
+
+User-requested [stop 170](lanes/n010-comparison-readiness/results/170-user-requested-minimal-calibration-stop.json)
+terminated the accepted-calibration controller and its GPU PT child using
+verified PID/start identities. Two post-stop process scans found no remaining
+research workers. Exact [partial 158](lanes/n010-comparison-readiness/results/158-minimal-calibration-full-renderer.json)
+bytes are retained: 12/16 boundaries completed all eight blocks, with C1 PT B8
+and C6 PT B2 PASS and ten FAIL. C6 PT B8 retains five complete blocks plus
+interrupted block-5 files; all three C12 roles remain unstarted. Full calibration
+is **INCOMPLETE / NOT ACCEPTED**. No subset acceptance, threshold change,
+old-path restart or power/clock change occurred. Earlier live-status paragraphs
+below describe their publication checkpoints, not current running processes.
+
+After actual GPU termination, separate preregistered plan-047 CPU recovery 163
+started at its fresh path. The seven fixed scene exports were copied byte-for-byte
+and passed their per-scene checks; the ten fresh invocations are still pending
+completion. Full physical/eight-gate/two-iid validity and reference admission
+are not established. Old 152 and its stopped workflow remain unchanged.
+
+Independent CPU [build 167](lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
+completed all five compile/link steps PASS. It verifies 494 input identities,
+whole-source inverse proofs, unchanged timed Renderer method and unchanged
+active inputs. This establishes compilation of plan-048 row-bulk PFM output,
+**not GPU byte equivalence, accepted timing or runtime regression validation**.
+GPU sizing 168 and calibration 169 have not run; they require actual CPU/GPU
+quiescence and their original full sixteen-boundary gates. Tests were not run.
+
+All 24 eligible references, complete quality/memory pilots and the final six-gate
+readiness result remain required. The direct max-relative-error-1.0 pixels
+remain **UNRESOLVED / 未解決**, included without masks. N010 remains active;
+Lane M comparative acquisition has not started. No N011.
+
 **Status: empirical architecture and image-producing renderer demonstrated; general real-time GI superiority NOT established.** This is the sole cross-lane status/adoption synthesis. For the long research history see [archived 2026-10-02 status](archive/status-2026-10-02.md); for exact decision evidence use the linked lane results and [branch inventory](branch-inventory.md).
 
 ## Current incumbent — adoption versus experiments

@@ -1,0 +1,336 @@
+{
+  "schema": "n010-user-requested-minimal-calibration-stop/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "USER_STOPPED_PARTIAL_CALIBRATION_TWELVE_COMPLETE_BOUNDARIES_TWO_PASS_TEN_FAIL",
+  "utc": "2026-10-15T14:44:20.346112+00:00",
+  "source_commit": "d7dcf1c28aad56c5c3e8439ce96481b8efc89ecf",
+  "source_receipt": {
+    "path": "out/research/n010-comparison-readiness/process-stop-20261015T144305Z.json",
+    "sha256": "cb7394dc281d47eaf9c0ff3649168314d7f8376d58f930668f3941440f4a7adc",
+    "record": {
+      "schema": "n010-user-requested-process-stop/1",
+      "utc": "2026-10-15T14:43:02.005618+00:00",
+      "reason": "User requested inspection and termination of remaining old research processes. No research acquisition restarted.",
+      "before": [
+        {
+          "pid": 1562759,
+          "ppid": 517261,
+          "state": "S",
+          "start_ticks": 17954907,
+          "argv": [
+            "out/research/n010-comparison-readiness/venv/bin/python",
+            "scripts/research/n010_reference_sampling/calibrate_minimal_capture.py",
+            "--mode",
+            "accepted",
+            "--lock",
+            "research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json",
+            "--work",
+            "out/research/n010-comparison-readiness/minimal-calibration-accepted-v1",
+            "--plan",
+            "research/lanes/n010-comparison-readiness/results/157-minimal-calibration-quiet-sizing.json",
+            "--output",
+            "research/lanes/n010-comparison-readiness/results/158-minimal-calibration-full-renderer.json"
+          ]
+        },
+        {
+          "pid": 1578203,
+          "ppid": 1562759,
+          "state": "S",
+          "start_ticks": 18258053,
+          "argv": [
+            "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/minimal-calibration-build-v2/phos-n010-pixel-pt",
+            "--state",
+            "/var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/states/static",
+            "--spp",
+            "1024",
+            "--vertices",
+            "8",
+            "--family",
+            "pixel-pt",
+            "--seed",
+            "305419896",
+            "--calibration-doses",
+            "out/research/n010-comparison-readiness/minimal-calibration-accepted-v1/C6-pt-B8/block-5.doses.txt",
+            "--out",
+            "out/research/n010-comparison-readiness/minimal-calibration-accepted-v1/C6-pt-B8/block-5",
+            "--target-state",
+            "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/rc-corrected-pilot/C6-hwrt"
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "pid": 1562759,
+          "start_ticks": 17954907,
+          "signal": "SIGSTOP",
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "pid": 1578203,
+          "start_ticks": 18258053,
+          "signal": "SIGSTOP",
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "pid": 1562759,
+          "start_ticks": 17954907,
+          "signal": "SIGTERM",
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "pid": 1578203,
+          "start_ticks": 18258053,
+          "signal": "SIGTERM",
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "pid": 1578203,
+          "start_ticks": 18258053,
+          "signal": "SIGCONT",
+          "result": 0,
+          "errno": 0
+        },
+        {
+          "pid": 1562759,
+          "start_ticks": 17954907,
+          "signal": "SIGCONT",
+          "result": 0,
+          "errno": 0
+        }
+      ],
+      "after_first_scan": [],
+      "after_second_scan": [],
+      "remaining_live_research_workers": [],
+      "preserved_result": {
+        "path": "research/lanes/n010-comparison-readiness/results/158-minimal-calibration-full-renderer.json",
+        "bytes": 54460873,
+        "sha256": "a44b69153e61cf36f38c6877ebe09cd30feff94cb564764fbc6c5e0af7718010",
+        "complete": false,
+        "all_pass": false,
+        "classification": "INCOMPLETE; user-stopped acquisition; partial results retained unchanged"
+      },
+      "result_top_level_keys": [
+        "schema",
+        "mode",
+        "complete",
+        "all_pass",
+        "lock_sha256",
+        "source_commit",
+        "rows",
+        "fixture_input_sha256",
+        "capture_scope",
+        "plan_sha256"
+      ],
+      "stopped": true
+    }
+  },
+  "preserved_partial": {
+    "path": "research/lanes/n010-comparison-readiness/results/158-minimal-calibration-full-renderer.json",
+    "bytes": 54460873,
+    "sha256": "a44b69153e61cf36f38c6877ebe09cd30feff94cb564764fbc6c5e0af7718010",
+    "complete": false,
+    "all_pass": false
+  },
+  "required_boundary_count": 16,
+  "complete_boundary_count": 12,
+  "complete_passing_boundary_count": 2,
+  "complete_failing_boundary_count": 10,
+  "boundary_records": [
+    {
+      "boundary": "C1-hwrt",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C1-software",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": true,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "complete_process_blocks": 8,
+      "verdict": "PASS",
+      "original_gates": {
+        "control_max_absolute_ratio": true,
+        "control_span": true,
+        "control_order_bias": true,
+        "effect_span": true,
+        "effect_order_bias": true,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": false,
+        "effect_exceeds_control_envelope": false
+      }
+    },
+    {
+      "boundary": "C7-hwrt",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C7-software",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": true,
+        "effect_order_bias": false,
+        "effect_positive_fraction": false,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": false,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C6-hwrt",
+      "complete_process_blocks": 8,
+      "verdict": "FAIL",
+      "original_gates": {
+        "control_max_absolute_ratio": false,
+        "control_span": false,
+        "control_order_bias": false,
+        "effect_span": false,
+        "effect_order_bias": false,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "complete_process_blocks": 8,
+      "verdict": "PASS",
+      "original_gates": {
+        "control_max_absolute_ratio": true,
+        "control_span": true,
+        "control_order_bias": true,
+        "effect_span": true,
+        "effect_order_bias": true,
+        "effect_positive_fraction": true,
+        "effect_exceeds_control_envelope": true
+      }
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "complete_process_blocks": 5,
+      "verdict": "INCOMPLETE",
+      "original_gates": null
+    }
+  ],
+  "unstarted_boundaries": [
+    "C12-hwrt",
+    "C12-pt-B2",
+    "C12-pt-B8"
+  ],
+  "interrupted_boundary": "C6-pt-B8",
+  "interrupted_complete_block_count": 5,
+  "full_calibration_verdict": "INCOMPLETE_NOT_ACCEPTED",
+  "partial_boundary_verdict": "NOT_ASSIGNED",
+  "thresholds_changed": false,
+  "restarted": false,
+  "old_work_paths_written_after_stop": false,
+  "raw_payload_policy": "Retain all original payloads, including interrupted block-5 files, at immutable old work path. This record checks the partial summary and stop receipt hashes; it does not independently rehash all GPU payloads.",
+  "readiness": "NOT_ESTABLISHED; all original six gates remain mandatory",
+  "next_work": "Separate preregistered plan-047 CPU controls and plan-048 CPU build use fresh paths. GPU sizing/calibration require actual CPU/GPU quiescence.",
+  "direct_max_relative_error_1_0": "UNRESOLVED / \u672a\u89e3\u6c7a; included, without masks or gate changes",
+  "tests": "NOT_RUN; operational evidence publication, no runtime regression claim"
+}

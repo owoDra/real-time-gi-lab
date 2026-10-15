@@ -811,6 +811,24 @@
       "status": "posthoc-cpu-replay-all-ten-static-calibration-decisions-and-saved-output-cadence",
       "result": "162-minimal-static-calibration-posthoc-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-158",
+      "status": "user-stopped-partial-twelve-complete-boundaries-two-pass-ten-fail",
+      "result": "158-minimal-calibration-full-renderer.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-170",
+      "status": "user-requested-minimal-calibration-stop-partials-retained",
+      "result": "170-user-requested-minimal-calibration-stop.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-167",
+      "status": "complete-row-bulk-pfm-fixture-build-inverse-and-active-inputs-pass-no-gpu-validation",
+      "result": "167-bulk-pfm-calibration-fixture-build.json",
+      "gpu_run": false
     }
   ]
 }

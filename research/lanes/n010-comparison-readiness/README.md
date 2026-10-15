@@ -1,5 +1,37 @@
 # N010 — final comparison preparation
 
+## Current execution checkpoint — 2026-10-15 14:43 UTC stop
+
+User-requested [stop 170](results/170-user-requested-minimal-calibration-stop.json)
+terminated the accepted-calibration controller and its GPU PT child using
+verified PID/start identities. Two post-stop process scans found no remaining
+research workers. Exact [partial 158](results/158-minimal-calibration-full-renderer.json)
+bytes are retained: 12/16 boundaries completed all eight blocks, with C1 PT B8
+and C6 PT B2 PASS and ten FAIL. C6 PT B8 retains five complete blocks plus
+interrupted block-5 files; all three C12 roles remain unstarted. Full calibration
+is **INCOMPLETE / NOT ACCEPTED**. No subset acceptance, threshold change,
+old-path restart or power/clock change occurred. Earlier live-status paragraphs
+below describe their publication checkpoints, not current running processes.
+
+After actual GPU termination, separate preregistered plan-047 CPU recovery 163
+started at its fresh path. The seven fixed scene exports were copied byte-for-byte
+and passed their per-scene checks; the ten fresh invocations are still pending
+completion. Full physical/eight-gate/two-iid validity and reference admission
+are not established. Old 152 and its stopped workflow remain unchanged.
+
+Independent CPU [build 167](results/167-bulk-pfm-calibration-fixture-build.json)
+completed all five compile/link steps PASS. It verifies 494 input identities,
+whole-source inverse proofs, unchanged timed Renderer method and unchanged
+active inputs. This establishes compilation of plan-048 row-bulk PFM output,
+**not GPU byte equivalence, accepted timing or runtime regression validation**.
+GPU sizing 168 and calibration 169 have not run; they require actual CPU/GPU
+quiescence and their original full sixteen-boundary gates. Tests were not run.
+
+All 24 eligible references, complete quality/memory pilots and the final six-gate
+readiness result remain required. The direct max-relative-error-1.0 pixels
+remain **UNRESOLVED / 未解決**, included without masks. N010 remains active;
+Lane M comparative acquisition has not started. No N011.
+
 N010 is the final preparation study before **Lane M GI competitiveness**. It
 must deliver executable comparisons, eligible references, correctness evidence,
 quality matching, calibrated GPU timing and allocation-lifetime memory records.
@@ -389,7 +421,7 @@ relaxation follows from this partial observation. Final 047 remains pending.
 
 ### Minimal-output calibration commands (plan 044)
 
-157 has completed PASS; 158 has been launched once and is running. The commands
+157 completed PASS; 158 was launched once and user-stopped (170). The commands
 below document those actual invocations and must not be rerun into existing
 paths. They require complete corrected build 159 (v2 binaries), and refuse
 live research workers, existing work/output paths and partial boundary selection. Keep the new build/source/input identities frozen.
@@ -433,7 +465,8 @@ paths; GPU calibration 158 must actually terminate before CPU dispatch.
 
 ### Prepared interrupted-control recovery commands (plan 047)
 
-Not run. Execute each command only after actual termination of calibration 158
+163 has started after actual termination of calibration 158; 164/165 have not
+run. Execute each later command only after its preceding proof completes PASS
 and all other research workers, and only after complete PASS of the preceding
 step. The old workflow is not restarted. These paths must not already exist.
 There is no automatic waiting/retry controller.
@@ -525,8 +558,8 @@ inverse checks reconstruct the exact build-159 files; build and calibration
 CLI assembly succeeds. No native compile, serialization/runtime replay,
 new GPU run or accepted capability is established. Source 158 stays frozen.
 
-The following commands are prepared, **not run**. First wait for actual 158
-termination. Build 167 may coexist with CPU reference controls, but refuses
+Build 167 below completed PASS after actual termination of 158. GPU commands
+168/169 remain **not run**. Build 167 may coexist with CPU reference controls, but refuses
 GPU research/calibration. Run 168 only after all CPU/GPU workers terminate and
 167 completes PASS; run 169 only after complete full PASS 168. All paths are
 fresh; there is no automatic retry or partial-boundary selection.
