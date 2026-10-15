@@ -127,3 +127,13 @@ Sponza dynamics, quiet sizing, accepted calibration and final six-gate preflight
 Executed current-view interim 129 remains NOT_READY. See
 [130](lanes/n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
 for current execution and remaining gates. N010 remains the final preparation.
+
+Plan 038 now supplies an actual waiting quiescence-transition worker: after
+complete selected qualification and all 24 provenance checks, retire only the
+redundant independent hybrid acquisition, preserving all complete/partial
+bytes and confirming process termination. It does not signal selected-reference
+work or bypass final pilots/calibration. Retirement 135 remains pending.
+Post-hoc memory audit 133 verifies current allocation-hook link coverage and
+the 16 current-binary diagnostic ledgers, while preserving 65 historical-binary
+pilot identities and the failed stricter audit 132. These results do not pass
+accepted timing or whole-corpus readiness. [Details](lanes/n010-comparison-readiness/results/134-memory-evidence-scopes-and-quiescence-watch.md).

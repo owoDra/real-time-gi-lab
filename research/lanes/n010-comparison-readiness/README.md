@@ -31,6 +31,13 @@ New comparison execution waits for
 all 24 eligible references, complete provenance and quiescence. Interim
 preflight 129 is **NOT_READY**; final pilots/calibration/047 remain pending.
 
+[Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
+records current allocation-hook coverage, 76 retained pilot ledgers and the 16
+current-binary diagnostic ledgers, explicitly separating historical binaries
+and accepted timing. Plan-038 watcher is actually waiting to retire redundant
+hybrid acquisition only after full selected-reference qualification/provenance.
+No retirement or final readiness is claimed; all partial evidence is preserved.
+
 ## Earlier execution checkpoints
 
 The progression below records earlier checkpoints. Use the current section

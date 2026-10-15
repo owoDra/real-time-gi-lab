@@ -42,6 +42,26 @@ results are indexed only after completion and identity verification; mutable
 
 ## Continuous completion of existing acquisitions
 
+### Current memory audit and qualified-reference quiescence worker
+
+`audit_comparison_memory_boundary.py` retains strict audit 132 FAIL because
+old pilot binary identities differ from current binaries. Its separate guarded
+adapter `audit_comparison_memory_scopes.py` records 133: actual current Ninja
+link/dependency hook coverage, 76 retained pilot ledger replays, and 16 raw
+current-binary diagnostic-sizing ledger replays. Historical identities remain
+explicit; no new GPU/build, accepted timing or binary reproduction is claimed.
+
+`retire_qualified_redundant_hybrid.py --work NEW_ROOT --output NEW_JSON` runs
+the prospective plan-038 transition. The current root is
+`qualified-reference-quiescence-transition-v1`; it waits for complete/PASS 128
+and replays every selected view-127 reference before any signals. It checks
+owned process/work/start/descendant identities, retains all files/status bytes,
+and confirms only redundant hybrid processes terminate. Selected qualification
+failure refuses retirement; natural hybrid completion is a verified no-op.
+The comparison driver waits for the watcher too before unchanged pilots and
+calibration. Pending 135 is not indexed as completed evidence. Original frozen
+scripts/views, live selected-reference work and all scientific gates stay fixed.
+
 `finish_readiness.py` waits for the already running original CPU reference
 ladders, executes each qualified remaining GPU pilot sequentially, and waits
 for CPU work to finish before quiet sizing and the single accepted calibration

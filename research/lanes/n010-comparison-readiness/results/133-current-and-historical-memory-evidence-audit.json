@@ -1,0 +1,2609 @@
+{
+  "schema": "n010-comparison-owned-memory-boundary-audit/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "build_run": false,
+  "source_commit": "af268f4680e30408f159ca7e04ceaf87faf8de53",
+  "classification": "POST_HOC_DISTINCT_CURRENT_SOURCE_AND_RETAINED_LEDGER_SCOPES",
+  "scope": "Application-owned Vulkan allocations in the two frozen comparison executables; no new runtime/calibration/whole-corpus claim",
+  "limitations": "Direct call-site and compiled project dependency audit, not a formal proof of arbitrary dynamically loaded code; driver-private, OS and CPU heap allocations are outside the declared owned-Vulkan scope",
+  "inputs": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/audit_comparison_memory_scopes.py": "ef0bfafa718c350f017049fc99e23a10c1a5b21a2cf735f337d059c512138d04",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight.py": "87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/build.ninja": "9430e432b01ba5086e4c2b55721736094deb2001687198d0f5d90dc687fc493b",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/CMakeLists.txt": "302fa9a9964bf900fc48af673a81d44d30ab051a1f88a1ce7192e3a063047102",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/allocation_ledger.hpp": "beb83fb64a5db6eab278f4d9da3843123ee4302445451a44f99916b7f4b19598",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_memory_hooks.py": "512b532931d4083ef19d30cc497d0f542c949f85c44aae8b0902b91e85b561a9",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/audit_comparison_memory_boundary.py": "ebb8f4ae6386b503cb7c413576335b3dbbb84e12af58ee689c3b1becc8ea4b7c",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-capture": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-0.deps.txt": "c6dda4cf0f70720421473bb23baabef5fb70b1d064cbd368c740b6bcd3dfdb85",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_capture_main.cpp.o": "57a72ac96d469011934d8297dbeffcfaf5b7a41afee73eb28fafdf389e2ec48a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-1.deps.txt": "8cb02587462691cc3113b338302f9226811338114430e62ae28f4d5b8bc0d370",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_runtime.cpp.o": "477842e19a68e37a43c23311b4e14388daedf6d599f820b5be26dcb15d71bdb8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-2.deps.txt": "60fb25c876b82124b295b2367769ef322851bdc933939e41143438d316d0d4ac",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/n001_reference.cpp.o": "693c695c1007cc991d968201dc2ed327ae71747ec16dfa077a3a80f4e3c3b5bb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-3.deps.txt": "0f499ea52e7d00506c408e326da6de178eb580a8a5bead2158f5f276b195d1c6",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o": "6f09432ea4ed778107ed7a6b3f4e3e4668f70bb66a23c53ee4ae0107ab98fb78",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-4.deps.txt": "311ad48a69d804d69c3e11a31ed53c4202e6266e7bae2a4f537dd6b3dae2351f",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_a001_scene.cpp.o": "5fc5f61d7ba79955bb56ae6259f2e448717e968689c263dbc57e2ebaf71dfcc4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-5.deps.txt": "7a579d44516d77346a232230d797e763ec88cf06f46debd93e085454a3eb486a",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_a001_runtime.cpp.o": "2392fbc8fda977f648ba4eb9af71f4f94437c51635a2568eaf4b36fb715af3ea",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-6.deps.txt": "a5d323493844489d964e98510ad1289c3e4fe4c96cb411bdb17cb51a39283f06",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_b002_scene.cpp.o": "b7dcf8fa3eca86c6b6bbeb9f350446238e4e572a3dabb2fe1e68cf37c91ddf0f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-7.deps.txt": "3d3fe9c06434c708e6cff3ee7202611f2653442356d364db6179061b93f04a66",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.cpp.o": "6fa624d8f63d14a9673506c4f971447ebb39b439871755df81524f612c91de76",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-8.deps.txt": "55784b1ef60714403c896793f2fdb641476fdacb979c172aed1e6cfb4137116d",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_b002_vulkan.cpp.o": "40b33358d9c2a4dee8b69e6468aab3a59063ceed11f55a87f62c39139a807148",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-9.deps.txt": "e63f38df7b83bb38003d0edec4da4bcfadd78dfbf89ed2840062a79f43fb5674",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o": "df8636b04297b3ce21d99f6c893caf511db0074fced583805180633e9117488b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-10.deps.txt": "2fcac0a28bcbccaa516271cec0e6fb640cc14b0dc4c78d4a49b7eb451eb6844d",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o": "9fbb69cbe91eae728a79eb499f22e53c33b0356f51dd9be37d12a0ecba1527ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-11.deps.txt": "f39b7614a3ad51dff3f694bd4029db1023fc137bef70831dfea230796fce2d66",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/n002_hwrt_rebuild.cpp.o": "907c7779e208983ced65380efb154b90a88dbbfd48b5e1c89181826623cd8b7e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-capture-12.deps.txt": "4175de3953ae227b5c835ae7021384222535543563ebd0aa2bcfa32b994f6c44",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_vk_context.cpp.o": "7908cdac3b4a47f7f1f13a848e8e2f91b10b501f9e6f3aa71898eee27d26faa3",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n009_scene_contract/generated/n009_a001_runtime.cpp": "b52a41ef6b34e4afa067b57c4514c799bd6b2c382c38961533800cc564fae5ac",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n009_scene_contract/generated/n009_a001_scene.cpp": "9920ab17c6ba230569060c5af5ac6830ad8198b5cb33180bfe5a4b69baea1819",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n009_scene_contract/generated/n009_b002_scene.cpp": "2233ac598f2acebdf481129690d5a35c910298a19c59a53356235bad3f8f13f9",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_b002_vulkan.cpp": "7b71943e2f2a7c454123632eda90e227af68a7e3ed358115fc14bfc6b9f31a5a",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_capture_main.cpp": "dd6d3b734d4eb63f7921074b42b9b6b10f364f4bc8a64fae6816e16fc5818d59",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_runtime.cpp": "06d7d285c395f1445ede7a6fed2a4b1ec770a683abc19cc668f8327f757c783b",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_vk_context.cpp": "88c5190b7c1bc1b7e134cc5a1b7e74725dd7488c85f15b481888229c6ef0c127",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp": "647e8017a6865c44f81779b80c614853006207681f4a078fb53bfcdac8f3975f",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/integration/i001_compute.hpp": "692504218a429acab816b30389fdd21116a61804ad900bfc8eac804eb07df84d",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.cpp": "c3745d9f99b187e7bea77dc246c46be5b0c72cc3ced11d4f6983e5a7716b1397",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.hpp": "4c071dea15b5bb37cb71c4ecc99f6aff918d0dec6ba592c69665ff3d28ef0d4c",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_runtime.hpp": "61aaba1c58b8f9b316458d2f98eb4ecf067f3d128fc865796f778301f27fe55c",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_scene.hpp": "12783431674f9273e430f48ec219f5179773407f396d2355d97b274492f8e846",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_types.hpp": "93809bd5ad4666366fd68f46d55e6f2590f5e2b0d20d867d433857648a2e4228",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/stream_schema.hpp": "a56bcc7c88306b2be330f9e3bca845e7be9452f091a74987ef6e4b7b16afb3ad",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp": "6f120eb814599e13d38ffacc11ebb284ab8e83348a9171a88547850d1c0ec9a5",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.hpp": "bdd9df711a80f3b9b38cbc9b657e277e714d8b12da5294c7d779a4f52efe93bd",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_gpu_layout.hpp": "5cc8c612d0af7a58c7fe4a83d2ceae0c789d8393d1fc8b09257940e7fd6f2494",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp": "d5cc17a8335b5821cd4d3d0a93755d9eca776c17fcaadfb707b72defdc07cfb3",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.hpp": "2a3134029ab12aed8ffd4af74db6bf6c4e2ee8aa1c739c6c8bfad8d61dd7b75a",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_scene.hpp": "daeab66cd5ee54399f93a09eaed7095d8a37e69430f47cda119e4a0897d95b35",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_vulkan.hpp": "97e9bda27982cd5d392cb2898f5fe293637351227b728baa077ef8d518e6f6ca",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_micro_bvh8.hpp": "4d62f531d03fa9ea02e91b8836dafeb6969479369b5545116656a89abe21fbe5",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b003_quantized_bvh8.hpp": "5e355fdacaf37a4aaf32c6b0c4de5384e557bf61664a1039a6c0d9f804582e5e",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/gpu_software_bvh.hpp": "d32871770d133e97d283e4b7e6a1620b1dc1dcc8925d81f13d395e77d5444633",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/hierarchical_stratabrick.hpp": "5e3b955e02faa7f87746333c33c2467c695b1ff3c004e3ded750edd722d57c9b",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/lane_a_stream_v1.hpp": "4a589a1c9ec80b0175382055d255318d599091e86846a7c0570dc1f071e922c6",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/software_bvh.hpp": "c4eb5a6540bc68c40d1c321249fedd0e182be1e3264e15675402e18d05f7e242",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/traversal_common.hpp": "45b2f33fcd34bfaebc9b8b1b6a95116198d8297bfd12dfcf33301d215b16d06f",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/traversal_contract.hpp": "acdb30639b5bf79c2a5130e517e520098632b28849555fe9eff5fe384fc024c0",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e003_instance_payload.hpp": "52b71b2bdf1ae5950a245518f90238e8840faf0db8f858fe6153b2a242770f52",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_e_dynamic_geometry/e004_deforming_payload.hpp": "74978f6e8b5e76c02489e9157f8c2b9644b301f339dd82c8d5835018510cf6d0",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/n001_reference.cpp": "6aae47f8d4e6c04908a6324edf7910a69873a728d9caf51784c7968900331cde",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/n001_reference.hpp": "093b50fecd40f846832756a408c80e50901fdad6398abc7e330d52bf662787b8",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/n001_runtime.hpp": "3cdcfb4cbcb17f94a711bf33e174933323908ffe7af9e2143b909265a922d363",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/n002_hwrt_rebuild.cpp": "7d69699dbd0e742f7ad71cc01d0eacff53edde6afdc57f5b6a3e25eda19c6999",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n006_interval_aware_allocation/n006_primary_axis_proxy.hpp": "ab6b21f7df637d9f6c67dd29688adec13ef3a9e6514bb5bb00254a3d313fb254",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n007_reference_validity/n007_cpu_components.hpp": "f052429db7cf13b75b9f6d9c9791ee2d93392ff06a7859a5f0cb4572bc60c394",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n007_reference_validity/n007_probe_audit.hpp": "c0b410b3b66ecfc6b4bf41e2bfef1f5fe7ea9b173ac8143f7d9fca4af75c7ae2",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n009_scene_contract/n009_contract.hpp": "0ac523ffc05da73bb8f2cc0dbb33baa64a6b1fadb2fc4ba1b8229bab58ee588d",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/neutral_work.hpp": "8f7cc624084bc4cb326a4eba23c64c822dc53def9c29afe5046c8df8dcff940d",
+    "/var/owo/workspaces/projects/gi-lab/src/vk_context.hpp": "864cfc1b98df742de1b45ca84800a2ac91778e05608d17d9a144e98b13d9cd86",
+    "/var/owo/workspaces/projects/gi-lab/src/vk_init.hpp": "319f254440c6dfdb02151b678db5ca8a83a558b86ae7dc655e9bdf6a6a18a085",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-pixel-pt-0.deps.txt": "2e9143d345e934489dfb08aaee657074f93163d7be0ce41ae8460e4ae99f3939",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/pixel_pt_main.cpp.o": "2e6a57d8d8eadc5039d5ddf2bf79847cbfd048b3ed1bfebc619a6e474c85f7fb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-pixel-pt-1.deps.txt": "ba72c45438230507883124ead2f616037a6991c633eac205b36aa8d6b9dc1898",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/generated/n010_b002_vulkan.cpp.o": "40b33358d9c2a4dee8b69e6468aab3a59063ceed11f55a87f62c39139a807148",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-pixel-pt-2.deps.txt": "79efa744c889c52ac42929c3c639682be0743fd5ecd0720d100c35949f2ab2d0",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o": "df8636b04297b3ce21d99f6c893caf511db0074fced583805180633e9117488b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-pixel-pt-3.deps.txt": "6091005583efdbf5fae250ff0bf9c48a186d47f01b6c8257a5a8a14d7d4d40ad",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o": "9fbb69cbe91eae728a79eb499f22e53c33b0356f51dd9be37d12a0ecba1527ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/comparison-memory-boundary-audit-v2/phos-n010-pixel-pt-4.deps.txt": "e7ad935be8fa081cac0ce94e830aed5d2f7a0a3133aba51d837a2cc6a8797b13",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o": "6f09432ea4ed778107ed7a6b3f4e3e4668f70bb66a23c53ee4ae0107ab98fb78",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/pixel_pt_main.cpp": "c2f0bc8d517e29fd3ec33641900aed47b1310b3161e2f8b61e288c8b7b2c429c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json": "6723dbd5e01fa42cd31f0ffe472715b35e82de800cc715809d94ee96113a6f4e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B2_n1/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B2_n4/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B2_n16/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B2_n64/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B2_n256/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B2_n1024/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B8_n1/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B8_n4/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B8_n16/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B8_n64/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B8_n256/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-cohort-v1/C7_B8_n1024/allocation-ledger.json": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/019-controlled-dynamic-cohort.json": "346de6b0594cadea45d04ea3acd8af2e75786ac841e100fbf79e17db2c2788d9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C8-incumbent-hwrt/allocation-ledger.json": "3821dc7d4767df008e266605c7eea19b54109a9156159b88d8619a4a22a99d9f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C8-incumbent-software/allocation-ledger.json": "5711ce4058c3489884440dfa094d87d7f349b1cbb670fff793da95e13b92a6a8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C8-vanilla-traversal/allocation-ledger.json": "64d9b42a5c36be7b33b06a0201af129a023507588629ab81cb6cb516bde26718",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C8-pixel-pt-B2/allocation-ledger.json": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C8-pixel-pt-B8/allocation-ledger.json": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C8-dense-rc/allocation-ledger.json": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C9-incumbent-hwrt/allocation-ledger.json": "8b89d54c78653aecd43febb763b47482eb88c8b7cc748411f9847d969a6743e7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C9-incumbent-software/allocation-ledger.json": "63db87a0df8a409d851a930043e403340a91cab32af4db431f6d08d17b2ab8f5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C9-vanilla-traversal/allocation-ledger.json": "d59b36e8ce1133b35453f124b06664ab92c68970c7d8ed99d4bce4ce79332afb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C9-pixel-pt-B2/allocation-ledger.json": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C9-pixel-pt-B8/allocation-ledger.json": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C9-dense-rc/allocation-ledger.json": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C10-incumbent-hwrt/allocation-ledger.json": "675b2b2fc1e06b0b6d57f613d4fb9f553bcb43695c9bbce396c0e289220fefee",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C10-incumbent-software/allocation-ledger.json": "a5c08f89af61522520a387dab076c68b0a8b45bead56d3a986a384cda0218e70",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C10-vanilla-traversal/allocation-ledger.json": "f7d1ac1f9184e55f8214c2e5495439e12cf768db1815676ef57f44c86794c4dc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C10-pixel-pt-B2/allocation-ledger.json": "fc3cbc03b7f9a89e1c2af6688972aad526ef46e9f11819339ba4596616da5b2c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C10-pixel-pt-B8/allocation-ledger.json": "fc3cbc03b7f9a89e1c2af6688972aad526ef46e9f11819339ba4596616da5b2c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C10-dense-rc/allocation-ledger.json": "fc3cbc03b7f9a89e1c2af6688972aad526ef46e9f11819339ba4596616da5b2c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C11-incumbent-hwrt/allocation-ledger.json": "41c95be1a1f7277a7d86833579abfcd08adfda515e4cdc0228b10586b844a620",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C11-incumbent-software/allocation-ledger.json": "5b76077c570d59ce83cc087163c24ff509a1bcd82ec64263cf6a379f3bd9f669",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C11-vanilla-traversal/allocation-ledger.json": "01e3e1c4c80ba9a9d2194115701eb96283572dd057a8c0aa7fc0bdade6d27245",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C11-pixel-pt-B2/allocation-ledger.json": "f91de9fa85d3fbd323ea528701fb8fa86289e37baa041ce40320181aba5b4cd7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C11-pixel-pt-B8/allocation-ledger.json": "f91de9fa85d3fbd323ea528701fb8fa86289e37baa041ce40320181aba5b4cd7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C11-dense-rc/allocation-ledger.json": "f91de9fa85d3fbd323ea528701fb8fa86289e37baa041ce40320181aba5b4cd7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C12-incumbent-hwrt/allocation-ledger.json": "70d6d8044605d3eeac5f8d839caf83a3ee2ea9d6e6a255a8ccbe2c4ec7cf1259",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C12-vanilla-traversal/allocation-ledger.json": "fd3626667942863d4371586a0be922f5c8b3bdef0697587cce40bc2fa28e1652",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C12-pixel-pt-B2/allocation-ledger.json": "425c38eace8d198c8013005e3757a3e153b9e31bfdeea7ed5f1c6532277900b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C12-pixel-pt-B8/allocation-ledger.json": "425c38eace8d198c8013005e3757a3e153b9e31bfdeea7ed5f1c6532277900b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/dynamic-pilot-v1/C12-dense-rc/allocation-ledger.json": "425c38eace8d198c8013005e3757a3e153b9e31bfdeea7ed5f1c6532277900b9",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/024-c8-pt-quality-ladder.json": "72ffb72decd1bbd1c321a9cff5b0d90754467d437e0beec1427edff414fe99a4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B2_n1/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B2_n4/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B2_n16/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B2_n64/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B2_n256/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B2_n1024/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B8_n1/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B8_n4/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B8_n16/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B8_n64/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B8_n256/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C8_B8_n1024/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/025-c9-pt-quality-ladder.json": "870c9b0d8ed19a33644c85f3e860607c1fcbc4f2603334342fcf9d8d75434b4b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B2_n1/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B2_n4/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B2_n16/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B2_n64/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B2_n256/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B2_n1024/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B8_n1/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B8_n4/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B8_n16/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B8_n64/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B8_n256/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/pt-additional-ladder-v1/C9_B8_n1024/allocation-ledger.json": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/031-c1-b2-pt-quality-ladder.json": "9c3fbf0fb0f3f4fb6a0a87ed57f593d9f70154a73d5958e6a919a03e616eb5a6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c1-b2-pt-ladder-v1/C1_B2_n1/allocation-ledger.json": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c1-b2-pt-ladder-v1/C1_B2_n4/allocation-ledger.json": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c1-b2-pt-ladder-v1/C1_B2_n16/allocation-ledger.json": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c1-b2-pt-ladder-v1/C1_B2_n64/allocation-ledger.json": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c1-b2-pt-ladder-v1/C1_B2_n256/allocation-ledger.json": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/c1-b2-pt-ladder-v1/C1_B2_n1024/allocation-ledger.json": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/037-controlled-dynamic-pt1024.json": "39bea72a5a3eb1c0af0930959f41d4614903f549495342b43d9bf7118e11c99d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/controlled-dynamic-pt1024-v1/C8-pixel-pt-B2/allocation-ledger.json": "2746684d4719202ca88a195c3acdf2350f55ca995f1e726c5b53975d0bd032cd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/controlled-dynamic-pt1024-v1/C9-pixel-pt-B2/allocation-ledger.json": "2746684d4719202ca88a195c3acdf2350f55ca995f1e726c5b53975d0bd032cd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/controlled-dynamic-pt1024-v1/C10-pixel-pt-B2/allocation-ledger.json": "43b387454f730f65b88faf64dc2c7984494a286ee370f99d7e4dc85f9dba97b4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/controlled-dynamic-pt1024-v1/C11-pixel-pt-B2/allocation-ledger.json": "a2b5687c0e65fbf7cdf30183e3a3a42e2b04984c58c69492bd88836e51ec4cd0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/controlled-dynamic-pt1024-v1/C12-pixel-pt-B2/allocation-ledger.json": "3c22ce7471444d2ef56106da54dfe89a01ebea84b4560cf9efec313e3d0a5495",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/035-calibration-observable-sizing.json": "a9b04bed78218d202414ffc02a8cdc86b2b8e8358fab48e425e2faa1d3aac3c8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C1-hwrt/sizing/allocation-ledger.json": "8c16269688accb32d04ff3a569a997aca5eb433e119afecdc1dbb96b7c71c7bd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C1-software/sizing/allocation-ledger.json": "83cdc7e20f2e2debc71114d8ec5f03a28c2fe91188f6c1ce2184a5a59c1a829c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C1-pt-B2/sizing/allocation-ledger.json": "8c589d3ace4021334cf849aa101034f3aa2020e2cdb2fd47a1b0a0d1797d77d6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C1-pt-B8/sizing/allocation-ledger.json": "8c589d3ace4021334cf849aa101034f3aa2020e2cdb2fd47a1b0a0d1797d77d6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C1-dense-rc/sizing/allocation-ledger.json": "8c589d3ace4021334cf849aa101034f3aa2020e2cdb2fd47a1b0a0d1797d77d6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C7-hwrt/sizing/allocation-ledger.json": "1cf25ecdbd781b6f2629beae4016191c0f4263c874d516e7395222e46107d49c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C7-software/sizing/allocation-ledger.json": "5f505a8e4e04f681078d9c2ecd3b7be648b8bfb5cf3fbaec473497e29bc26d4a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C7-pt-B2/sizing/allocation-ledger.json": "4061567576671eaee2372a4ed83910bf3e3b2aa4277b404f3aba49b1ccc85c71",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C7-pt-B8/sizing/allocation-ledger.json": "4061567576671eaee2372a4ed83910bf3e3b2aa4277b404f3aba49b1ccc85c71",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C7-dense-rc/sizing/allocation-ledger.json": "4061567576671eaee2372a4ed83910bf3e3b2aa4277b404f3aba49b1ccc85c71",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C6-hwrt/sizing/allocation-ledger.json": "474c81c61a107349a53bd004bec04e8e99cbf08a6d2cb932a024b929fb6f6a8a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C6-pt-B2/sizing/allocation-ledger.json": "98d490880d303eb3443c284499def7b5ff90754c8a685e3c4250b17b305fe442",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C6-pt-B8/sizing/allocation-ledger.json": "98d490880d303eb3443c284499def7b5ff90754c8a685e3c4250b17b305fe442",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C12-hwrt/sizing/allocation-ledger.json": "86515c7618aeba3e8b65cda29f7f91b3bcc1fb16e9a54dbdfa9cac09d38694ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C12-pt-B2/sizing/allocation-ledger.json": "294a8f971f781fe3de3fac279d21ab918ab3abb3814a062570cba814ccdbb985",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/calibration-sizing-v3/C12-pt-B8/sizing/allocation-ledger.json": "294a8f971f781fe3de3fac279d21ab918ab3abb3814a062570cba814ccdbb985"
+  },
+  "linked_targets": [
+    {
+      "target": "phos-n010-capture",
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "objects": [
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_capture_main.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_capture_main.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_capture_main.cpp.o"
+          ],
+          "dependency_stdout_sha256": "c6dda4cf0f70720421473bb23baabef5fb70b1d064cbd368c740b6bcd3dfdb85"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_runtime.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_runtime.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_runtime.cpp.o"
+          ],
+          "dependency_stdout_sha256": "8cb02587462691cc3113b338302f9226811338114430e62ae28f4d5b8bc0d370"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/n001_reference.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/n001_reference.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/n001_reference.cpp.o"
+          ],
+          "dependency_stdout_sha256": "60fb25c876b82124b295b2367769ef322851bdc933939e41143438d316d0d4ac"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o"
+          ],
+          "dependency_stdout_sha256": "0f499ea52e7d00506c408e326da6de178eb580a8a5bead2158f5f276b195d1c6"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_a001_scene.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n009_scene_contract/generated/n009_a001_scene.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_a001_scene.cpp.o"
+          ],
+          "dependency_stdout_sha256": "311ad48a69d804d69c3e11a31ed53c4202e6266e7bae2a4f537dd6b3dae2351f"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_a001_runtime.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n009_scene_contract/generated/n009_a001_runtime.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_a001_runtime.cpp.o"
+          ],
+          "dependency_stdout_sha256": "7a579d44516d77346a232230d797e763ec88cf06f46debd93e085454a3eb486a"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_b002_scene.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n009_scene_contract/generated/n009_b002_scene.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/n009_scene_contract/generated/n009_b002_scene.cpp.o"
+          ],
+          "dependency_stdout_sha256": "a5d323493844489d964e98510ad1289c3e4fe4c96cb411bdb17cb51a39283f06"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_a_split_rc/a001_analysis.cpp.o"
+          ],
+          "dependency_stdout_sha256": "3d3fe9c06434c708e6cff3ee7202611f2653442356d364db6179061b93f04a66"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_b002_vulkan.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_b002_vulkan.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_b002_vulkan.cpp.o"
+          ],
+          "dependency_stdout_sha256": "55784b1ef60714403c896793f2fdb641476fdacb979c172aed1e6cfb4137116d"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o"
+          ],
+          "dependency_stdout_sha256": "e63f38df7b83bb38003d0edec4da4bcfadd78dfbf89ed2840062a79f43fb5674"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o"
+          ],
+          "dependency_stdout_sha256": "2fcac0a28bcbccaa516271cec0e6fb640cc14b0dc4c78d4a49b7eb451eb6844d"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/n002_hwrt_rebuild.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/n002_hwrt_rebuild.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/__/lane_n_end_to_end_renderer/n002_hwrt_rebuild.cpp.o"
+          ],
+          "dependency_stdout_sha256": "f39b7614a3ad51dff3f694bd4029db1023fc137bef70831dfea230796fce2d66"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_vk_context.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_vk_context.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-capture.dir/generated/n010_vk_context.cpp.o"
+          ],
+          "dependency_stdout_sha256": "4175de3953ae227b5c835ae7021384222535543563ebd0aa2bcfa32b994f6c44"
+        }
+      ],
+      "project_dependency_count": 44,
+      "allocation_sites": [
+        {
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_b002_vulkan.cpp",
+          "allocation_calls": 1,
+          "free_calls": 1,
+          "allocate_hooks": 1,
+          "release_hooks": 1,
+          "pass": true
+        },
+        {
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_vk_context.cpp",
+          "allocation_calls": 1,
+          "free_calls": 1,
+          "allocate_hooks": 1,
+          "release_hooks": 1,
+          "pass": true
+        }
+      ],
+      "external_link_inputs": " _deps/vk_bootstrap-build/libvk-bootstrap.a _deps/fastgltf-build/libfastgltf.a || _deps/fastgltf-build/libfastgltf.a _deps/vk_bootstrap-build/libvk-bootstrap.a phos-n009-capture src/research/n010_comparison_readiness/phos-n010-neutral-work-shader src/research/n010_comparison_readiness/phos-n010-shaders",
+      "stale_unlinked_object_files_not_treated_as_active": true,
+      "pass": true
+    },
+    {
+      "target": "phos-n010-pixel-pt",
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "objects": [
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/pixel_pt_main.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/pixel_pt_main.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/pixel_pt_main.cpp.o"
+          ],
+          "dependency_stdout_sha256": "2e9143d345e934489dfb08aaee657074f93163d7be0ce41ae8460e4ae99f3939"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/generated/n010_b002_vulkan.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_b002_vulkan.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/generated/n010_b002_vulkan.cpp.o"
+          ],
+          "dependency_stdout_sha256": "ba72c45438230507883124ead2f616037a6991c633eac205b36aa8d6b9dc1898"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o"
+          ],
+          "dependency_stdout_sha256": "79efa744c889c52ac42929c3c639682be0743fd5ecd0720d100c35949f2ab2d0"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o"
+          ],
+          "dependency_stdout_sha256": "6091005583efdbf5fae250ff0bf9c48a186d47f01b6c8257a5a8a14d7d4d40ad"
+        },
+        {
+          "object": "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o",
+          "source": "/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp",
+          "dependency_command": [
+            "ninja",
+            "-C",
+            "/var/owo/workspaces/projects/gi-lab/build/n009",
+            "-t",
+            "deps",
+            "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o"
+          ],
+          "dependency_stdout_sha256": "e7ad935be8fa081cac0ce94e830aed5d2f7a0a3133aba51d837a2cc6a8797b13"
+        }
+      ],
+      "project_dependency_count": 21,
+      "allocation_sites": [
+        {
+          "source": "/var/owo/workspaces/projects/gi-lab/build/n009/src/research/n010_comparison_readiness/generated/n010_b002_vulkan.cpp",
+          "allocation_calls": 1,
+          "free_calls": 1,
+          "allocate_hooks": 1,
+          "release_hooks": 1,
+          "pass": true
+        }
+      ],
+      "external_link_inputs": " _deps/vk_bootstrap-build/libvk-bootstrap.a || _deps/vk_bootstrap-build/libvk-bootstrap.a src/research/n010_comparison_readiness/phos-n010-dense-rc-shader src/research/n010_comparison_readiness/phos-n010-neutral-work-shader src/research/n010_comparison_readiness/phos-n010-pixel-pt-shader",
+      "stale_unlinked_object_files_not_treated_as_active": true,
+      "pass": true
+    }
+  ],
+  "pilot_rows": [
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 0,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 1,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 2,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 3,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 4,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 5,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 6,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 7,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 8,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 9,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 10,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "013-c7-pt-cohort-pilot.json",
+      "row_index": 11,
+      "cell": "C7",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "4a6fc0727fb9742db2cbe937d01a628b5b84f81c9665326dcef426fab1210dfe",
+      "ledger_sha256": "f809c264729f46829d49584d57dbd0d70ce6dc66518854a0fce208db2989a423",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 0,
+      "cell": "C8",
+      "role": "incumbent-hwrt",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "3821dc7d4767df008e266605c7eea19b54109a9156159b88d8619a4a22a99d9f",
+      "binary_matches_current": false,
+      "event_count": 150,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266937920,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 1,
+      "cell": "C8",
+      "role": "incumbent-software",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "5711ce4058c3489884440dfa094d87d7f349b1cbb670fff793da95e13b92a6a8",
+      "binary_matches_current": false,
+      "event_count": 174,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266694400,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 2,
+      "cell": "C8",
+      "role": "vanilla-traversal",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "64d9b42a5c36be7b33b06a0201af129a023507588629ab81cb6cb516bde26718",
+      "binary_matches_current": false,
+      "event_count": 162,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266552640,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 3,
+      "cell": "C8",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+      "binary_matches_current": false,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 4,
+      "cell": "C8",
+      "role": "pixel-pt-B8",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+      "binary_matches_current": false,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 5,
+      "cell": "C8",
+      "role": "dense-rc",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+      "binary_matches_current": false,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 6,
+      "cell": "C9",
+      "role": "incumbent-hwrt",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "8b89d54c78653aecd43febb763b47482eb88c8b7cc748411f9847d969a6743e7",
+      "binary_matches_current": false,
+      "event_count": 150,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266937920,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 7,
+      "cell": "C9",
+      "role": "incumbent-software",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "63db87a0df8a409d851a930043e403340a91cab32af4db431f6d08d17b2ab8f5",
+      "binary_matches_current": false,
+      "event_count": 174,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266694400,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 8,
+      "cell": "C9",
+      "role": "vanilla-traversal",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "d59b36e8ce1133b35453f124b06664ab92c68970c7d8ed99d4bce4ce79332afb",
+      "binary_matches_current": false,
+      "event_count": 162,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266552640,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 9,
+      "cell": "C9",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+      "binary_matches_current": false,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 10,
+      "cell": "C9",
+      "role": "pixel-pt-B8",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+      "binary_matches_current": false,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 11,
+      "cell": "C9",
+      "role": "dense-rc",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "2467d5254e8b20097d7b4fc52d2d39cb896c8a4832dc69b12cb1f20b3345193f",
+      "binary_matches_current": false,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 12,
+      "cell": "C10",
+      "role": "incumbent-hwrt",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "675b2b2fc1e06b0b6d57f613d4fb9f553bcb43695c9bbce396c0e289220fefee",
+      "binary_matches_current": false,
+      "event_count": 154,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266937920,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 13,
+      "cell": "C10",
+      "role": "incumbent-software",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "a5c08f89af61522520a387dab076c68b0a8b45bead56d3a986a384cda0218e70",
+      "binary_matches_current": false,
+      "event_count": 184,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266694400,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 14,
+      "cell": "C10",
+      "role": "vanilla-traversal",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "f7d1ac1f9184e55f8214c2e5495439e12cf768db1815676ef57f44c86794c4dc",
+      "binary_matches_current": false,
+      "event_count": 170,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266552640,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 15,
+      "cell": "C10",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "fc3cbc03b7f9a89e1c2af6688972aad526ef46e9f11819339ba4596616da5b2c",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 16,
+      "cell": "C10",
+      "role": "pixel-pt-B8",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "fc3cbc03b7f9a89e1c2af6688972aad526ef46e9f11819339ba4596616da5b2c",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 17,
+      "cell": "C10",
+      "role": "dense-rc",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "fc3cbc03b7f9a89e1c2af6688972aad526ef46e9f11819339ba4596616da5b2c",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 18,
+      "cell": "C11",
+      "role": "incumbent-hwrt",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "41c95be1a1f7277a7d86833579abfcd08adfda515e4cdc0228b10586b844a620",
+      "binary_matches_current": false,
+      "event_count": 156,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266937920,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 19,
+      "cell": "C11",
+      "role": "incumbent-software",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "5b76077c570d59ce83cc087163c24ff509a1bcd82ec64263cf6a379f3bd9f669",
+      "binary_matches_current": false,
+      "event_count": 192,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266694400,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 20,
+      "cell": "C11",
+      "role": "vanilla-traversal",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "01e3e1c4c80ba9a9d2194115701eb96283572dd057a8c0aa7fc0bdade6d27245",
+      "binary_matches_current": false,
+      "event_count": 170,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266552640,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 21,
+      "cell": "C11",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "f91de9fa85d3fbd323ea528701fb8fa86289e37baa041ce40320181aba5b4cd7",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 22,
+      "cell": "C11",
+      "role": "pixel-pt-B8",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "f91de9fa85d3fbd323ea528701fb8fa86289e37baa041ce40320181aba5b4cd7",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 23,
+      "cell": "C11",
+      "role": "dense-rc",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "f91de9fa85d3fbd323ea528701fb8fa86289e37baa041ce40320181aba5b4cd7",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 25,
+      "cell": "C12",
+      "role": "incumbent-hwrt",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "70d6d8044605d3eeac5f8d839caf83a3ee2ea9d6e6a255a8ccbe2c4ec7cf1259",
+      "binary_matches_current": false,
+      "event_count": 160,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266937920,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 26,
+      "cell": "C12",
+      "role": "vanilla-traversal",
+      "spp": null,
+      "binary_sha256": "3f129562364727b09735b9720f795042a0efd9edcd820edb1c1e1c1937bf15ba",
+      "ledger_sha256": "fd3626667942863d4371586a0be922f5c8b3bdef0697587cce40bc2fa28e1652",
+      "binary_matches_current": false,
+      "event_count": 170,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266552640,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 27,
+      "cell": "C12",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "425c38eace8d198c8013005e3757a3e153b9e31bfdeea7ed5f1c6532277900b9",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 28,
+      "cell": "C12",
+      "role": "pixel-pt-B8",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "425c38eace8d198c8013005e3757a3e153b9e31bfdeea7ed5f1c6532277900b9",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 29,
+      "cell": "C12",
+      "role": "dense-rc",
+      "spp": null,
+      "binary_sha256": "391c78d1bae8f61603cb0a77b3fb86c0bb61d8af7e60527a776b4626a05862f0",
+      "ledger_sha256": "425c38eace8d198c8013005e3757a3e153b9e31bfdeea7ed5f1c6532277900b9",
+      "binary_matches_current": false,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 0,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 1,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 2,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 3,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 4,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 5,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 6,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 7,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 8,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 9,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 10,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "024-c8-pt-quality-ladder.json",
+      "row_index": 11,
+      "cell": "C8",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 0,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 1,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 2,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 3,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 4,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 5,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 6,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 7,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 8,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 9,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 10,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "025-c9-pt-quality-ladder.json",
+      "row_index": 11,
+      "cell": "C9",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "9a6a6d6193817b79f328348e566d3a53747734f00b05658f6b948990a613147c",
+      "ledger_sha256": "9d5db80c6356702b564e57b1d37e08e8e3229321bb4833ee8f5532e3a7846afa",
+      "binary_matches_current": false,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "031-c1-b2-pt-quality-ladder.json",
+      "row_index": 0,
+      "cell": "C1",
+      "role": "pixel-pt",
+      "spp": 1,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+      "binary_matches_current": true,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106438752,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "031-c1-b2-pt-quality-ladder.json",
+      "row_index": 1,
+      "cell": "C1",
+      "role": "pixel-pt",
+      "spp": 4,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+      "binary_matches_current": true,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106438752,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "031-c1-b2-pt-quality-ladder.json",
+      "row_index": 2,
+      "cell": "C1",
+      "role": "pixel-pt",
+      "spp": 16,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+      "binary_matches_current": true,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106438752,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "031-c1-b2-pt-quality-ladder.json",
+      "row_index": 3,
+      "cell": "C1",
+      "role": "pixel-pt",
+      "spp": 64,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+      "binary_matches_current": true,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106438752,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "031-c1-b2-pt-quality-ladder.json",
+      "row_index": 4,
+      "cell": "C1",
+      "role": "pixel-pt",
+      "spp": 256,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+      "binary_matches_current": true,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106438752,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "031-c1-b2-pt-quality-ladder.json",
+      "row_index": 5,
+      "cell": "C1",
+      "role": "pixel-pt",
+      "spp": 1024,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "60daf32cfe850f29eb5d15f2611c444ead0831f11cc3b4fada4340f589e56a0e",
+      "binary_matches_current": true,
+      "event_count": 26,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106438752,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "037-controlled-dynamic-pt1024.json",
+      "row_index": 0,
+      "cell": "C8",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "2746684d4719202ca88a195c3acdf2350f55ca995f1e726c5b53975d0bd032cd",
+      "binary_matches_current": true,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "037-controlled-dynamic-pt1024.json",
+      "row_index": 1,
+      "cell": "C9",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "2746684d4719202ca88a195c3acdf2350f55ca995f1e726c5b53975d0bd032cd",
+      "binary_matches_current": true,
+      "event_count": 36,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "037-controlled-dynamic-pt1024.json",
+      "row_index": 2,
+      "cell": "C10",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "43b387454f730f65b88faf64dc2c7984494a286ee370f99d7e4dc85f9dba97b4",
+      "binary_matches_current": true,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "037-controlled-dynamic-pt1024.json",
+      "row_index": 3,
+      "cell": "C11",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "a2b5687c0e65fbf7cdf30183e3a3a42e2b04984c58c69492bd88836e51ec4cd0",
+      "binary_matches_current": true,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    },
+    {
+      "source_result": "037-controlled-dynamic-pt1024.json",
+      "row_index": 4,
+      "cell": "C12",
+      "role": "pixel-pt-B2",
+      "spp": null,
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "ledger_sha256": "3c22ce7471444d2ef56106da54dfe89a01ebea84b4560cf9efec313e3d0a5495",
+      "binary_matches_current": true,
+      "event_count": 40,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2370160,
+      "teardown_zero": true,
+      "pass": true
+    }
+  ],
+  "unsupported_rows": [
+    {
+      "source_result": "019-controlled-dynamic-cohort.json",
+      "row_index": 24,
+      "cell": "C12",
+      "role": "incumbent-software",
+      "spp": null,
+      "classification": "UNSUPPORTED_IN_CAPTURE_API"
+    }
+  ],
+  "current_sizing_rows": [
+    {
+      "boundary": {
+        "id": "C1-hwrt",
+        "cell": "C1",
+        "base": "C1",
+        "dynamic": false,
+        "role": "hwrt"
+      },
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "8c16269688accb32d04ff3a569a997aca5eb433e119afecdc1dbb96b7c71c7bd",
+      "event_count": 222,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 416762576,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C1-software",
+        "cell": "C1",
+        "base": "C1",
+        "dynamic": false,
+        "role": "software"
+      },
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "83cdc7e20f2e2debc71114d8ec5f03a28c2fe91188f6c1ce2184a5a59c1a829c",
+      "event_count": 252,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 363518784,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C1-pt-B2",
+        "cell": "C1",
+        "base": "C1",
+        "dynamic": false,
+        "role": "pt-B2"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "8c589d3ace4021334cf849aa101034f3aa2020e2cdb2fd47a1b0a0d1797d77d6",
+      "event_count": 62,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106504288,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C1-pt-B8",
+        "cell": "C1",
+        "base": "C1",
+        "dynamic": false,
+        "role": "pt-B8"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "8c589d3ace4021334cf849aa101034f3aa2020e2cdb2fd47a1b0a0d1797d77d6",
+      "event_count": 62,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106504288,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C1-dense-rc",
+        "cell": "C1",
+        "base": "C1",
+        "dynamic": false,
+        "role": "dense-rc"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "8c589d3ace4021334cf849aa101034f3aa2020e2cdb2fd47a1b0a0d1797d77d6",
+      "event_count": 62,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106504288,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C7-hwrt",
+        "cell": "C7",
+        "base": "C7",
+        "dynamic": false,
+        "role": "hwrt"
+      },
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "1cf25ecdbd781b6f2629beae4016191c0f4263c874d516e7395222e46107d49c",
+      "event_count": 222,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 267003456,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C7-software",
+        "cell": "C7",
+        "base": "C7",
+        "dynamic": false,
+        "role": "software"
+      },
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "5f505a8e4e04f681078d9c2ecd3b7be648b8bfb5cf3fbaec473497e29bc26d4a",
+      "event_count": 252,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 266759936,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C7-pt-B2",
+        "cell": "C7",
+        "base": "C7",
+        "dynamic": false,
+        "role": "pt-B2"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "4061567576671eaee2372a4ed83910bf3e3b2aa4277b404f3aba49b1ccc85c71",
+      "event_count": 62,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2435696,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C7-pt-B8",
+        "cell": "C7",
+        "base": "C7",
+        "dynamic": false,
+        "role": "pt-B8"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "4061567576671eaee2372a4ed83910bf3e3b2aa4277b404f3aba49b1ccc85c71",
+      "event_count": 62,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2435696,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C7-dense-rc",
+        "cell": "C7",
+        "base": "C7",
+        "dynamic": false,
+        "role": "dense-rc"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "4061567576671eaee2372a4ed83910bf3e3b2aa4277b404f3aba49b1ccc85c71",
+      "event_count": 62,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2435696,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C6-hwrt",
+        "cell": "C6",
+        "base": "C1",
+        "dynamic": true,
+        "role": "hwrt"
+      },
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "474c81c61a107349a53bd004bec04e8e99cbf08a6d2cb932a024b929fb6f6a8a",
+      "event_count": 828,
+      "device_contexts": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "true_peak_owned_bytes": 416778960,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C6-pt-B2",
+        "cell": "C6",
+        "base": "C1",
+        "dynamic": true,
+        "role": "pt-B2"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "98d490880d303eb3443c284499def7b5ff90754c8a685e3c4250b17b305fe442",
+      "event_count": 296,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106504288,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C6-pt-B8",
+        "cell": "C6",
+        "base": "C1",
+        "dynamic": true,
+        "role": "pt-B8"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "98d490880d303eb3443c284499def7b5ff90754c8a685e3c4250b17b305fe442",
+      "event_count": 296,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 106504288,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C12-hwrt",
+        "cell": "C12",
+        "base": "C7",
+        "dynamic": true,
+        "role": "hwrt"
+      },
+      "binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "86515c7618aeba3e8b65cda29f7f91b3bcc1fb16e9a54dbdfa9cac09d38694ac",
+      "event_count": 828,
+      "device_contexts": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "true_peak_owned_bytes": 267003456,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C12-pt-B2",
+        "cell": "C12",
+        "base": "C7",
+        "dynamic": true,
+        "role": "pt-B2"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "294a8f971f781fe3de3fac279d21ab918ab3abb3814a062570cba814ccdbb985",
+      "event_count": 296,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2435696,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    },
+    {
+      "boundary": {
+        "id": "C12-pt-B8",
+        "cell": "C12",
+        "base": "C7",
+        "dynamic": true,
+        "role": "pt-B8"
+      },
+      "binary_sha256": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+      "shader_sha256": {
+        "e003_instance_quantized.spv": "5f3ee73417b17b0b08329a93c0f065beddb578e64150f5f2f787b831ebba7e69",
+        "i001_clamp_counters.spv": "335cc9da35b1e5b852f681a4857c88b87b5855c8e1d165f95316e262ad479e59",
+        "i001_hwrt.spv": "7a8ed27a0c969414ee8062bde75d028e78069d1e7d8d14282afba154c6526c1a",
+        "i001_radiance.spv": "4995e539af059052113635105f678d4a68abf41490178a30af6d0d40ee6b02e2",
+        "i001_software_bvh.spv": "0f0f7883fc9c6ae880c61460f767507034b3f385de85eec2be73c28c82e58a38",
+        "i001_storage_invalidate.spv": "a85c2c52b07bf3928b3edf8651d6130e2bf8bc0f6744dd0b3432f5f3da708962",
+        "i001_storage_resolve.spv": "78ee9ceb1da270e6baf6e3e9d0e38d7487ee39eab336effc116a1d74fbc7083b",
+        "i001_storage_update.spv": "5bfcbe121f5725386030014bfa759285957034c53df3ceba4d70c95fe9e03856",
+        "i001_work_to_rays.spv": "258de406cce1e765d32de893f0b2d644680e67613e46430c2c74ef737cdc22ae",
+        "lane_a_finalize.spv": "8d1a424d4146053f4162ce0141fcf78b4a1609190f6d3e9fe82a95bf7ab5bd9d",
+        "lane_a_merge.spv": "0d25dd5eb63f9ac39088ebc921b4651dffd13193f380a85f147fb70744d3ee41",
+        "lane_a_producer.spv": "efa4a85182d88b596bbe00547f09400d863d63a9814b01b24c8d4a1930fb40aa",
+        "lane_a_visibility_depth.spv": "08a6f6bcd69c37a9f419598af20c36c3a31574ee7285eeccf48fb9c7dc07fc52",
+        "lane_a_visibility_owner.spv": "e63e89b7fcbbb908414132718476a2bb1d95c9053e294186c72b6a2c875b1640",
+        "lane_b_b002_hwrt.spv": "925411d167d6868b635e53683439fd68bd23beb4b6c989c887e38fe404362721",
+        "lane_b_b002_software_bvh.spv": "ff38d10918c213e23681887662244693b6ca5bf7227cf2215c3e8f35bb0dfb34",
+        "n001_composite.spv": "21384ddd3b32061da918ff414f93b46b9bca4f538af3f24413b3b7d26cb8286b",
+        "n001_primary.spv": "21c05f75ddc73f3b20f52223a29ce40738260155bcf6294b3cabc1d07bb6f896",
+        "n003_composite_software.spv": "47e2c3213edaca9734af8580d35f689f78f8307d148b170c2d57f952f63e7f31",
+        "n003_primary_software.spv": "7b111a11dd6e2da3111dcf7912cad6b589a52e9e9e54148124642fd968ab883b",
+        "n007_hwrt_composite.spv": "3a82bbcadeeba79ccdad5a0c738c00bc6310d4b2383a8e0ab4e282f176ad4b6d",
+        "n007_software_composite.spv": "8842bc49133b95d91f7b352f7a198fde5da74e6578181628e4be8ab961111af7",
+        "n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e",
+        "n010_hwrt_composite.spv": "5b60fad796fe4f5da7e727df4d9ba34c1c4a0e654949597b8fa4c7a974d68ada",
+        "n010_hwrt_corrected_composite.spv": "213eaeb79fe480d56e6507fb0e5a7d7fdb12620bdf4a4641b0d8abd1fda71f6f",
+        "n010_neutral_work.spv": "dea69e46fccfb655bed86a3fb38b014f4d519140f8989f27175fd498181bb1e8",
+        "n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+        "n010_software_composite.spv": "d0f2b34906258374d8a7a3bd4cec433938d48265fd198eee43a32c3b0177e6d2",
+        "n010_software_corrected_composite.spv": "3b56a9406f9d8e047610a39d03470fe71605505ff90c666005cdcf884c62378a"
+      },
+      "ledger_sha256": "294a8f971f781fe3de3fac279d21ab918ab3abb3814a062570cba814ccdbb985",
+      "event_count": 296,
+      "device_contexts": [
+        1
+      ],
+      "true_peak_owned_bytes": 2435696,
+      "teardown_zero": true,
+      "pass": true,
+      "accepted_timing": false
+    }
+  ],
+  "scoring_exclusions": 0,
+  "historical_pilot_rows_not_matching_current_binary": 65,
+  "current_binary_pilot_rows": 11,
+  "historical_pilots_attested_as_current_binary": false,
+  "accepted_calibration_claimed": false,
+  "inputs_unchanged_after_audit": true
+}

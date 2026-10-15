@@ -667,6 +667,24 @@
       "status": "complete-replayed-proof-chain-audit-only",
       "result": "131-replayed-point-guided-proof-chain-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-132",
+      "status": "posthoc-strict-current-binary-identity-audit-failure",
+      "result": "132-comparison-owned-memory-boundary-audit.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-133",
+      "status": "posthoc-current-and-historical-memory-scopes-audit",
+      "result": "133-current-and-historical-memory-evidence-audit.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-134",
+      "status": "interim-memory-evidence-and-quiescence-watch",
+      "result": "134-memory-evidence-scopes-and-quiescence-watch.md",
+      "gpu_run": false
     }
   ]
 }
