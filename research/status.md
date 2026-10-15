@@ -87,7 +87,7 @@ unchanged. Prospective [042](lanes/n010-comparison-readiness/experiments/042-pro
 allows quiet full-boundary sizing/accepted calibration before further CPU
 reference computation, with all original boundaries, thresholds and final
 readiness gates unchanged. It does not dispatch a new quality pilot or admit
-Lane M. The controller is prepared; 046/029 have not yet run.
+Lane M. The controller has passed initial quiescence and is acquiring quiet sizing 046 over all sixteen boundaries. Accepted 029 dispatches only after complete PASS 046. Neither is a completed calibration claim yet.
 
 | Completion requirement | Current state / next action |
 | --- | --- |

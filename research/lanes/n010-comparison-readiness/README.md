@@ -77,8 +77,7 @@ refuses corpus dispatch with zero native attempts; no corpus root is created.
 No mixture tuning, threshold change or corpus acquisition is performed for
 this stopped candidate. Prospective [042](experiments/042-prospective-independent-quiet-calibration.md)
 permits independent quiet sizing/accepted calibration before more reference
-computation, with unchanged scientific gates. The controller is prepared;
-046/029 remain unexecuted at this checkpoint.
+computation, with unchanged scientific gates. The controller has passed initial quiescence and is acquiring quiet sizing 046 across all sixteen boundaries. Accepted 029 requires complete PASS 046; completed calibration is not yet claimed.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
