@@ -32,8 +32,17 @@ passes full prefix provenance, not reference eligibility. These uncertainty
 statistics are 1.781× / 1.868× the original sampler at the same level;
 the new sampler has not demonstrated improved precision. About 80.63% of paths
 terminate with a guided null continuation; preceding radiance contributions
-are retained. This is diagnostic, not proof of bias or cap failure. Acquisition
-continues at 16384 spp under the original ladder and stop rules.
+are retained. This is diagnostic, not proof of bias or cap failure. The next
+16384-spp level also fails both gates: absolute p99 9.06741e-5, relative p99
+6.79678%. Full two-level provenance passes in post-hoc CPU audit
+[137](lanes/n010-comparison-readiness/results/137-second-point-guided-level-and-cpu-budget.json);
+32768 spp is executing under unchanged rules. The audit also records an
+operational CPU-budget risk: 42,294.43 aggregate CPU seconds for completed
+children through 16384 spp projects linearly to about 338,355 CPU seconds for
+the last interval, above the 172,800-second invocation guard. This includes
+bookkeeping and is a resource forecast, not an observed interruption or
+statistical cap failure. Resolve the budget prospectively before a conflicting
+high-level invocation; current runtime limits and scientific gates are unchanged.
 
 | Completion requirement | Current state / next action |
 | --- | --- |

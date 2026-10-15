@@ -38,7 +38,14 @@ passes complete prefix provenance, with no new rendering. First-level uncertaint
 is 1.781× / 1.868× the original sampler; improved precision is not established.
 About 80.63% of paths terminate with guided null continuations, retaining prior
 radiance contributions. This diagnostic does not establish bias or cap failure.
-The next 16384-spp level is executing under unchanged qualification rules.
+The completed 16384-spp level also fails (9.06741e-5 / 6.79678%). Full two-level
+provenance passes in CPU-only post-hoc [137](results/137-second-point-guided-level-and-cpu-budget.json);
+32768 spp is executing. Its process snapshots show 42,294.43 aggregate CPU
+seconds in reaped children through 16384 spp, including bookkeeping. A linear
+last-interval resource forecast exceeds the fixed 172,800 CPU-second guard;
+prospective operational repair is required before a conflicting invocation.
+This is not an observed interruption or statistical cap failure. No runtime
+limit, sample cap or qualification rule has been changed.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16

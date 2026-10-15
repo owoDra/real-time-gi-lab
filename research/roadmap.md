@@ -107,8 +107,14 @@ The first four-seed point-guided C1 B8 level at 8192 spp has now completed:
 absolute/relative active p99 uncertainty 1.28593e-4 / 9.63962% fails both fixed
 gates. Post-hoc [136](lanes/n010-comparison-readiness/results/136-first-point-guided-level-provenance-and-precision.json)
 passes complete prefix provenance but finds worse first-level precision than
-the original sampler. The 16384 level is executing; cap outcome and full
-qualification remain pending. No screen, cap or corpus change follows.
+the original sampler. The completed 16384 level also fails absolute/relative
+p99 gates (9.06741e-5 / 6.79678%); full two-level provenance passes in
+[137](lanes/n010-comparison-readiness/results/137-second-point-guided-level-and-cpu-budget.json).
+The 32768 level is executing. Observed aggregate child CPU time also identifies
+a possible operational guard interruption at high levels. Resolve that budget
+prospectively while retaining own prefixes, scientific gates, sample cap and
+all outcomes; no runtime limits have been changed. Forecasts do not establish
+either an interruption or statistical cap failure. Full qualification is pending.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full

@@ -691,6 +691,12 @@
       "status": "posthoc-first-prefix-provenance-pass-statistically-ineligible",
       "result": "136-first-point-guided-level-provenance-and-precision.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-137",
+      "status": "posthoc-second-prefix-provenance-and-cpu-budget-risk",
+      "result": "137-second-point-guided-level-and-cpu-budget.json",
+      "gpu_run": false
     }
   ]
 }
