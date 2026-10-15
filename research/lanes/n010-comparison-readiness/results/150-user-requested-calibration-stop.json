@@ -1,0 +1,397 @@
+{
+  "schema": "n010-user-requested-calibration-stop/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "USER_STOPPED_PARTIAL_CALIBRATION_NOT_ACCEPTED",
+  "utc": "2026-10-15T13:09:25.550908+00:00",
+  "source_receipt": {
+    "path": "out/research/n010-comparison-readiness/process-stop-20261015T130605Z.json",
+    "sha256": "3ea0ec7089d2691e4a90981d152211c4996f2abf6edffef0055e79b7ebdb0e5b",
+    "record": {
+      "schema": "n010-user-requested-process-stop/1",
+      "utc": "2026-10-15T13:06:05.027685+00:00",
+      "reason": "User requested checking and stopping remaining old research processes",
+      "processes_before": [
+        {
+          "pid": 1546329,
+          "ppid": 517261,
+          "state": "S",
+          "start_ticks": "17614697",
+          "comm": "gi_timing_queue",
+          "cmd": "out/research/n010-comparison-readiness/venv/bin/python scripts/research/n010_reference_sampling/run_independent_quiet_calibration.py --work out/research/n010-comparison-readiness/independent-quiet-calibration-v1"
+        },
+        {
+          "pid": 1546911,
+          "ppid": 1546329,
+          "state": "S",
+          "start_ticks": "17624956",
+          "comm": "python",
+          "cmd": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python /var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/calibrate_renderer.py --mode accepted --lock /var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json --work /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/accepted --output /var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/029-full-renderer-calibration.json --plan /var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json"
+        },
+        {
+          "pid": 1549387,
+          "ppid": 1546911,
+          "state": "S",
+          "start_ticks": "17686330",
+          "comm": "phos-n010-pixel",
+          "cmd": "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt --state /var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/states/static --spp 1024 --vertices 2 --family pixel-pt --seed 305419896 --calibration-doses /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/accepted/C1-pt-B2/block-5.doses.txt --out /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/accepted/C1-pt-B2/block-5"
+        }
+      ],
+      "signals": [
+        {
+          "pid": 1546329,
+          "signal": "SIGSTOP",
+          "utc": "2026-10-15T13:06:04.648011+00:00"
+        },
+        {
+          "pid": 1546911,
+          "signal": "SIGSTOP",
+          "utc": "2026-10-15T13:06:04.674902+00:00"
+        },
+        {
+          "pid": 1549387,
+          "signal": "SIGSTOP",
+          "utc": "2026-10-15T13:06:04.688551+00:00"
+        },
+        {
+          "pid": 1546329,
+          "signal": "SIGTERM",
+          "utc": "2026-10-15T13:06:04.701603+00:00"
+        },
+        {
+          "pid": 1546911,
+          "signal": "SIGTERM",
+          "utc": "2026-10-15T13:06:04.701613+00:00"
+        },
+        {
+          "pid": 1549387,
+          "signal": "SIGTERM",
+          "utc": "2026-10-15T13:06:04.701616+00:00"
+        },
+        {
+          "pid": 1549387,
+          "signal": "SIGCONT",
+          "utc": "2026-10-15T13:06:04.701625+00:00"
+        },
+        {
+          "pid": 1546911,
+          "signal": "SIGCONT",
+          "utc": "2026-10-15T13:06:04.701628+00:00"
+        },
+        {
+          "pid": 1546329,
+          "signal": "SIGCONT",
+          "utc": "2026-10-15T13:06:04.701669+00:00"
+        }
+      ],
+      "remaining_live_targets": [],
+      "saved_results_deleted": false,
+      "restart_performed": false,
+      "partial_029": {
+        "path": "research/lanes/n010-comparison-readiness/results/029-full-renderer-calibration.json",
+        "sha256": "9098cf0c80873fe339f96d003f0e9b43716f66d6fc6261177d087e79509fc1b7",
+        "complete": false,
+        "all_pass": false
+      },
+      "preserved_controller_status": "out/research/n010-comparison-readiness/independent-quiet-calibration-v1/status.json"
+    }
+  },
+  "preserved_partial": {
+    "path": "research/lanes/n010-comparison-readiness/results/029-full-renderer-calibration.json",
+    "sha256": "9098cf0c80873fe339f96d003f0e9b43716f66d6fc6261177d087e79509fc1b7",
+    "complete": false,
+    "all_pass": false
+  },
+  "boundary_rows": [
+    {
+      "boundary": "C1-hwrt",
+      "retained_complete_blocks": 8,
+      "boundary_complete": true,
+      "analysis": {
+        "processes": [
+          {
+            "control": {
+              "median_log_ratio": 0.02259510742193913,
+              "ratio": 1.0228523103847924,
+              "order_bias_ratio": 1.1232453484052838,
+              "positive_pair_fraction": 0.5833333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.16735202323880577,
+              "ratio": 1.182170343502608,
+              "order_bias_ratio": 1.002901722396754,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.03584738622455095,
+              "ratio": 0.9647875221145347,
+              "order_bias_ratio": 1.042190079297691,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.12580432846146203,
+              "ratio": 1.1340602432589344,
+              "order_bias_ratio": 1.129361896238776,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.04035743956420315,
+              "ratio": 0.9604460763632802,
+              "order_bias_ratio": 1.1841819073797961,
+              "positive_pair_fraction": 0.3333333333333333
+            },
+            "effect": {
+              "median_log_ratio": 0.1546154016008252,
+              "ratio": 1.1672089680690363,
+              "order_bias_ratio": 1.1159583759164404,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.027455335232239544,
+              "ratio": 0.9729181367456388,
+              "order_bias_ratio": 1.0625234957275063,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.20655720678087605,
+              "ratio": 1.2294380643993124,
+              "order_bias_ratio": 1.114869992244517,
+              "positive_pair_fraction": 1.0
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.08342994461505489,
+              "ratio": 0.9199555322527745,
+              "order_bias_ratio": 1.0315233624994569,
+              "positive_pair_fraction": 0.3333333333333333
+            },
+            "effect": {
+              "median_log_ratio": 0.16390028244703744,
+              "ratio": 1.1780968323020011,
+              "order_bias_ratio": 1.00085627446969,
+              "positive_pair_fraction": 1.0
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.0814008463072714,
+              "ratio": 0.9218241075869145,
+              "order_bias_ratio": 1.0395480378160462,
+              "positive_pair_fraction": 0.16666666666666666
+            },
+            "effect": {
+              "median_log_ratio": 0.17345046132233238,
+              "ratio": 1.1894017639195404,
+              "order_bias_ratio": 1.1405953755863958,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.03224035510121518,
+              "ratio": 0.968273824554984,
+              "order_bias_ratio": 1.0131338966564618,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.1439781700884818,
+              "ratio": 1.1548588977821859,
+              "order_bias_ratio": 1.0558605645576333,
+              "positive_pair_fraction": 0.8333333333333334
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.028148426143519208,
+              "ratio": 0.9722440496564432,
+              "order_bias_ratio": 1.0664139659774945,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.20043433497323979,
+              "ratio": 1.2219333713180347,
+              "order_bias_ratio": 1.13916062028037,
+              "positive_pair_fraction": 1.0
+            }
+          }
+        ],
+        "control_envelope": 1.0870090617871646,
+        "control_span": 1.1118497302582069,
+        "effect_span": 1.0841029581164858,
+        "control_order_bias": 1.1841819073797961,
+        "effect_order_bias": 1.1405953755863958,
+        "minimum_positive_fraction": 0.8333333333333334,
+        "minimum_effect": 1.1340602432589344,
+        "gates": {
+          "control_max_absolute_ratio": false,
+          "control_span": false,
+          "control_order_bias": false,
+          "effect_span": false,
+          "effect_order_bias": false,
+          "effect_positive_fraction": true,
+          "effect_exceeds_control_envelope": true
+        },
+        "all_pass": false
+      }
+    },
+    {
+      "boundary": "C1-software",
+      "retained_complete_blocks": 8,
+      "boundary_complete": true,
+      "analysis": {
+        "processes": [
+          {
+            "control": {
+              "median_log_ratio": -0.017204559309900287,
+              "ratio": 0.9829425940094288,
+              "order_bias_ratio": 1.1508837167027788,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.13545326792535378,
+              "ratio": 1.1450556837563928,
+              "order_bias_ratio": 1.0292975512669904,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.050622986935838145,
+              "ratio": 0.950637005550059,
+              "order_bias_ratio": 1.0716903178210924,
+              "positive_pair_fraction": 0.3333333333333333
+            },
+            "effect": {
+              "median_log_ratio": 0.16033419041818392,
+              "ratio": 1.1739031126185764,
+              "order_bias_ratio": 1.1058566142589155,
+              "positive_pair_fraction": 0.8333333333333334
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.00902438186518747,
+              "ratio": 1.009065224366204,
+              "order_bias_ratio": 1.0243748080367356,
+              "positive_pair_fraction": 0.5833333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.2140813232336528,
+              "ratio": 1.2387233876889225,
+              "order_bias_ratio": 1.0391587923423935,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.001151217122242274,
+              "ratio": 1.0011518800270316,
+              "order_bias_ratio": 1.0285964723097238,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.14250158200648666,
+              "ratio": 1.1531549052544667,
+              "order_bias_ratio": 1.059080386471863,
+              "positive_pair_fraction": 1.0
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.005236496756327999,
+              "ratio": 0.994777189792534,
+              "order_bias_ratio": 1.0752317710736845,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.17792233142660252,
+              "ratio": 1.1947325244603846,
+              "order_bias_ratio": 1.0045911066396462,
+              "positive_pair_fraction": 1.0
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.02980221491138283,
+              "ratio": 0.9706374921870116,
+              "order_bias_ratio": 1.0269950453255907,
+              "positive_pair_fraction": 0.3333333333333333
+            },
+            "effect": {
+              "median_log_ratio": 0.12469980365208821,
+              "ratio": 1.1328083370929145,
+              "order_bias_ratio": 1.0685418787946612,
+              "positive_pair_fraction": 1.0
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.019365212252094838,
+              "ratio": 1.019553934220087,
+              "order_bias_ratio": 1.0282771289688117,
+              "positive_pair_fraction": 0.5833333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.1733508997729395,
+              "ratio": 1.1892833511318521,
+              "order_bias_ratio": 1.0592569665513627,
+              "positive_pair_fraction": 1.0
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.06643852014774033,
+              "ratio": 1.0686952588287963,
+              "order_bias_ratio": 1.0363900986919408,
+              "positive_pair_fraction": 0.8333333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.1645019162548128,
+              "ratio": 1.1788058284417848,
+              "order_bias_ratio": 1.024958481724204,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          }
+        ],
+        "control_envelope": 1.0686952588287963,
+        "control_span": 1.1241885731246348,
+        "effect_span": 1.0934977675639412,
+        "control_order_bias": 1.1508837167027788,
+        "effect_order_bias": 1.1058566142589155,
+        "minimum_positive_fraction": 0.8333333333333334,
+        "minimum_effect": 1.1328083370929145,
+        "gates": {
+          "control_max_absolute_ratio": false,
+          "control_span": false,
+          "control_order_bias": false,
+          "effect_span": false,
+          "effect_order_bias": false,
+          "effect_positive_fraction": true,
+          "effect_exceeds_control_envelope": true
+        },
+        "all_pass": false
+      }
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "retained_complete_blocks": 5,
+      "boundary_complete": false
+    }
+  ],
+  "required_boundaries": 16,
+  "complete_boundaries": 2,
+  "all_complete_boundaries_fail": true,
+  "remaining_research_processes_after_stop": [],
+  "verification": "Process enumeration by command/executable/comm before and after two seconds; no live research worker remained. See stop receipt for PID/start identities.",
+  "calibration_gate_thresholds_changed": false,
+  "saved_outputs_deleted": false,
+  "restarted": false,
+  "scope": "Operational user stop with CPU replay of retained completed boundary statistics; no new GPU measurement, full calibration verdict, cause attribution, reference admission or Lane M readiness."
+}

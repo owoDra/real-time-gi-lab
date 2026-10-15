@@ -78,9 +78,11 @@ No mixture tuning, threshold change or corpus acquisition is performed for
 this stopped candidate. Prospective [042](experiments/042-prospective-independent-quiet-calibration.md)
 permits independent quiet sizing/accepted calibration before more reference
 computation, with unchanged scientific gates. Actual [quiet sizing 046](results/046-calibration-quiet-sizing.json)
-passes all sixteen boundaries. Accepted 029 is now acquiring all eight fresh
-process blocks per boundary with the frozen doses and unchanged gates.
-Complete accepted calibration is not yet claimed.
+passes all sixteen boundaries. The user stopped [accepted 029](results/029-full-renderer-calibration.json)
+and its three-process tree ([150](results/150-user-requested-calibration-stop.json)).
+C1 HWRT/software each complete eight blocks and fail five unchanged gates; C1
+PT B2 retains five complete blocks. Full calibration is INCOMPLETE, with all
+payloads preserved. No old acquisition is restarted or accepted timing claimed.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16

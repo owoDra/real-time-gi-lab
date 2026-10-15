@@ -745,6 +745,18 @@
       "status": "prerequisite-refusal-no-corpus-acquisition",
       "result": "149-light-surface-corpus-prerequisite-refusal.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-029",
+      "status": "user-stopped-partial-two-complete-boundaries-fail",
+      "result": "029-full-renderer-calibration.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-150",
+      "status": "user-requested-calibration-stop-partials-retained",
+      "result": "150-user-requested-calibration-stop.json",
+      "gpu_run": false
     }
   ]
 }

@@ -140,9 +140,12 @@ refuses new corpus acquisition. Prospective
 [042](lanes/n010-comparison-readiness/experiments/042-prospective-independent-quiet-calibration.md)
 uses the now-idle research host for the separate quiet Renderer calibration
 requirement before further reference computation. [Quiet sizing 046](lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json)
-now passes all sixteen boundaries. Accepted 029 is acquiring the original eight
-blocks per boundary and remains required. No reference or campaign admission
-follows from that capability measurement alone.
+now passes all sixteen boundaries. The user stopped accepted 029 and its
+three-process tree ([150](lanes/n010-comparison-readiness/results/150-user-requested-calibration-stop.json)).
+Both completed C1 HWRT/software boundaries fail five unchanged gates; the full
+calibration is INCOMPLETE. Preserve every sample and diagnose the measurement
+procedure before a separately registered repair. No old acquisition is restarted.
+A valid full calibration remains required; no campaign admission follows.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
