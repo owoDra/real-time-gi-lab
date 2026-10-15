@@ -2,6 +2,18 @@
 
 ## Current execution checkpoint — 2026-10-15 14:43 UTC stop
 
+Prospective [proof intake 049](experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
+now supplies a separate strict verifier for actual 167/168/169 evidence. It
+requires complete full PASS before payload replay, pins build 167 and the
+original analysis source, and independently checks all native files, original
+sizing/schedules/thresholds, image/witness equality and ledger teardown. Its
+Python source compiles; numerical proof replay and native witness calls have
+**not run**, because 168/169 do not exist. No successful readiness adapter or
+accepted timing is created. The future six-gate integration must preserve every
+other gate and identify the exact calibrated fixture; old pilot timing remains
+diagnostic. This source-only work acquires no samples and does not overlap GPU
+measurement with the live CPU controls.
+
 User-requested [stop 170](results/170-user-requested-minimal-calibration-stop.json)
 terminated the accepted-calibration controller and its GPU PT child using
 verified PID/start identities. Two post-stop process scans found no remaining
