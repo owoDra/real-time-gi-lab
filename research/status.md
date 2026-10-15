@@ -20,7 +20,7 @@ Lane M starts. All scored pixels and earlier failed budgets remain retained.
 | Controlled dynamics | All 145 original cohort images are scored; all 29 memory ledgers replay to zero within the cap. C9 incumbent energy is about 7.645× the reference. C8/C9 complete ladders select 1024 spp for both transports; T_B2 PT 1024 confirmation passes all 25 dynamic frames. Earlier PT 256 losses remain ([033](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md), [042](lanes/n010-comparison-readiness/results/042-controlled-pt-budget-confirmation-summary.json)). |
 
 Current checkpoint: **NOT READY**. [Current-view preflight 129](lanes/n010-comparison-readiness/results/129-replayed-view-interim-preflight.json)
-and the [current execution record 130](lanes/n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
+and the [execution transition record 130](lanes/n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
 identify the remaining requirements. No pilot timing is yet accepted as a
 calibrated superiority comparison.
 
@@ -173,9 +173,14 @@ Post-hoc CPU-only [125](lanes/n010-comparison-readiness/results/125-point-guided
 rechecks the retained bytes, derives wrapper geometry/name fields from actual
 metadata and canonical scenes, and passes all eight original physical and two
 iid checks with unchanged gates and no rerender. Separate prefix build 114
-passes. Plan 036 uses a fresh 125/126 proof chain: all-state/own-prefix 126 is
-executing, and one fresh nine-slot acquisition queue waits for complete PASS.
-No point-guided corpus reference or full comparison admission exists yet.
+passes. Plan 036's fresh all-state/own-prefix
+[126](lanes/n010-comparison-readiness/results/126-replayed-point-guided-all-state-and-prefix.json)
+now completes all 24 low-dose cases, both actual-level C7 cases and all 78 native
+attempts PASS, including zero payload/counter disagreements. Independent
+proof-chain audit [131](lanes/n010-comparison-readiness/results/131-replayed-point-guided-proof-chain-audit.json)
+passes before publication. The single fresh nine-slot acquisition 128 has
+actually started. No point-guided corpus reference or full comparison admission
+exists yet; statistical qualification is still required.
 All four seeds, levels, absolute/relative screens and cap remain fixed.
 
 Prospective point-guided acquisition [plan 032](lanes/n010-comparison-readiness/experiments/032-point-guided-reference-qualification.md)
@@ -184,9 +189,10 @@ other fifteen remain included through original-method evidence. Executed
 prerequisite check [116](lanes/n010-comparison-readiness/results/116-point-guided-qualification-prerequisite-check.json)
 refuses dispatch because 113 is incomplete. Exact read input bytes are archived;
 no acquisition root or samples were created. The old 113/115 queue terminated
-on 113 failure with no acquisition. A separate plan-036 queue waits on 125/126,
-retaining the original nine-slot/four-seed/six-level/screens/cap rules. Its new
-sampling-reference success path remains unexecuted. Plan-037 view 127 is a
+on 113 failure with no acquisition. The separate plan-036 queue now executes
+128 after complete 125/126 PASS, retaining the original nine-slot/four-seed/
+six-level/screens/cap rules. Successful statistical qualification and full new
+sampling-reference provenance remain unmeasured. Plan-037 view 127 is a
 scheduling map, not eligibility or comparison readiness.
 Existing-CPU delegation [117](lanes/n010-comparison-readiness/results/117-point-guided-api-existing-cpu-provenance-audit.json)
 passes all fifteen previously eligible slots through the new API; this audits

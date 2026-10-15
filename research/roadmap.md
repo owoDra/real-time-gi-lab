@@ -97,9 +97,11 @@ surface sampling with explicit null samples and importance weights. Physical
 controls 113 acquired all seventeen scenes but failed in the analysis adapter
 on an omitted metadata field. Original FAIL is retained. CPU-only post-hoc
 replay 125 passes the unchanged eight physical/two iid gates on those same bytes.
-Plan 036 starts a fresh all-state/own-prefix proof 126 and a conditional single
-acquisition queue; four seeds, six levels, support-aware screens and cap remain
-unchanged. No point-guided corpus reference is yet qualified.
+Plan 036's fresh all-state/own-prefix proof 126 now completes PASS (24 low-dose,
+two actual-level cases and all 78 native attempts); complete proof-chain audit
+131 also passes. One fresh nine-slot acquisition 128 is actually executing.
+Four seeds, six levels, support-aware screens and cap remain unchanged. No
+point-guided corpus reference is yet qualified.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
@@ -107,7 +109,7 @@ retaining the fifteen eligible original-method references within the full
 its exact read bytes are retained. API delegation 117 passes the existing
 fifteen-slot subset; the new-variant branch remains unexecuted. The
 old acquisition queue terminated on the 113 failure without dispatch. A fresh
-plan-036 queue waits for the complete 125/126 chain. Neither queue,
+plan-036 queue now executes 128 after complete 125/126 PASS. Neither queue,
 prepared provenance nor a subset audit passes final comparison readiness.
 
 Separate final-preflight adapter 033 reuses the exact original six-gate source

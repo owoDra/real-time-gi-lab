@@ -655,6 +655,18 @@
       "status": "interim-execution-and-comparison-transition",
       "result": "130-validated-reference-acquisition-and-comparison-transition.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-126",
+      "status": "complete-replayed-all-state-and-prefix-only",
+      "result": "126-replayed-point-guided-all-state-and-prefix.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-131",
+      "status": "complete-replayed-proof-chain-audit-only",
+      "result": "131-replayed-point-guided-proof-chain-audit.json",
+      "gpu_run": false
     }
   ]
 }

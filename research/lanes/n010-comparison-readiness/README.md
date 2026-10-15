@@ -22,8 +22,12 @@ queue continues. At the user's request, both old CPU recovery jobs were stopped
 with all complete/partial files retained (124); idle comparison waiter 120 was
 retired without jobs. Point-guided 113 remains FAIL after an analysis wrapper
 error; post-hoc replay 125 passes the original physical/iid checks without new
-rendering. Fresh 125/126 proof/acquisition runs and comparison view 127 are
-separate from those historical attempts. New comparison execution waits for
+rendering. Fresh [126](results/126-replayed-point-guided-all-state-and-prefix.json)
+now passes all 24 low-dose/two actual-level cases and 78 native attempts;
+[131](results/131-replayed-point-guided-proof-chain-audit.json) rechecks the complete
+proof chain. Fresh nine-slot acquisition 128 has actually started. These runs
+and comparison view 127 are separate from the historical failed attempts.
+New comparison execution waits for
 all 24 eligible references, complete provenance and quiescence. Interim
 preflight 129 is **NOT_READY**; final pilots/calibration/047 remain pending.
 

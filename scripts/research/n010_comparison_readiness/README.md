@@ -19,8 +19,11 @@ outputs and reuses its exact physical/iid analysis with the missing wrapper
 fields derived from canonical geometry. Actual post-hoc replay 125 passes;
 113 remains FAIL. Plan-036 guarded adapters pin their original sources and
 retain all counts/seeds/thresholds/resources. `validate_replayed_point_guided_prefix.py`
-executes fresh 126; `launch_replayed_point_guided_qualification.py` waits for
-125/126 before one fresh 128 acquisition. Their roots are separate from the
+completes 126 PASS (24 low-dose/two actual-level cases, 78 attempts).
+`qualify_point_guided_replayed_references.py --prerequisites-only` replays the
+complete 125/126 proof chain in 131 with no native acquisition.
+`launch_replayed_point_guided_qualification.py` now executes one fresh 128
+acquisition after that complete chain. Their roots are separate from the
 terminal old attempts. Never import original/hybrid moments into those prefixes.
 
 `assemble_replayed_reference_view.py` fixes plan-037 view 127 (fifteen original
@@ -35,7 +38,7 @@ queue, a scheduling view nor a subset provenance PASS is readiness evidence.
 The frozen inputs of each active worker must remain unchanged. Do not relaunch
 existing work roots or infer failure from an observation timeout. Terminal
 results are indexed only after completion and identity verification; mutable
-121/126/128 are explicitly not published as completed results.
+121/128 are explicitly not published as completed results; 126 is now terminal.
 
 ## Continuous completion of existing acquisitions
 

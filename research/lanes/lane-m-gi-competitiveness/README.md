@@ -26,6 +26,13 @@ indirect quality, GPU Renderer time and persistent/true-peak owned memory;
 report quality FAIL without a same-quality speed ranking. No scene omissions,
 single-GPU generality or quality-unmatched superiority claims.
 
-The [N010 completion inventory](../n010-comparison-readiness/results/102-completion-evidence-and-handoff.md)
-lists remaining gates and a runnable evidence-verification command. Interim
-full-gate preflight 103 is NOT_READY; it does not authorize an accepted campaign.
+The [current N010 execution record](../n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
+lists completed proofs, the fixed 24-slot comparison transition and remaining
+gates. Actual current-view interim preflight 129 is NOT_READY; it does not
+authorize an accepted campaign. The fresh N010 driver requires all eligible
+references/provenance, actual pilots and accepted calibration before final 047.
+
+N010 subsequently completed the separate point-guided state/prefix proof 126
+and full proof-chain audit 131; its nine-slot reference acquisition 128 has
+started. Statistical eligibility, full comparison admission and accepted
+calibration remain pending. This does not start the accepted Lane M campaign.
