@@ -239,6 +239,17 @@ The lightweight CPU diagnostic ran during ongoing 158; it launched no CPU
 reference acquisition or GPU experiment. All six churn boundaries remain in
 the original full acquisition; 162 does not pass full timing capability.
 
+Prospective [plan 048](lanes/n010-comparison-readiness/experiments/048-prospective-bulk-pfm-calibration-output.md)
+prepares a separate row-bulk PFM fixture: the two per-pixel output loops become
+one identical RGB row write, with no GPU/timestamp/frame-schedule change.
+Source overlays reverse exactly to build-159 files and both CLI programs
+assemble. Native build 167, full sizing 168 and accepted calibration 169 have
+not run. Build refuses GPU/calibration work; new GPU acquisition requires
+actual CPU/GPU quiescence, complete build and full sizing PASS. This tests
+remaining CPU output overhead without claiming it caused earlier failures.
+All original boundaries, samples, image/scratch/memory proofs and thresholds
+remain required; 158 continues unchanged and its outcomes are retained.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Current full-slot view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json) reverifies those sixteen eligible targets and retains eight pending targets; full-corpus admission remains false. View 127 is historical. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |

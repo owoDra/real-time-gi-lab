@@ -516,3 +516,44 @@ or justify a correction, exclusion, threshold change or repeated acquisition.
 The lightweight CPU diagnostic ran during ongoing 158; it launched no CPU
 reference acquisition or GPU experiment. All six churn boundaries remain in
 the original full acquisition; 162 does not pass full timing capability.
+
+### Prospective row-bulk PFM calibration fixture (plan 048)
+
+[Plan 048](experiments/048-prospective-bulk-pfm-calibration-output.md) changes
+only the two PFM output loops to one identical RGB row write. Its source
+inverse checks reconstruct the exact build-159 files; build and calibration
+CLI assembly succeeds. No native compile, serialization/runtime replay,
+new GPU run or accepted capability is established. Source 158 stays frozen.
+
+The following commands are prepared, **not run**. First wait for actual 158
+termination. Build 167 may coexist with CPU reference controls, but refuses
+GPU research/calibration. Run 168 only after all CPU/GPU workers terminate and
+167 completes PASS; run 169 only after complete full PASS 168. All paths are
+fresh; there is no automatic retry or partial-boundary selection.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/build_bulk_pfm_calibration_capture.py \
+  --work out/research/n010-comparison-readiness/minimal-calibration-build-v3 \
+  --output research/lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_bulk_pfm_capture.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/bulk-pfm-calibration-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_bulk_pfm_capture.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/bulk-pfm-calibration-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json
+```
+
+The new method keeps all sixteen boundaries, every sample, old exact
+schedule/statistics/thresholds, every image/scratch witness and zero-teardown
+8 GiB ledger checks. All 24 eligible references and final pilots/047 remain
+required regardless of this future measurement outcome.
