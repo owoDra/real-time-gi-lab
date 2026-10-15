@@ -31,6 +31,15 @@ New comparison execution waits for
 all 24 eligible references, complete provenance and quiescence. Interim
 preflight 129 is **NOT_READY**; final pilots/calibration/047 remain pending.
 
+First four-seed C1 B8 point-guided level at 8192 spp is **INELIGIBLE**:
+active absolute/relative p99 uncertainty 1.28593e-4 / 9.63962% exceeds the fixed
+1e-5 / 5% gates. CPU-only post-hoc [136](results/136-first-point-guided-level-provenance-and-precision.json)
+passes complete prefix provenance, with no new rendering. First-level uncertainty
+is 1.781× / 1.868× the original sampler; improved precision is not established.
+About 80.63% of paths terminate with guided null continuations, retaining prior
+radiance contributions. This diagnostic does not establish bias or cap failure.
+The next 16384-spp level is executing under unchanged qualification rules.
+
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
 current-binary diagnostic ledgers, explicitly separating historical binaries

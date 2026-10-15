@@ -685,6 +685,12 @@
       "status": "interim-memory-evidence-and-quiescence-watch",
       "result": "134-memory-evidence-scopes-and-quiescence-watch.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-136",
+      "status": "posthoc-first-prefix-provenance-pass-statistically-ineligible",
+      "result": "136-first-point-guided-level-provenance-and-precision.json",
+      "gpu_run": false
     }
   ]
 }

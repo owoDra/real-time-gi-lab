@@ -103,11 +103,19 @@ two actual-level cases and all 78 native attempts); complete proof-chain audit
 Four seeds, six levels, support-aware screens and cap remain unchanged. No
 point-guided corpus reference is yet qualified.
 
+The first four-seed point-guided C1 B8 level at 8192 spp has now completed:
+absolute/relative active p99 uncertainty 1.28593e-4 / 9.63962% fails both fixed
+gates. Post-hoc [136](lanes/n010-comparison-readiness/results/136-first-point-guided-level-provenance-and-precision.json)
+passes complete prefix provenance but finds worse first-level precision than
+the original sampler. The 16384 level is executing; cap outcome and full
+qualification remain pending. No screen, cap or corpus change follows.
+
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
 24-slot corpus. Actual 116 refuses acquisition at incomplete physical 113;
 its exact read bytes are retained. API delegation 117 passes the existing
-fifteen-slot subset; the new-variant branch remains unexecuted. The
+fifteen-slot subset; that historical check did not execute the new-variant branch
+(now exercised by first-level audit 136). The
 old acquisition queue terminated on the 113 failure without dispatch. A fresh
 plan-036 queue now executes 128 after complete 125/126 PASS. Neither queue,
 prepared provenance nor a subset audit passes final comparison readiness.

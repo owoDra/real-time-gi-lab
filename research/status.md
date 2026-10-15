@@ -24,6 +24,17 @@ and the [execution transition record 130](lanes/n010-comparison-readiness/result
 identify the remaining requirements. No pilot timing is yet accepted as a
 calibrated superiority comparison.
 
+First point-guided C1 B8 level (four seeds, 8192 spp) is **INELIGIBLE**:
+active absolute p99 uncertainty is 1.28593e-4 and relative p99 is 9.63962%,
+above the unchanged 1e-5 / 5% gates. Post-hoc CPU audit
+[136](lanes/n010-comparison-readiness/results/136-first-point-guided-level-provenance-and-precision.json)
+passes full prefix provenance, not reference eligibility. These uncertainty
+statistics are 1.781× / 1.868× the original sampler at the same level;
+the new sampler has not demonstrated improved precision. About 80.63% of paths
+terminate with a guided null continuation; preceding radiance contributions
+are retained. This is diagnostic, not proof of bias or cap failure. Acquisition
+continues at 16384 spp under the original ladder and stop rules.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
