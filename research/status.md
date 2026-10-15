@@ -66,14 +66,21 @@ the global guide's precision losses. It retains 75% cosine support and the
 unchanged radiance evaluator, with explicit density correction.
 [Build 144](lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json)
 passes both standalone/prefix compilation and sampling-only source checks.
-Physical 145 is acquiring the unchanged seventeen-scene/four-seed controls.
-A guarded sequential queue waits for this producer's actual termination and
-complete PASS, then dispatches all-state/prefix 146 and bounded feasibility 147
-in order. A failed/incomplete stage stops the sequence without retry; no corpus
-acquisition/admission follows automatically.
-Complete physical/state/prefix proofs and a bounded two-level feasibility screen
-remain required before any acquisition/admission proposal. This separate CPU
-candidate does not restart the stopped workflows or qualify any reference yet.
+[Physical 145](lanes/n010-comparison-readiness/results/145-light-surface-physical-controls.json)
+completes all seventeen scenes/four seeds, eight physical gates and two retained
+iid comparisons with PASS. [State/prefix 146](lanes/n010-comparison-readiness/results/146-light-surface-all-state-and-prefix.json)
+passes all 24 low-dose states, two actual C7 transports and 78 native invocations.
+[Bounded feasibility 147](lanes/n010-comparison-readiness/results/147-light-surface-bounded-feasibility.json)
+**FAILS**: absolute p99 ratios versus the original global guide are
+0.7575396423 at 8192 and 0.7462398911 at 16384. Plan 040 requires <=0.75 at
+both levels; 24.246% improvement at 8192 does not meet 25%. Both reference
+screens also remain INELIGIBLE (9.74140e-5 / 7.47907%, then 6.76646e-5 /
+5.32703%). The sequential job terminated without retry. No reference is
+admitted, no cap failure is claimed, and the threshold is not relaxed.
+The conditional [plan-041 intake](lanes/n010-comparison-readiness/experiments/041-prospective-light-surface-corpus-admission.md)
+was prepared locally before those results but first committed after them; it is
+inactive and its new-variant admission branch has not run. Existing references,
+all 24 required slots and every final readiness gate remain unchanged.
 
 | Completion requirement | Current state / next action |
 | --- | --- |

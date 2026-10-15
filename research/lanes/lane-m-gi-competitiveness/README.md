@@ -37,7 +37,7 @@ N010 completed the separate point-guided state/prefix proof 126 and full
 proof-chain audit 131. The later user-requested stop
 [148](../n010-comparison-readiness/results/148-user-requested-reference-workflow-stop.json)
 retains all partial reference outputs and retires the old acquisition and
-comparison waiters. The separate plan-040 light-surface candidate has build
-proof 144; it requires complete physical/state/prefix validation and bounded
-feasibility before a new corpus-acquisition proposal. Neither a prototype build
-nor its operational queue starts the accepted Lane M campaign.
+comparison waiters. The separate plan-040 light-surface candidate passes physical/state/prefix
+proofs 145/146 but fails the unchanged bounded feasibility rule in 147 and stops.
+Prepared plan-041 intake is inactive. These outcomes do not qualify references
+or start the accepted Lane M campaign.

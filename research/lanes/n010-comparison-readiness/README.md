@@ -63,12 +63,17 @@ remained at the stop check; no 138/139/140 transition executed, and interrupted
 The separate [plan-040](experiments/040-prospective-light-surface-reference-sampling.md)
 light-surface candidate has complete standalone/prefix [build 144](results/144-light-surface-proposal-build.json).
 Only the proposal changes; source checks retain the original radiance evaluator.
-Physical 145 is acquiring all unchanged seventeen-scene/four-seed controls.
-A guarded queue waits for its live producer to terminate with complete PASS,
-then executes all-state/prefix 146 and bounded feasibility 147 in order. It
-stops on failure or incomplete output and does not retry or admit references.
-All-state/prefix proof and two-level feasibility must pass before any separate
-corpus acquisition/admission proposal; no reference is qualified by the build.
+[Physical 145](results/145-light-surface-physical-controls.json) now passes all
+seventeen scenes/four seeds, eight physical gates and two iid comparisons.
+[146](results/146-light-surface-all-state-and-prefix.json) passes all 24 states,
+two actual C7 prefixes and 78 native attempts. However,
+[147](results/147-light-surface-bounded-feasibility.json) **FAILS** the frozen
+feasibility condition: 8192/16384 absolute p99 ratios are 0.7575396423 /
+0.7462398911 against a required <=0.75 at both levels. Both statistical screens
+remain INELIGIBLE. The sequence stopped without retry; no reference admission
+or statistical cap failure follows. The prepared [041 intake](experiments/041-prospective-light-surface-corpus-admission.md)
+is inactive. No mixture tuning, threshold change or corpus acquisition is
+performed for this stopped candidate.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16

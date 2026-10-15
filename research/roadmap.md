@@ -128,9 +128,13 @@ statistical cap failure is claimed. There is no live comparison or handoff waite
 
 The separate prospective [plan 040](lanes/n010-comparison-readiness/experiments/040-prospective-light-surface-reference-sampling.md)
 light-surface proposal has complete sampling-only [build 144](lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json).
-Unchanged physical controls 145 are executing. All-state/prefix proof and bounded
-C1 B8 two-level feasibility are required before a new all-nine-slot acquisition
-proposal. The frozen 24-slot scope, eligibility and comparison gates remain.
+Complete physical [145](lanes/n010-comparison-readiness/results/145-light-surface-physical-controls.json)
+and all-state/prefix [146](lanes/n010-comparison-readiness/results/146-light-surface-all-state-and-prefix.json)
+pass. Bounded [147](lanes/n010-comparison-readiness/results/147-light-surface-bounded-feasibility.json)
+fails the exact <=0.75 ratio at both levels: 0.7575396423 / 0.7462398911.
+This candidate stops; the prepared conditional plan 041 is inactive. Its two
+reference screens are INELIGIBLE, and no cap failure is claimed. The frozen
+24-slot scope, eligibility and comparison gates remain.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full

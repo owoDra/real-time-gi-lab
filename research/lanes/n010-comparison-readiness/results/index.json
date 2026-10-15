@@ -711,6 +711,24 @@
       "gpu_run": false
     },
     {
+      "id": "N010-145",
+      "status": "complete-physical-and-iid-controls-no-reference-admission",
+      "result": "145-light-surface-physical-controls.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-146",
+      "status": "complete-all-state-and-own-prefix-controls-no-reference-admission",
+      "result": "146-light-surface-all-state-and-prefix.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-147",
+      "status": "bounded-feasibility-failure-candidate-stopped",
+      "result": "147-light-surface-bounded-feasibility.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-148",
       "status": "user-requested-workflow-stop-partials-retained",
       "result": "148-user-requested-reference-workflow-stop.json",

@@ -14,3 +14,8 @@ the same complete own prefixes, all statistical gates and the fixed sample cap.
 is a separate prospective CPU sampling candidate. It preserves the transport
 integral and current acquisitions; physical/prefix proofs and a bounded
 feasibility screen precede any subsequent reference-admission transition.
+
+[041 — conditional light-surface corpus intake](041-prospective-light-surface-corpus-admission.md)
+was drafted before plan-040 completion and first committed after it. It is
+**inactive** because bounded feasibility 147 fails the unchanged 040 rule.
+Prepared admission code is not proof of new-variant reference eligibility.
