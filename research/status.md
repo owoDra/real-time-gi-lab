@@ -56,6 +56,15 @@ Current native 1394060 and all original workflows continue unchanged until
 the verified child-free boundary. Subsequent acquisition 140 and budget-aware
 comparison/retirement replace their old workflow only after complete PASS 138.
 
+Separate prospective [plan 040](lanes/n010-comparison-readiness/experiments/040-prospective-light-surface-reference-sampling.md)
+registers a light-visible-surface proposal for offline references, motivated by
+the global guide's precision losses. It retains 75% cosine support and the
+unchanged radiance evaluator, with explicit density correction. Build, complete
+physical/state/prefix proofs and a bounded two-level feasibility screen are
+required before any acquisition/admission proposal. Current global-guide
+acquisition and plan-039 workflow remain unchanged. This candidate has not run
+or qualified any reference at this checkpoint.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
