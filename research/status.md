@@ -43,6 +43,11 @@ the last interval, above the 172,800-second invocation guard. This includes
 bookkeeping and is a resource forecast, not an observed interruption or
 statistical cap failure. Resolve the budget prospectively before a conflicting
 high-level invocation; current runtime limits and scientific gates are unchanged.
+Prospective [plan 039](lanes/n010-comparison-readiness/experiments/039-operational-cpu-budget-continuation.md)
+prepares a child-free, fully audited prefix handoff to a fresh process with
+691200 aggregate CPU seconds and unchanged 43200 elapsed seconds / 4 GiB.
+The guarded wrappers and actual resource-capability witness are prepared;
+neither the witness nor transition 138 has executed at this checkpoint.
 
 | Completion requirement | Current state / next action |
 | --- | --- |

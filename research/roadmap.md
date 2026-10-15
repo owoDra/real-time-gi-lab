@@ -115,6 +115,10 @@ a possible operational guard interruption at high levels. Resolve that budget
 prospectively while retaining own prefixes, scientific gates, sample cap and
 all outcomes; no runtime limits have been changed. Forecasts do not establish
 either an interruption or statistical cap failure. Full qualification is pending.
+Prospective [plan 039](lanes/n010-comparison-readiness/experiments/039-operational-cpu-budget-continuation.md)
+registers a clean completed-prefix workflow transition and fresh-process CPU
+ceiling consistent with sixteen threads and the unchanged wall guard. Code is
+prepared; actual capability, boundary retirement and continuation remain pending.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full

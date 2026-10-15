@@ -46,6 +46,12 @@ last-interval resource forecast exceeds the fixed 172,800 CPU-second guard;
 prospective operational repair is required before a conflicting invocation.
 This is not an observed interruption or statistical cap failure. No runtime
 limit, sample cap or qualification rule has been changed.
+Prospective [039](experiments/039-operational-cpu-budget-continuation.md) prepares
+the explicit operational fix: verify a complete child-free prefix boundary,
+retain old workflow bytes, retire only its owned idle processes and continue
+the same prefixes in a fresh process with a 691200 aggregate CPU-second ceiling.
+The 43200 elapsed-second / 4 GiB guards and every scientific gate are unchanged.
+Capability proof and transition are pending; prepared code is not execution.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
