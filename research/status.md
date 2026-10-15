@@ -123,6 +123,20 @@ The capture source performs large diagnostic readbacks and file writes between
 frames. Any capture repair requires prospective acquisition and unchanged
 full boundaries/thresholds; no clock/power cause or calibration PASS is inferred.
 
+
+Prospective [044](lanes/n010-comparison-readiness/experiments/044-prospective-minimal-calibration-capture.md)
+now implements that separate image/scratch-only calibration fixture. CPU
+[build 156](lanes/n010-comparison-readiness/results/156-minimal-calibration-fixture-build.json) passes
+all five compile/link steps, inverse source checks and unchanged-active-input
+hashes. Its separate binaries retain the timed Renderer method and all shaders.
+The prepared calibration wrapper keeps the original full schedule/statistics,
+requires all sixteen boundaries, checks every frame against immutable 046 image
+hashes, replays allocation ledgers and refuses other research workers. CLI
+assembly (`--help`) succeeds; no GPU image-equivalence or new calibration run
+has occurred. Fresh quiet sizing 157 and accepted 158 remain unexecuted until
+the CPU proposal work actually terminates. Existing 029 remains partial/failed
+in its completed scope. Neither build success nor a prepared command is READY.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |

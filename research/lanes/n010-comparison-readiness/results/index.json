@@ -769,6 +769,12 @@
       "status": "posthoc-cpu-calibration-capture-volume-and-order-diagnosis",
       "result": "155-stopped-calibration-posthoc-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-156",
+      "status": "complete-isolated-minimal-calibration-fixture-build-no-gpu-validation",
+      "result": "156-minimal-calibration-fixture-build.json",
+      "gpu_run": false
     }
   ]
 }

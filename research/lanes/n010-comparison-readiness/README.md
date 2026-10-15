@@ -97,6 +97,20 @@ records large inter-frame capture volume/cadence and append-order variation;
 it establishes no timing-failure cause. A separate prospective capture repair
 must preserve full workload boundaries, images, scratch, memory and thresholds.
 
+
+Prospective [044](experiments/044-prospective-minimal-calibration-capture.md)
+now implements that separate image/scratch-only calibration fixture. CPU
+[build 156](results/156-minimal-calibration-fixture-build.json) passes
+all five compile/link steps, inverse source checks and unchanged-active-input
+hashes. Its separate binaries retain the timed Renderer method and all shaders.
+The prepared calibration wrapper keeps the original full schedule/statistics,
+requires all sixteen boundaries, checks every frame against immutable 046 image
+hashes, replays allocation ledgers and refuses other research workers. CLI
+assembly (`--help`) succeeds; no GPU image-equivalence or new calibration run
+has occurred. Fresh quiet sizing 157 and accepted 158 remain unexecuted until
+the CPU proposal work actually terminates. Existing 029 remains partial/failed
+in its completed scope. Neither build success nor a prepared command is READY.
+
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
 current-binary diagnostic ledgers, explicitly separating historical binaries
@@ -322,3 +336,33 @@ executes against current view 067 and remains NOT_READY, retaining incomplete
 reference/Sponza-pilot/calibration gates. The six gate names/pass classifications
 match 103; all 162 recorded inputs were checked unchanged after execution.
 No new sampling branch, current view/driver replacement or final 047 is attested.
+
+
+### Prepared minimal-output calibration commands (plan 044)
+
+Not executed. First require actual termination of the CPU proposal sequence;
+these commands refuse live research workers, existing work/output paths and
+partial boundary selection. Keep the new build/source/input identities frozen.
+Sizing additionally checks every image against original quiet sizing 046 and
+requires zero-teardown ledger replay within 8 GiB. Only complete full PASS 157
+permits 158. Original failed/partial timing is retained.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_minimal_capture.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/minimal-calibration-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/157-minimal-calibration-quiet-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_minimal_capture.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/minimal-calibration-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/157-minimal-calibration-quiet-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/158-minimal-calibration-full-renderer.json
+```
+
+All 24 eligible references, complete pilots and final six-gate handoff remain
+required even if this independent capability measurement eventually passes.

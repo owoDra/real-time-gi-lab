@@ -160,6 +160,20 @@ records large inter-frame capture volume/cadence and append-order variation;
 it establishes no timing-failure cause. A separate prospective capture repair
 must preserve full workload boundaries, images, scratch, memory and thresholds.
 
+
+Prospective [044](lanes/n010-comparison-readiness/experiments/044-prospective-minimal-calibration-capture.md)
+now implements that separate image/scratch-only calibration fixture. CPU
+[build 156](lanes/n010-comparison-readiness/results/156-minimal-calibration-fixture-build.json) passes
+all five compile/link steps, inverse source checks and unchanged-active-input
+hashes. Its separate binaries retain the timed Renderer method and all shaders.
+The prepared calibration wrapper keeps the original full schedule/statistics,
+requires all sixteen boundaries, checks every frame against immutable 046 image
+hashes, replays allocation ledgers and refuses other research workers. CLI
+assembly (`--help`) succeeds; no GPU image-equivalence or new calibration run
+has occurred. Fresh quiet sizing 157 and accepted 158 remain unexecuted until
+the CPU proposal work actually terminates. Existing 029 remains partial/failed
+in its completed scope. Neither build success nor a prepared command is READY.
+
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
 24-slot corpus. Actual 116 refuses acquisition at incomplete physical 113;
