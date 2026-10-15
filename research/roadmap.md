@@ -139,8 +139,9 @@ reference screens are INELIGIBLE, and no cap failure is claimed. The frozen
 refuses new corpus acquisition. Prospective
 [042](lanes/n010-comparison-readiness/experiments/042-prospective-independent-quiet-calibration.md)
 uses the now-idle research host for the separate quiet Renderer calibration
-requirement before further reference computation. Sizing 046 and accepted 029
-must execute under the original gates; no reference or campaign admission
+requirement before further reference computation. [Quiet sizing 046](lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json)
+now passes all sixteen boundaries. Accepted 029 is acquiring the original eight
+blocks per boundary and remains required. No reference or campaign admission
 follows from that capability measurement alone.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,

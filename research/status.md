@@ -87,14 +87,18 @@ unchanged. Prospective [042](lanes/n010-comparison-readiness/experiments/042-pro
 allows quiet full-boundary sizing/accepted calibration before further CPU
 reference computation, with all original boundaries, thresholds and final
 readiness gates unchanged. It does not dispatch a new quality pilot or admit
-Lane M. The controller has passed initial quiescence and is acquiring quiet sizing 046 over all sixteen boundaries. Accepted 029 dispatches only after complete PASS 046. Neither is a completed calibration claim yet.
+Lane M. The independent controller passed initial quiescence and
+[quiet sizing 046](lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json)
+now completes all sixteen boundaries with PASS. Accepted 029 is actually
+running the unchanged eight-process-block calibration with those frozen doses.
+No accepted timing-capability PASS is claimed until its complete outcome.
 
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
 | Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
 | Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
-| Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Source/ledger audit [133](lanes/n010-comparison-readiness/results/133-current-and-historical-memory-evidence-audit.json) verifies current allocation hooks and 16 current-binary diagnostic memory ledgers, distinguishing 65 historical-binary pilot rows. This is not accepted timing. Quiet sizing 046 and accepted eight-process calibration 029 remain required. |
+| Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Source/ledger audit [133](lanes/n010-comparison-readiness/results/133-current-and-historical-memory-evidence-audit.json) verifies current allocation hooks and 16 current-binary diagnostic memory ledgers, distinguishing 65 historical-binary pilot rows. This is not accepted timing. Quiet sizing 046 now passes all sixteen boundaries; accepted eight-process calibration 029 is running and remains required. |
 | Final handoff | Idle continuation-v3 was retired without jobs (120). Later plan-037/038/039 waiters were stopped by the user (148); none is live. All 24 eligible references, full provenance and quiescence remain mandatory before unchanged pilots/calibration. See historical [134](lanes/n010-comparison-readiness/results/134-memory-evidence-scopes-and-quiescence-watch.md). Final 047 and decision remain pending, then distinct Lane M; no N011. |
 
 The additional DDGI family is pinned to RTXGI Vulkan on AMD, without CUDA:

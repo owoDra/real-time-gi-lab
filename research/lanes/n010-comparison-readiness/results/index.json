@@ -231,6 +231,12 @@
       "gpu_run": false
     },
     {
+      "id": "N010-046",
+      "status": "complete-quiet-sizing-only-accepted-calibration-pending",
+      "result": "046-calibration-quiet-sizing.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-049",
       "status": "build-complete-equivalence-pending",
       "result": "049-incremental-oracle-build.json",
