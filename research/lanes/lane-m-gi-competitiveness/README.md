@@ -26,13 +26,18 @@ indirect quality, GPU Renderer time and persistent/true-peak owned memory;
 report quality FAIL without a same-quality speed ranking. No scene omissions,
 single-GPU generality or quality-unmatched superiority claims.
 
-The [current N010 execution record](../n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
-lists completed proofs, the fixed 24-slot comparison transition and remaining
-gates. Actual current-view interim preflight 129 is NOT_READY; it does not
-authorize an accepted campaign. The fresh N010 driver requires all eligible
-references/provenance, actual pilots and accepted calibration before final 047.
+Use the [current research status](../../status.md) for the live N010 state.
+[Execution record 130](../n010-comparison-readiness/results/130-validated-reference-acquisition-and-comparison-transition.md)
+records an earlier checkpoint, including the fixed 24-slot scope. Interim
+preflight 129 is NOT_READY; it does not authorize an accepted campaign. All
+eligible references/provenance, actual pilots and accepted calibration remain
+required before final 047.
 
-N010 subsequently completed the separate point-guided state/prefix proof 126
-and full proof-chain audit 131; its nine-slot reference acquisition 128 has
-started. Statistical eligibility, full comparison admission and accepted
-calibration remain pending. This does not start the accepted Lane M campaign.
+N010 completed the separate point-guided state/prefix proof 126 and full
+proof-chain audit 131. The later user-requested stop
+[148](../n010-comparison-readiness/results/148-user-requested-reference-workflow-stop.json)
+retains all partial reference outputs and retires the old acquisition and
+comparison waiters. The separate plan-040 light-surface candidate has build
+proof 144; it requires complete physical/state/prefix validation and bounded
+feasibility before a new corpus-acquisition proposal. Neither a prototype build
+nor its operational queue starts the accepted Lane M campaign.

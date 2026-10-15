@@ -67,6 +67,10 @@ unchanged radiance evaluator, with explicit density correction.
 [Build 144](lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json)
 passes both standalone/prefix compilation and sampling-only source checks.
 Physical 145 is acquiring the unchanged seventeen-scene/four-seed controls.
+A guarded sequential queue waits for this producer's actual termination and
+complete PASS, then dispatches all-state/prefix 146 and bounded feasibility 147
+in order. A failed/incomplete stage stops the sequence without retry; no corpus
+acquisition/admission follows automatically.
 Complete physical/state/prefix proofs and a bounded two-level feasibility screen
 remain required before any acquisition/admission proposal. This separate CPU
 candidate does not restart the stopped workflows or qualify any reference yet.

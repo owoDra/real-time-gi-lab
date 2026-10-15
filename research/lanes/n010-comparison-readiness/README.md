@@ -64,6 +64,9 @@ The separate [plan-040](experiments/040-prospective-light-surface-reference-samp
 light-surface candidate has complete standalone/prefix [build 144](results/144-light-surface-proposal-build.json).
 Only the proposal changes; source checks retain the original radiance evaluator.
 Physical 145 is acquiring all unchanged seventeen-scene/four-seed controls.
+A guarded queue waits for its live producer to terminate with complete PASS,
+then executes all-state/prefix 146 and bounded feasibility 147 in order. It
+stops on failure or incomplete output and does not retry or admit references.
 All-state/prefix proof and two-level feasibility must pass before any separate
 corpus acquisition/admission proposal; no reference is qualified by the build.
 
