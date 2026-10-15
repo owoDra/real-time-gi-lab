@@ -19,3 +19,8 @@ feasibility screen precede any subsequent reference-admission transition.
 was drafted before plan-040 completion and first committed after it. It is
 **inactive** because bounded feasibility 147 fails the unchanged 040 rule.
 Prepared admission code is not proof of new-variant reference eligibility.
+
+[042 — independent quiet calibration](042-prospective-independent-quiet-calibration.md)
+registers operation ordering only: quiet sizing/accepted calibration while all
+reference workers are terminal, before another CPU reference computation.
+All original boundaries, thresholds and final readiness requirements remain.

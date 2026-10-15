@@ -733,6 +733,12 @@
       "status": "user-requested-workflow-stop-partials-retained",
       "result": "148-user-requested-reference-workflow-stop.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-149",
+      "status": "prerequisite-refusal-no-corpus-acquisition",
+      "result": "149-light-surface-corpus-prerequisite-refusal.json",
+      "gpu_run": false
     }
   ]
 }

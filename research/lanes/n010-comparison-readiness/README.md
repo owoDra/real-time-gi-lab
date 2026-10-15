@@ -72,8 +72,13 @@ feasibility condition: 8192/16384 absolute p99 ratios are 0.7575396423 /
 0.7462398911 against a required <=0.75 at both levels. Both statistical screens
 remain INELIGIBLE. The sequence stopped without retry; no reference admission
 or statistical cap failure follows. The prepared [041 intake](experiments/041-prospective-light-surface-corpus-admission.md)
-is inactive. No mixture tuning, threshold change or corpus acquisition is
-performed for this stopped candidate.
+is inactive. Actual [149](results/149-light-surface-corpus-prerequisite-refusal.json)
+refuses corpus dispatch with zero native attempts; no corpus root is created.
+No mixture tuning, threshold change or corpus acquisition is performed for
+this stopped candidate. Prospective [042](experiments/042-prospective-independent-quiet-calibration.md)
+permits independent quiet sizing/accepted calibration before more reference
+computation, with unchanged scientific gates. The controller is prepared;
+046/029 remain unexecuted at this checkpoint.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16

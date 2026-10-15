@@ -134,7 +134,14 @@ pass. Bounded [147](lanes/n010-comparison-readiness/results/147-light-surface-bo
 fails the exact <=0.75 ratio at both levels: 0.7575396423 / 0.7462398911.
 This candidate stops; the prepared conditional plan 041 is inactive. Its two
 reference screens are INELIGIBLE, and no cap failure is claimed. The frozen
-24-slot scope, eligibility and comparison gates remain.
+24-slot scope, eligibility and comparison gates remain. Actual
+[149](lanes/n010-comparison-readiness/results/149-light-surface-corpus-prerequisite-refusal.json)
+refuses new corpus acquisition. Prospective
+[042](lanes/n010-comparison-readiness/experiments/042-prospective-independent-quiet-calibration.md)
+uses the now-idle research host for the separate quiet Renderer calibration
+requirement before further reference computation. Sizing 046 and accepted 029
+must execute under the original gates; no reference or campaign admission
+follows from that capability measurement alone.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full

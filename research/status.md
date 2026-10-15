@@ -79,8 +79,15 @@ screens also remain INELIGIBLE (9.74140e-5 / 7.47907%, then 6.76646e-5 /
 admitted, no cap failure is claimed, and the threshold is not relaxed.
 The conditional [plan-041 intake](lanes/n010-comparison-readiness/experiments/041-prospective-light-surface-corpus-admission.md)
 was prepared locally before those results but first committed after them; it is
-inactive and its new-variant admission branch has not run. Existing references,
-all 24 required slots and every final readiness gate remain unchanged.
+inactive. Actual guard [149](lanes/n010-comparison-readiness/results/149-light-surface-corpus-prerequisite-refusal.json)
+refuses dispatch on failed 147, with zero native attempts and no new corpus
+root. The new-variant payload admission branch remains unexercised.
+Existing references, all 24 required slots and every final readiness gate remain
+unchanged. Prospective [042](lanes/n010-comparison-readiness/experiments/042-prospective-independent-quiet-calibration.md)
+allows quiet full-boundary sizing/accepted calibration before further CPU
+reference computation, with all original boundaries, thresholds and final
+readiness gates unchanged. It does not dispatch a new quality pilot or admit
+Lane M. The controller is prepared; 046/029 have not yet run.
 
 | Completion requirement | Current state / next action |
 | --- | --- |
