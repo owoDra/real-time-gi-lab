@@ -290,3 +290,24 @@ The sixteen retained slots, eight pending slots, view 160 and all final gates
 are unchanged. Current calibration 158 has completed ten static boundaries:
 C1 PT B8 passes; the other nine fail. Its six churn boundaries remain pending
 and the overall acquisition is still INCOMPLETE.
+
+
+
+CPU-only post-hoc [diagnosis 162](lanes/n010-comparison-readiness/results/162-minimal-static-calibration-posthoc-diagnosis.json)
+archives an exact 158 summary snapshot and replays all ten completed static
+boundaries, eight blocks and 64 samples per block (5,120 raw samples). Every
+original decision is reproduced: C1 PT B8 passes, the other nine fail. All
+schedules and producer image/scratch/ledger metadata match. Payload content
+hashes are not independently rechecked in this diagnostic.
+
+Compared descriptively with the earlier 155 block-0 record, C1 HWRT/software
+completed-output cadence medians fall from 394/498 ms to 9.30/12.57 ms; saved
+frame bytes are about 2.14 MB, versus at least 69.06 MB for just the old three
+secondary streams. These are different retained acquisitions, not a causal
+isolation or directly measured GPU duty cycle. Timing gates still fail for
+those roles. C1 PT B2 also fails with a GPU-duration/file-cadence proxy near
+0.967; C1 PT B8 passes near 0.998. This does not identify a clock/power cause
+or justify a correction, exclusion, threshold change or repeated acquisition.
+The lightweight CPU diagnostic ran during ongoing 158; it launched no CPU
+reference acquisition or GPU experiment. All six churn boundaries remain in
+the original full acquisition; 162 does not pass full timing capability.

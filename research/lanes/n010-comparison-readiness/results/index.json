@@ -805,6 +805,12 @@
       "status": "complete-all-sixteen-minimal-capture-sizing-boundaries-image-equal-and-ledger-pass",
       "result": "157-minimal-calibration-quiet-sizing.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-162",
+      "status": "posthoc-cpu-replay-all-ten-static-calibration-decisions-and-saved-output-cadence",
+      "result": "162-minimal-static-calibration-posthoc-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }
