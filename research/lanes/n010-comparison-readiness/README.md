@@ -14,7 +14,7 @@ replay passes on all 10 captures; the C7 key-driven counterfactual validation
 passes V1–V4 on both backends. Direct shadow-offset diagnosis is post-hoc;
 new physical sampler validation and comparison harness work continue.
 
-**Current execution:** [130](results/130-validated-reference-acquisition-and-comparison-transition.md).
+**Historical execution transition:** [130](results/130-validated-reference-acquisition-and-comparison-transition.md).
 Hybrid numerical/physical/state/prefix proofs 098/099/101 are complete PASS;
 actual first-reference provenance [123](results/123-first-qualified-hybrid-provenance-audit.json)
 passes C4 B2 at 16384/32768 with 5,413 unchanged read identities. The hybrid
@@ -26,10 +26,29 @@ rendering. Fresh [126](results/126-replayed-point-guided-all-state-and-prefix.js
 now passes all 24 low-dose/two actual-level cases and 78 native attempts;
 [131](results/131-replayed-point-guided-proof-chain-audit.json) rechecks the complete
 proof chain. Nine-slot acquisition 128 started, then was interrupted in 148. These runs
-and comparison view 127 are separate from the historical failed attempts.
+and historical comparison view 127 are separate from the historical failed attempts.
 New comparison execution still requires
 all 24 eligible references, complete provenance and quiescence. Interim
 preflight 129 is **NOT_READY**; final pilots/calibration/047 remain pending.
+
+
+Current reference view [160](results/160-primary-direction-reference-view.json),
+prospectively registered in [plan 046](experiments/046-prospective-directional-corpus-admission.md),
+reverifies all sixteen already eligible references: fifteen original CPU slots
+and the previously qualified hybrid C4 B2 slot. All 6,043 recorded input hashes
+were rechecked unchanged at the stop checkpoint. The full 24-slot map retains
+eight pending targets (C1/C2/C3/C4 B8, C5/C6 both transports); no new proposal
+reference is admitted. Historical view 127 and all failed/partial acquisitions
+are retained. Whole-corpus readiness remains NOT_READY.
+
+User-requested stop [161](results/161-user-requested-directional-workflow-stop.json)
+records verified termination of the three physical-152/controller/native
+processes and two empty post-stop research-worker scans. Seven of seventeen
+scene rows passed; A6a was interrupted, and the final eight physical checks,
+two iid crosschecks, state/prefix 153 and feasibility 154 remain uncompleted.
+The controller's saved RUNNING label is stale after actual PID termination.
+This is an operational interruption, not a scientific FAIL or a cap failure.
+The stopped workflow is not restarted; no threshold or final gate is relaxed.
 
 First four-seed C1 B8 point-guided level at 8192 spp is **INELIGIBLE**:
 active absolute/relative p99 uncertainty 1.28593e-4 / 9.63962% exceeds the fixed
@@ -88,8 +107,9 @@ payloads preserved. No old acquisition is restarted or accepted timing claimed.
 Prospective [043](experiments/043-prospective-primary-direction-reference-sampling.md)
 implements a distinct primary-position directional proposal. Sampling-only
 [build 151](results/151-primary-direction-proposal-build.json) passes;
-physical 152 is running, then full state/prefix 153 and bounded feasibility
-154 require complete preceding PASS. Feasibility compares against the original
+physical 152 was user-stopped in 161 after seven complete scene rows; full
+physical validity remains INCOMPLETE. State/prefix 153 and bounded feasibility
+154 were not run and require complete preceding PASS. Feasibility compares against the original
 cosine method, requiring <=0.75 uncertainty ratios at both original levels.
 No reference admission, old-process restart or relaxed final gate follows.
 Post-hoc [155](results/155-stopped-calibration-posthoc-diagnosis.json)
@@ -119,8 +139,9 @@ registers that filesystem repair before any new GPU run. Corrected isolated
 passes all five compile/link steps and unchanged-active-input checks; the
 calibration wrapper now requires its v2 binaries. Build 156 and its known
 source-identified defect are retained unchanged; no runtime failure was observed
-or hidden. GPU sizing 157 / calibration 158 remain unexecuted. Physical 152
-continues in its original process, with actual first-scene seed payloads saved.
+or hidden. GPU sizing 157 / calibration 158 remain unexecuted at build publication. The
+user subsequently stopped the physical-152 process tree (161); all 171 saved
+payload/log/status files remain retained and no old workflow is restarted.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16

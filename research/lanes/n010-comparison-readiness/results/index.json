@@ -781,6 +781,24 @@
       "status": "complete-isolated-calibration-directory-fix-build-no-gpu-validation",
       "result": "159-minimal-calibration-directory-fix-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-152",
+      "status": "user-stopped-partial-seven-of-seventeen-scene-rows-no-full-physical-verdict",
+      "result": "152-primary-direction-physical-controls.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-160",
+      "status": "complete-fixed-twenty-four-slot-view-sixteen-reverified-eight-pending",
+      "result": "160-primary-direction-reference-view.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-161",
+      "status": "user-requested-directional-workflow-stop-partials-retained",
+      "result": "161-user-requested-directional-workflow-stop.json",
+      "gpu_run": false
     }
   ]
 }

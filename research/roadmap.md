@@ -151,8 +151,9 @@ A valid full calibration remains required; no campaign admission follows.
 Prospective [043](lanes/n010-comparison-readiness/experiments/043-prospective-primary-direction-reference-sampling.md)
 implements a distinct primary-position directional proposal. Sampling-only
 [build 151](lanes/n010-comparison-readiness/results/151-primary-direction-proposal-build.json) passes;
-physical 152 is running, then full state/prefix 153 and bounded feasibility
-154 require complete preceding PASS. Feasibility compares against the original
+physical 152 was user-stopped in 161 after seven complete scene rows; full
+physical validity remains INCOMPLETE. State/prefix 153 and bounded feasibility
+154 were not run and require complete preceding PASS. Feasibility compares against the original
 cosine method, requiring <=0.75 uncertainty ratios at both original levels.
 No reference admission, old-process restart or relaxed final gate follows.
 Post-hoc [155](lanes/n010-comparison-readiness/results/155-stopped-calibration-posthoc-diagnosis.json)
@@ -182,8 +183,9 @@ registers that filesystem repair before any new GPU run. Corrected isolated
 passes all five compile/link steps and unchanged-active-input checks; the
 calibration wrapper now requires its v2 binaries. Build 156 and its known
 source-identified defect are retained unchanged; no runtime failure was observed
-or hidden. GPU sizing 157 / calibration 158 remain unexecuted. Physical 152
-continues in its original process, with actual first-scene seed payloads saved.
+or hidden. GPU sizing 157 / calibration 158 remain unexecuted at build publication. The
+user subsequently stopped the physical-152 process tree (161); all 171 saved
+payload/log/status files remain retained and no old workflow is restarted.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
@@ -220,3 +222,23 @@ Post-hoc memory audit 133 verifies current allocation-hook link coverage and
 the 16 current-binary diagnostic ledgers, while preserving 65 historical-binary
 pilot identities and the failed stricter audit 132. These results do not pass
 accepted timing or whole-corpus readiness. [Details](lanes/n010-comparison-readiness/results/134-memory-evidence-scopes-and-quiescence-watch.md).
+
+
+
+Current reference view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json),
+prospectively registered in [plan 046](lanes/n010-comparison-readiness/experiments/046-prospective-directional-corpus-admission.md),
+reverifies all sixteen already eligible references: fifteen original CPU slots
+and the previously qualified hybrid C4 B2 slot. All 6,043 recorded input hashes
+were rechecked unchanged at the stop checkpoint. The full 24-slot map retains
+eight pending targets (C1/C2/C3/C4 B8, C5/C6 both transports); no new proposal
+reference is admitted. Historical view 127 and all failed/partial acquisitions
+are retained. Whole-corpus readiness remains NOT_READY.
+
+User-requested stop [161](lanes/n010-comparison-readiness/results/161-user-requested-directional-workflow-stop.json)
+records verified termination of the three physical-152/controller/native
+processes and two empty post-stop research-worker scans. Seven of seventeen
+scene rows passed; A6a was interrupted, and the final eight physical checks,
+two iid crosschecks, state/prefix 153 and feasibility 154 remain uncompleted.
+The controller's saved RUNNING label is stale after actual PID termination.
+This is an operational interruption, not a scientific FAIL or a cap failure.
+The stopped workflow is not restarted; no threshold or final gate is relaxed.

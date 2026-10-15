@@ -105,8 +105,9 @@ cosine support, density correction on the first continuation only. It uses
 geometry/direct light, never candidate GI outputs; later bounces and the
 physical evaluator stay unchanged. [Build 151](lanes/n010-comparison-readiness/results/151-primary-direction-proposal-build.json)
 passes separate standalone/prefix compilation and reversible source checks.
-Physical 152 is actually running; only a complete PASS permits all-state/prefix
-153, then fresh bounded feasibility 154. The new feasibility baseline is the
+Physical 152 was user-stopped in 161 after seven complete scene rows; the full
+physical verdict is INCOMPLETE. State/prefix 153 and feasibility 154 did not run.
+Only complete physical PASS could have permitted those later stages. The new feasibility baseline is the
 **original cosine** 8192/16384 levels, with <=0.75 uncertainty ratios at both
 levels; plan 040's worse global-guide baseline is not substituted. These are
 CPU proposal checks, not eligible references or a new GI quality result.
@@ -145,12 +146,33 @@ registers that filesystem repair before any new GPU run. Corrected isolated
 passes all five compile/link steps and unchanged-active-input checks; the
 calibration wrapper now requires its v2 binaries. Build 156 and its known
 source-identified defect are retained unchanged; no runtime failure was observed
-or hidden. GPU sizing 157 / calibration 158 remain unexecuted. Physical 152
-continues in its original process, with actual first-scene seed payloads saved.
+or hidden. GPU sizing 157 / calibration 158 remain unexecuted at build publication. The
+user subsequently stopped the physical-152 process tree (161); all 171 saved
+payload/log/status files remain retained and no old workflow is restarted.
+
+
+
+Current reference view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json),
+prospectively registered in [plan 046](lanes/n010-comparison-readiness/experiments/046-prospective-directional-corpus-admission.md),
+reverifies all sixteen already eligible references: fifteen original CPU slots
+and the previously qualified hybrid C4 B2 slot. All 6,043 recorded input hashes
+were rechecked unchanged at the stop checkpoint. The full 24-slot map retains
+eight pending targets (C1/C2/C3/C4 B8, C5/C6 both transports); no new proposal
+reference is admitted. Historical view 127 and all failed/partial acquisitions
+are retained. Whole-corpus readiness remains NOT_READY.
+
+User-requested stop [161](lanes/n010-comparison-readiness/results/161-user-requested-directional-workflow-stop.json)
+records verified termination of the three physical-152/controller/native
+processes and two empty post-stop research-worker scans. Seven of seventeen
+scene rows passed; A6a was interrupted, and the final eight physical checks,
+two iid crosschecks, state/prefix 153 and feasibility 154 remain uncompleted.
+The controller's saved RUNNING label is stale after actual PID termination.
+This is an operational interruption, not a scientific FAIL or a cap failure.
+The stopped workflow is not restarted; no threshold or final gate is relaxed.
 
 | Completion requirement | Current state / next action |
 | --- | --- |
-| All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
+| All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Current full-slot view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json) reverifies those sixteen eligible targets and retains eight pending targets; full-corpus admission remains false. View 127 is historical. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
 | Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
 | Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
 | Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Source/ledger audit [133](lanes/n010-comparison-readiness/results/133-current-and-historical-memory-evidence-audit.json) verifies current allocation hooks and 16 current-binary diagnostic memory ledgers, distinguishing 65 historical-binary pilot rows. This is not accepted timing. Quiet sizing 046 now passes all sixteen boundaries; accepted 029 was user-stopped (150), with two completed boundaries failing; a valid full calibration remains required. |
