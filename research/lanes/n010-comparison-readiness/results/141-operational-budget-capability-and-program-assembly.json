@@ -1,0 +1,86 @@
+{
+  "schema": "n010-operational-budget-capability-and-program-assembly/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "native_acquisition_run": false,
+  "eligible_for_references": false,
+  "source_commit": "5add08fa68e637c4451097f4e6912ce31dc54ec3",
+  "classification": "OFFLINE_OPERATIONAL_CAPABILITY_AND_SOURCE_ASSEMBLY_ONLY",
+  "inputs": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/039-operational-cpu-budget-continuation.md": "a19745e78404fe46160de635ee171f34208c24613664200735f38b728445c21b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/budget_reference_provenance.py": "74147a9b5082e855cc1b221ee6a8c5f6afd56559c058f5d970a752858218b851",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_budget_references.py": "0b885f95751f3d351d150b540841ca1caf287fabfef77da22a22cc25eddbe92e",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/retire_point_guided_at_boundary.py": "4f225d362c1adaa355a9c8fdacbff53d52d7686c107d745233a987c39ad6f105",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/launch_budget_continuation.py": "e1555adfad91ac613f7e23366fe37828dd2328e4824ca721f47a90193e222ffd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/finish_budget_readiness.py": "f0e502947890b17bbb689be8c581ce2d6db8d958022c94338f66f6e173e6bc54",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight_budget.py": "fe44c307eb1e842f7ac748a62548cb885aac4099700f13eaf5f4df2adc6d0cdc",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/retire_budget_redundant_hybrid.py": "ce27d3808a2d984da019d24374a54a75fe5ed3dd06326829a9a0539d8f73fa81",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/audit_budget_capability.py": "02e2445a1e0867cdfef5b11bac01638e8e23e8ecda8be73e273c2f3488184f6c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_point_guided_references.py": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/qualification-adapter.py.txt": "d544a863a72b0cdf63a1ea76f8447c5f1853afd1538c0022c98becd25185c6b5",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/finish_replayed_readiness.py": "4591d6d4e4c8af20af12dc1fc55fcc64d2399137b502c65a539358a0a3e4c9c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/comparison-adapter.py.txt": "e3482284f644c11d414adcf092b2fa04d81b9accf0778f09b031f403f1aeca4f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/comparison-final.py.txt": "9f48e3f800a4e51b69f7cda59274006d0d80c7a415fe14ac870004dac7428aa8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight_replayed.py": "8387513530a32db29b60848b44b31cfe98832c881f1f4fbeaae81405077850b1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/preflight-adapter.py.txt": "7fe792e8b31c93448b1141def715523315e283556a7fcd39d54cd76703aaca9e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/preflight-final.py.txt": "6a33b634c825cf50cc27dc51e0b0173a973bf0a54653d503483f5df4c67bc5d1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/retire_qualified_redundant_hybrid.py": "85f4350d1f7472a01ac81f0f332b71723e58e1686ae0d02bc4a569a8c7fe7592",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/retirement-adapter.py.txt": "af5e4a57b844be7d8ebb3f6dc3eba720caad4390243fae7308e12ab4bfce07ef",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/child.stdout.json": "8ba07206caeb55a98858cd0beb2be3bf6f36ec4fd2526c02cf3ad0b5803f0455",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/child.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "programs": [
+    {
+      "name": "qualification",
+      "guarded_source": "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_point_guided_references.py",
+      "adapter_program": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/qualification-adapter.py.txt",
+      "adapter_compiles": true
+    },
+    {
+      "name": "comparison",
+      "guarded_source": "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/finish_replayed_readiness.py",
+      "adapter_program": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/comparison-adapter.py.txt",
+      "adapter_compiles": true,
+      "final_program": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/comparison-final.py.txt",
+      "final_compiles": true,
+      "final_program_not_executed": true
+    },
+    {
+      "name": "preflight",
+      "guarded_source": "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight_replayed.py",
+      "adapter_program": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/preflight-adapter.py.txt",
+      "adapter_compiles": true,
+      "final_program": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/preflight-final.py.txt",
+      "final_compiles": true,
+      "final_program_not_executed": true
+    },
+    {
+      "name": "retirement",
+      "guarded_source": "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/retire_qualified_redundant_hybrid.py",
+      "adapter_program": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/budget-capability-and-program-assembly-v1/retirement-adapter.py.txt",
+      "adapter_compiles": true
+    }
+  ],
+  "scope": "Fresh Python CPU limit witness and exact guarded program construction; no sampler invocation, acquisition, runtime regression validation or readiness",
+  "actual_fresh_child": {
+    "command": [
+      "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python",
+      "-c",
+      "import json,os,resource; print(json.dumps({\"uid\":os.getuid(),\"cpu_seconds\":list(resource.getrlimit(resource.RLIMIT_CPU)),\"address_space_bytes\":list(resource.getrlimit(resource.RLIMIT_AS))}))"
+    ],
+    "returncode": 0,
+    "observed": {
+      "uid": 1000,
+      "cpu_seconds": [
+        691200,
+        691200
+      ],
+      "address_space_bytes": [
+        4294967296,
+        4294967296
+      ]
+    },
+    "role": "Python resource capability witness; no renderer or reference computation"
+  }
+}

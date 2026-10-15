@@ -697,6 +697,12 @@
       "status": "posthoc-second-prefix-provenance-and-cpu-budget-risk",
       "result": "137-second-point-guided-level-and-cpu-budget.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-141",
+      "status": "operational-child-limit-capability-and-program-assembly-only",
+      "result": "141-operational-budget-capability-and-program-assembly.json",
+      "gpu_run": false
     }
   ]
 }

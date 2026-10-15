@@ -402,3 +402,32 @@ all 24 references or exercise the point-guided-reference branch. Missing 044,
 048 and 029 remain explicit failures. New sampling use requires a separately
 recorded full view/provenance/scheduling transition and a fresh final audit;
 119 is retained and does not manufacture absent final 047.
+
+### Operational CPU budget continuation (current plan 039)
+
+The original point-guided CPU guard counts aggregate thread CPU, separately from
+the wall guard. Post-hoc audit 137 records a possible high-level interruption;
+no interruption or statistical cap failure has been observed.
+
+`audit_budget_capability.py --work NEW_WORK --output NEW_JSON` constructs the
+guarded programs, retains their exact assembled source and checks a fresh Python
+child's actual 691200 CPU-second / 4 GiB limits without invoking the sampler.
+Actual result 141 passes. This is operational capability, not reference admission.
+
+`launch_budget_continuation.py --work NEW_WORK` first waits via
+`retire_point_guided_at_boundary.py` for a complete child-free boundary under
+prospective plan 039. Transition 138 verifies every imported prefix and archives
+old mutable workflow bytes before retiring only the original queue, qualifier,
+idle comparison driver and idle retirement waiter. A race with a new native
+resumes the parents without interrupting that native. The hybrid queue continues.
+The current launcher and boundary monitor are waiting; 138 has not executed.
+
+Only after PASS 138, launcher result 139 records independent launches of
+`qualify_budget_references.py` (result 140), `retire_budget_redundant_hybrid.py`
+(result 142) and `finish_budget_readiness.py`. The qualifier continues exact own
+prefixes in place, refuses unexpected partials/overwrites, and hashes actual
+pre-exec resource receipts. `budget_reference_provenance.py` replays the unchanged
+physical/statistical gates plus imported-prefix and receipt identities.
+`readiness_preflight_budget.py` retains the original six gates. Full selected
+references, pilots and accepted calibration are still required; there is no retry,
+sample/quality threshold change, GPU power change or new N-series lane.

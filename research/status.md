@@ -46,8 +46,15 @@ high-level invocation; current runtime limits and scientific gates are unchanged
 Prospective [plan 039](lanes/n010-comparison-readiness/experiments/039-operational-cpu-budget-continuation.md)
 prepares a child-free, fully audited prefix handoff to a fresh process with
 691200 aggregate CPU seconds and unchanged 43200 elapsed seconds / 4 GiB.
-The guarded wrappers and actual resource-capability witness are prepared;
-neither the witness nor transition 138 has executed at this checkpoint.
+Actual CPU capability/program-assembly witness
+[141](lanes/n010-comparison-readiness/results/141-operational-budget-capability-and-program-assembly.json)
+passes: a fresh unprivileged Python child establishes the declared bounds,
+and the guarded comparison/preflight programs assemble with all six gates.
+This is not sampler execution or readiness. Launcher PID 1403395 and boundary
+monitor PID 1403525 are actually waiting; no signal or transition 138 yet.
+Current native 1394060 and all original workflows continue unchanged until
+the verified child-free boundary. Subsequent acquisition 140 and budget-aware
+comparison/retirement replace their old workflow only after complete PASS 138.
 
 | Completion requirement | Current state / next action |
 | --- | --- |

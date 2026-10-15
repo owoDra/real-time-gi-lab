@@ -51,7 +51,11 @@ the explicit operational fix: verify a complete child-free prefix boundary,
 retain old workflow bytes, retire only its owned idle processes and continue
 the same prefixes in a fresh process with a 691200 aggregate CPU-second ceiling.
 The 43200 elapsed-second / 4 GiB guards and every scientific gate are unchanged.
-Capability proof and transition are pending; prepared code is not execution.
+Actual [141](results/141-operational-budget-capability-and-program-assembly.json)
+passes fresh unprivileged-child resource capability and guarded source assembly;
+it performs no sampler/GPU acquisition. Operational launcher 1403395 and boundary
+monitor 1403525 are live and waiting, with no signal yet. Transition 138 and
+continuation 140 remain pending. The current native keeps its original limits.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
