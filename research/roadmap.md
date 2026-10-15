@@ -254,9 +254,23 @@ three-dose sizing schedule, +20% target and dose cap are unchanged. This is
 actual GPU sizing/image equivalence, not accepted timing capability.
 
 Separate accepted calibration 158 has started with those frozen doses and the
-original eight-process schedule and thresholds. Its first C1 HWRT and software
+original eight-process schedule and thresholds. Its C1 HWRT, software and PT B2
 boundaries completed all eight blocks and **FAIL**; remaining boundaries are
 still running at this checkpoint. Removing bulk diagnostic output alone has
 not established the required timing precision. Retain every subsequent row,
 earlier 029 failures and all raw samples. No retry, correction or threshold
 relaxation follows from this partial observation. Final 047 remains pending.
+
+
+
+Prospective [recovery plan 047](lanes/n010-comparison-readiness/experiments/047-prospective-directional-control-recovery.md)
+prepares an explicit fresh control workflow after user interruption 161. It
+imports all seven completed scene exports byte-for-byte, retains their actual
+native commands as imports, acquires the other ten scenes once at new paths,
+and applies the complete unchanged seventeen-scene/eight-physical/two-iid gates.
+Separate 163/164/165 artifacts are required; old partial 152 and absent 153/154
+are never rewritten or relabelled. Guarded program assembly and Python source
+compilation succeed, with row numerical/analytic/iid source checks unchanged.
+No recovery acquisition/import branch, reference admission or new CPU worker
+has executed. Each entry point refuses other research workers and existing
+paths; GPU calibration 158 must actually terminate before CPU dispatch.

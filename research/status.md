@@ -181,19 +181,33 @@ three-dose sizing schedule, +20% target and dose cap are unchanged. This is
 actual GPU sizing/image equivalence, not accepted timing capability.
 
 Separate accepted calibration 158 has started with those frozen doses and the
-original eight-process schedule and thresholds. Its first C1 HWRT and software
+original eight-process schedule and thresholds. Its C1 HWRT, software and PT B2
 boundaries completed all eight blocks and **FAIL**; remaining boundaries are
 still running at this checkpoint. Removing bulk diagnostic output alone has
 not established the required timing precision. Retain every subsequent row,
 earlier 029 failures and all raw samples. No retry, correction or threshold
 relaxation follows from this partial observation. Final 047 remains pending.
 
+
+
+Prospective [recovery plan 047](lanes/n010-comparison-readiness/experiments/047-prospective-directional-control-recovery.md)
+prepares an explicit fresh control workflow after user interruption 161. It
+imports all seven completed scene exports byte-for-byte, retains their actual
+native commands as imports, acquires the other ten scenes once at new paths,
+and applies the complete unchanged seventeen-scene/eight-physical/two-iid gates.
+Separate 163/164/165 artifacts are required; old partial 152 and absent 153/154
+are never rewritten or relabelled. Guarded program assembly and Python source
+compilation succeed, with row numerical/analytic/iid source checks unchanged.
+No recovery acquisition/import branch, reference admission or new CPU worker
+has executed. Each entry point refuses other research workers and existing
+paths; GPU calibration 158 must actually terminate before CPU dispatch.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Current full-slot view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json) reverifies those sixteen eligible targets and retains eight pending targets; full-corpus admission remains false. View 127 is historical. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |
 | Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
 | Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
-| Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Source/ledger audit [133](lanes/n010-comparison-readiness/results/133-current-and-historical-memory-evidence-audit.json) verifies current allocation hooks and 16 current-binary diagnostic memory ledgers, distinguishing 65 historical-binary pilot rows. This is not accepted timing. Quiet sizing 046 now passes all sixteen boundaries; accepted 029 was user-stopped (150), with two completed boundaries failing; minimal-fixture sizing 157 also passes all sixteen image/memory checks; accepted 158 is running with its first two C1 boundaries failing. A valid full calibration remains required. |
+| Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Source/ledger audit [133](lanes/n010-comparison-readiness/results/133-current-and-historical-memory-evidence-audit.json) verifies current allocation hooks and 16 current-binary diagnostic memory ledgers, distinguishing 65 historical-binary pilot rows. This is not accepted timing. Quiet sizing 046 now passes all sixteen boundaries; accepted 029 was user-stopped (150), with two completed boundaries failing; minimal-fixture sizing 157 also passes all sixteen image/memory checks; accepted 158 is running with its first three C1 boundaries failing. A valid full calibration remains required. |
 | Final handoff | Idle continuation-v3 was retired without jobs (120). Later plan-037/038/039 waiters were stopped by the user (148); none is live. All 24 eligible references, full provenance and quiescence remain mandatory before unchanged pilots/calibration. See historical [134](lanes/n010-comparison-readiness/results/134-memory-evidence-scopes-and-quiescence-watch.md). Final 047 and decision remain pending, then distinct Lane M; no N011. |
 
 The additional DDGI family is pinned to RTXGI Vulkan on AMD, without CUDA:

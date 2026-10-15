@@ -380,7 +380,7 @@ three-dose sizing schedule, +20% target and dose cap are unchanged. This is
 actual GPU sizing/image equivalence, not accepted timing capability.
 
 Separate accepted calibration 158 has started with those frozen doses and the
-original eight-process schedule and thresholds. Its first C1 HWRT and software
+original eight-process schedule and thresholds. Its C1 HWRT, software and PT B2
 boundaries completed all eight blocks and **FAIL**; remaining boundaries are
 still running at this checkpoint. Removing bulk diagnostic output alone has
 not established the required timing precision. Retain every subsequent row,
@@ -416,3 +416,46 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
 
 All 24 eligible references, complete pilots and final six-gate handoff remain
 required even if this independent capability measurement eventually passes.
+
+
+
+Prospective [recovery plan 047](experiments/047-prospective-directional-control-recovery.md)
+prepares an explicit fresh control workflow after user interruption 161. It
+imports all seven completed scene exports byte-for-byte, retains their actual
+native commands as imports, acquires the other ten scenes once at new paths,
+and applies the complete unchanged seventeen-scene/eight-physical/two-iid gates.
+Separate 163/164/165 artifacts are required; old partial 152 and absent 153/154
+are never rewritten or relabelled. Guarded program assembly and Python source
+compilation succeed, with row numerical/analytic/iid source checks unchanged.
+No recovery acquisition/import branch, reference admission or new CPU worker
+has executed. Each entry point refuses other research workers and existing
+paths; GPU calibration 158 must actually terminate before CPU dispatch.
+
+### Prepared interrupted-control recovery commands (plan 047)
+
+Not run. Execute each command only after actual termination of calibration 158
+and all other research workers, and only after complete PASS of the preceding
+step. The old workflow is not restarted. These paths must not already exist.
+There is no automatic waiting/retry controller.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/recover_primary_direction_physical.py \
+  --work out/research/n010-comparison-readiness/primary-direction-physical-recovery-v1 \
+  --output research/lanes/n010-comparison-readiness/results/163-primary-direction-recovered-physical-controls.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/validate_recovered_primary_direction_prefix.py \
+  --work out/research/n010-comparison-readiness/primary-direction-prefix-proof-recovery-v1 \
+  --output research/lanes/n010-comparison-readiness/results/164-primary-direction-recovered-all-state-and-prefix.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_recovered_primary_direction_feasibility.py \
+  --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1 \
+  --output research/lanes/n010-comparison-readiness/results/165-primary-direction-recovered-bounded-feasibility.json
+```
+
+Complete recovery controls alone do not admit references. The original
+plan-046 intake still refuses incomplete 152; an explicit new-chain adapter
+and full payload/command/resource replay remain required before that intake.
+All sixteen retained eligible slots, eight pending slots and final gates stay.
