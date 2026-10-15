@@ -110,7 +110,8 @@ passes complete prefix provenance but finds worse first-level precision than
 the original sampler. The completed 16384 level also fails absolute/relative
 p99 gates (9.06741e-5 / 6.79678%); full two-level provenance passes in
 [137](lanes/n010-comparison-readiness/results/137-second-point-guided-level-and-cpu-budget.json).
-The 32768 level is executing. Observed aggregate child CPU time also identifies
+The 32768 level was interrupted by the user-requested stop (148), not completed.
+Observed aggregate child CPU time also identifies
 a possible operational guard interruption at high levels. Resolve that budget
 prospectively while retaining own prefixes, scientific gates, sample cap and
 all outcomes; no runtime limits have been changed. Forecasts do not establish
@@ -119,10 +120,17 @@ Prospective [plan 039](lanes/n010-comparison-readiness/experiments/039-operation
 registers a clean completed-prefix workflow transition and fresh-process CPU
 ceiling consistent with sixteen threads and the unchanged wall guard. Actual
 [141](lanes/n010-comparison-readiness/results/141-operational-budget-capability-and-program-assembly.json)
-passes fresh-child resource capability and guarded source assembly. Launcher
-and completed-boundary monitor are live, without signaling current work.
-Actual boundary retirement 138, continuation 140 and accepted readiness remain
-pending; the witness does not qualify references or run the Renderer.
+passes fresh-child resource capability and guarded source assembly. The user's
+later stop request terminated both reference acquisitions and all old
+launcher/waiter processes ([148](lanes/n010-comparison-readiness/results/148-user-requested-reference-workflow-stop.json));
+470 payload files remain retained. No 138/139/140 transition executed and no
+statistical cap failure is claimed. There is no live comparison or handoff waiter.
+
+The separate prospective [plan 040](lanes/n010-comparison-readiness/experiments/040-prospective-light-surface-reference-sampling.md)
+light-surface proposal has complete sampling-only [build 144](lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json).
+Unchanged physical controls 145 are executing. All-state/prefix proof and bounded
+C1 B8 two-level feasibility are required before a new all-nine-slot acquisition
+proposal. The frozen 24-slot scope, eligibility and comparison gates remain.
 
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
@@ -131,7 +139,7 @@ its exact read bytes are retained. API delegation 117 passes the existing
 fifteen-slot subset; that historical check did not execute the new-variant branch
 (now exercised by first-level audit 136). The
 old acquisition queue terminated on the 113 failure without dispatch. A fresh
-plan-036 queue now executes 128 after complete 125/126 PASS. Neither queue,
+plan-036 queue executed 128 after complete 125/126 PASS and was later stopped in 148. Neither queue,
 prepared provenance nor a subset audit passes final comparison readiness.
 
 Separate final-preflight adapter 033 reuses the exact original six-gate source

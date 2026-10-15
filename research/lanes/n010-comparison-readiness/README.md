@@ -18,16 +18,16 @@ new physical sampler validation and comparison harness work continue.
 Hybrid numerical/physical/state/prefix proofs 098/099/101 are complete PASS;
 actual first-reference provenance [123](results/123-first-qualified-hybrid-provenance-audit.json)
 passes C4 B2 at 16384/32768 with 5,413 unchanged read identities. The hybrid
-queue continues. At the user's request, both old CPU recovery jobs were stopped
+queue was subsequently stopped in 148. At the user's earlier request, both old CPU recovery jobs were stopped
 with all complete/partial files retained (124); idle comparison waiter 120 was
 retired without jobs. Point-guided 113 remains FAIL after an analysis wrapper
 error; post-hoc replay 125 passes the original physical/iid checks without new
 rendering. Fresh [126](results/126-replayed-point-guided-all-state-and-prefix.json)
 now passes all 24 low-dose/two actual-level cases and 78 native attempts;
 [131](results/131-replayed-point-guided-proof-chain-audit.json) rechecks the complete
-proof chain. Fresh nine-slot acquisition 128 has actually started. These runs
+proof chain. Nine-slot acquisition 128 started, then was interrupted in 148. These runs
 and comparison view 127 are separate from the historical failed attempts.
-New comparison execution waits for
+New comparison execution still requires
 all 24 eligible references, complete provenance and quiescence. Interim
 preflight 129 is **NOT_READY**; final pilots/calibration/047 remain pending.
 
@@ -40,7 +40,7 @@ About 80.63% of paths terminate with guided null continuations, retaining prior
 radiance contributions. This diagnostic does not establish bias or cap failure.
 The completed 16384-spp level also fails (9.06741e-5 / 6.79678%). Full two-level
 provenance passes in CPU-only post-hoc [137](results/137-second-point-guided-level-and-cpu-budget.json);
-32768 spp is executing. Its process snapshots show 42,294.43 aggregate CPU
+The 32768-spp attempt was interrupted in 148. Its earlier process snapshots show 42,294.43 aggregate CPU
 seconds in reaped children through 16384 spp, including bookkeeping. A linear
 last-interval resource forecast exceeds the fixed 172,800 CPU-second guard;
 prospective operational repair is required before a conflicting invocation.
@@ -53,15 +53,25 @@ the same prefixes in a fresh process with a 691200 aggregate CPU-second ceiling.
 The 43200 elapsed-second / 4 GiB guards and every scientific gate are unchanged.
 Actual [141](results/141-operational-budget-capability-and-program-assembly.json)
 passes fresh unprivileged-child resource capability and guarded source assembly;
-it performs no sampler/GPU acquisition. Operational launcher 1403395 and boundary
-monitor 1403525 are live and waiting, with no signal yet. Transition 138 and
-continuation 140 remain pending. The current native keeps its original limits.
+it performs no sampler/GPU acquisition. The user's later request stopped all ten
+old native/launcher/waiter processes, including the operational handoff and
+comparison watchers ([148](results/148-user-requested-reference-workflow-stop.json)).
+All 470 payload files and summary bytes remain retained. No old research process
+remained at the stop check; no 138/139/140 transition executed, and interrupted
+32768-spp outputs are incomplete rather than statistical cap failures.
+
+The separate [plan-040](experiments/040-prospective-light-surface-reference-sampling.md)
+light-surface candidate has complete standalone/prefix [build 144](results/144-light-surface-proposal-build.json).
+Only the proposal changes; source checks retain the original radiance evaluator.
+Physical 145 is acquiring all unchanged seventeen-scene/four-seed controls.
+All-state/prefix proof and two-level feasibility must pass before any separate
+corpus acquisition/admission proposal; no reference is qualified by the build.
 
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
 current-binary diagnostic ledgers, explicitly separating historical binaries
-and accepted timing. Plan-038 watcher is actually waiting to retire redundant
-hybrid acquisition only after full selected-reference qualification/provenance.
+and accepted timing. The historical plan-038 watcher was stopped in 148; any later comparison
+still requires full selected-reference qualification/provenance and quiescence.
 No retirement or final readiness is claimed; all partial evidence is preserved.
 
 ## Earlier execution checkpoints

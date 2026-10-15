@@ -36,7 +36,8 @@ are retained. This is diagnostic, not proof of bias or cap failure. The next
 16384-spp level also fails both gates: absolute p99 9.06741e-5, relative p99
 6.79678%. Full two-level provenance passes in post-hoc CPU audit
 [137](lanes/n010-comparison-readiness/results/137-second-point-guided-level-and-cpu-budget.json);
-32768 spp is executing under unchanged rules. The audit also records an
+The later 32768-spp attempt was interrupted by the user's process-stop request,
+not completed or classified. The audit also records an
 operational CPU-budget risk: 42,294.43 aggregate CPU seconds for completed
 children through 16384 spp projects linearly to about 338,355 CPU seconds for
 the last interval, above the 172,800-second invocation guard. This includes
@@ -50,20 +51,25 @@ Actual CPU capability/program-assembly witness
 [141](lanes/n010-comparison-readiness/results/141-operational-budget-capability-and-program-assembly.json)
 passes: a fresh unprivileged Python child establishes the declared bounds,
 and the guarded comparison/preflight programs assemble with all six gates.
-This is not sampler execution or readiness. Launcher PID 1403395 and boundary
-monitor PID 1403525 are actually waiting; no signal or transition 138 yet.
-Current native 1394060 and all original workflows continue unchanged until
-the verified child-free boundary. Subsequent acquisition 140 and budget-aware
-comparison/retirement replace their old workflow only after complete PASS 138.
+This is not sampler execution or readiness. The user's subsequent process-stop
+request terminated ten old native/launcher/waiter processes, including both
+reference acquisitions and the plan-039 handoff monitors
+([148](lanes/n010-comparison-readiness/results/148-user-requested-reference-workflow-stop.json)).
+All 470 acquired payload files and mutable summary bytes were preserved.
+No old research process remained at the stop check. There is no live automatic
+handoff or comparison waiter; 138/139/140 were not executed. Interrupted
+32768-spp outputs remain incomplete, and no statistical cap failure is claimed.
 
 Separate prospective [plan 040](lanes/n010-comparison-readiness/experiments/040-prospective-light-surface-reference-sampling.md)
 registers a light-visible-surface proposal for offline references, motivated by
 the global guide's precision losses. It retains 75% cosine support and the
-unchanged radiance evaluator, with explicit density correction. Build, complete
-physical/state/prefix proofs and a bounded two-level feasibility screen are
-required before any acquisition/admission proposal. Current global-guide
-acquisition and plan-039 workflow remain unchanged. This candidate has not run
-or qualified any reference at this checkpoint.
+unchanged radiance evaluator, with explicit density correction.
+[Build 144](lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json)
+passes both standalone/prefix compilation and sampling-only source checks.
+Physical 145 is acquiring the unchanged seventeen-scene/four-seed controls.
+Complete physical/state/prefix proofs and a bounded two-level feasibility screen
+remain required before any acquisition/admission proposal. This separate CPU
+candidate does not restart the stopped workflows or qualify any reference yet.
 
 | Completion requirement | Current state / next action |
 | --- | --- |
@@ -71,7 +77,7 @@ or qualified any reference at this checkpoint.
 | Correctness diagnostics | Actual all-pixel GPU keys and BF-P replay pass (002/007). Measured direct disagreements are included. Sponza direct max-relative-error-1.0 pixels remain **UNRESOLVED / 未解決**; CPU primary-tie diagnosis [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports a mechanism, but a GPU repair is unverified. |
 | Full quality/memory pilot | Controlled corpus and Sponza one-bounce pilot executed. Finish C1 B8 ladder 043 / combined 044 and full Sponza dynamic cohort 048 after eligible references. Quality FAIL and software churn `UNSUPPORTED_IN_CAPTURE_API` remain outcomes. |
 | Full Renderer timing capability | Loaded sizing 035 passes 16 boundaries; failures 027/028 remain retained. Source/ledger audit [133](lanes/n010-comparison-readiness/results/133-current-and-historical-memory-evidence-audit.json) verifies current allocation hooks and 16 current-binary diagnostic memory ledgers, distinguishing 65 historical-binary pilot rows. This is not accepted timing. Quiet sizing 046 and accepted eight-process calibration 029 remain required. |
-| Final handoff | Idle continuation-v3 was retired without jobs (120). Fresh plan-037 driver waits for all 24 eligible references, full provenance and quiescence before unchanged pilots/calibration. A separate plan-038 watcher will retire only redundant hybrid work after complete selected-reference proof; it is waiting, no retirement yet. See [134](lanes/n010-comparison-readiness/results/134-memory-evidence-scopes-and-quiescence-watch.md). Final 047 and decision remain pending, then distinct Lane M; no N011. |
+| Final handoff | Idle continuation-v3 was retired without jobs (120). Later plan-037/038/039 waiters were stopped by the user (148); none is live. All 24 eligible references, full provenance and quiescence remain mandatory before unchanged pilots/calibration. See historical [134](lanes/n010-comparison-readiness/results/134-memory-evidence-scopes-and-quiescence-watch.md). Final 047 and decision remain pending, then distinct Lane M; no N011. |
 
 The additional DDGI family is pinned to RTXGI Vulkan on AMD, without CUDA:
 [source](lanes/n010-comparison-readiness/results/021-ddgi-source-provenance.json),

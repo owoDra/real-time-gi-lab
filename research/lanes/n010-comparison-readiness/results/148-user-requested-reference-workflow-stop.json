@@ -1,0 +1,100 @@
+{
+  "schema": "n010-user-requested-reference-workflow-stop/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "USER_REQUESTED_OLD_REFERENCE_WORKFLOWS_STOPPED_PARTIALS_RETAINED",
+  "source_commit": "a5ff5b0d912d70895e29b921bfcaead2131900f6",
+  "authority": "User: 古いプロセスが残っている可能性があるので確認して止めて",
+  "observed_utc": "2026-10-15T01:28:53.500979+00:00",
+  "record_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/process-cleanup-20261015T012852Z/cleanup.json",
+  "record_sha256": "cde49189ac5ee3b89c5f92e2c0d4e3955d004fc4d9c69efeec7a0af8604e020d",
+  "terminated_pids": [
+    1403395,
+    1403525,
+    1370691,
+    1349762,
+    1347641,
+    1362414,
+    921120,
+    1130793,
+    1394060,
+    1415461
+  ],
+  "all_old_processes_stopped": true,
+  "remaining_research_processes_at_stop": [],
+  "retained_payload_inventory": {
+    "hybrid-reference-ladders-v1": {
+      "files": 399,
+      "bytes": 1047464445
+    },
+    "point-guided-replayed-reference-ladders-v1": {
+      "files": 71,
+      "bytes": 203580157
+    }
+  },
+  "preservation_checks": [
+    {
+      "directory": "hybrid-reference-ladders-v1",
+      "all_recorded_files_preserved": true
+    },
+    {
+      "directory": "point-guided-replayed-reference-ladders-v1",
+      "all_recorded_files_preserved": true
+    },
+    {
+      "path": "research/lanes/n010-comparison-readiness/results/121-hybrid-reference-qualification.json",
+      "bytes_unchanged": true
+    },
+    {
+      "path": "research/lanes/n010-comparison-readiness/results/128-replayed-point-guided-reference-qualification.json",
+      "bytes_unchanged": true
+    },
+    {
+      "path": "research/lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json",
+      "bytes_unchanged": true
+    }
+  ],
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/process-cleanup-20261015T012852Z/cleanup.json": "cde49189ac5ee3b89c5f92e2c0d4e3955d004fc4d9c69efeec7a0af8604e020d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-reference-ladders-v1/C4_T_B2/qualification.json": "1a7a9561881dfae1da6498a9cf11890d9ba7d3d0cc84ba1945c8210c10be50f7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-reference-ladders-v1/C4_T_B8/qualification.json": "b8aba9f1b6ef718f4385556ad6970a1ac2655f7f87afd61d54ae873cb465835b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-replayed-reference-ladders-v1/C1_T_B8/qualification.json": "a7dae7d253e56b29c63f6144924211998a9bbf9a179521e846590e0199721d72",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/121-hybrid-reference-qualification.json": "631de21f448328518f446e9412af3ca50a144ca3e26fd0f8990308d64e25b0c4",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/128-replayed-point-guided-reference-qualification.json": "7d173eba99a38594ee4d98b643682629d02ea3fab12f9a4eb622a2cddfc8273e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/144-light-surface-proposal-build.json": "6fac2acbbd891c69a83b396fae80b5abe38675f4666fe3aac82d309063ea7c59",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/process-cleanup-20261015T012852Z/point-guided-replayed-reference-ladders-v1-inventory.json": "4bc64b70fd2fddcf92d8027e5ddc3c4af74e07d47cb860d9799f3629fd6bd9ee",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/process-cleanup-20261015T012852Z/hybrid-reference-ladders-v1-inventory.json": "1189fd8c7ee1acdeea9b61f1ba93ea155ec688c58ca7f3f7c932a10d22df2654"
+  },
+  "scientific_qualification_complete": false,
+  "cap_failure_claimed": false,
+  "power_settings_changed": false,
+  "plan039_boundary_transition_executed": false,
+  "automatic_continuation_stopped": true,
+  "last_complete_levels": [
+    {
+      "directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-reference-ladders-v1/C4_T_B2",
+      "classification": "STATISTICALLY_ELIGIBLE",
+      "spp": 32768,
+      "max_active_abs_p99": 4.008181858807803e-06,
+      "max_active_rel_p99": 0.00765538534324151,
+      "frozen_cap": 262144
+    },
+    {
+      "directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/hybrid-reference-ladders-v1/C4_T_B8",
+      "classification": "INELIGIBLE",
+      "spp": 16384,
+      "max_active_abs_p99": 5.1993711385875956e-05,
+      "max_active_rel_p99": 0.041462249040289494,
+      "frozen_cap": 262144
+    },
+    {
+      "directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/point-guided-replayed-reference-ladders-v1/C1_T_B8",
+      "classification": "INELIGIBLE",
+      "spp": 16384,
+      "max_active_abs_p99": 9.067407343536626e-05,
+      "max_active_rel_p99": 0.06796777696209247,
+      "frozen_cap": 262144
+    }
+  ],
+  "scope": "Operational stop only. Neither an eligible reference nor a statistical cap outcome. Existing summaries and interrupted native outputs are retained byte-for-byte; this does not modify historical 124."
+}
