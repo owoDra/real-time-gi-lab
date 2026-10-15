@@ -200,7 +200,7 @@ if __name__ == '__main__':
             ratio = row['max_active_abs_p99']/baseline[spp]['max_active_abs_p99']
             result['levels'].append({'spp': spp, 'screen': screen, 'payload_sha256': payloads,
                 'primary_direct_emission_exact_to_baseline': True,
-                'resource_receipt_sha256': sha(receipt_path), 'absolute_p99_ratio_to_global_guide': ratio,
+                'resource_receipt_sha256': sha(receipt_path), 'absolute_p99_ratio_to_original_cosine': ratio,
                 'feasibility_pass': bool(ratio <= 0.75 and row['active_fraction'] == 1.0
                     and (spp == LEVELS[0] or row['signal_support_stable_vs_previous']))})
             attempt['pass'] = True
