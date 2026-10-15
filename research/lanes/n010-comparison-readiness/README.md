@@ -456,6 +456,42 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
 ```
 
 Complete recovery controls alone do not admit references. The original
-plan-046 intake still refuses incomplete 152; an explicit new-chain adapter
-and full payload/command/resource replay remain required before that intake.
+plan-046 intake still refuses incomplete 152. The conditional Amendment-1
+adapter below supplies the explicit new-chain dispatch; its actual full
+payload/command/resource replay is still required before reference admission.
 All sixteen retained eligible slots, eight pending slots and final gates stay.
+
+
+
+[Plan-047 Amendment 1](experiments/047-prospective-directional-control-recovery.md)
+now supplies the explicit recovered-chain provenance API and eight-slot
+qualifier. It requires 151/163/164/165, checks the seven imported actual
+commands/payloads and ten fresh physical invocations, and replays the original
+feasibility/native-prefix/resource proof. Source comparison confirms that the
+original numerical gates and complete ladder program are byte-identical after
+only declared proof/file dispatch, quiescence and fixed-output guards. CLI
+assembly passes. No numerical/import/admission branch or new sample has run;
+163/164/165/166 remain absent, and the original API still refuses partial 152.
+The sixteen retained slots, eight pending slots, view 160 and all final gates
+are unchanged. Current calibration 158 has completed ten static boundaries:
+C1 PT B8 passes; the other nine fail. Its six churn boundaries remain pending
+and the overall acquisition is still INCOMPLETE.
+
+### Conditional eight-slot intake after recovered controls
+
+Prepared only; no acquisition has run. Only after complete actual PASS
+151/163/164/165 and no remaining CPU/GPU research worker:
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/qualify_recovered_primary_direction_references.py \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/primary-direction-reference-ladders-v1 \
+  --output research/lanes/n010-comparison-readiness/results/166-recovered-primary-direction-reference-qualification.json
+```
+
+This explicit Amendment-1 adapter supersedes the original proof dispatch for
+future new-variant acquisition only. The original plan-046 API remains frozen
+with view 160; original/hybrid references retain their original proof chains.
+Full 24-slot admission, all pilots, accepted calibration and six-gate final
+047 remain mandatory. A partial or failed 158 cannot pass readiness.

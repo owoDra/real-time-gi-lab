@@ -202,6 +202,22 @@ No recovery acquisition/import branch, reference admission or new CPU worker
 has executed. Each entry point refuses other research workers and existing
 paths; GPU calibration 158 must actually terminate before CPU dispatch.
 
+
+
+[Plan-047 Amendment 1](lanes/n010-comparison-readiness/experiments/047-prospective-directional-control-recovery.md)
+now supplies the explicit recovered-chain provenance API and eight-slot
+qualifier. It requires 151/163/164/165, checks the seven imported actual
+commands/payloads and ten fresh physical invocations, and replays the original
+feasibility/native-prefix/resource proof. Source comparison confirms that the
+original numerical gates and complete ladder program are byte-identical after
+only declared proof/file dispatch, quiescence and fixed-output guards. CLI
+assembly passes. No numerical/import/admission branch or new sample has run;
+163/164/165/166 remain absent, and the original API still refuses partial 152.
+The sixteen retained slots, eight pending slots, view 160 and all final gates
+are unchanged. Current calibration 158 has completed ten static boundaries:
+C1 PT B8 passes; the other nine fail. Its six churn boundaries remain pending
+and the overall acquisition is still INCOMPLETE.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Current full-slot view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json) reverifies those sixteen eligible targets and retains eight pending targets; full-corpus admission remains false. View 127 is historical. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |

@@ -57,3 +57,27 @@ complete controls alone admit a new reference. All six readiness gates remain.
 Direct max-relative-error-1.0 pixels remain UNRESOLVED / 未解決 and included.
 No N011, CUDA, Actions, power/clock change, active Renderer promotion or
 N001–N009 result modification.
+
+## Amendment 1 — explicit corpus intake for the recovered proof identities
+
+Registered before 163/164/165 or any new eight-slot corpus acquisition.
+The separate recovered provenance API substitutes actual 151/163/164/165
+identities for the uncompleted old 151/152/153/154 chain. It must independently
+check the fixed seven imported commands/payloads against immutable 152/161,
+the fresh seventeen-scene copies, the ten registered new native commands and
+the full recovered physical/state/prefix/feasibility scope. All original
+numerical gates remain guarded and unchanged. Do not create successful old
+153/154 artifacts or accept a recovered summary without actual payload replay.
+
+The new qualifier retains plan-046's exact sixteen existing eligible targets,
+eight selected pending targets, computational variant, output root, six sample
+levels, four seeds, convergence/cap rules, resource limits and first qualifying
+pair. C1 B8 may import only its own complete 165 prefixes, keeping the actual
+165 commands, resource receipts and native metadata. It may not import old
+cosine/global/light-surface samples or treat imports as new native executions.
+
+Use result 166 for the fresh eight-slot qualification summary; refuse existing
+work/output and other live research workers. Do not dispatch until complete
+151/163/164/165 PASS and actual GPU quiescence. The frozen original API and view
+160 are unchanged; old variants continue through their original/hybrid verifier.
+New API source assembly alone proves neither import execution nor admission.
