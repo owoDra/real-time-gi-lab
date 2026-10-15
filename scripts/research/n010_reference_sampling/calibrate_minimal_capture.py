@@ -17,7 +17,7 @@ if __name__ == '__main__':
     if sha(original) != digest:
         raise ValueError('original scientific calibration changed')
     source = original.read_text()
-    fixture = ROOT/'out/research/n010-comparison-readiness/minimal-calibration-build-v1'
+    fixture = ROOT/'out/research/n010-comparison-readiness/minimal-calibration-build-v2'
     for name in ('phos-n010-capture','phos-n010-pixel-pt'):
         source = once(source,"ROOT/'build/n009/"+name+"'",repr(fixture/name).replace('PosixPath','Path'))
     source = once(source,' env=os.environ.copy();cell=',
@@ -38,11 +38,11 @@ def schedule''')
  if a.boundaries:raise ValueError('plan 044 requires all sixteen boundaries')
  _require_quiet()
  _inputs={}
- _build=_read(LANE/'results/156-minimal-calibration-fixture-build.json',_inputs)
- if not _build['complete'] or not _build['all_pass'] or not _build['source_inverse_proof'] or not _build['active_inputs_byte_unchanged']:
+ _build=_read(LANE/'results/159-minimal-calibration-directory-fix-build.json',_inputs)
+ if _build['schema']!='n010-minimal-calibration-fixture-build/2' or not _build['complete'] or not _build['all_pass'] or not _build['source_inverse_proof'] or not _build['active_inputs_byte_unchanged']:
   raise ValueError('minimal fixture build proof incomplete/failed')
  _check_files(_build['input_sha256'],_inputs)
- _fixture=ROOT/'out/research/n010-comparison-readiness/minimal-calibration-build-v1'
+ _fixture=ROOT/'out/research/n010-comparison-readiness/minimal-calibration-build-v2'
  _check_files({str(_fixture/name):h for name,h in _build['generated_sha256'].items()},_inputs)
  _baseline=_read(LANE/'results/046-calibration-quiet-sizing.json',_inputs)
  if sha(LANE/'results/046-calibration-quiet-sizing.json')!='2ab654662ffdef9b873179d95a9142eea7e18ad0635cec37601c51f0f828d36d':
@@ -51,6 +51,7 @@ def schedule''')
   raise ValueError('original complete quiet sizing proof required')
  if _baseline['lock_sha256']!=sha(a.lock):raise ValueError('original quiet sizing lock differs')
  for _path in (Path(_wrapper),Path(_original),LANE/'experiments/044-prospective-minimal-calibration-capture.md',
+  LANE/'experiments/045-minimal-capture-output-directory-repair.md',
   LANE/'experiments/001-comparison-readiness.md',LANE/'experiments/009-timing-calibration-execution.md',
   LANE/'experiments/012-amendment-5-sizing-probe-range.md',Path(_replay_file),Path(_quiet_file),
   ROOT/'build/n009/n010-neutral-work-verify',ROOT/'scripts/run_with_vulkan.sh'):
