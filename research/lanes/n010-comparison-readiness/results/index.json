@@ -757,6 +757,18 @@
       "status": "user-requested-calibration-stop-partials-retained",
       "result": "150-user-requested-calibration-stop.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-151",
+      "status": "complete-sampling-only-directional-standalone-and-prefix-build",
+      "result": "151-primary-direction-proposal-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-155",
+      "status": "posthoc-cpu-calibration-capture-volume-and-order-diagnosis",
+      "result": "155-stopped-calibration-posthoc-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }

@@ -97,6 +97,32 @@ gates; C1 PT B2 retains five complete blocks. The full sixteen-boundary outcome
 is INCOMPLETE, all bytes are preserved, and no old acquisition is restarted.
 No accepted timing-capability PASS is established.
 
+
+Separate prospective [plan 043](lanes/n010-comparison-readiness/experiments/043-prospective-primary-direction-reference-sampling.md)
+registers a primary-position directional histogram for offline references:
+16 by 16 cosine-domain bins, four deterministic pilot rays per bin, 50%
+cosine support, density correction on the first continuation only. It uses
+geometry/direct light, never candidate GI outputs; later bounces and the
+physical evaluator stay unchanged. [Build 151](lanes/n010-comparison-readiness/results/151-primary-direction-proposal-build.json)
+passes separate standalone/prefix compilation and reversible source checks.
+Physical 152 is actually running; only a complete PASS permits all-state/prefix
+153, then fresh bounded feasibility 154. The new feasibility baseline is the
+**original cosine** 8192/16384 levels, with <=0.75 uncertainty ratios at both
+levels; plan 040's worse global-guide baseline is not substituted. These are
+CPU proposal checks, not eligible references or a new GI quality result.
+No old acquisition is restarted. All 24 references and final gates remain.
+
+Post-hoc CPU [155](lanes/n010-comparison-readiness/results/155-stopped-calibration-posthoc-diagnosis.json)
+finds 64 distinct raw work-stream hashes despite identical HDR images in each
+completed boundary's first block. Canonicalized first-two-frame ray work/hits
+match after removing only append-position identity; raw contribution records
+still contain that identity. Completed image-file cadence is about 394/498 ms
+for HWRT/software while timed frames take milliseconds. This is saved-file
+cadence, not a measured CPU-idle duration or proven cause of failed gates.
+The capture source performs large diagnostic readbacks and file writes between
+frames. Any capture repair requires prospective acquisition and unchanged
+full boundaries/thresholds; no clock/power cause or calibration PASS is inferred.
+
 | Completion requirement | Current state / next action |
 | --- | --- |
 | All 24 locked references | Fifteen original CPU references pass provenance [109](lanes/n010-comparison-readiness/results/109-existing-eligible-cpu-provenance-audit.json). Separate hybrid C4 B2 qualifies at 16384/32768 and passes full provenance [123](lanes/n010-comparison-readiness/results/123-first-qualified-hybrid-provenance-audit.json). Fixed comparison view [127](lanes/n010-comparison-readiness/results/127-replayed-point-guided-reference-view.json) retains the fifteen original targets and selects nine pending point-guided targets; it is not admission. Old CPU C1/C2 B8 jobs were stopped at the user's request [124](lanes/n010-comparison-readiness/results/124-user-requested-old-cpu-process-stop.json): complete 65536 levels remain INELIGIBLE, partial 131072 files retained, cap outcome unmeasured. |

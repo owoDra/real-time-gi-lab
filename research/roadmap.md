@@ -147,6 +147,19 @@ calibration is INCOMPLETE. Preserve every sample and diagnose the measurement
 procedure before a separately registered repair. No old acquisition is restarted.
 A valid full calibration remains required; no campaign admission follows.
 
+
+Prospective [043](lanes/n010-comparison-readiness/experiments/043-prospective-primary-direction-reference-sampling.md)
+implements a distinct primary-position directional proposal. Sampling-only
+[build 151](lanes/n010-comparison-readiness/results/151-primary-direction-proposal-build.json) passes;
+physical 152 is running, then full state/prefix 153 and bounded feasibility
+154 require complete preceding PASS. Feasibility compares against the original
+cosine method, requiring <=0.75 uncertainty ratios at both original levels.
+No reference admission, old-process restart or relaxed final gate follows.
+Post-hoc [155](lanes/n010-comparison-readiness/results/155-stopped-calibration-posthoc-diagnosis.json)
+records large inter-frame capture volume/cadence and append-order variation;
+it establishes no timing-failure cause. A separate prospective capture repair
+must preserve full workload boundaries, images, scratch, memory and thresholds.
+
 Plan 032 prepares point-guided acquisition of every unfinished transport,
 retaining the fifteen eligible original-method references within the full
 24-slot corpus. Actual 116 refuses acquisition at incomplete physical 113;

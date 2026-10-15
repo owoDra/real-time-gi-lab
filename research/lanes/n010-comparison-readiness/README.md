@@ -84,6 +84,19 @@ C1 HWRT/software each complete eight blocks and fail five unchanged gates; C1
 PT B2 retains five complete blocks. Full calibration is INCOMPLETE, with all
 payloads preserved. No old acquisition is restarted or accepted timing claimed.
 
+
+Prospective [043](experiments/043-prospective-primary-direction-reference-sampling.md)
+implements a distinct primary-position directional proposal. Sampling-only
+[build 151](results/151-primary-direction-proposal-build.json) passes;
+physical 152 is running, then full state/prefix 153 and bounded feasibility
+154 require complete preceding PASS. Feasibility compares against the original
+cosine method, requiring <=0.75 uncertainty ratios at both original levels.
+No reference admission, old-process restart or relaxed final gate follows.
+Post-hoc [155](results/155-stopped-calibration-posthoc-diagnosis.json)
+records large inter-frame capture volume/cadence and append-order variation;
+it establishes no timing-failure cause. A separate prospective capture repair
+must preserve full workload boundaries, images, scratch, memory and thresholds.
+
 [Memory/progression audit 134](results/134-memory-evidence-scopes-and-quiescence-watch.md)
 records current allocation-hook coverage, 76 retained pilot ledgers and the 16
 current-binary diagnostic ledgers, explicitly separating historical binaries
