@@ -799,6 +799,12 @@
       "status": "user-requested-directional-workflow-stop-partials-retained",
       "result": "161-user-requested-directional-workflow-stop.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-157",
+      "status": "complete-all-sixteen-minimal-capture-sizing-boundaries-image-equal-and-ledger-pass",
+      "result": "157-minimal-calibration-quiet-sizing.json",
+      "gpu_run": true
     }
   ]
 }

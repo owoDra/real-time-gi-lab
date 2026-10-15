@@ -370,10 +370,28 @@ match 103; all 162 recorded inputs were checked unchanged after execution.
 No new sampling branch, current view/driver replacement or final 047 is attested.
 
 
-### Prepared minimal-output calibration commands (plan 044)
 
-Not executed. First require actual termination of the CPU proposal sequence;
-these commands require complete corrected build 159 (v2 binaries), and refuse
+Fresh isolated-fixture GPU [sizing 157](results/157-minimal-calibration-quiet-sizing.json)
+now completes all sixteen original boundaries with PASS, including static and
+first-target churn roles. Every saved direct/indirect/total image matches the
+corresponding immutable original-046 image; all scratch witnesses and owned
+allocation-ledger replays pass with zero teardown within 8 GiB. The original
+three-dose sizing schedule, +20% target and dose cap are unchanged. This is
+actual GPU sizing/image equivalence, not accepted timing capability.
+
+Separate accepted calibration 158 has started with those frozen doses and the
+original eight-process schedule and thresholds. Its first C1 HWRT and software
+boundaries completed all eight blocks and **FAIL**; remaining boundaries are
+still running at this checkpoint. Removing bulk diagnostic output alone has
+not established the required timing precision. Retain every subsequent row,
+earlier 029 failures and all raw samples. No retry, correction or threshold
+relaxation follows from this partial observation. Final 047 remains pending.
+
+### Minimal-output calibration commands (plan 044)
+
+157 has completed PASS; 158 has been launched once and is running. The commands
+below document those actual invocations and must not be rerun into existing
+paths. They require complete corrected build 159 (v2 binaries), and refuse
 live research workers, existing work/output paths and partial boundary selection. Keep the new build/source/input identities frozen.
 Sizing additionally checks every image against original quiet sizing 046 and
 requires zero-teardown ledger replay within 8 GiB. Only complete full PASS 157

@@ -242,3 +242,21 @@ two iid crosschecks, state/prefix 153 and feasibility 154 remain uncompleted.
 The controller's saved RUNNING label is stale after actual PID termination.
 This is an operational interruption, not a scientific FAIL or a cap failure.
 The stopped workflow is not restarted; no threshold or final gate is relaxed.
+
+
+
+Fresh isolated-fixture GPU [sizing 157](lanes/n010-comparison-readiness/results/157-minimal-calibration-quiet-sizing.json)
+now completes all sixteen original boundaries with PASS, including static and
+first-target churn roles. Every saved direct/indirect/total image matches the
+corresponding immutable original-046 image; all scratch witnesses and owned
+allocation-ledger replays pass with zero teardown within 8 GiB. The original
+three-dose sizing schedule, +20% target and dose cap are unchanged. This is
+actual GPU sizing/image equivalence, not accepted timing capability.
+
+Separate accepted calibration 158 has started with those frozen doses and the
+original eight-process schedule and thresholds. Its first C1 HWRT and software
+boundaries completed all eight blocks and **FAIL**; remaining boundaries are
+still running at this checkpoint. Removing bulk diagnostic output alone has
+not established the required timing precision. Retain every subsequent row,
+earlier 029 failures and all raw samples. No retry, correction or threshold
+relaxation follows from this partial observation. Final 047 remains pending.
