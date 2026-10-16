@@ -41,3 +41,35 @@ comparison waiters. The separate plan-040 light-surface candidate passes physica
 proofs 145/146 but fails the unchanged bounded feasibility rule in 147 and stops.
 Prepared plan-041 intake is inactive. These outcomes do not qualify references
 or start the accepted Lane M campaign.
+
+## Timing and memory handoff identity
+
+The prepared N010 [proof-intake policy](../n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
+and [strict verifier](../../../scripts/research/n010_reference_sampling/bulk_pfm_timing_provenance.py)
+identify the separate row-bulk PFM fixture built in
+`out/research/n010-comparison-readiness/minimal-calibration-build-v3`.
+Build [167](../n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
+establishes compilation and source relationships. Only complete full GPU
+sizing 168 and calibration 169, their actual payload replay and final six-gate
+047 could establish the corresponding N010 handoff; construction alone does
+not establish any accepted timing capability. Consult current status for
+their execution state.
+
+Before Lane M timing, pin the actual binaries, shaders, selected quality
+budgets, resolution, readback/output mode and frame lifecycle. N010's fixed
+calibration uses pixel PT **1024 spp**, dense RC **1 spp**, static runtime reuse
+and fresh-source/first-target churn semantics. Do not transfer that precision
+to a different PT budget, output mode, allocation/history policy, frame
+lifecycle or comparator merely because some source is shared. Calibrate the
+actual selected boundary when these conditions differ. Historical and N010
+pilot timing remains diagnostic; no later PASS retroactively accepts it.
+The DDGI scene adapter requires its own complete-boundary calibration.
+
+Retain persistent, transient, startup and recurring owned-allocation peaks,
+including all required contexts and simultaneous old/new AS or upload memory.
+Replay allocation/free events to zero and enforce the declared memory cap;
+GPU heap budgets and named-buffer totals do not substitute for this ledger.
+Keep complete quality losses at each tested budget, all transition/recovery
+frames and explicit unresolved direct discrepancies. Accepted campaign entry
+still requires the original N010 final gate and Lane M's prospective held-out
+registration; this handoff procedure does not start the campaign.
