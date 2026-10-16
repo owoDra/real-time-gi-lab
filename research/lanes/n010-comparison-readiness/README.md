@@ -54,14 +54,22 @@ partials are imported. The pending provenance API requires actual
 151/163/164/172 PASS before still-unexecuted eight-slot 166. Seeds, samples,
 full-support/uncertainty gates, cap and resource limits remain unchanged.
 CPU 172 was subsequently **user-stopped before its first seed export or
-complete level**. [Stop 176](lanes/n010-comparison-readiness/results/176-user-requested-post-stop-feasibility-stop.json)
+complete level**. [Stop 176](results/176-user-requested-post-stop-feasibility-stop.json)
 records both actual process exits and two empty research-worker scans. The exact
 partial 172 SHA256 is `f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e757c42cb`.
 All four partial/receipt files are retained. This is **INCOMPLETE, no numerical
 PASS/FAIL or scientific cap-failure**. Do not restart 172 or its existing v2
 work path. 166 remains unexecuted because actual full feasibility PASS is absent.
 Independent prospective timing preparation can continue after verified
-quiescence; stopped CPU work is not restarted.
+quiescence; stopped CPU work is not restarted. Prospective
+[plan 052](experiments/052-prospective-hidden-ide-full-calibration.md)
+now registers fresh sizing 177 / full calibration 178 with the single IDE
+window undisplayed, sampled client accounting and verified restoration. The
+entire original sixteen-boundary/eight-block schedule, scientific thresholds,
+167 fixture and image/memory gates remain unchanged. Source assembly/CLI only
+are checked; no new visibility intervention or GPU measurement has run yet.
+The original 169 timing verifier remains unchanged and correctly rejects FAIL.
+New proof intake is required before any future 178 timing admission.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
@@ -712,3 +720,41 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
   --work out/research/n010-comparison-readiness/ide-visibility-diagnostic-v1 \
   --output research/lanes/n010-comparison-readiness/results/174-ide-visibility-accounting-diagnostic.json
 ```
+
+### Prospective full calibration with IDE undisplayed (plan 052)
+
+The registered IDE window is temporarily moved to an undisplayed special
+workspace during each acquisition and restored afterward. Its original
+PID/client/window identities and sampled local graphics-accounting condition
+are operational guards, not GPU utilization estimates or changed timing gates.
+Refuse existing paths and other research workers. Keep stopped 172 immutable.
+All original sixteen boundaries are mandatory. Run 178 only after actual
+complete full PASS 177, restoration and actual controller termination.
+These commands identify one-time prospective acquisitions; never rerun their
+paths. A scientific precision FAIL still completes all sixteen boundaries.
+An operational guard failure retains partials and prevents timing admission.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_hidden_ide_bulk_pfm.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/hidden-ide-bulk-pfm-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/177-hidden-ide-bulk-pfm-calibration-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_hidden_ide_bulk_pfm.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/hidden-ide-bulk-pfm-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/177-hidden-ide-bulk-pfm-calibration-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/178-hidden-ide-bulk-pfm-calibration-full-renderer.json
+```
+
+Source assembly proves the whole generated program reverses exactly to the
+frozen plan-048 program; all original scientific function definitions remain
+byte-identical. Source compilation and CLI help are not GPU measurements,
+software regression validation, reference admission or readiness. Unit tests
+were not run. The existing plan-049 verifier/driver still requires actual
+167/168/169 PASS and therefore rejects 169. A new guarded proof-intake adapter
+must verify actual complete 167/177/178 before selecting that timing proof.

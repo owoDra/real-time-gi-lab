@@ -61,7 +61,15 @@ All four partial/receipt files are retained. This is **INCOMPLETE, no numerical
 PASS/FAIL or scientific cap-failure**. Do not restart 172 or its existing v2
 work path. 166 remains unexecuted because actual full feasibility PASS is absent.
 Independent prospective timing preparation can continue after verified
-quiescence; stopped CPU work is not restarted.
+quiescence; stopped CPU work is not restarted. Prospective
+[plan 052](lanes/n010-comparison-readiness/experiments/052-prospective-hidden-ide-full-calibration.md)
+now registers fresh sizing 177 / full calibration 178 with the single IDE
+window undisplayed, sampled client accounting and verified restoration. The
+entire original sixteen-boundary/eight-block schedule, scientific thresholds,
+167 fixture and image/memory gates remain unchanged. Source assembly/CLI only
+are checked; no new visibility intervention or GPU measurement has run yet.
+The original 169 timing verifier remains unchanged and correctly rejects FAIL.
+New proof intake is required before any future 178 timing admission.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
