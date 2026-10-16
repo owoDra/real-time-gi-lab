@@ -1,0 +1,124 @@
+{
+  "schema": "n010-user-requested-post-stop-feasibility-stop/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "USER_STOPPED_BEFORE_FIRST_COMPLETE_FEASIBILITY_LEVEL",
+  "utc": "2026-10-16T03:26:18.575815+00:00",
+  "source_commit": "b3130f79b605fdb931d9b340371a246af12343e4",
+  "source_receipt": {
+    "path": "out/research/n010-comparison-readiness/process-stop-20261016T032406Z.json",
+    "sha256": "df6a19e18d762b8db29e1544b935b26f15d9fa990c189cd79e14242e7531b078",
+    "record": {
+      "schema": "n010-user-requested-process-stop/1",
+      "requested_action": "Stop remaining research processes; preserve partial evidence; do not restart",
+      "utc": "2026-10-16T03:24:06.643925+00:00",
+      "before": [
+        {
+          "pid": 1730502,
+          "ppid": 1661239,
+          "start_ticks": 22797560,
+          "state": "S",
+          "cmdline": "out/research/n010-comparison-readiness/venv/bin/python scripts/research/n010_reference_sampling/acquire_post_stop_primary_direction_feasibility.py --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2 --output research/lanes/n010-comparison-readiness/results/172-primary-direction-post-stop-bounded-feasibility.json ",
+          "cpu_ticks": 1575
+        },
+        {
+          "pid": 1730569,
+          "ppid": 1730502,
+          "start_ticks": 22798874,
+          "state": "S",
+          "cmdline": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-build-v1/prefix/n010_primary_direction_prefix --net /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin --scene /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2/scene.n008 --out /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2/o.n8192 --seeds 305419896,2596069104,81985529216486895,18364758544493064720 --spp 8192 --threads 16 ",
+          "cpu_ticks": 575448
+        }
+      ],
+      "signals": [
+        {
+          "pid": 1730502,
+          "signal": "SIGSTOP"
+        },
+        {
+          "pid": 1730569,
+          "signal": "SIGSTOP"
+        },
+        {
+          "pid": 1730569,
+          "signal": "SIGTERM"
+        },
+        {
+          "pid": 1730569,
+          "signal": "SIGCONT"
+        },
+        {
+          "pid": 1730502,
+          "signal": "SIGTERM"
+        },
+        {
+          "pid": 1730502,
+          "signal": "SIGCONT"
+        }
+      ],
+      "preserved_files": [
+        {
+          "path": "research/lanes/n010-comparison-readiness/results/172-primary-direction-post-stop-bounded-feasibility.json",
+          "size": 687599,
+          "sha256": "f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e757c42cb"
+        },
+        {
+          "path": "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2/n8192.resource-limits.json",
+          "size": 773,
+          "sha256": "ce6b94cc6b0c6e6adcd425754b31dfe3aa57c83866abce6399a604122c3dbda5"
+        },
+        {
+          "path": "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2/retained-original-cosine-qualification.json",
+          "size": 17824,
+          "sha256": "9da5eece00c7e1e490a35aefceb0a54f7ea42b0a90b4ad655d6713c482a9fa8f"
+        },
+        {
+          "path": "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2/scene.n008",
+          "size": 46679029,
+          "sha256": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac"
+        }
+      ],
+      "after": [
+        {
+          "pid": 1730502,
+          "pidfd_exit_observed": true,
+          "proc": null
+        },
+        {
+          "pid": 1730569,
+          "pidfd_exit_observed": true,
+          "proc": null
+        }
+      ],
+      "all_targets_exited": true,
+      "post_stop_research_process_scans": [
+        {
+          "scan": 1,
+          "remaining_research_processes": []
+        },
+        {
+          "scan": 2,
+          "remaining_research_processes": []
+        }
+      ]
+    }
+  },
+  "preserved_partial": {
+    "path": "research/lanes/n010-comparison-readiness/results/172-primary-direction-post-stop-bounded-feasibility.json",
+    "size": 687599,
+    "sha256": "f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e757c42cb"
+  },
+  "completed_levels": 0,
+  "exported_seed_count": 0,
+  "numerical_verdict": "INCOMPLETE_NOT_ASSIGNED",
+  "scientific_cap_failure": false,
+  "reference_admission": false,
+  "restarted": false,
+  "old_work_paths_written_after_stop": false,
+  "thresholds_changed": false,
+  "power_settings_changed": false,
+  "readiness": "NOT_ESTABLISHED; all original six gates remain mandatory",
+  "next_work": "172 and its v2 work path are immutable and must not be restarted. 166 remains unexecuted because actual full feasibility PASS is absent. Independently preregistered full GPU timing acquisition may proceed after actual CPU/GPU quiescence; no retry or calibration-threshold change.",
+  "direct_max_relative_error_1_0": "UNRESOLVED / 未解決; included without masks",
+  "tests": "NOT_RUN; process-stop/provenance publication, no runtime regression claim"
+}

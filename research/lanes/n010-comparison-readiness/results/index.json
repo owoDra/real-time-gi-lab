@@ -883,6 +883,18 @@
       "status": "complete-visible-hidden-restored-local-graphics-accounting-suppression-and-restoration-pass-no-timing-admission",
       "result": "174-ide-visibility-accounting-diagnostic.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-172",
+      "status": "user-stopped-before-first-complete-level-no-numerical-verdict",
+      "result": "172-primary-direction-post-stop-bounded-feasibility.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-176",
+      "status": "user-requested-post-stop-feasibility-stop-partials-retained",
+      "result": "176-user-requested-post-stop-feasibility-stop.json",
+      "gpu_run": false
     }
   ]
 }

@@ -36,8 +36,8 @@ counter suppression, **not causal proof for prior calibration failures, physical
 GPU utilization, global quiescence or accepted timing**. Exact 174 SHA256:
 `c8c8a7a00662344f48de9a6f266ac976f789b9594d3e6bc336a3dacb1aa7ef8b`.
 A separate prospective full-boundary acquisition under this visibility policy
-is still required; all original timing gates remain unchanged. CPU 172 may
-proceed after actual diagnostic termination and quiescence.
+is still required; all original timing gates remain unchanged. CPU 172 is
+now stopped as recorded below.
 
 Reference work remains **16/24 eligible slots, eight pending** in immutable
 view [160](results/160-primary-direction-reference-view.json). Physical
@@ -53,12 +53,15 @@ prepares fresh result **172** from sample zero at a separate v2 path. No 165
 partials are imported. The pending provenance API requires actual
 151/163/164/172 PASS before still-unexecuted eight-slot 166. Seeds, samples,
 full-support/uncertainty gates, cap and resource limits remain unchanged.
-After actual diagnostic termination and quiescence, **CPU 172 started once**
-at its registered v2 path. Native PID/start receipt confirms 16 threads,
-4 GiB address space and 691200 aggregate CPU seconds, with the unchanged
-43200-second elapsed guard. It starts from sample zero; no stopped 165 samples
-are imported. No numerical level or feasibility verdict exists yet. GPU work
-must remain stopped while this CPU acquisition runs.
+CPU 172 was subsequently **user-stopped before its first seed export or
+complete level**. [Stop 176](lanes/n010-comparison-readiness/results/176-user-requested-post-stop-feasibility-stop.json)
+records both actual process exits and two empty research-worker scans. The exact
+partial 172 SHA256 is `f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e757c42cb`.
+All four partial/receipt files are retained. This is **INCOMPLETE, no numerical
+PASS/FAIL or scientific cap-failure**. Do not restart 172 or its existing v2
+work path. 166 remains unexecuted because actual full feasibility PASS is absent.
+Independent prospective timing preparation can continue after verified
+quiescence; stopped CPU work is not restarted.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
@@ -676,9 +679,10 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
   --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json
 ```
 
-### Fresh feasibility after zero-export stop (plan 050)
+### User-stopped fresh feasibility (plan 050, stop 176)
 
-172 started once after actual termination of GPU 169 and diagnostic 174.
+172 started once after actual termination of GPU 169 and diagnostic 174,
+then was user-stopped before its first seed export (176).
 The command identifies that acquisition; never restart its existing paths. Preserve 165 and its v1 work
 path. A numerical failure stops this candidate without retry. Full 172 PASS
 is required for 166; all original full-reference gates remain unchanged.
