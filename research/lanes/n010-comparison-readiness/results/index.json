@@ -925,6 +925,12 @@
       "status": "read-only-current-boot-amd-display-and-empty-research-worker-observation",
       "result": "182-current-boot-display-and-process-observation.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-183",
+      "status": "complete-posthoc-all-retained-bulk-calibration-blocks-precision-and-file-cadence-description-no-causal-or-timing-admission",
+      "result": "183-bulk-calibration-precision-posthoc-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }

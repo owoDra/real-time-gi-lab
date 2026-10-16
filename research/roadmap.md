@@ -121,6 +121,20 @@ and failed restoration remain disclosed. OS observations are not GPU runtime
 validation. CPU 172 remains stopped; 180 is a fresh, separately registered
 acquisition from sample zero, not a restart of stopped work.
 
+Post-hoc [precision diagnosis 183](lanes/n010-comparison-readiness/results/183-bulk-calibration-precision-posthoc-diagnosis.json)
+now describes **all 153 complete blocks** from 169/178 and replays every
+completed original boundary decision exactly. Original 169 retains 2 PASS /
+14 FAIL; original 178 retains 3 FAIL / 1 partial. All samples, including warmups,
+remain in their original campaigns. Small-boundary block-0 GPU/file-cadence
+medians include C7 HWRT **0.187 / 5.381 ms** and dense RC **0.088 / 2.000 ms**;
+C6 HWRT is **4.002 / 400.620 ms**, including independently prepared source
+states between targets. File cadence is a filesystem observation, not measured
+GPU idle time, a clock/power diagnosis or causal proof. This motivates examining
+inter-sample acquisition output overhead before a separately preregistered fresh
+calibration; it does not justify changing original timing gates, subtracting
+known work, changing source/first-target semantics or accepting old samples.
+No new GPU samples or runtime regression checks were run in this diagnosis.
+
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
 mandatory. The pilot driver and final auditor are prepared but unexecuted;
