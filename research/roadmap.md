@@ -2,6 +2,32 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+Independent [row-bulk sizing 168](lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json)
+now completes **all sixteen boundaries PASS**: unchanged sizing gates,
+exact original-046 component images, known-work scratch witnesses and owned
+allocation-ledger replay to zero within 8 GiB. Its 670 fixture-input identities
+were independently rehashed unchanged. SHA256:
+`8a475b8bded695958aa34d9b65164166086a4d86e261093771ffc3e3ed6bb559`.
+After actual sizing termination and its full prerequisite/quiescence checks,
+fresh full calibration 169 started once at the registered new path. At this
+publication checkpoint C1 HWRT/software each completed eight process blocks
+and **FAIL** the original precision gates; later boundaries remain running.
+All sixteen boundaries must complete; no early stop, subset acceptance,
+correction or retry. Sizing PASS is not accepted timing or readiness.
+
+Prospective [zero-export recovery plan 050](lanes/n010-comparison-readiness/experiments/050-prospective-zero-export-feasibility-recovery.md)
+now prepares fresh feasibility **172**, starting from sample zero at a new v2
+work path after GPU termination. Original 165/171 and all three stopped work
+files remain immutable and are explicitly verified, never imported as samples.
+The native two-level program has a complete source-inverse proof; all numerical
+bodies, seeds, samples, thresholds and limits remain unchanged. The pending
+provenance API now requires actual 151/163/164/**172** and the new path before
+unexecuted 166. Six declared dispatch/provenance edits reconstruct the entire
+previous API source at its immutable Git identity. Source assembly and CLI help
+pass; interruption replay and new numerical acquisition have **not run**.
+View 160, all 24 slots, all original controls and the six final gates stay fixed.
+No CPU sampling may overlap GPU calibration.
+
 [Plan-049 Amendment 1](lanes/n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
 now prepares the remaining-pilot driver. It requires full actual timing-proof
 replay, complete eight-slot 166, independent verification of all 24 fixed-view
@@ -19,7 +45,7 @@ requires complete full PASS before payload replay, pins build 167 and the
 original analysis source, and independently checks all native files, original
 sizing/schedules/thresholds, image/witness equality and ledger teardown. Its
 Python source compiles; numerical proof replay and native witness calls have
-**not run**, because 168/169 do not exist. A separate final six-gate adapter
+**not run**, because full 169 is not complete. A separate final six-gate adapter
 now assembles and its CLI help succeeds. Its inverse edits reconstruct the
 entire original preflight: all gate names and the other five numerical bodies
 remain unchanged; only reference dispatch, strict calibration proof intake,
@@ -65,16 +91,16 @@ no seed export or numerical level completed. Its result is **INCOMPLETE**, with
 no numerical PASS/FAIL or cap-failure verdict. The old work path must never be
 restarted. The original <=0.75 feasibility gates at both 8192/16384 levels and
 full reference screens remain fixed. 166 has not run and cannot use incomplete
-165. Independent GPU 168/169 remain unexecuted and may proceed only after
-167 full PASS and actual CPU/GPU quiescence; they do not admit references.
+165. Independent GPU 168 completed full PASS and 169 is running after
+167 full PASS and actual CPU/GPU quiescence; neither admits references.
 
 Independent CPU [build 167](lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
 completed all five compile/link steps PASS. It verifies 494 input identities,
 whole-source inverse proofs, unchanged timed Renderer method and unchanged
 active inputs. This establishes compilation of plan-048 row-bulk PFM output,
 **not GPU byte equivalence, accepted timing or runtime regression validation**.
-GPU sizing 168 and calibration 169 have not run; they require actual CPU/GPU
-quiescence and their original full sixteen-boundary gates. Tests were not run.
+GPU sizing 168 completed full PASS; fresh calibration 169 is running under
+its original full sixteen-boundary gates. Tests were not run.
 
 All 24 eligible references, complete quality/memory pilots and the final six-gate
 readiness result remain required. The direct max-relative-error-1.0 pixels
@@ -91,7 +117,7 @@ Lane M comparative acquisition has not started. No N011.
 - **N009 concluded (2026-10-14): SC NO GO / BF1–BF3 PASS / PT INCOMPLETE.** [Final result 009](lanes/n009-scene-contract/results/009-n009-final-decision.md). Under C1, C1/C2/C4/C5/C6 have full total support but only deterministic direct references; both T_B2/T_B8 totals fail the unchanged four-seed 8192-SPP cap. Amendment 1 leaves C3 light motion NOT_CONSTRUCTIBLE. BF gates pass on C7; C7 V1 and old B4 V3 failures prevent COMPLETE attribution. Excluding 21 V1 pixels is post-hoc sensitivity. Sponza direct max-relative-error-1.0 pixels remain unresolved (未解決).
 - **N010 is the final preparation gate (active):** [preregistered protocol](lanes/n010-comparison-readiness/experiments/001-comparison-readiness.md). Finish reference eligibility, direct/key correctness diagnostics, RC/path-tracing executable controls, matched HDR quality scoring, complete Renderer GPU timing calibration and allocation-lifetime memory accounting here. Require an executed comparison pilot and fail-closed readiness preflight; plans alone cannot pass. N009's negative result and thresholds remain frozen. C1/BF-P default adoption requires a separate architecture decision and executable checks.
 - **N010 execution progress:** C7 now has qualified T_B2/T_B8 references and an executed PT budget ladder with quality passes; incumbent/dense RC losses are retained. Construction corpus is locked through C12. Controlled dynamic comparisons and C8/C9 matching budget ladders are complete. Sponza C1 T_B2 now has an eligible reference: incumbent indirect NRMSE 88.8399% / bias +35.8544% is FAIL; pixel PT passes at 256/1024 spp. Remaining Sponza qualification/pilots and full Renderer timing calibration are required; quality failure does not reopen preparation. [Interim comparisons](lanes/n010-comparison-readiness/results/033-interim-comparison-findings.md).
-- **N010 timing capability remains an open gate.** Independent [plan 048](lanes/n010-comparison-readiness/experiments/048-prospective-bulk-pfm-calibration-output.md) prepares identical-byte row-bulk image output after post-hoc 162; it must still pass fresh full-boundary sizing/calibration, without threshold changes or transferring earlier diagnostic timing into accepted evidence. Build/GPU execution is pending.
+- **N010 timing capability remains an open gate.** Independent [plan 048](lanes/n010-comparison-readiness/experiments/048-prospective-bulk-pfm-calibration-output.md) prepares identical-byte row-bulk image output after post-hoc 162; it must still pass fresh full-boundary sizing/calibration, without threshold changes or transferring earlier diagnostic timing into accepted evidence. Build 167 and full sizing 168 PASS; full calibration 169 is running with its original gates.
 - **Immediately after N010: Lane M GI competitiveness.** Use a distinct lane-m-gi-competitiveness identity and preserve the historical Lane M topology study. Execute comparisons on the frozen corpus; report quality failures as losses, without opening N011 or another preparation lane. Initial executable cohort is incumbent/vanilla RC and pixel path tracing; DDGI/RTXGI is the additional named family to integrate and qualify before the accepted Lane M comparative campaign. Report supported regimes/devices honestly.
 - Compare on several representative scenes and dynamic classes, not just Sponza.
 - Establish fair image quality, GPU time, persistent/true-peak memory comparisons to representative existing GI families.

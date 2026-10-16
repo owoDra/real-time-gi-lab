@@ -2,6 +2,32 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+Independent [row-bulk sizing 168](lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json)
+now completes **all sixteen boundaries PASS**: unchanged sizing gates,
+exact original-046 component images, known-work scratch witnesses and owned
+allocation-ledger replay to zero within 8 GiB. Its 670 fixture-input identities
+were independently rehashed unchanged. SHA256:
+`8a475b8bded695958aa34d9b65164166086a4d86e261093771ffc3e3ed6bb559`.
+After actual sizing termination and its full prerequisite/quiescence checks,
+fresh full calibration 169 started once at the registered new path. At this
+publication checkpoint C1 HWRT/software each completed eight process blocks
+and **FAIL** the original precision gates; later boundaries remain running.
+All sixteen boundaries must complete; no early stop, subset acceptance,
+correction or retry. Sizing PASS is not accepted timing or readiness.
+
+Prospective [zero-export recovery plan 050](lanes/n010-comparison-readiness/experiments/050-prospective-zero-export-feasibility-recovery.md)
+now prepares fresh feasibility **172**, starting from sample zero at a new v2
+work path after GPU termination. Original 165/171 and all three stopped work
+files remain immutable and are explicitly verified, never imported as samples.
+The native two-level program has a complete source-inverse proof; all numerical
+bodies, seeds, samples, thresholds and limits remain unchanged. The pending
+provenance API now requires actual 151/163/164/**172** and the new path before
+unexecuted 166. Six declared dispatch/provenance edits reconstruct the entire
+previous API source at its immutable Git identity. Source assembly and CLI help
+pass; interruption replay and new numerical acquisition have **not run**.
+View 160, all 24 slots, all original controls and the six final gates stay fixed.
+No CPU sampling may overlap GPU calibration.
+
 [Plan-049 Amendment 1](lanes/n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
 now prepares the remaining-pilot driver. It requires full actual timing-proof
 replay, complete eight-slot 166, independent verification of all 24 fixed-view
@@ -19,7 +45,7 @@ requires complete full PASS before payload replay, pins build 167 and the
 original analysis source, and independently checks all native files, original
 sizing/schedules/thresholds, image/witness equality and ledger teardown. Its
 Python source compiles; numerical proof replay and native witness calls have
-**not run**, because 168/169 do not exist. A separate final six-gate adapter
+**not run**, because full 169 is not complete. A separate final six-gate adapter
 now assembles and its CLI help succeeds. Its inverse edits reconstruct the
 entire original preflight: all gate names and the other five numerical bodies
 remain unchanged; only reference dispatch, strict calibration proof intake,
@@ -65,16 +91,16 @@ no seed export or numerical level completed. Its result is **INCOMPLETE**, with
 no numerical PASS/FAIL or cap-failure verdict. The old work path must never be
 restarted. The original <=0.75 feasibility gates at both 8192/16384 levels and
 full reference screens remain fixed. 166 has not run and cannot use incomplete
-165. Independent GPU 168/169 remain unexecuted and may proceed only after
-167 full PASS and actual CPU/GPU quiescence; they do not admit references.
+165. Independent GPU 168 completed full PASS and 169 is running after
+167 full PASS and actual CPU/GPU quiescence; neither admits references.
 
 Independent CPU [build 167](lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
 completed all five compile/link steps PASS. It verifies 494 input identities,
 whole-source inverse proofs, unchanged timed Renderer method and unchanged
 active inputs. This establishes compilation of plan-048 row-bulk PFM output,
 **not GPU byte equivalence, accepted timing or runtime regression validation**.
-GPU sizing 168 and calibration 169 have not run; they require actual CPU/GPU
-quiescence and their original full sixteen-boundary gates. Tests were not run.
+GPU sizing 168 completed full PASS; fresh calibration 169 is running under
+its original full sixteen-boundary gates. Tests were not run.
 
 All 24 eligible references, complete quality/memory pilots and the final six-gate
 readiness result remain required. The direct max-relative-error-1.0 pixels

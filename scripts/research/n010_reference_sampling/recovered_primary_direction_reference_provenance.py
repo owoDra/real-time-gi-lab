@@ -1,4 +1,4 @@
-"""Plan 047 Amendment 1: explicit recovered proof dispatch, unchanged gates."""
+"""Plans 047/050: explicit recovered proof dispatch, unchanged numerical gates."""
 import json
 from pathlib import Path
 
@@ -11,6 +11,7 @@ _QUALIFIER_BASE = HERE/'qualify_primary_direction_references.py'
 _QUALIFIER_SHA = '99bbde9b594dd5e1d9b3363210f225b7f177690ebfbdfa8ac2c86d56b36e784a'
 _PHYSICAL = RESULTS/'163-primary-direction-recovered-physical-controls.json'
 _PHYSICAL_WORK = ROOT/'out/research/n010-comparison-readiness/primary-direction-physical-recovery-v1'
+CONTINUATION_PLAN = RESULTS.parent/'experiments/050-prospective-zero-export-feasibility-recovery.md'
 
 
 def _verify_recovered_physical(inputs):
@@ -74,11 +75,11 @@ if sha(_BASE) != _BASE_SHA or sha(_QUALIFIER_BASE) != _QUALIFIER_SHA:
     raise ValueError('frozen plan-046 provenance/acquisition source changed')
 _source = _BASE.read_text()
 for _before, _after in (
-    ('import acquire_primary_direction_feasibility as F', 'import acquire_recovered_primary_direction_feasibility as F'),
-    ('primary-direction-feasibility-v1', 'primary-direction-feasibility-recovery-v1'),
+    ('import acquire_primary_direction_feasibility as F', 'import acquire_post_stop_primary_direction_feasibility as F'),
+    ('primary-direction-feasibility-v1', 'primary-direction-feasibility-recovery-v2'),
     ('152-primary-direction-physical-controls.json', '163-primary-direction-recovered-physical-controls.json'),
     ('153-primary-direction-all-state-and-prefix.json', '164-primary-direction-recovered-all-state-and-prefix.json'),
-    ('154-primary-direction-bounded-feasibility.json', '165-primary-direction-recovered-bounded-feasibility.json')):
+    ('154-primary-direction-bounded-feasibility.json', '172-primary-direction-post-stop-bounded-feasibility.json')):
     _source = once(_source, _before, _after)
 _name = 'qualify_primary_direction_references.py'
 if _source.count(_name) != 4:
@@ -87,7 +88,7 @@ _source = _source.replace(_name, 'qualify_recovered_primary_direction_references
 _source = once(_source, '    if F.prerequisites(inputs) != BINARY:',
     '    _verify_recovered_physical(inputs)\n    if F.prerequisites(inputs) != BINARY:')
 _source = once(_source, '    for p in (Path(__file__), Path(F.__file__), PLAN,',
-    '    for p in (Path(__file__), Path(F.__file__), PLAN, RECOVERY_PLAN, _BASE, _QUALIFIER_BASE,\n'
+    '    for p in (Path(__file__), Path(F.__file__), PLAN, RECOVERY_PLAN, CONTINUATION_PLAN, _BASE, _QUALIFIER_BASE,\n'
     '              Path(R.__file__), HERE/"primary_direction_recovery_programs.py",\n'
     '              HERE/"validate_recovered_primary_direction_prefix.py",')
 exec(compile(_source, str(_BASE)+'#plan047-recovered-proof-dispatch', 'exec'), globals())

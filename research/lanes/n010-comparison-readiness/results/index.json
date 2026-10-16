@@ -853,6 +853,12 @@
       "status": "user-requested-recovered-feasibility-stop-partials-retained",
       "result": "171-user-requested-recovered-feasibility-stop.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-168",
+      "status": "complete-all-sixteen-row-bulk-sizing-boundaries-image-equal-scratch-and-ledger-pass",
+      "result": "168-bulk-pfm-calibration-quiet-sizing.json",
+      "gpu_run": true
     }
   ]
 }
