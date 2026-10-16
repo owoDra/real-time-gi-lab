@@ -1,214 +1,76 @@
 # Forward research roadmap — major gates only
 
-## Current execution checkpoint — 2026-10-16 JST
+## Current execution checkpoint — 2026-10-17 JST
 
-Prospective [plan 056](lanes/n010-comparison-readiness/experiments/056-prospective-nested-scramble-reference-sampling.md)
-has an isolated nested-prefix hash scramble [build 187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json)
-COMPLETE / build PASS. Exact 187 SHA256:
-`13375a5a4189c8a3ef8394d16692ae0d58a003d63483c60207c5eb0f28b28b4f`.
-Physical 188, state/prefix 189 and feasibility 190 remain **unexecuted**;
-compilation and whole-source inversion do not admit references or timing.
-The same four seeds, original screens/cap and six final readiness gates remain.
-Sampling requires actual terminal 180 and terminal GPU 185/186 (or retained
-terminal failure), and no other research worker. No queue or tests were run.
+**N010 remains NOT_READY.** User resumed work for cause diagnosis and the
+shortest valid completion path, with low interactive load. No old stopped
+acquisition or waiting queue is restarted. Current action is a one-CPU bounded
+diagnosis, not another full-frame reference ladder or long GPU campaign.
 
-Full [row-bulk calibration 169](lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json)
-is now **COMPLETE / FAIL / NOT ACCEPTED**. All sixteen boundaries finish eight
-fresh-process blocks each: **C1 PT B8 and C6 PT B8 PASS; the other fourteen FAIL**
-the original precision gates. No subset is accepted. All 128 blocks / 8,192
-samples and original payloads are retained. Exact result SHA256:
-`dddca3bfa7d2f0847e683352593519165829963d49fd173a29b698ba825d6add`.
-The controller/native processes have actually terminated; there is no restart
-or waiting worker. No timing threshold, correction or exclusion changed.
+See [cause review 192](lanes/n010-comparison-readiness/results/192-cause-review-and-shortest-valid-completion.md)
+and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/057-bounded-cause-diagnosis-and-critical-path.md).
 
-CPU [decision/replay 175](lanes/n010-comparison-readiness/results/175-bulk-pfm-calibration-decision-and-replay.json)
-recomputes every original schedule and statistical decision exactly, replays
-all 128 owned-allocation ledgers to teardown zero within 8 GiB, and rehashes
-671 frozen fixture inputs. Maximum true-peak owned bytes: **375,184,080**.
-It does not independently rehash every GPU payload or regenerate timestamps
-or radiance. Producer image/scratch/manifests remain in exact complete 169.
-This is scientific-analysis/ledger replay, not software regression validation;
-unit tests were not run. Complete sizing [168](lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json)
-remains full PASS; sizing/compilation alone cannot establish accepted timing.
+| Required item | Actual current evidence | Remaining work |
+| --- | --- | --- |
+| All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
+| Candidate feasibility | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
+| New sampler preparation | [187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json): isolated build PASS | 188/189/190 NOT RUN. Compilation is not scientific admission; diagnose before dispatch. |
+| GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Full 186 NOT RUN. No accepted precision/timing proof exists. |
+| Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified. Direct max-relative-error-1.0 pixels **UNRESOLVED / 未解決**, included. |
+| Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
 
-Post-hoc [173](lanes/n010-comparison-readiness/results/173-posthoc-concurrent-drm-client-diagnosis.json)
-observes IDE graphics accounting on the same AMD device during three sampled
-live-calibration intervals. This is not proved causation of the precision
-failures, exact per-query overlap or instantaneous utilization. Prospective
-[plan-051 diagnostic 174](lanes/n010-comparison-readiness/results/174-ide-visibility-accounting-diagnostic.json)
-now completes all visible/hidden/restored A/B/A phases and its fixed **local
-accounting-suppression classifier PASS**. The same client's accounted graphics
-rates are **22.8578 / 0 / 22.9617 million ns per elapsed second**; all three
-hidden intervals have zero increment. Original PID/window identities, eight
-input hashes and exact workspace/geometry/focus restoration are verified.
-No application stopped or power/clock/idle preference changed. This is local
-counter suppression, **not causal proof for prior calibration failures, physical
-GPU utilization, global quiescence or accepted timing**. Exact 174 SHA256:
-`c8c8a7a00662344f48de9a6f266ac976f789b9594d3e6bc336a3dacb1aa7ef8b`.
-A separate prospective full-boundary acquisition under this visibility policy
-is still required; all original timing gates remain unchanged. CPU 172 is
-now stopped as recorded below.
+### What the cause analysis establishes
 
-Reference work remains **16/24 eligible slots, eight pending** in immutable
-view [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json). Physical
-[163](lanes/n010-comparison-readiness/results/163-primary-direction-recovered-physical-controls.json)
-passes all seventeen scenes, eight physical checks and two iid comparisons;
-[state/prefix 164](lanes/n010-comparison-readiness/results/164-primary-direction-recovered-all-state-and-prefix.json)
-passes all 24 states, both actual C7 transports and all 78 native invocations.
-These controls alone admit no reference. Feasibility 165 was user-stopped
-before its first seed export or level; exact partials and [stop 171](lanes/n010-comparison-readiness/results/171-user-requested-recovered-feasibility-stop.json)
-remain unchanged, with **INCOMPLETE, no numerical PASS/FAIL or cap-failure**.
-Prospective [plan 050](lanes/n010-comparison-readiness/experiments/050-prospective-zero-export-feasibility-recovery.md)
-prepared result **172** from sample zero at a separate v2 path; no 165
-partials were imported. Seeds, samples, full-support/uncertainty gates, cap
-and resource limits remain unchanged.
-CPU 172 was subsequently **user-stopped before its first seed export or
-complete level**. [Stop 176](lanes/n010-comparison-readiness/results/176-user-requested-post-stop-feasibility-stop.json)
-records both actual process exits and two empty research-worker scans. The exact
-partial 172 SHA256 is `f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e757c42cb`.
-All four partial/receipt files are retained. This is **INCOMPLETE, no numerical
-PASS/FAIL or scientific cap-failure**. Do not restart 172 or its existing v2
-work path. 166 remains unexecuted because actual full feasibility PASS is absent.
-Prospective [plan 053](lanes/n010-comparison-readiness/experiments/053-prospective-feasibility-after-second-zero-export-stop.md)
-now prepares fresh feasibility **180** at v3, with the same two-level question,
-source/executable/seed/threshold/resource boundaries and no stopped-sample
-imports. Whole generated-source inversion reconstructs the prior plan-050
-program exactly. The pending reference API now requires actual
-**151/163/164/180 PASS**, with whole API-source inversion to its prior Git
-identity. **Fresh 180 has now started once** from sample zero at v3, under
-committed plan 053 Amendment 1 (`6f6b557`). Real prerequisites rehash 3893 inputs
-and whole generated numerical-source inversion is exact. At the live start
-checkpoint, controller PID/start is `6449/46323`, first native `6544/47962`,
-boot `e1fb993f-5ed5-48e2-8234-809a20e1ade2`. The **8192-spp level now
-completes all four seeds and FAILS the feasibility criterion**: absolute-p99
-uncertainty is `7.729857694357595e-5`, or **1.0703554221788882 times** the
-immutable original cosine baseline; the registered limit is **<=0.75 at both
-levels**. Primary/direct/emission remain bit-exact; full signal support is 1.0.
-The reference screen is INCOMPLETE / ineligible (relative p99
-`0.06025009250719263`). Fixed first-level manifest SHA256:
-`5b8e86a623fac2995b339788d67076149639d77503b5b44dee787608e7d5187e`.
+CPU-only [191](lanes/n010-comparison-readiness/results/191-posthoc-readiness-bottleneck-diagnosis.json)
+checks retained original C1 B2/B8 scene/sidecar identities. At
+8192/16384/32768, later-indirect replicate-centered energy divided by full
+indirect energy is **0.974696 / 0.982808 / 0.986884**. First-indirect ratios
+are only 0.017115 / 0.012833 / 0.010016; covariance is separately retained.
+These are four-replicate image-energy diagnostics, not additive variance
+shares or iid uncertainty estimates. They locate the observed disagreement
+after the first indirect bounce. The failed guide targets first-secondary-hit
+direct light, then applies its weight to all later contributions; the causal
+weight/depth mechanism is the next small diagnosis, not yet proved.
 
-**The full 180 campaign is still INCOMPLETE**: its fresh 16384-spp continuation
-is alive and finishes the registered schedule without a threshold change or
-retry. The two-level adoption condition can no longer pass; 166 remains
-unexecuted and this candidate is not admitted for corpus references. Do not
-publish mutable 180 as a completed result or call this a full statistical-cap
-failure. The original 12-hour elapsed guard per native invocation is unchanged;
-that guard is not an N010 completion estimate. Reference readiness remains
-16/24 and accepted timing is still absent. Remaining duration is uncertain;
-the current native's expected completion is not the N010 completion date.
-The CPU-only post-shutdown prerequisite uses terminal
-unchanged 178 policy, exact 181/182, current boot and live research-worker
-exclusion. Old-window restoration failure remains recorded and does not admit
-GPU timing. No waiting/retry worker is installed; no GPU calibration may overlap.
-Independent prospective timing preparation can continue after verified
-quiescence; stopped CPU work is not restarted. Prospective
-[plan 052](lanes/n010-comparison-readiness/experiments/052-prospective-hidden-ide-full-calibration.md)
-registers fresh sizing 177 / full calibration 178 with the single IDE
-window undisplayed, sampled client accounting and verified restoration.
-**Sizing 177 now completes all sixteen boundaries PASS**, including original
-image/scratch/memory checks and environment/restoration guards. Its controller
-actually terminated. Exact SHA256:
-`530f1da100725d6d4c8ed64dfa7acc957a3a3515f7b6ad0bc1aefbaead9526cf`.
-All 66 sampled snapshots / 65 intervals have zero target-client graphics
-increment. A separate CPU replay reproduces every original sizing decision,
-all sixteen owned-memory ledgers, sampled environment gates and 686 immutable
-input identities. It does not independently regenerate radiance/timestamps or
-rehash every native GPU payload. Full timing remains unestablished.
-The original sixteen-boundary/eight-block schedule, scientific thresholds,
-167 fixture and image/memory gates remain unchanged. A new strict 052 proof
-intake adapter assembles with a whole inverse to original 049, adding sampled
-environment/source-bound restoration evidence. Its full timing-proof intake
-has not run; it requires actual complete 167/177/178 PASS. The original 169
-verifier remains unchanged and correctly rejects FAIL. **Full 178 is now
-terminal / INCOMPLETE / NOT ACCEPTED**. Completed C1 HWRT, software and PT B2
-boundaries each FAIL the original precision gates (eight blocks each).
-C1 PT B8 retains one complete block; the next native invocation terminates
-with SIGTERM (returncode -15). No full verdict is assigned to that boundary or
-the campaign, and no subset is accepted. The sampled environment guard fails
-and old-window restoration fails after the desktop session disappears. Keep
-all partials and failed restoration evidence immutable; never restart this path.
+Original C1 B8 absolute-p99 decay exponent is 0.518411. Planning extrapolation
+predicts 1.71180e-5 / 1.19508e-5 at 131072/262144, above the unchanged 1e-5
+gate. This is not a measured cap failure or a replacement acceptance threshold.
+Do not spend full ladders on marginal early improvement without examining
+whether the original consecutive-level criterion is plausibly reachable.
 
-CPU [replay 179](lanes/n010-comparison-readiness/results/179-hidden-ide-calibration-decision-and-replay.json)
-recomputes all **25 complete blocks / 1600 samples**, original decisions and
-25 owned-memory ledgers (teardown zero, maximum true peak **375,184,080 bytes**),
-and rehashes **684** frozen fixture inputs. Strict timing intake correctly
-rejects incomplete 178 before full native-payload replay. This is post-hoc
-scientific analysis, not runtime regression validation; tests were not run.
-[Observation 181](lanes/n010-comparison-readiness/results/181-execution-environment-after-host-shutdown.json)
-records prior host power-off and a subsequent boot with simpledrm/no AMD render
-node. Shutdown initiator and timing-failure causation are not established.
-[Observation 182](lanes/n010-comparison-readiness/results/182-current-boot-display-and-process-observation.json)
-records a further boot with AMD framebuffer **3440x1440**, renderD128 and no
-research workers. The earlier fallback observation is historical. No resolution,
-power or clock setting was changed by the agent; prior window visibility moves
-and failed restoration remain disclosed. OS observations are not GPU runtime
-validation. CPU 172 remains stopped; 180 is a fresh, separately registered
-acquisition from sample zero, not a restart of stopped work.
+Timing causes remain hypotheses. Complete 169 has two heavy PT B8 PASS and
+fourteen FAIL boundaries; terminal 178 has three FAIL and one partial plus
+failed environment/restoration guards. Replays 175/179 and post-hoc 183 retain
+all decisions. File cadence and IDE accounting are not causal clock/power or
+GPU-idle evidence. Deferred serialization's complete sizing 185 establishes
+image/scratch/memory/spool checks, not full precision. Its zero-dose medians
+alone imply about 4405 seconds summed GPU work for full 186 before other costs;
+this scale estimate is not an ETA. No long GPU run is automatically queued.
 
-Post-hoc [precision diagnosis 183](lanes/n010-comparison-readiness/results/183-bulk-calibration-precision-posthoc-diagnosis.json)
-now describes **all 153 complete blocks** from 169/178 and replays every
-completed original boundary decision exactly. Original 169 retains 2 PASS /
-14 FAIL; original 178 retains 3 FAIL / 1 partial. All samples, including warmups,
-remain in their original campaigns. Small-boundary block-0 GPU/file-cadence
-medians include C7 HWRT **0.187 / 5.381 ms** and dense RC **0.088 / 2.000 ms**;
-C6 HWRT is **4.002 / 400.620 ms**, including independently prepared source
-states between targets. File cadence is a filesystem observation, not measured
-GPU idle time, a clock/power diagnosis or causal proof. This motivates examining
-inter-sample acquisition output overhead before a separately preregistered fresh
-calibration; it does not justify changing original timing gates, subtracting
-known work, changing source/first-target semantics or accepting old samples.
-No new GPU samples or runtime regression checks were run in this diagnosis.
+### Evidence and preserved boundaries
 
-Prospective [plan 054](lanes/n010-comparison-readiness/experiments/054-prospective-deferred-image-serialization.md)
-is registered before the new build or GPU data. Isolated
-[build 184](lanes/n010-comparison-readiness/results/184-deferred-image-calibration-fixture-build.json)
-now completes **all five serial compiler/link steps PASS**. Whole source inverse
-to 167, identical entire runtime/timed PT bodies and unchanged active inputs
-are verified; 511 inputs and 13 generated files are recorded. Exact result
-SHA256: `6eca016a61ca7ba3b072f05ef7f22221a2d402a9ff778d10b56feb0261f96ebf`.
-Only calibration CPU PFM serialization moves after each native sequence,
-retaining all images in a bounded **256 MiB CPU RGBA spool**. Image/scratch
-readbacks, scratch writes, directories, source/first-target preparation and
-all GPU work remain in their original order. CPU spool memory is separate
-from the unchanged all-owned-Vulkan ledger scope; it is not GPU memory.
-No GPU runtime/image equivalence or timing capability has been established.
-Sizing 185 and full calibration 186 are prepared **but not run**, with the
-original sixteen-boundary/eight-block schedule and all original thresholds.
-Source/CLI assembly and a whole-original-049-inverse strict proof adapter are
-prepared; full proof intake is unexecuted and requires actual 184/185/186 PASS,
-all native payloads, bounded complete spool flush and matching boot/device/driver.
-Do not move desktop windows or change resolution/power/clocks for this plan.
-No waiting/retry worker or GPU overlap with CPU 180 is installed. Source/build
-preparation is not software regression validation; unit tests were not run.
+- Exact 180 SHA256: `f52002b46754152f02ef6111863f7776b5404d2b4673d201b20d4fb253d808ef`.
+- Exact 185 SHA256: `58dba169986246adc16898e89f351d6ca1643d6e16a9f247e6934183f3838b32`.
+- Exact 191 SHA256: `448a0bd9f36e94dd3b487d7e805073a5efa2286ea281452a76a8b067bfb28f5c`.
+- Complete physical 163 and state/prefix 164 remain valid for their failed
+  sampler's scope; they do not override 180 or attest a new sampler.
+- Prior 165/172 stops and 171/176 receipts, historical host/session 181/182,
+  178 restoration failure, all negative sampler/GPU-port and quality results
+  remain in immutable result records and Git history. No display, desktop
+  window, power or clock setting changes occur in the current work.
+- Original seeds, 24-slot corpus, six levels/cap, support/absolute/relative
+  gates, all-pixel scoring, quality targets, full GPU precision and true-peak
+  memory requirements remain. No N011, Actions, default Renderer promotion or
+  N001–N009 result changes. Unit/runtime regression tests are **NOT RUN**.
 
-Prospective [handoff plan 055](lanes/n010-comparison-readiness/experiments/055-prospective-deferred-calibration-handoff.md)
-now prepares separate final-pilot/auditor entries selecting strict actual
-184/185/186, with unchanged original reference/quality/memory checks. Complete
-parent-adapter source inverses are exact; original full pilot/auditor inverses
-are inherited. Source inspection confirms the same **six gate names** and
-byte-identical bodies for the five non-calibration gates. Python assembly and
-CLI help complete; **no admission, pilot, final gate or READY result has run**.
-The fresh pilot work root is `final-comparison-pilots-deferred-image-v1`, with
-unchanged unexecuted outputs 043/044/048. Admission requires actual full timing
-PASS, complete 166 and all 24 independently verified references before work
-creation. Run final 047 only after actual pilot-driver termination/quiescence.
-All preparation-pilot timing remains diagnostic; no historical timing transfer.
-Plan 054/build 184 and negative 169/178 evidence remain immutable.
+### Execution order
 
-All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
-full actual timing capability and executed final six-gate **047 READY** remain
-mandatory. The pilot driver and final auditor are prepared but unexecuted;
-their original numerical bodies and all six gate names remain unchanged.
-Historical pilot timing stays diagnostic. Direct max-relative-error-1.0 pixels
-remain **UNRESOLVED / 未解決**, included without masks. Default Renderer/build
-behavior and N001–N009 results remain unchanged. N010 stays active; Lane M
-comparative acquisition has not started. No N011, CUDA or Actions.
-
-Earlier live-status descriptions retained below are historical publication
-checkpoints; this section reports the current execution state.
-
-**No new GI algorithm study is part of the October 2026 history consolidation.** The current evidence-backed Renderer is a baseline for further work, not an announced replacement for existing GI.
+1. Identify dominant depth/weight or measurement-cadence mechanisms using
+   bounded diagnostics, then decide the smallest supported repair.
+2. Complete the unchanged pending reference ladders and full timing proof.
+3. Finish whole-corpus quality/true-peak pilots and execute all six final gates.
+4. Publish N010 decision and distinct Lane M handoff; incumbent losses are
+   valid comparison outcomes and do not require another preparation study.
 
 ## Phase 1 — establish competitiveness
 

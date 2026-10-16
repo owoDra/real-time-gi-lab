@@ -915,6 +915,12 @@
       "gpu_run": false
     },
     {
+      "id": "N010-180",
+      "status": "complete-negative-bounded-feasibility-no-reference-admission",
+      "result": "180-primary-direction-second-stop-bounded-feasibility.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-181",
       "status": "posthoc-prior-host-shutdown-and-fallback-boot-observation-no-runtime-validation",
       "result": "181-execution-environment-after-host-shutdown.json",
@@ -939,9 +945,27 @@
       "gpu_run": false
     },
     {
+      "id": "N010-185",
+      "status": "complete-sizing-pass-no-full-timing-admission",
+      "result": "185-deferred-image-calibration-sizing.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-187",
       "status": "complete-isolated-nested-scramble-two-step-build-and-whole-source-inverse-only-no-scientific-admission",
       "result": "187-nested-scramble-oracle-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-191",
+      "status": "posthoc-cpu-retained-depth-decomposition-and-critical-path-diagnosis",
+      "result": "191-posthoc-readiness-bottleneck-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-192",
+      "status": "posthoc-cause-review-and-shortest-valid-completion-path",
+      "result": "192-cause-review-and-shortest-valid-completion.md",
       "gpu_run": false
     }
   ]

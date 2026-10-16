@@ -1,0 +1,423 @@
+{
+  "schema": "n010-posthoc-readiness-bottleneck-diagnosis/1",
+  "complete": true,
+  "classification": "POST_HOC_DIAGNOSIS_NOT_ADMISSION",
+  "gpu_run": false,
+  "new_transport_samples": false,
+  "eligible_for_references": false,
+  "source_commit": "e6dbc3334f927a1c7444c57acf313e716842b831",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_readiness_bottlenecks.py": "b9f8d9746f8ce3c3baab4b46404ebf0f373a5854b73c5878e8b4b240b5bd5823",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json": "c858405069ef7c57d75a2fe8f2376fd40f6b7cd21299820d3c9d52493503f176",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json": "f52002b46754152f02ef6111863f7776b5404d2b4673d201b20d4fb253d808ef",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/qualification.json": "9da5eece00c7e1e490a35aefceb0a54f7ea42b0a90b4ad655d6713c482a9fa8f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/qualification.json": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/scene.n008": "24941dd0d88d0f3fd2a40ead7bab67898582f0d74fd5d8d73d9e8f322607da32",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_rqmc_oracle.py": "fe837aa917f9564266cfd77cbb8efebf92370cae6566a37db36b406a791076ae",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/generate_cached_oracle.py": "5a6da3f8f5f8a97dc6c4152bdb72ce2bb84a14eab84281864f1fb42b49dddd91",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle/n008_oracle.hpp": "dc47c4e1d8145fea21988313547b35e13a917c3929a838aa91ae7a5bc21bba4c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s0.f64": "459c3c3c38eeb733b9ac40c91d46c16e171b201e859e8d9958287c86c2f82023",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s1.f64": "c6f71bd18d0f355c05a8ecafc711b586918c6a64bff6acea164b49b661120c57",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s2.f64": "17908a4021c91a53ebc15d91c749f4395c2d5c5c0d7bc5779aab402ac246e7d7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s3.f64": "1c58c734982d617a5b11d9b3ee3c4249b1265563b7647ffb643ac5b3bd85bfb0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s0.f64": "ddb90ee92716e17b7f236dfc03e869900fd8564e566737d63e975329fecacf91",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s1.f64": "69b4b12dd163f882acc7ce6bacb9b73e02f398bc509dab3b1b55f38f1e4a0425",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s2.f64": "599989ee86422adaf4d57310f002ffcc7759c0bc966056bf0969133696a63849",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s3.f64": "6bed3e25037d3287c5d5169f386205c877d1bf78388e2cf110dcd0f6c11e27c0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s0.f64": "a6022a47fc0c635c4705f7e4b06df866dfe2f73e619ecfa88fbfa608fe25eff0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s1.f64": "d281df5ce71c87ac41637d5af0474fae0291da6690e99db6d10f7485ef6d37c7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s2.f64": "0f176d29b80d2896f34f3d13cfc0011fef782ac30a8bbba649d275ec54b20557",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s3.f64": "73469d4f16a27af576b026156b237f1876e98e6bef8639aae980dae229e06735",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s0.f64": "500f6b6fe9fc2acfb5d1139bcc9603cc88b362123058fa3df21a94d535a907ce",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s1.f64": "40389bda28a0c0305889a39c8beddd531ff0384a8746e1371a6731549ae9a585",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s2.f64": "b184138e4cd03d139252246ed1aa18cea4942c54dfca7993e76aa78c6f97f4ce",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s3.f64": "aadb8b69bab3718fa2c98bc6c23fc677f2ed936d210df1a5f35ab38293559410",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s0.f64": "578d2d4e5602eb0b43902fd6c3e6544f829d7c9784b0d362a9bbdecc2af4125d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s1.f64": "e3da1f2598b335b5e67e0dfaba2360ad0d5f6cac4a4a6f5b3b4d0cfb415d7cad",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s2.f64": "92fdde0070af8c15e8f272ac7d299bf5aad50513f9c96e44cd6324b6dcb7afc4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s3.f64": "babd5a4aecb7480ff02f12812f4d802617a813113c7ea2a50c897e3c3c921550",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s0.f64": "71d9c39395b6db41ad463b0509361d89916444273aea618899bfb9677207cb6a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s1.f64": "37a870f3408a1be411e88c6cd8a077c66dee0f1b404a757400727bbe7bc08782",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s2.f64": "cb3980081f0ac501a16fb272619eee8b9e9209f4dd86d77bcb6f5a5b3d2a6c45",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s3.f64": "27a41bb75a7a67506b96f80e3a5e75c71c54a3b0f0ab4342da60fff6a99cee7a",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json": "dddca3bfa7d2f0847e683352593519165829963d49fd173a29b698ba825d6add",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/178-hidden-ide-bulk-pfm-calibration-full-renderer.json": "1f25e8a3430254b5c010d0208e3e77e3d2d2985aa42421f51de978b219a55870",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json": "58dba169986246adc16898e89f351d6ca1643d6e16a9f247e6934183f3838b32"
+  },
+  "resources": {
+    "cpu_affinity": [
+      31
+    ],
+    "nice": 15,
+    "cpu_limit_seconds": 120,
+    "elapsed_seconds_diagnostic": 0.8418310200004271
+  },
+  "eligible_slots": 16,
+  "pending_slots": 8,
+  "reference_bounce_decomposition": [
+    {
+      "spp": 8192,
+      "first_indirect_bounce_replicate_energy": 1.0605210340115998e-06,
+      "later_indirect_bounces_replicate_energy": 6.039630995722124e-05,
+      "cross_covariance_energy": 5.074443687625232e-07,
+      "full_indirect_replicate_energy": 6.196427535999538e-05,
+      "later_to_full_energy_ratio": 0.9746956549775707,
+      "first_to_full_energy_ratio": 0.017115039720068777,
+      "decomposition_relative_residual": 2.1871517220741071e-16,
+      "first_indirect_pairwise_luma_p99": 1.0708956426515799e-05,
+      "later_indirect_pairwise_luma_p99": 7.10323103592004e-05,
+      "full_indirect_pairwise_luma_p99": 7.221759634500706e-05,
+      "scope": "Four retained replicate means, not iid per-path variance or a confidence bound. Later means are paired B8 minus B2; their float64 rounding is retained."
+    },
+    {
+      "spp": 16384,
+      "first_indirect_bounce_replicate_energy": 3.8661734725450483e-07,
+      "later_indirect_bounces_replicate_energy": 2.9609030923956915e-05,
+      "cross_covariance_energy": 1.3132593363247565e-07,
+      "full_indirect_replicate_energy": 3.0126974204843894e-05,
+      "later_to_full_energy_ratio": 0.9828079887025727,
+      "first_to_full_energy_ratio": 0.012832929872935711,
+      "decomposition_relative_residual": 1.124617349880576e-16,
+      "first_indirect_pairwise_luma_p99": 6.446459875620679e-06,
+      "later_indirect_pairwise_luma_p99": 4.986121411944876e-05,
+      "full_indirect_pairwise_luma_p99": 5.0374711901257714e-05,
+      "scope": "Four retained replicate means, not iid per-path variance or a confidence bound. Later means are paired B8 minus B2; their float64 rounding is retained."
+    },
+    {
+      "spp": 32768,
+      "first_indirect_bounce_replicate_energy": 1.488952781829085e-07,
+      "later_indirect_bounces_replicate_energy": 1.4671411525820844e-05,
+      "cross_covariance_energy": 4.609005810573868e-08,
+      "full_indirect_replicate_energy": 1.4866396862109493e-05,
+      "later_to_full_energy_ratio": 0.986884156389931,
+      "first_to_full_energy_ratio": 0.010015559221508683,
+      "decomposition_relative_residual": 1.139526887531387e-16,
+      "first_indirect_pairwise_luma_p99": 3.995146443795677e-06,
+      "later_indirect_pairwise_luma_p99": 3.515475985745719e-05,
+      "full_indirect_pairwise_luma_p99": 3.5403060545675156e-05,
+      "scope": "Four retained replicate means, not iid per-path variance or a confidence bound. Later means are paired B8 minus B2; their float64 rounding is retained."
+    }
+  ],
+  "original_cosine_convergence": {
+    "levels": [
+      8192,
+      16384,
+      32768,
+      65536
+    ],
+    "absolute_p99": [
+      7.221767213195569e-05,
+      5.037479102611542e-05,
+      3.540308447554708e-05,
+      2.451940439641476e-05
+    ],
+    "observed_log_log_decay_exponent": 0.5184110835985899,
+    "extrapolation": [
+      {
+        "spp": 131072,
+        "modelled_absolute_p99": 1.711798455657127e-05,
+        "multiplicative_reduction_to_reach_original_1e_5": 0.5841809219392706
+      },
+      {
+        "spp": 262144,
+        "modelled_absolute_p99": 1.1950755024125253e-05,
+        "multiplicative_reduction_to_reach_original_1e_5": 0.836767215110073
+      }
+    ],
+    "scope": "Planning-only extrapolation, not cap evidence, eligibility or a new acceptance gate. Two consecutive levels and all original tests still required."
+  },
+  "candidate_180": {
+    "complete": true,
+    "all_pass": false,
+    "levels": [
+      {
+        "spp": 8192,
+        "ratio_to_original": 1.0703554221788882,
+        "feasibility_pass": false
+      },
+      {
+        "spp": 16384,
+        "ratio_to_original": 1.0599135470235277,
+        "feasibility_pass": false
+      }
+    ]
+  },
+  "prior_timing_decisions": [
+    {
+      "campaign": 169,
+      "boundary": "C1-hwrt",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.269463192492914,
+      "effect_order_bias": 1.0708864545919254
+    },
+    {
+      "campaign": 169,
+      "boundary": "C1-software",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_span",
+        "control_order_bias",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.0725696795846724,
+      "effect_order_bias": 1.0750383936895416
+    },
+    {
+      "campaign": 169,
+      "boundary": "C1-pt-B2",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_order_bias",
+        "effect_span"
+      ],
+      "control_order_bias": 1.0558634563587759,
+      "effect_order_bias": 1.0270248039603704
+    },
+    {
+      "campaign": 169,
+      "boundary": "C1-pt-B8",
+      "complete_blocks": 8,
+      "verdict": "PASS",
+      "failed_gates": [],
+      "control_order_bias": 1.0145553216493588,
+      "effect_order_bias": 1.016831151445142
+    },
+    {
+      "campaign": 169,
+      "boundary": "C1-dense-rc",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias",
+        "effect_positive_fraction",
+        "effect_exceeds_control_envelope"
+      ],
+      "control_order_bias": 1.3160408151434824,
+      "effect_order_bias": 1.4206936513691175
+    },
+    {
+      "campaign": 169,
+      "boundary": "C7-hwrt",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias",
+        "effect_positive_fraction",
+        "effect_exceeds_control_envelope"
+      ],
+      "control_order_bias": 1.788997666298744,
+      "effect_order_bias": 2.2502854687159206
+    },
+    {
+      "campaign": 169,
+      "boundary": "C7-software",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias",
+        "effect_positive_fraction",
+        "effect_exceeds_control_envelope"
+      ],
+      "control_order_bias": 1.6547230642020605,
+      "effect_order_bias": 1.9115430278204255
+    },
+    {
+      "campaign": 169,
+      "boundary": "C7-pt-B2",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.0813400879835653,
+      "effect_order_bias": 1.0570925909131734
+    },
+    {
+      "campaign": 169,
+      "boundary": "C7-pt-B8",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_order_bias",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.0353553298036615,
+      "effect_order_bias": 1.06807352016102
+    },
+    {
+      "campaign": 169,
+      "boundary": "C7-dense-rc",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.1299403375366823,
+      "effect_order_bias": 1.063876572250173
+    },
+    {
+      "campaign": 169,
+      "boundary": "C6-hwrt",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.047697541287213,
+      "effect_order_bias": 1.0752146449824032
+    },
+    {
+      "campaign": 169,
+      "boundary": "C6-pt-B2",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.1229937823082257,
+      "effect_order_bias": 1.1426389110257458
+    },
+    {
+      "campaign": 169,
+      "boundary": "C6-pt-B8",
+      "complete_blocks": 8,
+      "verdict": "PASS",
+      "failed_gates": [],
+      "control_order_bias": 1.0052174587803744,
+      "effect_order_bias": 1.005692606034734
+    },
+    {
+      "campaign": 169,
+      "boundary": "C12-hwrt",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.0514291511740492,
+      "effect_order_bias": 1.0621123431503627
+    },
+    {
+      "campaign": 169,
+      "boundary": "C12-pt-B2",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.201948406821895,
+      "effect_order_bias": 1.1590488699585988
+    },
+    {
+      "campaign": 169,
+      "boundary": "C12-pt-B8",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span"
+      ],
+      "control_order_bias": 1.0660835183933346,
+      "effect_order_bias": 1.020733853260266
+    },
+    {
+      "campaign": 178,
+      "boundary": "C1-hwrt",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "control_order_bias",
+        "effect_span",
+        "effect_order_bias"
+      ],
+      "control_order_bias": 1.1131046948144152,
+      "effect_order_bias": 1.1300865112183687
+    },
+    {
+      "campaign": 178,
+      "boundary": "C1-software",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_order_bias"
+      ],
+      "control_order_bias": 1.0402591114581563,
+      "effect_order_bias": 1.0233173510224232
+    },
+    {
+      "campaign": 178,
+      "boundary": "C1-pt-B2",
+      "complete_blocks": 8,
+      "verdict": "FAIL",
+      "failed_gates": [
+        "control_max_absolute_ratio",
+        "control_span",
+        "effect_span"
+      ],
+      "control_order_bias": 1.0118595731760847,
+      "effect_order_bias": 1.0124055858775745
+    },
+    {
+      "campaign": 178,
+      "boundary": "C1-pt-B8",
+      "complete_blocks": 1,
+      "verdict": "INCOMPLETE",
+      "failed_gates": null,
+      "control_order_bias": null,
+      "effect_order_bias": null
+    }
+  ],
+  "deferred_sizing_185": {
+    "complete": true,
+    "all_pass": true,
+    "boundaries": 16,
+    "full_186_run": false,
+    "scope": "Sizing evidence only; no full precision verdict and no causal proof of output-overhead hypothesis."
+  },
+  "limits": "No sampler cause is inferred solely from full-frame energy decomposition. No GPU clock/power/desktop cause is established by timing correlations. No thresholds, seeds, cap, corpus, old evidence or scoring masks changed.",
+  "tests": "NOT_RUN; retained scientific-data diagnosis only",
+  "direct_error_1_0": "UNRESOLVED / 未解決; included without masks"
+}
