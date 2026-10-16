@@ -1,0 +1,885 @@
+{
+  "schema": "n010-posthoc-concurrent-drm-client-diagnosis/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "POSTHOC_OBSERVED_NONRESEARCH_GRAPHICS_ACCOUNTING_ON_SAME_DEVICE_DURING_CALIBRATION",
+  "utc": "2026-10-16T02:17:42.381953+00:00",
+  "source_commit": "a86b2bdf61b44594b61ad4efa853450d5b45c544",
+  "source_observation": {
+    "path": "out/research/n010-comparison-readiness/posthoc-drm-client-observation-v1.json",
+    "sha256": "06c1f6354691c5a9c940bb43a1d7d7d6559e803a2940d33ab8d8d6a2dc8e19cf",
+    "record": {
+      "schema": "n010-posthoc-read-only-drm-client-observation/1",
+      "source_commit": "a86b2bdf61b44594b61ad4efa853450d5b45c544",
+      "gpu_work_submitted_by_observer": false,
+      "power_settings_changed": false,
+      "recorded_calibration_modified": false,
+      "measurement": "Linux proc fdinfo cumulative per-DRM-client engine nanoseconds, first readable FD per deduplicated driver/PCI/client-id",
+      "interval_policy": "Four snapshots, fixed five-second gaps; observational only, no acceptance threshold",
+      "calibration_snapshot_before": {
+        "sha256": "a96fa1f28e37f36d447dc8e1da1096394c4de9229df0c665e018da56486f819c",
+        "bytes": 8223167,
+        "complete": false,
+        "rows": 4
+      },
+      "snapshots": [
+        {
+          "utc": "2026-10-16T02:15:27.290888+00:00",
+          "scan_start_monotonic_ns": 224230857760407,
+          "scan_end_monotonic_ns": 224230879507627,
+          "clients": {
+            "amdgpu|0000:c5:00.0|18": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "18",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 1856,
+                  "start_ticks": 1399,
+                  "comm": "python"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|15": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "15",
+              "engine_ns": {
+                "gfx": 4568777296,
+                "compute": 25249292141
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2088,
+                  "start_ticks": 1496,
+                  "comm": ".quickshell-wra"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|12": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "12",
+              "engine_ns": {
+                "gfx": 1089760,
+                "compute": 954754
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|13": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "13",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|14": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "14",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2243,
+                  "start_ticks": 1536,
+                  "comm": ".xdg-desktop-po"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2943": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2943",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 516230,
+                  "start_ticks": 8673902,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516491,
+                  "start_ticks": 8673962,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516525,
+                  "start_ticks": 8673972,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516771,
+                  "start_ticks": 8674048,
+                  "comm": "bash"
+                },
+                {
+                  "pid": 517090,
+                  "start_ticks": 8674069,
+                  "comm": "npm exec codex"
+                },
+                {
+                  "pid": 517115,
+                  "start_ticks": 8674094,
+                  "comm": "node"
+                },
+                {
+                  "pid": 517156,
+                  "start_ticks": 8674097,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517378,
+                  "start_ticks": 8674137,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517553,
+                  "start_ticks": 8674322,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 1661239,
+                  "start_ticks": 20945957,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 1695815,
+                  "start_ticks": 22088507,
+                  "comm": "codex-code-mode"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2946": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2946",
+              "engine_ns": {
+                "gfx": 1918333007592,
+                "compute": 794537831240
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 516315,
+                  "start_ticks": 8673949,
+                  "comm": "orca-ide"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|6519": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "6519",
+              "engine_ns": {
+                "compute": 41665625831
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 1712651,
+                  "start_ticks": 22418894,
+                  "comm": "phos-n010-pixel"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "utc": "2026-10-16T02:15:32.340475+00:00",
+          "scan_start_monotonic_ns": 224235879597594,
+          "scan_end_monotonic_ns": 224235929109139,
+          "clients": {
+            "amdgpu|0000:c5:00.0|18": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "18",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 1856,
+                  "start_ticks": 1399,
+                  "comm": "python"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|15": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "15",
+              "engine_ns": {
+                "gfx": 4568777296,
+                "compute": 25249292141
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2088,
+                  "start_ticks": 1496,
+                  "comm": ".quickshell-wra"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|12": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "12",
+              "engine_ns": {
+                "gfx": 1089760,
+                "compute": 954754
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|13": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "13",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|14": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "14",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2243,
+                  "start_ticks": 1536,
+                  "comm": ".xdg-desktop-po"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2943": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2943",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 516230,
+                  "start_ticks": 8673902,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516491,
+                  "start_ticks": 8673962,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516525,
+                  "start_ticks": 8673972,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516771,
+                  "start_ticks": 8674048,
+                  "comm": "bash"
+                },
+                {
+                  "pid": 517090,
+                  "start_ticks": 8674069,
+                  "comm": "npm exec codex"
+                },
+                {
+                  "pid": 517115,
+                  "start_ticks": 8674094,
+                  "comm": "node"
+                },
+                {
+                  "pid": 517156,
+                  "start_ticks": 8674097,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517378,
+                  "start_ticks": 8674137,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517553,
+                  "start_ticks": 8674322,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 1661239,
+                  "start_ticks": 20945957,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 1695815,
+                  "start_ticks": 22088507,
+                  "comm": "codex-code-mode"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2946": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2946",
+              "engine_ns": {
+                "gfx": 1920655509000,
+                "compute": 794537846940
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 516315,
+                  "start_ticks": 8673949,
+                  "comm": "orca-ide"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|6519": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "6519",
+              "engine_ns": {
+                "compute": 46692781633
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 1712651,
+                  "start_ticks": 22418894,
+                  "comm": "phos-n010-pixel"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "utc": "2026-10-16T02:15:37.365209+00:00",
+          "scan_start_monotonic_ns": 224240929462158,
+          "scan_end_monotonic_ns": 224240953831706,
+          "clients": {
+            "amdgpu|0000:c5:00.0|18": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "18",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 1856,
+                  "start_ticks": 1399,
+                  "comm": "python"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|15": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "15",
+              "engine_ns": {
+                "gfx": 4568777296,
+                "compute": 25249292141
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2088,
+                  "start_ticks": 1496,
+                  "comm": ".quickshell-wra"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|12": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "12",
+              "engine_ns": {
+                "gfx": 1089760,
+                "compute": 954754
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|13": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "13",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|14": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "14",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2243,
+                  "start_ticks": 1536,
+                  "comm": ".xdg-desktop-po"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2943": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2943",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 516230,
+                  "start_ticks": 8673902,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516491,
+                  "start_ticks": 8673962,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516525,
+                  "start_ticks": 8673972,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516771,
+                  "start_ticks": 8674048,
+                  "comm": "bash"
+                },
+                {
+                  "pid": 517090,
+                  "start_ticks": 8674069,
+                  "comm": "npm exec codex"
+                },
+                {
+                  "pid": 517115,
+                  "start_ticks": 8674094,
+                  "comm": "node"
+                },
+                {
+                  "pid": 517156,
+                  "start_ticks": 8674097,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517378,
+                  "start_ticks": 8674137,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517553,
+                  "start_ticks": 8674322,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 1661239,
+                  "start_ticks": 20945957,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 1695815,
+                  "start_ticks": 22088507,
+                  "comm": "codex-code-mode"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2946": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2946",
+              "engine_ns": {
+                "gfx": 1923069477872,
+                "compute": 794537846940
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 516315,
+                  "start_ticks": 8673949,
+                  "comm": "orca-ide"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|6519": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "6519",
+              "engine_ns": {
+                "compute": 51698735730
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 1712651,
+                  "start_ticks": 22418894,
+                  "comm": "phos-n010-pixel"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "utc": "2026-10-16T02:15:42.415942+00:00",
+          "scan_start_monotonic_ns": 224245954388061,
+          "scan_end_monotonic_ns": 224246004571958,
+          "clients": {
+            "amdgpu|0000:c5:00.0|18": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "18",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 1856,
+                  "start_ticks": 1399,
+                  "comm": "python"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|15": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "15",
+              "engine_ns": {
+                "gfx": 4568777296,
+                "compute": 25249292141
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2088,
+                  "start_ticks": 1496,
+                  "comm": ".quickshell-wra"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|12": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "12",
+              "engine_ns": {
+                "gfx": 1089760,
+                "compute": 954754
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|13": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "13",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2116,
+                  "start_ticks": 1502,
+                  "comm": "Xwayland"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|14": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "14",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 2243,
+                  "start_ticks": 1536,
+                  "comm": ".xdg-desktop-po"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2943": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2943",
+              "engine_ns": {},
+              "observed_pid_start": [
+                {
+                  "pid": 516230,
+                  "start_ticks": 8673902,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516491,
+                  "start_ticks": 8673962,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516525,
+                  "start_ticks": 8673972,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 516771,
+                  "start_ticks": 8674048,
+                  "comm": "bash"
+                },
+                {
+                  "pid": 517090,
+                  "start_ticks": 8674069,
+                  "comm": "npm exec codex"
+                },
+                {
+                  "pid": 517115,
+                  "start_ticks": 8674094,
+                  "comm": "node"
+                },
+                {
+                  "pid": 517156,
+                  "start_ticks": 8674097,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517378,
+                  "start_ticks": 8674137,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 517553,
+                  "start_ticks": 8674322,
+                  "comm": "orca-ide"
+                },
+                {
+                  "pid": 1661239,
+                  "start_ticks": 20945957,
+                  "comm": "codex"
+                },
+                {
+                  "pid": 1695815,
+                  "start_ticks": 22088507,
+                  "comm": "codex-code-mode"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|2946": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "2946",
+              "engine_ns": {
+                "gfx": 1925054542792,
+                "compute": 794537846940
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 516315,
+                  "start_ticks": 8673949,
+                  "comm": "orca-ide"
+                }
+              ]
+            },
+            "amdgpu|0000:c5:00.0|6519": {
+              "driver": "amdgpu",
+              "device_pci": "0000:c5:00.0",
+              "client_id": "6519",
+              "engine_ns": {
+                "compute": 56730737531
+              },
+              "observed_pid_start": [
+                {
+                  "pid": 1712651,
+                  "start_ticks": 22418894,
+                  "comm": "phos-n010-pixel"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "positive_engine_accounting_intervals": [
+        {
+          "client_key": "amdgpu|0000:c5:00.0|2946",
+          "pid_start_before": [
+            {
+              "pid": 516315,
+              "start_ticks": 8673949,
+              "comm": "orca-ide"
+            }
+          ],
+          "pid_start_after": [
+            {
+              "pid": 516315,
+              "start_ticks": 8673949,
+              "comm": "orca-ide"
+            }
+          ],
+          "scan_start_interval_ns": 5021837187,
+          "engine_accounted_ns_delta": {
+            "gfx": 2322501408,
+            "compute": 15700
+          }
+        },
+        {
+          "client_key": "amdgpu|0000:c5:00.0|6519",
+          "pid_start_before": [
+            {
+              "pid": 1712651,
+              "start_ticks": 22418894,
+              "comm": "phos-n010-pixel"
+            }
+          ],
+          "pid_start_after": [
+            {
+              "pid": 1712651,
+              "start_ticks": 22418894,
+              "comm": "phos-n010-pixel"
+            }
+          ],
+          "scan_start_interval_ns": 5021837187,
+          "engine_accounted_ns_delta": {
+            "compute": 5027155802
+          }
+        },
+        {
+          "client_key": "amdgpu|0000:c5:00.0|2946",
+          "pid_start_before": [
+            {
+              "pid": 516315,
+              "start_ticks": 8673949,
+              "comm": "orca-ide"
+            }
+          ],
+          "pid_start_after": [
+            {
+              "pid": 516315,
+              "start_ticks": 8673949,
+              "comm": "orca-ide"
+            }
+          ],
+          "scan_start_interval_ns": 5049864564,
+          "engine_accounted_ns_delta": {
+            "gfx": 2413968872,
+            "compute": 0
+          }
+        },
+        {
+          "client_key": "amdgpu|0000:c5:00.0|6519",
+          "pid_start_before": [
+            {
+              "pid": 1712651,
+              "start_ticks": 22418894,
+              "comm": "phos-n010-pixel"
+            }
+          ],
+          "pid_start_after": [
+            {
+              "pid": 1712651,
+              "start_ticks": 22418894,
+              "comm": "phos-n010-pixel"
+            }
+          ],
+          "scan_start_interval_ns": 5049864564,
+          "engine_accounted_ns_delta": {
+            "compute": 5005954097
+          }
+        },
+        {
+          "client_key": "amdgpu|0000:c5:00.0|2946",
+          "pid_start_before": [
+            {
+              "pid": 516315,
+              "start_ticks": 8673949,
+              "comm": "orca-ide"
+            }
+          ],
+          "pid_start_after": [
+            {
+              "pid": 516315,
+              "start_ticks": 8673949,
+              "comm": "orca-ide"
+            }
+          ],
+          "scan_start_interval_ns": 5024925903,
+          "engine_accounted_ns_delta": {
+            "gfx": 1985064920,
+            "compute": 0
+          }
+        },
+        {
+          "client_key": "amdgpu|0000:c5:00.0|6519",
+          "pid_start_before": [
+            {
+              "pid": 1712651,
+              "start_ticks": 22418894,
+              "comm": "phos-n010-pixel"
+            }
+          ],
+          "pid_start_after": [
+            {
+              "pid": 1712651,
+              "start_ticks": 22418894,
+              "comm": "phos-n010-pixel"
+            }
+          ],
+          "scan_start_interval_ns": 5024925903,
+          "engine_accounted_ns_delta": {
+            "compute": 5032001801
+          }
+        }
+      ],
+      "limitations": "Post-hoc live observation only; cumulative counters do not identify overlap with individual timed commands, prove causation of noise, measure clocks/power or retrospectively classify earlier blocks. Missing/exited clients are unassessed. No repeated FD accounting. No correction, exclusion or threshold change."
+    }
+  },
+  "device_pci": "0000:c5:00.0",
+  "calibration": "169-bulk-pfm-calibration-full-renderer.json",
+  "calibration_terminal": false,
+  "observed_nonresearch_client": {
+    "client_key": "amdgpu|0000:c5:00.0|2946",
+    "pid": 516315,
+    "start_ticks": 8673949,
+    "comm": "orca-ide",
+    "intervals": [
+      {
+        "scan_start_interval_ns": 5021837187,
+        "graphics_accounted_ns_delta": 2322501408
+      },
+      {
+        "scan_start_interval_ns": 5049864564,
+        "graphics_accounted_ns_delta": 2413968872
+      },
+      {
+        "scan_start_interval_ns": 5024925903,
+        "graphics_accounted_ns_delta": 1985064920
+      }
+    ]
+  },
+  "deduplication": "One first-readable FD per driver/PCI/client-id per snapshot; shared descriptors and inherited clients are not summed repeatedly.",
+  "inference": "The same AMD DRM device accounts additional graphics work for the IDE across all three observed intervals while the calibration native compute client also advances. This establishes concurrent client activity over those observation intervals, not the cause of precision-gate failures.",
+  "limitations": [
+    "Post-hoc four-snapshot observation with five-second gaps, not a preregistered calibration gate.",
+    "Cumulative accounting is asynchronous and does not identify overlap with individual timed commands or instantaneous utilization.",
+    "This does not characterize every earlier or later block; clients absent from both snapshots have no measured delta.",
+    "No clock/power measurement, causal isolation, correction, exclusion or threshold change.",
+    "Read-only proc inspection submits no observer GPU work and leaves the acquisition and every application running."
+  ],
+  "next_action": "Complete all sixteen original 169 boundaries unchanged. Before any future independent calibration repair, address the observed non-research GPU-client activity prospectively; do not assume another image-writer change solves the noise.",
+  "readiness": "NOT_ESTABLISHED; no accepted timing or readiness follows from this diagnosis",
+  "direct_max_relative_error_1_0": "UNRESOLVED / 未解決; included",
+  "tests": "NOT_RUN; observational diagnosis only"
+}

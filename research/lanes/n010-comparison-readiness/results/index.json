@@ -859,6 +859,12 @@
       "status": "complete-all-sixteen-row-bulk-sizing-boundaries-image-equal-scratch-and-ledger-pass",
       "result": "168-bulk-pfm-calibration-quiet-sizing.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-173",
+      "status": "posthoc-read-only-same-device-ide-graphics-accounting-during-calibration-no-causal-proof",
+      "result": "173-posthoc-concurrent-drm-client-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }

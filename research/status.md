@@ -2,6 +2,22 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+Read-only post-hoc [DRM-client observation 173](lanes/n010-comparison-readiness/results/173-posthoc-concurrent-drm-client-diagnosis.json)
+finds IDE graphics accounting advancing on the **same AMD device** during
+live calibration: 2.3225, 2.4140 and 1.9851 graphics-engine seconds across three
+roughly five-second intervals; the native calibration compute client also
+advances in each interval. Four snapshots deduplicate shared/inherited FDs
+by driver/PCI/client-id. This establishes other-client activity in those
+observation intervals, **not causation of precision failures**, exact per-query
+overlap, instantaneous utilization or behavior of unobserved blocks.
+No GPU work, application stop, power/clock change, correction, exclusion or
+threshold change was introduced. Original 169 continues through all sixteen
+boundaries. A future independent acquisition repair must address this observed
+non-research GPU activity prospectively, rather than assume another writer
+optimization solves the noise. Three C1 boundaries (HWRT/software/PT B2) have
+now completed eight blocks each and FAIL; C1 PT B8 is running. These are live
+publication checkpoints, not a complete full-calibration decision.
+
 Independent [row-bulk sizing 168](lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json)
 now completes **all sixteen boundaries PASS**: unchanged sizing gates,
 exact original-046 component images, known-work scratch witnesses and owned
