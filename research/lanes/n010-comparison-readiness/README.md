@@ -79,8 +79,14 @@ The original sixteen-boundary/eight-block schedule, scientific thresholds,
 intake adapter assembles with a whole inverse to original 049, adding sampled
 environment/source-bound restoration evidence. Its full timing-proof intake
 has not run; it requires actual complete 167/177/178 PASS. The original 169
-verifier remains unchanged and correctly rejects FAIL. 178 is the next fixed
-full acquisition, only after actual quiescence; 172 is not restarted.
+verifier remains unchanged and correctly rejects FAIL. **Full 178 started
+once** after actual sizing-controller termination and quiescence, from frozen
+177 doses. Controller PID/start is `1736973/22907358`; native GPU work is
+observed. Its first C1 HWRT boundary completes eight blocks with the original
+precision decision FAIL; subsequent boundaries are still acquiring. This is
+not a complete calibration or timing admission. Finish the full fixed campaign
+without changing environment, dropping samples or retrying. CPU 172 remains
+stopped and is not restarted. No CPU reference worker overlaps this campaign.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
@@ -741,7 +747,8 @@ are operational guards, not GPU utilization estimates or changed timing gates.
 Refuse existing paths and other research workers. Keep stopped 172 immutable.
 All original sixteen boundaries are mandatory. Run 178 only after actual
 complete full PASS 177, restoration and actual controller termination.
-177 is complete PASS; its command is historical. 178 is pending.
+177 is complete PASS; its command is historical. 178 has started once;
+its command identifies that live acquisition, not a restart instruction.
 These commands identify one-time acquisitions; never rerun their paths. A scientific precision FAIL still completes all sixteen boundaries.
 An operational guard failure retains partials and prevents timing admission.
 
