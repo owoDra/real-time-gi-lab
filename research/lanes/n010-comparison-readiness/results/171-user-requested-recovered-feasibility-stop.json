@@ -1,0 +1,134 @@
+{
+  "schema": "n010-user-requested-recovered-feasibility-stop/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "USER_STOPPED_BEFORE_FIRST_COMPLETE_FEASIBILITY_LEVEL",
+  "utc": "2026-10-16T02:02:25.156226+00:00",
+  "source_commit": "8bff51f6daab913abbe72f8e0f5918be8e1f8c2c",
+  "source_receipt": {
+    "path": "out/research/n010-comparison-readiness/process-stop-20261016T020116Z.json",
+    "sha256": "ca8fb3eefe2ac27325416c2b64cf7a01217b408e9c7eab1bbf188c2dcaaf5c46",
+    "record": {
+      "schema": "n010-user-requested-process-stop/1",
+      "utc": "2026-10-16T02:01:14.799963+00:00",
+      "reason": "User requested inspection and termination of remaining processes. Preserve partial acquisition without assigning a numerical verdict.",
+      "before": [
+        {
+          "pid": 1705460,
+          "ppid": 1661239,
+          "state": "S",
+          "start_ticks": 22274781,
+          "argv": [
+            "out/research/n010-comparison-readiness/venv/bin/python",
+            "scripts/research/n010_reference_sampling/acquire_recovered_primary_direction_feasibility.py",
+            "--work",
+            "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1",
+            "--output",
+            "research/lanes/n010-comparison-readiness/results/165-primary-direction-recovered-bounded-feasibility.json"
+          ]
+        },
+        {
+          "pid": 1705518,
+          "ppid": 1705460,
+          "state": "S",
+          "start_ticks": 22275741,
+          "argv": [
+            "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-build-v1/prefix/n010_primary_direction_prefix",
+            "--net",
+            "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+            "--scene",
+            "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1/scene.n008",
+            "--out",
+            "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1/o.n8192",
+            "--seeds",
+            "305419896,2596069104,81985529216486895,18364758544493064720",
+            "--spp",
+            "8192",
+            "--threads",
+            "16"
+          ]
+        }
+      ],
+      "signals": [
+        {
+          "pid": 1705460,
+          "start_ticks": 22274781,
+          "signal": "SIGSTOP",
+          "result": "sent"
+        },
+        {
+          "pid": 1705518,
+          "start_ticks": 22275741,
+          "signal": "SIGSTOP",
+          "result": "sent"
+        },
+        {
+          "pid": 1705460,
+          "start_ticks": 22274781,
+          "signal": "SIGTERM",
+          "result": "sent"
+        },
+        {
+          "pid": 1705518,
+          "start_ticks": 22275741,
+          "signal": "SIGTERM",
+          "result": "sent"
+        },
+        {
+          "pid": 1705518,
+          "start_ticks": 22275741,
+          "signal": "SIGCONT",
+          "result": "sent"
+        },
+        {
+          "pid": 1705460,
+          "start_ticks": 22274781,
+          "signal": "SIGCONT",
+          "result": "sent"
+        }
+      ],
+      "after": [],
+      "remaining_live_target_workers": [],
+      "preserved_partial": {
+        "path": "research/lanes/n010-comparison-readiness/results/165-primary-direction-recovered-bounded-feasibility.json",
+        "bytes": 685688,
+        "sha256": "7f68e982e64d4203040550ab73e73f504edaf08642a86529a5c6f2be0f8d2c2f",
+        "complete": false,
+        "all_pass": false,
+        "classification": "INCOMPLETE; user-stopped acquisition, not a numerical FAIL"
+      },
+      "restarted": false,
+      "power_settings_changed": false,
+      "after_first_scan": [],
+      "after_second_scan": [],
+      "remaining_live_research_workers": [],
+      "stopped": true
+    }
+  },
+  "preserved_partial": {
+    "path": "research/lanes/n010-comparison-readiness/results/165-primary-direction-recovered-bounded-feasibility.json",
+    "bytes": 685688,
+    "sha256": "7f68e982e64d4203040550ab73e73f504edaf08642a86529a5c6f2be0f8d2c2f",
+    "complete": false,
+    "all_pass": false,
+    "classification": "INCOMPLETE; user-stopped acquisition, not a numerical FAIL"
+  },
+  "completed_levels": 0,
+  "exported_seed_count": 0,
+  "partial_files_sha256": {
+    "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1/n8192.resource-limits.json": "4ba416301875e49d8701700b1aa9a1b0673c942bfec95aff1892e738a24d64fc",
+    "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1/retained-original-cosine-qualification.json": "9da5eece00c7e1e490a35aefceb0a54f7ea42b0a90b4ad655d6713c482a9fa8f",
+    "out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac"
+  },
+  "numerical_verdict": "INCOMPLETE_NOT_ASSIGNED",
+  "scientific_cap_failure": false,
+  "reference_admission": false,
+  "restarted": false,
+  "old_work_paths_written_after_stop": false,
+  "thresholds_changed": false,
+  "power_settings_changed": false,
+  "readiness": "NOT_ESTABLISHED; all original six gates remain mandatory",
+  "next_work": "Independent registered 168 sizing may proceed only with 167 full PASS and actual CPU/GPU quiescence; 169 requires full 168 PASS. 165 and its work path are immutable and must never be restarted. Any feasibility recovery needs a separate prospective path and record; 166 remains blocked by incomplete 165.",
+  "direct_max_relative_error_1_0": "UNRESOLVED / 未解決; included without masks",
+  "tests": "NOT_RUN; process-stop/provenance publication, no runtime regression claim"
+}

@@ -26,7 +26,7 @@ remain unchanged; only reference dispatch, strict calibration proof intake,
 output/quiescence guards and provenance differ. Final 047 has not run and no
 READY or accepted timing is created. Old pilot timing remains diagnostic.
 This source-only work acquires no samples and does not overlap GPU measurement
-with the live CPU controls.
+with CPU controls.
 
 User-requested [stop 170](lanes/n010-comparison-readiness/results/170-user-requested-minimal-calibration-stop.json)
 terminated the accepted-calibration controller and its GPU PT child using
@@ -57,13 +57,16 @@ C7 B2/B8 checks use 8192-to-16384 own prefixes against fresh 16384 samples.
 The next-stage prerequisite verifier rehashed 3,194 proof/input/payload
 identities. Immutable 164 SHA256:
 `a230cb1ea71154089ba83380555d87dd3774b10dedeb3e24e2acde6eedccb6ab`.
-After verified terminal state of its controller/native process, fresh bounded
-feasibility 165 started at its registered recovery path. Its 8192-spp native
-process runs with 16 threads; the actual PID/start receipt confirms 4 GiB and
-691200 CPU-second limits, with the original 43200-second wall guard. Both
-8192/16384 original-cosine uncertainty ratios must be <=0.75 with full support;
-no numerical level or feasibility verdict exists yet. 166 and GPU 168/169
-remain unexecuted. Physical/prefix PASS alone admits no new reference.
+The subsequent user-requested [stop 171](lanes/n010-comparison-readiness/results/171-user-requested-recovered-feasibility-stop.json)
+terminated feasibility 165's controller and 16-thread CPU child by verified
+PID/start identities. Two actual post-stop scans found zero research workers.
+Exact [partial 165](lanes/n010-comparison-readiness/results/165-primary-direction-recovered-bounded-feasibility.json) and all three work files are retained unchanged;
+no seed export or numerical level completed. Its result is **INCOMPLETE**, with
+no numerical PASS/FAIL or cap-failure verdict. The old work path must never be
+restarted. The original <=0.75 feasibility gates at both 8192/16384 levels and
+full reference screens remain fixed. 166 has not run and cannot use incomplete
+165. Independent GPU 168/169 remain unexecuted and may proceed only after
+167 full PASS and actual CPU/GPU quiescence; they do not admit references.
 
 Independent CPU [build 167](lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
 completed all five compile/link steps PASS. It verifies 494 input identities,

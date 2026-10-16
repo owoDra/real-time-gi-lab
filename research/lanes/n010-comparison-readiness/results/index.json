@@ -841,6 +841,18 @@
       "status": "complete-all-twenty-four-states-both-actual-c7-prefixes-seventy-eight-invocations-byte-counter-exact",
       "result": "164-primary-direction-recovered-all-state-and-prefix.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-165",
+      "status": "user-stopped-before-first-complete-level-no-numerical-verdict",
+      "result": "165-primary-direction-recovered-bounded-feasibility.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-171",
+      "status": "user-requested-recovered-feasibility-stop-partials-retained",
+      "result": "171-user-requested-recovered-feasibility-stop.json",
+      "gpu_run": false
     }
   ]
 }
