@@ -2,6 +2,17 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+[Plan-049 Amendment 1](experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
+now prepares the remaining-pilot driver. It requires full actual timing-proof
+replay, complete eight-slot 166, independent verification of all 24 fixed-view
+references and quiescence before creating work. Original C1 B8 ladder and all
+C2–C6 roles/frames/budgets/scoring/merge bodies remain byte-identical; full
+inverse edits reconstruct the original driver. It imports complete 169 instead
+of rerunning old 029/046 and terminates before the separate final 047 auditor.
+No waiting worker, accepted pilot timing, retry or overwrite is introduced.
+Source assembly and CLI help pass; admission and GPU pilot execution have
+**not run**. This prepares execution, not readiness or competitive evidence.
+
 Prospective [proof intake 049](experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
 now supplies a separate strict verifier for actual 167/168/169 evidence. It
 requires complete full PASS before payload replay, pins build 167 and the
@@ -622,8 +633,8 @@ The auditor is prepared; Python/source assembly and `--help` succeed. It has
 **not executed its six numerical gates**. Dispatch only after all 24 references
 admit, all original complete pilots exist, full 168/169 pass and no research
 worker is live. This is the final one-time result 047, not an interim status
-probe. The separate remaining-pilot acquisition driver still needs explicit
-integration; this command does not acquire missing pilots or calibration.
+probe. The separate remaining-pilot driver is prepared below; this auditor
+does not acquire missing pilots or calibration.
 
 ```bash
 LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
@@ -635,4 +646,24 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
   --dynamic-pilots research/lanes/n010-comparison-readiness/results/019-controlled-dynamic-cohort.json research/lanes/n010-comparison-readiness/results/037-controlled-dynamic-pt1024.json research/lanes/n010-comparison-readiness/results/048-sponza-dynamic-cohort.json \
   --static-pilots research/lanes/n010-comparison-readiness/results/044-c1-complete-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json research/lanes/n010-comparison-readiness/results/024-c8-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/025-c9-pt-quality-ladder.json \
   --output research/lanes/n010-comparison-readiness/results/047-readiness-preflight.json
+```
+
+
+### Remaining full pilots after actual proof admission (plan 049 Amendment 1)
+
+Prepared, **not run**. Dispatch only after 151/163/164/165/166 and full 167/168/169
+complete PASS, all 24 references verify and every CPU/GPU research worker
+terminates. The command refuses missing proofs before creating its work root.
+It acquires original 043/044/048 once, retains all quality losses and memory
+ledgers, and does not rerun old calibration. Run the separate final auditor
+above only after this process actually terminates. No pilot timing becomes an
+accepted Lane M performance measurement.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/finish_recovered_primary_direction_readiness.py \
+  --work out/research/n010-comparison-readiness/final-comparison-pilots-recovered-v1 \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json
 ```

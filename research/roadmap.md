@@ -2,6 +2,17 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+[Plan-049 Amendment 1](lanes/n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
+now prepares the remaining-pilot driver. It requires full actual timing-proof
+replay, complete eight-slot 166, independent verification of all 24 fixed-view
+references and quiescence before creating work. Original C1 B8 ladder and all
+C2–C6 roles/frames/budgets/scoring/merge bodies remain byte-identical; full
+inverse edits reconstruct the original driver. It imports complete 169 instead
+of rerunning old 029/046 and terminates before the separate final 047 auditor.
+No waiting worker, accepted pilot timing, retry or overwrite is introduced.
+Source assembly and CLI help pass; admission and GPU pilot execution have
+**not run**. This prepares execution, not readiness or competitive evidence.
+
 Prospective [proof intake 049](lanes/n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
 now supplies a separate strict verifier for actual 167/168/169 evidence. It
 requires complete full PASS before payload replay, pins build 167 and the
