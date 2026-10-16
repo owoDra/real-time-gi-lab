@@ -68,11 +68,26 @@ program exactly. The pending reference API now requires actual
 identity. **Fresh 180 has now started once** from sample zero at v3, under
 committed plan 053 Amendment 1 (`6f6b557`). Real prerequisites rehash 3893 inputs
 and whole generated numerical-source inversion is exact. At the live start
-checkpoint, controller PID/start is `6449/46323`, native `6544/47962`, boot
-`e1fb993f-5ed5-48e2-8234-809a20e1ade2`; first 8192-spp level is acquiring,
-with no seed exports or numerical verdict yet. The original 12-hour elapsed
-guard per each of two native invocations is unchanged; that bound is not an
-N010 completion estimate. The CPU-only post-shutdown prerequisite uses terminal
+checkpoint, controller PID/start is `6449/46323`, first native `6544/47962`,
+boot `e1fb993f-5ed5-48e2-8234-809a20e1ade2`. The **8192-spp level now
+completes all four seeds and FAILS the feasibility criterion**: absolute-p99
+uncertainty is `7.729857694357595e-5`, or **1.0703554221788882 times** the
+immutable original cosine baseline; the registered limit is **<=0.75 at both
+levels**. Primary/direct/emission remain bit-exact; full signal support is 1.0.
+The reference screen is INCOMPLETE / ineligible (relative p99
+`0.06025009250719263`). Fixed first-level manifest SHA256:
+`5b8e86a623fac2995b339788d67076149639d77503b5b44dee787608e7d5187e`.
+
+**The full 180 campaign is still INCOMPLETE**: its fresh 16384-spp continuation
+is alive and finishes the registered schedule without a threshold change or
+retry. The two-level adoption condition can no longer pass; 166 remains
+unexecuted and this candidate is not admitted for corpus references. Do not
+publish mutable 180 as a completed result or call this a full statistical-cap
+failure. The original 12-hour elapsed guard per native invocation is unchanged;
+that guard is not an N010 completion estimate. Reference readiness remains
+16/24 and accepted timing is still absent. Remaining duration is uncertain;
+the current native's expected completion is not the N010 completion date.
+The CPU-only post-shutdown prerequisite uses terminal
 unchanged 178 policy, exact 181/182, current boot and live research-worker
 exclusion. Old-window restoration failure remains recorded and does not admit
 GPU timing. No waiting/retry worker is installed; no GPU calibration may overlap.
@@ -866,7 +881,14 @@ incomplete 178. Full payload admission has not run and timing remains unproved.
 
 ### Fresh feasibility after stop 176 (plan 053)
 
-Started once at checkpoint `6f6b557`; **acquiring, no numerical verdict yet**.
+Started once at checkpoint `6f6b557`. **8192 spp now completes all four seeds
+and FAILS** the <=0.75 feasibility ratio, with actual ratio
+**1.0703554221788882**. Primary/direct/emission remain exact. The independent
+reference screen remains INCOMPLETE / ineligible. The full 180 campaign is
+still INCOMPLETE while the registered 16384-spp continuation runs; its final
+result is not yet published. Both levels must pass, so this candidate cannot
+admit corpus acquisition 166. Preserve the remaining acquisition and all data;
+no retry or threshold adjustment.
 The following command identifies the live acquisition; never rerun its paths.
 Plan 053 Amendment 1 permits CPU-only continuation
 after terminal 178 and documented host/session termination, with exact 181/182
