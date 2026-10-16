@@ -61,6 +61,12 @@ geometry/layout attributes and focus. A refusal, missing counter, changed
 identity, intervention or restoration failure is a retained diagnostic failure,
 not grounds for a retry or for modifying 169. Save partials as they are acquired.
 
+Implementation detail registered before any intervention: restoration waits
+two fixed seconds outside every accounting phase before comparing exact window
+geometry, allowing the compositor's workspace animation to finish. This is
+separate from each phase's fixed two-second settle; neither interval contributes
+to accounting deltas. Record both GPU and IDE-parent PID/start identities.
+
 ## Fixed interpretation
 
 For each phase, compute total accounted graphics-nanosecond delta divided by

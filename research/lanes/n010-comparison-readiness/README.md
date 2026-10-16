@@ -1,5 +1,18 @@
 # N010 — final comparison preparation
 
+Prospective [visibility diagnostic 051](experiments/051-prospective-ide-visibility-accounting-diagnostic.md)
+now has a prepared one-time 174 entry point. After actual complete sixteen-boundary
+169 and quiescence, it records visible/hidden/restored A/B/A phases for the
+same registered IDE graphics client, four snapshots per phase, unchanged
+PID/start identities and verified workspace/geometry/focus restoration.
+It moves only the selected window briefly; it does not stop an application or
+change power/clock/idle preferences. A fixed local graphics-accounting
+suppression classifier is separate from every original timing/quality gate.
+CLI assembly succeeds; the intervention, accounting phases and restoration
+have **not run**. No window has been moved, no 174 data exists and no calibration
+or readiness PASS follows. It may run before CPU 172 after GPU termination;
+its outcome does not waive reference qualification or any final gate.
+
 Read-only post-hoc [DRM-client observation 173](results/173-posthoc-concurrent-drm-client-diagnosis.json)
 finds IDE graphics accounting advancing on the **same AMD device** during
 live calibration: 2.3225, 2.4140 and 1.9851 graphics-engine seconds across three
@@ -739,4 +752,21 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
   scripts/research/n010_reference_sampling/acquire_post_stop_primary_direction_feasibility.py \
   --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2 \
   --output research/lanes/n010-comparison-readiness/results/172-primary-direction-post-stop-bounded-feasibility.json
+```
+
+### Prepared reversible IDE visibility diagnostic (plan 051)
+
+174 is **not run**. Dispatch once only after complete 169 with all sixteen
+boundaries/eight blocks and no research workers. All 169 FAILs stay FAIL.
+It briefly moves the single registered IDE window to an undisplayed special
+workspace, restores its original workspace/focus and verifies exact attributes.
+It can precede CPU 172; this is environment diagnosis, not accepted timing.
+The classifier cannot admit references, calibration or Lane M. Refuse existing
+paths and changed PID/window identities; preserve any failures without retry.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/diagnose_ide_visibility_accounting.py \
+  --work out/research/n010-comparison-readiness/ide-visibility-diagnostic-v1 \
+  --output research/lanes/n010-comparison-readiness/results/174-ide-visibility-accounting-diagnostic.json
 ```

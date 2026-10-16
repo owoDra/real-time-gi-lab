@@ -2,6 +2,19 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+Prospective [visibility diagnostic 051](lanes/n010-comparison-readiness/experiments/051-prospective-ide-visibility-accounting-diagnostic.md)
+now has a prepared one-time 174 entry point. After actual complete sixteen-boundary
+169 and quiescence, it records visible/hidden/restored A/B/A phases for the
+same registered IDE graphics client, four snapshots per phase, unchanged
+PID/start identities and verified workspace/geometry/focus restoration.
+It moves only the selected window briefly; it does not stop an application or
+change power/clock/idle preferences. A fixed local graphics-accounting
+suppression classifier is separate from every original timing/quality gate.
+CLI assembly succeeds; the intervention, accounting phases and restoration
+have **not run**. No window has been moved, no 174 data exists and no calibration
+or readiness PASS follows. It may run before CPU 172 after GPU termination;
+its outcome does not waive reference qualification or any final gate.
+
 Read-only post-hoc [DRM-client observation 173](lanes/n010-comparison-readiness/results/173-posthoc-concurrent-drm-client-diagnosis.json)
 finds IDE graphics accounting advancing on the **same AMD device** during
 live calibration: 2.3225, 2.4140 and 1.9851 graphics-engine seconds across three
