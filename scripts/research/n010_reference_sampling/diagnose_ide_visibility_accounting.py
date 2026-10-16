@@ -178,6 +178,9 @@ def main():
             window = selected(original['address'])
             require(monitors()==initial_monitors and window['workspace']['name']==workspace,
                     'phase visibility or displayed workspaces changed')
+            require(all(window[k]==original[k] for k in (
+                'pid', 'class', 'mapped', 'floating', 'fullscreen', 'fullscreenClient', 'pinned', 'grouped')),
+                'window mapping or layout state changed during diagnostic')
             value = counter()
             value['window'] = window
             row['snapshots'].append(value)
@@ -217,8 +220,10 @@ def main():
         require(original['workspace']['id'] in {m['activeWorkspace']['id'] for m in initial_monitors},
                 'original window must be on a displayed workspace')
         require(not any(w['workspace']['name']==SPECIAL for w in clients)
-                and not any(m['specialWorkspace']['name']==SPECIAL for m in initial_monitors),
+                and not any(m['specialWorkspace']['name']==SPECIAL for m in initial_monitors)
+                and not any(w['name']==SPECIAL for w in ipc_json('workspaces')),
                 'registered special workspace is already in use')
+        result['registered_special_workspace_absent'] = True
         active = ipc_json('activewindow')
         if active.get('address'):
             stat = (Path('/proc')/str(active['pid'])/'stat').read_text().rsplit(')', 1)[1].split()
