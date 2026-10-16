@@ -63,13 +63,24 @@ work path. 166 remains unexecuted because actual full feasibility PASS is absent
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](lanes/n010-comparison-readiness/experiments/052-prospective-hidden-ide-full-calibration.md)
-now registers fresh sizing 177 / full calibration 178 with the single IDE
-window undisplayed, sampled client accounting and verified restoration. The
-entire original sixteen-boundary/eight-block schedule, scientific thresholds,
-167 fixture and image/memory gates remain unchanged. Source assembly/CLI only
-are checked; no new visibility intervention or GPU measurement has run yet.
-The original 169 timing verifier remains unchanged and correctly rejects FAIL.
-New proof intake is required before any future 178 timing admission.
+registers fresh sizing 177 / full calibration 178 with the single IDE
+window undisplayed, sampled client accounting and verified restoration.
+**Sizing 177 now completes all sixteen boundaries PASS**, including original
+image/scratch/memory checks and environment/restoration guards. Its controller
+actually terminated. Exact SHA256:
+`530f1da100725d6d4c8ed64dfa7acc957a3a3515f7b6ad0bc1aefbaead9526cf`.
+All 66 sampled snapshots / 65 intervals have zero target-client graphics
+increment. A separate CPU replay reproduces every original sizing decision,
+all sixteen owned-memory ledgers, sampled environment gates and 686 immutable
+input identities. It does not independently regenerate radiance/timestamps or
+rehash every native GPU payload. Full timing remains unestablished.
+The original sixteen-boundary/eight-block schedule, scientific thresholds,
+167 fixture and image/memory gates remain unchanged. A new strict 052 proof
+intake adapter assembles with a whole inverse to original 049, adding sampled
+environment/source-bound restoration evidence. Its full timing-proof intake
+has not run; it requires actual complete 167/177/178 PASS. The original 169
+verifier remains unchanged and correctly rejects FAIL. 178 is the next fixed
+full acquisition, only after actual quiescence; 172 is not restarted.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain

@@ -895,6 +895,12 @@
       "status": "user-requested-post-stop-feasibility-stop-partials-retained",
       "result": "176-user-requested-post-stop-feasibility-stop.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-177",
+      "status": "complete-all-sixteen-hidden-ide-sizing-image-scratch-ledger-and-environment-restoration-pass",
+      "result": "177-hidden-ide-bulk-pfm-calibration-sizing.json",
+      "gpu_run": true
     }
   ]
 }

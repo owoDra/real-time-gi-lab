@@ -63,13 +63,24 @@ work path. 166 remains unexecuted because actual full feasibility PASS is absent
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](experiments/052-prospective-hidden-ide-full-calibration.md)
-now registers fresh sizing 177 / full calibration 178 with the single IDE
-window undisplayed, sampled client accounting and verified restoration. The
-entire original sixteen-boundary/eight-block schedule, scientific thresholds,
-167 fixture and image/memory gates remain unchanged. Source assembly/CLI only
-are checked; no new visibility intervention or GPU measurement has run yet.
-The original 169 timing verifier remains unchanged and correctly rejects FAIL.
-New proof intake is required before any future 178 timing admission.
+registers fresh sizing 177 / full calibration 178 with the single IDE
+window undisplayed, sampled client accounting and verified restoration.
+**Sizing 177 now completes all sixteen boundaries PASS**, including original
+image/scratch/memory checks and environment/restoration guards. Its controller
+actually terminated. Exact SHA256:
+`530f1da100725d6d4c8ed64dfa7acc957a3a3515f7b6ad0bc1aefbaead9526cf`.
+All 66 sampled snapshots / 65 intervals have zero target-client graphics
+increment. A separate CPU replay reproduces every original sizing decision,
+all sixteen owned-memory ledgers, sampled environment gates and 686 immutable
+input identities. It does not independently regenerate radiance/timestamps or
+rehash every native GPU payload. Full timing remains unestablished.
+The original sixteen-boundary/eight-block schedule, scientific thresholds,
+167 fixture and image/memory gates remain unchanged. A new strict 052 proof
+intake adapter assembles with a whole inverse to original 049, adding sampled
+environment/source-bound restoration evidence. Its full timing-proof intake
+has not run; it requires actual complete 167/177/178 PASS. The original 169
+verifier remains unchanged and correctly rejects FAIL. 178 is the next fixed
+full acquisition, only after actual quiescence; 172 is not restarted.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
@@ -721,7 +732,7 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
   --output research/lanes/n010-comparison-readiness/results/174-ide-visibility-accounting-diagnostic.json
 ```
 
-### Prospective full calibration with IDE undisplayed (plan 052)
+### Full calibration with IDE undisplayed (plan 052)
 
 The registered IDE window is temporarily moved to an undisplayed special
 workspace during each acquisition and restored afterward. Its original
@@ -730,8 +741,8 @@ are operational guards, not GPU utilization estimates or changed timing gates.
 Refuse existing paths and other research workers. Keep stopped 172 immutable.
 All original sixteen boundaries are mandatory. Run 178 only after actual
 complete full PASS 177, restoration and actual controller termination.
-These commands identify one-time prospective acquisitions; never rerun their
-paths. A scientific precision FAIL still completes all sixteen boundaries.
+177 is complete PASS; its command is historical. 178 is pending.
+These commands identify one-time acquisitions; never rerun their paths. A scientific precision FAIL still completes all sixteen boundaries.
 An operational guard failure retains partials and prevents timing admission.
 
 ```bash
@@ -758,3 +769,6 @@ software regression validation, reference admission or readiness. Unit tests
 were not run. The existing plan-049 verifier/driver still requires actual
 167/168/169 PASS and therefore rejects 169. A new guarded proof-intake adapter
 must verify actual complete 167/177/178 before selecting that timing proof.
+`hidden_ide_timing_provenance.py` now provides that strict adapter with whole
+original-verifier inverse proof. Only assembly and sizing/environment replay
+have run; complete 178 and full payload intake remain required.
