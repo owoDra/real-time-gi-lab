@@ -1,0 +1,294 @@
+{
+  "schema": "n010-posthoc-depth-weight-and-rqmc-interpretation/1",
+  "complete": true,
+  "gpu_run": false,
+  "new_transport_samples": false,
+  "classification": "POST_HOC_DIAGNOSTIC_NO_ADMISSION",
+  "source_commit": "e44ee9ed0892fa1c82e3d2c804288c6c131c0a86",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/analyze_bounce_diagnosis.py": "de3748dba0419adb9fa66058272528b849ade4be5fea0ad37305ee3636ddb8bd",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/193-selected-bounce-path-diagnosis.json": "6143ecbf6651201c15541f4b2ee2c7e33b04843023049fc6d3d1f75230de545a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic": "348e4a29199284ee4af2ce043c629bb9e3d41b84bccad65e47cc5d146167c0c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/data.json": "1e59e83afa43cc33c0997dd79f44df3f4074e7d6e25ca9d7a44f07b6a63dcafd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/n010_rqmc_oracle.hpp": "b4fd04d0d50f426e3d17b661970a76f9258ebbfc108e720a77320de848154598",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/n010_bounce_diagnostic": "56cc1282823f396bf027ac338a72f9e49fe491485e00797b75547f9b28107cde",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/data.json": "17b0e9b78eb9ee301a87d9ec96382d84691ea07f6ba0e2f1ff226cc5358af570",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/n010_rqmc_oracle.hpp": "c47ae5a4dad5dbf3d87758f744a0f830c68b1eb2c1cb4a39fd39313db10f647a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/n010_bounce_diagnostic": "4fd91aaf0bcddba4ed21be00e0e049e18fe024e5ea94ba8125b6b6f62075207d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/data.json": "07f93f6df19190c9039203fadbabea790a4ca572960b408c2ff104cfa0a4d838",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/qualification.json": "9da5eece00c7e1e490a35aefceb0a54f7ea42b0a90b4ad655d6713c482a9fa8f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s0.f64": "ddb90ee92716e17b7f236dfc03e869900fd8564e566737d63e975329fecacf91",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s1.f64": "69b4b12dd163f882acc7ce6bacb9b73e02f398bc509dab3b1b55f38f1e4a0425",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s2.f64": "599989ee86422adaf4d57310f002ffcc7759c0bc966056bf0969133696a63849",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s3.f64": "6bed3e25037d3287c5d5169f386205c877d1bf78388e2cf110dcd0f6c11e27c0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s0.f64": "500f6b6fe9fc2acfb5d1139bcc9603cc88b362123058fa3df21a94d535a907ce",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s1.f64": "40389bda28a0c0305889a39c8beddd531ff0384a8746e1371a6731549ae9a585",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s2.f64": "b184138e4cd03d139252246ed1aa18cea4942c54dfca7993e76aa78c6f97f4ce",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n16384.s3.f64": "aadb8b69bab3718fa2c98bc6c23fc677f2ed936d210df1a5f35ab38293559410",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s0.f64": "71d9c39395b6db41ad463b0509361d89916444273aea618899bfb9677207cb6a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s1.f64": "37a870f3408a1be411e88c6cd8a077c66dee0f1b404a757400727bbe7bc08782",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s2.f64": "cb3980081f0ac501a16fb272619eee8b9e9209f4dd86d77bcb6f5a5b3d2a6c45",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n32768.s3.f64": "27a41bb75a7a67506b96f80e3a5e75c71c54a3b0f0ab4342da60fff6a99cee7a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/qualification.json": "dd0d994f9daea8df86ed1594a12aca13b23d57abe276974d63e75f59d20a02db",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s0.f64": "459c3c3c38eeb733b9ac40c91d46c16e171b201e859e8d9958287c86c2f82023",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s1.f64": "c6f71bd18d0f355c05a8ecafc711b586918c6a64bff6acea164b49b661120c57",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s2.f64": "17908a4021c91a53ebc15d91c749f4395c2d5c5c0d7bc5779aab402ac246e7d7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n8192.s3.f64": "1c58c734982d617a5b11d9b3ee3c4249b1265563b7647ffb643ac5b3bd85bfb0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s0.f64": "a6022a47fc0c635c4705f7e4b06df866dfe2f73e619ecfa88fbfa608fe25eff0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s1.f64": "d281df5ce71c87ac41637d5af0474fae0291da6690e99db6d10f7485ef6d37c7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s2.f64": "0f176d29b80d2896f34f3d13cfc0011fef782ac30a8bbba649d275ec54b20557",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n16384.s3.f64": "73469d4f16a27af576b026156b237f1876e98e6bef8639aae980dae229e06735",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s0.f64": "578d2d4e5602eb0b43902fd6c3e6544f829d7c9784b0d362a9bbdecc2af4125d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s1.f64": "e3da1f2598b335b5e67e0dfaba2360ad0d5f6cac4a4a6f5b3b4d0cfb415d7cad",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s2.f64": "92fdde0070af8c15e8f272ac7d299bf5aad50513f9c96e44cd6324b6dcb7afc4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-v1/C1_T_B2/o.n32768.s3.f64": "babd5a4aecb7480ff02f12812f4d802617a813113c7ea2a50c897e3c3c921550",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json": "f52002b46754152f02ef6111863f7776b5404d2b4673d201b20d4fb253d808ef",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s0.f64": "9980357a5414e48d06d5785f6fca90da3a573886101c2b3227c15fbfcd67a79c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s1.f64": "6fce7aad19c96bbea017f9d4db1675a8b262048bce6e37928a7b7100cb6c63de",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s2.f64": "2ce98c7779a4535bb1a2aba15dd27cdbfb6756b4a6ea9d0ee415da0d9a3541e0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s3.f64": "5cad5ee974f9b30b0a9c846d4478de6cb5a3643c294250636e5883478e38eb66",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n16384.s0.f64": "b8ba918d4b60173f0cc5b92e97f89f78a0961a0241121828b26c3453dcdf18a0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n16384.s1.f64": "04e3b7540cc6dbafc0c947b5bc0f9b1a073c22dad88a3169f754096a10e7e0bd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n16384.s2.f64": "23bc23e63e2156357e635a0f1ce32a4a28614539b827dd055984b833fb9b2853",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n16384.s3.f64": "238bcb224ea62f9c46c20199c50754e7149944679048939f2ec82dd2cfc92534"
+  },
+  "selected_path_strata": [
+    {
+      "variant": "original",
+      "strata": [
+        {
+          "stratum": "original_selected_tail",
+          "pixel_count": 8,
+          "indirect_replicate_energy": 7.895724093239114e-08,
+          "first_indirect_path_variance_sum": 2.6135799313594333e-05,
+          "later_indirect_path_variance_sum": 0.00014452455950988774,
+          "indirect_path_variance_sum": 0.00019705828705300773,
+          "first_later_path_covariance_sum": 1.3198964114762836e-05,
+          "per_bounce_path_variance_sum": [
+            -4.716808845903978e-18,
+            2.613579931359434e-05,
+            1.8768591088854075e-05,
+            1.4610871181696938e-05,
+            1.1896191094198355e-05,
+            1.0303182563113887e-05,
+            8.690319983869432e-06,
+            7.800769748075316e-06
+          ],
+          "importance_weight_mean": 1.0,
+          "importance_weight_second": 1.0
+        },
+        {
+          "stratum": "fixed_grid",
+          "pixel_count": 8,
+          "indirect_replicate_energy": 8.444374890019818e-09,
+          "first_indirect_path_variance_sum": 1.3668457179974993e-05,
+          "later_indirect_path_variance_sum": 0.00010805912570590001,
+          "indirect_path_variance_sum": 0.0001365136512270502,
+          "first_later_path_covariance_sum": 7.393034170587607e-06,
+          "per_bounce_path_variance_sum": [
+            6.090364173334513e-18,
+            1.3668457179974993e-05,
+            1.2147468559033694e-05,
+            1.0511927034429972e-05,
+            9.121041092236597e-06,
+            8.046432137376012e-06,
+            7.2459012580838855e-06,
+            6.536209342499032e-06
+          ],
+          "importance_weight_mean": 1.0,
+          "importance_weight_second": 1.0
+        }
+      ]
+    },
+    {
+      "variant": "guided",
+      "strata": [
+        {
+          "stratum": "original_selected_tail",
+          "pixel_count": 8,
+          "indirect_replicate_energy": 1.0817038204793316e-08,
+          "first_indirect_path_variance_sum": 1.0992293026727246e-05,
+          "later_indirect_path_variance_sum": 0.00015673562951056897,
+          "indirect_path_variance_sum": 0.00017289856129821033,
+          "first_later_path_covariance_sum": 2.585319380457043e-06,
+          "per_bounce_path_variance_sum": [
+            -4.716808845903978e-18,
+            1.0992293026727246e-05,
+            1.7255676480594642e-05,
+            1.544100464546487e-05,
+            1.3441954926963976e-05,
+            1.1305909527897932e-05,
+            9.885592333274878e-06,
+            8.720944779466119e-06
+          ],
+          "importance_weight_mean": 1.000004742461308,
+          "importance_weight_second": 1.211925991426747
+        },
+        {
+          "stratum": "fixed_grid",
+          "pixel_count": 8,
+          "indirect_replicate_energy": 4.278246639596439e-09,
+          "first_indirect_path_variance_sum": 6.104537386865031e-06,
+          "later_indirect_path_variance_sum": 0.00011898905732307886,
+          "indirect_path_variance_sum": 0.0001273593260643622,
+          "first_later_path_covariance_sum": 1.1328656772091639e-06,
+          "per_bounce_path_variance_sum": [
+            6.090364173334513e-18,
+            6.10453738686503e-06,
+            1.1283344317866277e-05,
+            1.0979564486772876e-05,
+            1.0076741763816693e-05,
+            9.29645472376587e-06,
+            8.448873414292525e-06,
+            7.937693277226377e-06
+          ],
+          "importance_weight_mean": 1.0000191171086321,
+          "importance_weight_second": 1.3321620805749919
+        }
+      ]
+    },
+    {
+      "variant": "nested",
+      "strata": [
+        {
+          "stratum": "original_selected_tail",
+          "pixel_count": 8,
+          "indirect_replicate_energy": 1.0099724441335452e-08,
+          "first_indirect_path_variance_sum": 2.6089117526000264e-05,
+          "later_indirect_path_variance_sum": 0.00014703472419603885,
+          "indirect_path_variance_sum": 0.00019987487488575635,
+          "first_later_path_covariance_sum": 1.3375516581858602e-05,
+          "per_bounce_path_variance_sum": [
+            -4.716808845903978e-18,
+            2.608911752600027e-05,
+            1.8617931446404478e-05,
+            1.4863604887711615e-05,
+            1.2245770449097509e-05,
+            1.0072823524571213e-05,
+            8.934188890450747e-06,
+            7.798047460864281e-06
+          ],
+          "importance_weight_mean": 1.0,
+          "importance_weight_second": 1.0
+        },
+        {
+          "stratum": "fixed_grid",
+          "pixel_count": 8,
+          "indirect_replicate_energy": 8.343748926087498e-09,
+          "first_indirect_path_variance_sum": 1.3718600218793487e-05,
+          "later_indirect_path_variance_sum": 0.00010763020764081906,
+          "indirect_path_variance_sum": 0.00013593389548054516,
+          "first_later_path_covariance_sum": 7.292543810466296e-06,
+          "per_bounce_path_variance_sum": [
+            6.090364173334513e-18,
+            1.3718600218793485e-05,
+            1.2282481101820195e-05,
+            1.0622203258747985e-05,
+            9.122758950981392e-06,
+            8.036630687365311e-06,
+            7.0879273409602076e-06,
+            6.474757637783318e-06
+          ],
+          "importance_weight_mean": 1.0,
+          "importance_weight_second": 1.0
+        }
+      ]
+    }
+  ],
+  "whole_image_moment_diagnostics": [
+    {
+      "variant": "original",
+      "spp": 8192,
+      "replicate_variance_sum": 2.065475845333179e-05,
+      "mean_path_variance_sum": 0.25859674143244815,
+      "iid_variance_of_mean_proxy_sum": 3.1566985038140644e-05,
+      "observed_replicate_variance_to_iid_proxy": 0.654315210286183,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "original",
+      "spp": 16384,
+      "replicate_variance_sum": 1.0042324734947967e-05,
+      "mean_path_variance_sum": 0.25864114863236565,
+      "iid_variance_of_mean_proxy_sum": 1.578620291945591e-05,
+      "observed_replicate_variance_to_iid_proxy": 0.6361456764610046,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "original",
+      "spp": 32768,
+      "replicate_variance_sum": 4.955465620703165e-06,
+      "mean_path_variance_sum": 0.25863555962891177,
+      "iid_variance_of_mean_proxy_sum": 7.892930896878411e-06,
+      "observed_replicate_variance_to_iid_proxy": 0.6278359313475063,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "first_bounce",
+      "spp": 8192,
+      "replicate_variance_sum": 3.535070113372e-07,
+      "mean_path_variance_sum": 0.02269664292913008,
+      "iid_variance_of_mean_proxy_sum": 2.7705862950598244e-06,
+      "observed_replicate_variance_to_iid_proxy": 0.12759285352978578,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "first_bounce",
+      "spp": 16384,
+      "replicate_variance_sum": 1.2887244908483496e-07,
+      "mean_path_variance_sum": 0.022698042307265444,
+      "iid_variance_of_mean_proxy_sum": 1.3853785587930569e-06,
+      "observed_replicate_variance_to_iid_proxy": 0.09302327386754762,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "first_bounce",
+      "spp": 32768,
+      "replicate_variance_sum": 4.9631759394302827e-08,
+      "mean_path_variance_sum": 0.022698034325697124,
+      "iid_variance_of_mean_proxy_sum": 6.926890358183937e-07,
+      "observed_replicate_variance_to_iid_proxy": 0.07165085172116839,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "guided",
+      "spp": 8192,
+      "replicate_variance_sum": 2.34003781186589e-05,
+      "mean_path_variance_sum": 0.25057272255020335,
+      "iid_variance_of_mean_proxy_sum": 3.058749054567912e-05,
+      "observed_replicate_variance_to_iid_proxy": 0.7650309881980334,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    },
+    {
+      "variant": "guided",
+      "spp": 16384,
+      "replicate_variance_sum": 1.139621228216575e-05,
+      "mean_path_variance_sum": 0.2505605354289923,
+      "iid_variance_of_mean_proxy_sum": 1.5293001429992207e-05,
+      "observed_replicate_variance_to_iid_proxy": 0.7451913435263151,
+      "scope": "Descriptive comparison to an iid proxy only. RQMC moments are not standard errors; pixels are not asserted independent; no confidence or adoption claim."
+    }
+  ],
+  "whole_image_comparisons": [
+    {
+      "spp": 8192,
+      "guided_to_original_path_variance_ratio": 0.9689709203689217,
+      "guided_to_original_replicate_variance_ratio": 1.1329291587471564,
+      "guided_to_original_iid_proxy_efficiency_ratio": 1.169208626318538
+    },
+    {
+      "spp": 16384,
+      "guided_to_original_path_variance_ratio": 0.9687574338186258,
+      "guided_to_original_replicate_variance_ratio": 1.134818140515429,
+      "guided_to_original_iid_proxy_efficiency_ratio": 1.1714161883044645
+    }
+  ],
+  "selection_warning": "Tail pixels were selected for large ORIGINAL replicate energy. Regression to the mean prevents interpreting their improvement under any new seed mapping as a fair global improvement. Fixed grid is separately reported but only eight pixels.",
+  "scope": "C1 retained image moments plus all sixteen plan-057 path diagnostics. No other state, full image nested-scramble result, reference qualification or timing proof.",
+  "tests": "NOT_RUN; post-hoc scientific analysis",
+  "readiness": "NOT_ESTABLISHED; original six gates unchanged"
+}

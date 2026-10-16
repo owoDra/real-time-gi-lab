@@ -1,0 +1,563 @@
+{
+  "schema": "n010-selected-bounce-path-diagnosis/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "POST_HOC_DIAGNOSTIC_COMPLETE_NO_ADMISSION",
+  "source_commit": "e44ee9ed0892fa1c82e3d2c804288c6c131c0a86",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/057-bounded-cause-diagnosis-and-critical-path.md": "a13ecefbfead7e66214951da2e9602df0ebf39dc4fc3fd3bbd1dfd6738dd45aa",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/build_nested_scramble.py": "de096be93c4703e82e4513a56dce485fd111d08fb7d2571a3277fb8e6efe9c71",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/191-posthoc-readiness-bottleneck-diagnosis.json": "448a0bd9f36e94dd3b487d7e805073a5efa2286ea281452a76a8b067bfb28f5c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/qualification.json": "9da5eece00c7e1e490a35aefceb0a54f7ea42b0a90b4ad655d6713c482a9fa8f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s0.f64": "ddb90ee92716e17b7f236dfc03e869900fd8564e566737d63e975329fecacf91",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s1.f64": "69b4b12dd163f882acc7ce6bacb9b73e02f398bc509dab3b1b55f38f1e4a0425",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s2.f64": "599989ee86422adaf4d57310f002ffcc7759c0bc966056bf0969133696a63849",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/o.n8192.s3.f64": "6bed3e25037d3287c5d5169f386205c877d1bf78388e2cf110dcd0f6c11e27c0",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json": "f52002b46754152f02ef6111863f7776b5404d2b4673d201b20d4fb253d808ef",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s0.f64": "9980357a5414e48d06d5785f6fca90da3a573886101c2b3227c15fbfcd67a79c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s1.f64": "6fce7aad19c96bbea017f9d4db1675a8b262048bce6e37928a7b7100cb6c63de",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s2.f64": "2ce98c7779a4535bb1a2aba15dd27cdbfb6756b4a6ea9d0ee415da0d9a3541e0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3/o.n8192.s3.f64": "5cad5ee974f9b30b0a9c846d4478de6cb5a3643c294250636e5883478e38eb66",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json": "13375a5a4189c8a3ef8394d16692ae0d58a003d63483c60207c5eb0f28b28b4f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/owen-reference-build-v1/standalone/n010_rqmc_oracle.hpp": "112750c7c61ccb95881805b8d6c6664c3dbbece9c542f98dd0746a4fecd06721",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/151-primary-direction-proposal-build.json": "7b909ced4d749f7d8516c4930299c8944cf1c6da5236a717684dcbf0373b8e20",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/primary-direction-build-v1/standalone/n010_rqmc_oracle.hpp": "11f21ffbebbae86d12f6cc3abb3fc3f71d7c561724e52154c13e8ae1be766e01"
+  },
+  "selected_pixels": [
+    [
+      152,
+      173
+    ],
+    [
+      162,
+      155
+    ],
+    [
+      153,
+      171
+    ],
+    [
+      178,
+      51
+    ],
+    [
+      3,
+      62
+    ],
+    [
+      215,
+      16
+    ],
+    [
+      175,
+      142
+    ],
+    [
+      83,
+      29
+    ],
+    [
+      40,
+      30
+    ],
+    [
+      120,
+      30
+    ],
+    [
+      200,
+      30
+    ],
+    [
+      280,
+      30
+    ],
+    [
+      40,
+      150
+    ],
+    [
+      120,
+      150
+    ],
+    [
+      200,
+      150
+    ],
+    [
+      280,
+      150
+    ]
+  ],
+  "selection_scope": "Post-hoc original-8192 energy tails plus fixed grid; C1 only, not acceptance",
+  "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+  ],
+  "spp": 8192,
+  "attempts": [
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic"
+      ],
+      "cpu_affinity": [
+        31
+      ],
+      "nice": 15,
+      "address_space_bytes": 4294967296,
+      "cpu_seconds": 120,
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 1.6078276259995619,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/pixels.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/data.json"
+      ],
+      "cpu_affinity": [
+        31
+      ],
+      "nice": 15,
+      "address_space_bytes": 4294967296,
+      "cpu_seconds": 120,
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 10.323632482999528,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/n010_bounce_diagnostic"
+      ],
+      "cpu_affinity": [
+        31
+      ],
+      "nice": 15,
+      "address_space_bytes": 4294967296,
+      "cpu_seconds": 120,
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 1.7562688210000488,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/n010_bounce_diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/pixels.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/data.json"
+      ],
+      "cpu_affinity": [
+        31
+      ],
+      "nice": 15,
+      "address_space_bytes": 4294967296,
+      "cpu_seconds": 120,
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 10.399928627000918,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/n010_bounce_diagnostic"
+      ],
+      "cpu_affinity": [
+        31
+      ],
+      "nice": 15,
+      "address_space_bytes": 4294967296,
+      "cpu_seconds": 120,
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 1.5802538499992806,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/n010_bounce_diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/pixels.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/data.json"
+      ],
+      "cpu_affinity": [
+        31
+      ],
+      "nice": 15,
+      "address_space_bytes": 4294967296,
+      "cpu_seconds": 120,
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 10.27059018,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "variants": [
+    {
+      "variant": "original",
+      "whole_header_instrumentation_inverse_exact": true,
+      "unmodified_header_sha256": "6e2c554649d2972db15e68b51bb8522b9b01b1abdaf5a2d6304501c922ee3619",
+      "selected_retained_mean_second_bit_exact": true,
+      "payload_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic": "348e4a29199284ee4af2ce043c629bb9e3d41b84bccad65e47cc5d146167c0c1",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/data.json": "1e59e83afa43cc33c0997dd79f44df3f4074e7d6e25ca9d7a44f07b6a63dcafd"
+      },
+      "selected_replicate_bounce_cross_energy": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          6.770475748859239e-10,
+          8.495150674833615e-10,
+          6.836930510259857e-10,
+          5.053373912870887e-10,
+          6.441280415615519e-10,
+          3.242573116557241e-10,
+          3.9085021422866305e-10
+        ],
+        [
+          0.0,
+          8.495150674833615e-10,
+          3.6002555437041786e-09,
+          2.6690978862944138e-09,
+          2.098307791688874e-09,
+          2.149858838573507e-09,
+          1.401465932698035e-09,
+          1.6767959573826686e-09
+        ],
+        [
+          0.0,
+          6.836930510259857e-10,
+          2.6690978862944138e-09,
+          3.8977414237466e-09,
+          2.4904994328596992e-09,
+          2.1920763186505064e-09,
+          1.4568281531725072e-09,
+          1.5515398134211007e-09
+        ],
+        [
+          0.0,
+          5.053373912870887e-10,
+          2.098307791688874e-09,
+          2.4904994328596992e-09,
+          3.733225238692011e-09,
+          2.11067560204209e-09,
+          1.9612881572638698e-09,
+          1.976658622714771e-09
+        ],
+        [
+          0.0,
+          6.441280415615519e-10,
+          2.149858838573507e-09,
+          2.1920763186505064e-09,
+          2.11067560204209e-09,
+          3.3592210928434888e-09,
+          1.9378443951286206e-09,
+          1.9490138707726807e-09
+        ],
+        [
+          0.0,
+          3.242573116557241e-10,
+          1.401465932698035e-09,
+          1.4568281531725072e-09,
+          1.9612881572638698e-09,
+          1.9378443951286206e-09,
+          2.6928341764394537e-09,
+          2.076125263404567e-09
+        ],
+        [
+          0.0,
+          3.9085021422866305e-10,
+          1.6767959573826686e-09,
+          1.5515398134211007e-09,
+          1.976658622714771e-09,
+          1.9490138707726807e-09,
+          2.076125263404567e-09,
+          3.249576545478734e-09
+        ]
+      ],
+      "selected_full_indirect_replicate_energy": 8.740161582241098e-08,
+      "selected_first_indirect_replicate_energy": 6.770475748859239e-10,
+      "selected_later_indirect_replicate_energy": 7.992900609304029e-08,
+      "path_moments_not_rqmc_standard_errors": {
+        "first_indirect_variance_sum": 3.9804256493569325e-05,
+        "later_indirect_variance_sum": 0.0002525836852157877,
+        "full_indirect_variance_sum": 0.00033357193828005793,
+        "first_later_covariance_sum": 2.059199828535044e-05,
+        "weight_mean": 1.0,
+        "weight_second": 1.0
+      }
+    },
+    {
+      "variant": "guided",
+      "whole_header_instrumentation_inverse_exact": true,
+      "unmodified_header_sha256": "11f21ffbebbae86d12f6cc3abb3fc3f71d7c561724e52154c13e8ae1be766e01",
+      "selected_retained_mean_second_bit_exact": true,
+      "payload_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/n010_rqmc_oracle.hpp": "b4fd04d0d50f426e3d17b661970a76f9258ebbfc108e720a77320de848154598",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/n010_bounce_diagnostic": "56cc1282823f396bf027ac338a72f9e49fe491485e00797b75547f9b28107cde",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/guided/data.json": "17b0e9b78eb9ee301a87d9ec96382d84691ea07f6ba0e2f1ff226cc5358af570"
+      },
+      "selected_replicate_bounce_cross_energy": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          2.343829236825838e-10,
+          3.6604048919109465e-11,
+          -2.951811933355898e-10,
+          -1.1334258150320337e-10,
+          6.182290104684383e-11,
+          1.5763920038321485e-11,
+          -6.294405141763507e-11
+        ],
+        [
+          0.0,
+          3.6604048919109465e-11,
+          2.284312743468715e-09,
+          6.146886913782511e-10,
+          3.831532543265457e-10,
+          3.2002141592556154e-10,
+          -2.677749662488309e-10,
+          -1.6663653522935607e-10
+        ],
+        [
+          0.0,
+          -2.951811933355898e-10,
+          6.146886913782511e-10,
+          2.4926745006645106e-09,
+          9.926612559530486e-10,
+          2.737919039372645e-10,
+          -3.0970860581936484e-10,
+          3.337385117583857e-11
+        ],
+        [
+          0.0,
+          -1.1334258150320337e-10,
+          3.831532543265457e-10,
+          9.926612559530486e-10,
+          1.7854784510816818e-09,
+          2.704200648574355e-11,
+          -8.433826151493305e-11,
+          1.557527880649106e-10
+        ],
+        [
+          0.0,
+          6.182290104684383e-11,
+          3.2002141592556154e-10,
+          2.737919039372645e-10,
+          2.704200648574355e-11,
+          1.5758714225261254e-09,
+          1.7049326085243968e-10,
+          -1.5172383671839717e-10
+        ],
+        [
+          0.0,
+          1.5763920038321485e-11,
+          -2.677749662488309e-10,
+          -3.0970860581936484e-10,
+          -8.433826151493305e-11,
+          1.7049326085243968e-10,
+          1.4216804217700489e-09,
+          2.9578169443021725e-10
+        ],
+        [
+          0.0,
+          -6.294405141763507e-11,
+          -1.6663653522935607e-10,
+          3.337385117583857e-11,
+          1.557527880649106e-10,
+          -1.5172383671839717e-10,
+          2.9578169443021725e-10,
+          1.442282459702519e-09
+        ]
+      ],
+      "selected_full_indirect_replicate_energy": 1.5095284844389756e-08,
+      "selected_first_indirect_replicate_energy": 2.343829236825838e-10,
+      "selected_later_indirect_replicate_energy": 1.557545583321148e-08,
+      "path_moments_not_rqmc_standard_errors": {
+        "first_indirect_variance_sum": 1.709683041359228e-05,
+        "later_indirect_variance_sum": 0.0002757246868336479,
+        "full_indirect_variance_sum": 0.00030025788736257254,
+        "first_later_covariance_sum": 3.718185057666207e-06,
+        "weight_mean": 1.0000119297849699,
+        "weight_second": 1.2720440360008693
+      }
+    },
+    {
+      "variant": "nested",
+      "whole_header_instrumentation_inverse_exact": true,
+      "unmodified_header_sha256": "112750c7c61ccb95881805b8d6c6664c3dbbece9c542f98dd0746a4fecd06721",
+      "selected_retained_mean_second_bit_exact": null,
+      "payload_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/n010_rqmc_oracle.hpp": "c47ae5a4dad5dbf3d87758f744a0f830c68b1eb2c1cb4a39fd39313db10f647a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/n010_bounce_diagnostic": "4fd91aaf0bcddba4ed21be00e0e049e18fe024e5ea94ba8125b6b6f62075207d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/nested/data.json": "07f93f6df19190c9039203fadbabea790a4ca572960b408c2ff104cfa0a4d838"
+      },
+      "selected_replicate_bounce_cross_energy": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          5.556306552847571e-10,
+          -3.6765916729246435e-11,
+          1.8228174076860435e-10,
+          -1.4692722170135938e-10,
+          -2.971131412329147e-10,
+          -2.0471243891743812e-10,
+          -7.142998010301925e-11
+        ],
+        [
+          0.0,
+          -3.6765916729246435e-11,
+          1.007951008171104e-09,
+          2.3203813944150403e-10,
+          3.7054839012663297e-10,
+          4.986002997410377e-10,
+          -8.362926190295708e-11,
+          9.170529120303492e-11
+        ],
+        [
+          0.0,
+          1.8228174076860435e-10,
+          2.3203813944150403e-10,
+          2.48739957999439e-09,
+          4.153658343892969e-10,
+          2.8474792751193864e-10,
+          6.165441986298198e-11,
+          -7.385964532503345e-12
+        ],
+        [
+          0.0,
+          -1.4692722170135938e-10,
+          3.7054839012663297e-10,
+          4.153658343892969e-10,
+          2.03014325721864e-09,
+          7.512027058842375e-10,
+          3.51655562650297e-10,
+          1.4638253949458676e-10
+        ],
+        [
+          0.0,
+          -2.971131412329147e-10,
+          4.986002997410377e-10,
+          2.8474792751193864e-10,
+          7.512027058842375e-10,
+          2.174730199287195e-09,
+          7.167623300564479e-10,
+          3.1816376412686344e-10
+        ],
+        [
+          0.0,
+          -2.0471243891743812e-10,
+          -8.362926190295708e-11,
+          6.165441986298198e-11,
+          3.51655562650297e-10,
+          7.167623300564479e-10,
+          1.6816507867179809e-09,
+          1.1572291211744676e-10
+        ],
+        [
+          0.0,
+          -7.142998010301925e-11,
+          9.170529120303492e-11,
+          -7.385964532503345e-12,
+          1.4638253949458676e-10,
+          3.1816376412686344e-10,
+          1.1572291211744676e-10,
+          1.1282320162379394e-09
+        ]
+      ],
+      "selected_full_indirect_replicate_energy": 1.844347336742295e-08,
+      "selected_first_indirect_replicate_energy": 5.556306552847571e-10,
+      "selected_later_indirect_replicate_energy": 1.9037176627968942e-08,
+      "path_moments_not_rqmc_standard_errors": {
+        "first_indirect_variance_sum": 3.980771774479375e-05,
+        "later_indirect_variance_sum": 0.00025466493183685793,
+        "full_indirect_variance_sum": 0.0003358087703663015,
+        "first_later_covariance_sum": 2.06680603923249e-05,
+        "weight_mean": 1.0,
+        "weight_second": 1.0
+      }
+    }
+  ],
+  "reference_admission": false,
+  "tests": "NOT_RUN; selected-path scientific diagnosis"
+}

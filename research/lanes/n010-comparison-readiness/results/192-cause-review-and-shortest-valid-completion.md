@@ -162,3 +162,30 @@ Completion and a date are not yet guaranteed. No new unit/regression tests,
 GPU run, architecture promotion, Actions or N001–N009 result changes occur
 in this review. The preliminary 191 import failure and corrected environment
 are disclosed in plan 057; the successful read-only diagnosis took <1 second.
+
+## Follow-up: completed depth/weight and whole-image interpretation
+
+[193](193-selected-bounce-path-diagnosis.json) actually completed. All six
+serial compiler/native steps return zero; original and failed-guide selected
+mean/moment fields match retained bytes exactly. One-CPU native durations
+are 10.324 / 10.400 / 10.271 seconds. No GPU was used.
+
+[194](194-posthoc-depth-weight-and-rqmc-interpretation.json) distinguishes
+selected tails from the fixed grid and adds whole-image moment analysis.
+The selected-path guide lowers first-indirect variance and raises later
+variance, but **whole-image total per-path variance decreases** to
+0.968971 / 0.968757 at 8192/16384, while replicate variance increases to
+1.132929 / 1.134818. The observed replicate-variance-to-iid-proxy ratio rises
+by 1.169209 / 1.171416. Thus attributing the failure solely to higher total
+path variance is contradicted by the whole-image data. Reduced observed
+RQMC variance-reduction benefit is also part of the measured failure.
+These proxies are descriptive, not RQMC uncertainty estimates or a proof
+about all randomizations. Tail pixels selected on original errors must not
+be used to proclaim a new sampler better (regression to the mean).
+
+The smallest next reference check uses the existing nested binary on a
+prospectively fixed grid, rather than another full-image/proof campaign.
+Timing's smallest next check targets the cheap C7 HWRT boundary that failed
+all seven original gates, rather than the >hour full 186 campaign. Both are
+registered in [058](../experiments/058-fixed-grid-and-short-boundary-diagnostics.md)
+with strict diagnostic scope, finite resource guards and no acceptance transfer.

@@ -47,6 +47,28 @@ image/scratch/memory/spool checks, not full precision. Its zero-dose medians
 alone imply about 4405 seconds summed GPU work for full 186 before other costs;
 this scale estimate is not an ETA. No long GPU run is automatically queued.
 
+### Completed small diagnosis and the next bounded checks
+
+[193](results/193-selected-bounce-path-diagnosis.json) completed all six
+serial compiler/native invocations. Original and failed-guide selected mean
+and second-moment fields are bit-exact to retained sidecars. Native runs took
+10.324 / 10.400 / 10.271 seconds, one low-priority CPU each, no GPU.
+[194](results/194-posthoc-depth-weight-and-rqmc-interpretation.json)
+keeps tail selection separate from fixed-grid observations. On the sixteen
+selected pixels, the guide reduces first-indirect path variance but increases
+later variance. Whole-image data show a necessary qualification: **total path
+variance actually falls to 0.969 of original, while observed replicate variance
+increases to 1.133 / 1.135**. Loss of the observed net variance-reduction benefit,
+not simply more path variance, is therefore part of the measured failure.
+Moment-based iid proxies are descriptive only, never RQMC standard errors.
+
+[Plan 058](experiments/058-fixed-grid-and-short-boundary-diagnostics.md)
+registers two finite diagnostics before long acquisitions: existing nested
+binary on a fixed 256-pixel C1 grid (195, one CPU, no GPU), then exact deferred
+fixture on C7 HWRT only (196, original eight blocks, short native guards).
+Neither has run at this checkpoint. Neither can admit references, replace
+188/189/190 or establish full 186 timing. All original six gates remain.
+
 ### Evidence and preserved boundaries
 
 - Exact 180 SHA256: `f52002b46754152f02ef6111863f7776b5404d2b4673d201b20d4fb253d808ef`.

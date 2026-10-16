@@ -967,6 +967,18 @@
       "status": "posthoc-cause-review-and-shortest-valid-completion-path",
       "result": "192-cause-review-and-shortest-valid-completion.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-193",
+      "status": "complete-selected-cpu-path-diagnosis-exact-retained-reconstruction-no-admission",
+      "result": "193-selected-bounce-path-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-194",
+      "status": "posthoc-whole-image-and-stratified-depth-weight-interpretation-no-admission",
+      "result": "194-posthoc-depth-weight-and-rqmc-interpretation.json",
+      "gpu_run": false
     }
   ]
 }
