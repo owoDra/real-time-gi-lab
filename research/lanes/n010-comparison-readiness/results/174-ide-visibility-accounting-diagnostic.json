@@ -1,0 +1,741 @@
+{
+  "schema": "n010-ide-visibility-accounting-diagnostic/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "renderer_gpu_work_submitted": false,
+  "desktop_visibility_intervention": true,
+  "classification": "LOCAL_GRAPHICS_ACCOUNTING_SUPPRESSION_ONLY_NO_TIMING_ADMISSION",
+  "source_commit": "8408f4dfd8936feca068dda8fb45f76dd768096d",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_ide_visibility_accounting.py": "b405236c259648552d90ab1b4f0978d25961e7cafb5e8e33eb1265d00791fe7f",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/051-prospective-ide-visibility-accounting-diagnostic.md": "aafe3dbffe7235207a32bdc8475f71eae5b6590469890f49a93ae75f849e723e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/173-posthoc-concurrent-drm-client-diagnosis.json": "ca43cfb2b6b7391ebdeffff28eb4f5177cc9c81a5814e6fa301faff2d4ab4470",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/posthoc-drm-client-observation-v1.json": "06c1f6354691c5a9c940bb43a1d7d7d6559e803a2940d33ab8d8d6a2dc8e19cf",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json": "dddca3bfa7d2f0847e683352593519165829963d49fd173a29b698ba825d6add",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json": "8a475b8bded695958aa34d9b65164166086a4d86e261093771ffc3e3ed6bb559",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json": "73d12dd8d7171e215fa2dc149485776dfa7749985946d3be9209cb86b069be3f",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe"
+  },
+  "phases": [
+    {
+      "name": "visible-before",
+      "snapshots": [
+        {
+          "utc": "2026-10-16T03:14:46.396929+00:00",
+          "scan_start_monotonic_ns": 227789984905846,
+          "scan_end_monotonic_ns": 227789985556590,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3151696313168,
+            "compute": 794761392738
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:14:51.427871+00:00",
+          "scan_start_monotonic_ns": 227795015965082,
+          "scan_end_monotonic_ns": 227795016500189,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3151806807810,
+            "compute": 794761392738
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:14:56.459155+00:00",
+          "scan_start_monotonic_ns": 227800047318939,
+          "scan_end_monotonic_ns": 227800047780608,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3151924489907,
+            "compute": 794761392738
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:01.490240+00:00",
+          "scan_start_monotonic_ns": 227805078428142,
+          "scan_end_monotonic_ns": 227805078866942,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152041317361,
+            "compute": 794761803719
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        }
+      ],
+      "intervals": [
+        {
+          "elapsed_ns": 5031059236,
+          "graphics_accounted_ns_delta": 110494642
+        },
+        {
+          "elapsed_ns": 5031353857,
+          "graphics_accounted_ns_delta": 117682097
+        },
+        {
+          "elapsed_ns": 5031109203,
+          "graphics_accounted_ns_delta": 116827454
+        }
+      ],
+      "accounted_ns_per_elapsed_second": 22857765.486021183,
+      "complete": true
+    },
+    {
+      "name": "hidden",
+      "snapshots": [
+        {
+          "utc": "2026-10-16T03:15:03.533246+00:00",
+          "scan_start_monotonic_ns": 227807121397913,
+          "scan_end_monotonic_ns": 227807121871842,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152052563126,
+            "compute": 794761803719
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": -98,
+              "name": "special:n010-calibration-isolation"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:08.564374+00:00",
+          "scan_start_monotonic_ns": 227812152535833,
+          "scan_end_monotonic_ns": 227812153007672,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152052563126,
+            "compute": 794761803719
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": -98,
+              "name": "special:n010-calibration-isolation"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:13.595808+00:00",
+          "scan_start_monotonic_ns": 227817184044634,
+          "scan_end_monotonic_ns": 227817184433985,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152052563126,
+            "compute": 794761803719
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": -98,
+              "name": "special:n010-calibration-isolation"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:18.635870+00:00",
+          "scan_start_monotonic_ns": 227822224023757,
+          "scan_end_monotonic_ns": 227822224498445,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152052563126,
+            "compute": 794761803719
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": -98,
+              "name": "special:n010-calibration-isolation"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        }
+      ],
+      "intervals": [
+        {
+          "elapsed_ns": 5031137920,
+          "graphics_accounted_ns_delta": 0
+        },
+        {
+          "elapsed_ns": 5031508801,
+          "graphics_accounted_ns_delta": 0
+        },
+        {
+          "elapsed_ns": 5039979123,
+          "graphics_accounted_ns_delta": 0
+        }
+      ],
+      "accounted_ns_per_elapsed_second": 0.0,
+      "complete": true
+    },
+    {
+      "name": "visible-after",
+      "snapshots": [
+        {
+          "utc": "2026-10-16T03:15:22.732341+00:00",
+          "scan_start_monotonic_ns": 227826320584792,
+          "scan_end_monotonic_ns": 227826320965603,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152136323827,
+            "compute": 794761816929
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:27.764284+00:00",
+          "scan_start_monotonic_ns": 227831352434230,
+          "scan_end_monotonic_ns": 227831352911598,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152251919635,
+            "compute": 794762037403
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:32.793984+00:00",
+          "scan_start_monotonic_ns": 227836382162848,
+          "scan_end_monotonic_ns": 227836382610148,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152363184858,
+            "compute": 794762037403
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        },
+        {
+          "utc": "2026-10-16T03:15:37.828872+00:00",
+          "scan_start_monotonic_ns": 227841417057593,
+          "scan_end_monotonic_ns": 227841417496703,
+          "client": [
+            "amdgpu",
+            "0000:c5:00.0",
+            "2946"
+          ],
+          "pid": 516315,
+          "start_ticks": 8673949,
+          "first_matching_fd": 9,
+          "engine_ns": {
+            "gfx": 3152482964312,
+            "compute": 794762037403
+          },
+          "window": {
+            "address": "0x5ab6278d0500",
+            "pid": 516230,
+            "class": "orca",
+            "mapped": true,
+            "hidden": false,
+            "workspace": {
+              "id": 1,
+              "name": "1"
+            },
+            "monitor": 0,
+            "at": [
+              72,
+              22
+            ],
+            "size": [
+              3346,
+              1396
+            ],
+            "floating": false,
+            "fullscreen": 0,
+            "fullscreenClient": 0,
+            "pinned": false,
+            "grouped": []
+          }
+        }
+      ],
+      "intervals": [
+        {
+          "elapsed_ns": 5031849438,
+          "graphics_accounted_ns_delta": 115595808
+        },
+        {
+          "elapsed_ns": 5029728618,
+          "graphics_accounted_ns_delta": 111265223
+        },
+        {
+          "elapsed_ns": 5034894745,
+          "graphics_accounted_ns_delta": 119779454
+        }
+      ],
+      "accounted_ns_per_elapsed_second": 22961687.115220603,
+      "complete": true
+    }
+  ],
+  "ipc_commands": [
+    {
+      "command": [
+        "hyprctl",
+        "dispatch",
+        "movetoworkspacesilent",
+        "special:n010-calibration-isolation,address:0x5ab6278d0500"
+      ],
+      "started_monotonic_ns": 227805083841124,
+      "returncode": 0,
+      "stdout": "ok\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "hyprctl",
+        "dispatch",
+        "movetoworkspacesilent",
+        "1,address:0x5ab6278d0500"
+      ],
+      "started_monotonic_ns": 227822252522132,
+      "returncode": 0,
+      "stdout": "ok\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "hyprctl",
+        "dispatch",
+        "focuswindow",
+        "address:0x5ab6278d0500"
+      ],
+      "started_monotonic_ns": 227822260966542,
+      "returncode": 0,
+      "stdout": "ok\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "hyprctl",
+        "dispatch",
+        "focuswindow",
+        "address:0x5ab6278d0500"
+      ],
+      "started_monotonic_ns": 227841444832235,
+      "returncode": 0,
+      "stdout": "ok\n",
+      "stderr": ""
+    }
+  ],
+  "power_settings_changed": false,
+  "application_stopped": false,
+  "calibration_modified": false,
+  "original_timing_gates_changed": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "thresholds": {
+    "minimum_each_visible_accounted_ns_per_second": 10000000,
+    "maximum_hidden_accounted_ns_per_second": 1000000,
+    "maximum_hidden_to_smaller_visible_rate": 0.05
+  },
+  "direct_max_relative_error_1_0": "UNRESOLVED / 未解決; included",
+  "tests": "NOT_RUN; operational diagnostic, no Renderer regression claim",
+  "desktop_version": {
+    "branch": "v0.55.2-b",
+    "commit": "39d7e209c79d451efab1b21151d5938289da838d",
+    "version": "0.55.2",
+    "dirty": false,
+    "commit_message": "version: bump to 0.55.2",
+    "commit_date": "2026-05-16",
+    "tag": "v0.55.2",
+    "commits": "-1",
+    "buildAquamarine": "0.11.0",
+    "buildHyprlang": "0.6.8",
+    "buildHyprutils": "0.13.1",
+    "buildHyprcursor": "0.1.13",
+    "buildHyprgraphics": "0.5.1",
+    "systemAquamarine": "unknown",
+    "systemHyprlang": "unknown",
+    "systemHyprutils": "unknown",
+    "systemHyprcursor": "unknown",
+    "systemHyprgraphics": "unknown",
+    "abiHash": "39d7e209c79d451efab1b21151d5938289da838d_aq_0.11_hu_0.13_hg_0.5_hc_0.1_hlg_0.6",
+    "flags": [
+      "nix"
+    ]
+  },
+  "process_identities": {
+    "gpu": {
+      "pid": 516315,
+      "start_ticks": 8673949,
+      "ppid": 516230
+    },
+    "ide_parent": {
+      "pid": 516230,
+      "start_ticks": 8673902,
+      "ppid": 2018
+    }
+  },
+  "registered_special_workspace_absent": true,
+  "original_window": {
+    "address": "0x5ab6278d0500",
+    "pid": 516230,
+    "class": "orca",
+    "mapped": true,
+    "hidden": false,
+    "workspace": {
+      "id": 1,
+      "name": "1"
+    },
+    "monitor": 0,
+    "at": [
+      72,
+      22
+    ],
+    "size": [
+      3346,
+      1396
+    ],
+    "floating": false,
+    "fullscreen": 0,
+    "fullscreenClient": 0,
+    "pinned": false,
+    "grouped": []
+  },
+  "original_monitors": [
+    {
+      "id": 0,
+      "activeWorkspace": {
+        "id": 1,
+        "name": "1"
+      },
+      "specialWorkspace": {
+        "id": 0,
+        "name": ""
+      }
+    }
+  ],
+  "original_focus": {
+    "address": "0x5ab6278d0500",
+    "pid": 516230,
+    "start_ticks": 8673902
+  },
+  "restoration_required": true,
+  "restoration_verified": true,
+  "input_identities_unchanged": true,
+  "local_suppression_gates": {
+    "both_visible_rates_sufficient": true,
+    "hidden_rate_below_absolute_cutoff": true,
+    "hidden_rate_below_relative_cutoff": true
+  },
+  "limitations": "Per-client cumulative accounting, not instantaneous utilization, per-query overlap or causal proof for earlier failures. No calibration or reference gate is passed."
+}

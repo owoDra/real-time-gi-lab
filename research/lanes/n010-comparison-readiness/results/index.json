@@ -877,6 +877,12 @@
       "status": "complete-original-schedule-statistical-and-ledger-replay-of-all-sixteen-calibration-boundaries",
       "result": "175-bulk-pfm-calibration-decision-and-replay.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-174",
+      "status": "complete-visible-hidden-restored-local-graphics-accounting-suppression-and-restoration-pass-no-timing-admission",
+      "result": "174-ide-visibility-accounting-diagnostic.json",
+      "gpu_run": false
     }
   ]
 }

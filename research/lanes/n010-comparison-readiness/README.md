@@ -25,13 +25,19 @@ Post-hoc [173](results/173-posthoc-concurrent-drm-client-diagnosis.json)
 observes IDE graphics accounting on the same AMD device during three sampled
 live-calibration intervals. This is not proved causation of the precision
 failures, exact per-query overlap or instantaneous utilization. Prospective
-[plan 051](experiments/051-prospective-ide-visibility-accounting-diagnostic.md)
-prepares a separate one-time **174**, comparing visible/hidden/restored IDE
-accounting with exact PID/window identity and verified restoration. It has
-**not run**; source/CLI assembly only is checked. It may run after actual
-complete 169 and quiescence, before CPU 172. No window has been moved, no
-application stopped, and no power/clock/idle preference changed. Its fixed
-local accounting classifier cannot pass any original timing/quality gate.
+[plan-051 diagnostic 174](results/174-ide-visibility-accounting-diagnostic.json)
+now completes all visible/hidden/restored A/B/A phases and its fixed **local
+accounting-suppression classifier PASS**. The same client's accounted graphics
+rates are **22.8578 / 0 / 22.9617 million ns per elapsed second**; all three
+hidden intervals have zero increment. Original PID/window identities, eight
+input hashes and exact workspace/geometry/focus restoration are verified.
+No application stopped or power/clock/idle preference changed. This is local
+counter suppression, **not causal proof for prior calibration failures, physical
+GPU utilization, global quiescence or accepted timing**. Exact 174 SHA256:
+`c8c8a7a00662344f48de9a6f266ac976f789b9594d3e6bc336a3dacb1aa7ef8b`.
+A separate prospective full-boundary acquisition under this visibility policy
+is still required; all original timing gates remain unchanged. CPU 172 may
+proceed after actual diagnostic termination and quiescence.
 
 Reference work remains **16/24 eligible slots, eight pending** in immutable
 view [160](results/160-primary-direction-reference-view.json). Physical
@@ -679,9 +685,11 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
   --output research/lanes/n010-comparison-readiness/results/172-primary-direction-post-stop-bounded-feasibility.json
 ```
 
-### Prepared reversible IDE visibility diagnostic (plan 051)
+### Completed reversible IDE visibility diagnostic (plan 051)
 
-174 is **not run**. Dispatch once only after complete 169 with all sixteen
+174 completed its local suppression/restoration classifier PASS. The command
+identifies that one-time acquisition; do not restart existing paths. It required
+complete 169 with all sixteen
 boundaries/eight blocks and no research workers. All 169 FAILs stay FAIL.
 It briefly moves the single registered IDE window to an undisplayed special
 workspace, restores its original workspace/focus and verifies exact attributes.
