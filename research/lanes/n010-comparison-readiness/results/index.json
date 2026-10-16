@@ -829,6 +829,12 @@
       "status": "complete-row-bulk-pfm-fixture-build-inverse-and-active-inputs-pass-no-gpu-validation",
       "result": "167-bulk-pfm-calibration-fixture-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-163",
+      "status": "complete-seventeen-physical-scenes-eight-checks-two-iid-pass-seven-imports-ten-fresh",
+      "result": "163-primary-direction-recovered-physical-controls.json",
+      "gpu_run": false
     }
   ]
 }

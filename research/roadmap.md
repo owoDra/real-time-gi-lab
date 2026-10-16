@@ -1,6 +1,6 @@
 # Forward research roadmap — major gates only
 
-## Current execution checkpoint — 2026-10-15 14:43 UTC stop
+## Current execution checkpoint — 2026-10-16 JST
 
 Prospective [proof intake 049](lanes/n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
 now supplies a separate strict verifier for actual 167/168/169 evidence. It
@@ -8,11 +8,14 @@ requires complete full PASS before payload replay, pins build 167 and the
 original analysis source, and independently checks all native files, original
 sizing/schedules/thresholds, image/witness equality and ledger teardown. Its
 Python source compiles; numerical proof replay and native witness calls have
-**not run**, because 168/169 do not exist. No successful readiness adapter or
-accepted timing is created. The future six-gate integration must preserve every
-other gate and identify the exact calibrated fixture; old pilot timing remains
-diagnostic. This source-only work acquires no samples and does not overlap GPU
-measurement with the live CPU controls.
+**not run**, because 168/169 do not exist. A separate final six-gate adapter
+now assembles and its CLI help succeeds. Its inverse edits reconstruct the
+entire original preflight: all gate names and the other five numerical bodies
+remain unchanged; only reference dispatch, strict calibration proof intake,
+output/quiescence guards and provenance differ. Final 047 has not run and no
+READY or accepted timing is created. Old pilot timing remains diagnostic.
+This source-only work acquires no samples and does not overlap GPU measurement
+with the live CPU controls.
 
 User-requested [stop 170](lanes/n010-comparison-readiness/results/170-user-requested-minimal-calibration-stop.json)
 terminated the accepted-calibration controller and its GPU PT child using
@@ -25,11 +28,20 @@ is **INCOMPLETE / NOT ACCEPTED**. No subset acceptance, threshold change,
 old-path restart or power/clock change occurred. Earlier live-status paragraphs
 below describe their publication checkpoints, not current running processes.
 
-After actual GPU termination, separate preregistered plan-047 CPU recovery 163
-started at its fresh path. The seven fixed scene exports were copied byte-for-byte
-and passed their per-scene checks; the ten fresh invocations are still pending
-completion. Full physical/eight-gate/two-iid validity and reference admission
-are not established. Old 152 and its stopped workflow remain unchanged.
+After actual GPU termination, separate preregistered plan-047 CPU
+[recovery 163](lanes/n010-comparison-readiness/results/163-primary-direction-recovered-physical-controls.json)
+completed **all 17 scenes, eight physical checks and two iid comparisons PASS**.
+It retains seven byte-exact imports with their actual old commands and ten new
+native invocations. The recovered provenance verifier independently checked
+1,065 input/payload identities and full import/native scope. SHA256:
+`309c48d7a08e32b6d9d378fe1e3764985bac4dfcc7cf6637e81a747c1706811a`.
+The original iid gates remain <=0.2% mean-channel difference / <=1% NRMSE;
+A7 NRMSE is 0.714933%, A6b 0.0891075%. Scoring exclusions: zero.
+This is physical control validity, **not reference admission**. Old 152 and its
+stopped workflow remain unchanged. After the 163 controller/native processes
+actually terminated, fresh state/prefix proof 164 started: all 24 locked states,
+both actual C7 transports and all 78 invocations remain mandatory. 165/166 and
+GPU 168/169 have not run.
 
 Independent CPU [build 167](lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
 completed all five compile/link steps PASS. It verifies 494 input identities,
