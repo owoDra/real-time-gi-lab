@@ -12,7 +12,8 @@ PLAN = RESULTS.parent/'experiments/052-prospective-hidden-ide-full-calibration.m
 sys.path.insert(0,str(HERE.parent/'n010_comparison_readiness'))
 
 
-def verify_environment(proof, mode, inputs):
+def replay_environment(proof, mode, inputs):
+    """Replay operational evidence; this alone makes no scientific timing decision."""
     from reference_provenance import read
     from qualify_hybrid_references import check_files
     work = ROOT/'out/research/n010-comparison-readiness'/(
@@ -31,7 +32,6 @@ def verify_environment(proof, mode, inputs):
         and policy['schema']=='n010-hidden-ide-calibration-policy/1'
         and all(policy.get(k) for k in ('complete','all_pass','restoration_verified',
                                       'pre_gpu_hidden_intervals_pass','input_identities_unchanged'))
-        and proof.get('numerical_all_pass') is True
         and policy['maximum_accounted_gfx_ns_per_elapsed_second']==1000000
         and policy['requested_observer_interval_seconds']==5
         and policy.get('application_stopped') is False and policy.get('power_settings_changed') is False
@@ -80,6 +80,13 @@ def verify_environment(proof, mode, inputs):
                   'mandatory prospective environment source/input missing')
         inputs[str(p)] = D.sha(p)
     check_files(inputs,{})
+
+
+def verify_environment(proof, mode, inputs):
+    """Admission retains the independent requirement of scientific full PASS."""
+    D.require(proof.get('numerical_all_pass') is True,
+              'scientific full PASS required in addition to environment replay')
+    replay_environment(proof,mode,inputs)
 
 
 def verifier_program():

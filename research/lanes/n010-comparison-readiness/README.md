@@ -812,3 +812,25 @@ to its complete source SHA256
 `ec98f3ec41950b01b1b4565e9ae671a85e57ff7b95b916b24a03e987ac61401d`
 at `3b7c566`. Source assembly is not acquisition, reference eligibility or
 readiness. No unit tests or runtime regression validation were run.
+
+### Post-hoc decision replay after 178 actually terminates
+
+Prepared only; **not run**. The CPU-only report 179 preserves every full
+scientific PASS/FAIL and every incomplete boundary, with no exclusions,
+corrections, retries or new thresholds. It replays original schedules,
+statistics, owned-memory event ledgers, all frozen inputs and the sampled
+visibility/restoration evidence. Environment replay alone cannot admit timing;
+strict intake still requires actual full numerical PASS and all native payloads.
+Run only after actual controller/native termination; do not overlap 178 or 180.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/summarize_hidden_ide_calibration.py \
+  --output research/lanes/n010-comparison-readiness/results/179-hidden-ide-calibration-decision-and-replay.json
+```
+
+On scientific FAIL, strict intake refuses before expensive native payload
+verification. The report must distinguish that scope from complete payload
+rehashing or radiance/timestamp regeneration; its replay is not software
+regression validation. The source compiles and the strict whole-verifier
+inverse remains exact; the scientific replay itself has not been executed.
