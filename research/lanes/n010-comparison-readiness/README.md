@@ -157,6 +157,20 @@ Do not move desktop windows or change resolution/power/clocks for this plan.
 No waiting/retry worker or GPU overlap with CPU 180 is installed. Source/build
 preparation is not software regression validation; unit tests were not run.
 
+Prospective [handoff plan 055](experiments/055-prospective-deferred-calibration-handoff.md)
+now prepares separate final-pilot/auditor entries selecting strict actual
+184/185/186, with unchanged original reference/quality/memory checks. Complete
+parent-adapter source inverses are exact; original full pilot/auditor inverses
+are inherited. Source inspection confirms the same **six gate names** and
+byte-identical bodies for the five non-calibration gates. Python assembly and
+CLI help complete; **no admission, pilot, final gate or READY result has run**.
+The fresh pilot work root is `final-comparison-pilots-deferred-image-v1`, with
+unchanged unexecuted outputs 043/044/048. Admission requires actual full timing
+PASS, complete 166 and all 24 independently verified references before work
+creation. Run final 047 only after actual pilot-driver termination/quiescence.
+All preparation-pilot timing remains diagnostic; no historical timing transfer.
+Plan 054/build 184 and negative 169/178 evidence remain immutable.
+
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
 mandatory. The pilot driver and final auditor are prepared but unexecuted;
@@ -941,3 +955,50 @@ adapter `deferred_image_timing_provenance.py` reverses completely to original
 049 SHA256 `49ac6660fe17e8895be2a0d600771a8e844358867fe57014f0066105b247b9a8`.
 Neither proof assembly admits failed 169, incomplete 178, an eligible reference,
 a different workload's timing or final READY. All original six gates remain.
+
+
+### Deferred-calibration final pilot and six-gate dispatch (plan 055)
+
+Both adapters are prepared; **not run**. Source assembly and CLI help complete.
+The complete parent-module inverses are exact (pilot parent `7a7cff2449d5...`,
+auditor parent `c485165c1ec8...`), retaining inherited whole-source inverses to
+original scientific drivers `53b173...` / `87985c...`. All six original gate
+names and the five non-calibration function bodies remain unchanged. New source
+provenance records both parent/new adapters, plan 055 and the actual verifier.
+
+The old plan-049 entries above still require failed 169 and refuse admission.
+The entries below select only actual full 184/185/186 proof; they do not alias
+negative records to PASS. Require actual complete 180/166 PASS and independent
+full 24-slot reference verification. Never create or start a waiting worker.
+
+Only after complete required proofs and all research workers terminate:
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/finish_deferred_primary_direction_readiness.py \
+  --work out/research/n010-comparison-readiness/final-comparison-pilots-deferred-image-v1 \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json
+```
+
+Only after the actual pilot driver exits with full completed pilots, dispatch
+this separate one-time final auditor. It refuses existing 047 and live research
+workers. A source assembly or diagnostic preflight is not a final gate result.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/readiness_preflight_deferred_primary_direction.py \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json \
+  --calibration research/lanes/n010-comparison-readiness/results/186-deferred-image-calibration-full-renderer.json \
+  --dynamic-pilots research/lanes/n010-comparison-readiness/results/019-controlled-dynamic-cohort.json research/lanes/n010-comparison-readiness/results/037-controlled-dynamic-pt1024.json research/lanes/n010-comparison-readiness/results/048-sponza-dynamic-cohort.json \
+  --static-pilots research/lanes/n010-comparison-readiness/results/044-c1-complete-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json research/lanes/n010-comparison-readiness/results/024-c8-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/025-c9-pt-quality-ladder.json \
+  --output research/lanes/n010-comparison-readiness/results/047-readiness-preflight.json
+```
+
+Pilot time remains diagnostic. Lane M timing requires the exact admitted
+fixture/boundary or its own calibration; no capability is transferred into old
+or new preparation-pilot timings. No unit tests/runtime regression checks were
+run during this source-only adapter preparation.

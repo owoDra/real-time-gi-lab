@@ -157,6 +157,20 @@ Do not move desktop windows or change resolution/power/clocks for this plan.
 No waiting/retry worker or GPU overlap with CPU 180 is installed. Source/build
 preparation is not software regression validation; unit tests were not run.
 
+Prospective [handoff plan 055](lanes/n010-comparison-readiness/experiments/055-prospective-deferred-calibration-handoff.md)
+now prepares separate final-pilot/auditor entries selecting strict actual
+184/185/186, with unchanged original reference/quality/memory checks. Complete
+parent-adapter source inverses are exact; original full pilot/auditor inverses
+are inherited. Source inspection confirms the same **six gate names** and
+byte-identical bodies for the five non-calibration gates. Python assembly and
+CLI help complete; **no admission, pilot, final gate or READY result has run**.
+The fresh pilot work root is `final-comparison-pilots-deferred-image-v1`, with
+unchanged unexecuted outputs 043/044/048. Admission requires actual full timing
+PASS, complete 166 and all 24 independently verified references before work
+creation. Run final 047 only after actual pilot-driver termination/quiescence.
+All preparation-pilot timing remains diagnostic; no historical timing transfer.
+Plan 054/build 184 and negative 169/178 evidence remain immutable.
+
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
 mandatory. The pilot driver and final auditor are prepared but unexecuted;
