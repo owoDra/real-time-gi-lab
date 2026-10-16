@@ -979,6 +979,30 @@
       "status": "posthoc-whole-image-and-stratified-depth-weight-interpretation-no-admission",
       "result": "194-posthoc-depth-weight-and-rqmc-interpretation.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-195",
+      "status": "complete-fixed-grid-cpu-diagnostic-marginal-p99-gain-no-reference-admission",
+      "result": "195-fixed-grid-scramble-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-196",
+      "status": "complete-eight-block-c7-diagnostic-all-seven-precision-gates-fail-no-timing-admission",
+      "result": "196-deferred-c7-precision-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-197",
+      "status": "complete-user-idle-eight-block-c7-diagnostic-all-seven-gates-fail-coarse-external-engine-observation-no-causal-proof",
+      "result": "197-natural-idle-c7-precision-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-198",
+      "status": "complete-cpu-original-decision-schedule-resource-ledger-and-spool-replay-no-admission",
+      "result": "198-bounded-cause-probes-posthoc-replay.json",
+      "gpu_run": false
     }
   ]
 }

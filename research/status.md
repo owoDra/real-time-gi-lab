@@ -4,8 +4,9 @@
 
 **N010 remains NOT_READY.** User resumed work for cause diagnosis and the
 shortest valid completion path, with low interactive load. No old stopped
-acquisition or waiting queue is restarted. Current action is a one-CPU bounded
-diagnosis, not another full-frame reference ladder or long GPU campaign.
+acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
+diagnostics have completed; neither supplies the missing readiness proof.
+No full-frame reference ladder or long GPU campaign is running or queued.
 
 See [cause review 192](lanes/n010-comparison-readiness/results/192-cause-review-and-shortest-valid-completion.md)
 and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/057-bounded-cause-diagnosis-and-critical-path.md).
@@ -14,8 +15,8 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | --- | --- | --- |
 | All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Candidate feasibility | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| New sampler preparation | [187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json): isolated build PASS | 188/189/190 NOT RUN. Compilation is not scientific admission; diagnose before dispatch. |
-| GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Full 186 NOT RUN. No accepted precision/timing proof exists. |
+| New sampler preparation | [187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json): isolated build PASS | Fixed-grid 195 shows p99 ratio 0.948 but replicate-variance ratio 1.019; insufficient evidence for long acquisition. 188/189/190 remain NOT RUN. |
+| GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified. Direct max-relative-error-1.0 pixels **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
 
@@ -29,8 +30,9 @@ are only 0.017115 / 0.012833 / 0.010016; covariance is separately retained.
 These are four-replicate image-energy diagnostics, not additive variance
 shares or iid uncertainty estimates. They locate the observed disagreement
 after the first indirect bounce. The failed guide targets first-secondary-hit
-direct light, then applies its weight to all later contributions; the causal
-weight/depth mechanism is the next small diagnosis, not yet proved.
+direct light, then applies its weight to all later contributions. Completed
+193/194 below separate depth/weight effects from the loss of observed net
+variance reduction; a complete causal explanation remains unproved.
 
 Original C1 B8 absolute-p99 decay exponent is 0.518411. Planning extrapolation
 predicts 1.71180e-5 / 1.19508e-5 at 131072/262144, above the unchanged 1e-5
@@ -63,11 +65,40 @@ not simply more path variance, is therefore part of the measured failure.
 Moment-based iid proxies are descriptive only, never RQMC standard errors.
 
 [Plan 058](lanes/n010-comparison-readiness/experiments/058-fixed-grid-and-short-boundary-diagnostics.md)
-registers two finite diagnostics before long acquisitions: existing nested
-binary on a fixed 256-pixel C1 grid (195, one CPU, no GPU), then exact deferred
-fixture on C7 HWRT only (196, original eight blocks, short native guards).
-Neither has run at this checkpoint. Neither can admit references, replace
-188/189/190 or establish full 186 timing. All original six gates remain.
+completed both diagnostics. [195](lanes/n010-comparison-readiness/results/195-fixed-grid-scramble-diagnosis.json)
+uses the exact existing nested binary on a prospectively fixed 256-pixel C1
+grid, one CPU at nice 15, 164.588 seconds, no GPU. Nested/original p99 is
+**0.948183**, but replicate variance is **1.018947**. This one-level grid
+provides no evidence of the strong reduction needed to justify another long
+ladder. It is not a formal failure of unrun 188/189/190 or reference admission.
+
+[196](lanes/n010-comparison-readiness/results/196-deferred-c7-precision-diagnostic.json) and
+[197](lanes/n010-comparison-readiness/results/197-natural-idle-c7-precision-diagnostic.json), prospectively
+registered in [059](lanes/n010-comparison-readiness/experiments/059-natural-idle-c7-observation.md), each
+complete all eight C7 HWRT blocks / 512 samples with frozen dose 3439 and
+unchanged original classifier. **Both FAIL all seven precision gates.**
+Summed measured GPU intervals are only 0.252902 / 0.249035 seconds; setup,
+readback, output and one-second block settles are additional. All acquisition
+image/scratch checks and owned-memory/spool checks pass. In 197, even with
+the user leaving the PC untouched, zero-dose full GPU times span
+**147.961–956.537 us**, known-work times **2.405–13.746 us**.
+
+197 observes positive DRM engine deltas for Brave and the IDE over a coarse
+13.572-second interval; eight same-UID processes are inaccessible. This is
+neither exact per-query overlap nor proof of interference, clock changes or
+global GPU idleness. Deferred CPU serialization plus a user-idle interval
+has not established precision; do not dispatch the >hour full 186 campaign.
+[198](lanes/n010-comparison-readiness/results/198-bounded-cause-probes-posthoc-replay.json) replays all
+original schedules/decisions, native resource receipts, owned ledgers and CPU
+spool receipts exactly; it does not independently rehash every native payload.
+
+The next implementation target is the measurement fixture's frame cadence
+and the oracle's later-path variance mechanism. GPU readbacks still occur
+between frames despite deferred PFM serialization. Inspect a complete-work
+batching repair and a depth-aware reference repair before new sampling; any
+new method must be registered and pass its original physical/full-boundary
+proofs. Neither current diagnostic changes a threshold or supplies a final
+gate. No completion ETA is justified yet.
 
 ### Evidence and preserved boundaries
 

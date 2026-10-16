@@ -27,7 +27,7 @@ feasibility campaign is COMPLETE/FAIL. Neither statement is a measured
 scientific failure, not an operational crash. Producer attempts took
 2999.5225 and 3099.9844 wall seconds, diagnostic only, at sixteen threads.
 185 finished naturally before the subsequent research-worker scan; no claim
-that a running GPU job was killed. Current work is small CPU analysis.
+that a running GPU job was killed. That initial checkpoint preceded the completed bounded probes below.
 
 ## 1. Reference noise: depth mismatch in the improvement target
 
@@ -136,10 +136,11 @@ step while the interactive-load constraint and cause review are in effect.
 
 ## 4. Shortest valid route and decision points
 
-1. **Diagnose cheaply before another variant ladder.** Run only plan 057's
-   bounded selected-path comparison. Check reconstruction against actual
-   original/180 moments, retain each bounce and correction moment, and separate
-   what it establishes from hypotheses. Existing 188/189/190 remain NOT RUN.
+1. **Use the completed small diagnostics before another variant ladder.**
+   193 reconstructs retained moments exactly; 194 identifies reduced observed
+   net variance reduction. Fixed-grid 195 does not supply the required strong
+   improvement. Existing 188/189/190 remain NOT RUN. Do not dispatch a full
+   nested-scramble campaign on compilation or the selected tail pixels alone.
 2. **Repair the dominant reference mechanism once supported.** Keep all sixteen
    eligible references. A proposed sampler still needs prospective registration,
    original physical/all-state/prefix checks and the unchanged full eight-slot
@@ -160,7 +161,8 @@ build/provenance records alone will not resolve the numerical bottleneck.
 This review changes work ordering, not the preregistered success criteria.
 Completion and a date are not yet guaranteed. No new unit/regression tests,
 GPU run, architecture promotion, Actions or N001–N009 result changes occur
-in this review. The preliminary 191 import failure and corrected environment
+in this initial review. Subsequent bounded GPU probes are recorded below.
+The preliminary 191 import failure and corrected environment
 are disclosed in plan 057; the successful read-only diagnosis took <1 second.
 
 ## Follow-up: completed depth/weight and whole-image interpretation
@@ -189,3 +191,85 @@ Timing's smallest next check targets the cheap C7 HWRT boundary that failed
 all seven original gates, rather than the >hour full 186 campaign. Both are
 registered in [058](../experiments/058-fixed-grid-and-short-boundary-diagnostics.md)
 with strict diagnostic scope, finite resource guards and no acceptance transfer.
+
+
+## Follow-up: actual bounded outcomes and naturally idle observation
+
+These are completed diagnostic results, not new reference or timing admission.
+Plans 058/059 were committed before their respective acquisitions.
+
+| Result | Actual complete outcome | Decision for the shortest route |
+| --- | --- | --- |
+| [195](195-fixed-grid-scramble-diagnosis.json) | Exact 193 nested binary, prospective 256-pixel C1 grid, 8192 × four seeds; one low-priority CPU, 164.588 seconds | Nested/original max-pairwise p99 0.948183119, replicate-variance sum 1.018947446, per-path variance sum 1.000469321. No strong gain supports a long campaign. Scope is one grid and one level, not formal 190 FAIL. |
+| [196](196-deferred-c7-precision-diagnostic.json) | Eight C7 HWRT blocks / all 512 samples complete; all seven original gates FAIL | Deferred PFM output alone has not repaired short-boundary precision. No full 186. |
+| [197](197-natural-idle-c7-precision-diagnostic.json) | Same fresh eight blocks / 512 samples during user-declared idle interval; all seven original gates FAIL | Waiting without operating the PC has not established precision. No repeat-until-PASS loop, sample removal or full 186 dispatch. |
+| [198](198-bounded-cause-probes-posthoc-replay.json) | CPU replay of original decisions and all schedules; resource receipts rehashed; owned ledgers and CPU spool receipts replayed | Exact decisions retained. Acquisition image/scratch PASS flags checked; this replay does not independently rehash every native payload. |
+
+Exact new result SHA256 identities:
+
+- 195: `fb8241581d78b70cfc2c6db6e73643021392b051f370472d6c10a58618471733`
+- 196: `24833b87c6edfd8e748687ab5f5efc8971bfdb998515f687331f1f7aec6c986f`
+- 197: `d07cd05eca73c18e0e9bc0f755e6674d73963f8ff0db2aa2b17def783a79fe71`
+
+196/197 each preserve the full 184 C7 Renderer work, original dose 3439,
+046 images, all scratch checks, 30 CPU/30 elapsed second native guards,
+all-owned Vulkan peak **263317056 bytes**, teardown zero, and bounded CPU
+spool release. Summed measured GPU intervals are **0.252901997 / 0.249035210
+seconds**. Host setup, settles, readbacks and output are additional.
+
+| Original precision statistic | Limit | 196 | 197 |
+| --- | --- | --- | --- |
+| Control envelope | <=1.02 | 1.656799 | 1.567719 |
+| Control span | <=1.03 | 1.697616 | 1.892328 |
+| Control order bias | <=1.02 | 1.940064 | 1.904106 |
+| Effect span | <=1.05 | 2.293783 | 1.807090 |
+| Effect order bias | <=1.03 | 2.426973 | 4.486912 |
+| Minimum effect-positive fraction | >=0.75 | 0.416667 | 0.5 |
+| Minimum effect exceeds control envelope | >envelope | 0.838039: FAIL | 1.031253: FAIL |
+
+197's 384 zero-dose samples range **147.961–956.537 us** at the full GPU
+boundary and **2.405–13.746 us** for the fixed neutral-work stage. The work
+and output checks pass; the execution-time spread is a separate unresolved
+measurement problem, not evidence that the GI estimator suddenly changes
+its mathematical work. Static inspection finds these Renderer timestamps
+inside one submitted GPU command buffer, with fence waiting/query retrieval
+outside that buffer; CPU output is not directly counted as GPU time by these
+expressions. This inspection is not proof that the entire measurement system
+is correct or that preemption, clocks or contention caused the spread.
+
+197's before/after fdinfo interval is about **13.572 seconds**. Surviving
+Brave counters increase by graphics **48.116 ms**, compute **0.562 ms**,
+encode **310.011 ms**; IDE counters by graphics **136.032 ms**, compute
+**0.146 ms**. These per-engine cumulative deltas must not be summed into a
+GPU utilization percentage. Eight same-UID processes are inaccessible; the
+short-lived benchmark clients are absent from both snapshots. Coarse
+interval activity does **not** establish exact overlap with timed queries,
+global GPU idleness, causal interference or a clock/power mechanism. No
+application, desktop, display, driver, power or clock setting was changed.
+
+### Supported next work
+
+- **Reference branch:** do not spend another full ladder on a marginal
+  scrambling change. The evidence supports targeting later-path uncertainty
+  while preserving the exact physical integral. A distinct proposal needs
+  prospective registration, independent physical/state/prefix proofs and the
+  unchanged eight pending ladders. Strong reduction is still unproved.
+- **Timing branch:** inspect an isolated batching/cadence repair that retains
+  the complete original Renderer work and maintenance costs. Deferred PFM
+  output still performs synchronous GPU readbacks between frames. Avoid
+  assuming I/O is the proved cause or changing the measured work boundary.
+  Preserve every frame's correctness and owned-memory evidence if readbacks
+  are deferred. First use a bounded C7 diagnosis before full sixteen-boundary
+  proof; all seven existing precision gates remain required.
+- **Completion branch:** keep 16/24 qualified references, all losses, unresolved
+  error-1.0 pixels, full-corpus quality/memory work and six final gates visible.
+  These negative diagnostics save ungrounded long acquisitions; they do not
+  complete N010 or justify a completion date. No N011 or Lane M superiority
+  claim is introduced.
+
+198's first invocation used system Python and failed at import because NumPy
+was unavailable, before any scientific data was read or output created. The
+same retained-data replay completed with the existing research venv and its
+required library environment. No new samples or numerical retry were involved.
+Unit/runtime regression tests are **NOT RUN**. The default build graph and
+N001–N009 results are unchanged; no GitHub Actions were added.

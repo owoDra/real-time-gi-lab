@@ -1,0 +1,415 @@
+{
+  "schema": "n010-bounded-cause-probes-posthoc-replay/1",
+  "complete": true,
+  "classification": "POST_HOC_DIAGNOSIS_NO_ADMISSION",
+  "gpu_run": false,
+  "source_commit": "40045343ea70e9df7d57ff5000321ff59a0e63bd",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/summarize_bounded_cause_probes.py": "8ad7b2abc7cc6a0f94acff8d2dc4525b05d47de43b100bc2e555ec39eb319b8b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/calibrate_renderer.py": "64deb4d3995eb40498ca2b454dacf6d97d5909115ef32a36e3c80c3a7683cb8d",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight.py": "87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json": "58dba169986246adc16898e89f351d6ca1643d6e16a9f247e6934183f3838b32",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/195-fixed-grid-scramble-diagnosis.json": "fb8241581d78b70cfc2c6db6e73643021392b051f370472d6c10a58618471733",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/196-deferred-c7-precision-diagnostic.json": "24833b87c6edfd8e748687ab5f5efc8971bfdb998515f687331f1f7aec6c986f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-0.resource-limits.json": "c03198554bab0fa5ed5e6f37be59617aa7265fcc15a62f8f6acc42964f4cf613",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-0/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-1.resource-limits.json": "19857c3d2e463fda80f331d88fe65415492b898d37a38f057dc74d3c83a63b92",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-1/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-2.resource-limits.json": "d66c15bb4a042b47550ad2b8b8c22a997abf26975eddccfed2e9d8c31c7d20e7",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-2/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-3.resource-limits.json": "bcf8388b0ba6ef7d3ecbce397eaf9992a2308dd3635594d94afd5a6f0bbcc4a4",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-3/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-4.resource-limits.json": "38960aedd0f8e32c863a82df8db2c2c226d0bfbbcad4121c78b4b931700b2bbe",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-4/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-5.resource-limits.json": "6cf35ee477e31256ec53a39ec77b8bca4890afb97d32dfa02927ca938af3812c",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-5/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-6.resource-limits.json": "585e5eec2529087f29c683f481b9ff179f6ce80833256238ce16762beea2c438",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-6/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-7.resource-limits.json": "1f07a912c428ba0b1823ff8c90b2baf54d59de52326d65dcbbc747957f13b5c3",
+    "out/research/n010-comparison-readiness/deferred-c7-precision-diagnostic-v1/C7-hwrt/block-7/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/197-natural-idle-c7-precision-diagnostic.json": "d07cd05eca73c18e0e9bc0f755e6674d73963f8ff0db2aa2b17def783a79fe71",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-0.resource-limits.json": "dd8fe62130fa738cdf304bc1ee390986aec842f1b99b27e2b826bb11d4834247",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-0/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-1.resource-limits.json": "c5766b5351c817b27d206edeb3bd09a546bab3d316d0ee09e2760d2844569b37",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-1/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-2.resource-limits.json": "577f6b05269510b2fdbd3e4228fd5e1e53718d287b9c25fc326132ee732cdccf",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-2/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-3.resource-limits.json": "810b5727dd96f9b7fee569c255002457708bb16019c9baa4b79f38ed43bcd319",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-3/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-4.resource-limits.json": "392f67e50d637d655d2b40873723f5b642f029fb3b5faf84a17494f4635a019e",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-4/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-5.resource-limits.json": "6783a23badcdcb0cb816454536dbcd3d5410754f31e911482482263b92c5c6f7",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-5/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-6.resource-limits.json": "0f0655abc2164bb2483a83afbb496a7b808f25862d9a42c72c194ae4571bc998",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-6/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-7.resource-limits.json": "3117a877a12c2c9e58288075a1e8d6726beecf6d9414e5fdb26b9d0575409086",
+    "out/research/n010-comparison-readiness/natural-idle-c7-precision-diagnostic-v1/C7-hwrt/block-7/deferred-image-serialization.json": "941a0d4cb27ca918a03ea9cf7f3f97ea360db153d9732758f12a07a63d80cc7f"
+  },
+  "tests": "NOT_RUN; scientific retained-data replay only",
+  "reference_admission": false,
+  "accepted_timing": false,
+  "n010_ready": false,
+  "fixed_grid_nested_over_original": {
+    "indirect_replicate_variance_sum": 1.018947446021095,
+    "max_pairwise_indirect_p99": 0.9481831190900482,
+    "mean_path_variance_sum": 1.0004693205843618
+  },
+  "fixed_grid_scope": "256 prospectively fixed C1 pixels; 8192 and four seeds; no whole-frame, second-level or other-state admission",
+  "timing_diagnostics": [
+    {
+      "result": 196,
+      "numerical_analysis_replay_exact": true,
+      "all_512_schedule_and_sample_records_replayed": true,
+      "native_receipts_rehashed": true,
+      "all_owned_ledgers_replayed": true,
+      "cpu_spool_receipts_rehashed": true,
+      "acquisition_image_scratch_checks_all_pass": true,
+      "independent_full_native_payload_rehash": false,
+      "all_pass": false,
+      "original_analysis": {
+        "processes": [
+          {
+            "control": {
+              "median_log_ratio": -0.024337796961178937,
+              "ratio": 0.9759559791060521,
+              "order_bias_ratio": 1.0821399389371649,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": -0.17669068728967302,
+              "ratio": 0.8380389605399536,
+              "order_bias_ratio": 1.4940603297301793,
+              "positive_pair_fraction": 0.4166666666666667
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.05772264875711469,
+              "ratio": 1.0594211231939608,
+              "order_bias_ratio": 1.4024974015482246,
+              "positive_pair_fraction": 0.5833333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.4035718245198282,
+              "ratio": 1.4971627613137284,
+              "order_bias_ratio": 1.4317481334403093,
+              "positive_pair_fraction": 0.6666666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.16433095275704393,
+              "ratio": 1.178604312900556,
+              "order_bias_ratio": 1.2208971754093538,
+              "positive_pair_fraction": 0.5833333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.6535119464609636,
+              "ratio": 1.922279932608148,
+              "order_bias_ratio": 1.2550998195995133,
+              "positive_pair_fraction": 0.8333333333333334
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.16494013218783993,
+              "ratio": 1.1793225131392184,
+              "order_bias_ratio": 1.3585803617413366,
+              "positive_pair_fraction": 0.5833333333333334
+            },
+            "effect": {
+              "median_log_ratio": 0.5663242644736463,
+              "ratio": 1.7617793003459616,
+              "order_bias_ratio": 1.5333508192007594,
+              "positive_pair_fraction": 0.9166666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.05767572702231678,
+              "ratio": 1.0593714144831976,
+              "order_bias_ratio": 1.5526683424060608,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.45195837513198256,
+              "ratio": 1.5713865384590469,
+              "order_bias_ratio": 1.963115240678127,
+              "positive_pair_fraction": 0.6666666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.010217539133931867,
+              "ratio": 1.0102699164239173,
+              "order_bias_ratio": 1.4510864240043837,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.2047448635379199,
+              "ratio": 1.2272119185102262,
+              "order_bias_ratio": 1.2736333276496465,
+              "positive_pair_fraction": 0.5833333333333334
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.5048873641509086,
+              "ratio": 1.6567988950003774,
+              "order_bias_ratio": 1.6660386397638474,
+              "positive_pair_fraction": 0.6666666666666666
+            },
+            "effect": {
+              "median_log_ratio": 0.21859539969637914,
+              "ratio": 1.2443277194516014,
+              "order_bias_ratio": 1.2466283783193777,
+              "positive_pair_fraction": 0.5833333333333334
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.022447897508097774,
+              "ratio": 0.9778021817964134,
+              "order_bias_ratio": 1.9400637123934705,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.02587568897795428,
+              "ratio": 1.0262133709109829,
+              "order_bias_ratio": 2.4269732128647976,
+              "positive_pair_fraction": 0.5
+            }
+          }
+        ],
+        "control_envelope": 1.6567988950003774,
+        "control_span": 1.6976164196647046,
+        "effect_span": 2.2937834911274426,
+        "control_order_bias": 1.9400637123934705,
+        "effect_order_bias": 2.4269732128647976,
+        "minimum_positive_fraction": 0.4166666666666667,
+        "minimum_effect": 0.8380389605399536,
+        "gates": {
+          "control_max_absolute_ratio": false,
+          "control_span": false,
+          "control_order_bias": false,
+          "effect_span": false,
+          "effect_order_bias": false,
+          "effect_positive_fraction": false,
+          "effect_exceeds_control_envelope": false
+        },
+        "all_pass": false
+      },
+      "gpu_interval_sum_seconds": 0.2529019969260292,
+      "zero_dose_full_gpu_us": {
+        "count": 384,
+        "minimum": 146.7588436203003,
+        "median": 547.279838470459,
+        "maximum": 952.2893615798951
+      },
+      "zero_dose_known_work_gpu_us": {
+        "count": 384,
+        "minimum": 2.4045687103271485,
+        "median": 2.9055205249786376,
+        "maximum": 18.55525521469116
+      },
+      "maximum_true_peak_owned_bytes": 263317056
+    },
+    {
+      "result": 197,
+      "numerical_analysis_replay_exact": true,
+      "all_512_schedule_and_sample_records_replayed": true,
+      "native_receipts_rehashed": true,
+      "all_owned_ledgers_replayed": true,
+      "cpu_spool_receipts_rehashed": true,
+      "acquisition_image_scratch_checks_all_pass": true,
+      "independent_full_native_payload_rehash": false,
+      "all_pass": false,
+      "original_analysis": {
+        "processes": [
+          {
+            "control": {
+              "median_log_ratio": -0.10527973256173745,
+              "ratio": 0.9000727077232179,
+              "order_bias_ratio": 1.7307337759663677,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.4394991310308208,
+              "ratio": 1.5519297103784662,
+              "order_bias_ratio": 4.3276921671267985,
+              "positive_pair_fraction": 0.5
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.04991514158753275,
+              "ratio": 0.951310147744544,
+              "order_bias_ratio": 1.1425361625285122,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.38591427573760045,
+              "ratio": 1.4709585685714983,
+              "order_bias_ratio": 1.1935478011568776,
+              "positive_pair_fraction": 0.6666666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.4496213809841415,
+              "ratio": 1.56771850507038,
+              "order_bias_ratio": 1.5134196126652144,
+              "positive_pair_fraction": 0.6666666666666666
+            },
+            "effect": {
+              "median_log_ratio": 0.622492060652625,
+              "ratio": 1.8635663803854905,
+              "order_bias_ratio": 1.9113913073014563,
+              "positive_pair_fraction": 0.6666666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.177012878847791,
+              "ratio": 1.193646465819297,
+              "order_bias_ratio": 1.1970146325725097,
+              "positive_pair_fraction": 0.6666666666666666
+            },
+            "effect": {
+              "median_log_ratio": 0.08742655819609521,
+              "ratio": 1.0913621098975763,
+              "order_bias_ratio": 2.6377524243963446,
+              "positive_pair_fraction": 0.6666666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.1881862431668404,
+              "ratio": 0.8284603977755021,
+              "order_bias_ratio": 1.2170276760247298,
+              "positive_pair_fraction": 0.3333333333333333
+            },
+            "effect": {
+              "median_log_ratio": 0.2665709013610259,
+              "ratio": 1.3054801463732604,
+              "order_bias_ratio": 1.4600911454044034,
+              "positive_pair_fraction": 0.75
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.18601608874037018,
+              "ratio": 0.8302602370330834,
+              "order_bias_ratio": 1.0705226995952415,
+              "positive_pair_fraction": 0.4166666666666667
+            },
+            "effect": {
+              "median_log_ratio": 0.4732707746251279,
+              "ratio": 1.6052359813055834,
+              "order_bias_ratio": 1.0287878009425524,
+              "positive_pair_fraction": 0.75
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": -0.02703442348494863,
+              "ratio": 0.973327735614988,
+              "order_bias_ratio": 1.9041062862113711,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.49857569184401485,
+              "ratio": 1.6463746550959015,
+              "order_bias_ratio": 4.486912423973426,
+              "positive_pair_fraction": 0.6666666666666666
+            }
+          },
+          {
+            "control": {
+              "median_log_ratio": 0.0013002302872500045,
+              "ratio": 1.0013010759531304,
+              "order_bias_ratio": 1.0642704450584972,
+              "positive_pair_fraction": 0.5
+            },
+            "effect": {
+              "median_log_ratio": 0.030774332051809843,
+              "ratio": 1.0312527569320242,
+              "order_bias_ratio": 1.6666416892799647,
+              "positive_pair_fraction": 0.5
+            }
+          }
+        ],
+        "control_envelope": 1.56771850507038,
+        "control_span": 1.8923276348270344,
+        "effect_span": 1.8070898408355274,
+        "control_order_bias": 1.9041062862113711,
+        "effect_order_bias": 4.486912423973426,
+        "minimum_positive_fraction": 0.5,
+        "minimum_effect": 1.0312527569320242,
+        "gates": {
+          "control_max_absolute_ratio": false,
+          "control_span": false,
+          "control_order_bias": false,
+          "effect_span": false,
+          "effect_order_bias": false,
+          "effect_positive_fraction": false,
+          "effect_exceeds_control_envelope": false
+        },
+        "all_pass": false
+      },
+      "gpu_interval_sum_seconds": 0.2490352099829521,
+      "zero_dose_full_gpu_us": {
+        "count": 384,
+        "minimum": 147.96112797546385,
+        "median": 470.6943250465393,
+        "maximum": 956.5374329681397
+      },
+      "zero_dose_known_work_gpu_us": {
+        "count": 384,
+        "minimum": 2.4045687103271485,
+        "median": 2.484721000671387,
+        "maximum": 13.746117794036865
+      },
+      "maximum_true_peak_owned_bytes": 263317056
+    }
+  ],
+  "idle_observation": {
+    "coarse_interval_seconds": 13.572661060000001,
+    "clients_with_positive_engine_deltas": [
+      {
+        "client": "0000:c5:00.0/51",
+        "processes": [
+          {
+            "pid": 28152,
+            "comm": "brave"
+          }
+        ],
+        "engine_delta_milliseconds": {
+          "drm-engine-gfx": 48.115683,
+          "drm-engine-compute": 0.561575,
+          "drm-engine-enc": 310.010669
+        }
+      },
+      {
+        "client": "0000:c5:00.0/57",
+        "processes": [
+          {
+            "pid": 28674,
+            "comm": "orca-ide"
+          }
+        ],
+        "engine_delta_milliseconds": {
+          "drm-engine-gfx": 136.032003,
+          "drm-engine-compute": 0.145577
+        }
+      }
+    ],
+    "inaccessible_same_uid_pids_before": 8,
+    "inaccessible_same_uid_pids_after": 8,
+    "created_clients": [],
+    "disappeared_clients": [],
+    "scope": "No exact per-query overlap, global-quiescence, causal interference or clock/power diagnosis"
+  },
+  "conclusion": "Neither nested scrambling on this fixed grid nor deferred serialization plus a user-idle interval establishes the required repair. No full reference ladder or full 186 is dispatched by this replay."
+}
