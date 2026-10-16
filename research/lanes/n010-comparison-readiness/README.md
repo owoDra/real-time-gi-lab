@@ -1,140 +1,65 @@
 # N010 — final comparison preparation
 
-Prospective [visibility diagnostic 051](experiments/051-prospective-ide-visibility-accounting-diagnostic.md)
-now has a prepared one-time 174 entry point. After actual complete sixteen-boundary
-169 and quiescence, it records visible/hidden/restored A/B/A phases for the
-same registered IDE graphics client, four snapshots per phase, unchanged
-PID/start identities and verified workspace/geometry/focus restoration.
-It moves only the selected window briefly; it does not stop an application or
-change power/clock/idle preferences. A fixed local graphics-accounting
-suppression classifier is separate from every original timing/quality gate.
-CLI assembly succeeds; the intervention, accounting phases and restoration
-have **not run**. No window has been moved, no 174 data exists and no calibration
-or readiness PASS follows. It may run before CPU 172 after GPU termination;
-its outcome does not waive reference qualification or any final gate.
-
-Read-only post-hoc [DRM-client observation 173](results/173-posthoc-concurrent-drm-client-diagnosis.json)
-finds IDE graphics accounting advancing on the **same AMD device** during
-live calibration: 2.3225, 2.4140 and 1.9851 graphics-engine seconds across three
-roughly five-second intervals; the native calibration compute client also
-advances in each interval. Four snapshots deduplicate shared/inherited FDs
-by driver/PCI/client-id. This establishes other-client activity in those
-observation intervals, **not causation of precision failures**, exact per-query
-overlap, instantaneous utilization or behavior of unobserved blocks.
-No GPU work, application stop, power/clock change, correction, exclusion or
-threshold change was introduced. Original 169 continues through all sixteen
-boundaries. A future independent acquisition repair must address this observed
-non-research GPU activity prospectively, rather than assume another writer
-optimization solves the noise. Three C1 boundaries (HWRT/software/PT B2) have
-now completed eight blocks each and FAIL; C1 PT B8 is running. These are live
-publication checkpoints, not a complete full-calibration decision.
-
 ## Current execution checkpoint — 2026-10-16 JST
 
-Independent [row-bulk sizing 168](results/168-bulk-pfm-calibration-quiet-sizing.json)
-now completes **all sixteen boundaries PASS**: unchanged sizing gates,
-exact original-046 component images, known-work scratch witnesses and owned
-allocation-ledger replay to zero within 8 GiB. Its 670 fixture-input identities
-were independently rehashed unchanged. SHA256:
-`8a475b8bded695958aa34d9b65164166086a4d86e261093771ffc3e3ed6bb559`.
-After actual sizing termination and its full prerequisite/quiescence checks,
-fresh full calibration 169 started once at the registered new path. At this
-publication checkpoint C1 HWRT/software each completed eight process blocks
-and **FAIL** the original precision gates; later boundaries remain running.
-All sixteen boundaries must complete; no early stop, subset acceptance,
-correction or retry. Sizing PASS is not accepted timing or readiness.
+Full [row-bulk calibration 169](results/169-bulk-pfm-calibration-full-renderer.json)
+is now **COMPLETE / FAIL / NOT ACCEPTED**. All sixteen boundaries finish eight
+fresh-process blocks each: **C1 PT B8 and C6 PT B8 PASS; the other fourteen FAIL**
+the original precision gates. No subset is accepted. All 128 blocks / 8,192
+samples and original payloads are retained. Exact result SHA256:
+`dddca3bfa7d2f0847e683352593519165829963d49fd173a29b698ba825d6add`.
+The controller/native processes have actually terminated; there is no restart
+or waiting worker. No timing threshold, correction or exclusion changed.
 
-Prospective [zero-export recovery plan 050](experiments/050-prospective-zero-export-feasibility-recovery.md)
-now prepares fresh feasibility **172**, starting from sample zero at a new v2
-work path after GPU termination. Original 165/171 and all three stopped work
-files remain immutable and are explicitly verified, never imported as samples.
-The native two-level program has a complete source-inverse proof; all numerical
-bodies, seeds, samples, thresholds and limits remain unchanged. The pending
-provenance API now requires actual 151/163/164/**172** and the new path before
-unexecuted 166. Six declared dispatch/provenance edits reconstruct the entire
-previous API source at its immutable Git identity. Source assembly and CLI help
-pass; interruption replay and new numerical acquisition have **not run**.
-View 160, all 24 slots, all original controls and the six final gates stay fixed.
-No CPU sampling may overlap GPU calibration.
+CPU [decision/replay 175](results/175-bulk-pfm-calibration-decision-and-replay.json)
+recomputes every original schedule and statistical decision exactly, replays
+all 128 owned-allocation ledgers to teardown zero within 8 GiB, and rehashes
+671 frozen fixture inputs. Maximum true-peak owned bytes: **375,184,080**.
+It does not independently rehash every GPU payload or regenerate timestamps
+or radiance. Producer image/scratch/manifests remain in exact complete 169.
+This is scientific-analysis/ledger replay, not software regression validation;
+unit tests were not run. Complete sizing [168](results/168-bulk-pfm-calibration-quiet-sizing.json)
+remains full PASS; sizing/compilation alone cannot establish accepted timing.
 
-[Plan-049 Amendment 1](experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
-now prepares the remaining-pilot driver. It requires full actual timing-proof
-replay, complete eight-slot 166, independent verification of all 24 fixed-view
-references and quiescence before creating work. Original C1 B8 ladder and all
-C2–C6 roles/frames/budgets/scoring/merge bodies remain byte-identical; full
-inverse edits reconstruct the original driver. It imports complete 169 instead
-of rerunning old 029/046 and terminates before the separate final 047 auditor.
-No waiting worker, accepted pilot timing, retry or overwrite is introduced.
-Source assembly and CLI help pass; admission and GPU pilot execution have
-**not run**. This prepares execution, not readiness or competitive evidence.
+Post-hoc [173](results/173-posthoc-concurrent-drm-client-diagnosis.json)
+observes IDE graphics accounting on the same AMD device during three sampled
+live-calibration intervals. This is not proved causation of the precision
+failures, exact per-query overlap or instantaneous utilization. Prospective
+[plan 051](experiments/051-prospective-ide-visibility-accounting-diagnostic.md)
+prepares a separate one-time **174**, comparing visible/hidden/restored IDE
+accounting with exact PID/window identity and verified restoration. It has
+**not run**; source/CLI assembly only is checked. It may run after actual
+complete 169 and quiescence, before CPU 172. No window has been moved, no
+application stopped, and no power/clock/idle preference changed. Its fixed
+local accounting classifier cannot pass any original timing/quality gate.
 
-Prospective [proof intake 049](experiments/049-prospective-bulk-pfm-timing-proof-intake.md)
-now supplies a separate strict verifier for actual 167/168/169 evidence. It
-requires complete full PASS before payload replay, pins build 167 and the
-original analysis source, and independently checks all native files, original
-sizing/schedules/thresholds, image/witness equality and ledger teardown. Its
-Python source compiles; numerical proof replay and native witness calls have
-**not run**, because full 169 is not complete. A separate final six-gate adapter
-now assembles and its CLI help succeeds. Its inverse edits reconstruct the
-entire original preflight: all gate names and the other five numerical bodies
-remain unchanged; only reference dispatch, strict calibration proof intake,
-output/quiescence guards and provenance differ. Final 047 has not run and no
-READY or accepted timing is created. Old pilot timing remains diagnostic.
-This source-only work acquires no samples and does not overlap GPU measurement
-with CPU controls.
+Reference work remains **16/24 eligible slots, eight pending** in immutable
+view [160](results/160-primary-direction-reference-view.json). Physical
+[163](results/163-primary-direction-recovered-physical-controls.json)
+passes all seventeen scenes, eight physical checks and two iid comparisons;
+[state/prefix 164](results/164-primary-direction-recovered-all-state-and-prefix.json)
+passes all 24 states, both actual C7 transports and all 78 native invocations.
+These controls alone admit no reference. Feasibility 165 was user-stopped
+before its first seed export or level; exact partials and [stop 171](results/171-user-requested-recovered-feasibility-stop.json)
+remain unchanged, with **INCOMPLETE, no numerical PASS/FAIL or cap-failure**.
+Prospective [plan 050](experiments/050-prospective-zero-export-feasibility-recovery.md)
+prepares fresh result **172** from sample zero at a separate v2 path. No 165
+partials are imported. The pending provenance API requires actual
+151/163/164/172 PASS before still-unexecuted eight-slot 166. Seeds, samples,
+full-support/uncertainty gates, cap and resource limits remain unchanged.
+CPU 172 has not run and must not overlap diagnostic or GPU acquisition.
 
-User-requested [stop 170](results/170-user-requested-minimal-calibration-stop.json)
-terminated the accepted-calibration controller and its GPU PT child using
-verified PID/start identities. Two post-stop process scans found no remaining
-research workers. Exact [partial 158](results/158-minimal-calibration-full-renderer.json)
-bytes are retained: 12/16 boundaries completed all eight blocks, with C1 PT B8
-and C6 PT B2 PASS and ten FAIL. C6 PT B8 retains five complete blocks plus
-interrupted block-5 files; all three C12 roles remain unstarted. Full calibration
-is **INCOMPLETE / NOT ACCEPTED**. No subset acceptance, threshold change,
-old-path restart or power/clock change occurred. Earlier live-status paragraphs
-below describe their publication checkpoints, not current running processes.
+All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
+full actual timing capability and executed final six-gate **047 READY** remain
+mandatory. The pilot driver and final auditor are prepared but unexecuted;
+their original numerical bodies and all six gate names remain unchanged.
+Historical pilot timing stays diagnostic. Direct max-relative-error-1.0 pixels
+remain **UNRESOLVED / 未解決**, included without masks. Default Renderer/build
+behavior and N001–N009 results remain unchanged. N010 stays active; Lane M
+comparative acquisition has not started. No N011, CUDA or Actions.
 
-After actual GPU termination, separate preregistered plan-047 CPU
-[recovery 163](results/163-primary-direction-recovered-physical-controls.json)
-completed **all 17 scenes, eight physical checks and two iid comparisons PASS**.
-It retains seven byte-exact imports with their actual old commands and ten new
-native invocations. The recovered provenance verifier independently checked
-1,065 input/payload identities and full import/native scope. SHA256:
-`309c48d7a08e32b6d9d378fe1e3764985bac4dfcc7cf6637e81a747c1706811a`.
-The original iid gates remain <=0.2% mean-channel difference / <=1% NRMSE;
-A7 NRMSE is 0.714933%, A6b 0.0891075%. Scoring exclusions: zero.
-This is physical control validity, **not reference admission**. Old 152 and its
-stopped workflow remain unchanged. Separate recovered
-[state/prefix proof 164](results/164-primary-direction-recovered-all-state-and-prefix.json)
-now completes **all 24 locked states, both actual C7 transports and all 78
-invocations PASS**, with zero payload-byte or counter disagreements. The actual
-C7 B2/B8 checks use 8192-to-16384 own prefixes against fresh 16384 samples.
-The next-stage prerequisite verifier rehashed 3,194 proof/input/payload
-identities. Immutable 164 SHA256:
-`a230cb1ea71154089ba83380555d87dd3774b10dedeb3e24e2acde6eedccb6ab`.
-The subsequent user-requested [stop 171](results/171-user-requested-recovered-feasibility-stop.json)
-terminated feasibility 165's controller and 16-thread CPU child by verified
-PID/start identities. Two actual post-stop scans found zero research workers.
-Exact [partial 165](results/165-primary-direction-recovered-bounded-feasibility.json) and all three work files are retained unchanged;
-no seed export or numerical level completed. Its result is **INCOMPLETE**, with
-no numerical PASS/FAIL or cap-failure verdict. The old work path must never be
-restarted. The original <=0.75 feasibility gates at both 8192/16384 levels and
-full reference screens remain fixed. 166 has not run and cannot use incomplete
-165. Independent GPU 168 completed full PASS and 169 is running after
-167 full PASS and actual CPU/GPU quiescence; neither admits references.
-
-Independent CPU [build 167](results/167-bulk-pfm-calibration-fixture-build.json)
-completed all five compile/link steps PASS. It verifies 494 input identities,
-whole-source inverse proofs, unchanged timed Renderer method and unchanged
-active inputs. This establishes compilation of plan-048 row-bulk PFM output,
-**not GPU byte equivalence, accepted timing or runtime regression validation**.
-GPU sizing 168 completed full PASS; fresh calibration 169 is running under
-its original full sixteen-boundary gates. Tests were not run.
-
-All 24 eligible references, complete quality/memory pilots and the final six-gate
-readiness result remain required. The direct max-relative-error-1.0 pixels
-remain **UNRESOLVED / 未解決**, included without masks. N010 remains active;
-Lane M comparative acquisition has not started. No N011.
+Earlier live-status descriptions retained below are historical publication
+checkpoints; this section reports the current execution state.
 
 N010 is the final preparation study before **Lane M GI competitiveness**. It
 must deliver executable comparisons, eligible references, correctness evidence,

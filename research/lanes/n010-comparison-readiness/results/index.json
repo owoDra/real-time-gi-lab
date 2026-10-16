@@ -865,6 +865,18 @@
       "status": "posthoc-read-only-same-device-ide-graphics-accounting-during-calibration-no-causal-proof",
       "result": "173-posthoc-concurrent-drm-client-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-169",
+      "status": "complete-sixteen-boundaries-eight-blocks-two-pass-fourteen-fail-not-accepted",
+      "result": "169-bulk-pfm-calibration-full-renderer.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-175",
+      "status": "complete-original-schedule-statistical-and-ledger-replay-of-all-sixteen-calibration-boundaries",
+      "result": "175-bulk-pfm-calibration-decision-and-replay.json",
+      "gpu_run": false
     }
   ]
 }
