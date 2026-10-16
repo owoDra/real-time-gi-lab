@@ -901,6 +901,30 @@
       "status": "complete-all-sixteen-hidden-ide-sizing-image-scratch-ledger-and-environment-restoration-pass",
       "result": "177-hidden-ide-bulk-pfm-calibration-sizing.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-178",
+      "status": "terminal-operational-guard-failed-incomplete-calibration-not-accepted",
+      "result": "178-hidden-ide-bulk-pfm-calibration-full-renderer.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-179",
+      "status": "complete-posthoc-replay-three-fail-boundaries-one-partial-no-timing-admission",
+      "result": "179-hidden-ide-calibration-decision-and-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-181",
+      "status": "posthoc-prior-host-shutdown-and-fallback-boot-observation-no-runtime-validation",
+      "result": "181-execution-environment-after-host-shutdown.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-182",
+      "status": "read-only-current-boot-amd-display-and-empty-research-worker-observation",
+      "result": "182-current-boot-display-and-process-observation.json",
+      "gpu_run": false
     }
   ]
 }

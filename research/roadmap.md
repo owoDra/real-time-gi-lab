@@ -65,8 +65,11 @@ source/executable/seed/threshold/resource boundaries and no stopped-sample
 imports. Whole generated-source inversion reconstructs the prior plan-050
 program exactly. The pending reference API now requires actual
 **151/163/164/180 PASS**, with whole API-source inversion to its prior Git
-identity. 180 has not run: actual 178 termination, verified restoration and
-CPU/GPU quiescence are required first. No waiting worker is installed.
+identity. 180 has not run. Plan 053 Amendment 1 now records the CPU-only
+post-shutdown prerequisite before any data: terminal unchanged 178 policy,
+exact host/session observations 181/182, matching current boot and no research
+workers. Original old-window restoration failure remains recorded and does not
+admit GPU timing. No waiting worker is installed.
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](lanes/n010-comparison-readiness/experiments/052-prospective-hidden-ide-full-calibration.md)
@@ -86,14 +89,31 @@ The original sixteen-boundary/eight-block schedule, scientific thresholds,
 intake adapter assembles with a whole inverse to original 049, adding sampled
 environment/source-bound restoration evidence. Its full timing-proof intake
 has not run; it requires actual complete 167/177/178 PASS. The original 169
-verifier remains unchanged and correctly rejects FAIL. **Full 178 started
-once** after actual sizing-controller termination and quiescence, from frozen
-177 doses. Controller PID/start is `1736973/22907358`; native GPU work is
-observed. Its first C1 HWRT boundary completes eight blocks with the original
-precision decision FAIL; subsequent boundaries are still acquiring. This is
-not a complete calibration or timing admission. Finish the full fixed campaign
-without changing environment, dropping samples or retrying. CPU 172 remains
-stopped and is not restarted. No CPU reference worker overlaps this campaign.
+verifier remains unchanged and correctly rejects FAIL. **Full 178 is now
+terminal / INCOMPLETE / NOT ACCEPTED**. Completed C1 HWRT, software and PT B2
+boundaries each FAIL the original precision gates (eight blocks each).
+C1 PT B8 retains one complete block; the next native invocation terminates
+with SIGTERM (returncode -15). No full verdict is assigned to that boundary or
+the campaign, and no subset is accepted. The sampled environment guard fails
+and old-window restoration fails after the desktop session disappears. Keep
+all partials and failed restoration evidence immutable; never restart this path.
+
+CPU [replay 179](lanes/n010-comparison-readiness/results/179-hidden-ide-calibration-decision-and-replay.json)
+recomputes all **25 complete blocks / 1600 samples**, original decisions and
+25 owned-memory ledgers (teardown zero, maximum true peak **375,184,080 bytes**),
+and rehashes **684** frozen fixture inputs. Strict timing intake correctly
+rejects incomplete 178 before full native-payload replay. This is post-hoc
+scientific analysis, not runtime regression validation; tests were not run.
+[Observation 181](lanes/n010-comparison-readiness/results/181-execution-environment-after-host-shutdown.json)
+records prior host power-off and a subsequent boot with simpledrm/no AMD render
+node. Shutdown initiator and timing-failure causation are not established.
+[Observation 182](lanes/n010-comparison-readiness/results/182-current-boot-display-and-process-observation.json)
+records a further boot with AMD framebuffer **3440x1440**, renderD128 and no
+research workers. The earlier fallback observation is historical. No resolution,
+power or clock setting was changed by the agent; prior window visibility moves
+and failed restoration remain disclosed. OS observations are not GPU runtime
+validation. CPU 172 remains stopped; 180 is a fresh, separately registered
+acquisition from sample zero, not a restart of stopped work.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain

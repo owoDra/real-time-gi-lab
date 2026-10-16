@@ -1,0 +1,64 @@
+{
+  "schema": "n010-current-boot-display-and-process-observation/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "READ_ONLY_POST_REBOOT_ENVIRONMENT_OBSERVATION_NOT_TIMING_OR_REFERENCE_ADMISSION",
+  "utc": "2026-10-16T12:51:12.134952+00:00",
+  "source_commit": "7984c959b3b6af96438e1b4684911120d84c378f",
+  "current_boot_id": "e1fb993f-5ed5-48e2-8234-809a20e1ade2",
+  "kernel": "6.18.35",
+  "logical_cpus": 32,
+  "fb_name": "amdgpudrmfb",
+  "fb_virtual_size": "3440,1440",
+  "pci_driver": "/sys/bus/pci/drivers/amdgpu",
+  "dri_nodes": [
+    "/dev/dri/by-path",
+    "/dev/dri/card1",
+    "/dev/dri/renderD128"
+  ],
+  "render_node_present": true,
+  "prior_process_identities": [
+    {
+      "pid": 1736973,
+      "old_start_ticks": 22907358,
+      "current": null
+    },
+    {
+      "pid": 516230,
+      "old_start_ticks": 8673902,
+      "current": null
+    },
+    {
+      "pid": 516315,
+      "old_start_ticks": 8673949,
+      "current": null
+    }
+  ],
+  "research_workers": [],
+  "commands": {
+    "boots": {
+      "command": [
+        "journalctl",
+        "--list-boots",
+        "-n",
+        "3",
+        "--no-pager"
+      ],
+      "returncode": 0,
+      "stdout": "IDX BOOT ID                          FIRST ENTRY                 LAST ENTRY\n -2 1260e72e41424f879ef40af56254b0c2 Tue 2026-10-13 20:58:19 JST Fri 2026-10-16 12:49:09 JST\n -1 d9405100cb574bde8ba516c09a8e3c46 Fri 2026-10-16 21:39:09 JST Fri 2026-10-16 21:45:11 JST\n  0 e1fb993f5ed548e28234809a20e1ade2 Fri 2026-10-16 21:45:24 JST Fri 2026-10-16 21:51:11 JST\n",
+      "stderr": ""
+    }
+  },
+  "input_sha256": {
+    "research/lanes/n010-comparison-readiness/results/178-hidden-ide-bulk-pfm-calibration-full-renderer.json": "1f25e8a3430254b5c010d0208e3e77e3d2d2985aa42421f51de978b219a55870",
+    "research/lanes/n010-comparison-readiness/results/179-hidden-ide-calibration-decision-and-replay.json": "77be55c570631c687e62618d1cd93132c4c106b1fe45808599cf7550c4d14352",
+    "research/lanes/n010-comparison-readiness/results/181-execution-environment-after-host-shutdown.json": "f416162a5780ee1544ff560d27f4e435042e95ef2d4c6c48d08177e6e04d95a5"
+  },
+  "old_session_restoration_verified": false,
+  "resolution_setting_commands_executed_by_agent": false,
+  "power_or_clock_changes_by_agent": false,
+  "causation": "Current AMD framebuffer 3440x1440 and render node are directly observed after a further boot. Prior fallback and shutdown records are immutable. Driver restoration/reboot initiator and exact prior resolution-change cause are not established. This observation does not repair original 178 restoration failure.",
+  "reference_admission": false,
+  "timing_admission": false,
+  "tests": "NOT_RUN; read-only OS provenance, no runtime/correctness validation"
+}

@@ -65,8 +65,11 @@ source/executable/seed/threshold/resource boundaries and no stopped-sample
 imports. Whole generated-source inversion reconstructs the prior plan-050
 program exactly. The pending reference API now requires actual
 **151/163/164/180 PASS**, with whole API-source inversion to its prior Git
-identity. 180 has not run: actual 178 termination, verified restoration and
-CPU/GPU quiescence are required first. No waiting worker is installed.
+identity. 180 has not run. Plan 053 Amendment 1 now records the CPU-only
+post-shutdown prerequisite before any data: terminal unchanged 178 policy,
+exact host/session observations 181/182, matching current boot and no research
+workers. Original old-window restoration failure remains recorded and does not
+admit GPU timing. No waiting worker is installed.
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](experiments/052-prospective-hidden-ide-full-calibration.md)
@@ -86,14 +89,31 @@ The original sixteen-boundary/eight-block schedule, scientific thresholds,
 intake adapter assembles with a whole inverse to original 049, adding sampled
 environment/source-bound restoration evidence. Its full timing-proof intake
 has not run; it requires actual complete 167/177/178 PASS. The original 169
-verifier remains unchanged and correctly rejects FAIL. **Full 178 started
-once** after actual sizing-controller termination and quiescence, from frozen
-177 doses. Controller PID/start is `1736973/22907358`; native GPU work is
-observed. Its first C1 HWRT boundary completes eight blocks with the original
-precision decision FAIL; subsequent boundaries are still acquiring. This is
-not a complete calibration or timing admission. Finish the full fixed campaign
-without changing environment, dropping samples or retrying. CPU 172 remains
-stopped and is not restarted. No CPU reference worker overlaps this campaign.
+verifier remains unchanged and correctly rejects FAIL. **Full 178 is now
+terminal / INCOMPLETE / NOT ACCEPTED**. Completed C1 HWRT, software and PT B2
+boundaries each FAIL the original precision gates (eight blocks each).
+C1 PT B8 retains one complete block; the next native invocation terminates
+with SIGTERM (returncode -15). No full verdict is assigned to that boundary or
+the campaign, and no subset is accepted. The sampled environment guard fails
+and old-window restoration fails after the desktop session disappears. Keep
+all partials and failed restoration evidence immutable; never restart this path.
+
+CPU [replay 179](results/179-hidden-ide-calibration-decision-and-replay.json)
+recomputes all **25 complete blocks / 1600 samples**, original decisions and
+25 owned-memory ledgers (teardown zero, maximum true peak **375,184,080 bytes**),
+and rehashes **684** frozen fixture inputs. Strict timing intake correctly
+rejects incomplete 178 before full native-payload replay. This is post-hoc
+scientific analysis, not runtime regression validation; tests were not run.
+[Observation 181](results/181-execution-environment-after-host-shutdown.json)
+records prior host power-off and a subsequent boot with simpledrm/no AMD render
+node. Shutdown initiator and timing-failure causation are not established.
+[Observation 182](results/182-current-boot-display-and-process-observation.json)
+records a further boot with AMD framebuffer **3440x1440**, renderD128 and no
+research workers. The earlier fallback observation is historical. No resolution,
+power or clock setting was changed by the agent; prior window visibility moves
+and failed restoration remain disclosed. OS observations are not GPU runtime
+validation. CPU 172 remains stopped; 180 is a fresh, separately registered
+acquisition from sample zero, not a restart of stopped work.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
@@ -755,8 +775,8 @@ are operational guards, not GPU utilization estimates or changed timing gates.
 Refuse existing paths and other research workers. Keep stopped 172 immutable.
 All original sixteen boundaries are mandatory. Run 178 only after actual
 complete full PASS 177, restoration and actual controller termination.
-177 is complete PASS; its command is historical. 178 has started once;
-its command identifies that live acquisition, not a restart instruction.
+177 is complete PASS; 178 is terminal INCOMPLETE / NOT ACCEPTED.
+Both commands are historical identifiers; never rerun their existing paths.
 These commands identify one-time acquisitions; never rerun their paths. A scientific precision FAIL still completes all sixteen boundaries.
 An operational guard failure retains partials and prevents timing admission.
 
@@ -785,13 +805,15 @@ were not run. The existing plan-049 verifier/driver still requires actual
 167/168/169 PASS and therefore rejects 169. A new guarded proof-intake adapter
 must verify actual complete 167/177/178 before selecting that timing proof.
 `hidden_ide_timing_provenance.py` now provides that strict adapter with whole
-original-verifier inverse proof. Only assembly and sizing/environment replay
-have run; complete 178 and full payload intake remain required.
+original-verifier inverse proof. Actual post-hoc replay 179 retains three FAIL boundaries and rejects
+incomplete 178. Full payload admission has not run and timing remains unproved.
 
 ### Fresh feasibility after stop 176 (plan 053)
 
-Prepared only; **not run**. Require actual GPU 178 controller/native
-termination, completed verified IDE restoration and no research workers.
+Prepared only; **not run**. Plan 053 Amendment 1 permits CPU-only continuation
+after terminal 178 and documented host/session termination, with exact 181/182
+identities, matching current boot and no research workers. Old restoration
+failure remains immutable; this alternative grants no GPU timing admission.
 No waiting/restart worker is installed. Keep 165/v1 and 172/v2 immutable.
 Begin from sample zero at the separate v3 path; only its own complete prefix
 may continue to 16384. The bounded two-level question, four seeds, executable,
@@ -815,13 +837,15 @@ readiness. No unit tests or runtime regression validation were run.
 
 ### Post-hoc decision replay after 178 actually terminates
 
-Prepared only; **not run**. The CPU-only report 179 preserves every full
+Executed once; **complete analysis, calibration NOT ACCEPTED**. The CPU-only
+report 179 preserves every full
 scientific PASS/FAIL and every incomplete boundary, with no exclusions,
 corrections, retries or new thresholds. It replays original schedules,
 statistics, owned-memory event ledgers, all frozen inputs and the sampled
 visibility/restoration evidence. Environment replay alone cannot admit timing;
 strict intake still requires actual full numerical PASS and all native payloads.
-Run only after actual controller/native termination; do not overlap 178 or 180.
+Executed after actual controller/native termination, before any 180 data.
+The following command is historical; never overwrite existing 179.
 
 ```bash
 LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
@@ -833,4 +857,5 @@ On scientific FAIL, strict intake refuses before expensive native payload
 verification. The report must distinguish that scope from complete payload
 rehashing or radiance/timestamp regeneration; its replay is not software
 regression validation. The source compiles and the strict whole-verifier
-inverse remains exact; the scientific replay itself has not been executed.
+inverse remains exact. Replay covers 25 complete blocks / 1600 samples and
+684 frozen fixture identities; full native-payload admission was rejected.

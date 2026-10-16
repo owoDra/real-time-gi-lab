@@ -87,3 +87,37 @@ separate 178 outcome and every earlier timing/quality loss remain unchanged.
 Direct relative-error-1.0 pixels stay UNRESOLVED / 未解決 and included.
 No default build/Renderer promotion, N001–N009 changes, N011, CUDA, Actions,
 power or clock changes.
+
+## Amendment 1 — CPU-only continuation after host shutdown (prospective)
+
+Registered at parent `7984c95`, before any result 180 data or result 166 data.
+The original condition requiring verified old-window restoration cannot now be
+fulfilled: the old host/compositor session ended. Record 178 remains immutable,
+INCOMPLETE / NOT ACCEPTED with restoration failure. Record 179 independently
+replays 25 complete blocks / 1600 samples, retaining three completed FAIL
+boundaries and one incomplete boundary. No full-campaign verdict is assigned.
+Record 181 directly preserves prior system power-off and a later boot; it does
+not establish the shutdown initiator or the cause of timing failures.
+
+For **CPU-only** acquisition 180, replace the original restoration prerequisite
+with this narrow alternative: terminal unchanged 178 policy; exact 181 SHA256
+`f416162a5780ee1544ff560d27f4e435042e95ef2d4c6c48d08177e6e04d95a5`;
+exact current observation 182 SHA256
+`86da43f005f3cf547a325d7a185f59f4ebea655a0564723bb4d2e3890777e968`;
+matching current boot ID `e1fb993f-5ed5-48e2-8234-809a20e1ade2`, distinct from
+the acquisition boot; recorded absence of all old process identities; and the
+original live research-worker exclusion before dispatch. Rehash all referenced
+evidence and frozen fixture inputs. No old controller, acquisition path, desktop
+or application is restarted. No old-window restoration is claimed.
+
+182 observes AMD framebuffer 3440x1440 and renderD128 after a further boot;
+181's earlier no-render-node observation remains historical. These are OS
+observations, not GPU runtime/correctness checks. This CPU alternative requires
+no GUI/GPU access, display manipulation, driver loading, power or clock changes.
+It provides no exemption for any GPU experiment or timing-admission rule.
+
+Only the operational prerequisite changes. The entire generated feasibility
+program and its original whole-parent inverse remain byte-identical to the
+previous plan-053 version. All controls, numerical bodies, seeds, dose schedule,
+uncertainty/support tests, thresholds, caps, resource limits, no-retry rules and
+166 admission conditions above remain unchanged. No stopped samples are reused.

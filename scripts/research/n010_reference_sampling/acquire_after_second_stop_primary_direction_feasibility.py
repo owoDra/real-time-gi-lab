@@ -51,14 +51,33 @@ def validate_interruption(inputs):
     check_files(expected,inputs)
     check_files(partial['input_sha256'],inputs)
     # A quiet-process check runs in the original main before this prerequisite.
-    # Require the completed restoration record, irrespective of timing PASS/FAIL.
+    # Amendment 1 permits CPU-only work after the original desktop session ended.
+    # It does not repair or admit the failed GPU environment/restoration evidence.
     gpu = read(RESULTS/'178-hidden-ide-bulk-pfm-calibration-full-renderer.json',inputs)
     policy_path = ROOT/'out/research/n010-comparison-readiness/hidden-ide-bulk-pfm-accepted-v1/visibility-policy.json'
     policy = read(policy_path,inputs)
     if (policy!=gpu.get('visibility_policy') or not policy.get('complete')
-        or not policy.get('restoration_verified') or policy.get('restoration_failure')
         or sha(policy_path)!=gpu.get('visibility_policy_sha256')):
-        raise ValueError('GPU acquisition/restoration is not terminal and verified')
+        raise ValueError('GPU acquisition policy is not terminal and unchanged')
+    if not policy.get('restoration_verified') or policy.get('restoration_failure'):
+        shutdown_path = RESULTS/'181-execution-environment-after-host-shutdown.json'
+        current_path = RESULTS/'182-current-boot-display-and-process-observation.json'
+        if (sha(shutdown_path)!='f416162a5780ee1544ff560d27f4e435042e95ef2d4c6c48d08177e6e04d95a5'
+            or sha(current_path)!='86da43f005f3cf547a325d7a185f59f4ebea655a0564723bb4d2e3890777e968'):
+            raise ValueError('registered host/session termination observation changed')
+        shutdown, current = read(shutdown_path,inputs), read(current_path,inputs)
+        if (not shutdown['complete'] or not current['complete']
+            or current['current_boot_id']!=Path('/proc/sys/kernel/random/boot_id').read_text().strip()
+            or current['current_boot_id'].replace('-','')==shutdown['prior_boot_id'].replace('-','')
+            or current['research_workers']
+            or any(r['current'] is not None for r in current['prior_process_identities'])
+            or shutdown['restoration_verified'] or current['old_session_restoration_verified']
+            or gpu['complete'] or gpu['all_pass']
+            or gpu['classification']!='OPERATIONAL_GUARD_FAILED_PARTIALS_RETAINED_NOT_ACCEPTED'):
+            raise ValueError('CPU-only post-shutdown continuation scope differs')
+        for observation in (shutdown,current):
+            evidence = observation.get('evidence_sha256',observation.get('input_sha256'))
+            check_files({str(ROOT/p):h for p,h in evidence.items()},inputs)
     check_files(gpu['fixture_input_sha256'],inputs)
     inputs[str(CONTINUATION_PLAN)] = sha(CONTINUATION_PLAN)
 
