@@ -49,10 +49,9 @@ These controls alone admit no reference. Feasibility 165 was user-stopped
 before its first seed export or level; exact partials and [stop 171](results/171-user-requested-recovered-feasibility-stop.json)
 remain unchanged, with **INCOMPLETE, no numerical PASS/FAIL or cap-failure**.
 Prospective [plan 050](experiments/050-prospective-zero-export-feasibility-recovery.md)
-prepares fresh result **172** from sample zero at a separate v2 path. No 165
-partials are imported. The pending provenance API requires actual
-151/163/164/172 PASS before still-unexecuted eight-slot 166. Seeds, samples,
-full-support/uncertainty gates, cap and resource limits remain unchanged.
+prepared result **172** from sample zero at a separate v2 path; no 165
+partials were imported. Seeds, samples, full-support/uncertainty gates, cap
+and resource limits remain unchanged.
 CPU 172 was subsequently **user-stopped before its first seed export or
 complete level**. [Stop 176](results/176-user-requested-post-stop-feasibility-stop.json)
 records both actual process exits and two empty research-worker scans. The exact
@@ -60,6 +59,14 @@ partial 172 SHA256 is `f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e7
 All four partial/receipt files are retained. This is **INCOMPLETE, no numerical
 PASS/FAIL or scientific cap-failure**. Do not restart 172 or its existing v2
 work path. 166 remains unexecuted because actual full feasibility PASS is absent.
+Prospective [plan 053](experiments/053-prospective-feasibility-after-second-zero-export-stop.md)
+now prepares fresh feasibility **180** at v3, with the same two-level question,
+source/executable/seed/threshold/resource boundaries and no stopped-sample
+imports. Whole generated-source inversion reconstructs the prior plan-050
+program exactly. The pending reference API now requires actual
+**151/163/164/180 PASS**, with whole API-source inversion to its prior Git
+identity. 180 has not run: actual 178 termination, verified restoration and
+CPU/GPU quiescence are required first. No waiting worker is installed.
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](experiments/052-prospective-hidden-ide-full-calibration.md)
@@ -581,8 +588,8 @@ and the overall acquisition is still INCOMPLETE.
 
 ### Conditional eight-slot intake after recovered controls
 
-Prepared only; no acquisition has run. Under plan 050, this pending API
-requires actual complete 151/163/164/172 PASS and no CPU/GPU research worker:
+Prepared only; no acquisition has run. Under plan 053, this pending API
+requires actual complete 151/163/164/180 PASS and no CPU/GPU research worker:
 
 ```bash
 LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
@@ -686,8 +693,8 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
 
 ### Remaining full pilots after actual proof admission (plan 049 Amendment 1)
 
-Prepared, **not run**. Under plan 050 dispatch only after
-151/163/164/172/166 and full 167/168/169
+Prepared, **not run**. Under plan 053 reference dispatch only after
+151/163/164/180/166 and full 167/168/169
 complete PASS, all 24 references verify and every CPU/GPU research worker
 terminates. The command refuses missing proofs before creating its work root.
 It acquires original 043/044/048 once, retains all quality losses and memory
@@ -709,8 +716,9 @@ LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/ve
 172 started once after actual termination of GPU 169 and diagnostic 174,
 then was user-stopped before its first seed export (176).
 The command identifies that acquisition; never restart its existing paths. Preserve 165 and its v1 work
-path. A numerical failure stops this candidate without retry. Full 172 PASS
-is required for 166; all original full-reference gates remain unchanged.
+path. No numerical level completed. 172 cannot admit 166; plan 053 now
+requires actual complete 180 PASS. All original full-reference gates remain
+unchanged. The following command is historical and must not be rerun.
 
 ```bash
 LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
@@ -779,3 +787,28 @@ must verify actual complete 167/177/178 before selecting that timing proof.
 `hidden_ide_timing_provenance.py` now provides that strict adapter with whole
 original-verifier inverse proof. Only assembly and sizing/environment replay
 have run; complete 178 and full payload intake remain required.
+
+### Fresh feasibility after stop 176 (plan 053)
+
+Prepared only; **not run**. Require actual GPU 178 controller/native
+termination, completed verified IDE restoration and no research workers.
+No waiting/restart worker is installed. Keep 165/v1 and 172/v2 immutable.
+Begin from sample zero at the separate v3 path; only its own complete prefix
+may continue to 16384. The bounded two-level question, four seeds, executable,
+limits and scientific gates are unchanged. Completed 180 FAIL stops corpus
+intake; only actual full 180 PASS permits still-unexecuted 166.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_after_second_stop_primary_direction_feasibility.py \
+  --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3 \
+  --output research/lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json
+```
+
+Full source inversion reconstructs the prior plan-050 generated program
+(`d9d2ac08a54c35b09e4940537c3da14d65b3036ac0be1984305d325a81d8464b`).
+The pending API's five declared documentation/dispatch/plan changes reverse
+to its complete source SHA256
+`ec98f3ec41950b01b1b4565e9ae671a85e57ff7b95b916b24a03e987ac61401d`
+at `3b7c566`. Source assembly is not acquisition, reference eligibility or
+readiness. No unit tests or runtime regression validation were run.

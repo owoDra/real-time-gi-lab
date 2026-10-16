@@ -49,10 +49,9 @@ These controls alone admit no reference. Feasibility 165 was user-stopped
 before its first seed export or level; exact partials and [stop 171](lanes/n010-comparison-readiness/results/171-user-requested-recovered-feasibility-stop.json)
 remain unchanged, with **INCOMPLETE, no numerical PASS/FAIL or cap-failure**.
 Prospective [plan 050](lanes/n010-comparison-readiness/experiments/050-prospective-zero-export-feasibility-recovery.md)
-prepares fresh result **172** from sample zero at a separate v2 path. No 165
-partials are imported. The pending provenance API requires actual
-151/163/164/172 PASS before still-unexecuted eight-slot 166. Seeds, samples,
-full-support/uncertainty gates, cap and resource limits remain unchanged.
+prepared result **172** from sample zero at a separate v2 path; no 165
+partials were imported. Seeds, samples, full-support/uncertainty gates, cap
+and resource limits remain unchanged.
 CPU 172 was subsequently **user-stopped before its first seed export or
 complete level**. [Stop 176](lanes/n010-comparison-readiness/results/176-user-requested-post-stop-feasibility-stop.json)
 records both actual process exits and two empty research-worker scans. The exact
@@ -60,6 +59,14 @@ partial 172 SHA256 is `f5d50696c8e85f36ea6a3c5ab13f967248c06a2b647cb31c84db127e7
 All four partial/receipt files are retained. This is **INCOMPLETE, no numerical
 PASS/FAIL or scientific cap-failure**. Do not restart 172 or its existing v2
 work path. 166 remains unexecuted because actual full feasibility PASS is absent.
+Prospective [plan 053](lanes/n010-comparison-readiness/experiments/053-prospective-feasibility-after-second-zero-export-stop.md)
+now prepares fresh feasibility **180** at v3, with the same two-level question,
+source/executable/seed/threshold/resource boundaries and no stopped-sample
+imports. Whole generated-source inversion reconstructs the prior plan-050
+program exactly. The pending reference API now requires actual
+**151/163/164/180 PASS**, with whole API-source inversion to its prior Git
+identity. 180 has not run: actual 178 termination, verified restoration and
+CPU/GPU quiescence are required first. No waiting worker is installed.
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](lanes/n010-comparison-readiness/experiments/052-prospective-hidden-ide-full-calibration.md)
