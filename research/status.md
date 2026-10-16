@@ -53,7 +53,12 @@ prepares fresh result **172** from sample zero at a separate v2 path. No 165
 partials are imported. The pending provenance API requires actual
 151/163/164/172 PASS before still-unexecuted eight-slot 166. Seeds, samples,
 full-support/uncertainty gates, cap and resource limits remain unchanged.
-CPU 172 has not run and must not overlap diagnostic or GPU acquisition.
+After actual diagnostic termination and quiescence, **CPU 172 started once**
+at its registered v2 path. Native PID/start receipt confirms 16 threads,
+4 GiB address space and 691200 aggregate CPU seconds, with the unchanged
+43200-second elapsed guard. It starts from sample zero; no stopped 165 samples
+are imported. No numerical level or feasibility verdict exists yet. GPU work
+must remain stopped while this CPU acquisition runs.
 
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
