@@ -49,10 +49,21 @@ native invocations. The recovered provenance verifier independently checked
 The original iid gates remain <=0.2% mean-channel difference / <=1% NRMSE;
 A7 NRMSE is 0.714933%, A6b 0.0891075%. Scoring exclusions: zero.
 This is physical control validity, **not reference admission**. Old 152 and its
-stopped workflow remain unchanged. After the 163 controller/native processes
-actually terminated, fresh state/prefix proof 164 started: all 24 locked states,
-both actual C7 transports and all 78 invocations remain mandatory. 165/166 and
-GPU 168/169 have not run.
+stopped workflow remain unchanged. Separate recovered
+[state/prefix proof 164](lanes/n010-comparison-readiness/results/164-primary-direction-recovered-all-state-and-prefix.json)
+now completes **all 24 locked states, both actual C7 transports and all 78
+invocations PASS**, with zero payload-byte or counter disagreements. The actual
+C7 B2/B8 checks use 8192-to-16384 own prefixes against fresh 16384 samples.
+The next-stage prerequisite verifier rehashed 3,194 proof/input/payload
+identities. Immutable 164 SHA256:
+`a230cb1ea71154089ba83380555d87dd3774b10dedeb3e24e2acde6eedccb6ab`.
+After verified terminal state of its controller/native process, fresh bounded
+feasibility 165 started at its registered recovery path. Its 8192-spp native
+process runs with 16 threads; the actual PID/start receipt confirms 4 GiB and
+691200 CPU-second limits, with the original 43200-second wall guard. Both
+8192/16384 original-cosine uncertainty ratios must be <=0.75 with full support;
+no numerical level or feasibility verdict exists yet. 166 and GPU 168/169
+remain unexecuted. Physical/prefix PASS alone admits no new reference.
 
 Independent CPU [build 167](lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json)
 completed all five compile/link steps PASS. It verifies 494 input identities,
