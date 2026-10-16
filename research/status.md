@@ -135,6 +135,28 @@ calibration; it does not justify changing original timing gates, subtracting
 known work, changing source/first-target semantics or accepting old samples.
 No new GPU samples or runtime regression checks were run in this diagnosis.
 
+Prospective [plan 054](lanes/n010-comparison-readiness/experiments/054-prospective-deferred-image-serialization.md)
+is registered before the new build or GPU data. Isolated
+[build 184](lanes/n010-comparison-readiness/results/184-deferred-image-calibration-fixture-build.json)
+now completes **all five serial compiler/link steps PASS**. Whole source inverse
+to 167, identical entire runtime/timed PT bodies and unchanged active inputs
+are verified; 511 inputs and 13 generated files are recorded. Exact result
+SHA256: `6eca016a61ca7ba3b072f05ef7f22221a2d402a9ff778d10b56feb0261f96ebf`.
+Only calibration CPU PFM serialization moves after each native sequence,
+retaining all images in a bounded **256 MiB CPU RGBA spool**. Image/scratch
+readbacks, scratch writes, directories, source/first-target preparation and
+all GPU work remain in their original order. CPU spool memory is separate
+from the unchanged all-owned-Vulkan ledger scope; it is not GPU memory.
+No GPU runtime/image equivalence or timing capability has been established.
+Sizing 185 and full calibration 186 are prepared **but not run**, with the
+original sixteen-boundary/eight-block schedule and all original thresholds.
+Source/CLI assembly and a whole-original-049-inverse strict proof adapter are
+prepared; full proof intake is unexecuted and requires actual 184/185/186 PASS,
+all native payloads, bounded complete spool flush and matching boot/device/driver.
+Do not move desktop windows or change resolution/power/clocks for this plan.
+No waiting/retry worker or GPU overlap with CPU 180 is installed. Source/build
+preparation is not software regression validation; unit tests were not run.
+
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
 mandatory. The pilot driver and final auditor are prepared but unexecuted;

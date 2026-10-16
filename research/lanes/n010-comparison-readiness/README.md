@@ -135,6 +135,28 @@ calibration; it does not justify changing original timing gates, subtracting
 known work, changing source/first-target semantics or accepting old samples.
 No new GPU samples or runtime regression checks were run in this diagnosis.
 
+Prospective [plan 054](experiments/054-prospective-deferred-image-serialization.md)
+is registered before the new build or GPU data. Isolated
+[build 184](results/184-deferred-image-calibration-fixture-build.json)
+now completes **all five serial compiler/link steps PASS**. Whole source inverse
+to 167, identical entire runtime/timed PT bodies and unchanged active inputs
+are verified; 511 inputs and 13 generated files are recorded. Exact result
+SHA256: `6eca016a61ca7ba3b072f05ef7f22221a2d402a9ff778d10b56feb0261f96ebf`.
+Only calibration CPU PFM serialization moves after each native sequence,
+retaining all images in a bounded **256 MiB CPU RGBA spool**. Image/scratch
+readbacks, scratch writes, directories, source/first-target preparation and
+all GPU work remain in their original order. CPU spool memory is separate
+from the unchanged all-owned-Vulkan ledger scope; it is not GPU memory.
+No GPU runtime/image equivalence or timing capability has been established.
+Sizing 185 and full calibration 186 are prepared **but not run**, with the
+original sixteen-boundary/eight-block schedule and all original thresholds.
+Source/CLI assembly and a whole-original-049-inverse strict proof adapter are
+prepared; full proof intake is unexecuted and requires actual 184/185/186 PASS,
+all native payloads, bounded complete spool flush and matching boot/device/driver.
+Do not move desktop windows or change resolution/power/clocks for this plan.
+No waiting/retry worker or GPU overlap with CPU 180 is installed. Source/build
+preparation is not software regression validation; unit tests were not run.
+
 All **24 eligible references**, complete C1 B8 / C2–C6 quality-memory pilots,
 full actual timing capability and executed final six-gate **047 READY** remain
 mandatory. The pilot driver and final auditor are prepared but unexecuted;
@@ -881,3 +903,41 @@ rehashing or radiance/timestamp regeneration; its replay is not software
 regression validation. The source compiles and the strict whole-verifier
 inverse remains exact. Replay covers 25 complete blocks / 1600 samples and
 684 frozen fixture identities; full native-payload admission was rejected.
+
+
+### Deferred CPU image serialization (plan 054)
+
+Build 184 is complete. The build command is historical; never rerun its path.
+CPU source assembly/CLI help and strict-verifier inverse proof are complete;
+**no GPU acquisition or full proof intake has run**. Require actual completion
+and termination of CPU feasibility 180 and every other research worker first.
+Sizing/full calibration are separate one-time commands; no waiting controller
+is installed. Never dispatch full 186 without actual complete all-sixteen 185
+PASS, stable original input hashes and matching sizing boot/device/driver.
+No desktop-window/display changes are performed by these commands.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_deferred_image_capture.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_deferred_image_capture.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/deferred-image-calibration-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/186-deferred-image-calibration-full-renderer.json
+```
+
+The generated acquisition program reverses completely to original plan 048
+SHA256 `18f906fee96fc1cbb43f9f225c4c6ea35224cac01e6d9736647308e56436b55c`.
+Only declared fixture/proof/work dispatch changes in the original function
+prelude; schedule/statistical bodies remain byte-identical. The strict intake
+adapter `deferred_image_timing_provenance.py` reverses completely to original
+049 SHA256 `49ac6660fe17e8895be2a0d600771a8e844358867fe57014f0066105b247b9a8`.
+Neither proof assembly admits failed 169, incomplete 178, an eligible reference,
+a different workload's timing or final READY. All original six gates remain.
