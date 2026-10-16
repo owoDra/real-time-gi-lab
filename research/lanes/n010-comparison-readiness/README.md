@@ -65,11 +65,17 @@ source/executable/seed/threshold/resource boundaries and no stopped-sample
 imports. Whole generated-source inversion reconstructs the prior plan-050
 program exactly. The pending reference API now requires actual
 **151/163/164/180 PASS**, with whole API-source inversion to its prior Git
-identity. 180 has not run. Plan 053 Amendment 1 now records the CPU-only
-post-shutdown prerequisite before any data: terminal unchanged 178 policy,
-exact host/session observations 181/182, matching current boot and no research
-workers. Original old-window restoration failure remains recorded and does not
-admit GPU timing. No waiting worker is installed.
+identity. **Fresh 180 has now started once** from sample zero at v3, under
+committed plan 053 Amendment 1 (`6f6b557`). Real prerequisites rehash 3893 inputs
+and whole generated numerical-source inversion is exact. At the live start
+checkpoint, controller PID/start is `6449/46323`, native `6544/47962`, boot
+`e1fb993f-5ed5-48e2-8234-809a20e1ade2`; first 8192-spp level is acquiring,
+with no seed exports or numerical verdict yet. The original 12-hour elapsed
+guard per each of two native invocations is unchanged; that bound is not an
+N010 completion estimate. The CPU-only post-shutdown prerequisite uses terminal
+unchanged 178 policy, exact 181/182, current boot and live research-worker
+exclusion. Old-window restoration failure remains recorded and does not admit
+GPU timing. No waiting/retry worker is installed; no GPU calibration may overlap.
 Independent prospective timing preparation can continue after verified
 quiescence; stopped CPU work is not restarted. Prospective
 [plan 052](experiments/052-prospective-hidden-ide-full-calibration.md)
@@ -810,7 +816,9 @@ incomplete 178. Full payload admission has not run and timing remains unproved.
 
 ### Fresh feasibility after stop 176 (plan 053)
 
-Prepared only; **not run**. Plan 053 Amendment 1 permits CPU-only continuation
+Started once at checkpoint `6f6b557`; **acquiring, no numerical verdict yet**.
+The following command identifies the live acquisition; never rerun its paths.
+Plan 053 Amendment 1 permits CPU-only continuation
 after terminal 178 and documented host/session termination, with exact 181/182
 identities, matching current boot and no research workers. Old restoration
 failure remains immutable; this alternative grants no GPU timing admission.
