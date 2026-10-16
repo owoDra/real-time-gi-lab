@@ -937,6 +937,12 @@
       "status": "complete-isolated-deferred-image-fixture-five-step-build-and-source-inverse-only-no-gpu-validation",
       "result": "184-deferred-image-calibration-fixture-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-187",
+      "status": "complete-isolated-nested-scramble-two-step-build-and-whole-source-inverse-only-no-scientific-admission",
+      "result": "187-nested-scramble-oracle-build.json",
+      "gpu_run": false
     }
   ]
 }

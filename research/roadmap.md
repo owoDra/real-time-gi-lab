@@ -2,6 +2,16 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+Prospective [plan 056](lanes/n010-comparison-readiness/experiments/056-prospective-nested-scramble-reference-sampling.md)
+has an isolated nested-prefix hash scramble [build 187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json)
+COMPLETE / build PASS. Exact 187 SHA256:
+`13375a5a4189c8a3ef8394d16692ae0d58a003d63483c60207c5eb0f28b28b4f`.
+Physical 188, state/prefix 189 and feasibility 190 remain **unexecuted**;
+compilation and whole-source inversion do not admit references or timing.
+The same four seeds, original screens/cap and six final readiness gates remain.
+Sampling requires actual terminal 180 and terminal GPU 185/186 (or retained
+terminal failure), and no other research worker. No queue or tests were run.
+
 Full [row-bulk calibration 169](lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json)
 is now **COMPLETE / FAIL / NOT ACCEPTED**. All sixteen boundaries finish eight
 fresh-process blocks each: **C1 PT B8 and C6 PT B8 PASS; the other fourteen FAIL**

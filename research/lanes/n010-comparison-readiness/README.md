@@ -2,6 +2,16 @@
 
 ## Current execution checkpoint — 2026-10-16 JST
 
+Prospective [plan 056](experiments/056-prospective-nested-scramble-reference-sampling.md)
+has an isolated nested-prefix hash scramble [build 187](results/187-nested-scramble-oracle-build.json)
+COMPLETE / build PASS. Exact 187 SHA256:
+`13375a5a4189c8a3ef8394d16692ae0d58a003d63483c60207c5eb0f28b28b4f`.
+Physical 188, state/prefix 189 and feasibility 190 remain **unexecuted**;
+compilation and whole-source inversion do not admit references or timing.
+The same four seeds, original screens/cap and six final readiness gates remain.
+Sampling requires actual terminal 180 and terminal GPU 185/186 (or retained
+terminal failure), and no other research worker. No queue or tests were run.
+
 Full [row-bulk calibration 169](results/169-bulk-pfm-calibration-full-renderer.json)
 is now **COMPLETE / FAIL / NOT ACCEPTED**. All sixteen boundaries finish eight
 fresh-process blocks each: **C1 PT B8 and C6 PT B8 PASS; the other fourteen FAIL**
@@ -1024,3 +1034,44 @@ Pilot time remains diagnostic. Lane M timing requires the exact admitted
 fixture/boundary or its own calibration; no capability is transferred into old
 or new preparation-pilot timings. No unit tests/runtime regression checks were
 run during this source-only adapter preparation.
+
+
+### Nested prefix scrambling candidate (plan 056)
+
+Separate from failed first-level 180, [187](results/187-nested-scramble-oracle-build.json)
+compiles original cached-cosine standalone/prefix binaries with only the
+uniform scrambling and diagnostic metadata changed. There is no direction
+pilot or extra scored path per spp. Input-prefix-dependent binary permutations
+preserve dyadic occupancy; this does not prove improved RQMC error. All
+scientific outcomes remain unmeasured. Whole parent-driver inversions preserve
+the original physical, state/prefix and two-level feasibility gates.
+
+The commands below are **not run**. First finish actual CPU 180, then GPU
+185/186 (or record its actual terminal failure) and verify no other research
+worker. The dispatch guard enforces this ordering before creating outputs.
+Invoke each stage once, sequentially, only after its complete predecessor
+PASS. Existing outputs are refused; no waiting option or retry is allowed.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/validate_nested_scramble.py \
+  --work out/research/n010-comparison-readiness/owen-reference-physical-v1 \
+  --output research/lanes/n010-comparison-readiness/results/188-nested-scramble-physical-controls.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/validate_nested_scramble_prefix.py \
+  --work out/research/n010-comparison-readiness/owen-reference-prefix-v1 \
+  --output research/lanes/n010-comparison-readiness/results/189-nested-scramble-all-state-and-prefix.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_nested_scramble_feasibility.py \
+  --work out/research/n010-comparison-readiness/owen-reference-feasibility-v1 \
+  --output research/lanes/n010-comparison-readiness/results/190-nested-scramble-bounded-feasibility.json
+```
+
+Both original-baseline ratios must be <=0.75 at 8192/16384. Failure stops this
+candidate. Even full PASS does not admit corpus references: a later prospective
+full 24-slot provenance/qualification transition is still required, with
+unchanged six levels through 262144, support and 1e-5 / 5% screens. Existing
+166/180 proof chains are not rewritten. Active/default Renderer/build graph
+and historical results remain unchanged; unit/regression tests were not run.
