@@ -169,6 +169,43 @@ reference ladder. All 24 slots/seeds/cap/gates remain, **16/24 eligible**.
 No long reference/GPU campaign or scientific worker is running or queued.
 Completion time remains unproved; no N010 READY or Lane M result is asserted.
 
+### Whole-path reference prototype: two numerical stops identified
+
+[067](lanes/n010-comparison-readiness/experiments/067-whole-path-mixture-diagnosis.md) derives a distinct half-eye /
+half-light complete-path mixture in raw-hit surface coordinates. It preserves
+original soft falloff/nudge/offset/direct/BVH, evaluates both ordered densities
+without assuming reciprocity, and applies one bounded<=2 correction per depth
+contribution. [210](lanes/n010-comparison-readiness/results/210-whole-path-mixture-diagnosis.json) compiles but stops
+at its raw-target guard after3.378 native CPU seconds. It is **INCOMPLETE**;
+no promising-rule verdict or reference admission is established.
+
+[211](lanes/n010-comparison-readiness/results/211-whole-path-numeric-failure-witness.json) reproduces the same failure.
+Decimal80 analysis shows grazing condition number3522.828485: even exact
+line-plane intersection misses the stored binary64 target by2.6930e-10,
+exceeding its old2.0827e-10 *unconditioned* numerical allowance.
+[069](lanes/n010-comparison-readiness/experiments/069-conditioned-raw-target-numeric-audit.md) explicitly amends that
+diagnostic guard before new data, using plane residuals and analytically
+conditioned backward error. This is **a changed numerical audit**;210 remains
+failed. Statistical/reference/promising thresholds are unchanged.
+
+[212](lanes/n010-comparison-readiness/results/212-whole-path-conditioned-diagnosis.json) then stops after18.716 CPU
+seconds at the unchanged own-family nonzero-density guard. It too is
+**INCOMPLETE**, not a variance-screen FAIL/PASS. [213](lanes/n010-comparison-readiness/results/213-whole-path-own-support-witness.json)
+reproduces the exact cause: at C1 pixel200/150, light-prefix5, the same raw
+point is on overlapping coplanar triangles59258/59011. Tiny direction changes
+select a different primitive. [214](lanes/n010-comparison-readiness/results/214-coincident-surface-operator-diagnosis.json)
+uses original Oracle operators: plane/material/nudged point/spawn match here,
+but normalized normals and one fixed cosine-mapped direction differ by1 ULP.
+A plain ID alias is not verified. No scored path is removed or silently merged.
+
+Next implementation work must define and independently validate density
+matching across such physically coincident surfaces, including numeric
+normal/map and self-ignore effects, before another complete prototype. These
+witnesses identify prototype stops, **not** a fix for original reference
+uncertainty, all duplicate geometry, or the unresolved GPU direct pixels.
+No GPU dispatch in210–214; one CPU nice15 only. All prior failures/partials
+are retained; no whole-frame ladder or scientific worker remains running.
+
 The unresolved reference problem is reducing later finite-transport uncertainty
 while preserving the physical and sampling contracts. The unresolved timing
 problem remains full-boundary precision: packed copies and a contiguous C7

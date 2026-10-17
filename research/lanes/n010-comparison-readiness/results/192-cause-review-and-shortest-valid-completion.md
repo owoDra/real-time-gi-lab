@@ -505,3 +505,85 @@ and full-frame feasibility gates. That is remaining research, not a completed
 implementation or a promised completion date. Timing208 remains an independent
 FAIL; other full-boundary implementations/precision and original final gates
 are still required. No worker or delayed dispatch remains.
+
+
+## Whole-path mixture: numerical support must be repaired before feasibility
+
+Plan067 derives a raw-hit-area path integral for the fixed rho1 point-lit
+C1 prototype. Family E generates forward cosine paths; family L starts at the
+light and reverses prefixes. The same original point-direct target is used,
+including N001 soft falloff and original canonical shading spawns. Forward
+and reverse generative densities are evaluated separately; no reciprocity,
+reciprocal-square radiance substitution or repeated per-bounce correction is
+assumed. The original physical sample body is unchanged; whole-source inverses
+and all inputs are retained. This is a restricted prototype, not full PBRT BDPT.
+
+210 compiles in1.973s, then native aborts in3.378s at the raw-target geometric
+reconstruction guard. It remains INCOMPLETE. Partial rows are not a completed
+32-record diagnostic, a variance FAIL, reference eligibility or cap evidence.
+Plan068/211 reproduces the identical guard without changing it, compile/native
+2.037/3.352s, and records the precise original geometry before the same abort.
+Decimal80 arithmetic on recorded binary64 coordinates gives:
+
+- abs(normal dot unit direction)0.00028386281198589516;
+- condition number3522.828485365984;
+- stored target signed plane residual5.726400733464768e-14;
+- ideal line-plane to target distance2.693020242080077e-10;
+- actual to target distance2.977577705144710e-10;
+- original unconditioned bound2.082746319999676e-10;
+- actual to ideal line-plane distance2.845574881781110e-11.
+
+Thus the first numerical guard can reject even the high-precision geometric
+intersection; this does not prove a transport-density bias. Plan069 explicitly
+**changes that diagnostic guard**, prospectively, to geometric backward error:
+retain original scale B; require target/actual plane residuals<=B and
+|actual-target|*abs(N dot direction)<=B. It preserves and separately reports
+unconditioned error/B. No projection, sample removal, changed physical body,
+scientific threshold or old-record rewrite. The inclusion inverse proves only
+the declared numeric audit/reporting differs. Own log-density<=1e-6 remains.
+This audit is not a proof of unbiased finite-arithmetic transport.
+
+212 compile/native1.928/18.716s ends at a **different unchanged guard**:
+generated own-family path has zero reconstructed density. It remains
+INCOMPLETE, with no promising-rule conclusion. Plan070/213 reproduces the
+same abort. The first failure is light-family C1 pixel(200,150),prefix5;
+steps0–3 retain their IDs, step4 expects59258 and returns59011. Both triangles
+lie exactly on x=-1086.4200439453125; their overlapping interiors contain
+recorded point(-1086.4200439453125,937.5586958317924,-117.97109649398705).
+Independent Decimal80 barycentric minima are0.07295981164 and0.07482003880:
+this witness is inside both triangles, not a shared-edge-only ambiguity.
+
+Plan071/214 loads the original full scene and byte-identical193 original
+header. It calls the original nudge_inside, offset and cosine_sample, without
+new sampled paths. Both primitives have material0, two-sided rho1/emission0.
+Nudge and spawn bit patterns match exactly at this point. Spawn is behind
+their common plane in the incoming direction and is4.637058736989275e-9
+on the outgoing hemisphere side; original offset4.636979505308799e-9.
+But face-forward normal.x is-0.9999999999999999 vs-1, and one fixed mapped
+cosine direction differs by1 ULP. Numeric normal equality is **false**. Thus
+neither exact operator identity nor primitive-tag interchangeability has been
+proved. Do not hide this by renaming IDs, merging geometry or dropping paths.
+The geometric plane is behind ideal positive-cosine outgoing rays; that
+observation is not an exhaustive finite-arithmetic BVH self-ignore proof.
+
+The concrete next issue is path-density matching for coincident geometric
+surfaces while preserving canonical numeric operators and self-ignore behavior.
+Any repair must be prospectively specified, preserve all points/failed runs,
+and receive independent physical/normalization/state/prefix validation before
+full-frame feasibility. It may fail the original promising rule afterwards;
+current partials cannot answer that question. No statistical threshold, seed,
+cap, corpus or N008 physical definition is changed. No GPU direct repair or
+N010 readiness is established by these CPU witnesses.
+
+All work is one CPU nice15 with4GiB and finite per-process time bounds. CPU
+replay rehashes every immutable input/generated payload for211/213/214 and
+confirms their actual PID/start identities terminated. The211 input manifest
+preserves every210 generated/partial file;213 likewise preserves all212 bytes.
+No GPU, unit/regression tests, settings change or retained scientific worker.
+Exact terminal result SHA256:
+
+- 210: `abcf6336a4310d36e6894467fab1b12484383e09aa8adc4d5b562fe588dae64e`
+- 211: `d33b15c3d481f2685b171a7aa2bb7f33761513ef1c81f4e5648c934aeec9ee95`
+- 212: `11713aca61ef3fd15d312a562e0d60a2e1cb04c73f4311ba97ffcf38790341ad`
+- 213: `e277ae8a4893d0d8f39dbe5b44d9e78227c87f0d354490c1de1a47a735d17be7`
+- 214: `df8828a3eadd1f9cb69272509d9e58d207d73aacc1ae158180be21672535279c`

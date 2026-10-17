@@ -1069,6 +1069,36 @@
       "status": "complete-frozen-full-suffix-pilot-exact-original-controls-promising-rule-fail-fixed-model-stopped-no-admission",
       "result": "209-frozen-suffix-cv-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-210",
+      "status": "terminal-native-raw-target-guard-failure-incomplete-prototype-no-promising-or-admission-verdict",
+      "result": "210-whole-path-mixture-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-211",
+      "status": "complete-posthoc-identical-guard-reproduction-and-decimal80-conditioning-diagnosis-no-admission",
+      "result": "211-whole-path-numeric-failure-witness.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-212",
+      "status": "terminal-native-own-family-support-failure-incomplete-prototype-explicit-numerical-guard-amendment-no-admission",
+      "result": "212-whole-path-conditioned-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-213",
+      "status": "complete-posthoc-identical-own-support-failure-witness-overlapping-coplanar-triangles-no-admission",
+      "result": "213-whole-path-own-support-witness.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-214",
+      "status": "complete-posthoc-original-operator-witness-spawn-equal-normal-and-direction-one-ulp-different-no-admission",
+      "result": "214-coincident-surface-operator-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }

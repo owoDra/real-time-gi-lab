@@ -1,0 +1,206 @@
+{
+  "schema": "n010-coincident-surface-operator-diagnosis/1",
+  "complete": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "POSTHOC_ORIGINAL_OPERATOR_OBSERVATIONS_NO_ADMISSION",
+  "source_commit": "cca3dca32c788fe81687300a09d204a96c547766",
+  "original_header_byte_identical": true,
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_coincident_path_surfaces.py": "20e7edc7a1f962b9422ca5d27d6acc2588f90dc026771dae6f7d1dc72cbffa67",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/071-coincident-surface-operator-diagnosis.md": "c93975cba99e1c09b85fff5aead396aab4fa0eac8b52c28359058ff3ee723140",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/213-whole-path-own-support-witness.json": "e277ae8a4893d0d8f39dbe5b44d9e78227c87f0d354490c1de1a47a735d17be7",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/193-selected-bounce-path-diagnosis.json": "6143ecbf6651201c15541f4b2ee2c7e33b04843023049fc6d3d1f75230de545a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-0.resources.json": "3dc47c894a74f9ddea4131106665f078a9d8da3a813ac6699833cbfafe6eef40",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-1.resources.json": "1d8e0e5dee47b26f61dcb12fbe76de42a243037c59c86c9c7f02f0e7fce2eddf",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/data.json": "b422ffb91b33c4a8ce078163cdaf55d7391bf1004c56b7f7b09c51de9317a076"
+  },
+  "attempts": [
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/n010_surface_operator"
+      ],
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 1.314496808000058,
+      "receipt_sha256": "3dc47c894a74f9ddea4131106665f078a9d8da3a813ac6699833cbfafe6eef40"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/n010_surface_operator",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/witness.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/data.json"
+      ],
+      "elapsed_limit_seconds": 180,
+      "returncode": 0,
+      "elapsed": 0.5670225259996187,
+      "receipt_sha256": "1d8e0e5dee47b26f61dcb12fbe76de42a243037c59c86c9c7f02f0e7fce2eddf"
+    }
+  ],
+  "tests": "NOT_RUN; original-operator witness calculation only",
+  "observation": {
+    "offset": 4.636979505308799e-09,
+    "surfaces": [
+      {
+        "triangle": 59258,
+        "geometric_normal": [
+          -0.9999999999999999,
+          0,
+          0
+        ],
+        "normal": [
+          -0.9999999999999999,
+          0,
+          0
+        ],
+        "normal_bits": [
+          13830554455654793215,
+          9223372036854775808,
+          0
+        ],
+        "nudge": [
+          -1086.4200439453125,
+          937.5586958317924,
+          -117.97109649398705
+        ],
+        "nudge_bits": [
+          13875864978184994816,
+          4651458069321297838,
+          13861373931701189585
+        ],
+        "spawn": [
+          -1086.4200439499496,
+          937.5586958317924,
+          -117.97109649398705
+        ],
+        "spawn_bits": [
+          13875864978185015210,
+          4651458069321297838,
+          13861373931701189585
+        ],
+        "mapped_direction": [
+          -0.7905694150420949,
+          -0.43301270189221924,
+          -0.43301270189221935
+        ],
+        "mapped_direction_bits": [
+          13828668072646040403,
+          13824844120144235689,
+          13824844120144235691
+        ],
+        "axis": 0,
+        "plane": -1086.4200439453125,
+        "material": 0,
+        "two_sided": true,
+        "rho": [
+          1,
+          1,
+          1
+        ],
+        "emit": [
+          0,
+          0,
+          0
+        ],
+        "recorded_direction_cosine": -0.615192916932069,
+        "signed_spawn_plane_distance": 4.637058736989274e-09
+      },
+      {
+        "triangle": 59011,
+        "geometric_normal": [
+          1,
+          0,
+          0
+        ],
+        "normal": [
+          -1,
+          0,
+          0
+        ],
+        "normal_bits": [
+          13830554455654793216,
+          9223372036854775808,
+          0
+        ],
+        "nudge": [
+          -1086.4200439453125,
+          937.5586958317924,
+          -117.97109649398705
+        ],
+        "nudge_bits": [
+          13875864978184994816,
+          4651458069321297838,
+          13861373931701189585
+        ],
+        "spawn": [
+          -1086.4200439499496,
+          937.5586958317924,
+          -117.97109649398705
+        ],
+        "spawn_bits": [
+          13875864978185015210,
+          4651458069321297838,
+          13861373931701189585
+        ],
+        "mapped_direction": [
+          -0.7905694150420949,
+          -0.43301270189221924,
+          -0.4330127018922194
+        ],
+        "mapped_direction_bits": [
+          13828668072646040403,
+          13824844120144235689,
+          13824844120144235692
+        ],
+        "axis": 0,
+        "plane": -1086.4200439453125,
+        "material": 0,
+        "two_sided": true,
+        "rho": [
+          1,
+          1,
+          1
+        ],
+        "emit": [
+          0,
+          0,
+          0
+        ],
+        "recorded_direction_cosine": -0.6151929169320691,
+        "signed_spawn_plane_distance": 4.637058736989275e-09
+      }
+    ],
+    "normal_numeric_equal": false,
+    "normal_bits_equal": false,
+    "nudge_bits_equal": true,
+    "spawn_bits_equal": true,
+    "mapped_direction_bits_equal": false,
+    "axis_plane_exactly_equal": true
+  },
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/main.cpp": "bda09c2cfa150084463a1f25a9c73c638646549e6fe0cbe20ebb09fcbf0ba7f0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-0.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-1.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/data.json": "b422ffb91b33c4a8ce078163cdaf55d7391bf1004c56b7f7b09c51de9317a076",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/n010_surface_operator": "861f30544a001718fb5087947004e1811a36cefa2ac008ea67932767e359f5f7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-0.resources.json": "3dc47c894a74f9ddea4131106665f078a9d8da3a813ac6699833cbfafe6eef40",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/witness.txt": "91c6428ce29b51f53e2b312891624bb2801dc873bef11c1f038041e90b1f7d18",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/coincident-surface-operator-diagnosis-v1/step-1.resources.json": "1d8e0e5dee47b26f61dcb12fbe76de42a243037c59c86c9c7f02f0e7fce2eddf"
+  }
+}
