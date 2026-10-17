@@ -121,9 +121,11 @@ void whole_density_prefixes_gpu(WholeStateGpu current,WholeRawGpu path[7],uint c
 }
 
 void main() {
-    uint slot=gl_GlobalInvocationID.x;if(slot>=interval.w)return;
+    uint invocation=gl_GlobalInvocationID.x,slot=invocation/interval.z;
+    uint sampleIndex=interval.x+invocation%interval.z;
+    if(slot>=interval.w || sampleIndex>=interval.y)return;
     diagnosticSlot=slot;uint pixel=selected[slot];Primary initial=primary[pixel];
-    for(uint sampleIndex=interval.x;sampleIndex<interval.y;++sampleIndex) {
+    {
         pathAmbiguous=false;diagnosticSample=sampleIndex;diagnosticBounce=1u;
         dvec3 indirect=dvec3(0.0LF);u64vec4 counters=initial.counters;
         if(initial.origin.w>0.0LF && sizes.w>1u) {

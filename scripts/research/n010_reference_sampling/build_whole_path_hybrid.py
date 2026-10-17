@@ -82,6 +82,8 @@ def main():
               'oracle.sample_all_split(uint32_t(pixel%scene.width),uint32_t(pixel/scene.width),rng,comp,cnt,nullptr,&cache);')
     host_once('!threads || threads>16', 'threads!=1')
     host_once('if(!spp || spp>262144', 'if(!spp || spp>8192')
+    host_once('vkCmdDispatch(c.command,uint32_t((selected.size()+63)/64),1,1);',
+              'vkCmdDispatch(c.command,uint32_t((selected.size()*batch+63)/64),1,1);')
     host_once('        params.interval[0]=begin;',
         '        const auto batchStarted=std::chrono::steady_clock::now();\n        params.interval[0]=begin;')
     host_once('check(vkQueueWaitIdle(c.queue));',

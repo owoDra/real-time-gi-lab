@@ -57,6 +57,12 @@ Build only the original fixed C1 eight-pixel diagnostic: (40,30),(120,30),
 layout but ONLY those eight pixels computed. Emit a distinct schema and
 prototype-scope.json listing the selection. Outside-selection zeros are NOT
 reference pixels, black-reference evidence or an admitted full-frame image.
+Before any build, the implementation is clarified to use one independent
+GPU invocation per selected-pixel/sample pair (at most8*16=128 paths/batch),
+instead of095's per-pixel loop. Only path output records are written on GPU;
+CPU accumulation retains the original per-pixel sample order. No shared
+GPU sum is raced or reordered. This is an execution-layout change from095,
+not a new proposal, sample count, numerical threshold or accepted timing.
 Reject other image dimensions, depth other than8, or point count other than1.
 Nonemissive scope stays unchanged. Limit native interface to8192spp, batch<=16
 and one fallback CPU worker. Actual numerical acquisition needs a separate
