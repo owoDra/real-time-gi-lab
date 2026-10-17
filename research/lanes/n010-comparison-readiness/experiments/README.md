@@ -1,5 +1,11 @@
 # N010 protocols
 
+[104 — wide8 original-control backend coverage](104-wide8-original-control-coverage.md)
+registers byte/audit identity against retained counts on all17 original
+artifacts, reusing A6a254 and acquiring sixteen fixed cases. Nine are original
+full64 deterministic cases; remaining low counts do not replace full gates.
+One low-priority core, finite total budget, no subsequent full-control queue.
+
 [103 — fixed ranked process-median intervals](103-ranked-process-median-calibration.md)
 prepares one independent24-process C7 acquisition, retaining all observations
 and freezing exact binomial-derived ranks before new data. It preserves100's
