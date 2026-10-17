@@ -1,5 +1,11 @@
 # N010 protocols
 
+[103 — fixed ranked process-median intervals](103-ranked-process-median-calibration.md)
+prepares one independent24-process C7 acquisition, retaining all observations
+and freezing exact binomial-derived ranks before new data. It preserves100's
+effect, control-allowance and width rules. NOT RUN; both sealed controls and
+the CPU execution prototype must terminate first. No automatic GPU queue.
+
 [102 — eight-wide CPU execution prototype](102-wide8-exact-cpu-bvh-prototype.md)
 prepares a separate flattened topology after the stopped SIMD prototypes.
 It cannot dispatch before both101 sealed controls finish successfully and
