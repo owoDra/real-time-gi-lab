@@ -1,0 +1,484 @@
+{
+  "schema": "n010-whole-path-support-witness/1",
+  "complete": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "POSTHOC_SAME_OWN_SUPPORT_FAILURE_REPRODUCED_NO_ADMISSION",
+  "source_commit": "6588ad3bdf338d6560c768ebe4b7d9770c5f1eaf",
+  "exact_original_guard_and_source_inverse": true,
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_whole_path_support_witness.py": "5a7ae37fb4b658bc26717ac2390170159b14bbd8fdf52d524875a05bb4c3052a",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/070-whole-path-own-support-witness.md": "03804321eb441a55e4f23ea413e00756acdfebe29d45706cd9fc6218b2ab27ab",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/212-whole-path-conditioned-diagnosis.json": "11713aca61ef3fd15d312a562e0d60a2e1cb04c73f4311ba97ffcf38790341ad",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_whole_path_conditioned.py": "7ab928b361ce42f32493093249c022646fb4b4b955f5390b675f9ec4b949b75e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/069-conditioned-raw-target-numeric-audit.md": "be771a25e731ee5e40e7bd711b492c5584f5a4562e97c24b35b0c00cbfdef737",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_readiness_bottlenecks.py": "b9f8d9746f8ce3c3baab4b46404ebf0f373a5854b73c5878e8b4b240b5bd5823",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/whole_path_conditioned.inc": "de9ab2b8ac11002eec1c671007672e5cfade4cf402cdb5dd6da434c2a1ae8979",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/211-whole-path-numeric-failure-witness.json": "d33b15c3d481f2685b171a7aa2bb7f33761513ef1c81f4e5648c934aeec9ee95",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/whole_path_mixture.inc": "cc36e479eab6da74f54e82c75750b09300b06fffad8afcbad23f77a7d631679b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/193-selected-bounce-path-diagnosis.json": "6143ecbf6651201c15541f4b2ee2c7e33b04843023049fc6d3d1f75230de545a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic": "348e4a29199284ee4af2ce043c629bb9e3d41b84bccad65e47cc5d146167c0c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/data.json": "1e59e83afa43cc33c0997dd79f44df3f4074e7d6e25ca9d7a44f07b6a63dcafd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/step-0.resources.json": "77eafb97891684c8dae5174e3b04cdc009fc50de6459ba6ff8771fa557c47415",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/step-1.resources.json": "4ba92f10709e251121c5fbac3433f57c6fc93d0689c13c5222e83802bb912f6c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/main.cpp": "b6229fc8358358de385d611f2576181c5c0d204a1564aa8740f8b5bccf5d56b7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/n010_rqmc_oracle.hpp": "fe82910127915172f8eb5f701f0ed70508848a14fa6457050e1443bed5e1f431",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/n010_whole_path_diagnostic": "06b6e7880092306782716cbc5dfde8659b70422f7b46a7972a604d5cd88f2ec3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/step-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/step-1.stderr": "e32f877f5bdd14fe713a458f6fbb1116abe2f8185cffa3b2642b7c495f44e373",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/step-0.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/step-1.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/data.json": "51e3ad5945aa42fb694ed85717f1a2549ef8c7709ddb3ce9c444d4974d00237f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-conditioned-diagnosis-v1/pixels.txt": "435d39a925b0492669e4f9e0c9ec42c8a40fb2b2e5a33c1f635f2bfa7075819d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-0.resources.json": "d6700cdbba80012d7bc7e9a26924d9111ead22b90e4ecb0e2747a8abb62de669",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-1.resources.json": "154299b9b8bc7ca421441307f4929c987e65dede7b09d98d99249c178fb3fa5e"
+  },
+  "attempts": [
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/n010_whole_path_support_witness"
+      ],
+      "elapsed_limit_seconds": 300,
+      "returncode": 0,
+      "elapsed": 2.1728301269999974,
+      "receipt_sha256": "d6700cdbba80012d7bc7e9a26924d9111ead22b90e4ecb0e2747a8abb62de669"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/n010_whole_path_support_witness",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/pixels.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/partial-data.json"
+      ],
+      "elapsed_limit_seconds": 300,
+      "returncode": -6,
+      "elapsed": 19.1382772689999,
+      "receipt_sha256": "154299b9b8bc7ca421441307f4929c987e65dede7b09d98d99249c178fb3fa5e"
+    }
+  ],
+  "tests": "NOT_RUN; bounded post-hoc support reproduction only",
+  "witness": {
+    "eye": false,
+    "x": 200,
+    "y": 150,
+    "prefix_length": 5,
+    "sampled_log_density": -61.88301612830442,
+    "own_reconstructed_finite": false,
+    "raw_vertices": [
+      {
+        "triangle": 59039,
+        "point": [
+          -1431.199951171875,
+          726.0215718204427,
+          68.97980588969978
+        ]
+      },
+      {
+        "triangle": 21398,
+        "point": [
+          -1414.41118689076,
+          712.8026046887961,
+          63.604729946909266
+        ]
+      },
+      {
+        "triangle": 21060,
+        "point": [
+          -1423.5243177842942,
+          714.845714973023,
+          53.61129560963368
+        ]
+      },
+      {
+        "triangle": 248214,
+        "point": [
+          -1456.5039656005804,
+          1411.7146977201742,
+          -107.72530377699115
+        ]
+      },
+      {
+        "triangle": 59258,
+        "point": [
+          -1086.4200439453125,
+          937.5586958317924,
+          -117.97109649398705
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "index": 0,
+      "sphere": true,
+      "source_triangle": 4294967295,
+      "expected_triangle": 59039,
+      "pdf": 0.07957747154594767,
+      "origin": [
+        -60.51995849609375,
+        651.4939575195312,
+        -38.68988037109375
+      ],
+      "normal": [
+        0,
+        0,
+        0
+      ],
+      "direction": [
+        -0.9954675942443801,
+        0.054126291555530205,
+        0.07819599332287906
+      ],
+      "target": [
+        -1431.199951171875,
+        726.0215718204427,
+        68.97980588969978
+      ]
+    },
+    {
+      "index": 1,
+      "sphere": false,
+      "source_triangle": 59039,
+      "expected_triangle": 21398,
+      "pdf": 0.2425361144150131,
+      "origin": [
+        -1431.199951167238,
+        726.0215718204427,
+        68.97980588969978
+      ],
+      "normal": [
+        1,
+        0,
+        0
+      ],
+      "direction": [
+        0.7619496752764187,
+        -0.5999362161251799,
+        -0.24394513507664325
+      ],
+      "target": [
+        -1414.41118689076,
+        712.8026046887961,
+        63.604729946909266
+      ]
+    },
+    {
+      "index": 2,
+      "sphere": false,
+      "source_triangle": 21398,
+      "expected_triangle": 21060,
+      "pdf": 0.2541033388917601,
+      "origin": [
+        -1414.411186893861,
+        712.8026046918415,
+        63.604729945293066
+      ],
+      "normal": [
+        -0.6687207019799094,
+        0.6567561842403213,
+        -0.34854545930995884
+      ],
+      "direction": [
+        -0.6662539327507755,
+        0.14937020835613202,
+        -0.7306122350123702
+      ],
+      "target": [
+        -1423.5243177842942,
+        714.845714973023,
+        53.61129560963368
+      ]
+    },
+    {
+      "index": 3,
+      "sphere": false,
+      "source_triangle": 21060,
+      "expected_triangle": 248214,
+      "pdf": 0.11815824734960145,
+      "origin": [
+        -1423.5243177841066,
+        714.8457149756794,
+        53.611295613429725
+      ],
+      "normal": [
+        0.040446708439930715,
+        0.5728724026562858,
+        0.8186460004490278
+      ],
+      "direction": [
+        -0.04605702875066791,
+        0.9731976203117515,
+        -0.22531121126611564
+      ],
+      "target": [
+        -1456.5039656005804,
+        1411.7146977201742,
+        -107.72530377699115
+      ]
+    },
+    {
+      "index": 4,
+      "sphere": false,
+      "source_triangle": 248214,
+      "expected_triangle": 59258,
+      "pdf": 0.28108051595027017,
+      "origin": [
+        -1456.5039655997753,
+        1411.7146977156076,
+        -107.72530377699115
+      ],
+      "normal": [
+        0.173638008323858,
+        -0.98480954608763,
+        0
+      ],
+      "direction": [
+        0.6151929169320691,
+        -0.7881926147337517,
+        -0.017031648064233178
+      ],
+      "target": [
+        -1086.4200439453125,
+        937.5586958317924,
+        -117.97109649398705
+      ]
+    }
+  ],
+  "hits": [
+    {
+      "index": 0,
+      "expected_triangle": 59039,
+      "actual_triangle": 59039,
+      "hit": true,
+      "hit_t": 1376.9207562363792,
+      "expected_vertices": [
+        [
+          -1431.199951171875,
+          867.3870239257812,
+          -640.6328125
+        ],
+        [
+          -1431.199951171875,
+          867.3869018554688,
+          574.7060546875
+        ],
+        [
+          -1431.199951171875,
+          415.5300598144531,
+          -640.6328735351562
+        ]
+      ],
+      "actual_vertices": [
+        [
+          -1431.199951171875,
+          867.3870239257812,
+          -640.6328125
+        ],
+        [
+          -1431.199951171875,
+          867.3869018554688,
+          574.7060546875
+        ],
+        [
+          -1431.199951171875,
+          415.5300598144531,
+          -640.6328735351562
+        ]
+      ]
+    },
+    {
+      "index": 1,
+      "expected_triangle": 21398,
+      "actual_triangle": 21398,
+      "hit": true,
+      "hit_t": 22.033954237709004,
+      "expected_vertices": [
+        [
+          -1411.81005859375,
+          715.034912109375,
+          62.82048034667969
+        ],
+        [
+          -1414.4300537109375,
+          714.6089477539062,
+          67.0445785522461
+        ],
+        [
+          -1416.1500244140625,
+          711.137939453125,
+          63.80418014526367
+        ]
+      ],
+      "actual_vertices": [
+        [
+          -1411.81005859375,
+          715.034912109375,
+          62.82048034667969
+        ],
+        [
+          -1414.4300537109375,
+          714.6089477539062,
+          67.0445785522461
+        ],
+        [
+          -1416.1500244140625,
+          711.137939453125,
+          63.80418014526367
+        ]
+      ]
+    },
+    {
+      "index": 2,
+      "expected_triangle": 21060,
+      "actual_triangle": 21060,
+      "hit": true,
+      "hit_t": 13.678164499243776,
+      "expected_vertices": [
+        [
+          -1423.72998046875,
+          716.034912109375,
+          52.78927993774414
+        ],
+        [
+          -1418.22998046875,
+          713.0089111328125,
+          54.63507843017578
+        ],
+        [
+          -1423.3499755859375,
+          708.8009643554688,
+          57.832679748535156
+        ]
+      ],
+      "actual_vertices": [
+        [
+          -1423.72998046875,
+          716.034912109375,
+          52.78927993774414
+        ],
+        [
+          -1418.22998046875,
+          713.0089111328125,
+          54.63507843017578
+        ],
+        [
+          -1423.3499755859375,
+          708.8009643554688,
+          57.832679748535156
+        ]
+      ]
+    },
+    {
+      "index": 3,
+      "expected_triangle": 248214,
+      "actual_triangle": 248214,
+      "hit": true,
+      "hit_t": 716.0611248938955,
+      "expected_vertices": [
+        [
+          -1435.8299560546875,
+          1415.35986328125,
+          -275.2187805175781
+        ],
+        [
+          -1435.8299560546875,
+          1415.35986328125,
+          -38.6904296875
+        ],
+        [
+          -1683.8499755859375,
+          1371.6298828125,
+          -38.690433502197266
+        ]
+      ],
+      "actual_vertices": [
+        [
+          -1435.8299560546875,
+          1415.35986328125,
+          -275.2187805175781
+        ],
+        [
+          -1435.8299560546875,
+          1415.35986328125,
+          -38.6904296875
+        ],
+        [
+          -1683.8499755859375,
+          1371.6298828125,
+          -38.690433502197266
+        ]
+      ]
+    },
+    {
+      "index": 4,
+      "expected_triangle": 59258,
+      "actual_triangle": 59011,
+      "hit": true,
+      "hit_t": 601.5737689244693,
+      "expected_vertices": [
+        [
+          -1086.4200439453125,
+          1316.389892578125,
+          -408.1468200683594
+        ],
+        [
+          -1086.4200439453125,
+          907.7440185546875,
+          -408.1468505859375
+        ],
+        [
+          -1086.4200439453125,
+          907.743896484375,
+          318.9010925292969
+        ]
+      ],
+      "actual_vertices": [
+        [
+          -1086.4200439453125,
+          907.7440185546875,
+          -408.1468505859375
+        ],
+        [
+          -1086.4200439453125,
+          1306.2298583984375,
+          -408.1468200683594
+        ],
+        [
+          -1086.4200439453125,
+          907.743896484375,
+          318.9010925292969
+        ]
+      ]
+    }
+  ],
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/main.cpp": "b6229fc8358358de385d611f2576181c5c0d204a1564aa8740f8b5bccf5d56b7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/n010_rqmc_oracle.hpp": "2bceddd124bdc549c726973169545b19dedadf53e878184655fbbba58516137a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-1.stderr": "5925b977a5d5fc79914c132150e9b870ba79dd100002b7f3081200f93f2d957a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-0.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-1.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/n010_whole_path_support_witness": "5abdabf492b452125027f0abf0dfd6b848c5afa52240f7ae851433f19ed3de75",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/pixels.txt": "435d39a925b0492669e4f9e0c9ec42c8a40fb2b2e5a33c1f635f2bfa7075819d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/partial-data.json": "51e3ad5945aa42fb694ed85717f1a2549ef8c7709ddb3ce9c444d4974d00237f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-0.resources.json": "d6700cdbba80012d7bc7e9a26924d9111ead22b90e4ecb0e2747a8abb62de669",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-support-witness-v1/step-1.resources.json": "154299b9b8bc7ca421441307f4929c987e65dede7b09d98d99249c178fb3fa5e"
+  }
+}
