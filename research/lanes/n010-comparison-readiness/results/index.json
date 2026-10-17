@@ -1261,6 +1261,18 @@
       "status": "complete-posthoc-byte-exact-unexecuted-debug-companion-attributes-dominant-cpu-samples-to-bvh-no-admission",
       "result": "241-posthoc-cpu-profile-inline-attribution.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-242",
+      "status": "terminal-visited-slab-identity-failure-padding-implementation-error-no-cost-or-physical-verdict",
+      "result": "242-simd-slab-cpu-bvh-prototype.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-243",
+      "status": "complete-8-billion-visited-slab-and-53-million-query-exact-equivalence-pass-cost-ratio090276-fails075-stop",
+      "result": "243-simd-slab-neutral-padding-prototype.json",
+      "gpu_run": false
     }
   ]
 }

@@ -908,3 +908,47 @@ Terminal239 SHA256: `180f22a88c10c6fd9d6eb18eab39790b00c4912521173bf1876ea776628
 Terminal240 SHA256: `571c3bef164911e1662956008237236ea09c94a6b6653403fbb9469494c8f1ff`.
 
 Terminal241 SHA256: `d6dea5b8ae136d52f00c303cda0e96458cf837e24ecd212a5dfe33c714b6c3f2`.
+
+
+## SIMD box predicate: exact execution evidence, operational rejection
+
+094/242 preserves a genuine implementation failure: first paired native aborts
+with SIMD/original visited-box mismatch (0.707784CPU/0.989740elapsed seconds).
+The unused fourth lane was incorrectly[0,0], constraining the xyz reduction.
+No cost/reference verdict.095 explicitly changes only the padding mask to make
+the fourth interval neutral[-inf,+inf], with exact include/driver inverses. Its
+initial Python expected-string bootstrap failed before any compiler/native;
+that typo and pre-acquisition correction are recorded in095/Git history.
+
+243 completes all four serial stages with unchanged original scientific inputs:
+- compiler2.816809CPU/2.843820elapsed seconds;
+- C1 original eight pixels8192/four seeds paired138.324491CPU/138.997524elapsed;
+- standalone exporter compiler3.403344CPU/3.438121elapsed;
+- original236 A6a full128x96/eight spp/four seeds38.495451CPU/38.688645elapsed.
+
+Every8,575,080,199 executed visited-box SIMD/scalar boolean comparison passes.
+Every51,047,139closest triangle/t-bit and2,368,308occlusion comparison passes.
+Original223 entire accumulated data bytes and all236 A6a21 f64/PFM/hit payloads
+and integer/proposal audit data are exact. Scalar tree/node/triangle order,
+watertight intersection, intervals, ignores, ties and scientific proposal are
+retained. Packed immutable boxes add64bytes/node; process stays within4GiB.
+No universal arbitrary-ray proof or default Renderer promotion is claimed.
+
+Actual standalone CPU ratio38.495451/42.641725=0.90276486235 FAILS the original
+prospective<=0.75 operational condition. Complete=true/semantic=true/all_pass=
+false is intentional. This uncontrolled retained single-run sizing does not
+establish a speedup. Stop this fixed SIMD candidate; no full-control dispatch
+or threshold relaxation. Combined with240/241, box work is a measured hotspot,
+but this xyz-only SIMD implementation is insufficient. A possible next distinct
+execution design is batching boxes to amortize both predicates and traversal;
+not implemented, registered or queued at this checkpoint.
+
+No native/controller/GPU research worker remains. Scientific original full
+physical inventory11/17, eligible references16/24, GPU precision208FAIL, direct
+max-relative-error1.0 pixelsUNRESOLVED/未解決 included. N010 NOT_READY.
+Unit/regression tests NOT RUN. Default Renderer/CMake/src/shaders unchanged
+against066d156. No N001–N009 result/Actions/settings/power/display/app changes.
+
+Terminal242 SHA256: `809121f79ec4f3165451d635780d7d284f54cfe870ef070f6e52a7ae297f8d86`.
+
+Terminal243 SHA256: `69c1f381dcb241408b78aa6310ae0d2f9b7a6f7c6cbf9d783b7728d56c591ccb`.

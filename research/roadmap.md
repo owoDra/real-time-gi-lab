@@ -26,8 +26,15 @@ uses an unexecuted debug companion with identical .text bytes/addresses/symbols.
 A6a/C1 samples: BVH slab45.79/46.98%, remaining traversal27.51/26.51%, triangle
 intersection18.23/18.40%. All4256/3342 original samples remain denominators;
 77/75 unannotated samples retained. Zero reported lost samples. This diagnoses
-CPU reference cost, not GPU precision or GI superiority. Optimize the dominant
-box predicate with exact original query/output checks before any full queue.
+CPU reference cost, not GPU precision or GI superiority. [SIMD slab243](lanes/n010-comparison-readiness/results/243-simd-slab-neutral-padding-prototype.json)
+passes8,575,080,199 visited-box comparisons,53,415,447 query comparisons and all
+original223/A6a output/audit checks. But standalone A6a38.495451CPU seconds /
+retained42.641725=0.902765 FAILS its prospective<=0.75 execution condition;
+stop this candidate too. Prior242 padding failure is retained;095 is an explicit
+implementation amendment, with no scientific gate change. These uncontrolled
+single-run cost probes do not establish a speedup. SIMD across xyz alone is
+insufficient; next examine whether batching boxes can reduce both predicate
+and traversal overhead. No full-control/GPU queue or research worker remains.
 
 [Read-only observation235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,
