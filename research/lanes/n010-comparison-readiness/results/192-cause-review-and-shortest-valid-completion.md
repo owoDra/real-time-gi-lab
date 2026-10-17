@@ -681,3 +681,79 @@ Exact terminal record SHA256:
 - 219: `06edcbb4144a89c81676f19f37ee3ff13bacdb3e91da592d12fa84b8ae9acfe7`
 - 220: `e1ea2c33e62e562395b60ac893d90e2cf83a1822bfe927f739952c7a5cc8b996`
 - 221: `7d175550bb5bd554e044fed0b1611b99793e6835e46103f03d6da3e522f548af`
+
+
+## General target adapter, ten original full controls, and the live A6c run
+
+078 derives the actual RGB material product and one-sided absorption target,
+with per-order cumulative density reuse and original physical methods intact.
+222 preserves a misplaced closing-brace compile failure; scope-only079/223
+completes all262144 legacy/new C1 RGB/depth bit comparisons. Accumulated218
+means/second/depth fields are exact. The paired native82.398s includes legacy
+and new work; it is not an independent new-sampler speed estimate. 224 builds
+the original-format single-thread exporter, preserving original writer and
+physical source via inverses, explicit auxiliary primary-cache primes and
+unchanged scored RNG. Default Renderer/CMake/shaders are untouched.
+
+225/226 complete nine original full128x96/64spp/four-seed controls. Every
+f64/PFM/hit payload equals original bytes, no mask. Shadow-work count
+comparisons are scoped:225's direct/absorbed controls match all integer counts;
+226 primary-hit/absorption counts match while extra sampled endpoint shadows
+remain descriptive. No variance or convergence inference from zero indirect.
+
+227 retains a COST-pilot guard failure comparing64- and8192-sample rounded
+deterministic accumulations. 228 NOT RUN. Prospectively083 adds original
+same-count64 baseline, without changing accuracy/cost gates. 229 passes;
+the distinct230 full8192 original A7 acquisition completes but its analysis
+metadata omitted geometry_hash_match and raises KeyError. 230 is sealed as
+terminal analysis failure with raw outputs complete and exact unsealed crash
+snapshot. Its process elapsed/childCPU were NOT RETAINED before the exception;
+no invented timings/exit receipt and no native rerun. 084/231 replays that same
+full data, adding the hash predicate through independent original authored
+scene identity. All original analytic and full iid16384 gates PASS. Indirect
+analytic per-channel region relative error1.0425099784e-5,NRMSE0.000444196791;
+iid relative difference9.3568489428e-5,NRMSE0.007144046945. All original
+same-count deterministic mean/second fields and primary hits are byte-exact.
+This is full original RGB B2 A7 validation, not the entire physical suite.
+
+233 independently rehashes718 immutable payloads, confirms18 old compiler/
+native PID/start identities terminal, compares all original/retained fields,
+and inventories10of17 original full controls. Its first inventory incorrectly
+included022's three corpus checkpoints along with17 control scenes; it stopped
+without a result, then selects the exact original17 control metadata assets.
+This is an explicit post-hoc catalog correction, not a scientific gate change.
+Pending: A6a,A6b,A6b_level5_diag,A6c,A10,sealed-dark,sealed-lit. Numerical bias,
+A6b independent iid, full all-state/prefix and whole-frame two-level feasibility
+still precede qualification. No reference admission or full-suite PASS.
+
+085/232 costs original full-frame A6c at8spp/fourseeds:1.898731CPU and
+1.910170elapsed sec;8192 conservative scaling1944.300544CPU/1956.014465elapsed
+(~32.6min), not an ETA or physical result. Same-count inter-seed deterministic
+bits, original primary geometry, finite/proposal audits pass, no quality score.
+086 prospectively registers ONE original full A6c8192/fourseed/whole-frame
+acquisition234, same224 binary and original scientific gates, oneCPU nice15,
+4GiB/3600CPU/5400elapsed. No retry or automatic subsequent-control queue.
+
+**234 is currently RUNNING, not a result.** Native PID69782/start473962 was
+verified live at2026-10-17T04:40:30UTC; tool session78104. Source601db86.
+Resume by polling that exact handle/identity and inspecting terminal234; a
+poll timeout never justifies a new acquisition. The complete native receipt
+must be saved before analytic parsing. No GPU or settings/app/display/clock/
+power changes. Reference eligibility16/24,timing208FAIL,error1.0UNRESOLVED/
+未解決 included; all original final requirements remain. Unit/regression tests
+NOT RUN. N010 NOT_READY; no Lane M comparative superiority is claimed.
+
+Exact terminal record SHA256 (234 is mutable acquisition state, excluded):
+
+- 222: `62449c632f305b6740a04d0fff97c5cebd155b255c11d992719dd9553655ea89`
+- 223: `2f5c516468153b1aea04021530c10eaca0b1c89dfc50045a40f688ddb6def1c7`
+- 224: `56bb79b683fffe5c8b30d12626939aa6b86d8d3cf85dfe724d7afc2937a5b0b6`
+- 225: `f4de1c124fa6cba6412d4a1471be4f488144fd1d3c26de20ef4330b6c236f777`
+- 226: `3868f2d80d1860074c6c7f84ee8576b7d7a88b2f52900a44fea9054183e5d8c8`
+- 227: `f3edaef1a4f293064083bc64c497f4eb78e04d0d2661c38c715e53fdcbfc86b6`
+- 228: `d67fbb2696eb09667f6f537aad8f20c8f6e5f7fa293df90379d6ee2c9caa710b`
+- 229: `61b7aa722fc3f2256be78cbaa376b3993f8b1be4f5519a21557d3e26d4fde996`
+- 230: `42b656a47a490e7df85d145d9aed3930a29ac0f138485ed5c38a9c128f26812b`
+- 231: `4ca006c299fda61accc6e78eee7b3a5dba543f4f505ecf2f2ed5dcc3fb26051e`
+- 232: `e493feffc868477258d284efc0b081fe2af065b6112bca392b17c89ab13e4e7d`
+- 233: `842de54fc3af69ad403545cee00fd4ccb70bfc92eeac3a8ecc295ef0eed34615`

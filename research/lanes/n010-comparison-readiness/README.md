@@ -6,7 +6,9 @@
 shortest valid completion path, with low interactive load. No old stopped
 acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
 diagnostics have completed; neither supplies the missing readiness proof.
-No full-frame reference ladder or long GPU campaign is running or queued.
+One registered original A6c CPU control is running (234, one low-priority
+core). No full-frame reference ladder, GPU campaign or subsequent-control queue
+is running or queued.
 
 See [cause review 192](results/192-cause-review-and-shortest-valid-completion.md)
 and [prospective bounded plan 057](experiments/057-bounded-cause-diagnosis-and-critical-path.md).
@@ -15,7 +17,7 @@ and [prospective bounded plan 057](experiments/057-bounded-cause-diagnosis-and-c
 | --- | --- | --- |
 | All 24 eligible references | [160](results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| Whole-path reference candidate | [218](results/218-all-split-path-mixture-diagnosis.json): bounded promising PASS; [220](results/220-bounded-all-split-furnace-control.json): derived furnace analytic/iid PASS | Original full physical controls, numerical bias, all-state/prefix and full-frame feasibility are still required; no intake yet. |
+| Whole-path reference candidate | [223](results/223-all-split-general-transport-equivalence.json): exact legacy equivalence; [225](results/225-all-split-full-sidedness-controls.json)/[226](results/226-all-split-full-deterministic-controls.json)/[231](results/231-posthoc-original-a7-retained-control.json): 10/17 original full controls PASS | [234](results/234-all-split-original-a6c-full-physical-control.json) A6c RUNNING; finish remaining original controls, bias, all-state/prefix and full-frame feasibility before intake. |
 | GPU calibration | [185](results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
@@ -228,9 +230,76 @@ changing original transport, validate all original applicable physical controls
 and numerical-density bias, then all24-state/exact-prefix and whole-frame
 feasibility before the unchanged reference ladders. All original gates remain;
 references **16/24**, timing208 **FAIL**, direct1.0 pixels **UNRESOLVED / 未解決**
-and included. No GPU/settings/default build change or retained scientific
-worker/automatic queue. Unit/regression tests NOT RUN. N010 remains NOT_READY;
+and included. At the 215–221 checkpoint there was no retained worker or queue. No GPU/
+settings/default build change occurred. Unit/regression tests NOT RUN. N010 remains NOT_READY;
 no Lane M comparative superiority result or completion date is asserted.
+
+### General adapter and original physical controls — active A6c acquisition
+
+[078](experiments/078-all-split-general-transport-and-prefix-reuse.md) adds the original RGB throughput product, one-sided back-face
+absorption and actual 1–8 vertex limit to the sampling target. The geometric
+proposal stays separate from physical absorption; no black/back-face reflection
+is introduced. Ordered area-density prefixes are traversed once per order,
+with original sums and states. [222](results/222-all-split-general-transport-equivalence.json) preserves a helper-scope compile
+failure; [079](experiments/079-general-prefix-helper-scope-repair.md) moves only the misplaced brace. [223](results/223-all-split-general-transport-equivalence.json) then
+compares **every one of 262,144 C1 sample indices** against the prior sampler:
+RGB components and depth values match bit-for-bit; all accumulated 218 fields
+also match. Native duration 82.398 seconds includes both samplers and original
+controls, and is not a separate speed measurement of the new implementation.
+
+[224](results/224-all-split-exporter-build.json) builds an opt-in full-output CPU exporter with exact source
+inverses. Its scored RNG stays untouched while an independent copy primes the
+original primary cache once per pixel; that auxiliary work is counted. Original
+writers/checkpoints are retained. One render thread is enforced; main Renderer,
+CMake and GPU behavior remain unchanged.
+
+[225](results/225-all-split-full-sidedness-controls.json) and [226](results/226-all-split-full-deterministic-controls.json) complete **nine original full control scenes**
+at original 128×96, 64 samples and all four seeds. Every moment/PFM/hit payload
+matches original bytes, with no pixel masks. Primary counters remain exact;
+proposal endpoint-shadow work is named separately and need not equal another
+sampler's workload. These direct/zero-indirect controls do not establish
+stochastic multi-bounce convergence.
+
+[227](results/227-all-split-original-a7-cost-pilot.json) is a retained A7 cost-pilot diagnostic stop: it compared 64-sample
+rounded accumulations with 8192-sample records. [228](results/228-all-split-original-a7-full-control.json) was NOT RUN.
+[083](experiments/083-a7-pilot-same-count-baseline-amendment.md) instead acquires an original same-count 64-sample baseline;
+[229](results/229-all-split-original-a7-cost-pilot.json) passes its exact deterministic comparison and unchanged cost
+gate. The distinct original **full 8192-sample A7 acquisition** in [230](results/230-all-split-original-a7-full-control.json)
+completes, then analysis stops at omitted geometry-hash metadata. No native
+retry: post-hoc [231](results/231-posthoc-original-a7-retained-control.json) validates the SAME raw data against unchanged
+original analytic and independent 16384-sample iid controls. It PASSES.
+Analytic indirect region-relative error **1.04251e-5**, NRMSE **0.000444197**;
+iid per-channel mean difference **9.35685e-5**, full-image NRMSE **0.00714405**.
+Original deterministic means/second moments and primary bytes match. The
+outer native duration was not saved before the analysis crash: **NOT RETAINED**,
+not reconstructed from the sizing estimate. All failed records remain.
+
+[233](results/233-posthoc-all-split-general-controls-replay.json) post-hoc rehashes **718 immutable payloads**, replays retained
+218 statistics and nine complete byte comparisons, confirms **18 terminated
+compiler/native identities**, and checks the actual **10/17 original full
+control scenes**. This checkpoint precedes the new live acquisition below.
+The seven pending scenes are A6a, A6b, A6b_level5_diag, A6c, A10, sealed-dark,
+sealed-lit. Full A6b independent iid, numerical-bias assessment, all-state/
+exact-prefix and whole-frame feasibility are still required.
+
+[232](results/232-all-split-original-a6c-cpu-cost.json) measures original A6c on all pixels/four seeds at eight samples:
+**1.898731 CPU / 1.910170 elapsed seconds**. Conservative 8192-sample scaling
+is about **1944 CPU / 1956 elapsed seconds** (~32.6 minutes), a workload sizing
+estimate, not an N010 completion forecast or a physical PASS. [086](experiments/086-original-a6c-full-physical-control.md)
+prospectively bounds a single original full A6c run at one CPU, nice 15,
+4 GiB, 3600 CPU / 5400 elapsed seconds, no retry or following queue.
+
+**Currently RUNNING: [234](results/234-all-split-original-a6c-full-physical-control.json)**, exact original A6c 8192 samples, four
+seeds, whole 128×96. Native PID **69782**, start ticks **473962**, verified live
+at **2026-10-17 04:40:30 UTC** from matching `/proc` identity; tool session
+**78104**. Resume by observing this same acquisition, never starting another
+because a poll expires. Its outcome is **UNMEASURED / INCOMPLETE** while live.
+One CPU only, no GPU, app/display/clock/power changes. No automatic next run.
+
+References remain **16/24**, timing208 remains **FAIL**, direct-error-1.0 pixels
+remain **UNRESOLVED / 未解決** and included. Original seeds/slots/cap/thresholds
+and final quality/time/true-peak gates remain. Unit/regression tests NOT RUN.
+N010 is NOT_READY; a physical control PASS is no Lane M GI superiority claim.
 
 ### Evidence and preserved boundaries
 

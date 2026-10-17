@@ -1,0 +1,11 @@
+{
+  "schema": "n010-original-a7-planned-full-not-run/1",
+  "complete": false,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "NOT_RUN_AFTER_ACTUAL_227_DIAGNOSTIC_GUARD_STOP",
+  "source_commit": "601db866f236b8543b7de80a34c297de7d8e9bdb",
+  "reason": "Original227 pilot stopped at cross-count deterministic-bit guard before planned228 dispatch. Same-count amendment083 later used distinct229/230;231 replays that exact230 acquisition. This record does not relabel228 as executed.",
+  "actual_later_evidence": "231-posthoc-original-a7-retained-control.json",
+  "tests": "NOT_RUN"
+}
