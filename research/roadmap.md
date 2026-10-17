@@ -17,7 +17,7 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | Candidate feasibility | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
 | New sampler preparation | [187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json): isolated build PASS | Fixed-grid 195 shows p99 ratio 0.948 but replicate-variance ratio 1.019; insufficient evidence for long acquisition. 188/189/190 remain NOT RUN. |
 | GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
-| Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified. Direct max-relative-error-1.0 pixels **UNRESOLVED / 未解決**, included. |
+| Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
 
 ### What the cause analysis establishes
@@ -113,6 +113,17 @@ p99 ratio is **0.837924**, but replicate variance **1.054490** and descriptive
 per-path variance **1.032952**. Its prospective promising rule FAILS; no full
 controls/ladder follows this fixed prototype. This does not reject every
 conditional correction or prove a general variance theorem.
+
+[203](lanes/n010-comparison-readiness/results/203-array-rqmc-transport-diagnosis.json), registered in
+[062](lanes/n010-comparison-readiness/experiments/062-array-rqmc-transport-diagnosis.md), then completes
+an eight-pixel geometry-sorted array-RQMC prototype in 24.206 native CPU
+seconds. Original moments, deterministic components and first-indirect luma
+means match retained values bit-for-bit. Its p99 ratio is **1.049287**,
+replicate variance **0.885354**, and per-path variance **0.994757**. The
+prospective promising rule FAILS. This fixed sort/assignment stops; no
+larger-level prefix, full physical/state proof or reference admission follows.
+The result does not reject array-RQMC generally or establish the behavior of
+all eight pending corpus slots. No scientific acquisition remains running.
 
 The unresolved reference problem is how to retain effective stratification
 through later transport steps. The unresolved timing problem includes the

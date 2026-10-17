@@ -338,3 +338,61 @@ native termination (return code zero) with all 32 outputs. No calculation was
 restarted because observation failed. No research worker remains after the
 recorded termination. Unit/runtime regression tests remain NOT RUN. N010 is
 still NOT_READY with all original reference, timing and final requirements.
+
+
+## Array-RQMC follow-up: preserve the negative result
+
+[062](../experiments/062-array-rqmc-transport-diagnosis.md) registers a
+geometry-only normal-octant/Morton sorting and per-transition randomized
+3D Sobol assignment. [203](203-array-rqmc-transport-diagnosis.json) completes
+one compiler and one native invocation in 2.164 / 24.206 seconds, one CPU at
+nice 15, 4 GiB / 220 CPU / 300 elapsed guards. Its exact SHA256 is
+`9cb28aa598201b593a53c0e0d58e08f0a352f44008a4615c82a52881bd31515a`.
+
+The prototype replays assigned prefixes through the original physical body,
+with optional stop/vertex exports. All 32 original means/second moments are
+bit-exact to 193; all first-indirect luma means and deterministic components
+also match exactly. It uses no weights, correction, extra scored camera
+samples, radiance-defined sorting or clamping. Prefix replays are real extra
+CPU cost and are explicitly retained. This is not an efficient production
+reference implementation.
+
+On the same eight fixed C1 pixels, array/original paired-p99 ratio is
+**1.049287102**, replicate variance **0.885353909**, descriptive per-path
+variance **0.994756569**. Thus smaller replicate variance does not imply the
+required tail-error reduction. The original prospective promising rule FAILS;
+this fixed sort/assignment stops. Do not tune its key or dispatch another
+level/full corpus from this result. No larger-level prefix was proved.
+
+The institutional [2009](https://www.gerad.ca/en/papers/G-2009-03) and
+[2016](https://www.gerad.ca/en/papers/G-2016-61) Array-RQMC abstracts motivate
+per-step sorting/randomization; they do not establish success on this geometry.
+The author PDF requests returned access-denied pages, so no full-paper-reading
+claim is made. This negative prototype does not reject all array-RQMC methods
+or prove a population variance bound.
+
+Post-hoc CPU verification replays 201's exact original analysis, all 512
+schedule tags, eight owned-memory ledgers and eight native resource receipts.
+It rehashes all generated 202/203 payloads and confirms their recorded native
+PID/start identities are no longer present. No GPU work or regression tests
+were dispatched by that verification. This is not an independent rehash of
+all 201 native payload files, which were checked during acquisition.
+
+### Remaining prerequisite boundary, without adding unnecessary repairs
+
+The original correctness gate explicitly permits **measured and included**
+remaining direct discrepancies (readiness_preflight.py, correctness gate).
+Actual key/BF-P validation is distinct from proving a new GPU primary repair.
+Do not make an unrequested winning-incumbent or complete direct-pixel repair
+another prerequisite for comparison: retain the measured max-relative-error
+1.0 pixels as UNRESOLVED / 未解決 and include them in scoring. All required
+key/BF-P validations and explicit discrepancy records still have to verify.
+
+The main unfinished prerequisites remain (a) eight pending eligible references
+under the unchanged screen and (b) all sixteen complete Renderer boundaries
+under the unchanged precision gates. Whole-corpus quality/true-peak pilots,
+fixed quality selection, additional-family provenance and the final original
+six-gate auditor are still required afterwards. 199–203 improve executable
+cause diagnosis and reject unsupported dispatches, not readiness. No long
+acquisition, default promotion, N011 or threshold change is substituted for
+those requirements.

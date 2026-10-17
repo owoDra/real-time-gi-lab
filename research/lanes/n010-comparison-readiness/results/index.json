@@ -1027,6 +1027,12 @@
       "status": "complete-paired-cpu-later-bounce-control-variate-diagnostic-promising-rule-fail-no-admission",
       "result": "202-later-bounce-cv-path-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-203",
+      "status": "complete-eight-pixel-array-rqmc-exact-original-controls-promising-rule-fail-fixed-construction-stopped-no-admission",
+      "result": "203-array-rqmc-transport-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }
