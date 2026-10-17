@@ -1,10 +1,18 @@
 # N010 protocols
 
+[105 — original full level-5 artifact](105-original-full-level5-artifact.md)
+registers one original256spp/four-seed diagnostic artifact after successful
+104. Its original analytic role stays diagnostic-only; no A6b gate shortcut.
+One finite low-priority CPU native, no automatic next-artifact queue.
+
 [104 — wide8 original-control backend coverage](104-wide8-original-control-coverage.md)
 registers byte/audit identity against retained counts on all17 original
 artifacts, reusing A6a254 and acquiring sixteen fixed cases. Nine are original
 full64 deterministic cases; remaining low counts do not replace full gates.
 One low-priority core, finite total budget, no subsequent full-control queue.
+Terminal257: all sixteen fresh cases PASS in79.274CPU/79.731elapsed seconds;
+with inherited254 A6a, all17 retained-count artifacts have exact bytes/audits.
+Original full inventory13/17 and eligible references16/24 are unchanged.
 
 [103 — fixed ranked process-median intervals](103-ranked-process-median-calibration.md)
 prepares one independent24-process C7 acquisition, retaining all observations

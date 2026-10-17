@@ -1351,6 +1351,12 @@
       "status": "complete-registered-ranked-calibration-outcome-selected-boundary-next-no-general-timing-or-reference-admission",
       "result": "256-ranked-calibration-outcome-and-next-boundary.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-257",
+      "status": "complete-wide8-all17-retained-count-control-artifact-bytes-and-audits-exact-nine-full64-no-reference-admission",
+      "result": "257-wide8-original-control-coverage.json",
+      "gpu_run": false
     }
   ]
 }
