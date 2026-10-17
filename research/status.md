@@ -17,8 +17,14 @@ is committed in c8fbbe7 before the original full sealed-dark CPU acquisition.
 is now terminal **physical PASS**, all original128x96/1024spp/four seeds,
 all sample means/moments/PFM exactly zero. Native0,601.583CPU/603.943elapsed
 seconds, CPU31/nice15/4GiB within1200CPU/1800elapsed limits; no retry.
-The original physical inventory is now **12/17**. Next is the separately
-invoked original sealed-lit control, not an automatic queue.
+The original physical inventory is now **12/17**. Original sealed-lit253
+was separately invoked from63796c8 after252 PASS; native PID297743/
+start_ticks2430101 is confirmed live under the same one-core finite limits.
+No GPU or subsequent-control queue;253 is not counted as PASS.
+[Plan102](lanes/n010-comparison-readiness/experiments/102-wide8-exact-cpu-bvh-prototype.md), committed
+in eb308b2, prepares a distinct eight-wide CPU execution candidate. It is
+NOT RUN and cannot dispatch before both sealed controls pass and workers
+are quiescent. No execution-scaling claim or reference admission.
 All other missing controls and reference slots remain required.
 Telemetry is optional, not a prerequisite.
 
@@ -84,7 +90,7 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | --- | --- | --- |
 | All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| Whole-path reference candidate | [223](lanes/n010-comparison-readiness/results/223-all-split-general-transport-equivalence.json): exact legacy equivalence; [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json)/[226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json)/[231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json)/[237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json): 11/17 original full controls PASS | [234](lanes/n010-comparison-readiness/results/234-all-split-original-a6c-full-physical-control.json) native0 / retained237 analytic PASS; six remaining originals, A6b IID, bias, all-state/prefix and feasibility remain. |
+| Whole-path reference candidate | [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json); [226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json); [231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json); [237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json); [252](lanes/n010-comparison-readiness/results/252-all-split-original-sealed-dark-full-control.json): **12/17 original full artifacts PASS** | Five originals remain, including live sealed-lit253; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
 | GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
