@@ -805,3 +805,18 @@ Original087/236 remains NOT RUN and refuses failed234; a separate dispatch
 amendment is needed after successful237. No current physical verdict.
 
 Terminal234 SHA256: `3d9ac259909cd1ec796623233d54c6a7dba821e10bf80dc85a1980ecb7878a9b`.
+
+
+## Same A6c analytic replay PASS and prospective cost dispatch
+
+237 rehashes234 inputs/all25 outputs, confirms native terminal identity and
+resource receipts, then replays the exact original analysis with only actual
+run_counters inserted; inverse exact. No native rerun or input rewrite. Direct
+facet allowance violations0; indirect max region-relative8.1611197802e-5,
+NRMSE0.00138358751045, original gates PASS. Full inventory11/17; remaining
+A6a,A6b,A6b_level5_diag,A10,sealed-dark/lit and required A6b IID unchanged.
+089 changes only087 controller prerequisite filename234 ->237, preserving
+the original driver hash and original cost/native/stop/scientific guards.
+No full queue.236 has not yet been acquired at this checkpoint.
+
+Terminal237 SHA256: `ff30d739737318fd534742e4b7c56adf01f820bcfa5430e0a89d6fe3be58aabf`.

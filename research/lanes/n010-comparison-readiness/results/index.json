@@ -1225,6 +1225,12 @@
       "status": "complete-posthoc-read-only-natural-idle-positive-other-app-drm-deltas-no-paired-precision-or-causal-verdict",
       "result": "235-posthoc-natural-idle-read-only-observation.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-237",
+      "status": "complete-posthoc-same234-native-full-original-a6c-analytic-pass-no-retry-eleven-of17-full-artifacts",
+      "result": "237-posthoc-original-a6c-retained-control.json",
+      "gpu_run": false
     }
   ]
 }

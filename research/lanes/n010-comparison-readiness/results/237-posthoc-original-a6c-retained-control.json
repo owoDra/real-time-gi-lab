@@ -1,0 +1,281 @@
+{
+  "schema": "n010-posthoc-original-a6c-retained-control/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "native_reexecuted": false,
+  "reference_admission": false,
+  "classification": "POSTHOC_SAME_A6C_FULL_ANALYTIC_COMPLETE_NO_ADMISSION",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/replay_all_split_a6c_retained.py": "6aceec2e9ac997bc5c0f5ae5c3c32144c72b194ea6e02bcea00640d856e93eab",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/088-retained-a6c-analysis-repair.md": "681088b47f547cfebc1e8f363f95a4ce60f548b839c541278ad07d01cf533fc7",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/234-all-split-original-a6c-full-physical-control.json": "3d9ac259909cd1ec796623233d54c6a7dba821e10bf80dc85a1980ecb7878a9b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/validate_all_split_a6c_full.py": "61f18256421829f8092624fc0461c325f8090ea4929bee88aa2df432ef3db298",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/086-original-a6c-full-physical-control.md": "9b69a4f3accc195dd7a533de71a7c9e75461298e9f9183888cddc138e2d160f5",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/232-all-split-original-a6c-cpu-cost.json": "e493feffc868477258d284efc0b081fe2af065b6112bca392b17c89ab13e4e7d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/233-posthoc-all-split-general-controls-replay.json": "842de54fc3af69ad403545cee00fd4ccb70bfc92eeac3a8ecc295ef0eed34615",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/224-all-split-exporter-build.json": "56bb79b683fffe5c8b30d12626939aa6b86d8d3cf85dfe724d7afc2937a5b0b6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/main.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_rqmc_oracle.hpp": "47315cba3ca8c2bfa4dec9dc5cc233bb03e03e21551502e4f27405d626f7f048",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.resources.json": "0e1278bce19369e8cac4c48643ab1033b5415b1d3be564c94d1435574fc74fcc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle": "883e0540f595299e376eea9d289d77bccec0bf13d7f7f5b1b9dff30358dfb294",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stderr": "e8e50b08a6e9a537d11cd6467e4139a74aac9e5a15d1f3d876f7564fda5402e3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/022-cached-oracle-equivalence.json": "1c353f2623514630e67a7994fa5ebf205da8cafd583e2ab387deae3d9b1e3482",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.meta.json": "da8bb4b5decbd3abe89cefbe5f23e03516be308d005936eec57eba9961ce9fd7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.n008": "3c9d18a909ed48151ac952ff9100d31df41119f9d85efe876ea3959ce5b51d6c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s0.f64": "eb72403369406c51a1469649831c88576f80532faf6f6c6c517a28919d2b3a96",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s0.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s0.indirect.pfm": "6e5bf1036f9a18d6e97bfe6f26655e26fd07884994f21a20358615354c9e68a2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s0.total.pfm": "606f24d3ae184475ff811b9a27ed7bdd571ce2c559e52f93b0b5dd46f168c402",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s1.f64": "91e0566d73e32436adbedb66a1990e2ce3329efa9d8991c0166ff4a1f60edd60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s1.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s1.indirect.pfm": "05068ff6df22c2326bac64e66dbcfb633c06d9980050d15c54749f645efe433d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s1.total.pfm": "32aa13e812000a04c197875a34e5a2f2577da8630157ef6e3333f47acae989f6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s2.f64": "531d6736d5c9897024d47c53638d3b1d6cab50f49db7c96a56ddca633447e4c0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s2.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s2.indirect.pfm": "bd5dee5558c8619fb8cdb461bb620d87df22c2413cdf87a8bb1d3994c319b583",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s2.total.pfm": "a3e51059d56eb19474d3bd4d2c2a86414dbe03d2a9be34fc265a47eeb0f3b5a9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s3.f64": "e80f5ec8490ff31f69735b0afa4507418bf6522c1ea2125417f596558a83a483",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s3.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s3.indirect.pfm": "b375eddbc3500671b046a48bef0313be1f99deb5f7dcbb99d49905e77ba08cf3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6c.s3.total.pfm": "200916f101f85b7eb4e44d62e01370351fb279c0d3883a00434054e3677f2d44",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/validate_sampler.py": "ee3e0bf186815fe3e5c79ee5faaef379145837b8ef28d9e02e3a5838d1396e8a",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/phase_a_controls.py": "c028e77e02d90a23949d445c34abd52f716a75cc83f006b2806ffb131b9a80f1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/n008lib.py": "28fd7658ab3b728afcc70675e1c7a7aa913af254d81d35df71b37da80079386c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/native.resources.json": "9bb849e09ae4f084b5f0536d305517cda6ac3a9af75669bf39cbabd3ccc55e1c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s0.total.pfm": "36af3df1a204e1498906a3b201719e673f084f223f5b4ad0c855b23f23b0a5f6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s3.indirect.pfm": "eb8fee2ba05c861366a5cb23d727fcc8153955a6bf6612b800ec0e968d7a2d68",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s1.f64": "db8a35f19ed487b911d184c667758b20ec7d9b1155434405dc0f84965d8fd1f0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s0.indirect.pfm": "65bf4af4068fd3b673d5d43265e96ebf36ccf7cf3bbf1fef18e46ee0818ddabe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s3.total.pfm": "0983bef03cd69c929f03362a852969928cf374867a351c99c93cc3e3df602c32",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s1.indirect.pfm": "ed9844573afa5ea610161f4ec1ace8ac8d0e7da0d22b5327e0b7d13d1958db6d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s2.f64": "34804db303eb3e9ebabbedc7a2bac7ff0e680c50adf94e9ead52899e04a0c699",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/native.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s0.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s2.indirect.pfm": "032683f786e999da8e4dca6c5fdedbdd1a7f70ee2e59ecb3fbcf7ea92823bea2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s0.f64": "3e052767da7ca37ea5b5bf5cdeddc7d948b2a0ac496a58c80cd676dcb5141dd5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/native.stdout": "261e169738507b890a211028e926e4e8cabb85a3162fd450c474cbf9f47f1e1f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.meta.json": "6e3b27734ac51763d13ef59d5bc98e588c9b8189806e57f88e3ac355d0503d50",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s3.f64": "3f5ac8e5cb61f494d1e5a152141f2ba300a3e1e3346cc205bcc68c2dfbb8ca1a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s2.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s2.total.pfm": "3ca6167aa724fbbf344cfa145d1f25c65992b3f13bf273eef709393249bbc8b1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s1.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s3.direct.pfm": "2badff21ec562e6bd1d8c1c400898fba6d7921794d904cfed14668515877cc60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s1.total.pfm": "ecb11ca4f3c8c132356efb46f41cd7c17379360c94080bbbac810a43772312e8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.hits": "051c096867419d985bd66870184a185c8346ae5cbcb9b5401645efd78b2e083b"
+  },
+  "source_commit": "262cdd6082788dc133171678733c2af9030a069f",
+  "native_returncode": 0,
+  "native_elapsed_seconds": 1331.1271714100003,
+  "native_cpu_seconds": 1325.2109890000002,
+  "native_pid_start_confirmed_terminal": true,
+  "analysis_inverse_exact": true,
+  "original_analysis_sha256": "c9429f7e543b3398b3f3fecca38c874b20f558f9b2bc52cc7f21a008d24cf58e",
+  "repaired_analysis_sha256": "209243dfcf6e4ffcd29f350cfc8de8daecfa1e329aa44c2d998bfec18edf491a",
+  "analysis_receipt": {
+    "pid": 87968,
+    "start_ticks": 618876,
+    "affinity": [
+      31
+    ],
+    "nice": 15,
+    "cpu": [
+      220,
+      220
+    ],
+    "address_space": [
+      4294967296,
+      4294967296
+    ]
+  },
+  "tests": "NOT_RUN; post-hoc same full native acquisition analytic replay",
+  "physical_checks": {
+    "id": "A6c",
+    "title": "Original full finite-depth colored sphere control",
+    "pass": true,
+    "checks": [
+      {
+        "name": "A6c:direct:geometric_allowance",
+        "pass": true,
+        "violations": 0
+      },
+      {
+        "name": "A6c:indirect:fixed_accuracy",
+        "pass": true,
+        "per_channel_region_relative_error": [
+          8.161119780159818e-05,
+          8.1611197615402e-05,
+          8.1611197615402e-05
+        ],
+        "nrmse": 0.001383587510452374
+      }
+    ],
+    "runs": [
+      {
+        "name": "A6c",
+        "scene_sha256": "3c9d18a909ed48151ac952ff9100d31df41119f9d85efe876ea3959ce5b51d6c",
+        "geometry_sha256": "1be7dfbcfdac48343c3d00f7cda0614c3bb3e08be8a7f66c635a63b576174b60",
+        "geometry_hash_match": true,
+        "triangles": 81920,
+        "spp": 8192,
+        "seeds": [
+          305419896,
+          2596069104,
+          81985529216486895,
+          18364758544493064720
+        ],
+        "run_counters": [
+          {
+            "seed": 305419896,
+            "primary_hits": 100663296,
+            "shadow_tests": 201325890,
+            "shadow_blocked": 0,
+            "backface_absorbed": 0
+          },
+          {
+            "seed": 2596069104,
+            "primary_hits": 100663296,
+            "shadow_tests": 201325878,
+            "shadow_blocked": 0,
+            "backface_absorbed": 0
+          },
+          {
+            "seed": 81985529216486895,
+            "primary_hits": 100663296,
+            "shadow_tests": 201325937,
+            "shadow_blocked": 0,
+            "backface_absorbed": 0
+          },
+          {
+            "seed": 18364758544493064720,
+            "primary_hits": 100663296,
+            "shadow_tests": 201325906,
+            "shadow_blocked": 0,
+            "backface_absorbed": 0
+          }
+        ]
+      }
+    ],
+    "notes": {
+      "A6c_mesh": {
+        "facet_normal_deviation_rad": 0.01193587100459241,
+        "max_sagitta": 7.123166264477732e-05
+      },
+      "A6c_expected_indirect": [
+        0.5156620156177409,
+        0.2291831180523293,
+        0.057295779513082325
+      ]
+    }
+  },
+  "deterministic_component_bits_primary_exact": true,
+  "native_metadata": {
+    "oracle": "n010-all-split-general",
+    "version": 1,
+    "scene_sha256": "3c9d18a909ed48151ac952ff9100d31df41119f9d85efe876ea3959ce5b51d6c",
+    "geometry_sha256": "1be7dfbcfdac48343c3d00f7cda0614c3bb3e08be8a7f66c635a63b576174b60",
+    "triangles": 81920,
+    "point_lights": 1,
+    "width": 128,
+    "height": 96,
+    "spp": 8192,
+    "seeds": [
+      305419896,
+      2596069104,
+      81985529216486895,
+      18364758544493064720
+    ],
+    "ray_offset": 3.4641016151377544e-12,
+    "runs": [
+      {
+        "seed": 305419896,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s0",
+        "primary_hits": 100663296,
+        "shadow_tests": 201325890,
+        "shadow_blocked": 0,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 331.694,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 301989186,
+          "component_attempts": 100663296,
+          "component_nulls": 0,
+          "own_checks": 100663296,
+          "max_own_log_error": 4.943530029777321e-10,
+          "max_conditioned_error_fraction": 0.0072916657686932776,
+          "max_unconditioned_error_fraction": 213.24303449899367
+        }
+      },
+      {
+        "seed": 2596069104,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s1",
+        "primary_hits": 100663296,
+        "shadow_tests": 201325878,
+        "shadow_blocked": 0,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 335.475,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 301989174,
+          "component_attempts": 100663296,
+          "component_nulls": 0,
+          "own_checks": 100663296,
+          "max_own_log_error": 1.8922747813121532e-09,
+          "max_conditioned_error_fraction": 0.007186512072634134,
+          "max_unconditioned_error_fraction": 55.80635222099242
+        }
+      },
+      {
+        "seed": 81985529216486895,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s2",
+        "primary_hits": 100663296,
+        "shadow_tests": 201325937,
+        "shadow_blocked": 0,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 332.045,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 301989233,
+          "component_attempts": 100663296,
+          "component_nulls": 0,
+          "own_checks": 100663296,
+          "max_own_log_error": 1.4322605323968673e-09,
+          "max_conditioned_error_fraction": 0.007368025425000002,
+          "max_unconditioned_error_fraction": 352.3187508095613
+        }
+      },
+      {
+        "seed": 18364758544493064720,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-a6c-full-v1/A6c.s3",
+        "primary_hits": 100663296,
+        "shadow_tests": 201325906,
+        "shadow_blocked": 0,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 331.684,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 301989202,
+          "component_attempts": 100663296,
+          "component_nulls": 0,
+          "own_checks": 100663296,
+          "max_own_log_error": 6.268372487738816e-10,
+          "max_conditioned_error_fraction": 0.0071937548130378585,
+          "max_unconditioned_error_fraction": 60.58205122722608
+        }
+      }
+    ]
+  },
+  "scope": "Same234 original full A6c only; 11of17 if PASS, other physical/bias/state/prefix/reference gates remain"
+}

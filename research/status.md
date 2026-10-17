@@ -6,21 +6,17 @@
 shortest valid completion path, with low interactive load. No old stopped
 acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
 diagnostics have completed; neither supplies the missing readiness proof.
-Original A6c native234 returned0 with all outputs saved; its analysis stopped
-at missing run_counters metadata. [Repair088](lanes/n010-comparison-readiness/experiments/088-retained-a6c-analysis-repair.md)
-will replay the same retained data. No acquisition, GPU campaign or subsequent
-control queue is running. A6c has no physical verdict until that replay.
+Original full A6c native234 completed; [post-hoc237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json)
+repairs only missing summary metadata and passes the unchanged analytic gates.
+Actual original full physical inventory is **11/17**. No native was retried.
+The next bounded step is the six-scene cost-only236 inventory, under
+[087](lanes/n010-comparison-readiness/experiments/087-remaining-original-controls-cost.md) and
+[dispatch amendment089](lanes/n010-comparison-readiness/experiments/089-retained-a6c-cost-dispatch-amendment.md).
+It creates no full acquisition or GPU queue.
 
-[Read-only idle observation 235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json) records 30.157s
-after the user answered “now”: Brave and IDE DRM counters increased.
-Eight same-UID processes remain inaccessible. This is a post-hoc
-activity observation, not paired precision or causal evidence. No GPU
-work was launched alongside the active A6c CPU acquisition.
-
-[Plan 087](lanes/n010-comparison-readiness/experiments/087-remaining-original-controls-cost.md) prepares the
-six remaining original-scene cost probes. **NOT RUN / NOT QUEUED**; the
-driver refuses live or failed234 and only reports cost, with fixed
-one-core limits. Original full counts and scientific gates stay fixed.
+[Read-only observation235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json)
+retains30.157s of user-declared idle DRM activity; other-app counters increased,
+eight same-UID PIDs inaccessible. No paired precision or causal verdict.
 
 See [cause review 192](lanes/n010-comparison-readiness/results/192-cause-review-and-shortest-valid-completion.md)
 and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/057-bounded-cause-diagnosis-and-critical-path.md).
@@ -29,7 +25,7 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | --- | --- | --- |
 | All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| Whole-path reference candidate | [223](lanes/n010-comparison-readiness/results/223-all-split-general-transport-equivalence.json): exact legacy equivalence; [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json)/[226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json)/[231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json): 10/17 original full controls PASS | [234](lanes/n010-comparison-readiness/results/234-all-split-original-a6c-full-physical-control.json) native0 / analysis metadata failure; retained237 replay pending, then remaining controls, bias, all-state/prefix and feasibility before intake. |
+| Whole-path reference candidate | [223](lanes/n010-comparison-readiness/results/223-all-split-general-transport-equivalence.json): exact legacy equivalence; [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json)/[226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json)/[231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json)/[237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json): 11/17 original full controls PASS | [234](lanes/n010-comparison-readiness/results/234-all-split-original-a6c-full-physical-control.json) native0 / retained237 analytic PASS; six remaining originals, A6b IID, bias, all-state/prefix and feasibility remain. |
 | GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
@@ -246,7 +242,7 @@ and included. At the 215–221 checkpoint there was no retained worker or queue.
 settings/default build change occurred. Unit/regression tests NOT RUN. N010 remains NOT_READY;
 no Lane M comparative superiority result or completion date is asserted.
 
-### General adapter and original physical controls — active A6c acquisition
+### General adapter and original physical controls — A6c completed
 
 [078](lanes/n010-comparison-readiness/experiments/078-all-split-general-transport-and-prefix-reuse.md) adds the original RGB throughput product, one-sided back-face
 absorption and actual 1–8 vertex limit to the sampling target. The geometric
@@ -289,8 +285,8 @@ not reconstructed from the sizing estimate. All failed records remain.
 [233](lanes/n010-comparison-readiness/results/233-posthoc-all-split-general-controls-replay.json) post-hoc rehashes **718 immutable payloads**, replays retained
 218 statistics and nine complete byte comparisons, confirms **18 terminated
 compiler/native identities**, and checks the actual **10/17 original full
-control scenes**. This checkpoint precedes the new live acquisition below.
-The seven pending scenes are A6a, A6b, A6b_level5_diag, A6c, A10, sealed-dark,
+control scenes**. This checkpoint preceded234.
+At233 the seven pending scenes were A6a, A6b, A6b_level5_diag, A6c, A10, sealed-dark,
 sealed-lit. Full A6b independent iid, numerical-bias assessment, all-state/
 exact-prefix and whole-frame feasibility are still required.
 
@@ -301,12 +297,15 @@ estimate, not an N010 completion forecast or a physical PASS. [086](lanes/n010-c
 prospectively bounds a single original full A6c run at one CPU, nice 15,
 4 GiB, 3600 CPU / 5400 elapsed seconds, no retry or following queue.
 
-**Currently RUNNING: [234](lanes/n010-comparison-readiness/results/234-all-split-original-a6c-full-physical-control.json)**, exact original A6c 8192 samples, four
-seeds, whole 128×96. Native PID **69782**, start ticks **473962**, verified live
-at **2026-10-17 04:40:30 UTC** from matching `/proc` identity; tool session
-**78104**. Resume by observing this same acquisition, never starting another
-because a poll expires. Its outcome is **UNMEASURED / INCOMPLETE** while live.
-One CPU only, no GPU, app/display/clock/power changes. No automatic next run.
+**234 native completed**, original8192/fourseed/whole128×96. Native PID69782/
+start473962 is terminal. Actual1331.127171410elapsed/1325.210989000CPU sec;
+all25 payload identities and return0 were saved before a run_counters summary
+KeyError.234 preserves that metadata failure. [237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json)
+explicitly replays the same data with only that missing field added, exact
+analysis inverse and immutable payload checks. Direct geometric violations0;
+indirect relative8.1611197802e-5,NRMSE0.00138358751045: original gates PASS.
+11/17 full artifacts complete; A6a,A6b,A6b_level5_diag,A10,sealed-dark/lit
+remain.087/089 prepares their cost-only inventory236, no automatic full queue.
 
 References remain **16/24**, timing208 remains **FAIL**, direct-error-1.0 pixels
 remain **UNRESOLVED / 未解決** and included. Original seeds/slots/cap/thresholds
