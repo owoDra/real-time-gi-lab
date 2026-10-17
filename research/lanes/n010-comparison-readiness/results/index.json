@@ -1303,6 +1303,12 @@
       "status": "complete-2048-raw-frames-symmetric-interleaved-means-four-of-seven-precision-gates-pass-overall-fail-stop",
       "result": "248-interleaved-four-frame-c7-precision-diagnostic.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-249",
+      "status": "methodology-review-prospective-effect-uncertainty-direction-no-new-calibration-no-reclassification-not-ready",
+      "result": "249-comparison-criteria-review.md",
+      "gpu_run": false
     }
   ]
 }

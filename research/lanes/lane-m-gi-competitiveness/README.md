@@ -42,6 +42,17 @@ proofs 145/146 but fails the unchanged bounded feasibility rule in 147 and stops
 Prepared plan-041 intake is inactive. These outcomes do not qualify references
 or start the accepted Lane M campaign.
 
+## Timing criteria review — 2026-10-17
+
+[N010 review249](../n010-comparison-readiness/results/249-comparison-criteria-review.md)
+prioritizes a prospective effect/uncertainty method, including ordering-bias
+handling, over further environment tuning to meet fixed stability percentages.
+GPU Renderer time, matched quality, full costs and true-peak memory remain
+comparison axes. Timing can be inconclusive without erasing quality/memory
+outcomes. This review is not an amended executable registration or accepted
+calibration: old FAILs remain, all corpus rows remain, and the existing N010
+entry gate is not bypassed. No accepted Lane M campaign has started.
+
 ## Timing and memory handoff identity
 
 The prepared N010 [proof-intake policy](../n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)

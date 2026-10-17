@@ -139,6 +139,23 @@ A later methodology change is allowed only when diagnostics justify it. Freeze
 the new protocol before the next accepted campaign and do not silently mix old
 and new timing evidence.
 
+### N010 timing criteria review (2026-10-17)
+
+The user-requested [N010 review249](lanes/n010-comparison-readiness/results/249-comparison-criteria-review.md)
+adopts an effect/uncertainty direction for a future timing amendment. GPU
+Renderer time remains primary. Environment-sensitive control annotations
+must have a prospectively defined relationship to the claim's uncertainty
+and possible systematic bias; a fixed stability percentage is not by itself
+an architecture quality verdict. Inconclusive timing preserves valid quality
+and memory observations. CPU wall and read-only telemetry remain diagnostic.
+
+This review supplies no replacement numerical gates or accepted calibration.
+Before fresh accepted timing, freeze the estimator, effect/uncertainty margins,
+bias handling, repetition units, ordering, finite resource/stopping budget,
+multiple-comparison treatment and actual-boundary calibration. The historical
+Lane K/L and N010 numerical rules below remain the rules for their original
+records. No old FAIL is reclassified and no current preflight is bypassed.
+
 ### Post-Lane-H calibration requirement
 
 After Lane G/H, a new timing methodology intended to support architecture
