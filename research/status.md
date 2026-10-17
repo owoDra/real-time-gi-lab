@@ -74,6 +74,14 @@ BVH source and running259 inputs remain pinned. Generation/compiler/runtime
 are NOT RUN; no dispatch while any scientific worker is live. This supplies
 the build procedure for the existing exact-prefix obligation, not new proof
 or another reference-admission gate.
+[Plan109](lanes/n010-comparison-readiness/experiments/109-wide8-state-prefix-checkpoints.md)
+and its prepared driver retain all24 full-frame16spp state cases and both
+C7 full-frame8192-to-16384 prefix cases, with all four seeds. Each of the78
+native steps needs an explicit invocation after prior terminal PASS and full
+physical/IID/build prerequisites; no next-step queue. Images/hits/scored
+counters and combined interval proposal audits must match exactly. This code
+is NOT RUN, pending the original sphere controls and prefix build. No new
+reference eligibility or density/bias proof is claimed.
 [Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.

@@ -1,5 +1,11 @@
 # N010 protocols
 
+[109 — wide8 full-state and exact-prefix checkpoints](109-wide8-state-prefix-checkpoints.md)
+implements all24 full-frame16spp cases and both C7 actual8192-to-16384 prefix
+cases with four original seeds. One explicit native per invocation,78 steps
+and a separate all-scope summary. Prepared NOT RUN, pending full physical/IID
+and prefix build proof; no automatic queue or reference-admission claim.
+
 [108 — separate wide8 continuation build](108-wide8-prefix-build.md)
 prepares the executable needed for the existing exact-prefix obligation.
 Dyadic f64 sum restoration and scored counters retain the original indices;
