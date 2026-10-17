@@ -21,3 +21,8 @@ Work:out/research/n010-comparison-readiness/simd-slab-neutral-padding-v1
 Result:results/243-simd-slab-neutral-padding-prototype.json
 Driver:scripts/research/n010_reference_sampling/diagnose_simd_slab_neutral_padding.py
 Include:scripts/research/n010_reference_sampling/simd_slab_neutral_padding.inc
+
+Pre-acquisition bootstrap at f991b81 stopped in include inverse verification:
+a literal + in the Python expected string disagreed with the C++ include.
+No work directory, compiler or native was started. Correct only that expected
+string before acquisition; the C++ include and all scientific guards stay exact.

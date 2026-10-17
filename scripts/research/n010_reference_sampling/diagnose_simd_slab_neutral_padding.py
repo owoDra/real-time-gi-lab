@@ -12,7 +12,7 @@ D.checked(SEALED094)
 old_include=D.checked(Path(__file__).with_name('simd_slab_cpu_bvh.inc')).decode()
 new_include=D.checked(Path(__file__).with_name('simd_slab_neutral_padding.inc')).decode()
 old='const auto nan = _mm256_cmp_pd(a, b, _CMP_UNORD_Q);'
-new='const auto nan = _mm256_or_pd(_mm256_cmp_pd(a, b, _CMP_UNORD_Q),\n+            _mm256_castsi256_pd(_mm256_set_epi64x(-1LL, 0, 0, 0)));'
+new='const auto nan = _mm256_or_pd(_mm256_cmp_pd(a, b, _CMP_UNORD_Q),\n            _mm256_castsi256_pd(_mm256_set_epi64x(-1LL, 0, 0, 0)));'
 if D.once(old_include,old,new)!=new_include or D.once(new_include,new,old)!=old_include:
     raise ValueError('padding-only include/inverse differs')
 source=SEALED094.read_text()
