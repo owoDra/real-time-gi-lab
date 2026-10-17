@@ -775,3 +775,19 @@ power unchanged. A6c PID69782/start473962 remains the same live acquisition.
 Raw observation SHA256: `71ec68bd9e5b370d6fa4e4a3ea56cc294adf66c5d9cbb3c598e00c32e3d368ba`.
 
 Exact terminal235 SHA256: `f7d572d66a56a97147b5994404b6f8f6a44e5a02e12be1468f9b906761579aad`.
+
+
+## Preparation of the next cost decision (NOT RUN)
+
+087 and size_all_split_remaining_controls.py prepare a six-scene,8spp,
+whole128x96,four-original-seed cost inventory on unchanged224. It refuses
+live/failed234 and any concurrent research worker before creating output.
+One native at a time,oneCPU nice15,4GiB;90CPU/120elapsed per native within
+180CPU/240elapsed total native budgets. Record native terminal evidence before
+analysis, including timeout resource deltas. Original physical counts remain
+8192/8192/256/8192/1024/1024; no quality claim, changed threshold, independent
+IID substitute or automatic full queue.236 does not exist until acquisition.
+The controller is prepared but NOT RUN; no unit/regression tests were run.
+This avoids committing an unmeasured multi-bounce full workload while A6c
+still runs. A6b_level5_diag is diagnostic only in the original control law;
+its presence in the17-scene artifact inventory does not create a new gate.

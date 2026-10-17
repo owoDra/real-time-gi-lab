@@ -16,6 +16,11 @@ Eight same-UID processes remain inaccessible. This is a post-hoc
 activity observation, not paired precision or causal evidence. No GPU
 work was launched alongside the active A6c CPU acquisition.
 
+[Plan 087](experiments/087-remaining-original-controls-cost.md) prepares the
+six remaining original-scene cost probes. **NOT RUN / NOT QUEUED**; the
+driver refuses live or failed234 and only reports cost, with fixed
+one-core limits. Original full counts and scientific gates stay fixed.
+
 See [cause review 192](results/192-cause-review-and-shortest-valid-completion.md)
 and [prospective bounded plan 057](experiments/057-bounded-cause-diagnosis-and-critical-path.md).
 
