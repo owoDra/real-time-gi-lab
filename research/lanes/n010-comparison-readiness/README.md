@@ -20,7 +20,14 @@ precedes any long full control. No acquisition or GPU/full-control queue runs.
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
 41.859831/42.641725=0.981664 fails its prospective<=0.75 execution condition;
 stop this candidate before full controls. This single-run sizing comparison
-does not demonstrate a speedup. CPU profiling is the next diagnosis.
+does not demonstrate a speedup. [Original profiles240](results/240-original-all-split-cpu-profile-local-linker.json)
+complete with exact A6a payloads. [Post-hoc inline attribution241](results/241-posthoc-cpu-profile-inline-attribution.json)
+uses an unexecuted debug companion with identical .text bytes/addresses/symbols.
+A6a/C1 samples: BVH slab45.79/46.98%, remaining traversal27.51/26.51%, triangle
+intersection18.23/18.40%. All4256/3342 original samples remain denominators;
+77/75 unannotated samples retained. Zero reported lost samples. This diagnoses
+CPU reference cost, not GPU precision or GI superiority. Optimize the dominant
+box predicate with exact original query/output checks before any full queue.
 
 [Read-only observation235](results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,

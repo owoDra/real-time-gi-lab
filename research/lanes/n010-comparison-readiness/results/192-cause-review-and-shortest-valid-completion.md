@@ -872,3 +872,39 @@ GPU-time threshold was used. Original physical inventory11/17,references16/24,
 timing208FAIL,direct1.0UNRESOLVED/未解決 included. Full objective incomplete.
 
 Terminal238 SHA256: `5ea7ca9e64934a19479339b17e6f909fc0461d439ad37b2ee6d498c7bb6e7b90`.
+
+
+## Original CPU profiles and post-hoc inline attribution
+
+239 preserves a bootstrap linker failure before any profile/native execution.
+092's environment-only strict-inverse dispatch240 removes LD_LIBRARY_PATH only
+from perf/its children, retaining original224 binary/counts/seeds. No system or
+app changes. Both own-user-IP-only profiles completed: A6a8spp/four seeds/full
+128x96, C1 one spp/four seeds/full320x180. A6a all21 payloads and integer/proposal
+audits exactly match236. Profile-root+descendant CPU includes overhead:
+A6a42.901428CPU/43.251436elapsed, C1 33.702783CPU/33.945753elapsed seconds.
+C1 low count supplies no physical, convergence or cap verdict.
+
+093/241 compiles exact224 source/flags with only -g/output path changed, NEVER
+executes it, and verifies identical .text address/bytes and every text symbol
+address/name before offline addr2line mapping. This interpretation is POST-HOC.
+
+| Original case | All IP samples | Slab | Remaining traversal | Triangle intersection | Unannotated |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| A6a | 4256 | 1949 (45.7942%) | 1171 (27.5141%) | 776 (18.2331%) | 77 |
+| C1 | 3342 | 1570 (46.9779%) | 886 (26.5111%) | 615 (18.4022%) | 75 |
+
+Zero reported lost samples; all original samples remain denominators. Inline
+frames, all address/count/category rows, executable and shared-library reports
+and raw IP samples retained. Sampling/skid/line-table coverage/user-only scope
+limit attribution. This locates dominant reference CPU cost in BVH box/loop
+work. It neither explains GPU precision nor proves a complete cause or speedup.
+The near-first238 candidate remains stopped. Next optimize the box predicate
+with original node/query/output identity checks. No full physical queue;
+11/17 physical,16/24references,N010 NOT_READY; tests NOT RUN.
+
+Terminal239 SHA256: `180f22a88c10c6fd9d6eb18eab39790b00c4912521173bf1876ea776628d08ca`.
+
+Terminal240 SHA256: `571c3bef164911e1662956008237236ea09c94a6b6653403fbb9469494c8f1ff`.
+
+Terminal241 SHA256: `d6dea5b8ae136d52f00c303cda0e96458cf837e24ecd212a5dfe33c714b6c3f2`.

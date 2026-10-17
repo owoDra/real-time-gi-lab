@@ -1243,6 +1243,24 @@
       "status": "complete-53-million-query-and-payload-bit-equivalence-pass-execution-ratio098166-fails-prospective075-stop-no-full-dispatch",
       "result": "238-near-first-cpu-bvh-prototype.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-239",
+      "status": "terminal-bootstrap-linker-failure-before-any-profile-or-native-no-retry",
+      "result": "239-original-all-split-cpu-profile.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-240",
+      "status": "complete-original-a6a-and-c1-user-ip-only-cpu-profiles-a6a-payloads-exact-no-admission",
+      "result": "240-original-all-split-cpu-profile-local-linker.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-241",
+      "status": "complete-posthoc-byte-exact-unexecuted-debug-companion-attributes-dominant-cpu-samples-to-bvh-no-admission",
+      "result": "241-posthoc-cpu-profile-inline-attribution.json",
+      "gpu_run": false
     }
   ]
 }
