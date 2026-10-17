@@ -2,6 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
+[Plan112](lanes/n010-comparison-readiness/experiments/112-full-frame-depth-split-hybrid-build.md) prepares the isolated full-frame/depth-split hybrid build: bounded tiles, unchanged full-sample CPU fallback, routing-reason telemetry and per-replicate aggregate evidence. Generation/compilation/native acquisition **NOT RUN**; this plan authorizes compilation only. New numerical/full-frame/prefix evidence and final intake remain required. No environmental stability-tuning campaign.
+
 **Current priority: finish missing references/physical proof and qualify the
 selected comparison boundaries.** Following
 [review249](lanes/n010-comparison-readiness/results/249-comparison-criteria-review.md),
