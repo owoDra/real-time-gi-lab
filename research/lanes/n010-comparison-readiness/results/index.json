@@ -1219,6 +1219,12 @@
       "status": "running-one-core-original-a6c-full8192-physical-control-no-decision-no-following-queue",
       "result": "234-all-split-original-a6c-full-physical-control.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-235",
+      "status": "complete-posthoc-read-only-natural-idle-positive-other-app-drm-deltas-no-paired-precision-or-causal-verdict",
+      "result": "235-posthoc-natural-idle-read-only-observation.json",
+      "gpu_run": false
     }
   ]
 }

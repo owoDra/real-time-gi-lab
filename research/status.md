@@ -10,6 +10,12 @@ One registered original A6c CPU control is running (234, one low-priority
 core). No full-frame reference ladder, GPU campaign or subsequent-control queue
 is running or queued.
 
+[Read-only idle observation 235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json) records 30.157s
+after the user answered “now”: Brave and IDE DRM counters increased.
+Eight same-UID processes remain inaccessible. This is a post-hoc
+activity observation, not paired precision or causal evidence. No GPU
+work was launched alongside the active A6c CPU acquisition.
+
 See [cause review 192](lanes/n010-comparison-readiness/results/192-cause-review-and-shortest-valid-completion.md)
 and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/057-bounded-cause-diagnosis-and-critical-path.md).
 

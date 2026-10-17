@@ -757,3 +757,21 @@ Exact terminal record SHA256 (234 is mutable acquisition state, excluded):
 - 231: `4ca006c299fda61accc6e78eee7b3a5dba543f4f505ecf2f2ed5dcc3fb26051e`
 - 232: `e493feffc868477258d284efc0b081fe2af065b6112bca392b17c89ab13e4e7d`
 - 233: `842de54fc3af69ad403545cee00fd4ccb70bfc92eeac3a8ecc295ef0eed34615`
+
+
+## User-declared idle read-only observation while A6c continues
+
+235 is explicitly post-hoc, read-only and separate from original natural-idle
+197. The latest “now” answer was honored with seven DRM-accounting snapshots
+over30.156964s; no concurrent scientific acquisition or GPU load was started
+under086. Brave surviving-client increments: gfx98,479,386ns,compute937,102ns,
+enc631,024,838ns. IDE: gfx36,104,708ns,compute530,143ns. Eight same-UID
+processes are inaccessible in every snapshot. Counter increments establish
+activity over this coarse interval, not per-query interference, global
+quiescence, clock behavior or causality. Full paired precision remains NOT RUN
+for this observation. No samples or apps were removed; settings/display/clock/
+power unchanged. A6c PID69782/start473962 remains the same live acquisition.
+
+Raw observation SHA256: `71ec68bd9e5b370d6fa4e4a3ea56cc294adf66c5d9cbb3c598e00c32e3d368ba`.
+
+Exact terminal235 SHA256: `f7d572d66a56a97147b5994404b6f8f6a44e5a02e12be1468f9b906761579aad`.

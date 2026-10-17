@@ -1,0 +1,87 @@
+{
+  "schema": "n010-posthoc-read-only-natural-idle-observation/1",
+  "complete": true,
+  "classification": "POSTHOC_READ_ONLY_OTHER_APP_GPU_ACTIVITY_NO_PRECISION_OR_CAUSAL_VERDICT",
+  "gpu_run": false,
+  "scientific_acquisition": false,
+  "user_declared_idle": true,
+  "started_utc": "2026-10-17T04:45:10.950491+00:00",
+  "finished_utc": "2026-10-17T04:45:41.107685+00:00",
+  "elapsed_seconds": 30.156963612,
+  "snapshot_count": 7,
+  "surviving_clients": [
+    {
+      "client": "0000:c5:00.0/15",
+      "processes": [
+        {
+          "pid": 2030,
+          "comm": ".quickshell-wra"
+        }
+      ],
+      "engine_deltas_ns": {
+        "drm-engine-gfx": 0,
+        "drm-engine-compute": 0
+      }
+    },
+    {
+      "client": "0000:c5:00.0/12",
+      "processes": [
+        {
+          "pid": 2054,
+          "comm": "Xwayland"
+        }
+      ],
+      "engine_deltas_ns": {
+        "drm-engine-gfx": 0,
+        "drm-engine-compute": 0
+      }
+    },
+    {
+      "client": "0000:c5:00.0/25",
+      "processes": [
+        {
+          "pid": 3473,
+          "comm": "brave"
+        }
+      ],
+      "engine_deltas_ns": {
+        "drm-engine-gfx": 98479386,
+        "drm-engine-compute": 937102,
+        "drm-engine-enc": 631024838
+      }
+    },
+    {
+      "client": "0000:c5:00.0/31",
+      "processes": [
+        {
+          "pid": 3784,
+          "comm": "orca-ide"
+        }
+      ],
+      "engine_deltas_ns": {
+        "drm-engine-gfx": 36104708,
+        "drm-engine-compute": 530143
+      }
+    }
+  ],
+  "inaccessible_same_uid_pids_each_snapshot": [
+    8,
+    8,
+    8,
+    8,
+    8,
+    8,
+    8
+  ],
+  "raw_observation": "out/research/n010-comparison-readiness/natural-idle-read-only-20261017T0446.json",
+  "raw_sha256": "71ec68bd9e5b370d6fa4e4a3ea56cc294adf66c5d9cbb3c598e00c32e3d368ba",
+  "observer_source": "scripts/research/n010_reference_sampling/observe_natural_idle_c7.py:snapshot",
+  "observer_source_sha256": "65b04d34fdfa15d5e46752e53356937f75481467faaef07452a8044d76e826a7",
+  "scope": "Same-UID DRM counters only. Existing CPU A6c PID69782 continues unchanged. No settings/app/process mutation; not a paired GPU precision experiment or global quiescence/causality proof.",
+  "paired_precision_acquisition": "NOT_RUN; existing plan086 A6c native PID69782 is active. No concurrent scientific worker/GPU acquisition. Do not infer paired precision from this read-only observation.",
+  "settings_apps_display_clock_power_changes": false,
+  "samples_excluded": 0,
+  "reference_admission": false,
+  "n010_state": "NOT_READY",
+  "unit_regression_tests": "NOT_RUN"
+}
