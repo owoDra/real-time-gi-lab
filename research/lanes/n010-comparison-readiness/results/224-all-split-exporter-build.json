@@ -1,0 +1,52 @@
+{
+  "schema": "n010-all-split-exporter-build/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "ISOLATED_EXPORTER_BUILD_PASS_NO_RUNTIME_ADMISSION",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/build_all_split_exporter.py": "6989ce18395a7554fc7e2044f3f8746fb4a3a268a0208cc9cd8707f1daecb856",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/080-all-split-exporter-and-full-sidedness-controls.md": "fc229c0915ced102edf11e3ca8128bef58d52a0d7e3dd6d3da17fb403fabaa5c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/223-all-split-general-transport-equivalence.json": "2f5c516468153b1aea04021530c10eaca0b1c89dfc50045a40f688ddb6def1c7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/main.cpp": "17050ecba7d6e1144b445ca97a12ff3e39c22f5e1826e4e6332909a07230f264",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/n010_rqmc_oracle.hpp": "4d30511cae07449948898bf374bf329a5ed1173118ecf07de63bffd8512895b6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/n010_whole_path_diagnostic": "8aa5e97b24176665585c79d24d864fba2968c6b9d1fd993a745d7bf1225cb63f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/step-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/step-1.stderr": "254b67aa14b9249e83609bf9dd4d2b0369bb2481c11ac648772b41e132fb87ab",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/step-0.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/step-1.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/data.json": "d0f29a4ac93af084771fb2ec1f373c7ebf05f8547f9cfd5d36b3a3e01c2f1a67",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/pixels.txt": "435d39a925b0492669e4f9e0c9ec42c8a40fb2b2e5a33c1f635f2bfa7075819d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/step-0.resources.json": "a1d05bbb15a3add000563e1243b89f768ca1d5db38cffb07e892e4052793cedc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-general-transport-v2/step-1.resources.json": "dbeed83b5cd7eb730f1e69b22640c8d81ba815cd306a48b53afac2133b8c5320",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle/n008_oracle_main.cpp": "53c597bbff3772c5710f297d1eb74d64a15ead5b43ec2bc42d80d63a2761ec03",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.resources.json": "0e1278bce19369e8cac4c48643ab1033b5415b1d3be564c94d1435574fc74fcc"
+  },
+  "source_commit": "673a1b87acbd59aa7f9f119149aea6b91406c691",
+  "header_and_main_inverses_exact": true,
+  "command": [
+    "c++",
+    "-std=c++20",
+    "-O3",
+    "-fno-fast-math",
+    "-ffp-contract=off",
+    "-pthread",
+    "-I",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/main.cpp",
+    "-o",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle"
+  ],
+  "tests": "NOT_RUN; standalone scientific exporter build only",
+  "returncode": 0,
+  "elapsed": 3.051523756000279,
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/main.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_rqmc_oracle.hpp": "47315cba3ca8c2bfa4dec9dc5cc233bb03e03e21551502e4f27405d626f7f048",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.resources.json": "0e1278bce19369e8cac4c48643ab1033b5415b1d3be564c94d1435574fc74fcc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle": "883e0540f595299e376eea9d289d77bccec0bf13d7f7f5b1b9dff30358dfb294",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stderr": "e8e50b08a6e9a537d11cd6467e4139a74aac9e5a15d1f3d876f7564fda5402e3"
+  }
+}
