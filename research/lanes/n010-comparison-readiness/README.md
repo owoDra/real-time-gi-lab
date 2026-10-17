@@ -2,14 +2,18 @@
 
 ## Current execution checkpoint — 2026-10-17 JST
 
-**Current priority: comparison criteria review.** [Review249](results/249-comparison-criteria-review.md)
-responds to the user's concern about environment-sensitive gates. Keep GPU
-Renderer time, matched quality and true-peak memory; replace repeated attempts
-to meet fixed stability percentages with a prospective effect/uncertainty
-method that also addresses systematic bias. Exact statistical registration
-and fresh calibration remain pending. Old FAILs remain; this review accepts
-no timing or readiness evidence. Telemetry is optional diagnosis, not the
-next blocking prerequisite. No new acquisition is launched.
+**Current priority: finish missing CPU physical evidence.** Following
+[review249](results/249-comparison-criteria-review.md),
+[plan100](experiments/100-order-aware-timing-uncertainty.md) was committed
+before the new twelve-process [250 acquisition](results/250-uncertainty-c7-calibration-diagnostic.json).
+[Outcome251](results/251-order-aware-calibration-outcome.md):
+**timing capability INCONCLUSIVE**, effect interval[0.889520,1.639825].
+A loaded same-role BA control has a large process11 shift; retain every
+sample. All2880 frames/images/scratch/owned ledgers pass integrity, no retry.
+This is no accepted timing or readiness proof. Stop this method; no new GPU
+queue. Next prepare the unchanged original full sealed-room CPU controls
+under one-core low-priority finite limits. All other missing controls and
+reference slots remain required. Telemetry is optional, not a prerequisite.
 
 **N010 remains NOT_READY.** User resumed work for cause diagnosis and the
 shortest valid completion path, with low interactive load. No old stopped
@@ -55,8 +59,8 @@ span1.040768,order bias1.023116 FAIL. Both methods stop; dose1301 remains frozen
 from246. All individual timestamps/images/scratch/owned ledgers retained,
 owned peak516,167,104bytes and teardown zero. No single-frame precision or
 all16 transfer is claimed. Averaging and symmetric positions have not supplied
-accepted timing or established its cause. Review249 now takes priority over
-new telemetry implementation or another precision measurement design.
+accepted timing or established its cause. Review249 led to prospective100
+and completed250/251; the new decision is also inconclusive, without a2% cut.
 No full campaign or native/GPU research worker remains.
 
 [Read-only observation235](results/235-posthoc-natural-idle-read-only-observation.json)

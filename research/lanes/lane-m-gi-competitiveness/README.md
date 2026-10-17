@@ -49,9 +49,13 @@ prioritizes a prospective effect/uncertainty method, including ordering-bias
 handling, over further environment tuning to meet fixed stability percentages.
 GPU Renderer time, matched quality, full costs and true-peak memory remain
 comparison axes. Timing can be inconclusive without erasing quality/memory
-outcomes. This review is not an amended executable registration or accepted
-calibration: old FAILs remain, all corpus rows remain, and the existing N010
-entry gate is not bypassed. No accepted Lane M campaign has started.
+outcomes. Subsequent [plan100](../n010-comparison-readiness/experiments/100-order-aware-timing-uncertainty.md)
+registers the concrete replacement method before new C7 acquisition.
+[250/251](../n010-comparison-readiness/results/251-order-aware-calibration-outcome.md)
+completes twelve processes but remains timing-inconclusive, with control-
+allowance interval[0.889520,1.639825]. No accepted calibration: old FAILs and
+all corpus rows remain, and the existing N010 entry gate is not bypassed.
+No accepted Lane M campaign has started.
 
 ## Timing and memory handoff identity
 

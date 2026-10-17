@@ -149,10 +149,14 @@ and possible systematic bias; a fixed stability percentage is not by itself
 an architecture quality verdict. Inconclusive timing preserves valid quality
 and memory observations. CPU wall and read-only telemetry remain diagnostic.
 
-This review supplies no replacement numerical gates or accepted calibration.
-Before fresh accepted timing, freeze the estimator, effect/uncertainty margins,
-bias handling, repetition units, ordering, finite resource/stopping budget,
-multiple-comparison treatment and actual-boundary calibration. The historical
+The subsequent [plan100](lanes/n010-comparison-readiness/experiments/100-order-aware-timing-uncertainty.md)
+freezes a twelve-process order-aware median interval, loaded/unloaded controls,
+explicit conditional bias allowance, a1.20 interval-width resolution and finite
+stopping/resource limits. Fresh C7 [250/251](lanes/n010-comparison-readiness/results/251-order-aware-calibration-outcome.md)
+completes but timing capability is **inconclusive**, interval[0.889520,1.639825].
+It supplies no accepted calibration or all-boundary qualification. Before any
+accepted candidate timing, actual-boundary calibration and prospective
+comparison multiplicity/quality/coverage registration remain required. The historical
 Lane K/L and N010 numerical rules below remain the rules for their original
 records. No old FAIL is reclassified and no current preflight is bypassed.
 

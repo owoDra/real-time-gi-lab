@@ -1309,6 +1309,18 @@
       "status": "methodology-review-prospective-effect-uncertainty-direction-no-new-calibration-no-reclassification-not-ready",
       "result": "249-comparison-criteria-review.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-250",
+      "status": "complete-prospective-twelve-process-2880-frame-integrity-pass-timing-capability-inconclusive-no-retry",
+      "result": "250-uncertainty-c7-calibration-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-251",
+      "status": "posthoc-complete-same250-order-aware-interval-inconclusive-loaded-ba-control-shift-no-exclusions-no-admission",
+      "result": "251-order-aware-calibration-outcome.md",
+      "gpu_run": false
     }
   ]
 }
