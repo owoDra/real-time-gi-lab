@@ -38,10 +38,17 @@ passes12,013,100,580 acquired /4,763,926,019 cached box comparisons and all
 fails<=0.75; stop it too. Original244 verifier compile error retained;097 is
 an explicit verifier-only build repair, not a scientific gate change. Neither
 SIMD design supplies sufficient execution scaling. No full-control queue.
-Next GPU-side diagnostic098 changes the observation unit to four-frame means
-with every raw frame retained and unchanged precision cuts; no claim of reduced
-single-frame jitter or transfer to other boundaries. It is prospectively
-registered, has not been acquired at this checkpoint, and has no full campaign.
+[Four-frame mean247](results/247-four-frame-c7-precision-diagnostic.json)
+completes2048 raw frames/512 observations,6/7 precision gates PASS but control
+order bias1.024851>1.02 FAIL. [Symmetric interleaved248](results/248-interleaved-four-frame-c7-precision-diagnostic.json)
+also completes2048 raw frames,4/7 gates PASS; control envelope1.029850,
+span1.040768,order bias1.023116 FAIL. Both methods stop; dose1301 remains frozen
+from246. All individual timestamps/images/scratch/owned ledgers retained,
+owned peak516,167,104bytes and teardown zero. No single-frame precision or
+all16 transfer is claimed. Averaging and symmetric positions have not supplied
+accepted timing or established its cause. Next inspect read-only GPU telemetry
+capability and actual timing alignment before another measurement design.
+No full campaign or native/GPU research worker remains.
 
 [Read-only observation235](results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,

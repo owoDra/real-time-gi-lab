@@ -1285,6 +1285,24 @@
       "status": "complete-12-billion-acquired-and-4-billion-cached-box-and-53-million-query-equivalence-pass-cost-ratio1042-fails075-stop",
       "result": "245-batched-box-verifier-repaired-prototype.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-246",
+      "status": "complete-four-frame-static-c7-sizing-dose1301-frozen-no-timing-admission",
+      "result": "246-four-frame-c7-sizing.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-247",
+      "status": "complete-2048-raw-frames-four-frame-means-six-of-seven-precision-gates-pass-overall-fail-stop",
+      "result": "247-four-frame-c7-precision-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-248",
+      "status": "complete-2048-raw-frames-symmetric-interleaved-means-four-of-seven-precision-gates-pass-overall-fail-stop",
+      "result": "248-interleaved-four-frame-c7-precision-diagnostic.json",
+      "gpu_run": true
     }
   ]
 }

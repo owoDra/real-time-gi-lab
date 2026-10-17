@@ -984,3 +984,55 @@ changes. CPU workers are terminal before any GPU dispatch. Tests NOT RUN.
 Terminal244 SHA256: `36f99c2bd4cdbe07ebf79ab8be7521d60bc24a681a183ea5dca67d09600cae89`.
 
 Terminal245 SHA256: `00033ab30d610c9221e12f06a581a92f506a833155977e37f2e9df8b6d4a7a74`.
+
+
+## Four-frame GPU observation methods: both complete precision FAIL
+
+098/246 completes36raw frames/9sizing observations, dose1301 frozen from
+positive original slopes; median zero-dose four-frame GPU154.2330447us.
+247 uses exact206 static C7 binary/shaders and original seven cuts on512means
+of2048retained raw frames,8fresh processes,one-second settles. Images/scratch/
+ledger/spool/identity/resource checks pass, all8natives0. Original observation
+unit changed explicitly; no single-frame/dynamic/all16 proof is claimed.
+
+| Precision quantity | Frozen cut | Consecutive-four247 | Symmetric-interleaved248 |
+| --- | --- | ---: | ---: |
+| Control envelope | <=1.02 | 1.015459077 PASS | 1.029850076 FAIL |
+| Control span | <=1.03 | 1.021331477 PASS | 1.040768444 FAIL |
+| Control order bias | <=1.02 | 1.024851451 FAIL | 1.023116344 FAIL |
+| Effect span | <=1.05 | 1.029404222 PASS | 1.025983346 PASS |
+| Effect order bias | <=1.03 | 1.021840376 PASS | 1.022558455 PASS |
+| Minimum positive fraction | >=0.75 | 0.916666667 PASS | 0.916666667 PASS |
+| Minimum effect | >control envelope | 1.184458284 PASS | 1.179454389 PASS |
+
+247 overallFAIL (6/7), stopped.099 prospectively changes only paired raw frame
+placement to0,1,1,0,1,0,0,1, equal temporal centroids per arm. Its initial outer
+mode-parser edit bootstrap fails before any native/work; corrected outer guard
+is documented in099/Git.248 completes all8processes/2048raw frames/512means
+with explicit one-to-one raw index maps, same immutable246dose/environment/
+binary, unchanged original schedule labels/classifier/cuts, all native0.
+248 overallFAIL(4/7), stopped. AB/BA here identifies first actual arm occurrence;
+whole arms are interleaved. No inference that conventional sequential AB/BA
+precision passed, no post-hoc row removal/threshold increase/native retry.
+
+For both methods actual owned Vulkan peak516,167,104bytes,teardown zero, CPU
+RGBA<=256MiB/scratch<=16MiB/packed Vulkan staging<=256MiB, retained work about
+4.382GB each<=6GiB. GPU measured-interval sums0.309109151/0.301406196seconds;
+these exclude setup/output/fence/inter-frame gaps and are NOT total wall time
+or an interactive-load guarantee. One nice15CPU and no other scientific worker.
+Every original raw frame/image/scratch/timestamp remains retained, no smoothing
+across observations. These uncontrolled distinct runs neither establish a
+performance improvement nor identify clock/app/drift causation. Symmetric
+positions have not supplied accepted precision; do not tune another repeat count
+blindly. Next inspect read-only GPU telemetry capability/timestamp alignment.
+
+Original full physical11/17,eligible16/24, original208per-frame precisionFAIL,
+max-relative-error1.0direct pixelsUNRESOLVED/未解決 included; N010 NOT_READY.
+No original result changes or default Renderer/build promotion. Tests NOT RUN.
+No native/controller/GPU scientific worker or full queue remains.
+
+Terminal246 SHA256: `77b98ecdc30e98d4caca5551eee540dce5102e21ee677793d442bf0b8daa787d`.
+
+Terminal247 SHA256: `f9bc9f7249788245f2ab6de5e79fb5ad3262c7ecf780cf915c492ae4e527bcfa`.
+
+Terminal248 SHA256: `9d39b790a656b2129dc271d595b7d2ccfda61dcd3d5e61dd93e344760ae5134a`.
