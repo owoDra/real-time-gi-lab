@@ -82,6 +82,14 @@ physical/IID/build prerequisites; no next-step queue. Images/hits/scored
 counters and combined interval proposal audits must match exactly. This code
 is NOT RUN, pending the original sphere controls and prefix build. No new
 reference eligibility or density/bias proof is claimed.
+[Plan110](lanes/n010-comparison-readiness/experiments/110-whole-path-hybrid-prototype-build.md)
+prepares an isolated Vulkan FP64/CPU all-split execution prototype, using
+retained095 physical helpers and the selected254 CPU fallback. Every uncertain
+sample is recomputed in full on one CPU worker; all routing/raw/corrected
+samples are retained. Scope is only the original C1 eight diagnostic pixels,
+not full-frame references. Scaled-density GPU arithmetic, numerical agreement,
+cost and interactive latency remain unverified. Build/runtime NOT RUN; no
+dispatch while259 is live and no replacement of106/108/109 or intake gates.
 [Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.

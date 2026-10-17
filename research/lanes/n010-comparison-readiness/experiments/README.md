@@ -1,5 +1,12 @@
 # N010 protocols
 
+[110 — selected-pixel all-split hybrid build](110-whole-path-hybrid-prototype-build.md)
+prepares a separate Vulkan FP64 path using095 helpers, scaled densities and
+complete selected254 CPU recomputation for every uncertain sample. Only the
+fixed C1 eight-pixel diagnostic; raw/corrected values and flags are retained.
+Build/runtime NOT RUN, no native execution authorized by this build plan,
+no overlap with259 or transfer of old GPU qualification.
+
 [109 — wide8 full-state and exact-prefix checkpoints](109-wide8-state-prefix-checkpoints.md)
 implements all24 full-frame16spp cases and both C7 actual8192-to-16384 prefix
 cases with four original seeds. One explicit native per invocation,78 steps
