@@ -1321,6 +1321,12 @@
       "status": "posthoc-complete-same250-order-aware-interval-inconclusive-loaded-ba-control-shift-no-exclusions-no-admission",
       "result": "251-order-aware-calibration-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-252",
+      "status": "complete-original-full-sealed-dark1024spp-four-seeds-all-zero-physical-pass-twelve-of17-no-reference-admission",
+      "result": "252-all-split-original-sealed-dark-full-control.json",
+      "gpu_run": false
     }
   ]
 }

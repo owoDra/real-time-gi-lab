@@ -1,0 +1,265 @@
+{
+  "schema": "n010-all-split-original-sealed-full-control/1",
+  "name": "sealed-dark",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "ORIGINAL_FULL_SEALED_PHYSICAL_COMPLETE_NO_ADMISSION",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/validate_all_split_sealed_full.py": "45b18e625835542041f070aec3121599fb7a41300b93db1724a942cc3bf68a66",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/101-original-sealed-room-full-controls.md": "31d25ee5508fe17bc641d68a00d21466d3b16158de130eff698eba6bd6627a9b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/224-all-split-exporter-build.json": "56bb79b683fffe5c8b30d12626939aa6b86d8d3cf85dfe724d7afc2937a5b0b6",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/236-all-split-remaining-controls-cpu-cost.json": "f805f49d6d89b99be968510c856c1b994a8f260b99908d1783b8ea66c58140cf",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/022-cached-oracle-equivalence.json": "1c353f2623514630e67a7994fa5ebf205da8cafd583e2ab387deae3d9b1e3482",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/main.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_rqmc_oracle.hpp": "47315cba3ca8c2bfa4dec9dc5cc233bb03e03e21551502e4f27405d626f7f048",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.resources.json": "0e1278bce19369e8cac4c48643ab1033b5415b1d3be564c94d1435574fc74fcc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle": "883e0540f595299e376eea9d289d77bccec0bf13d7f7f5b1b9dff30358dfb294",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stderr": "e8e50b08a6e9a537d11cd6467e4139a74aac9e5a15d1f3d876f7564fda5402e3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.meta.json": "20c32ac6ce4e8ae484c937b0cbc316f26a01e1be05d2491095e52af1b51eceff",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.n008": "96307310cb5fd281aa32449e960d6c44bd5a2123058fabbb969c49b527978b2c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s0.f64": "3f6edd9a958dcaa1f75613f01d2ccec32b93149d13ded092c0fddf523a6cc007",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s0.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s0.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s1.f64": "b5084ac1c7e34e211bd8c1e91b664628a1a922db56eb2c12a262d5e69387ee51",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s1.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s1.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s2.f64": "62cc690f103279290a87b875dabc8051cfe68d62a48ad9d8d6d3a59483f154c0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s2.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s2.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s3.f64": "ead5f0a02b150a25059c17302a5179bcbe7f3c5a3e9022f94a60daa44bef79d2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s3.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.s3.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/validate_sampler.py": "ee3e0bf186815fe3e5c79ee5faaef379145837b8ef28d9e02e3a5838d1396e8a",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/phase_a_controls.py": "c028e77e02d90a23949d445c34abd52f716a75cc83f006b2806ffb131b9a80f1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/n008lib.py": "28fd7658ab3b728afcc70675e1c7a7aa913af254d81d35df71b37da80079386c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/native.resources.json": "a2f11019560db1a0f573c629e7fed136250b0878e2c4d087d2d872fb40fe5cc2"
+  },
+  "source_commit": "c8fbbe7c1b1f86f8b9a74af9b81dfea2e39942a7",
+  "command": [
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+    "--net",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+    "--scene",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/sealed-dark.n008",
+    "--out",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark",
+    "--seeds",
+    "305419896,2596069104,81985529216486895,18364758544493064720",
+    "--spp",
+    "1024",
+    "--threads",
+    "1"
+  ],
+  "native_limits": {
+    "cpu_seconds": 1200,
+    "elapsed_seconds": 1800,
+    "address_space_bytes": 4294967296,
+    "affinity": [
+      31
+    ],
+    "nice": 15
+  },
+  "scheduling": "One named native only; no automatic subsequent-control queue",
+  "tests": "NOT_RUN; unchanged original full scientific physical control",
+  "returncode": 0,
+  "elapsed_seconds": 603.9431003310019,
+  "child_cpu_seconds": 601.5830320000001,
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/native.resources.json": "a2f11019560db1a0f573c629e7fed136250b0878e2c4d087d2d872fb40fe5cc2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/native.stderr": "3528cf40d86673576318ba9469c9b46ce151aa1ed58f4a85158522875e20d269",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/native.stdout": "80227373a82a7904059f9c23f685346aba7f092ce64f7b9943c9ea1c32acde5d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.hits": "0cb3efe8e2470d62bc240d8b9115f0458ffe6af73145048e83e48f95561bdee1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.meta.json": "0c75abbf9c17a4f477321f0f79400f7ac1fa7bcb0165a8886f5827b249557145",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s0.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s0.f64": "3f6edd9a958dcaa1f75613f01d2ccec32b93149d13ded092c0fddf523a6cc007",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s0.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s1.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s1.f64": "b5084ac1c7e34e211bd8c1e91b664628a1a922db56eb2c12a262d5e69387ee51",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s1.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s2.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s2.f64": "62cc690f103279290a87b875dabc8051cfe68d62a48ad9d8d6d3a59483f154c0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s2.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s3.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s3.f64": "ead5f0a02b150a25059c17302a5179bcbe7f3c5a3e9022f94a60daa44bef79d2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s3.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361"
+  },
+  "physical_checks": {
+    "id": "N010-sealed-dark",
+    "title": "Unchanged original full sealed-room component",
+    "pass": true,
+    "checks": [
+      {
+        "name": "dark:all_samples_zero",
+        "pass": true,
+        "nonzero_values": 0
+      }
+    ],
+    "runs": [
+      {
+        "name": "sealed-dark",
+        "scene_sha256": "96307310cb5fd281aa32449e960d6c44bd5a2123058fabbb969c49b527978b2c",
+        "geometry_sha256": "80016b3ef6872bbfcd002bf07ae82d3efd66c6af8a7acb5c89f0de8f89dcb35e",
+        "geometry_hash_match": true,
+        "triangles": 22,
+        "spp": 1024,
+        "seeds": [
+          305419896,
+          2596069104,
+          81985529216486895,
+          18364758544493064720
+        ],
+        "run_counters": [
+          {
+            "seed": 305419896,
+            "primary_hits": 12582912,
+            "shadow_tests": 23374394,
+            "shadow_blocked": 23374394,
+            "backface_absorbed": 0
+          },
+          {
+            "seed": 2596069104,
+            "primary_hits": 12582912,
+            "shadow_tests": 23372159,
+            "shadow_blocked": 23372159,
+            "backface_absorbed": 0
+          },
+          {
+            "seed": 81985529216486895,
+            "primary_hits": 12582912,
+            "shadow_tests": 23371978,
+            "shadow_blocked": 23371978,
+            "backface_absorbed": 0
+          },
+          {
+            "seed": 18364758544493064720,
+            "primary_hits": 12582912,
+            "shadow_tests": 23374066,
+            "shadow_blocked": 23374066,
+            "backface_absorbed": 0
+          }
+        ]
+      }
+    ],
+    "notes": {}
+  },
+  "native_metadata": {
+    "oracle": "n010-all-split-general",
+    "version": 1,
+    "scene_sha256": "96307310cb5fd281aa32449e960d6c44bd5a2123058fabbb969c49b527978b2c",
+    "geometry_sha256": "80016b3ef6872bbfcd002bf07ae82d3efd66c6af8a7acb5c89f0de8f89dcb35e",
+    "triangles": 22,
+    "point_lights": 1,
+    "width": 128,
+    "height": 96,
+    "spp": 1024,
+    "seeds": [
+      305419896,
+      2596069104,
+      81985529216486895,
+      18364758544493064720
+    ],
+    "ray_offset": 6.18465843842649e-12,
+    "runs": [
+      {
+        "seed": 305419896,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s0",
+        "primary_hits": 12582912,
+        "shadow_tests": 23374394,
+        "shadow_blocked": 23374394,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 151.614,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 798708775,
+          "component_attempts": 88080384,
+          "component_nulls": 0,
+          "own_checks": 88080384,
+          "max_own_log_error": 1.936104254696147e-08,
+          "max_conditioned_error_fraction": 0.011824360535504952,
+          "max_unconditioned_error_fraction": 926.2915171648709
+        }
+      },
+      {
+        "seed": 2596069104,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s1",
+        "primary_hits": 12582912,
+        "shadow_tests": 23372159,
+        "shadow_blocked": 23372159,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 151.145,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 798710741,
+          "component_attempts": 88080384,
+          "component_nulls": 0,
+          "own_checks": 88080384,
+          "max_own_log_error": 2.4769420292614086e-08,
+          "max_conditioned_error_fraction": 0.013780658529259754,
+          "max_unconditioned_error_fraction": 179206.6617123008
+        }
+      },
+      {
+        "seed": 81985529216486895,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s2",
+        "primary_hits": 12582912,
+        "shadow_tests": 23371978,
+        "shadow_blocked": 23371978,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 150.727,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 798718148,
+          "component_attempts": 88080384,
+          "component_nulls": 0,
+          "own_checks": 88080384,
+          "max_own_log_error": 2.492040351853575e-09,
+          "max_conditioned_error_fraction": 0.01502515288476172,
+          "max_unconditioned_error_fraction": 3722.92339745584
+        }
+      },
+      {
+        "seed": 18364758544493064720,
+        "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-original-sealed-dark-full-v1/sealed-dark.s3",
+        "primary_hits": 12582912,
+        "shadow_tests": 23374066,
+        "shadow_blocked": 23374066,
+        "backface_absorbed": 0,
+        "cpu_seconds_diagnostic": 150.442,
+        "all_split": {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 798709272,
+          "component_attempts": 88080384,
+          "component_nulls": 0,
+          "own_checks": 88080384,
+          "max_own_log_error": 8.614730262479497e-09,
+          "max_conditioned_error_fraction": 0.011425565058890596,
+          "max_unconditioned_error_fraction": 3832.812236751314
+        }
+      }
+    ]
+  },
+  "deterministic_component_bits_primary_exact": true,
+  "scope": "One original full sealed-room artifact only; no corpus reference admission"
+}

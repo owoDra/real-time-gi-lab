@@ -13,10 +13,12 @@ sample. All2880 frames/images/scratch/owned ledgers pass integrity, no retry.
 This is no accepted timing or readiness proof. Stop this method; no new GPU
 queue. [Plan101](lanes/n010-comparison-readiness/experiments/101-original-sealed-room-full-controls.md)
 is committed in c8fbbe7 before the original full sealed-dark CPU acquisition.
-Native PID293471/start_ticks2366423 is confirmed live; CPU31,nice15,4GiB,
-1200CPU/1800elapsed limits,1024spp/four original seeds. This is one explicitly
-named acquisition, no subsequent queue. Result252 is still acquiring and
-not counted as PASS; the original physical inventory remains11/17.
+[Original sealed-dark252](lanes/n010-comparison-readiness/results/252-all-split-original-sealed-dark-full-control.json)
+is now terminal **physical PASS**, all original128x96/1024spp/four seeds,
+all sample means/moments/PFM exactly zero. Native0,601.583CPU/603.943elapsed
+seconds, CPU31/nice15/4GiB within1200CPU/1800elapsed limits; no retry.
+The original physical inventory is now **12/17**. Next is the separately
+invoked original sealed-lit control, not an automatic queue.
 All other missing controls and reference slots remain required.
 Telemetry is optional, not a prerequisite.
 
@@ -26,14 +28,15 @@ acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
 diagnostics have completed; neither supplies the missing readiness proof.
 Original full A6c native234 completed; [post-hoc237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json)
 repairs only missing summary metadata and passes the unchanged analytic gates.
-Actual original full physical inventory is **11/17**. No native was retried.
+The prior full physical inventory was11/17;252 now advances it to **12/17**.
+No native was retried.
 [Cost inventory236](lanes/n010-comparison-readiness/results/236-all-split-remaining-controls-cpu-cost.json)
 completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
 core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
 precedes the long sphere controls. No GPU/full-control queue runs; the one
-bounded sealed-dark CPU acquisition above is active.
+bounded sealed-room CPU controls run one named acquisition at a time.
 
 [Traversal prototype238](lanes/n010-comparison-readiness/results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
@@ -68,7 +71,7 @@ all16 transfer is claimed. Averaging and symmetric positions have not supplied
 accepted timing or established its cause. Review249 led to prospective100
 and completed250/251; the new decision is also inconclusive, without a2% cut.
 No full GPU campaign or GPU research worker remains. The separate single CPU
-physical-control acquisition is recorded above.
+physical-control state is recorded above.
 
 [Read-only observation235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,
