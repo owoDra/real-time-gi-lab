@@ -1,0 +1,523 @@
+{
+  "schema": "n010-all-split-full-sidedness-controls/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "TWO_ORIGINAL_FULL_CONTROLS_BYTE_EXACT_PASS_NO_ADMISSION",
+  "source_commit": "1b9714f643bb64f3959ab192519f95b0924bf220",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/validate_all_split_sidedness_full.py": "5bd2a4725d34a0d7e875c2167852ec191c00fe41e579e93c7e92163443e85963",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/080-all-split-exporter-and-full-sidedness-controls.md": "fc229c0915ced102edf11e3ca8128bef58d52a0d7e3dd6d3da17fb403fabaa5c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/224-all-split-exporter-build.json": "56bb79b683fffe5c8b30d12626939aa6b86d8d3cf85dfe724d7afc2937a5b0b6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/main.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_rqmc_oracle.hpp": "47315cba3ca8c2bfa4dec9dc5cc233bb03e03e21551502e4f27405d626f7f048",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.resources.json": "0e1278bce19369e8cac4c48643ab1033b5415b1d3be564c94d1435574fc74fcc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle": "883e0540f595299e376eea9d289d77bccec0bf13d7f7f5b1b9dff30358dfb294",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stderr": "e8e50b08a6e9a537d11cd6467e4139a74aac9e5a15d1f3d876f7564fda5402e3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/022-cached-oracle-equivalence.json": "1c353f2623514630e67a7994fa5ebf205da8cafd583e2ab387deae3d9b1e3482",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.meta.json": "48a2872f5025db55aab548c7f69c24be6ee177428a8538e403a46c7655d5dd7c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.n008": "cbb994401f438acf7a8fe800c7072b3e480e60943ea48801622925b1b79e4552",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s0.f64": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s0.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s0.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s1.f64": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s1.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s1.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s2.f64": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s2.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s2.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s3.f64": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s3.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.s3.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.meta.json": "28b9fb06e8833c072906ab19418099f7bf87b6c3abbd5172d330f924081e658f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.n008": "cb89970aa549c63ceb00fa3bd238bc92249cf5719c03bd50e5785a57d9f5930d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s0.f64": "2f6dd1423e10be608bc50efff0576349f5bfc82c62c33c2d0a3cf05a52dcd2d0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s0.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s0.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s1.f64": "f619574c2e80c3baddeb04487b7537e73ff9024bf290fd6b6e2b89a6b2137724",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s1.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s1.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s2.f64": "de7e92bc928140dff7314f337730577bd608ef0b068d8389af62ed73552cc6dc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s2.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s2.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s3.f64": "b8c7ff35acb7092eac1e09942335c179e7c8ca03acb7a50aaa8264fd1c2ffaf6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s3.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.s3.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.resources.json": "16dec8f0d01e95bd7e965c11b63f578e49b9f11d0973f8020f3b3ef86d51fda7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.resources.json": "a2f58d86201cf9540fccdb131477fab03561e955208cbcbe357bc6050bbbb948"
+  },
+  "scope": "Only2/17 original full controls A4c,A4d; not general indirect/color/range/full-suite proof",
+  "names": [
+    "A4c",
+    "A4d"
+  ],
+  "rows": [
+    {
+      "name": "A4c",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4c.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 0.08648730900040391,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+          "original_sha256": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+          "original_sha256": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+          "original_sha256": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+          "original_sha256": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        }
+      ],
+      "all_original_integer_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A4d",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4d.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 0.13279569600035757,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "2f6dd1423e10be608bc50efff0576349f5bfc82c62c33c2d0a3cf05a52dcd2d0",
+          "original_sha256": "2f6dd1423e10be608bc50efff0576349f5bfc82c62c33c2d0a3cf05a52dcd2d0",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "f619574c2e80c3baddeb04487b7537e73ff9024bf290fd6b6e2b89a6b2137724",
+          "original_sha256": "f619574c2e80c3baddeb04487b7537e73ff9024bf290fd6b6e2b89a6b2137724",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "de7e92bc928140dff7314f337730577bd608ef0b068d8389af62ed73552cc6dc",
+          "original_sha256": "de7e92bc928140dff7314f337730577bd608ef0b068d8389af62ed73552cc6dc",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "b8c7ff35acb7092eac1e09942335c179e7c8ca03acb7a50aaa8264fd1c2ffaf6",
+          "original_sha256": "b8c7ff35acb7092eac1e09942335c179e7c8ca03acb7a50aaa8264fd1c2ffaf6",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "original_sha256": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+          "byte_identical": true
+        }
+      ],
+      "all_original_integer_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 0,
+          "component_attempts": 0,
+          "component_nulls": 0,
+          "own_checks": 0,
+          "max_own_log_error": 0,
+          "max_conditioned_error_fraction": 0,
+          "max_unconditioned_error_fraction": 0
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    }
+  ],
+  "tests": "NOT_RUN; original scientific full-frame controls only",
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.meta.json": "044e16338da693f44a5469bb0e6d778324778570959a1be438d70749e3eefb58",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s3.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s0.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s3.f64": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s1.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s1.f64": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s2.f64": "de7e92bc928140dff7314f337730577bd608ef0b068d8389af62ed73552cc6dc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s1.f64": "f619574c2e80c3baddeb04487b7537e73ff9024bf290fd6b6e2b89a6b2137724",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.meta.json": "b25c1e9a502c36f758b01620e5c04b530ccea69e308e233b9344725153b72dbb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s3.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s3.f64": "b8c7ff35acb7092eac1e09942335c179e7c8ca03acb7a50aaa8264fd1c2ffaf6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.resources.json": "a2f58d86201cf9540fccdb131477fab03561e955208cbcbe357bc6050bbbb948",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s2.f64": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s2.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.stdout": "09e4bac437f0ece3413b4d624fb5408a46947459ededdcf183b996f501d44858",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.hits": "b74b1aa9a7cba33cac13dc3d9470e0d9f70f37b2ee145c51d644dea3bc8fc6f7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.resources.json": "16dec8f0d01e95bd7e965c11b63f578e49b9f11d0973f8020f3b3ef86d51fda7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s1.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s2.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s0.f64": "2f6dd1423e10be608bc50efff0576349f5bfc82c62c33c2d0a3cf05a52dcd2d0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s1.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s2.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.stdout": "9066141a3cceecd64d0db9eb73d66e7346c4b8837b3de7e846f55186f3848509",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s0.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s1.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s2.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s3.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s3.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.hits": "5b956681f732a007dff0701fef98cb185473618ffc4e466bbda46117e33288db",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s0.total.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4c.s0.f64": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-sidedness-v1/A4d.s0.direct.pfm": "04bdb2a020b44130409423cc02f9265587cffa57c79b7a67c575791a27f8d779"
+  }
+}
