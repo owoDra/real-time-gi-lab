@@ -9,10 +9,12 @@ diagnostics have completed; neither supplies the missing readiness proof.
 Original full A6c native234 completed; [post-hoc237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json)
 repairs only missing summary metadata and passes the unchanged analytic gates.
 Actual original full physical inventory is **11/17**. No native was retried.
-The next bounded step is the six-scene cost-only236 inventory, under
-[087](lanes/n010-comparison-readiness/experiments/087-remaining-original-controls-cost.md) and
-[dispatch amendment089](lanes/n010-comparison-readiness/experiments/089-retained-a6c-cost-dispatch-amendment.md).
-It creates no full acquisition or GPU queue.
+[Cost inventory236](lanes/n010-comparison-readiness/results/236-all-split-remaining-controls-cpu-cost.json)
+completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
+core. The three full multibounce sphere cases project about12CPU hours each;
+all six remaining artifacts project36.984CPU hours. These are low-count cost
+projections, not full-run evidence or an N010 ETA. Execution optimization
+precedes any long full control. No acquisition or GPU/full-control queue runs.
 
 [Read-only observation235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,
@@ -305,7 +307,10 @@ explicitly replays the same data with only that missing field added, exact
 analysis inverse and immutable payload checks. Direct geometric violations0;
 indirect relative8.1611197802e-5,NRMSE0.00138358751045: original gates PASS.
 11/17 full artifacts complete; A6a,A6b,A6b_level5_diag,A10,sealed-dark/lit
-remain.087/089 prepares their cost-only inventory236, no automatic full queue.
+remain.087/089/236 completed their cost-only inventory, no full acquisition.
+The three8192 multibounce sphere controls project roughly12CPU hours each;
+all six remaining artifacts36.984CPU hours. Optimize execution before those
+long controls. These cost probes add no physical or reference admission.
 
 References remain **16/24**, timing208 remains **FAIL**, direct-error-1.0 pixels
 remain **UNRESOLVED / 未解決** and included. Original seeds/slots/cap/thresholds

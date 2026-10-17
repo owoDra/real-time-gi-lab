@@ -117,6 +117,12 @@
       "gpu_run": false
     },
     {
+      "id": "N010-022",
+      "status": "complete",
+      "result": "022-cached-oracle-equivalence.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-023",
       "status": "host-build-complete",
       "result": "023-ddgi-vulkan-host-build.json",
@@ -153,6 +159,12 @@
       "gpu_run": true
     },
     {
+      "id": "N010-029",
+      "status": "user-stopped-partial-two-complete-boundaries-fail",
+      "result": "029-full-renderer-calibration.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-030",
       "status": "interim-not-ready",
       "result": "030-readiness-preflight-interim.json",
@@ -171,15 +183,15 @@
       "gpu_run": true
     },
     {
-      "id": "N010-034",
-      "status": "compiler-ready",
-      "result": "034-dxc-cpu-compiler-provenance.json",
-      "gpu_run": false
-    },
-    {
       "id": "N010-033",
       "status": "interim",
       "result": "033-interim-comparison-findings.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-034",
+      "status": "compiler-ready",
+      "result": "034-dxc-cpu-compiler-provenance.json",
       "gpu_run": false
     },
     {
@@ -243,6 +255,18 @@
       "gpu_run": false
     },
     {
+      "id": "N010-050",
+      "status": "complete",
+      "result": "050-incremental-oracle-equivalence.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-051",
+      "status": "complete",
+      "result": "051-controlled-reference-provenance-audit.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-052",
       "status": "diagnostic-only",
       "result": "052-residual-direct-cpu-diagnostic.json",
@@ -258,18 +282,6 @@
       "id": "N010-054",
       "status": "diagnostic-only",
       "result": "054-primary-tie-cpu-diagnostic.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-022",
-      "status": "complete",
-      "result": "022-cached-oracle-equivalence.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-051",
-      "status": "complete",
-      "result": "051-controlled-reference-provenance-audit.json",
       "gpu_run": false
     },
     {
@@ -294,12 +306,6 @@
       "id": "N010-058",
       "status": "complete",
       "result": "058-ddgi-volume-build.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-050",
-      "status": "complete",
-      "result": "050-incremental-oracle-equivalence.json",
       "gpu_run": false
     },
     {
@@ -375,15 +381,15 @@
       "gpu_run": true
     },
     {
+      "id": "N010-075",
+      "status": "complete-negative",
+      "result": "075-gpu-reference-full-conformance-resource-followup.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-076",
       "status": "host-build-complete",
       "result": "076-gpu-reference-prefix-build.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-080",
-      "status": "single-transport-complete",
-      "result": "080-recovered-c2-b2-provenance.json",
       "gpu_run": false
     },
     {
@@ -393,10 +399,10 @@
       "gpu_run": false
     },
     {
-      "id": "N010-075",
-      "status": "complete-negative",
-      "result": "075-gpu-reference-full-conformance-resource-followup.json",
-      "gpu_run": true
+      "id": "N010-080",
+      "status": "single-transport-complete",
+      "result": "080-recovered-c2-b2-provenance.json",
+      "gpu_run": false
     },
     {
       "id": "N010-081",
@@ -405,16 +411,16 @@
       "gpu_run": false
     },
     {
-      "id": "N010-083",
-      "status": "publication-links-only",
-      "result": "083-result-index-link-verification.json",
-      "gpu_run": false
-    },
-    {
       "id": "N010-082",
       "status": "complete-negative",
       "result": "082-gpu-reference-deep-conformance-resource-followup.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-083",
+      "status": "publication-links-only",
+      "result": "083-result-index-link-verification.json",
+      "gpu_run": false
     },
     {
       "id": "N010-084",
@@ -447,16 +453,16 @@
       "gpu_run": false
     },
     {
-      "id": "N010-090",
-      "status": "failed-attempt-clarification",
-      "result": "090-path-diagnostic-launch-clarification.json",
-      "gpu_run": false
-    },
-    {
       "id": "N010-089",
       "status": "posthoc-diagnostic",
       "result": "089-deep-path-diagnostic.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-090",
+      "status": "failed-attempt-clarification",
+      "result": "090-path-diagnostic-launch-clarification.json",
+      "gpu_run": false
     },
     {
       "id": "N010-091",
@@ -489,10 +495,28 @@
       "gpu_run": false
     },
     {
+      "id": "N010-096",
+      "status": "full-frame-feasibility-only",
+      "result": "096-hybrid-full-frame-deep-conformance.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-097",
       "status": "complete-prefix-ineligible",
       "result": "097-recovered-c1-b8-32768-prefix-audit.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-098",
+      "status": "complete-numerical-suite-only",
+      "result": "098-hybrid-full-numerical-conformance.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-099",
+      "status": "complete-physical-suite-only",
+      "result": "099-hybrid-physical-controls.json",
+      "gpu_run": true
     },
     {
       "id": "N010-100",
@@ -501,9 +525,9 @@
       "gpu_run": false
     },
     {
-      "id": "N010-096",
-      "status": "full-frame-feasibility-only",
-      "result": "096-hybrid-full-frame-deep-conformance.json",
+      "id": "N010-101",
+      "status": "complete-all-state-and-prefix-only",
+      "result": "101-hybrid-all-state-and-prefix.json",
       "gpu_run": true
     },
     {
@@ -561,15 +585,15 @@
       "gpu_run": true
     },
     {
-      "id": "N010-098",
-      "status": "complete-numerical-suite-only",
-      "result": "098-hybrid-full-numerical-conformance.json",
-      "gpu_run": true
-    },
-    {
       "id": "N010-112",
       "status": "cpu-host-build-complete",
       "result": "112-point-guided-oracle-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-113",
+      "status": "terminal-analysis-adapter-failure",
+      "result": "113-point-guided-physical-controls.json",
       "gpu_run": false
     },
     {
@@ -594,24 +618,6 @@
       "id": "N010-119",
       "status": "not-ready-adapter-interim-preflight",
       "result": "119-point-guided-adapter-interim-preflight.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-099",
-      "status": "complete-physical-suite-only",
-      "result": "099-hybrid-physical-controls.json",
-      "gpu_run": true
-    },
-    {
-      "id": "N010-101",
-      "status": "complete-all-state-and-prefix-only",
-      "result": "101-hybrid-all-state-and-prefix.json",
-      "gpu_run": true
-    },
-    {
-      "id": "N010-113",
-      "status": "terminal-analysis-adapter-failure",
-      "result": "113-point-guided-physical-controls.json",
       "gpu_run": false
     },
     {
@@ -645,6 +651,12 @@
       "gpu_run": false
     },
     {
+      "id": "N010-126",
+      "status": "complete-replayed-all-state-and-prefix-only",
+      "result": "126-replayed-point-guided-all-state-and-prefix.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-127",
       "status": "prospective-full-scheduling-view-only",
       "result": "127-replayed-point-guided-reference-view.json",
@@ -660,12 +672,6 @@
       "id": "N010-130",
       "status": "interim-execution-and-comparison-transition",
       "result": "130-validated-reference-acquisition-and-comparison-transition.md",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-126",
-      "status": "complete-replayed-all-state-and-prefix-only",
-      "result": "126-replayed-point-guided-all-state-and-prefix.json",
       "gpu_run": false
     },
     {
@@ -747,12 +753,6 @@
       "gpu_run": false
     },
     {
-      "id": "N010-029",
-      "status": "user-stopped-partial-two-complete-boundaries-fail",
-      "result": "029-full-renderer-calibration.json",
-      "gpu_run": true
-    },
-    {
       "id": "N010-150",
       "status": "user-requested-calibration-stop-partials-retained",
       "result": "150-user-requested-calibration-stop.json",
@@ -762,6 +762,12 @@
       "id": "N010-151",
       "status": "complete-sampling-only-directional-standalone-and-prefix-build",
       "result": "151-primary-direction-proposal-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-152",
+      "status": "user-stopped-partial-seven-of-seventeen-scene-rows-no-full-physical-verdict",
+      "result": "152-primary-direction-physical-controls.json",
       "gpu_run": false
     },
     {
@@ -777,15 +783,21 @@
       "gpu_run": false
     },
     {
+      "id": "N010-157",
+      "status": "complete-all-sixteen-minimal-capture-sizing-boundaries-image-equal-and-ledger-pass",
+      "result": "157-minimal-calibration-quiet-sizing.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-158",
+      "status": "user-stopped-partial-twelve-complete-boundaries-two-pass-ten-fail",
+      "result": "158-minimal-calibration-full-renderer.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-159",
       "status": "complete-isolated-calibration-directory-fix-build-no-gpu-validation",
       "result": "159-minimal-calibration-directory-fix-build.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-152",
-      "status": "user-stopped-partial-seven-of-seventeen-scene-rows-no-full-physical-verdict",
-      "result": "152-primary-direction-physical-controls.json",
       "gpu_run": false
     },
     {
@@ -801,33 +813,9 @@
       "gpu_run": false
     },
     {
-      "id": "N010-157",
-      "status": "complete-all-sixteen-minimal-capture-sizing-boundaries-image-equal-and-ledger-pass",
-      "result": "157-minimal-calibration-quiet-sizing.json",
-      "gpu_run": true
-    },
-    {
       "id": "N010-162",
       "status": "posthoc-cpu-replay-all-ten-static-calibration-decisions-and-saved-output-cadence",
       "result": "162-minimal-static-calibration-posthoc-diagnosis.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-158",
-      "status": "user-stopped-partial-twelve-complete-boundaries-two-pass-ten-fail",
-      "result": "158-minimal-calibration-full-renderer.json",
-      "gpu_run": true
-    },
-    {
-      "id": "N010-170",
-      "status": "user-requested-minimal-calibration-stop-partials-retained",
-      "result": "170-user-requested-minimal-calibration-stop.json",
-      "gpu_run": false
-    },
-    {
-      "id": "N010-167",
-      "status": "complete-row-bulk-pfm-fixture-build-inverse-and-active-inputs-pass-no-gpu-validation",
-      "result": "167-bulk-pfm-calibration-fixture-build.json",
       "gpu_run": false
     },
     {
@@ -849,9 +837,9 @@
       "gpu_run": false
     },
     {
-      "id": "N010-171",
-      "status": "user-requested-recovered-feasibility-stop-partials-retained",
-      "result": "171-user-requested-recovered-feasibility-stop.json",
+      "id": "N010-167",
+      "status": "complete-row-bulk-pfm-fixture-build-inverse-and-active-inputs-pass-no-gpu-validation",
+      "result": "167-bulk-pfm-calibration-fixture-build.json",
       "gpu_run": false
     },
     {
@@ -861,21 +849,33 @@
       "gpu_run": true
     },
     {
-      "id": "N010-173",
-      "status": "posthoc-read-only-same-device-ide-graphics-accounting-during-calibration-no-causal-proof",
-      "result": "173-posthoc-concurrent-drm-client-diagnosis.json",
-      "gpu_run": false
-    },
-    {
       "id": "N010-169",
       "status": "complete-sixteen-boundaries-eight-blocks-two-pass-fourteen-fail-not-accepted",
       "result": "169-bulk-pfm-calibration-full-renderer.json",
       "gpu_run": true
     },
     {
-      "id": "N010-175",
-      "status": "complete-original-schedule-statistical-and-ledger-replay-of-all-sixteen-calibration-boundaries",
-      "result": "175-bulk-pfm-calibration-decision-and-replay.json",
+      "id": "N010-170",
+      "status": "user-requested-minimal-calibration-stop-partials-retained",
+      "result": "170-user-requested-minimal-calibration-stop.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-171",
+      "status": "user-requested-recovered-feasibility-stop-partials-retained",
+      "result": "171-user-requested-recovered-feasibility-stop.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-172",
+      "status": "user-stopped-before-first-complete-level-no-numerical-verdict",
+      "result": "172-primary-direction-post-stop-bounded-feasibility.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-173",
+      "status": "posthoc-read-only-same-device-ide-graphics-accounting-during-calibration-no-causal-proof",
+      "result": "173-posthoc-concurrent-drm-client-diagnosis.json",
       "gpu_run": false
     },
     {
@@ -885,9 +885,9 @@
       "gpu_run": false
     },
     {
-      "id": "N010-172",
-      "status": "user-stopped-before-first-complete-level-no-numerical-verdict",
-      "result": "172-primary-direction-post-stop-bounded-feasibility.json",
+      "id": "N010-175",
+      "status": "complete-original-schedule-statistical-and-ledger-replay-of-all-sixteen-calibration-boundaries",
+      "result": "175-bulk-pfm-calibration-decision-and-replay.json",
       "gpu_run": false
     },
     {
@@ -1224,6 +1224,12 @@
       "id": "N010-235",
       "status": "complete-posthoc-read-only-natural-idle-positive-other-app-drm-deltas-no-paired-precision-or-causal-verdict",
       "result": "235-posthoc-natural-idle-read-only-observation.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-236",
+      "status": "complete-six-original-scene-cost-integrity-only-175-cpu-seconds-no-physical-admission-no-full-queue",
+      "result": "236-all-split-remaining-controls-cpu-cost.json",
       "gpu_run": false
     },
     {

@@ -820,3 +820,31 @@ the original driver hash and original cost/native/stop/scientific guards.
 No full queue.236 has not yet been acquired at this checkpoint.
 
 Terminal237 SHA256: `ff30d739737318fd534742e4b7c56adf01f820bcfa5430e0a89d6fe3be58aabf`.
+
+
+## All six original-scene cost probes complete; execution scalability
+
+236 completed six original128x96/four-seed/eight-sample probes serially with
+175.253736CPU/176.120783171elapsed sec. All source/primary/finite/deterministic
+inter-seed/proposal guards pass; all six native PID/start identities terminal.
+Inputs211,payloads144 retained. These are NOT the original full controls.
+
+| Original scene | Actual pilot CPU sec | Linear original-count CPU hours |
+| --- | ---: | ---: |
+| A6a | 42.641725 | 12.129202 |
+| A6b | 42.653570 | 12.132571 |
+| A6b_level5_diag | 36.899459 | 0.327995 |
+| A10 | 42.220372 | 12.009350 |
+| sealed-dark | 4.939181 | 0.175615 |
+| sealed-lit | 5.899429 | 0.209757 |
+
+Total projected remaining full controls36.984491CPU hours on the current
+one-core execution. Scaling includes setup/output; planning only, not an ETA.
+The current all-split method is expensive despite its eight-pixel statistical
+improvement. This is a measured execution-scalability issue, not a physical
+FAIL or measured statistical-cap failure. No full run is automatically queued.
+Optimize the exact execution path before spending these long controls; retain
+all original scene/count/seed/accuracy requirements. Physical inventory11/17,
+references16/24,timing208FAIL,direct1.0UNRESOLVED/未解決 included. N010 NOT_READY.
+
+Terminal236 SHA256: `f805f49d6d89b99be968510c856c1b994a8f260b99908d1783b8ea66c58140cf`.
