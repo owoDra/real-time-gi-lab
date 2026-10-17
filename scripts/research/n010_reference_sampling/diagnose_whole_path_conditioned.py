@@ -32,7 +32,26 @@ def main():
         D.checked(p)
     witness=json.loads(D.checked(D.RESULTS/'211-whole-path-numeric-failure-witness.json'))
     if not witness['complete'] or witness['classification']!='POSTHOC_SAME_GUARD_REPRODUCED_NO_ADMISSION':raise ValueError('actual previous witness required')
-    D.checked(D.HERE/'whole_path_mixture.inc')
+    original_inclusion=D.checked(D.HERE/'whole_path_mixture.inc').decode()
+    revised_inclusion=D.checked(D.HERE/'whole_path_conditioned.inc').decode()
+    audit_old='''            audit.max_target_error_fraction=std::max(audit.max_target_error_fraction,error/bound);
+            if(error>bound)throw std::runtime_error("raw-target closest-hit reconstruction error");'''
+    audit_new='''            const auto& numeric_triangle=scene_.triangles.at(target.triangle);
+            const auto numeric_normal=normalize(cross(numeric_triangle.v1-numeric_triangle.v0,numeric_triangle.v2-numeric_triangle.v0));
+            const double target_plane_error=std::abs(dot(numeric_normal,target.point-numeric_triangle.v0));
+            const double actual_plane_error=std::abs(dot(numeric_normal,actual-numeric_triangle.v0));
+            const double conditioned_error=error*std::abs(dot(numeric_normal,direction));
+            const double certified_error=std::max({target_plane_error,actual_plane_error,conditioned_error});
+            audit.max_unconditioned_target_error_fraction=std::max(audit.max_unconditioned_target_error_fraction,error/bound);
+            audit.max_target_error_fraction=std::max(audit.max_target_error_fraction,certified_error/bound);
+            if(certified_error>bound)throw std::runtime_error("conditioned raw-target/plane reconstruction error");'''
+    edits=[(audit_old,audit_new),('double max_own_log_error{},max_target_error_fraction{},max_weight{};',
+        'double max_own_log_error{},max_target_error_fraction{},max_weight{},max_unconditioned_target_error_fraction{};')]
+    expected=original_inclusion
+    for a,b in edits:expected=D.once(expected,a,b)
+    if expected!=revised_inclusion:raise ValueError('non-diagnostic whole-path implementation changed')
+    for a,b in reversed(edits):expected=D.once(expected,b,a)
+    if expected!=original_inclusion:raise ValueError('original inclusion inverse differs')
     proof=json.loads(D.checked(D.RESULTS/'193-selected-bounce-path-diagnosis.json'))
     old=next(v for v in proof['variants'] if v['variant']=='original')
     if not proof['complete'] or not old['selected_retained_mean_second_bit_exact']:
@@ -113,7 +132,7 @@ def main():
         classification='DIAGNOSTIC_ACQUIRING_NO_ADMISSION',reference_admission=False,
         source_commit=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
         input_sha256=D.INPUTS,pixels=PIXELS,spp=8192,seeds=list(D.SEEDS),
-        whole_header_and_main_inverse_exact=True,numerical_guard_amendment='069; original 210 guard failed; geometric backward-error audit explicitly replaced',attempts=[],
+        whole_header_and_main_inverse_exact=True,inclusion_only_numeric_edits_proved=True,numerical_guard_amendment='069; original 210 guard failed; geometric backward-error audit explicitly replaced',attempts=[],
         tests='NOT_RUN; paired original/whole-path scientific prototype only')
     def save():OUTPUT.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
     save()
