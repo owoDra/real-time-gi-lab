@@ -1,0 +1,148 @@
+{
+  "schema": "n010-whole-path-axis-cosine-diagnosis/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "DIAGNOSTIC_COMPLETE_NO_ADMISSION",
+  "reference_admission": false,
+  "source_commit": "b11e445563c84d8b6c81f1953e984ab44c91051d",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_whole_path_axis_cosine.py": "70213261b1ef32835c228cb61c3d6247a9073a582bf44ed09eb1f9c0f2ec9cd7",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/074-axis-cosine-support-audit.md": "fd5c0750dae2c82884ab8b3ad9c06aff083587e02b296d71dc77b039d79982e6",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_readiness_bottlenecks.py": "b9f8d9746f8ce3c3baab4b46404ebf0f373a5854b73c5878e8b4b240b5bd5823",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/whole_path_axis_cosine.inc": "9094126f1381c12f589de31f65fd77587226290276ea9979a168309859cc8313",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/211-whole-path-numeric-failure-witness.json": "d33b15c3d481f2685b171a7aa2bb7f33761513ef1c81f4e5648c934aeec9ee95",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/whole_path_geometric.inc": "d6d2a9aefccf42a654d2a616819d3439ec21d3d6a1d2781d46d5e5133150e7b0",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/216-coincident-predicate-witness.json": "c7d5395462c10ee06bb597fecae2a96585dda3d14ac42b50ea2b04488a36cd03",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/214-coincident-surface-operator-diagnosis.json": "df8828a3eadd1f9cb69272509d9e58d207d73aacc1ae158180be21672535279c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/193-selected-bounce-path-diagnosis.json": "6143ecbf6651201c15541f4b2ee2c7e33b04843023049fc6d3d1f75230de545a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic": "348e4a29199284ee4af2ce043c629bb9e3d41b84bccad65e47cc5d146167c0c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/data.json": "1e59e83afa43cc33c0997dd79f44df3f4074e7d6e25ca9d7a44f07b6a63dcafd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-0.resources.json": "68b89721dba205d3f280efebf8de0d1da68c785d6f32839886bde421787a4279",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-1.resources.json": "7097cc894a0399f213d9c5101d96b25c8d32504815109d853e05ddb5503e8348",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/data.json": "33312aad8e2ffdf4354f664373e3388a7c8671e9d87036847cb35a43fa9d1a3e"
+  },
+  "pixels": [
+    [
+      40,
+      30
+    ],
+    [
+      120,
+      30
+    ],
+    [
+      200,
+      30
+    ],
+    [
+      280,
+      30
+    ],
+    [
+      40,
+      150
+    ],
+    [
+      120,
+      150
+    ],
+    [
+      200,
+      150
+    ],
+    [
+      280,
+      150
+    ]
+  ],
+  "spp": 8192,
+  "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+  ],
+  "whole_header_and_main_inverse_exact": true,
+  "support_amendment": "072+074; remove basis-sign predicate using axis cosine rotation derivation; no bit-exact transport equivalence claimed",
+  "numerical_guard_amendment": "069 retained; 210/212 failures preserved",
+  "attempts": [
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/n010_whole_path_diagnostic"
+      ],
+      "elapsed_limit_seconds": 300,
+      "returncode": 0,
+      "elapsed": 2.309113762999914,
+      "receipt_sha256": "68b89721dba205d3f280efebf8de0d1da68c785d6f32839886bde421787a4279"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/n010_whole_path_diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/pixels.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/data.json"
+      ],
+      "elapsed_limit_seconds": 300,
+      "returncode": 0,
+      "elapsed": 21.775829781000084,
+      "receipt_sha256": "7097cc894a0399f213d9c5101d96b25c8d32504815109d853e05ddb5503e8348"
+    }
+  ],
+  "tests": "NOT_RUN; paired original/whole-path scientific prototype only",
+  "original_mean_second_bit_exact": true,
+  "deterministic_components_bit_exact": true,
+  "all_prefix_own_density_reconstruction_pass": true,
+  "variants": [
+    {
+      "variant": "original",
+      "max_pairwise_indirect_p99": 6.549227157601098e-05,
+      "indirect_replicate_variance_sum": 2.8147916300064086e-09,
+      "mean_path_variance_sum": 3.412841280676259e-05,
+      "negative_indirect_mean_values": 0
+    },
+    {
+      "variant": "mixture",
+      "max_pairwise_indirect_p99": 5.539861719465591e-05,
+      "indirect_replicate_variance_sum": 2.3064420861162734e-09,
+      "mean_path_variance_sum": 4.744564131429608e-05,
+      "negative_indirect_mean_values": 0
+    }
+  ],
+  "mixture_over_original": {
+    "max_pairwise_indirect_p99": 0.8458802216130148,
+    "indirect_replicate_variance_sum": 0.8194006481790704,
+    "mean_path_variance_sum": 1.3902094299824768
+  },
+  "diagnostic_promising": false,
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/main.cpp": "9c805af5e778c586adbf310e483b2a6f09f9e370bfda55fa5c1ec310ffa0b48b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/n010_rqmc_oracle.hpp": "3357ed6c6e8b0c731f9598fc27b8217415448e475a2ba00bbf0ec760a00f32a9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/n010_whole_path_diagnostic": "a6b01f303854f658cae81cb733f6e857b4428a533bc97bf723debe36ee470879",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-1.stderr": "eca3d881c3ea10078870430ce3d969bcedd6e8cb4fef4a1e9be18609ea4ada02",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-0.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-1.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/data.json": "33312aad8e2ffdf4354f664373e3388a7c8671e9d87036847cb35a43fa9d1a3e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/pixels.txt": "435d39a925b0492669e4f9e0c9ec42c8a40fb2b2e5a33c1f635f2bfa7075819d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-0.resources.json": "68b89721dba205d3f280efebf8de0d1da68c785d6f32839886bde421787a4279",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-axis-cosine-diagnosis-v1/step-1.resources.json": "7097cc894a0399f213d9c5101d96b25c8d32504815109d853e05ddb5503e8348"
+  },
+  "scope": "Eight fixed C1 pixels, one level/four seeds, no physical/full-frame/state/prefix proof or reference admission"
+}
