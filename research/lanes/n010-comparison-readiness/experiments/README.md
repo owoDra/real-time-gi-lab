@@ -1,5 +1,11 @@
 # N010 protocols
 
+[107 — retained A6b independent IID replay](107-retained-a6b-independent-iid-replay.md)
+prepares the unchanged independent-comparator check against original009's
+existing16384/four-seed data. No new IID acquisition is needed. NOT RUN;
+all four new A6b8192 seed parts and their full physical PASS must exist first,
+and every scientific worker must be terminal. No waiting/acquisition queue.
+
 [106 — full sphere controls in original-seed checkpoints](106-original-sphere-seed-checkpoints.md)
 registers one manually invoked8192spp original seed at a time for A6a,A6b,A10.
 All four original seeds and full physical gates remain; the last seed records

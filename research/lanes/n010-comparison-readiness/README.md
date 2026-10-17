@@ -61,6 +61,11 @@ nice15/4GiB,7200CPU/10800elapsed limits. Projection5536CPU/5566elapsed is
 low-count operational planning, not a full-run ETA. Other seeds are NOT RUN;
 this part cannot advance a full physical gate until all four seeds pass.
 All original samples/physical gates remain; no next-seed/artifact queue.
+[Plan107](experiments/107-retained-a6b-independent-iid-replay.md) prepares
+the independent A6b comparison using original009's already retained16384/
+four-seed IID data. No additional IID native acquisition is required. The
+new8192 A6b four-seed result and current identities must still be validated;
+the replay is NOT RUN and cannot dispatch while a scientific worker is live.
 [Plan103](experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.
