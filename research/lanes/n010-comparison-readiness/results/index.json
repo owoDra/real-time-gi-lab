@@ -1417,6 +1417,12 @@
       "status": "complete-selected-hybrid-outcome-full-frame-execution-and-storage-boundary-no-readiness-admission",
       "result": "359-selected-hybrid-numerical-outcome-and-full-frame-boundary.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-360",
+      "status": "complete-isolated-full-frame-depth-split-build-pass-no-runtime-or-reference-admission",
+      "result": "360-whole-path-full-frame-build.json",
+      "gpu_run": false
     }
   ]
 }

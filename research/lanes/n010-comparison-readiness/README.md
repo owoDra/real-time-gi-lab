@@ -2,7 +2,7 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-[Plan112](experiments/112-full-frame-depth-split-hybrid-build.md) prepares the isolated full-frame/depth-split hybrid build: bounded tiles, unchanged full-sample CPU fallback, routing-reason telemetry and per-replicate aggregate evidence. Generation/compilation/native acquisition **NOT RUN**; this plan authorizes compilation only. New numerical/full-frame/prefix evidence and final intake remain required. No environmental stability-tuning campaign.
+[Plan112](experiments/112-full-frame-depth-split-hybrid-build.md), committed0ce0e21c before generation, now has terminal [360](results/360-whole-path-full-frame-build.json) **isolated build PASS**: shader0.084s/host4.157s, both exit0, CPU31/nice15/4GiB; CPU snapshot/context exact and shader source inverse exact,220 NoContraction results. Runtime is NOT RUN. [Plan113](experiments/113-depth-split-hybrid-numerical-diagnostic.md) freezes the next independent-probe/all32-pair numerical acquisition before native data, with unchanged guards and reason-bit telemetry. Full-frame feasibility, original physical/bias/state/prefix and final intake remain required; no environmental stability-tuning campaign.
 
 **Current priority: finish missing references/physical proof and qualify the
 selected comparison boundaries.** Following
