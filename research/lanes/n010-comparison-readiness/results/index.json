@@ -1273,6 +1273,18 @@
       "status": "complete-8-billion-visited-slab-and-53-million-query-exact-equivalence-pass-cost-ratio090276-fails075-stop",
       "result": "243-simd-slab-neutral-padding-prototype.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-244",
+      "status": "terminal-verifier-compile-lvalue-error-before-native-no-cost-verdict",
+      "result": "244-batched-box-cpu-bvh-prototype.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-245",
+      "status": "complete-12-billion-acquired-and-4-billion-cached-box-and-53-million-query-equivalence-pass-cost-ratio1042-fails075-stop",
+      "result": "245-batched-box-verifier-repaired-prototype.json",
+      "gpu_run": false
     }
   ]
 }

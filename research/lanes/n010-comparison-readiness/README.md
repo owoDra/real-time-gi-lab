@@ -32,9 +32,16 @@ original223/A6a output/audit checks. But standalone A6a38.495451CPU seconds /
 retained42.641725=0.902765 FAILS its prospective<=0.75 execution condition;
 stop this candidate too. Prior242 padding failure is retained;095 is an explicit
 implementation amendment, with no scientific gate change. These uncontrolled
-single-run cost probes do not establish a speedup. SIMD across xyz alone is
-insufficient; next examine whether batching boxes can reduce both predicate
-and traversal overhead. No full-control/GPU queue or research worker remains.
+single-run cost probes do not establish a speedup. [Batched-box245](results/245-batched-box-verifier-repaired-prototype.json)
+passes12,013,100,580 acquired /4,763,926,019 cached box comparisons and all
+53,415,447 queries/original outputs, but A6a44.446001/42.641725=1.042312
+fails<=0.75; stop it too. Original244 verifier compile error retained;097 is
+an explicit verifier-only build repair, not a scientific gate change. Neither
+SIMD design supplies sufficient execution scaling. No full-control queue.
+Next GPU-side diagnostic098 changes the observation unit to four-frame means
+with every raw frame retained and unchanged precision cuts; no claim of reduced
+single-frame jitter or transfer to other boundaries. It is prospectively
+registered, has not been acquired at this checkpoint, and has no full campaign.
 
 [Read-only observation235](results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,

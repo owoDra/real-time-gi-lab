@@ -952,3 +952,35 @@ against066d156. No N001–N009 result/Actions/settings/power/display/app changes
 Terminal242 SHA256: `809121f79ec4f3165451d635780d7d284f54cfe870ef070f6e52a7ae297f8d86`.
 
 Terminal243 SHA256: `69c1f381dcb241408b78aa6310ae0d2f9b7a6f7c6cbf9d783b7728d56c591ccb`.
+
+
+## Batched-box result and next distinct GPU observation diagnosis
+
+096/244 stops at compile1: original V3 index accessor is read-only and the
+verifier assigned through it. No native run.097 changes verifier reconstruction
+to whole V3 assignment only, with strict inverse; standalone production unchanged.
+245 completes compile,paired,compile,standalone cost serially on one nice15CPU:
+2.947814/2.976176,205.339231/206.401823,3.260713/3.283932,44.446001/44.666648
+CPU/elapsed seconds respectively.12,013,100,580acquired box and4,763,926,019cached
+current-limit predicates match scalar, all51,047,139closest tri/t bits and
+2,368,308occlusion bool match original. Entire223 data and all236 A6a21 payloads
+and integer/proposal audits exact. No universal arbitrary-ray proof.
+
+CPU ratio1.04231245335 FAILS prospective<=0.75, so this fixed candidate stops.
+It adds immutable packet/index/expanded-stack overhead and pretests some later
+rejected nodes; cost outcome does not independently identify which overhead
+dominates. Do not claim batching inherently loses or extrapolate a speedup.
+Both stopped SIMD designs fail to supply required execution scaling. Full
+physical11/17 and eligible16/24 unchanged; no full-control queue.
+
+Next prospective098 examines a distinct static C7 GPU observation unit: mean
+of four separately timed exact original frames, every raw frame retained.
+208 remains per-frame precision FAIL. Original schedule/analysis/cuts unchanged;
+explicitly changed observation/warmup counts, no single-frame-jitter or cause
+claim, and no transfer to dynamics/all16.246sizing/247diagnosis have NOT RUN
+at this checkpoint. Same206 fixture binary, no Renderer/shader/build/settings
+changes. CPU workers are terminal before any GPU dispatch. Tests NOT RUN.
+
+Terminal244 SHA256: `36f99c2bd4cdbe07ebf79ab8be7521d60bc24a681a183ea5dca67d09600cae89`.
+
+Terminal245 SHA256: `00033ab30d610c9221e12f06a581a92f506a833155977e37f2e9df8b6d4a7a74`.
