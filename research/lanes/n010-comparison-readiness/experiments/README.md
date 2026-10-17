@@ -1,5 +1,10 @@
 # N010 protocols
 
+[102 — eight-wide CPU execution prototype](102-wide8-exact-cpu-bvh-prototype.md)
+prepares a separate flattened topology after the stopped SIMD prototypes.
+It cannot dispatch before both101 sealed controls finish successfully and
+research workers are quiescent. Prepared source is not execution evidence.
+
 [101 — original full sealed-room controls](101-original-sealed-room-full-controls.md)
 registers the two pending original1024spp artifacts with unchanged224 exporter
 and original physical laws. One named acquisition at a time, finite one-core
