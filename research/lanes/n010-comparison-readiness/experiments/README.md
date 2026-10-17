@@ -1,5 +1,10 @@
 # N010 protocols
 
+[101 — original full sealed-room controls](101-original-sealed-room-full-controls.md)
+registers the two pending original1024spp artifacts with unchanged224 exporter
+and original physical laws. One named acquisition at a time, finite one-core
+limits, no GPU/concurrent research or automatic queue; dark must pass before lit.
+
 [100 — order-aware timing uncertainty](100-order-aware-timing-uncertainty.md)
 prospectively registers a replacement timing decision method following249.
 It freezes paired randomization, twelve process repetitions, separate loaded
