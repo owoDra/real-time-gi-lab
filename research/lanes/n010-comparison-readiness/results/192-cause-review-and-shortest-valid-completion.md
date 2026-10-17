@@ -587,3 +587,97 @@ Exact terminal result SHA256:
 - 212: `11713aca61ef3fd15d312a562e0d60a2e1cb04c73f4311ba97ffcf38790341ad`
 - 213: `e277ae8a4893d0d8f39dbe5b44d9e78227c87f0d354490c1de1a47a735d17be7`
 - 214: `df8828a3eadd1f9cb69272509d9e58d207d73aacc1ae158180be21672535279c`
+
+
+## All-split path sampler: first bounded promising result and derived furnace control
+
+The latest current findings and remaining admission obligations are recorded
+above the historical checkpoint in status/roadmap/README. This section retains
+the detailed new215–221 evidence; no prior terminal record is rewritten.
+
+Plans072/074 explicitly amend prototype numerical support matching, not the
+scientific thresholds. 215 is INCOMPLETE at own-support, native24.838s; its
+large opposite-family unmatched log is retained, not converted into a variance
+verdict. 216 reuses original operators at the last logged pair59259/59010 on
+x=-1086.4200439453125. Projected barycentrics are strictly interior on both;
+normal numeric/spawn/nudge/material equal, but signed-zero normal.z branches
+and mapped tangent directions differ. It locates a rejected candidate pair,
+not the complete failing own-prefix. For exact unit axis normals the two
+Duff frames differ by(t,s)->(-t,-s), an azimuth pi rotation. Uniform azimuth
+and thus cosine density are unchanged. 074 removes only that basis-sign
+predicate; no original mapped sample is replaced. All other restricted
+plane/interior/material/nudge/spawn/offset/normal, alternative-self and own
+log-density guards remain. This numerical approximation still needs physical
+bias assessment; it is not exact finite-arithmetic transport equivalence.
+
+217 completes: p99 ratio0.8458802216130148, replicate variance0.8194006481790704,
+path variance1.3902094299824768. Original promising rule FAIL; fixed half-eye/
+half-light stops. 218 is a structurally different all-split construction.
+For each k, s uniform0..k, e=k-s eye vertices and s light vertices; join the
+raw eye prefix with reversed raw light prefix. q_j=E(prefix k-j)*L(reverse
+suffix j), q_mix=sum_j(q_j)/(k+1). The target F=q_0*R_k uses original forward
+point-direct physics. Thus weight=(k+1)*q_0/sum(q_j)<=k+1. Ordered canonical
+spawns/normal/visibility/range are evaluated separately; no reciprocity.
+One uniform coordinate selects and remaps the strategy, the original first2k
+of14 net dimensions generate its vertices; reuse across depths does not
+change the integral sum. Up to28 vertices/scored index is explicit extra cost.
+
+218 completes all32 records on the eight original fixed C1 pixels,8192/four
+original seeds. Original193 means/second moments and deterministic components
+are bit-exact. Strategy selection counts have exact floor/ceil stratification;
+all generated non-null own products reconstruct within1e-6 log error.
+Ratios: p99 **0.7017963067378328**, replicate variance **0.5074178675470417**,
+path variance **0.8308178798828323**. Original two-gate promising rule PASS.
+This is selected one-level reference-sampler evidence, not corpus admission,
+measured cap feasibility, equal-cost performance, or an incumbent GI win.
+
+219 preserves an original Xoshiro constructor compile error, native NOT RUN.
+077 changes only the driver to actual(seed,pixel,index), including per-index
+iid stream boundaries; no data-driven threshold change. 220 reuses218's exact
+header, all original A6a geometry/camera/falloff/bounces/light, changing only
+rho0.5 to rho1 for a derived control. Eight other prospectively fixed pixels,
+original four seeds,8192 net and16384 original iid samples. Unit sphere target
+is1/pi for B2 and7/pi for B8. Finite mesh allowance is independently derived
+from minimum facet distance and maximum vertex radius, including original
+offset plus1024epsilon margin; original A6 .002 target allowance is retained.
+All four analytic checks and both iid comparator checks pass. Global mean
+relative differences B2/B8 **6.044807454363976e-6 / 4.138105199613662e-6**;
+NRMSE **4.575118814680136e-5 / 1.2831637533379166e-5**. All zero-intensity
+controls exactly zero. This derived eight-pixel result is not a PASS of all
+seventeen original applicable physical controls or general materials/sidedness.
+
+221 is post-hoc, no native sampling. On one low-priority CPU it independently
+rehashes98 immutable input/generated payloads, checks11 actual compiler/native
+PID/start identities are terminal, inverts the physical headers, checks exact
+original moments/deterministic bits and recomputes217/218 and220 decisions.
+All replay exactly. 218 audit coverage: five coincident matches, zero following
+alternative-self ray checks, one alternative-self direct check. Maximum normal
+difference1.1102230246251565e-16, own-log error1.1189378312792542e-9, conditioned
+backward-error fraction0.6358539612193481. Critically, maximum UNCONDITIONED
+reconstruction-error/B is **14108638923.233318** (217:616576777.438203).
+Near-parallel amplification is not bounded spatially by the conditioned
+plane check. Do not describe all reconstructed points as spatially identical,
+claim exhaustive self-ignore coverage, or infer a Sponza physical bias bound
+from the sphere result. Those are remaining numerical/physical obligations.
+
+Next concrete work: integrate physically correct general material/sidedness/
+finite-depth target factors (the current rho1 eight-bounce prototype is not
+yet a full original-control adapter), validate the full original physical
+suite and density/numerical approximation, then all-state/prefix and whole-frame
+two-level feasibility. Positive small triage does not authorize qualification.
+All24 slots/four seeds/six levels/cap/consecutive support1e-5/5% gates remain.
+References16/24;208 timingFAIL and remaining quality/true-peak/full-boundary
+pilots remain separate work. Direct max-relative-error1.0 pixels UNRESOLVED/
+未解決 and included. No GPU/settings/display/default-build/Actions/historical
+result changes; no scientific worker or automatic acquisition queue remains.
+Unit/regression tests NOT RUN; no claim of N010 READY or Lane M superiority.
+
+Exact terminal record SHA256:
+
+- 215: `f0a9b3797f0c51be30cd082cea410b5974d3b98b4053dce07c90d788c5846152`
+- 216: `c7d5395462c10ee06bb597fecae2a96585dda3d14ac42b50ea2b04488a36cd03`
+- 217: `8f00fa4a820a1f4dc12cbcad696894a539ac3a237540f1daae3a949f746f50d4`
+- 218: `5ca6c3a278ac1b79673e5b6622d7a6d7fb0832473faeae0a0a990c4d6261ddb3`
+- 219: `06edcbb4144a89c81676f19f37ee3ff13bacdb3e91da592d12fa84b8ae9acfe7`
+- 220: `e1ea2c33e62e562395b60ac893d90e2cf83a1822bfe927f739952c7a5cc8b996`
+- 221: `7d175550bb5bd554e044fed0b1611b99793e6835e46103f03d6da3e522f548af`

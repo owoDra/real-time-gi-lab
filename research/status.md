@@ -14,8 +14,8 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | Required item | Actual current evidence | Remaining work |
 | --- | --- | --- |
 | All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
-| Candidate feasibility | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| New sampler preparation | [187](lanes/n010-comparison-readiness/results/187-nested-scramble-oracle-build.json): isolated build PASS | Fixed-grid 195 shows p99 ratio 0.948 but replicate-variance ratio 1.019; insufficient evidence for long acquisition. 188/189/190 remain NOT RUN. |
+| Stopped first-direction guide | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
+| Whole-path reference candidate | [218](lanes/n010-comparison-readiness/results/218-all-split-path-mixture-diagnosis.json): bounded promising PASS; [220](lanes/n010-comparison-readiness/results/220-bounded-all-split-furnace-control.json): derived furnace analytic/iid PASS | Original full physical controls, numerical bias, all-state/prefix and full-frame feasibility are still required; no intake yet. |
 | GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
@@ -169,48 +169,68 @@ reference ladder. All 24 slots/seeds/cap/gates remain, **16/24 eligible**.
 No long reference/GPU campaign or scientific worker is running or queued.
 Completion time remains unproved; no N010 READY or Lane M result is asserted.
 
-### Whole-path reference prototype: two numerical stops identified
+### Whole-path reference methods: a bounded promising result, not admission
 
-[067](lanes/n010-comparison-readiness/experiments/067-whole-path-mixture-diagnosis.md) derives a distinct half-eye /
-half-light complete-path mixture in raw-hit surface coordinates. It preserves
-original soft falloff/nudge/offset/direct/BVH, evaluates both ordered densities
-without assuming reciprocity, and applies one bounded<=2 correction per depth
-contribution. [210](lanes/n010-comparison-readiness/results/210-whole-path-mixture-diagnosis.json) compiles but stops
-at its raw-target guard after3.378 native CPU seconds. It is **INCOMPLETE**;
-no promising-rule verdict or reference admission is established.
+[210](lanes/n010-comparison-readiness/results/210-whole-path-mixture-diagnosis.json) / [212](lanes/n010-comparison-readiness/results/212-whole-path-conditioned-diagnosis.json) remain INCOMPLETE at numerical guards;
+[211](lanes/n010-comparison-readiness/results/211-whole-path-numeric-failure-witness.json), [213](lanes/n010-comparison-readiness/results/213-whole-path-own-support-witness.json) and [214](lanes/n010-comparison-readiness/results/214-coincident-surface-operator-diagnosis.json) preserve the conditioning,
+overlapping-face and one-ULP operator witnesses. [072](lanes/n010-comparison-readiness/experiments/072-coincident-geometric-support-audit.md) prospectively
+amends support matching to exact common axis-plane/interior/material checks,
+bit-equal original nudge/spawn, bounded normal differences and actual
+alternative-self ray/direct checks. Original IDs, points and physical methods
+remain. This is explicitly a numerical support approximation, not a proof
+of bit-equal N008 finite-arithmetic expectation.
 
-[211](lanes/n010-comparison-readiness/results/211-whole-path-numeric-failure-witness.json) reproduces the same failure.
-Decimal80 analysis shows grazing condition number3522.828485: even exact
-line-plane intersection misses the stored binary64 target by2.6930e-10,
-exceeding its old2.0827e-10 *unconditioned* numerical allowance.
-[069](lanes/n010-comparison-readiness/experiments/069-conditioned-raw-target-numeric-audit.md) explicitly amends that
-diagnostic guard before new data, using plane residuals and analytically
-conditioned backward error. This is **a changed numerical audit**;210 remains
-failed. Statistical/reference/promising thresholds are unchanged.
+[215](lanes/n010-comparison-readiness/results/215-whole-path-geometric-support-diagnosis.json) still stops at own-support, INCOMPLETE. Post-hoc [216](lanes/n010-comparison-readiness/results/216-coincident-predicate-witness.json)
+finds that the last recorded unmatched pair has opposite signed-zero Duff
+basis branches, despite equal numeric axis normals/spawn/material. It is a
+candidate-pair diagnosis, not a full failing-prefix reproduction. [074](lanes/n010-comparison-readiness/experiments/074-axis-cosine-support-audit.md)
+derives that the two exact axis frames differ by an azimuth pi rotation,
+which preserves cosine density. It removes that basis-sign predicate only;
+original sample maps stay untouched. All failed records and amendments remain.
 
-[212](lanes/n010-comparison-readiness/results/212-whole-path-conditioned-diagnosis.json) then stops after18.716 CPU
-seconds at the unchanged own-family nonzero-density guard. It too is
-**INCOMPLETE**, not a variance-screen FAIL/PASS. [213](lanes/n010-comparison-readiness/results/213-whole-path-own-support-witness.json)
-reproduces the exact cause: at C1 pixel200/150, light-prefix5, the same raw
-point is on overlapping coplanar triangles59258/59011. Tiny direction changes
-select a different primitive. [214](lanes/n010-comparison-readiness/results/214-coincident-surface-operator-diagnosis.json)
-uses original Oracle operators: plane/material/nudged point/spawn match here,
-but normalized normals and one fixed cosine-mapped direction differ by1 ULP.
-A plain ID alias is not verified. No scored path is removed or silently merged.
+[217](lanes/n010-comparison-readiness/results/217-whole-path-axis-cosine-diagnosis.json) then completes the fixed half-eye/half-light prototype:
+p99 ratio **0.845880**, replicate variance **0.819401**, path variance
+**1.390209**. The original promising rule FAILS; that construction stops.
+[075](lanes/n010-comparison-readiness/experiments/075-all-split-path-mixture-diagnosis.md) defines a distinct uniform mixture over every eye/light split
+for each depth k. Forward and reverse ordered raw-area densities are evaluated
+independently; original target F=q_eye*R retains soft falloff/nudge/offset.
+The contribution is (k+1)*F/sum(q_split), bounded by(k+1)*R. It traces up to28
+vertices per scored index, versus seven previously; this is no equal-cost claim.
 
-Next implementation work must define and independently validate density
-matching across such physically coincident surfaces, including numeric
-normal/map and self-ignore effects, before another complete prototype. These
-witnesses identify prototype stops, **not** a fix for original reference
-uncertainty, all duplicate geometry, or the unresolved GPU direct pixels.
-No GPU dispatch in210–214; one CPU nice15 only. All prior failures/partials
-are retained; no whole-frame ladder or scientific worker remains running.
+[218](lanes/n010-comparison-readiness/results/218-all-split-path-mixture-diagnosis.json) completes all original32 eight-pixel/four-seed8192 records.
+Original moments and deterministic components are bit-exact. Ratios:
+**p99 0.701796**, **replicate variance 0.507418**, path variance0.830818.
+Both unchanged promising gates (<=0.75 / <=0.5625) PASS. Compile/native
+2.346 / 50.747 seconds, one CPU nice15, no GPU. This is one-level small-grid
+reference-sampler evidence, not a GI performance result or reference admission.
 
-The unresolved reference problem is reducing later finite-transport uncertainty
-while preserving the physical and sampling contracts. The unresolved timing
-problem remains full-boundary precision: packed copies and a contiguous C7
-batch have both failed. Neither is fixed. All original thresholds and final gates remain;
-N010 completion and a date remain unproved.
+[219](lanes/n010-comparison-readiness/results/219-bounded-all-split-furnace-control.json) retains a control-driver compile error; [077](lanes/n010-comparison-readiness/experiments/077-furnace-original-iid-constructor-repair.md) fixes
+its original Xoshiro(seed,pixel,index) invocation before any native control.
+[220](lanes/n010-comparison-readiness/results/220-bounded-all-split-furnace-control.json) uses the byte-identical218 header on a derived original A6a
+sphere, rho1, eight fixed pixels/four seeds. B2/B8 means pass analytic sphere
+expectations with a derived mesh envelope and the original0.002 allowance;
+independent original iid16384 vs net8192 relative mean differences are
+**6.0448e-6 / 4.1381e-6**, NRMSE **4.5751e-5 / 1.2832e-5**. Zero-light
+controls are exactly zero. This bounded derived control does NOT attest all
+seventeen original controls, colored/single-sided materials or the corpus.
+
+Post-hoc [221](lanes/n010-comparison-readiness/results/221-posthoc-path-mixture-evidence-replay.json) independently replays decisions/original moment bits,
+physical-source inverses,98 immutable payload hashes and11 terminated compiler/
+native identities. Numerical limitations are explicit:218's largest original
+unconditioned error/B is **1.41086e10**, while its conditioned plane audit is
+0.635854 and own-log error1.11894e-9. A conditioned audit and a sphere PASS
+are not a bound on Sponza physical bias. Five coincident matches, zero following
+alternative-ray checks and one alternative-direct check are the actually
+covered218 observations, not exhaustive equivalence.
+
+Next: integrate general material/sidedness/finite-depth target factors without
+changing original transport, validate all original applicable physical controls
+and numerical-density bias, then all24-state/exact-prefix and whole-frame
+feasibility before the unchanged reference ladders. All original gates remain;
+references **16/24**, timing208 **FAIL**, direct1.0 pixels **UNRESOLVED / 未解決**
+and included. No GPU/settings/default build change or retained scientific
+worker/automatic queue. Unit/regression tests NOT RUN. N010 remains NOT_READY;
+no Lane M comparative superiority result or completion date is asserted.
 
 ### Evidence and preserved boundaries
 

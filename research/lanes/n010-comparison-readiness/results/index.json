@@ -1099,6 +1099,48 @@
       "status": "complete-posthoc-original-operator-witness-spawn-equal-normal-and-direction-one-ulp-different-no-admission",
       "result": "214-coincident-surface-operator-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-215",
+      "status": "terminal-native-own-support-stop-incomplete-explicit-geometric-support-amendment-no-admission",
+      "result": "215-whole-path-geometric-support-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-216",
+      "status": "complete-posthoc-candidate-pair-signed-zero-basis-predicate-diagnosis-no-admission",
+      "result": "216-coincident-predicate-witness.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-217",
+      "status": "complete-two-family-original-controls-exact-promising-rule-fail-fixed-construction-stopped",
+      "result": "217-whole-path-axis-cosine-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-218",
+      "status": "complete-all-split-small-fixed-grid-promising-rule-pass-not-physical-or-reference-admission",
+      "result": "218-all-split-path-mixture-diagnosis.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-219",
+      "status": "terminal-furnace-driver-compile-error-native-not-run-no-physical-verdict",
+      "result": "219-bounded-all-split-furnace-control.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-220",
+      "status": "complete-bounded-derived-rho1-furnace-analytic-and-independent-iid-pass-not-full-physical-suite",
+      "result": "220-bounded-all-split-furnace-control.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-221",
+      "status": "complete-posthoc-payload-original-controls-decision-and-termination-replay-no-admission",
+      "result": "221-posthoc-path-mixture-evidence-replay.json",
+      "gpu_run": false
     }
   ]
 }
