@@ -848,3 +848,27 @@ all original scene/count/seed/accuracy requirements. Physical inventory11/17,
 references16/24,timing208FAIL,direct1.0UNRESOLVED/未解決 included. N010 NOT_READY.
 
 Terminal236 SHA256: `f805f49d6d89b99be968510c856c1b994a8f260b99908d1783b8ea66c58140cf`.
+
+
+## Near-first execution prototype: identity PASS, cost stop
+
+090/238 preserves the exact old Bvh copy and pairs every executed query.
+51,047,139closest queries have identical triangle/t bits;2,368,308occlusion
+queries identical bool. The whole223 C1 data.json is byte-identical, including
+all original/mixture/depth/audit data. Its paired native115.444280CPU/116.000005
+elapsed sec includes BOTH query implementations and is not a standalone cost.
+The separately compiled optimized exporter A6a8/fourseed/128x96 native has
+all21 f64/PFM/hit payloads byte-identical to236, matching native integer and
+proposal audits. Measured41.859831CPU versus retained42.641725CPU yields
+0.9816636405, failing prospectively registered<=0.75 execution-promising rule.
+Both complete=true and all_pass=false are intentional: identity passes, cost
+condition fails. Do not start full controls with this traversal candidate.
+Single-run retained sizing is not a controlled speedup estimate or GI win.
+
+The ordering argument did not establish a useful cost reduction. Next inspect
+actual CPU time concentration, including profile coverage/overhead, rather than
+assuming traversal ordering explains cost. No new sampling/physical/quality/
+GPU-time threshold was used. Original physical inventory11/17,references16/24,
+timing208FAIL,direct1.0UNRESOLVED/未解決 included. Full objective incomplete.
+
+Terminal238 SHA256: `5ea7ca9e64934a19479339b17e6f909fc0461d439ad37b2ee6d498c7bb6e7b90`.

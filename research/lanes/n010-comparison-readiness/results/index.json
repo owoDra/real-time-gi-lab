@@ -1237,6 +1237,12 @@
       "status": "complete-posthoc-same234-native-full-original-a6c-analytic-pass-no-retry-eleven-of17-full-artifacts",
       "result": "237-posthoc-original-a6c-retained-control.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-238",
+      "status": "complete-53-million-query-and-payload-bit-equivalence-pass-execution-ratio098166-fails-prospective075-stop-no-full-dispatch",
+      "result": "238-near-first-cpu-bvh-prototype.json",
+      "gpu_run": false
     }
   ]
 }

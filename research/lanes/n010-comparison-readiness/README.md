@@ -16,6 +16,12 @@ all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
 precedes any long full control. No acquisition or GPU/full-control queue runs.
 
+[Traversal prototype238](results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
+2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
+41.859831/42.641725=0.981664 fails its prospective<=0.75 execution condition;
+stop this candidate before full controls. This single-run sizing comparison
+does not demonstrate a speedup. CPU profiling is the next diagnosis.
+
 [Read-only observation235](results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,
 eight same-UID PIDs inaccessible. No paired precision or causal verdict.
