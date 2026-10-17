@@ -1423,6 +1423,66 @@
       "status": "complete-isolated-full-frame-depth-split-build-pass-no-runtime-or-reference-admission",
       "result": "360-whole-path-full-frame-build.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-361",
+      "status": "complete-independent-retained-cpu-depth-split-probe-pass-no-admission",
+      "result": "361-depth-split-hybrid-probe.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-362",
+      "status": "complete-all-eight-original-seed0-depth-split-8192-numerical-pass-no-admission",
+      "result": "362-depth-split-hybrid-seed0.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-363",
+      "status": "complete-all-eight-original-seed1-depth-split-8192-numerical-pass-no-admission",
+      "result": "363-depth-split-hybrid-seed1.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-364",
+      "status": "complete-all-eight-original-seed2-depth-split-8192-numerical-pass-no-admission",
+      "result": "364-depth-split-hybrid-seed2.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-365",
+      "status": "complete-all-eight-original-seed3-depth-split-8192-numerical-pass-no-admission",
+      "result": "365-depth-split-hybrid-seed3.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-366",
+      "status": "complete-all32-depth-split-original-pairs-numerical-pass-no-admission",
+      "result": "366-depth-split-hybrid-numerical.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-367",
+      "status": "complete-depth-split-and-full-frame-outcome-routing-diagnosis-no-reference-admission",
+      "result": "367-depth-split-and-full-frame-pilot-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-368",
+      "status": "complete-independent-cpu-c1-full-frame-one-sample-baseline-pass-no-admission",
+      "result": "368-full-frame-one-sample-cpu.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-369",
+      "status": "complete-all57600-c1-one-sample-hybrid-numerical-pass-no-full-count-throughput-admission",
+      "result": "369-full-frame-one-sample-gpu.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-370",
+      "status": "complete-full-frame-one-sample-cpu-gpu-pilot-pass-no-reference-admission",
+      "result": "370-full-frame-one-sample-hybrid-pilot.json",
+      "gpu_run": false
     }
   ]
 }

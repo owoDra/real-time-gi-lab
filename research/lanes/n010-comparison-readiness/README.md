@@ -2,7 +2,39 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-[Plan112](experiments/112-full-frame-depth-split-hybrid-build.md), committed0ce0e21c before generation, now has terminal [360](results/360-whole-path-full-frame-build.json) **isolated build PASS**: shader0.084s/host4.157s, both exit0, CPU31/nice15/4GiB; CPU snapshot/context exact and shader source inverse exact,220 NoContraction results. Runtime is NOT RUN. [Plan113](experiments/113-depth-split-hybrid-numerical-diagnostic.md) freezes the next independent-probe/all32-pair numerical acquisition before native data, with unchanged guards and reason-bit telemetry. Full-frame feasibility, original physical/bias/state/prefix and final intake remain required; no environmental stability-tuning campaign.
+**Latest verified checkpoint: N010 NOT_READY; no scientific worker/queue active.**
+See [outcome367](results/367-depth-split-and-full-frame-pilot-outcome.md).
+
+| Requirement | Current evidence | Remaining boundary |
+| --- | --- | --- |
+| Eligible references |16/24; unchanged | Eight slots, original convergence gates; no masks/cap relaxation. |
+| Original full physical artifacts |14/17, including one diagnostic-only item;259 only one A6a seed | Remaining original sphere/range parts, independent IID/bias proof. |
+| New execution backend | [360](results/360-whole-path-full-frame-build.json) build PASS; [366](results/366-depth-split-hybrid-numerical.json) all32 original depth-split pairs PASS | Full physical/all-state/exact-prefix and full-count feasibility/intake still required. |
+| Full-frame numerical pilot | [370](results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
+| Execution cost | Matched1spp CPU4.673s vs hybrid28.838s; standalone owned peak89,973,904bytes/zero teardown | Hybrid is slower at batch1/tile256. Bound cost at intended sample/tile layout before long acquisition; no assumed GPU acceleration. |
+| GPU performance methodology | [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Actual selected workloads/quality budgets, multiplicity and final proof intake; no automatic transfer. |
+| Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
+
+Post-hoc routing telemetry:88674/92147 CPU-routed diagnostic paths carry
+intersection ambiguity (96.2310%); categories overlap. Provisional versus
+necessary ambiguity is not yet quantified; no routing guard changed.
+Direct relative-error1.0 pixels remain **UNRESOLVED / 未解決**, included.
+
+**Decision policy:** GPU Renderer time remains a comparison axis, using paired
+ratios, registered uncertainty and order/control allowance. CPU wall/clock/
+busy/other-app telemetry is diagnostic. Stop generic stability-percentage
+and idle tuning. Unresolved measurement uncertainty means timing inconclusive,
+while valid quality/memory observations remain reportable. Preserve old FAILs;
+freeze any new method and its verifier before new accepted data. N010 remains
+the final preparation lane; Lane M accepted comparisons have not started.
+
+### Retained earlier checkpoint detail
+
+The following chronology supplies provenance; the latest table above governs
+current execution status. Detailed scientific records retain their original
+scope and outcomes.
+
+[Plan112](experiments/112-full-frame-depth-split-hybrid-build.md) build and subsequent113 numerical /114 full-frame pilot are now complete; see latest checkpoint and367. No larger campaign was queued.
 
 **Current priority: finish missing references/physical proof and qualify the
 selected comparison boundaries.** Following
