@@ -1363,6 +1363,12 @@
       "status": "complete-original-full-level5-256spp-four-seed-integrity-pass-diagnostic-only-fourteenth-of17-artifacts-no-analytic-admission",
       "result": "258-wide8-original-level5-full-artifact.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-259",
+      "status": "complete-original-full-a6a-8192-seed0-integrity-pass-one-of-four-no-physical-or-reference-admission",
+      "result": "259-wide8-original-a6a-seed0.json",
+      "gpu_run": false
     }
   ]
 }

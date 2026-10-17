@@ -54,13 +54,16 @@ proof remains. Full artifact inventory14/17, eligible references16/24.
 No GPU scientific worker or automatic next acquisition.
 [Plan106](experiments/106-original-sphere-seed-checkpoints.md) prepares
 original8192 sphere/range controls in four explicit original-seed checkpoints,
-one manually invoked native at a time. The first A6a seed0/305419896 native259
-is now live, PID401761/start3905232, from616965d after258 terminal PASS.
-It retains all128x96 pixels and8192 samples for this original seed, CPU31/
-nice15/4GiB,7200CPU/10800elapsed limits. Projection5536CPU/5566elapsed is
-low-count operational planning, not a full-run ETA. Other seeds are NOT RUN;
-this part cannot advance a full physical gate until all four seeds pass.
-All original samples/physical gates remain; no next-seed/artifact queue.
+one manually invoked native at a time. Original A6a seed0/305419896
+[259](results/259-wide8-original-a6a-seed0.json) is terminal **seed integrity PASS**,
+from616965d: native0,5234.088CPU/5257.400elapsed seconds, all128x96 pixels/
+8192spp, CPU31/nice15/4GiB within7200CPU/10800elapsed limits. Original
+deterministic/primary bits and all704,643,072 own-density checks pass;
+max own-log1.57243e-8, conditioned0.00828615, unconditioned28899.5278 retained.
+PID401761/start3905232 has terminated. Other seeds are NOT RUN; this is only
+one of four parts and cannot advance the full physical inventory beyond14/17.
+No next-seed/artifact queue. Next is the separately registered bounded hybrid
+build/probe, after quiescence; no CPU backend evidence is replaced.
 [Plan107](experiments/107-retained-a6b-independent-iid-replay.md) prepares
 the independent A6b comparison using original009's already retained16384/
 four-seed IID data. No additional IID native acquisition is required. The
@@ -70,7 +73,7 @@ the replay is NOT RUN and cannot dispatch while a scientific worker is live.
 prepares a separate continuation build for the selected wide8 CPU backend.
 It restores dyadic prefix sums and scored counters; proposal diagnostics
 explicitly cover only the newly executed interval. Original physical/proposal/
-BVH source and running259 inputs remain pinned. Generation/compiler/runtime
+BVH source and completed259 inputs remain pinned. Generation/compiler/runtime
 are NOT RUN; no dispatch while any scientific worker is live. This supplies
 the build procedure for the existing exact-prefix obligation, not new proof
 or another reference-admission gate.
@@ -89,7 +92,7 @@ sample is recomputed in full on one CPU worker; all routing/raw/corrected
 samples are retained. Scope is only the original C1 eight diagnostic pixels,
 not full-frame references. Scaled-density GPU arithmetic, numerical agreement,
 cost and interactive latency remain unverified. Build/runtime NOT RUN; no
-dispatch while259 is live and no replacement of106/108/109 or intake gates.
+dispatch while another scientific worker is live; no replacement of106/108/109 or intake gates.
 [Plan111](experiments/111-whole-path-hybrid-numerical-diagnostic.md)
 pre-registers the prototype numerical acquisition: an independent original
 CPU eight-pixel1spp probe, then one explicit8192spp original-seed native per
@@ -99,7 +102,7 @@ retained254 mixture mean/moment pairs under unchanged numerical tolerances.
 All raw samples/flags and stopped runs remain evidence. Generation, all
 three isolated compiler invocations and every diagnostic native are NOT RUN.
 This prepares the required conformance procedure; it adds no reference or
-performance admission, automatic queue or workload while259 remains live.
+performance admission or automatic queue;259 is terminal and all prototype steps remain NOT RUN.
 [Plan103](experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.
@@ -128,8 +131,9 @@ core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
 precedes the long sphere controls. The sealed controls and254/255/257 are
-terminal. The original full diagnostic258 is also terminal; only259's named
-full A6a seed0 CPU native is active. No GPU or automatic queue is active.
+terminal. Original diagnostic258 and the first full A6a seed part259 are
+also terminal. No scientific CPU/GPU worker or automatic queue is active at
+this checkpoint;259 does not complete the four-seed physical artifact.
 
 [Traversal prototype238](results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
