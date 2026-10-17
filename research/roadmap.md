@@ -129,7 +129,16 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | Whole-path reference candidate | [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json); [226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json); [231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json); [237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json); [252](lanes/n010-comparison-readiness/results/252-all-split-original-sealed-dark-full-control.json); [253](lanes/n010-comparison-readiness/results/253-all-split-original-sealed-lit-full-control.json): **13/17 original full artifacts PASS** | Four original sphere/range artifacts remain; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
 | GPU calibration | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md): **bounded static C7 capability PASS**, interval[1.138644,1.242059] | Register/calibrate actual selected quality/workload boundaries and proof intake. No all16/dynamic transfer or accepted candidate timing; old FAILs retained. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
-| Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
+| Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and final six-gate auditor. DDGI source/device preparation021/023/057 is already present; scene-GI qualification is required before that family's Lane M campaign. |
+
+The [original N010 registration](lanes/n010-comparison-readiness/experiments/001-comparison-readiness.md)
+requires an executable RC/path-tracing first cohort. Its DDGI entry gate is
+source provenance and a specified Vulkan/device/integration boundary, as
+implemented in readiness_preflight.py; previous preflight103 passed that gate.
+Final preflight must recheck its current identities. Actual DDGI scene tracing,
+finite-depth transport, dynamics and timing belong before DDGI's accepted
+Lane M campaign, not as a newly added blocker to the first RC/PT cohort.
+This clarifies the existing scope; it changes no gate or historical outcome.
 
 ### What the cause analysis establishes
 
