@@ -1036,3 +1036,16 @@ Terminal246 SHA256: `77b98ecdc30e98d4caca5551eee540dce5102e21ee677793d442bf0b8da
 Terminal247 SHA256: `f9bc9f7249788245f2ab6de5e79fb5ad3262c7ecf780cf915c492ae4e527bcfa`.
 
 Terminal248 SHA256: `9d39b790a656b2129dc271d595b7d2ccfda61dcd3d5e61dd93e344760ae5134a`.
+
+
+Read-only capability inspection after248 (not a contemporaneous measurement):
+/sys/class/drm/card1/device vendor0x1002/device0x1586,driveramdgpu exposes readable
+gpu_busy_percent,pp_dpm_sclk,gpu_metrics(264bytes),and hwmon freq1_input(label
+sclk). One unaligned snapshot reports busy5%,sclk899000000Hz and the899MHz DPM
+row active (listed rows600/899/2900MHz). These are capability/one-point readings,
+not query-overlap data, clock stability, decoded gpu_metrics or cause evidence.
+No sysfs/settings writes were made. Kernel documentation identifies freq1_input
+as gfx/compute Hz and describes the monitoring APIs:
+[official AMDGPU monitoring interface](https://kernel.org/doc/html/latest/gpu/amdgpu/thermal.html).
+A later prospective clock/timestamp experiment must account for reporting
+resolution/averaging, reading overhead and host/GPU clock alignment.
