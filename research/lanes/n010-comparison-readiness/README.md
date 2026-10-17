@@ -156,6 +156,19 @@ It has no PT/dense-RC or fresh-state dynamic implementation. Do not transfer it
 to all sixteen boundaries or rerun a failed candidate/full campaign. No
 scientific worker remains. Reference eligibility remains **16/24**.
 
+[066](experiments/066-frozen-suffix-control-variate-diagnosis.md) and
+[209](results/209-frozen-suffix-cv-diagnosis.json) complete a distinct frozen
+full-suffix predictor: 65536 auxiliary pilot paths, then the original 32
+scored pixel/seed records, one CPU nice15. Compile/native 1.767 / 6.389
+seconds. All original means/second moments and deterministic components are
+bit-exact; the model dump is byte-identical before/after scoring. Corrected
+p99 ratio **0.947268**, replicate variance **1.033002**, path variance
+**0.975724**. The prospective promising rule FAILS; this fixed model stops.
+The local predictor has not established the reduction needed for any new
+reference ladder. All 24 slots/seeds/cap/gates remain, **16/24 eligible**.
+No long reference/GPU campaign or scientific worker is running or queued.
+Completion time remains unproved; no N010 READY or Lane M result is asserted.
+
 The unresolved reference problem is reducing later finite-transport uncertainty
 while preserving the physical and sampling contracts. The unresolved timing
 problem remains full-boundary precision: packed copies and a contiguous C7

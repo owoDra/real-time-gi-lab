@@ -1063,6 +1063,12 @@
       "status": "complete-contiguous-c7-512-sample-precision-fail-three-of-seven-gates-pass-no-admission",
       "result": "208-contiguous-c7-precision-diagnostic.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-209",
+      "status": "complete-frozen-full-suffix-pilot-exact-original-controls-promising-rule-fail-fixed-model-stopped-no-admission",
+      "result": "209-frozen-suffix-cv-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }

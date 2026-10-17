@@ -457,3 +457,51 @@ Exact terminal result SHA256:
 - 206: `01ecd757d296e97e2d724b01547603d1cb5a9eabbddcd7b0e7437b3ad132f5a1`
 - 207: `ce208b43b004cdd90be55d37764fedf84991e8819f038058a3d8cee2c5f41a8c`
 - 208: `6341ee46e8e744495dd48bdb6b115fbfb51d0f0178dc904253a6fb6498cde318`
+
+
+## Frozen full-suffix predictor: no qualifying reduction
+
+Plan066/result209 address a distinct limitation of 202: predicting the entire
+remaining finite suffix instead of the next direct contribution. A separate
+fixed pilot (seed0x50494c4f5431, 65536 paths on the same eight fixed pixels)
+trains an 8^3 world-grid / normal-octant / remaining-depth table with sixteen
+cosine-square bins and fixed pseudocount32. Its exactly integrated table mean
+minus the selected-bin value is added as a separate correction. Original
+path contributions and sample map remain untouched; the auxiliary training
+cost is explicit, not counted as scored reference samples.
+
+209 completes compile/native in 1.767 / 6.389 seconds, actual one CPU nice15,
+4GiB/220CPU/300elapsed guards. All32 original mean/second-moment records are
+bit-exact to193, as are deterministic components. No negative corrected means.
+Frozen model dumps are byte-identical before/after scoring. Pilot contains
+358120 reached continuations,6902 visited state keys,69509 nonempty directional
+cells. No scored values fit the model. This is not reference admission or an
+independent proof of conditional RQMC/finite-hash behavior.
+
+Corrected/original paired-p99 ratio **0.947268365**, replicate-variance ratio
+**1.033001634**, descriptive per-path variance ratio **0.975723868**. The
+original prospective promising rule FAILS. This fixed model/grid/prior/pilot
+stops without tuning or a larger-level dispatch. Small path-variance reduction
+again does not establish reduced four-replicate disagreement. This does not
+reject all full-suffix predictors or establish corpus/cap behavior.
+
+Post-hoc CPU replay rehashes every209 immutable input/generated payload,
+verifies actual native termination and the identical frozen dumps, and
+reconciles every table visit with its global count. The largest stored-table
+floating residual in the sixteen-cell conditional correction mean is
+1.0842021724855044e-19. This finite table check is not an all-state/physical or
+cross-replicate independence validation. Unit/regression tests remain NOT RUN.
+Exact209 SHA256: `0ad479ef2dd2ffe7ba38dcd291cc93a29fe963416f878796cee2dd78b37a1bc2`.
+
+### Current scope of the remaining work
+
+The bounded diagnoses reject these fixed repairs; they do not prove that a
+full original reference ladder has failed at its cap. Nor do they establish a
+method that will complete all eight pending slots. Do not extend a failed
+local predictor into expensive whole-frame runs. A future reference candidate
+must target whole-path transport with a derived matching density or a stronger
+integrable surrogate, then pass the same independent physical/state/prefix
+and full-frame feasibility gates. That is remaining research, not a completed
+implementation or a promised completion date. Timing208 remains an independent
+FAIL; other full-boundary implementations/precision and original final gates
+are still required. No worker or delayed dispatch remains.

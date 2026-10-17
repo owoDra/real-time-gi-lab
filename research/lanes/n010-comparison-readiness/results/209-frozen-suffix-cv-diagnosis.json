@@ -1,0 +1,146 @@
+{
+  "schema": "n010-frozen-suffix-cv-diagnosis/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "DIAGNOSTIC_COMPLETE_NO_ADMISSION",
+  "reference_admission": false,
+  "source_commit": "0ba40e5f1bf40d0cf4f3f8cbae076e4f53bdffab",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_frozen_suffix_cv.py": "40eb7b496ebfec03ed2f76b2393d0596779bd63ee69c600113e021bfa91a7b54",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/066-frozen-suffix-control-variate-diagnosis.md": "828a11d7f531145eb34b63af9d243ae281dd9951772a4d9890a749bd6099fc93",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_readiness_bottlenecks.py": "b9f8d9746f8ce3c3baab4b46404ebf0f373a5854b73c5878e8b4b240b5bd5823",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/193-selected-bounce-path-diagnosis.json": "6143ecbf6651201c15541f4b2ee2c7e33b04843023049fc6d3d1f75230de545a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_rqmc_oracle.hpp": "502c448032c4d931b5a7e52c59dd04adde9860cc1c37ac1577011fe48deba0e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/main.cpp": "c55fbc42a78938d607ac13993c51e0d8294a7e313b1e031381432b3c2d4563b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/n010_bounce_diagnostic": "348e4a29199284ee4af2ce043c629bb9e3d41b84bccad65e47cc5d146167c0c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/selected-bounce-diagnosis-v1/original/data.json": "1e59e83afa43cc33c0997dd79f44df3f4074e7d6e25ca9d7a44f07b6a63dcafd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-0.resources.json": "d22f9f3d3cf683c039b377504852eb7694721c3f90a97d15ed8800ce98ac79c6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-1.resources.json": "7aefe213025afecd3306749456dcd91fe7355c0d71469df2cab30a09452a97e7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json.model-before.txt": "3ceaf3291f8097f1faeda4b14cbe3558d1f70a29fcadba081d7e62d97106ecc0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json.model-after.txt": "3ceaf3291f8097f1faeda4b14cbe3558d1f70a29fcadba081d7e62d97106ecc0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json": "5f3b8f54444f95d34de9f4da198a031e40b78a43dcbf1b1953db92a4c9837787"
+  },
+  "pixels": [
+    [
+      40,
+      30
+    ],
+    [
+      120,
+      30
+    ],
+    [
+      200,
+      30
+    ],
+    [
+      280,
+      30
+    ],
+    [
+      40,
+      150
+    ],
+    [
+      120,
+      150
+    ],
+    [
+      200,
+      150
+    ],
+    [
+      280,
+      150
+    ]
+  ],
+  "spp": 8192,
+  "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+  ],
+  "whole_header_and_main_inverse_exact": true,
+  "attempts": [
+    {
+      "command": [
+        "c++",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/n010_suffix_cv_diagnostic"
+      ],
+      "elapsed_limit_seconds": 300,
+      "returncode": 0,
+      "elapsed": 1.7672084729999824,
+      "receipt_sha256": "d22f9f3d3cf683c039b377504852eb7694721c3f90a97d15ed8800ce98ac79c6"
+    },
+    {
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/n010_suffix_cv_diagnostic",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/pixels.txt",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json"
+      ],
+      "elapsed_limit_seconds": 300,
+      "returncode": 0,
+      "elapsed": 6.389234529000078,
+      "receipt_sha256": "7aefe213025afecd3306749456dcd91fe7355c0d71469df2cab30a09452a97e7"
+    }
+  ],
+  "tests": "NOT_RUN; independent-pilot paired-path scientific prototype only",
+  "original_mean_second_bit_exact": true,
+  "deterministic_components_bit_exact": true,
+  "pilot_paths": 65536,
+  "model_dump_bit_exact_before_after": true,
+  "variants": [
+    {
+      "variant": "original",
+      "max_pairwise_indirect_p99": 6.549227157601098e-05,
+      "indirect_replicate_variance_sum": 2.8147916300064086e-09,
+      "mean_path_variance_sum": 3.412841280676259e-05,
+      "negative_indirect_mean_values": 0
+    },
+    {
+      "variant": "corrected",
+      "max_pairwise_indirect_p99": 6.203875703648603e-05,
+      "indirect_replicate_variance_sum": 2.90768435301537e-09,
+      "mean_path_variance_sum": 3.329990693622846e-05,
+      "negative_indirect_mean_values": 0
+    }
+  ],
+  "corrected_over_original": {
+    "max_pairwise_indirect_p99": 0.9472683653136575,
+    "indirect_replicate_variance_sum": 1.0330016339464354,
+    "mean_path_variance_sum": 0.9757238675227825
+  },
+  "diagnostic_promising": false,
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/main.cpp": "b5286187b71c69e79818d95e343428f5789bce08cdc0c026c66723d2563eb51c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/n010_suffix_cv_diagnostic": "a358b59765c1c361426d7f0be51da405211df7ffd45590f76e559343e8d2f680",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/n010_rqmc_oracle.hpp": "7c69a35cfaef8a7c12936ffd612fa995cf6adb46a29c91fd12d71c2c5df8125f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-0.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-1.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-0.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json.model-before.txt": "3ceaf3291f8097f1faeda4b14cbe3558d1f70a29fcadba081d7e62d97106ecc0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-1.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json": "5f3b8f54444f95d34de9f4da198a031e40b78a43dcbf1b1953db92a4c9837787",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/pixels.txt": "435d39a925b0492669e4f9e0c9ec42c8a40fb2b2e5a33c1f635f2bfa7075819d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-0.resources.json": "d22f9f3d3cf683c039b377504852eb7694721c3f90a97d15ed8800ce98ac79c6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/data.json.model-after.txt": "3ceaf3291f8097f1faeda4b14cbe3558d1f70a29fcadba081d7e62d97106ecc0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/frozen-suffix-cv-diagnosis-v1/step-1.resources.json": "7aefe213025afecd3306749456dcd91fe7355c0d71469df2cab30a09452a97e7"
+  },
+  "scope": "Eight fixed C1 pixels, one level/four seeds, no physical/full-frame/state/prefix proof or reference admission"
+}
