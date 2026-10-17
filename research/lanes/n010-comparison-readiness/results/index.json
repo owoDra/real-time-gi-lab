@@ -1369,6 +1369,54 @@
       "status": "complete-original-full-a6a-8192-seed0-integrity-pass-one-of-four-no-physical-or-reference-admission",
       "result": "259-wide8-original-a6a-seed0.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-352",
+      "status": "complete-isolated-hybrid-build-three-compilers-exit0-no-runtime-or-reference-admission",
+      "result": "352-whole-path-hybrid-prototype-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-353",
+      "status": "complete-independent-eight-pixel-one-spp-cpu-gpu-probe-numerical-pass-no-reference-admission",
+      "result": "353-whole-path-hybrid-probe.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-354",
+      "status": "complete-selected-c1-eight-pixel-8192-seed0-numerical-pass-all-streams-retained-no-admission",
+      "result": "354-whole-path-hybrid-seed0.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-355",
+      "status": "complete-selected-c1-eight-pixel-8192-seed1-numerical-pass-all-streams-retained-no-admission",
+      "result": "355-whole-path-hybrid-seed1.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-356",
+      "status": "complete-selected-c1-eight-pixel-8192-seed2-numerical-pass-all-streams-retained-no-admission",
+      "result": "356-whole-path-hybrid-seed2.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-357",
+      "status": "complete-selected-c1-eight-pixel-8192-seed3-numerical-pass-all-streams-retained-no-admission",
+      "result": "357-whole-path-hybrid-seed3.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-358",
+      "status": "complete-all32-selected-c1-pairs-four-original-seeds-numerical-pass-no-full-frame-or-reference-admission",
+      "result": "358-whole-path-hybrid-numerical.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-359",
+      "status": "complete-selected-hybrid-outcome-full-frame-execution-and-storage-boundary-no-readiness-admission",
+      "result": "359-selected-hybrid-numerical-outcome-and-full-frame-boundary.md",
+      "gpu_run": false
     }
   ]
 }

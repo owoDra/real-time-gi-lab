@@ -62,8 +62,8 @@ deterministic/primary bits and all704,643,072 own-density checks pass;
 max own-log1.57243e-8, conditioned0.00828615, unconditioned28899.5278 retained.
 PID401761/start3905232 has terminated. Other seeds are NOT RUN; this is only
 one of four parts and cannot advance the full physical inventory beyond14/17.
-No next-seed/artifact queue. Next is the separately registered bounded hybrid
-build/probe, after quiescence; no CPU backend evidence is replaced.
+No next-seed/artifact queue. The bounded hybrid build/probe/four-seed
+numerical diagnostic below is also terminal; no CPU backend evidence is replaced.
 [Plan107](experiments/107-retained-a6b-independent-iid-replay.md) prepares
 the independent A6b comparison using original009's already retained16384/
 four-seed IID data. No additional IID native acquisition is required. The
@@ -85,24 +85,28 @@ physical/IID/build prerequisites; no next-step queue. Images/hits/scored
 counters and combined interval proposal audits must match exactly. This code
 is NOT RUN, pending the original sphere controls and prefix build. No new
 reference eligibility or density/bias proof is claimed.
-[Plan110](experiments/110-whole-path-hybrid-prototype-build.md)
-prepares an isolated Vulkan FP64/CPU all-split execution prototype, using
-retained095 physical helpers and the selected254 CPU fallback. Every uncertain
-sample is recomputed in full on one CPU worker; all routing/raw/corrected
-samples are retained. Scope is only the original C1 eight diagnostic pixels,
-not full-frame references. Scaled-density GPU arithmetic, numerical agreement,
-cost and interactive latency remain unverified. Build/runtime NOT RUN; no
-dispatch while another scientific worker is live; no replacement of106/108/109 or intake gates.
-[Plan111](experiments/111-whole-path-hybrid-numerical-diagnostic.md)
-pre-registers the prototype numerical acquisition: an independent original
-CPU eight-pixel1spp probe, then one explicit8192spp original-seed native per
-invocation and a separate four-part summary. It validates every corrected
-stream/stat/sidecar, original primary/cache/scored counters and all32
-retained254 mixture mean/moment pairs under unchanged numerical tolerances.
-All raw samples/flags and stopped runs remain evidence. Generation, all
-three isolated compiler invocations and every diagnostic native are NOT RUN.
-This prepares the required conformance procedure; it adds no reference or
-performance admission or automatic queue;259 is terminal and all prototype steps remain NOT RUN.
+[Plan110](experiments/110-whole-path-hybrid-prototype-build.md) and
+[111](experiments/111-whole-path-hybrid-numerical-diagnostic.md), committed
+before data, now have terminal [352 build](results/352-whole-path-hybrid-prototype-build.json),
+[353 CPU/GPU1spp probe](results/353-whole-path-hybrid-probe.json) and
+[358 four-seed summary](results/358-whole-path-hybrid-numerical.json) **selected-C1 numerical PASS**.
+All32 original eight-pixel/8192spp pairs pass, including exact primary/cache/
+deterministic bits and scored counters; max corrected mean1.30104e-18,
+moment2.03288e-20, indirect NRMSE3.29097e-16. All262144 raw/corrected paths,
+92147 CPU fallbacks(35.1513%) and2048 full-count batches remain. Each GPU
+native47.95–48.54wall/3.30–3.42CPU seconds; max submit/wait wall95.967ms,
+all owned ledgers zero, peak106,548,880bytes (prototype only, not Renderer).
+[Outcome359](results/359-selected-hybrid-numerical-outcome-and-full-frame-boundary.md)
+records limits and the next full-frame feasibility boundary: this fixed
+shape/eight-pixel prototype is not an admitted full-frame backend, physical/
+bias/state/prefix proof, reference or GPU performance result. No speedup is
+inferred from a different-work CPU denominator. Its324bytes/path dump would
+cost30.375GiB per full A6a seed /142.383GiB per full C18192seed, so dispatch,
+resources and full-reference evidence storage need prospective definition
+before any larger acquisition. Keep all current evidence. No scientific
+worker or queue is active; no replacement of106/108/109 or intake gates.
+Default Renderer build and unit/regression tests NOT RUN; isolated scientific compilation and
+registered numerical/image/stream/ledger checks above were executed.
 [Plan103](experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.
