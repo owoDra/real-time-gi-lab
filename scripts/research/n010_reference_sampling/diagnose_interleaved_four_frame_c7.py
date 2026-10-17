@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 """Plan099: symmetric positions within paired four-frame static observations."""
 import hashlib
+import sys
 from pathlib import Path
 
 SEALED098=Path(__file__).with_name('diagnose_four_frame_c7.py')
 EXPECTED098='02f6a84de18a88f74c6117115ffb824cf3e726976b9baaaebd0aeaf384e9f1eb'
 if hashlib.sha256(SEALED098.read_bytes()).hexdigest()!=EXPECTED098:
     raise ValueError('sealed098 driver changed')
+if '--mode' not in sys.argv or sys.argv[sys.argv.index('--mode')+1]!='diagnostic':
+    raise ValueError('plan099 reuses246 sizing; diagnostic mode only')
 source=SEALED098.read_text()
 expanded='''        if len(doses)%2:raise ValueError('interleaved observations require pairs')
         pattern=(0,1,1,0,1,0,0,1)
@@ -20,7 +23,6 @@ expanded='''        if len(doses)%2:raise ValueError('interleaved observations r
         if sorted(j for group in constituent_indices for j in group)!=list(range(4*len(doses))):
             raise ValueError('raw frame mapping missing/duplicate')'''
 edits=[
-    ("mode=parser.parse_args().mode", "mode=parser.parse_args().mode\n    if mode!='diagnostic':raise ValueError('plan099 reuses246 sizing; no sizing acquisition')"),
     ('247-four-frame-c7-precision-diagnostic','248-interleaved-four-frame-c7-precision-diagnostic'),
     ('four-frame-c7-diagnostic-v1','interleaved-four-frame-c7-diagnostic-v1'),
     ("RESULTS.parent/'experiments/098-four-frame-c7-observation-diagnosis.md',HERE/",

@@ -42,3 +42,8 @@ default-build/N001–N009 result changes.
 Work:out/research/n010-comparison-readiness/interleaved-four-frame-c7-diagnostic-v1
 Result:results/248-interleaved-four-frame-c7-precision-diagnostic.json
 Driver:scripts/research/n010_reference_sampling/diagnose_interleaved_four_frame_c7.py
+
+Pre-acquisition d1ad230 bootstrap stops before work/native: an outer edit looked
+for the mode parser in098, although098 delegates that parser to063. Move the
+diagnostic-only guard to the outer wrapper before dispatch. No raw data or
+scientific method changed; no native/profile retry.
