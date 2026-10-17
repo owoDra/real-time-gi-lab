@@ -93,6 +93,11 @@ def main():
     host_once('n010-gpu-reference-diagnostic/1', 'n010-whole-path-eight-pixel-hybrid/1')
     host_once('<<uint64_t(pixels)*spp<<', '<<uint64_t(selected.size())*spp<<')
     host_once('#include <chrono>', '#include <chrono>\n#include <exception>')
+    host_once('    Context c;c.init();',
+        '    std::ofstream primaryEvidence(out/"primary-records.bin",std::ios::binary);\n'
+        '    for(auto pixel:selected)primaryEvidence.write(reinterpret_cast<const char*>(&primary[pixel]),sizeof(GPrimary));\n'
+        '    primaryEvidence.close();if(!primaryEvidence)throw std::runtime_error("CPU primary evidence write failed");\n'
+        '    Context c;c.init();')
     host_once('        std::vector<std::thread> workers;',
               '        std::exception_ptr workerError;\n        std::vector<std::thread> workers;')
     host_once('workers.emplace_back([&,worker]{', 'workers.emplace_back([&,worker]{try{')
@@ -108,7 +113,8 @@ def main():
         '    std::ofstream scope(out/"prototype-scope.json");\n'
         '    scope<<"{\\"selection_scope\\":\\"eight_fixed_pixels_only\\",\\"selected_pixels\\":['+
         ','.join(map(str,selected))+'],\\"seed\\":"<<seed<<",\\"spp\\":"<<spp\n'
-        '         <<",\\"path_record_bytes\\":"<<sizeof(GPath)<<",\\"flag_record_bytes\\":4,\\"reference_admission\\":false}\\n";scope.close();\n'
+        '         <<",\\"path_record_bytes\\":"<<sizeof(GPath)<<",\\"primary_record_bytes\\":"<<sizeof(GPrimary)\n'
+        '         <<",\\"flag_record_bytes\\":4,\\"reference_admission\\":false}\\n";scope.close();\n'
         '    if(!scope || !rawSamples || !correctedSamples || !routingFlags || !batchIndex)throw std::runtime_error("sample evidence file creation failed");')
     host_once('GPath value=pathValues[index];',
         'GPath value=pathValues[index];\n'
@@ -133,6 +139,7 @@ def main():
         raise ValueError('host prototype inverse differs')
     shader_base = D.checked(base / 'hybrid.comp.glsl').decode()
     shader_main = D.checked(D.HERE / 'whole_path_scaled_gpu.inc.glsl').decode()
+    cpu_probe = D.checked(D.HERE / 'whole_path_cpu_probe.cpp')
     cut = shader_base.index('void main() {')
     shader = shader_base[:cut] + shader_main
     helper = D.HERE.parent / 'n010_comparison_readiness/compile_gpu_reference.py'
@@ -145,6 +152,7 @@ def main():
     (WORK/'n010_reference_context.hpp').write_bytes(context)
     (WORK/'prototype.cpp').write_text(host)
     (WORK/'prototype.comp.glsl').write_text(shader)
+    (WORK/'cpu-probe.cpp').write_bytes(cpu_probe)
     (WORK/'host-edits.json').write_text(json.dumps(host_edits,indent=2)+'\n')
     result = dict(schema='n010-whole-path-hybrid-prototype-build/1',complete=False,all_pass=False,
                   gpu_run=False,reference_admission=False,runtime_validated=False,
@@ -198,6 +206,9 @@ def main():
             raise ValueError('retained host compiler command differs')
         command.insert(1,'-mavx512f')
         compile_one(command,'host')
+        compile_one(['g++','-std=c++20','-O2','-mavx512f','-fno-fast-math',
+                     '-ffp-contract=off','-pthread',str(WORK/'cpu-probe.cpp'),
+                     '-o',str(WORK/'n010_whole_cpu_probe')],'cpu-probe')
         for path,digest in list(D.INPUTS.items()):
             D.checked(Path(path),digest)
         result.update(complete=True,all_pass=True,

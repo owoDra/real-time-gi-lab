@@ -1,6 +1,6 @@
-# Current research status (2026-10-17)
+# Current research status (2026-10-18)
 
-## Current execution checkpoint — 2026-10-17 JST
+## Current execution checkpoint — 2026-10-18 JST
 
 **Current priority: finish missing references/physical proof and qualify the
 selected comparison boundaries.** Following
@@ -90,6 +90,16 @@ samples are retained. Scope is only the original C1 eight diagnostic pixels,
 not full-frame references. Scaled-density GPU arithmetic, numerical agreement,
 cost and interactive latency remain unverified. Build/runtime NOT RUN; no
 dispatch while259 is live and no replacement of106/108/109 or intake gates.
+[Plan111](lanes/n010-comparison-readiness/experiments/111-whole-path-hybrid-numerical-diagnostic.md)
+pre-registers the prototype numerical acquisition: an independent original
+CPU eight-pixel1spp probe, then one explicit8192spp original-seed native per
+invocation and a separate four-part summary. It validates every corrected
+stream/stat/sidecar, original primary/cache/scored counters and all32
+retained254 mixture mean/moment pairs under unchanged numerical tolerances.
+All raw samples/flags and stopped runs remain evidence. Generation, all
+three isolated compiler invocations and every diagnostic native are NOT RUN.
+This prepares the required conformance procedure; it adds no reference or
+performance admission, automatic queue or workload while259 remains live.
 [Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.

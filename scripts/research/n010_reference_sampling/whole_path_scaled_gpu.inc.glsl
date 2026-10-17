@@ -47,6 +47,16 @@ WholeStateGpu whole_state_gpu(WholeRawGpu raw,dvec3 incoming) {
     return WholeStateGpu(raw.tri,nudge(t,raw.point)+normal*physical.x,normal);
 }
 
+bool possible_cpu_coincidence(uint aId,uint bId) {
+    Triangle a=triangles[aId],b=triangles[bId];
+    if(any(notEqual(a.rho,b.rho)) || any(notEqual(a.emit.xyz,b.emit.xyz)))return false;
+    for(int j=0;j<3;++j) {
+        if(a.a[j]==a.b[j] && a.a[j]==a.c[j] && a.a[j]==b.a[j] &&
+           a.a[j]==b.b[j] && a.a[j]==b.c[j])return true;
+    }
+    return false;
+}
+
 ScaledDensityGpu density_edge(ScaledDensityGpu q,double pdf,double cosine,double d2) {
     return density_times(density_times(density_times(q,pdf),cosine),1.0LF/d2);
 }
@@ -94,9 +104,13 @@ void whole_density_prefixes_gpu(WholeStateGpu current,WholeRawGpu path[7],uint c
         Hit hit=trace(current.origin,direction,sphere?physical.x:0.0LF,
                       sphere?infinity():physical.w,current.tri,false);
         if(hit.tri==MISS)return;
-        // CPU072/074 geometric matching uses long-double interior predicates.
-        // Delegate the entire sample instead of approximating those predicates.
-        if(hit.tri!=target.tri){pathAmbiguous=true;return;}
+        // Noncoincident occlusion is an ordinary zero in the CPU proposal too.
+        // Its exact axis/material necessary conditions use only stored doubles.
+        // Delegate possible CPU072/074 matches, including long-double interiors.
+        if(hit.tri!=target.tri) {
+            if(possible_cpu_coincidence(target.tri,hit.tri))pathAmbiguous=true;
+            return;
+        }
         dvec3 actual=current.origin+direction*hit.t;
         double error=lengthd(actual-target.point);
         double bound=5.684341886080801486968994140625e-14LF*
