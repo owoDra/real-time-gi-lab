@@ -1003,6 +1003,30 @@
       "status": "complete-cpu-original-decision-schedule-resource-ledger-and-spool-replay-no-admission",
       "result": "198-bounded-cause-probes-posthoc-replay.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-199",
+      "status": "complete-isolated-packed-capture-build-and-source-inverse-pass-no-runtime-or-timing-admission",
+      "result": "199-packed-readback-fixture-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-200",
+      "status": "complete-single-c7-packed-sizing-image-scratch-owned-memory-and-cpu-spool-pass-no-timing-admission",
+      "result": "200-packed-readback-c7-sizing.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-201",
+      "status": "complete-eight-block-packed-c7-all-seven-original-precision-gates-fail-candidate-stopped",
+      "result": "201-packed-readback-c7-precision-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-202",
+      "status": "complete-paired-cpu-later-bounce-control-variate-diagnostic-promising-rule-fail-no-admission",
+      "result": "202-later-bounce-cv-path-diagnosis.json",
+      "gpu_run": false
     }
   ]
 }

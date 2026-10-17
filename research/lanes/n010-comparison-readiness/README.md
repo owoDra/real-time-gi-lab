@@ -92,13 +92,33 @@ has not established precision; do not dispatch the >hour full 186 campaign.
 original schedules/decisions, native resource receipts, owned ledgers and CPU
 spool receipts exactly; it does not independently rehash every native payload.
 
-The next implementation target is the measurement fixture's frame cadence
-and the oracle's later-path variance mechanism. GPU readbacks still occur
-between frames despite deferred PFM serialization. Inspect a complete-work
-batching repair and a depth-aware reference repair before new sampling; any
-new method must be registered and pass its original physical/full-boundary
-proofs. Neither current diagnostic changes a threshold or supplies a final
-gate. No completion ETA is justified yet.
+### Completed implementation probes 060/061
+
+[199](results/199-packed-readback-fixture-build.json) builds an isolated
+capture fixture with four diagnostic downloads coalesced after the original
+timed GPU commands. Whole-source inverses and unchanged timed recording and
+expressions pass. One-CPU compile/link durations are 6.461 / 2.646 / 0.057
+seconds. [200](results/200-packed-readback-c7-sizing.json) completes
+C7 sizing PASS, dose 3500. All images/scratch/owned-memory/CPU spools pass.
+Actual [201](results/201-packed-readback-c7-precision-diagnostic.json)
+completes all eight blocks / 512 samples but **FAILS all seven original gates**.
+Zero-dose times span 156.177–987.717 us; observed peak owned Vulkan memory is
+263382656 bytes, teardown zero. This fixed candidate stops; no full campaign.
+
+[202](results/202-later-bounce-cv-path-diagnosis.json) completes the
+prospective [061](experiments/061-later-bounce-control-variate-diagnosis.md)
+conditional control-variate diagnosis on eight fixed C1 pixels, one low-priority
+CPU, 67.572 seconds. Original means/moments reconstruct bit-exactly. Corrected
+p99 ratio is **0.837924**, but replicate variance **1.054490** and descriptive
+per-path variance **1.032952**. Its prospective promising rule FAILS; no full
+controls/ladder follows this fixed prototype. This does not reject every
+conditional correction or prove a general variance theorem.
+
+The unresolved reference problem is how to retain effective stratification
+through later transport steps. The unresolved timing problem includes the
+per-frame submit/fence/query cycle, which packed diagnostic copies do not
+remove. Neither is fixed. All original thresholds and final gates remain;
+N010 completion and a date remain unproved.
 
 ### Evidence and preserved boundaries
 

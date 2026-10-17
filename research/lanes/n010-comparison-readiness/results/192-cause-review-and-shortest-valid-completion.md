@@ -273,3 +273,68 @@ same retained-data replay completed with the existing research venv and its
 required library environment. No new samples or numerical retry were involved.
 Unit/runtime regression tests are **NOT RUN**. The default build graph and
 N001–N009 results are unchanged; no GitHub Actions were added.
+
+
+## Completed implementation probes: packed readback and later-bounce correction
+
+[Plan 060](../experiments/060-packed-readback-cadence-diagnosis.md) produces
+actual build [199](199-packed-readback-fixture-build.json), C7 sizing
+[200](200-packed-readback-c7-sizing.json), and eight-block precision
+[201](201-packed-readback-c7-precision-diagnostic.json). Four separate
+synchronous diagnostic downloads are replaced with four copies after the
+original stamp(15) in the same command buffer, followed by the original
+fence wait. CPU scratch and RGBA spools preserve all original output bytes.
+The default Renderer and PT/dense-RC fixture are unchanged. This is a narrow
+timing repair prototype, not a complete cohort fixture or accepted timing.
+
+199's whole-source inverse guards pass; the original timed GPU recording and
+time expressions are byte-identical. The three serial compile/link steps
+return zero in 6.461 / 2.646 / 0.057 seconds on one CPU at nice 15. Actual
+200 sizing PASS freezes dose 3500 by the original three-dose/+20% rule.
+201 completes all eight blocks and 512 samples, but all seven original
+precision gates FAIL: control envelope 1.733625, span 1.773053, order bias
+1.691504; effect span 1.419234, order bias 1.451815, minimum positive fraction
+0.666667, minimum effect 1.210181 below control envelope. No thresholds change.
+
+Every image equals 046, scratch checks pass, owned Vulkan peak is 263382656
+bytes and teardown zero, bounded CPU RGBA/scratch spools release all records.
+Summed timed GPU work is 0.303380 seconds. Zero-dose full times range
+156.177–987.717 us and neutral stage 1.202–79.271 us. Coalescing readbacks
+alone is insufficient; the candidate stops. These uncontrolled campaigns do
+not establish how much of the variation is caused by downloads. The remaining
+per-frame submit/fence/query cycle is not removed and may still matter.
+A complete contiguous-frame implementation would need per-frame parameter,
+query and captured-buffer identities, every frame's correctness and all
+owned memory, with unchanged original workload and precision gates.
+
+[Plan 061](../experiments/061-later-bounce-control-variate-diagnosis.md) and
+[202](202-later-bounce-cv-path-diagnosis.json) target later transport directly:
+a fixed 4x4 cosine-square midpoint predictor adds a conditionally zero-mean
+correction after later vertices, preserving the original cosine sample mapping
+and every original path contribution. The prototype separately retains both
+original and corrected estimates. All 32 original mean/second-moment records
+are bit-exact to 193. Compiler/native return zero, 1.916 / 67.572 seconds,
+one CPU at nice 15, 4 GiB address-space / 220 CPU / 300 elapsed bounds.
+
+On the eight prospectively fixed C1 pixels, corrected/original p99 ratio is
+0.837924133, replicate variance 1.054490032 and descriptive per-path variance
+1.032952174. No corrected indirect mean is negative. The preregistered
+promising rule requires p99 <=0.75 and replicate variance <=0.75^2; it FAILS.
+The fixed prototype stops without parameter tuning, full controls or a ladder.
+This eight-pixel diagnostic does not rank whole-frame/corpus performance or
+reject all control variates. It does show this coarse direct-light predictor
+does not provide the required reduction in the measured later-path uncertainty.
+
+New exact result SHA256:
+
+- 199: `7780bec0e9e2ec7f6da930a9b81fad01384e3620c5e39091f9a838e2c68dc108`
+- 200: `174f9f5439853b7c0339a6e82a17edd6c3ac80e00bc21733ae1e24f714eacb76`
+- 201: `d11d11e81ff8b2aad1cbef9e084036e2badd3c2fc989d1b3514b967691995796`
+- 202: `58f75c7606a5553c4e409c3c5375cc9b8c9d2ec3a2639a5b4817cc8390af9fea`
+
+The 202 tool session handle expired after sampling, but the retained native
+PID/start identity is absent and the authoritative result records complete
+native termination (return code zero) with all 32 outputs. No calculation was
+restarted because observation failed. No research worker remains after the
+recorded termination. Unit/runtime regression tests remain NOT RUN. N010 is
+still NOT_READY with all original reference, timing and final requirements.
