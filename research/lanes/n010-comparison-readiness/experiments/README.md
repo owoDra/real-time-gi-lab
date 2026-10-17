@@ -1,5 +1,11 @@
 # N010 protocols
 
+[106 — full sphere controls in original-seed checkpoints](106-original-sphere-seed-checkpoints.md)
+registers one manually invoked8192spp original seed at a time for A6a,A6b,A10.
+All four original seeds and full physical gates remain; the last seed records
+the pooled analytic verdict. Prepared NOT RUN;258 must terminate PASS first.
+No next-seed/artifact queue or change to running limits.
+
 [105 — original full level-5 artifact](105-original-full-level5-artifact.md)
 registers one original256spp/four-seed diagnostic artifact after successful
 104. Its original analytic role stays diagnostic-only; no A6b gate shortcut.

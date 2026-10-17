@@ -33,6 +33,24 @@ A6a21.626573CPU seconds / retained42.641725=0.507169 passes the operational
 <=0.75 sizing condition. This uncontrolled single-run comparison is not a
 GI speedup result or reference admission; full physical/state/prefix proof
 for this backend remains required. All four native/compiler receipts exit0.
+[Plan104](lanes/n010-comparison-readiness/experiments/104-wide8-original-control-coverage.md), committed
+in3b7b871 before acquisition, now has terminal [257](lanes/n010-comparison-readiness/results/257-wide8-original-control-coverage.json)
+**retained-count backend coverage PASS** on all17 original artifacts:
+sixteen fresh cases79.274CPU/79.731elapsed seconds, plus inherited254 A6a.
+All21 output payloads and integer/proposal audits match for each case. Nine
+are original full64 deterministic cases; eight other low-count matches do
+not replace original full physical/IID/bias/state/prefix/reference gates.
+[Plan105](lanes/n010-comparison-readiness/experiments/105-original-full-level5-artifact.md), committed
+in844e5c9 before dispatch, has one live original A6b_level5_diag full256spp/
+four-seed native258, PID324604/start2589490, CPU31/nice15/4GiB. Limits
+1200CPU/1800elapsed seconds; retained8spp projection633CPU/636elapsed is
+operational planning only. This original mesh item is diagnostic-only, not
+an analytic A6b gate. No automatic next acquisition; inventory stays13/17
+until terminal validated evidence. No GPU scientific worker.
+[Plan106](lanes/n010-comparison-readiness/experiments/106-original-sphere-seed-checkpoints.md) prepares
+original8192 sphere/range controls in four explicit original-seed checkpoints,
+one manually invoked native at a time. NOT RUN;258 must terminate PASS first.
+All original samples/physical gates remain; no next-seed/artifact queue.
 [Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.
@@ -59,8 +77,8 @@ completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
 core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
-precedes the long sphere controls. The sealed controls and254/255 are now
-terminal; no CPU/GPU scientific worker or automatic queue remains active.
+precedes the long sphere controls. The sealed controls and254/255/257 are
+terminal. Only258's named CPU diagnostic native is active; no GPU or queue.
 
 [Traversal prototype238](lanes/n010-comparison-readiness/results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
