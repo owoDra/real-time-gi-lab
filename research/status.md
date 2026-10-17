@@ -17,14 +17,19 @@ is committed in c8fbbe7 before the original full sealed-dark CPU acquisition.
 is now terminal **physical PASS**, all original128x96/1024spp/four seeds,
 all sample means/moments/PFM exactly zero. Native0,601.583CPU/603.943elapsed
 seconds, CPU31/nice15/4GiB within1200CPU/1800elapsed limits; no retry.
-The original physical inventory is now **12/17**. Original sealed-lit253
-was separately invoked from63796c8 after252 PASS; native PID297743/
-start_ticks2430101 is confirmed live under the same one-core finite limits.
-No GPU or subsequent-control queue;253 is not counted as PASS.
+Original [sealed-lit253](lanes/n010-comparison-readiness/results/253-all-split-original-sealed-lit-full-control.json)
+is also terminal **physical PASS**, every pixel direct/total positive,
+original128x96/1024spp/four seeds and exact deterministic/primary identities.
+Native0,732.539CPU/735.380elapsed seconds, CPU31/nice15/4GiB, no retry.
+Both sealed natives are terminal. Full physical inventory is now **13/17**;
+the four original sphere/range artifacts, A6b IID and other gates remain.
 [Plan102](lanes/n010-comparison-readiness/experiments/102-wide8-exact-cpu-bvh-prototype.md), committed
 in eb308b2, prepares a distinct eight-wide CPU execution candidate. It is
 NOT RUN and cannot dispatch before both sealed controls pass and workers
 are quiescent. No execution-scaling claim or reference admission.
+[Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
+in d8341e4 before new data, prepares one independent24-process exact ranked
+median interval acquisition. NOT RUN;254 must terminate first. No GPU queue.
 All other missing controls and reference slots remain required.
 Telemetry is optional, not a prerequisite.
 
@@ -34,7 +39,7 @@ acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
 diagnostics have completed; neither supplies the missing readiness proof.
 Original full A6c native234 completed; [post-hoc237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json)
 repairs only missing summary metadata and passes the unchanged analytic gates.
-The prior full physical inventory was11/17;252 now advances it to **12/17**.
+The prior full physical inventory was11/17;252/253 now advance it to **13/17**.
 No native was retried.
 [Cost inventory236](lanes/n010-comparison-readiness/results/236-all-split-remaining-controls-cpu-cost.json)
 completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
@@ -90,7 +95,7 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | --- | --- | --- |
 | All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| Whole-path reference candidate | [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json); [226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json); [231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json); [237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json); [252](lanes/n010-comparison-readiness/results/252-all-split-original-sealed-dark-full-control.json): **12/17 original full artifacts PASS** | Five originals remain, including live sealed-lit253; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
+| Whole-path reference candidate | [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json); [226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json); [231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json); [237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json); [252](lanes/n010-comparison-readiness/results/252-all-split-original-sealed-dark-full-control.json); [253](lanes/n010-comparison-readiness/results/253-all-split-original-sealed-lit-full-control.json): **13/17 original full artifacts PASS** | Four original sphere/range artifacts remain; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
 | GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |

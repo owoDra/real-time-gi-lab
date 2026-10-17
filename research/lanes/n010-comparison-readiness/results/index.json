@@ -1327,6 +1327,12 @@
       "status": "complete-original-full-sealed-dark1024spp-four-seeds-all-zero-physical-pass-twelve-of17-no-reference-admission",
       "result": "252-all-split-original-sealed-dark-full-control.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-253",
+      "status": "complete-original-full-sealed-lit1024spp-four-seeds-positive-physical-pass-thirteen-of17-no-reference-admission",
+      "result": "253-all-split-original-sealed-lit-full-control.json",
+      "gpu_run": false
     }
   ]
 }
