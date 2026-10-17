@@ -1216,7 +1216,7 @@
     },
     {
       "id": "N010-234",
-      "status": "running-one-core-original-a6c-full8192-physical-control-no-decision-no-following-queue",
+      "status": "terminal-native-return0-all-payloads-time-retained-analysis-run-counters-metadata-failure-no-retry",
       "result": "234-all-split-original-a6c-full-physical-control.json",
       "gpu_run": false
     },

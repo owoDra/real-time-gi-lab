@@ -6,9 +6,10 @@
 shortest valid completion path, with low interactive load. No old stopped
 acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
 diagnostics have completed; neither supplies the missing readiness proof.
-One registered original A6c CPU control is running (234, one low-priority
-core). No full-frame reference ladder, GPU campaign or subsequent-control queue
-is running or queued.
+Original A6c native234 returned0 with all outputs saved; its analysis stopped
+at missing run_counters metadata. [Repair088](experiments/088-retained-a6c-analysis-repair.md)
+will replay the same retained data. No acquisition, GPU campaign or subsequent
+control queue is running. A6c has no physical verdict until that replay.
 
 [Read-only idle observation 235](results/235-posthoc-natural-idle-read-only-observation.json) records 30.157s
 after the user answered “now”: Brave and IDE DRM counters increased.
@@ -28,7 +29,7 @@ and [prospective bounded plan 057](experiments/057-bounded-cause-diagnosis-and-c
 | --- | --- | --- |
 | All 24 eligible references | [160](results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| Whole-path reference candidate | [223](results/223-all-split-general-transport-equivalence.json): exact legacy equivalence; [225](results/225-all-split-full-sidedness-controls.json)/[226](results/226-all-split-full-deterministic-controls.json)/[231](results/231-posthoc-original-a7-retained-control.json): 10/17 original full controls PASS | [234](results/234-all-split-original-a6c-full-physical-control.json) A6c RUNNING; finish remaining original controls, bias, all-state/prefix and full-frame feasibility before intake. |
+| Whole-path reference candidate | [223](results/223-all-split-general-transport-equivalence.json): exact legacy equivalence; [225](results/225-all-split-full-sidedness-controls.json)/[226](results/226-all-split-full-deterministic-controls.json)/[231](results/231-posthoc-original-a7-retained-control.json): 10/17 original full controls PASS | [234](results/234-all-split-original-a6c-full-physical-control.json) native0 / analysis metadata failure; retained237 replay pending, then remaining controls, bias, all-state/prefix and feasibility before intake. |
 | GPU calibration | [185](results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |

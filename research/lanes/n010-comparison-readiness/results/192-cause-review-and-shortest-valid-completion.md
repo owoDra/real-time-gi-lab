@@ -791,3 +791,17 @@ The controller is prepared but NOT RUN; no unit/regression tests were run.
 This avoids committing an unmeasured multi-bounce full workload while A6c
 still runs. A6b_level5_diag is diagnostic only in the original control law;
 its presence in the17-scene artifact inventory does not create a new gate.
+
+
+## Terminal A6c native, analysis-only metadata failure
+
+234 native returned0:1331.127171410elapsed/1325.210989000CPU sec, all25
+payload identities retained BEFORE analysis. Its Python summary then raises
+KeyError run_counters. Both original native and controlling process are
+terminal. Preserve234 exactly.088 registers an explicitly post-hoc analysis
+replay237 with only that metadata field supplied from actual integer counters;
+original analytic/identity/proposal checks stay identical. No native rerun.
+Original087/236 remains NOT RUN and refuses failed234; a separate dispatch
+amendment is needed after successful237. No current physical verdict.
+
+Terminal234 SHA256: `3d9ac259909cd1ec796623233d54c6a7dba821e10bf80dc85a1980ecb7878a9b`.
