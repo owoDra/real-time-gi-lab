@@ -3,13 +3,15 @@
 [103 — fixed ranked process-median intervals](103-ranked-process-median-calibration.md)
 prepares one independent24-process C7 acquisition, retaining all observations
 and freezing exact binomial-derived ranks before new data. It preserves100's
-effect, control-allowance and width rules. NOT RUN; both sealed controls and
-the CPU execution prototype must terminate first. No automatic GPU queue.
+effect, control-allowance and width rules. Terminal255/256: all four checks
+PASS on static repeated-frame C7 HWRT, no accepted candidate timing or all16
+qualification. All24 processes retained, no retry or automatic GPU queue.
 
 [102 — eight-wide CPU execution prototype](102-wide8-exact-cpu-bvh-prototype.md)
-prepares a separate flattened topology after the stopped SIMD prototypes.
-It cannot dispatch before both101 sealed controls finish successfully and
-research workers are quiescent. Prepared source is not execution evidence.
+registers a separate flattened topology after the stopped SIMD prototypes.
+Terminal254 passes original query/payload identities and the operational
+cost condition (0.507169<=0.75). No full physical/state/prefix/reference
+admission transfers from this selected-ray/small-count execution prototype.
 
 [101 — original full sealed-room controls](101-original-sealed-room-full-controls.md)
 registers the two pending original1024spp artifacts with unchanged224 exporter

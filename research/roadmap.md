@@ -2,7 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-17 JST
 
-**Current priority: finish missing CPU physical evidence.** Following
+**Current priority: finish missing references/physical proof and qualify the
+selected comparison boundaries.** Following
 [review249](lanes/n010-comparison-readiness/results/249-comparison-criteria-review.md),
 [plan100](lanes/n010-comparison-readiness/experiments/100-order-aware-timing-uncertainty.md) was committed
 before the new twelve-process [250 acquisition](lanes/n010-comparison-readiness/results/250-uncertainty-c7-calibration-diagnostic.json).
@@ -24,12 +25,24 @@ Native0,732.539CPU/735.380elapsed seconds, CPU31/nice15/4GiB, no retry.
 Both sealed natives are terminal. Full physical inventory is now **13/17**;
 the four original sphere/range artifacts, A6b IID and other gates remain.
 [Plan102](lanes/n010-comparison-readiness/experiments/102-wide8-exact-cpu-bvh-prototype.md), committed
-in eb308b2, prepares a distinct eight-wide CPU execution candidate. It is
-NOT RUN and cannot dispatch before both sealed controls pass and workers
-are quiescent. No execution-scaling claim or reference admission.
+in eb308b2 before execution, now has terminal [254](lanes/n010-comparison-readiness/results/254-wide8-cpu-bvh-prototype.json)
+**execution-prototype PASS**:53,415,447 exact full-query comparisons,
+10,456,548,434 acquired /1,933,448,022 cached box predicates, original223
+entire payload and all21 original236 A6a payloads/audits exact.
+A6a21.626573CPU seconds / retained42.641725=0.507169 passes the operational
+<=0.75 sizing condition. This uncontrolled single-run comparison is not a
+GI speedup result or reference admission; full physical/state/prefix proof
+for this backend remains required. All four native/compiler receipts exit0.
 [Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
-in d8341e4 before new data, prepares one independent24-process exact ranked
-median interval acquisition. NOT RUN;254 must terminate first. No GPU queue.
+in d8341e4 before new data, now has terminal [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
+**bounded C7 calibration capability PASS**, all four registered checks.
+The independently acquired24-process effect interval[1.138644,1.242059]
+includes control/order allowance; width1.090823<=1.20. All5760 raw frames,
+1440 means and all24 process summaries remain; no retry or sample deletion.
+This is static repeated-frame C7 HWRT capability only, explicitly no accepted
+candidate timing or all16/dynamic qualification. Stop generic stability-gate
+tuning; next timing work must register the selected actual workload boundaries
+and final proof-intake amendment. No GPU research worker or automatic queue.
 All other missing controls and reference slots remain required.
 Telemetry is optional, not a prerequisite.
 
@@ -46,8 +59,8 @@ completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
 core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
-precedes the long sphere controls. No GPU/full-control queue runs; the one
-bounded sealed-room CPU controls run one named acquisition at a time.
+precedes the long sphere controls. The sealed controls and254/255 are now
+terminal; no CPU/GPU scientific worker or automatic queue remains active.
 
 [Traversal prototype238](lanes/n010-comparison-readiness/results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
@@ -96,7 +109,7 @@ and [prospective bounded plan 057](lanes/n010-comparison-readiness/experiments/0
 | All 24 eligible references | [160](lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
 | Whole-path reference candidate | [225](lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json); [226](lanes/n010-comparison-readiness/results/226-all-split-full-deterministic-controls.json); [231](lanes/n010-comparison-readiness/results/231-posthoc-original-a7-retained-control.json); [237](lanes/n010-comparison-readiness/results/237-posthoc-original-a6c-retained-control.json); [252](lanes/n010-comparison-readiness/results/252-all-split-original-sealed-dark-full-control.json); [253](lanes/n010-comparison-readiness/results/253-all-split-original-sealed-lit-full-control.json): **13/17 original full artifacts PASS** | Four original sphere/range artifacts remain; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
-| GPU calibration | [185](lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json): **COMPLETE / sizing PASS**, all sixteen boundaries | Short C7 probes 196/197 both complete and FAIL all seven precision gates, including user-idle 197. Full 186 NOT RUN; no accepted timing. |
+| GPU calibration | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md): **bounded static C7 capability PASS**, interval[1.138644,1.242059] | Register/calibrate actual selected quality/workload boundaries and proof intake. No all16/dynamic transfer or accepted candidate timing; old FAILs retained. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](lanes/n010-comparison-readiness/results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and original final six-gate auditor. DDGI source/device boundary remains required for Lane M. |
 

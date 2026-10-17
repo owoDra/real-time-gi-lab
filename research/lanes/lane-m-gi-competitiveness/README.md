@@ -57,6 +57,17 @@ allowance interval[0.889520,1.639825]. No accepted calibration: old FAILs and
 all corpus rows remain, and the existing N010 entry gate is not bypassed.
 No accepted Lane M campaign has started.
 
+Independent prospectively committed [103](../n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md)
+and terminal [255/256](../n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
+now demonstrate bounded static repeated-frame C7 HWRT calibration capability:
+all four checks PASS, control/order-allowance interval[1.138644,1.242059],
+width1.090823<=1.20. All24 processes/5760 frames retained. This supplies a
+concrete method to carry into actual selected workload/quality-boundary
+calibration; it is not accepted candidate timing or qualification of dynamic
+frames, other GI roles or devices. Register multiplicity, complete costs and
+the final proof-intake amendment before accepted Lane M acquisition. Old
+results and the current N010 preflight are unchanged; N010 is still NOT_READY.
+
 ## Timing and memory handoff identity
 
 The prepared N010 [proof-intake policy](../n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)

@@ -1333,6 +1333,24 @@
       "status": "complete-original-full-sealed-lit1024spp-four-seeds-positive-physical-pass-thirteen-of17-no-reference-admission",
       "result": "253-all-split-original-sealed-lit-full-control.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-254",
+      "status": "complete-wide8-exact-query-and-payload-pass-operational-cost-ratio0507-promising-no-reference-admission",
+      "result": "254-wide8-cpu-bvh-prototype.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-255",
+      "status": "complete-independent24-process5760-frame-integrity-pass-bounded-c7-calibration-capability-pass-no-timing-admission",
+      "result": "255-orderstat-uncertainty-c7-calibration-diagnostic.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-256",
+      "status": "complete-registered-ranked-calibration-outcome-selected-boundary-next-no-general-timing-or-reference-admission",
+      "result": "256-ranked-calibration-outcome-and-next-boundary.md",
+      "gpu_run": false
     }
   ]
 }

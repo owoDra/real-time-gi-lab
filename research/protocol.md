@@ -160,6 +160,17 @@ comparison multiplicity/quality/coverage registration remain required. The histo
 Lane K/L and N010 numerical rules below remain the rules for their original
 records. No old FAIL is reclassified and no current preflight is bypassed.
 
+Independent [plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md)
+was committed before24 fresh processes, with exact binomial-derived median
+ranks4/21 and all100 control/order/width checks retained. Terminal
+[255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
+passes all four checks: effect interval[1.138644,1.242059],width1.090823<=1.20.
+Every process/sample remains. This is bounded static repeated-frame C7 HWRT
+calibration capability, not accepted candidate timing, all-boundary/dynamic
+qualification, a tail-latency guarantee or an unconditional systematic-bias
+bound. Actual selected boundaries and final proof intake still require their
+prospective registration. Stop generic tuning toward old stability cuts.
+
 ### Post-Lane-H calibration requirement
 
 After Lane G/H, a new timing methodology intended to support architecture
