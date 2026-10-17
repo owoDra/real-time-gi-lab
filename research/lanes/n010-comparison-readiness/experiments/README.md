@@ -1,5 +1,12 @@
 # N010 protocols
 
+[100 — order-aware timing uncertainty](100-order-aware-timing-uncertainty.md)
+prospectively registers a replacement timing decision method following249.
+It freezes paired randomization, twelve process repetitions, separate loaded
+and unloaded controls, exact median intervals, explicit conditional bias
+allowance and finite stopping/resource limits before a new C7-only diagnostic.
+No earlier FAIL, accepted evidence or complete readiness gate is reclassified.
+
 [001 — comparison readiness](001-comparison-readiness.md) is frozen before new
 reference acquisition and GPU validation. Implementation identities and state
 hashes are locked before their corresponding acquisitions. Any amendment is
