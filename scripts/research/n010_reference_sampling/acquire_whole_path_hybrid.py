@@ -34,7 +34,13 @@ def location(index):
 def prior(index):
     output, _ = location(index)
     d = json.loads(D.checked(output))
-    if not (d['complete'] and d['all_pass'] and d['seed_index']==index):
+    seed=D.SEEDS[0 if index is None else index]
+    spp,batch=(1,1) if index is None else (8192,16)
+    if not (d['schema']=='n010-whole-path-hybrid-part/1' and d['complete'] and d['all_pass']
+            and d['seed_index']==index and (d['seed'],d['spp'],d['batch'])==(seed,spp,batch)
+            and d['selected_pixels']==SELECTED and not d['reference_admission'] and not d['accepted_timing']
+            and [(r['x'],r['y'],r['seed']) for r in d['validation']['rows']]
+                ==[(x,y,seed) for x,y in PIXELS]):
         raise ValueError('terminal successful prior hybrid part required')
     for path,digest in d['payload_sha256'].items():
         D.checked(Path(path),digest)
