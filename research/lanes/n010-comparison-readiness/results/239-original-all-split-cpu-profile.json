@@ -1,0 +1,22 @@
+{
+  "schema": "n010-original-all-split-cpu-profile-bootstrap/1",
+  "complete": false,
+  "classification": "BOOTSTRAP_LINKER_FAILURE_BEFORE_ACQUISITION",
+  "source_commit": "aab5ca64c6dde618640042ef802f8ba8d146d291",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/profile_original_all_split_cpu.py": "39388ab12b7cae67b05bf41bc2e1576cab53aaf153e1e6691cdc876a0c7c9b33",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/091-original-all-split-cpu-profile.md": "8d5bd9cee9efbf4aa9f6d8e7e9e065d47c4d38c9ea42455b526f2ef3b98222ab",
+    "/nix/store/r9yzbjkiz71ig7g26jdd9cc4pp8ymdph-perf-linux-7.2.10/bin/perf": "9d420a0aa203f45039bf22f59898766ba96aac0b50cd5c5f6bbbeb837e318e9d"
+  },
+  "payload_sha256": {},
+  "gpu_run": false,
+  "reference_admission": false,
+  "native_runs": 0,
+  "profiling_runs": 0,
+  "observed_returncode": 1,
+  "failure": "perf --version: libcurl.so.4 version CURL_OPENSSL_4 not found, required by libdebuginfod.so.1; inherited LD_LIBRARY_PATH overrides Nix closure",
+  "evidence_scope": "Post-hoc bootstrap receipt from terminal output and retained empty work directory; no profiling attempted, no acquired result discarded",
+  "work_directory": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/original-all-split-cpu-profile-v1",
+  "work_directory_empty": true,
+  "tests": "NOT_RUN"
+}
