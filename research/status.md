@@ -11,9 +11,14 @@ before the new twelve-process [250 acquisition](lanes/n010-comparison-readiness/
 A loaded same-role BA control has a large process11 shift; retain every
 sample. All2880 frames/images/scratch/owned ledgers pass integrity, no retry.
 This is no accepted timing or readiness proof. Stop this method; no new GPU
-queue. Next prepare the unchanged original full sealed-room CPU controls
-under one-core low-priority finite limits. All other missing controls and
-reference slots remain required. Telemetry is optional, not a prerequisite.
+queue. [Plan101](lanes/n010-comparison-readiness/experiments/101-original-sealed-room-full-controls.md)
+is committed in c8fbbe7 before the original full sealed-dark CPU acquisition.
+Native PID293471/start_ticks2366423 is confirmed live; CPU31,nice15,4GiB,
+1200CPU/1800elapsed limits,1024spp/four original seeds. This is one explicitly
+named acquisition, no subsequent queue. Result252 is still acquiring and
+not counted as PASS; the original physical inventory remains11/17.
+All other missing controls and reference slots remain required.
+Telemetry is optional, not a prerequisite.
 
 **N010 remains NOT_READY.** User resumed work for cause diagnosis and the
 shortest valid completion path, with low interactive load. No old stopped
@@ -27,7 +32,8 @@ completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
 core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
-precedes any long full control. No acquisition or GPU/full-control queue runs.
+precedes the long sphere controls. No GPU/full-control queue runs; the one
+bounded sealed-dark CPU acquisition above is active.
 
 [Traversal prototype238](lanes/n010-comparison-readiness/results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
@@ -61,7 +67,8 @@ owned peak516,167,104bytes and teardown zero. No single-frame precision or
 all16 transfer is claimed. Averaging and symmetric positions have not supplied
 accepted timing or established its cause. Review249 led to prospective100
 and completed250/251; the new decision is also inconclusive, without a2% cut.
-No full campaign or native/GPU research worker remains.
+No full GPU campaign or GPU research worker remains. The separate single CPU
+physical-control acquisition is recorded above.
 
 [Read-only observation235](lanes/n010-comparison-readiness/results/235-posthoc-natural-idle-read-only-observation.json)
 retains30.157s of user-declared idle DRM activity; other-app counters increased,
