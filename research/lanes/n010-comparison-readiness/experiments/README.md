@@ -3,8 +3,9 @@
 [106 — full sphere controls in original-seed checkpoints](106-original-sphere-seed-checkpoints.md)
 registers one manually invoked8192spp original seed at a time for A6a,A6b,A10.
 All four original seeds and full physical gates remain; the last seed records
-the pooled analytic verdict. Prepared NOT RUN;258 is now terminal integrity
-PASS. Each named seed still requires explicit invocation after quiescence.
+the pooled analytic verdict. A6a seed0 native259 was explicitly dispatched
+after258 terminal integrity PASS, from616965d; PID401761/start3905232,
+CPU31/nice15/4GiB. Other seeds NOT RUN; no full physical gate from one part.
 No next-seed/artifact queue or change to running limits.
 
 [105 — original full level-5 artifact](105-original-full-level5-artifact.md)

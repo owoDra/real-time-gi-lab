@@ -54,8 +54,12 @@ proof remains. Full artifact inventory14/17, eligible references16/24.
 No GPU scientific worker or automatic next acquisition.
 [Plan106](experiments/106-original-sphere-seed-checkpoints.md) prepares
 original8192 sphere/range controls in four explicit original-seed checkpoints,
-one manually invoked native at a time. Prepared NOT RUN;258 is now terminal
-integrity PASS. The first named seed still requires an explicit invocation.
+one manually invoked native at a time. The first A6a seed0/305419896 native259
+is now live, PID401761/start3905232, from616965d after258 terminal PASS.
+It retains all128x96 pixels and8192 samples for this original seed, CPU31/
+nice15/4GiB,7200CPU/10800elapsed limits. Projection5536CPU/5566elapsed is
+low-count operational planning, not a full-run ETA. Other seeds are NOT RUN;
+this part cannot advance a full physical gate until all four seeds pass.
 All original samples/physical gates remain; no next-seed/artifact queue.
 [Plan103](experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md)
@@ -85,8 +89,8 @@ core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
 precedes the long sphere controls. The sealed controls and254/255/257 are
-terminal. The original full diagnostic258 is also terminal; no CPU/GPU
-scientific worker or automatic queue is currently active.
+terminal. The original full diagnostic258 is also terminal; only259's named
+full A6a seed0 CPU native is active. No GPU or automatic queue is active.
 
 [Traversal prototype238](results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
