@@ -1,0 +1,1755 @@
+{
+  "schema": "n010-all-split-full-deterministic-controls/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "classification": "SEVEN_ORIGINAL_FULL_CONTROLS_BYTE_EXACT_PASS_NO_ADMISSION",
+  "source_commit": "761ab551c058a006babbccea9e9ce157047f8cf7",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/validate_all_split_deterministic_full.py": "dbe18997eada45b84ab8c6085c533cfbf5b5e839f87ec1a01a42b73876ccc8df",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/081-all-split-original-deterministic-full-controls.md": "15c8bc241d15b318dad3808c2c19e75c36675a8c783facac68d1f917ecc64598",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/validate_all_split_sidedness_full.py": "5bd2a4725d34a0d7e875c2167852ec191c00fe41e579e93c7e92163443e85963",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/225-all-split-full-sidedness-controls.json": "f4de1c124fa6cba6412d4a1471be4f488144fd1d3c26de20ef4330b6c236f777",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/224-all-split-exporter-build.json": "56bb79b683fffe5c8b30d12626939aa6b86d8d3cf85dfe724d7afc2937a5b0b6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/main.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_rqmc_oracle.hpp": "47315cba3ca8c2bfa4dec9dc5cc233bb03e03e21551502e4f27405d626f7f048",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.resources.json": "0e1278bce19369e8cac4c48643ab1033b5415b1d3be564c94d1435574fc74fcc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle": "883e0540f595299e376eea9d289d77bccec0bf13d7f7f5b1b9dff30358dfb294",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/compile.stderr": "e8e50b08a6e9a537d11cd6467e4139a74aac9e5a15d1f3d876f7564fda5402e3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/022-cached-oracle-equivalence.json": "1c353f2623514630e67a7994fa5ebf205da8cafd583e2ab387deae3d9b1e3482",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.meta.json": "9648bf7bab30cc108a81f9c0508b3a7943e683a5975be59a8127457643e8885a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.n008": "02be2e2246d29182d6e28f1faa4a6e3c991fec60281e79d450e29432e4e78dc7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s0.f64": "25e30e630a4a2937e850be6ef0cb31de8f56d6e7755cdae2684b1d22ae190431",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s0.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s0.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s1.f64": "3c2afaabc3803bef6ccc5db7932bc629204a85032dc79f7d0c72d466bce6e9cc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s1.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s1.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s2.f64": "b1a8f2a53e84f21d2aba0a2a94e3bab479fa19bd254add7b383957f3dd74d068",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s2.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s2.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s3.f64": "4f54a20681b7d3b53c2d36596b9f81d56ab5660d90348f32bae9527e10b258e9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s3.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.s3.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.meta.json": "749b118ce20dbd44180704c84bcd44aa3c2341821b2308d8323ecb8ad9541e64",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.n008": "35b5eb428bf4e7b3a85c6d52bbc01970b42077f107309fe7f2fa4e7311215e87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s0.f64": "e9af612a00f6a3ce5cb97660b55d0658a80f6665c61dc2dbace1611014c862f9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s0.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s0.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s1.f64": "05c3be7d17ff5d7058e079040bbaa3fb6f13d720dfbdae992f39d0511f1eafa0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s1.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s1.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s2.f64": "f7e4840b85b00881bb6db1c6909def774bf985c82228ef417d9389acbaf78835",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s2.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s2.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s3.f64": "e7909ccc1c8cf4c851c2cff2abdd3d4e22ade3f2d9b21cdc669f5174df2fe962",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s3.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.s3.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.meta.json": "e4dad51b554fd3c505809f0d5e286bf94c6bcce5a85c14eb90488c14361b2001",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.n008": "37e227a606ed5d522e1697d67139feb1cf50db5c5ec186071b1ddcf7fb9f5436",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s0.f64": "ff09ff4fbdc75c982edceaff9c1104da45ceefb76bb95394db6c62ce641f525d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s0.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s0.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s1.f64": "cda7c5df40df26950b3589e47183fea831f60af7922cd4491f9d66deaef75609",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s1.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s1.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s2.f64": "a086a8ff8e0c62b07c2e75186e80894f3d1caf9b10e774d8b36567322cbbe9cc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s2.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s2.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s3.f64": "9a242bef32fc8ea877a09678f792d9d5756117996d3cd83e762f9d283b8e8bf4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s3.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.s3.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.meta.json": "aa0f2a1218d8d88c717a5e69b58eee14476166da2cafa7f7729d50f62c4be726",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.n008": "d6a6625c8e61a1b3602e7e3373ee440729c1347f031c85fc03291c1a5fbfc353",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s0.f64": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s0.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s0.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s1.f64": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s1.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s1.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s2.f64": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s2.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s2.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s3.f64": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s3.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.s3.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.meta.json": "0059e5f3b4d24f422267cb136eee1608909bfb07ee9d9451cc041475007bbcb9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.n008": "c1b31e62e07e8f75030f529f6837935d53d1eacd7e1aa597ce6d466dacb82e87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s0.f64": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s0.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s0.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s1.f64": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s1.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s1.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s2.f64": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s2.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s2.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s3.f64": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s3.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.s3.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.meta.json": "6ceb1710b3a930aa8d525bfe6d87e4e9cc8499197ea315ed7017dfe179173ef0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.n008": "6c7f7695a4a6c71e1c381c1a18623290cb97f6e019bfa263fb6ea03a32de7e0b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s0.f64": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s0.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s0.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s1.f64": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s1.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s1.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s2.f64": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s2.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s2.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s3.f64": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s3.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.s3.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.meta.json": "5435a7efd5ed5b134ee048f848b20e78e64351eafdaa2231f588ff78706d7c84",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.n008": "c2767666566fb89a166249ffed5cb499f5826ae446f271baa3bc6f82900fa023",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s0.f64": "1d3e5943c3d5d4409c0c5c231e68939ae4dfcf16a507d9879be966411d817d60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s0.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s0.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s1.f64": "57e497460155b92272010b34d42042aa9af5a99ee8a35daab018ca225621af74",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s1.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s1.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s2.f64": "a65c62a56259315f6acc9b58db582fba0c91de4a878a6a0f52a1ad436dddb1f9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s2.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s2.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s3.f64": "e2a5ef1ed9b077664163ca0fb9f122aa1ebffd756c1688be424f2bc87c41a843",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s3.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.s3.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.resources.json": "1627c73e1e2babc4d56d893e9b66e4a801dc93cb785404ac8631e4d1f4700998",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.resources.json": "5713b400e294605cbe9f10a770a46278affc4a62b733678732c206ee7a4d740d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.resources.json": "c46a1b2af469c25ec908ac5a1295b415af3e2e28afbe35c2fc101b182629f21d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.resources.json": "e735d4d440df78d00148233e85f86604d24896b278e573a32c8f4cf2b998ce3e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.resources.json": "235435fac303822b16834e92822e9c002b4c05b24e35c92ef90a9cbe9d3d2b77",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.resources.json": "60e10673be6acae6c731d1fc34ab0d016f54bfaa097e1efc6c94594013620fad",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.resources.json": "7ea4cc593c1dcc6742f1cb7e6c52b492681e02d2f1c66fa3aaa8abb3cf987609"
+  },
+  "scope": "Seven original full deterministic scenes; plus225 nine of17, not stochastic indirect/range/full-suite proof",
+  "names": [
+    "A2",
+    "A2b",
+    "A4a",
+    "A4b",
+    "A8_authored",
+    "A8_frozen",
+    "A8_stale_rest_pose"
+  ],
+  "rows": [
+    {
+      "name": "A2",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 1.1401725779996923,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "25e30e630a4a2937e850be6ef0cb31de8f56d6e7755cdae2684b1d22ae190431",
+          "original_sha256": "25e30e630a4a2937e850be6ef0cb31de8f56d6e7755cdae2684b1d22ae190431",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "3c2afaabc3803bef6ccc5db7932bc629204a85032dc79f7d0c72d466bce6e9cc",
+          "original_sha256": "3c2afaabc3803bef6ccc5db7932bc629204a85032dc79f7d0c72d466bce6e9cc",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "b1a8f2a53e84f21d2aba0a2a94e3bab479fa19bd254add7b383957f3dd74d068",
+          "original_sha256": "b1a8f2a53e84f21d2aba0a2a94e3bab479fa19bd254add7b383957f3dd74d068",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "4f54a20681b7d3b53c2d36596b9f81d56ab5660d90348f32bae9527e10b258e9",
+          "original_sha256": "4f54a20681b7d3b53c2d36596b9f81d56ab5660d90348f32bae9527e10b258e9",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "original_sha256": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3406812,
+          "component_attempts": 3167360,
+          "component_nulls": 3113683,
+          "own_checks": 53677,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.004054467329096557,
+          "max_unconditioned_error_fraction": 0.008577452274217034
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3407572,
+          "component_attempts": 3167360,
+          "component_nulls": 3113691,
+          "own_checks": 53669,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.003993394267355666,
+          "max_unconditioned_error_fraction": 0.006553337496179192
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3408025,
+          "component_attempts": 3167360,
+          "component_nulls": 3113535,
+          "own_checks": 53825,
+          "max_own_log_error": 3.552713678800501e-15,
+          "max_conditioned_error_fraction": 0.005365588730612083,
+          "max_unconditioned_error_fraction": 0.007116949378523251
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3407321,
+          "component_attempts": 3167360,
+          "component_nulls": 3113597,
+          "own_checks": 53763,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.0046802151391310744,
+          "max_unconditioned_error_fraction": 0.007077465890882275
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A2b",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A2b.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 1.0953554569996413,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "e9af612a00f6a3ce5cb97660b55d0658a80f6665c61dc2dbace1611014c862f9",
+          "original_sha256": "e9af612a00f6a3ce5cb97660b55d0658a80f6665c61dc2dbace1611014c862f9",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "05c3be7d17ff5d7058e079040bbaa3fb6f13d720dfbdae992f39d0511f1eafa0",
+          "original_sha256": "05c3be7d17ff5d7058e079040bbaa3fb6f13d720dfbdae992f39d0511f1eafa0",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "f7e4840b85b00881bb6db1c6909def774bf985c82228ef417d9389acbaf78835",
+          "original_sha256": "f7e4840b85b00881bb6db1c6909def774bf985c82228ef417d9389acbaf78835",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "e7909ccc1c8cf4c851c2cff2abdd3d4e22ade3f2d9b21cdc669f5174df2fe962",
+          "original_sha256": "e7909ccc1c8cf4c851c2cff2abdd3d4e22ade3f2d9b21cdc669f5174df2fe962",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "original_sha256": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3406812,
+          "component_attempts": 3167360,
+          "component_nulls": 3113683,
+          "own_checks": 53677,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.004054467329096557,
+          "max_unconditioned_error_fraction": 0.008577452274217034
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3407572,
+          "component_attempts": 3167360,
+          "component_nulls": 3113691,
+          "own_checks": 53669,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.003993394267355666,
+          "max_unconditioned_error_fraction": 0.006553337496179192
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3408025,
+          "component_attempts": 3167360,
+          "component_nulls": 3113535,
+          "own_checks": 53825,
+          "max_own_log_error": 3.552713678800501e-15,
+          "max_conditioned_error_fraction": 0.005365588730612083,
+          "max_unconditioned_error_fraction": 0.007116949378523251
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3407321,
+          "component_attempts": 3167360,
+          "component_nulls": 3113597,
+          "own_checks": 53763,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.0046802151391310744,
+          "max_unconditioned_error_fraction": 0.007077465890882275
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A4a",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4a.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 0.30576791200019215,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "ff09ff4fbdc75c982edceaff9c1104da45ceefb76bb95394db6c62ce641f525d",
+          "original_sha256": "ff09ff4fbdc75c982edceaff9c1104da45ceefb76bb95394db6c62ce641f525d",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "cda7c5df40df26950b3589e47183fea831f60af7922cd4491f9d66deaef75609",
+          "original_sha256": "cda7c5df40df26950b3589e47183fea831f60af7922cd4491f9d66deaef75609",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "a086a8ff8e0c62b07c2e75186e80894f3d1caf9b10e774d8b36567322cbbe9cc",
+          "original_sha256": "a086a8ff8e0c62b07c2e75186e80894f3d1caf9b10e774d8b36567322cbbe9cc",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "9a242bef32fc8ea877a09678f792d9d5756117996d3cd83e762f9d283b8e8bf4",
+          "original_sha256": "9a242bef32fc8ea877a09678f792d9d5756117996d3cd83e762f9d283b8e8bf4",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "original_sha256": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326200,
+          "component_attempts": 1306368,
+          "component_nulls": 1300515,
+          "own_checks": 5853,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.0023110433437513404,
+          "max_unconditioned_error_fraction": 0.0028540354815446882
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326321,
+          "component_attempts": 1306368,
+          "component_nulls": 1300608,
+          "own_checks": 5760,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.0024107587558898566,
+          "max_unconditioned_error_fraction": 0.002770541524074847
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326313,
+          "component_attempts": 1306368,
+          "component_nulls": 1300620,
+          "own_checks": 5748,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.002427832978267599,
+          "max_unconditioned_error_fraction": 0.0027264082794336234
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326313,
+          "component_attempts": 1306368,
+          "component_nulls": 1300509,
+          "own_checks": 5859,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.002070881087799739,
+          "max_unconditioned_error_fraction": 0.0025067885089210032
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A4b",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A4b.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 0.3068205500003387,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+          "original_sha256": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+          "original_sha256": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+          "original_sha256": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+          "original_sha256": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326200,
+          "component_attempts": 1306368,
+          "component_nulls": 1300515,
+          "own_checks": 5853,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.0023110433437513404,
+          "max_unconditioned_error_fraction": 0.0028540354815446882
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326321,
+          "component_attempts": 1306368,
+          "component_nulls": 1300608,
+          "own_checks": 5760,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.0024107587558898566,
+          "max_unconditioned_error_fraction": 0.002770541524074847
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326313,
+          "component_attempts": 1306368,
+          "component_nulls": 1300620,
+          "own_checks": 5748,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.002427832978267599,
+          "max_unconditioned_error_fraction": 0.0027264082794336234
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 1326313,
+          "component_attempts": 1306368,
+          "component_nulls": 1300509,
+          "own_checks": 5859,
+          "max_own_log_error": 1.7763568394002505e-15,
+          "max_conditioned_error_fraction": 0.002070881087799739,
+          "max_unconditioned_error_fraction": 0.0025067885089210032
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A8_authored",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_authored.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 1.1370734080001057,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+          "original_sha256": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+          "original_sha256": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+          "original_sha256": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+          "original_sha256": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3402070,
+          "component_attempts": 3157504,
+          "component_nulls": 3110272,
+          "own_checks": 47232,
+          "max_own_log_error": 8.881784197001252e-15,
+          "max_conditioned_error_fraction": 0.007458237388006092,
+          "max_unconditioned_error_fraction": 0.14229323832672394
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3402277,
+          "component_attempts": 3157504,
+          "component_nulls": 3110092,
+          "own_checks": 47412,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.008992815678245397,
+          "max_unconditioned_error_fraction": 0.48878997947804
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3402996,
+          "component_attempts": 3157504,
+          "component_nulls": 3110131,
+          "own_checks": 47373,
+          "max_own_log_error": 3.375077994860476e-14,
+          "max_conditioned_error_fraction": 0.008111334679629382,
+          "max_unconditioned_error_fraction": 0.5012728919069657
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3401650,
+          "component_attempts": 3157504,
+          "component_nulls": 3110314,
+          "own_checks": 47190,
+          "max_own_log_error": 5.329070518200751e-15,
+          "max_conditioned_error_fraction": 0.008525275906374393,
+          "max_unconditioned_error_fraction": 1.3605896782700677
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A8_frozen",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_frozen.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 1.147009238999999,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+          "original_sha256": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+          "original_sha256": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+          "original_sha256": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+          "original_sha256": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "original_sha256": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3402070,
+          "component_attempts": 3157504,
+          "component_nulls": 3110272,
+          "own_checks": 47232,
+          "max_own_log_error": 7.105427357601002e-15,
+          "max_conditioned_error_fraction": 0.007936169920655205,
+          "max_unconditioned_error_fraction": 0.42098431336174075
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3402277,
+          "component_attempts": 3157504,
+          "component_nulls": 3110092,
+          "own_checks": 47412,
+          "max_own_log_error": 5.684341886080802e-14,
+          "max_conditioned_error_fraction": 0.008358037296552942,
+          "max_unconditioned_error_fraction": 0.9030646198949485
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3402996,
+          "component_attempts": 3157504,
+          "component_nulls": 3110131,
+          "own_checks": 47373,
+          "max_own_log_error": 1.5987211554602254e-14,
+          "max_conditioned_error_fraction": 0.00813855517110275,
+          "max_unconditioned_error_fraction": 0.4948836889246893
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3401650,
+          "component_attempts": 3157504,
+          "component_nulls": 3110314,
+          "own_checks": 47190,
+          "max_own_log_error": 1.4210854715202004e-14,
+          "max_conditioned_error_fraction": 0.008170400087637919,
+          "max_unconditioned_error_fraction": 2.0316929759496385
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    },
+    {
+      "name": "A8_stale_rest_pose",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-exporter-v1/n010_all_split_oracle",
+        "--net",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A8_stale_rest_pose.n008",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose",
+        "--seeds",
+        "305419896,2596069104,81985529216486895,18364758544493064720",
+        "--spp",
+        "64",
+        "--threads",
+        "1"
+      ],
+      "pass_": true,
+      "returncode": 0,
+      "elapsed": 1.115948651000508,
+      "payloads": [
+        {
+          "payload": ".s0.f64",
+          "sha256": "1d3e5943c3d5d4409c0c5c231e68939ae4dfcf16a507d9879be966411d817d60",
+          "original_sha256": "1d3e5943c3d5d4409c0c5c231e68939ae4dfcf16a507d9879be966411d817d60",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.direct.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s0.total.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.f64",
+          "sha256": "57e497460155b92272010b34d42042aa9af5a99ee8a35daab018ca225621af74",
+          "original_sha256": "57e497460155b92272010b34d42042aa9af5a99ee8a35daab018ca225621af74",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.direct.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s1.total.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.f64",
+          "sha256": "a65c62a56259315f6acc9b58db582fba0c91de4a878a6a0f52a1ad436dddb1f9",
+          "original_sha256": "a65c62a56259315f6acc9b58db582fba0c91de4a878a6a0f52a1ad436dddb1f9",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.direct.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s2.total.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.f64",
+          "sha256": "e2a5ef1ed9b077664163ca0fb9f122aa1ebffd756c1688be424f2bc87c41a843",
+          "original_sha256": "e2a5ef1ed9b077664163ca0fb9f122aa1ebffd756c1688be424f2bc87c41a843",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.emission.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.direct.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.indirect.pfm",
+          "sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "original_sha256": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+          "byte_identical": true
+        },
+        {
+          "payload": ".s3.total.pfm",
+          "sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "original_sha256": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+          "byte_identical": true
+        }
+      ],
+      "original_primary_hit_absorption_counters_exact": true,
+      "audit_receipts": [
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3368344,
+          "component_attempts": 3138688,
+          "component_nulls": 3092793,
+          "own_checks": 45895,
+          "max_own_log_error": 5.684341886080802e-14,
+          "max_conditioned_error_fraction": 0.008254179480889723,
+          "max_unconditioned_error_fraction": 0.5296504657668619
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3368463,
+          "component_attempts": 3138688,
+          "component_nulls": 3092833,
+          "own_checks": 45855,
+          "max_own_log_error": 2.9753977059954195e-13,
+          "max_conditioned_error_fraction": 0.005565598245487517,
+          "max_unconditioned_error_fraction": 0.4543288491466582
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3368892,
+          "component_attempts": 3138688,
+          "component_nulls": 3092767,
+          "own_checks": 45921,
+          "max_own_log_error": 7.105427357601002e-14,
+          "max_conditioned_error_fraction": 0.007051706743803909,
+          "max_unconditioned_error_fraction": 0.6366804963714205
+        },
+        {
+          "auxiliary_primary_primes": 12288,
+          "proposal_bvh_queries": 3369272,
+          "component_attempts": 3138688,
+          "component_nulls": 3092769,
+          "own_checks": 45919,
+          "max_own_log_error": 4.618527782440651e-14,
+          "max_conditioned_error_fraction": 0.007431947933099481,
+          "max_unconditioned_error_fraction": 1.2278364345987827
+        }
+      ],
+      "full_frame": [
+        128,
+        96
+      ],
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "spp": 64
+    }
+  ],
+  "tests": "NOT_RUN; original scientific full-frame controls only",
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s2.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.hits": "245ca22bf155a8c0d78641cef5f9ce0732ea34061b0752963d43cd6263c1b819",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s1.f64": "741f725d67cca4e5c4b17cf8e3d7b946c550badb1a1d5681044fe5317e15fe4b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.meta.json": "afdcab0d84cb7d768d405639f26bdc941208580c40f56b7c30207011ab2477f3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s2.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s0.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s0.f64": "e9af612a00f6a3ce5cb97660b55d0658a80f6665c61dc2dbace1611014c862f9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s2.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s0.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.stdout": "e9b432525ae5faacdab6f6403cec0bdcc37358329d76175e3e3bbb8b03c42dc4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.stdout": "2a8cbad365f489501d598e0f101d230e1ad8124ed3a0f84106ad8cee26574c12",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s2.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s2.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s2.f64": "a65c62a56259315f6acc9b58db582fba0c91de4a878a6a0f52a1ad436dddb1f9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s2.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s1.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s3.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s0.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s3.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.meta.json": "e7e1af750137bec2eddd8be89dad1189bdb1a87aad236e38bc7ae3d318653588",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s1.f64": "3c2afaabc3803bef6ccc5db7932bc629204a85032dc79f7d0c72d466bce6e9cc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.stderr": "69d14c14d98151aa4c3dd1619d41888a78dcc8e821f08c534449193858ff12d8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s0.f64": "25e30e630a4a2937e850be6ef0cb31de8f56d6e7755cdae2684b1d22ae190431",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.resources.json": "7ea4cc593c1dcc6742f1cb7e6c52b492681e02d2f1c66fa3aaa8abb3cf987609",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s0.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s2.f64": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s3.f64": "4f54a20681b7d3b53c2d36596b9f81d56ab5660d90348f32bae9527e10b258e9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.stdout": "b4e90cdf538035643eb21c7ce1bb8428d61a817fdc9c39742dbad0d078867379",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s1.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.stdout": "a3052461ee331ec9cdaba69bfacf6b2a19a84434f5bb76b993668d9325dd787b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s2.f64": "a086a8ff8e0c62b07c2e75186e80894f3d1caf9b10e774d8b36567322cbbe9cc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s2.f64": "b1a8f2a53e84f21d2aba0a2a94e3bab479fa19bd254add7b383957f3dd74d068",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s0.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s1.f64": "05c3be7d17ff5d7058e079040bbaa3fb6f13d720dfbdae992f39d0511f1eafa0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s1.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s0.f64": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s0.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s3.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.meta.json": "3d568fca35e69cd7e2d70acaddc5a70925645e7e31754367c469077629ed9b9e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s2.f64": "14b102e1e42b53daa9b21b39cf75af455c01062b59822d49bfeafb9b3a666fd1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s3.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s2.f64": "813cdb97ec1e392b09f887d3205a1dd32272bf3aff108a637fde83d23da1e335",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s1.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s0.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s1.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.hits": "bfa69b7a1b7cc48495408538dbf6390bea2f58bcc65d27eb12358918a20b3b7b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s0.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s3.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.resources.json": "1627c73e1e2babc4d56d893e9b66e4a801dc93cb785404ac8631e4d1f4700998",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.hits": "44c85963100ae8aab068cecdd0316f18b86363b45a367a4ad2c53f8fa80d10f1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.resources.json": "c46a1b2af469c25ec908ac5a1295b415af3e2e28afbe35c2fc101b182629f21d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s1.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s2.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.stderr": "7ae9ec133b12102d4ba5ecb37c0f1f65f26e2e0904708988acef5480e9c23c6c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s3.f64": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s0.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.stdout": "e373d8b7ebbc3b46e700ae9ffaaa9970094db75c301c308d4b33125a0898b814",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.stderr": "97a073d55402d69681d675603c50b37fd85da506c373b5ca9bd2f09718854fb5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s2.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s3.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s2.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s1.f64": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.resources.json": "e735d4d440df78d00148233e85f86604d24896b278e573a32c8f4cf2b998ce3e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s3.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s3.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.meta.json": "f269a479e68f7235a070e9f767ffde41bd87663a196efb4da7ef74f901aa216e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s0.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s0.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s3.f64": "7e6b08111742aecf712567d957129e7770e86d0dc1eabc08a199704a4b978cb6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s2.direct.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s1.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s3.direct.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s3.direct.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.stderr": "97a073d55402d69681d675603c50b37fd85da506c373b5ca9bd2f09718854fb5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s2.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s1.direct.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s3.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.resources.json": "5713b400e294605cbe9f10a770a46278affc4a62b733678732c206ee7a4d740d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s1.f64": "cda7c5df40df26950b3589e47183fea831f60af7922cd4491f9d66deaef75609",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.resources.json": "235435fac303822b16834e92822e9c002b4c05b24e35c92ef90a9cbe9d3d2b77",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s3.f64": "271c327bc8005204ceeaf5317a82cc72f86ecb9169503e7d4aa5fc11d629d44b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s2.f64": "f7e4840b85b00881bb6db1c6909def774bf985c82228ef417d9389acbaf78835",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.stdout": "ab1d804346d8b4583bdc66c5e370b35cec276d0ee12068aea3e7282a481a9145",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s3.f64": "e2a5ef1ed9b077664163ca0fb9f122aa1ebffd756c1688be424f2bc87c41a843",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s1.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.meta.json": "ef3893f7d207cd8dbb98d5c3610278fa1d0a49eba13d212f0271799b3108fdf8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s3.total.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s0.total.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s2.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s0.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.hits": "b45356b01dfb34b9d2ef8fc51d401834eebc51427138cd4c5346a9859668ef60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s2.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s1.f64": "096f7b4d343b44559fd6053078aa42154bf131f87e92c4c74113c2e2314b23f2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s1.total.pfm": "91e2f941967c06a4bfa5368e1752da272ed1f4bb63391aed43c68ec8aa050ece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.meta.json": "9c89efc461958b2dcb9bf1c2de0361124791ef0aa88a70ae3b8225c0954edce7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s0.f64": "ff09ff4fbdc75c982edceaff9c1104da45ceefb76bb95394db6c62ce641f525d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.stderr": "e1468f32280a19eea831a1247c37ef19d542c3c42c814d9bd6fdcd8191c7fece",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s1.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s1.direct.pfm": "1580a86bfaa128d6fd964badea4215cdec3bff7623d1de2322231232d44ab7fe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s0.f64": "1d3e5943c3d5d4409c0c5c231e68939ae4dfcf16a507d9879be966411d817d60",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s0.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s3.f64": "9a242bef32fc8ea877a09678f792d9d5756117996d3cd83e762f9d283b8e8bf4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s1.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.resources.json": "60e10673be6acae6c731d1fc34ab0d016f54bfaa097e1efc6c94594013620fad",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s2.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s3.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s0.total.pfm": "957fd4efb5eb62c932e259fa4d976b798507a44741712e389ee2da1551c39519",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_authored.s0.f64": "5a9a30086a372b0a410dacfcd1aa47fc98584865196b636911682f455c42b9cf",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s2.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.hits": "7a8c50612518e18d6393be0c7bf6322abb49b22fc8dd77f5f2001c17787f666a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.stdout": "bb4bd3c4bd729a2b06e983ecb54e225fa1455e649182735d6cd9105a1b291a30",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_frozen.s3.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.hits": "7feaa61bded02e5c18f23f068cb04d7a693dccd0d4598d6315351aa91db86303",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s1.f64": "57e497460155b92272010b34d42042aa9af5a99ee8a35daab018ca225621af74",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s1.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s3.total.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s3.f64": "e7909ccc1c8cf4c851c2cff2abdd3d4e22ade3f2d9b21cdc669f5174df2fe962",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.s1.total.pfm": "e4ec274ced0ffbf27711b8447dd8250bee884709a8d5db9990458e82ae993177",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s2.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4b.s0.f64": "4e5421d6e88edfcca985dd965e33d2c2ff01740f1baf39f454ed571a49272cfc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.s3.direct.pfm": "1c48e738a943418515dee44598f8adef0226f69402c10c3f449b9d29e05608cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A4a.meta.json": "b96879ce9d157e5302ec49995091de8a3e83f1dc53f6ff9369799bd5230e0285",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2b.s1.emission.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A8_stale_rest_pose.s0.indirect.pfm": "8902bbd7e2e2b4dcaeade43c42d11f6883c5f3930ff0b3e50127783898cae361",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/all-split-full-deterministic-v1/A2.hits": "7feaa61bded02e5c18f23f068cb04d7a693dccd0d4598d6315351aa91db86303"
+  }
+}
