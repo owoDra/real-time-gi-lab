@@ -22,8 +22,10 @@ Original [sealed-lit253](results/253-all-split-original-sealed-lit-full-control.
 is also terminal **physical PASS**, every pixel direct/total positive,
 original128x96/1024spp/four seeds and exact deterministic/primary identities.
 Native0,732.539CPU/735.380elapsed seconds, CPU31/nice15/4GiB, no retry.
-Both sealed natives are terminal. Full physical inventory is now **13/17**;
-the four original sphere/range artifacts, A6b IID and other gates remain.
+Both sealed natives are terminal. With258's diagnostic-only level5 artifact,
+the original full artifact inventory is now **14/17**, including that one
+non-gated item. Three original8192 sphere/range artifacts, A6b IID and other
+gates remain. This is not14 analytic gates passing.
 [Plan102](experiments/102-wide8-exact-cpu-bvh-prototype.md), committed
 in eb308b2 before execution, now has terminal [254](results/254-wide8-cpu-bvh-prototype.json)
 **execution-prototype PASS**:53,415,447 exact full-query comparisons,
@@ -41,15 +43,19 @@ All21 output payloads and integer/proposal audits match for each case. Nine
 are original full64 deterministic cases; eight other low-count matches do
 not replace original full physical/IID/bias/state/prefix/reference gates.
 [Plan105](experiments/105-original-full-level5-artifact.md), committed
-in844e5c9 before dispatch, has one live original A6b_level5_diag full256spp/
-four-seed native258, PID324604/start2589490, CPU31/nice15/4GiB. Limits
-1200CPU/1800elapsed seconds; retained8spp projection633CPU/636elapsed is
-operational planning only. This original mesh item is diagnostic-only, not
-an analytic A6b gate. No automatic next acquisition; inventory stays13/17
-until terminal validated evidence. No GPU scientific worker.
+in844e5c9 before dispatch, now has terminal [258](results/258-wide8-original-level5-full-artifact.json):
+original A6b_level5_diag full128x96/256spp/four seeds, **integrity PASS**,
+native0,615.547CPU/618.643elapsed seconds. CPU31/nice15/4GiB within the
+1200CPU/1800elapsed limits; original deterministic bits/hits/counts and all
+finite/proposal audits pass. Original analytic role stays **diagnostic-only**;
+indirect region error0.02967–0.02996%,NRMSE0.07955% is not a gated A6b result.
+All unconditioned numerical-audit values are retained; independent bias/IID
+proof remains. Full artifact inventory14/17, eligible references16/24.
+No GPU scientific worker or automatic next acquisition.
 [Plan106](experiments/106-original-sphere-seed-checkpoints.md) prepares
 original8192 sphere/range controls in four explicit original-seed checkpoints,
-one manually invoked native at a time. NOT RUN;258 must terminate PASS first.
+one manually invoked native at a time. Prepared NOT RUN;258 is now terminal
+integrity PASS. The first named seed still requires an explicit invocation.
 All original samples/physical gates remain; no next-seed/artifact queue.
 [Plan103](experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md)
@@ -70,7 +76,8 @@ acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
 diagnostics have completed; neither supplies the missing readiness proof.
 Original full A6c native234 completed; [post-hoc237](results/237-posthoc-original-a6c-retained-control.json)
 repairs only missing summary metadata and passes the unchanged analytic gates.
-The prior full physical inventory was11/17;252/253 now advance it to **13/17**.
+252/253 advanced the prior original full inventory11/17 to13/17;258 now
+retains **14/17**, including the original diagnostic-only level5 artifact.
 No native was retried.
 [Cost inventory236](results/236-all-split-remaining-controls-cpu-cost.json)
 completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
@@ -78,7 +85,8 @@ core. The three full multibounce sphere cases project about12CPU hours each;
 all six remaining artifacts project36.984CPU hours. These are low-count cost
 projections, not full-run evidence or an N010 ETA. Execution optimization
 precedes the long sphere controls. The sealed controls and254/255/257 are
-terminal. Only258's named CPU diagnostic native is active; no GPU or queue.
+terminal. The original full diagnostic258 is also terminal; no CPU/GPU
+scientific worker or automatic queue is currently active.
 
 [Traversal prototype238](results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
 2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
@@ -126,7 +134,7 @@ and [prospective bounded plan 057](experiments/057-bounded-cause-diagnosis-and-c
 | --- | --- | --- |
 | All 24 eligible references | [160](results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
 | Stopped first-direction guide | [180](results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
-| Whole-path reference candidate | [225](results/225-all-split-full-sidedness-controls.json); [226](results/226-all-split-full-deterministic-controls.json); [231](results/231-posthoc-original-a7-retained-control.json); [237](results/237-posthoc-original-a6c-retained-control.json); [252](results/252-all-split-original-sealed-dark-full-control.json); [253](results/253-all-split-original-sealed-lit-full-control.json): **13/17 original full artifacts PASS** | Four original sphere/range artifacts remain; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
+| Whole-path reference candidate | [225](results/225-all-split-full-sidedness-controls.json); [226](results/226-all-split-full-deterministic-controls.json); [231](results/231-posthoc-original-a7-retained-control.json); [237](results/237-posthoc-original-a6c-retained-control.json); [252](results/252-all-split-original-sealed-dark-full-control.json); [253](results/253-all-split-original-sealed-lit-full-control.json); [258](results/258-wide8-original-level5-full-artifact.json): **14/17 original full artifacts retained**, including one diagnostic-only item | Three original8192 sphere/range controls remain; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
 | GPU calibration | [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md): **bounded static C7 capability PASS**, interval[1.138644,1.242059] | Register/calibrate actual selected quality/workload boundaries and proof intake. No all16/dynamic transfer or accepted candidate timing; old FAILs retained. |
 | Correctness | Actual GPU keys/BF-P evidence retained; [053](results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
 | Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and final six-gate auditor. DDGI source/device preparation021/023/057 is already present; scene-GI qualification is required before that family's Lane M campaign. |
