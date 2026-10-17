@@ -1033,6 +1033,36 @@
       "status": "complete-eight-pixel-array-rqmc-exact-original-controls-promising-rule-fail-fixed-construction-stopped-no-admission",
       "result": "203-array-rqmc-transport-diagnosis.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-204",
+      "status": "complete-compile-fail-decoder-target-state-preserved-no-gpu",
+      "result": "204-contiguous-c7-fixture-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-205",
+      "status": "complete-compile-fail-generated-import-include-preserved-no-gpu",
+      "result": "205-contiguous-c7-decoder-repair-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-206",
+      "status": "complete-isolated-static-c7-command-batch-build-pass-no-runtime-admission",
+      "result": "206-contiguous-c7-import-repair-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-207",
+      "status": "complete-contiguous-c7-sizing-pass-no-timing-admission",
+      "result": "207-contiguous-c7-sizing.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-208",
+      "status": "complete-contiguous-c7-512-sample-precision-fail-three-of-seven-gates-pass-no-admission",
+      "result": "208-contiguous-c7-precision-diagnostic.json",
+      "gpu_run": true
     }
   ]
 }

@@ -125,10 +125,41 @@ larger-level prefix, full physical/state proof or reference admission follows.
 The result does not reject array-RQMC generally or establish the behavior of
 all eight pending corpus slots. No scientific acquisition remains running.
 
-The unresolved reference problem is how to retain effective stratification
-through later transport steps. The unresolved timing problem includes the
-per-frame submit/fence/query cycle, which packed diagnostic copies do not
-remove. Neither is fixed. All original thresholds and final gates remain;
+### Contiguous submission diagnosis, completed 2026-10-17
+
+[063](experiments/063-contiguous-c7-command-batch-diagnosis.md) through
+[065](experiments/065-contiguous-import-header-repair.md) implement a static C7-only
+fixture with separate uniform/query/readback slots for every original frame.
+[204](results/204-contiguous-c7-fixture-build.json) and
+[205](results/205-contiguous-c7-decoder-repair-build.json) preserve compiler failures;
+[206](results/206-contiguous-c7-import-repair-build.json) builds successfully without
+changing original timed GPU recording or timing expressions. No original
+header/default target changes. [207](results/207-contiguous-c7-sizing.json) sizing PASS
+freezes dose 1342 by the original rule; no dose tuning follows.
+
+[208](results/208-contiguous-c7-precision-diagnostic.json) completes all 8 blocks / 512
+samples, each block in one frame-batch submit/wait. Every original image,
+scratch, schedule, owned-memory ledger and batch frame identity passes its
+acquisition check. Original classifier: **3/7 gates PASS, overall FAIL**.
+Control envelope 1.030658, span 1.046921, order bias 1.078222; effect span
+1.027634 (PASS), order bias 1.033715 (FAIL), minimum positive fraction 0.916667
+(PASS), minimum effect 1.193435 > control envelope (PASS). Summed measured
+GPU intervals **0.082508 seconds**; zero-dose full GPU times
+131.249 / 141.108 / 419.156 us (min/median/max). Setup, copies, CPU recording
+and one-second block settles are additional. Cached CPU calls are not separate
+frame wall-time measurements. All native payload hashes and original decisions
+were independently replayed on one low-priority CPU after acquisition.
+
+This fixture does not establish original precision or explain how much prior
+variation came from CPU gaps: dose, cadence and natural environment differ.
+It has no PT/dense-RC or fresh-state dynamic implementation. Do not transfer it
+to all sixteen boundaries or rerun a failed candidate/full campaign. No
+scientific worker remains. Reference eligibility remains **16/24**.
+
+The unresolved reference problem is reducing later finite-transport uncertainty
+while preserving the physical and sampling contracts. The unresolved timing
+problem remains full-boundary precision: packed copies and a contiguous C7
+batch have both failed. Neither is fixed. All original thresholds and final gates remain;
 N010 completion and a date remain unproved.
 
 ### Evidence and preserved boundaries

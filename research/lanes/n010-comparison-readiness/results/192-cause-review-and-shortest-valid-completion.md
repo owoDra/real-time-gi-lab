@@ -396,3 +396,64 @@ six-gate auditor are still required afterwards. 199–203 improve executable
 cause diagnosis and reject unsupported dispatches, not readiness. No long
 acquisition, default promotion, N011 or threshold change is substituted for
 those requirements.
+
+
+## Contiguous C7 submission: completed evidence, not precision admission
+
+Plans 063–065 and results 204–208 implement one original frame stream with
+per-frame parameters, query ranges and output copies, in one submit/fence
+wait per block. The original commands through stamp15 and timing expressions
+are byte-identical. Uniform descriptors alone become dynamic descriptors,
+with actual device alignment4, stride4096, range128; all frame IDs are verified.
+The inter-frame full memory dependency and diagnostic copies are outside the
+scored timestamps. No extra warmup/scientific frames, averaging or power change.
+This is static C7 only, not a full-corpus or dynamic implementation.
+
+204's compiler caught an omitted target_state helper argument; 205 retains
+that repair and catches a generated relative include resolving historical
+standalone Lane B instead of the pinned imported header. Both terminate with
+no GPU work and remain immutable. 206 explicitly selects the original pinned
+header and completes runtime/capture/compute/link in 5.965 / 2.525 / 0.524 /
+0.057 seconds, each one CPU nice15, original 8GiB/120CPU/300elapsed guards.
+Original headers, default build and N001–N009 remain byte-unchanged.
+
+207 sizing completes 9 scheduled frames and freezes dose1342, original rule.
+208 completes all 8x64 scheduled frames, 8 single frame-batch submits and waits,
+all frame/query/uniform identities, original 046 image hashes, neutral-scratch
+verification, CPU spool receipts and owned-memory replay. Each native process
+has an actual receipt for CPU30/elapsed30, one CPU nice15. All ledgers return
+zero at teardown. Summed measured full GPU intervals are 0.082507846 seconds;
+zero-dose min/median/max 131.249375 / 141.108107 / 419.156402 us. Batch CPU
+wall includes recording/submission; cached per-frame calls are not independent
+frame execution costs. Initial resource uploads and diagnostic copies remain
+additional work, not hidden inside a single-submit-lifetime claim.
+
+| Original precision gate | Observed | Decision |
+| --- | ---: | --- |
+| Control absolute envelope <=1.02 | 1.030658426 | FAIL |
+| Control span <=1.03 | 1.046921226 | FAIL |
+| Control AB/BA bias <=1.02 | 1.078221697 | FAIL |
+| Effect span <=1.05 | 1.027634048 | PASS |
+| Effect AB/BA bias <=1.03 | 1.033715157 | FAIL |
+| Minimum positive fraction >=0.75 | 0.916666667 | PASS |
+| Minimum effect > control envelope | 1.193435139 > 1.030658426 | PASS |
+
+Overall **COMPLETE / FAIL**. The candidate stops. Three passing component
+gates do not override the four failures or authorize accepted timing. Earlier
+201 has 0/7 passing gates, but differing dose/cadence/natural environment do
+not establish a causal effect size or identify clock/app interference. No
+full campaign is started. References remain16/24, no readiness claim.
+
+Post-hoc CPU verification recomputes the exact original C.analysis, every
+512 schedule tag, all eight owned ledgers and actual native receipts, and
+**every retained native payload hash** for 208. Recorded native PID/start
+identities are absent. No GPU dispatch or unit/regression tests in replay.
+All plans and failed records remain; no settings/apps were changed.
+
+Exact terminal result SHA256:
+
+- 204: `d6af20614355724f086a193f291636a8cd5209c9a2a7da8f9c29989f41f59d90`
+- 205: `b969168cfca2dabe6b58df97d7fbc065ae45373fbe106af111b5689559a2e17d`
+- 206: `01ecd757d296e97e2d724b01547603d1cb5a9eabbddcd7b0e7437b3ad132f5a1`
+- 207: `ce208b43b004cdd90be55d37764fedf84991e8819f038058a3d8cee2c5f41a8c`
+- 208: `6341ee46e8e744495dd48bdb6b115fbfb51d0f0178dc904253a6fb6498cde318`
