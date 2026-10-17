@@ -66,6 +66,14 @@ the independent A6b comparison using original009's already retained16384/
 four-seed IID data. No additional IID native acquisition is required. The
 new8192 A6b four-seed result and current identities must still be validated;
 the replay is NOT RUN and cannot dispatch while a scientific worker is live.
+[Plan108](lanes/n010-comparison-readiness/experiments/108-wide8-prefix-build.md)
+prepares a separate continuation build for the selected wide8 CPU backend.
+It restores dyadic prefix sums and scored counters; proposal diagnostics
+explicitly cover only the newly executed interval. Original physical/proposal/
+BVH source and running259 inputs remain pinned. Generation/compiler/runtime
+are NOT RUN; no dispatch while any scientific worker is live. This supplies
+the build procedure for the existing exact-prefix obligation, not new proof
+or another reference-admission gate.
 [Plan103](lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md), committed
 in d8341e4 before new data, now has terminal [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md)
 **bounded C7 calibration capability PASS**, all four registered checks.

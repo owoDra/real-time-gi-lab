@@ -1,5 +1,12 @@
 # N010 protocols
 
+[108 — separate wide8 continuation build](108-wide8-prefix-build.md)
+prepares the executable needed for the existing exact-prefix obligation.
+Dyadic f64 sum restoration and scored counters retain the original indices;
+proposal audits explicitly describe only the newly executed interval. The
+physical/proposal/BVH source remains unchanged. Build/runtime NOT RUN, no
+dispatch with another live scientific worker and no rendering under this plan.
+
 [107 — retained A6b independent IID replay](107-retained-a6b-independent-iid-replay.md)
 prepares the unchanged independent-comparator check against original009's
 existing16384/four-seed data. No new IID acquisition is needed. NOT RUN;
