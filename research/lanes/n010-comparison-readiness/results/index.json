@@ -1609,6 +1609,30 @@
       "status": "complete-negative-first-tiled-pt-capture-vulkan-error-partials-retained-c7-not-run",
       "result": "395-tiled-pt-first-capture-failure.json",
       "gpu_run": true
+    },
+    {
+      "id": "N010-396",
+      "status": "complete-source-inverse-exact-first-tile-only-trace-preparation",
+      "result": "396-tiled-pt-first-call-prepare.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-397",
+      "status": "complete-private-first-call-host-link-build",
+      "result": "397-tiled-pt-first-call-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-398",
+      "status": "complete-first-tile-diagnostic-vulkan-success-duration-operational-stop-no-admission",
+      "result": "398-tiled-pt-first-call-probe.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-399",
+      "status": "complete-first-call-diagnostic-outcome-no-error-reproduction-spatial-tiling-duration-stop",
+      "result": "399-tiled-pt-first-call-diagnostic-outcome.md",
+      "gpu_run": false
     }
   ]
 }

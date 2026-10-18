@@ -73,9 +73,15 @@ exit1/0.671375elapsed seconds. Image/frames are incomplete; ledger teardown
 is NOT zero (921,728bytes). Exact call/VkResult and cause remain unproven.
 Plan123 stops: C7 NOT RUN, no retry/monolithic recapture, successful391 absent.
 Preserve partials and diagnose the call/result before another PT capture.
-Immediate next action: register a first-tile-only host diagnostic reporting
-the actual Vulkan call/VkResult, with unchanged shader/work/operational guards.
-No long CPU seed is live or queued; preserve this quiescent diagnostic window.
+[First-call diagnostic396–399](lanes/n010-comparison-readiness/results/399-tiled-pt-first-call-diagnostic-outcome.md)
+now completes: all11 Vulkan calls succeed, including fence/query results;
+first64-pixel tile takes500.617ms and stops at the unchanged250ms operational
+guard.395's generic Vulkan error is NOT reproduced; exact original call is
+still unproven. No second tile/image/C7/retry or391 summary. One loaded-run
+duration is not calibrated speed or an intrinsic lower bound. Next prepare
+an exact RNG/sum/sample-index continuation contract with explicit added memory
+and all-byte046 equivalence, retaining full spp/quality and existing stops.
+No scientific worker/queue remains; no default build or user setting changes.
 No numerical equivalence, accepted timing, memory or reference admission.
 
 
