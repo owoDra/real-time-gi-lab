@@ -2011,6 +2011,30 @@
       "status": "complete-prospective-full-compensated-sealed-dark-exact-zero-no-reference-admission",
       "result": "483-compensated-sealed-dark-full-control.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-484",
+      "status": "complete-prospective-full-compensated-sealed-lit-positive-every-pixel-no-admission",
+      "result": "484-compensated-sealed-lit-full-control.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-485",
+      "status": "complete-full-sealed-pair-checkpoint-not-ready",
+      "result": "485-compensated-full-sealed-controls-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-486",
+      "status": "complete-prospective-full-compensated-a7-analytic-and-independent-iid-pass-no-admission",
+      "result": "486-compensated-a7-full-control.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-503",
+      "status": "complete-metadata-only-original16-selected28-union36-no-execution-or-admission",
+      "result": "503-selected-reportable-timing-scope.json",
+      "gpu_run": false
     }
   ]
 }

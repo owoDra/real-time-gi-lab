@@ -207,6 +207,16 @@ and finite stopping policy. Report uncertain orderings as inconclusive and
 retain wins, losses and all declared rows. Do not select only stable scenes
 or silently replace an end-to-end GPU envelope with active dispatch time.
 
+For N010's future no-speed-claim handoff, experiment147 implements120's
+separation with a complete descriptive pilot over the original16/selected28
+union36 execution boundaries. One full registered trajectory per boundary
+must have replayable raw timestamps, physical/quality/history/source/native
+identity and owned-memory evidence. Additional known-work sizing or a
+precision campaign is not a handoff prerequisite. Scope manifest503 is
+metadata only; missing/invalid actual evidence still blocks handoff and the
+final intake remains to be implemented. Actual-boundary calibration remains
+mandatory before accepted Lane M speed claims or architecture promotion.
+
 ### Post-Lane-H calibration requirement
 
 After Lane G/H, a new timing methodology intended to support architecture
