@@ -1531,6 +1531,12 @@
       "status": "complete-ranked-timing-replay-outcome-selected-boundary-intake-still-required",
       "result": "379-ranked-timing-raw-replay-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-380",
+      "status": "complete-source-only-early-density-route-candidate-inverse-exact-uncompiled-unexecuted-no-admission",
+      "result": "380-early-density-route-prepare.json",
+      "gpu_run": false
     }
   ]
 }

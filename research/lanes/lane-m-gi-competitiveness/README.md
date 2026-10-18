@@ -7,6 +7,12 @@ Later N010 [outcome374](../n010-comparison-readiness/results/374-batched-hybrid-
 
 N010 [outcome367](../n010-comparison-readiness/results/367-depth-split-and-full-frame-pilot-outcome.md) records a depth-split backend with all32 original selected numerical pairs PASS and full57600-pixel C1/1spp CPU/GPU conformance PASS. These are reference-execution diagnostics, not qualified references or GI timing: batch1 hybrid28.838s exceeds matched CPU4.673s. References remain16/24; full physical/bias/state/prefix/feasibility and quality/dynamic/Renderer memory/budget/timing intake gates remain. No accepted campaign admission follows. GPU ratios with registered uncertainty remain the timing axis; no idle or generic stability-percentage prerequisite.
 
+N010 [source380](../n010-comparison-readiness/results/380-early-density-route-prepare.json)
+prepares a new conservative early-branch routing diagnostic after finding
+unprotected near-zero PDF/target/direct-cosine branches in360. Actual372
+cause remains unresolved; no candidate compilation/GPU run or reference
+admission. Original CPU260 continues; no simultaneous acquisition or queue.
+
 N010 is the last preparation study. Its fail-closed preflight must record
 `READY_FOR_LANE_M_FIRST_COHORT` before this lane accepts comparisons. No N011.
 The first cohort is the frozen incumbent RC, traversal control, dense repository

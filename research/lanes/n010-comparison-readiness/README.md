@@ -22,6 +22,16 @@ intersection ambiguity (96.2310%); categories overlap. Provisional versus
 necessary ambiguity is not yet quantified; no routing guard changed.
 Direct relative-error1.0 pixels remain **UNRESOLVED / 未解決**, included.
 
+[Source preparation380](results/380-early-density-route-prepare.json)
+identifies unprotected early PDF/target-cosine/direct-cosine branches and
+prepares a conservative CPU-routing candidate with exact inverse to360.
+This is a source finding, not the proven cause of372.
+[Plan119](experiments/119-early-density-route-diagnostic.md)
+prepares one original/one guarded16-sample probe at the already localized
+pixel43665, retaining per-depth early-route telemetry. Compiler/GPU steps
+are NOT RUN and refuse dispatch until260 terminates with integrity PASS
+and actual quiescence; no automatic queue or full-frame scaling.
+
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired
 ratios, registered uncertainty and order/control allowance. CPU wall/clock/
 busy/other-app telemetry is diagnostic. Stop generic stability-percentage

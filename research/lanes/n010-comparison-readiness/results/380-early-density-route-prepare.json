@@ -1,0 +1,47 @@
+{
+  "schema": "n010-early-density-route-diagnostic/1",
+  "step": "prepare",
+  "complete": true,
+  "step_valid": true,
+  "all_pass": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "gpu_run": false,
+  "classification": "POSTHOC_EARLY_ROUTE_STEP_COMPLETE_NO_ADMISSION",
+  "source_commit": "6bb44472f5abb733611f249c322744f3ab37d521",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_early_density_routes.py": "b2f760c633f9a5761bb0d4ce71aafb9bfc6ef7ac159b331369eb45195715b8e7",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/119-early-density-route-diagnostic.md": "e2711a7cc043138ed75884507b55ee98db3b02b9a14d4c7742b76d4a8097e6a9",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/360-whole-path-full-frame-build.json": "3191adae4d54297ccbe00d2179af6c5910d6e2d33814b02a220075eebeab0699",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/372-batched-full-frame-gpu.json": "088a828350fb163868691636707afc98eeb8d7fa7064d9e5ef7660422c7e07c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/posthoc-batched-counter-localization-v1/scan/scan.json": "76518ff58a796431a3ab664e440aab00595ac7616d8149972a7a06414eecb73b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/full.comp.glsl": "f6280c7187d5390a2fa31c2c3782d72c257f942bd72f33000ab9634799605332",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/full.cpp": "1451a98dfc155bc046bf3a002f72c3e32e556052aea37abb74caaaa5cbf8bfa3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/n010_reference_snapshot.hpp": "e78d83f16a37059e5889f9cb6bda37601143bb1f78bb72cf9997c1379d3e362e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac"
+  },
+  "attempts": [],
+  "tests": "NOT_RUN; post-hoc source/isolated compiler/scientific diagnosis only",
+  "validation": {
+    "backend_id": "65c6a3bdf3b7170a137b94b1c2b798f16ca437ee50a3b45997112d19863877ca",
+    "shader_inverse_exact": true,
+    "host_inverse_exact": true,
+    "cpu_header_context_byte_identical": true,
+    "selection": [
+      43665
+    ],
+    "cause": "HYPOTHESIS_UNRESOLVED; unprotected early zero/near-zero branches found in source",
+    "early_route_mask_bits": {
+      "1": "prefix PDF",
+      "2": "target cosine",
+      "4": "direct cosine"
+    }
+  },
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/n010_reference_snapshot.hpp": "e78d83f16a37059e5889f9cb6bda37601143bb1f78bb72cf9997c1379d3e362e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/source-edits.json": "07fb2886804c97d176158d00684fb1d0e94f672029c646004014849937ebd66c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/full.comp.glsl": "a027acf60d2dfad0925166d2927f6efda3fa5f50c964e95a091e527b8692dd79",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/full.cpp": "759ac0761c16f25f6a037bc7c6361481292ee0b168edb82478ba7aabef17900b"
+  }
+}
