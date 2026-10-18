@@ -2173,6 +2173,72 @@
       "status": "complete-exact32bit-split-partition-arithmetic-no-native-bias-bound",
       "result": "615-compensated-split-grid-exact-arithmetic.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-489",
+      "status": "complete-one-of-four-compensated-a6a-seeds-integrity-no-admission",
+      "result": "489-compensated-full-a6a-seed0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-513",
+      "status": "complete-full-raw-execution-quality-pending-no-speed",
+      "result": "513-raw-query-static-C1-hwrt-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-514",
+      "status": "complete-full-raw-execution-quality-pending-no-speed",
+      "result": "514-raw-query-static-C1-software-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-515",
+      "status": "complete-full-raw-execution-quality-pending-no-speed",
+      "result": "515-raw-query-static-C1-dense-rc-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-516",
+      "status": "complete-native-zero-original-static-counter-intake-failure-preserved",
+      "result": "516-raw-query-static-C7-hwrt-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-517",
+      "status": "complete-full-raw-execution-quality-pending-no-speed",
+      "result": "517-raw-query-static-C7-software-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-518",
+      "status": "complete-full-five-frame-raw-execution-quality-pending-no-speed",
+      "result": "518-raw-query-dynamic-C6-hwrt-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-519",
+      "status": "complete-full-five-frame-raw-execution-quality-pending-no-speed",
+      "result": "519-raw-query-dynamic-C12-hwrt-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-526",
+      "status": "complete-isolated-compensated-prefix-build-runtime-not-qualified",
+      "result": "526-compensated-prefix-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-616",
+      "status": "complete-posthoc-full-c7-hwrt-raw-and-quality-loss-no-speed",
+      "result": "616-posthoc-c7-hwrt-locked-counter-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-617",
+      "status": "complete-terminal-seed-full8-nonpt-inventory-prefix-build-not-ready",
+      "result": "617-terminal-seed-full-non-pt-captures-and-prefix-build.md",
+      "gpu_run": false
     }
   ]
 }
