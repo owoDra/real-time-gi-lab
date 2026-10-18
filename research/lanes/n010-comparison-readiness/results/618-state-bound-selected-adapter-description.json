@@ -1,0 +1,496 @@
+{
+  "schema": "n010-full-selected-pilot-adapter-description/1",
+  "complete": true,
+  "classification": "FULL_36_TIMING_ADAPTER_SOURCE_AND_SCOPE_ONLY",
+  "source_commit": "91779ca6710c1fc0896a9fc3ccc6d0db7507c5bd",
+  "source_composition": {
+    "whole_source_inverse_exact": true,
+    "other_five_gate_asts_identical": true,
+    "original_sha256": "87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c",
+    "generated_sha256": "a8ad6d6a9579f76df4f45ce887ba8b6c881c7bf0865ca9c3208b011934e0a1b5",
+    "selected_full36_timing_route_implemented": true,
+    "all_split_reference_dispatch_implemented": false,
+    "scope": "Known original/exact-prefix/hybrid references only; unknown variants fail closed",
+    "state_bound_selected_intake": {
+      "whole_selected_source_inverse_exact": true,
+      "original_selected_sha256": "e1c6be0c7c5d84c881e8a5944b0fb8f4103e68dc5d36b5014584bc40227d0ebd",
+      "generated_selected_sha256": "edcfcc40dd07e2507e86cd903f4a2754dd12fdac1ce5857bd64ca777940c9e9a",
+      "unchanged_pt_branch_and_final_checks": true,
+      "substitutions": [
+        {
+          "old": "def inventory():\n",
+          "new": "def _original_inventory():\n"
+        },
+        {
+          "old": "            if row['posthoc_reuse']:\n                prior = C.read(Path(row['prior_posthoc_replay']))\n                C.require(prior['complete'] and prior['posthoc'] and not prior['native_executed']\n                    and prior['source_capture'] == str(path) and prior['original507_failure_unchanged'],\n                    'explicit507/509 post-hoc identity differs')\n                for group in ('input_sha256','payload_sha256'):\n                    for name,digest in prior[group].items():R.checked(name,digest)\n            proof = N.verify_capture(path,row['id'],references=references,score_work=work/row['id'],\n                reference_verifier=H.verify_reference)\n",
+          "new": "            proof = _non_pt(row,references,work/row['id'])\n"
+        }
+      ],
+      "raw_state_composition": {
+        "original_source_sha256": "8a48580f97f68ae6bba7958661b6f2384c77dad53a8d65e3f78bfd70df81b5db",
+        "whole_source_inverse_exact": true,
+        "generated_source_sha256": "1358b28ba00ba613cc2844f4733d758b7dcd3860c4fcb59915c355e91a164ce2",
+        "substitutions": [
+          {
+            "old": "def state(directory, expected, index, rc):",
+            "new": "def state(directory, expected, index, rc, dynamic):"
+          },
+          {
+            "old": "(1 if index == 0 else 2)",
+            "new": "(1 if dynamic and index == 0 else 2)"
+          },
+          {
+            "old": "state(frame_dir,source if index == 0 else target,index,rc)",
+            "new": "state(frame_dir,source if index == 0 else target,index,rc,dynamic)"
+          },
+          {
+            "old": "state(directory,target,count-1,rc)",
+            "new": "state(directory,target,count-1,rc,dynamic)"
+          }
+        ]
+      },
+      "immutable_native_snapshot_binding": true,
+      "all_split_reference_dispatch_implemented": false
+    }
+  },
+  "inventory": [
+    {
+      "id": "static-C1-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C1",
+      "vertices": 2,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/static-C1-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "static-C1-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C1",
+      "vertices": 8,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/402-continuation-pixel-pt-c1.json",
+      "posthoc_reuse": true,
+      "record_present": true
+    },
+    {
+      "id": "static-C7-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C7",
+      "vertices": 2,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/static-C7-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "static-C7-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C7",
+      "vertices": 8,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/403-continuation-pixel-pt-c7.json",
+      "posthoc_reuse": true,
+      "record_present": true
+    },
+    {
+      "id": "static-C8-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C8",
+      "vertices": 2,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/static-C8-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "static-C8-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C8",
+      "vertices": 8,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/static-C8-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "static-C9-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C9",
+      "vertices": 2,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/static-C9-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "static-C9-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C9",
+      "vertices": 8,
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/static-C9-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C2-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C2",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C2-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C2-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C2",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C2-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C3-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C3",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C3-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C3-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C3",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C3-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C4-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C4",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C4-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C4-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C4",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C4-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C5-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C5",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C5-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C5-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C5",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C5-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C6-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C6",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C6-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C6-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C6",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C6-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C8-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C8",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C8-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C8-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C8",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C8-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C9-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C9",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C9-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C9-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C9",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C9-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C10-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C10",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C10-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C10-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C10",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C10-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C11-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C11",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C11-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C11-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C11",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C11-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C12-pt-B2",
+      "kind": "continuation-pt",
+      "cell": "C12",
+      "vertices": 2,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C12-B2-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "dynamic-C12-pt-B8",
+      "kind": "continuation-pt",
+      "cell": "C12",
+      "vertices": 8,
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/continuation-quality-cases/dynamic-C12-B8-n1024.json",
+      "posthoc_reuse": false,
+      "record_present": false
+    },
+    {
+      "id": "static-C1-hwrt",
+      "kind": "raw-non-pt",
+      "cell": "C1",
+      "role": "hwrt",
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/513-raw-query-static-C1-hwrt-pilot.json",
+      "posthoc_reuse": false,
+      "record_present": true,
+      "prior_posthoc_replay": null,
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-hwrt/native-record.json"
+    },
+    {
+      "id": "static-C1-software",
+      "kind": "raw-non-pt",
+      "cell": "C1",
+      "role": "software",
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/514-raw-query-static-C1-software-pilot.json",
+      "posthoc_reuse": false,
+      "record_present": true,
+      "prior_posthoc_replay": null,
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-software/native-record.json"
+    },
+    {
+      "id": "static-C1-dense-rc",
+      "kind": "raw-non-pt",
+      "cell": "C1",
+      "role": "dense-rc",
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/515-raw-query-static-C1-dense-rc-pilot.json",
+      "posthoc_reuse": false,
+      "record_present": true,
+      "prior_posthoc_replay": null,
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-dense-rc/native-record.json"
+    },
+    {
+      "id": "static-C7-hwrt",
+      "kind": "raw-non-pt",
+      "cell": "C7",
+      "role": "hwrt",
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/516-raw-query-static-C7-hwrt-pilot.json",
+      "posthoc_reuse": true,
+      "record_present": true,
+      "prior_posthoc_replay": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/616-posthoc-c7-hwrt-locked-counter-replay.json",
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-hwrt/native-record.json"
+    },
+    {
+      "id": "static-C7-software",
+      "kind": "raw-non-pt",
+      "cell": "C7",
+      "role": "software",
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/517-raw-query-static-C7-software-pilot.json",
+      "posthoc_reuse": false,
+      "record_present": true,
+      "prior_posthoc_replay": null,
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-software/native-record.json"
+    },
+    {
+      "id": "static-C7-dense-rc",
+      "kind": "raw-non-pt",
+      "cell": "C7",
+      "role": "dense-rc",
+      "dynamic": false,
+      "frames": 1,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/507-raw-query-static-c7-dense-pilot.json",
+      "posthoc_reuse": true,
+      "record_present": true,
+      "prior_posthoc_replay": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/509-posthoc-c7-dense-raw-query-replay.json"
+    },
+    {
+      "id": "dynamic-C6-hwrt",
+      "kind": "raw-non-pt",
+      "cell": "C6",
+      "role": "hwrt",
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/518-raw-query-dynamic-C6-hwrt-pilot.json",
+      "posthoc_reuse": false,
+      "record_present": true,
+      "prior_posthoc_replay": null,
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C6-hwrt/native-record.json"
+    },
+    {
+      "id": "dynamic-C12-hwrt",
+      "kind": "raw-non-pt",
+      "cell": "C12",
+      "role": "hwrt",
+      "dynamic": true,
+      "frames": 5,
+      "path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/519-raw-query-dynamic-C12-hwrt-pilot.json",
+      "posthoc_reuse": false,
+      "record_present": true,
+      "prior_posthoc_replay": null,
+      "immutable_native_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C12-hwrt/native-record.json"
+    }
+  ],
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight_state_bound.py": "fcdfa10a1769d8ee32aa708fa0904db17504328ec7f484b137f8b1fffcdb6081",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/state_bound_pilot_provenance.py": "8fb8ee83019a72f328bc43f89fefdcd2c2cdfec526514e1c68ff4dfc7f6b7614",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/160-state-bound-full-selected-intake.md": "f275cbc35cbc27ff1c72cbfcffa2d8526d754c6efc6a3ddf62458f9b521605c2",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight_selected_pilots.py": "d1545faac17f3326d94074c295ffc2b223ff575aef3336c8c7536d9454d42855",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/non_pt_state_bound_case.py": "3e638838b3dd66163cf1d48d75a319c359df4aaa027a008d98fc67f4888cfda6",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/159-locked-static-frame-counter-intake.md": "1c7493800d7214c90ad0ceb35d6981f93f3e4319abe8f9a9fa5ddde0128384e8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight.py": "87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/selected_reportable_pilot_provenance.py": "e1c6be0c7c5d84c881e8a5944b0fb8f4103e68dc5d36b5014584bc40227d0ebd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/non_pt_raw_provenance.py": "8a48580f97f68ae6bba7958661b6f2384c77dad53a8d65e3f78bfd70df81b5db",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/503-selected-reportable-timing-scope.json": "99014afa39b1c57d0e1d54cb7362b3071b45d1bf63e73573a9cb14a4eddb4961",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/417-selected-pt-quality-command-description.json": "11687babee6fffc902b39b5c20a9f79ecad8524dd33716b594b8978cafdd56c1",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/511-full-non-pt-raw-intake-description.json": "de94c5d7587e08a8e4ce0c04f5ab52dd7ec275f053bc332bbce8f7adc849e59b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/513-raw-query-static-C1-hwrt-pilot.json": "7a5f2c17da23cf40edc526b9e88b3f69263b20f30cc0846aece17c8be7da5a65",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/514-raw-query-static-C1-software-pilot.json": "a02ac9f709fca6465d851af74a2407e31c0fe48954120537f51685551bc8d36e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/515-raw-query-static-C1-dense-rc-pilot.json": "cae1e7d12f13bde576d7dfaeae935084d65bfce9b4623f2fbd234e374b04a129",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/516-raw-query-static-C7-hwrt-pilot.json": "d774430e99e6f65b6d4a259590604fe25c10c0008732dd08b654263ce1a00ded",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/517-raw-query-static-C7-software-pilot.json": "0ae536bf12dec5b28a53c7947ae4352f590640cf5e4bdd3c910015a174c5ea94",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/518-raw-query-dynamic-C6-hwrt-pilot.json": "3de7917f38f5fdffa5e760f21e528301a239639f24222d9e22d649d9c4f5bc8d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/519-raw-query-dynamic-C12-hwrt-pilot.json": "19b9f97947d9bf96e9dc04b35e4d2087d33032f31fa522249c8372f4dfbf13e0"
+  },
+  "native_executed": false,
+  "raw_evidence_replayed": false,
+  "quality_scoring_executed": false,
+  "accepted_timing": false,
+  "final_handoff_admitted": false,
+  "tests": "NOT_RUN; source inverse/five gate AST/scope metadata only"
+}

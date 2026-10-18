@@ -2239,6 +2239,12 @@
       "status": "complete-terminal-seed-full8-nonpt-inventory-prefix-build-not-ready",
       "result": "617-terminal-seed-full-non-pt-captures-and-prefix-build.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-618",
+      "status": "complete-full36-state-bound-snapshot-adapter-source-only-runtime-not-run",
+      "result": "618-state-bound-selected-adapter-description.json",
+      "gpu_run": false
     }
   ]
 }
