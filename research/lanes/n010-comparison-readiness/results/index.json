@@ -1483,6 +1483,36 @@
       "status": "complete-full-frame-one-sample-cpu-gpu-pilot-pass-no-reference-admission",
       "result": "370-full-frame-one-sample-hybrid-pilot.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-371",
+      "status": "complete-independent-cpu-c1-full-frame-16spp-with-eight-spp-checkpoint-pass-no-admission",
+      "result": "371-batched-full-frame-cpu.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-372",
+      "status": "complete-intended-batch-hybrid-fail-independent-shadow-and-proposal-counts-stop-variant",
+      "result": "372-batched-full-frame-gpu.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-374",
+      "status": "complete-batched-hybrid-stop-and-posthoc-cpu-localization-original-cpu-continuation",
+      "result": "374-batched-hybrid-stop-and-cpu-localization.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-375",
+      "status": "complete-posthoc-cpu-counter-localization-isolated-build-pass",
+      "result": "375-posthoc-batched-counter-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-376",
+      "status": "complete-posthoc-all-pixel-cpu-scan-localizes-one-pixel-gpu-count-failure-retained",
+      "result": "376-posthoc-batched-counter-scan.json",
+      "gpu_run": false
     }
   ]
 }

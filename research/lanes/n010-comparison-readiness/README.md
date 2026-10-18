@@ -3,7 +3,7 @@
 ## Current execution checkpoint — 2026-10-18 JST
 
 **Latest verified checkpoint: N010 NOT_READY; no scientific worker/queue active.**
-See [outcome367](results/367-depth-split-and-full-frame-pilot-outcome.md).
+Latest: [outcome374](results/374-batched-hybrid-stop-and-cpu-localization.md). Original1spp/selected results remain in367.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
@@ -11,9 +11,11 @@ See [outcome367](results/367-depth-split-and-full-frame-pilot-outcome.md).
 | Original full physical artifacts |14/17, including one diagnostic-only item;259 only one A6a seed | Remaining original sphere/range parts, independent IID/bias proof. |
 | New execution backend | [360](results/360-whole-path-full-frame-build.json) build PASS; [366](results/366-depth-split-hybrid-numerical.json) all32 original depth-split pairs PASS | Full physical/all-state/exact-prefix and full-count feasibility/intake still required. |
 | Full-frame numerical pilot | [370](results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
-| Execution cost | Matched1spp CPU4.673s vs hybrid28.838s; standalone owned peak89,973,904bytes/zero teardown | Hybrid is slower at batch1/tile256. Bound cost at intended sample/tile layout before long acquisition; no assumed GPU acceleration. |
+| Intended-batch execution | [371/372](results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Stop this GPU variant; continue original106 CPU physical parts. Single-run wall does not admit a failed backend. |
 | GPU performance methodology | [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Actual selected workloads/quality budgets, multiplicity and final proof intake; no automatic transfer. |
 | Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
+
+[Post-hoc CPU scan376](results/376-posthoc-batched-counter-scan.json) reproduces all CPU bits/counts and localizes the shadow mismatch to pixel43665/(145,136): CPU[16,53,4,0] vs GPU[16,52,4,0]. Ray/sample cause remains UNRESOLVED; no GPU retry or373 success summary. Next original CPU part260 is prepared, NOT RUN at this checkpoint.
 
 Post-hoc routing telemetry:88674/92147 CPU-routed diagnostic paths carry
 intersection ambiguity (96.2310%); categories overlap. Provisional versus
