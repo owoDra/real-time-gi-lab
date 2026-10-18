@@ -2005,6 +2005,12 @@
       "status": "complete-compensated-candidate-nine-full-controls-one-posthoc-original-failures-preserved-not-ready",
       "result": "482-compensated-candidate-full-control-checkpoint.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-483",
+      "status": "complete-prospective-full-compensated-sealed-dark-exact-zero-no-reference-admission",
+      "result": "483-compensated-sealed-dark-full-control.json",
+      "gpu_run": false
     }
   ]
 }
