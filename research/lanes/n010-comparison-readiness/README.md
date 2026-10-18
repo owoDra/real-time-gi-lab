@@ -2,8 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; continuation PT two-image equivalence complete; original CPU261 live, no GPU/compiler or queue.**
-Latest: [outcome406](results/406-continuation-pt-equivalence-outcome.md). C1/C7 PT-B8/1024 images match archived046 byte-for-byte; no physical/timing admission. CPU A6a seed2 now live.
+**Latest verified checkpoint: N010 NOT_READY; retained continuation C7 quality PASS (post-hoc one row); original CPU261 live, no GPU/compiler or queue.**
+Latest: [outcome408](results/408-environment-criteria-and-c7-quality-outcome.md), [quality407](results/407-retained-continuation-c7-quality.json). CPU-only analysis of403 verifies original C7_T_B8 provenance/convergence and all57600 pixels: totalNRMSE1.443%, indirect5.575%, bias−0.0599%; no masks or changed targets. One post-hoc row, no timing/reference admission. C1_B8 remains ineligible. [406](results/406-continuation-pt-equivalence-outcome.md) retains two-image046 equivalence; original CPU A6a seed2 remains live.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
@@ -48,6 +48,13 @@ Accepted speed claims still require actual-boundary calibration and
 matched-quality uncertainty analysis. The old preflight has NOT yet
 implemented this amendment; full intake/adapter work remains. No old
 FAIL is reclassified and no numerical threshold changes retroactively.
+
+**Criterion roles under120:** GPU Renderer time remains the performance axis;
+CPU elapsed, GPU busy/clocks, other-app activity and free VRAM are diagnostic.
+Owned allocation peaks and physical/quality evidence remain required. Run/dispatch
+guards are operational stops, not intrinsic architecture loss. Do not wait for an
+idle/stability percentage to permit comparison. The shared protocol now makes
+these roles explicit; the final auditor still requires120 integration.
 
 [Source review384](results/384-all-split-density-identity-and-numerical-scope.md)
 maps the ideal all-split density identity to the CPU source and identifies

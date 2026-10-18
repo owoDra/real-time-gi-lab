@@ -1675,6 +1675,18 @@
       "status": "complete-continuation-equivalence-outcome-original-physical-seed261-live",
       "result": "406-continuation-pt-equivalence-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-407",
+      "status": "complete-posthoc-c7-full-image-quality-pass-original-reference-provenance-no-timing-admission",
+      "result": "407-retained-continuation-c7-quality.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-408",
+      "status": "complete-environment-criteria-clarification-and-single-row-quality-integration-not-ready",
+      "result": "408-environment-criteria-and-c7-quality-outcome.md",
+      "gpu_run": false
     }
   ]
 }
