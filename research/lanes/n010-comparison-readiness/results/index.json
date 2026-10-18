@@ -2089,6 +2089,18 @@
       "status": "complete-criteria-role-review-no-new-threshold-not-ready",
       "result": "510-environment-sensitive-criteria-followup.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-511",
+      "status": "complete-full-eight-role-source-command-metadata-only-runtime-not-run",
+      "result": "511-full-non-pt-raw-intake-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-512",
+      "status": "complete-source-checkpoint-one-live-physical-seed-not-ready",
+      "result": "512-full-non-pt-intake-source-checkpoint.md",
+      "gpu_run": false
     }
   ]
 }

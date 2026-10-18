@@ -1,0 +1,309 @@
+{
+  "schema": "n010-full-non-pt-raw-intake-description/1",
+  "complete": true,
+  "classification": "FULL_EIGHT_ROLE_INTAKE_SOURCE_AND_COMMAND_METADATA_ONLY",
+  "source_commit": "d362d84f37d79beb2a27176e35b2e828818f8ed5",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/152-full-non-pt-raw-evidence-intake.md": "54c640c4ce748bd7faae954570588f3338c0739310fefa16c310527f16b0b20b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/describe_non_pt_raw_pilots.py": "c1f7ef2665df59873f331b43a71a02cf3160448bbd0213b3c09e4e0a6329393b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/non_pt_raw_provenance.py": "8a48580f97f68ae6bba7958661b6f2384c77dad53a8d65e3f78bfd70df81b5db",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/503-selected-reportable-timing-scope.json": "99014afa39b1c57d0e1d54cb7362b3071b45d1bf63e73573a9cb14a4eddb4961",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/506-raw-query-pilot-build.json": "34a4e0764f81a7168d5a840455fdacaf3743ba5fedc6c615430ef9e82d334d7d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json": "73d12dd8d7171e215fa2dc149485776dfa7749985946d3be9209cb86b069be3f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc": "54568b9b8b1a5bc45033f746bef210c1b32677278174e671983ca5b21a873ca5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-dense": "acbaf61c3cdd05a92faea852637025e2d8e54d453e8219402cd54b0d19a1e990"
+  },
+  "source_function_ast_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/describe_non_pt_raw_pilots.py": {
+      "main": "802668bcd741014d8a6be1cb751660e9aa2b10972070954a85ab66eedc1656af"
+    },
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/non_pt_raw_provenance.py": {
+      "identity": "fdc75def65693374a2d66f22fc42efd7445e20576b7feeac202122e0bb4c111a",
+      "command": "7c1606cde52de0f7ce21d7e86362b48f118571326bba5f94dc87f4b0a7afd93c",
+      "interval": "34c237252c1681d2db97b4d8507c5a17704531a7ba456f788067f1c0e838eeec",
+      "raw_trace": "2f43bd09c3ecdc1a324824d3d46960218e8445ad279b6cbdb164cbee078ce0bc",
+      "memory": "7c35580b23d1a515d5bb938118cd55c781ac227c02586b33275e084aa2a573b9",
+      "state": "4038a852e95b00e6a91bc4f39ab31bb83e7401a1ec88541ff3641917d700be57",
+      "verify_capture": "2d9f149aa9835c865eb52152f56b3e2669ff72124e82bff89d13f900aca33b3a"
+    }
+  },
+  "rows": [
+    {
+      "boundary_id": "static-C1-hwrt",
+      "cell": "C1",
+      "role": "hwrt",
+      "dynamic": false,
+      "frames": 1,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+        "--scenario",
+        "static",
+        "--backend",
+        "hwrt",
+        "--direct-profile",
+        "ulp4",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-hwrt/capture"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-hwrt/raw-queries.jsonl",
+        "PHOS_N010_MEMORY_LEDGER": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-hwrt/capture/allocation-ledger.json",
+        "PHOS_N009_CONTRACT": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/513-raw-query-static-C1-hwrt-pilot.json",
+      "fresh_work_required": true
+    },
+    {
+      "boundary_id": "static-C1-software",
+      "cell": "C1",
+      "role": "software",
+      "dynamic": false,
+      "frames": 1,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+        "--scenario",
+        "static",
+        "--backend",
+        "software",
+        "--direct-profile",
+        "ulp4",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-software/capture"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-software/raw-queries.jsonl",
+        "PHOS_N010_MEMORY_LEDGER": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-software/capture/allocation-ledger.json",
+        "PHOS_N009_CONTRACT": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/514-raw-query-static-C1-software-pilot.json",
+      "fresh_work_required": true
+    },
+    {
+      "boundary_id": "static-C1-dense-rc",
+      "cell": "C1",
+      "role": "dense-rc",
+      "dynamic": false,
+      "frames": 1,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-dense",
+        "--state",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/states/static",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-dense-rc/capture",
+        "--family",
+        "dense-rc",
+        "--spp",
+        "1",
+        "--vertices",
+        "2",
+        "--seed",
+        "305419896",
+        "--frames",
+        "1"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C1-dense-rc/raw-queries.jsonl"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/515-raw-query-static-C1-dense-rc-pilot.json",
+      "fresh_work_required": true
+    },
+    {
+      "boundary_id": "static-C7-hwrt",
+      "cell": "C7",
+      "role": "hwrt",
+      "dynamic": false,
+      "frames": 1,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n008-hdr-oracle/phase-b-states/n004-scenes/leak-medium.gltf",
+        "--scenario",
+        "static",
+        "--backend",
+        "hwrt",
+        "--direct-profile",
+        "ulp4",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-hwrt/capture"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-hwrt/raw-queries.jsonl",
+        "PHOS_N010_MEMORY_LEDGER": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-hwrt/capture/allocation-ledger.json",
+        "PHOS_N009_CONTRACT": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/516-raw-query-static-C7-hwrt-pilot.json",
+      "fresh_work_required": true
+    },
+    {
+      "boundary_id": "static-C7-software",
+      "cell": "C7",
+      "role": "software",
+      "dynamic": false,
+      "frames": 1,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n008-hdr-oracle/phase-b-states/n004-scenes/leak-medium.gltf",
+        "--scenario",
+        "static",
+        "--backend",
+        "software",
+        "--direct-profile",
+        "ulp4",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-software/capture"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-software/raw-queries.jsonl",
+        "PHOS_N010_MEMORY_LEDGER": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-software/capture/allocation-ledger.json",
+        "PHOS_N009_CONTRACT": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/517-raw-query-static-C7-software-pilot.json",
+      "fresh_work_required": true
+    },
+    {
+      "boundary_id": "static-C7-dense-rc",
+      "cell": "C7",
+      "role": "dense-rc",
+      "dynamic": false,
+      "frames": 1,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-dense",
+        "--state",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/gpu-bc2419c/C7-leak-medium-software",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-dense-rc/capture",
+        "--family",
+        "dense-rc",
+        "--spp",
+        "1",
+        "--vertices",
+        "2",
+        "--seed",
+        "305419896",
+        "--frames",
+        "1"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/static-C7-dense-rc/raw-queries.jsonl"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "retained_native": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/507-raw-query-static-c7-dense-pilot.json",
+      "explicit_posthoc_replay": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/509-posthoc-c7-dense-raw-query-replay.json",
+      "repeat_forbidden": true
+    },
+    {
+      "boundary_id": "dynamic-C6-hwrt",
+      "cell": "C6",
+      "role": "hwrt",
+      "dynamic": true,
+      "frames": 5,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+        "--scenario",
+        "deforming-control",
+        "--backend",
+        "hwrt",
+        "--direct-profile",
+        "ulp4",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C6-hwrt/capture",
+        "--target-state",
+        "--recovery-frames",
+        "3",
+        "--topology-churn"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C6-hwrt/raw-queries.jsonl",
+        "PHOS_N010_MEMORY_LEDGER": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C6-hwrt/capture/allocation-ledger.json",
+        "PHOS_N009_CONTRACT": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/518-raw-query-dynamic-C6-hwrt-pilot.json",
+      "fresh_work_required": true
+    },
+    {
+      "boundary_id": "dynamic-C12-hwrt",
+      "cell": "C12",
+      "role": "hwrt",
+      "dynamic": true,
+      "frames": 5,
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-build-v1/phos-n010-raw-query-rc",
+        "--scene",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n008-hdr-oracle/phase-b-states/n004-scenes/leak-medium.gltf",
+        "--scenario",
+        "deforming-control",
+        "--backend",
+        "hwrt",
+        "--direct-profile",
+        "ulp4",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C12-hwrt/capture",
+        "--target-state",
+        "--recovery-frames",
+        "3",
+        "--topology-churn"
+      ],
+      "environment_switches": {
+        "PHOS_N010_RAW_QUERY_CAPTURE": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C12-hwrt/raw-queries.jsonl",
+        "PHOS_N010_MEMORY_LEDGER": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/raw-query-pilot-cases-v1/dynamic-C12-hwrt/capture/allocation-ledger.json",
+        "PHOS_N009_CONTRACT": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract"
+      },
+      "native_acquisition_implemented": false,
+      "full_intake_runtime_executed": false,
+      "future_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/519-raw-query-dynamic-C12-hwrt-pilot.json",
+      "fresh_work_required": true
+    }
+  ],
+  "non_pt_count": 8,
+  "new_trajectory_commands": 7,
+  "retained_native_count": 1,
+  "native_executed": false,
+  "raw_evidence_replayed": false,
+  "quality_scoring_executed": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "final_handoff_admitted": false,
+  "remaining": [
+    "One-case bounded acquisition driver",
+    "Actual independent full8 raw intake execution",
+    "Independent setup/readback/submit/wait receipts and final cost accounting",
+    "Full36 union/final120 auditor and all-split reference dispatch"
+  ],
+  "tests": "NOT_RUN; source/AST/command/binary-identity metadata only"
+}
