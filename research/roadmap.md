@@ -72,6 +72,15 @@ one CPU31/nice15 compiler with120CPU/180elapsed/4GiB limits per stage.
 No monolithic PT recapture or queued work;119 stays the next focused GPU
 diagnostic after260 terminates with integrity PASS.
 
+[Replay policy123](lanes/n010-comparison-readiness/experiments/123-tiled-pt-numerical-replay-policy.md) and its standalone driver are now prepared for
+two separately invoked C1/C7 PT-B8/1024 full images against immutable046.
+Source AST parsed only; no capture/replay or numerical391 has run. Fixed
+tile64/pause2000us, exact all-image bytes, complete tile timestamps and
+owned-lifetime replay; Vulkan virtual mappings are explicitly unlimited,
+with positive owned peak<=8GiB/zero teardown and120CPU/180elapsed guards.
+Both119 and private build390 must finish before any such GPU capture.
+
+
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired
 ratios, registered uncertainty and order/control allowance. CPU wall/clock/
 busy/other-app telemetry is diagnostic. Stop generic stability-percentage
