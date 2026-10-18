@@ -64,6 +64,11 @@ Host/shader whole-source inverses pass; compiled/runtime equivalence is
 NOT RUN. Record active GPU sum, image timestamp envelope including yields,
 and CPU wall separately; no speed claim or automatic calibration transfer.
 Private build390 and all-pixel byte replay against archived046 remain.
+The [private build driver](../scripts/research/n010_reference_sampling/build_tiled_pixel_pt.py) now assembles
+the original shader/host/link commands and412 input identities in its
+metadata-only `--describe` mode. Actual build is NOT RUN: it requires
+terminal integrity-PASS260/quiescence, refuses existing output, and uses
+one CPU31/nice15 compiler with120CPU/180elapsed/4GiB limits per stage.
 No monolithic PT recapture or queued work;119 stays the next focused GPU
 diagnostic after260 terminates with integrity PASS.
 
