@@ -3,7 +3,7 @@
 ## Current execution checkpoint — 2026-10-18 JST
 
 **Latest verified checkpoint: N010 NOT_READY; CPU260 and bounded GPU probes terminal; no live scientific worker/queue.**
-Latest: [outcome394](lanes/n010-comparison-readiness/results/394-guarded-full-frame-conformance-outcome.md). Candidate393 passes full C1/16spp conformance; original372 stays FAIL. Tiled PT395 remains stopped.
+Latest: [diagnostic399](lanes/n010-comparison-readiness/results/399-tiled-pt-first-call-diagnostic-outcome.md) stops at observed first-tile duration, all Vulkan calls succeed; [continuation source400](lanes/n010-comparison-readiness/results/400-continuation-pixel-pt-source-prepare.json) prepared only. Candidate393 C1 conformance remains PASS; N010 unfinished.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
@@ -83,6 +83,20 @@ an exact RNG/sum/sample-index continuation contract with explicit added memory
 and all-byte046 equivalence, retaining full spp/quality and existing stops.
 No scientific worker/queue remains; no default build or user setting changes.
 No numerical equivalence, accepted timing, memory or reference admission.
+
+[Plan126](lanes/n010-comparison-readiness/experiments/126-exact-sample-continuation-pixel-pt.md) and
+[source400](lanes/n010-comparison-readiness/results/400-continuation-pixel-pt-source-prepare.json) now prepare
+an isolated sample-continuation PT. Full host/shader inverses and original
+per-sample transport/scalar addition/RNG helper bytes match. Preserve RNG,
+float sum bits and next-sample/error words per pixel (16bytes/pixel,921600
+additional persistent bytes at320x180), original complete spp/quality and
+sample order. Fixed proposed captures tile4096/chunk16/pause2000us; existing
+250ms/500ms/180s operational stops remain. Compilation and actual state/
+image equivalence are NOT RUN;401 build driver and402/403/404 full-image
+byte replay/intake remain to implement. Explicit separate readback-duration
+reporting must be added before capture; current source400 downloads/checks
+state but does not yet emit that separate duration. No native/queue/claim.
+
 
 
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired

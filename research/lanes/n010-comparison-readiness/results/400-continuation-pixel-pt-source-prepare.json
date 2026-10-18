@@ -1,0 +1,39 @@
+{
+  "schema": "n010-continuation-pixel-pt-source-preparation/1",
+  "complete": true,
+  "source_preparation_valid": true,
+  "all_pass": false,
+  "compiled": false,
+  "gpu_run": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "source_commit": "c12e3c071155f0dc0bbb2a3bf0f3b32db4b5e1a5",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/prepare_continuation_pixel_pt.py": "eb3f09e46f5ce3f00a62a18b38238d62b7bbf5fc25a6d747b6ed0e6825bde0f8",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/126-exact-sample-continuation-pixel-pt.md": "e3b641d744d13adc360061bf287054d3020afa3e97879b37c9c91ce999398e33",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/prepare_tiled_pixel_pt.py": "b3b976ed12d290bf12943829fa8ec1a52e8176f64eefdc08c1b408c9aacbcaaa",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/389-tiled-pixel-pt-source-prepare.json": "46e5e05c0ad23fe37df62b3a097284c0be0612e947a8ec76cba024cc25a0a805",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/122-spatially-tiled-pixel-pt.md": "53c4647458ae4247c143e10de0cdc23ca47f8ccf0761a76440d71edc9c34dc22",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/pixel_pt_main.cpp": "c2f0bc8d517e29fd3ec33641900aed47b1310b3161e2f8b61e288c8b7b2c429c",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/n010_comparison_readiness/n010_pixel_pt.comp.glsl": "ddb81baa0b701f96d78ffe297db589290d3fe4c2d6965a4df655c47a4a23d1c2",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json": "2ab654662ffdef9b873179d95a9142eea7e18ad0635cec37601c51f0f828d36d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/tiled-pixel-pt-source-v1/source-edits.json": "ce481f7a8f1b23061742f75fdb632f9bead7c1118c3372b8e2f838094fc9ce46",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/tiled-pixel-pt-source-v1/tiled_pixel_pt.comp.glsl": "87fb6bb515154c5ff988770f23527706b4f3d83e0bc822039459d2bb50405f89",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/tiled-pixel-pt-source-v1/tiled_pixel_pt.cpp": "8e4948fd29ef598e6b311b5568685683839eb10c2cd88d92c4c90055a03e9fa8",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/398-tiled-pt-first-call-probe.json": "b6bba62a5cb47d27b928ac0e7e470e8ab1b17c1e353e1cbf595d5ee8e0e90278"
+  },
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/continuation-pixel-pt-source-v1/continuation_pixel_pt.cpp": "6bf7190a36d244a5790faba684b5f0c212945af8282d0497040db1ad522f01d0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/continuation-pixel-pt-source-v1/source-edits.json": "6dc35d583792fd4f4df554a46c56c2860d2b2d4ebe88bd7660f421a2836429b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/continuation-pixel-pt-source-v1/continuation_pixel_pt.comp.glsl": "8f68b4d7a05e09e28b49ee5592fabe0f991b930842bb609dc367d36ba4568ba9"
+  },
+  "whole_host_inverse_exact": true,
+  "whole_shader_inverse_exact": true,
+  "per_sample_transport_scalar_sum_body_byte_identical": true,
+  "transport_rng_helpers_byte_identical": true,
+  "sample_state_stride_bytes": 16,
+  "additional_persistent_state_bytes_at_320x180": 921600,
+  "classification": "CONTINUATION_SOURCES_PREPARED_UNCOMPILED_UNEXECUTED_NO_ADMISSION",
+  "limitation": "Source inverses/body identity do not prove floating runtime equivalence; full046 byte replay required.",
+  "tests": "NOT_RUN; source preparation only, no native/compiler/GPU work"
+}

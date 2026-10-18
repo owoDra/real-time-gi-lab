@@ -1633,6 +1633,12 @@
       "status": "complete-first-call-diagnostic-outcome-no-error-reproduction-spatial-tiling-duration-stop",
       "result": "399-tiled-pt-first-call-diagnostic-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-400",
+      "status": "complete-source-only-exact-rng-float-sum-continuation-inverse-exact-uncompiled-unexecuted-no-admission",
+      "result": "400-continuation-pixel-pt-source-prepare.json",
+      "gpu_run": false
     }
   ]
 }
