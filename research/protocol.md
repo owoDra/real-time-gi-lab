@@ -188,6 +188,25 @@ campaign limit; do not tune idle/stability percentages until a pass appears.
 The legacy preflight has not implemented120: the separately versioned full
 intake/final adapter and valid selected-boundary pilot remain required.
 
+For implementation and review, use these roles. This table clarifies120;
+it adds no gate and changes no historical outcome or numerical threshold.
+
+| Observation | Role in future N010 handoff and Lane M |
+| --- | --- |
+| Physical scene/transport identity, eligible reference, full-image correctness and quality, complete dynamic histories | Required comparison validity; a timing amendment cannot waive missing or invalid evidence. A measured candidate quality loss is a reportable outcome. |
+| Allocation/free ledger, persistent and true-peak owned bytes | Required memory evidence against the registered budget; global free VRAM is not a substitute. |
+| Complete Renderer GPU timestamps, including recurring required work | Primary performance measurement. Keep absolute time, paired effects and uncertainty; unresolved precision can mean TIMING_INCONCLUSIVE rather than architecture failure or a handoff veto. No speed claim follows from an unresolved effect. |
+| CPU elapsed time, GPU busy, clocks, other-app activity, global free VRAM | Health, resource and causal diagnostics. Do not make an idle percentage, CPU/GPU wall ratio or incidental desktop load an architecture acceptance criterion. |
+| Registered process timeouts and per-dispatch guards | Operational bounds protecting the desktop and limiting a run. A stop leaves that run incomplete; it does not establish an intrinsic performance loss or justify repeating until PASS. |
+
+Environment sensitivity alone does not make GPU time useless: performance
+is conditional on the declared device, driver, workload and execution regime.
+Before a Lane M campaign, register matched-quality paired comparisons,
+their order, repetition, full cost boundary, uncertainty/multiplicity rules
+and finite stopping policy. Report uncertain orderings as inconclusive and
+retain wins, losses and all declared rows. Do not select only stable scenes
+or silently replace an end-to-end GPU envelope with active dispatch time.
+
 ### Post-Lane-H calibration requirement
 
 After Lane G/H, a new timing methodology intended to support architecture
