@@ -1723,6 +1723,24 @@
       "status": "complete-current-160-view-48-static-20-dynamic-command-descriptions-native-not-run",
       "result": "414-manual-continuation-quality-current-view-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-415",
+      "status": "complete-all42-retained-quality-rows-exact-raw-reference-score-map-memory-replay-c1-b8-missing",
+      "result": "415-retained-pt-ladder-proof-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-416",
+      "status": "complete-retained-ladder-reuse-and-prospective-both-transports1024-selection-not-ready",
+      "result": "416-retained-ladder-reuse-and-selected-budget-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-417",
+      "status": "complete-selected-pt-48-static20-dynamic-command-metadata-native-not-run",
+      "result": "417-selected-pt-quality-command-description.json",
+      "gpu_run": false
     }
   ]
 }

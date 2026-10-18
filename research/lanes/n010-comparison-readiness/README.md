@@ -2,8 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; manual single-case PT quality/history runner source prepared; original CPU261 live, no GPU/compiler or queue.**
-Latest: [outcome413](results/413-manual-continuation-quality-runner-outcome.md), [current command metadata414](results/414-manual-continuation-quality-current-view-description.json). A bounded manual runner connects401 to129 proof/scoring for48 static slots/20 five-frame histories, retaining42 old ladder rows and refusing duplicate402/403 capture. Current160 reference view/explicit original-hybrid proof dispatch replaces stale067 for this runner. Source/descriptions only: --run NOT RUN, no automatic queue. [411](results/411-continuation-quality-intake-corrected-replay.json) remains actual two-static-execution/one-C7-quality replay. Final auditor, full scope and eight references remain; original CPU261 stays live.
+**Latest verified checkpoint: N010 NOT_READY; all42 retained PT ladder rows replayed; prospective B2/B8 pilot budget1024; original CPU261 live, no GPU/compiler or queue.**
+Latest: [outcome416](results/416-retained-ladder-reuse-and-selected-budget-outcome.md), [raw replay415](results/415-retained-pt-ladder-proof-replay.json). All42 retained rows reproduce original33 FAIL/9 PASS, exact full metrics/error-map bytes, physical references and owned ledgers. Canonical C7/C8/C9 pilots are complete; C1 lacks six B8 rows/eligible reference. Tuning C7/C8/C9 requires common1024spp for B2/B8; prospective132 freezes it, [417](results/417-selected-pt-quality-command-description.json) describes selected manual commands only. Old B2/256 outcomes remain; no timing transfer/new native. Next selected PT candidate after CPU completion is dynamic-C8-B2-n1024, not queued. Full scope/final auditor remain.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
@@ -13,7 +13,7 @@ Latest: [outcome413](results/413-manual-continuation-quality-runner-outcome.md),
 | Full-frame numerical pilot | [370](results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
 | Intended-batch execution | [371/372](results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Original variant stays stopped;393 candidate passes C1 conformance only. All-state/physical/prefix/full-count qualification remains. |
 | GPU performance methodology | [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Valid selected-boundary pilot and final intake/adapter; precision may be INCONCLUSIVE under amendment120. No automatic C7 transfer. |
-| Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
+| Quality/dynamics/memory |42 retained static PT rows replayed; prospective tuning selects1024spp B2/B8 | C1 B8 ladder/reference, actual selected-budget and all-family dynamic/memory/timing pilots remain. |
 
 [CPU scan376](results/376-posthoc-batched-counter-scan.json) localizes one shadow-count pixel. New [382/383](results/392-early-route-and-tiled-pt-runtime-checkpoint.md) reproduce its old one-shadow/two-query deficit and restore all16 CPU counts with an early-PDF CPU route at sample9/depth2; raw GPU paths remain bit-identical. [Candidate393](results/393-guarded-full-frame-conformance.json) now passes all57600pixels/16spp with exact CPU scored/proposal counts; max error4.48e-16, indirect NRMSE1.69e-15. Original372 remains FAIL and373 absent; no all-state/reference admission.
 
