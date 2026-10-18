@@ -2119,6 +2119,18 @@
       "status": "complete-full36-adapter-source-inverse-five-gate-ast-scope-metadata-only",
       "result": "523-full-selected-pilot-adapter-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-525",
+      "status": "complete-exact-prefix-source-inverses-only-build-runtime-not-run",
+      "result": "525-compensated-prefix-source-prepare.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-527",
+      "status": "complete-compensated-prefix-source-checkpoint-one-live-seed-not-ready",
+      "result": "527-compensated-prefix-source-checkpoint.md",
+      "gpu_run": false
     }
   ]
 }
