@@ -46,6 +46,16 @@ maps the ideal all-split density identity to the CPU source and identifies
 its finite-grid/approximate-support limitations. It is not numerical-bias
 admission and adds no new reference gate.
 
+[Implementation385](lanes/n010-comparison-readiness/results/385-reportable-timing-intake-implementation.md)
+now prepares the raw-proof timing intake and intermediate audit bridge,
+with exact whole-parent source inverses. Source assembly only; neither
+evidence replay nor the audit has run. The bridge cannot emit READY:
+actual selected-budget/history-frame scope, bounded acquisition and
+all-split provenance/final-auditor integration remain incomplete.
+Retained PT-B8/1024 sizing is about4.22GPU seconds/sample: the unchanged
+64-sample route has no demonstrated fit within180seconds. Do not launch
+that whole pilot next; establish actual budgets/bounded Renderer work first.
+
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired
 ratios, registered uncertainty and order/control allowance. CPU wall/clock/
 busy/other-app telemetry is diagnostic. Stop generic stability-percentage
