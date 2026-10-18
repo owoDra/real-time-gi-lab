@@ -2,35 +2,39 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; one original CPU control live, no GPU worker/next-step queue.**
-Latest: [outcome374](lanes/n010-comparison-readiness/results/374-batched-hybrid-stop-and-cpu-localization.md). Original1spp/selected results remain in367.
+**Latest verified checkpoint: N010 NOT_READY; CPU260 and bounded GPU probes terminal; no live scientific worker/queue.**
+Latest: [checkpoint392](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md). Original372 FAIL stays unchanged; candidate repaired one diagnostic pixel only.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
 | Eligible references |16/24; unchanged | Eight slots, original convergence gates; no masks/cap relaxation. |
-| Original full physical artifacts |14/17, including one diagnostic-only item;259 only one A6a seed | Remaining original sphere/range parts, independent IID/bias proof. |
+| Original full physical artifacts |14/17, including one diagnostic-only item;259/260 two of four A6a seeds | Remaining original sphere/range parts, independent IID/bias proof. |
 | New execution backend | [360](lanes/n010-comparison-readiness/results/360-whole-path-full-frame-build.json) build PASS; [366](lanes/n010-comparison-readiness/results/366-depth-split-hybrid-numerical.json) all32 original depth-split pairs PASS | Full physical/all-state/exact-prefix and full-count feasibility/intake still required. |
 | Full-frame numerical pilot | [370](lanes/n010-comparison-readiness/results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
 | Intended-batch execution | [371/372](lanes/n010-comparison-readiness/results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Stop this GPU variant; continue original106 CPU physical parts. Single-run wall does not admit a failed backend. |
 | GPU performance methodology | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Valid selected-boundary pilot and final intake/adapter; precision may be INCONCLUSIVE under amendment120. No automatic C7 transfer. |
 | Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
 
-[Post-hoc CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) reproduces all CPU bits/counts and localizes the shadow mismatch to pixel43665/(145,136): CPU[16,53,4,0] vs GPU[16,52,4,0]. Ray/sample cause remains UNRESOLVED; no GPU retry or373 success summary. Original A6a seed1/2596069104 part260 is now **RUNNING**, source838d3e50, native PID10159/start59862, CPU31/nice15/4GiB,7200CPU/10800elapsed limits. Actual receipt and /proc identity confirmed live; result is not terminal or accepted. Source/checkpoint259 is retained; no restart and no following seed queued. The mutable local260 record stays uncommitted until terminal evidence. Prior seed0 took5234CPU/5257elapsed seconds; that is a one-seed cost reference, not an N010 completion estimate.
+[CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) localizes one shadow-count pixel. New [382/383](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md) reproduce its old one-shadow/two-query deficit and restore all16 CPU counts with an early-PDF CPU route at sample9/depth2; raw GPU paths remain bit-identical. Full-frame candidate conformance is not yet established; original372 remains FAIL and373 absent.
+
+[Original260](lanes/n010-comparison-readiness/results/260-wide8-original-a6a-seed1.json) is terminal seed-integrity PASS,5204.821CPU/5228.693elapsed seconds, original128x96/8192spp/seed2596069104. PID10159 ended, no restart/following seed. Two of four A6a seeds are complete; physical inventory and references are unchanged. CPU31/nice15/4GiB within7200CPU/10800elapsed limits; no N010 completion ETA follows from this one seed.
 
 Post-hoc routing telemetry:88674/92147 CPU-routed diagnostic paths carry
 intersection ambiguity (96.2310%); categories overlap. Provisional versus
-necessary ambiguity is not yet quantified; no routing guard changed.
+necessary ambiguity is not yet quantified; original backend is unchanged.
+The separate119 candidate adds conservative routing, scoped to its diagnostic.
 Direct relative-error1.0 pixels remain **UNRESOLVED / 未解決**, included.
 
-[Source preparation380](lanes/n010-comparison-readiness/results/380-early-density-route-prepare.json)
-identifies unprotected early PDF/target-cosine/direct-cosine branches and
-prepares a conservative CPU-routing candidate with exact inverse to360.
-This is a source finding, not the proven cause of372.
-[Plan119](lanes/n010-comparison-readiness/experiments/119-early-density-route-diagnostic.md)
-prepares one original/one guarded16-sample probe at the already localized
-pixel43665, retaining per-depth early-route telemetry. Compiler/GPU steps
-are NOT RUN and refuse dispatch until260 terminates with integrity PASS
-and actual quiescence; no automatic queue or full-frame scaling.
+[Source380](lanes/n010-comparison-readiness/results/380-early-density-route-prepare.json) and
+[381–383 runtime](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md)
+complete the frozen119 diagnostic. One pixel restores all16 independent CPU
+sample counters and proposal queries944 (old942); component error3.30e-17,
+owned peak89,941,232bytes/zero teardown. Candidate unconditioned fraction
+221087782.547 is retained; no new cut or global-bias claim. Exact ray operands
+are not captured. [Plan124](lanes/n010-comparison-readiness/experiments/124-guarded-full-frame-conformance.md)
+now registers one candidate C1/all57600pixels/16spp capture against retained
+371, reusing the entire original115 validator body. No wall-ratio decision;
+source prepared only,393 NOT RUN, no queued work or reference admission.
 
 **Prospective handoff amendment:** [120](lanes/n010-comparison-readiness/experiments/120-reportable-comparison-readiness-amendment.md)
 separates timing evidence validity from precision. A complete valid
@@ -56,29 +60,16 @@ Retained PT-B8/1024 sizing is about4.22GPU seconds/sample: the unchanged
 64-sample route has no demonstrated fit within180seconds. Do not launch
 that whole pilot next; establish actual budgets/bounded Renderer work first.
 
-[Source preparation389](lanes/n010-comparison-readiness/results/389-tiled-pixel-pt-source-prepare.json)
-implements [122](lanes/n010-comparison-readiness/experiments/122-spatially-tiled-pixel-pt.md):
-private spatial pixel tiles (default64 pixels, >=2ms yields), preserving
-the original per-pixel camera/RNG/sample/transport body byte-for-byte.
-Host/shader whole-source inverses pass; compiled/runtime equivalence is
-NOT RUN. Record active GPU sum, image timestamp envelope including yields,
-and CPU wall separately; no speed claim or automatic calibration transfer.
-Private build390 and all-pixel byte replay against archived046 remain.
-The [private build driver](../scripts/research/n010_reference_sampling/build_tiled_pixel_pt.py) now assembles
-the original shader/host/link commands and412 input identities in its
-metadata-only `--describe` mode. Actual build is NOT RUN: it requires
-terminal integrity-PASS260/quiescence, refuses existing output, and uses
-one CPU31/nice15 compiler with120CPU/180elapsed/4GiB limits per stage.
-No monolithic PT recapture or queued work;119 stays the next focused GPU
-diagnostic after260 terminates with integrity PASS.
-
-[Replay policy123](lanes/n010-comparison-readiness/experiments/123-tiled-pt-numerical-replay-policy.md) and its standalone driver are now prepared for
-two separately invoked C1/C7 PT-B8/1024 full images against immutable046.
-Source AST parsed only; no capture/replay or numerical391 has run. Fixed
-tile64/pause2000us, exact all-image bytes, complete tile timestamps and
-owned-lifetime replay; Vulkan virtual mappings are explicitly unlimited,
-with positive owned peak<=8GiB/zero teardown and120CPU/180elapsed guards.
-Both119 and private build390 must finish before any such GPU capture.
+[PT source389](lanes/n010-comparison-readiness/results/389-tiled-pixel-pt-source-prepare.json) and
+[private build390](lanes/n010-comparison-readiness/results/390-tiled-pixel-pt-build.json) complete isolated
+spatial pixel-PT compilation with original inputs; default build untouched.
+[First capture395](lanes/n010-comparison-readiness/results/395-tiled-pt-first-capture-failure.json) then
+fails before any complete tile with generic`Vulkan operation failed`,
+exit1/0.671375elapsed seconds. Image/frames are incomplete; ledger teardown
+is NOT zero (921,728bytes). Exact call/VkResult and cause remain unproven.
+Plan123 stops: C7 NOT RUN, no retry/monolithic recapture, successful391 absent.
+Preserve partials and diagnose the call/result before another PT capture.
+No numerical equivalence, accepted timing, memory or reference admission.
 
 
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired

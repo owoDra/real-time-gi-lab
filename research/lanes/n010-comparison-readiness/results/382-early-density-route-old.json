@@ -1,0 +1,508 @@
+{
+  "schema": "n010-early-density-route-diagnostic/1",
+  "step": "old",
+  "complete": true,
+  "step_valid": true,
+  "all_pass": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "gpu_run": true,
+  "classification": "POSTHOC_EARLY_ROUTE_STEP_COMPLETE_NO_ADMISSION",
+  "source_commit": "0325435b672f422ba906a3310b4ed951f520ad18",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/260-wide8-original-a6a-seed1.json": "0d846f743bcef34b5f4586f24aeb5cb3e2f8b98e6ef0a8b6fcacd06b554d7677",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_early_density_routes.py": "b2f760c633f9a5761bb0d4ce71aafb9bfc6ef7ac159b331369eb45195715b8e7",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/119-early-density-route-diagnostic.md": "e2711a7cc043138ed75884507b55ee98db3b02b9a14d4c7742b76d4a8097e6a9",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/360-whole-path-full-frame-build.json": "3191adae4d54297ccbe00d2179af6c5910d6e2d33814b02a220075eebeab0699",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/372-batched-full-frame-gpu.json": "088a828350fb163868691636707afc98eeb8d7fa7064d9e5ef7660422c7e07c1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/posthoc-batched-counter-localization-v1/scan/scan.json": "76518ff58a796431a3ab664e440aab00595ac7616d8149972a7a06414eecb73b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/380-early-density-route-prepare.json": "e1929605b2fc124f528014e10ea9cbeeaab1ee4b14c4249805d9a7ac45aff33a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/full.comp.glsl": "f6280c7187d5390a2fa31c2c3782d72c257f942bd72f33000ab9634799605332",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/full.cpp": "1451a98dfc155bc046bf3a002f72c3e32e556052aea37abb74caaaa5cbf8bfa3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/n010_reference_snapshot.hpp": "e78d83f16a37059e5889f9cb6bda37601143bb1f78bb72cf9997c1379d3e362e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/n010_reference_snapshot.hpp": "e78d83f16a37059e5889f9cb6bda37601143bb1f78bb72cf9997c1379d3e362e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/source-edits.json": "07fb2886804c97d176158d00684fb1d0e94f672029c646004014849937ebd66c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/full.comp.glsl": "a027acf60d2dfad0925166d2927f6efda3fa5f50c964e95a091e527b8692dd79",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/prepare/full.cpp": "759ac0761c16f25f6a037bc7c6361481292ee0b168edb82478ba7aabef17900b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/381-early-density-route-build.json": "46d480e7075e186e7c12da9b0e3093824619b6b7cc966091632fe7cd899a1ca3",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/_deps/glslang-build/StandAlone/glslang": "b9a3ba373c803c704ec64bd00e1663dbb3bb2bf658ed9099827b390b8c499f45",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/shader.resources.json": "52dd4d8802e728ffd52acf2aababce54dae259935b43b218e8c8a214edda0d8d",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/compile_gpu_reference.py": "326c16a2dfe3e2b659401f19f6b38937c6c183af8839585db403afc05970e102",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/host.resources.json": "f4f6b139c956abf494a4efb5bea5f743d755037b344c5e3dc0d7b6e5073582e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/raw.spv": "65d20586632c7b351752d8794d0a1739cf2f43a4edbfb2a9f0851223347b7e54",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/n010_reference_snapshot.hpp": "e78d83f16a37059e5889f9cb6bda37601143bb1f78bb72cf9997c1379d3e362e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/host.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/shader.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/full.spv": "8fde404b74bcec34ffec3c71310042084b65689efd6c2e37a56ad77928444a30",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/host.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/probe": "42689d1508079acce8fdc2cb09c2aba83d19bef878a3e85e9e0b87bc0ddc0bb3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/full.comp.glsl": "a027acf60d2dfad0925166d2927f6efda3fa5f50c964e95a091e527b8692dd79",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/n010_reference_context.hpp": "b498c2fa290c8538ee84a01bb377ab1304f07cbb4d623ea3c5c2e235e36ec6ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/shader.stderr": "50078053ed3975cbfdddb275e74811f08dca646f41dfc36515d1d9f9db78d965",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/full.cpp": "759ac0761c16f25f6a037bc7c6361481292ee0b168edb82478ba7aabef17900b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/371-batched-full-frame-cpu.json": "225b9e381492bc29c75938de3d4f3603da10e5747f1fb97b15d071467bf63635",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/full.spv": "0d2ebf0e64c147da1bafc51cbc3ebf776fd27a8a8d61f61ffdf85220dea9a0d7",
+    "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh": "9b39625714adbbf636888946ab3e4424e67ceae5c49450a6b83f6990c0451b4a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu.resources.json": "852bef4cdf974989090a01ed42b18ecc22d6b9a2aed0b5df06fa706b28ef32cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu.json": "30aef50c6761964aeeb3c6cd1238fc85615a00192b2c1c698b3f3bd0f3aab58b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/scope.json": "d038458307b6f675f3a7433172d205ee895028be3d5337113527b6e9467f4321",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu-paths.bin": "d035e4cecff09667a9c7e3e4acad9e93b5ccdeb86bbfa50f35724cbaa5842479",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/corrected-paths.bin": "f7bcdb87e78028754c0275e52d94fc3ccf096966e315b3e39431a35add7b9515",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/routing-flags.bin": "065e93621b67dc1b6c697cfde17511839bba33d0220c6fb56f0012f6fa3f7b2e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu-parts.bin": "b60f3f8e377f36d812cf31d332d5837403e558079d40b157073b3ab291dc9f1d",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/readiness_preflight.py": "87985c62edd7ad9a7a8e931e0f36264d939a4e4774507fe0653ac9d483857e2c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/allocation-ledger.json": "8b07aa973b9470937d594d2854fdf114773f1927712f8e9398c13df8a296e1b0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/dispatches.jsonl": "c332e1aa7ba6724b4c34a410e087f3d5016b391eb65f1376dc7564fa99e9cdd7"
+  },
+  "attempts": [
+    {
+      "command": [
+        "bash",
+        "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/build/probe",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/references-recovery-sponza-v1/C1_T_B8/scene.n008",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/whole-path-full-frame-build-v1/full.spv",
+        "305419896",
+        "16",
+        "16",
+        "1",
+        "counter-pixel",
+        "0",
+        "-",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu",
+        "1"
+      ],
+      "terminal": true,
+      "resource_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu.resources.json",
+      "returncode": 0,
+      "elapsed_seconds": 0.9257070979992932,
+      "child_cpu_seconds": 0.8437039999999999
+    }
+  ],
+  "tests": "NOT_RUN; post-hoc source/isolated compiler/scientific diagnosis only",
+  "validation": {
+    "reproduces_prior_corrected_pixel_counts": true,
+    "all16_corrected_scored_and_proposal_counts_exact": false,
+    "max_corrected_sample_component_error": 3.2959746043559335e-17,
+    "sample_rows": [
+      {
+        "sample": 0,
+        "raw_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 1,
+        "raw_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      },
+      {
+        "sample": 2,
+        "raw_counters": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 3,
+        "raw_counters": [
+          1,
+          6,
+          1,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          6,
+          1,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          6,
+          1,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      },
+      {
+        "sample": 4,
+        "raw_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 5,
+        "raw_counters": [
+          1,
+          3,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          3,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          3,
+          0,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 6,
+        "raw_counters": [
+          1,
+          6,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          6,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          6,
+          0,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      },
+      {
+        "sample": 7,
+        "raw_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 8,
+        "raw_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          3,
+          1,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 9,
+        "raw_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          2,
+          0,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 10,
+        "raw_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      },
+      {
+        "sample": 11,
+        "raw_counters": [
+          1,
+          3,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          3,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          3,
+          0,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      },
+      {
+        "sample": 12,
+        "raw_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 13,
+        "raw_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "routing_flags": 0,
+        "early_depths": []
+      },
+      {
+        "sample": 14,
+        "raw_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          4,
+          0,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      },
+      {
+        "sample": 15,
+        "raw_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "corrected_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "cpu_counters": [
+          1,
+          1,
+          0,
+          0
+        ],
+        "routing_flags": 1,
+        "early_depths": []
+      }
+    ],
+    "cpu_expected_audit": {
+      "proposal_bvh_queries": 944,
+      "component_attempts": 112,
+      "component_nulls": 20,
+      "own_checks": 92
+    },
+    "gpu_audit": {
+      "proposal_bvh_queries": 942,
+      "component_attempts": 112,
+      "component_nulls": 20,
+      "own_checks": 92,
+      "max_own_log_error_bound": 2.842170943040401e-14,
+      "max_conditioned_error_fraction": 0.003221278003830302,
+      "max_unconditioned_error_fraction": 0.09673050287662403,
+      "max_weight": 6
+    },
+    "owned_peak_bytes": 89941232,
+    "owned_teardown_zero": true,
+    "causal_scope": "Early-branch route telemetry is diagnostic; no full-frame or ray-level cause is inferred automatically"
+  },
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu.resources.json": "852bef4cdf974989090a01ed42b18ecc22d6b9a2aed0b5df06fa706b28ef32cb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu.stderr": "fcab082df1e44cdebf22d83103b5419602a3ad73542877bfa749df82a8de26f0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/scope.json": "d038458307b6f675f3a7433172d205ee895028be3d5337113527b6e9467f4321",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu.stats": "769e2778e241cec77705cce0e7539ec318c64fabf6f19327f35c5d8c6690c221",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/audit.bin": "fc4a71a69c5747260072a01b9bc377bda6394d2e1e558cbd27f27c93852ba8b4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/o.indirect.pfm": "d6ed378f7ce768fade391cd62623ef7a8c9b63a1be87c883c81b1d0a0a8243a0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/o.direct.pfm": "07d140b5d4f868dd2956071865d82b8141fa9724d43fa5d4cf5e67beaa1ca7f6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/allocation-ledger.json": "8b07aa973b9470937d594d2854fdf114773f1927712f8e9398c13df8a296e1b0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/routing-flags.bin": "065e93621b67dc1b6c697cfde17511839bba33d0220c6fb56f0012f6fa3f7b2e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu-paths.bin": "d035e4cecff09667a9c7e3e4acad9e93b5ccdeb86bbfa50f35724cbaa5842479",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/batches.jsonl": "51a995a832b24861af83f6ef0329596e794a5cc490c3f162c6ab3a4b4fcd62b1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu-parts.bin": "b60f3f8e377f36d812cf31d332d5837403e558079d40b157073b3ab291dc9f1d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/sample-counts.bin": "020d99799ffee35454d9b977b0959d2e95f2564e2165718c937f7c94f9ea584e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/corrected-paths.bin": "f7bcdb87e78028754c0275e52d94fc3ccf096966e315b3e39431a35add7b9515",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/o.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/prefix.stamp": "5c6028e08939334277b58feecb1884af0153e010bcb75f23813267059b85db37",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/dispatches.jsonl": "c332e1aa7ba6724b4c34a410e087f3d5016b391eb65f1376dc7564fa99e9cdd7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/o.total.pfm": "15546e560fe7e3bc0aa4d7bb5b894b120a1c2cf939289bb90f7d89e773e7ddde",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/o.hits": "2a0e6003269a8bbc020753ec08a3bb0cb7756efb3cfb2cf5c1337c3ca1e9d4aa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/primary-records.bin": "c300c46346541c055fa2fa577b05239cbfc4180f10f0c88f019d884a8e172225",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/o.f64": "267c6eb9b59dc543dfa654d9df09c23a22a6516203e578fbdb5a667b4763e565",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/early-density-route-diagnostic-v1/old/gpu/gpu.json": "30aef50c6761964aeeb3c6cd1238fc85615a00192b2c1c698b3f3bd0f3aab58b"
+  }
+}

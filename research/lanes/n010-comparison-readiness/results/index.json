@@ -1371,6 +1371,12 @@
       "gpu_run": false
     },
     {
+      "id": "N010-260",
+      "status": "complete-original-full-a6a-8192-seed1-integrity-pass-two-of-four-no-admission",
+      "result": "260-wide8-original-a6a-seed1.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-352",
       "status": "complete-isolated-hybrid-build-three-compilers-exit0-no-runtime-or-reference-admission",
       "result": "352-whole-path-hybrid-prototype-build.json",
@@ -1539,6 +1545,24 @@
       "gpu_run": false
     },
     {
+      "id": "N010-381",
+      "status": "complete-isolated-early-route-candidate-build-no-admission",
+      "result": "381-early-density-route-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-382",
+      "status": "complete-posthoc-original-probe-reproduces-shadow-and-query-deficit",
+      "result": "382-early-density-route-old.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-383",
+      "status": "complete-posthoc-focused-candidate-restores-all-counts-raw-paths-unchanged-no-admission",
+      "result": "383-early-density-route-guarded.json",
+      "gpu_run": true
+    },
+    {
       "id": "N010-384",
       "status": "complete-source-only-ideal-density-derivation-numerical-bias-admission-open",
       "result": "384-all-split-density-identity-and-numerical-scope.md",
@@ -1555,6 +1579,24 @@
       "status": "complete-spatial-pixel-pt-source-preparation-inverse-exact-per-pixel-body-unchanged-uncompiled-unexecuted-no-admission",
       "result": "389-tiled-pixel-pt-source-prepare.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-390",
+      "status": "complete-isolated-tiled-pt-build-runtime-equivalence-not-established",
+      "result": "390-tiled-pixel-pt-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-392",
+      "status": "complete-runtime-checkpoint-focused-repair-and-stopped-tiled-pt-failure",
+      "result": "392-early-route-and-tiled-pt-runtime-checkpoint.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-395",
+      "status": "complete-negative-first-tiled-pt-capture-vulkan-error-partials-retained-c7-not-run",
+      "result": "395-tiled-pt-first-capture-failure.json",
+      "gpu_run": true
     }
   ]
 }
