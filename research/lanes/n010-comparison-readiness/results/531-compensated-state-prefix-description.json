@@ -1,0 +1,1343 @@
+{
+  "schema": "n010-compensated-state-prefix-description/1",
+  "complete": true,
+  "source_scope_metadata_valid": true,
+  "source_commit": "1333778a5c86c3dede6952da00e766894429ed10",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/157-compensated-all-state-prefix-acquisition.md": "e57c796d480e1e8f1c41fdd3b73ad5ccc9f3ded50c71e090432377b127749772",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_state_prefix.py": "d3e1f97f8ddc228579af95ca3daca60f70527e3fa378dc6b6b90f1ce61aea1fd",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/156-compensated-full-level5-diagnostic.md": "91054e91280b0b700e82124118e926b07c6f1dc3ff9ba166bfa315fe5a767e03",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_level5_full.py": "f6483610f4da4ac37f7b01dc288a54710153ee87093bf6aa18186a27f8cfdd37",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/cover_wide8_original_controls.py": "d8a8ce0847fb17a9fa8f1807d054b7a19bf6dd4c7c96aaf856e15dcb3e9cd673",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_full_sphere_seed.py": "9cf015bd6b18ceeda9e4c016ce99689d991caa0e9c0eab1187f5e243dbd349a8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_wide8_state_prefix.py": "f4245ab95bd2fef5836c2957407cc389315a85d1ab8b4e8b9d4ab23796495e98",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/078-all-state-cpu-port-controls.json": "6cf7e6082bca5f8f65de40685b310580c271e14037c4d38d11eef785fbbf24be",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/016-corpus-state-lock.json": "103bf2a09a2c7589ef72023cd7a1482e3b8e315c077a6132fd5605861a97686c"
+  },
+  "proof": {
+    "whole109_source_inverse_exact": true,
+    "original_scientific_blocks_exact": {
+      "original_slots": true,
+      "selected_slot": true,
+      "full_terminal_analysis_bytes": true,
+      "full_terminal_analysis_ast": true
+    }
+  },
+  "generated_source_sha256": "8b76f64dd7819b9219d9e6c4fadb084df10582f783cd15d0951c243ad16fe9eb",
+  "source_edits": [
+    [
+      "PLAN = D.RESULTS.parent / 'experiments/109-wide8-state-prefix-checkpoints.md'",
+      "PLAN = CANDIDATE_PLAN"
+    ],
+    [
+      "BASE = D.OUT / 'wide8-state-prefix-v1'",
+      "BASE = CANDIDATE_BASE"
+    ],
+    [
+      "SUMMARY = D.RESULTS / '351-wide8-all-state-prefix-summary.json'",
+      "SUMMARY = CANDIDATE_SUMMARY"
+    ],
+    [
+      "f'{273+3*case+phase:03d}-wide8-state-prefix-{label}.json'",
+      "f'{532+3*case+phase:03d}-compensated-state-prefix-{label}.json'"
+    ],
+    [
+      "    os.nice(15)",
+      "    priority = os.getpriority(os.PRIO_PROCESS,0)\n    if priority < 15:os.nice(15-priority)"
+    ],
+    [
+      "    for stem in ('225', '226', '231', '237', '252', '253', '258', '262', '266',\n                 '270', '271', '254', '257', '272'):\n        proof = C.pinned_result(stem)\n        if not proof['all_pass']:\n            raise ValueError('required physical/backend/prefix record failed: ' + stem)\n        if stem in ('262', '266', '270') and not proof['full_four_seed_physical_pass']:\n            raise ValueError('full four-seed physical gate required')\n        for path, digest in proof['input_sha256'].items():\n            D.checked(Path(path), digest)\n",
+      "    candidate_prerequisites()\n"
+    ],
+    [
+      "'wide8-cpu-bvh-v1/n010_wide8_exporter' if phase == 0\n                      else 'wide8-prefix-build-v1/n010_wide8_prefix'",
+      "'compensated-full-deterministic-v1/build/n010_compensated_exporter' if phase == 0\n                      else 'compensated-prefix-build-v1/n010_compensated_prefix'"
+    ],
+    [
+      "    work.mkdir(parents=True)",
+      "    work.mkdir(parents=True)\n    (work/'generated-driver.py').write_text(generated_program)\n    (work/'source-edits.json').write_text(json.dumps(source_edits,indent=2)+'\\n')"
+    ],
+    [
+      "schema='n010-wide8-all-state-prefix-summary/1'",
+      "schema='n010-compensated-all-state-prefix-summary/1', numerical_variant='compensated-raw-target-v1', source_composition_proof=composition_proof"
+    ],
+    [
+      "schema='n010-wide8-state-prefix-step/1'",
+      "schema='n010-compensated-state-prefix-step/1', numerical_variant='compensated-raw-target-v1', source_composition_proof=composition_proof"
+    ],
+    [
+      "receipt.write_text(json.dumps(dict(pid=os.getpid(),",
+      "receipt.write_text(json.dumps(dict(pid=os.getpid(), pgid=os.getpgrp(),\n            boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),elapsed_limit_seconds=28800,"
+    ],
+    [
+      "proc = subprocess.run(command, capture_output=True, text=True, timeout=28800, preexec_fn=limits)",
+      "proc = isolated_native(command, receipt, limits)"
+    ],
+    [
+      "        resource.setrlimit(resource.RLIMIT_CPU, (600,) * 2)\n        meta = json.loads(proc.stdout)",
+      "        if (actual['pid'] != actual['pgid'] or actual['pid'] != proc.pid\n                or actual['start_ticks'] != proc.start_ticks or actual['command'] != command\n                or actual['boot_id'] != Path('/proc/sys/kernel/random/boot_id').read_text().strip()\n                or actual['elapsed_limit_seconds'] != 28800 or result['elapsed_seconds'] >= 28800\n                or result['child_cpu_seconds'] > 21600):\n            raise ValueError('owned candidate state/prefix native resource identity differs')\n        result['terminal_identity_verified'] = True\n        resource.setrlimit(resource.RLIMIT_CPU, (600,) * 2)\n        meta = json.loads(proc.stdout)"
+    ],
+    [
+      "    receipt = json.loads(D.checked(Path(data['resource_receipt'])))",
+      "    if not data['terminal_identity_verified'] or data['numerical_variant'] != 'compensated-raw-target-v1':\n        raise ValueError('candidate terminal identity required')\n    receipt = json.loads(D.checked(Path(data['resource_receipt'])))"
+    ]
+  ],
+  "rows": [
+    {
+      "case_index": 0,
+      "phase": 0,
+      "cell": "C1",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/532-compensated-state-prefix-case00-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case00-phase0"
+    },
+    {
+      "case_index": 0,
+      "phase": 1,
+      "cell": "C1",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/533-compensated-state-prefix-case00-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case00-phase1"
+    },
+    {
+      "case_index": 0,
+      "phase": 2,
+      "cell": "C1",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/534-compensated-state-prefix-case00-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case00-phase2"
+    },
+    {
+      "case_index": 1,
+      "phase": 0,
+      "cell": "C1",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/535-compensated-state-prefix-case01-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case01-phase0"
+    },
+    {
+      "case_index": 1,
+      "phase": 1,
+      "cell": "C1",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/536-compensated-state-prefix-case01-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case01-phase1"
+    },
+    {
+      "case_index": 1,
+      "phase": 2,
+      "cell": "C1",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/537-compensated-state-prefix-case01-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case01-phase2"
+    },
+    {
+      "case_index": 2,
+      "phase": 0,
+      "cell": "C2",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/538-compensated-state-prefix-case02-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case02-phase0"
+    },
+    {
+      "case_index": 2,
+      "phase": 1,
+      "cell": "C2",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/539-compensated-state-prefix-case02-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case02-phase1"
+    },
+    {
+      "case_index": 2,
+      "phase": 2,
+      "cell": "C2",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/540-compensated-state-prefix-case02-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case02-phase2"
+    },
+    {
+      "case_index": 3,
+      "phase": 0,
+      "cell": "C2",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/541-compensated-state-prefix-case03-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case03-phase0"
+    },
+    {
+      "case_index": 3,
+      "phase": 1,
+      "cell": "C2",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/542-compensated-state-prefix-case03-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case03-phase1"
+    },
+    {
+      "case_index": 3,
+      "phase": 2,
+      "cell": "C2",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/543-compensated-state-prefix-case03-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case03-phase2"
+    },
+    {
+      "case_index": 4,
+      "phase": 0,
+      "cell": "C3",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/544-compensated-state-prefix-case04-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case04-phase0"
+    },
+    {
+      "case_index": 4,
+      "phase": 1,
+      "cell": "C3",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/545-compensated-state-prefix-case04-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case04-phase1"
+    },
+    {
+      "case_index": 4,
+      "phase": 2,
+      "cell": "C3",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/546-compensated-state-prefix-case04-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case04-phase2"
+    },
+    {
+      "case_index": 5,
+      "phase": 0,
+      "cell": "C3",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/547-compensated-state-prefix-case05-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case05-phase0"
+    },
+    {
+      "case_index": 5,
+      "phase": 1,
+      "cell": "C3",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/548-compensated-state-prefix-case05-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case05-phase1"
+    },
+    {
+      "case_index": 5,
+      "phase": 2,
+      "cell": "C3",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/549-compensated-state-prefix-case05-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case05-phase2"
+    },
+    {
+      "case_index": 6,
+      "phase": 0,
+      "cell": "C4",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/550-compensated-state-prefix-case06-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case06-phase0"
+    },
+    {
+      "case_index": 6,
+      "phase": 1,
+      "cell": "C4",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/551-compensated-state-prefix-case06-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case06-phase1"
+    },
+    {
+      "case_index": 6,
+      "phase": 2,
+      "cell": "C4",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/552-compensated-state-prefix-case06-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case06-phase2"
+    },
+    {
+      "case_index": 7,
+      "phase": 0,
+      "cell": "C4",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/553-compensated-state-prefix-case07-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case07-phase0"
+    },
+    {
+      "case_index": 7,
+      "phase": 1,
+      "cell": "C4",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/554-compensated-state-prefix-case07-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case07-phase1"
+    },
+    {
+      "case_index": 7,
+      "phase": 2,
+      "cell": "C4",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/555-compensated-state-prefix-case07-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case07-phase2"
+    },
+    {
+      "case_index": 8,
+      "phase": 0,
+      "cell": "C5",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/556-compensated-state-prefix-case08-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case08-phase0"
+    },
+    {
+      "case_index": 8,
+      "phase": 1,
+      "cell": "C5",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/557-compensated-state-prefix-case08-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case08-phase1"
+    },
+    {
+      "case_index": 8,
+      "phase": 2,
+      "cell": "C5",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/558-compensated-state-prefix-case08-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case08-phase2"
+    },
+    {
+      "case_index": 9,
+      "phase": 0,
+      "cell": "C5",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/559-compensated-state-prefix-case09-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case09-phase0"
+    },
+    {
+      "case_index": 9,
+      "phase": 1,
+      "cell": "C5",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/560-compensated-state-prefix-case09-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case09-phase1"
+    },
+    {
+      "case_index": 9,
+      "phase": 2,
+      "cell": "C5",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/561-compensated-state-prefix-case09-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case09-phase2"
+    },
+    {
+      "case_index": 10,
+      "phase": 0,
+      "cell": "C6",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/562-compensated-state-prefix-case10-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case10-phase0"
+    },
+    {
+      "case_index": 10,
+      "phase": 1,
+      "cell": "C6",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/563-compensated-state-prefix-case10-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case10-phase1"
+    },
+    {
+      "case_index": 10,
+      "phase": 2,
+      "cell": "C6",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/564-compensated-state-prefix-case10-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case10-phase2"
+    },
+    {
+      "case_index": 11,
+      "phase": 0,
+      "cell": "C6",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/565-compensated-state-prefix-case11-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case11-phase0"
+    },
+    {
+      "case_index": 11,
+      "phase": 1,
+      "cell": "C6",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/566-compensated-state-prefix-case11-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case11-phase1"
+    },
+    {
+      "case_index": 11,
+      "phase": 2,
+      "cell": "C6",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/567-compensated-state-prefix-case11-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case11-phase2"
+    },
+    {
+      "case_index": 12,
+      "phase": 0,
+      "cell": "C7",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/568-compensated-state-prefix-case12-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case12-phase0"
+    },
+    {
+      "case_index": 12,
+      "phase": 1,
+      "cell": "C7",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/569-compensated-state-prefix-case12-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case12-phase1"
+    },
+    {
+      "case_index": 12,
+      "phase": 2,
+      "cell": "C7",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/570-compensated-state-prefix-case12-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case12-phase2"
+    },
+    {
+      "case_index": 13,
+      "phase": 0,
+      "cell": "C7",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/571-compensated-state-prefix-case13-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case13-phase0"
+    },
+    {
+      "case_index": 13,
+      "phase": 1,
+      "cell": "C7",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/572-compensated-state-prefix-case13-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case13-phase1"
+    },
+    {
+      "case_index": 13,
+      "phase": 2,
+      "cell": "C7",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/573-compensated-state-prefix-case13-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case13-phase2"
+    },
+    {
+      "case_index": 14,
+      "phase": 0,
+      "cell": "C8",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/574-compensated-state-prefix-case14-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case14-phase0"
+    },
+    {
+      "case_index": 14,
+      "phase": 1,
+      "cell": "C8",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/575-compensated-state-prefix-case14-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case14-phase1"
+    },
+    {
+      "case_index": 14,
+      "phase": 2,
+      "cell": "C8",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/576-compensated-state-prefix-case14-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case14-phase2"
+    },
+    {
+      "case_index": 15,
+      "phase": 0,
+      "cell": "C8",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/577-compensated-state-prefix-case15-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case15-phase0"
+    },
+    {
+      "case_index": 15,
+      "phase": 1,
+      "cell": "C8",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/578-compensated-state-prefix-case15-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case15-phase1"
+    },
+    {
+      "case_index": 15,
+      "phase": 2,
+      "cell": "C8",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/579-compensated-state-prefix-case15-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case15-phase2"
+    },
+    {
+      "case_index": 16,
+      "phase": 0,
+      "cell": "C9",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/580-compensated-state-prefix-case16-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case16-phase0"
+    },
+    {
+      "case_index": 16,
+      "phase": 1,
+      "cell": "C9",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/581-compensated-state-prefix-case16-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case16-phase1"
+    },
+    {
+      "case_index": 16,
+      "phase": 2,
+      "cell": "C9",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/582-compensated-state-prefix-case16-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case16-phase2"
+    },
+    {
+      "case_index": 17,
+      "phase": 0,
+      "cell": "C9",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/583-compensated-state-prefix-case17-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case17-phase0"
+    },
+    {
+      "case_index": 17,
+      "phase": 1,
+      "cell": "C9",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/584-compensated-state-prefix-case17-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case17-phase1"
+    },
+    {
+      "case_index": 17,
+      "phase": 2,
+      "cell": "C9",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/585-compensated-state-prefix-case17-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case17-phase2"
+    },
+    {
+      "case_index": 18,
+      "phase": 0,
+      "cell": "C10",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/586-compensated-state-prefix-case18-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case18-phase0"
+    },
+    {
+      "case_index": 18,
+      "phase": 1,
+      "cell": "C10",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/587-compensated-state-prefix-case18-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case18-phase1"
+    },
+    {
+      "case_index": 18,
+      "phase": 2,
+      "cell": "C10",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/588-compensated-state-prefix-case18-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case18-phase2"
+    },
+    {
+      "case_index": 19,
+      "phase": 0,
+      "cell": "C10",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/589-compensated-state-prefix-case19-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case19-phase0"
+    },
+    {
+      "case_index": 19,
+      "phase": 1,
+      "cell": "C10",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/590-compensated-state-prefix-case19-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case19-phase1"
+    },
+    {
+      "case_index": 19,
+      "phase": 2,
+      "cell": "C10",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/591-compensated-state-prefix-case19-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case19-phase2"
+    },
+    {
+      "case_index": 20,
+      "phase": 0,
+      "cell": "C11",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/592-compensated-state-prefix-case20-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case20-phase0"
+    },
+    {
+      "case_index": 20,
+      "phase": 1,
+      "cell": "C11",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/593-compensated-state-prefix-case20-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case20-phase1"
+    },
+    {
+      "case_index": 20,
+      "phase": 2,
+      "cell": "C11",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/594-compensated-state-prefix-case20-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case20-phase2"
+    },
+    {
+      "case_index": 21,
+      "phase": 0,
+      "cell": "C11",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/595-compensated-state-prefix-case21-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case21-phase0"
+    },
+    {
+      "case_index": 21,
+      "phase": 1,
+      "cell": "C11",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/596-compensated-state-prefix-case21-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case21-phase1"
+    },
+    {
+      "case_index": 21,
+      "phase": 2,
+      "cell": "C11",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/597-compensated-state-prefix-case21-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case21-phase2"
+    },
+    {
+      "case_index": 22,
+      "phase": 0,
+      "cell": "C12",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/598-compensated-state-prefix-case22-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case22-phase0"
+    },
+    {
+      "case_index": 22,
+      "phase": 1,
+      "cell": "C12",
+      "vertices": 2,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/599-compensated-state-prefix-case22-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case22-phase1"
+    },
+    {
+      "case_index": 22,
+      "phase": 2,
+      "cell": "C12",
+      "vertices": 2,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/600-compensated-state-prefix-case22-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case22-phase2"
+    },
+    {
+      "case_index": 23,
+      "phase": 0,
+      "cell": "C12",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/601-compensated-state-prefix-case23-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case23-phase0"
+    },
+    {
+      "case_index": 23,
+      "phase": 1,
+      "cell": "C12",
+      "vertices": 8,
+      "spp": 8,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/602-compensated-state-prefix-case23-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case23-phase1"
+    },
+    {
+      "case_index": 23,
+      "phase": 2,
+      "cell": "C12",
+      "vertices": 8,
+      "spp": 16,
+      "begin_spp": 8,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/603-compensated-state-prefix-case23-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case23-phase2"
+    },
+    {
+      "case_index": 24,
+      "phase": 0,
+      "cell": "C7",
+      "vertices": 2,
+      "spp": 16384,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/604-compensated-state-prefix-case24-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case24-phase0"
+    },
+    {
+      "case_index": 24,
+      "phase": 1,
+      "cell": "C7",
+      "vertices": 2,
+      "spp": 8192,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/605-compensated-state-prefix-case24-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case24-phase1"
+    },
+    {
+      "case_index": 24,
+      "phase": 2,
+      "cell": "C7",
+      "vertices": 2,
+      "spp": 16384,
+      "begin_spp": 8192,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/606-compensated-state-prefix-case24-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case24-phase2"
+    },
+    {
+      "case_index": 25,
+      "phase": 0,
+      "cell": "C7",
+      "vertices": 8,
+      "spp": 16384,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/607-compensated-state-prefix-case25-phase0.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case25-phase0"
+    },
+    {
+      "case_index": 25,
+      "phase": 1,
+      "cell": "C7",
+      "vertices": 8,
+      "spp": 8192,
+      "begin_spp": 0,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/608-compensated-state-prefix-case25-phase1.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case25-phase1"
+    },
+    {
+      "case_index": 25,
+      "phase": 2,
+      "cell": "C7",
+      "vertices": 8,
+      "spp": 16384,
+      "begin_spp": 8192,
+      "seeds": [
+        305419896,
+        2596069104,
+        81985529216486895,
+        18364758544493064720
+      ],
+      "output": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/609-compensated-state-prefix-case25-phase2.json",
+      "work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-state-prefix-v1/case25-phase2"
+    }
+  ],
+  "classification": "COMPENSATED_FULL78_STATE_PREFIX_SOURCE_ONLY_NOT_RUN",
+  "gpu_run": false,
+  "native_executed": false,
+  "reference_admission": false,
+  "accepted_timing": false,
+  "tests": "NOT_RUN; source/AST/inverse/full-scope metadata only"
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "n010-compensated-full-level5-description/1",
+  "complete": true,
+  "source_metadata_valid": true,
+  "source_commit": "41a4d10fc0efd6e4f2f59ce69fed59583ca5fa22",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/156-compensated-full-level5-diagnostic.md": "91054e91280b0b700e82124118e926b07c6f1dc3ff9ba166bfa315fe5a767e03",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_level5_full.py": "f6483610f4da4ac37f7b01dc288a54710153ee87093bf6aa18186a27f8cfdd37",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/cover_wide8_original_controls.py": "d8a8ce0847fb17a9fa8f1807d054b7a19bf6dd4c7c96aaf856e15dcb3e9cd673",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_full_sphere_seed.py": "9cf015bd6b18ceeda9e4c016ce99689d991caa0e9c0eab1187f5e243dbd349a8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_original_level5_wide8.py": "9e29c2e6ee4f7facf42cc7b81ace44d593db8465191b57ad2ef52eb2f78f76e5"
+  },
+  "proof": {
+    "whole105_source_inverse_exact": true,
+    "not_gated_analytic_diagnostic_expression_ast_exact": true,
+    "terminal_physical_analysis_bytes_exact": true,
+    "terminal_physical_analysis_ast_exact": true
+  },
+  "generated_source_sha256": "dba787f26051b1d6db99b09e22e8f7e776edecce17716f06404230a41a9cfee4",
+  "source_edits": [
+    [
+      "WORK = D.OUT / 'wide8-original-level5-full-v1'",
+      "WORK = CANDIDATE_WORK"
+    ],
+    [
+      "OUTPUT = D.RESULTS / '258-wide8-original-level5-full-artifact.json'",
+      "OUTPUT = CANDIDATE_OUTPUT"
+    ],
+    [
+      "PLAN = D.RESULTS.parent / 'experiments/105-original-full-level5-artifact.md'",
+      "PLAN = CANDIDATE_PLAN"
+    ],
+    [
+      "    os.nice(15)",
+      "    priority = os.getpriority(os.PRIO_PROCESS,0)\n    if priority < 15:os.nice(15-priority)"
+    ],
+    [
+      "    prototype = C.pinned_result('254')",
+      "    candidate = candidate_prerequisites()\n    prototype = C.pinned_result('254')"
+    ],
+    [
+      "    binary = D.OUT / 'wide8-cpu-bvh-v1/n010_wide8_exporter'\n    D.checked(binary, prototype['payload_sha256'][str(binary)])",
+      "    binary = D.OUT / 'compensated-full-deterministic-v1/build/n010_compensated_exporter'\n    D.checked(binary, candidate['payload_sha256'][str(binary)])"
+    ],
+    [
+      "schema='n010-wide8-original-full-level5-artifact/1'",
+      "schema='n010-compensated-full-level5-artifact/1',\n                  numerical_variant='compensated-raw-target-v1', resource_receipt=str(receipt),\n                  source_composition_proof=composition_proof"
+    ],
+    [
+      "    WORK.mkdir()",
+      "    WORK.mkdir()\n    (WORK/'source-edits.json').write_text(json.dumps(source_edits,indent=2)+'\\n')\n    (WORK/'generated-driver.py').write_text(generated_program)"
+    ],
+    [
+      "receipt.write_text(json.dumps(dict(pid=os.getpid(),",
+      "receipt.write_text(json.dumps(dict(pid=os.getpid(), pgid=os.getpgrp(),\n            boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),elapsed_limit_seconds=1800,"
+    ],
+    [
+      "proc = subprocess.run(command, capture_output=True, text=True, timeout=1800, preexec_fn=limits)",
+      "proc = isolated_native(command, receipt, limits)"
+    ],
+    [
+      "classification='ORIGINAL_FULL_LEVEL5_NATIVE_ACQUIRING'",
+      "classification='COMPENSATED_FULL_LEVEL5_NATIVE_ACQUIRING'"
+    ],
+    [
+      "classification='ORIGINAL_FULL_LEVEL5_NATIVE_TERMINAL_ANALYSIS_PENDING'",
+      "classification='COMPENSATED_FULL_LEVEL5_NATIVE_TERMINAL_ANALYSIS_PENDING'"
+    ],
+    [
+      "classification='ORIGINAL_FULL_LEVEL5_FAILURE_PARTIALS_RETAINED'",
+      "classification='COMPENSATED_FULL_LEVEL5_FAILURE_PARTIALS_RETAINED'"
+    ],
+    [
+      "classification='ORIGINAL_FULL_LEVEL5_DIAGNOSTIC_COMPLETE_NO_ADMISSION'",
+      "classification='COMPENSATED_FULL_LEVEL5_DIAGNOSTIC_COMPLETE_NO_ADMISSION'"
+    ],
+    [
+      "scope='One original full256 diagnostic artifact; no A6b analytic/IID gate or reference admission'",
+      "scope='One candidate full256 diagnostic artifact; no A6b analytic/IID gate or reference admission'"
+    ],
+    [
+      "        if proc.returncode:\n",
+      "        if (actual['pid'] != actual['pgid'] or actual['pid'] != proc.pid\n                or actual['start_ticks'] != proc.start_ticks or actual['affinity'] != [31]\n                or actual['boot_id'] != Path('/proc/sys/kernel/random/boot_id').read_text().strip()\n                or actual['elapsed_limit_seconds'] != 1800 or actual['command'] != command\n                or result['elapsed_seconds'] >= 1800 or result['child_cpu_seconds'] > 1200):\n            raise ValueError('owned candidate native terminal/resource identity differs')\n        result['terminal_identity_verified'] = True\n        if proc.returncode:\n"
+    ],
+    [
+      "                      original_full_artifacts_retained=14,",
+      "                      original_full_artifacts_retained=14, candidate_full_artifacts_retained=17,"
+    ]
+  ],
+  "classification": "COMPENSATED_LEVEL5_SOURCE_ONLY_NATIVE_NOT_RUN",
+  "gpu_run": false,
+  "native_executed": false,
+  "reference_admission": false,
+  "accepted_timing": false,
+  "original_analysis_is_diagnostic_not_gated": true,
+  "tests": "NOT_RUN; source/AST/inverse metadata only"
+}

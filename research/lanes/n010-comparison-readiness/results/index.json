@@ -2131,6 +2131,24 @@
       "status": "complete-compensated-prefix-source-checkpoint-one-live-seed-not-ready",
       "result": "527-compensated-prefix-source-checkpoint.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-528",
+      "status": "complete-full-level5-source-inverse-original-diagnostic-not-gated-native-not-run",
+      "result": "528-compensated-full-level5-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-530",
+      "status": "complete-compensated-diagnostic-and-full78-prefix-source-checkpoint-not-ready",
+      "result": "530-compensated-diagnostic-and-prefix-routes-source-checkpoint.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-531",
+      "status": "complete-full78-original-state-prefix-source-inverse-scope-only-runtime-not-run",
+      "result": "531-compensated-state-prefix-description.json",
+      "gpu_run": false
     }
   ]
 }
