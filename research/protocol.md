@@ -171,6 +171,23 @@ qualification, a tail-latency guarantee or an unconditional systematic-bias
 bound. Actual selected boundaries and final proof intake still require their
 prospective registration. Stop generic tuning toward old stability cuts.
 
+### N010 prospective handoff amendment (2026-10-18)
+
+[Amendment120](lanes/n010-comparison-readiness/experiments/120-reportable-comparison-readiness-amendment.md)
+separates readiness to execute/report a comparison from permission to claim a
+speed advantage. For future handoff a complete, valid actual-boundary timing
+pilot may terminate **TIMING_INCONCLUSIVE** without that outcome alone
+preventing handoff. Missing or invalid evidence still prevents handoff. All
+other reference/correctness/quality/dynamic/memory/provenance requirements
+remain. This prospectively changes the N010 timing-precision prerequisite;
+old records and their thresholds are unchanged.
+
+Actual-boundary calibration remains necessary before accepted performance
+claims or architecture promotion. Keep all samples and stop at the frozen
+campaign limit; do not tune idle/stability percentages until a pass appears.
+The legacy preflight has not implemented120: the separately versioned full
+intake/final adapter and valid selected-boundary pilot remain required.
+
 ### Post-Lane-H calibration requirement
 
 After Lane G/H, a new timing methodology intended to support architecture

@@ -12,7 +12,7 @@ Latest: [outcome374](lanes/n010-comparison-readiness/results/374-batched-hybrid-
 | New execution backend | [360](lanes/n010-comparison-readiness/results/360-whole-path-full-frame-build.json) build PASS; [366](lanes/n010-comparison-readiness/results/366-depth-split-hybrid-numerical.json) all32 original depth-split pairs PASS | Full physical/all-state/exact-prefix and full-count feasibility/intake still required. |
 | Full-frame numerical pilot | [370](lanes/n010-comparison-readiness/results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
 | Intended-batch execution | [371/372](lanes/n010-comparison-readiness/results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Stop this GPU variant; continue original106 CPU physical parts. Single-run wall does not admit a failed backend. |
-| GPU performance methodology | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Actual selected workloads/quality budgets, multiplicity and final proof intake; no automatic transfer. |
+| GPU performance methodology | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Valid selected-boundary pilot and final intake/adapter; precision may be INCONCLUSIVE under amendment120. No automatic C7 transfer. |
 | Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
 
 [Post-hoc CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) reproduces all CPU bits/counts and localizes the shadow mismatch to pixel43665/(145,136): CPU[16,53,4,0] vs GPU[16,52,4,0]. Ray/sample cause remains UNRESOLVED; no GPU retry or373 success summary. Original A6a seed1/2596069104 part260 is now **RUNNING**, source838d3e50, native PID10159/start59862, CPU31/nice15/4GiB,7200CPU/10800elapsed limits. Actual receipt and /proc identity confirmed live; result is not terminal or accepted. Source/checkpoint259 is retained; no restart and no following seed queued. The mutable local260 record stays uncommitted until terminal evidence. Prior seed0 took5234CPU/5257elapsed seconds; that is a one-seed cost reference, not an N010 completion estimate.
@@ -31,6 +31,20 @@ prepares one original/one guarded16-sample probe at the already localized
 pixel43665, retaining per-depth early-route telemetry. Compiler/GPU steps
 are NOT RUN and refuse dispatch until260 terminates with integrity PASS
 and actual quiescence; no automatic queue or full-frame scaling.
+
+**Prospective handoff amendment:** [120](lanes/n010-comparison-readiness/experiments/120-reportable-comparison-readiness-amendment.md)
+separates timing evidence validity from precision. A complete valid
+actual-boundary pilot may end TIMING_INCONCLUSIVE without that outcome
+alone blocking handoff; incomplete/invalid evidence still blocks it.
+Accepted speed claims still require actual-boundary calibration and
+matched-quality uncertainty analysis. The old preflight has NOT yet
+implemented this amendment; full intake/adapter work remains. No old
+FAIL is reclassified and no numerical threshold changes retroactively.
+
+[Source review384](lanes/n010-comparison-readiness/results/384-all-split-density-identity-and-numerical-scope.md)
+maps the ideal all-split density identity to the CPU source and identifies
+its finite-grid/approximate-support limitations. It is not numerical-bias
+admission and adds no new reference gate.
 
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired
 ratios, registered uncertainty and order/control allowance. CPU wall/clock/
