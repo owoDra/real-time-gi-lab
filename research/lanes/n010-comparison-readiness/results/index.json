@@ -2035,6 +2035,60 @@
       "status": "complete-metadata-only-original16-selected28-union36-no-execution-or-admission",
       "result": "503-selected-reportable-timing-scope.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-487",
+      "status": "complete-prospective-full-compensated-a6c-analytic-pass-no-admission",
+      "result": "487-compensated-a6c-full-control.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-488",
+      "status": "complete-full-a7-a6c-controls-checkpoint-not-ready",
+      "result": "488-compensated-a7-a6c-full-controls-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-504",
+      "status": "complete-private-raw-query-source-only",
+      "result": "504-raw-query-pilot-source-prepare.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-505",
+      "status": "complete-private-compiler-command-metadata-only",
+      "result": "505-raw-query-pilot-build-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-506",
+      "status": "complete-private-raw-query-build-runtime-not-qualified",
+      "result": "506-raw-query-pilot-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-507",
+      "status": "complete-native-zero-original-intake-failure-preserved",
+      "result": "507-raw-query-static-c7-dense-pilot.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-508",
+      "status": "complete-one-native-and-posthoc-replay-checkpoint-no-speed-claim",
+      "result": "508-raw-query-pilot-and-posthoc-replay-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-509",
+      "status": "complete-posthoc-full-c7-dense-evidence-quality-loss-timing-inconclusive",
+      "result": "509-posthoc-c7-dense-raw-query-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-510",
+      "status": "complete-criteria-role-review-no-new-threshold-not-ready",
+      "result": "510-environment-sensitive-criteria-followup.md",
+      "gpu_run": false
     }
   ]
 }
