@@ -1891,6 +1891,120 @@
       "status": "complete-numerical-failure-mechanism-outcome-one-sample-only-original-gates-unchanged",
       "result": "446-original-sphere-density-mechanism-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-447",
+      "status": "complete-compensated-target-source-inverse-only-uncompiled",
+      "result": "447-compensated-raw-target-source.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-448",
+      "status": "complete-private-compensated-target-probe-build-only",
+      "result": "448-compensated-raw-target-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-449",
+      "status": "complete-failed-pixel8192-samples57344-density-checks-original-bound-pass-no-admission",
+      "result": "449-compensated-raw-target-probe.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-450",
+      "status": "complete-independent-decimal80-all12-geometric-residuals-deltas-and-physical-operands",
+      "result": "450-compensated-raw-target-arithmetic.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-451",
+      "status": "complete-one-pixel-numerical-candidate-outcome-broader-qualification-remains",
+      "result": "451-compensated-raw-target-candidate-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-452",
+      "status": "complete-private-full-exporter-build-exact-original-cli-candidate-header",
+      "result": "452-compensated-full-exporter-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-453",
+      "status": "terminal-full-a2-native-complete-old-whole-audit-identity-intake-fail-retained",
+      "result": "453-compensated-full-a2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-462",
+      "status": "complete-posthoc-full-a2-byte-exact-observation-old-intake-failure-unchanged",
+      "result": "462-compensated-full-control-intake-stop.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-463",
+      "status": "terminal-pre-native-parent-directory-failure-no-payloads-retained",
+      "result": "463-compensated-full-a2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-473",
+      "status": "complete-posthoc-archived-a2-replay-no-native-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "473-compensated-full-a2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-474",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "474-compensated-full-a2b.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-475",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "475-compensated-full-a4a.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-476",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "476-compensated-full-a4b.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-477",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "477-compensated-full-a8_authored.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-478",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "478-compensated-full-a8_frozen.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-479",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "479-compensated-full-a8_stale_rest_pose.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-480",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "480-compensated-full-a4c.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-481",
+      "status": "complete-prospective-original-full-control-all21-bytes-integers-exact-original-numerical-bounds",
+      "result": "481-compensated-full-a4d.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-482",
+      "status": "complete-compensated-candidate-nine-full-controls-one-posthoc-original-failures-preserved-not-ready",
+      "result": "482-compensated-candidate-full-control-checkpoint.md",
+      "gpu_run": false
     }
   ]
 }
