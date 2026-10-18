@@ -43,12 +43,19 @@ def arithmetic(g, r):
         log_pdf_actual = (scalar(r['pdf'])/scalar(g['pdf'])).ln()
         log_cos_actual = (scalar(r['cosine'])/scalar(g['cosine'])).ln()
         log_d2_actual = (scalar(r['d2'])/scalar(g['d2'])).ln()
-        log_pdf_direction = (rec_float_pdf_cos/gen_pdf_cos).ln()
-        log_pdf_components = dict(
-            original_direction_normalization=(unit_pdf_cos/gen_pdf_cos).ln(),
-            rounded_target_direction=(rec_exact_pdf_cos/unit_pdf_cos).ln(),
-            reconstructed_direction_arithmetic=(rec_float_pdf_cos/rec_exact_pdf_cos).ln(),
-            pdf_dot_division_rounding=log_pdf_actual-log_pdf_direction)
+        isotropic = g['light'] and g['index'] == 0
+        if isotropic:
+            # Original whole_sample uses constant1/(4*pi), with no source normal.
+            log_pdf_components = dict(original_direction_normalization=Decimal(0),
+                rounded_target_direction=Decimal(0), reconstructed_direction_arithmetic=Decimal(0),
+                pdf_dot_division_rounding=log_pdf_actual)
+        else:
+            log_pdf_direction = (rec_float_pdf_cos/gen_pdf_cos).ln()
+            log_pdf_components = dict(
+                original_direction_normalization=(unit_pdf_cos/gen_pdf_cos).ln(),
+                rounded_target_direction=(rec_exact_pdf_cos/unit_pdf_cos).ln(),
+                reconstructed_direction_arithmetic=(rec_float_pdf_cos/rec_exact_pdf_cos).ln(),
+                pdf_dot_division_rounding=log_pdf_actual-log_pdf_direction)
         return {key:str(value) for key,value in dict(
             original_direction_norm=norm(direction),
             stored_raw_target_rounding_distance=norm(stored_target_error),
@@ -148,6 +155,10 @@ def main():
         all12_operand_records_retained_in=str(WITNESS),own_family_legs=legs,
         short_leg_triangle_vertices=triangle_vertices,short_leg_shared_vertices=shared,
         numerical_mechanism_scope='This exact original failed sample only; no sampler-bias bound or repair admission',
+        prior_analysis_attempts=[dict(source_commit='a869e5ec',returncode=1,
+            failure='decimal.InvalidOperation: DivisionUndefined at isotropic light leg zero source normal',
+            accepted_output_produced=False,new_native_run=False,
+            correction='Treat original constant1/(4*pi) leg separately; no normal-dot quotient applies')],
         repair_executed=False,full_seed_retry=False,next_seed_queued=False,
         execution=dict(elapsed_seconds=elapsed,cpu_seconds=cpu,affinity=[31],nice=15,
                        cpu_limit_seconds=120,elapsed_limit_seconds=180,address_space_limit_bytes=4*1024**3),
