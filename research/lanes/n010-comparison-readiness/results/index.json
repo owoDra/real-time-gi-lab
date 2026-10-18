@@ -1705,6 +1705,24 @@
       "status": "complete-corrected-raw-static-execution-and-c7-physical-quality-replay-valid-no-timing-admission",
       "result": "411-continuation-quality-intake-corrected-replay.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-412",
+      "status": "complete-original-067-view-command-metadata-native-not-run",
+      "result": "412-manual-continuation-quality-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-413",
+      "status": "complete-manual-single-case-quality-runner-source-prepared-no-native-queue",
+      "result": "413-manual-continuation-quality-runner-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-414",
+      "status": "complete-current-160-view-48-static-20-dynamic-command-descriptions-native-not-run",
+      "result": "414-manual-continuation-quality-current-view-description.json",
+      "gpu_run": false
     }
   ]
 }

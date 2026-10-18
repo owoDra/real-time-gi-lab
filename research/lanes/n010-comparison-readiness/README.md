@@ -2,8 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; continuation raw-quality intake replays two static executions and one eligible C7 row; original CPU261 live, no GPU/compiler or queue.**
-Latest: [outcome410](results/410-continuation-quality-intake-outcome.md), [raw replay411](results/411-continuation-quality-intake-corrected-replay.json). The shared continuation comparator intake replays actual C1/C7 B8/1024 raw state/cost/owned memory and exactly reproduces407 C7 metrics/error-map bytes. Original [409 stop](results/409-continuation-quality-intake-replay.json) is retained: generated401 publication timing was incorrectly treated as source registration; corrected checks pin actual401 bytes and source commits. Post-hoc static scope only; other budgets/dynamic paths not runtime verified, final auditor remains. C1_B8 remains ineligible; original CPU261 remains live.
+**Latest verified checkpoint: N010 NOT_READY; manual single-case PT quality/history runner source prepared; original CPU261 live, no GPU/compiler or queue.**
+Latest: [outcome413](results/413-manual-continuation-quality-runner-outcome.md), [current command metadata414](results/414-manual-continuation-quality-current-view-description.json). A bounded manual runner connects401 to129 proof/scoring for48 static slots/20 five-frame histories, retaining42 old ladder rows and refusing duplicate402/403 capture. Current160 reference view/explicit original-hybrid proof dispatch replaces stale067 for this runner. Source/descriptions only: --run NOT RUN, no automatic queue. [411](results/411-continuation-quality-intake-corrected-replay.json) remains actual two-static-execution/one-C7-quality replay. Final auditor, full scope and eight references remain; original CPU261 stays live.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
