@@ -1639,6 +1639,42 @@
       "status": "complete-source-only-exact-rng-float-sum-continuation-inverse-exact-uncompiled-unexecuted-no-admission",
       "result": "400-continuation-pixel-pt-source-prepare.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-401",
+      "status": "complete-private-continuation-pt-build-pass-runtime-proof-separate",
+      "result": "401-continuation-pixel-pt-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-402",
+      "status": "complete-c1-full-pt-b8-1024-byte-exact-original046-state-and-cost-replayed-no-admission",
+      "result": "402-continuation-pixel-pt-c1.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-403",
+      "status": "complete-c7-full-pt-b8-1024-byte-exact-original046-state-and-cost-replayed-no-admission",
+      "result": "403-continuation-pixel-pt-c7.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-404",
+      "status": "complete-two-state-whole-image-byte-exact-replay-no-timing-reference-admission",
+      "result": "404-continuation-pixel-pt-numerical.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-405",
+      "status": "complete-source-only-readback-accounting-inverse-to400-shader-unchanged",
+      "result": "405-continuation-readback-source-prepare.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-406",
+      "status": "complete-continuation-equivalence-outcome-original-physical-seed261-live",
+      "result": "406-continuation-pt-equivalence-outcome.md",
+      "gpu_run": false
     }
   ]
 }

@@ -2,8 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; CPU260 and bounded GPU probes terminal; no live scientific worker/queue.**
-Latest: [diagnostic399](lanes/n010-comparison-readiness/results/399-tiled-pt-first-call-diagnostic-outcome.md) stops at observed first-tile duration, all Vulkan calls succeed; [continuation source400](lanes/n010-comparison-readiness/results/400-continuation-pixel-pt-source-prepare.json) prepared only. Candidate393 C1 conformance remains PASS; N010 unfinished.
+**Latest verified checkpoint: N010 NOT_READY; continuation PT two-image equivalence complete; original CPU261 live, no GPU/compiler or queue.**
+Latest: [outcome406](lanes/n010-comparison-readiness/results/406-continuation-pt-equivalence-outcome.md). C1/C7 PT-B8/1024 images match archived046 byte-for-byte; no physical/timing admission. CPU A6a seed2 now live.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
@@ -17,7 +17,7 @@ Latest: [diagnostic399](lanes/n010-comparison-readiness/results/399-tiled-pt-fir
 
 [CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) localizes one shadow-count pixel. New [382/383](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md) reproduce its old one-shadow/two-query deficit and restore all16 CPU counts with an early-PDF CPU route at sample9/depth2; raw GPU paths remain bit-identical. [Candidate393](lanes/n010-comparison-readiness/results/393-guarded-full-frame-conformance.json) now passes all57600pixels/16spp with exact CPU scored/proposal counts; max error4.48e-16, indirect NRMSE1.69e-15. Original372 remains FAIL and373 absent; no all-state/reference admission.
 
-[Original260](lanes/n010-comparison-readiness/results/260-wide8-original-a6a-seed1.json) is terminal seed-integrity PASS,5204.821CPU/5228.693elapsed seconds, original128x96/8192spp/seed2596069104. PID10159 ended, no restart/following seed. Two of four A6a seeds are complete; physical inventory and references are unchanged. CPU31/nice15/4GiB within7200CPU/10800elapsed limits; no N010 completion ETA follows from this one seed.
+[Original260](lanes/n010-comparison-readiness/results/260-wide8-original-a6a-seed1.json) is terminal seed-integrity PASS,5204.821CPU/5228.693elapsed seconds, original128x96/8192spp/seed2596069104. PID10159 ended without restart. Two of four A6a seeds are complete; physical inventory and references are unchanged. CPU31/nice15/4GiB within7200CPU/10800elapsed limits; no N010 completion ETA follows from this one seed.
 
 Post-hoc routing telemetry:88674/92147 CPU-routed diagnostic paths carry
 intersection ambiguity (96.2310%); categories overlap. Provisional versus
@@ -78,25 +78,31 @@ now completes: all11 Vulkan calls succeed, including fence/query results;
 first64-pixel tile takes500.617ms and stops at the unchanged250ms operational
 guard.395's generic Vulkan error is NOT reproduced; exact original call is
 still unproven. No second tile/image/C7/retry or391 summary. One loaded-run
-duration is not calibrated speed or an intrinsic lower bound. Next prepare
-an exact RNG/sum/sample-index continuation contract with explicit added memory
-and all-byte046 equivalence, retaining full spp/quality and existing stops.
-No scientific worker/queue remains; no default build or user setting changes.
-No numerical equivalence, accepted timing, memory or reference admission.
+duration is not calibrated speed or an intrinsic lower bound. Subsequent126/127 implementation below preserves full spp/quality and stops,
+with explicit added state memory and all-byte046 equivalence.
+The diagnostic ended without queued work; subsequent CPU261 is recorded below.
+No default build or user setting changes.
+Neither failed123 nor diagnostic125 admits a numerical, timing, memory or
+reference result; the separately qualified continuation implementation follows.
 
-[Plan126](lanes/n010-comparison-readiness/experiments/126-exact-sample-continuation-pixel-pt.md) and
-[source400](lanes/n010-comparison-readiness/results/400-continuation-pixel-pt-source-prepare.json) now prepare
-an isolated sample-continuation PT. Full host/shader inverses and original
-per-sample transport/scalar addition/RNG helper bytes match. Preserve RNG,
-float sum bits and next-sample/error words per pixel (16bytes/pixel,921600
-additional persistent bytes at320x180), original complete spp/quality and
-sample order. Fixed proposed captures tile4096/chunk16/pause2000us; existing
-250ms/500ms/180s operational stops remain. Compilation and actual state/
-image equivalence are NOT RUN;401 build driver and402/403/404 full-image
-byte replay/intake remain to implement. Explicit separate readback-duration
-reporting must be added before capture; current source400 downloads/checks
-state but does not yet emit that separate duration. No native/queue/claim.
+[Continuation401–406](lanes/n010-comparison-readiness/results/406-continuation-pt-equivalence-outcome.md)
+now completes private compilation and two separately invoked full C1/C7
+PT-B8/1024 images.404 independently replays all960 dispatches per image,
+all57600 final sample-state records and EVERY direct/indirect/total PFM byte
+against immutable046. Both images match exactly; all original samples and
+sum/RNG order retained. Additional persistent state921600bytes at320x180.
+Observed max dispatch14.045ms C1/1.492ms C7, complete native13.231s/2.379s;
+these are descriptive, not calibrated timing/response guarantees. Preserve
+GPU active sum AND full yield envelope and separate readback. Owned true
+peaks107360352/3291760bytes, zero teardown, CPU/driver-private excluded.
+Actual full quality/budget/history/memory/timing proof and final intake still
+remain; two states do not qualify all comparator regimes or references.
 
+Original A6a seed2/81985529216486895 part261 is now **RUNNING**, native
+PID197130/start1882463/session15102, CPU31/nice15/4GiB within7200CPU/
+10800elapsed. Receipt and actual /proc identity confirmed; no next seed or
+GPU/compiler queue. Mutable261 stays uncommitted/unindexed until terminal.
+Do not restart or overlap it; continue low-load evidence/source integration.
 
 
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired
