@@ -14,11 +14,12 @@ import time
 
 import continuation_quality_provenance as C
 from continuation_quality_provenance import R,P
+import hybrid_reference_provenance as H
 from build_tiled_pixel_pt import quiet
 
 PLAN = R.RESULTS.parent/'experiments/130-manual-continuation-quality-cases.md'
 LOCK = R.RESULTS/'026-dynamic-execution-state-lock.json'
-VIEW = R.RESULTS/'067-recovery-reference-view.json'
+VIEW = R.RESULTS/'160-primary-direction-reference-view.json'
 PARTS = R.BASE/'continuation-quality-cases-v1'
 PUBLISHED = R.RESULTS/'continuation-quality-cases'
 LEGACY = ('013-c7-pt-cohort-pilot.json','024-c8-pt-quality-ladder.json',
@@ -76,7 +77,7 @@ def references_before_launch(description):
     view = C.read(VIEW)
     C.require(set(lock['cells']) == {f'C{i}' for i in range(1,13)}
         and len(view['rows']) == 24 and {r['name'] for r in view['rows']} ==
-        {f'C{i}_T_B{v}' for i in range(1,13) for v in (2,8)}, 'full026/067 map required')
+        {f'C{i}_T_B{v}' for i in range(1,13) for v in (2,8)}, 'full026/160 map required')
     physical = P.physical_proof(R.INPUTS)
     R.checked(P.Q.BINARY,physical['binary_sha256'])
     R.checked(P.Q.NET,physical['sobol_table_sha256'])
@@ -85,7 +86,7 @@ def references_before_launch(description):
         directory = Path(ref['directory'])
         C.require(directory.is_symlink() and str(directory.resolve()) == entry['target'],
                   'fixed reference scheduling target changed')
-        P.verify_reference(directory,ref['cell'],description['vertices'],lock['cells'][ref['cell']],R.INPUTS)
+        H.verify_reference(directory,ref['cell'],description['vertices'],lock['cells'][ref['cell']],R.INPUTS)
     return Path(view['work'])
 
 
@@ -189,7 +190,8 @@ def acquire(description):
         resource.setrlimit(resource.RLIMIT_AS,(2*1024**3,2*1024**3))
         signal.alarm(180)
         proof = C.verify_capture(output,LOCK,description['cell'],description['vertices'],description['spp'],
-            dynamic=description['dynamic'],references=references,score_work=part/'quality')
+            dynamic=description['dynamic'],references=references,score_work=part/'quality',
+            reference_verifier=H.verify_reference)
         record.update(execution_evidence_valid=True,quality_evidence_valid=True,validation=proof,
             quality_payload_sha256={str(p):hashlib.sha256(p.read_bytes()).hexdigest()
                 for p in sorted((part/'quality').rglob('*')) if p.is_file()},

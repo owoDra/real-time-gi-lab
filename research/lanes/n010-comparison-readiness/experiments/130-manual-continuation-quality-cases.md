@@ -87,3 +87,26 @@ state/prefix/full-count/provenance, actual matched-quality budget selection,
 selected-boundary timing and final120 auditor remain required. Preserve
 Sponza direct-relative1.0 as UNRESOLVED/未解決, all historical FAILs and
 N001–N009. No N011, CUDA, Actions, default build or architecture promotion.
+
+## Amendment1 — current retained reference scheduling map
+
+Before any native, metadata source review found that the initially selected
+067 scheduling map predates the eligible C4_T_B2 hybrid reference. Current
+retained-view160 explicitly preserves all16 qualified slots (including that
+hybrid slot) and eight pending slots. Keep the original412 description and
+its99f48971 source identity as historical metadata, not acquisition evidence.
+
+Use160's24-slot map and the existing `hybrid_reference_provenance.verify_reference`
+callback, which independently verifies its physical/state/payload/convergence
+chain and delegates original/exact-prefix variants to their original proof.
+The generic129 intake already takes that explicit callback. This admits no
+new reference variant: pending primary-direction/all-split slots remain
+unusable until their own full proved source/registration integration. Old
+ineligible C1_B8 references remain ineligible; changing a view is no cure.
+Preserve the immutable160 map; any future all-split map is separately versioned.
+
+Commit these source/recipe changes before fresh414 metadata description or
+any native execution. All48 static/20 dynamic slots, budgets, reuse, limits,
+no-queue policy and original full physical/quality rules are unchanged.
+413 reports both source-only descriptors; --run remains NOT RUN in this
+preparation step. No source/capture/result of N001–N009 changes.
