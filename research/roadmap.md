@@ -2,8 +2,8 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; retained continuation C7 quality PASS (post-hoc one row); original CPU261 live, no GPU/compiler or queue.**
-Latest: [outcome408](lanes/n010-comparison-readiness/results/408-environment-criteria-and-c7-quality-outcome.md), [quality407](lanes/n010-comparison-readiness/results/407-retained-continuation-c7-quality.json). CPU-only analysis of403 verifies original C7_T_B8 provenance/convergence and all57600 pixels: totalNRMSE1.443%, indirect5.575%, bias−0.0599%; no masks or changed targets. One post-hoc row, no timing/reference admission. C1_B8 remains ineligible. [406](lanes/n010-comparison-readiness/results/406-continuation-pt-equivalence-outcome.md) retains two-image046 equivalence; original CPU A6a seed2 remains live.
+**Latest verified checkpoint: N010 NOT_READY; continuation raw-quality intake replays two static executions and one eligible C7 row; original CPU261 live, no GPU/compiler or queue.**
+Latest: [outcome410](lanes/n010-comparison-readiness/results/410-continuation-quality-intake-outcome.md), [raw replay411](lanes/n010-comparison-readiness/results/411-continuation-quality-intake-corrected-replay.json). The shared continuation comparator intake replays actual C1/C7 B8/1024 raw state/cost/owned memory and exactly reproduces407 C7 metrics/error-map bytes. Original [409 stop](lanes/n010-comparison-readiness/results/409-continuation-quality-intake-replay.json) is retained: generated401 publication timing was incorrectly treated as source registration; corrected checks pin actual401 bytes and source commits. Post-hoc static scope only; other budgets/dynamic paths not runtime verified, final auditor remains. C1_B8 remains ineligible; original CPU261 remains live.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |

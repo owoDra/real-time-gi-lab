@@ -1687,6 +1687,24 @@
       "status": "complete-environment-criteria-clarification-and-single-row-quality-integration-not-ready",
       "result": "408-environment-criteria-and-c7-quality-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-409",
+      "status": "complete-negative-read-only-intake-invalid-generated-build-git-assumption-preserved",
+      "result": "409-continuation-quality-intake-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-410",
+      "status": "complete-continuation-quality-component-intake-outcome-corpus-and-final-auditor-remain",
+      "result": "410-continuation-quality-intake-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-411",
+      "status": "complete-corrected-raw-static-execution-and-c7-physical-quality-replay-valid-no-timing-admission",
+      "result": "411-continuation-quality-intake-corrected-replay.json",
+      "gpu_run": false
     }
   ]
 }
