@@ -1783,6 +1783,24 @@
       "status": "complete-dynamic-quality-losses-preserved-reuse-avoids-duplicate-acquisition-not-ready",
       "result": "424-retained-dynamic-cohort-proof-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-425",
+      "status": "complete-selected28-execution-scope-and-five-gate-source-composition-metadata-only",
+      "result": "425-selected-execution-audit-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-426",
+      "status": "complete-actual-six-gate-current-audit16-eligible2-selected-executions-not-ready",
+      "result": "426-selected-scope-readiness-audit.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-427",
+      "status": "complete-current-proof-gap-audit-timing-evidence-distinct-from-precision-final-intake-remains",
+      "result": "427-selected-scope-readiness-audit-outcome.md",
+      "gpu_run": false
     }
   ]
 }
