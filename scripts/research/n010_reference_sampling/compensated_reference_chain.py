@@ -79,7 +79,9 @@ def program():
     change("Path(__file__).with_name('qualify_point_guided_references.py')",'Path(_chain_implementation)')
     change("'--spp', str(spp), '--threads', '16']","'--spp', str(spp), '--threads', '1']")
     change("';'.join(','.join(str(r[k]) for k in KEYS) for r in pm['runs'])", "';'.join(','.join(str(r[k]) for k in KEYS)+',0' for r in pm['runs'])")
-    change("                or run['proposal_null_samples'] > state['width']*state['height']*spp\n",'')
+    change("                or run['primary_hits'] > state['width']*state['height']*spp\n"
+           "                or run['proposal_null_samples'] > state['width']*state['height']*spp\n",
+           "                or run['primary_hits'] > state['width']*state['height']*spp\n")
     inverse = source
     for before,after in reversed(edits):inverse = D.once(inverse,after,before)
     if inverse != original:raise ValueError('whole retained reference verifier inverse differs')
