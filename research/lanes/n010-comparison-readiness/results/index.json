@@ -1837,6 +1837,60 @@
       "status": "complete-posthoc-terminal-diagnosis-scientific-seed-incomplete-numerical-root-cause-unproven",
       "result": "433-original-a6a-seed2-terminal-failure.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-434",
+      "status": "complete-private-immutable-oracle-pixel-probe-build-only",
+      "result": "434-original-sphere-pixel-probe-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-435",
+      "status": "complete-posthoc-original-density-failure-exactly-reproduced-sample3265-no-admission",
+      "result": "435-original-sphere-pixel-probe.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-436",
+      "status": "complete-one-pixel-reproduction-outcome-original-seed-remains-fail",
+      "result": "436-original-sphere-one-pixel-reproduction-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-437",
+      "status": "terminal-precompiler-source-selector-failure-no-payloads-retained",
+      "result": "437-original-sphere-density-source.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-442",
+      "status": "complete-corrected-selector-whole-header-caller-inverses-exact-uncompiled",
+      "result": "442-original-sphere-density-source.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-443",
+      "status": "complete-private-operand-witness-build-only",
+      "result": "443-original-sphere-density-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-444",
+      "status": "complete-posthoc-same-original-failure-and-all12-density-operand-records-retained",
+      "result": "444-original-sphere-density-witness.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-445",
+      "status": "complete-posthoc-decimal80-short-leg-target-coordinate-rounding-mechanism-no-repair",
+      "result": "445-original-sphere-density-arithmetic.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-446",
+      "status": "complete-numerical-failure-mechanism-outcome-one-sample-only-original-gates-unchanged",
+      "result": "446-original-sphere-density-mechanism-outcome.md",
+      "gpu_run": false
     }
   ]
 }
