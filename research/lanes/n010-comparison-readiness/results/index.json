@@ -1741,6 +1741,48 @@
       "status": "complete-selected-pt-48-static20-dynamic-command-metadata-native-not-run",
       "result": "417-selected-pt-quality-command-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-418",
+      "status": "complete-posthoc-c8-all-retained-dynamic-rows-exact-quality-map-state-reference-memory-replay",
+      "result": "418-retained-dynamic-c8-proof.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-419",
+      "status": "complete-posthoc-c9-all-retained-dynamic-rows-exact-quality-map-state-reference-memory-replay",
+      "result": "419-retained-dynamic-c9-proof.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-420",
+      "status": "complete-posthoc-c10-all-retained-dynamic-rows-exact-quality-map-state-reference-memory-replay",
+      "result": "420-retained-dynamic-c10-proof.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-421",
+      "status": "complete-posthoc-c11-all-retained-dynamic-rows-exact-quality-map-state-reference-memory-replay",
+      "result": "421-retained-dynamic-c11-proof.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-422",
+      "status": "complete-posthoc-c12-all-retained-dynamic-rows-exact-quality-map-state-reference-memory-replay",
+      "result": "422-retained-dynamic-c12-proof.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-423",
+      "status": "complete-all35-retained-controlled-dynamic-rows-170frames-265scores-proved-sponza-missing",
+      "result": "423-retained-controlled-dynamic-cohort-proof.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-424",
+      "status": "complete-dynamic-quality-losses-preserved-reuse-avoids-duplicate-acquisition-not-ready",
+      "result": "424-retained-dynamic-cohort-proof-outcome.md",
+      "gpu_run": false
     }
   ]
 }
