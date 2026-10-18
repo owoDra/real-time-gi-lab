@@ -1,0 +1,60 @@
+{
+  "schema": "n010-compensated-single-level-io-description/1",
+  "complete": true,
+  "classification": "SINGLE_LEVEL_IO_SOURCE_ONLY_SCIENTIFIC_LAUNCHER_UNIMPLEMENTED",
+  "source_commit": "da58e1ad61cc332bc4afffa2df4d7ad30921f627",
+  "source_composition": {
+    "original_sha256": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e",
+    "original_analysis_sha256": "023c58923146762288eca022451e1f7bec22c6e900256d8f2bc3810a02ca9772",
+    "generated_analysis_sha256": "c24145dfd17004af86a81e4b76e08e83bc947a1b5246732760c4bbc22e87abab",
+    "whole_original_analysis_inverse_exact": true,
+    "original_assessor_support_se_stop_suffix_bytes_exact": true,
+    "original_assessor_support_se_stop_suffix_ast_exact": true
+  },
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/161-compensated-single-level-io-component.md": "6b6d3e6a964999f5b17af3b6bb88fee7a11c0690ccbffde70b1933bbf23cb0cf",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/compensated_reference_level_io.py": "24899620c4322aa31d08548165b414aa15b0645cdf115bf181916b6547634ae0",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/158-compensated-reference-raw-chain.md": "bd6c8606f7ab5fbad1967ffcef0ae062cbc4870f361fdf113a0822ceea21bf87",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/compensated_reference_chain.py": "45cf734783d70ec2ebef5f25a16e256b9b78d1920086010c95ede42e8f586735",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_point_guided_references.py": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_state_prefix.py": "d3e1f97f8ddc228579af95ca3daca60f70527e3fa378dc6b6b90f1ce61aea1fd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_level5_full.py": "f6483610f4da4ac37f7b01dc288a54710153ee87093bf6aa18186a27f8cfdd37",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_references.py": "2d26cca6db3ecfb7db714333f5502a280c6c00e2c2ca645ee9769554648404ca",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/n008lib.py": "28fd7658ab3b728afcc70675e1c7a7aa913af254d81d35df71b37da80079386c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n007_reference_validity/check_convergence.py": "8a5dec1373eeba0dfa3ef88ab89518ebe48717ebe53d1a743c9445ead3052d55"
+  },
+  "selected_transports": [
+    "C1_T_B8",
+    "C2_T_B8",
+    "C3_T_B8",
+    "C4_T_B8",
+    "C5_T_B2",
+    "C5_T_B8",
+    "C6_T_B2",
+    "C6_T_B8"
+  ],
+  "levels": [
+    8192,
+    16384,
+    32768,
+    65536,
+    131072,
+    262144
+  ],
+  "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+  ],
+  "root": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-reference-ladders-v1",
+  "binary": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-prefix-build-v1/n010_compensated_prefix",
+  "one_native_per_future_call": true,
+  "automatic_queue": false,
+  "scientific_launcher_implemented": false,
+  "native_executed": false,
+  "raw_evidence_replayed": false,
+  "prerequisites_executed": false,
+  "reference_admission": false,
+  "tests": "NOT_RUN; source/AST/analysis inverse/original8-slot scope metadata only"
+}
