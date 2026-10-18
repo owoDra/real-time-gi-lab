@@ -72,6 +72,14 @@ frames, other GI roles or devices. Register multiplicity, complete costs and
 the final proof-intake amendment before accepted Lane M acquisition. Old
 results and the current N010 preflight are unchanged; N010 is still NOT_READY.
 
+N010 [implementation377](../n010-comparison-readiness/results/377-ranked-timing-decision-implementation.md)
+prepares the pure numerical comparison classifier and prospective family-rank
+budget. It separates added-work calibration from candidate/baseline decisions
+and retains unmatched-quality/inconclusive outcomes. It is NOT EXECUTED and
+grants no proof admission. Selected-boundary acquisition and strict raw-evidence
+replay/final-auditor integration remain required; old timing gates/results stay
+unchanged until an explicit complete replacement is verified.
+
 ## Timing and memory handoff identity
 
 The prepared N010 [proof-intake policy](../n010-comparison-readiness/experiments/049-prospective-bulk-pfm-timing-proof-intake.md)

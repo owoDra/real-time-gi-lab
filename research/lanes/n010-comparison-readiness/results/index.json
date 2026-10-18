@@ -1513,6 +1513,12 @@
       "status": "complete-posthoc-all-pixel-cpu-scan-localizes-one-pixel-gpu-count-failure-retained",
       "result": "376-posthoc-batched-counter-scan.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-377",
+      "status": "prepared-ranked-timing-numerical-decision-core-not-executed-no-proof-admission",
+      "result": "377-ranked-timing-decision-implementation.md",
+      "gpu_run": false
     }
   ]
 }

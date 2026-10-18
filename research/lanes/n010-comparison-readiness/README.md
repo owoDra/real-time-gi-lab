@@ -30,6 +30,13 @@ while valid quality/memory observations remain reportable. Preserve old FAILs;
 freeze any new method and its verifier before new accepted data. N010 remains
 the final preparation lane; Lane M accepted comparisons have not started.
 
+[Implementation377](results/377-ranked-timing-decision-implementation.md)
+prepares the ranked timing numerical core: separate calibration/comparison
+classifiers, explicit quality-unmatched/inconclusive outcomes, and full-family
+rank budgeting including separately claimed dynamic frames. Numerical execution
+is NOT RUN; no accepted proof or gate change. Actual selected-boundary acquisition
+and strict evidence replay/final-auditor integration remain required.
+
 ### Retained earlier checkpoint detail
 
 The following chronology supplies provenance; the latest table above governs
