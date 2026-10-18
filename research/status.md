@@ -2,7 +2,9 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; actual current six-gate audit verifies16/24 references and2/28 selected execution captures; original CPU261 live, no GPU/compiler or queue.**
+**Latest verified checkpoint: N010 NOT_READY; references16/24 and selected captures2/28 unchanged. Original CPU261 ended in a numerical self-check failure; no retry or next task queued.**
+Current update: [432](lanes/n010-comparison-readiness/results/432-history-known-work-preparation-outcome.md) records bounded full-history timing source preparation and the post-hoc all-word CPU replay of144 archived integer-work images. No new compilation/GPU qualification or timing admission. [433](lanes/n010-comparison-readiness/results/433-original-a6a-seed2-terminal-failure.json) diagnoses original261: log-density discrepancy1.010298547e-6 exceeds unchanged1e-6; native SIGABRT within time limits. Root numerical cause is not yet established. This is a correctness failure, distinct from environment-sensitive timing uncertainty. Recipe135's431 build guard is unmet. Next physical work is a separately registered bounded CPU diagnosis of the failing pixel; no full-seed retry or automatic queue. Amendment120's diagnostic/performance/readiness roles remain; final intake still unfinished.
+
 Latest: [outcome427](lanes/n010-comparison-readiness/results/427-selected-scope-readiness-audit-outcome.md), [actual audit426](lanes/n010-comparison-readiness/results/426-selected-scope-readiness-audit.json), [source/scope425](lanes/n010-comparison-readiness/results/425-selected-execution-audit-description.json). The audit binds415/423, independently inventories all24 reference chains and all28 selected continuation slots, and replays402/403 actual native/raw-timestamp/state/memory proofs. Original five non-timing gate ASTs are unchanged. Correctness-with-explicit-discrepancies and DDGI source gates pass; full references, Sponza dynamics, C1 B8 ladder and timing evidence remain incomplete. Missing386 is evidence_valid=false /precision NOT_EVALUABLE, not valid inconclusive timing. This intermediate integration cannot grant final readiness; selected-history timing intake/all-split dispatch remain. Do not rerun unchanged audit inputs or launch the oversized legacy386 route. Reuse [423](lanes/n010-comparison-readiness/results/423-retained-controlled-dynamic-cohort-proof.json)'s34 controlled histories/265 scores and [415](lanes/n010-comparison-readiness/results/415-retained-pt-ladder-proof-replay.json)'s42 static rows; preserve all quality losses. Next work produces missing evidence and bounded selected-history timing/intake, no duplicate quality campaign or automatic queue.
 
 | Requirement | Current evidence | Remaining boundary |
@@ -105,11 +107,7 @@ peaks107360352/3291760bytes, zero teardown, CPU/driver-private excluded.
 Actual full quality/budget/history/memory/timing proof and final intake still
 remain; two states do not qualify all comparator regimes or references.
 
-Original A6a seed2/81985529216486895 part261 is now **RUNNING**, native
-PID197130/start1882463/session15102, CPU31/nice15/4GiB within7200CPU/
-10800elapsed. Receipt and actual /proc identity confirmed; no next seed or
-GPU/compiler queue. Mutable261 stays uncommitted/unindexed until terminal.
-Do not restart or overlap it; continue low-load evidence/source integration.
+Original A6a seed2/81985529216486895 [261](lanes/n010-comparison-readiness/results/261-wide8-original-a6a-seed2.json) is now **TERMINAL FAILURE**, native−6/SIGABRT, CPU4369.726179/elapsed4552.480710 seconds within7200CPU/10800elapsed limits. The same process handle terminated; PID197130 is absent. Exact terminal result and partials are preserved. [433](lanes/n010-comparison-readiness/results/433-original-a6a-seed2-terminal-failure.json) records a density self-check discrepancy above its unchanged threshold; numerical root cause is unproven. Two of four original A6a seeds are complete; no seed2 restart, seed3 queue or reference admission. Recipe135's431 build prerequisite is unmet. Diagnose this failure prospectively before further physical acquisition.
 
 
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired

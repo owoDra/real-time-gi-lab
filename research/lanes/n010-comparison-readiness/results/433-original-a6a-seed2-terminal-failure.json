@@ -1,0 +1,99 @@
+{
+  "schema": "n010-original-sphere-terminal-failure/1",
+  "complete": true,
+  "terminal_identity_verified": true,
+  "scientific_seed_complete": false,
+  "seed_integrity_pass": false,
+  "all_pass": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "gpu_run": false,
+  "posthoc": true,
+  "source_commit": "6244794af786e96d10c14f469302180d7526a878",
+  "source_result": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/261-wide8-original-a6a-seed2.json",
+  "original_result_bytes_preserved": true,
+  "native_pid": 197130,
+  "native_start_ticks": 1882463,
+  "native_live": false,
+  "returncode": -6,
+  "signal": "SIGABRT",
+  "elapsed_seconds": 4552.480709888998,
+  "child_cpu_seconds": 4369.726179,
+  "registered_limits": {
+    "cpu_seconds": 7200,
+    "elapsed_seconds": 10800,
+    "address_space_bytes": 4294967296,
+    "affinity": [
+      31
+    ],
+    "nice": 15
+  },
+  "within_registered_time_limits": true,
+  "direct_termination_cause": "Uncaught runtime_error: own-family area-density mismatch",
+  "density_check": {
+    "pixel": [
+      96,
+      77
+    ],
+    "component_vertices": 4,
+    "strategy_split": 3,
+    "sampled_log_density": 16.29948935779069,
+    "reconstructed_log_density": 16.299490368089238,
+    "absolute_log_error": 1.0102985470439307e-06,
+    "frozen_maximum_absolute_log_error": 1e-06,
+    "threshold_unchanged": true,
+    "sample_index": "NOT_CAPTURED_BY_ORIGINAL_LOG"
+  },
+  "vertices": [
+    {
+      "triangle": 36677,
+      "point": [
+        -0.3037777823748541,
+        -0.1166366375998606,
+        -0.9455126146693063
+      ]
+    },
+    {
+      "triangle": 7723,
+      "point": [
+        0.019891042765685596,
+        0.9909877006957506,
+        0.13237620306939424
+      ]
+    },
+    {
+      "triangle": 7720,
+      "point": [
+        0.01989103499621038,
+        0.9909876998450904,
+        0.13237621035597613
+      ]
+    },
+    {
+      "triangle": 76332,
+      "point": [
+        0.08921157455131518,
+        0.07074388515379018,
+        -0.9934510737778296
+      ]
+    }
+  ],
+  "short_raw_segment_length": 1.0685627899758765e-08,
+  "numerical_root_cause": "NOT_YET_ESTABLISHED; short segment is diagnostic observation, not causal proof",
+  "failure_reproduced": false,
+  "retry_executed": false,
+  "next_seed_queued": false,
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/261-wide8-original-a6a-seed2.json": "1ea66e0dfed9333e6a882bdd18127c061716292f1ad310f82a28a32a70b73d12",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/wide8-original-sphere-seed-v1/A6a-seed2/native.resources.json": "46769bd47e821b1d787418e96d3722a073075c9c649615e29e8cd68fc9ea0f14",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/wide8-original-sphere-seed-v1/A6a-seed2/native.stderr": "05d309fa8761a0f30d1dbee8192c8b8b0576e51fceabd52a234f4785c32591c7",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/wide8-original-sphere-seed-v1/A6a-seed2/native.stdout": "e280d68ea27bcc927b3ce6ecabfef0122a5d2808302cff71725e6ea18dfc1086",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_original_sphere_seed_wide8.py": "44dd5e7b71453d095941b66dcb5c539f4868236ad3a8ca450a56470b58aca174",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/wide8-cpu-bvh-v1/n010_rqmc_oracle.hpp": "40607186e96cad47e9386b4fcd78a71958894946a237e628c546566819970537",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/wide8-cpu-bvh-v1/n010_wide8_exporter": "99de435e937dfe8229c6f8c4d32485a5287d704f9db2e7e12bf49271dae5a6a9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sampler-validation-v1/rqmc/A6a.n008": "b49f528313125e0214c6bc63bf15e1688b848d75c3a8b87fbc6588e4566834ef",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439"
+  },
+  "classification": "ORIGINAL_FULL_SEED_NUMERICAL_SELF_CHECK_FAILURE_TERMINAL_NO_ADMISSION",
+  "tests": "NOT_RUN; post-hoc terminal logs/resource/source diagnosis only"
+}

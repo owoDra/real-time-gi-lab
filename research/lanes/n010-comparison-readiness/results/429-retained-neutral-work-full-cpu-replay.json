@@ -1,0 +1,1482 @@
+{
+  "schema": "n010-retained-neutral-work-full-cpu-replay/1",
+  "complete": true,
+  "posthoc": true,
+  "all144_scratch_images_all16384_words_cpu_exact": true,
+  "all_pass": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "gpu_run": false,
+  "new_shader_runtime_verified": false,
+  "source_commit": "6244794af786e96d10c14f469302180d7526a878",
+  "classification": "ALL_RETAINED_INTEGER_SCRATCH_BYTES_CPU_EXACT_NO_TIMING_ADMISSION",
+  "unique_dose_sha256": {
+    "0": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "65536": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "262144": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017"
+  },
+  "rows": [
+    {
+      "boundary": "C1-hwrt",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/0/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/1/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/2/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/3/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/4/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/5/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/6/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/7/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-hwrt",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/8/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/0/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/1/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/2/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/3/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/4/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/5/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/6/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/7/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-software",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/8/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B2",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-pt-B8",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C1-dense-rc",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/0/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/1/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/2/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/3/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/4/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/5/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/6/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/7/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-hwrt",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/8/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/0/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/1/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/2/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/3/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/4/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/5/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/6/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/7/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-software",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/8/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B2",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-pt-B8",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C7-dense-rc",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/0/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/1/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/2/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/3/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/4/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/5/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/6/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/7/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-hwrt",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/8/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B2",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C6-pt-B8",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/0/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/1/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/2/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/3/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/4/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/5/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/6/gpu/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/7/gpu/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-hwrt",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/8/gpu/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B2",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 0,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/0/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 1,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/1/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 2,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/2/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 3,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/3/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 4,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/4/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 5,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/5/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 6,
+      "dose": 0,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/6/neutral-work.bin",
+      "sha256": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 7,
+      "dose": 65536,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/7/neutral-work.bin",
+      "sha256": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+      "all_words_cpu_exact": true
+    },
+    {
+      "boundary": "C12-pt-B8",
+      "sample": 8,
+      "dose": 262144,
+      "lanes": 16384,
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/8/neutral-work.bin",
+      "sha256": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+      "all_words_cpu_exact": true
+    }
+  ],
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/replay_neutral_work_full_cpu.py": "fe4bce8e7c291faae2612f59cd216f9e249bd819a33c22065ac1f5db40158eb9",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/135-bounded-history-known-work.md": "7a88f419a9037cf793203d4ab5acd29c147946ebb9cb44c3f14521cdf546a998",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/n010_comparison_readiness/n010_neutral_work.comp.glsl": "99690d94944eeff357b8d659232ba7aabb9756de4243fbacc7258e43affb1068",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/n010_comparison_readiness/n010_history_neutral_work.comp.glsl": "8b8b282d7a995584a8241c9e606c06455df9d62b7767073cc10957725409e326",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/neutral_work_verify.cpp": "c8a27be26f503e9085c826d8573684dfc8e412d642c7e43a86ee2296fc72193d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json": "58dba169986246adc16898e89f351d6ca1643d6e16a9f247e6934183f3838b32",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/0/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/1/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/2/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/3/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/4/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/5/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/6/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/7/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-hwrt/sizing/frames/8/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/0/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/1/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/2/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/3/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/4/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/5/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/6/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/7/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-software/sizing/frames/8/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B2/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-pt-B8/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C1-dense-rc/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/0/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/1/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/2/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/3/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/4/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/5/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/6/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/7/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-hwrt/sizing/frames/8/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/0/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/1/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/2/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/3/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/4/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/5/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/6/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/7/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-software/sizing/frames/8/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B2/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-pt-B8/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C7-dense-rc/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/0/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/1/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/2/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/3/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/4/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/5/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/6/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/7/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-hwrt/sizing/frames/8/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B2/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C6-pt-B8/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/0/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/1/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/2/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/3/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/4/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/5/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/6/gpu/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/7/gpu/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-hwrt/sizing/frames/8/gpu/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B2/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/0/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/1/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/2/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/3/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/4/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/5/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/6/neutral-work.bin": "3fe5b388ed8c86729b0941aeedad31be42c202a82c41b388ab9b83ff7a8f4b5f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/7/neutral-work.bin": "d3cf043693f45ef8b8f2c6e79ea09fd50743324a760c5e79444c6635d6e0358b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1/C12-pt-B8/sizing/frames/8/neutral-work.bin": "c1f27c74524e256e7268b55e3b70b356a1fe5b47f15f38f248c18a7ed3dff017"
+  },
+  "execution": {
+    "elapsed_seconds": 1.5186928539988003,
+    "cpu_seconds": 1.4084772440000002,
+    "peak_rss_kib": 479880,
+    "affinity": [
+      31
+    ],
+    "nice": 15,
+    "numerical_threads": 1,
+    "cpu_limit_seconds": 120,
+    "elapsed_limit_seconds": 180,
+    "address_space_limit_bytes": 2147483648
+  },
+  "tests": "NOT_RUN; post-hoc archived integer-work scientific replay, not new-shader/runtime validation"
+}

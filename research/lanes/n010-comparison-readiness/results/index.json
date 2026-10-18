@@ -1377,6 +1377,12 @@
       "gpu_run": false
     },
     {
+      "id": "N010-261",
+      "status": "terminal-original-full-sphere-seed-numerical-self-check-failure-partials-retained",
+      "result": "261-wide8-original-a6a-seed2.json",
+      "gpu_run": false
+    },
+    {
       "id": "N010-352",
       "status": "complete-isolated-hybrid-build-three-compilers-exit0-no-runtime-or-reference-admission",
       "result": "352-whole-path-hybrid-prototype-build.json",
@@ -1800,6 +1806,36 @@
       "id": "N010-427",
       "status": "complete-current-proof-gap-audit-timing-evidence-distinct-from-precision-final-intake-remains",
       "result": "427-selected-scope-readiness-audit-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-428",
+      "status": "complete-history-known-work-source-preparation-uncompiled-unexecuted",
+      "result": "428-history-known-work-source-prepare.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-429",
+      "status": "complete-posthoc-all144-scratch-images-all16384-words-cpu-exact-no-timing-admission",
+      "result": "429-retained-neutral-work-full-cpu-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-430",
+      "status": "complete-private-build-command-description-zero-compilers",
+      "result": "430-history-known-work-build-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-432",
+      "status": "complete-preparation-outcome-and-environment-criterion-roles-terminal-physical-failure-not-ready",
+      "result": "432-history-known-work-preparation-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-433",
+      "status": "complete-posthoc-terminal-diagnosis-scientific-seed-incomplete-numerical-root-cause-unproven",
+      "result": "433-original-a6a-seed2-terminal-failure.json",
       "gpu_run": false
     }
   ]
