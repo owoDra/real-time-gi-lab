@@ -2101,6 +2101,24 @@
       "status": "complete-source-checkpoint-one-live-physical-seed-not-ready",
       "result": "512-full-non-pt-intake-source-checkpoint.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-521",
+      "status": "complete-seven-bounded-single-case-command-source-metadata-only",
+      "result": "521-bounded-non-pt-acquisition-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-522",
+      "status": "complete-bounded-acquisition-and-full36-adapter-source-checkpoint-not-ready",
+      "result": "522-bounded-non-pt-and-full-scope-adapter-source-checkpoint.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-523",
+      "status": "complete-full36-adapter-source-inverse-five-gate-ast-scope-metadata-only",
+      "result": "523-full-selected-pilot-adapter-description.json",
+      "gpu_run": false
     }
   ]
 }
