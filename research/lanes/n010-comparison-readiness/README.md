@@ -33,9 +33,13 @@ the final preparation lane; Lane M accepted comparisons have not started.
 [Implementation377](results/377-ranked-timing-decision-implementation.md)
 prepares the ranked timing numerical core: separate calibration/comparison
 classifiers, explicit quality-unmatched/inconclusive outcomes, and full-family
-rank budgeting including separately claimed dynamic frames. Numerical execution
-is NOT RUN; no accepted proof or gate change. Actual selected-boundary acquisition
-and strict evidence replay/final-auditor integration remain required.
+rank budgeting including separately claimed dynamic frames.
+[Post-hoc raw replay378/379](results/379-ranked-timing-raw-replay-outcome.md)
+now reproduces all24 retained C7 processes/5760 raw frames/1440 means and all
+ranked calibration results exactly, using0.080CPU seconds, no new acquisition.
+This checks arithmetic on one old diagnostic; all_pass/accepted_timing/proof_admission
+remain false. Actual selected-boundary acquisition and strict full-evidence
+replay/final-auditor integration remain required.
 
 ### Retained earlier checkpoint detail
 

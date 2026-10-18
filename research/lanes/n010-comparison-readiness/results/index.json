@@ -1519,6 +1519,18 @@
       "status": "prepared-ranked-timing-numerical-decision-core-not-executed-no-proof-admission",
       "result": "377-ranked-timing-decision-implementation.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-378",
+      "status": "complete-posthoc-raw-timing-arithmetic-replay-exact-no-proof-admission",
+      "result": "378-posthoc-ranked-c7-raw-timing-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-379",
+      "status": "complete-ranked-timing-replay-outcome-selected-boundary-intake-still-required",
+      "result": "379-ranked-timing-raw-replay-outcome.md",
+      "gpu_run": false
     }
   ]
 }

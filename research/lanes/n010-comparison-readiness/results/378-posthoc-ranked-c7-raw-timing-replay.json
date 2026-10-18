@@ -1,0 +1,2182 @@
+{
+  "schema": "n010-posthoc-ranked-c7-timing-replay/1",
+  "complete": true,
+  "numerical_replay_pass": true,
+  "all_pass": false,
+  "diagnostic_only": true,
+  "accepted_timing": false,
+  "proof_admission": false,
+  "gpu_run": false,
+  "new_native_acquisitions": 0,
+  "classification": "POSTHOC_RAW_TIMING_NUMERICAL_REPLAY_CONSISTENT_NO_ADMISSION",
+  "source_commit": "757a4ef415c8f64914b2755c8aa95ef0be3ad0b5",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/replay_ranked_c7_timing.py": "3474ca7fc40a03a25ea2eb7875b20e5c3469f01fac3bab95f5488c7572c89327",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/118-posthoc-ranked-c7-raw-timing-replay.md": "59371350eca36e4ba8f5ec3da8047ff68713c5e04594477ad8471c75a86e2122",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/ranked_timing_observations.py": "75097b16f1aebbe47712ff1b590f8d59ea3949ba76ecea998dc2e9c18fff01b9",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/timing_uncertainty_orderstats.py": "1fd18afa0677ab22206cbdd85f6b2c58aa3243f61f9161cf1390f23d7b2f9b50",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/timing_uncertainty.py": "84f9845c84bfece4ea255c3e83c612faa85096f6b398a490dda5bafdcfe9cac3",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/ranked_timing_decision.py": "ae1b5e4510bb70afe6a9414ce597efc026c0bacfdd1ac9543aad7c9cdc6bf572",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/255-orderstat-uncertainty-c7-calibration-diagnostic.json": "e71e9f9c17852fc3399660c79dce370850f7b4e0a90ea3ecab37f921b1cd864d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/103-ranked-process-median-calibration.md": "3ecad30243bddf1d90be7ac3fb8bfbf81447273f12fd791dde19cd6365e36674",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json": "2ab654662ffdef9b873179d95a9142eea7e18ad0635cec37601c51f0f828d36d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-0.resource-limits.json": "ce61446fbcf4797683bebd48d7d32a3fdf2fafd1252df9be1bdc02fe55ec78ba",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-0/calibration-timings.jsonl": "4b7b9a51eca1ae275b44a653c965ec50d38fa7d078d354da7f42863221d9a012",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-0.schedule.json": "aab9aa29c54bc63ae77678686f423e18f2af70846162e2df31f56c0f018374ce",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-0.doses.txt": "88cfb96dc11f5fe55a8ff3759309ce7eacf3c929c6c9ee21ae267e86ce6902c0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-1.resource-limits.json": "6de3e4d8f4e2d442d11d6b9f9874987d9f8dc0d27e28a30ec08ff381c3fd8b2a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-1/calibration-timings.jsonl": "3a6f903010248d7d5192fa9dd6792438877250155db3a1cc7dde2e258fed2dbe",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-1.schedule.json": "858a611c4940149927f2b0c3048215cb30def02df14b768149d95b278db93f50",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-1.doses.txt": "efd5a1260ce883bd29dcea3e2b9c44663b9f6643a45d27a38adc88cdec6af639",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-2.resource-limits.json": "60eb6eac16e6947770cb521c333670590a1fce48bca71fcc418a97a3bda1cc55",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-2/calibration-timings.jsonl": "7184578bbdbd4d890805d39cf8844dbc6cefc677d7c00b5d10639c879cd2e6e5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-2.schedule.json": "1ab301c9a86275f5d86bd4d946f379b15cde5f097077b80b28b8c37119438d7e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-2.doses.txt": "38036abd72ca8482af3e38b9801bc9b25032920b6db5d2813f2bc62f2ec1afd8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-3.resource-limits.json": "a7cfc366f87b2c0c7890a816a9b343232105e290f914806a6c3635ffdbacf6df",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-3/calibration-timings.jsonl": "93287f7df0fcf209289eea5db0630b7c3fc753a0ea7bbc276b877302ebbac1e9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-3.schedule.json": "a027207c81491b3be3c15f9340c6d04b6c008e3d15c38eb29994c43db970f5fa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-3.doses.txt": "f2df2f143c590de81b7baa679f68794aa6f077d42c0ecbec42228a02af429dff",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-4.resource-limits.json": "c1f071b571bd97bcac1e6682c57bf8fe93baf73e62067bbc030ebeaa38c637d0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-4/calibration-timings.jsonl": "ed8da4f1e79bad5ebe4a26828703f29030bd16a7ebb0b13bc99cd8919ed91dbc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-4.schedule.json": "05f0f49210903fc21823dfca95a0284dd1eca93f865a6f4f64241be3fae7c125",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-4.doses.txt": "e0c3753a755089d086bdab6181dde7629429bf8bd58397693ee696d1d12bbc39",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-5.resource-limits.json": "2524a321ed136b977bd8e27ae474209257f7d9c9be330498224aa57d8beeb42f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-5/calibration-timings.jsonl": "5ed897e55d55fee74167b1a105931398d917b4a4fe01c5564b8e5869b3e7c1e6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-5.schedule.json": "9197924decd5208a083f50a3498731bc45bf9fca33487ade712270439b234098",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-5.doses.txt": "3c4e1cef2f7c8edcfa148c2a9247be6f7f33b29cd523927a44379ba8d639c832",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-6.resource-limits.json": "8b53dd57db961165caeaa26e786e9ca8606a5a9738acb866141ed5c881b69da8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-6/calibration-timings.jsonl": "7eade310081a857530c67cd972e80fcb4661f9371c85b1cc52a8b032d654b0b3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-6.schedule.json": "61aa1cdf28b7ff8e7c410656cab4c1eb503fd9a182867e5b72f1d7007006b170",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-6.doses.txt": "cadaf739ceedc1cbd78ca155910589fede202217b7448936246d8c6ed9fb5f00",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-7.resource-limits.json": "3db4dcc8dcd8e358aa61031d8cc1e6b23b6a8d9b691de26eed7165adf83422e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-7/calibration-timings.jsonl": "ce3be7cd403f89b4b46d7b92f5252882a4d2d0b9029521a2454acc51c5fd0bfb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-7.schedule.json": "1edfd7aa1db13c384ee7b57acfa445875910e55380a08505615787da9cb6a66c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-7.doses.txt": "17f6f65d4a13b70c4378b3d7b196c948fb18d81473bf7fe04eea6ef542f691e4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-8.resource-limits.json": "29122579ed04ec6d54557c6ac6da80916ce27e57db12e8513575eda4a569c7b0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-8/calibration-timings.jsonl": "bb304deeb5425cab526196a2b18347f7a468b7242180222026eacb639f0a31bb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-8.schedule.json": "528b1ff7f52e3e951e8ab4f2c71af31b6d7593af64d13b3dfc47f8f57287e6e4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-8.doses.txt": "763982008a60d31512bca91d3eaf9a41485b6a46312a5e19def42e6913d00fa5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-9.resource-limits.json": "67d8b2f57192bf50f0d2ddd07e59744bbb8cef5c6b8a1906881dab0a1b675559",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-9/calibration-timings.jsonl": "c0b11efba9167092fef2153970e1bd2d6d2bcbf49ea31bccd481cb401a15f25d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-9.schedule.json": "7795fc9216274894ae09648a316e42413d9e133ddd819ac1158b03a55dc98f11",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-9.doses.txt": "4ac156fad41c6b9934605f9b07aeb3c7e3c6143fa696a2915bf49fe98354d0ef",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-10.resource-limits.json": "86c95e6587ad3c291cb94474787b54f123fd665338173febbed5f29ff8600f1a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-10/calibration-timings.jsonl": "afb1257f43ef2ac68c6ac4972f4f336aedf19ad3f0394bd649bef73efed4858b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-10.schedule.json": "47b07598778a5cb691f023a3f74731c6dcb738eb0d19e5f8973dd345fea02b49",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-10.doses.txt": "52224a96dc659b8d9f3600094f23346d597cf422a6d7ede7af4b33080374841c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-11.resource-limits.json": "928811d66301a82a56336a30be248423dc4e0a653ea93f37d06cba9d04013791",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-11/calibration-timings.jsonl": "48482dc465bb3c295634710b9409e27c88fcffe4c237fec869e38b3708ab94d9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-11.schedule.json": "80e139822e1fef5eea1006c9c3ee4a76b33a2f95cb694e29d21245651011f604",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-11.doses.txt": "a38d203aa727410d5233ff5c91984225f114d69d90e1264664065646dd5535e0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-12.resource-limits.json": "09fa7d08f972d94ca9ad573c4c975140357df0afa1b3d8efc0d1fcea579e83ca",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-12/calibration-timings.jsonl": "e696a6bc44d794b8a8ca0035524158455744e17a4958a61d72017ad0371b956a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-12.schedule.json": "6a78e6ac15e03880a992a383e661a98a5f36e53773442cfd4dee593e1d7069e8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-12.doses.txt": "b439bde1a331dfe8c8f27471ff6f81f6717dc4711affb3a750a797f28f29319a",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-13.resource-limits.json": "d13cf32efa48587ba7e1c012a00989f2e3ad8ebd96076b85f395ac7972a4b0a4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-13/calibration-timings.jsonl": "2a18f4e3a9d6d48313cf13df9866b2ffc51b96a21c04689ba09198ad1825e190",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-13.schedule.json": "a68172daa9042c334377bf567fb5eb673bf2731e07d3e5ed2c65b9cbd7f217c5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-13.doses.txt": "da805ca1b41036309fab921a210adeb7ddce2cc9fef096fb8ddf2b79a41ee42d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-14.resource-limits.json": "adaa4259a0d231974682cb80265821143c5a6f09dfb4683a27b4428e0887a192",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-14/calibration-timings.jsonl": "39704e70a77a504de7af0f4290b644ab3ad84650e508da8591ecc99c3001e498",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-14.schedule.json": "98f91f782a30d762f652ca3875d537712945c982fa7f6243db71e41e818a87e4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-14.doses.txt": "60932193b18ceeaaa264a4063e840b1e12e015280a188f9555dee3ad6ca9e859",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-15.resource-limits.json": "42b42c6ca73ba4b4f9e0017507f23e7f4fa70f99d3a134a10666aadd5159fa71",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-15/calibration-timings.jsonl": "6fb576466f251beb0eaf05aec3451a9407b4bb7059b1585dff8181c2fb4b65ff",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-15.schedule.json": "9d0a0b76382e48e18d46d62dc1abe093103afd4ce18ed4f26a84e1ca23fdc1af",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-15.doses.txt": "ded5a74fd8ef8ad7969c3b1ad555a451adfcfb9bfdf68886afcb3b843097860d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-16.resource-limits.json": "ac7ac345c442b196fb5fb7b54f3d54909b472a41b8e833aa8cd15d6ce67ebe53",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-16/calibration-timings.jsonl": "4ff3769c1b6b911da02c04bb844984c9fc176b61e6c1fb352bd8ad9d36fa96fb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-16.schedule.json": "4433c93a870feb5e030d7c417f0ae9670ae12106976ffea05aaec23050ff2739",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-16.doses.txt": "ce5d718cc27ec9b391539443031ea4083e7864c9b5742c0e1ff052b13378b625",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-17.resource-limits.json": "634ad0981d69eca02d6e9712040bc0df84e716fa64e41702210936a6416316b9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-17/calibration-timings.jsonl": "fc39062adab763a6155ffd2f4056bf896481c6114cd1565701db56bceae92239",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-17.schedule.json": "5433c161e2af703f929fc0f1b72fbf8c3c0fa4df619709dd1d570a2a3660e960",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-17.doses.txt": "e3e15014156946fd34e8cdbbf4025ad200f808b4670fb33058e70cba0ece4dd1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-18.resource-limits.json": "87282fc5a3782f02632e97f99082884f191ec47e2cbc27bf255060b824204c36",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-18/calibration-timings.jsonl": "c0840bb4e754d6b867289f577c3f22e7502c9d8f2f52ed6994ab00f18a61712d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-18.schedule.json": "2923da7bbddb516be534f7a49ed0d7685edf4fefb9ff93131e147c7e485ce978",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-18.doses.txt": "2e02f316104dd0a1b6fedeca19d55d34bc106f9ee7f5d47449ef54a8b5deb648",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-19.resource-limits.json": "6f2e16cdf7ef8a4a5931f15c4045356ff32a2ea728aec99381fcfb6a7e47f427",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-19/calibration-timings.jsonl": "75e269679e90efa9f1d04c4a750d372d848988dd008b5c9cfe0e15ed9b9cc9e1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-19.schedule.json": "353674f79c975d708e5e9d8d62d2ccae9d80a974f4ae40d9d4c2d77b713892a6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-19.doses.txt": "e92e68ce2d3054b2b38ee56643ae582c9e442a687e7e63440171b8476be5c457",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-20.resource-limits.json": "e255b9de36690afe189ba054ec05a88c3b00a602ba2c2de434a563600a498db5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-20/calibration-timings.jsonl": "21911c2f619f9180e4626a2f22a0b769de858aebe4baa3f82e45e4dfae028cea",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-20.schedule.json": "40266cb337e66e549fad560184dd01637c6079fce9dd29e34180aa9b55ef94ed",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-20.doses.txt": "70bcf7eea445608edf2e38f256282957baea3672f28c90f3b7a9dd8ef0257809",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-21.resource-limits.json": "a059cde3416596faa3bb02c99a72f47181cfb8599bcabb3e251aeb4000524f8b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-21/calibration-timings.jsonl": "f07e8500a720353bbc35a15c93afa8a22cd12f3b035e0c576ef4d330dac38fed",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-21.schedule.json": "45b62d6312ccd95dc620a1166856af99403a77b465de05d72ce6b07a8255053e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-21.doses.txt": "bf14624661af6d7f2297debd7d974de262c4154baf93d517e1455344e5afa360",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-22.resource-limits.json": "a8e82ced844ff79779d15ab954281953137a538b41d0ce4f2f19d08b5247c92f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-22/calibration-timings.jsonl": "6b848356d5ed56d98217e4143f31ae9c7fe24ec260f7f3e1a66193c91ee659cc",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-22.schedule.json": "2f4887e805057ccdd649b947fe91ae1c120bb20d5fc13a2313c488e4b453e8d8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-22.doses.txt": "17858bb3a7ca5008601cc6889b6eb046209a77dc617ba019ee1be7952ce41589",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-23.resource-limits.json": "6d597a5457840f003370cc1ae6162ee27e3a7ad293117eebb038900173761c2b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-23/calibration-timings.jsonl": "74cce95c4252b1ffdfa56754bcf0d01a8da5defde3ed257da6fcfc110ef7f646",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-23.schedule.json": "a455b888c5100fa0476b7c10c576a76b49c9dd6a872301d8951fb937bb8ce8fb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/orderstat-uncertainty-c7-diagnostic-v1/C7-hwrt/block-23.doses.txt": "ebab11dc2d179708b073cb36d89f76d468d82151af5543691950bdde5bdd201f"
+  },
+  "raw_frames": 5760,
+  "observations": 1440,
+  "retained_processes": [
+    {
+      "index": 0,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312082,
+        2537414
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 1,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312139,
+        2537711
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 2,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312198,
+        2538009
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 3,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312420,
+        2538311
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 4,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312442,
+        2538607
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 5,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312576,
+        2538906
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 6,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312618,
+        2539204
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 7,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312733,
+        2539503
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 8,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312800,
+        2539805
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 9,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312812,
+        2540108
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 10,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312929,
+        2540411
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 11,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        312998,
+        2540716
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 12,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313094,
+        2541022
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 13,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313131,
+        2541328
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 14,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313199,
+        2541633
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 15,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313262,
+        2541939
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 16,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313417,
+        2542255
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 17,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313452,
+        2542565
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 18,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313563,
+        2542877
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 19,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313642,
+        2543189
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 20,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313794,
+        2543504
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 21,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313827,
+        2543819
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 22,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313897,
+        2544132
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    },
+    {
+      "index": 23,
+      "process_identity": [
+        "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+        313973,
+        2544450
+      ],
+      "raw_frames": 240,
+      "observations": 60
+    }
+  ],
+  "comparisons": {
+    "all_process_paired_values_and_medians_exact": true,
+    "all_six_ranked_intervals_exact": true,
+    "effect_ratio_interval_exact": true,
+    "all_four_calibration_checks_exact": true,
+    "family_noncoverage_bound_exact": true
+  },
+  "decision": {
+    "schema": "n010-ranked-timing-decision/1",
+    "design": {
+      "schema": "n010-ranked-timing-design/1",
+      "boundary_ids": [
+        "C1-hwrt",
+        "C1-software",
+        "C1-pt-B2",
+        "C1-pt-B8",
+        "C1-dense-rc",
+        "C7-hwrt",
+        "C7-software",
+        "C7-pt-B2",
+        "C7-pt-B8",
+        "C7-dense-rc",
+        "C6-hwrt",
+        "C6-pt-B2",
+        "C6-pt-B8",
+        "C12-hwrt",
+        "C12-pt-B2",
+        "C12-pt-B8"
+      ],
+      "processes": 24,
+      "rank": 4,
+      "intervals_per_boundary": 6,
+      "interval_noncoverage_bound": 0.0002771615982055664,
+      "family_noncoverage_bound": 0.026607513427734375,
+      "family_alpha_limit": 0.05,
+      "practical_ratio": 1.2
+    },
+    "boundary_id": "C7-hwrt",
+    "purpose": "calibration",
+    "process_summaries": [
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312082,
+          2537414
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.02569506624513836,
+                0.0061965930482193576,
+                -0.002520013192483184
+              ],
+              "median_log_ratio": 0.0061965930482193576
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.0075651180347941355,
+                -0.11108499576352347,
+                -0.040365790132780896
+              ],
+              "median_log_ratio": -0.040365790132780896
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.0069525193148818835,
+                -0.008220610351516645,
+                -0.0021544436021101072
+              ],
+              "median_log_ratio": -0.0021544436021101072
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.0019387729266289637,
+                -0.04610981975323297,
+                0.39272659425013806
+              ],
+              "median_log_ratio": 0.0019387729266289637
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1829039114643971,
+                0.1614034553618005,
+                0.11684362741444772
+              ],
+              "median_log_ratio": 0.1614034553618005
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.207493485148131,
+                0.18527035153641283,
+                0.16042029284085355
+              ],
+              "median_log_ratio": 0.18527035153641283
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312139,
+          2537711
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.006611837193116041,
+                0.03276338340710807,
+                0.021563594697765826
+              ],
+              "median_log_ratio": 0.021563594697765826
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.024306505423286787,
+                0.04075662319625449,
+                0.03971451709963817
+              ],
+              "median_log_ratio": 0.03971451709963817
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.01570839453282309,
+                -0.06887967888962633,
+                0.019172522823401743
+              ],
+              "median_log_ratio": -0.01570839453282309
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.36336569660513607,
+                0.06686627955416893,
+                -0.0015748530767585951
+              ],
+              "median_log_ratio": -0.0015748530767585951
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.17851548060893035,
+                0.18516230105367723,
+                0.2098254662800145
+              ],
+              "median_log_ratio": 0.18516230105367723
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.21164960251840678,
+                0.1606110544899787,
+                0.17708415440869246
+              ],
+              "median_log_ratio": 0.17708415440869246
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312198,
+          2538009
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.009592075706476274,
+                0.0024985663131807645,
+                -0.008308490133680993
+              ],
+              "median_log_ratio": -0.008308490133680993
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.28904763794751404,
+                -0.002691429427127654,
+                -0.2649556974746748
+              ],
+              "median_log_ratio": -0.2649556974746748
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.000459849407425114,
+                -0.04128749462387682,
+                -0.007857572474593453
+              ],
+              "median_log_ratio": -0.007857572474593453
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.009798663048702222,
+                -0.00777242729340972,
+                -5.783188273319068e-05
+              ],
+              "median_log_ratio": -5.783188273319068e-05
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.2290006444466995,
+                0.21647582304671512,
+                0.1341221334220793
+              ],
+              "median_log_ratio": 0.21647582304671512
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.17754827804129705,
+                0.1677956806010199,
+                0.1760402221954465
+              ],
+              "median_log_ratio": 0.1760402221954465
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312420,
+          2538311
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.044175522266964855,
+                0.3842872297749719,
+                -0.013635099243721674
+              ],
+              "median_log_ratio": -0.013635099243721674
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.3218387719275252,
+                -0.017310442105372567,
+                0.00106364129864665
+              ],
+              "median_log_ratio": -0.017310442105372567
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.005571712583693784,
+                -0.01913193358126019,
+                0.004337094925746693
+              ],
+              "median_log_ratio": 0.004337094925746693
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.01407363234972157,
+                0.014941061421619054,
+                0.012437742668156783
+              ],
+              "median_log_ratio": 0.01407363234972157
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1612086073839431,
+                0.22218840631672077,
+                0.11762709996394698
+              ],
+              "median_log_ratio": 0.1612086073839431
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.2039706740487361,
+                0.17445862168635923,
+                0.18150638195652644
+              ],
+              "median_log_ratio": 0.18150638195652644
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312442,
+          2538607
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.015319916290880965,
+                0.019729197363196543,
+                0.016462099908243138
+              ],
+              "median_log_ratio": 0.016462099908243138
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.016394884898253876,
+                -0.028916723001742115,
+                -0.014756785245844138
+              ],
+              "median_log_ratio": -0.014756785245844138
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.040010947744383664,
+                -0.006023250678093247,
+                -0.016905952078074663
+              ],
+              "median_log_ratio": -0.006023250678093247
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.0018025880735040567,
+                -0.027850397792336855,
+                -0.3050709071851749
+              ],
+              "median_log_ratio": -0.027850397792336855
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.6712135714627291,
+                0.17380287496749516,
+                0.14131250454833807
+              ],
+              "median_log_ratio": 0.17380287496749516
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.18643244531197944,
+                0.13092083154812972,
+                0.3228070728431686
+              ],
+              "median_log_ratio": 0.18643244531197944
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312576,
+          2538906
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.09025771546274822,
+                -0.005648990324227319,
+                -0.00269143826105509
+              ],
+              "median_log_ratio": -0.00269143826105509
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.003992021269537561,
+                -0.01277104512057733,
+                -0.04040621919388376
+              ],
+              "median_log_ratio": -0.01277104512057733
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.021491842273190242,
+                0.005371334726337506,
+                -0.03021916962098
+              ],
+              "median_log_ratio": 0.005371334726337506
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.006207711560318406,
+                0.05126702127268167,
+                0.011109978488249064
+              ],
+              "median_log_ratio": 0.011109978488249064
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1357264469784081,
+                0.18089488266993814,
+                0.1767110691942431
+              ],
+              "median_log_ratio": 0.1767110691942431
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.17744077817385112,
+                0.18990279261411455,
+                0.334445980835362
+              ],
+              "median_log_ratio": 0.18990279261411455
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312618,
+          2539204
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.014752638475038295,
+                -0.22701234652538754,
+                0.024353074375969053
+              ],
+              "median_log_ratio": -0.014752638475038295
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.007732175216229931,
+                0.03448160200793759,
+                0.04980282248381809
+              ],
+              "median_log_ratio": 0.03448160200793759
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.011106379610021639,
+                -0.0001719246974061042,
+                0.026069627630354836
+              ],
+              "median_log_ratio": 0.011106379610021639
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.01543078136521778,
+                0.00265405186948781,
+                -0.007118703558060529
+              ],
+              "median_log_ratio": 0.00265405186948781
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.15046078358963597,
+                0.4418616527602343,
+                0.1730204475411983
+              ],
+              "median_log_ratio": 0.1730204475411983
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.1457614262320717,
+                0.18784643272592436,
+                0.17490333412803769
+              ],
+              "median_log_ratio": 0.17490333412803769
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312733,
+          2539503
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.008686193260680567,
+                -0.04385005611321753,
+                -0.032882438079435986
+              ],
+              "median_log_ratio": -0.032882438079435986
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.020522482718676325,
+                0.03353902030205152,
+                -0.061568084393819805
+              ],
+              "median_log_ratio": 0.020522482718676325
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.0026388943193474154,
+                -0.26183937749974157,
+                0.025830760034521658
+              ],
+              "median_log_ratio": 0.0026388943193474154
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.007075232070921022,
+                -0.010994282174181969,
+                0.03154693836003284
+              ],
+              "median_log_ratio": -0.007075232070921022
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1645589427946757,
+                0.1892603218716425,
+                0.11486565054493807
+              ],
+              "median_log_ratio": 0.1645589427946757
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.17206115471934097,
+                0.15552418280676797,
+                0.12595701794512873
+              ],
+              "median_log_ratio": 0.15552418280676797
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312800,
+          2539805
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.02926971345009705,
+                -0.027966838575380525,
+                0.038480909286878306
+              ],
+              "median_log_ratio": -0.027966838575380525
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.03828253555153137,
+                0.013596017392572731,
+                0.0009890068895465121
+              ],
+              "median_log_ratio": 0.013596017392572731
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.024478466981170788,
+                -0.0017494650497099744,
+                -0.012537198364609125
+              ],
+              "median_log_ratio": -0.0017494650497099744
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.03103798732775788,
+                -0.03640590191329018,
+                0.012992113767677452
+              ],
+              "median_log_ratio": 0.012992113767677452
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1515710843434493,
+                0.18121306802377665,
+                0.19864200327239248
+              ],
+              "median_log_ratio": 0.18121306802377665
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.24624157661143511,
+                0.23270065079254848,
+                0.18798388142208394
+              ],
+              "median_log_ratio": 0.23270065079254848
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312812,
+          2540108
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.030448472438180933,
+                -0.04467174810225009,
+                -0.02661350844999321
+              ],
+              "median_log_ratio": -0.030448472438180933
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.01475425191777402,
+                -0.47290116477008043,
+                -0.0038842939566421483
+              ],
+              "median_log_ratio": -0.0038842939566421483
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.010184460285879753,
+                0.025109366086714092,
+                -0.039465863490682825
+              ],
+              "median_log_ratio": 0.010184460285879753
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.06981921300936082,
+                0.006915616694562501,
+                0.012974407312429409
+              ],
+              "median_log_ratio": 0.012974407312429409
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.5491166616743711,
+                0.13756191129129516,
+                0.17441507901633244
+              ],
+              "median_log_ratio": 0.17441507901633244
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.17098041431331687,
+                0.17883404239712142,
+                0.17135986994381736
+              ],
+              "median_log_ratio": 0.17135986994381736
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312929,
+          2540411
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.009222770478790504,
+                -0.01982225457417122,
+                -0.007883283608635154
+              ],
+              "median_log_ratio": -0.009222770478790504
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.006573115073364308,
+                0.4327435262918409,
+                0.044134769187001134
+              ],
+              "median_log_ratio": 0.044134769187001134
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.024039481255882702,
+                0.03653505722111308,
+                -0.534494537422125
+              ],
+              "median_log_ratio": 0.024039481255882702
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.27974204810188547,
+                0.028394227559147316,
+                0.01277687861317939
+              ],
+              "median_log_ratio": 0.01277687861317939
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.16471015774709344,
+                0.17309996390951768,
+                0.16744061280151049
+              ],
+              "median_log_ratio": 0.16744061280151049
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.15222337041539227,
+                0.5028780043643718,
+                0.15023298665633195
+              ],
+              "median_log_ratio": 0.15222337041539227
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          312998,
+          2540716
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.001729605504689352,
+                -0.00969784114368459,
+                -0.3331124758903695
+              ],
+              "median_log_ratio": -0.00969784114368459
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.01732895348899081,
+                -0.007321353384175256,
+                0.044862404057259886
+              ],
+              "median_log_ratio": 0.01732895348899081
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.250546008972703,
+                -0.002101331616085712,
+                0.00992212250631627
+              ],
+              "median_log_ratio": -0.002101331616085712
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.019107123000522225,
+                0.009487793820435988,
+                -0.025510038045818743
+              ],
+              "median_log_ratio": -0.019107123000522225
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1977152473131889,
+                0.13095754270152754,
+                0.17299637967121165
+              ],
+              "median_log_ratio": 0.17299637967121165
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.16416592410559713,
+                0.15169501143676456,
+                0.20193968084083208
+              ],
+              "median_log_ratio": 0.16416592410559713
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313094,
+          2541022
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.06439530716301224,
+                0.009443193771011996,
+                0.017951167702578673
+              ],
+              "median_log_ratio": 0.009443193771011996
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.03505780830844375,
+                0.4899468858247033,
+                -0.029960299595874425
+              ],
+              "median_log_ratio": -0.029960299595874425
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.02341471068920434,
+                -0.06401396044511276,
+                -0.014921130237442763
+              ],
+              "median_log_ratio": -0.014921130237442763
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.11839149323524055,
+                0.0161401544690656,
+                0.007505247182636721
+              ],
+              "median_log_ratio": 0.0161401544690656
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.14412671348978665,
+                0.19104079589157777,
+                0.13430040398673257
+              ],
+              "median_log_ratio": 0.14412671348978665
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.18656501824585386,
+                0.14524187058666205,
+                0.20958225153803536
+              ],
+              "median_log_ratio": 0.18656501824585386
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313131,
+          2541328
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.0032403765124718177,
+                0.03761446360909533,
+                0.01376660391222582
+              ],
+              "median_log_ratio": 0.01376660391222582
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.01400747415539174,
+                0.01421030682135606,
+                0.010418875116283234
+              ],
+              "median_log_ratio": 0.01400747415539174
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.004290856635581849,
+                -0.006985301120200315,
+                0.009045112980891843
+              ],
+              "median_log_ratio": -0.004290856635581849
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.0017504964208538646,
+                0.2896809967738648,
+                0.008379607630706153
+              ],
+              "median_log_ratio": 0.008379607630706153
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.19422990030375212,
+                0.15071023055184807,
+                0.18966650976852126
+              ],
+              "median_log_ratio": 0.18966650976852126
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.37730437359218844,
+                0.16567432336079843,
+                0.18299341998689178
+              ],
+              "median_log_ratio": 0.16567432336079843
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313199,
+          2541633
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.15441351878150422,
+                -0.024730067695140214,
+                0.0030528295544047295
+              ],
+              "median_log_ratio": -0.024730067695140214
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.023844652441251165,
+                0.00262812240626963,
+                -0.026029724868108343
+              ],
+              "median_log_ratio": -0.023844652441251165
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.016711301293004677,
+                -0.1450379123830033,
+                -0.039871780650654276
+              ],
+              "median_log_ratio": -0.039871780650654276
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.04065086941918432,
+                -0.02788332422328499,
+                -0.03085703530409853
+              ],
+              "median_log_ratio": -0.03085703530409853
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.33956235791975276,
+                0.15085889628778013,
+                0.14704273975887514
+              ],
+              "median_log_ratio": 0.15085889628778013
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.14373981290873572,
+                0.1302207890578766,
+                0.21262150440240427
+              ],
+              "median_log_ratio": 0.14373981290873572
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313262,
+          2541939
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.03616413740109072,
+                -0.14418258419749666,
+                0.011268961634354408
+              ],
+              "median_log_ratio": 0.011268961634354408
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.00178094437099492,
+                -0.02742123673027503,
+                -0.003947731780934033
+              ],
+              "median_log_ratio": -0.003947731780934033
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.008089199403863698,
+                0.02816029892987415,
+                0.0023819909592307166
+              ],
+              "median_log_ratio": 0.0023819909592307166
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.014858590792138698,
+                -0.005204128780043912,
+                0.056664708571959495
+              ],
+              "median_log_ratio": -0.005204128780043912
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.2041471290920043,
+                0.15693330395034927,
+                0.18970645739246006
+              ],
+              "median_log_ratio": 0.18970645739246006
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.15522596437266173,
+                0.16967542896819193,
+                -0.21635116075404498
+              ],
+              "median_log_ratio": 0.15522596437266173
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313417,
+          2542255
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.021061054428546395,
+                -0.0515125290791652,
+                -0.030283590713186887
+              ],
+              "median_log_ratio": -0.030283590713186887
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.009167516498688738,
+                0.010344809058567871,
+                0.0026699375620928612
+              ],
+              "median_log_ratio": 0.009167516498688738
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.054425073445362675,
+                -0.03772619430653627,
+                -0.03962022233303787
+              ],
+              "median_log_ratio": -0.03962022233303787
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.03532603263519075,
+                0.016576451892926915,
+                0.04860595865611956
+              ],
+              "median_log_ratio": 0.03532603263519075
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.17877754835922552,
+                0.24235104998325924,
+                0.1098048588869229
+              ],
+              "median_log_ratio": 0.17877754835922552
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.33079884574512036,
+                0.1585597735223015,
+                0.15954847591987117
+              ],
+              "median_log_ratio": 0.1585597735223015
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313452,
+          2542565
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.024026618654359323,
+                -0.0040680780219859505,
+                0.004098366392282185
+              ],
+              "median_log_ratio": 0.004098366392282185
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.010731200120834105,
+                -0.021386528923576585,
+                -0.029796015261892256
+              ],
+              "median_log_ratio": -0.021386528923576585
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.003272217306203393,
+                0.0011215164075775298,
+                0.03173262032561473
+              ],
+              "median_log_ratio": 0.0011215164075775298
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.33255529149574803,
+                0.02540317378415309,
+                0.04901784607349893
+              ],
+              "median_log_ratio": 0.02540317378415309
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.08303572780341857,
+                0.2006126790434885,
+                0.17087913548462105
+              ],
+              "median_log_ratio": 0.17087913548462105
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.16401570184843348,
+                0.19686387163976377,
+                -0.14911457719073046
+              ],
+              "median_log_ratio": 0.16401570184843348
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313563,
+          2542877
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.022013683884092035,
+                -0.005844393122065996,
+                0.02866853350422201
+              ],
+              "median_log_ratio": -0.005844393122065996
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.008249578062103158,
+                0.00535384627042125,
+                7.049948890785763e-05
+              ],
+              "median_log_ratio": 7.049948890785763e-05
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.0002905709740042378,
+                0.025790618505636072,
+                -0.0013036702994179213
+              ],
+              "median_log_ratio": -0.0002905709740042378
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.05305289013463462,
+                5.714448985828097e-05,
+                -0.02452525070962751
+              ],
+              "median_log_ratio": 5.714448985828097e-05
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.16537478822111124,
+                0.21871183333591068,
+                0.1888036233207982
+              ],
+              "median_log_ratio": 0.1888036233207982
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.22597857665651672,
+                0.1974807215787433,
+                0.1980124864533044
+              ],
+              "median_log_ratio": 0.1980124864533044
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313642,
+          2543189
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.00623495511725375,
+                0.0014077299483699832,
+                -0.004485587329577352
+              ],
+              "median_log_ratio": -0.004485587329577352
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.0001937296186357379,
+                0.02282442972509609,
+                -0.3063893544542536
+              ],
+              "median_log_ratio": 0.0001937296186357379
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.031655891296202,
+                -0.03451205230514363,
+                0.00044154984711218325
+              ],
+              "median_log_ratio": 0.00044154984711218325
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.02133295722079799,
+                -0.02356919185948018,
+                -0.04871321445603165
+              ],
+              "median_log_ratio": -0.02356919185948018
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1328966734664318,
+                0.18802572704356263,
+                0.1678008751279292
+              ],
+              "median_log_ratio": 0.1678008751279292
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.1328859099843205,
+                -0.38197360997648855,
+                0.12597796132302547
+              ],
+              "median_log_ratio": 0.12597796132302547
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313794,
+          2543504
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.0248569673891467,
+                0.015064171889516398,
+                -0.009420669823836195
+              ],
+              "median_log_ratio": -0.009420669823836195
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.020223136118043127,
+                0.019284438032153302,
+                -0.5687341511451287
+              ],
+              "median_log_ratio": 0.019284438032153302
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.01200412651034573,
+                0.008482482116745514,
+                -0.004529506102147002
+              ],
+              "median_log_ratio": -0.004529506102147002
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.013509229919591983,
+                0.019791332391875634,
+                0.0338060361304539
+              ],
+              "median_log_ratio": 0.019791332391875634
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.16925169409340451,
+                0.14511622253484618,
+                0.15780503228161735
+              ],
+              "median_log_ratio": 0.15780503228161735
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.1381651356486395,
+                0.6515957394225393,
+                0.16635153271774872
+              ],
+              "median_log_ratio": 0.16635153271774872
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313827,
+          2543819
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.006239552606587582,
+                0.007145511053437901,
+                -0.004198379297256505
+              ],
+              "median_log_ratio": -0.004198379297256505
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.0076644183179293696,
+                -0.5371271518701731,
+                0.5435188407127979
+              ],
+              "median_log_ratio": 0.0076644183179293696
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.000674233085436055,
+                0.004002598573142042,
+                -0.013817242171504174
+              ],
+              "median_log_ratio": -0.000674233085436055
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.026306189237588363,
+                -0.015265764627764038,
+                -0.0280593529249494
+              ],
+              "median_log_ratio": -0.015265764627764038
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.14551367171037227,
+                0.14735145386869358,
+                0.19628599196089264
+              ],
+              "median_log_ratio": 0.14735145386869358
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.14955524200212203,
+                0.15577029531206274,
+                0.18308282098369885
+              ],
+              "median_log_ratio": 0.15577029531206274
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313897,
+          2544132
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                -0.16095958665153487,
+                0.0051371735292904406,
+                0.017686073232691304
+              ],
+              "median_log_ratio": 0.0051371735292904406
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.014858110847245962,
+                0.0035074483191301457,
+                0.018060786715028008
+              ],
+              "median_log_ratio": 0.014858110847245962
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.00887114130796963,
+                0.002156115167617463,
+                -0.01095339696215339
+              ],
+              "median_log_ratio": 0.002156115167617463
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.00924505814405105,
+                -0.03410255050121137,
+                -0.00891572170942902
+              ],
+              "median_log_ratio": -0.00924505814405105
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1725286522394621,
+                0.17045607542114702,
+                0.16476824871782
+              ],
+              "median_log_ratio": 0.17045607542114702
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.18404203263134572,
+                0.14886896012398318,
+                0.16749658818670926
+              ],
+              "median_log_ratio": 0.16749658818670926
+            }
+          }
+        }
+      },
+      {
+        "process_identity": [
+          "1e3c7870-4ef0-4214-9d46-d38cc17a9683",
+          313973,
+          2544450
+        ],
+        "populations": {
+          "control_a": {
+            "AB": {
+              "paired_log_ratios": [
+                0.0015797249069747748,
+                0.02122405297358097,
+                0.0221193246662312
+              ],
+              "median_log_ratio": 0.02122405297358097
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.01053474816704644,
+                -0.0020004835423267386,
+                -0.024064030640202832
+              ],
+              "median_log_ratio": -0.01053474816704644
+            }
+          },
+          "control_b": {
+            "AB": {
+              "paired_log_ratios": [
+                0.008574851838551759,
+                0.007579273765427905,
+                0.011160243210908126
+              ],
+              "median_log_ratio": 0.008574851838551759
+            },
+            "BA": {
+              "paired_log_ratios": [
+                -0.001230192592390664,
+                0.019420310736818974,
+                -0.27483608145577265
+              ],
+              "median_log_ratio": -0.001230192592390664
+            }
+          },
+          "effect": {
+            "AB": {
+              "paired_log_ratios": [
+                0.1596630522170685,
+                0.17889173479633363,
+                0.15050281585993439
+              ],
+              "median_log_ratio": 0.1596630522170685
+            },
+            "BA": {
+              "paired_log_ratios": [
+                0.17363725334484248,
+                0.17112116258546875,
+                0.19488809080481168
+              ],
+              "median_log_ratio": 0.17363725334484248
+            }
+          }
+        }
+      }
+    ],
+    "log_median_intervals": {
+      "control_a": {
+        "AB": {
+          "point": -0.005164990225821673,
+          "lower": -0.027966838575380525,
+          "upper": 0.01376660391222582,
+          "sorted_values": [
+            -0.032882438079435986,
+            -0.030448472438180933,
+            -0.030283590713186887,
+            -0.027966838575380525,
+            -0.024730067695140214,
+            -0.014752638475038295,
+            -0.013635099243721674,
+            -0.00969784114368459,
+            -0.009420669823836195,
+            -0.009222770478790504,
+            -0.008308490133680993,
+            -0.005844393122065996,
+            -0.004485587329577352,
+            -0.004198379297256505,
+            -0.00269143826105509,
+            0.004098366392282185,
+            0.0051371735292904406,
+            0.0061965930482193576,
+            0.009443193771011996,
+            0.011268961634354408,
+            0.01376660391222582,
+            0.016462099908243138,
+            0.02122405297358097,
+            0.021563594697765826
+          ],
+          "repetitions": 24,
+          "rank": 4,
+          "noncoverage_bound": 0.0002771615982055664
+        },
+        "BA": {
+          "point": 0.00013211455377179775,
+          "lower": -0.023844652441251165,
+          "upper": 0.020522482718676325,
+          "sorted_values": [
+            -0.2649556974746748,
+            -0.040365790132780896,
+            -0.029960299595874425,
+            -0.023844652441251165,
+            -0.021386528923576585,
+            -0.017310442105372567,
+            -0.014756785245844138,
+            -0.01277104512057733,
+            -0.01053474816704644,
+            -0.003947731780934033,
+            -0.0038842939566421483,
+            7.049948890785763e-05,
+            0.0001937296186357379,
+            0.0076644183179293696,
+            0.009167516498688738,
+            0.013596017392572731,
+            0.01400747415539174,
+            0.014858110847245962,
+            0.01732895348899081,
+            0.019284438032153302,
+            0.020522482718676325,
+            0.03448160200793759,
+            0.03971451709963817,
+            0.044134769187001134
+          ],
+          "repetitions": 24,
+          "rank": 4,
+          "noncoverage_bound": 0.0002771615982055664
+        }
+      },
+      "control_b": {
+        "AB": {
+          "point": -0.0004824020297201464,
+          "lower": -0.014921130237442763,
+          "upper": 0.008574851838551759,
+          "sorted_values": [
+            -0.039871780650654276,
+            -0.03962022233303787,
+            -0.01570839453282309,
+            -0.014921130237442763,
+            -0.007857572474593453,
+            -0.006023250678093247,
+            -0.004529506102147002,
+            -0.004290856635581849,
+            -0.0021544436021101072,
+            -0.002101331616085712,
+            -0.0017494650497099744,
+            -0.000674233085436055,
+            -0.0002905709740042378,
+            0.00044154984711218325,
+            0.0011215164075775298,
+            0.002156115167617463,
+            0.0023819909592307166,
+            0.0026388943193474154,
+            0.004337094925746693,
+            0.005371334726337506,
+            0.008574851838551759,
+            0.010184460285879753,
+            0.011106379610021639,
+            0.024039481255882702
+          ],
+          "repetitions": 24,
+          "rank": 4,
+          "noncoverage_bound": 0.0002771615982055664
+        },
+        "BA": {
+          "point": 0.0009979587082436223,
+          "lower": -0.019107123000522225,
+          "upper": 0.0161401544690656,
+          "sorted_values": [
+            -0.03085703530409853,
+            -0.027850397792336855,
+            -0.02356919185948018,
+            -0.019107123000522225,
+            -0.015265764627764038,
+            -0.00924505814405105,
+            -0.007075232070921022,
+            -0.005204128780043912,
+            -0.0015748530767585951,
+            -0.001230192592390664,
+            -5.783188273319068e-05,
+            5.714448985828097e-05,
+            0.0019387729266289637,
+            0.00265405186948781,
+            0.008379607630706153,
+            0.011109978488249064,
+            0.01277687861317939,
+            0.012974407312429409,
+            0.012992113767677452,
+            0.01407363234972157,
+            0.0161401544690656,
+            0.019791332391875634,
+            0.02540317378415309,
+            0.03532603263519075
+          ],
+          "repetitions": 24,
+          "rank": 4,
+          "noncoverage_bound": 0.0002771615982055664
+        }
+      },
+      "effect": {
+        "AB": {
+          "point": 0.17193775757791635,
+          "lower": 0.15780503228161735,
+          "upper": 0.1888036233207982,
+          "sorted_values": [
+            0.14412671348978665,
+            0.14735145386869358,
+            0.15085889628778013,
+            0.15780503228161735,
+            0.1596630522170685,
+            0.1612086073839431,
+            0.1614034553618005,
+            0.1645589427946757,
+            0.16744061280151049,
+            0.1678008751279292,
+            0.17045607542114702,
+            0.17087913548462105,
+            0.17299637967121165,
+            0.1730204475411983,
+            0.17380287496749516,
+            0.17441507901633244,
+            0.1767110691942431,
+            0.17877754835922552,
+            0.18121306802377665,
+            0.18516230105367723,
+            0.1888036233207982,
+            0.18966650976852126,
+            0.18970645739246006,
+            0.21647582304671512
+          ],
+          "repetitions": 24,
+          "rank": 4,
+          "noncoverage_bound": 0.0002771615982055664
+        },
+        "BA": {
+          "point": 0.1694282290652633,
+          "lower": 0.15522596437266173,
+          "upper": 0.18656501824585386,
+          "sorted_values": [
+            0.12597796132302547,
+            0.14373981290873572,
+            0.15222337041539227,
+            0.15522596437266173,
+            0.15552418280676797,
+            0.15577029531206274,
+            0.1585597735223015,
+            0.16401570184843348,
+            0.16416592410559713,
+            0.16567432336079843,
+            0.16635153271774872,
+            0.16749658818670926,
+            0.17135986994381736,
+            0.17363725334484248,
+            0.17490333412803769,
+            0.1760402221954465,
+            0.17708415440869246,
+            0.18150638195652644,
+            0.18527035153641283,
+            0.18643244531197944,
+            0.18656501824585386,
+            0.18990279261411455,
+            0.1980124864533044,
+            0.23270065079254848
+          ],
+          "repetitions": 24,
+          "rank": 4,
+          "noncoverage_bound": 0.0002771615982055664
+        }
+      }
+    },
+    "by_order": {
+      "AB": {
+        "controls_compatible": true,
+        "control_log_bias_allowance": 0.027966838575380525,
+        "lower_log": 0.12983819370623684,
+        "upper_log": 0.2167704618961787
+      },
+      "BA": {
+        "controls_compatible": true,
+        "control_log_bias_allowance": 0.023844652441251165,
+        "lower_log": 0.13138131193141056,
+        "upper_log": 0.21040967068710503
+      }
+    },
+    "effect_ratio_interval": {
+      "lower": 1.1386441286318703,
+      "upper": 1.242058969553914,
+      "multiplicative_width": 1.0908227938138153
+    },
+    "numerical_checks": {
+      "same_role_control_locations_compatible": true,
+      "order_intervals_compatible_after_allowance": true,
+      "positive_effect_after_control_allowance": true,
+      "interval_width_within_registered_resolution": true
+    },
+    "quality_status": "UNKNOWN",
+    "caller_evidence_verified": false,
+    "caller_nuisance_model_justified": false,
+    "conditional_numerical_classification": "INVALID_OR_UNVERIFIED_EVIDENCE",
+    "accepted_timing": false,
+    "proof_admission": false,
+    "statistical_scope": "Simultaneous raw median intervals assume independent process repetitions and common medians. The expanded effect interval additionally assumes effect nuisance shifts are bounded by the same-role controls. Compatibility does not prove that model. Fresh process identities do not establish statistical independence."
+  },
+  "source_boot_identity": "Original255 acquisition-wide before/after environment record; individual resource receipts contain PID/start, not individual boot IDs. No comparison to the current boot or performance pooling is made.",
+  "not_verified": [
+    "Images and scratch payloads",
+    "Build/binary/shader source proof",
+    "Owned memory ledger replay",
+    "Actual selected GI boundaries/quality/dynamic parity",
+    "Conditional nuisance-model justification",
+    "Full proof intake/final readiness"
+  ],
+  "tests": "NOT_RUN; bounded post-hoc archived timing arithmetic replay, not regression tests",
+  "analysis_resources": {
+    "affinity": [
+      31
+    ],
+    "nice": 15,
+    "cpu_limit_seconds": 20,
+    "address_space_limit_bytes": 1073741824,
+    "cpu_seconds": 0.079903376,
+    "elapsed_seconds": 0.16967934299987064
+  }
+}

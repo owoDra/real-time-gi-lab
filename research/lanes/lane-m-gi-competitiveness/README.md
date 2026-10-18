@@ -75,10 +75,12 @@ results and the current N010 preflight are unchanged; N010 is still NOT_READY.
 N010 [implementation377](../n010-comparison-readiness/results/377-ranked-timing-decision-implementation.md)
 prepares the pure numerical comparison classifier and prospective family-rank
 budget. It separates added-work calibration from candidate/baseline decisions
-and retains unmatched-quality/inconclusive outcomes. It is NOT EXECUTED and
-grants no proof admission. Selected-boundary acquisition and strict raw-evidence
-replay/final-auditor integration remain required; old timing gates/results stay
-unchanged until an explicit complete replacement is verified.
+and retains unmatched-quality/inconclusive outcomes.
+[Post-hoc378/379](../n010-comparison-readiness/results/379-ranked-timing-raw-replay-outcome.md)
+now reproduces all24 original C7 processes from5760 raw frames, with exact
+ranked calibration arithmetic and no new acquisition. No proof admission:
+selected-boundary acquisition and strict full-evidence replay/final-auditor
+integration remain required. Old timing gates/results stay unchanged.
 
 ## Timing and memory handoff identity
 
