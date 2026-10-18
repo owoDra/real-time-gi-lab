@@ -1,0 +1,97 @@
+{
+  "schema": "n010-tiled-pixel-pt-source-preparation/1",
+  "complete": true,
+  "source_preparation_valid": true,
+  "all_pass": false,
+  "gpu_run": false,
+  "compiled": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "classification": "SOURCE_PREPARED_UNCOMPILED_UNEXECUTED_NO_ADMISSION",
+  "source_commit": "07c8be801ae4bdaf2125f16dcf8a8ad011449714",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/prepare_tiled_pixel_pt.py": "b3b976ed12d290bf12943829fa8ec1a52e8176f64eefdc08c1b408c9aacbcaaa",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/122-spatially-tiled-pixel-pt.md": "53c4647458ae4247c143e10de0cdc23ca47f8ccf0761a76440d71edc9c34dc22",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/pixel_pt_main.cpp": "c2f0bc8d517e29fd3ec33641900aed47b1310b3161e2f8b61e288c8b7b2c429c",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/n010_comparison_readiness/n010_pixel_pt.comp.glsl": "ddb81baa0b701f96d78ffe297db589290d3fe4c2d6965a4df655c47a4a23d1c2",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/046-calibration-quiet-sizing.json": "2ab654662ffdef9b873179d95a9142eea7e18ad0635cec37601c51f0f828d36d"
+  },
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/tiled-pixel-pt-source-v1/source-edits.json": "ce481f7a8f1b23061742f75fdb632f9bead7c1118c3372b8e2f838094fc9ce46",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/tiled-pixel-pt-source-v1/tiled_pixel_pt.comp.glsl": "87fb6bb515154c5ff988770f23527706b4f3d83e0bc822039459d2bb50405f89",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/tiled-pixel-pt-source-v1/tiled_pixel_pt.cpp": "8e4948fd29ef598e6b311b5568685683839eb10c2cd88d92c4c90055a03e9fa8"
+  },
+  "whole_host_inverse_exact": true,
+  "whole_shader_inverse_exact": true,
+  "per_pixel_camera_rng_transport_sum_body_byte_identical": true,
+  "validation_baselines": [
+    {
+      "boundary": {
+        "id": "C1-pt-B8",
+        "cell": "C1",
+        "base": "C1",
+        "dynamic": false,
+        "role": "pt-B8"
+      },
+      "command": [
+        "bash",
+        "scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt",
+        "--state",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/states/static",
+        "--spp",
+        "1024",
+        "--vertices",
+        "8",
+        "--family",
+        "pixel-pt",
+        "--seed",
+        "305419896",
+        "--calibration-doses",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/sizing/C1-pt-B8/sizing.doses.txt",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/sizing/C1-pt-B8/sizing"
+      ],
+      "images": {
+        "direct": "110769e6ed0e315a3ac82d16c585df620027632dbc0d222831d48f07dfdb8705",
+        "indirect": "0cfea5c11c772de9f030dc6e138e55e2c102638a76db4781815881e28abeb7ab",
+        "total": "655bd2de2091dfca1d237c1de1e2faeb3664a921e8fcc9b7450e698d13b557a2"
+      }
+    },
+    {
+      "boundary": {
+        "id": "C7-pt-B8",
+        "cell": "C7",
+        "base": "C7",
+        "dynamic": false,
+        "role": "pt-B8"
+      },
+      "command": [
+        "bash",
+        "scripts/run_with_vulkan.sh",
+        "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt",
+        "--state",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/gpu-bc2419c/C7-leak-medium-software",
+        "--spp",
+        "1024",
+        "--vertices",
+        "8",
+        "--family",
+        "pixel-pt",
+        "--seed",
+        "305419896",
+        "--calibration-doses",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/sizing/C7-pt-B8/sizing.doses.txt",
+        "--out",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/independent-quiet-calibration-v1/sizing/C7-pt-B8/sizing"
+      ],
+      "images": {
+        "direct": "5057fea608c03ea1dca772f6778345f5b79967e6ddb5ed8dc419b719217132be",
+        "indirect": "790965da497e3255a72f381e597f67a52e6498ed46f106e978b069a6c421b419",
+        "total": "4d6701dba53230d6a33e0550f27e1bf98e8dfa5b1c44cf29c0d027403d57f4c7"
+      }
+    }
+  ],
+  "limitation": "Source proof only; floating GPU equivalence, tile duration, full source/dynamic coverage, memory/runtime and any timing conclusion are unverified.",
+  "tests": "NOT_RUN; source preparation only, no compiler/GPU/numerical execution"
+}

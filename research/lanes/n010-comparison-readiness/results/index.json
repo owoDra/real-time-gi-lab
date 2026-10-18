@@ -1549,6 +1549,12 @@
       "status": "prepared-reportable-timing-raw-intake-and-intermediate-audit-source-inverse-checked-no-execution-no-admission",
       "result": "385-reportable-timing-intake-implementation.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-389",
+      "status": "complete-spatial-pixel-pt-source-preparation-inverse-exact-per-pixel-body-unchanged-uncompiled-unexecuted-no-admission",
+      "result": "389-tiled-pixel-pt-source-prepare.json",
+      "gpu_run": false
     }
   ]
 }

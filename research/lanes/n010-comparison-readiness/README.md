@@ -56,6 +56,17 @@ Retained PT-B8/1024 sizing is about4.22GPU seconds/sample: the unchanged
 64-sample route has no demonstrated fit within180seconds. Do not launch
 that whole pilot next; establish actual budgets/bounded Renderer work first.
 
+[Source preparation389](results/389-tiled-pixel-pt-source-prepare.json)
+implements [122](experiments/122-spatially-tiled-pixel-pt.md):
+private spatial pixel tiles (default64 pixels, >=2ms yields), preserving
+the original per-pixel camera/RNG/sample/transport body byte-for-byte.
+Host/shader whole-source inverses pass; compiled/runtime equivalence is
+NOT RUN. Record active GPU sum, image timestamp envelope including yields,
+and CPU wall separately; no speed claim or automatic calibration transfer.
+Private build390 and all-pixel byte replay against archived046 remain.
+No monolithic PT recapture or queued work;119 stays the next focused GPU
+diagnostic after260 terminates with integrity PASS.
+
 **Decision policy:** GPU Renderer time remains a comparison axis, using paired
 ratios, registered uncertainty and order/control allowance. CPU wall/clock/
 busy/other-app telemetry is diagnostic. Stop generic stability-percentage
