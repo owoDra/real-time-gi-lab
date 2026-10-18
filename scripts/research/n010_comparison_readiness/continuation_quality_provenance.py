@@ -139,11 +139,23 @@ def verify_capture(part_path, lock_path, cell, vertices, spp, dynamic=False,
             and all(c in '0123456789abcdef' for c in commit), 'full capture source commit required')
     subprocess.run(['git','merge-base','--is-ancestor',commit,'HEAD'],cwd=ROOT,
                    check=True,capture_output=True)
-    for path in (R.RESULTS/'401-continuation-pixel-pt-build.json',
+    build_path = R.RESULTS/'401-continuation-pixel-pt-build.json'
+    require(record['input_sha256'].get(str(build_path)) == P.sha(build_path),
+            'actual build result not pinned in capture inputs')
+    subprocess.run(['git','merge-base','--is-ancestor',build['source_commit'],commit],cwd=ROOT,
+                   check=True,capture_output=True)
+    # A generated build result can be published after acquisition. Its actual
+    # bytes must match the capture's immutable input digest, while executable
+    # source/registration bytes must already exist in the recorded Git commits.
+    tracked_sources = (ROOT/'scripts/research/n010_reference_sampling/build_continuation_pixel_pt.py',
+                 ROOT/'scripts/research/n010_reference_sampling/prepare_continuation_pixel_pt.py',
+                 ROOT/'scripts/research/n010_reference_sampling/prepare_continuation_readback.py',
                  R.RESULTS.parent/'experiments/126-exact-sample-continuation-pixel-pt.md',
-                 R.RESULTS.parent/'experiments/127-continuation-readback-accounting.md'):
-        require(subprocess.check_output(['git','show',commit+':'+str(path.relative_to(ROOT))],cwd=ROOT)
-                == R.checked(path), 'build/source recipe absent or different at capture commit')
+                 R.RESULTS.parent/'experiments/127-continuation-readback-accounting.md')
+    for path in tracked_sources:
+        for source_commit in (build['source_commit'],commit):
+            require(subprocess.check_output(['git','show',source_commit+':'+str(path.relative_to(ROOT))],cwd=ROOT)
+                    == R.checked(path), 'executable source/recipe absent or different at build/capture commit')
     lock = read(Path(lock_path).resolve())
     require(set(lock['cells']) == {f'C{i}' for i in range(1,13)}, 'full026 corpus required')
     spec = lock['cells'][cell]

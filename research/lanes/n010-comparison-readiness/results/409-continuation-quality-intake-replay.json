@@ -1,0 +1,28 @@
+{
+  "schema": "n010-continuation-quality-intake-failure/1",
+  "complete": true,
+  "execution_intake_valid": false,
+  "all_pass": false,
+  "accepted_timing": false,
+  "reference_admission": false,
+  "gpu_run": false,
+  "posthoc": true,
+  "source_commit": "a6e42b0c95a23a862e79ed11480e08abadb3bd95",
+  "classification": "READ_ONLY_INTAKE_STOPPED_INVALID_BUILD_RESULT_GIT_ASSUMPTION",
+  "failed_cell": "C1",
+  "command": [
+    "out/research/n010-comparison-readiness/venv/bin/python",
+    "scripts/research/n010_comparison_readiness/replay_continuation_quality_intake.py"
+  ],
+  "returncode": 1,
+  "observation": "Tool exec_command chunk c41fc1: subprocess git show returned128 because401 result was not yet Git-tracked at capture commitdf99a956. No output409 was produced by the driver; this record preserves the failed analysis.",
+  "error": "fatal: path 'research/lanes/n010-comparison-readiness/results/401-continuation-pixel-pt-build.json' exists on disk, but not in 'df99a9569c864576ed0868c9502039a742ff0e81'",
+  "source_sha256_at_execution": {
+    "scripts/research/n010_comparison_readiness/continuation_quality_provenance.py": "742dd077a009e845b7deeaa2400275589929131f67eea8dfd7dcf7d9c9123236",
+    "scripts/research/n010_comparison_readiness/replay_continuation_quality_intake.py": "dee2d82953ec219b02578b420de503cf86228add2937f1fb86d404e4bcc255e4",
+    "research/lanes/n010-comparison-readiness/experiments/129-continuation-quality-proof-intake.md": "a412acfaa5fdae90d8b4bc70a6f01b966573f8e4c3da205a5c906ad84365f3cc"
+  },
+  "preserved_work": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/continuation-quality-proof-intake-v1",
+  "diagnosis": "401 was retained and hashed by402/403 before their acquisition, but published with the completed outcome afterward. Source registration must be checked via tracked source bytes at the acquisition/build commits; the output artifact through the captured immutable digest.",
+  "tests": "NOT_RUN; failed read-only scientific evidence replay; no new GPU/compiler/native oracle"
+}

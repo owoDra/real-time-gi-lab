@@ -15,8 +15,8 @@ import continuation_quality_provenance as C
 from continuation_quality_provenance import R
 
 PLAN = R.RESULTS.parent/'experiments/129-continuation-quality-proof-intake.md'
-OUTPUT = R.RESULTS/'409-continuation-quality-intake-replay.json'
-WORK = R.BASE/'continuation-quality-proof-intake-v1'
+OUTPUT = R.RESULTS/'411-continuation-quality-intake-corrected-replay.json'
+WORK = R.BASE/'continuation-quality-proof-intake-v2'
 
 
 def main():
@@ -36,6 +36,13 @@ def main():
         C.require(subprocess.check_output(['git','show',commit+':'+str(path.relative_to(R.ROOT))])
                   == R.checked(path), 'commit exact driver/component/recipe before replay')
     WORK.mkdir()
+    failed = C.read(R.RESULTS/'409-continuation-quality-intake-replay.json')
+    C.require(failed['classification'] == 'READ_ONLY_INTAKE_STOPPED_INVALID_BUILD_RESULT_GIT_ASSUMPTION'
+              and failed['execution_intake_valid'] is False and failed['gpu_run'] is False,
+              'retain original409 analysis failure before corrected proof intake')
+    for name,digest in failed['source_sha256_at_execution'].items():
+        raw = subprocess.check_output(['git','show',failed['source_commit']+':'+name])
+        C.require(hashlib.sha256(raw).hexdigest() == digest, 'old409 source bytes no longer reachable')
     lock = R.RESULTS/'026-dynamic-execution-state-lock.json'
     references = R.BASE/'references-v1'
     old = C.read(R.RESULTS/'404-continuation-pixel-pt-numerical.json')

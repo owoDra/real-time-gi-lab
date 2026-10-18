@@ -56,3 +56,26 @@ false even when the component replay is valid. Outcome410/index/current
 docs must retain N010 NOT_READY, references16/24, physical inventory14/17,
 unresolved direct-relative1.0 pixels and every unexecuted scope. No tests,
 default build or N001–N009 result edits. No N011; finish full N010 then Lane M.
+
+## Amendment1 — correct generated-result versus registered-source provenance
+
+The first CPU-only replay stopped before scoring: it incorrectly required
+the generated401 build RESULT to be Git-tracked in the capture's commit.
+Actual402/403 source commitdf99a956 already contained the executable source
+and recipes, and their retained inputs pin401's exact digest;401 was Git
+published afterward with the completed outcome. The original failure is
+preserved as409 with execution commit/source hashes and original empty
+privatev1 work. No capture/reference bytes or scientific result changed.
+
+Correct that implementation assumption: require401's digest in each capture
+input; verify401's pinned sources/binary/shader; prove build-source commit
+ancestry to the capture commit, and exact tracked executable source/recipe
+bytes at BOTH commits. Do not demand that a generated output was published
+before it was used. This correction changes no reference, quality, timing,
+memory or operational threshold and permits no new GPU or native acquisition.
+
+Commit the correction before one new read-only replay to fresh411 and
+private `continuation-quality-proof-intake-v2`. Validate409's original source
+bytes through immutable Git blobs. Preserve both versions, all failures and
+the original data. All other129 scope/limits/nonclaims remain. If411 stops,
+preserve partials and report that stop; no automatic following run.
