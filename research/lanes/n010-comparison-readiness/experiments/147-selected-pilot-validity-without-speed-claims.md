@@ -99,3 +99,9 @@ distinct Lane M handoff remain. Sponza maximum direct-relative1.0 pixels
 remain UNRESOLVED/未解決, included. Original261/372/453/463 failures stay
 unchanged. No N011/default build/N001–N009/Actions/CUDA/settings changes.
 Tests NOT RUN; this step is prospective policy/source metadata only.
+
+Metadata attempt at4b78b6ad stopped before output/native: its union guard
+correctly rejected identities omitting static/dynamic mode (C8/C9 each has
+both). Correct the metadata key to mode/cell/role and preserve an explicit
+map for all16 original names. This changes no scope, sample or acquisition;
+retain the failed attempt in503. Metadata correction is not a native retry.
