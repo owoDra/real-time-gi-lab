@@ -3,7 +3,7 @@
 ## Current execution checkpoint — 2026-10-18 JST
 
 **Latest verified checkpoint: N010 NOT_READY; CPU260 and bounded GPU probes terminal; no live scientific worker/queue.**
-Latest: [checkpoint392](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md). Original372 FAIL stays unchanged; candidate repaired one diagnostic pixel only.
+Latest: [outcome394](lanes/n010-comparison-readiness/results/394-guarded-full-frame-conformance-outcome.md). Candidate393 passes full C1/16spp conformance; original372 stays FAIL. Tiled PT395 remains stopped.
 
 | Requirement | Current evidence | Remaining boundary |
 | --- | --- | --- |
@@ -11,11 +11,11 @@ Latest: [checkpoint392](lanes/n010-comparison-readiness/results/392-early-route-
 | Original full physical artifacts |14/17, including one diagnostic-only item;259/260 two of four A6a seeds | Remaining original sphere/range parts, independent IID/bias proof. |
 | New execution backend | [360](lanes/n010-comparison-readiness/results/360-whole-path-full-frame-build.json) build PASS; [366](lanes/n010-comparison-readiness/results/366-depth-split-hybrid-numerical.json) all32 original depth-split pairs PASS | Full physical/all-state/exact-prefix and full-count feasibility/intake still required. |
 | Full-frame numerical pilot | [370](lanes/n010-comparison-readiness/results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
-| Intended-batch execution | [371/372](lanes/n010-comparison-readiness/results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Stop this GPU variant; continue original106 CPU physical parts. Single-run wall does not admit a failed backend. |
+| Intended-batch execution | [371/372](lanes/n010-comparison-readiness/results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Original variant stays stopped;393 candidate passes C1 conformance only. All-state/physical/prefix/full-count qualification remains. |
 | GPU performance methodology | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Valid selected-boundary pilot and final intake/adapter; precision may be INCONCLUSIVE under amendment120. No automatic C7 transfer. |
 | Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
 
-[CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) localizes one shadow-count pixel. New [382/383](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md) reproduce its old one-shadow/two-query deficit and restore all16 CPU counts with an early-PDF CPU route at sample9/depth2; raw GPU paths remain bit-identical. Full-frame candidate conformance is not yet established; original372 remains FAIL and373 absent.
+[CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) localizes one shadow-count pixel. New [382/383](lanes/n010-comparison-readiness/results/392-early-route-and-tiled-pt-runtime-checkpoint.md) reproduce its old one-shadow/two-query deficit and restore all16 CPU counts with an early-PDF CPU route at sample9/depth2; raw GPU paths remain bit-identical. [Candidate393](lanes/n010-comparison-readiness/results/393-guarded-full-frame-conformance.json) now passes all57600pixels/16spp with exact CPU scored/proposal counts; max error4.48e-16, indirect NRMSE1.69e-15. Original372 remains FAIL and373 absent; no all-state/reference admission.
 
 [Original260](lanes/n010-comparison-readiness/results/260-wide8-original-a6a-seed1.json) is terminal seed-integrity PASS,5204.821CPU/5228.693elapsed seconds, original128x96/8192spp/seed2596069104. PID10159 ended, no restart/following seed. Two of four A6a seeds are complete; physical inventory and references are unchanged. CPU31/nice15/4GiB within7200CPU/10800elapsed limits; no N010 completion ETA follows from this one seed.
 
@@ -32,9 +32,13 @@ sample counters and proposal queries944 (old942); component error3.30e-17,
 owned peak89,941,232bytes/zero teardown. Candidate unconditioned fraction
 221087782.547 is retained; no new cut or global-bias claim. Exact ray operands
 are not captured. [Plan124](lanes/n010-comparison-readiness/experiments/124-guarded-full-frame-conformance.md)
-now registers one candidate C1/all57600pixels/16spp capture against retained
-371, reusing the entire original115 validator body. No wall-ratio decision;
-source prepared only,393 NOT RUN, no queued work or reference admission.
+completes [393](lanes/n010-comparison-readiness/results/393-guarded-full-frame-conformance.json): one
+candidate full C1/16spp capture against371, original115 validator AST exact.
+All113tiles/791depths and independent counts match, owned peak91,022,480bytes/
+zero teardown. Unconditioned diagnostic5.7393e10 is retained without a new
+cut. Native43.562elapsed/25.279CPU seconds is descriptive, no wall-ratio
+acceptance or calibrated speed claim. All-state/physical/prefix/full-count
+qualification remains; no automatic queue or reference admission.
 
 **Prospective handoff amendment:** [120](lanes/n010-comparison-readiness/experiments/120-reportable-comparison-readiness-amendment.md)
 separates timing evidence validity from precision. A complete valid
@@ -69,6 +73,9 @@ exit1/0.671375elapsed seconds. Image/frames are incomplete; ledger teardown
 is NOT zero (921,728bytes). Exact call/VkResult and cause remain unproven.
 Plan123 stops: C7 NOT RUN, no retry/monolithic recapture, successful391 absent.
 Preserve partials and diagnose the call/result before another PT capture.
+Immediate next action: register a first-tile-only host diagnostic reporting
+the actual Vulkan call/VkResult, with unchanged shader/work/operational guards.
+No long CPU seed is live or queued; preserve this quiescent diagnostic window.
 No numerical equivalence, accepted timing, memory or reference admission.
 
 

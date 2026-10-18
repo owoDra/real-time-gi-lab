@@ -1593,6 +1593,18 @@
       "gpu_run": false
     },
     {
+      "id": "N010-393",
+      "status": "complete-guarded-c1-full-frame-16spp-conformance-pass-no-admission",
+      "result": "393-guarded-full-frame-conformance.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-394",
+      "status": "complete-guarded-full-frame-outcome-pt-diagnosis-and-full-qualification-remain",
+      "result": "394-guarded-full-frame-conformance-outcome.md",
+      "gpu_run": false
+    },
+    {
       "id": "N010-395",
       "status": "complete-negative-first-tiled-pt-capture-vulkan-error-partials-retained-c7-not-run",
       "result": "395-tiled-pt-first-capture-failure.json",
