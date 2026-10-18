@@ -35,6 +35,9 @@ The shorter native wall is a single-run operational observation. It does
 not satisfy115's conjunction, admit this backend, or establish a calibrated
 GPU/CPU or GI superiority claim. Do not bypass the failure because the
 counter difference is small. No alternative tile/guard/seed is retried.
+Receipts identify PID/start/resources but do not record a boot identity;
+same-boot/session timing provenance is not established. The wall ratio is
+descriptive only and cannot serve as accepted timing capability evidence.
 
 ## Explicitly post-hoc review, no reclassification
 

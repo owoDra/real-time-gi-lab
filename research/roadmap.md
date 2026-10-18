@@ -2,7 +2,7 @@
 
 ## Current execution checkpoint — 2026-10-18 JST
 
-**Latest verified checkpoint: N010 NOT_READY; no scientific worker/queue active.**
+**Latest verified checkpoint: N010 NOT_READY; one original CPU control live, no GPU worker/next-step queue.**
 Latest: [outcome374](lanes/n010-comparison-readiness/results/374-batched-hybrid-stop-and-cpu-localization.md). Original1spp/selected results remain in367.
 
 | Requirement | Current evidence | Remaining boundary |
@@ -15,7 +15,7 @@ Latest: [outcome374](lanes/n010-comparison-readiness/results/374-batched-hybrid-
 | GPU performance methodology | [255/256](lanes/n010-comparison-readiness/results/256-ranked-calibration-outcome-and-next-boundary.md) bounded static-C7 calibration PASS | Actual selected workloads/quality budgets, multiplicity and final proof intake; no automatic transfer. |
 | Quality/dynamics/memory | Required full corpus and frozen comparison budgets remain incomplete | Complete pilots and Renderer/comparator true peak; standalone backend peak does not qualify them. |
 
-[Post-hoc CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) reproduces all CPU bits/counts and localizes the shadow mismatch to pixel43665/(145,136): CPU[16,53,4,0] vs GPU[16,52,4,0]. Ray/sample cause remains UNRESOLVED; no GPU retry or373 success summary. Next original CPU part260 is prepared, NOT RUN at this checkpoint.
+[Post-hoc CPU scan376](lanes/n010-comparison-readiness/results/376-posthoc-batched-counter-scan.json) reproduces all CPU bits/counts and localizes the shadow mismatch to pixel43665/(145,136): CPU[16,53,4,0] vs GPU[16,52,4,0]. Ray/sample cause remains UNRESOLVED; no GPU retry or373 success summary. Original A6a seed1/2596069104 part260 is now **RUNNING**, source838d3e50, native PID10159/start59862, CPU31/nice15/4GiB,7200CPU/10800elapsed limits. Actual receipt and /proc identity confirmed live; result is not terminal or accepted. Source/checkpoint259 is retained; no restart and no following seed queued. The mutable local260 record stays uncommitted until terminal evidence. Prior seed0 took5234CPU/5257elapsed seconds; that is a one-seed cost reference, not an N010 completion estimate.
 
 Post-hoc routing telemetry:88674/92147 CPU-routed diagnostic paths carry
 intersection ambiguity (96.2310%); categories overlap. Provisional versus
