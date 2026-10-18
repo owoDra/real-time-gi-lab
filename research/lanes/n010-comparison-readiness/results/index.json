@@ -2149,6 +2149,18 @@
       "status": "complete-full78-original-state-prefix-source-inverse-scope-only-runtime-not-run",
       "result": "531-compensated-state-prefix-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-611",
+      "status": "complete-compensated-reference-raw-chain-source-inverse-only-no-admission",
+      "result": "611-compensated-reference-chain-description.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-613",
+      "status": "complete-reference-raw-chain-source-checkpoint-density-bias-admission-pending",
+      "result": "613-compensated-reference-chain-source-checkpoint.md",
+      "gpu_run": false
     }
   ]
 }

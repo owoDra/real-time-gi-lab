@@ -1,0 +1,91 @@
+{
+  "schema": "n010-compensated-reference-raw-chain/1",
+  "complete": true,
+  "source_commit": "5369d9ecc82a980ed9f45ebbb02e9413775fb2e5",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/158-compensated-reference-raw-chain.md": "bd6c8606f7ab5fbad1967ffcef0ae062cbc4870f361fdf113a0822ceea21bf87",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/compensated_reference_chain.py": "45cf734783d70ec2ebef5f25a16e256b9b78d1920086010c95ede42e8f586735",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/157-compensated-all-state-prefix-acquisition.md": "e57c796d480e1e8f1c41fdd3b73ad5ccc9f3ded50c71e090432377b127749772",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_state_prefix.py": "d3e1f97f8ddc228579af95ca3daca60f70527e3fa378dc6b6b90f1ce61aea1fd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/point_guided_reference_provenance.py": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_references.py": "2d26cca6db3ecfb7db714333f5502a280c6c00e2c2ca645ee9769554648404ca",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/n008lib.py": "28fd7658ab3b728afcc70675e1c7a7aa913af254d81d35df71b37da80079386c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n007_reference_validity/check_convergence.py": "8a5dec1373eeba0dfa3ef88ab89518ebe48717ebe53d1a743c9445ead3052d55",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/diagnose_selected_bounce_paths.py": "6eb6d1d85679def1d401cab91dfa596bf33186f3174b82027d455847799cbf0c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_level5_full.py": "f6483610f4da4ac37f7b01dc288a54710153ee87093bf6aa18186a27f8cfdd37",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_compensated_full_sphere_seed.py": "9cf015bd6b18ceeda9e4c016ce99689d991caa0e9c0eab1187f5e243dbd349a8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/run_primary_direction_sequence.py": "b5167f74dedc8296bf84c7581b2b61e77754066b6287702aac7eac4c93933abe"
+  },
+  "source_composition": {
+    "whole_original_source_inverse_exact": true,
+    "assessor_manifest_signal_support_replicate_se_stop_bytes_exact": true,
+    "original_sha256": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91",
+    "generated_sha256": "6f435d8efc6d6f257eecbf9eed7adaa705f6e80de438e37ad7c8e0d10db6cbe3"
+  },
+  "source_edits": [
+    [
+      "VARIANT = 'validated-point-guided-mixture'",
+      "VARIANT = 'compensated-all-split-mixture-v1'"
+    ],
+    [
+      "BINARY = ROOT/'out/research/n010-comparison-readiness/point-guided-prefix-build-v1/n010_point_guided_prefix'",
+      "BINARY = Path('/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-prefix-build-v1/n010_compensated_prefix')"
+    ],
+    [
+      "KEYS = ('primary_hits', 'shadow_tests', 'shadow_blocked', 'backface_absorbed', 'proposal_null_samples')",
+      "KEYS = ('primary_hits', 'shadow_tests', 'shadow_blocked', 'backface_absorbed')"
+    ],
+    [
+      "PROOFS = ('112-point-guided-oracle-build.json', '113-point-guided-physical-controls.json',\n          '114-point-guided-prefix-build.json', '115-point-guided-all-state-and-prefix.json')\nSELECTED = ('C1_T_B8', 'C2_T_B8', 'C3_T_B8', 'C4_T_B2', 'C4_T_B8',\n            'C5_T_B2', 'C5_T_B8', 'C6_T_B2', 'C6_T_B8')\n",
+      "PROOFS = ('452-compensated-full-exporter-build.json', '525-compensated-prefix-source-prepare.json', '526-compensated-prefix-build.json', '610-compensated-all-state-prefix-summary.json')\nSELECTED = ('C1_T_B8', 'C2_T_B8', 'C3_T_B8', 'C4_T_B8', 'C5_T_B2', 'C5_T_B8', 'C6_T_B2', 'C6_T_B8')\n"
+    ],
+    [
+      "def prerequisites(inputs):\n    proofs = {}\n    for name in PROOFS:\n        proof = read(RESULTS/name, inputs)\n        proofs[name] = proof\n        if not proof['complete'] or not proof['all_pass']:\n            raise ValueError('guided prerequisite incomplete/failed: '+name)\n        check_files(proof['input_sha256'], inputs)\n    for number, directory in (('112', 'point-guided-oracle-build-v1'), ('114', 'point-guided-prefix-build-v1')):\n        proof = next(v for name, v in proofs.items() if name.startswith(number))\n        root = ROOT/'out/research/n010-comparison-readiness'/directory\n        check_files({str(root/name): h for name, h in proof['generated_sha256'].items()}, inputs)\n    if not proofs[PROOFS[2]]['sampling_physical_source_bytes_equal']:\n        raise ValueError('guided continuation changed sampling/physics')\n    physical = proofs[PROOFS[1]]\n    if (len(physical['rows']) != 17 or len(physical['physical_checks']) != 8 or len(physical['iid_crosscheck']) != 2\n        or not all(row['pass'] for key in ('rows', 'physical_checks', 'iid_crosscheck') for row in physical[key])\n        or physical['seeds'] != list(Q.L.N007_SEEDS)):\n        raise ValueError('guided physical proof scope/gates differs')\n    for row in physical['rows']:\n        prefix = Path(row['command'][row['command'].index('--out')+1])\n        check_files({str(prefix.parent/name): h for name, h in row['payload_sha256'].items()}, inputs)\n    state = proofs[PROOFS[3]]\n    if (len(state['low_dose_rows']) != 24 or len(state['actual_level_rows']) != 2\n        or len(state['process_attempts']) != 78 or state['seeds'] != list(Q.L.N007_SEEDS)\n        or {(r['cell'], r['vertices']) for r in state['low_dose_rows']}\n            != {(f'C{i}', v) for i in range(1, 13) for v in (2, 8)}\n        or {(r['cell'], r['vertices']) for r in state['actual_level_rows']} != {('C7', 2), ('C7', 8)}\n        or not all(r['pass'] for key in ('low_dose_rows', 'actual_level_rows', 'process_attempts') for r in state[key])):\n        raise ValueError('guided all-state/prefix proof scope differs')\n    for attempt in state['process_attempts']:\n        prefix = Path(attempt['command'][attempt['command'].index('--out')+1])\n        check_files({str(prefix)+suffix: h for suffix, h in attempt['payload_sha256'].items()}, inputs)\n    for path in (Path(__file__), Path(Q.__file__), Path(Q.L.__file__), Path(Q.convergence.__file__),\n                 Q.NET, RESULTS.parent/'experiments/032-point-guided-reference-qualification.md'):\n        inputs[str(path.resolve())] = sha(path)\n    return {name: sha(RESULTS/name) for name in PROOFS}\n\n",
+      "def prerequisites(inputs):\n    return _prerequisites(inputs)\n\n"
+    ],
+    [
+      "Path(__file__).with_name('qualify_point_guided_references.py')",
+      "Path(_chain_implementation)"
+    ],
+    [
+      "'--spp', str(spp), '--threads', '16']",
+      "'--spp', str(spp), '--threads', '1']"
+    ],
+    [
+      "';'.join(','.join(str(r[k]) for k in KEYS) for r in pm['runs'])",
+      "';'.join(','.join(str(r[k]) for k in KEYS)+',0' for r in pm['runs'])"
+    ],
+    [
+      "                or run['primary_hits'] > state['width']*state['height']*spp\n                or run['proposal_null_samples'] > state['width']*state['height']*spp\n",
+      "                or run['primary_hits'] > state['width']*state['height']*spp\n"
+    ]
+  ],
+  "selected_transports": [
+    "C1_T_B8",
+    "C2_T_B8",
+    "C3_T_B8",
+    "C4_T_B8",
+    "C5_T_B2",
+    "C5_T_B8",
+    "C6_T_B2",
+    "C6_T_B8"
+  ],
+  "levels": [
+    8192,
+    16384,
+    32768,
+    65536,
+    131072,
+    262144
+  ],
+  "variant": "compensated-all-split-mixture-v1",
+  "rows": [],
+  "reference_admission": false,
+  "final_handoff_admitted": false,
+  "gpu_run": false,
+  "native_executed": false,
+  "tests": "NOT_RUN; source metadata or scientific raw-chain replay only",
+  "source_metadata_valid": true,
+  "raw_chains_replayed": false,
+  "classification": "COMPENSATED_RAW_CHAIN_SOURCE_ONLY_ADMISSION_UNIMPLEMENTED"
+}
