@@ -2161,6 +2161,18 @@
       "status": "complete-reference-raw-chain-source-checkpoint-density-bias-admission-pending",
       "result": "613-compensated-reference-chain-source-checkpoint.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-614",
+      "status": "partial-ideal-density-source-assessment-native-bias-unresolved-no-admission",
+      "result": "614-compensated-density-support-source-assessment.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-615",
+      "status": "complete-exact32bit-split-partition-arithmetic-no-native-bias-bound",
+      "result": "615-compensated-split-grid-exact-arithmetic.json",
+      "gpu_run": false
     }
   ]
 }

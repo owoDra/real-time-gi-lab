@@ -1,0 +1,203 @@
+{
+  "schema": "n010-compensated-density-source-and-integer-partition/1",
+  "complete": true,
+  "classification": "POSTHOC_IDEAL_LAW_SOURCE_REVIEW_AND_EXACT_GRID_ARITHMETIC_NO_ADMISSION",
+  "source_commit": "d0c59ebcb4cd9a6f9a9d134aa2d4a1347979a569",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/452-compensated-full-exporter-build.json": "57d7fb874689b80512489b97c0a1a8042315d7c89025770e755752639b6915ce",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-full-deterministic-v1/build/n010_rqmc_oracle.hpp": "cb4e1de41018dd13b762da38a90f56873825e5a14971ee063b25c9e8627e1872",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-full-deterministic-v1/build/exporter.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/compensated_raw_target.inc.hpp": "448db2076cedaee70c555ce9878298dea765cb3f5731c263021ac0baa560db5b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/069-conditioned-raw-target-numeric-audit.md": "be771a25e731ee5e40e7bd711b492c5584f5a4562e97c24b35b0c00cbfdef737",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/072-coincident-geometric-support-audit.md": "a1323cdc2262d7f84e69169ea79f5742c59eadc841c3e2801c125cdb711c7d2a",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/074-axis-cosine-support-audit.md": "fd5c0750dae2c82884ab8b3ad9c06aff083587e02b296d71dc77b039d79982e6",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/075-all-split-path-mixture-diagnosis.md": "b6de42e4413fb2d92bd10d19a436fc555ac48aa919c22beb030349909defbec9",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/078-all-split-general-transport-and-prefix-reuse.md": "2710b83985b74d10d3754d5ac572230aab3e2ad6cad1898211c7926736aaafb3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/139-compensated-raw-target-candidate.md": "5a0753c3be06cf23ce2dce61520cfa4abca7f11f4182b1f61466f07461d0b01f"
+  },
+  "grid_size": 4294967296,
+  "rows": [
+    {
+      "depth": 1,
+      "strategies": 2,
+      "grid_counts": [
+        2147483648,
+        2147483648
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "1/2",
+        "1/2"
+      ],
+      "max_absolute_probability_difference_fraction": "0",
+      "total_variation_fraction": "0",
+      "total_variation": 0.0,
+      "conditional_selection_only_mixture_relative_bound_fraction": "0",
+      "conditional_selection_only_mixture_relative_bound": 0.0
+    },
+    {
+      "depth": 2,
+      "strategies": 3,
+      "grid_counts": [
+        1431655765,
+        1431655766,
+        1431655765
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "1431655765/4294967296",
+        "715827883/2147483648",
+        "1431655765/4294967296"
+      ],
+      "max_absolute_probability_difference_fraction": "1/6442450944",
+      "total_variation_fraction": "1/6442450944",
+      "total_variation": 1.5522042910257974e-10,
+      "conditional_selection_only_mixture_relative_bound_fraction": "1/2147483648",
+      "conditional_selection_only_mixture_relative_bound": 4.656612873077393e-10
+    },
+    {
+      "depth": 3,
+      "strategies": 4,
+      "grid_counts": [
+        1073741824,
+        1073741824,
+        1073741824,
+        1073741824
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "max_absolute_probability_difference_fraction": "0",
+      "total_variation_fraction": "0",
+      "total_variation": 0.0,
+      "conditional_selection_only_mixture_relative_bound_fraction": "0",
+      "conditional_selection_only_mixture_relative_bound": 0.0
+    },
+    {
+      "depth": 4,
+      "strategies": 5,
+      "grid_counts": [
+        858993459,
+        858993459,
+        858993460,
+        858993459,
+        858993459
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "858993459/4294967296",
+        "858993459/4294967296",
+        "214748365/1073741824",
+        "858993459/4294967296",
+        "858993459/4294967296"
+      ],
+      "max_absolute_probability_difference_fraction": "1/5368709120",
+      "total_variation_fraction": "1/5368709120",
+      "total_variation": 1.8626451492309571e-10,
+      "conditional_selection_only_mixture_relative_bound_fraction": "1/1073741824",
+      "conditional_selection_only_mixture_relative_bound": 9.313225746154785e-10
+    },
+    {
+      "depth": 5,
+      "strategies": 6,
+      "grid_counts": [
+        715827883,
+        715827882,
+        715827883,
+        715827883,
+        715827882,
+        715827883
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "715827883/4294967296",
+        "357913941/2147483648",
+        "715827883/4294967296",
+        "715827883/4294967296",
+        "357913941/2147483648",
+        "715827883/4294967296"
+      ],
+      "max_absolute_probability_difference_fraction": "1/6442450944",
+      "total_variation_fraction": "1/3221225472",
+      "total_variation": 3.104408582051595e-10,
+      "conditional_selection_only_mixture_relative_bound_fraction": "1/1073741824",
+      "conditional_selection_only_mixture_relative_bound": 9.313225746154785e-10
+    },
+    {
+      "depth": 6,
+      "strategies": 7,
+      "grid_counts": [
+        613566757,
+        613566756,
+        613566757,
+        613566756,
+        613566757,
+        613566756,
+        613566757
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "613566757/4294967296",
+        "153391689/1073741824",
+        "613566757/4294967296",
+        "153391689/1073741824",
+        "613566757/4294967296",
+        "153391689/1073741824",
+        "613566757/4294967296"
+      ],
+      "max_absolute_probability_difference_fraction": "1/7516192768",
+      "total_variation_fraction": "3/7516192768",
+      "total_variation": 3.991382462637765e-10,
+      "conditional_selection_only_mixture_relative_bound_fraction": "1/1073741824",
+      "conditional_selection_only_mixture_relative_bound": 9.313225746154785e-10
+    },
+    {
+      "depth": 7,
+      "strategies": 8,
+      "grid_counts": [
+        536870912,
+        536870912,
+        536870912,
+        536870912,
+        536870912,
+        536870912,
+        536870912,
+        536870912
+      ],
+      "total_grid_points": 4294967296,
+      "full_grid_probability_fractions": [
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8",
+        "1/8"
+      ],
+      "max_absolute_probability_difference_fraction": "0",
+      "total_variation_fraction": "0",
+      "total_variation": 0.0,
+      "conditional_selection_only_mixture_relative_bound_fraction": "0",
+      "conditional_selection_only_mixture_relative_bound": 0.0
+    }
+  ],
+  "reproduction_python": "from fractions import Fraction\nM=2**32\nceildiv=lambda a,b:-((-a)//b)\nfor n in range(2,9):\n    counts=[min(M,ceildiv(2*M*(j+1)-n,2*n))-max(0,ceildiv(2*M*j-n,2*n)) for j in range(n)]\n    tv=sum(abs(Fraction(c,M)-Fraction(1,n)) for c in counts)/2\n    bound=max(abs(Fraction(n*c,M)-1) for c in counts)\n    print(n,counts,str(tv),str(bound))\n",
+  "scope": "Source reading and integer arithmetic only; no samples/images/physical replay",
+  "assumptions": [
+    "Ideal common raw-surface measure for MIS algebra and Jacobian derivation",
+    "Grid probabilities refer to uniform use of the complete32-bit grid, not empirical frequencies of the four registered seeds",
+    "Selection-only mixture relative bound assumes unchanged conditional component densities; finite directional grids and native visibility errors are outside that bound"
+  ],
+  "native_executed": false,
+  "gpu_run": false,
+  "reference_admission": false,
+  "finite_arithmetic_bias_bounded": false,
+  "whole_corpus_density_support_qualified": false,
+  "quality_thresholds_changed": false,
+  "tests": "NOT_RUN; exact integer arithmetic/source review, no native scientific acquisition"
+}
