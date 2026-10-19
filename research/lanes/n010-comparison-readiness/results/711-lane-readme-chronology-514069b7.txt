@@ -1,0 +1,1387 @@
+# N010 — final comparison preparation
+
+[629](results/629-private-state-prefix-description.json):165 implements the private exporter's full original78 state/prefix qualification route, preserving the whole109 inverse, canonical24 states plus two actual-level C7 cases, all4 seeds/full frames/counts, every21-payload/counter/interval identity and complete terminal analysis bytes/AST. All16 metadata identities match. Full original candidate physical controls/IID/separate diagnostic529 and actual626/627/625 remain strict prerequisites. Four render threads remain restricted to CPU31/nice15, actual load one core.630..707/708 are **NOT RUN**; no automatic physical-evidence transfer, multi-core speed proof or reference admission.145 seed2 remains the sole scientific worker; no native/image replay ran for629. Tests NOT RUN.
+
+[Terminal checkpoint628](results/628-terminal-seed1-and-thread-private-equivalence.md):490 full A6a seed1 completes (1476 matching identities, unchanged numerical/resource gates), making two of four seeds without artifact/reference admission.164 corrected621's retained CLI guard in626; actual627 full/prefix compilation passes (31 matching identities).163 actual623/624/625 passes exact full320x180/C1/16spp/one-seed binary/audit equivalence:1 versus4 render threads on the SAME CPU31/nice15, no CPU-load increase or accepted speed claim. All source/capture/raw bytes retained. Full backend qualification and final readiness remain unfinished; refs16/24, candidate13/17, PT2/28, non-PT raw8/8 unchanged. Tests NOT RUN.
+
+
+
+## Current execution checkpoint — 2026-10-19 JST
+
+**Latest verified checkpoint: N010 NOT_READY; references16/24 and selected PT captures2/28 unchanged. Compensated candidate13/17 full artifacts; all8 non-PT raw executions retained, union10/36 descriptive trajectories; six new quality replays pending. No speed claim or reference admission.**
+
+[488](results/488-compensated-a7-a6c-full-controls-outcome.md) records terminal full A7/486 and A6c/487, each128x96/8192spp/four original seeds. All original physical gates pass, including A7 independent IID16384. A6c indirect NRMSE .0013835875104523702 and channel relative error≤8.16112e-5 pass unchanged .01/.002 bounds. Native CPU/elapsed727.8233/732.562660068 seconds are provenance, not GI performance. Original14/17 including diagnostic, references16/24 and original261/453/463 failures remain unchanged. Full A6a/A6b/A10, separate diagnostic, A6b IID and complete bias/support/Jacobian/state/prefix/full-count/reference qualification remain. Sponza direct-relative1.0 pixels remain **UNRESOLVED/未解決**, included.
+
+[508](results/508-raw-query-pilot-and-posthoc-replay-outcome.md): private raw-query source504, command description505 and actual build506 complete. One static C7 dense native507 returned0 and all full image/state bytes match original015, but its original timing intake FAIL is preserved. Cause is source binary32 multiplication versus verifier binary64, not established environment instability. Explicit POST-HOC CPU replay509 reproduces source arithmetic without changing tolerance, validates all raw queries/fences, full owned ledger (peak2370160bytes/zero teardown) and full-pixel scoring. Quality evidence is valid but both B2/B8 quality targets FAIL; retain those losses. Timing is TIMING_INCONCLUSIVE; no accepted speed or calibration. Selected PT2/28 plus non-PT1/8 gives union3/36 retained descriptive trajectories, not final-auditor acceptance.
+
+**Current execution:**145 A6a seeds0/489 and1/490 are terminal integrity PASS, two of four; no full-artifact increment. All8 non-PT raw boundaries, prefix compiler526 and private compilers627 are terminal. Actual623/624/625 full-C1 single-core thread equivalence passes; it is not full backend qualification. After publication of628,145 A6a seed2 was manually launched once (native PID615961/start_ticks7566712/session51833, source1b8218d7), under original CPU31/nice15/one-thread7200CPU/10800elapsed/4GiB guards. Mutable491 remains uncommitted/unindexed until terminal. This is the sole scientific worker; no automatic queue.
+
+[617](results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md) records terminal489 (all1465 hashes, unchanged numerical gates), seven separately invoked full non-PT natives (including both5-frame histories), POST-HOC616 and actual isolated prefix build526. Static-counter correction159 preserves every physical byte beyond the registered counter and every numerical/quality/timing threshold; no GPU retry.616 both B2/B8 quality targets FAIL and remain included. Native timing stays TIMING_INCONCLUSIVE. At617 final154 intake still needed159/snapshot integration;160 now implements that source route (618), with actual full audit619 NOT RUN.526 builds only: all78 candidate state/prefix acquisitions remain. Tests NOT RUN.
+
+[522](results/522-bounded-non-pt-and-full-scope-adapter-source-checkpoint.md):153 implements a bounded one-case non-PT driver; actual521 describes all7 remaining commands. At the522 source checkpoint513–519 native cases were NOT RUN; first intended case static-C7-hwrt was dispatched after489 became terminal; actual513–519/616 outcomes follow in617. Existing C7 dense507/509 is excluded from acquisition. Immutable native snapshots separate terminal receipts from later analysis.The159-corrected intake now validates all8 raw executions; full quality replay remains incomplete until eligible references exist.
+
+154 additionally implements the full36 selected timing-validity route and separate readiness adapter. Actual523 verifies whole original-source inverse and exact AST identity of the other5 gate bodies. Valid full evidence may be TIMING_INCONCLUSIVE; no calibrated speed claim. Source inventory finds3 existing record paths/33 absent, not proof of execution validity. Actual524 full audit/raw replay/scoring NOT RUN. All-split reference admission/dispatch remains unimplemented; unknown variants fail closed. No final readiness from source metadata. CPU diagnostic detail absent in506 is reported without a new idle/stability gate.
+
+[527](results/527-compensated-prefix-source-checkpoint.md):155 actual525 prepares the compensated candidate's exact-prefix source. Both C++ files and retained loader invert exactly; all physical/proposal/BVH/compensation source outside render is unchanged, and all88 pinned input/payload hashes match. At527 no compilation/runtime acquisition was executed; subsequent526 builds successfully (617), runtime qualification remains pending. The full109 state/prefix scope and candidate physical prerequisites remain. This advances implementation without changing coverage or thresholds; the then-live145 A6a seed0 is now terminal in489; current execution is recorded above. Tests NOT RUN.
+
+[530](results/530-compensated-diagnostic-and-prefix-routes-source-checkpoint.md):156/157 implement the separate full level5 diagnostic and full original109 candidate state/prefix acquisition routes. Actual528/531 reproduce whole-source inverses, original physical-analysis AST/bytes and all78 registered state/prefix slots with unchanged seeds/counts/intervals. Diagnostic analytic error remains NOT_GATED. Native529/532..609 and aggregate610 are NOT RUN; compiler526 now completes (617); candidate physical prerequisites are enforced before acquisition. All-split reference admission/dispatch remains unfinished. Coverage is unchanged; the then-live145 A6a seed0 is now terminal in489; current execution is recorded above. Tests NOT RUN.
+
+[613](results/613-compensated-reference-chain-source-checkpoint.md):158 implements the compensated raw reference-chain reader, with actual611 source inverse and unchanged assessor/support/SE/stop checks. All8 missing slots/all6 levels remain; actual nulls use all_split interval audits and the loader's unused fifth counter remains explicit zero. The first metadata inverse-anchor failure is retained in history; no native ran. Actual612 full raw replay is NOT RUN. This API cannot admit references and is not wired into readiness: density/support/Jacobian/bias, full-count feasibility, acquisition and admission/dispatch remain. Counts are unchanged; the then-live145 A6a seed0 is now terminal in489; current execution is recorded above. Tests NOT RUN.
+
+[614](results/614-compensated-density-support-source-assessment.md) records a POST-HOC partial source/ideal-measure assessment of452 and exact grid arithmetic615. Ideal ordered area Jacobians/MIS/null accounting correspond to source, subject to common-measure assumptions. The32-bit selector is exactly balanced for2/4/8 strategies, slightly unequal for3/5/6/7; its conditional selection-only mixture bound is at most2^-30. This is **not a native radiance-bias bound**: finite directional grids, visibility and cross-family reconstruction remain outside it. No sampler, threshold, gate or admission change. Physical/state/prefix/full-count/reference evidence remains required; the then-live145 A6a seed0 is now terminal in489; current execution is recorded above. Tests NOT RUN.
+
+[618](results/618-state-bound-selected-adapter-description.json):160 now implements the full36 state-bound intake and readiness source route, including159's exact counter correction, explicit507/509 and516/616 post-hoc provenance, and all seven153 immutable native snapshots. Whole154 selected-source inverse and unchanged PT branch/final checks are recorded, with the original five readiness gate ASTs unchanged. All19 metadata input identities match; inventory is36 rows/10 paths present/26 absent, not execution validity. No raw/image/quality replay or gate ran. Future619 full audit is NOT RUN and must wait for complete required data/quiescence; original524 stays NOT RUN. Known original/exact-prefix/hybrid reference dispatch only; all-split admission remains unimplemented and fails closed. The then-live145 seed1 ended in490; current execution is above. Tests NOT RUN.
+
+[620](results/620-compensated-single-level-io-description.json):161 implements the mechanical one-level compensated reference I/O library, with10 matching source identities and exact original032 analysis-block inverse. Original manifest/assessor/support/replicate-SE/classification/attempt suffix bytes and ASTs match; outer-loop first-stop behavior is enforced by refusing another level after a qualifying classification. All8 missing slots,6 original levels and4 seeds remain. Native resource/terminal/partial receipts, own prefix restoration and immutable prior-qualification snapshots are implemented in source only. The CLI exposes description only: no acquisition, prerequisite, pixel replay or sampler ran. The scientific launcher, density/bias assessment, whole-frame feasibility and admission dispatcher remain unfinished; source metadata cannot authorize or admit references.The then-live145 seed1 ended in490; current execution is above. Tests NOT RUN.
+
+[621](results/621-thread-private-reference-source.json):162 prepares a PRIVATE thread-specific audit candidate for full and prefix exporters, with15 matching input/payload identities, seven reversible header edits each, unchanged actual sample_all_split body/physical-density block bytes, all audit fields merged by integer sums or maxima, and no per-pixel radiance reduction across workers. Diagnostic coordinates are thread_local; paired-debug BVH remains serial. Source supports1..4 threads but **actual CPU load remains one core** pending the user preference; no native/compiler ran, no old controls automatically qualify this candidate. Source-only621 had a remaining CLI guard corrected in626/627; unrun622 is preserved. Actual623–625 now pass the bounded full-C1 single-core equivalence case; all-state/prefix/full-physical/feasibility qualification remains. POST-HOC planning from371's one-seed16spp53.512s suggests four8192 seeds at one core~109593s, above the unchanged43200s operational ceiling; ideal2/4-way~54797/27398s is only a model, not candidate throughput, ETA or intrinsic GI loss. Do not launch an oversized legacy ladder or change stops; actual whole-frame feasibility/qualification remains open.The then-live145 seed1 ended in490; current execution is above. Tests NOT RUN.
+
+**Criteria:** [510](results/510-environment-sensitive-criteria-followup.md) confirms the user's review is already reflected prospectively in120/147 and the shared protocol: incidental CPU wall/busy/clocks/other-app activity/free VRAM are diagnostics. Complete valid pilots may remain TIMING_INCONCLUSIVE at N010 handoff; incomplete/invalid evidence still blocks. Future Lane M speed claims retain actual-boundary calibration, matched quality and uncertainty/bias rules. No historical threshold changes. Original16 plus selected28 union36 scope503 remains fixed. Extra known-work sizing/calibration is optional for N010 handoff. The selected raw intake/final120 timing route now exists as154 source, but actual qualification and all-split reference dispatch remain unfinished; produce the missing evidence and validate the full route, without a new generic stability campaign. Finish N010 then distinct Lane M, no N011.
+
+Last complete six-gate audit (before147): [outcome427](results/427-selected-scope-readiness-audit-outcome.md), [actual audit426](results/426-selected-scope-readiness-audit.json), [source/scope425](results/425-selected-execution-audit-description.json). The audit binds415/423, independently inventories all24 reference chains and all28 selected continuation slots, and replays402/403 actual native/raw-timestamp/state/memory proofs. Original five non-timing gate ASTs are unchanged. Correctness-with-explicit-discrepancies and DDGI source gates pass; full references, Sponza dynamics, C1 B8 ladder and timing evidence remain incomplete. Missing386 is evidence_valid=false /precision NOT_EVALUABLE, not valid inconclusive timing. This intermediate integration cannot grant final readiness; selected-history timing intake/all-split dispatch remain. Do not rerun unchanged audit inputs or launch the oversized legacy386 route. Reuse [423](results/423-retained-controlled-dynamic-cohort-proof.json)'s34 controlled histories/265 scores and [415](results/415-retained-pt-ladder-proof-replay.json)'s42 static rows; preserve all quality losses. Next work produces missing evidence and bounded selected-history timing/intake, no duplicate quality campaign or automatic queue.
+
+| Requirement | Current evidence | Remaining boundary |
+| --- | --- | --- |
+| Eligible references |16/24; unchanged | Eight slots, original convergence gates; no masks/cap relaxation. |
+| Original full physical artifacts |14/17, including one diagnostic-only item;259/260 two of four A6a seeds | Remaining original sphere/range parts, independent IID/bias proof. |
+| New raw-target precision candidate | [449/450](results/451-compensated-raw-target-candidate-outcome.md): failed pixel8192 samples passes unchanged1e-6; [488](results/488-compensated-a7-a6c-full-controls-outcome.md):13/17 full artifacts including sealed pair and A7/A6c analytic/IID; one earlier intake post-hoc | Remaining sphere/range/A6b IID/state/prefix/bias obligations; no reference admission or original-inventory increment. |
+| New execution backend | [360](results/360-whole-path-full-frame-build.json) build PASS; [366](results/366-depth-split-hybrid-numerical.json) all32 original depth-split pairs PASS | Full physical/all-state/exact-prefix and full-count feasibility/intake still required. |
+| Full-frame numerical pilot | [370](results/370-full-frame-one-sample-hybrid-pilot.json): all57600 C1 pixels/1spp PASS, max error1.73e-15; exact deterministic/primary/scored/proposal counts | One seed/one sample is not a qualified reference or full-count throughput proof. |
+| Intended-batch execution | [371/372](results/374-batched-hybrid-stop-and-cpu-localization.md): CPU16spp53.512s vs hybrid44.752s, but **hybrid FAIL** (one shadow test/two proposal queries missing) | Original variant stays stopped;393 candidate passes C1 conformance only. All-state/physical/prefix/full-count qualification remains. |
+| GPU performance methodology | [426](results/426-selected-scope-readiness-audit.json): actual timing evidence absent; precision NOT_EVALUABLE. Prior255/256 remains bounded static-C7 calibration only | Complete36-boundary descriptive pilot union under147 and actual160 intake/auditor; source route exists, runtime NOT RUN. Precision may remain INCONCLUSIVE; no extra known-work prerequisite or automatic C7/reset-target transfer. |
+| Quality/dynamics/memory |42 retained static PT rows and all34 controlled dynamic histories/265 scores replayed; PT1024 passes retained dynamic targets, incumbent quality losses remain | C1 B8 ladder/reference, Sponza C2–C6 cohort, new401 five-frame execution and selected timing/intake remain. |
+
+[CPU scan376](results/376-posthoc-batched-counter-scan.json) localizes one shadow-count pixel. New [382/383](results/392-early-route-and-tiled-pt-runtime-checkpoint.md) reproduce its old one-shadow/two-query deficit and restore all16 CPU counts with an early-PDF CPU route at sample9/depth2; raw GPU paths remain bit-identical. [Candidate393](results/393-guarded-full-frame-conformance.json) now passes all57600pixels/16spp with exact CPU scored/proposal counts; max error4.48e-16, indirect NRMSE1.69e-15. Original372 remains FAIL and373 absent; no all-state/reference admission.
+
+[Original260](results/260-wide8-original-a6a-seed1.json) is terminal seed-integrity PASS,5204.821CPU/5228.693elapsed seconds, original128x96/8192spp/seed2596069104. PID10159 ended without restart. Two of four A6a seeds are complete; physical inventory and references are unchanged. CPU31/nice15/4GiB within7200CPU/10800elapsed limits; no N010 completion ETA follows from this one seed.
+
+Post-hoc routing telemetry:88674/92147 CPU-routed diagnostic paths carry
+intersection ambiguity (96.2310%); categories overlap. Provisional versus
+necessary ambiguity is not yet quantified; original backend is unchanged.
+The separate119 candidate adds conservative routing, scoped to its diagnostic.
+Direct relative-error1.0 pixels remain **UNRESOLVED / 未解決**, included.
+
+[Source380](results/380-early-density-route-prepare.json) and
+[381–383 runtime](results/392-early-route-and-tiled-pt-runtime-checkpoint.md)
+complete the frozen119 diagnostic. One pixel restores all16 independent CPU
+sample counters and proposal queries944 (old942); component error3.30e-17,
+owned peak89,941,232bytes/zero teardown. Candidate unconditioned fraction
+221087782.547 is retained; no new cut or global-bias claim. Exact ray operands
+are not captured. [Plan124](experiments/124-guarded-full-frame-conformance.md)
+completes [393](results/393-guarded-full-frame-conformance.json): one
+candidate full C1/16spp capture against371, original115 validator AST exact.
+All113tiles/791depths and independent counts match, owned peak91,022,480bytes/
+zero teardown. Unconditioned diagnostic5.7393e10 is retained without a new
+cut. Native43.562elapsed/25.279CPU seconds is descriptive, no wall-ratio
+acceptance or calibrated speed claim. All-state/physical/prefix/full-count
+qualification remains; no automatic queue or reference admission.
+
+**Prospective handoff amendment:** [120](experiments/120-reportable-comparison-readiness-amendment.md)
+separates timing evidence validity from precision. A complete valid
+actual-boundary pilot may end TIMING_INCONCLUSIVE without that outcome
+alone blocking handoff; incomplete/invalid evidence still blocks it.
+Accepted speed claims still require actual-boundary calibration and
+matched-quality uncertainty analysis. The old preflight has NOT yet
+implemented this amendment; full intake/adapter work remains. No old
+FAIL is reclassified and no numerical threshold changes retroactively.
+
+**Criterion roles under120:** GPU Renderer time remains the performance axis;
+CPU elapsed, GPU busy/clocks, other-app activity and free VRAM are diagnostic.
+Owned allocation peaks and physical/quality evidence remain required. Run/dispatch
+guards are operational stops, not intrinsic architecture loss. Do not wait for an
+idle/stability percentage to permit comparison. The shared protocol now makes
+these roles explicit; the final auditor still requires120 integration.
+
+[Source review384](results/384-all-split-density-identity-and-numerical-scope.md)
+maps the ideal all-split density identity to the CPU source and identifies
+its finite-grid/approximate-support limitations. It is not numerical-bias
+admission and adds no new reference gate.
+
+[Implementation385](results/385-reportable-timing-intake-implementation.md)
+now prepares the raw-proof timing intake and intermediate audit bridge,
+with exact whole-parent source inverses. Source assembly only; neither
+evidence replay nor the audit has run. The bridge cannot emit READY:
+actual selected-budget/history-frame scope, bounded acquisition and
+all-split provenance/final-auditor integration remain incomplete.
+Retained PT-B8/1024 sizing is about4.22GPU seconds/sample: the unchanged
+64-sample route has no demonstrated fit within180seconds. Do not launch
+that whole pilot next; establish actual budgets/bounded Renderer work first.
+
+[PT source389](results/389-tiled-pixel-pt-source-prepare.json) and
+[private build390](results/390-tiled-pixel-pt-build.json) complete isolated
+spatial pixel-PT compilation with original inputs; default build untouched.
+[First capture395](results/395-tiled-pt-first-capture-failure.json) then
+fails before any complete tile with generic`Vulkan operation failed`,
+exit1/0.671375elapsed seconds. Image/frames are incomplete; ledger teardown
+is NOT zero (921,728bytes). Exact call/VkResult and cause remain unproven.
+Plan123 stops: C7 NOT RUN, no retry/monolithic recapture, successful391 absent.
+Preserve partials and diagnose the call/result before another PT capture.
+[First-call diagnostic396–399](results/399-tiled-pt-first-call-diagnostic-outcome.md)
+now completes: all11 Vulkan calls succeed, including fence/query results;
+first64-pixel tile takes500.617ms and stops at the unchanged250ms operational
+guard.395's generic Vulkan error is NOT reproduced; exact original call is
+still unproven. No second tile/image/C7/retry or391 summary. One loaded-run
+duration is not calibrated speed or an intrinsic lower bound. Subsequent126/127 implementation below preserves full spp/quality and stops,
+with explicit added state memory and all-byte046 equivalence.
+The diagnostic ended without queued work; subsequent CPU261 is recorded below.
+No default build or user setting changes.
+Neither failed123 nor diagnostic125 admits a numerical, timing, memory or
+reference result; the separately qualified continuation implementation follows.
+
+[Continuation401–406](results/406-continuation-pt-equivalence-outcome.md)
+now completes private compilation and two separately invoked full C1/C7
+PT-B8/1024 images.404 independently replays all960 dispatches per image,
+all57600 final sample-state records and EVERY direct/indirect/total PFM byte
+against immutable046. Both images match exactly; all original samples and
+sum/RNG order retained. Additional persistent state921600bytes at320x180.
+Observed max dispatch14.045ms C1/1.492ms C7, complete native13.231s/2.379s;
+these are descriptive, not calibrated timing/response guarantees. Preserve
+GPU active sum AND full yield envelope and separate readback. Owned true
+peaks107360352/3291760bytes, zero teardown, CPU/driver-private excluded.
+Actual full quality/budget/history/memory/timing proof and final intake still
+remain; two states do not qualify all comparator regimes or references.
+
+Original A6a seed2/81985529216486895 [261](results/261-wide8-original-a6a-seed2.json) is now **TERMINAL FAILURE**, native−6/SIGABRT, CPU4369.726179/elapsed4552.480710 seconds within7200CPU/10800elapsed limits. The same process handle terminated; PID197130 is absent. Exact terminal result and partials are preserved. [433](results/433-original-a6a-seed2-terminal-failure.json) records a density self-check discrepancy above its unchanged threshold; mechanism for the exact failed sample is now established by [446](results/446-original-sphere-density-mechanism-outcome.md), with no repair or global bias bound. Two of four original A6a seeds are complete; no seed2 restart, seed3 queue or reference admission. Recipe135's431 build prerequisite is unmet. Qualify a separately registered numerical candidate before further physical acquisition.
+
+
+**Decision policy:** GPU Renderer time remains a comparison axis, using paired
+ratios, registered uncertainty and order/control allowance. CPU wall/clock/
+busy/other-app telemetry is diagnostic. Stop generic stability-percentage
+and idle tuning. Unresolved measurement uncertainty means timing inconclusive,
+while valid quality/memory observations remain reportable. Preserve old FAILs;
+freeze any new method and its verifier before new accepted data. N010 remains
+the final preparation lane; Lane M accepted comparisons have not started.
+
+[Implementation377](results/377-ranked-timing-decision-implementation.md)
+prepares the ranked timing numerical core: separate calibration/comparison
+classifiers, explicit quality-unmatched/inconclusive outcomes, and full-family
+rank budgeting including separately claimed dynamic frames.
+[Post-hoc raw replay378/379](results/379-ranked-timing-raw-replay-outcome.md)
+now reproduces all24 retained C7 processes/5760 raw frames/1440 means and all
+ranked calibration results exactly, using0.080CPU seconds, no new acquisition.
+This checks arithmetic on one old diagnostic; all_pass/accepted_timing/proof_admission
+remain false. Actual selected-boundary acquisition and strict full-evidence
+replay/final-auditor integration remain required.
+
+### Retained earlier checkpoint detail
+
+The following chronology supplies provenance; the latest table above governs
+current execution status. Detailed scientific records retain their original
+scope and outcomes.
+
+[Plan112](experiments/112-full-frame-depth-split-hybrid-build.md) build and subsequent113 numerical /114 full-frame pilot are now complete; see latest checkpoint and367. No larger campaign was queued.
+
+**Current priority: finish missing references/physical proof and qualify the
+selected comparison boundaries.** Following
+[review249](results/249-comparison-criteria-review.md),
+[plan100](experiments/100-order-aware-timing-uncertainty.md) was committed
+before the new twelve-process [250 acquisition](results/250-uncertainty-c7-calibration-diagnostic.json).
+[Outcome251](results/251-order-aware-calibration-outcome.md):
+**timing capability INCONCLUSIVE**, effect interval[0.889520,1.639825].
+A loaded same-role BA control has a large process11 shift; retain every
+sample. All2880 frames/images/scratch/owned ledgers pass integrity, no retry.
+This is no accepted timing or readiness proof. Stop this method; no new GPU
+queue. [Plan101](experiments/101-original-sealed-room-full-controls.md)
+is committed in c8fbbe7 before the original full sealed-dark CPU acquisition.
+[Original sealed-dark252](results/252-all-split-original-sealed-dark-full-control.json)
+is now terminal **physical PASS**, all original128x96/1024spp/four seeds,
+all sample means/moments/PFM exactly zero. Native0,601.583CPU/603.943elapsed
+seconds, CPU31/nice15/4GiB within1200CPU/1800elapsed limits; no retry.
+Original [sealed-lit253](results/253-all-split-original-sealed-lit-full-control.json)
+is also terminal **physical PASS**, every pixel direct/total positive,
+original128x96/1024spp/four seeds and exact deterministic/primary identities.
+Native0,732.539CPU/735.380elapsed seconds, CPU31/nice15/4GiB, no retry.
+Both sealed natives are terminal. With258's diagnostic-only level5 artifact,
+the original full artifact inventory is now **14/17**, including that one
+non-gated item. Three original8192 sphere/range artifacts, A6b IID and other
+gates remain. This is not14 analytic gates passing.
+[Plan102](experiments/102-wide8-exact-cpu-bvh-prototype.md), committed
+in eb308b2 before execution, now has terminal [254](results/254-wide8-cpu-bvh-prototype.json)
+**execution-prototype PASS**:53,415,447 exact full-query comparisons,
+10,456,548,434 acquired /1,933,448,022 cached box predicates, original223
+entire payload and all21 original236 A6a payloads/audits exact.
+A6a21.626573CPU seconds / retained42.641725=0.507169 passes the operational
+<=0.75 sizing condition. This uncontrolled single-run comparison is not a
+GI speedup result or reference admission; full physical/state/prefix proof
+for this backend remains required. All four native/compiler receipts exit0.
+[Plan104](experiments/104-wide8-original-control-coverage.md), committed
+in3b7b871 before acquisition, now has terminal [257](results/257-wide8-original-control-coverage.json)
+**retained-count backend coverage PASS** on all17 original artifacts:
+sixteen fresh cases79.274CPU/79.731elapsed seconds, plus inherited254 A6a.
+All21 output payloads and integer/proposal audits match for each case. Nine
+are original full64 deterministic cases; eight other low-count matches do
+not replace original full physical/IID/bias/state/prefix/reference gates.
+[Plan105](experiments/105-original-full-level5-artifact.md), committed
+in844e5c9 before dispatch, now has terminal [258](results/258-wide8-original-level5-full-artifact.json):
+original A6b_level5_diag full128x96/256spp/four seeds, **integrity PASS**,
+native0,615.547CPU/618.643elapsed seconds. CPU31/nice15/4GiB within the
+1200CPU/1800elapsed limits; original deterministic bits/hits/counts and all
+finite/proposal audits pass. Original analytic role stays **diagnostic-only**;
+indirect region error0.02967–0.02996%,NRMSE0.07955% is not a gated A6b result.
+All unconditioned numerical-audit values are retained; independent bias/IID
+proof remains. Full artifact inventory14/17, eligible references16/24.
+No GPU scientific worker or automatic next acquisition.
+[Plan106](experiments/106-original-sphere-seed-checkpoints.md) prepares
+original8192 sphere/range controls in four explicit original-seed checkpoints,
+one manually invoked native at a time. Original A6a seed0/305419896
+[259](results/259-wide8-original-a6a-seed0.json) is terminal **seed integrity PASS**,
+from616965d: native0,5234.088CPU/5257.400elapsed seconds, all128x96 pixels/
+8192spp, CPU31/nice15/4GiB within7200CPU/10800elapsed limits. Original
+deterministic/primary bits and all704,643,072 own-density checks pass;
+max own-log1.57243e-8, conditioned0.00828615, unconditioned28899.5278 retained.
+PID401761/start3905232 has terminated. Other seeds are NOT RUN; this is only
+one of four parts and cannot advance the full physical inventory beyond14/17.
+No next-seed/artifact queue. The bounded hybrid build/probe/four-seed
+numerical diagnostic below is also terminal; no CPU backend evidence is replaced.
+[Plan107](experiments/107-retained-a6b-independent-iid-replay.md) prepares
+the independent A6b comparison using original009's already retained16384/
+four-seed IID data. No additional IID native acquisition is required. The
+new8192 A6b four-seed result and current identities must still be validated;
+the replay is NOT RUN and cannot dispatch while a scientific worker is live.
+[Plan108](experiments/108-wide8-prefix-build.md)
+prepares a separate continuation build for the selected wide8 CPU backend.
+It restores dyadic prefix sums and scored counters; proposal diagnostics
+explicitly cover only the newly executed interval. Original physical/proposal/
+BVH source and completed259 inputs remain pinned. Generation/compiler/runtime
+are NOT RUN; no dispatch while any scientific worker is live. This supplies
+the build procedure for the existing exact-prefix obligation, not new proof
+or another reference-admission gate.
+[Plan109](experiments/109-wide8-state-prefix-checkpoints.md)
+and its prepared driver retain all24 full-frame16spp state cases and both
+C7 full-frame8192-to-16384 prefix cases, with all four seeds. Each of the78
+native steps needs an explicit invocation after prior terminal PASS and full
+physical/IID/build prerequisites; no next-step queue. Images/hits/scored
+counters and combined interval proposal audits must match exactly. This code
+is NOT RUN, pending the original sphere controls and prefix build. No new
+reference eligibility or density/bias proof is claimed.
+[Plan110](experiments/110-whole-path-hybrid-prototype-build.md) and
+[111](experiments/111-whole-path-hybrid-numerical-diagnostic.md), committed
+before data, now have terminal [352 build](results/352-whole-path-hybrid-prototype-build.json),
+[353 CPU/GPU1spp probe](results/353-whole-path-hybrid-probe.json) and
+[358 four-seed summary](results/358-whole-path-hybrid-numerical.json) **selected-C1 numerical PASS**.
+All32 original eight-pixel/8192spp pairs pass, including exact primary/cache/
+deterministic bits and scored counters; max corrected mean1.30104e-18,
+moment2.03288e-20, indirect NRMSE3.29097e-16. All262144 raw/corrected paths,
+92147 CPU fallbacks(35.1513%) and2048 full-count batches remain. Each GPU
+native47.95–48.54wall/3.30–3.42CPU seconds; max submit/wait wall95.967ms,
+all owned ledgers zero, peak106,548,880bytes (prototype only, not Renderer).
+[Outcome359](results/359-selected-hybrid-numerical-outcome-and-full-frame-boundary.md)
+records limits and the next full-frame feasibility boundary: this fixed
+shape/eight-pixel prototype is not an admitted full-frame backend, physical/
+bias/state/prefix proof, reference or GPU performance result. No speedup is
+inferred from a different-work CPU denominator. Its324bytes/path dump would
+cost30.375GiB per full A6a seed /142.383GiB per full C18192seed, so dispatch,
+resources and full-reference evidence storage need prospective definition
+before any larger acquisition. Keep all current evidence. No scientific
+worker or queue is active; no replacement of106/108/109 or intake gates.
+Default Renderer build and unit/regression tests NOT RUN; isolated scientific compilation and
+registered numerical/image/stream/ledger checks above were executed.
+[Plan103](experiments/103-ranked-process-median-calibration.md), committed
+in d8341e4 before new data, now has terminal [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md)
+**bounded C7 calibration capability PASS**, all four registered checks.
+The independently acquired24-process effect interval[1.138644,1.242059]
+includes control/order allowance; width1.090823<=1.20. All5760 raw frames,
+1440 means and all24 process summaries remain; no retry or sample deletion.
+This is static repeated-frame C7 HWRT capability only, explicitly no accepted
+candidate timing or all16/dynamic qualification. Stop generic stability-gate
+tuning; next timing work must register the selected actual workload boundaries
+and final proof-intake amendment. No GPU research worker or automatic queue.
+All other missing controls and reference slots remain required.
+Telemetry is optional, not a prerequisite.
+
+**N010 remains NOT_READY.** User resumed work for cause diagnosis and the
+shortest valid completion path, with low interactive load. No old stopped
+acquisition or waiting queue is restarted. Bounded CPU and short C7 GPU
+diagnostics have completed; neither supplies the missing readiness proof.
+Original full A6c native234 completed; [post-hoc237](results/237-posthoc-original-a6c-retained-control.json)
+repairs only missing summary metadata and passes the unchanged analytic gates.
+252/253 advanced the prior original full inventory11/17 to13/17;258 now
+retains **14/17**, including the original diagnostic-only level5 artifact.
+No native was retried.
+[Cost inventory236](results/236-all-split-remaining-controls-cpu-cost.json)
+completed all six scenes in175.254CPU/176.121elapsed seconds, one low-priority
+core. The three full multibounce sphere cases project about12CPU hours each;
+all six remaining artifacts project36.984CPU hours. These are low-count cost
+projections, not full-run evidence or an N010 ETA. Execution optimization
+precedes the long sphere controls. The sealed controls and254/255/257 are
+terminal. Original diagnostic258 and the first full A6a seed part259 are
+also terminal. No scientific CPU/GPU worker or automatic queue is active at
+this checkpoint;259 does not complete the four-seed physical artifact.
+
+[Traversal prototype238](results/238-near-first-cpu-bvh-prototype.json) passes51,047,139 closest/
+2,368,308 occlusion identity pairs and exact223/A6a payload checks. Cost
+41.859831/42.641725=0.981664 fails its prospective<=0.75 execution condition;
+stop this candidate before full controls. This single-run sizing comparison
+does not demonstrate a speedup. [Original profiles240](results/240-original-all-split-cpu-profile-local-linker.json)
+complete with exact A6a payloads. [Post-hoc inline attribution241](results/241-posthoc-cpu-profile-inline-attribution.json)
+uses an unexecuted debug companion with identical .text bytes/addresses/symbols.
+A6a/C1 samples: BVH slab45.79/46.98%, remaining traversal27.51/26.51%, triangle
+intersection18.23/18.40%. All4256/3342 original samples remain denominators;
+77/75 unannotated samples retained. Zero reported lost samples. This diagnoses
+CPU reference cost, not GPU precision or GI superiority. [SIMD slab243](results/243-simd-slab-neutral-padding-prototype.json)
+passes8,575,080,199 visited-box comparisons,53,415,447 query comparisons and all
+original223/A6a output/audit checks. But standalone A6a38.495451CPU seconds /
+retained42.641725=0.902765 FAILS its prospective<=0.75 execution condition;
+stop this candidate too. Prior242 padding failure is retained;095 is an explicit
+implementation amendment, with no scientific gate change. These uncontrolled
+single-run cost probes do not establish a speedup. [Batched-box245](results/245-batched-box-verifier-repaired-prototype.json)
+passes12,013,100,580 acquired /4,763,926,019 cached box comparisons and all
+53,415,447 queries/original outputs, but A6a44.446001/42.641725=1.042312
+fails<=0.75; stop it too. Original244 verifier compile error retained;097 is
+an explicit verifier-only build repair, not a scientific gate change. Neither
+SIMD design supplies sufficient execution scaling. No full-control queue.
+[Four-frame mean247](results/247-four-frame-c7-precision-diagnostic.json)
+completes2048 raw frames/512 observations,6/7 precision gates PASS but control
+order bias1.024851>1.02 FAIL. [Symmetric interleaved248](results/248-interleaved-four-frame-c7-precision-diagnostic.json)
+also completes2048 raw frames,4/7 gates PASS; control envelope1.029850,
+span1.040768,order bias1.023116 FAIL. Both methods stop; dose1301 remains frozen
+from246. All individual timestamps/images/scratch/owned ledgers retained,
+owned peak516,167,104bytes and teardown zero. No single-frame precision or
+all16 transfer is claimed. Averaging and symmetric positions have not supplied
+accepted timing or established its cause. Review249 led to prospective100
+and completed250/251; the new decision is also inconclusive, without a2% cut.
+No full GPU campaign or GPU research worker remains. The separate single CPU
+physical-control state is recorded above.
+
+[Read-only observation235](results/235-posthoc-natural-idle-read-only-observation.json)
+retains30.157s of user-declared idle DRM activity; other-app counters increased,
+eight same-UID PIDs inaccessible. No paired precision or causal verdict.
+
+See [cause review 192](results/192-cause-review-and-shortest-valid-completion.md)
+and [prospective bounded plan 057](experiments/057-bounded-cause-diagnosis-and-critical-path.md).
+
+| Required item | Actual current evidence | Remaining work |
+| --- | --- | --- |
+| All 24 eligible references | [160](results/160-primary-direction-reference-view.json): sixteen eligible, eight pending | Resolve the dominant uncertainty mechanism; validate any distinct sampling method before all fixed pending ladders. |
+| Stopped first-direction guide | [180](results/180-primary-direction-second-stop-bounded-feasibility.json): **COMPLETE / FAIL**, 8192/16384 ratios **1.0703554221788882 / 1.0599135470235277** against <=0.75 | Candidate rejected; 166 NOT RUN and blocked by its genuine FAIL. This is not a full statistical-cap failure. |
+| Whole-path reference candidate | [225](results/225-all-split-full-sidedness-controls.json); [226](results/226-all-split-full-deterministic-controls.json); [231](results/231-posthoc-original-a7-retained-control.json); [237](results/237-posthoc-original-a6c-retained-control.json); [252](results/252-all-split-original-sealed-dark-full-control.json); [253](results/253-all-split-original-sealed-lit-full-control.json); [258](results/258-wide8-original-level5-full-artifact.json): **14/17 original full artifacts retained**, including one diagnostic-only item | Three original8192 sphere/range controls remain; A6b IID/bias/all-state/prefix/feasibility remain. No reference admission. |
+| GPU calibration | [255/256](results/256-ranked-calibration-outcome-and-next-boundary.md): **bounded static C7 capability PASS**, interval[1.138644,1.242059] | Register/calibrate actual selected quality/workload boundaries and proof intake. No all16/dynamic transfer or accepted candidate timing; old FAILs retained. |
+| Correctness | Actual GPU keys/BF-P evidence retained; [053](results/053-residual-primary-contract-diagnosis.md) supports CPU primary-tie mechanism | GPU repair unverified; the original gate permits explicitly measured remaining direct discrepancies. Max-relative-error-1.0 pixels stay **UNRESOLVED / 未解決**, included. |
+| Cohort and quality/memory pilots | RC/PT families executable; measured quality losses and allocation ledgers retained | Finish missing full-corpus ladders/dynamic pilots and final six-gate auditor. DDGI source/device preparation021/023/057 is already present; scene-GI qualification is required before that family's Lane M campaign. |
+
+The [original N010 registration](experiments/001-comparison-readiness.md)
+requires an executable RC/path-tracing first cohort. Its DDGI entry gate is
+source provenance and a specified Vulkan/device/integration boundary, as
+implemented in readiness_preflight.py; previous preflight103 passed that gate.
+Final preflight must recheck its current identities. Actual DDGI scene tracing,
+finite-depth transport, dynamics and timing belong before DDGI's accepted
+Lane M campaign, not as a newly added blocker to the first RC/PT cohort.
+This clarifies the existing scope; it changes no gate or historical outcome.
+
+### What the cause analysis establishes
+
+CPU-only [191](results/191-posthoc-readiness-bottleneck-diagnosis.json)
+checks retained original C1 B2/B8 scene/sidecar identities. At
+8192/16384/32768, later-indirect replicate-centered energy divided by full
+indirect energy is **0.974696 / 0.982808 / 0.986884**. First-indirect ratios
+are only 0.017115 / 0.012833 / 0.010016; covariance is separately retained.
+These are four-replicate image-energy diagnostics, not additive variance
+shares or iid uncertainty estimates. They locate the observed disagreement
+after the first indirect bounce. The failed guide targets first-secondary-hit
+direct light, then applies its weight to all later contributions. Completed
+193/194 below separate depth/weight effects from the loss of observed net
+variance reduction; a complete causal explanation remains unproved.
+
+Original C1 B8 absolute-p99 decay exponent is 0.518411. Planning extrapolation
+predicts 1.71180e-5 / 1.19508e-5 at 131072/262144, above the unchanged 1e-5
+gate. This is not a measured cap failure or a replacement acceptance threshold.
+Do not spend full ladders on marginal early improvement without examining
+whether the original consecutive-level criterion is plausibly reachable.
+
+Timing causes remain hypotheses. Complete 169 has two heavy PT B8 PASS and
+fourteen FAIL boundaries; terminal 178 has three FAIL and one partial plus
+failed environment/restoration guards. Replays 175/179 and post-hoc 183 retain
+all decisions. File cadence and IDE accounting are not causal clock/power or
+GPU-idle evidence. Deferred serialization's complete sizing 185 establishes
+image/scratch/memory/spool checks, not full precision. Its zero-dose medians
+alone imply about 4405 seconds summed GPU work for full 186 before other costs;
+this scale estimate is not an ETA. No long GPU run is automatically queued.
+
+### Completed small diagnosis and the next bounded checks
+
+[193](results/193-selected-bounce-path-diagnosis.json) completed all six
+serial compiler/native invocations. Original and failed-guide selected mean
+and second-moment fields are bit-exact to retained sidecars. Native runs took
+10.324 / 10.400 / 10.271 seconds, one low-priority CPU each, no GPU.
+[194](results/194-posthoc-depth-weight-and-rqmc-interpretation.json)
+keeps tail selection separate from fixed-grid observations. On the sixteen
+selected pixels, the guide reduces first-indirect path variance but increases
+later variance. Whole-image data show a necessary qualification: **total path
+variance actually falls to 0.969 of original, while observed replicate variance
+increases to 1.133 / 1.135**. Loss of the observed net variance-reduction benefit,
+not simply more path variance, is therefore part of the measured failure.
+Moment-based iid proxies are descriptive only, never RQMC standard errors.
+
+[Plan 058](experiments/058-fixed-grid-and-short-boundary-diagnostics.md)
+completed both diagnostics. [195](results/195-fixed-grid-scramble-diagnosis.json)
+uses the exact existing nested binary on a prospectively fixed 256-pixel C1
+grid, one CPU at nice 15, 164.588 seconds, no GPU. Nested/original p99 is
+**0.948183**, but replicate variance is **1.018947**. This one-level grid
+provides no evidence of the strong reduction needed to justify another long
+ladder. It is not a formal failure of unrun 188/189/190 or reference admission.
+
+[196](results/196-deferred-c7-precision-diagnostic.json) and
+[197](results/197-natural-idle-c7-precision-diagnostic.json), prospectively
+registered in [059](experiments/059-natural-idle-c7-observation.md), each
+complete all eight C7 HWRT blocks / 512 samples with frozen dose 3439 and
+unchanged original classifier. **Both FAIL all seven precision gates.**
+Summed measured GPU intervals are only 0.252902 / 0.249035 seconds; setup,
+readback, output and one-second block settles are additional. All acquisition
+image/scratch checks and owned-memory/spool checks pass. In 197, even with
+the user leaving the PC untouched, zero-dose full GPU times span
+**147.961–956.537 us**, known-work times **2.405–13.746 us**.
+
+197 observes positive DRM engine deltas for Brave and the IDE over a coarse
+13.572-second interval; eight same-UID processes are inaccessible. This is
+neither exact per-query overlap nor proof of interference, clock changes or
+global GPU idleness. Deferred CPU serialization plus a user-idle interval
+has not established precision; do not dispatch the >hour full 186 campaign.
+[198](results/198-bounded-cause-probes-posthoc-replay.json) replays all
+original schedules/decisions, native resource receipts, owned ledgers and CPU
+spool receipts exactly; it does not independently rehash every native payload.
+
+### Completed implementation probes 060/061
+
+[199](results/199-packed-readback-fixture-build.json) builds an isolated
+capture fixture with four diagnostic downloads coalesced after the original
+timed GPU commands. Whole-source inverses and unchanged timed recording and
+expressions pass. One-CPU compile/link durations are 6.461 / 2.646 / 0.057
+seconds. [200](results/200-packed-readback-c7-sizing.json) completes
+C7 sizing PASS, dose 3500. All images/scratch/owned-memory/CPU spools pass.
+Actual [201](results/201-packed-readback-c7-precision-diagnostic.json)
+completes all eight blocks / 512 samples but **FAILS all seven original gates**.
+Zero-dose times span 156.177–987.717 us; observed peak owned Vulkan memory is
+263382656 bytes, teardown zero. This fixed candidate stops; no full campaign.
+
+[202](results/202-later-bounce-cv-path-diagnosis.json) completes the
+prospective [061](experiments/061-later-bounce-control-variate-diagnosis.md)
+conditional control-variate diagnosis on eight fixed C1 pixels, one low-priority
+CPU, 67.572 seconds. Original means/moments reconstruct bit-exactly. Corrected
+p99 ratio is **0.837924**, but replicate variance **1.054490** and descriptive
+per-path variance **1.032952**. Its prospective promising rule FAILS; no full
+controls/ladder follows this fixed prototype. This does not reject every
+conditional correction or prove a general variance theorem.
+
+[203](results/203-array-rqmc-transport-diagnosis.json), registered in
+[062](experiments/062-array-rqmc-transport-diagnosis.md), then completes
+an eight-pixel geometry-sorted array-RQMC prototype in 24.206 native CPU
+seconds. Original moments, deterministic components and first-indirect luma
+means match retained values bit-for-bit. Its p99 ratio is **1.049287**,
+replicate variance **0.885354**, and per-path variance **0.994757**. The
+prospective promising rule FAILS. This fixed sort/assignment stops; no
+larger-level prefix, full physical/state proof or reference admission follows.
+The result does not reject array-RQMC generally or establish the behavior of
+all eight pending corpus slots. No scientific acquisition remains running.
+
+### Contiguous submission diagnosis, completed 2026-10-17
+
+[063](experiments/063-contiguous-c7-command-batch-diagnosis.md) through
+[065](experiments/065-contiguous-import-header-repair.md) implement a static C7-only
+fixture with separate uniform/query/readback slots for every original frame.
+[204](results/204-contiguous-c7-fixture-build.json) and
+[205](results/205-contiguous-c7-decoder-repair-build.json) preserve compiler failures;
+[206](results/206-contiguous-c7-import-repair-build.json) builds successfully without
+changing original timed GPU recording or timing expressions. No original
+header/default target changes. [207](results/207-contiguous-c7-sizing.json) sizing PASS
+freezes dose 1342 by the original rule; no dose tuning follows.
+
+[208](results/208-contiguous-c7-precision-diagnostic.json) completes all 8 blocks / 512
+samples, each block in one frame-batch submit/wait. Every original image,
+scratch, schedule, owned-memory ledger and batch frame identity passes its
+acquisition check. Original classifier: **3/7 gates PASS, overall FAIL**.
+Control envelope 1.030658, span 1.046921, order bias 1.078222; effect span
+1.027634 (PASS), order bias 1.033715 (FAIL), minimum positive fraction 0.916667
+(PASS), minimum effect 1.193435 > control envelope (PASS). Summed measured
+GPU intervals **0.082508 seconds**; zero-dose full GPU times
+131.249 / 141.108 / 419.156 us (min/median/max). Setup, copies, CPU recording
+and one-second block settles are additional. Cached CPU calls are not separate
+frame wall-time measurements. All native payload hashes and original decisions
+were independently replayed on one low-priority CPU after acquisition.
+
+This fixture does not establish original precision or explain how much prior
+variation came from CPU gaps: dose, cadence and natural environment differ.
+It has no PT/dense-RC or fresh-state dynamic implementation. Do not transfer it
+to all sixteen boundaries or rerun a failed candidate/full campaign. No
+scientific worker remains. Reference eligibility remains **16/24**.
+
+[066](experiments/066-frozen-suffix-control-variate-diagnosis.md) and
+[209](results/209-frozen-suffix-cv-diagnosis.json) complete a distinct frozen
+full-suffix predictor: 65536 auxiliary pilot paths, then the original 32
+scored pixel/seed records, one CPU nice15. Compile/native 1.767 / 6.389
+seconds. All original means/second moments and deterministic components are
+bit-exact; the model dump is byte-identical before/after scoring. Corrected
+p99 ratio **0.947268**, replicate variance **1.033002**, path variance
+**0.975724**. The prospective promising rule FAILS; this fixed model stops.
+The local predictor has not established the reduction needed for any new
+reference ladder. All 24 slots/seeds/cap/gates remain, **16/24 eligible**.
+No long reference/GPU campaign or scientific worker is running or queued.
+Completion time remains unproved; no N010 READY or Lane M result is asserted.
+
+### Whole-path reference methods: a bounded promising result, not admission
+
+[210](results/210-whole-path-mixture-diagnosis.json) / [212](results/212-whole-path-conditioned-diagnosis.json) remain INCOMPLETE at numerical guards;
+[211](results/211-whole-path-numeric-failure-witness.json), [213](results/213-whole-path-own-support-witness.json) and [214](results/214-coincident-surface-operator-diagnosis.json) preserve the conditioning,
+overlapping-face and one-ULP operator witnesses. [072](experiments/072-coincident-geometric-support-audit.md) prospectively
+amends support matching to exact common axis-plane/interior/material checks,
+bit-equal original nudge/spawn, bounded normal differences and actual
+alternative-self ray/direct checks. Original IDs, points and physical methods
+remain. This is explicitly a numerical support approximation, not a proof
+of bit-equal N008 finite-arithmetic expectation.
+
+[215](results/215-whole-path-geometric-support-diagnosis.json) still stops at own-support, INCOMPLETE. Post-hoc [216](results/216-coincident-predicate-witness.json)
+finds that the last recorded unmatched pair has opposite signed-zero Duff
+basis branches, despite equal numeric axis normals/spawn/material. It is a
+candidate-pair diagnosis, not a full failing-prefix reproduction. [074](experiments/074-axis-cosine-support-audit.md)
+derives that the two exact axis frames differ by an azimuth pi rotation,
+which preserves cosine density. It removes that basis-sign predicate only;
+original sample maps stay untouched. All failed records and amendments remain.
+
+[217](results/217-whole-path-axis-cosine-diagnosis.json) then completes the fixed half-eye/half-light prototype:
+p99 ratio **0.845880**, replicate variance **0.819401**, path variance
+**1.390209**. The original promising rule FAILS; that construction stops.
+[075](experiments/075-all-split-path-mixture-diagnosis.md) defines a distinct uniform mixture over every eye/light split
+for each depth k. Forward and reverse ordered raw-area densities are evaluated
+independently; original target F=q_eye*R retains soft falloff/nudge/offset.
+The contribution is (k+1)*F/sum(q_split), bounded by(k+1)*R. It traces up to28
+vertices per scored index, versus seven previously; this is no equal-cost claim.
+
+[218](results/218-all-split-path-mixture-diagnosis.json) completes all original32 eight-pixel/four-seed8192 records.
+Original moments and deterministic components are bit-exact. Ratios:
+**p99 0.701796**, **replicate variance 0.507418**, path variance0.830818.
+Both unchanged promising gates (<=0.75 / <=0.5625) PASS. Compile/native
+2.346 / 50.747 seconds, one CPU nice15, no GPU. This is one-level small-grid
+reference-sampler evidence, not a GI performance result or reference admission.
+
+[219](results/219-bounded-all-split-furnace-control.json) retains a control-driver compile error; [077](experiments/077-furnace-original-iid-constructor-repair.md) fixes
+its original Xoshiro(seed,pixel,index) invocation before any native control.
+[220](results/220-bounded-all-split-furnace-control.json) uses the byte-identical218 header on a derived original A6a
+sphere, rho1, eight fixed pixels/four seeds. B2/B8 means pass analytic sphere
+expectations with a derived mesh envelope and the original0.002 allowance;
+independent original iid16384 vs net8192 relative mean differences are
+**6.0448e-6 / 4.1381e-6**, NRMSE **4.5751e-5 / 1.2832e-5**. Zero-light
+controls are exactly zero. This bounded derived control does NOT attest all
+seventeen original controls, colored/single-sided materials or the corpus.
+
+Post-hoc [221](results/221-posthoc-path-mixture-evidence-replay.json) independently replays decisions/original moment bits,
+physical-source inverses,98 immutable payload hashes and11 terminated compiler/
+native identities. Numerical limitations are explicit:218's largest original
+unconditioned error/B is **1.41086e10**, while its conditioned plane audit is
+0.635854 and own-log error1.11894e-9. A conditioned audit and a sphere PASS
+are not a bound on Sponza physical bias. Five coincident matches, zero following
+alternative-ray checks and one alternative-direct check are the actually
+covered218 observations, not exhaustive equivalence.
+
+Next: integrate general material/sidedness/finite-depth target factors without
+changing original transport, validate all original applicable physical controls
+and numerical-density bias, then all24-state/exact-prefix and whole-frame
+feasibility before the unchanged reference ladders. All original gates remain;
+references **16/24**, timing208 **FAIL**, direct1.0 pixels **UNRESOLVED / 未解決**
+and included. At the 215–221 checkpoint there was no retained worker or queue. No GPU/
+settings/default build change occurred. Unit/regression tests NOT RUN. N010 remains NOT_READY;
+no Lane M comparative superiority result or completion date is asserted.
+
+### General adapter and original physical controls — A6c completed
+
+[078](experiments/078-all-split-general-transport-and-prefix-reuse.md) adds the original RGB throughput product, one-sided back-face
+absorption and actual 1–8 vertex limit to the sampling target. The geometric
+proposal stays separate from physical absorption; no black/back-face reflection
+is introduced. Ordered area-density prefixes are traversed once per order,
+with original sums and states. [222](results/222-all-split-general-transport-equivalence.json) preserves a helper-scope compile
+failure; [079](experiments/079-general-prefix-helper-scope-repair.md) moves only the misplaced brace. [223](results/223-all-split-general-transport-equivalence.json) then
+compares **every one of 262,144 C1 sample indices** against the prior sampler:
+RGB components and depth values match bit-for-bit; all accumulated 218 fields
+also match. Native duration 82.398 seconds includes both samplers and original
+controls, and is not a separate speed measurement of the new implementation.
+
+[224](results/224-all-split-exporter-build.json) builds an opt-in full-output CPU exporter with exact source
+inverses. Its scored RNG stays untouched while an independent copy primes the
+original primary cache once per pixel; that auxiliary work is counted. Original
+writers/checkpoints are retained. One render thread is enforced; main Renderer,
+CMake and GPU behavior remain unchanged.
+
+[225](results/225-all-split-full-sidedness-controls.json) and [226](results/226-all-split-full-deterministic-controls.json) complete **nine original full control scenes**
+at original 128×96, 64 samples and all four seeds. Every moment/PFM/hit payload
+matches original bytes, with no pixel masks. Primary counters remain exact;
+proposal endpoint-shadow work is named separately and need not equal another
+sampler's workload. These direct/zero-indirect controls do not establish
+stochastic multi-bounce convergence.
+
+[227](results/227-all-split-original-a7-cost-pilot.json) is a retained A7 cost-pilot diagnostic stop: it compared 64-sample
+rounded accumulations with 8192-sample records. [228](results/228-all-split-original-a7-full-control.json) was NOT RUN.
+[083](experiments/083-a7-pilot-same-count-baseline-amendment.md) instead acquires an original same-count 64-sample baseline;
+[229](results/229-all-split-original-a7-cost-pilot.json) passes its exact deterministic comparison and unchanged cost
+gate. The distinct original **full 8192-sample A7 acquisition** in [230](results/230-all-split-original-a7-full-control.json)
+completes, then analysis stops at omitted geometry-hash metadata. No native
+retry: post-hoc [231](results/231-posthoc-original-a7-retained-control.json) validates the SAME raw data against unchanged
+original analytic and independent 16384-sample iid controls. It PASSES.
+Analytic indirect region-relative error **1.04251e-5**, NRMSE **0.000444197**;
+iid per-channel mean difference **9.35685e-5**, full-image NRMSE **0.00714405**.
+Original deterministic means/second moments and primary bytes match. The
+outer native duration was not saved before the analysis crash: **NOT RETAINED**,
+not reconstructed from the sizing estimate. All failed records remain.
+
+[233](results/233-posthoc-all-split-general-controls-replay.json) post-hoc rehashes **718 immutable payloads**, replays retained
+218 statistics and nine complete byte comparisons, confirms **18 terminated
+compiler/native identities**, and checks the actual **10/17 original full
+control scenes**. This checkpoint preceded234.
+At233 the seven pending scenes were A6a, A6b, A6b_level5_diag, A6c, A10, sealed-dark,
+sealed-lit. Full A6b independent iid, numerical-bias assessment, all-state/
+exact-prefix and whole-frame feasibility are still required.
+
+[232](results/232-all-split-original-a6c-cpu-cost.json) measures original A6c on all pixels/four seeds at eight samples:
+**1.898731 CPU / 1.910170 elapsed seconds**. Conservative 8192-sample scaling
+is about **1944 CPU / 1956 elapsed seconds** (~32.6 minutes), a workload sizing
+estimate, not an N010 completion forecast or a physical PASS. [086](experiments/086-original-a6c-full-physical-control.md)
+prospectively bounds a single original full A6c run at one CPU, nice 15,
+4 GiB, 3600 CPU / 5400 elapsed seconds, no retry or following queue.
+
+**234 native completed**, original8192/fourseed/whole128×96. Native PID69782/
+start473962 is terminal. Actual1331.127171410elapsed/1325.210989000CPU sec;
+all25 payload identities and return0 were saved before a run_counters summary
+KeyError.234 preserves that metadata failure. [237](results/237-posthoc-original-a6c-retained-control.json)
+explicitly replays the same data with only that missing field added, exact
+analysis inverse and immutable payload checks. Direct geometric violations0;
+indirect relative8.1611197802e-5,NRMSE0.00138358751045: original gates PASS.
+11/17 full artifacts complete; A6a,A6b,A6b_level5_diag,A10,sealed-dark/lit
+remain.087/089/236 completed their cost-only inventory, no full acquisition.
+The three8192 multibounce sphere controls project roughly12CPU hours each;
+all six remaining artifacts36.984CPU hours. Optimize execution before those
+long controls. These cost probes add no physical or reference admission.
+
+References remain **16/24**, timing208 remains **FAIL**, direct-error-1.0 pixels
+remain **UNRESOLVED / 未解決** and included. Original seeds/slots/cap/thresholds
+and final quality/time/true-peak gates remain. Unit/regression tests NOT RUN.
+N010 is NOT_READY; a physical control PASS is no Lane M GI superiority claim.
+
+### Evidence and preserved boundaries
+
+- Exact 180 SHA256: `f52002b46754152f02ef6111863f7776b5404d2b4673d201b20d4fb253d808ef`.
+- Exact 185 SHA256: `58dba169986246adc16898e89f351d6ca1643d6e16a9f247e6934183f3838b32`.
+- Exact 191 SHA256: `448a0bd9f36e94dd3b487d7e805073a5efa2286ea281452a76a8b067bfb28f5c`.
+- Complete physical 163 and state/prefix 164 remain valid for their failed
+  sampler's scope; they do not override 180 or attest a new sampler.
+- Prior 165/172 stops and 171/176 receipts, historical host/session 181/182,
+  178 restoration failure, all negative sampler/GPU-port and quality results
+  remain in immutable result records and Git history. No display, desktop
+  window, power or clock setting changes occur in the current work.
+- Original seeds, 24-slot corpus, six levels/cap, support/absolute/relative
+  gates, all-pixel scoring, quality targets, full GPU precision and true-peak
+  memory requirements remain. No N011, Actions, default Renderer promotion or
+  N001–N009 result changes. Unit/runtime regression tests are **NOT RUN**.
+
+## Earlier execution checkpoints
+
+The progression below records earlier checkpoints. Use the current section
+above and `research/status.md` for present process and reference status.
+
+New executable cohort: native GPU pixel PT and the separately frozen dense
+repository RC estimator control. [C7 budget/quality results](results/013-c7-pt-cohort-pilot.json)
+include all losses and passing PT levels. [Construction lock](results/016-corpus-state-lock.json)
+contains source/target dynamics and local light motion. C7 and C8–C12 references
+are eligible in both finite transports. The [dynamic cohort](results/019-controlled-dynamic-cohort.json)
+retains all 145 executed source/target/recovery images, all losses and two
+explicit software-churn capture limitations; [independent memory replay](results/020-controlled-dynamic-summary.json)
+passes for all 29 roles. Sponza C1/C3 T_B2 references now qualify. [C1 quality comparisons](results/033-interim-comparison-findings.md)
+show incumbent/dense RC FAIL and pixel PT PASS at 256/1024 spp. Remaining
+Sponza reference acquisition and calibrated timing are in progress.
+Historical vanilla-software is a traversal control, not a separate GI baseline.
+
+[RTXGI provenance](results/021-ddgi-source-provenance.json) pins the fetched SDK
+for the required additional Lane M DDGI comparator. The chosen path is Vulkan
+on AMD, without CUDA. The [Vulkan host SDK builds](results/023-ddgi-vulkan-host-build.json)
+and the [pinned CPU DXC runs](results/034-dxc-cpu-compiler-provenance.json);
+integrated DDGI runtime is not yet demonstrated.
+
+[Post-hoc CPU primary diagnosis](results/053-residual-primary-contract-diagnosis.md)
+localizes both residual C1 direct-zero pixels to differing primary primitives
+and supports a legacy tie-interval mechanism. No GPU repair is claimed; both
+pixels remain unresolved and included in scoring.
+
+[Cache equivalence](results/022-cached-oracle-equivalence.json) is complete and
+PASS in all 20 cases. The [controlled reference provenance audit](results/051-controlled-reference-provenance-audit.json)
+rechecks C7–C12, both transports: canonical scene/state, four fixed seeds,
+all component/f64/primary-hit hashes, and every original convergence screen.
+All 12 pass. This is a subset audit; remaining Sponza references and the full
+readiness gate are unfinished. Incremental equivalence 050 is now complete/PASS in all three declared
+cases. Reference jobs and the waiting driver terminated (065), with cause unestablished.
+Complete prefixes and partial later seeds are retained. Amendment 8 prepares
+fresh acquisitions from the validated complete C1 T_B8/C3 T_B8/C2 T_B2
+prefixes; view 067 fixes all 24 slots before recovery output. Prior view 061 and
+statuses are historical. GPU numerical-port compilation/build (066/068) are
+isolated diagnostics and establish no reference eligibility.
+
+The unmanaged SDK also validates reduction shader modules/pipelines even when
+variability is disabled. [Result 056](results/056-ddgi-reduction-shader-compilation.json)
+compiles both official reduction entry points for 32/64-lane configurations,
+using the pinned DXC and SDK. All four compile. Runtime must select the shader
+against supported subgroup configuration; this is CPU compilation, not an
+integrated DDGI GPU execution or quality result.
+
+[Official SDK GPU volume bring-up](results/057-ddgi-volume-runtime-bringup.json)
+now executes on Radeon 8060S/RADV with subgroup width 64. Both preregistered
+constant-field controls pass every irradiance/distance texel, including borders:
+maximum errors 5.96046e-8 / 2.98023e-8. Owned Vulkan peak is 131,472 bytes,
+20 lifetime events independently replay to zero teardown. The standalone build
+is [058](results/058-ddgi-volume-build.json). No default CMake/Renderer changes.
+This is resource/dispatch normalization wiring: scene tracing, finite-depth
+transport, surface gather and dynamic histories remain unimplemented. It is
+not DDGI frame-quality qualification or a calibrated timing result.
+
+Historically, recovery executed C1 T_B8 16384→32768 and C2 T_B2 8192→16384 in
+two 16-thread qualifiers. Continuation-v3 used view 067; its later retirement
+and the user-requested CPU stops are recorded in 120/124. C7 T_B2
+GPU numerical-port conformance at 16 spp passes (070), with exact counters and
+max mean discrepancy 2.71051e-20; this does not grant reference eligibility.
+
+C2 T_B2 recovery is now eligible at 16384/32768; independent canonical/
+payload/prefix-chain audit 080 passes, scoped to this one transport. C1/C3
+T_B8 and the remaining slots still run. GPU conformance 074 preserves its
+120-second Sponza guard failure; prospective 075 uses the recorded 900-second
+guard. First C1 T_B2 8192 numerical comparison passes with exact counters and
+max mean difference 1.73472e-18. GPU references remain ineligible pending
+full numerical, physical-control, all-state and actual-level prefix proof.
+
+The resource follow-up 075 is now terminal: twelve cases pass, then the first
+C1 T_B8 case times out at 900 seconds without numerical output. 075 remains
+failed; 081 records that conditional physical/prefix workers refused dispatch
+(NOT RUN). Plan 021 starts 082 with the twelve unchanged completed cases and
+a fresh 1800-second guard for the remaining four. New conditional workers
+use 082 and fresh work roots; no GPU reference is admitted.
+
+### Completed deep GPU numerical failure
+
+082 completed C1 T_B8 seed 0 (8192 spp) but failed unchanged Amendment 7
+gates: mean 6.78235e-7, moment 5.31950e-9, indirect NRMSE 2.94757e-6,
+shadow-test/blocked counter differences +26/+31. Primary/direct/emission
+remain byte identical. The candidate is ineligible; dependent physical and
+all-state/prefix runs refused dispatch (085, NOT RUN). 084 maps 54 affected
+pixels as post-hoc diagnosis; plan 022 uses eight selected pixels to replay
+and intervene on sampling arithmetic. No exclusions or relaxed thresholds.
+CPU reference recovery continues independently; 15/24 slots are eligible.
+
+Post-hoc intervention 087 reproduces all eight selected original CPU/GPU
+payloads byte exactly. Supplying CPU trigonometry removes the discrepancy
+in two pixels (13450, 55934), with exact counters and mean error <=4.34e-19.
+Six pixels retain mean/moment/counter discrepancies. Trigonometry alone is
+insufficient; full causation is unestablished and no GPU reference is admitted.
+Plan 023 records path/bounce diagnostics with aggregate replay required.
+
+Deep-path diagnosis 089/091/092 reproduces every selected aggregate/counter
+and establishes a signed-zero sampling-basis mechanism in all eight traced
+original paths: nearby coplanar closest primitives have opposite zero signs
+in normal.z, producing large next-direction changes under identical uniforms.
+CPU sign-bit-only direction intervention matches the original CPU direction
+exactly (8/8); the other 46 above-gate pixels are not individually traced.
+Plan 024 tests a general ambiguity flag and independent complete CPU-path
+recomputation, with all samples retained and unchanged admission gates.
+It is a separate candidate; 082 remains failed, GPU references unadmitted.
+The Renderer direct-zero pixels remain unresolved.
+
+The general ambiguity-guard/whole-path CPU fallback feasibility 093 passes
+unchanged numerical/counter/finite/direct/emission gates on all eight selected
+pixels (mean <=8.674e-19, moment <=1.017e-20). It recomputes 11864/65536
+paths without reference-radiance or hit/sign overrides. Audit 094 replays
+all diagnostic GPU memory ledgers, verifies separate build 095 and confirms
+53 frozen continuation inputs remain unchanged. Plan 025 streams the same
+guard over complete frames with bounded per-dispatch storage. Its first full
+C1 T_B8 seed-0 trial 096 has now passed; full sixteen-case/physical/all-state/
+prefix admission remains unexecuted. CPU acquisition remains independent.
+
+C1 T_B8 recovery now completes all four 32768-spp seeds with verified prefix
+provenance (097). Active absolute p99 3.54031e-5 exceeds the fixed 1e-5 gate;
+relative p99 2.51347% alone does not qualify the reference. The original
+qualifier continues at 65536 spp. The remaining cap outcome is unmeasured.
+Full-frame hybrid deep trial 096 completed with the frozen 64-epsilon
+guard and original CPU fallback, 16-sample batches / 16 CPU workers. No GPU
+reference is admitted from the selected success or the standalone build.
+
+Full-frame C1 T_B8 seed-0 feasibility 096 **PASS** at unchanged gates:
+max mean difference 1.38561e-16, moment difference 3.59820e-18, indirect
+NRMSE 4.10311e-16, exact counters/primary/direct/emission, finite output, zero
+faults and owned-memory replay PASS. CPU fallback recomputed 40861185 of
+471859200 paths (~8.66%), with every path retained. Original 082 stays failed.
+The new complete numerical suite 098 is executing; physical worker 099 waits
+for that complete PASS. Separate prefix host build 100 succeeds, but prefix
+runtime validation is NOT RUN. No reference admission or N010 READY yet.
+
+### Completion evidence inventory
+
+[102](results/102-completion-evidence-and-handoff.md) maps each unchanged
+completion requirement to executed evidence, pending work and the runnable
+final verification command. Actual full-gate preflight [103](results/103-interim-full-gate-preflight.json)
+is NOT_READY: correctness accounting and additional-family source/device
+boundaries pass, while full references, Sponza pilots and accepted timing
+calibration remain pending. It is an interim check, not final result 047.
+
+Prospective [hybrid acquisition plan 029](experiments/029-hybrid-reference-acquisition.md)
+and `qualify_hybrid_references.py` now prepare a fresh, proof-gated high-sample
+ladder without changing the live CPU view. Prerequisite checks 104–106 refused
+GPU dispatch while 098 was incomplete (exit 2, no work root). Successful proof
+validation/acquisition remains unexecuted; reference admission still requires
+all unchanged gates and a separate completed-boundary provenance transition.
+
+Full-frame C1 T_B8 seed 1 [107](results/107-hybrid-full-frame-deep-seed1-conformance.json) now passes
+the unchanged numerical gates: maximum mean difference 8.67362e-17, moment
+6.28498e-19 and indirect NRMSE 3.65583e-16; exact counters/primary/direct/emission,
+finite output, zero faults and memory replay PASS. It is an exact-byte copy
+of the completed 098 child result, not a repeat acquisition. The suite now
+has 14/16 passing cases and proceeds to seed 2. Physical/all-state/prefix
+proof and statistical qualification remain required; no reference is admitted.
+
+CPU-only [raw-prefix export audit 108](results/108-hybrid-deep-raw-prefix-export-audit.json)
+passes all pixels of both retained C1 B8 8192-spp seed-0/seed-1 cases: raw
+sums/moments reconstruct saved binary64 values exactly, per-pixel counters
+reproduce global metadata, all four PFM components agree, and memory replay
+passes. This is a two-export consistency audit, not full prefix/runtime or
+reference eligibility. A separate hybrid provenance API is prepared; the
+existing frozen CPU view/preflight remains unchanged.
+
+Existing eligible CPU-slot [provenance audit 109](results/109-existing-eligible-cpu-provenance-audit.json)
+passes all fifteen selected references via the separate API's original-method
+delegation: C1/C2/C3 B2 and C7–C12 both transports. Every canonical scene,
+payload/header, convergence screen and imported-prefix chain is checked; all
+recorded inputs remain unchanged after the audit. This is a selected fifteen-slot
+audit, not whole-corpus readiness or execution of the new hybrid-variant branch.
+
+C1 B8 / 8192 spp seed 2 [110](results/110-hybrid-full-frame-deep-seed2-conformance.json) passes
+unchanged full-frame numerical gates, with exact counters/primary/direct/emission,
+finite output, zero faults and owned-memory replay. This exact-byte copy of
+the completed 098 child is not a repeat acquisition. At publication of 110, suite 098 had 15/16
+cases passing and was executing the final seed; full physical/all-state/prefix
+and statistical qualification are still required before reference use.
+
+Full numerical suite [098](results/098-hybrid-full-numerical-conformance.json)
+now completes all sixteen fixed cases with PASS. Physical 099 has started;
+all-state/prefix 101 remains waiting. Numerical completion alone admits no
+reference. All sixteen child result hashes were verified before publication.
+
+Separate prospective [point-guided CPU sampling plan 030](experiments/030-prospective-point-guided-reference-sampling.md)
+retains the original physical target and exact convergence gates. CPU build
+[112](results/112-point-guided-oracle-build.json) passes and physical/iid
+control acquisition 113 is executing. It changes continuation sampling and
+importance weights only; it does not change the current Renderer or replace
+any pending/accepted original reference.
+
+Prospective [state/prefix plan 031](experiments/031-point-guided-state-and-prefix-validation.md)
+requires all 24 original locked scenes/four seeds at 16 spp, exact direct/emission
+and primary identities, zero own-prefix payload/counter disagreement at 8→16,
+and both C7 transports at 8192→16384. Separate prefix build
+[114](results/114-point-guided-prefix-build.json) passes. Runner 115 waits for
+complete physical 113 PASS and has executed no state/prefix acquisition yet.
+Neither build proves convergence or reference admission.
+
+[Point-guided acquisition plan 032](experiments/032-point-guided-reference-qualification.md)
+prepares all nine unfinished transport ladders, retaining the other fifteen
+in the full corpus. [116](results/116-point-guided-qualification-prerequisite-check.json)
+actually refuses acquisition at incomplete 113; all read bytes are archived.
+The queue waits for complete 113/115 PASS before a single fresh acquisition.
+No new sampling reference, successful new-variant audit or view replacement
+has occurred. [117](results/117-point-guided-api-existing-cpu-provenance-audit.json)
+passes only delegation to the existing audit on the fifteen original CPU
+references. It does not attest new sampling, remaining nine slots or readiness.
+
+[Readiness adapter 033](experiments/033-point-guided-readiness-adapter.md) keeps
+all six exact original gates while dispatching reference audits through the
+separate API. Actual [119](results/119-point-guided-adapter-interim-preflight.json)
+executes against current view 067 and remains NOT_READY, retaining incomplete
+reference/Sponza-pilot/calibration gates. The six gate names/pass classifications
+match 103; all 162 recorded inputs were checked unchanged after execution.
+No new sampling branch, current view/driver replacement or final 047 is attested.
+
+
+
+Fresh isolated-fixture GPU [sizing 157](results/157-minimal-calibration-quiet-sizing.json)
+now completes all sixteen original boundaries with PASS, including static and
+first-target churn roles. Every saved direct/indirect/total image matches the
+corresponding immutable original-046 image; all scratch witnesses and owned
+allocation-ledger replays pass with zero teardown within 8 GiB. The original
+three-dose sizing schedule, +20% target and dose cap are unchanged. This is
+actual GPU sizing/image equivalence, not accepted timing capability.
+
+Separate accepted calibration 158 has started with those frozen doses and the
+original eight-process schedule and thresholds. Its C1 HWRT, software and PT B2
+boundaries completed all eight blocks and **FAIL**; remaining boundaries are
+still running at this checkpoint. Removing bulk diagnostic output alone has
+not established the required timing precision. Retain every subsequent row,
+earlier 029 failures and all raw samples. No retry, correction or threshold
+relaxation follows from this partial observation. Final 047 remains pending.
+
+### Minimal-output calibration commands (plan 044)
+
+157 completed PASS; 158 was launched once and user-stopped (170). The commands
+below document those actual invocations and must not be rerun into existing
+paths. They require complete corrected build 159 (v2 binaries), and refuse
+live research workers, existing work/output paths and partial boundary selection. Keep the new build/source/input identities frozen.
+Sizing additionally checks every image against original quiet sizing 046 and
+requires zero-teardown ledger replay within 8 GiB. Only complete full PASS 157
+permits 158. Original failed/partial timing is retained.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_minimal_capture.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/minimal-calibration-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/157-minimal-calibration-quiet-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_minimal_capture.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/minimal-calibration-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/157-minimal-calibration-quiet-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/158-minimal-calibration-full-renderer.json
+```
+
+All 24 eligible references, complete pilots and final six-gate handoff remain
+required even if this independent capability measurement eventually passes.
+
+
+
+Prospective [recovery plan 047](experiments/047-prospective-directional-control-recovery.md)
+prepares an explicit fresh control workflow after user interruption 161. It
+imports all seven completed scene exports byte-for-byte, retains their actual
+native commands as imports, acquires the other ten scenes once at new paths,
+and applies the complete unchanged seventeen-scene/eight-physical/two-iid gates.
+Separate 163/164/165 artifacts are required; old partial 152 and absent 153/154
+are never rewritten or relabelled. Guarded program assembly and Python source
+compilation succeed, with row numerical/analytic/iid source checks unchanged.
+No recovery acquisition/import branch, reference admission or new CPU worker
+has executed. Each entry point refuses other research workers and existing
+paths; GPU calibration 158 must actually terminate before CPU dispatch.
+
+### Prepared interrupted-control recovery commands (plan 047)
+
+163/164 completed PASS; 165 was user-stopped before its first level (171).
+Commands identify those one-time acquisitions; do not restart
+existing work/results. Execute later steps only after complete proof PASS
+and all other research workers, and only after complete PASS of the preceding
+step. The old workflow is not restarted. These paths must not already exist.
+There is no automatic waiting/retry controller.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/recover_primary_direction_physical.py \
+  --work out/research/n010-comparison-readiness/primary-direction-physical-recovery-v1 \
+  --output research/lanes/n010-comparison-readiness/results/163-primary-direction-recovered-physical-controls.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/validate_recovered_primary_direction_prefix.py \
+  --work out/research/n010-comparison-readiness/primary-direction-prefix-proof-recovery-v1 \
+  --output research/lanes/n010-comparison-readiness/results/164-primary-direction-recovered-all-state-and-prefix.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_recovered_primary_direction_feasibility.py \
+  --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v1 \
+  --output research/lanes/n010-comparison-readiness/results/165-primary-direction-recovered-bounded-feasibility.json
+```
+
+Complete recovery controls alone do not admit references. The original
+plan-046 intake still refuses incomplete 152. The conditional Amendment-1
+adapter below supplies the explicit new-chain dispatch; its actual full
+payload/command/resource replay is still required before reference admission.
+All sixteen retained eligible slots, eight pending slots and final gates stay.
+
+
+
+[Plan-047 Amendment 1](experiments/047-prospective-directional-control-recovery.md)
+now supplies the explicit recovered-chain provenance API and eight-slot
+qualifier. It requires 151/163/164/165, checks the seven imported actual
+commands/payloads and ten fresh physical invocations, and replays the original
+feasibility/native-prefix/resource proof. Source comparison confirms that the
+original numerical gates and complete ladder program are byte-identical after
+only declared proof/file dispatch, quiescence and fixed-output guards. CLI
+assembly passes. No numerical/import/admission branch or new sample has run;
+163/164/165/166 remain absent, and the original API still refuses partial 152.
+The sixteen retained slots, eight pending slots, view 160 and all final gates
+are unchanged. Current calibration 158 has completed ten static boundaries:
+C1 PT B8 passes; the other nine fail. Its six churn boundaries remain pending
+and the overall acquisition is still INCOMPLETE.
+
+### Conditional eight-slot intake after recovered controls
+
+Prepared only; no acquisition has run. Under plan 053, this pending API
+requires actual complete 151/163/164/180 PASS and no CPU/GPU research worker:
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/qualify_recovered_primary_direction_references.py \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/primary-direction-reference-ladders-v1 \
+  --output research/lanes/n010-comparison-readiness/results/166-recovered-primary-direction-reference-qualification.json
+```
+
+This explicit Amendment-1 adapter supersedes the original proof dispatch for
+future new-variant acquisition only. The original plan-046 API remains frozen
+with view 160; original/hybrid references retain their original proof chains.
+Full 24-slot admission, all pilots, accepted calibration and six-gate final
+047 remain mandatory. A partial or failed 158 cannot pass readiness.
+
+
+
+CPU-only post-hoc [diagnosis 162](results/162-minimal-static-calibration-posthoc-diagnosis.json)
+archives an exact 158 summary snapshot and replays all ten completed static
+boundaries, eight blocks and 64 samples per block (5,120 raw samples). Every
+original decision is reproduced: C1 PT B8 passes, the other nine fail. All
+schedules and producer image/scratch/ledger metadata match. Payload content
+hashes are not independently rechecked in this diagnostic.
+
+Compared descriptively with the earlier 155 block-0 record, C1 HWRT/software
+completed-output cadence medians fall from 394/498 ms to 9.30/12.57 ms; saved
+frame bytes are about 2.14 MB, versus at least 69.06 MB for just the old three
+secondary streams. These are different retained acquisitions, not a causal
+isolation or directly measured GPU duty cycle. Timing gates still fail for
+those roles. C1 PT B2 also fails with a GPU-duration/file-cadence proxy near
+0.967; C1 PT B8 passes near 0.998. This does not identify a clock/power cause
+or justify a correction, exclusion, threshold change or repeated acquisition.
+The lightweight CPU diagnostic ran during ongoing 158; it launched no CPU
+reference acquisition or GPU experiment. All six churn boundaries remain in
+the original full acquisition; 162 does not pass full timing capability.
+
+### Prospective row-bulk PFM calibration fixture (plan 048)
+
+[Plan 048](experiments/048-prospective-bulk-pfm-calibration-output.md) changes
+only the two PFM output loops to one identical RGB row write. Its source
+inverse checks reconstruct the exact build-159 files; build and calibration
+CLI assembly succeeds. No native compile, serialization/runtime replay,
+new GPU run or accepted capability is established. Source 158 stays frozen.
+
+Build 167 below completed PASS after actual termination of 158. GPU commands
+168 completed full PASS; 169 has started. The commands identify one-time
+acquisitions and must never restart existing paths. Build 167 may coexist with CPU reference controls, but refuses
+GPU research/calibration. Run 168 only after all CPU/GPU workers terminate and
+167 completes PASS; run 169 only after complete full PASS 168. All paths are
+fresh; there is no automatic retry or partial-boundary selection.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/build_bulk_pfm_calibration_capture.py \
+  --work out/research/n010-comparison-readiness/minimal-calibration-build-v3 \
+  --output research/lanes/n010-comparison-readiness/results/167-bulk-pfm-calibration-fixture-build.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_bulk_pfm_capture.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/bulk-pfm-calibration-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_bulk_pfm_capture.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/bulk-pfm-calibration-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/168-bulk-pfm-calibration-quiet-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json
+```
+
+The new method keeps all sixteen boundaries, every sample, old exact
+schedule/statistics/thresholds, every image/scratch witness and zero-teardown
+8 GiB ledger checks. All 24 eligible references and final pilots/047 remain
+required regardless of this future measurement outcome.
+
+
+### Final recovered-reference and fixture-proof audit (plan 049)
+
+The auditor is prepared; Python/source assembly and `--help` succeed. It has
+**not executed its six numerical gates**. Dispatch only after all 24 references
+admit, all original complete pilots exist, full 168/169 pass and no research
+worker is live. This is the final one-time result 047, not an interim status
+probe. The separate remaining-pilot driver is prepared below; this auditor
+does not acquire missing pilots or calibration.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/readiness_preflight_recovered_primary_direction.py \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json \
+  --calibration research/lanes/n010-comparison-readiness/results/169-bulk-pfm-calibration-full-renderer.json \
+  --dynamic-pilots research/lanes/n010-comparison-readiness/results/019-controlled-dynamic-cohort.json research/lanes/n010-comparison-readiness/results/037-controlled-dynamic-pt1024.json research/lanes/n010-comparison-readiness/results/048-sponza-dynamic-cohort.json \
+  --static-pilots research/lanes/n010-comparison-readiness/results/044-c1-complete-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json research/lanes/n010-comparison-readiness/results/024-c8-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/025-c9-pt-quality-ladder.json \
+  --output research/lanes/n010-comparison-readiness/results/047-readiness-preflight.json
+```
+
+
+### Remaining full pilots after actual proof admission (plan 049 Amendment 1)
+
+Prepared, **not run**. Under plan 053 reference dispatch only after
+151/163/164/180/166 and full 167/168/169
+complete PASS, all 24 references verify and every CPU/GPU research worker
+terminates. The command refuses missing proofs before creating its work root.
+It acquires original 043/044/048 once, retains all quality losses and memory
+ledgers, and does not rerun old calibration. Run the separate final auditor
+above only after this process actually terminates. No pilot timing becomes an
+accepted Lane M performance measurement.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/finish_recovered_primary_direction_readiness.py \
+  --work out/research/n010-comparison-readiness/final-comparison-pilots-recovered-v1 \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json
+```
+
+### User-stopped fresh feasibility (plan 050, stop 176)
+
+172 started once after actual termination of GPU 169 and diagnostic 174,
+then was user-stopped before its first seed export (176).
+The command identifies that acquisition; never restart its existing paths. Preserve 165 and its v1 work
+path. No numerical level completed. 172 cannot admit 166; plan 053 now
+requires actual complete 180 PASS. All original full-reference gates remain
+unchanged. The following command is historical and must not be rerun.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_post_stop_primary_direction_feasibility.py \
+  --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v2 \
+  --output research/lanes/n010-comparison-readiness/results/172-primary-direction-post-stop-bounded-feasibility.json
+```
+
+### Completed reversible IDE visibility diagnostic (plan 051)
+
+174 completed its local suppression/restoration classifier PASS. The command
+identifies that one-time acquisition; do not restart existing paths. It required
+complete 169 with all sixteen
+boundaries/eight blocks and no research workers. All 169 FAILs stay FAIL.
+It briefly moves the single registered IDE window to an undisplayed special
+workspace, restores its original workspace/focus and verifies exact attributes.
+It can precede CPU 172; this is environment diagnosis, not accepted timing.
+The classifier cannot admit references, calibration or Lane M. Refuse existing
+paths and changed PID/window identities; preserve any failures without retry.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/diagnose_ide_visibility_accounting.py \
+  --work out/research/n010-comparison-readiness/ide-visibility-diagnostic-v1 \
+  --output research/lanes/n010-comparison-readiness/results/174-ide-visibility-accounting-diagnostic.json
+```
+
+### Full calibration with IDE undisplayed (plan 052)
+
+The registered IDE window is temporarily moved to an undisplayed special
+workspace during each acquisition and restored afterward. Its original
+PID/client/window identities and sampled local graphics-accounting condition
+are operational guards, not GPU utilization estimates or changed timing gates.
+Refuse existing paths and other research workers. Keep stopped 172 immutable.
+All original sixteen boundaries are mandatory. Run 178 only after actual
+complete full PASS 177, restoration and actual controller termination.
+177 is complete PASS; 178 is terminal INCOMPLETE / NOT ACCEPTED.
+Both commands are historical identifiers; never rerun their existing paths.
+These commands identify one-time acquisitions; never rerun their paths. A scientific precision FAIL still completes all sixteen boundaries.
+An operational guard failure retains partials and prevents timing admission.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_hidden_ide_bulk_pfm.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/hidden-ide-bulk-pfm-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/177-hidden-ide-bulk-pfm-calibration-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_hidden_ide_bulk_pfm.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/hidden-ide-bulk-pfm-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/177-hidden-ide-bulk-pfm-calibration-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/178-hidden-ide-bulk-pfm-calibration-full-renderer.json
+```
+
+Source assembly proves the whole generated program reverses exactly to the
+frozen plan-048 program; all original scientific function definitions remain
+byte-identical. Source compilation and CLI help are not GPU measurements,
+software regression validation, reference admission or readiness. Unit tests
+were not run. The existing plan-049 verifier/driver still requires actual
+167/168/169 PASS and therefore rejects 169. A new guarded proof-intake adapter
+must verify actual complete 167/177/178 before selecting that timing proof.
+`hidden_ide_timing_provenance.py` now provides that strict adapter with whole
+original-verifier inverse proof. Actual post-hoc replay 179 retains three FAIL boundaries and rejects
+incomplete 178. Full payload admission has not run and timing remains unproved.
+
+### Fresh feasibility after stop 176 (plan 053)
+
+Completed once at checkpoint `6f6b557`. Both registered levels finish:
+8192/16384 spp ratios are **1.0703554221788882 / 1.0599135470235277**,
+both FAIL against <=0.75. Primary/direct/emission remain exact. The bounded
+campaign is COMPLETE/FAIL; its two-level reference screen remains
+INCOMPLETE/ineligible. This is not a 262144-spp cap failure. Corpus acquisition
+166 is NOT RUN and cannot consume this failed proof. The command below is
+historical; never rerun its existing paths. All exact outputs are retained.
+Plan 053 Amendment 1 permits CPU-only continuation
+after terminal 178 and documented host/session termination, with exact 181/182
+identities, matching current boot and no research workers. Old restoration
+failure remains immutable; this alternative grants no GPU timing admission.
+No waiting/restart worker is installed. Keep 165/v1 and 172/v2 immutable.
+Begin from sample zero at the separate v3 path; only its own complete prefix
+may continue to 16384. The bounded two-level question, four seeds, executable,
+limits and scientific gates are unchanged. Completed 180 FAIL stops corpus
+intake; only actual full 180 PASS permits still-unexecuted 166.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_after_second_stop_primary_direction_feasibility.py \
+  --work out/research/n010-comparison-readiness/primary-direction-feasibility-recovery-v3 \
+  --output research/lanes/n010-comparison-readiness/results/180-primary-direction-second-stop-bounded-feasibility.json
+```
+
+Full source inversion reconstructs the prior plan-050 generated program
+(`d9d2ac08a54c35b09e4940537c3da14d65b3036ac0be1984305d325a81d8464b`).
+The pending API's five declared documentation/dispatch/plan changes reverse
+to its complete source SHA256
+`ec98f3ec41950b01b1b4565e9ae671a85e57ff7b95b916b24a03e987ac61401d`
+at `3b7c566`. Source assembly is not acquisition, reference eligibility or
+readiness. No unit tests or runtime regression validation were run.
+
+### Post-hoc decision replay after 178 actually terminates
+
+Executed once; **complete analysis, calibration NOT ACCEPTED**. The CPU-only
+report 179 preserves every full
+scientific PASS/FAIL and every incomplete boundary, with no exclusions,
+corrections, retries or new thresholds. It replays original schedules,
+statistics, owned-memory event ledgers, all frozen inputs and the sampled
+visibility/restoration evidence. Environment replay alone cannot admit timing;
+strict intake still requires actual full numerical PASS and all native payloads.
+Executed after actual controller/native termination, before any 180 data.
+The following command is historical; never overwrite existing 179.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/summarize_hidden_ide_calibration.py \
+  --output research/lanes/n010-comparison-readiness/results/179-hidden-ide-calibration-decision-and-replay.json
+```
+
+On scientific FAIL, strict intake refuses before expensive native payload
+verification. The report must distinguish that scope from complete payload
+rehashing or radiance/timestamp regeneration; its replay is not software
+regression validation. The source compiles and the strict whole-verifier
+inverse remains exact. Replay covers 25 complete blocks / 1600 samples and
+684 frozen fixture identities; full native-payload admission was rejected.
+
+
+### Deferred CPU image serialization (plan 054)
+
+Build 184 is complete. The build command is historical; never rerun its path.
+CPU source assembly/CLI help and strict-verifier inverse proof are complete;
+**sizing 185 completed all sixteen boundaries PASS**; full 186 and full
+proof intake have NOT RUN. CPU feasibility 180 has actually terminated FAIL.
+The sizing command below is historical; never rerun its existing paths.
+Sizing/full calibration are separate one-time commands; no waiting controller
+is installed. Never dispatch full 186 without actual complete all-sixteen 185
+PASS, stable original input hashes and matching sizing boot/device/driver.
+No desktop-window/display changes are performed by these commands.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_deferred_image_capture.py \
+  --mode sizing \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/deferred-image-calibration-sizing-v1 \
+  --output research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/calibrate_deferred_image_capture.py \
+  --mode accepted \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --work out/research/n010-comparison-readiness/deferred-image-calibration-accepted-v1 \
+  --plan research/lanes/n010-comparison-readiness/results/185-deferred-image-calibration-sizing.json \
+  --output research/lanes/n010-comparison-readiness/results/186-deferred-image-calibration-full-renderer.json
+```
+
+The generated acquisition program reverses completely to original plan 048
+SHA256 `18f906fee96fc1cbb43f9f225c4c6ea35224cac01e6d9736647308e56436b55c`.
+Only declared fixture/proof/work dispatch changes in the original function
+prelude; schedule/statistical bodies remain byte-identical. The strict intake
+adapter `deferred_image_timing_provenance.py` reverses completely to original
+049 SHA256 `49ac6660fe17e8895be2a0d600771a8e844358867fe57014f0066105b247b9a8`.
+Neither proof assembly admits failed 169, incomplete 178, an eligible reference,
+a different workload's timing or final READY. All original six gates remain.
+
+
+### Deferred-calibration final pilot and six-gate dispatch (plan 055)
+
+Both adapters are prepared; **not run**. Source assembly and CLI help complete.
+The complete parent-module inverses are exact (pilot parent `7a7cff2449d5...`,
+auditor parent `c485165c1ec8...`), retaining inherited whole-source inverses to
+original scientific drivers `53b173...` / `87985c...`. All six original gate
+names and the five non-calibration function bodies remain unchanged. New source
+provenance records both parent/new adapters, plan 055 and the actual verifier.
+
+The old plan-049 entries above still require failed 169 and refuse admission.
+The entries below select only actual full 184/185/186 proof; they do not alias
+negative records to PASS. Require actual complete 180/166 PASS and independent
+full 24-slot reference verification. Never create or start a waiting worker.
+
+Only after complete required proofs and all research workers terminate:
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/finish_deferred_primary_direction_readiness.py \
+  --work out/research/n010-comparison-readiness/final-comparison-pilots-deferred-image-v1 \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json
+```
+
+Only after the actual pilot driver exits with full completed pilots, dispatch
+this separate one-time final auditor. It refuses existing 047 and live research
+workers. A source assembly or diagnostic preflight is not a final gate result.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/readiness_preflight_deferred_primary_direction.py \
+  --lock research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json \
+  --references out/research/n010-comparison-readiness/full-corpus-primary-direction-view-v1 \
+  --reference-view-record research/lanes/n010-comparison-readiness/results/160-primary-direction-reference-view.json \
+  --calibration research/lanes/n010-comparison-readiness/results/186-deferred-image-calibration-full-renderer.json \
+  --dynamic-pilots research/lanes/n010-comparison-readiness/results/019-controlled-dynamic-cohort.json research/lanes/n010-comparison-readiness/results/037-controlled-dynamic-pt1024.json research/lanes/n010-comparison-readiness/results/048-sponza-dynamic-cohort.json \
+  --static-pilots research/lanes/n010-comparison-readiness/results/044-c1-complete-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/013-c7-pt-cohort-pilot.json research/lanes/n010-comparison-readiness/results/024-c8-pt-quality-ladder.json research/lanes/n010-comparison-readiness/results/025-c9-pt-quality-ladder.json \
+  --output research/lanes/n010-comparison-readiness/results/047-readiness-preflight.json
+```
+
+Pilot time remains diagnostic. Lane M timing requires the exact admitted
+fixture/boundary or its own calibration; no capability is transferred into old
+or new preparation-pilot timings. No unit tests/runtime regression checks were
+run during this source-only adapter preparation.
+
+
+### Nested prefix scrambling candidate (plan 056)
+
+Separate from failed first-level 180, [187](results/187-nested-scramble-oracle-build.json)
+compiles original cached-cosine standalone/prefix binaries with only the
+uniform scrambling and diagnostic metadata changed. There is no direction
+pilot or extra scored path per spp. Input-prefix-dependent binary permutations
+preserve dyadic occupancy; this does not prove improved RQMC error. All
+scientific outcomes remain unmeasured. Whole parent-driver inversions preserve
+the original physical, state/prefix and two-level feasibility gates.
+
+The commands below are **not run**. First finish actual CPU 180, then GPU
+185/186 (or record its actual terminal failure) and verify no other research
+worker. The dispatch guard enforces this ordering before creating outputs.
+Invoke each stage once, sequentially, only after its complete predecessor
+PASS. Existing outputs are refused; no waiting option or retry is allowed.
+
+```bash
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/validate_nested_scramble.py \
+  --work out/research/n010-comparison-readiness/owen-reference-physical-v1 \
+  --output research/lanes/n010-comparison-readiness/results/188-nested-scramble-physical-controls.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/validate_nested_scramble_prefix.py \
+  --work out/research/n010-comparison-readiness/owen-reference-prefix-v1 \
+  --output research/lanes/n010-comparison-readiness/results/189-nested-scramble-all-state-and-prefix.json
+
+LD_LIBRARY_PATH="$NIX_LD_LIBRARY_PATH" out/research/n010-comparison-readiness/venv/bin/python \
+  scripts/research/n010_reference_sampling/acquire_nested_scramble_feasibility.py \
+  --work out/research/n010-comparison-readiness/owen-reference-feasibility-v1 \
+  --output research/lanes/n010-comparison-readiness/results/190-nested-scramble-bounded-feasibility.json
+```
+
+Both original-baseline ratios must be <=0.75 at 8192/16384. Failure stops this
+candidate. Even full PASS does not admit corpus references: a later prospective
+full 24-slot provenance/qualification transition is still required, with
+unchanged six levels through 262144, support and 1e-5 / 5% screens. Existing
+166/180 proof chains are not rewritten. Active/default Renderer/build graph
+and historical results remain unchanged; unit/regression tests were not run.

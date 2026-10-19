@@ -1,0 +1,63 @@
+{
+  "schema": "n010-current-summary-consolidation/1",
+  "complete": true,
+  "classification": "HISTORICAL_CHRONOLOGY_PRESERVED_CURRENT_SUMMARIES_CONSOLIDATED_NOT_READY",
+  "source_commit": "514069b739394fd34a22f35d2cf1b95aba13e75a",
+  "historical_snapshots": [
+    {
+      "source_path": "research/status.md",
+      "source_commit": "514069b739394fd34a22f35d2cf1b95aba13e75a",
+      "source_git_blob": "96648c868987aa3908f63bc098a60af7ce71a7e3",
+      "snapshot_path": "research/lanes/n010-comparison-readiness/results/709-status-chronology-514069b7.txt",
+      "sha256": "4f18bd4182b55456bb4b2e7ce26a06e6d79e84db31b9c4a56181c56e58422f7a",
+      "bytes": 117700,
+      "byte_exact": true,
+      "historical_not_current": true
+    },
+    {
+      "source_path": "research/roadmap.md",
+      "source_commit": "514069b739394fd34a22f35d2cf1b95aba13e75a",
+      "source_git_blob": "ce63ed9caa218db89f1705e30ee388789b4ac270",
+      "snapshot_path": "research/lanes/n010-comparison-readiness/results/710-roadmap-chronology-514069b7.txt",
+      "sha256": "52b398e4318f165119aa872d96b62639c6efce3fbe61d7b29511faacab388ad2",
+      "bytes": 94379,
+      "byte_exact": true,
+      "historical_not_current": true
+    },
+    {
+      "source_path": "research/lanes/n010-comparison-readiness/README.md",
+      "source_commit": "514069b739394fd34a22f35d2cf1b95aba13e75a",
+      "source_git_blob": "f5b3ce2d3178a3363b0a9e4fa421ea3381a0fb5a",
+      "snapshot_path": "research/lanes/n010-comparison-readiness/results/711-lane-readme-chronology-514069b7.txt",
+      "sha256": "64f1fd42e249dfaf242fa5a4628afeaccb67dae3929cbeb77a72e33cce581624",
+      "bytes": 109931,
+      "byte_exact": true,
+      "historical_not_current": true
+    }
+  ],
+  "original_rendered_sources": {
+    "research/status.md": "https://github.com/owoDra/real-time-gi-lab/blob/514069b739394fd34a22f35d2cf1b95aba13e75a/research/status.md",
+    "research/roadmap.md": "https://github.com/owoDra/real-time-gi-lab/blob/514069b739394fd34a22f35d2cf1b95aba13e75a/research/roadmap.md",
+    "research/lanes/n010-comparison-readiness/README.md": "https://github.com/owoDra/real-time-gi-lab/blob/514069b739394fd34a22f35d2cf1b95aba13e75a/research/lanes/n010-comparison-readiness/README.md"
+  },
+  "current_summary_sha256": {
+    "research/status.md": "1765607e55ae3db68e29a4f7d5c6488d6f728df14e1f9d458b567bcf5e0f4d24",
+    "research/roadmap.md": "a2f3865d1c094d4b0e5f0ef279c401df16fb2dd7df1671165205f96b1705ed06",
+    "research/lanes/n010-comparison-readiness/README.md": "c8f07344a5136f2af2f46a9fcfbcd6d5cc2e72c0a698efe9bb7a63fcd6080a87"
+  },
+  "scientific_results_changed": false,
+  "accepted_raw_bytes_changed": false,
+  "scientific_native_executed": false,
+  "thresholds_changed": false,
+  "reference_admission": false,
+  "tests": "NOT_RUN; documentation/byte identity/Git ancestry/local links only",
+  "historical_snapshots_verified_against_git": true,
+  "source_git_ancestry_verified": true,
+  "current_local_links_verified": 59,
+  "prior_index_entries_byte_values_unchanged": true,
+  "default_build_graph_comparison_baseline": "adf81960",
+  "default_build_graph_diff_empty": true,
+  "historical_n001_n009_result_diff_empty": true,
+  "research_harness": "OK;8 configured lane indexes/419 declared links;not runtime validation",
+  "runtime_regression_validation": "NOT_RUN"
+}
