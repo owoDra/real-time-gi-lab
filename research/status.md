@@ -109,6 +109,11 @@ only bound is **not** a native radiance-bias bound.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
   API. Actual612 raw replay and scientific acquisition/feasibility launcher remain
   unfinished;620's CLI only describes source.
+- 167/718 connects the same full raw reader and single-level I/O to exact626/627
+  private binaries and complete165/708 evidence, with whole158/161 inverses and
+  unchanged scientific analysis. Distinct private root/variant,4 threads on
+  CPU31. **Source only:** no prerequisite, native, raw replay or admission ran;
+  scientific launcher/feasibility/admission dispatch remain unfinished.
 - 160's whole36 corrected state/snapshot route618 exists;619 final audit **NOT RUN**.
 
 [629](lanes/n010-comparison-readiness/results/629-private-state-prefix-description.json),

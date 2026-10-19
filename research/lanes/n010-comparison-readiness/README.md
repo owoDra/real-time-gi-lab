@@ -62,6 +62,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |163 `acquire_thread_private_equivalence.py`|Original versusprivate full-C1/16spp/one-seed,1vs4 threads on sameCPU31|623/624/625 complete;scoped equivalence only |
 |165 `acquire_private_state_prefix.py`|Same full78 state/prefix scope;all157 prerequisites plus626/627/625|629 description;630..707/708 NOT RUN |
 |158/161 raw-chain and one-level I/O|Full existing physical/state proofs and unchanged assessor/support/SE/stop|611/620 source only;actual612/launcher/admission unfinished |
+|167 `private_reference_execution.py`|Same full raw/level science with exact626/627,165/708,717 transfer assessment;distinct root/variant|718 source/inverses complete;no prerequisites/native/replay/admission executed |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
 
