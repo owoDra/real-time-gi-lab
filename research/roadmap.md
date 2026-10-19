@@ -1,5 +1,7 @@
 # Forward research roadmap — major gates only
 
+**Next bounded qualification (source only):** [plan163](lanes/n010-comparison-readiness/experiments/163-thread-private-full-frame-equivalence-pilot.md) registers a fresh compensated full-C1/16spp baseline and private-audit candidate pair, separately invoked after current145 seed1/490 is terminal and actual622 compilation passes. Candidate4 render threads all remain pinned to the same CPU31: actual load stays one core/nice15 pending the CPU preference. Require exact full binary payloads/exported audits, canonical deterministic moments/primary records and unchanged numerical/resource guards. Outputs623–625 and build622 are **NOT RUN**. No automatic queue, reference admission, multi-core speed claim or readiness increment. Tests NOT RUN.
+
 ## Current execution checkpoint — 2026-10-19 JST
 
 **Latest verified checkpoint: N010 NOT_READY; references16/24 and selected PT captures2/28 unchanged. Compensated candidate13/17 full artifacts; all8 non-PT raw executions retained, union10/36 descriptive trajectories; six new quality replays pending. No speed claim or reference admission.**
