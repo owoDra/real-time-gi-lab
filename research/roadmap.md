@@ -14,9 +14,11 @@ Full state/prefix170 is now qualified:78/78 actual steps/26 cases, all24 locked
 states plus2 high-count C7 cases;708 complete/all_pass, all26 restored results
 exact. This execution evidence also does not admit a reference.
 
-1. Complete the existing independent density/support/Jacobian/bias assessment
-   and actual whole-frame two-level feasibility, retaining the now-qualified
-   full locked-state/exact-prefix and physical/IID evidence.
+1. Execute the actual whole-frame two-level feasibility under172, retaining
+   qualified full locked-state/exact-prefix and physical/IID evidence.735 records
+   the independent density/support/numerical review, permits unadmitted feasibility
+   only, and retains the unbounded global finite-arithmetic bias limitation.
+   Actual admission still requires its own explicit assessment and dispatch.
    Admit the missing8 references only through unchanged full-frame/four-seed/
    six-level/two-consecutive-level/support/1e-5 absolute/5% relative rules.
    Source-only metadata, seed integrity and agreement with itself do not admit

@@ -38,6 +38,13 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   have exact21 payloads/scored counters/interval audits.630–707 terminal,
   full708 complete/all_pass; all4990 summary input hashes match. Original
   numerical guards hold. No reference admission or job queued.
+- [735 numerical assessment](lanes/n010-comparison-readiness/results/735-independent-compensated-density-and-bias-assessment.md)
+  now combines independent ideal-density/source review with complete physical/IID
+  and state/prefix evidence. It permits only unadmitted whole-frame feasibility;
+  global finite-arithmetic bias remains unbounded and admission fails closed.
+  Prospective172 provides one manually named level at a time, exact171/627,
+  original scientific rules/resources and immutable qualification snapshots.
+  Actual preparation736 and full-C1 B8 feasibility737/738/739 have **NOT RUN**.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.

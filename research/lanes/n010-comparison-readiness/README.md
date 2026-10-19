@@ -67,6 +67,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|A6b493–496 physical/IID PASS;A10 497–500 pooled physical PASS |
 |170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|630–707/708 complete/PASS;all24 low-dose states and2 actual C7 cases qualified;all26 restored exact |
 |171 `four_core_reference_execution.py`|Explicit170 full78/four-core raw-reader and level-I/O connection;all8 slots/six levels/four seeds|726 source/inverses only;no prerequisite/native/raw replay/admission executed |
+|172 `acquire_four_core_reference_level.py`|735 scoped independent review;actual prerequisite preparation then two separately invoked full-C1 B8 levels;original171/161 scientific rules;immutable qualification history|Registered;736 preparation/737–739 actual feasibility NOT RUN;no admission |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
 
@@ -121,3 +122,8 @@ in [712](results/712-current-summary-consolidation.json). Use their pinned Git
 source links for original relative-link context; they are historical records.
 The result index retains all outcomes; no accepted raw byte or failed run is
 removed. [AI research/human oversight disclosure](../../../docs/ai-research-workflow.md).
+
+[735 post-hoc independent numerical assessment](results/735-independent-compensated-density-and-bias-assessment.md)
+permits unadmitted feasibility acquisition under
+[172](experiments/172-four-core-scientific-level-and-feasibility.md), retaining
+the unresolved global finite-arithmetic bias bound and separate admission.
