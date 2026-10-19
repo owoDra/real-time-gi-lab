@@ -2263,6 +2263,42 @@
       "status": "complete-cli-scope-correction-source-only-build-and-runtime-not-run",
       "result": "626-thread-private-cli-source.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-490",
+      "status": "complete-second-of-four-full-a6a-seed-integrity-no-admission",
+      "result": "490-compensated-full-a6a-seed1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-623",
+      "status": "complete-full-c1-single-core-baseline-equivalence-only",
+      "result": "623-thread-private-baseline-equivalence.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-624",
+      "status": "complete-full-c1-four-threads-on-one-core-exact-equivalence-only",
+      "result": "624-thread-private-candidate-equivalence.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-625",
+      "status": "complete-full-c1-single-core-thread-equivalence-no-admission",
+      "result": "625-thread-private-full-frame-equivalence-summary.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-627",
+      "status": "complete-private-full-prefix-build-runtime-qualification-partial",
+      "result": "627-thread-private-cli-build.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-628",
+      "status": "complete-terminal-seed1-and-bounded-equivalence-not-ready",
+      "result": "628-terminal-seed1-and-thread-private-equivalence.md",
+      "gpu_run": false
     }
   ]
 }
