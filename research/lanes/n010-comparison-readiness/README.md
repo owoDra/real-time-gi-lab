@@ -70,7 +70,10 @@ and [n010_comparison_readiness](../../../scripts/research/n010_comparison_readin
 The prefix routes use all21 payload identities, original16/8/restored16 and
 C7 16384/8192/restored16384 levels, original own-log1e-6/conditioned1 guards and
 complete interval counters. Private4 render threads remain restricted to one
-CPU31; no approved multicore throughput or automatic physical-evidence transfer.
+CPU31; no approved multicore throughput.
+[717 assessment](results/717-private-estimator-identity-and-physical-evidence-transfer.md)
+justifies estimator-level physical-evidence transfer for exact626/627, while
+complete original physical controls and private708 remain required.
 
 ## Reference admission and measurements
 

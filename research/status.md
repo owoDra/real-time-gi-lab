@@ -103,7 +103,9 @@ only bound is **not** a native radiance-bias bound.
   summary610 **NOT RUN**. Prefix526 builds only.
 - Private route165/629 retains the same full78 cases, scientific analysis and
   prerequisites;630..707/708 **NOT RUN**. Four render threads remain on one CPU.
-  Physical-evidence transfer requires a justified assessment; it is not automatic.
+  [717 source assessment](lanes/n010-comparison-readiness/results/717-private-estimator-identity-and-physical-evidence-transfer.md)
+  justifies estimator-level physical-evidence transfer for exact626/627 identities;
+  complete original controls and private708 execution qualification remain required.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
   API. Actual612 raw replay and scientific acquisition/feasibility launcher remain
   unfinished;620's CLI only describes source.
