@@ -13,19 +13,18 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   admission. Direct allowance has0 violations; indirect relative7.5096e-5 /
   NRMSE7.9006e-5 pass unchanged. All1498 hashes in terminal492 match. Original261
   and prior per-seed records are preserved; this does not prove global bias.
-- A6b493: **1/4 seeds** terminal0/integrity PASS, all1477 hashes match;
-  no pooled A6b/IID verdict. CPU5251.617578/elapsed5271.961829 seconds are
-  diagnostic; original one-core guards held.
+- A6b493/494: **2/4 seeds** terminal0/integrity PASS, no pooled A6b/IID verdict.
+  All1930 hashes in494 match. Its CPU5505.956862/elapsed1387.285087 seconds
+  are offline diagnostics; original guards held under registered four-core169.
+  Earlier one-core493 and its evidence remain unchanged.
 - **CPU-profile pilot720 PASS:** one full-C1/16spp/original-seed case, exact
   six output files/all exported audits versus623; all1917 hashes match.
   Four threads on distinct cores28–31/nice15; CPU54.058786/elapsed14.137738
   seconds are offline diagnostics.169 registers the same profile for remaining
   named full physical steps, preserving whole145 scientific/IID analysis.
-- **Live:**169 A6b seed1, nativePID706088/start_ticks9322770/session91480,
-  source aef41730ca2dfd81540fc03cdb1f48a1686b59c2. Four workers observed on
-  CPUs28–31/nice15; original7200CPU/10800elapsed/4GiB. Sole scientific job,
-  mutable494 uncommitted/unindexed until terminal; no queue/retry. No reference
-  admission follows from the live receipt or bounded pilot.
+- **Next:** separately invoke169 A6b seed2 after terminal inspection/publication,
+  CPUs28–31/nice15/original7200CPU/10800elapsed/4GiB. No live native at this
+  checkpoint; no queue/retry or reference admission follows from a receipt.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -34,11 +33,9 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Latest A6b seed0 outcome719](lanes/n010-comparison-readiness/results/719-compensated-a6b-seed0-terminal-outcome.md),
+[Latest A6b seed1 outcome722](lanes/n010-comparison-readiness/results/722-four-core-a6b-seed1-terminal-outcome.md),
 [bounded four-core outcome721](lanes/n010-comparison-readiness/results/721-four-core-execution-pilot-outcome.md),
-[full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md),
-[terminal execution and full-frame equivalence628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md),
-[non-PT/prefix outcomes617](lanes/n010-comparison-readiness/results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md).
+[full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md).
 A live process receipt is observation, not a passing research result.
 
 ## What is established
@@ -109,7 +106,7 @@ only bound is **not** a native radiance-bias bound.
   seeds, reserved494..500 and all original analytical/IID/numerical/resource
   rules, with exact627/720 four-core execution and explicit prior-profile
   validation. Whole145 inverse and complete physical/IID analysis bytes/AST
-  are exact.494 A6b seed1 is live; later495..500 NOT RUN. A receipt is not PASS.
+  are exact.494 A6b seed1 is terminal PASS; later495..500 NOT RUN.
 - 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
   and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
   chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;

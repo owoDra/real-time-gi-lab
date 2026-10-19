@@ -8,7 +8,7 @@ are in the [N010 results](lanes/n010-comparison-readiness/results/index.json).
 Do not open more preparation lanes because the incumbent loses quality.
 
 1. Finish the registered compensated physical acquisition and independent
-   controls. A6a4/4 passes its pooled analytical gate; A6b1/4 is terminal.
+   controls. A6a4/4 passes its pooled analytical gate; A6b2/4 is terminal.
    Use bounded low-priority profile720 under separately registered169, then
    remaining named A6b/IID, A10 and level5 diagnostic. Full science is unchanged.
    Keep original seeds/counts/numerical/resource guards and every failure.
