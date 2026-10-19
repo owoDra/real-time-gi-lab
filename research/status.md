@@ -121,6 +121,12 @@ only bound is **not** a native radiance-bias bound.
   [717 source assessment](lanes/n010-comparison-readiness/results/717-private-estimator-identity-and-physical-evidence-transfer.md)
   justifies estimator-level physical-evidence transfer for exact626/627 identities;
   complete original controls and private708 execution qualification remain required.
+- 170/723 provides the **same78** state/prefix cases on bounded CPUs28–31,
+  with whole165-generated/109 inverses and unchanged full scientific analysis.
+  All15 metadata hashes match; actual630..707/708 remain **NOT RUN**, pending
+  complete physical/IID/diagnostic controls. New reader rejects mixed/missing
+  execution profiles.165/629's one-core template is retained;167/718's raw/level
+  profile still needs an explicit corresponding connection before use.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
   API. Actual612 raw replay and scientific acquisition/feasibility launcher remain
   unfinished;620's CLI only describes source.

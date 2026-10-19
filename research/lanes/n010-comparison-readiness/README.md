@@ -18,7 +18,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
 | Private exporter |627 full/prefix build;623/624/625 same-core and720 four-core full-C1 equivalence,one seed/16spp only |
-| Full state/prefix |Original157 and private165 scientific acquisitions NOT RUN |
+| Full state/prefix |Original157/private165 and four-core170/723 source routes;scientific acquisitions NOT RUN |
 | Final state-bound audit619 |NOT RUN;all-split admission unfinished/fails closed |
 | Direct relative error1.0 |Sponza pixels UNRESOLVED/未解決, included |
 
@@ -65,6 +65,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |167 `private_reference_execution.py`|Same full raw/level science with exact626/627,165/708,717 transfer assessment;distinct root/variant|718 source/inverses complete;no prerequisites/native/replay/admission executed |
 |168 `acquire_multicore_equivalence.py`|Same exact full-C1/one-seed/16spp comparison versus623,4 distinct CPU cores/nice15|720 terminal exact PASS;offline costs only;no full-scope admission |
 |169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|494 seed1 terminal PASS;495 seed2 live/unindexed;496..500 NOT RUN |
+|170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|723 source/full-scope metadata only;630..707/708 NOT RUN |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
 
@@ -72,8 +73,9 @@ Scripts are under [n010_reference_sampling](../../../scripts/research/n010_refer
 and [n010_comparison_readiness](../../../scripts/research/n010_comparison_readiness/).
 The prefix routes use all21 payload identities, original16/8/restored16 and
 C7 16384/8192/restored16384 levels, original own-log1e-6/conditioned1 guards and
-complete interval counters. Private4 render threads remain restricted to one
-CPU31. Separate720 is one bounded four-core pilot; it does not change those templates.
+complete interval counters. Original165/167 templates keep4 render threads on
+CPU31.170/723 registers the same full state/prefix scope on four distinct cores;
+all78 acquisitions remain NOT RUN pending complete physical controls.
 [717 assessment](results/717-private-estimator-identity-and-physical-evidence-transfer.md)
 justifies estimator-level physical-evidence transfer for exact626/627, while
 complete original physical controls and private708 remain required.
