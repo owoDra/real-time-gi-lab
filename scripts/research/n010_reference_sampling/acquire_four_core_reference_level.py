@@ -196,9 +196,16 @@ def main():
         finite_arithmetic_global_bias_bound_proved=False,
         tests='NOT_RUN; registered scientific acquisition or retained-evidence verification only')
     if args.prepare:
-        result['prior_bootstrap_failure'] = dict(interpreter='bare system python',
+        result['prior_bootstrap_failures'] = [dict(interpreter='bare system python',
             error="ModuleNotFoundError: No module named 'numpy'",returncode=1,
-            preparation_executed=False,native_executed=False,scientific_outputs_created=False)
+            preparation_executed=False,native_executed=False,scientific_outputs_created=False),
+            dict(interpreter='retained venv without LD_LIBRARY_PATH',
+            error='ImportError: libstdc++.so.6 unavailable to NumPy; loader also reports libz.so.1 missing',
+            returncode=1,preparation_executed=False,native_executed=False,scientific_outputs_created=False)]
+    result['library_search_path'] = os.environ.get('LD_LIBRARY_PATH','')
+    for path in (Path('/nix/store/chqq8mpmpyfi9kgsngya71akv5xicn03-gcc-15.2.0-lib/lib/libstdc++.so.6'),
+                 Path('/nix/store/lw86vj9kfwgvlivg3p8qg2nibpmhmsl9-zlib-1.3.2/lib/libz.so.1')):
+        D.checked(path)
     write(output,result,True);started = time.monotonic()
     try:
         if args.prepare:

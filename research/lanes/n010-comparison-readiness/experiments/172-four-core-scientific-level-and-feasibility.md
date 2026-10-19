@@ -24,6 +24,13 @@ Invoke with the retained `out/research/n010-comparison-readiness/venv/bin/python
 and OPENBLAS_NUM_THREADS=1/OMP_NUM_THREADS=1. The initial bare system-Python
 invocation failed importing NumPy, before preparation, any736 record or native;
 record that bootstrap failure rather than presenting it as a scientific run.
+The subsequent venv-only bootstrap also stopped before preparation because
+NumPy could not load libstdc++; loader inspection also found libz missing.
+Use process-local LD_LIBRARY_PATH containing627's existing RUNPATH GCC library
+`/nix/store/chqq8mpmpyfi9kgsngya71akv5xicn03-gcc-15.2.0-lib/lib` and
+`/nix/store/lw86vj9kfwgvlivg3p8qg2nibpmhmsl9-zlib-1.3.2/lib`.
+Record both library bytes and the path; no installed package or host setting
+changes. Neither failed bootstrap reached a native or scientific replay.
 
 Then separately invoke `--selected C1_T_B8 --spp 8192` (737), inspect terminal
 and hashes, then manually invoke16384 (738). Each call launches at most one
