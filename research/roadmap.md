@@ -1,5 +1,7 @@
 # Forward research roadmap — major gates only
 
+[626](lanes/n010-comparison-readiness/results/626-thread-private-cli-source.json) corrects a source-review finding:621 private headers allow1..4 threads but its unchanged CLI still rejects threads!=1. Two exact-inverse CLI predicate/diagnostic changes now preserve both headers and all scientific arithmetic. All22 recorded input/payload identities and both complete CLI inverses verified. This is source-only; no compiler/native/image replay or tests ran. Preserve621 and unrun622; prospective163 now requires626/627. Current145 seed1 remains the sole scientific worker, one CPU31/nice15. No readiness/admission/count increment.
+
 **Next bounded qualification (source only):** [plan163](lanes/n010-comparison-readiness/experiments/163-thread-private-full-frame-equivalence-pilot.md) registers a fresh compensated full-C1/16spp baseline and private-audit candidate pair, separately invoked after current145 seed1/490 is terminal and actual627 compilation passes (164 corrects the CLI guard left in621). Candidate4 render threads all remain pinned to the same CPU31: actual load stays one core/nice15 pending the CPU preference. Require exact full binary payloads/exported audits, canonical deterministic moments/primary records and unchanged numerical/resource guards. Outputs623–625 and build627 are **NOT RUN**; unrun622 is preserved and superseded for this pilot. No automatic queue, reference admission, multi-core speed claim or readiness increment. Tests NOT RUN.
 
 ## Current execution checkpoint — 2026-10-19 JST

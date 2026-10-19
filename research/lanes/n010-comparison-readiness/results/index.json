@@ -2257,6 +2257,12 @@
       "status": "complete-thread-private-audit-source-and-posthoc-resource-planning-runtime-not-qualified",
       "result": "621-thread-private-reference-source.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-626",
+      "status": "complete-cli-scope-correction-source-only-build-and-runtime-not-run",
+      "result": "626-thread-private-cli-source.json",
+      "gpu_run": false
     }
   ]
 }
