@@ -195,6 +195,10 @@ def main():
         gpu_run=False,native_executed=False,automatic_queue=False,
         finite_arithmetic_global_bias_bound_proved=False,
         tests='NOT_RUN; registered scientific acquisition or retained-evidence verification only')
+    if args.prepare:
+        result['prior_bootstrap_failure'] = dict(interpreter='bare system python',
+            error="ModuleNotFoundError: No module named 'numpy'",returncode=1,
+            preparation_executed=False,native_executed=False,scientific_outputs_created=False)
     write(output,result,True);started = time.monotonic()
     try:
         if args.prepare:

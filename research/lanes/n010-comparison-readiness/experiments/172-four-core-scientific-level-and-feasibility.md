@@ -20,6 +20,10 @@ checking171's complete physical/IID/diagnostic and all78 state/prefix inputs,
 the reviewed735 identity and exact committed sources/recipe. It launches no
 native. Preparation has1200CPU/1800elapsed/4GiB, one CPU31/nice15. A source
 description is not a substitute for preparation or actual feasibility.
+Invoke with the retained `out/research/n010-comparison-readiness/venv/bin/python`
+and OPENBLAS_NUM_THREADS=1/OMP_NUM_THREADS=1. The initial bare system-Python
+invocation failed importing NumPy, before preparation, any736 record or native;
+record that bootstrap failure rather than presenting it as a scientific run.
 
 Then separately invoke `--selected C1_T_B8 --spp 8192` (737), inspect terminal
 and hashes, then manually invoke16384 (738). Each call launches at most one
