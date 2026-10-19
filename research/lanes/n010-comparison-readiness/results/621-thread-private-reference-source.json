@@ -1,0 +1,165 @@
+{
+  "schema": "n010-thread-private-reference-source/1",
+  "complete": true,
+  "source_preparation_valid": true,
+  "classification": "THREAD_PRIVATE_AUDIT_SOURCE_ONLY_NOT_QUALIFIED",
+  "source_commit": "81a47372924a9bcc787be74d7366c80111979a4e",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/162-thread-private-reference-audit-source.md": "c9555172d500ab5d40dcb05296b04bc2b05fd5561f97cf963cf5c4063966341b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/prepare_thread_private_reference.py": "3c30991a66a85d83cf3906b4dd80be0940338e936c9032fbbb0d09b4f8efd49d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/452-compensated-full-exporter-build.json": "57d7fb874689b80512489b97c0a1a8042315d7c89025770e755752639b6915ce",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/525-compensated-prefix-source-prepare.json": "2332be24d9a8e0a8c7b33da47ce237bca85d48d5450bc41fd418cf29e49f22f3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-full-deterministic-v1/build/n010_rqmc_oracle.hpp": "cb4e1de41018dd13b762da38a90f56873825e5a14971ee063b25c9e8627e1872",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-full-deterministic-v1/build/exporter.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-prefix-source-v1/n010_rqmc_oracle.hpp": "9759ca46b5c80c5e00c362ffb55eca5b0ec42792659391f4cb89bded5c85e70d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/compensated-prefix-source-v1/n010_rqmc_main.cpp": "1639462cb79c5f4420193f5746a3cd7c041683317166cdd60f417cdd55291cfd",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/371-batched-full-frame-cpu.json": "225b9e381492bc29c75938de3d4f3603da10e5747f1fb97b15d071467bf63635"
+  },
+  "payload_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/full/n010_rqmc_oracle.hpp": "f2238e39eb3cb268188be7709643432b1b4d295e5259bf614fb1a7ae0db205eb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/full/source-edits.json": "bf5b8c7cdb3df06a560c54c6955991bd4944dfaa4c97001ee7117235fd1aa32e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/full/exporter.cpp": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/prefix/n010_rqmc_oracle.hpp": "f797ad867cdc1b7a760abf0a435f3afef619f7e7da2495d2332b0719bf96c9f8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/prefix/source-edits.json": "bf5b8c7cdb3df06a560c54c6955991bd4944dfaa4c97001ee7117235fd1aa32e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/prefix/n010_rqmc_main.cpp": "1639462cb79c5f4420193f5746a3cd7c041683317166cdd60f417cdd55291cfd"
+  },
+  "rows": [
+    {
+      "mode": "full",
+      "proof": {
+        "whole_header_inverse_exact": true,
+        "sample_all_split_body_byte_identical": true,
+        "physical_density_geometry_sampling_block_byte_identical": true,
+        "all_audit_layout_fields_accounted": true,
+        "integer_fields": [
+          "eye_samples",
+          "light_samples",
+          "prefixes",
+          "forward_null",
+          "opposite_zero",
+          "density_reconstructions",
+          "bvh_queries",
+          "own_checks",
+          "coincident_matches",
+          "alternative_ray_checks",
+          "alternative_direct_checks",
+          "unmatched_visibility",
+          "component_attempts",
+          "component_nulls"
+        ],
+        "maxima_fields": [
+          "max_coincident_normal_difference",
+          "max_own_log_error",
+          "max_target_error_fraction",
+          "max_weight",
+          "max_unconditioned_target_error_fraction"
+        ],
+        "all_direct_counter_fields": [
+          "primary_hits",
+          "shadow_tests",
+          "shadow_blocked",
+          "backface_absorbed",
+          "proposal_null_samples"
+        ],
+        "per_pixel_statistics_arithmetic_unchanged": true,
+        "debug_paired_bvh_serial_guard": true
+      },
+      "original_header_sha256": "cb4e1de41018dd13b762da38a90f56873825e5a14971ee063b25c9e8627e1872",
+      "generated_header_sha256": "f2238e39eb3cb268188be7709643432b1b4d295e5259bf614fb1a7ae0db205eb",
+      "main_sha256": "b6519fae962c188f2469c310c62c01143f85de4d71383544c57d2cd81e47ed87",
+      "command": [
+        "c++",
+        "-mavx512f",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/full/exporter.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-build-v1/n010_thread_private_exporter"
+      ],
+      "compiler_realpath": "/nix/store/788mx070y81zjlg5ipcl0cra3afviw9k-gcc-wrapper-15.2.0/bin/g++",
+      "binary": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-build-v1/n010_thread_private_exporter"
+    },
+    {
+      "mode": "prefix",
+      "proof": {
+        "whole_header_inverse_exact": true,
+        "sample_all_split_body_byte_identical": true,
+        "physical_density_geometry_sampling_block_byte_identical": true,
+        "all_audit_layout_fields_accounted": true,
+        "integer_fields": [
+          "eye_samples",
+          "light_samples",
+          "prefixes",
+          "forward_null",
+          "opposite_zero",
+          "density_reconstructions",
+          "bvh_queries",
+          "own_checks",
+          "coincident_matches",
+          "alternative_ray_checks",
+          "alternative_direct_checks",
+          "unmatched_visibility",
+          "component_attempts",
+          "component_nulls"
+        ],
+        "maxima_fields": [
+          "max_coincident_normal_difference",
+          "max_own_log_error",
+          "max_target_error_fraction",
+          "max_weight",
+          "max_unconditioned_target_error_fraction"
+        ],
+        "all_direct_counter_fields": [
+          "primary_hits",
+          "shadow_tests",
+          "shadow_blocked",
+          "backface_absorbed",
+          "proposal_null_samples"
+        ],
+        "per_pixel_statistics_arithmetic_unchanged": true,
+        "debug_paired_bvh_serial_guard": true
+      },
+      "original_header_sha256": "9759ca46b5c80c5e00c362ffb55eca5b0ec42792659391f4cb89bded5c85e70d",
+      "generated_header_sha256": "f797ad867cdc1b7a760abf0a435f3afef619f7e7da2495d2332b0719bf96c9f8",
+      "main_sha256": "1639462cb79c5f4420193f5746a3cd7c041683317166cdd60f417cdd55291cfd",
+      "command": [
+        "c++",
+        "-mavx512f",
+        "-std=c++20",
+        "-O3",
+        "-fno-fast-math",
+        "-ffp-contract=off",
+        "-pthread",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v1/prefix/n010_rqmc_main.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-build-v1/n010_thread_private_prefix"
+      ],
+      "compiler_realpath": "/nix/store/788mx070y81zjlg5ipcl0cra3afviw9k-gcc-wrapper-15.2.0/bin/g++",
+      "binary": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-build-v1/n010_thread_private_prefix"
+    }
+  ],
+  "posthoc_resource_planning": {
+    "posthoc": true,
+    "source": "371 one-seed16spp older backend; not candidate throughput/ETA",
+    "four_seed8192_cpu_seconds": 109137.887232,
+    "four_seed8192_elapsed_seconds": 109593.310091272,
+    "optimistic_two_way_elapsed_seconds": 54796.655045636,
+    "optimistic_four_way_elapsed_seconds": 27398.327522818,
+    "unchanged_native_elapsed_guard_seconds": 43200,
+    "actual_feasibility_proved": false
+  },
+  "maximum_render_threads_in_source": 4,
+  "actual_cpu_load_changed": false,
+  "compiled": false,
+  "native_rendering_executed": false,
+  "reference_admission": false,
+  "gpu_run": false,
+  "tests": "NOT_RUN; source inverses/body/layout/input identity only"
+}

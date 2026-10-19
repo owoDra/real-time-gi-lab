@@ -2251,6 +2251,12 @@
       "status": "complete-single-level-reference-io-source-only-scientific-dispatch-not-implemented",
       "result": "620-compensated-single-level-io-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-621",
+      "status": "complete-thread-private-audit-source-and-posthoc-resource-planning-runtime-not-qualified",
+      "result": "621-thread-private-reference-source.json",
+      "gpu_run": false
     }
   ]
 }
