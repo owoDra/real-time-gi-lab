@@ -13,10 +13,12 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   admission. Direct allowance has0 violations; indirect relative7.5096e-5 /
   NRMSE7.9006e-5 pass unchanged. All1498 hashes in terminal492 match. Original261
   and prior per-seed records are preserved; this does not prove global bias.
-- **Execution:** A6a seed3/nativePID644484/session34570 is terminal0.
-  Next separately invoke145 A6b seed0 once after publication; no live native at
-  this checkpoint. Keep CPU31/nice15/one thread/7200CPU/10800elapsed/4GiB,
-  no queue/retry. The updated optional CPU preference is unanswered.
+- **Live acquisition:**145 A6b seed0 was separately invoked once after
+  publication dd4097aa (nativePID674045/start_ticks8670629/session8893,
+  source dd4097aabcf8326a784ac35ffb3731f8df87add3).
+  CPU31/nice15/one render thread/7200CPU/10800elapsed/4GiB; sole scientific
+  worker, no queue/retry. Mutable493 stays uncommitted/unindexed until terminal.
+  The updated optional CPU preference is unanswered; no CPU increase.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
