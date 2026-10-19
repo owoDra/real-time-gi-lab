@@ -2431,6 +2431,18 @@
       "status": "complete-original-full-a6b-seed2-four-core-terminal-not-ready",
       "result": "724-four-core-a6b-seed2-terminal-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-496",
+      "status": "complete-full-four-seed-a6b-analytical-and-independent-iid-pass-no-admission",
+      "result": "496-compensated-full-a6b-seed3.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-725",
+      "status": "complete-full-a6b-physical-and-independent-iid-pass-not-ready",
+      "result": "725-a6b-full-physical-and-independent-iid-outcome.md",
+      "gpu_run": false
     }
   ]
 }

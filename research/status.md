@@ -7,25 +7,25 @@ separate Lane M GI competitiveness. No N011. The goal is a valid executable
 comparison; an incumbent quality loss is a result and does not block handoff.
 
 - Eligible references: **16/24**. Missing: C1/C2/C3/C4 T_B8 and C5/C6 T_B2/T_B8.
-- Compensated sampler: **14/17 full physical artifacts**; original14/17 including
+- Compensated sampler: **15/17 full physical artifacts**; original14/17 including
   its diagnostic-only item is a separate historical inventory.
 - A6a489–492: **4/4 seeds, pooled analytical physical PASS**, no reference
   admission. Direct allowance has0 violations; indirect relative7.5096e-5 /
   NRMSE7.9006e-5 pass unchanged. All1498 hashes in terminal492 match. Original261
   and prior per-seed records are preserved; this does not prove global bias.
-- A6b493–495: **3/4 seeds** terminal0/integrity PASS, no pooled A6b/IID verdict.
-  All1941 hashes in495 match. Its CPU5515.776769/elapsed1389.290944 seconds
-  are offline diagnostics; original guards held under registered four-core169.
-  Earlier one-core493 and its evidence remain unchanged.
+- A6b493–496: **4/4 seeds, pooled analytical and independent IID PASS**.
+  Direct allowance0 violations; indirect NRMSE.0002978842/IID NRMSE.0007334998,
+  all RGB relative bounds pass unchanged. All1994 hashes in terminal496 match.
+  CPU5523.044093/elapsed1391.996325 seconds are offline diagnostics; original
+  guards held under169. Earlier records/profiles remain unchanged. No admission.
 - **CPU-profile pilot720 PASS:** one full-C1/16spp/original-seed case, exact
   six output files/all exported audits versus623; all1917 hashes match.
   Four threads on distinct cores28–31/nice15; CPU54.058786/elapsed14.137738
   seconds are offline diagnostics.169 registers the same profile for remaining
   named full physical steps, preserving whole145 scientific/IID analysis.
-- **Live:**169 A6b seed3, nativePID721692/start_ticks9629831/session85291,
-  sourceef8001573057c10e72143e7a1701f9793ad3cd77. CPUs28–31/nice15/original
-  7200CPU/10800elapsed/4GiB. Sole scientific job; mutable496 remains uncommitted/
-  unindexed until terminal. No queue/retry or reference admission from a receipt.
+- **Next:** separately invoke169 A10 seed0 after terminal inspection/publication,
+  CPUs28–31/nice15/original7200CPU/10800elapsed/4GiB. No live native at this
+  checkpoint; no queue/retry or reference admission from a receipt.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -34,7 +34,7 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Latest A6b seed2 outcome724](lanes/n010-comparison-readiness/results/724-four-core-a6b-seed2-terminal-outcome.md),
+[Latest full-A6b/IID outcome725](lanes/n010-comparison-readiness/results/725-a6b-full-physical-and-independent-iid-outcome.md),
 [bounded four-core outcome721](lanes/n010-comparison-readiness/results/721-four-core-execution-pilot-outcome.md),
 [full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md).
 A live process receipt is observation, not a passing research result.
@@ -87,7 +87,7 @@ from timing precision. Final state-bound auditor619 has **NOT RUN**.
 
 | Requirement | Required next evidence |
 | --- | --- |
-| Eligible locked physical references | After A6a PASS, finish A6b/A10 all4 seeds, A6b IID and separate level5 diagnostic; complete density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots. |
+| Eligible locked physical references | After A6a/A6b/IID PASS, finish A10 all4 seeds and separate level5 diagnostic; complete density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots. |
 | Correctness and explicit discrepancies | Keep full physical/state/key checks and all pixels. Report direct-relative1.0 as unresolved; no masked acceptance or retroactive V1/V3 repair. |
 | Whole-corpus dynamics/quality/memory | Finish Sponza C2–C6 histories and all selected boundary captures/replays; retain owned persistent/true-peak allocation/free evidence and zero teardown. |
 | Frozen ladders/quality selection | Complete C1 B8 ladder once its reference is eligible; retain every failed budget and full-pixel score. |
@@ -107,7 +107,7 @@ only bound is **not** a native radiance-bias bound.
   seeds, reserved494..500 and all original analytical/IID/numerical/resource
   rules, with exact627/720 four-core execution and explicit prior-profile
   validation. Whole145 inverse and complete physical/IID analysis bytes/AST
-  are exact.494/495 A6b seeds1/2 are terminal PASS;496 seed3 live;497..500 NOT RUN.
+  are exact.493–496 complete A6b physical/IID PASS;497..500 A10 NOT RUN.
 - 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
   and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
   chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;
