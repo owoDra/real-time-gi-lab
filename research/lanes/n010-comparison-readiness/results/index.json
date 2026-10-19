@@ -2377,6 +2377,18 @@
       "status": "complete-private-full-scope-raw-reader-and-level-io-source-only",
       "result": "718-private-reference-execution-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-493",
+      "status": "complete-first-of-four-full-a6b-seed-integrity-no-admission",
+      "result": "493-compensated-full-a6b-seed0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-719",
+      "status": "complete-a6b-seed0-terminal-original-guards-not-ready",
+      "result": "719-compensated-a6b-seed0-terminal-outcome.md",
+      "gpu_run": false
     }
   ]
 }

@@ -8,8 +8,9 @@ are in the [N010 results](lanes/n010-comparison-readiness/results/index.json).
 Do not open more preparation lanes because the incumbent loses quality.
 
 1. Finish the registered compensated physical acquisition and independent
-   controls. A6a4/4 passes its pooled analytical gate; A6b seed0 is the separately
-   invoked live one-core step, then remaining A6b/IID, A10 and level5 diagnostic.
+   controls. A6a4/4 passes its pooled analytical gate; A6b1/4 is terminal.
+   Qualify a bounded low-priority CPU profile before the next separately
+   invoked long step, then remaining A6b/IID, A10 and level5 diagnostic.
    Keep original seeds/counts/numerical/resource guards and every failure.
 2. Complete the existing density/support/Jacobian/bias assessment, full locked
    state/exact-prefix qualification and whole-frame two-level feasibility.

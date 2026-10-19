@@ -13,12 +13,14 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   admission. Direct allowance has0 violations; indirect relative7.5096e-5 /
   NRMSE7.9006e-5 pass unchanged. All1498 hashes in terminal492 match. Original261
   and prior per-seed records are preserved; this does not prove global bias.
-- **Live acquisition:**145 A6b seed0 was separately invoked once after
-  publication dd4097aa (nativePID674045/start_ticks8670629/session8893,
-  source dd4097aabcf8326a784ac35ffb3731f8df87add3).
-  CPU31/nice15/one render thread/7200CPU/10800elapsed/4GiB; sole scientific
-  worker, no queue/retry. Mutable493 stays uncommitted/unindexed until terminal.
-  The updated optional CPU preference is unanswered; no CPU increase.
+- A6b493: **1/4 seeds** terminal0/integrity PASS, all1477 hashes match;
+  no pooled A6b/IID verdict. CPU5251.617578/elapsed5271.961829 seconds are
+  diagnostic; original one-core guards held. No live native at this checkpoint.
+- **Next execution:** bounded CPU-profile pilot before another long job.
+  The optional CPU preference remained unanswered through493; use the offered
+  recommended maximum4 CPU threads/nice15 as a prospective assumption, first
+  checking full-frame exact equivalence on four distinct cores. No old run's
+  limits/affinity changes; no queue/retry. This is not reference qualification.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -27,7 +29,8 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Latest full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md),
+[Latest A6b seed0 outcome719](lanes/n010-comparison-readiness/results/719-compensated-a6b-seed0-terminal-outcome.md),
+[full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md),
 [terminal execution and full-frame equivalence628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md),
 [non-PT/prefix outcomes617](lanes/n010-comparison-readiness/results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md).
 A live process receipt is observation, not a passing research result.
@@ -134,7 +137,10 @@ separately for continuation PT. Its added persistent state is921600bytes at
 320x180; exact two-image046 equivalence is scoped evidence.
 [406](lanes/n010-comparison-readiness/results/406-continuation-pt-equivalence-outcome.md).
 
-Keep one-core low-priority acquisitions pending the optional CPU preference.
+Completed one-core runs retain their original profiles. Future owned CPU
+processes may use the offered maximum4 low-priority threads after a bounded
+exact-equivalence pilot and prospective execution registration; no default
+unbounded CPU increase or existing live-limit change.
 621 planning from old371 projects ~30.4h for four8192 seeds at one core, above
 original12h elapsed guard. It is post-hoc planning, not candidate throughput,
 a feasibility verdict or an ETA. Do not blindly launch the oversized route or

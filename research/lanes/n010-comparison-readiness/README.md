@@ -13,7 +13,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Item | Retained state |
 | --- | --- |
 | Eligible references |16/24;8 Sponza slots still missing |
-| Compensated full physical controls |14/17 artifacts;A6a4/4 pooled analytical PASS;A6b seed0 live on one core |
+| Compensated full physical controls |14/17 artifacts;A6a4/4 pooled analytical PASS;A6b1/4 terminal integrity PASS |
 | Selected PT captures |2/28 |
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
@@ -22,7 +22,8 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Final state-bound audit619 |NOT RUN;all-split admission unfinished/fails closed |
 | Direct relative error1.0 |Sponza pixels UNRESOLVED/未解決, included |
 
-[Latest full-A6a/quality outcome716](results/716-a6a-full-physical-and-retained-quality-outcome.md),
+[Latest A6b seed0 outcome719](results/719-compensated-a6b-seed0-terminal-outcome.md),
+[full-A6a/quality outcome716](results/716-a6a-full-physical-and-retained-quality-outcome.md),
 [actual terminal/equivalence628](results/628-terminal-seed1-and-thread-private-equivalence.md),
 [non-PT/prefix outcome617](results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md),
 [complete result index](results/index.json).
@@ -55,7 +56,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 
 | Route | Purpose / prerequisites | Actual state |
 | --- | --- | --- |
-|145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489–492 terminal/full A6a PASS;493 A6b seed0 live/unindexed;later parts NOT RUN |
+|145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489–492 terminal/full A6a PASS;493 A6b seed0 terminal;later parts NOT RUN |
 |156 `acquire_compensated_level5_full.py`|Separate full diagnostic after all original candidate physical prerequisites|528 description;529 NOT RUN |
 |157 `acquire_compensated_state_prefix.py`|Original full24-state plus2 actual C7 cases,3 phases/four seeds|531 description;532..609/610 NOT RUN |
 |164 `prepare_thread_private_cli.py`|Correct only621 CLI guard;exact private headers/compiler/limits|626 source/627 build complete;unrun622 preserved |
@@ -94,7 +95,9 @@ Retain continuation PT's active GPU sum and full yield envelope/readback costs.
 CPU wall, GPU clocks/busy, other apps and global free VRAM are diagnostic.
 No generic stability/idle prerequisite; actual Lane M claims retain precision.
 
-Keep one-core/nice15 acquisitions pending the optional CPU preference. Preserve
+Completed one-core acquisitions keep their exact profiles. A bounded future
+maximum4-thread/nice15 CPU profile first requires exact-equivalence acquisition
+and prospective execution registration; no old or live limit changes. Preserve
 all stops, partials and failed intakes (including261/453/463/507/516). Separate
 post-hoc replay never rewrites an original FAIL. N001–N009/default build and
 host settings remain unchanged. Tests **NOT RUN** in current source/evidence work.
