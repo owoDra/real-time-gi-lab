@@ -13,7 +13,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Item | Retained state |
 | --- | --- |
 | Eligible references |16/24;8 Sponza slots still missing |
-| Compensated full physical controls |15/17 artifacts;A6a4/4 and A6b4/4 analytical/IID PASS;A10/diagnostic remain |
+| Compensated full physical controls |15/17 artifacts;A6a4/4 and A6b4/4 analytical/IID PASS;A10 seed0 live;diagnostic pending |
 | Selected PT captures |2/28 |
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
@@ -64,7 +64,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |158/161 raw-chain and one-level I/O|Full existing physical/state proofs and unchanged assessor/support/SE/stop|611/620 source only;actual612/launcher/admission unfinished |
 |167 `private_reference_execution.py`|Same full raw/level science with exact626/627,165/708,717 transfer assessment;distinct root/variant|718 source/inverses complete;no prerequisites/native/replay/admission executed |
 |168 `acquire_multicore_equivalence.py`|Same exact full-C1/one-seed/16spp comparison versus623,4 distinct CPU cores/nice15|720 terminal exact PASS;offline costs only;no full-scope admission |
-|169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|A6b493–496 full physical/IID PASS;A10 497..500 NOT RUN |
+|169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|A6b493–496 full physical/IID PASS;497 A10 seed0 live/unindexed;498..500 NOT RUN |
 |170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|723 source/full-scope metadata only;630..707/708 NOT RUN |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
