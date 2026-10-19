@@ -2665,6 +2665,78 @@
       "status": "complete-c1-through-c4-state-prefix-eight-cases-twentyfour-steps-not-ready",
       "result": "733-c1-through-c4-four-core-state-prefix-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-654",
+      "status": "complete-four-core-c5-b2-phase0-no-admission",
+      "result": "654-private-state-prefix-case08-phase0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-655",
+      "status": "complete-four-core-c5-b2-phase1-no-admission",
+      "result": "655-private-state-prefix-case08-phase1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-656",
+      "status": "complete-four-core-c5-b2-phase2-all21-payloads-counters-audits-exact-no-admission",
+      "result": "656-private-state-prefix-case08-phase2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-657",
+      "status": "complete-four-core-c5-b8-phase0-no-admission",
+      "result": "657-private-state-prefix-case09-phase0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-658",
+      "status": "complete-four-core-c5-b8-phase1-no-admission",
+      "result": "658-private-state-prefix-case09-phase1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-659",
+      "status": "complete-four-core-c5-b8-phase2-all21-payloads-counters-audits-exact-no-admission",
+      "result": "659-private-state-prefix-case09-phase2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-660",
+      "status": "complete-four-core-c6-b2-phase0-no-admission",
+      "result": "660-private-state-prefix-case10-phase0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-661",
+      "status": "complete-four-core-c6-b2-phase1-no-admission",
+      "result": "661-private-state-prefix-case10-phase1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-662",
+      "status": "complete-four-core-c6-b2-phase2-all21-payloads-counters-audits-exact-no-admission",
+      "result": "662-private-state-prefix-case10-phase2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-663",
+      "status": "complete-four-core-c6-b8-phase0-no-admission",
+      "result": "663-private-state-prefix-case11-phase0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-664",
+      "status": "complete-four-core-c6-b8-phase1-no-admission",
+      "result": "664-private-state-prefix-case11-phase1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-665",
+      "status": "complete-four-core-c6-b8-phase2-all21-payloads-counters-audits-exact-no-admission",
+      "result": "665-private-state-prefix-case11-phase2.json",
+      "gpu_run": false
     }
   ]
 }
