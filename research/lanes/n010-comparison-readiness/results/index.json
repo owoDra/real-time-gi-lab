@@ -2461,6 +2461,18 @@
       "status": "complete-original-full-a10-seed0-four-core-terminal-not-ready",
       "result": "727-four-core-a10-seed0-terminal-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-498",
+      "status": "complete-second-of-four-full-a10-seed-integrity-four-core-no-admission",
+      "result": "498-compensated-full-a10-seed1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-728",
+      "status": "complete-original-full-a10-seed1-four-core-terminal-not-ready",
+      "result": "728-four-core-a10-seed1-terminal-outcome.md",
+      "gpu_run": false
     }
   ]
 }
