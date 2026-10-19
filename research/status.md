@@ -44,7 +44,10 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   global finite-arithmetic bias remains unbounded and admission fails closed.
   Prospective172 provides one manually named level at a time, exact171/627,
   original scientific rules/resources and immutable qualification snapshots.
-  Actual preparation736 and full-C1 B8 feasibility737/738/739 have **NOT RUN**.
+  [Actual preparation736](lanes/n010-comparison-readiness/results/736-four-core-reference-scientific-preparation.json)
+  is complete/PASS; all5004 input hashes independently match. Full physical/IID/
+  diagnostic and all78 state/prefix prerequisites were actually checked. No native
+  or admission in736. Full-C1 B8 feasibility737/738/739 has **NOT RUN**.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.

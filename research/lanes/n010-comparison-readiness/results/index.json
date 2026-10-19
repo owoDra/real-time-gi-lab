@@ -3007,6 +3007,12 @@
       "status": "posthoc-independent-density-physical-numerical-review-unadmitted-feasibility-only-global-bias-unbounded",
       "result": "735-independent-compensated-density-and-bias-assessment.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-736",
+      "status": "actual-full-physical-iid-state-prefix-prerequisites-valid-5004-input-hashes-no-native-no-admission",
+      "result": "736-four-core-reference-scientific-preparation.json",
+      "gpu_run": false
     }
   ]
 }
