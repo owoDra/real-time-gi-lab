@@ -27,7 +27,11 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   indirect RGB relative≤7.9596e-5/NRMSE.0002978842, range checks PASS unchanged.
   Final500 all1986 input/10 payload hashes match; CPU5506.54762/elapsed
   1387.988219 seconds are offline diagnostics. Same169 profile/original guards.
-  No reference admission. Separate156 diagnostic529 is pending, no job queued.
+  No reference admission.
+- **Live:**156 separate level5 diagnostic529, nativePID758340/start_ticks
+  10370462/session49724, sourcebe4bd9208564d7a064d6721d062722c424450a91.
+  Original1 thread/CPU31/nice15/1200CPU/1800elapsed/4GiB. Sole scientific job,
+  mutable529 uncommitted/unindexed; no queue/retry or reference admission.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.

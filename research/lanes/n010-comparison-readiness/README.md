@@ -13,7 +13,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Item | Retained state |
 | --- | --- |
 | Eligible references |16/24;8 Sponza slots still missing |
-| Compensated full physical controls |16/17 artifacts;A6a/A6b/A10 all4/4 physical PASS;A6b IID PASS;diagnostic529 pending |
+| Compensated full physical controls |16/17 artifacts;A6a/A6b/A10 all4/4 physical PASS;A6b IID PASS;separate diagnostic529 live |
 | Selected PT captures |2/28 |
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
