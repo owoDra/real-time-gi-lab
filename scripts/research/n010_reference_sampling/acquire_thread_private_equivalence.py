@@ -12,7 +12,7 @@ import time
 import numpy as np
 import compensated_reference_chain as P
 from compensated_reference_chain import D,Q,require_no_other_research_worker
-import prepare_thread_private_reference as B
+import prepare_thread_private_cli as B
 
 PLAN = D.RESULTS.parent/'experiments/163-thread-private-full-frame-equivalence-pilot.md'
 BASE = D.OUT/'thread-private-equivalence-v1'
@@ -64,14 +64,14 @@ def main():
     commit = subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
     for path in (PLAN,Path(__file__).resolve(),B.PLAN,Path(B.__file__).resolve()):
         if subprocess.check_output(['git','show',commit+':'+str(path.relative_to(D.ROOT))]) != D.checked(path):
-            raise ValueError('commit exact163/162 source/recipe first')
+            raise ValueError('commit exact163/164 source/recipe first')
     # The existing source must not be edited or its live worker displaced.
     current = bind(D.RESULTS/'490-compensated-full-a6a-seed1.json')
     if not current['seed_integrity_pass'] or not current['terminal_identity_verified']:raise ValueError('actual145 seed1 terminal integrity required')
     build,prep = bind(B.BUILD),bind(B.PREP)
     original = bind(D.RESULTS/'452-compensated-full-exporter-build.json')
     if not build['build_valid'] or not prep['source_preparation_valid'] or not original['build_valid']:
-        raise ValueError('actual452/621/622 builds/source required')
+        raise ValueError('actual452/626/627 builds/source required')
     if args.summarize:
         if SUMMARY.exists():raise ValueError('fresh equivalence summary required')
         resource.setrlimit(resource.RLIMIT_CPU,(120,120));signal.alarm(180)
