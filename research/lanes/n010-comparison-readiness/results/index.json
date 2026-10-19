@@ -2419,6 +2419,18 @@
       "status": "complete-full78-four-core-state-prefix-source-only-not-run",
       "result": "723-four-core-state-prefix-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-495",
+      "status": "complete-third-of-four-full-a6b-seed-integrity-four-core-no-admission",
+      "result": "495-compensated-full-a6b-seed2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-724",
+      "status": "complete-original-full-a6b-seed2-four-core-terminal-not-ready",
+      "result": "724-four-core-a6b-seed2-terminal-outcome.md",
+      "gpu_run": false
     }
   ]
 }
