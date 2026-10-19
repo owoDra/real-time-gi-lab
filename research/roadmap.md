@@ -10,15 +10,19 @@ Do not open more preparation lanes because the incumbent loses quality.
 Physical inventory is complete17/17, including16 gated physical PASS controls
 and1 separate NOT_GATED diagnostic; independent A6b IID PASS. Retain all
 original counts/guards and failures; this does not admit a reference.
+Full state/prefix170 is now qualified:78/78 actual steps/26 cases, all24 locked
+states plus2 high-count C7 cases;708 complete/all_pass, all26 restored results
+exact. This execution evidence also does not admit a reference.
 
-1. Complete the existing density/support/Jacobian/bias assessment, full locked
-   state/exact-prefix qualification and whole-frame two-level feasibility.
+1. Complete the existing independent density/support/Jacobian/bias assessment
+   and actual whole-frame two-level feasibility, retaining the now-qualified
+   full locked-state/exact-prefix and physical/IID evidence.
    Admit the missing8 references only through unchanged full-frame/four-seed/
    six-level/two-consecutive-level/support/1e-5 absolute/5% relative rules.
    Source-only metadata, seed integrity and agreement with itself do not admit
    a reference. Qualify execution changes before use; no automatic transfer.
-   Four-core170/723 full78 and171/726 raw/level source connections exist;
-   their actual qualification and scientific launcher/admission remain open.
+   Four-core170 full78 actual qualification is complete;171/726 raw/level
+   connection exists, but scientific launcher/admission remain open.
 2. With eligible references, complete Sponza dynamic cohorts and C1 B8 quality
    ladder, selected full capture/replay scope, owned persistent/true-peak memory
    and actual160 final audit619. Keep all pixels and all quality losses. Already

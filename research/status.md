@@ -33,10 +33,11 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   hashes match. Original one-core limits held; CPU614.880947/elapsed616.847964
   seconds are offline diagnostics. Analytic RGB/NRMSE remains **NOT_GATED**.
   No reference admission.
-- Full78 state/prefix170: **72/78 steps,24/26 cases** complete. C1–C12 T_B2/T_B8
-  uninterrupted16/fresh8/restored16 have exact21 payloads/scored counters/
-  interval audits under four-core execution.630–701 terminal hashes match;
-  all other cases and full708 remain NOT RUN. No job queued.
+- Full78 state/prefix170: **78/78 steps,26/26 cases qualified**. All24 locked
+  states at16/8/restored16 plus actual C7 B2/B8 at16384/8192/restored16384
+  have exact21 payloads/scored counters/interval audits.630–707 terminal,
+  full708 complete/all_pass; all4990 summary input hashes match. Original
+  numerical guards hold. No reference admission or job queued.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -45,7 +46,8 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Complete physical inventory731](lanes/n010-comparison-readiness/results/731-complete-physical-inventory-and-level5-diagnostic.md),
+[Full78 state/prefix outcome734](lanes/n010-comparison-readiness/results/734-full-four-core-state-prefix-qualification-outcome.md),
+[complete physical inventory731](lanes/n010-comparison-readiness/results/731-complete-physical-inventory-and-level5-diagnostic.md),
 [C1–C4 state/prefix outcome733](lanes/n010-comparison-readiness/results/733-c1-through-c4-four-core-state-prefix-outcome.md),
 [first state/prefix case732](lanes/n010-comparison-readiness/results/732-first-four-core-state-prefix-qualification-outcome.md),
 [full-A10 outcome730](lanes/n010-comparison-readiness/results/730-a10-full-four-seed-physical-outcome.md),
@@ -135,12 +137,14 @@ only bound is **not** a native radiance-bias bound.
   prerequisites;its one-core template was not acquired. Actual170 profile below.
   [717 source assessment](lanes/n010-comparison-readiness/results/717-private-estimator-identity-and-physical-evidence-transfer.md)
   justifies estimator-level physical-evidence transfer for exact626/627 identities;
-  complete original controls and private708 execution qualification remain required.
+  complete original controls are retained and private708 execution is now qualified.
 - 170/723 provides the **same78** state/prefix cases on bounded CPUs28–31,
   with whole165-generated/109 inverses and unchanged full scientific analysis.
-  All15 metadata hashes match; actual630–701 complete and702..707/708 **NOT RUN**. Required
-  physical/IID/diagnostic controls are now complete. New reader rejects mixed/missing
-  execution profiles.165/629's one-core template is retained.
+  Actual630–707 and708 are complete/all_pass; all26 restored comparisons are
+  exact,4990 summary input hashes match. Original guards hold; maximum own-log
+  2.4868995751603507e-13, conditioned fraction.7879659101024155≤1. Retain
+  unconditioned77068299115.4783 as diagnostic, no added cutoff. Reader rejects
+  mixed/missing profiles.165/629's one-core template is retained, not acquired.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
   API. Actual612 raw replay and scientific acquisition/feasibility launcher remain
   unfinished;620's CLI only describes source.
@@ -154,6 +158,7 @@ only bound is **not** a native radiance-bias bound.
   analysis are verified; qualification/attempt/receipt profiles must agree.
   Distinct root/variant; all8 slots, six levels and four seeds retained.
   **Source only:** no prerequisite/native/image replay/admission executed.
+  Its required full708 state/prefix evidence is now actually qualified.
   Actual whole-frame feasibility and scientific launcher/admission remain open.
 - 160's whole36 corrected state/snapshot route618 exists;619 final audit **NOT RUN**.
 
