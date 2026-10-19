@@ -1,5 +1,7 @@
 # N010 — final comparison preparation
 
+[629](results/629-private-state-prefix-description.json):165 implements the private exporter's full original78 state/prefix qualification route, preserving the whole109 inverse, canonical24 states plus two actual-level C7 cases, all4 seeds/full frames/counts, every21-payload/counter/interval identity and complete terminal analysis bytes/AST. All16 metadata identities match. Full original candidate physical controls/IID/separate diagnostic529 and actual626/627/625 remain strict prerequisites. Four render threads remain restricted to CPU31/nice15, actual load one core.630..707/708 are **NOT RUN**; no automatic physical-evidence transfer, multi-core speed proof or reference admission.145 seed2 remains the sole scientific worker; no native/image replay ran for629. Tests NOT RUN.
+
 [Terminal checkpoint628](results/628-terminal-seed1-and-thread-private-equivalence.md):490 full A6a seed1 completes (1476 matching identities, unchanged numerical/resource gates), making two of four seeds without artifact/reference admission.164 corrected621's retained CLI guard in626; actual627 full/prefix compilation passes (31 matching identities).163 actual623/624/625 passes exact full320x180/C1/16spp/one-seed binary/audit equivalence:1 versus4 render threads on the SAME CPU31/nice15, no CPU-load increase or accepted speed claim. All source/capture/raw bytes retained. Full backend qualification and final readiness remain unfinished; refs16/24, candidate13/17, PT2/28, non-PT raw8/8 unchanged. Tests NOT RUN.
 
 

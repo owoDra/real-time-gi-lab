@@ -2299,6 +2299,12 @@
       "status": "complete-terminal-seed1-and-bounded-equivalence-not-ready",
       "result": "628-terminal-seed1-and-thread-private-equivalence.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-629",
+      "status": "complete-private-full78-state-prefix-source-only-runtime-not-run",
+      "result": "629-private-state-prefix-description.json",
+      "gpu_run": false
     }
   ]
 }
