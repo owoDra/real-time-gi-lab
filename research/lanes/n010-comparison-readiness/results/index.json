@@ -2449,6 +2449,18 @@
       "status": "complete-four-core-full-reference-io-source-only-not-qualified",
       "result": "726-four-core-reference-execution-description.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-497",
+      "status": "complete-first-of-four-full-a10-seed-integrity-four-core-no-admission",
+      "result": "497-compensated-full-a10-seed0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-727",
+      "status": "complete-original-full-a10-seed0-four-core-terminal-not-ready",
+      "result": "727-four-core-a10-seed0-terminal-outcome.md",
+      "gpu_run": false
     }
   ]
 }

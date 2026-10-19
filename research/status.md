@@ -23,10 +23,10 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   Four threads on distinct cores28–31/nice15; CPU54.058786/elapsed14.137738
   seconds are offline diagnostics.169 registers the same profile for remaining
   named full physical steps, preserving whole145 scientific/IID analysis.
-- **Live:**169 A10 seed0, nativePID729793/start_ticks9791146/session46945,
-  source54808096fe0000056596f66d1fc5eca05f03849c. CPUs28–31/nice15/original
-  7200CPU/10800elapsed/4GiB. Sole scientific job; mutable497 remains uncommitted/
-  unindexed until terminal. No queue/retry or reference admission from a receipt.
+- A10 seed0/497: **1/4 seeds**, terminal0/seed integrity PASS; all1953 input
+  hashes and10 payload hashes match. CPU5518.853422/elapsed1389.886123 seconds
+  are offline diagnostics. Same169 profile and original guards; no pooled A10
+  verdict or admission. Next seed1 is separately pending; no job is queued.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -108,7 +108,8 @@ only bound is **not** a native radiance-bias bound.
   seeds, reserved494..500 and all original analytical/IID/numerical/resource
   rules, with exact627/720 four-core execution and explicit prior-profile
   validation. Whole145 inverse and complete physical/IID analysis bytes/AST
-  are exact.493–496 complete A6b physical/IID PASS;497 A10 seed0 live;498..500 NOT RUN.
+  are exact.493–496 complete A6b physical/IID PASS;497 A10 seed0 integrity PASS;
+  498..500 NOT RUN.
 - 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
   and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
   chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;
