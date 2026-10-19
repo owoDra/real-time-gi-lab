@@ -18,7 +18,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
 | Private exporter |627 full/prefix build;623/624/625 same-core and720 four-core full-C1 equivalence,one seed/16spp only |
-| Full state/prefix |Original157/private165 and four-core170/723 source routes;scientific acquisitions NOT RUN |
+| Full state/prefix |170 actual630–632 PASS (3/78 steps,1/26 cases),C1 B2 all21 restored payloads exact;remaining/708 NOT RUN |
 | Final state-bound audit619 |NOT RUN;all-split admission unfinished/fails closed |
 | Direct relative error1.0 |Sponza pixels UNRESOLVED/未解決, included |
 
@@ -56,7 +56,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 | Route | Purpose / prerequisites | Actual state |
 | --- | --- | --- |
 |145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489–493 original-profile terminal;494–500 completed under169;all three pooled physical PASS |
-|156 `acquire_compensated_level5_full.py`|Separate full diagnostic after all original candidate physical prerequisites|528 description;529 NOT RUN |
+|156 `acquire_compensated_level5_full.py`|Separate full diagnostic after all original candidate physical prerequisites|529 complete, original analytic result remains NOT_GATED;full inventory17/17 |
 |157 `acquire_compensated_state_prefix.py`|Original full24-state plus2 actual C7 cases,3 phases/four seeds|531 description;532..609/610 NOT RUN |
 |164 `prepare_thread_private_cli.py`|Correct only621 CLI guard;exact private headers/compiler/limits|626 source/627 build complete;unrun622 preserved |
 |163 `acquire_thread_private_equivalence.py`|Original versusprivate full-C1/16spp/one-seed,1vs4 threads on sameCPU31|623/624/625 complete;scoped equivalence only |
@@ -65,7 +65,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |167 `private_reference_execution.py`|Same full raw/level science with exact626/627,165/708,717 transfer assessment;distinct root/variant|718 source/inverses complete;no prerequisites/native/replay/admission executed |
 |168 `acquire_multicore_equivalence.py`|Same exact full-C1/one-seed/16spp comparison versus623,4 distinct CPU cores/nice15|720 terminal exact PASS;offline costs only;no full-scope admission |
 |169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|A6b493–496 physical/IID PASS;A10 497–500 pooled physical PASS |
-|170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|723 source/full-scope metadata only;630..707/708 NOT RUN |
+|170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|630–632 actual PASS,C1 B2 exact restored payloads;633..707/708 NOT RUN |
 |171 `four_core_reference_execution.py`|Explicit170 full78/four-core raw-reader and level-I/O connection;all8 slots/six levels/four seeds|726 source/inverses only;no prerequisite/native/raw replay/admission executed |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
@@ -76,19 +76,20 @@ The prefix routes use all21 payload identities, original16/8/restored16 and
 C7 16384/8192/restored16384 levels, original own-log1e-6/conditioned1 guards and
 complete interval counters. Original165/167 templates keep4 render threads on
 CPU31.170/723 registers the same full state/prefix scope on four distinct cores;
-all78 acquisitions remain NOT RUN; required full physical/IID/diagnostic
-controls are now complete17/17, including1 diagnostic-only item.
+630–632 are complete, C1 B2 restored21 payloads/counters/audits exact; remaining
+75 acquisitions and708 NOT RUN. Required full physical/IID/diagnostic controls
+are complete17/17, including1 diagnostic-only item.
 171/726 binds the raw/level reader to that explicit profile using a distinct
 root/variant and matching qualification/attempt/resource identities; source
 only, with actual feasibility/scientific launcher/admission still required.
 [717 assessment](results/717-private-estimator-identity-and-physical-evidence-transfer.md)
 justifies estimator-level physical-evidence transfer for exact626/627, while
-complete original physical controls and private708 remain required.
+complete original physical controls are retained;private708 remains required.
 
 ## Reference admission and measurements
 
-Finish independent physical/IID controls, density/support/Jacobian/numerical-bias
-assessment, full state/prefix and actual whole-frame two-level feasibility
+Retain complete independent physical/IID controls; finish density/support/
+Jacobian/numerical-bias assessment, full state/prefix and actual whole-frame two-level feasibility
 before original qualification ladders. Every missing slot retains original
 six levels through262144, four seeds, two consecutive qualifying levels, support,
 absolute1e-5/relative5% screens and all payload provenance. A statistical screen

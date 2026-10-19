@@ -2509,6 +2509,30 @@
       "status": "complete-full-seventeen-artifact-inventory-including-one-diagnostic-not-ready",
       "result": "731-complete-physical-inventory-and-level5-diagnostic.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-630",
+      "status": "complete-four-core-c1-b2-uninterrupted16-no-admission",
+      "result": "630-private-state-prefix-case00-phase0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-631",
+      "status": "complete-four-core-c1-b2-fresh8-no-admission",
+      "result": "631-private-state-prefix-case00-phase1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-632",
+      "status": "complete-four-core-c1-b2-restored16-all21-payloads-counters-audits-exact-no-admission",
+      "result": "632-private-state-prefix-case00-phase2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-732",
+      "status": "complete-first-of-twentysix-state-prefix-cases-three-of-seventyeight-steps-not-ready",
+      "result": "732-first-four-core-state-prefix-qualification-outcome.md",
+      "gpu_run": false
     }
   ]
 }

@@ -32,7 +32,11 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - Separate156 diagnostic529 terminal0/complete, all2097 input/27 payload
   hashes match. Original one-core limits held; CPU614.880947/elapsed616.847964
   seconds are offline diagnostics. Analytic RGB/NRMSE remains **NOT_GATED**.
-  Full78 state/prefix is next, no job queued; no reference admission.
+  No reference admission.
+- Full78 state/prefix170: **3/78 steps,1/26 cases** complete. C1 T_B2's
+  uninterrupted16/fresh8/restored16 have exact21 payloads/scored counters/
+  interval audits under four-core execution.630–632 terminal hashes match;
+  all other cases and full708 remain NOT RUN. No job queued.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -42,6 +46,7 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   promotion. Tests **NOT RUN** in the current work.
 
 [Complete physical inventory731](lanes/n010-comparison-readiness/results/731-complete-physical-inventory-and-level5-diagnostic.md),
+[first state/prefix case732](lanes/n010-comparison-readiness/results/732-first-four-core-state-prefix-qualification-outcome.md),
 [full-A10 outcome730](lanes/n010-comparison-readiness/results/730-a10-full-four-seed-physical-outcome.md),
 [full-A6b/IID outcome725](lanes/n010-comparison-readiness/results/725-a6b-full-physical-and-independent-iid-outcome.md),
 [bounded four-core outcome721](lanes/n010-comparison-readiness/results/721-four-core-execution-pilot-outcome.md),
@@ -126,13 +131,13 @@ only bound is **not** a native radiance-bias bound.
 - Original compensated full state/prefix route157:78 natives532..609 and
   summary610 **NOT RUN**. Prefix526 builds only.
 - Private route165/629 retains the same full78 cases, scientific analysis and
-  prerequisites;630..707/708 **NOT RUN**. Four render threads remain on one CPU.
+  prerequisites;its one-core template was not acquired. Actual170 profile below.
   [717 source assessment](lanes/n010-comparison-readiness/results/717-private-estimator-identity-and-physical-evidence-transfer.md)
   justifies estimator-level physical-evidence transfer for exact626/627 identities;
   complete original controls and private708 execution qualification remain required.
 - 170/723 provides the **same78** state/prefix cases on bounded CPUs28–31,
   with whole165-generated/109 inverses and unchanged full scientific analysis.
-  All15 metadata hashes match; actual630..707/708 remain **NOT RUN**. Required
+  All15 metadata hashes match; actual630–632 complete and633..707/708 **NOT RUN**. Required
   physical/IID/diagnostic controls are now complete. New reader rejects mixed/missing
   execution profiles.165/629's one-core template is retained.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
