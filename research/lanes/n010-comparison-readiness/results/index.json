@@ -2389,6 +2389,18 @@
       "status": "complete-a6b-seed0-terminal-original-guards-not-ready",
       "result": "719-compensated-a6b-seed0-terminal-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-720",
+      "status": "complete-bounded-four-core-full-c1-exact-equivalence-no-admission",
+      "result": "720-four-core-full-c1-equivalence.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-721",
+      "status": "complete-bounded-four-core-execution-pilot-offline-diagnostics-only",
+      "result": "721-four-core-execution-pilot-outcome.md",
+      "gpu_run": false
     }
   ]
 }

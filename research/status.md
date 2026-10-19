@@ -16,11 +16,13 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - A6b493: **1/4 seeds** terminal0/integrity PASS, all1477 hashes match;
   no pooled A6b/IID verdict. CPU5251.617578/elapsed5271.961829 seconds are
   diagnostic; original one-core guards held. No live native at this checkpoint.
-- **Next execution:** bounded CPU-profile pilot before another long job.
-  The optional CPU preference remained unanswered through493; use the offered
-  recommended maximum4 CPU threads/nice15 as a prospective assumption, first
-  checking full-frame exact equivalence on four distinct cores. No old run's
-  limits/affinity changes; no queue/retry. This is not reference qualification.
+- **CPU-profile pilot720 PASS:** one full-C1/16spp/original-seed case, exact
+  six output files/all exported audits versus623; all1917 hashes match.
+  Four threads on distinct cores28–31/nice15; CPU54.058786/elapsed14.137738
+  seconds are offline diagnostics. No live native at this checkpoint.169 now
+  registers the same profile for remaining named full physical steps, preserving
+  whole145 scientific/IID analysis; actual494..500 NOT RUN. No queue/retry or
+  reference qualification follows from the pilot/source registration.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -30,6 +32,7 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   promotion. Tests **NOT RUN** in the current work.
 
 [Latest A6b seed0 outcome719](lanes/n010-comparison-readiness/results/719-compensated-a6b-seed0-terminal-outcome.md),
+[bounded four-core outcome721](lanes/n010-comparison-readiness/results/721-four-core-execution-pilot-outcome.md),
 [full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md),
 [terminal execution and full-frame equivalence628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md),
 [non-PT/prefix outcomes617](lanes/n010-comparison-readiness/results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md).
@@ -71,6 +74,9 @@ A live process receipt is observation, not a passing research result.
    original seed,1 versus4 render threads on the **same CPU31**. This is not
    multicore throughput, full physical/state/prefix qualification or admission.
    [628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md).
+   Later720 repeats this exact one-seed full-frame comparison on four distinct
+   cores and also passes; its CPU/wall costs are offline diagnostics only.
+   Full scope and actual two-level feasibility remain required.
 
 ## Completion requirements
 
@@ -96,6 +102,11 @@ only bound is **not** a native radiance-bias bound.
 
 ### Executed replays and prepared routes
 
+- 169 `acquire_multicore_sphere_seed.py` retains145's full remaining A6b/A10
+  seeds, reserved494..500 and all original analytical/IID/numerical/resource
+  rules, with exact627/720 four-core execution and explicit prior-profile
+  validation. Whole145 inverse and complete physical/IID analysis bytes/AST
+  are exact. No native under this profile has run at this checkpoint.
 - 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
   and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
   chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;
@@ -142,9 +153,10 @@ processes may use the offered maximum4 low-priority threads after a bounded
 exact-equivalence pilot and prospective execution registration; no default
 unbounded CPU increase or existing live-limit change.
 621 planning from old371 projects ~30.4h for four8192 seeds at one core, above
-original12h elapsed guard. It is post-hoc planning, not candidate throughput,
-a feasibility verdict or an ETA. Do not blindly launch the oversized route or
-relax stops. No clock/power/display/driver/app changes or unrelated process kills.
+original12h elapsed guard. Actual720's bounded four-core pilot now projects
+about8h by simple linear planning. Neither projection is an actual two-level
+feasibility verdict or ETA. Do not blindly launch the oversized one-core route
+or relax stops. No clock/power/display/driver/app changes or unrelated process kills.
 AMD/Vulkan is the current device boundary; CUDA is not used.
 
 ## Current architecture

@@ -9,8 +9,8 @@ Do not open more preparation lanes because the incumbent loses quality.
 
 1. Finish the registered compensated physical acquisition and independent
    controls. A6a4/4 passes its pooled analytical gate; A6b1/4 is terminal.
-   Qualify a bounded low-priority CPU profile before the next separately
-   invoked long step, then remaining A6b/IID, A10 and level5 diagnostic.
+   Use bounded low-priority profile720 under separately registered169, then
+   remaining named A6b/IID, A10 and level5 diagnostic. Full science is unchanged.
    Keep original seeds/counts/numerical/resource guards and every failure.
 2. Complete the existing density/support/Jacobian/bias assessment, full locked
    state/exact-prefix qualification and whole-frame two-level feasibility.
