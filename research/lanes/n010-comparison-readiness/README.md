@@ -1,6 +1,12 @@
 # N010 — final comparison preparation
 
-**NOT_READY.** This is the final preparation study; afterwards proceed to
+**PROJECT PAUSED by user request (2026-10-19). N010 NOT_READY / INCOMPLETE.**
+No new acquisition, retry or diagnosis; resume only on explicit user request.
+[740 suspension checkpoint](results/740-project-suspension-checkpoint.md) preserves
+737's terminal failure, exact local archive manifest, limitations and restart point.
+All owned acquisition/observer processes are terminal; no queue.
+
+This is the final preparation study; afterwards proceed to
 separate Lane M GI competitiveness, without N011. Incumbent quality losses are
 comparison outcomes. They do not require a new preparation lane.
 
@@ -20,6 +26,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Private exporter |627 full/prefix build;623/624/625 same-core and720 four-core full-C1 equivalence,one seed/16spp only |
 | Full state/prefix |170 actual630–707/708 qualified:78/78 steps,26/26 cases,all26 restored payload/counter/audit comparisons exact |
 | Final state-bound audit619 |NOT RUN;all-split admission unfinished/fails closed |
+| Last full-frame feasibility737 |INCOMPLETE(-6),conditioned raw-target/plane reconstruction error;no admission;root cause undiagnosed |
 | Direct relative error1.0 |Sponza pixels UNRESOLVED/未解決, included |
 
 [Latest full-A6b/IID outcome725](results/725-a6b-full-physical-and-independent-iid-outcome.md),
@@ -46,9 +53,9 @@ No reference adoption or accepted speed follows from the new execution pilot.
 - Preserve N009 Amendment1/V1/V3 incompleteness and post-hoc sensitivity. The
   old direct1.0 pixels remain unresolved and included; no masked acceptance.
 
-## Execution map
+## Execution map (historical routes; execution suspended)
 
-Invoke one named scientific step per process, inspect its terminal result
+Do not invoke these routes during the project pause. After explicit resumption, invoke one named scientific step per process, inspect its terminal result
 before the next, and refuse existing outputs. Never launch the commands below
 while any145 native is live; source description is distinct from
 scientific acquisition. No automatic next step, retry or resource extension.
@@ -67,7 +74,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|A6b493–496 physical/IID PASS;A10 497–500 pooled physical PASS |
 |170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|630–707/708 complete/PASS;all24 low-dose states and2 actual C7 cases qualified;all26 restored exact |
 |171 `four_core_reference_execution.py`|Explicit170 full78/four-core raw-reader and level-I/O connection;all8 slots/six levels/four seeds|726 source/inverses only;no prerequisite/native/raw replay/admission executed |
-|172 `acquire_four_core_reference_level.py`|735 scoped independent review;actual prerequisite preparation then two separately invoked full-C1 B8 levels;original171/161 scientific rules;immutable qualification history|736 actual full prerequisites PASS,all5004 hashes match;737 full-C1 B8/8192 LIVE under exact original guards;738/739 NOT RUN;no queue/admission |
+|172 `acquire_four_core_reference_level.py`|735 scoped independent review;actual prerequisite preparation then two separately invoked full-C1 B8 levels;original171/161 scientific rules;immutable qualification history|736 actual full prerequisites PASS,all5004 hashes match;737 terminal INCOMPLETE(-6),raw-target/plane reconstruction guard;root cause undiagnosed;738/739 NOT RUN;no queue/admission;PAUSED |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
 
@@ -88,10 +95,11 @@ only, with actual feasibility/scientific launcher/admission still required.
 justifies estimator-level physical-evidence transfer for exact626/627;
 complete original physical controls are retained and private708 is now qualified.
 
-## Reference admission and measurements
+## Reference admission and measurements (unfinished; paused)
 
 Retain complete independent physical/IID and full state/prefix evidence.
-Finish density/support/Jacobian/numerical-bias assessment and actual whole-frame
+On explicit resumption, first assess737’s numerical failure, then finish
+density/support/Jacobian/numerical-bias admission assessment and actual whole-frame
 two-level feasibility
 before original qualification ladders. Every missing slot retains original
 six levels through262144, four seeds, two consecutive qualifying levels, support,

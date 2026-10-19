@@ -1,6 +1,15 @@
 # Forward research roadmap — major gates only
 
-## Immediate sequence: finish N010, then Lane M
+## Project paused — resume only on explicit user request
+
+**PAUSED (2026-10-19); N010 NOT_READY / INCOMPLETE.** No new computation,
+diagnosis or retry is scheduled. The latest native737 already failed before
+suspension; all owned acquisition/observer processes are terminal. Preserve
+[740 checkpoint](lanes/n010-comparison-readiness/results/740-project-suspension-checkpoint.md),
+the failed evidence and local archive. A future model improvement may motivate
+reconsideration; it does not establish that the remaining gates can be passed.
+
+## Deferred sequence on resumption: finish N010, then Lane M
 
 **N010 is the final preparation study. No N011.** The [current status](status.md)
 is the single authoritative progress/architecture summary; detailed outcomes
@@ -14,13 +23,17 @@ Full state/prefix170 is now qualified:78/78 actual steps/26 cases, all24 locked
 states plus2 high-count C7 cases;708 complete/all_pass, all26 restored results
 exact. This execution evidence also does not admit a reference.
 
-1. Execute the actual whole-frame two-level feasibility under172, retaining
+1. First diagnose737’s exact numerical guard failure against frozen evidence;
+   do not blindly retry or relax thresholds. If a bounded continuation is justified
+   after explicit user resumption, complete whole-frame feasibility under172, retaining
    qualified full locked-state/exact-prefix and physical/IID evidence.735 records
    the independent density/support/numerical review, permits unadmitted feasibility
    only, and retains the unbounded global finite-arithmetic bias limitation.
    Actual admission still requires its own explicit assessment and dispatch.
    Actual736 full prerequisite verification passes; first C1 B8/8192 feasibility
-   native737 is live, not accepted evidence.16384/summary remain unrun; no queue.
+   native737 terminated-6 at `conditioned raw-target/plane reconstruction error`.
+   Detailed root cause is undiagnosed; no admission.16384/summary remain unrun;
+   no queue. The pause did not terminate this acquisition.
    Admit the missing8 references only through unchanged full-frame/four-seed/
    six-level/two-consecutive-level/support/1e-5 absolute/5% relative rules.
    Source-only metadata, seed integrity and agreement with itself do not admit

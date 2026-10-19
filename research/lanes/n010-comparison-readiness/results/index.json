@@ -3013,6 +3013,18 @@
       "status": "actual-full-physical-iid-state-prefix-prerequisites-valid-5004-input-hashes-no-native-no-admission",
       "result": "736-four-core-reference-scientific-preparation.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-737",
+      "status": "incomplete-native-sigabrt-conditioned-raw-target-plane-reconstruction-guard-partials-retained-no-admission",
+      "result": "737-four-core-c1-b8-feasibility-8192.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-740",
+      "status": "user-requested-project-paused-not-ready-incomplete-no-new-acquisition-local-evidence-preserved",
+      "result": "740-project-suspension-checkpoint.md",
+      "gpu_run": false
     }
   ]
 }

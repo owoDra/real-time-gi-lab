@@ -2,7 +2,13 @@
 
 ## Current decision and execution
 
-**N010 NOT_READY.** N010 is the final preparation study; the next study is
+**PROJECT PAUSED by user request (2026-10-19). N010 NOT_READY / INCOMPLETE.**
+No acquisition, retry or diagnosis while paused; resume only on explicit user
+request. There is no technical need to continue running now.
+[740 suspension checkpoint](lanes/n010-comparison-readiness/results/740-project-suspension-checkpoint.md)
+records frozen failure evidence, the local archive and remaining work.
+
+N010 is the final preparation study; the next study is
 separate Lane M GI competitiveness. No N011. The goal is a valid executable
 comparison; an incumbent quality loss is a result and does not block handoff.
 
@@ -47,10 +53,14 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   [Actual preparation736](lanes/n010-comparison-readiness/results/736-four-core-reference-scientific-preparation.json)
   is complete/PASS; all5004 input hashes independently match. Full physical/IID/
   diagnostic and all78 state/prefix prerequisites were actually checked. No native
-  or admission in736. First full-C1 B8 feasibility737 is **LIVE**, native
-  PID798642/start11035451 under driver797441/start11011629, source7e052068;
-  actual4 cores/nice15/original resource receipt verified. This is observation,
-  not a result.737 is unaccepted while mutable;738/739 **NOT RUN**, no queue.
+  or admission in736. First full-C1 B8 feasibility
+  [737](lanes/n010-comparison-readiness/results/737-four-core-c1-b8-feasibility-8192.json)
+  is terminal **INCOMPLETE**, native returncode-6 with
+  `conditioned raw-target/plane reconstruction error`; detailed root cause has
+  **not been diagnosed**. It failed before the stop request; no signal was sent.
+  Source7e052068/original four-core guards and six partial payloads are preserved;
+  all5006 input hashes match. No admission;738/739 **NOT RUN**, no queue.
+  Acquisition and observer processes are terminal; all research is paused.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -109,7 +119,7 @@ A live process receipt is observation, not a passing research result.
    cores and also passes; its CPU/wall costs are offline diagnostics only.
    Full scope and actual two-level feasibility remain required.
 
-## Completion requirements
+## Completion requirements (deferred while paused)
 
 The last complete six-gate audit426 was NOT_READY. Later source-only metadata
 is not a final gate result.120/147 prospectively separate valid timing evidence
@@ -117,7 +127,7 @@ from timing precision. Final state-bound auditor619 has **NOT RUN**.
 
 | Requirement | Required next evidence |
 | --- | --- |
-| Eligible locked physical references | Full physical inventory17/17 incl diagnostic; density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots remain. |
+| Eligible locked physical references | Physical inventory and full state/prefix are complete;735 permits unadmitted feasibility only.737 failed; detailed diagnosis, admission/bias assessment, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots remain. |
 | Correctness and explicit discrepancies | Keep full physical/state/key checks and all pixels. Report direct-relative1.0 as unresolved; no masked acceptance or retroactive V1/V3 repair. |
 | Whole-corpus dynamics/quality/memory | Finish Sponza C2–C6 histories and all selected boundary captures/replays; retain owned persistent/true-peak allocation/free evidence and zero teardown. |
 | Frozen ladders/quality selection | Complete C1 B8 ladder once its reference is eligible; retain every failed budget and full-pixel score. |

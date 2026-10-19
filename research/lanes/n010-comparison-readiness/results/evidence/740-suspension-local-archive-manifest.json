@@ -1,0 +1,115 @@
+{
+  "schema": "n010-user-suspension-local-archive/1",
+  "reason": "USER_REQUEST_PROJECT_SUSPENSION",
+  "goal_status": "paused",
+  "native_failed_before_stop_request": true,
+  "native_returncode": -6,
+  "reference_admission": false,
+  "scientific_evidence_complete": false,
+  "source_commit": "7e0520686a7a492f62d152c963345421cba5f0d9",
+  "published_base": "66b35f9b",
+  "scope": "Failed737 native directory,terminal result,exact prefix binary/source/net; not a complete archive of all5006 prerequisite inputs",
+  "files": [
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.attempt.json",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.attempt.json",
+      "bytes": 1016111,
+      "sha256": "aec8fbad8419c0e47740c2629cc65e218759a339420397dea60537f61f0c46a8"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.resource-limits.json",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.resource-limits.json",
+      "bytes": 1080,
+      "sha256": "fb1fc2fbef4d52bbfeae31f7d98b981df47fb448b3d8d245a2937bc196262ea2"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.stderr.log",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.stderr.log",
+      "bytes": 6407,
+      "sha256": "d969d2aa58fb6a58d5d82fcd5a384f182c2976a8b2677a40183042dd47b84b2b"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.stdout.json",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/n8192.stdout.json",
+      "bytes": 1012,
+      "sha256": "f5f84e6f558159a0e576e58cfb8f07d6a0722b5ada42c2326c9ec4d03485a0b2"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.hits",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.hits",
+      "bytes": 921616,
+      "sha256": "927964ea5001b8432af9711f5b898ee704d50f07124cadf0b3de304f97e2d26a"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.direct.pfm",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.direct.pfm",
+      "bytes": 691214,
+      "sha256": "c65e3e197cfc266b57d71829391675341c65d236488416c0c4132ed9529fc729"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.emission.pfm",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.emission.pfm",
+      "bytes": 691214,
+      "sha256": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.f64",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.f64",
+      "bytes": 11059228,
+      "sha256": "18536ff4e2dd072c320f0fd1fd0c7f26b3e4fd892341dad22fe9c84b5c197afd"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.indirect.pfm",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.indirect.pfm",
+      "bytes": 691214,
+      "sha256": "8923a2617a58138d661d556a01baa6f53e9c675f23417d23c25519e341fa7623"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.total.pfm",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/o.n8192.s0.total.pfm",
+      "bytes": 691214,
+      "sha256": "22d87054810bb958dc411a396ea168bfc6771f0fc26e6685232c090e8caa05cc"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/scene.n008",
+      "archive_path": "out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/scene.n008",
+      "bytes": 46679029,
+      "sha256": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/737-four-core-c1-b8-feasibility-8192.json",
+      "archive_path": "research/lanes/n010-comparison-readiness/results/737-four-core-c1-b8-feasibility-8192.json",
+      "bytes": 1020040,
+      "sha256": "aa86b68e74b1b21f53981beaf6aaba96d5be9deae5f6492c3042bcd25b81e410"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-build-v2/n010_thread_private_prefix",
+      "archive_path": "out/research/n010-comparison-readiness/thread-private-reference-build-v2/n010_thread_private_prefix",
+      "bytes": 191256,
+      "sha256": "b2d6e8689d671088693a053783808bc42d9dea545a528634ec6527b81219793e"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+      "archive_path": "out/research/n010-comparison-readiness/sobol16x262144.bin",
+      "bytes": 16777232,
+      "sha256": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v2/prefix/n010_rqmc_oracle.hpp",
+      "archive_path": "out/research/n010-comparison-readiness/thread-private-reference-source-v2/prefix/n010_rqmc_oracle.hpp",
+      "bytes": 87335,
+      "sha256": "f797ad867cdc1b7a760abf0a435f3afef619f7e7da2495d2332b0719bf96c9f8"
+    },
+    {
+      "original_path": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v2/prefix/n010_rqmc_main.cpp",
+      "archive_path": "out/research/n010-comparison-readiness/thread-private-reference-source-v2/prefix/n010_rqmc_main.cpp",
+      "bytes": 13103,
+      "sha256": "08b8541eb4cb816509773634c995d5e04511b51c713a1532e1629f08e9ce6941"
+    }
+  ],
+  "archive": {
+    "path": "/var/owo/workspaces/artifacts/gi-lab/n010-suspension-20261019T130319Z/n010-737-failed-native-evidence.tar",
+    "bytes": 80578560,
+    "sha256": "407c8f446eeb125b41ef14762236314990142f55f80a323627af039ab1c50590"
+  }
+}
