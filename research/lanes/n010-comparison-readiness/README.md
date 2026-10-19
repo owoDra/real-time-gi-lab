@@ -13,7 +13,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Item | Retained state |
 | --- | --- |
 | Eligible references |16/24;8 Sponza slots still missing |
-| Compensated full physical controls |13/17 artifacts;A6a3/4 seeds complete;seed3 is the next one-core step |
+| Compensated full physical controls |13/17 artifacts;A6a3/4 seeds complete;seed3 is the live one-core acquisition |
 | Selected PT captures |2/28 |
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | New non-PT quality replay |Six pending;C7 dense/HWRT losses retained |
@@ -55,7 +55,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 
 | Route | Purpose / prerequisites | Actual state |
 | --- | --- | --- |
-|145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489/490/491 terminal;492 and later parts NOT RUN |
+|145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489/490/491 terminal;492 live/unindexed;later parts NOT RUN |
 |156 `acquire_compensated_level5_full.py`|Separate full diagnostic after all original candidate physical prerequisites|528 description;529 NOT RUN |
 |157 `acquire_compensated_state_prefix.py`|Original full24-state plus2 actual C7 cases,3 phases/four seeds|531 description;532..609/610 NOT RUN |
 |164 `prepare_thread_private_cli.py`|Correct only621 CLI guard;exact private headers/compiler/limits|626 source/627 build complete;unrun622 preserved |

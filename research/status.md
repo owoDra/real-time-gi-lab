@@ -14,9 +14,10 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   5303.1404757779965elapsed seconds; all1487 input/payload hashes match. The
   preserved original261 failed on this seed;491 passes unchanged numerical
   guards over the whole full-count image, without rewriting that failure.
-- **Current execution:**seed2 is terminal. Next separately launch145 A6a seed3
-  after this publication, one CPU31/nice15/one render thread with original
-  7200CPU/10800elapsed/4GiB guards. No active acquisition at this checkpoint;
+- **Live acquisition:**145 A6a seed3 was separately launched after publication
+  (nativePID644484/start_ticks8104711/session34570, source9c42fca0). One CPU31/
+  nice15/one render thread with original7200CPU/10800elapsed/4GiB guards.
+  Mutable492 stays uncommitted/unindexed until terminal. Sole scientific worker;
   no automatic next step/retry. The updated optional CPU preference is unanswered.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Six new non-PT quality
