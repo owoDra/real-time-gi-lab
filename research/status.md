@@ -92,6 +92,13 @@ only bound is **not** a native radiance-bias bound.
 
 ### Prepared work is not executed evidence
 
+- 166 `replay_retained_non_pt_quality.py` implements two POST-HOC retained
+  quality replays:517 static-C7-software (both transports) and519 dynamic-C12-
+  hwrt (all5 frames/both transports), using already eligible C7/C12 chains.
+  It reuses160 full native/raw/state/owned-memory intake and unchanged full-
+  pixel scoring, without recapture.714/715 **NOT RUN**; current145 must first
+  end, then invoke/inspect one case at a time. Six new quality replays remain
+  pending until actual results; no speed or reference-admission claim.
 - Original compensated full state/prefix route157:78 natives532..609 and
   summary610 **NOT RUN**. Prefix526 builds only.
 - Private route165/629 retains the same full78 cases, scientific analysis and

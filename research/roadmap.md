@@ -18,7 +18,9 @@ Do not open more preparation lanes because the incumbent loses quality.
    a reference. Qualify execution changes before use; no automatic transfer.
 3. With eligible references, complete Sponza dynamic cohorts and C1 B8 quality
    ladder, selected full capture/replay scope, owned persistent/true-peak memory
-   and actual160 final audit619. Keep all pixels and all quality losses.
+   and actual160 final audit619. Keep all pixels and all quality losses. Already
+   eligible C7/C12 retained non-PT quality replays166 may finish at the next
+   quiescent boundary without GPU recapture; do not score ineligible C1/C6.
 4. Publish the actual six-gate N010 decision and runnable comparison handoff
    to a distinct `lane-m-gi-competitiveness` identity. Preserve the historical
    Lane M topology study. Plans and missing/invalid pilots cannot pass.
