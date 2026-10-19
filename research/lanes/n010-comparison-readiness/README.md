@@ -5,6 +5,9 @@ No new acquisition, retry or diagnosis; resume only on explicit user request.
 [740 suspension checkpoint](results/740-project-suspension-checkpoint.md) preserves
 737's terminal failure, exact local archive manifest, limitations and restart point.
 All owned acquisition/observer processes are terminal; no queue.
+[741 raw-data preservation](results/741-raw-evidence-preservation.md) records a
+verified remote draft-release backup of the failed737 archive, plus a metadata
+inventory. The rest of the approximately233 GiB corpus is not fully backed up.
 
 This is the final preparation study; afterwards proceed to
 separate Lane M GI competitiveness, without N011. Incumbent quality losses are

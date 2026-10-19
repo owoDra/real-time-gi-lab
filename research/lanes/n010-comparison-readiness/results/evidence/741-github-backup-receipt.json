@@ -1,0 +1,71 @@
+{
+  "schema": "gi-lab-suspension-remote-backup-receipt/1",
+  "verified_utc": "2026-10-19T13:18:09.443066+00:00",
+  "project_status": "PAUSED",
+  "repository": "owoDra/real-time-gi-lab",
+  "release": {
+    "assets": [
+      {
+        "apiUrl": "https://api.github.com/repos/owoDra/real-time-gi-lab/releases/assets/656332393",
+        "contentType": "application/gzip",
+        "createdAt": "2026-10-19T13:17:35Z",
+        "digest": "sha256:745022ae7dac83cfb02d3264b350ace1c38d65af36d0c01ccca0235280921195",
+        "downloadCount": 0,
+        "id": "RA_kwDOVE639s4nHtZp",
+        "label": "",
+        "name": "741-local-raw-inventory.json.gz",
+        "size": 1871032,
+        "state": "uploaded",
+        "updatedAt": "2026-10-19T13:17:36Z",
+        "url": "https://github.com/owoDra/real-time-gi-lab/releases/download/untagged-3f01f518a9ca3cbc8dd0/741-local-raw-inventory.json.gz",
+        "local_sha256": "745022ae7dac83cfb02d3264b350ace1c38d65af36d0c01ccca0235280921195",
+        "downloaded_sha256": "745022ae7dac83cfb02d3264b350ace1c38d65af36d0c01ccca0235280921195",
+        "readback_verified": true
+      },
+      {
+        "apiUrl": "https://api.github.com/repos/owoDra/real-time-gi-lab/releases/assets/656332391",
+        "contentType": "application/json",
+        "createdAt": "2026-10-19T13:17:35Z",
+        "digest": "sha256:d08dc70693fd537c197773709ec8ca298c949eaeaf2787c9698689c13a96ea7e",
+        "downloadCount": 0,
+        "id": "RA_kwDOVE639s4nHtZn",
+        "label": "",
+        "name": "manifest.json",
+        "size": 7286,
+        "state": "uploaded",
+        "updatedAt": "2026-10-19T13:17:36Z",
+        "url": "https://github.com/owoDra/real-time-gi-lab/releases/download/untagged-3f01f518a9ca3cbc8dd0/manifest.json",
+        "local_sha256": "d08dc70693fd537c197773709ec8ca298c949eaeaf2787c9698689c13a96ea7e",
+        "downloaded_sha256": "d08dc70693fd537c197773709ec8ca298c949eaeaf2787c9698689c13a96ea7e",
+        "readback_verified": true
+      },
+      {
+        "apiUrl": "https://api.github.com/repos/owoDra/real-time-gi-lab/releases/assets/656332390",
+        "contentType": "application/x-tar",
+        "createdAt": "2026-10-19T13:17:35Z",
+        "digest": "sha256:407c8f446eeb125b41ef14762236314990142f55f80a323627af039ab1c50590",
+        "downloadCount": 0,
+        "id": "RA_kwDOVE639s4nHtZm",
+        "label": "",
+        "name": "n010-737-failed-native-evidence.tar",
+        "size": 80578560,
+        "state": "uploaded",
+        "updatedAt": "2026-10-19T13:17:41Z",
+        "url": "https://github.com/owoDra/real-time-gi-lab/releases/download/untagged-3f01f518a9ca3cbc8dd0/n010-737-failed-native-evidence.tar",
+        "local_sha256": "407c8f446eeb125b41ef14762236314990142f55f80a323627af039ab1c50590",
+        "downloaded_sha256": "407c8f446eeb125b41ef14762236314990142f55f80a323627af039ab1c50590",
+        "readback_verified": true
+      }
+    ],
+    "id": "RE_kwDOVE639s4Y37Td",
+    "isDraft": true,
+    "tagName": "n010-suspension-20261019",
+    "targetCommitish": "cb4504a71129188d9bf72e443c15714943dacc48",
+    "url": "https://github.com/owoDra/real-time-gi-lab/releases/tag/untagged-3f01f518a9ca3cbc8dd0"
+  },
+  "all_three_assets_downloaded_and_sha256_verified": true,
+  "complete_historical_raw_backup": false,
+  "raw_content_scope": "Only16-member failed737 archive; 183258-file out/research inventory is metadata, not contents",
+  "access": "Draft release: authenticated repository collaborators; not an anonymous published release",
+  "restore_directory": "/var/owo/workspaces/artifacts/gi-lab/n010-suspension-20261019T130319Z/github-readback-741"
+}

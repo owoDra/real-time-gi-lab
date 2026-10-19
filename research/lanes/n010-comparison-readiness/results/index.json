@@ -3025,6 +3025,12 @@
       "status": "user-requested-project-paused-not-ready-incomplete-no-new-acquisition-local-evidence-preserved",
       "result": "740-project-suspension-checkpoint.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-741",
+      "status": "paused-evidence-preservation-failed737-remote-backup-readback-verified-full-corpus-backup-incomplete",
+      "result": "741-raw-evidence-preservation.md",
+      "gpu_run": false
     }
   ]
 }

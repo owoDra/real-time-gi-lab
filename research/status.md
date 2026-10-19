@@ -7,6 +7,11 @@ No acquisition, retry or diagnosis while paused; resume only on explicit user
 request. There is no technical need to continue running now.
 [740 suspension checkpoint](lanes/n010-comparison-readiness/results/740-project-suspension-checkpoint.md)
 records frozen failure evidence, the local archive and remaining work.
+[741 preservation record](lanes/n010-comparison-readiness/results/741-raw-evidence-preservation.md)
+adds a verified GitHub draft-release copy of the latest failed737 archive and
+an183258-file metadata inventory. The remaining approximately233 GiB local raw
+corpus is **not fully backed up**; a separate destination is pending. Research
+remains paused; backup preparation is not a new scientific result.
 
 N010 is the final preparation study; the next study is
 separate Lane M GI competitiveness. No N011. The goal is a valid executable
