@@ -32,7 +32,11 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   1386.647112 seconds are offline diagnostics.
 - A10 seed2/499 is terminal0/integrity PASS: **3/4 seeds** complete, no pooled
   verdict. All1975 input/10 payload hashes match; CPU5498.890107/elapsed
-  1385.246271 seconds are offline diagnostics. Seed3 pending, no job queued.
+  1385.246271 seconds are offline diagnostics.
+- **Live:**169 A10 seed3, nativePID751454/start_ticks10223587/session27906,
+  source5756ac8e40b26232374bca5f6b615b9b76390f15. CPUs28–31/nice15/original
+  7200CPU/10800elapsed/4GiB. Sole scientific job; mutable500 uncommitted/
+  unindexed until terminal. No queue/retry or admission from a receipt.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -115,7 +119,7 @@ only bound is **not** a native radiance-bias bound.
   rules, with exact627/720 four-core execution and explicit prior-profile
   validation. Whole145 inverse and complete physical/IID analysis bytes/AST
   are exact.493–496 complete A6b physical/IID PASS;497 A10 seed0 integrity PASS;
-  498–499 A10 seed1–2 integrity PASS;500 NOT RUN.
+  498–499 A10 seed1–2 integrity PASS;500 seed3 live.
 - 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
   and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
   chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;
