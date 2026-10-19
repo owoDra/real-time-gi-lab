@@ -13,16 +13,16 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Item | Retained state |
 | --- | --- |
 | Eligible references |16/24;8 Sponza slots still missing |
-| Compensated full physical controls |13/17 artifacts;A6a3/4 seeds complete;seed3 is the live one-core acquisition |
+| Compensated full physical controls |14/17 artifacts;A6a4/4 pooled analytical PASS;next A6b seed0 |
 | Selected PT captures |2/28 |
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
-| New non-PT quality replay |Six pending;C7 dense/HWRT losses retained |
+| Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
 | Private exporter |627 full/prefix build;623/624/625 exact full-C1 single-core equivalence only |
 | Full state/prefix |Original157 and private165 scientific acquisitions NOT RUN |
 | Final state-bound audit619 |NOT RUN;all-split admission unfinished/fails closed |
 | Direct relative error1.0 |Sponza pixels UNRESOLVED/未解決, included |
 
-[Latest full seed2 outcome713](results/713-compensated-a6a-seed2-terminal-outcome.md),
+[Latest full-A6a/quality outcome716](results/716-a6a-full-physical-and-retained-quality-outcome.md),
 [actual terminal/equivalence628](results/628-terminal-seed1-and-thread-private-equivalence.md),
 [non-PT/prefix outcome617](results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md),
 [complete result index](results/index.json).
@@ -50,19 +50,19 @@ No reference adoption or accepted speed follows from the new execution pilot.
 
 Invoke one named scientific step per process, inspect its terminal result
 before the next, and refuse existing outputs. Never launch the commands below
-while the current145 native is live; source description is distinct from
+while any145 native is live; source description is distinct from
 scientific acquisition. No automatic next step, retry or resource extension.
 
 | Route | Purpose / prerequisites | Actual state |
 | --- | --- | --- |
-|145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489/490/491 terminal;492 live/unindexed;later parts NOT RUN |
+|145 `acquire_compensated_full_sphere_seed.py`|A6a thenA6b thenA10, each4 separately named original seeds;full physical/IID gates|489–492 terminal/full A6a PASS;A6b/A10 parts NOT RUN |
 |156 `acquire_compensated_level5_full.py`|Separate full diagnostic after all original candidate physical prerequisites|528 description;529 NOT RUN |
 |157 `acquire_compensated_state_prefix.py`|Original full24-state plus2 actual C7 cases,3 phases/four seeds|531 description;532..609/610 NOT RUN |
 |164 `prepare_thread_private_cli.py`|Correct only621 CLI guard;exact private headers/compiler/limits|626 source/627 build complete;unrun622 preserved |
 |163 `acquire_thread_private_equivalence.py`|Original versusprivate full-C1/16spp/one-seed,1vs4 threads on sameCPU31|623/624/625 complete;scoped equivalence only |
 |165 `acquire_private_state_prefix.py`|Same full78 state/prefix scope;all157 prerequisites plus626/627/625|629 description;630..707/708 NOT RUN |
 |158/161 raw-chain and one-level I/O|Full existing physical/state proofs and unchanged assessor/support/SE/stop|611/620 source only;actual612/launcher/admission unfinished |
-|166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 NOT RUN;no recapture |
+|166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
 
 Scripts are under [n010_reference_sampling](../../../scripts/research/n010_reference_sampling/)

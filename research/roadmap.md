@@ -8,7 +8,8 @@ are in the [N010 results](lanes/n010-comparison-readiness/results/index.json).
 Do not open more preparation lanes because the incumbent loses quality.
 
 1. Finish the registered compensated physical acquisition and independent
-   controls. A6a3/4 is complete; seed3 is the separately invoked live one-core step.
+   controls. A6a4/4 passes its pooled analytical gate; next is separately invoked
+   A6b seed0, then remaining A6b/IID, A10 and level5 diagnostic.
    Keep original seeds/counts/numerical/resource guards and every failure.
 2. Complete the existing density/support/Jacobian/bias assessment, full locked
    state/exact-prefix qualification and whole-frame two-level feasibility.
@@ -19,8 +20,8 @@ Do not open more preparation lanes because the incumbent loses quality.
 3. With eligible references, complete Sponza dynamic cohorts and C1 B8 quality
    ladder, selected full capture/replay scope, owned persistent/true-peak memory
    and actual160 final audit619. Keep all pixels and all quality losses. Already
-   eligible C7/C12 retained non-PT quality replays166 may finish at the next
-   quiescent boundary without GPU recapture; do not score ineligible C1/C6.
+   eligible C7/C12 retained non-PT quality replays166 are complete:714/715 retain
+   all12 target FAILs. Four new replays remain; do not score ineligible C1/C6.
 4. Publish the actual six-gate N010 decision and runnable comparison handoff
    to a distinct `lane-m-gi-competitiveness` identity. Preserve the historical
    Lane M topology study. Plans and missing/invalid pilots cannot pass.

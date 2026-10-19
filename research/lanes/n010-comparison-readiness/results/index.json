@@ -2341,6 +2341,30 @@
       "status": "complete-full-a6a-seed2-terminal-same-numerical-guards-not-ready",
       "result": "713-compensated-a6a-seed2-terminal-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-492",
+      "status": "complete-full-four-seed-a6a-analytical-physical-pass-no-admission",
+      "result": "492-compensated-full-a6a-seed3.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-714",
+      "status": "complete-posthoc-full-c7-software-quality-valid-two-target-fails",
+      "result": "714-posthoc-static-C7-software-full-quality-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-715",
+      "status": "complete-posthoc-full-c12-hwrt-dynamic-quality-valid-ten-target-fails",
+      "result": "715-posthoc-dynamic-C12-hwrt-full-quality-replay.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-716",
+      "status": "complete-full-a6a-physical-pass-and-retained-quality-losses-not-ready",
+      "result": "716-a6a-full-physical-and-retained-quality-outcome.md",
+      "gpu_run": false
     }
   ]
 }

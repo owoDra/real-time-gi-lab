@@ -7,26 +7,25 @@ separate Lane M GI competitiveness. No N011. The goal is a valid executable
 comparison; an incumbent quality loss is a result and does not block handoff.
 
 - Eligible references: **16/24**. Missing: C1/C2/C3/C4 T_B8 and C5/C6 T_B2/T_B8.
-- Compensated sampler: **13/17 full physical artifacts**; original14/17 including
+- Compensated sampler: **14/17 full physical artifacts**; original14/17 including
   its diagnostic-only item is a separate historical inventory.
-- A6a seeds0/489,1/490 and2/491 pass terminal integrity: **3/4**, no pooled
-  physical verdict or reference admission. Seed2 used5283.027633000001CPU /
-  5303.1404757779965elapsed seconds; all1487 input/payload hashes match. The
-  preserved original261 failed on this seed;491 passes unchanged numerical
-  guards over the whole full-count image, without rewriting that failure.
-- **Live acquisition:**145 A6a seed3 was separately launched after publication
-  (nativePID644484/start_ticks8104711/session34570, source9c42fca0). One CPU31/
-  nice15/one render thread with original7200CPU/10800elapsed/4GiB guards.
-  Mutable492 stays uncommitted/unindexed until terminal. Sole scientific worker;
-  no automatic next step/retry. The updated optional CPU preference is unanswered.
+- A6a489–492: **4/4 seeds, pooled analytical physical PASS**, no reference
+  admission. Direct allowance has0 violations; indirect relative7.5096e-5 /
+  NRMSE7.9006e-5 pass unchanged. All1498 hashes in terminal492 match. Original261
+  and prior per-seed records are preserved; this does not prove global bias.
+- **Execution:** A6a seed3/nativePID644484/session34570 is terminal0.
+  Next separately invoke145 A6b seed0 once after publication; no live native at
+  this checkpoint. Keep CPU31/nice15/one thread/7200CPU/10800elapsed/4GiB,
+  no queue/retry. The updated optional CPU preference is unanswered.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
-  descriptive union10/36 is not final-auditor acceptance. Six new non-PT quality
-  replays remain pending. C7 dense/HWRT both fail both retained quality targets.
+  descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
+  **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
+  New POST-HOC714/715 retain12 quality-target FAILs, indirect NRMSE97–98%.
 - Sponza direct-relative-error1.0 pixels remain **UNRESOLVED / 未解決**, included.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Latest seed2 outcome713](lanes/n010-comparison-readiness/results/713-compensated-a6a-seed2-terminal-outcome.md),
+[Latest full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md),
 [terminal execution and full-frame equivalence628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md),
 [non-PT/prefix outcomes617](lanes/n010-comparison-readiness/results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md).
 A live process receipt is observation, not a passing research result.
@@ -76,7 +75,7 @@ from timing precision. Final state-bound auditor619 has **NOT RUN**.
 
 | Requirement | Required next evidence |
 | --- | --- |
-| Eligible locked physical references | Finish A6a/A6b/A10 all4 seeds, A6b IID and separate level5 diagnostic; complete density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots. |
+| Eligible locked physical references | After A6a PASS, finish A6b/A10 all4 seeds, A6b IID and separate level5 diagnostic; complete density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots. |
 | Correctness and explicit discrepancies | Keep full physical/state/key checks and all pixels. Report direct-relative1.0 as unresolved; no masked acceptance or retroactive V1/V3 repair. |
 | Whole-corpus dynamics/quality/memory | Finish Sponza C2–C6 histories and all selected boundary captures/replays; retain owned persistent/true-peak allocation/free evidence and zero teardown. |
 | Frozen ladders/quality selection | Complete C1 B8 ladder once its reference is eligible; retain every failed budget and full-pixel score. |
@@ -90,15 +89,14 @@ All-split reference admission/dispatch remains unfinished and fails closed.
 is only a partial post-hoc ideal-measure/source assessment: its2^-30 selection-
 only bound is **not** a native radiance-bias bound.
 
-### Prepared work is not executed evidence
+### Executed replays and prepared routes
 
-- 166 `replay_retained_non_pt_quality.py` implements two POST-HOC retained
-  quality replays:517 static-C7-software (both transports) and519 dynamic-C12-
-  hwrt (all5 frames/both transports), using already eligible C7/C12 chains.
-  It reuses160 full native/raw/state/owned-memory intake and unchanged full-
-  pixel scoring, without recapture.714/715 **NOT RUN**; current145 must first
-  end, then invoke/inspect one case at a time. Six new quality replays remain
-  pending until actual results; no speed or reference-admission claim.
+- 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
+  and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
+  chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;
+  valid evidence, no accepted speed. Source capture bytes remain unchanged.
+  Four remaining new replays are513/514/515 static C1 and518 dynamic C6,
+  pending their required eligible references; no recapture is needed for these.
 - Original compensated full state/prefix route157:78 natives532..609 and
   summary610 **NOT RUN**. Prefix526 builds only.
 - Private route165/629 retains the same full78 cases, scientific analysis and
