@@ -13,7 +13,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Item | Retained state |
 | --- | --- |
 | Eligible references |16/24;8 Sponza slots still missing |
-| Compensated full physical controls |16/17 artifacts;A6a/A6b/A10 all4/4 physical PASS;A6b IID PASS;separate diagnostic529 live |
+| Compensated full physical controls |17/17 artifacts:16 gated physical PASS +1 separate NOT_GATED diagnostic;A6b IID PASS |
 | Selected PT captures |2/28 |
 | Non-PT raw executions |8/8;descriptive union10/36;not final-auditor acceptance |
 | Non-PT quality replay |4/8 complete;four pending;new714/715 retain12 target FAILs |
@@ -76,7 +76,8 @@ The prefix routes use all21 payload identities, original16/8/restored16 and
 C7 16384/8192/restored16384 levels, original own-log1e-6/conditioned1 guards and
 complete interval counters. Original165/167 templates keep4 render threads on
 CPU31.170/723 registers the same full state/prefix scope on four distinct cores;
-all78 acquisitions remain NOT RUN pending complete physical controls.
+all78 acquisitions remain NOT RUN; required full physical/IID/diagnostic
+controls are now complete17/17, including1 diagnostic-only item.
 171/726 binds the raw/level reader to that explicit profile using a distinct
 root/variant and matching qualification/attempt/resource identities; source
 only, with actual feasibility/scientific launcher/admission still required.

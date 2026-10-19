@@ -2497,6 +2497,18 @@
       "status": "complete-full-a10-physical-pass-sixteen-of-seventeen-not-ready",
       "result": "730-a10-full-four-seed-physical-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-529",
+      "status": "complete-original-full-level5-diagnostic-not-gated-no-admission",
+      "result": "529-compensated-full-level5-diagnostic.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-731",
+      "status": "complete-full-seventeen-artifact-inventory-including-one-diagnostic-not-ready",
+      "result": "731-complete-physical-inventory-and-level5-diagnostic.md",
+      "gpu_run": false
     }
   ]
 }

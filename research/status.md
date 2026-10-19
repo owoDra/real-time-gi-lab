@@ -7,7 +7,8 @@ separate Lane M GI competitiveness. No N011. The goal is a valid executable
 comparison; an incumbent quality loss is a result and does not block handoff.
 
 - Eligible references: **16/24**. Missing: C1/C2/C3/C4 T_B8 and C5/C6 T_B2/T_B8.
-- Compensated sampler: **16/17 full physical artifacts**; original14/17 including
+- Compensated sampler: **17/17 full artifacts**,16 gated controls and1 separate
+  diagnostic-only item; all16 original physical gates PASS. Original14/17 including
   its diagnostic-only item is a separate historical inventory.
 - A6a489–492: **4/4 seeds, pooled analytical physical PASS**, no reference
   admission. Direct allowance has0 violations; indirect relative7.5096e-5 /
@@ -28,10 +29,10 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   Final500 all1986 input/10 payload hashes match; CPU5506.54762/elapsed
   1387.988219 seconds are offline diagnostics. Same169 profile/original guards.
   No reference admission.
-- **Live:**156 separate level5 diagnostic529, nativePID758340/start_ticks
-  10370462/session49724, sourcebe4bd9208564d7a064d6721d062722c424450a91.
-  Original1 thread/CPU31/nice15/1200CPU/1800elapsed/4GiB. Sole scientific job,
-  mutable529 uncommitted/unindexed; no queue/retry or reference admission.
+- Separate156 diagnostic529 terminal0/complete, all2097 input/27 payload
+  hashes match. Original one-core limits held; CPU614.880947/elapsed616.847964
+  seconds are offline diagnostics. Analytic RGB/NRMSE remains **NOT_GATED**.
+  Full78 state/prefix is next, no job queued; no reference admission.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -40,7 +41,8 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Full-A10 outcome730](lanes/n010-comparison-readiness/results/730-a10-full-four-seed-physical-outcome.md),
+[Complete physical inventory731](lanes/n010-comparison-readiness/results/731-complete-physical-inventory-and-level5-diagnostic.md),
+[full-A10 outcome730](lanes/n010-comparison-readiness/results/730-a10-full-four-seed-physical-outcome.md),
 [full-A6b/IID outcome725](lanes/n010-comparison-readiness/results/725-a6b-full-physical-and-independent-iid-outcome.md),
 [bounded four-core outcome721](lanes/n010-comparison-readiness/results/721-four-core-execution-pilot-outcome.md),
 [full-A6a/quality outcome716](lanes/n010-comparison-readiness/results/716-a6a-full-physical-and-retained-quality-outcome.md).
@@ -94,7 +96,7 @@ from timing precision. Final state-bound auditor619 has **NOT RUN**.
 
 | Requirement | Required next evidence |
 | --- | --- |
-| Eligible locked physical references | A6a/A6b/A10 all4 seeds and A6b IID PASS; finish separate level5 diagnostic, density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots. |
+| Eligible locked physical references | Full physical inventory17/17 incl diagnostic; density/support/Jacobian/numerical-bias assessment, full state/prefix, whole-frame two-level feasibility and unchanged reference qualification for all8 missing slots remain. |
 | Correctness and explicit discrepancies | Keep full physical/state/key checks and all pixels. Report direct-relative1.0 as unresolved; no masked acceptance or retroactive V1/V3 repair. |
 | Whole-corpus dynamics/quality/memory | Finish Sponza C2–C6 histories and all selected boundary captures/replays; retain owned persistent/true-peak allocation/free evidence and zero teardown. |
 | Frozen ladders/quality selection | Complete C1 B8 ladder once its reference is eligible; retain every failed budget and full-pixel score. |
@@ -130,8 +132,8 @@ only bound is **not** a native radiance-bias bound.
   complete original controls and private708 execution qualification remain required.
 - 170/723 provides the **same78** state/prefix cases on bounded CPUs28–31,
   with whole165-generated/109 inverses and unchanged full scientific analysis.
-  All15 metadata hashes match; actual630..707/708 remain **NOT RUN**, pending
-  complete physical/IID/diagnostic controls. New reader rejects mixed/missing
+  All15 metadata hashes match; actual630..707/708 remain **NOT RUN**. Required
+  physical/IID/diagnostic controls are now complete. New reader rejects mixed/missing
   execution profiles.165/629's one-core template is retained.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
   API. Actual612 raw replay and scientific acquisition/feasibility launcher remain

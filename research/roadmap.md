@@ -7,12 +7,11 @@ is the single authoritative progress/architecture summary; detailed outcomes
 are in the [N010 results](lanes/n010-comparison-readiness/results/index.json).
 Do not open more preparation lanes because the incumbent loses quality.
 
-1. Finish the registered compensated physical acquisition and independent
-   controls. A6a/A6b/A10 all4/4 physical gates and A6b IID PASS; artifacts16/17.
-   Complete existing156 level5 diagnostic; all169 physical seeds are terminal.
-   Full science is unchanged.
-   Keep original seeds/counts/numerical/resource guards and every failure.
-2. Complete the existing density/support/Jacobian/bias assessment, full locked
+Physical inventory is complete17/17, including16 gated physical PASS controls
+and1 separate NOT_GATED diagnostic; independent A6b IID PASS. Retain all
+original counts/guards and failures; this does not admit a reference.
+
+1. Complete the existing density/support/Jacobian/bias assessment, full locked
    state/exact-prefix qualification and whole-frame two-level feasibility.
    Admit the missing8 references only through unchanged full-frame/four-seed/
    six-level/two-consecutive-level/support/1e-5 absolute/5% relative rules.
@@ -20,12 +19,12 @@ Do not open more preparation lanes because the incumbent loses quality.
    a reference. Qualify execution changes before use; no automatic transfer.
    Four-core170/723 full78 and171/726 raw/level source connections exist;
    their actual qualification and scientific launcher/admission remain open.
-3. With eligible references, complete Sponza dynamic cohorts and C1 B8 quality
+2. With eligible references, complete Sponza dynamic cohorts and C1 B8 quality
    ladder, selected full capture/replay scope, owned persistent/true-peak memory
    and actual160 final audit619. Keep all pixels and all quality losses. Already
    eligible C7/C12 retained non-PT quality replays166 are complete:714/715 retain
    all12 target FAILs. Four new replays remain; do not score ineligible C1/C6.
-4. Publish the actual six-gate N010 decision and runnable comparison handoff
+3. Publish the actual six-gate N010 decision and runnable comparison handoff
    to a distinct `lane-m-gi-competitiveness` identity. Preserve the historical
    Lane M topology study. Plans and missing/invalid pilots cannot pass.
 
