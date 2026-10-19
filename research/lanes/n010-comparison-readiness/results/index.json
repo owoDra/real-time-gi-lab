@@ -2329,6 +2329,18 @@
       "status": "complete-current-summary-consolidation-no-scientific-decision-change",
       "result": "712-current-summary-consolidation.json",
       "gpu_run": false
+    },
+    {
+      "id": "N010-491",
+      "status": "complete-third-of-four-full-a6a-seed-integrity-no-admission",
+      "result": "491-compensated-full-a6a-seed2.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-713",
+      "status": "complete-full-a6a-seed2-terminal-same-numerical-guards-not-ready",
+      "result": "713-compensated-a6a-seed2-terminal-outcome.md",
+      "gpu_run": false
     }
   ]
 }

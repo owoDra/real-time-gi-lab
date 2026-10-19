@@ -9,13 +9,15 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - Eligible references: **16/24**. Missing: C1/C2/C3/C4 T_B8 and C5/C6 T_B2/T_B8.
 - Compensated sampler: **13/17 full physical artifacts**; original14/17 including
   its diagnostic-only item is a separate historical inventory.
-- A6a seeds0/489 and1/490 pass terminal integrity: **2/4**, no pooled physical
-  verdict or reference admission. Seed1 used5398.559005CPU/5419.978203242994elapsed
-  seconds and all1476 input/payload hashes match.
-- **Live acquisition:**145 A6a seed2, nativePID615961/start_ticks7566712,
-  session51833/source1b8218d7. One CPU31/nice15/one render thread, original
-  7200CPU/10800elapsed/4GiB limits. Mutable491 is not indexed/committed until
-  terminal. It is the sole scientific worker; no automatic next step/retry.
+- A6a seeds0/489,1/490 and2/491 pass terminal integrity: **3/4**, no pooled
+  physical verdict or reference admission. Seed2 used5283.027633000001CPU /
+  5303.1404757779965elapsed seconds; all1487 input/payload hashes match. The
+  preserved original261 failed on this seed;491 passes unchanged numerical
+  guards over the whole full-count image, without rewriting that failure.
+- **Current execution:**seed2 is terminal. Next separately launch145 A6a seed3
+  after this publication, one CPU31/nice15/one render thread with original
+  7200CPU/10800elapsed/4GiB guards. No active acquisition at this checkpoint;
+  no automatic next step/retry. The updated optional CPU preference is unanswered.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Six new non-PT quality
   replays remain pending. C7 dense/HWRT both fail both retained quality targets.
@@ -23,7 +25,8 @@ comparison; an incumbent quality loss is a result and does not block handoff.
 - No accepted Lane M speed or general GI-superiority result; no architecture
   promotion. Tests **NOT RUN** in the current work.
 
-[Terminal execution and full-frame equivalence628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md),
+[Latest seed2 outcome713](lanes/n010-comparison-readiness/results/713-compensated-a6a-seed2-terminal-outcome.md),
+[terminal execution and full-frame equivalence628](lanes/n010-comparison-readiness/results/628-terminal-seed1-and-thread-private-equivalence.md),
 [non-PT/prefix outcomes617](lanes/n010-comparison-readiness/results/617-terminal-seed-full-non-pt-captures-and-prefix-build.md).
 A live process receipt is observation, not a passing research result.
 
