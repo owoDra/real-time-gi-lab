@@ -2533,6 +2533,24 @@
       "status": "complete-first-of-twentysix-state-prefix-cases-three-of-seventyeight-steps-not-ready",
       "result": "732-first-four-core-state-prefix-qualification-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-633",
+      "status": "complete-four-core-c1-b8-phase0-no-admission",
+      "result": "633-private-state-prefix-case01-phase0.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-634",
+      "status": "complete-four-core-c1-b8-phase1-no-admission",
+      "result": "634-private-state-prefix-case01-phase1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-635",
+      "status": "complete-four-core-c1-b8-phase2-all21-payloads-counters-audits-exact-no-admission",
+      "result": "635-private-state-prefix-case01-phase2.json",
+      "gpu_run": false
     }
   ]
 }
