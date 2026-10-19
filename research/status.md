@@ -126,8 +126,7 @@ only bound is **not** a native radiance-bias bound.
   with whole165-generated/109 inverses and unchanged full scientific analysis.
   All15 metadata hashes match; actual630..707/708 remain **NOT RUN**, pending
   complete physical/IID/diagnostic controls. New reader rejects mixed/missing
-  execution profiles.165/629's one-core template is retained;167/718's raw/level
-  profile still needs an explicit corresponding connection before use.
+  execution profiles.165/629's one-core template is retained.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
   API. Actual612 raw replay and scientific acquisition/feasibility launcher remain
   unfinished;620's CLI only describes source.
@@ -136,6 +135,12 @@ only bound is **not** a native radiance-bias bound.
   unchanged scientific analysis. Distinct private root/variant,4 threads on
   CPU31. **Source only:** no prerequisite, native, raw replay or admission ran;
   scientific launcher/feasibility/admission dispatch remain unfinished.
+- 171/726 explicitly connects that raw reader and level I/O to170's four-core
+  full78 profile. Whole158/161 inverses and unchanged original scientific
+  analysis are verified; qualification/attempt/receipt profiles must agree.
+  Distinct root/variant; all8 slots, six levels and four seeds retained.
+  **Source only:** no prerequisite/native/image replay/admission executed.
+  Actual whole-frame feasibility and scientific launcher/admission remain open.
 - 160's whole36 corrected state/snapshot route618 exists;619 final audit **NOT RUN**.
 
 [629](lanes/n010-comparison-readiness/results/629-private-state-prefix-description.json),

@@ -66,6 +66,7 @@ scientific acquisition. No automatic next step, retry or resource extension.
 |168 `acquire_multicore_equivalence.py`|Same exact full-C1/one-seed/16spp comparison versus623,4 distinct CPU cores/nice15|720 terminal exact PASS;offline costs only;no full-scope admission |
 |169 `acquire_multicore_sphere_seed.py`|Remaining145 A6b/A10 full seeds,exact627/720 four-core profile;original physical/IID analysis and resource ceilings|A6b493–496 full physical/IID PASS;497 A10 seed0 live/unindexed;498..500 NOT RUN |
 |170 `acquire_multicore_state_prefix.py`|Same complete165 full78 state/prefix scope under bounded four-core profile;all physical/IID/diagnostic prerequisites retained|723 source/full-scope metadata only;630..707/708 NOT RUN |
+|171 `four_core_reference_execution.py`|Explicit170 full78/four-core raw-reader and level-I/O connection;all8 slots/six levels/four seeds|726 source/inverses only;no prerequisite/native/raw replay/admission executed |
 |166 `replay_retained_non_pt_quality.py`|POST-HOC517 C7-software and519 C12-hwrt, full eligible references/raw/state/memory/quality;CPU only after quiescence|714/715 complete;all12 quality targets FAIL;no recapture |
 |160 `readiness_preflight_state_bound.py`|All required references/quality/capture/raw-query/owned-memory proof;no unknown variants|618 source;619 NOT RUN |
 
@@ -76,6 +77,9 @@ C7 16384/8192/restored16384 levels, original own-log1e-6/conditioned1 guards and
 complete interval counters. Original165/167 templates keep4 render threads on
 CPU31.170/723 registers the same full state/prefix scope on four distinct cores;
 all78 acquisitions remain NOT RUN pending complete physical controls.
+171/726 binds the raw/level reader to that explicit profile using a distinct
+root/variant and matching qualification/attempt/resource identities; source
+only, with actual feasibility/scientific launcher/admission still required.
 [717 assessment](results/717-private-estimator-identity-and-physical-evidence-transfer.md)
 justifies estimator-level physical-evidence transfer for exact626/627, while
 complete original physical controls and private708 remain required.

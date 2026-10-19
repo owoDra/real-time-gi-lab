@@ -1,0 +1,215 @@
+{
+  "schema": "n010-four-core-reference-execution-description/1",
+  "complete": true,
+  "classification": "FOUR_CORE_RAW_CHAIN_AND_LEVEL_IO_SOURCE_ONLY_NOT_QUALIFIED",
+  "source_commit": "c51619efc9c7a5b4fbe328c9fd5de72876713ca3",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/171-four-core-reference-chain-and-level-io.md": "a2f807d0fd89a768549d96063d273ca7407fef127513d89b85a6f016ca329173",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/four_core_reference_execution.py": "30b51c56b6a07b889d12e2ea2b9ad5af347c6b14a8c8aef2687df984864b6242",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/167-private-reference-chain-and-level-io.md": "8092f6954e492be0a8bd634c6a40cf8854d0ad6c1855ae53227bb90aceb35984",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/private_reference_execution.py": "cbf084a97e55570554202756d002fbafccfe04b45b8e90c1b12c75889c919a63",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/170-four-core-full-state-prefix-profile.md": "c7c9b4bee01b8f73941f8c3fc2e52965f493eca06c68cf6ce95ded9c7d5103c0",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_multicore_state_prefix.py": "73335a75b415547890fcc056541e0bb067885cd87b11d7fd805be4bd2229850d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/experiments/169-four-core-full-physical-seed-profile.md": "632ebd2d1c7f7b08de3447afb05e0dac2b1dccba067158e9097d6ed88a8d0c53",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/acquire_multicore_sphere_seed.py": "0be4e0a43a1e5732a2e374ffe68d58a94eeb2363924cc7e3b7bf2c1a7b5ba648",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/compensated_reference_chain.py": "45cf734783d70ec2ebef5f25a16e256b9b78d1920086010c95ede42e8f586735",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_reference_sampling/compensated_reference_level_io.py": "24899620c4322aa31d08548165b414aa15b0645cdf115bf181916b6547634ae0",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/point_guided_reference_provenance.py": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_point_guided_references.py": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e"
+  },
+  "proof": {
+    "parent167_composition": {
+      "whole158_inverse_exact": true,
+      "whole161_inverse_exact": true,
+      "original161_analysis_function_ast_exact": true,
+      "raw_verifier_composition": {
+        "whole_original_source_inverse_exact": true,
+        "assessor_manifest_signal_support_replicate_se_stop_bytes_exact": true,
+        "original_sha256": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91",
+        "generated_sha256": "6c608c6f051070d58ecc539f7fb16d4d0153692d6baf9b7d30d8d81adc9e18cd"
+      },
+      "scientific_analysis_composition": {
+        "original_sha256": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e",
+        "original_analysis_sha256": "023c58923146762288eca022451e1f7bec22c6e900256d8f2bc3810a02ca9772",
+        "generated_analysis_sha256": "c24145dfd17004af86a81e4b76e08e83bc947a1b5246732760c4bbc22e87abab",
+        "whole_original_analysis_inverse_exact": true,
+        "original_assessor_support_se_stop_suffix_bytes_exact": true,
+        "original_assessor_support_se_stop_suffix_ast_exact": true
+      },
+      "chain_source_sha256": "8c244f0d530ae542b554fd6a0a03b41f368c1ae5b3e43f080a14d9fda6d07792",
+      "level_source_sha256": "75f9d34ff9a12166ab10de7959443debb5422869c671ebb19c499a71cb299bdb",
+      "chain_edits": [
+        [
+          "import acquire_compensated_state_prefix as S",
+          "import acquire_private_state_prefix as S"
+        ],
+        [
+          "PLAN = D.RESULTS.parent/'experiments/158-compensated-reference-raw-chain.md'",
+          "PLAN = _private_plan"
+        ],
+        [
+          "VARIANT = 'compensated-all-split-mixture-v1'",
+          "VARIANT = _private_variant"
+        ],
+        [
+          "BINARY = D.OUT/'compensated-prefix-build-v1/n010_compensated_prefix'",
+          "BINARY = _private_binary"
+        ],
+        [
+          "REFERENCE_ROOT = D.OUT/'compensated-reference-ladders-v1'",
+          "REFERENCE_ROOT = _private_root"
+        ],
+        [
+          "PROOFS = ('452-compensated-full-exporter-build.json','525-compensated-prefix-source-prepare.json',\n          '526-compensated-prefix-build.json','610-compensated-all-state-prefix-summary.json')",
+          "PROOFS = _private_proofs"
+        ],
+        [
+          "isolated_native=S.isolated_native",
+          "isolated_native=S.S.isolated_native"
+        ],
+        [
+          "str(S.ORIGINAL)",
+          "str(S.S.ORIGINAL)"
+        ],
+        [
+          "if (not summary['all_pass'] or summary['numerical_variant']",
+          "if (summary.get('execution_variant') != 'thread-private-audit-v2'\n            or not summary['all_pass'] or summary['numerical_variant']"
+        ],
+        [
+          "\"'--spp', str(spp), '--threads', '1']\"",
+          "\"'--spp', str(spp), '--threads', '4']\""
+        ]
+      ],
+      "level_edits": [
+        [
+          "import compensated_reference_chain as P\nfrom compensated_reference_chain import D, Q, require_no_other_research_worker",
+          "P = _private_chain\nD, Q, require_no_other_research_worker = P.D, P.Q, P.require_no_other_research_worker"
+        ],
+        [
+          "PLAN = D.RESULTS.parent/'experiments/161-compensated-single-level-io-component.md'",
+          "PLAN = _private_plan"
+        ],
+        [
+          "'--spp',str(spp),'--threads','1']",
+          "'--spp',str(spp),'--threads','4']"
+        ]
+      ]
+    },
+    "whole158_composed_inverse_exact": true,
+    "whole161_composed_inverse_exact": true,
+    "original161_analysis_function_ast_exact": true,
+    "raw_verifier_composition": {
+      "whole_original_source_inverse_exact": true,
+      "assessor_manifest_signal_support_replicate_se_stop_bytes_exact": true,
+      "original_sha256": "e22bb5b1e28e3c8463f5ecbb1049305ae6e4b566b9f81c9e6c21a891eba95e91",
+      "generated_sha256": "c0a2f7635d704913662f95cb3c4a886614dc11dabde75e61f3ea165570f215c1"
+    },
+    "scientific_analysis_composition": {
+      "original_sha256": "cb9ce1e58a612cd66e6f2af1492e575b49e8ff3f003b6bef38d6e2112d77cc2e",
+      "original_analysis_sha256": "023c58923146762288eca022451e1f7bec22c6e900256d8f2bc3810a02ca9772",
+      "generated_analysis_sha256": "c24145dfd17004af86a81e4b76e08e83bc947a1b5246732760c4bbc22e87abab",
+      "whole_original_analysis_inverse_exact": true,
+      "original_assessor_support_se_stop_suffix_bytes_exact": true,
+      "original_assessor_support_se_stop_suffix_ast_exact": true
+    },
+    "chain_source_sha256": "1e9ee90299980c36e0c88b53ad5589f4e6b54e64912d284244d5bba40f58e0bf",
+    "level_source_sha256": "e9a324d4c6d07e33942d8f025d677fa16364e940ad4b109ccff375154fbf30b0",
+    "additional_chain_edits": [
+      [
+        "import acquire_private_state_prefix as S",
+        "import acquire_multicore_state_prefix as S"
+      ],
+      [
+        "summary.get('execution_variant') != 'thread-private-audit-v2'",
+        "summary.get('execution_variant') != 'thread-private-audit-v2'\n            or summary.get('execution_profile') != 'four-core-low-priority-v1'"
+      ],
+      [
+        "if q['computational_variant'] != VARIANT:",
+        "if q.get('execution_profile') != 'four-core-low-priority-v1' or q['computational_variant'] != VARIANT:"
+      ],
+      [
+        "or receipt['affinity'] != [31] or receipt['nice'] != 15",
+        "or receipt['affinity'] != [28,29,30,31] or receipt['nice'] != 15\n                or receipt.get('execution_profile') != 'four-core-low-priority-v1'\n                or attempt.get('execution_profile') != 'four-core-low-priority-v1'"
+      ]
+    ],
+    "additional_level_edits": [
+      [
+        "raise ValueError('one numerical thread required')\n    os.sched_setaffinity(0,{31})",
+        "raise ValueError('one numerical thread required')\n    if not {28,29,30,31}.issubset(os.sched_getaffinity(0)):\n        raise ValueError('registered four CPUs unavailable')\n    os.sched_setaffinity(0,{28,29,30,31})"
+      ],
+      [
+        "computational_variant=P.VARIANT,proof_sha256=proofs,levels=[],classification='INELIGIBLE')",
+        "computational_variant=P.VARIANT,execution_profile='four-core-low-priority-v1',proof_sha256=proofs,levels=[],classification='INELIGIBLE')"
+      ],
+      [
+        "attempt = dict(command=command,source_commit=commit,pass_=False,native_terminal=False,",
+        "attempt = dict(command=command,source_commit=commit,pass_=False,native_terminal=False,\n        execution_profile='four-core-low-priority-v1',"
+      ],
+      [
+        "boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),command=command,",
+        "boot_id=Path('/proc/sys/kernel/random/boot_id').read_text().strip(),command=command,\n            execution_profile='four-core-low-priority-v1',"
+      ],
+      [
+        "or own['affinity'] != [31] or own['nice'] != 15",
+        "or own['affinity'] != [28,29,30,31] or own['nice'] != 15\n                or own.get('execution_profile') != 'four-core-low-priority-v1'"
+      ]
+    ]
+  },
+  "variant": "compensated-all-split-private-four-core-v1",
+  "root": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1",
+  "binary": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-build-v2/n010_thread_private_prefix",
+  "required_proofs": [
+    "452-compensated-full-exporter-build.json",
+    "525-compensated-prefix-source-prepare.json",
+    "526-compensated-prefix-build.json",
+    "626-thread-private-cli-source.json",
+    "627-thread-private-cli-build.json",
+    "708-private-all-state-prefix-summary.json",
+    "717-private-estimator-identity-and-physical-evidence-transfer.md",
+    "720-four-core-full-c1-equivalence.json",
+    "723-four-core-state-prefix-description.json"
+  ],
+  "selected_transports": [
+    "C1_T_B8",
+    "C2_T_B8",
+    "C3_T_B8",
+    "C4_T_B8",
+    "C5_T_B2",
+    "C5_T_B8",
+    "C6_T_B2",
+    "C6_T_B8"
+  ],
+  "levels": [
+    8192,
+    16384,
+    32768,
+    65536,
+    131072,
+    262144
+  ],
+  "seeds": [
+    305419896,
+    2596069104,
+    81985529216486895,
+    18364758544493064720
+  ],
+  "render_threads": 4,
+  "actual_native_affinity": [
+    28,
+    29,
+    30,
+    31
+  ],
+  "description_affinity": [
+    31
+  ],
+  "execution_profile": "four-core-low-priority-v1",
+  "prerequisites_executed": false,
+  "raw_evidence_replayed": false,
+  "native_executed": false,
+  "gpu_run": false,
+  "scientific_launcher_implemented": false,
+  "reference_admission": false,
+  "accepted_timing": false,
+  "tests": "NOT_RUN; exact source/inverse/AST/full-scope connection metadata only"
+}

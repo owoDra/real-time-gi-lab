@@ -18,6 +18,8 @@ Do not open more preparation lanes because the incumbent loses quality.
    six-level/two-consecutive-level/support/1e-5 absolute/5% relative rules.
    Source-only metadata, seed integrity and agreement with itself do not admit
    a reference. Qualify execution changes before use; no automatic transfer.
+   Four-core170/723 full78 and171/726 raw/level source connections exist;
+   their actual qualification and scientific launcher/admission remain open.
 3. With eligible references, complete Sponza dynamic cohorts and C1 B8 quality
    ladder, selected full capture/replay scope, owned persistent/true-peak memory
    and actual160 final audit619. Keep all pixels and all quality losses. Already

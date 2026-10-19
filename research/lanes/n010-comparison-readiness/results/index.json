@@ -2443,6 +2443,12 @@
       "status": "complete-full-a6b-physical-and-independent-iid-pass-not-ready",
       "result": "725-a6b-full-physical-and-independent-iid-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-726",
+      "status": "complete-four-core-full-reference-io-source-only-not-qualified",
+      "result": "726-four-core-reference-execution-description.json",
+      "gpu_run": false
     }
   ]
 }
