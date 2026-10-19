@@ -19,6 +19,8 @@ exact. This execution evidence also does not admit a reference.
    the independent density/support/numerical review, permits unadmitted feasibility
    only, and retains the unbounded global finite-arithmetic bias limitation.
    Actual admission still requires its own explicit assessment and dispatch.
+   Actual736 full prerequisite verification passes; first C1 B8/8192 feasibility
+   native737 is live, not accepted evidence.16384/summary remain unrun; no queue.
    Admit the missing8 references only through unchanged full-frame/four-seed/
    six-level/two-consecutive-level/support/1e-5 absolute/5% relative rules.
    Source-only metadata, seed integrity and agreement with itself do not admit

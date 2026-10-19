@@ -47,7 +47,10 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   [Actual preparation736](lanes/n010-comparison-readiness/results/736-four-core-reference-scientific-preparation.json)
   is complete/PASS; all5004 input hashes independently match. Full physical/IID/
   diagnostic and all78 state/prefix prerequisites were actually checked. No native
-  or admission in736. Full-C1 B8 feasibility737/738/739 has **NOT RUN**.
+  or admission in736. First full-C1 B8 feasibility737 is **LIVE**, native
+  PID798642/start11035451 under driver797441/start11011629, source7e052068;
+  actual4 cores/nice15/original resource receipt verified. This is observation,
+  not a result.737 is unaccepted while mutable;738/739 **NOT RUN**, no queue.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
