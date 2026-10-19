@@ -2485,6 +2485,18 @@
       "status": "complete-original-full-a10-seed2-four-core-terminal-not-ready",
       "result": "729-four-core-a10-seed2-terminal-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-500",
+      "status": "complete-full-four-seed-a10-physical-pass-no-admission",
+      "result": "500-compensated-full-a10-seed3.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-730",
+      "status": "complete-full-a10-physical-pass-sixteen-of-seventeen-not-ready",
+      "result": "730-a10-full-four-seed-physical-outcome.md",
+      "gpu_run": false
     }
   ]
 }
