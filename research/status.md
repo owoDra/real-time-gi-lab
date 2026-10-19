@@ -33,9 +33,9 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   hashes match. Original one-core limits held; CPU614.880947/elapsed616.847964
   seconds are offline diagnostics. Analytic RGB/NRMSE remains **NOT_GATED**.
   No reference admission.
-- Full78 state/prefix170: **6/78 steps,2/26 cases** complete. C1 T_B2/T_B8
+- Full78 state/prefix170: **12/78 steps,4/26 cases** complete. C1/C2 T_B2/T_B8
   uninterrupted16/fresh8/restored16 have exact21 payloads/scored counters/
-  interval audits under four-core execution.630–635 terminal hashes match;
+  interval audits under four-core execution.630–641 terminal hashes match;
   all other cases and full708 remain NOT RUN. No job queued.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
@@ -137,7 +137,7 @@ only bound is **not** a native radiance-bias bound.
   complete original controls and private708 execution qualification remain required.
 - 170/723 provides the **same78** state/prefix cases on bounded CPUs28–31,
   with whole165-generated/109 inverses and unchanged full scientific analysis.
-  All15 metadata hashes match; actual630–635 complete and636..707/708 **NOT RUN**. Required
+  All15 metadata hashes match; actual630–641 complete and642..707/708 **NOT RUN**. Required
   physical/IID/diagnostic controls are now complete. New reader rejects mixed/missing
   execution profiles.165/629's one-core template is retained.
 - 158 raw-chain reader611/612 and161 level-I/O component620 are not an admission
