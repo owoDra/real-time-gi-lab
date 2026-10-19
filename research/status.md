@@ -15,14 +15,17 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   and prior per-seed records are preserved; this does not prove global bias.
 - A6b493: **1/4 seeds** terminal0/integrity PASS, all1477 hashes match;
   no pooled A6b/IID verdict. CPU5251.617578/elapsed5271.961829 seconds are
-  diagnostic; original one-core guards held. No live native at this checkpoint.
+  diagnostic; original one-core guards held.
 - **CPU-profile pilot720 PASS:** one full-C1/16spp/original-seed case, exact
   six output files/all exported audits versus623; all1917 hashes match.
   Four threads on distinct cores28–31/nice15; CPU54.058786/elapsed14.137738
-  seconds are offline diagnostics. No live native at this checkpoint.169 now
-  registers the same profile for remaining named full physical steps, preserving
-  whole145 scientific/IID analysis; actual494..500 NOT RUN. No queue/retry or
-  reference qualification follows from the pilot/source registration.
+  seconds are offline diagnostics.169 registers the same profile for remaining
+  named full physical steps, preserving whole145 scientific/IID analysis.
+- **Live:**169 A6b seed1, nativePID706088/start_ticks9322770/session91480,
+  source aef41730ca2dfd81540fc03cdb1f48a1686b59c2. Four workers observed on
+  CPUs28–31/nice15; original7200CPU/10800elapsed/4GiB. Sole scientific job,
+  mutable494 uncommitted/unindexed until terminal; no queue/retry. No reference
+  admission follows from the live receipt or bounded pilot.
 - Selected full PT captures: **2/28**. All **8/8 non-PT raw executions** exist;
   descriptive union10/36 is not final-auditor acceptance. Non-PT quality replay
   **4/8**: C7 dense/HWRT/software and dynamic C12 HWRT complete; four pending.
@@ -106,7 +109,7 @@ only bound is **not** a native radiance-bias bound.
   seeds, reserved494..500 and all original analytical/IID/numerical/resource
   rules, with exact627/720 four-core execution and explicit prior-profile
   validation. Whole145 inverse and complete physical/IID analysis bytes/AST
-  are exact. No native under this profile has run at this checkpoint.
+  are exact.494 A6b seed1 is live; later495..500 NOT RUN. A receipt is not PASS.
 - 166 POST-HOC714/715 are **complete**:517 static-C7-software (both transports)
   and519 dynamic-C12-HWRT (all5 frames/both transports), using eligible C7/C12
   chains,160 full intake and unchanged full-pixel scoring. All12 targets FAIL;
