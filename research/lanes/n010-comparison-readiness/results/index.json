@@ -3037,6 +3037,12 @@
       "status": "diagnostic-reproduced-737-guard-roundoff-tail-opposite-side-plane-residuals-exceed-single-B-no-admission",
       "result": "742-737-guard-failure-witness-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-743",
+      "status": "posthoc-sponza-b8-certain-ineligible-under-frozen-screen-131072-pair-p99-1.69e-5-no-native",
+      "result": "743-sponza-b8-frozen-screen-infeasibility.md",
+      "gpu_run": false
     }
   ]
 }
