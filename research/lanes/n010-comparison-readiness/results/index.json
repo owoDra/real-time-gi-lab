@@ -3043,6 +3043,12 @@
       "status": "posthoc-sponza-b8-certain-ineligible-under-frozen-screen-131072-pair-p99-1.69e-5-no-native",
       "result": "743-sponza-b8-frozen-screen-infeasibility.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-744",
+      "status": "r1-c1-c2-b8-r1-eligible-16384-original-ineligible-retained-all16-consistent",
+      "result": "744-r1-retained-assessment-outcome.md",
+      "gpu_run": false
     }
   ]
 }

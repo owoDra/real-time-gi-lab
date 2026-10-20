@@ -45,6 +45,7 @@ if __name__=='__main__':
     parser.add_argument('--work',type=Path,required=True)
     parser.add_argument('--output',type=Path,required=True)
     parser.add_argument('--threads',type=int,default=32)
+    parser.add_argument('--stop-rule',choices=('original','R1'),default='original')
     args=parser.parse_args()
     proofs=dependencies()
     if args.work.exists() or args.output.exists():
@@ -64,7 +65,7 @@ if __name__=='__main__':
                 'script':sha(Path(__file__)),'qualification_helpers':sha(Path(Q.__file__)),
                 'import_plan':sha(args.imports) if args.imports else None,
                 'provenance_helper':sha(Path(__file__).with_name('reference_provenance.py'))}
-    result={'schema':'n010-incremental-reference-qualification/1','amendment':'8' if args.imports else '6',
+    result={'schema':'n010-incremental-reference-qualification/1','amendment':'8' if args.imports else '6','stop_rule':args.stop_rule,
             'complete':False,'proof_sha256':proofs,'input_sha256':identities,'cells':[]}
     def frozen():
         if proofs!=dependencies() or identities!={'binary':sha(BINARY),'net':sha(Q.NET),'lock':sha(args.lock),
@@ -177,9 +178,13 @@ if __name__=='__main__':
                      'classification':'STATISTICALLY_ELIGIBLE' if screen['status']=='statistical-screen-pass' else 'INELIGIBLE'}
                 if import_record:row['prefix_import_sha256']=sha(out/'prefix-import.json')
                 (out/'qualification.json').write_text(json.dumps(row,indent=2,allow_nan=False)+'\n')
-                print(cell,transport,spp,screen['status'],flush=True)
+                if args.stop_rule=='R1':
+                    import assess_r1_reference_eligibility as R1
+                    row['r1']=R1.assess(slot,out,None)
+                    (out/'qualification.json').write_text(json.dumps(row,indent=2,allow_nan=False)+'\n')
+                print(cell,transport,spp,screen['status'],row.get('r1',{}).get('classification'),flush=True)
                 previous=fresh
-                if row['classification']=='STATISTICALLY_ELIGIBLE':
+                if row['classification']=='STATISTICALLY_ELIGIBLE' or row.get('r1',{}).get('classification')=='R1_STATISTICALLY_ELIGIBLE':
                     break
             result['cells'].append(row)
             args.output.write_text(json.dumps(result,indent=2,allow_nan=False)+'\n')
