@@ -3049,6 +3049,12 @@
       "status": "r1-c1-c2-b8-r1-eligible-16384-original-ineligible-retained-all16-consistent",
       "result": "744-r1-retained-assessment-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-746",
+      "status": "selected-pt-18-valid-all-pass-c4-b2-proof-pending-cpu-limit",
+      "result": "746-selected-pt-reference-independent-captures.md",
+      "gpu_run": true
     }
   ]
 }
