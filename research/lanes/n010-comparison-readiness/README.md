@@ -1,5 +1,7 @@
 # N010 — final comparison preparation
 
+**RESUMED 2026-10-20 by explicit user request.** [742](results/742-737-guard-failure-witness-outcome.md) diagnosed737; next is a separately registered audit-only repair and evidence-transfer assessment.
+
 **PROJECT PAUSED by user request (2026-10-19). N010 NOT_READY / INCOMPLETE.**
 No new acquisition, retry or diagnosis; resume only on explicit user request.
 [740 suspension checkpoint](results/740-project-suspension-checkpoint.md) preserves
@@ -29,7 +31,7 @@ questions and exit gates; [protocol](../../protocol.md) for measurement rules.
 | Private exporter |627 full/prefix build;623/624/625 same-core and720 four-core full-C1 equivalence,one seed/16spp only |
 | Full state/prefix |170 actual630–707/708 qualified:78/78 steps,26/26 cases,all26 restored payload/counter/audit comparisons exact |
 | Final state-bound audit619 |NOT RUN;all-split admission unfinished/fails closed |
-| Last full-frame feasibility737 |INCOMPLETE(-6),conditioned raw-target/plane reconstruction error;no admission;root cause undiagnosed |
+| Last full-frame feasibility737 |INCOMPLETE(-6),conditioned raw-target/plane reconstruction error;no admission;root cause diagnosed in [742](results/742-737-guard-failure-witness-outcome.md):069 audit allows each point B from plane but their separation only B |
 | Direct relative error1.0 |Sponza pixels UNRESOLVED/未解決, included |
 
 [Latest full-A6b/IID outcome725](results/725-a6b-full-physical-and-independent-iid-outcome.md),

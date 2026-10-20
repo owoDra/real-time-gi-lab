@@ -1,0 +1,118 @@
+{
+  "schema": "n010-737-guard-failure-witness/1",
+  "complete": true,
+  "gpu_run": false,
+  "classification": "WITNESS_CAPTURED_ANALYSIS_PENDING",
+  "reference_admission": false,
+  "feasibility": false,
+  "source_commit": "4e08e5e3ccac40f098cd8ff9b56a284c8cfc6289",
+  "plan_sha256": "ec57abb20942e0d7819819e3aa3ab6774f5282b7f445a2fee2814c19cea1b9b4",
+  "script_sha256": "9cd5e24dc24b2116721fc22c9c8621d24a3ff501cfaac106f1b987d424e40294",
+  "frozen_input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v2/prefix/n010_rqmc_oracle.hpp": "f797ad867cdc1b7a760abf0a435f3afef619f7e7da2495d2332b0719bf96c9f8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/thread-private-reference-source-v2/prefix/n010_rqmc_main.cpp": "08b8541eb4cb816509773634c995d5e04511b51c713a1532e1629f08e9ce6941",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/scene.n008": "f40929b73e709141d3985e54032274b90b33022fd2087a25b0a1ed17f20412ac",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439"
+  },
+  "generated_sha256": {
+    "header": "108a36f9b958f3b21839f901d2c374e10646886f91b1d21623dd1e45e86cd46d",
+    "main": "08b8541eb4cb816509773634c995d5e04511b51c713a1532e1629f08e9ce6941"
+  },
+  "header_inverse_exact": true,
+  "seed": 2596069104,
+  "spp": 8192,
+  "threads": 4,
+  "affinity": [
+    28,
+    29,
+    30,
+    31
+  ],
+  "nice": 15,
+  "limits": {
+    "cpu": 57600,
+    "elapsed": 14400,
+    "address_space": 4294967296
+  },
+  "tests": "NOT_RUN; diagnostic instrumentation only",
+  "compile": {
+    "command": [
+      "c++",
+      "-mavx512f",
+      "-std=c++20",
+      "-O3",
+      "-fno-fast-math",
+      "-ffp-contract=off",
+      "-pthread",
+      "-I",
+      "/var/owo/workspaces/projects/gi-lab/src/research/n008_hdr_oracle",
+      "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/737-guard-witness-v1/n010_rqmc_main.cpp",
+      "-o",
+      "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/737-guard-witness-v1/n010_737_guard_witness"
+    ],
+    "returncode": 0,
+    "stderr": "render(uint64_t, uint32_t, unsigned int, phos::gi::research::n008::RenderCounters&, std::vector<phos::gi::research::n008::PrimaryRecord>*, const std::vector<unsigned int>&, std::vector<std::vector<phos::gi::research::n008::PixelStats> >*, uint32_t, const std::vector<phos::gi::research::n008::PixelStats>*) const\u2019 at /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/737-guard-witness-v1/n010_rqmc_oracle.hpp:1602:41:\n/nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/stl_algobase.h:426:32: \u8b66\u544a: \u2018void* __builtin_memcpy(void*, const void*, long unsigned int)\u2019 reading between 9223372036854775681 and 9223372036854775807 bytes from a region of size 9223372036854775680 [-Wstringop-overread]\n  426 |               __builtin_memmove(_GLIBCXX_TO_ADDR(__result),\n      |               ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~\n  427 |                                 _GLIBCXX_TO_ADDR(__first),\n      |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~\n  428 |                                 __n * sizeof(*__first));\n      |                                 ~~~~~~~~~~~~~~~~~~~~~~~\nIn member function \u2018_Tp* std::__new_allocator<_Tp>::allocate(size_type, const void*) [with _Tp = phos::gi::research::n008::PixelStats]\u2019,\n    inlined from \u2018constexpr _Tp* std::allocator< <template-parameter-1-1> >::allocate(std::size_t) [with _Tp = phos::gi::research::n008::PixelStats]\u2019 at /nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/allocator.h:203:40,\n    inlined from \u2018static constexpr _Tp* std::allocator_traits<std::allocator<_CharT> >::allocate(allocator_type&, size_type) [with _Tp = phos::gi::research::n008::PixelStats]\u2019 at /nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/alloc_traits.h:614:28,\n    inlined from \u2018constexpr std::_Vector_base<_Tp, _Alloc>::pointer std::_Vector_base<_Tp, _Alloc>::_M_allocate(std::size_t) [with _Tp = phos::gi::research::n008::PixelStats; _Alloc = std::allocator<phos::gi::research::n008::PixelStats>]\u2019 at /nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/stl_vector.h:387:33,\n    inlined from \u2018constexpr void std::_Vector_base<_Tp, _Alloc>::_M_create_storage(std::size_t) [with _Tp = phos::gi::research::n008::PixelStats; _Alloc = std::allocator<phos::gi::research::n008::PixelStats>]\u2019 at /nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/stl_vector.h:405:44,\n    inlined from \u2018constexpr std::_Vector_base<_Tp, _Alloc>::_Vector_base(std::size_t, const allocator_type&) [with _Tp = phos::gi::research::n008::PixelStats; _Alloc = std::allocator<phos::gi::research::n008::PixelStats>]\u2019 at /nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/stl_vector.h:341:26,\n    inlined from \u2018constexpr std::vector<_Tp, _Alloc>::vector(size_type, const allocator_type&) [with _Tp = phos::gi::research::n008::PixelStats; _Alloc = std::allocator<phos::gi::research::n008::PixelStats>]\u2019 at /nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/stl_vector.h:587:47,\n    inlined from \u2018std::vector<phos::gi::research::n008::PixelStats> phos::gi::research::n008::Oracle::render(uint64_t, uint32_t, unsigned int, phos::gi::research::n008::RenderCounters&, std::vector<phos::gi::research::n008::PrimaryRecord>*, const std::vector<unsigned int>&, std::vector<std::vector<phos::gi::research::n008::PixelStats> >*, uint32_t, const std::vector<phos::gi::research::n008::PixelStats>*) const\u2019 at /var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/737-guard-witness-v1/n010_rqmc_oracle.hpp:1602:98:\n/nix/store/qxaq7jz61a6zkr2mq49i0zvqip2m2jj8-gcc-15.2.0/include/c++/15.2.0/bits/new_allocator.h:151:73: \u5099\u8003: source object of size [192, 9223372036854775680] allocated by \u2018operator new\u2019\n  151 |         return static_cast<_Tp*>(_GLIBCXX_OPERATOR_NEW(__n * sizeof(_Tp)));\n      |                                                                         ^\n",
+    "compiler": "g++ (GCC) 15.2.0"
+  },
+  "binary_sha256": "a881c385f440b643616ba0007e620e3abe074965185b74f90fa6b85d6ac0b2c5",
+  "command": [
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/737-guard-witness-v1/n010_737_guard_witness",
+    "--net",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+    "--scene",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/private-four-core-reference-ladders-v1/C1_T_B8/scene.n008",
+    "--out",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/737-guard-witness-v1/o.n8192",
+    "--seeds",
+    "2596069104",
+    "--spp",
+    "8192",
+    "--threads",
+    "4"
+  ],
+  "native_pid": 1412782,
+  "returncode": -6,
+  "wall_seconds_diagnostic": 915.0091180889867,
+  "child_cpu_seconds": 3640.378835,
+  "stdout_sha256": "cd58aad566836f0417355a7d1f04b0d7aa686938d57402509551569f44cac461",
+  "stderr_sha256": "b83978ea75b1639b4320e6b694d869e5f978b94ee1718d0ba9ffc37885dd93d4",
+  "stderr_tail": [
+    "GUARD_WITNESS {\"kind\":\"fail\",\"x\":277,\"y\":20,\"s\":658,\"light_first\":0,\"index\":2,\"source_triangle\":86176,\"target_triangle\":59183,\"hit_triangle\":59183,\"coincident\":0,\"ox\":\"-0x1.1f735ae846d14p+8\",\"oy\":\"-0x1.40cd5e7f6a712p+1\",\"oz\":\"0x1.1b487ef545d27p+9\",\"px\":\"-0x1.1c874a4375be4p+8\",\"py\":\"0x1.5c511c53c50b8p-2\",\"pz\":\"0x1.1cbcebffffe89p+9\",\"lx\":\"0x1.38831a65c7038p-47\",\"ly\":\"0x1.0d09c1c66f7cp-56\",\"lz\":\"0x1.99a3a3f4874adp-47\",\"wx\":\"0x1.2a9714048755cp-1\",\"wy\":\"0x1.22daa4f985346p-1\",\"wz\":\"0x1.294ec0dcace5ap-1\",\"distance\":\"0x1.40ae737ca9d53p+2\",\"t\":\"0x1.40ae737ccc8adp+2\",\"error\":\"0x1.15b7ed1d4b16dp-33\",\"bound\":\"0x1.3f7b8f2c2d305p-34\",\"target_plane\":\"0x1.77p-35\",\"actual_plane\":\"0x1.0ep-35\",\"conditioned\":\"0x1.4287d15a9280cp-34\"}",
+    "terminate called after throwing an instance of 'std::runtime_error'",
+    "  what():  conditioned raw-target/plane reconstruction error"
+  ],
+  "near_witnesses": 1,
+  "fail_witnesses": [
+    {
+      "kind": "fail",
+      "x": 277,
+      "y": 20,
+      "s": 658,
+      "light_first": 0,
+      "index": 2,
+      "source_triangle": 86176,
+      "target_triangle": 59183,
+      "hit_triangle": 59183,
+      "coincident": 0,
+      "ox": -287.45060588578167,
+      "oy": -2.506267368521443,
+      "oz": 566.5663744536331,
+      "px": -284.52847692131604,
+      "py": 0.34015316258706774,
+      "pz": 569.4759521483949,
+      "lx": 8.673953820340675e-15,
+      "ly": 1.4584585331099215e-17,
+      "lz": 1.1369772359927385e-14,
+      "wx": 0.583183885147871,
+      "wy": 0.5680743746366737,
+      "wz": 0.5806789655093312,
+      "distance": 5.010647651425944,
+      "t": 5.010647651552216,
+      "error": 1.2629173480901298e-10,
+      "bound": 7.264194514163174e-11,
+      "target_plane": 4.263256414560601e-11,
+      "actual_plane": 3.069544618483633e-11,
+      "conditioned": 7.333495392127644e-11
+    }
+  ]
+}

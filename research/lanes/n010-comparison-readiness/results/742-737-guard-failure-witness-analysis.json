@@ -1,0 +1,78 @@
+{
+  "schema": "n010-737-guard-failure-witness-analysis/1",
+  "posthoc": true,
+  "gpu_run": false,
+  "reference_admission": false,
+  "witness_sha256": "f2dad42eb03ef24ce8009472b101965a2e90f356063e5f62b4d8373c8ad9e389",
+  "stderr_sha256": "b83978ea75b1639b4320e6b694d869e5f978b94ee1718d0ba9ffc37885dd93d4",
+  "script_sha256": "c5c2354d0a17479824b43e77392124a5db2442c6ec34e4cb6cc4f7522e4f2fe6",
+  "rows": [
+    {
+      "kind": "near",
+      "pixel": [
+        277,
+        20
+      ],
+      "sample": 658,
+      "light_first": 0,
+      "index": 2,
+      "target_triangle": 59183,
+      "hit_triangle": 59183,
+      "coincident": 0,
+      "same_triangle": true,
+      "triangle_condition": 604.4941116700443,
+      "abs_cosine": 0.5806789655093312,
+      "distance": 5.010647651425944,
+      "recorded_fraction": {
+        "target_plane": 0.5868863239067219,
+        "actual_plane": 0.4225581532128398,
+        "conditioned": 1.009540063640828
+      },
+      "exact_target_plane_fraction": 0.5868863239067219,
+      "exact_precise_target_plane_fraction": 0.5867298059013497,
+      "exact_actual_plane_fraction": 0.4226622085379305,
+      "exact_line_plane_to_target_conditioned_fraction": 0.5868205624083251,
+      "exact_line_plane_to_actual_conditioned_fraction": 0.4226622085379305,
+      "target_barycentric": [
+        0.5813354963001349,
+        0.24482470303309944,
+        0.17383980066676563
+      ],
+      "bound_over_eps_scale": 327150.2370713207
+    },
+    {
+      "kind": "fail",
+      "pixel": [
+        277,
+        20
+      ],
+      "sample": 658,
+      "light_first": 0,
+      "index": 2,
+      "target_triangle": 59183,
+      "hit_triangle": 59183,
+      "coincident": 0,
+      "same_triangle": true,
+      "triangle_condition": 604.4941116700443,
+      "abs_cosine": 0.5806789655093312,
+      "distance": 5.010647651425944,
+      "recorded_fraction": {
+        "target_plane": 0.5868863239067219,
+        "actual_plane": 0.4225581532128398,
+        "conditioned": 1.009540063640828
+      },
+      "exact_target_plane_fraction": 0.5868863239067219,
+      "exact_precise_target_plane_fraction": 0.5867298059013497,
+      "exact_actual_plane_fraction": 0.4226622085379305,
+      "exact_line_plane_to_target_conditioned_fraction": 0.5868205624083251,
+      "exact_line_plane_to_actual_conditioned_fraction": 0.4226622085379305,
+      "target_barycentric": [
+        0.5813354963001349,
+        0.24482470303309944,
+        0.17383980066676563
+      ],
+      "bound_over_eps_scale": 327150.2370713207
+    }
+  ],
+  "tests": "NOT_RUN"
+}

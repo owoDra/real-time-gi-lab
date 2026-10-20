@@ -23,7 +23,11 @@ Full state/prefix170 is now qualified:78/78 actual steps/26 cases, all24 locked
 states plus2 high-count C7 cases;708 complete/all_pass, all26 restored results
 exact. This execution evidence also does not admit a reference.
 
-1. First diagnose737’s exact numerical guard failure against frozen evidence;
+1. **Done 2026-10-20:** [742](lanes/n010-comparison-readiness/results/742-737-guard-failure-witness-outcome.md) diagnosed737
+   (opposite-side plane residuals0.587B+0.423B exceed the069 third term's single B;
+   same triangle, no physics defect). Next: register an audit-only repair (implied2B
+   allowance) and assess transfer of627/708 evidence before a new737-level attempt.
+   Original text: First diagnose737’s exact numerical guard failure against frozen evidence;
    do not blindly retry or relax thresholds. If a bounded continuation is justified
    after explicit user resumption, complete whole-frame feasibility under172, retaining
    qualified full locked-state/exact-prefix and physical/IID evidence.735 records

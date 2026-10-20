@@ -1,6 +1,15 @@
-# Current research status (2026-10-19)
+# Current research status (2026-10-20)
 
 ## Current decision and execution
+
+**RESUMED by explicit user request (2026-10-20).** First step done:
+[742](lanes/n010-comparison-readiness/results/742-737-guard-failure-witness-outcome.md) reproduces737's guard failure and identifies its cause. The069
+audit admits each of target/hit up to B from the plane but requires their
+normal separation (≈ sum of both residuals, up to2B) to be ≤B; witness
+0.587B+0.423B=1.0095B on opposite sides, same triangle. Diagnostic only; no
+admission/feasibility. An audit repair needs its own prospective registration.
+The pause text below is retained as the 2026-10-19 record.
+
 
 **PROJECT PAUSED by user request (2026-10-19). N010 NOT_READY / INCOMPLETE.**
 No acquisition, retry or diagnosis while paused; resume only on explicit user
@@ -61,8 +70,8 @@ comparison; an incumbent quality loss is a result and does not block handoff.
   or admission in736. First full-C1 B8 feasibility
   [737](lanes/n010-comparison-readiness/results/737-four-core-c1-b8-feasibility-8192.json)
   is terminal **INCOMPLETE**, native returncode-6 with
-  `conditioned raw-target/plane reconstruction error`; detailed root cause has
-  **not been diagnosed**. It failed before the stop request; no signal was sent.
+  `conditioned raw-target/plane reconstruction error`; root cause diagnosed
+  post-hoc in [742](lanes/n010-comparison-readiness/results/742-737-guard-failure-witness-outcome.md) (audit third-term allowance inconsistent with its plane terms). It failed before the stop request; no signal was sent.
   Source7e052068/original four-core guards and six partial payloads are preserved;
   all5006 input hashes match. No admission;738/739 **NOT RUN**, no queue.
   Acquisition and observer processes are terminal; all research is paused.

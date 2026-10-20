@@ -3031,6 +3031,12 @@
       "status": "paused-evidence-preservation-failed737-remote-backup-readback-verified-full-corpus-backup-incomplete",
       "result": "741-raw-evidence-preservation.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-742",
+      "status": "diagnostic-reproduced-737-guard-roundoff-tail-opposite-side-plane-residuals-exceed-single-B-no-admission",
+      "result": "742-737-guard-failure-witness-outcome.md",
+      "gpu_run": false
     }
   ]
 }
