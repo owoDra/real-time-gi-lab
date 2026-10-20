@@ -1,0 +1,15 @@
+{
+  "schema": "n010-pt-proof-replay/1",
+  "case": "dynamic-C4-B2-n1024",
+  "source_commit": "4e93f767db775a72208012db0edf9b70c75e4de6",
+  "original_record_sha256": "ff420b8fd898bc3dd8029df98aee137107e3fcc78197fcc585b3c6fc56363950",
+  "original_classification": "NATIVE_TERMINAL_PROOF_PENDING",
+  "native_executed": false,
+  "gpu_run": false,
+  "reason": "130 runner RLIMIT_CPU120s ended proof stage after native returncode0",
+  "complete": true,
+  "tests": "NOT_RUN",
+  "failure": "continuation quality proof: fresh score output required",
+  "classification": "PROOF_REPLAY_FAILED_RETAINED",
+  "cpu_seconds_diagnostic": 30.596108
+}

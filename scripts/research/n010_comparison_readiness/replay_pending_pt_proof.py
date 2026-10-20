@@ -38,7 +38,7 @@ def main():
     B.C.require(all(payload.get(k)==v for k,v in record['payload_sha256'].items()),'retained capture bytes changed')
     output = OUT/(a.case+'.json');score_work = part.parent/(a.case+'.proof-replay')/'quality'
     B.C.require(not output.exists() and not score_work.exists(),'refuse existing replay')
-    OUT.mkdir(parents=True,exist_ok=True);score_work.mkdir(parents=True)
+    OUT.mkdir(parents=True,exist_ok=True);score_work.parent.mkdir(parents=True)  # verify_capture creates score_work
     result = dict(schema='n010-pt-proof-replay/1',case=a.case,source_commit=commit,
         original_record_sha256=hashlib.sha256(original.read_bytes()).hexdigest(),
         original_classification=record['classification'],native_executed=False,gpu_run=False,
