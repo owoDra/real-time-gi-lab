@@ -21,6 +21,8 @@ ROOT = Path(__file__).resolve().parents[3]
 BASE = ROOT/'out/research/n010-comparison-readiness'
 SLOT_VIEWS = BASE/'r1-slot-views-v1'
 PLAN = ROOT/'research/lanes/n010-comparison-readiness/experiments/175-r1-reference-integration.md'
+_ORIGINAL_VERIFY = H.verify_reference  # bound once: callers may later route H through this module
+_ORIGINAL_SCORE = S.score
 R1_SLOTS = ('C1_T_B8','C2_T_B8','C3_T_B8','C4_T_B8','C5_T_B2','C5_T_B8','C6_T_B2','C6_T_B8')
 
 
@@ -71,8 +73,8 @@ def verify_reference(directory, cell, vertices, spec, inputs, require_eligible=T
     directory = Path(directory)
     r1_path = directory.resolve()/'r1-eligibility.json'
     if not r1_path.exists():
-        return H.verify_reference(directory,cell,vertices,spec,inputs,require_eligible)
-    proof = H.verify_reference(directory,cell,vertices,spec,inputs,require_eligible=False)
+        return _ORIGINAL_VERIFY(directory,cell,vertices,spec,inputs,require_eligible)
+    proof = _ORIGINAL_VERIFY(directory,cell,vertices,spec,inputs,require_eligible=False)
     q = json.loads((directory.resolve()/'qualification.json').read_text())
     record = json.loads(r1_path.read_text())
     slot = f'{cell}_T_B{vertices}'
@@ -90,7 +92,7 @@ def score(capture,row,reference_work,output):
     reference_work = Path(reference_work)
     r1_path = reference_work.resolve()/'r1-eligibility.json'
     if not r1_path.exists():
-        result = S.score(capture,row,reference_work,output)
+        result = _ORIGINAL_SCORE(capture,row,reference_work,output)
         result['eligibility_rule'] = 'original'
         return result
     record = json.loads(r1_path.read_text())
@@ -98,7 +100,7 @@ def score(capture,row,reference_work,output):
             or row['levels'][-1]['spp'] != record['r1_eligible_at_spp']:
         raise ValueError('R1 scoring requires a verified R1 slot view')
     # score_hdr's only eligibility use is its first-line gate; R1 replaces that gate.
-    result = S.score(capture,dict(row,classification='STATISTICALLY_ELIGIBLE'),reference_work,output)
+    result = _ORIGINAL_SCORE(capture,dict(row,classification='STATISTICALLY_ELIGIBLE'),reference_work,output)
     result.update(eligibility_rule='R1',reference_original_classification=row['classification'],
                   r1_eligibility_sha256=sha(r1_path))
     return result

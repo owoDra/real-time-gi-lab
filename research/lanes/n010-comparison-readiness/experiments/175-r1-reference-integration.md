@@ -37,7 +37,7 @@ Symlinked work root `full-corpus-r1-view-v1`.
 Wraps the frozen132/130 runner exactly as132 wraps130: same case set and commands,
 with only `VIEW` → 747 and the reference verifier/scorer → B. Used for the remaining
 selected PT cases (dynamic C2/C3/C4-B8, C5/C6-B2/B8) and the C1-B8 static ladder
-(n1…n256), plus a CPU-only R1 score replay of retained402. One native per call, no
-retry. Every result says `eligibility_rule:"R1"` where an R1 slot is used.
+(n1…n256). Results/parts use the original130 paths that the417/503 inventory reads;
+retained402 is R1-scored inside the final audit (176). One native per call, no retry. Every result says `eligibility_rule:"R1"` where an R1 slot is used.
 
 N010 NOT_READY until all gates. Tests NOT RUN.

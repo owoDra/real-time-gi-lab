@@ -11,8 +11,6 @@ import r1_reference_provenance as X
 
 PLAN = B.R.RESULTS.parent/'experiments/175-r1-reference-integration.md'
 VIEW = B.R.RESULTS/'747-full-corpus-r1-reference-view.json'
-PUBLISHED = B.R.RESULTS/'r1-quality-cases'
-PARTS = B.R.BASE/'r1-quality-cases-v1'
 
 
 def main():
@@ -26,8 +24,6 @@ def main():
     B.cases = S132.selected_cases
     B.PLAN = PLAN
     B.VIEW = VIEW
-    B.PARTS = PARTS
-    B.PUBLISHED = PUBLISHED
     # Replace only the reference verifier and the score gate (175B); everything else is frozen130.
     B.H = types.SimpleNamespace(verify_reference=X.verify_reference)
     B.C.S = types.SimpleNamespace(score=X.score)
