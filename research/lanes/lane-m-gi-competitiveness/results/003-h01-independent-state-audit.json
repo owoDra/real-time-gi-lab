@@ -1,0 +1,104 @@
+{
+  "schema": "lane-m-m001-h01-upload-offline-audit/1",
+  "date_jst": "2026-10-22",
+  "source": "user-provided m001-h01-state.tar",
+  "classification": "STATE_INPUTS_CONSISTENT_FULL_PAYLOAD_NOT_VERIFIED",
+  "complete_metadata_audit": true,
+  "checks": {
+    "receipt_normal": true,
+    "source_sha_pinned": true,
+    "full_pinned_scene_list": true,
+    "manifest_matches_receipt": true,
+    "generator_sha_crossrecord": true,
+    "asset_glTF_sha": true,
+    "asset_bin_sha": true,
+    "asset_bytes": true,
+    "13_payloads_receipt": true,
+    "receipt_payload_sha_allocation-ledger.json": true,
+    "receipt_payload_sha_capture.json": true,
+    "receipt_payload_sha_frame-state.bin": true,
+    "receipt_payload_sha_geometry-state.bin": true,
+    "no_capture_admission": true,
+    "capture_contract": true,
+    "geometry_format": true,
+    "geometry_finite": true,
+    "geometry_two_sided": true,
+    "frame_binary_148": true,
+    "frame_parameters_finite": true,
+    "ledger_replay": true,
+    "gltf_triangle_count": true,
+    "glTF_capture_triangle_set": true
+  },
+  "checked_count": 23,
+  "passed_count": 23,
+  "receipt": {
+    "source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
+    "returncode": 0,
+    "payload_count": 13
+  },
+  "payload_hashes": {
+    "present_verified": 4,
+    "unavailable_not_verified": 9,
+    "unavailable_suffixes": [
+      "gpu/composite-lookup.bin",
+      "gpu/direct.pfm",
+      "gpu/hits.bin",
+      "gpu/indirect.pfm",
+      "gpu/probe-contributions.bin",
+      "gpu/probe-hits.bin",
+      "gpu/probe-work.bin",
+      "gpu/total.pfm",
+      "renderer-timings.jsonl"
+    ]
+  },
+  "state": {
+    "geometry_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+    "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+    "gltf_sha256": "0592ed91b67e6da84ab9a59c63cfceef7c3f9afeac333630ce10ad361905fac7",
+    "bin_sha256": "d5c6161059f56e3f8d1b16c9aa4e02b429a1b5ed5538d40d10637d2d6d416ac7",
+    "generator_source_sha256_attested_not_independently_received": "cd92c0db431be03b4fe07ed3db4f21aff43d35f44b0d6c821b7d9102297b76f9",
+    "gltf_capture_identical_triangle_order_count": 1224,
+    "geometry_triangles": 1224,
+    "width": 320,
+    "height": 180,
+    "fully_two_sided": true,
+    "finite_coordinates": true,
+    "nondegenerate_triangles": 1224,
+    "material_ids_all_unsigned_max": true,
+    "camera_axes_nearly_orthonormal": true
+  },
+  "owned_memory": {
+    "events": 74,
+    "true_peak_bytes": 266937920,
+    "teardown_zero": true,
+    "within_8gib_cap": true
+  },
+  "independent_n008_scene_inputs": {
+    "status": "INPUT_PREPARED_NOT_REFERENCE_QUALIFIED",
+    "geometry_hash_f64": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+    "T_B2": {
+      "max_bounces": 2,
+      "scene_sha256": "7153f784ef601167e17aaff7fbbaec1a641f1f194b03f71d248c2965d5847618",
+      "scene_bytes": 142870
+    },
+    "T_B8": {
+      "max_bounces": 8,
+      "scene_sha256": "9cc4fbfeb1aeda2851538e6318a44e0aa2165ae32ebdb5f48859b4448c92438d",
+      "scene_bytes": 142870
+    },
+    "note": "Hashes computed from the N008 Scene.text/state_scene construction reproduced offline; validate by running canonical N008 generator against exact source state before oracle acquisition."
+  },
+  "status": {
+    "reference_eligible": false,
+    "hdr_quality_scored": false,
+    "accepted_gpu_timing": false,
+    "other_heldouts_captured": false,
+    "gpu_run_by_assistant": false
+  },
+  "limitations": [
+    "Only 4 of 13 capture payload file SHA-256 hashes could be independently verified; 9 GPU image/intermediate/timing files were not supplied.",
+    "Original N004 source SHA is attested by cross-recorded local metadata but the raw N004 source was not in the archive.",
+    "N008 T_B2/B8 physical scenes are derived inputs, not converged/eligible reference images.",
+    "No complete GPU quality, matched-performance or DDGI comparative results exist."
+  ]
+}
