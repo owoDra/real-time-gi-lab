@@ -1,5 +1,11 @@
 # Lane M — GI competitiveness
 
+**2026-10-21: N010 recorded `READY_FOR_LANE_M_FIRST_COHORT`** ([751](../n010-comparison-readiness/results/751-r1-full-readiness-outcome.md)).
+Entry handoff: [753](../n010-comparison-readiness/results/753-lane-m-handoff.md)
+(references, unresolved correctness, comparators, quality conditions, GPU time and
+peak-memory procedures). The comparison is executable; the accepted campaign still
+requires this lane's prospective held-out registration and actual-boundary calibration.
+
 Distinct from the historical `lane-m-topology-backend-crossover` study.
 Status: handoff prepared; accepted campaign has not started.
 

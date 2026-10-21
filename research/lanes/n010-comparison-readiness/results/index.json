@@ -3067,6 +3067,42 @@
       "status": "r1-c3-c4-b8-r1-eligible-16384-references-24-of-24",
       "result": "752-r1-reference-acquisition-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-747",
+      "status": "full-24-slot-reference-view-16-original-8-r1-all-reverified",
+      "result": "747-full-corpus-r1-reference-view.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-748",
+      "status": "c1-b8-pt-ladder-n1-n256-fail-n1024-pass-r1-scored",
+      "result": "748-c1-b8-pt-quality-ladder.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-749",
+      "status": "c1-complete-pt-ladder-031-plus-748",
+      "result": "749-c1-complete-pt-quality-ladder-r1.json",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-750",
+      "status": "sponza-dynamic-c2-c6-complete-pt-pass-incumbents-fail-retained",
+      "result": "750-controlled-dynamic-cohort-r1.json",
+      "gpu_run": true
+    },
+    {
+      "id": "N010-751",
+      "status": "READY_FOR_LANE_M_FIRST_COHORT-six-gates-pass-timing-inconclusive",
+      "result": "751-r1-full-readiness-outcome.md",
+      "gpu_run": false
+    },
+    {
+      "id": "N010-753",
+      "status": "lane-m-handoff-issued",
+      "result": "753-lane-m-handoff.md",
+      "gpu_run": false
     }
   ]
 }

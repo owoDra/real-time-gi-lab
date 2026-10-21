@@ -1,5 +1,13 @@
 # Current research status (2026-10-20)
 
+**N010 READY_FOR_LANE_M_FIRST_COHORT (2026-10-21).** [751](lanes/n010-comparison-readiness/results/751-r1-full-readiness-outcome.md)
+passes all six gates: references24/24 (8 Sponza slots under disclosed post-hoc R1,
+[752](lanes/n010-comparison-readiness/results/752-r1-reference-acquisition-outcome.md)/[747](lanes/n010-comparison-readiness/results/747-full-corpus-r1-reference-view.json)),
+dynamic C2–C6 and C1 B8 pilots, 36/36 selected boundaries valid but
+TIMING_INCONCLUSIVE. [Handoff753](lanes/n010-comparison-readiness/results/753-lane-m-handoff.md) to Lane M GI
+competitiveness; accepted campaign not started, no speed claim. Direct error1.0
+UNRESOLVED/未解決. Text below is the earlier record.
+
 ## Current decision and execution
 
 **RESUMED by explicit user request (2026-10-20).** First step done:

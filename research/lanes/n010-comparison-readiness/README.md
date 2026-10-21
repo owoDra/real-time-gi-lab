@@ -1,5 +1,11 @@
 # N010 — final comparison preparation
 
+**READY_FOR_LANE_M_FIRST_COHORT (2026-10-21).** Final audit [751](results/751-r1-full-readiness-outcome.md):
+all six gates PASS with references24/24 (16 original +8 R1, plan174), Sponza dynamic
+cohorts and C1 B8 ladder complete, selected scope36/36 valid (TIMING_INCONCLUSIVE).
+Handoff: [753](results/753-lane-m-handoff.md). Direct error1.0 remains UNRESOLVED/未解決.
+The sections below are the historical record.
+
 **RESUMED 2026-10-20 by explicit user request.** [742](results/742-737-guard-failure-witness-outcome.md) diagnosed737; next is a separately registered audit-only repair and evidence-transfer assessment.
 
 **PROJECT PAUSED by user request (2026-10-19). N010 NOT_READY / INCOMPLETE.**

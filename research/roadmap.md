@@ -1,5 +1,10 @@
 # Forward research roadmap — major gates only
 
+**N010 complete (2026-10-21): READY_FOR_LANE_M_FIRST_COHORT** ([751](lanes/n010-comparison-readiness/results/751-r1-full-readiness-outcome.md),
+[handoff753](lanes/n010-comparison-readiness/results/753-lane-m-handoff.md)). Next: Lane M prospective registration
+(hypotheses, held-out states, budget ladders, tuning split) and actual-boundary
+calibration before any accepted comparison. Sections below are the earlier record.
+
 ## Project paused — resume only on explicit user request
 
 **PAUSED (2026-10-19); N010 NOT_READY / INCOMPLETE.** No new computation,
