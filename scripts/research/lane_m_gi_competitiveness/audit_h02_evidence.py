@@ -88,6 +88,17 @@ def audit(work: Path, *, metadata_only: bool = False) -> dict:
     check(digest(gltf) == H02_GLTF_SHA == scene["gltf_sha256"]
           and digest(binary) == H02_BIN_SHA == scene["bin_sha256"],
           "H02 glTF or BIN drift")
+    expected_inputs = {
+        "build/n009/phos-n010-capture": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+        "out/research/n010-comparison-readiness/light-selection-v1/sponza-local-motion.n009contract": "36b1516126b402d72c0bcd02bdce22a1bd5510ca8ea83ddc2437c7fedd58f864",
+        "out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H02.gltf": H02_GLTF_SHA,
+        "out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H02.bin": H02_BIN_SHA,
+    }
+    check(result.get("source_input_sha256") == expected_inputs,
+          "H02 GPU binary, physical-light contract, or scene input drifted from frozen run inputs")
+    check(type(result.get("source_commit")) is str and len(result["source_commit"]) == 40
+          and all(v in "0123456789abcdef" for v in result["source_commit"]),
+          "missing source commit identity")
     command = result.get("command", [])
     check(type(command) is list and all(type(x) is str for x in command), "bad native command")
     for opt, expected in (("--scenario", "static"), ("--backend", "hwrt"),
