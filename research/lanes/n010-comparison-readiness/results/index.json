@@ -3061,6 +3061,12 @@
       "status": "r1-c5-c6-b2-b8-r1-eligible-16384-stopped-at-c3-import-path-error",
       "result": "745-r1-reference-acquisition-outcome.md",
       "gpu_run": false
+    },
+    {
+      "id": "N010-752",
+      "status": "r1-c3-c4-b8-r1-eligible-16384-references-24-of-24",
+      "result": "752-r1-reference-acquisition-outcome.md",
+      "gpu_run": false
     }
   ]
 }

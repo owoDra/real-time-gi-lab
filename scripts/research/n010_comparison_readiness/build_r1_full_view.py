@@ -41,7 +41,8 @@ def main():
         inputs = {}
         vertices = int(row['transport'][-1])
         proof = X.verify_reference(Path(row['target']),row['cell'],vertices,lock['cells'][row['cell']],inputs)
-        if proof['eligibility_rule'] != row['eligibility_rule']:raise ValueError('eligibility rule mismatch '+row['name'])
+        # 175B returns the unchanged original proof (no eligibility_rule key) for the16 original slots.
+        if proof.get('eligibility_rule','original') != row['eligibility_rule']:raise ValueError('eligibility rule mismatch '+row['name'])
         row['verification'] = proof
         rows.append(row)
     WORK.mkdir(parents=True)
