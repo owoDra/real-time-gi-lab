@@ -7,9 +7,12 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "PRE_GPU_HOLDOUT_ASSET_GENERATION",
-      "classification": "NOT_RUN",
-      "accepted_timing": false
+      "phase": "OWNER_REPORTED_H01_CAPTURE_AWAITING_INPUT_ATTESTATION",
+      "classification": "OWNER_REPORTED_GPU_CAPTURE_SUCCESS_UNVERIFIED_INPUTS",
+      "accepted_timing": false,
+      "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
+      "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
+      "actual_h01_evidence_verified": false
     }
   ]
 }
