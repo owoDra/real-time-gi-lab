@@ -27,10 +27,11 @@
     "frame_parameters_finite": true,
     "ledger_replay": true,
     "gltf_triangle_count": true,
-    "glTF_capture_triangle_set": true
+    "glTF_capture_triangle_set": true,
+    "repository_n004_source_sha256_match": true
   },
-  "checked_count": 23,
-  "passed_count": 23,
+  "checked_count": 24,
+  "passed_count": 24,
   "receipt": {
     "source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
     "returncode": 0,
@@ -56,7 +57,6 @@
     "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
     "gltf_sha256": "0592ed91b67e6da84ab9a59c63cfceef7c3f9afeac333630ce10ad361905fac7",
     "bin_sha256": "d5c6161059f56e3f8d1b16c9aa4e02b429a1b5ed5538d40d10637d2d6d416ac7",
-    "generator_source_sha256_attested_not_independently_received": "cd92c0db431be03b4fe07ed3db4f21aff43d35f44b0d6c821b7d9102297b76f9",
     "gltf_capture_identical_triangle_order_count": 1224,
     "geometry_triangles": 1224,
     "width": 320,
@@ -65,7 +65,8 @@
     "finite_coordinates": true,
     "nondegenerate_triangles": 1224,
     "material_ids_all_unsigned_max": true,
-    "camera_axes_nearly_orthonormal": true
+    "camera_axes_nearly_orthonormal": true,
+    "generator_source_sha256_verified_from_current_branch": "cd92c0db431be03b4fe07ed3db4f21aff43d35f44b0d6c821b7d9102297b76f9"
   },
   "owned_memory": {
     "events": 74,
@@ -97,7 +98,6 @@
   },
   "limitations": [
     "Only 4 of 13 capture payload file SHA-256 hashes could be independently verified; 9 GPU image/intermediate/timing files were not supplied.",
-    "Original N004 source SHA is attested by cross-recorded local metadata but the raw N004 source was not in the archive.",
     "N008 T_B2/B8 physical scenes are derived inputs, not converged/eligible reference images.",
     "No complete GPU quality, matched-performance or DDGI comparative results exist."
   ]
