@@ -3055,6 +3055,12 @@
       "status": "selected-pt-18-valid-all-pass-c4-b2-proof-pending-cpu-limit",
       "result": "746-selected-pt-reference-independent-captures.md",
       "gpu_run": true
+    },
+    {
+      "id": "N010-745",
+      "status": "r1-c5-c6-b2-b8-r1-eligible-16384-stopped-at-c3-import-path-error",
+      "result": "745-r1-reference-acquisition-outcome.md",
+      "gpu_run": false
     }
   ]
 }
