@@ -7,15 +7,22 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "H01_STATE_INPUTS_CHECKED_H02_GPU_CAPTURE_READY",
-      "classification": "H01_STATE_INPUTS_CONSISTENT_REFERENCE_INELIGIBLE",
+      "phase": "H02_OWNER_REPORTED_SUCCESS_AWAITING_INDEPENDENT_STATE_AUDIT",
+      "classification": "H01_SCOPED_STATE_AUDIT_PASS_H02_RAW_UNQUALIFIED",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
       "actual_h01_evidence_verified": false,
       "h01_cpu_audit": "results/003-h01-independent-state-audit.json",
       "h02_gpu_runner": "scripts/research/lane_m_gi_competitiveness/capture_h02.py",
-      "reference_eligible": false
+      "reference_eligible": false,
+      "h01_state_inputs_verified": true,
+      "h01_complete_raw_payloads_verified": false,
+      "h02_owner_receipt": "results/005-h02-owner-reported-receipt.md",
+      "h02_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py",
+      "h02_state_inputs_verified": false,
+      "h02_full_raw_payloads_verified": false,
+      "h03_gpu_run": false
     }
   ]
 }

@@ -1,5 +1,7 @@
 # Lane M — GI competitiveness
 
+> **2026-10-22 M001 checkpoint:** H02 GPU one-shot returned success with 13 payloads **as reported by the owner**. [Exact receipt and file handoff](results/005-h02-owner-reported-receipt.md). [CPU H02 attestor](../../../scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py) committed; raw H02 evidence NOT independently inspected, H03 NOT RUN, no reference admission/quality/speed claim.
+
 > **M001 (2026-10-22): H01 state CPU audit 24/24 PASS; H01 reference still INELIGIBLE.** [Record 004](results/004-h01-state-and-h02-handoff.md) documents the compact-upload limits, physical-input hashes and next one-shot H02 GPU capture. No H02/H03/quality comparisons have run. No matched-quality GPU speed claims.
 
 > **M001 H01 owner-reported GPU capture terminal=0, 13 payloads (2026-10-21).** [Checkpoint](results/002-h01-owner-reported-checkpoint.md) retains the exact limited receipt; raw source/frame evidence is still locally held and **not independently audited**. [CPU state verifier](../../../scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py) prepared; no reference admission, other capture, timing or superiority claim.
