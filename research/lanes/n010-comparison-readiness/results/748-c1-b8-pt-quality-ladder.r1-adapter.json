@@ -1,0 +1,28 @@
+{
+  "schema": "n010-r1-pilot-adapter/1",
+  "pilot": "acquire_pt_pilot.py",
+  "pilot_sha256": "ba0145497a61f328c6d123ece2a5253e75898c858de15f81ad4ab134bddc447b",
+  "adapter_sha256": "678aef5fbc2af6254eef807e7c69e33d56e1b35ea50591f363a5670f9c44616a",
+  "r1_provenance_sha256": "6bf0e27a2f87e853f44da8164f817930f071cfe85d3519f062084d51dfbd5809",
+  "view_sha256": "d90fc78e9a7b20693abfcba5f8a0c7031b91dc0d1ab23282d18681bfb0e8a499",
+  "plan_sha256": "0bce1fd06908ae04d7f3240fe3988346c00b8c5b980ceea3fd9be145a7ea0407",
+  "source_commit": "9847675e4cfc7c2db25a99477af0efc7c8401bad",
+  "replaced_line": "        if row['classification']!='STATISTICALLY_ELIGIBLE':raise ValueError('reference not eligible')",
+  "replacement": "        _r1_require(a.references,(a.cell,),vertices)",
+  "inverse_exact": true,
+  "argv": [
+    "--cell",
+    "C1",
+    "--vertices",
+    "8",
+    "--state",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n009-scene-contract/states/static",
+    "--references",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/full-corpus-r1-view-v1",
+    "--work",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/final-comparison-pilots-r1-v1/C1-B8-ladder",
+    "--output",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/748-c1-b8-pt-quality-ladder.json"
+  ],
+  "eligibility_rule": "original for16 slots, R1 for8 (plan174)"
+}
