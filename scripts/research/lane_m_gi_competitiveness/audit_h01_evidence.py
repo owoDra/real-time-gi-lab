@@ -86,7 +86,7 @@ def memory(ledger: dict) -> dict:
             "teardown_zero": True}
 
 
-def audit(work: Path) -> dict:
+def audit(work: Path, *, metadata_only: bool = False) -> dict:
     work = work.resolve()
     receipt = json.loads((work / "result.json").read_text())
     check(receipt.get("schema") == "lane-m-m001-first-capture/1", "unexpected receipt")
@@ -127,18 +127,32 @@ def audit(work: Path) -> dict:
               row.get("gpu_state_frozen") is False, "geometry self-admitted")
         for ext in ("gltf", "bin"):
             filename = name + "." + ext
-            check(row.get(ext) == filename and
-                  digest(work / "assets" / filename) == row.get(ext + "_sha256"),
-                  "scene asset drift: " + filename)
+            asset = work / "assets" / filename
+            check(row.get(ext) == filename, "scene filename drift: " + filename)
+            if asset.is_file():
+                check(digest(asset) == row.get(ext + "_sha256"),
+                      "scene asset drift: " + filename)
+            else:
+                check(metadata_only and name != "M001-H01",
+                      "missing captured or strict-input scene asset: " + filename)
     payloads = receipt.get("payload_sha256")
     check(type(payloads) is dict and len(payloads) == 13, "unexpected payload inventory")
+    checked, deferred = 0, []
     for rel, expected in payloads.items():
         check(type(rel) is str and rel.startswith(CAPTURE.as_posix() + "/")
               and type(expected) is str and len(expected) == 64,
               "invalid payload entry")
         source = (work / rel).resolve()
-        check(source.is_relative_to(work) and source.is_file(), "missing/unsafe payload")
+        check(source.is_relative_to(work), "payload escaped root")
+        if not source.is_file():
+            check(metadata_only and Path(rel).name not in
+                  ("geometry-state.bin", "frame-state.bin", "capture.json",
+                   "allocation-ledger.json"),
+                  "missing required metadata payload: " + rel)
+            deferred.append(rel)
+            continue
         check(digest(source) == expected, "changed captured payload: " + rel)
+        checked += 1
     for file in NEEDED:
         check((CAPTURE / file).as_posix() in payloads, "missing pinned file " + file)
     meta = json.loads((work / CAPTURE / "capture.json").read_text())
@@ -150,30 +164,36 @@ def audit(work: Path) -> dict:
     check([meta.get("width"), meta.get("height")] == f["resolution"], "capture/frame mismatch")
     m = memory(json.loads((work / CAPTURE / "allocation-ledger.json").read_text()))
     return {"schema": "lane-m-m001-h01-state-audit/1", "complete": True,
-            "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+            "classification": ("STATE_INPUTS_CONSISTENT_FULL_PAYLOAD_NOT_VERIFIED"
+                               if deferred else "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE"),
             "capture_source_commit": CAPTURE_SOURCE, "geometry": g, "frame": f,
             "allocation": m, "input_sha256": {
                 "result": digest(work / "result.json"),
                 "geometry_manifest": digest(work / "assets/manifest.json"),
                 "capture_json": digest(work / CAPTURE / "capture.json")},
-            "capture_payload_hashes_checked": len(payloads),
+            "capture_payload_hashes_checked": checked,
+            "capture_payload_hashes_unverified": deferred,
             "reference_eligible": False, "accepted_timing": False, "gpu_run": False,
-            "scope": "Full payload SHA checks including HDR byte hashes. No HDR pixels read, reference scored, or GPU work."}
+            "scope": ("Selected input/state and memory hashes only; unprovided raw capture hashes pending."
+                      if deferred else "Full payload SHA including HDR byte hashes; no HDR pixels read, reference scored, or GPU work.")}
 
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--work", required=True, type=Path)
     ap.add_argument("--output", required=True, type=Path)
+    ap.add_argument("--metadata-only", action="store_true",
+                    help="verify compact local state inputs, explicitly flag omitted GPU payloads")
     args = ap.parse_args()
     check(not args.output.exists(), "refuse overwriting result")
-    result = audit(args.work)
+    result = audit(args.work, metadata_only=args.metadata_only)
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, sort_keys=True, indent=2) + "\n")
     print(json.dumps({"classification": result["classification"],
                       "geometry_sha256": result["geometry"]["geometry_sha256"],
                       "frame_sha256": result["frame"]["frame_sha256"],
                       "true_peak_owned_bytes": result["allocation"]["true_peak_owned_bytes"],
+                      "capture_payload_hashes_unverified": len(result["capture_payload_hashes_unverified"]),
                       "output": str(args.output)}, indent=2))
 
 
