@@ -1,5 +1,15 @@
 {
   "schema_version": 1,
   "lane": "lane-m-gi-competitiveness",
-  "experiments": []
+  "experiments": [
+    {
+      "id": "M001",
+      "name": "Prospective controlled first-cohort screen",
+      "plan": "experiments/001-first-cohort-preregistration.md",
+      "cpu_audit": "results/001-n010-input-metadata-audit.json",
+      "phase": "PRE_GPU_HOLDOUT_ASSET_GENERATION",
+      "classification": "NOT_RUN",
+      "accepted_timing": false
+    }
+  ]
 }

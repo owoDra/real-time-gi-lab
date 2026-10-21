@@ -1,5 +1,8 @@
 # Lane M — GI competitiveness
 
+> **Lane M M001 started 2026-10-21 (prospective preparation).** The first registration is [M001](experiments/001-first-cohort-preregistration.md), with CPU N010 metadata audit [001](results/001-n010-input-metadata-audit.json). N010 is READY for the first cohort, but no Lane M held-out GPU acquisition or accepted timing has run. Old N010 C1–C12 data are tuning only; three new non-Sponza static geometries are specified for future hold-out state locking. DDGI scene integration and dynamic/Sponza held-outs remain mandatory for broader claims. See the preregistration before starting any measurement.
+
+
 **2026-10-21: N010 recorded `READY_FOR_LANE_M_FIRST_COHORT`** ([751](../n010-comparison-readiness/results/751-r1-full-readiness-outcome.md)).
 Entry handoff: [753](../n010-comparison-readiness/results/753-lane-m-handoff.md)
 (references, unresolved correctness, comparators, quality conditions, GPU time and

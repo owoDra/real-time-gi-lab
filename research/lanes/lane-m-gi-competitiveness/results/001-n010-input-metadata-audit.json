@@ -1,0 +1,49 @@
+{
+  "schema": "lane-m-m001-n010-metadata-audit/1",
+  "date_jst": "2026-10-21",
+  "audit_kind": "CPU_METADATA_ONLY_NOT_RAW_GPU_REVALIDATION",
+  "source_branch": "research",
+  "source_commit": "5835cb15b9ada984454dbe0a14947c67c29ae6c9",
+  "inputs": [
+    {
+      "path": "research/lanes/n010-comparison-readiness/results/747-full-corpus-r1-reference-view.json",
+      "git_blob_sha": "d6c15d84702cce73feb7514c17a4f76430c33a2a"
+    },
+    {
+      "path": "research/lanes/n010-comparison-readiness/results/503-selected-reportable-timing-scope.json",
+      "git_blob_sha": "edf2bf51e0e840802511f79f36c06be87b84410d"
+    },
+    {
+      "path": "research/lanes/n010-comparison-readiness/results/026-dynamic-execution-state-lock.json",
+      "git_blob_sha": "00f614713592dc37dc0783a026b65e03fb487010"
+    }
+  ],
+  "checks": {
+    "24_unique_reference_slots": true,
+    "12_cells_and_2_transports": true,
+    "16_original_8_r1": true,
+    "all_reference_provenance_rows_pass": true,
+    "reference_states_match_lock": true,
+    "36_unique_selected_boundaries": true,
+    "no_accepted_timing_claim": true
+  },
+  "observations": {
+    "references_total": 24,
+    "original": 16,
+    "r1": 8,
+    "selected_pt": 28,
+    "non_pt": 8,
+    "selected_total": 36,
+    "accepted_timing": false
+  },
+  "classification": "HANDOFF_METADATA_CONSISTENT_NOT_LANE_M_COMPARISON_PASS",
+  "limitations": [
+    "Git blob and metadata relationships checked; large raw GPU evidence and full N010 auditor were not rerun.",
+    "R1 post-hoc eligibility disclosed; original-screen INELIGIBLE remains historically true for 8 slots.",
+    "Direct relative-error 1.0 pixels remain unresolved and are not excluded.",
+    "36 selected boundaries are valid pilots per 751, but timing is TIMING_INCONCLUSIVE.",
+    "No held-out scene geometry/state, SDK adapter or actual-boundary calibration qualified here."
+  ],
+  "tests": "NOT_RUN",
+  "gpu_run": false
+}
