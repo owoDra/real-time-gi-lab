@@ -118,7 +118,15 @@ def execute() -> dict:
         str(p.relative_to(WORK)): digest(p)
         for p in sorted(out.rglob("*")) if p.is_file()
     } if out.exists() else {}
-    frozen["complete"] = proc.returncode == 0 and bool(frozen["payload_sha256"])
+    required = (
+        "geometry-state.bin", "frame-state.bin", "capture.json",
+        "gpu/direct.pfm", "gpu/indirect.pfm", "gpu/total.pfm",
+        "allocation-ledger.json",
+    )
+    missing = [p for p in required if not (out / p).is_file()]
+    frozen["required_capture_files"] = list(required)
+    frozen["missing_capture_files"] = missing
+    frozen["complete"] = proc.returncode == 0 and not missing
     frozen["classification"] = ("RAW_H01_GPU_CAPTURE_RETAINED_UNQUALIFIED"
                                 if frozen["complete"] else "CAPTURE_FAILED_RETAIN_PARTIAL")
     receipt.write_text(json.dumps(frozen, indent=2) + "\n")
