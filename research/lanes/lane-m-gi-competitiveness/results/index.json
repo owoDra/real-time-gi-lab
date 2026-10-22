@@ -78,7 +78,9 @@
       "first_pt_gpu_executed": false,
       "retained_incumbent_quality_pass_count": 0,
       "retained_incumbent_quality_fail_count": 6,
-      "h03_full_raw_payloads_verified": true
+      "h03_full_raw_payloads_verified": true,
+      "first_pt_independent_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/audit_first_pt_quality.py",
+      "first_pt_independent_cpu_auditor_preparation": "results/020-independent-pt-auditor-preparation.json"
     }
   ]
 }
