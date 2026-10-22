@@ -41,7 +41,7 @@ def quiet():
     require(proc.is_dir(),"cannot inspect concurrent CPU/GPU workers")
     seen=[]
     for item in proc.iterdir():
-        if not item.name.isdigit() or item.name==str(os.getpid()):
+        if not item.name.isdigit() or item.name in (str(os.getpid()), str(os.getppid())):
             continue
         try:
             comm=(item/"comm").read_text().strip()
