@@ -7,8 +7,8 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "H01_B2_CPU_ORIGINAL_RQMC_8192_PER_LEVEL_PASS_16384_READY",
-      "classification": "FIRST_REFERENCE_LEVEL_STATISTICALLY_ELIGIBLE_COMBINED_REFERENCE_INCOMPLETE",
+      "phase": "H01_B2_TWO_LEVEL_STATISTICAL_PASS_FULL_RAW_PROVENANCE_ADMISSION_PENDING",
+      "classification": "ORIGINAL_N007_CONVERGENCE_PASS_AT_16384_REFERENCE_NOT_YET_ADMITTED",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
@@ -51,7 +51,12 @@
       "h01_b2_reference_first_cpu_level_status": "8192_INDIVIDUAL_PASS_TWO_LEVEL_SCREEN_INCOMPLETE",
       "reference_first_cpu_level_audit": "results/011-h01-b2-first-level-reference-audit.json",
       "reference_second_cpu_level_runner": "scripts/research/lane_m_gi_competitiveness/run_h01_b2_reference_stage2.py",
-      "h01_b2_two_level_reference_eligible": false
+      "h01_b2_two_level_reference_eligible": false,
+      "reference_second_cpu_level_status": "8192_16384_STATISTICAL_SCREEN_PASS",
+      "reference_second_cpu_level_audit": "results/012-h01-b2-two-level-statistical-screen-audit.json",
+      "h01_b2_eligible_at_spp_reported": 16384,
+      "h01_b2_full_raw_reference_admission_auditor": "scripts/research/lane_m_gi_competitiveness/admit_h01_b2_original_reference.py",
+      "h01_b2_raw_reference_admitted": false
     }
   ]
 }
