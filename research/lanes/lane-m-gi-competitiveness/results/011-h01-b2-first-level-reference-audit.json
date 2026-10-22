@@ -1,0 +1,85 @@
+{
+  "schema": "lane-m-m001-h01-b2-rqmc-first-level-upload-audit/1",
+  "date_jst": "2026-10-22",
+  "classification": "FIRST_LEVEL_ORIGINAL_SCREEN_ELIGIBLE_BUT_OVERALL_INCOMPLETE",
+  "source": "user supplied private out/m001-h01-b2-cpu-first-level.tar",
+  "uploaded_members": [
+    "result.json",
+    "oracle.stdout.txt",
+    "oracle.stderr.txt",
+    "level1-input-manifest.json",
+    "level1-screen.json",
+    "corrected-sources-manifest.json"
+  ],
+  "scoped_cpu_integrity_checks": {
+    "passed": 20,
+    "failed": 0,
+    "method": "Assistant independently parsed six archived text outputs and verified source SHA chain, corrected physical six-source manifest SHA, exact four seeds and scheduling, N007 screen manifest SHA, stdout/stderr SHA versus first result, geometry provenance and explicit one-level ineligibility"
+  },
+  "frozen_source_sha256": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+  "frozen_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+  "archived_corrected_source_manifest_sha256": "faff7cae0afefa0cd66db71d7dd8a11445db7c0fffe3fb3a45111f4099c01abd",
+  "first_level_result_sha256": "f8cd89121b149adcba824134fdde08102e88d99320cc378c966093324273cfe8",
+  "first_level_screen_sha256": "aaf7b9458df18097d4fee2dd6b1cbad4bde14f05e0c976f4146bdea75c182546",
+  "first_level_input_manifest_sha256": "a2b32c59b8aed4287f1035bdf13c3549b8451ac74a48b1980ac53d47d666938b",
+  "stdout_sha256": "634cf3fdf586d1be98a4c35c9bbac3439f906258db0b98a90d67d43eadc3fc48",
+  "original_validated_cpu_binary_sha256": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+  "original_sobol_table_sha256": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+  "physical_validation_result_sha256_reported": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+  "owner_reported_native": {
+    "returncode": 0,
+    "complete": true,
+    "original_oracle": "n010-rqmc-digital-shift",
+    "spp": 8192,
+    "seeds": [
+      305419896,
+      2596069104,
+      "81985529216486895",
+      "18364758544493064720"
+    ],
+    "replicate_count": 4,
+    "source_commit": "48813b1450ea5ad76446dd9f31ae4ed879861cb9",
+    "width": 320,
+    "height": 180,
+    "triangles": 1224,
+    "backface_absorbed_each": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "primary_hits_each": [
+      60006400,
+      60006400,
+      60006400,
+      60006400
+    ],
+    "original_native_payload_hash_inventory": 23
+  },
+  "first_level_original_n007": {
+    "per_level_eligible": true,
+    "active_fraction": 0.12598958333333332,
+    "noise_rms_range": [
+      1.3283633631108675e-8,
+      1.3761462538509365e-8
+    ],
+    "active_abs_luma_p99_max": 1.113160396926104e-7,
+    "active_rel_luma_p99_max": 0.0011096475645899757,
+    "problems": [],
+    "two_consecutive_levels_present": false,
+    "status": "incomplete",
+    "eligible_at_spp": null,
+    "physical_correctness_proven": false
+  },
+  "assistant_raw_payload_sha256_rechecked": 0,
+  "references_final_qualified": 0,
+  "quality_scored": false,
+  "accepted_timing": false,
+  "gpu_executed": false,
+  "limitations": [
+    "Only six compact receipt/manifest/stdout artifacts were uploaded; none of 23 original oracle image/sidecar payload files were transferred. Their bytes/hash and original screen recomputation are not independently verifiable by assistant.",
+    "N007's per-level eligible true is not a qualified held-out reference until the second consecutive level and stable support plus the pinned original N010 physical proof.",
+    "No extrapolation of quality, convergence at 16384 spp or practical GPU speed advantage is supported."
+  ],
+  "next_preregistered_unit": "H01/T_B2 original N010 CPU RQMC at 16384 spp, four identical frozen seeds, no other scene/level and no automatic retries. Independently rehash locally retained stage1 original files and run original two-level N007 screen."
+}
