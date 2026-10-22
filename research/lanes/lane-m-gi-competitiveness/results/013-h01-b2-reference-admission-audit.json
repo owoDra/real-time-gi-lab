@@ -1,0 +1,82 @@
+{
+  "schema": "lane-m-m001-h01-b2-admission-upload-independent-metadata-audit/1",
+  "date_jst": "2026-10-22",
+  "evidence_origin": "user-supplied private out/m001-h01-b2-reference-admission.tar (8 JSON members)",
+  "classification": "H01_B2_ORIGINAL_N010_OWNER_HOST_PROVENANCE_PASS_ASSISTANT_COMPACT_AUDIT_PASS",
+  "independent_compact_checks": {
+    "passed": 48,
+    "failed": 0,
+    "method": "assistant-side safe tar read, SHA256 of all 8 archived files, compare original frozen receipts, qualification, N007 screens, independent four-seed full-payload digest inventories, physical source, N010 binary/net and result classification"
+  },
+  "tar_sha256_manifest": {
+    "admission.json": "2bffa1e66206c1b3635351bb07bfc1538f17b05405c8c76f0bc6406eb1e49364",
+    "qualification.json": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+    "screen-n8192.json": "44dd5b023e186cea9bcbd0489fb06e3601cf6f2303f8e3d416465e9db5be08d4",
+    "screen-n16384.json": "cef5e6a260dd4b7080759a3c64696652549b2d6d08120284f374509c3699e213",
+    "n8192.meta.json": "49a8bab2aad80ab0d9d3e502715235fc2bda1eb8eedfdc78794ac87858a192d3",
+    "n16384.meta.json": "963e945b1c12b37731811563fce29e7f02e0eb73020c85d5775711fc776c9d9f",
+    "original-8192-result.json": "f8cd89121b149adcba824134fdde08102e88d99320cc378c966093324273cfe8",
+    "original-16384-result.json": "4c520b32278b87d8b89b0aecac2d42fc8e34e92f3b357d00f15a82e1b965ee00"
+  },
+  "target": {
+    "scene": "H01",
+    "transport": "T_B2",
+    "accepted_spp": 16384,
+    "original_full_prefix_levels": [
+      8192,
+      16384
+    ],
+    "four_seeds": [
+      305419896,
+      2596069104,
+      "81985529216486895",
+      "18364758544493064720"
+    ],
+    "scene_sha256": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+    "geometry_f64_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+    "geometry_gpu_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+    "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4"
+  },
+  "original_n007": {
+    "first_eligible": true,
+    "second_eligible": true,
+    "positive_support_fraction": [
+      0.12598958333333332,
+      0.12652777777777777
+    ],
+    "pairwise_relative_p99": [
+      0.0011096475645899757,
+      0.0006054164259694341
+    ],
+    "stable_positive_support": true,
+    "overall_status": "statistical-screen-pass",
+    "eligible_at_spp": 16384,
+    "physical_correctness_proven": false
+  },
+  "host_verified_original_N010": {
+    "original_full_prefix_verified": true,
+    "physical_sampler_009": "PASS",
+    "binary_sha256": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+    "sobol_table_sha256": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+    "original_8192_and_16384_raw_file_hashes_replayed": 46,
+    "original_N007_full_PFM_reassessed": true,
+    "canonical_reference_provenance_verifier": "PASS",
+    "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9"
+  },
+  "scope": {
+    "reference_eligible": true,
+    "reference_acceptance": "HOST_CANONICAL_PROVENANCE_PASS_WITH_ASSISTANT_RECEIPT_AUDIT",
+    "reference_slots_accepted": 1,
+    "reference_slots_total": 6,
+    "assistant_raw_f64_pfm_bytes_independently_rehashed": 0,
+    "raw_images_available_only_on_owner_host": true,
+    "quality_scored": false,
+    "matched_quality_timing_accepted": false,
+    "other_five_references_eligible": false
+  },
+  "limitations": [
+    "No original 42 canonical-view PFMs/F64 data files plus N007 hits were included in the 8-file compact archive, so assistant independently checks receipt integrity and canonical verifier attestations but cannot recompute pixel samples in sandbox.",
+    "The canonical owner-host N010 verifier was invoked by the user and recorded PASS for this cell, bound to the existing 009 physical proof. N007's statistical-only flag physical_correctness_proven=false is not changed.",
+    "The H01/B2 reference cannot be reused for T_B8 or H02/H03, and it does not establish accuracy of GPU RC/PT/DDGI outputs."
+  ]
+}
