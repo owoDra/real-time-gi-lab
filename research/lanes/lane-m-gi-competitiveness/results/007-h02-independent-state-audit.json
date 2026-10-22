@@ -1,0 +1,80 @@
+{
+  "schema": "lane-m-m001-h02-uploaded-state-audit/1",
+  "date_jst": "2026-10-22",
+  "source": "private-upload m001-h02-evidence-missing.tar with original m001-h01-state.tar and H01/H02 receipts",
+  "classification": "H02_STATE_INPUTS_CONSISTENT_REFERENCE_INELIGIBLE_FULL_RAW_UNVERIFIED",
+  "checks": {
+    "passed": 214,
+    "failed": 0,
+    "scope": "including safe member extraction, original receipt lineage, per-event allocation/ledger replay, geometry/manifest/UBO, and glTF exact ordered-triangle checks"
+  },
+  "source_provenance": {
+    "h01_receipt_sha256": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0",
+    "h02_receipt_sha256": "5562656fad898b07ac91903affd7d0f00423b1813f2a59dc67941fc22e23f765",
+    "h02_capture_source_commit": "63b8a58efc9287cc9a3d35c9e8b642b8af3e7482",
+    "n004_manifest_sha256": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+    "h02_gltf_sha256": "25a6ba40cb1f6065284b5da5bc979e33562cf65f913bf6808e35b38782eb6747",
+    "h02_bin_sha256": "fd2c7e09c7da2ff0f6760dc09c09c524586e2126328a26666dd98d35640ef94b"
+  },
+  "captured_state": {
+    "geometry_sha256": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c",
+    "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+    "resolution": [
+      320,
+      180
+    ],
+    "triangle_count": 1224,
+    "ordered_gltf_triangles_exact_byte_match": 1224,
+    "nondegenerate_triangles": 1224,
+    "BF_P_two_sided_all": true,
+    "all_vertex_and_frame_values_finite": true
+  },
+  "owned_vulkan_memory": {
+    "event_count": 74,
+    "true_peak_owned_bytes": 266937920,
+    "teardown_zero": true,
+    "below_8gib_cap": true
+  },
+  "independent_n008_scene_input": {
+    "status": "FROZEN_PHYSICAL_SCENE_INPUTS_ONLY_REFERENCE_NOT_ACQUIRED",
+    "reconstruction_check": "identical recipe reproduced H01 prior pinned N008 T_B2 and T_B8 SHA-256 and byte count before deriving H02",
+    "canonical_f64_geometry_sha256": "b40574ad76dbcc8f80250a0b1a1be0313176983b7140e96fdee18f4970ecb6e7",
+    "T_B2": {
+      "sha256": "0db4c7d6616bf14edd0e5f2378bf9f4e7f95353a6c4b9ee7f2eba2df64ae0bed",
+      "byte_count": 143266
+    },
+    "T_B8": {
+      "sha256": "c572d6f55726aa8898e23f5e03e8ddcc9b9696c64e012102bc48cb74f1416b31",
+      "byte_count": 143266
+    }
+  },
+  "payloads": {
+    "capture_payload_hashes_in_receipt": 13,
+    "uploaded_byte_hashes_independently_verified": 4,
+    "remaining_local_payloads_unverified": [
+      "gpu/composite-lookup.bin",
+      "gpu/direct.pfm",
+      "gpu/hits.bin",
+      "gpu/indirect.pfm",
+      "gpu/probe-contributions.bin",
+      "gpu/probe-hits.bin",
+      "gpu/probe-work.bin",
+      "gpu/total.pfm",
+      "renderer-timings.jsonl"
+    ]
+  },
+  "claims": {
+    "h02_state_integrity_scoped": "PASS",
+    "raw_hdr_payload_integrity": "NOT_VERIFIED",
+    "reference_eligible": false,
+    "hdr_quality_scored": false,
+    "accepted_timing": false,
+    "h03_gpu_run": false
+  },
+  "caveats": [
+    "The 214 checks count includes per-event bookkeeping and is not 214 statistically independent tests.",
+    "N007 legacy CPU physical audit not run; user-supplied stdout explicitly says so.",
+    "Physical N008 scene hashes describe input bytes; independent converged image references not produced.",
+    "Never accept speed claims with unmatched GI quality; N010 original failures remain intact."
+  ]
+}
