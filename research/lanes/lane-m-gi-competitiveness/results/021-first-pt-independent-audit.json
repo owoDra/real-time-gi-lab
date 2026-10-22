@@ -1,0 +1,156 @@
+{
+  "accepted_timing": false,
+  "archive_sha256": "9cb5a5bb5060e43678c585e7742ce03e59dd7e5e5ce1d920947b26bb3d6c8b6d",
+  "classification": "QUALITY_FAIL",
+  "components": {
+    "direct": {
+      "active_max_relative": 3.0877582695224063e-06,
+      "active_p99_absolute": 4.1570931812997734e-11,
+      "active_p99_relative": 8.647686967503252e-07,
+      "active_pixels": 6939,
+      "gpu_sum": 0.4194302650539612,
+      "gpu_zero_reference_positive": 0,
+      "nrmse": 3.170989533437041e-07,
+      "pixels": 57600,
+      "reference_rms": 2.2306129441681237e-05,
+      "reference_sum": 0.4194302901038408,
+      "reference_zero_leak_energy": 0.0,
+      "reference_zero_leak_pixels": 0,
+      "rmse": 7.073250299106303e-12,
+      "scoring_exclusions": 0,
+      "signed_sum_bias": -5.972358264178099e-08,
+      "whole_image_max_absolute": 5.664375897853919e-10
+    },
+    "indirect": {
+      "active_max_relative": 66.80609539712094,
+      "active_p99_absolute": 7.013863265541841e-05,
+      "active_p99_relative": 16.65554833243265,
+      "active_pixels": 7202,
+      "gpu_sum": 0.07187347758190299,
+      "gpu_zero_reference_positive": 5961,
+      "nrmse": 1.547165163994035,
+      "pixels": 57600,
+      "reference_rms": 4.977620562618119e-06,
+      "reference_sum": 0.07247190033843509,
+      "reference_zero_leak_energy": 0.0,
+      "reference_zero_leak_pixels": 0,
+      "rmse": 7.701201134063143e-06,
+      "scoring_exclusions": 0,
+      "signed_sum_bias": -0.00825730736654536,
+      "whole_image_max_absolute": 0.00012577039076336027
+    },
+    "total": {
+      "active_max_relative": 23.28060922381213,
+      "active_p99_absolute": 7.008225034993517e-05,
+      "active_p99_relative": 1.1169163848775383,
+      "active_pixels": 7288,
+      "gpu_sum": 0.49130374267315347,
+      "gpu_zero_reference_positive": 329,
+      "nrmse": 0.30183877892131206,
+      "pixels": 57600,
+      "reference_rms": 2.5514286670869443e-05,
+      "reference_sum": 0.4919021904422758,
+      "reference_zero_leak_energy": 0.0,
+      "reference_zero_leak_pixels": 0,
+      "rmse": 7.701201133783541e-06,
+      "scoring_exclusions": 0,
+      "signed_sum_bias": -0.0012165991141130795,
+      "whole_image_max_absolute": 0.00012577039724450905
+    }
+  },
+  "gpu_executed_by_auditor": false,
+  "owned_memory": {
+    "events": 26,
+    "teardown_zero": true,
+    "true_peak_owned_bytes": 2370160
+  },
+  "quality_evidence_valid": true,
+  "raw_payloads_rehashed": 18,
+  "reference_verification": {
+    "cell": "H01",
+    "computational_variant": "original-full-prefix",
+    "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+    "levels": [
+      8192,
+      16384
+    ],
+    "pass": true,
+    "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+    "transport": "T_B2"
+  },
+  "result_sha256": "d2c2b992a2dc9bb2224eb95b244d3191fad60482abca573dfda915d2c719a5f1",
+  "schema": "lane-m-m001-first-pt-independent-cpu-audit/1",
+  "state_audit": {
+    "accepted_timing": false,
+    "allocation": {
+      "events": 74,
+      "teardown_zero": true,
+      "true_peak_owned_bytes": 266937920
+    },
+    "capture_payload_hashes_checked": 13,
+    "capture_payload_hashes_unverified": [],
+    "capture_source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
+    "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+    "complete": true,
+    "frame": {
+      "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+      "resolution": [
+        320,
+        180
+      ],
+      "ubo": {
+        "camera_forward_far": [
+          -0.689671516418457,
+          -0.2206949144601822,
+          -0.689671516418457,
+          33.9779167175293
+        ],
+        "camera_pos_near": [
+          6.405184745788574,
+          3.3996591567993164,
+          6.405184745788574,
+          0.011325973086059093
+        ],
+        "camera_right_tan_x": [
+          0.7071068286895752,
+          0.0,
+          -0.7071068286895752,
+          1.2448135614395142
+        ],
+        "camera_up_tan_y": [
+          -0.15605488419532776,
+          0.975342869758606,
+          -0.15605488419532776,
+          0.7002076506614685
+        ],
+        "light_pos_interval": [
+          1.6988959312438965,
+          5.314090251922607,
+          1.1325973272323608,
+          0.08848416060209274
+        ],
+        "scene_origin_spacing": [
+          -3.8888890743255615,
+          0.0,
+          -3.8888890743255615,
+          0.17696832120418549
+        ]
+      }
+    },
+    "geometry": {
+      "geometry_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+      "triangles": 1224,
+      "two_sided": true,
+      "unique_primitive_ids": 1224
+    },
+    "gpu_run": false,
+    "input_sha256": {
+      "capture_json": "0e7f7b79b20ffbe4a5964a270cf3e25e6c40116041c605a0c425493761e2e381",
+      "geometry_manifest": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+      "result": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0"
+    },
+    "reference_eligible": false,
+    "schema": "lane-m-m001-h01-state-audit/1",
+    "scope": "Full payload SHA including HDR byte hashes; no HDR pixels read, reference scored, or GPU work."
+  }
+}

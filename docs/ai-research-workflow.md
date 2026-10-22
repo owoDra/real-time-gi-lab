@@ -9,7 +9,7 @@ This repository is a record of a real-time global illumination research program 
 | Research direction | **Human:** established goals, priorities, constraints, and when to stop or change direction |
 | Literature and architecture exploration | **AI-assisted:** ChatGPT and Codex CLI helped investigate alternatives, formulate hypotheses, and propose experiment plans |
 | Code, shaders, benchmarks, tests, scripts, and documentation | **Primarily AI-produced and iterated:** generated and refined through ChatGPT/Codex CLI workflows, with human feedback |
-| Vulkan/GPU execution and environment operation | **Human-operated environment:** experiments used the project's actual Vulkan-capable workstation/GPU; AI handled instructions and result analysis based on observed artifacts |
+| Vulkan/GPU execution and environment operation | **Human-operated environment:** experiments used the project's actual Vulkan-capable workstation/GPU; AI handled instructions and result analysis based on observed artifacts; explicitly authorized later studies also include assistant-executed workstation GPU runs |
 | Result classification and acceptance | **Human-supervised:** accepted, rejected, neutral, and inconclusive results follow recorded measurements and the [research protocol](../research/protocol.md), not the model's confidence |
 | Research history integration | **AI-assisted:** study branches, original result files, decisions, and provenance were inventoried and consolidated with human authorization |
 
@@ -18,6 +18,8 @@ The allocation of work varied between experiments; the table describes the progr
 ### Later studies with Claude Code
 
 From N008 ([Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5), 2026-10-13) work was also carried out with **Claude Code (Anthropic)** under the same human direction. N008 Phase A (oracle source, analytic controls, Mitsuba cross-check and records) was implemented and executed by the assistant entirely on CPU in its sandbox; Phase A/B were CPU-only. N008 Phase C GPU captures were executed by the assistant on the project workstation after explicit user authorization, and are recorded as such.
+
+In Lane M (2026-10-23), the user explicitly authorized assistant GPU execution without changing power settings. M001 PT captures from that point are recorded as assistant-executed on the authorized workstation; earlier owner-operated captures retain their original attribution. CPU preparation and independent artifact audits remain distinct from actual GPU execution.
 
 ## How the loop worked
 
