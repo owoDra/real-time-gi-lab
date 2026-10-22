@@ -1,0 +1,96 @@
+{
+  "schema": "lane-m-m001-h03-offline-state-audit/1",
+  "date_jst": "2026-10-22",
+  "source": "owner-supplied private 10-file m001-h03-state.tar and original H01/H02 state files",
+  "classification": "H03_STATE_INPUTS_CONSISTENT_REFERENCE_INELIGIBLE_FULL_RAW_UNVERIFIED",
+  "independent_checks": {
+    "passed": 286,
+    "failed": 0,
+    "method": "Standalone assistant-side CPU-only safe tar extraction, exact geometry payload/glTF f32 order, frame parse, receipt chain, owned-memory allocate/free replay; includes per-event checks, not 286 independent statistical measurements"
+  },
+  "receipt": {
+    "native_capture_returncode": 0,
+    "complete": true,
+    "source_commit": "eed40f6b80a987c4ff8c87ad1680b12fd69ee4b0",
+    "classification": "H03_RAW_STATE_CAPTURE_RETAINED_UNQUALIFIED",
+    "payload_sha256_count": 13,
+    "h01_full_local_capture_hash_replay_owner_reported": 13,
+    "h02_full_local_capture_hash_replay_owner_reported": 13
+  },
+  "lineage": {
+    "h01_receipt_sha256": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0",
+    "h02_receipt_sha256": "5562656fad898b07ac91903affd7d0f00423b1813f2a59dc67941fc22e23f765",
+    "manifest_sha256": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+    "n004_factory_sha256": "cd92c0db431be03b4fe07ed3db4f21aff43d35f44b0d6c821b7d9102297b76f9",
+    "capture_binary_sha256": "cc6d7802a45d68d5074a13bbdd5c2cc94310d2f7fa5c303ee890508dae7535ab",
+    "contract_sha256": "36b1516126b402d72c0bcd02bdce22a1bd5510ca8ea83ddc2437c7fedd58f864"
+  },
+  "scene": {
+    "name": "M001-H03",
+    "kind": "enclosed",
+    "wall_thickness_world": 0.127,
+    "geometry_triangles": 1248,
+    "ordered_gltf_capture_triangles_exact": 1248,
+    "unique_primitive_ids": 1248,
+    "all_finite": true,
+    "two_sided_triangle_count": 1248,
+    "metadata_material_id": 4294967295,
+    "geometry_state_sha256": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3",
+    "frame_state_sha256": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+    "gltf_sha256": "23b1a96560c405dfc645f8de51afef4fb4cbdca4e06d75ee32097bde034c9424",
+    "bin_sha256": "bab24715916c2a62a02f55aab4a9d0c1f43ca860600cb0529ca70e8b41d643f4",
+    "resolution": [
+      320,
+      180
+    ],
+    "frame_all_finite": true,
+    "scenario": "static",
+    "backend": "hwrt",
+    "spp": 512,
+    "work_items": 37664,
+    "work_overflow": 0,
+    "nondegenerate_triangles": 1248
+  },
+  "owned_vulkan_memory": {
+    "events_replayed": 74,
+    "true_peak_owned_bytes": 266947072,
+    "true_peak_MiB": 254.58056640625,
+    "teardown_zero": true,
+    "under_8GiB_limit": true
+  },
+  "capture_payload_bytes": {
+    "original_receipt_payloads": 13,
+    "independently_hash_verified_from_uploaded_tar": 4,
+    "not_in_uploaded_tar": 9,
+    "unverified_names": [
+      "gpu/composite-lookup.bin",
+      "gpu/direct.pfm",
+      "gpu/hits.bin",
+      "gpu/indirect.pfm",
+      "gpu/probe-contributions.bin",
+      "gpu/probe-hits.bin",
+      "gpu/probe-work.bin",
+      "gpu/total.pfm",
+      "renderer-timings.jsonl"
+    ]
+  },
+  "n010_camera_precision_correction": {
+    "status": "PENDING_PROSPECTIVE_AMENDMENT_BEFORE_ORACLE",
+    "h03_original_n008_scene_for_state_B2_sha256": "84f704b20ccdeea15177d0ff911663666f33b627978c1334171b10de4031a8b1",
+    "h03_original_n008_scene_for_state_B8_sha256": "808dd8fb7674a46ec1a61420482dd58ce1cd6b19271a5e1139b7c7dfc9a3898d",
+    "h03_corrected_n010_scene_for_state_B2_sha256": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+    "h03_corrected_n010_scene_for_state_B8_sha256": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847",
+    "canonical_geometry_f64_sha256": "e147373b109f5317ea75744b05705ca1df329a5b12fbdc37e9d1317faddb2b4c"
+  },
+  "reference_eligible": false,
+  "physical_reference_generated": false,
+  "hdr_quality_scored": false,
+  "accepted_timing": false,
+  "ddgi_integrated": false,
+  "limitations": [
+    "All H01-H03 new held-out GPU captures have state-input integrity but no statistically/physically eligible HDR reference.",
+    "Remaining 9/13 original GPU/HDR/timing payloads per scene only rehashed by the host preflight for H01/H02, not transferred for independent assistant verification; H03 only 4/13 independently rehashed.",
+    "N010 corrected camera direction must be used before generating any physical reference; older H01/H02 proposed N008 physical scene hashes are pre-correction inputs only, not admissible references.",
+    "No matched-quality PT/RC/DDGI timing inference; older pilot controls retained."
+  ]
+}
