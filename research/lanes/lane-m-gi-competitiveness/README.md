@@ -1,5 +1,7 @@
 # Lane M — GI competitiveness
 
+> **2026-10-22 M001:** H01/H02/H03 scoped GPU state/owned-memory CPU audits PASS. H03: 1,248 ordered triangles and 74 allocation events, teardown zero ([009](results/009-h03-independent-state-audit.json)); only 4/13 raw capture payloads per scene independently transferred. N010's existing float64 camera fix **supersedes the older N008 physical-scene SHA** ([010](results/010-n010-camera-precision-correction-lock.json)); use [corrected 6-scene writer](../../../scripts/research/lane_m_gi_competitiveness/prepare_m001_n010_physical_inputs.py), not the deprecated H01/H02 exporters. [Original reference admission gates](experiments/002-reference-admission-prospective.md) remain unmet; **no eligible reference/HDR score/quality-matched timing win**.
+
 > **2026-10-22:** H01 and H02 independent scoped state/owned-memory audits PASS, but each has only 4/13 raw GPU payloads independently rehashed. [H02 audit 007](results/007-h02-independent-state-audit.json), [H03 one-shot handoff 008](results/008-h02-audited-h03-handoff.md). H03 GPU NOT RUN. Physical reference quality INELIGIBLE; no accepted timing or architecture win.
 
 > **2026-10-22 M001 checkpoint:** H02 GPU one-shot returned success with 13 payloads **as reported by the owner**. [Exact receipt and file handoff](results/005-h02-owner-reported-receipt.md). [CPU H02 attestor](../../../scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py) committed; raw H02 evidence NOT independently inspected, H03 NOT RUN, no reference admission/quality/speed claim.
