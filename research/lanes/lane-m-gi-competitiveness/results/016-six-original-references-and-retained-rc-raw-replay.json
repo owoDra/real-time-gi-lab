@@ -1,0 +1,2430 @@
+{
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "canonical_reference_payload_hashes_replayed": 252,
+  "classification": "SIX_ORIGINAL_REFERENCES_ADMITTED_RETAINED_FIXED_RC_SCORED",
+  "collector_sha256": "b5b9239d5bc76067115cc85629ccfd8e6fa22d371251bbc650c95642bf7f5aa9",
+  "environment": {
+    "numpy": "2.5.4",
+    "python": "3.13.13"
+  },
+  "gpu_executed": false,
+  "limitations": [
+    "Reference physical admission uses the original N010 sampler companion proof; statistical-only N007 physical_correctness_proven remains false.",
+    "All three native state captures were human-operated historical M001 runs; this checkpoint acquired no GPU images.",
+    "RC is the unchanged fixed-budget incumbent on static controlled heldouts; no equal-quality speed or PT budget equivalence is claimed.",
+    "PT ladder, software/vanilla/dense captures, DDGI scene integration and matched-quality timing remain NOT RUN."
+  ],
+  "original_native_payload_hashes_replayed": 276,
+  "physical_proof_009_sha256": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+  "reference_qualified_slot_count": 6,
+  "reference_total_slot_count": 6,
+  "rows": [
+    {
+      "accepted_spp": 16384,
+      "canonical_raw_payload_sha256": {
+        "16384": {
+          "o.n16384.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+          "o.n16384.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s0.f64": "b19567c35d5f20710f6ec4a0ef397663ae4b1a46f887d6b33785fba58ff8f958",
+          "o.n16384.s0.indirect.pfm": "bff41b668e8d77d5f2b4a63a7097b2ef858783041900943897f0a073bb9cbf91",
+          "o.n16384.s0.total.pfm": "65dc0e22fe3a714714b8f576173b674e296ddfc28f4caee7e7187673dcc9bdcb",
+          "o.n16384.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s1.f64": "a9e664885abfded266f10bfaa646a0e86a84a40522c573c5864e20da5d25eb21",
+          "o.n16384.s1.indirect.pfm": "02cdab54556855638a80166a2c4a8adf711d59b41156b6417313b4b4b954e101",
+          "o.n16384.s1.total.pfm": "7776015c73b70c6b4d65b73d54f79480236bf43163670484974a4508432c5b03",
+          "o.n16384.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s2.f64": "33e73555bc9e2967a30da960524fa4ba9d4a3aae405ed928cc2f4bc7a96f2764",
+          "o.n16384.s2.indirect.pfm": "f7effd3dde483d7c60cd1ce1f0b64490fcc3ffa6e0c3570ca5836929eb3a2f27",
+          "o.n16384.s2.total.pfm": "4bd9a6321c0678469ddf376cbd6966cc446f737bf8062577d890680d948a04dd",
+          "o.n16384.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s3.f64": "d185fca26cdd16b38c874a32a79a1f173b40037e6dc45f59dfe200a240c26af5",
+          "o.n16384.s3.indirect.pfm": "fc72e738750d3c3fab5fabda94b8fe4f5aab0537ef85576f276a27f075729c39",
+          "o.n16384.s3.total.pfm": "8d71e5de011ff71f7e995df6816fc246c3b8d5ae2de751d428e4d08e3c51884f"
+        },
+        "8192": {
+          "o.n8192.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+          "o.n8192.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s0.f64": "47eb4115ff00bd630d21b67cd0b2704541461f651c928364ca097cdb774fd4d0",
+          "o.n8192.s0.indirect.pfm": "06cdcf4c7c67645407b761328c0af4bfdaa5f1d293c1a93aa0ef4b4f75227ee1",
+          "o.n8192.s0.total.pfm": "587086df38c03ea9078bd46d0ec9b67ae3e877785aa13f504e2810bbe0587c41",
+          "o.n8192.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s1.f64": "de7ae1eb276d923046b56c7fa740510cee2af1316f853639e4bc35011fecc61c",
+          "o.n8192.s1.indirect.pfm": "b55c52082ec6c39107ddd1b790f0b4152d1bb4ec07d6d2d06e8211c360dc326b",
+          "o.n8192.s1.total.pfm": "7625a73e6a8116f5aa79a926b2942f677f0859b5531ea085c36e45d6202fa4b8",
+          "o.n8192.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s2.f64": "00fad195574f1262bf091c08d6b7a3a77cbe748f3a1ba3fa4a3683445a382096",
+          "o.n8192.s2.indirect.pfm": "863d9ec813834c5d99f4f8ac16e23c53c80480edff7168373b27a9a665177827",
+          "o.n8192.s2.total.pfm": "e4d5a3c71080961bd264c29337b2776db674ab07651e5449cb225b1ef8f07297",
+          "o.n8192.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s3.f64": "e15c10fd3f52e5af0835f203e37ad94cb2478af856b0d855c2843d9b89de3392",
+          "o.n8192.s3.indirect.pfm": "96c23710c61ef19b4915ee1a913e3c8ddd204b73a728fcdec7611b63c5b40583",
+          "o.n8192.s3.total.pfm": "be44542747cb788e884dd2518b3d3675a685b66ae2ef1ad10d4b3d514eb31849"
+        }
+      },
+      "cell": "H01",
+      "original_N007_screens": [
+        {
+          "eligible_at_spp": null,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "44dd5b023e186cea9bcbd0489fb06e3601cf6f2303f8e3d416465e9db5be08d4",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.12598958333333332,
+              "eligible": true,
+              "max_active_abs_p99": 1.113160396926104e-07,
+              "max_active_rel_p99": 0.0011096475645899757,
+              "noise_rms_range": [
+                1.3283633631108675e-08,
+                1.3761462538509365e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            }
+          ],
+          "scene_sha256": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+          "schema_version": 1,
+          "source_commit": "06cf535048fbb547d8d4f9844e1e12385fd26805",
+          "status": "incomplete"
+        },
+        {
+          "eligible_at_spp": 16384,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "cef5e6a260dd4b7080759a3c64696652549b2d6d08120284f374509c3699e213",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.12598958333333332,
+              "eligible": true,
+              "max_active_abs_p99": 1.113160396926104e-07,
+              "max_active_rel_p99": 0.0011096475645899757,
+              "noise_rms_range": [
+                1.3283633631108675e-08,
+                1.3761462538509365e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            },
+            {
+              "active_fraction": 0.12652777777777777,
+              "eligible": true,
+              "max_active_abs_p99": 6.060610758139506e-08,
+              "max_active_rel_p99": 0.0006054164259694341,
+              "noise_rms_range": [
+                7.199126171223811e-09,
+                7.339662657862884e-09
+              ],
+              "problems": [],
+              "signal_support_stable_vs_previous": true,
+              "spp": 16384
+            }
+          ],
+          "scene_sha256": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+          "schema_version": 1,
+          "source_commit": "06cf535048fbb547d8d4f9844e1e12385fd26805",
+          "status": "statistical-screen-pass"
+        }
+      ],
+      "original_native_levels": [
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-h01-b2-rqmc-first-level-v1",
+          "payload_sha256": {
+            "oracle.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+            "oracle.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "47eb4115ff00bd630d21b67cd0b2704541461f651c928364ca097cdb774fd4d0",
+            "oracle.s0.indirect.pfm": "06cdcf4c7c67645407b761328c0af4bfdaa5f1d293c1a93aa0ef4b4f75227ee1",
+            "oracle.s0.total.pfm": "587086df38c03ea9078bd46d0ec9b67ae3e877785aa13f504e2810bbe0587c41",
+            "oracle.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "de7ae1eb276d923046b56c7fa740510cee2af1316f853639e4bc35011fecc61c",
+            "oracle.s1.indirect.pfm": "b55c52082ec6c39107ddd1b790f0b4152d1bb4ec07d6d2d06e8211c360dc326b",
+            "oracle.s1.total.pfm": "7625a73e6a8116f5aa79a926b2942f677f0859b5531ea085c36e45d6202fa4b8",
+            "oracle.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "00fad195574f1262bf091c08d6b7a3a77cbe748f3a1ba3fa4a3683445a382096",
+            "oracle.s2.indirect.pfm": "863d9ec813834c5d99f4f8ac16e23c53c80480edff7168373b27a9a665177827",
+            "oracle.s2.total.pfm": "e4d5a3c71080961bd264c29337b2776db674ab07651e5449cb225b1ef8f07297",
+            "oracle.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "e15c10fd3f52e5af0835f203e37ad94cb2478af856b0d855c2843d9b89de3392",
+            "oracle.s3.indirect.pfm": "96c23710c61ef19b4915ee1a913e3c8ddd204b73a728fcdec7611b63c5b40583",
+            "oracle.s3.total.pfm": "be44542747cb788e884dd2518b3d3675a685b66ae2ef1ad10d4b3d514eb31849",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "634cf3fdf586d1be98a4c35c9bbac3439f906258db0b98a90d67d43eadc3fc48"
+          },
+          "receipt_sha256": "f8cd89121b149adcba824134fdde08102e88d99320cc378c966093324273cfe8",
+          "source_commit": "48813b1450ea5ad76446dd9f31ae4ed879861cb9",
+          "spp": 8192
+        },
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-h01-b2-rqmc-second-level-v1",
+          "payload_sha256": {
+            "oracle.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+            "oracle.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "b19567c35d5f20710f6ec4a0ef397663ae4b1a46f887d6b33785fba58ff8f958",
+            "oracle.s0.indirect.pfm": "bff41b668e8d77d5f2b4a63a7097b2ef858783041900943897f0a073bb9cbf91",
+            "oracle.s0.total.pfm": "65dc0e22fe3a714714b8f576173b674e296ddfc28f4caee7e7187673dcc9bdcb",
+            "oracle.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "a9e664885abfded266f10bfaa646a0e86a84a40522c573c5864e20da5d25eb21",
+            "oracle.s1.indirect.pfm": "02cdab54556855638a80166a2c4a8adf711d59b41156b6417313b4b4b954e101",
+            "oracle.s1.total.pfm": "7776015c73b70c6b4d65b73d54f79480236bf43163670484974a4508432c5b03",
+            "oracle.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "33e73555bc9e2967a30da960524fa4ba9d4a3aae405ed928cc2f4bc7a96f2764",
+            "oracle.s2.indirect.pfm": "f7effd3dde483d7c60cd1ce1f0b64490fcc3ffa6e0c3570ca5836929eb3a2f27",
+            "oracle.s2.total.pfm": "4bd9a6321c0678469ddf376cbd6966cc446f737bf8062577d890680d948a04dd",
+            "oracle.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "d185fca26cdd16b38c874a32a79a1f173b40037e6dc45f59dfe200a240c26af5",
+            "oracle.s3.indirect.pfm": "fc72e738750d3c3fab5fabda94b8fe4f5aab0537ef85576f276a27f075729c39",
+            "oracle.s3.total.pfm": "8d71e5de011ff71f7e995df6816fc246c3b8d5ae2de751d428e4d08e3c51884f",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "45da5ad3d5c7ec0e407884f7ff962614a3f5f9898e5c8b3b0eaca3574e36d6a5"
+          },
+          "receipt_sha256": "4c520b32278b87d8b89b0aecac2d42fc8e34e92f3b357d00f15a82e1b965ee00",
+          "source_commit": "06cf535048fbb547d8d4f9844e1e12385fd26805",
+          "spp": 16384
+        }
+      ],
+      "physical_source_sha256": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+      "reference_eligible": true,
+      "retained_incumbent": {
+        "classification": "QUALITY_FAIL",
+        "quality": {
+          "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H01-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "4245c241b033400c776c7e48efebce3c941f26a8d8a5e04948297b4e9396a485",
+            "indirect.pfm": "312f89677a439edf33c0a5ae4dccc3900b78f68c65b38af8bbacb8432e006851",
+            "total.pfm": "b199fe6929b13febd18f2cc6b5a4fc238c19422a9c905ba95ee8c86f561b5581"
+          },
+          "cell": "H01",
+          "complete_oracle_scene_sha256": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "active_max_relative": 3.665566255848267e-06,
+              "active_p99_absolute": 4.5020638364231034e-11,
+              "active_p99_relative": 8.977370089431802e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302446767324,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.3390428540277356e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.448112211326342e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "active_max_relative": 28076.767253772257,
+              "active_p99_absolute": 3.617722264545578e-05,
+              "active_p99_relative": 1.3148117620507698,
+              "active_pixels": 7202,
+              "gpu_sum": 0.006561379414051771,
+              "gpu_zero_reference_positive": 6878,
+              "nrmse": 0.9796933113822603,
+              "pixels": 57600,
+              "reference_rms": 4.977620562618119e-06,
+              "reference_sum": 0.07247190033843509,
+              "reference_zero_leak_energy": 0.0007171740289777517,
+              "reference_zero_leak_pixels": 15,
+              "rmse": 4.876541571795775e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.9094631245570916,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "active_max_relative": 28076.767253772257,
+              "active_p99_absolute": 3.6460673705070457e-05,
+              "active_p99_relative": 1.0,
+              "active_pixels": 7288,
+              "gpu_sum": 0.4259916241035171,
+              "gpu_zero_reference_positive": 255,
+              "nrmse": 0.19112984635946365,
+              "pixels": 57600,
+              "reference_rms": 2.5514286670869443e-05,
+              "reference_sum": 0.4919021904422758,
+              "reference_zero_leak_energy": 4.577706567943096e-05,
+              "reference_zero_leak_pixels": 3,
+              "rmse": 4.876541691374588e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.13399120316886098,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          },
+          "normalization": "whole-image reference RMS; linear luma",
+          "pilot_quality_target": "FAIL",
+          "reference_state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+          },
+          "schema": "n010-full-image-hdr-score/1",
+          "scoring_exclusions": 0,
+          "state_bytes_equal": true,
+          "state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+          },
+          "superiority_claim": false,
+          "transport": "T_B2"
+        },
+        "result_sha256": "16be6816602d1476728010f2f755005c406b50c31dab38d9fb8fc321f1528729"
+      },
+      "state_audit": {
+        "accepted_timing": false,
+        "allocation": {
+          "events": 74,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266937920
+        },
+        "capture_payload_hashes_checked": 13,
+        "capture_payload_hashes_unverified": [],
+        "capture_source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
+        "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+        "complete": true,
+        "frame": {
+          "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "resolution": [
+            320,
+            180
+          ],
+          "ubo": {
+            "camera_forward_far": [
+              -0.689671516418457,
+              -0.2206949144601822,
+              -0.689671516418457,
+              33.9779167175293
+            ],
+            "camera_pos_near": [
+              6.405184745788574,
+              3.3996591567993164,
+              6.405184745788574,
+              0.011325973086059093
+            ],
+            "camera_right_tan_x": [
+              0.7071068286895752,
+              0.0,
+              -0.7071068286895752,
+              1.2448135614395142
+            ],
+            "camera_up_tan_y": [
+              -0.15605488419532776,
+              0.975342869758606,
+              -0.15605488419532776,
+              0.7002076506614685
+            ],
+            "light_pos_interval": [
+              1.6988959312438965,
+              5.314090251922607,
+              1.1325973272323608,
+              0.08848416060209274
+            ],
+            "scene_origin_spacing": [
+              -3.8888890743255615,
+              0.0,
+              -3.8888890743255615,
+              0.17696832120418549
+            ]
+          }
+        },
+        "geometry": {
+          "geometry_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+          "triangles": 1224,
+          "two_sided": true,
+          "unique_primitive_ids": 1224
+        },
+        "gpu_run": false,
+        "input_sha256": {
+          "capture_json": "0e7f7b79b20ffbe4a5964a270cf3e25e6c40116041c605a0c425493761e2e381",
+          "geometry_manifest": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+          "result": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0"
+        },
+        "reference_eligible": false,
+        "schema": "lane-m-m001-h01-state-audit/1",
+        "scope": "Full payload SHA including HDR byte hashes; no HDR pixels read, reference scored, or GPU work."
+      },
+      "state_sha256": {
+        "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+      },
+      "transport": "T_B2",
+      "verification": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+        "transport": "T_B2"
+      },
+      "verified_inputs_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/n16384.meta.json": "963e945b1c12b37731811563fce29e7f02e0eb73020c85d5775711fc776c9d9f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/n8192.meta.json": "49a8bab2aad80ab0d9d3e502715235fc2bda1eb8eedfdc78794ac87858a192d3",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.f64": "b19567c35d5f20710f6ec4a0ef397663ae4b1a46f887d6b33785fba58ff8f958",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.indirect.pfm": "bff41b668e8d77d5f2b4a63a7097b2ef858783041900943897f0a073bb9cbf91",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.total.pfm": "65dc0e22fe3a714714b8f576173b674e296ddfc28f4caee7e7187673dcc9bdcb",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.f64": "a9e664885abfded266f10bfaa646a0e86a84a40522c573c5864e20da5d25eb21",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.indirect.pfm": "02cdab54556855638a80166a2c4a8adf711d59b41156b6417313b4b4b954e101",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.total.pfm": "7776015c73b70c6b4d65b73d54f79480236bf43163670484974a4508432c5b03",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.f64": "33e73555bc9e2967a30da960524fa4ba9d4a3aae405ed928cc2f4bc7a96f2764",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.indirect.pfm": "f7effd3dde483d7c60cd1ce1f0b64490fcc3ffa6e0c3570ca5836929eb3a2f27",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.total.pfm": "4bd9a6321c0678469ddf376cbd6966cc446f737bf8062577d890680d948a04dd",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.f64": "d185fca26cdd16b38c874a32a79a1f173b40037e6dc45f59dfe200a240c26af5",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.indirect.pfm": "fc72e738750d3c3fab5fabda94b8fe4f5aab0537ef85576f276a27f075729c39",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.total.pfm": "8d71e5de011ff71f7e995df6816fc246c3b8d5ae2de751d428e4d08e3c51884f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.f64": "47eb4115ff00bd630d21b67cd0b2704541461f651c928364ca097cdb774fd4d0",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.indirect.pfm": "06cdcf4c7c67645407b761328c0af4bfdaa5f1d293c1a93aa0ef4b4f75227ee1",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.total.pfm": "587086df38c03ea9078bd46d0ec9b67ae3e877785aa13f504e2810bbe0587c41",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.f64": "de7ae1eb276d923046b56c7fa740510cee2af1316f853639e4bc35011fecc61c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.indirect.pfm": "b55c52082ec6c39107ddd1b790f0b4152d1bb4ec07d6d2d06e8211c360dc326b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.total.pfm": "7625a73e6a8116f5aa79a926b2942f677f0859b5531ea085c36e45d6202fa4b8",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.f64": "00fad195574f1262bf091c08d6b7a3a77cbe748f3a1ba3fa4a3683445a382096",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.indirect.pfm": "863d9ec813834c5d99f4f8ac16e23c53c80480edff7168373b27a9a665177827",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.total.pfm": "e4d5a3c71080961bd264c29337b2776db674ab07651e5449cb225b1ef8f07297",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.f64": "e15c10fd3f52e5af0835f203e37ad94cb2478af856b0d855c2843d9b89de3392",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.indirect.pfm": "96c23710c61ef19b4915ee1a913e3c8ddd204b73a728fcdec7611b63c5b40583",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.total.pfm": "be44542747cb788e884dd2518b3d3675a685b66ae2ef1ad10d4b3d514eb31849",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/qualification.json": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/scene.n008": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/screen-n16384.json": "cef5e6a260dd4b7080759a3c64696652549b2d6d08120284f374509c3699e213",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/screen-n8192.json": "44dd5b023e186cea9bcbd0489fb06e3601cf6f2303f8e3d416465e9db5be08d4",
+        "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df"
+      }
+    },
+    {
+      "accepted_spp": 16384,
+      "canonical_raw_payload_sha256": {
+        "16384": {
+          "o.n16384.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+          "o.n16384.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s0.f64": "3dd9c7f80b5a1a7fad3e132471ed2c17396315c230aa19f99a87e0d62b1b991c",
+          "o.n16384.s0.indirect.pfm": "81f210bbc814b0e43322596d31eaa0bf093fa0ed7bfb476386c0d8e754dbfac9",
+          "o.n16384.s0.total.pfm": "3d7d08702a5cb43ee8df84958d084d9400cdf69460de62329fce23f8076ee8f7",
+          "o.n16384.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s1.f64": "442a5677d5679e68c57459f8169e2de106c77bf34a1d75870ea910fbc81efd4f",
+          "o.n16384.s1.indirect.pfm": "5904aa31966a2afa7992ffef7a2978e66afedf22610b69386f0b9d3b31c19acb",
+          "o.n16384.s1.total.pfm": "affbde617c98a09ad312eff49c3146edb6aed9ff8dd0432040fffd5ba4f87151",
+          "o.n16384.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s2.f64": "73422d457e2d4df620fd222af9513b07126edff50c2448d79614817d77798958",
+          "o.n16384.s2.indirect.pfm": "733a70026583eab5f5dc05901130c08b23b90bffe7af0065edbc07fccac71ad5",
+          "o.n16384.s2.total.pfm": "afd787f7a4cf8f5f3cfcf7d4d52af80a3f12b118a68e00427dccd0f6baa16772",
+          "o.n16384.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s3.f64": "d238424104fcc2369fba0b1afbe78d7c7aa41b51efc80f2e4940a7d0a16d69d5",
+          "o.n16384.s3.indirect.pfm": "cd82a0ff28646cb845f883e075f1cc29e7da61128d97c20e0ebbf2dc4b58bc38",
+          "o.n16384.s3.total.pfm": "9cbb1561f7f859f56eca1717b5f85787e85057ce54f857e9f1a653bd2b56de38"
+        },
+        "8192": {
+          "o.n8192.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+          "o.n8192.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s0.f64": "b97c2d77da3d61ada00c3611fde6698d975541ebe50862815859aa5a4e298ae9",
+          "o.n8192.s0.indirect.pfm": "493771eaaea6af1dba4497e5a2fe5a7030d8cac3dbf900db6a10b2d239fbc3d9",
+          "o.n8192.s0.total.pfm": "44d346c2540b225433987838155f82e750d2063c72933e93fc2bf2e151e85be2",
+          "o.n8192.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s1.f64": "3dd4b1fbe79b2c1b1802b5c4d3513aaacf4f80387f1aa6dfd2b9c16983a8efdc",
+          "o.n8192.s1.indirect.pfm": "8aa69bb4f893d424069088511e8e7802c1c5620d33df0d79df376b3fe955e55d",
+          "o.n8192.s1.total.pfm": "264b047dc74fde8c14cb505330b745c8fb656913f5d43edc117662374303ea97",
+          "o.n8192.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s2.f64": "a32e4c83b454b61befe911e2bad59b4c80e3a0a7b23d069c6262e85b121fcf02",
+          "o.n8192.s2.indirect.pfm": "3067867746d5f892852b35a238c013e6ed7e48bd88ab9a28ae9152e7ccbf6f72",
+          "o.n8192.s2.total.pfm": "1ada0abe38b66764fe4d659e442b773afbbf41b9e392a8461769f06a404dfe11",
+          "o.n8192.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+          "o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s3.f64": "10503d84f94dd6636d7d515ecbda986af9a9f3a8af9a8db65e7e228d04099f7c",
+          "o.n8192.s3.indirect.pfm": "0343530bbc1db256012249e377698bc4214b9b91dd49e34a0fb809cc2f9e636f",
+          "o.n8192.s3.total.pfm": "20787ae62ea419a0c658e133bf67a3ce201bef56893231b17ea4295c3074117a"
+        }
+      },
+      "cell": "H01",
+      "original_N007_screens": [
+        {
+          "eligible_at_spp": null,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "15e0f7fdaf0dc8abd79c0ac9efa37a3c2faf0fcb799577ac16fc5835057ac20e",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.1271701388888889,
+              "eligible": true,
+              "max_active_abs_p99": 4.78995789308101e-07,
+              "max_active_rel_p99": 0.004728452768176765,
+              "noise_rms_range": [
+                5.103285016396797e-08,
+                5.2444655913326997e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            }
+          ],
+          "scene_sha256": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+          "schema_version": 1,
+          "source_commit": "d5d33d9e9dccf87e675f109aff4caf152c460c6d",
+          "status": "incomplete"
+        },
+        {
+          "eligible_at_spp": 16384,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "f6a3f5322617eabebd23ff3817663bab2727bfc2fa356975bab7b8a4db671011",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.1271701388888889,
+              "eligible": true,
+              "max_active_abs_p99": 4.78995789308101e-07,
+              "max_active_rel_p99": 0.004728452768176765,
+              "noise_rms_range": [
+                5.103285016396797e-08,
+                5.2444655913326997e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            },
+            {
+              "active_fraction": 0.1271701388888889,
+              "eligible": true,
+              "max_active_abs_p99": 3.303814446553605e-07,
+              "max_active_rel_p99": 0.0032587238820270745,
+              "noise_rms_range": [
+                3.5154533049952385e-08,
+                3.576700119786484e-08
+              ],
+              "problems": [],
+              "signal_support_stable_vs_previous": true,
+              "spp": 16384
+            }
+          ],
+          "scene_sha256": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+          "schema_version": 1,
+          "source_commit": "53e805117d41266ad3a206aed340494b944b985a",
+          "status": "statistical-screen-pass"
+        }
+      ],
+      "original_native_levels": [
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-h01-b8-rqmc-first-level-v1",
+          "payload_sha256": {
+            "oracle.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+            "oracle.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "b97c2d77da3d61ada00c3611fde6698d975541ebe50862815859aa5a4e298ae9",
+            "oracle.s0.indirect.pfm": "493771eaaea6af1dba4497e5a2fe5a7030d8cac3dbf900db6a10b2d239fbc3d9",
+            "oracle.s0.total.pfm": "44d346c2540b225433987838155f82e750d2063c72933e93fc2bf2e151e85be2",
+            "oracle.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "3dd4b1fbe79b2c1b1802b5c4d3513aaacf4f80387f1aa6dfd2b9c16983a8efdc",
+            "oracle.s1.indirect.pfm": "8aa69bb4f893d424069088511e8e7802c1c5620d33df0d79df376b3fe955e55d",
+            "oracle.s1.total.pfm": "264b047dc74fde8c14cb505330b745c8fb656913f5d43edc117662374303ea97",
+            "oracle.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "a32e4c83b454b61befe911e2bad59b4c80e3a0a7b23d069c6262e85b121fcf02",
+            "oracle.s2.indirect.pfm": "3067867746d5f892852b35a238c013e6ed7e48bd88ab9a28ae9152e7ccbf6f72",
+            "oracle.s2.total.pfm": "1ada0abe38b66764fe4d659e442b773afbbf41b9e392a8461769f06a404dfe11",
+            "oracle.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "10503d84f94dd6636d7d515ecbda986af9a9f3a8af9a8db65e7e228d04099f7c",
+            "oracle.s3.indirect.pfm": "0343530bbc1db256012249e377698bc4214b9b91dd49e34a0fb809cc2f9e636f",
+            "oracle.s3.total.pfm": "20787ae62ea419a0c658e133bf67a3ce201bef56893231b17ea4295c3074117a",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "945edbb19b6499d817476c61be348ffe8bcc4581a8f39aca7e4eb992b52e9b5a"
+          },
+          "receipt_sha256": "73c0d63ebc46f20be07f3b958ff8cb4e84003e1aa69c48bfd7f5d4a6f17944cf",
+          "source_commit": "d5d33d9e9dccf87e675f109aff4caf152c460c6d",
+          "spp": 8192
+        },
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/n16384",
+          "payload_sha256": {
+            "oracle.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+            "oracle.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "3dd9c7f80b5a1a7fad3e132471ed2c17396315c230aa19f99a87e0d62b1b991c",
+            "oracle.s0.indirect.pfm": "81f210bbc814b0e43322596d31eaa0bf093fa0ed7bfb476386c0d8e754dbfac9",
+            "oracle.s0.total.pfm": "3d7d08702a5cb43ee8df84958d084d9400cdf69460de62329fce23f8076ee8f7",
+            "oracle.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "442a5677d5679e68c57459f8169e2de106c77bf34a1d75870ea910fbc81efd4f",
+            "oracle.s1.indirect.pfm": "5904aa31966a2afa7992ffef7a2978e66afedf22610b69386f0b9d3b31c19acb",
+            "oracle.s1.total.pfm": "affbde617c98a09ad312eff49c3146edb6aed9ff8dd0432040fffd5ba4f87151",
+            "oracle.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "73422d457e2d4df620fd222af9513b07126edff50c2448d79614817d77798958",
+            "oracle.s2.indirect.pfm": "733a70026583eab5f5dc05901130c08b23b90bffe7af0065edbc07fccac71ad5",
+            "oracle.s2.total.pfm": "afd787f7a4cf8f5f3cfcf7d4d52af80a3f12b118a68e00427dccd0f6baa16772",
+            "oracle.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "d238424104fcc2369fba0b1afbe78d7c7aa41b51efc80f2e4940a7d0a16d69d5",
+            "oracle.s3.indirect.pfm": "cd82a0ff28646cb845f883e075f1cc29e7da61128d97c20e0ebbf2dc4b58bc38",
+            "oracle.s3.total.pfm": "9cbb1561f7f859f56eca1717b5f85787e85057ce54f857e9f1a653bd2b56de38",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "b9030e5704876087c32efc971da553dfb58c8ae014991f4b29c347fe34fad205"
+          },
+          "receipt_sha256": "871d8d91ffe3035f043ff3ab07bf786cd6ac6580145529434354be819cf5ebdf",
+          "source_commit": "53e805117d41266ad3a206aed340494b944b985a",
+          "spp": 16384
+        }
+      ],
+      "physical_source_sha256": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+      "reference_eligible": true,
+      "retained_incumbent": {
+        "classification": "QUALITY_FAIL",
+        "quality": {
+          "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H01-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "4245c241b033400c776c7e48efebce3c941f26a8d8a5e04948297b4e9396a485",
+            "indirect.pfm": "312f89677a439edf33c0a5ae4dccc3900b78f68c65b38af8bbacb8432e006851",
+            "total.pfm": "b199fe6929b13febd18f2cc6b5a4fc238c19422a9c905ba95ee8c86f561b5581"
+          },
+          "cell": "H01",
+          "complete_oracle_scene_sha256": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "active_max_relative": 3.665566255848267e-06,
+              "active_p99_absolute": 4.5020638364231034e-11,
+              "active_p99_relative": 8.977370089431802e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302446767324,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.3390428540277356e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.448112211326342e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "active_max_relative": 223.02977010689426,
+              "active_p99_absolute": 5.0930822723782285e-05,
+              "active_p99_relative": 1.3648882091194745,
+              "active_pixels": 7315,
+              "gpu_sum": 0.006561379414051771,
+              "gpu_zero_reference_positive": 6977,
+              "nrmse": 0.9738950286410251,
+              "pixels": 57600,
+              "reference_rms": 7.014371348232262e-06,
+              "reference_sum": 0.10446584661030747,
+              "reference_zero_leak_energy": 3.051804378628731e-05,
+              "reference_zero_leak_pixels": 1,
+              "rmse": 6.831261385085445e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.93719115264027,
+              "whole_image_max_absolute": 0.00010576519127827444
+            },
+            "total": {
+              "active_max_relative": 34.4958307442411,
+              "active_p99_absolute": 5.0919077831260044e-05,
+              "active_p99_relative": 1.0,
+              "active_pixels": 7325,
+              "gpu_sum": 0.4259916241035171,
+              "gpu_zero_reference_positive": 289,
+              "nrmse": 0.25157398510523327,
+              "pixels": 57600,
+              "reference_rms": 2.7154086905701627e-05,
+              "reference_sum": 0.5238961367141479,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 6.831261854761191e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.18687771439713857,
+              "whole_image_max_absolute": 0.00010576515201174389
+            }
+          },
+          "normalization": "whole-image reference RMS; linear luma",
+          "pilot_quality_target": "FAIL",
+          "reference_state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+          },
+          "schema": "n010-full-image-hdr-score/1",
+          "scoring_exclusions": 0,
+          "state_bytes_equal": true,
+          "state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+          },
+          "superiority_claim": false,
+          "transport": "T_B8"
+        },
+        "result_sha256": "679933c68c73fb66502d0a91e54ba9e8d68d9a4c29b2c9ffede174efa3aa0663"
+      },
+      "state_audit": {
+        "accepted_timing": false,
+        "allocation": {
+          "events": 74,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266937920
+        },
+        "capture_payload_hashes_checked": 13,
+        "capture_payload_hashes_unverified": [],
+        "capture_source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
+        "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+        "complete": true,
+        "frame": {
+          "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "resolution": [
+            320,
+            180
+          ],
+          "ubo": {
+            "camera_forward_far": [
+              -0.689671516418457,
+              -0.2206949144601822,
+              -0.689671516418457,
+              33.9779167175293
+            ],
+            "camera_pos_near": [
+              6.405184745788574,
+              3.3996591567993164,
+              6.405184745788574,
+              0.011325973086059093
+            ],
+            "camera_right_tan_x": [
+              0.7071068286895752,
+              0.0,
+              -0.7071068286895752,
+              1.2448135614395142
+            ],
+            "camera_up_tan_y": [
+              -0.15605488419532776,
+              0.975342869758606,
+              -0.15605488419532776,
+              0.7002076506614685
+            ],
+            "light_pos_interval": [
+              1.6988959312438965,
+              5.314090251922607,
+              1.1325973272323608,
+              0.08848416060209274
+            ],
+            "scene_origin_spacing": [
+              -3.8888890743255615,
+              0.0,
+              -3.8888890743255615,
+              0.17696832120418549
+            ]
+          }
+        },
+        "geometry": {
+          "geometry_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+          "triangles": 1224,
+          "two_sided": true,
+          "unique_primitive_ids": 1224
+        },
+        "gpu_run": false,
+        "input_sha256": {
+          "capture_json": "0e7f7b79b20ffbe4a5964a270cf3e25e6c40116041c605a0c425493761e2e381",
+          "geometry_manifest": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+          "result": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0"
+        },
+        "reference_eligible": false,
+        "schema": "lane-m-m001-h01-state-audit/1",
+        "scope": "Full payload SHA including HDR byte hashes; no HDR pixels read, reference scored, or GPU work."
+      },
+      "state_sha256": {
+        "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+      },
+      "transport": "T_B8",
+      "verification": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "ccfed4a146814320e969ac80c2241a9c8f43d83bab290a60e22b86128b04e847",
+        "transport": "T_B8"
+      },
+      "verified_inputs_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/n16384.meta.json": "bf3d1e7c528d0059eb471c1e559b774532a8589f41569c5ff88ec32bf1a9920d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/n8192.meta.json": "cf050634c52dfe9ca1b9266b02bb6776c05f1d268a7ad27595f1f26338d5b3b4",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s0.f64": "3dd9c7f80b5a1a7fad3e132471ed2c17396315c230aa19f99a87e0d62b1b991c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s0.indirect.pfm": "81f210bbc814b0e43322596d31eaa0bf093fa0ed7bfb476386c0d8e754dbfac9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s0.total.pfm": "3d7d08702a5cb43ee8df84958d084d9400cdf69460de62329fce23f8076ee8f7",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s1.f64": "442a5677d5679e68c57459f8169e2de106c77bf34a1d75870ea910fbc81efd4f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s1.indirect.pfm": "5904aa31966a2afa7992ffef7a2978e66afedf22610b69386f0b9d3b31c19acb",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s1.total.pfm": "affbde617c98a09ad312eff49c3146edb6aed9ff8dd0432040fffd5ba4f87151",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s2.f64": "73422d457e2d4df620fd222af9513b07126edff50c2448d79614817d77798958",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s2.indirect.pfm": "733a70026583eab5f5dc05901130c08b23b90bffe7af0065edbc07fccac71ad5",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s2.total.pfm": "afd787f7a4cf8f5f3cfcf7d4d52af80a3f12b118a68e00427dccd0f6baa16772",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s3.f64": "d238424104fcc2369fba0b1afbe78d7c7aa41b51efc80f2e4940a7d0a16d69d5",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s3.indirect.pfm": "cd82a0ff28646cb845f883e075f1cc29e7da61128d97c20e0ebbf2dc4b58bc38",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n16384.s3.total.pfm": "9cbb1561f7f859f56eca1717b5f85787e85057ce54f857e9f1a653bd2b56de38",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s0.f64": "b97c2d77da3d61ada00c3611fde6698d975541ebe50862815859aa5a4e298ae9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s0.indirect.pfm": "493771eaaea6af1dba4497e5a2fe5a7030d8cac3dbf900db6a10b2d239fbc3d9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s0.total.pfm": "44d346c2540b225433987838155f82e750d2063c72933e93fc2bf2e151e85be2",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s1.f64": "3dd4b1fbe79b2c1b1802b5c4d3513aaacf4f80387f1aa6dfd2b9c16983a8efdc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s1.indirect.pfm": "8aa69bb4f893d424069088511e8e7802c1c5620d33df0d79df376b3fe955e55d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s1.total.pfm": "264b047dc74fde8c14cb505330b745c8fb656913f5d43edc117662374303ea97",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s2.f64": "a32e4c83b454b61befe911e2bad59b4c80e3a0a7b23d069c6262e85b121fcf02",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s2.indirect.pfm": "3067867746d5f892852b35a238c013e6ed7e48bd88ab9a28ae9152e7ccbf6f72",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s2.total.pfm": "1ada0abe38b66764fe4d659e442b773afbbf41b9e392a8461769f06a404dfe11",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s3.f64": "10503d84f94dd6636d7d515ecbda986af9a9f3a8af9a8db65e7e228d04099f7c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s3.indirect.pfm": "0343530bbc1db256012249e377698bc4214b9b91dd49e34a0fb809cc2f9e636f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/o.n8192.s3.total.pfm": "20787ae62ea419a0c658e133bf67a3ce201bef56893231b17ea4295c3074117a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/qualification.json": "ccfed4a146814320e969ac80c2241a9c8f43d83bab290a60e22b86128b04e847",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/scene.n008": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/screen-n16384.json": "f6a3f5322617eabebd23ff3817663bab2727bfc2fa356975bab7b8a4db671011",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted/screen-n8192.json": "15e0f7fdaf0dc8abd79c0ac9efa37a3c2faf0fcb799577ac16fc5835057ac20e",
+        "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df"
+      }
+    },
+    {
+      "accepted_spp": 16384,
+      "canonical_raw_payload_sha256": {
+        "16384": {
+          "o.n16384.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+          "o.n16384.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s0.f64": "e062ba6b8a952976a3e1fdc05e4002a1d7e33e1df4dcc0a5d0bcd08ffa9a751a",
+          "o.n16384.s0.indirect.pfm": "2e3c0c0677bf504173185504790f4dcc4c8069d02954f5ffeb8d269bb68c839f",
+          "o.n16384.s0.total.pfm": "2a7b7fab2e277d8927a0c82002f4ae295b0122a129265b7ca0c62ad72b91e620",
+          "o.n16384.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s1.f64": "051d55fdedef13faa13017d42b2c759890b5bea182444572a2becbd639ae6d9a",
+          "o.n16384.s1.indirect.pfm": "7b8de867529184d4e060392e889b8d34f98c90584348b80ddf2573f620e0c309",
+          "o.n16384.s1.total.pfm": "eee1c989653e3e6bc071d8df55fead1de93087507a1f54d92dba8cbfd16c347a",
+          "o.n16384.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s2.f64": "2abe6251faa52aba4079538ea64d2b7f3e497e2597f1aace9aff4d84719fde61",
+          "o.n16384.s2.indirect.pfm": "a5b43b1630d171ea53cc7b57e10062fdaab04325791da311f0713c678b56130e",
+          "o.n16384.s2.total.pfm": "aee5608bbfc369baee6cb6db3239d660e8af2b37595fc25e73d76716ec342a45",
+          "o.n16384.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s3.f64": "9e04cfa2fadd03c833d8c1a6add1d4c1aa1cf632173202e06339861ac135196d",
+          "o.n16384.s3.indirect.pfm": "08ed9fb204aea2103c5fe9e41b68329b70a15f7227f6fa234f0fc3e6e099e55a",
+          "o.n16384.s3.total.pfm": "b62e7d028e6878686f805c70abb7885df66e4594285c512fa6de7eca246cbdfd"
+        },
+        "8192": {
+          "o.n8192.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+          "o.n8192.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s0.f64": "2aa9adf4e3ee2f4ad950b3c88531c9a1f8164d3533a748229dda45fd75b84399",
+          "o.n8192.s0.indirect.pfm": "8a8c8930786102c971400dafb49b473c492ba2cbfc7bbc3318fc3a48f58aca2a",
+          "o.n8192.s0.total.pfm": "b4821bdfe1a89e6a40a7ff4d18b5f5aba2fe4e583cd09f126175a84b00459d7a",
+          "o.n8192.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s1.f64": "3e08c1c54a6d5956bc7012021ca1ac21e7dc4fcd41ed4f1ed37afc4b3ae9ea78",
+          "o.n8192.s1.indirect.pfm": "aac37e73faa1598a2e176680fed34e3b060c9aacb87cd6be5e14af974dea9846",
+          "o.n8192.s1.total.pfm": "092f0647cabf3c7fce3bb2bab94375b5c8f5d8b13a527cc6555f8d3bb4f5a4fb",
+          "o.n8192.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s2.f64": "f2345a34c102a44caa24e5490946e73ce5de1472fe504acce07241881616def8",
+          "o.n8192.s2.indirect.pfm": "7766ea610a949ec80e5ee9894f19efcb0bbaa01b06198fa6aaa2be4530827911",
+          "o.n8192.s2.total.pfm": "e971db474cff3ffa292bc6fba69c35d28b2165c6fa8ab7c26a0f2a962309d3f3",
+          "o.n8192.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s3.f64": "195378c7a722f06db5a93cd7e004f38a8d500aa1e7a0c5377b4e3a2d728f3a6e",
+          "o.n8192.s3.indirect.pfm": "007f9e316c8a0c4cc12b0a3ffdbfafc6ea939ea177e79835d6d1d55dd0481eb1",
+          "o.n8192.s3.total.pfm": "4b6938c6446a40e7dec2a7e6a822945af74289517879465336bd14929cdf81c9"
+        }
+      },
+      "cell": "H02",
+      "original_N007_screens": [
+        {
+          "eligible_at_spp": null,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "8bca2a692a239022e2cdbe8b617152de7c37c51aaa3185510472635010ca422a",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.11605902777777778,
+              "eligible": true,
+              "max_active_abs_p99": 8.585368050262329e-08,
+              "max_active_rel_p99": 0.0008585368050262329,
+              "noise_rms_range": [
+                7.121065864247383e-09,
+                7.517019461027789e-09
+              ],
+              "problems": [],
+              "spp": 8192
+            }
+          ],
+          "scene_sha256": "5c400c4848ab3faff64fd2d241f31400e172d033a8a52b9ff944b71a5268ae0d",
+          "schema_version": 1,
+          "source_commit": "53e805117d41266ad3a206aed340494b944b985a",
+          "status": "incomplete"
+        },
+        {
+          "eligible_at_spp": 16384,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "727f9da6bc9741fec0ec9a443a8421b571c2b73a21d5224cac554b89ffc63067",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.11605902777777778,
+              "eligible": true,
+              "max_active_abs_p99": 8.585368050262329e-08,
+              "max_active_rel_p99": 0.0008585368050262329,
+              "noise_rms_range": [
+                7.121065864247383e-09,
+                7.517019461027789e-09
+              ],
+              "problems": [],
+              "spp": 8192
+            },
+            {
+              "active_fraction": 0.11616319444444445,
+              "eligible": true,
+              "max_active_abs_p99": 4.716584953712368e-08,
+              "max_active_rel_p99": 0.0004716584953712368,
+              "noise_rms_range": [
+                4.007304172042515e-09,
+                4.255464613321459e-09
+              ],
+              "problems": [],
+              "signal_support_stable_vs_previous": true,
+              "spp": 16384
+            }
+          ],
+          "scene_sha256": "5c400c4848ab3faff64fd2d241f31400e172d033a8a52b9ff944b71a5268ae0d",
+          "schema_version": 1,
+          "source_commit": "53e805117d41266ad3a206aed340494b944b985a",
+          "status": "statistical-screen-pass"
+        }
+      ],
+      "original_native_levels": [
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/n8192",
+          "payload_sha256": {
+            "oracle.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+            "oracle.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "2aa9adf4e3ee2f4ad950b3c88531c9a1f8164d3533a748229dda45fd75b84399",
+            "oracle.s0.indirect.pfm": "8a8c8930786102c971400dafb49b473c492ba2cbfc7bbc3318fc3a48f58aca2a",
+            "oracle.s0.total.pfm": "b4821bdfe1a89e6a40a7ff4d18b5f5aba2fe4e583cd09f126175a84b00459d7a",
+            "oracle.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "3e08c1c54a6d5956bc7012021ca1ac21e7dc4fcd41ed4f1ed37afc4b3ae9ea78",
+            "oracle.s1.indirect.pfm": "aac37e73faa1598a2e176680fed34e3b060c9aacb87cd6be5e14af974dea9846",
+            "oracle.s1.total.pfm": "092f0647cabf3c7fce3bb2bab94375b5c8f5d8b13a527cc6555f8d3bb4f5a4fb",
+            "oracle.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "f2345a34c102a44caa24e5490946e73ce5de1472fe504acce07241881616def8",
+            "oracle.s2.indirect.pfm": "7766ea610a949ec80e5ee9894f19efcb0bbaa01b06198fa6aaa2be4530827911",
+            "oracle.s2.total.pfm": "e971db474cff3ffa292bc6fba69c35d28b2165c6fa8ab7c26a0f2a962309d3f3",
+            "oracle.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "195378c7a722f06db5a93cd7e004f38a8d500aa1e7a0c5377b4e3a2d728f3a6e",
+            "oracle.s3.indirect.pfm": "007f9e316c8a0c4cc12b0a3ffdbfafc6ea939ea177e79835d6d1d55dd0481eb1",
+            "oracle.s3.total.pfm": "4b6938c6446a40e7dec2a7e6a822945af74289517879465336bd14929cdf81c9",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "74e0d74eea99eff998652313ff5b70773ab700b17ec313fea0830040ff6f14c0"
+          },
+          "receipt_sha256": "0e552234108f8a0051373363298eb544bc2882b5f47a2f41108b6312c3c95307",
+          "source_commit": "53e805117d41266ad3a206aed340494b944b985a",
+          "spp": 8192
+        },
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/n16384",
+          "payload_sha256": {
+            "oracle.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+            "oracle.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "e062ba6b8a952976a3e1fdc05e4002a1d7e33e1df4dcc0a5d0bcd08ffa9a751a",
+            "oracle.s0.indirect.pfm": "2e3c0c0677bf504173185504790f4dcc4c8069d02954f5ffeb8d269bb68c839f",
+            "oracle.s0.total.pfm": "2a7b7fab2e277d8927a0c82002f4ae295b0122a129265b7ca0c62ad72b91e620",
+            "oracle.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "051d55fdedef13faa13017d42b2c759890b5bea182444572a2becbd639ae6d9a",
+            "oracle.s1.indirect.pfm": "7b8de867529184d4e060392e889b8d34f98c90584348b80ddf2573f620e0c309",
+            "oracle.s1.total.pfm": "eee1c989653e3e6bc071d8df55fead1de93087507a1f54d92dba8cbfd16c347a",
+            "oracle.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "2abe6251faa52aba4079538ea64d2b7f3e497e2597f1aace9aff4d84719fde61",
+            "oracle.s2.indirect.pfm": "a5b43b1630d171ea53cc7b57e10062fdaab04325791da311f0713c678b56130e",
+            "oracle.s2.total.pfm": "aee5608bbfc369baee6cb6db3239d660e8af2b37595fc25e73d76716ec342a45",
+            "oracle.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "9e04cfa2fadd03c833d8c1a6add1d4c1aa1cf632173202e06339861ac135196d",
+            "oracle.s3.indirect.pfm": "08ed9fb204aea2103c5fe9e41b68329b70a15f7227f6fa234f0fc3e6e099e55a",
+            "oracle.s3.total.pfm": "b62e7d028e6878686f805c70abb7885df66e4594285c512fa6de7eca246cbdfd",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "18b8f641e286acf9ab8d4f30786103dfa249ddde586d854c1ecdf4bc843ae4a3"
+          },
+          "receipt_sha256": "0a2025785b549a8ee8d8c1fdc4c34145da41fd45ee12c901c34786a28d029c13",
+          "source_commit": "53e805117d41266ad3a206aed340494b944b985a",
+          "spp": 16384
+        }
+      ],
+      "physical_source_sha256": "5c400c4848ab3faff64fd2d241f31400e172d033a8a52b9ff944b71a5268ae0d",
+      "reference_eligible": true,
+      "retained_incumbent": {
+        "classification": "QUALITY_FAIL",
+        "quality": {
+          "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H02-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "97dbcaa5276c5650108a84171248fdc3676df36b2bf29307dd3f2a17184b974f",
+            "indirect.pfm": "936da9dee382a1b1e49d1af3f71512d9de8c87ed736b3e99f25d9a9daf579112",
+            "total.pfm": "6138824a1f461b8d9e9cf07f244d1584967264852994d92ccfa40365884c9fc0"
+          },
+          "cell": "H02",
+          "complete_oracle_scene_sha256": "5c400c4848ab3faff64fd2d241f31400e172d033a8a52b9ff944b71a5268ae0d",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "active_max_relative": 1.368679410407223e-05,
+              "active_p99_absolute": 4.422975900244749e-11,
+              "active_p99_relative": 6.19209535540581e-06,
+              "active_pixels": 6289,
+              "gpu_sum": 0.338922228733594,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.8027051128794504e-07,
+              "pixels": 57600,
+              "reference_rms": 1.994629419755363e-05,
+              "reference_sum": 0.33892229044148037,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.58498749280349e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "active_max_relative": 27978.069714557478,
+              "active_p99_absolute": 3.608018316414359e-05,
+              "active_p99_relative": 3.3333351002473015,
+              "active_pixels": 6485,
+              "gpu_sum": 0.01319905393756926,
+              "gpu_zero_reference_positive": 5865,
+              "nrmse": 1.080973821510543,
+              "pixels": 57600,
+              "reference_rms": 3.4302988751093713e-06,
+              "reference_sum": 0.03352036147965673,
+              "reference_zero_leak_energy": 0.0015106431674212217,
+              "reference_zero_leak_pixels": 31,
+              "rmse": 3.7080632839502943e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.6062377207483376,
+              "whole_image_max_absolute": 0.00015259021893143654
+            },
+            "total": {
+              "active_max_relative": 27978.069714557478,
+              "active_p99_absolute": 3.702482029931236e-05,
+              "active_p99_relative": 1.6511295524462302,
+              "active_pixels": 6691,
+              "gpu_sum": 0.35212128270151766,
+              "gpu_zero_reference_positive": 101,
+              "nrmse": 0.1791432807434761,
+              "pixels": 57600,
+              "reference_rms": 2.0698870877558277e-05,
+              "reference_sum": 0.3724426519211371,
+              "reference_zero_leak_energy": 0.0002899214159697294,
+              "reference_zero_leak_pixels": 19,
+              "rmse": 3.7080636366913842e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.054562411460657434,
+              "whole_image_max_absolute": 0.00015259023064477582
+            }
+          },
+          "normalization": "whole-image reference RMS; linear luma",
+          "pilot_quality_target": "FAIL",
+          "reference_state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c"
+          },
+          "schema": "n010-full-image-hdr-score/1",
+          "scoring_exclusions": 0,
+          "state_bytes_equal": true,
+          "state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c"
+          },
+          "superiority_claim": false,
+          "transport": "T_B2"
+        },
+        "result_sha256": "3ca820932b191cf1e528928911abed244a5ed9a58dc132bbe7d02eff22159d02"
+      },
+      "state_audit": {
+        "accepted_timing": false,
+        "capture_payloads_hash_verified": [
+          "allocation-ledger.json",
+          "capture.json",
+          "frame-state.bin",
+          "geometry-state.bin",
+          "gpu/composite-lookup.bin",
+          "gpu/direct.pfm",
+          "gpu/hits.bin",
+          "gpu/indirect.pfm",
+          "gpu/probe-contributions.bin",
+          "gpu/probe-hits.bin",
+          "gpu/probe-work.bin",
+          "gpu/total.pfm",
+          "renderer-timings.jsonl"
+        ],
+        "capture_payloads_not_provided": [],
+        "capture_source_commit": "63b8a58efc9287cc9a3d35c9e8b642b8af3e7482",
+        "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+        "complete_metadata_audit": true,
+        "frozen_manifest_sha256": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+        "glTF_ordered_triangles_matched": 1224,
+        "gpu_executed_by_auditor": false,
+        "h01_receipt_sha256": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0",
+        "h02_frame": {
+          "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "resolution": [
+            320,
+            180
+          ],
+          "ubo": {
+            "camera_forward_far": [
+              -0.689671516418457,
+              -0.2206949144601822,
+              -0.689671516418457,
+              33.9779167175293
+            ],
+            "camera_pos_near": [
+              6.405184745788574,
+              3.3996591567993164,
+              6.405184745788574,
+              0.011325973086059093
+            ],
+            "camera_right_tan_x": [
+              0.7071068286895752,
+              0.0,
+              -0.7071068286895752,
+              1.2448135614395142
+            ],
+            "camera_up_tan_y": [
+              -0.15605488419532776,
+              0.975342869758606,
+              -0.15605488419532776,
+              0.7002076506614685
+            ],
+            "light_pos_interval": [
+              1.6988959312438965,
+              5.314090251922607,
+              1.1325973272323608,
+              0.08848416060209274
+            ],
+            "scene_origin_spacing": [
+              -3.8888890743255615,
+              0.0,
+              -3.8888890743255615,
+              0.17696832120418549
+            ]
+          }
+        },
+        "h02_geometry": {
+          "geometry_sha256": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c",
+          "triangles": 1224,
+          "two_sided": true,
+          "unique_primitive_ids": 1224
+        },
+        "h02_owned_memory": {
+          "events": 74,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266937920
+        },
+        "h02_receipt_sha256": "5562656fad898b07ac91903affd7d0f00423b1813f2a59dc67941fc22e23f765",
+        "quality_scored": false,
+        "reference_eligible": false,
+        "schema": "lane-m-m001-h02-state-input-audit/1"
+      },
+      "state_sha256": {
+        "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c"
+      },
+      "transport": "T_B2",
+      "verification": {
+        "cell": "H02",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "637917e8821b6789723575c1afbab87fbae042332a612f2d03ea6171e22082ed",
+        "transport": "T_B2"
+      },
+      "verified_inputs_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/n16384.meta.json": "1475a59d211988ffff1a68bdf25420e9064fb20e948136d636c8443502e60184",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/n8192.meta.json": "d742b7dcc3537ec09f038466f1fddcee9fb94354ae794f46a97e7a6b0704a59b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s0.f64": "e062ba6b8a952976a3e1fdc05e4002a1d7e33e1df4dcc0a5d0bcd08ffa9a751a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s0.indirect.pfm": "2e3c0c0677bf504173185504790f4dcc4c8069d02954f5ffeb8d269bb68c839f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s0.total.pfm": "2a7b7fab2e277d8927a0c82002f4ae295b0122a129265b7ca0c62ad72b91e620",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s1.f64": "051d55fdedef13faa13017d42b2c759890b5bea182444572a2becbd639ae6d9a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s1.indirect.pfm": "7b8de867529184d4e060392e889b8d34f98c90584348b80ddf2573f620e0c309",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s1.total.pfm": "eee1c989653e3e6bc071d8df55fead1de93087507a1f54d92dba8cbfd16c347a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s2.f64": "2abe6251faa52aba4079538ea64d2b7f3e497e2597f1aace9aff4d84719fde61",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s2.indirect.pfm": "a5b43b1630d171ea53cc7b57e10062fdaab04325791da311f0713c678b56130e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s2.total.pfm": "aee5608bbfc369baee6cb6db3239d660e8af2b37595fc25e73d76716ec342a45",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s3.f64": "9e04cfa2fadd03c833d8c1a6add1d4c1aa1cf632173202e06339861ac135196d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s3.indirect.pfm": "08ed9fb204aea2103c5fe9e41b68329b70a15f7227f6fa234f0fc3e6e099e55a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n16384.s3.total.pfm": "b62e7d028e6878686f805c70abb7885df66e4594285c512fa6de7eca246cbdfd",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s0.f64": "2aa9adf4e3ee2f4ad950b3c88531c9a1f8164d3533a748229dda45fd75b84399",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s0.indirect.pfm": "8a8c8930786102c971400dafb49b473c492ba2cbfc7bbc3318fc3a48f58aca2a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s0.total.pfm": "b4821bdfe1a89e6a40a7ff4d18b5f5aba2fe4e583cd09f126175a84b00459d7a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s1.f64": "3e08c1c54a6d5956bc7012021ca1ac21e7dc4fcd41ed4f1ed37afc4b3ae9ea78",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s1.indirect.pfm": "aac37e73faa1598a2e176680fed34e3b060c9aacb87cd6be5e14af974dea9846",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s1.total.pfm": "092f0647cabf3c7fce3bb2bab94375b5c8f5d8b13a527cc6555f8d3bb4f5a4fb",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s2.f64": "f2345a34c102a44caa24e5490946e73ce5de1472fe504acce07241881616def8",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s2.indirect.pfm": "7766ea610a949ec80e5ee9894f19efcb0bbaa01b06198fa6aaa2be4530827911",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s2.total.pfm": "e971db474cff3ffa292bc6fba69c35d28b2165c6fa8ab7c26a0f2a962309d3f3",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s3.f64": "195378c7a722f06db5a93cd7e004f38a8d500aa1e7a0c5377b4e3a2d728f3a6e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s3.indirect.pfm": "007f9e316c8a0c4cc12b0a3ffdbfafc6ea939ea177e79835d6d1d55dd0481eb1",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/o.n8192.s3.total.pfm": "4b6938c6446a40e7dec2a7e6a822945af74289517879465336bd14929cdf81c9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/qualification.json": "637917e8821b6789723575c1afbab87fbae042332a612f2d03ea6171e22082ed",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/scene.n008": "5c400c4848ab3faff64fd2d241f31400e172d033a8a52b9ff944b71a5268ae0d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/screen-n16384.json": "727f9da6bc9741fec0ec9a443a8421b571c2b73a21d5224cac554b89ffc63067",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted/screen-n8192.json": "8bca2a692a239022e2cdbe8b617152de7c37c51aaa3185510472635010ca422a",
+        "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df"
+      }
+    },
+    {
+      "accepted_spp": 16384,
+      "canonical_raw_payload_sha256": {
+        "16384": {
+          "o.n16384.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+          "o.n16384.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s0.f64": "023c593a991dac8f4edd9326b9b824e2ef38facc3bb9fd5be1962e69ad7ae90b",
+          "o.n16384.s0.indirect.pfm": "c5e1e8ca5ce097e6829a662719c61fb851bcb4c64a0eb252507af7cfd5e9e53a",
+          "o.n16384.s0.total.pfm": "bfce52034b13c7e9f78921d7ca4f785ed20b714f20e8f6fe1905e5052d502ca9",
+          "o.n16384.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s1.f64": "7a781519a3ad2c2060ab7425725f8f45f777e079e08ca2625ab23b17bac5d41a",
+          "o.n16384.s1.indirect.pfm": "d6f38b68682d3dd09fa9335c3906d8fd74f509d7e4d7b88f4c4e710898dc54c7",
+          "o.n16384.s1.total.pfm": "66e5b5c08db6cdf7a0ec331a71b14ee1a372234515a68616203a5ebd9ec19403",
+          "o.n16384.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s2.f64": "4cbe7c146ea81d19e6898b1337773c55dffa86fe0a4fc9f9140ac6f29700bde9",
+          "o.n16384.s2.indirect.pfm": "30dbe66ac329d9a7ec9ffae0492f3c880f7044ba10f3a73ccb447f5e6c8717b6",
+          "o.n16384.s2.total.pfm": "257df8b135adafcab4521c6d1c52553d0abab7f4f6011fcf252dd3ed3e1e99ad",
+          "o.n16384.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s3.f64": "ef6b72a180d41841ca68ce00768e7d6b1430cb8ebce7b7a1a5a1c85b64c13672",
+          "o.n16384.s3.indirect.pfm": "ad5341510b0edf62f17f5291a85249a3927fee878b41437491f7434f105b0ec7",
+          "o.n16384.s3.total.pfm": "e99bbb1ba60ecc8684839ca815bf15fcbb4d5f69ac149529f7bef68d27f64525"
+        },
+        "8192": {
+          "o.n8192.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+          "o.n8192.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s0.f64": "96135098c49a3be9fcc533ea894bd6991b1733589f18f5eddc19b095f5a76488",
+          "o.n8192.s0.indirect.pfm": "130b2abc2312a965f157e80b317ef55e326caac91b807d1670ff9a77d5117010",
+          "o.n8192.s0.total.pfm": "1dea7960dfb040ec9090959b7ede7fc662d921d9a80ea5de25067ad1c1efa86b",
+          "o.n8192.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s1.f64": "43f3f58ae22a8b9ce13d8f37ce924e7c7daf5d712834b41fc0e7ef71ffd07a59",
+          "o.n8192.s1.indirect.pfm": "266fda839e392575c4bd2d336fd419b289b88a7258ce1afe294c4ac9380cba83",
+          "o.n8192.s1.total.pfm": "9dbff30739674b4f34a03ffb0e418cb7d92273fdb46165a9701e8677a8732fe4",
+          "o.n8192.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s2.f64": "dabd98542403c25c0a5c3910e576fd711605cb6bb8ae28a3c42564f6b1319359",
+          "o.n8192.s2.indirect.pfm": "e619cf7e1cbfdb37e46c7e2d24f6288e6325fdfa22b683572765169d115c73e6",
+          "o.n8192.s2.total.pfm": "c314f5fd4fb2924c14508c1d8f0e788c300e1eacd7be2ce81b087e00ae27c394",
+          "o.n8192.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+          "o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s3.f64": "8949d67ea57790bb063eff1903ee391a77a44353d2f859df423a49f34528c033",
+          "o.n8192.s3.indirect.pfm": "61c60c5253896f4989c82da9a63fc88eff38730e5cc8bc7c672520e10dbe6c25",
+          "o.n8192.s3.total.pfm": "1f2a88947e1b4a9b9bc9a9c34e69f983093242432daf8af26cc317a741c99870"
+        }
+      },
+      "cell": "H02",
+      "original_N007_screens": [
+        {
+          "eligible_at_spp": null,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "27e1382e08d3936e48dca3fcb0db6aef0dbc14b2dd0b0d4ae31fdb7e548a7236",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.11715277777777777,
+              "eligible": true,
+              "max_active_abs_p99": 3.381197893759234e-07,
+              "max_active_rel_p99": 0.0033528252970427266,
+              "noise_rms_range": [
+                3.535471701245109e-08,
+                3.618775412511663e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            }
+          ],
+          "scene_sha256": "289c2519dda077e079c0637c69f8690d5aec98c6685aa49bac9375a6bc7805a6",
+          "schema_version": 1,
+          "source_commit": "bfecdc01c05fa1c845adf1d9d6a40039027d033f",
+          "status": "incomplete"
+        },
+        {
+          "eligible_at_spp": 16384,
+          "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "manifest_sha256": "f213201ff8cdb6c5008663bec2472a37a55ee729ce8a95d8afa140218267fb2d",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.11715277777777777,
+              "eligible": true,
+              "max_active_abs_p99": 3.381197893759234e-07,
+              "max_active_rel_p99": 0.0033528252970427266,
+              "noise_rms_range": [
+                3.535471701245109e-08,
+                3.618775412511663e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            },
+            {
+              "active_fraction": 0.11715277777777777,
+              "eligible": true,
+              "max_active_abs_p99": 2.421508543193328e-07,
+              "max_active_rel_p99": 0.0023716725991107515,
+              "noise_rms_range": [
+                2.3624966317603e-08,
+                2.4612452481805738e-08
+              ],
+              "problems": [],
+              "signal_support_stable_vs_previous": true,
+              "spp": 16384
+            }
+          ],
+          "scene_sha256": "289c2519dda077e079c0637c69f8690d5aec98c6685aa49bac9375a6bc7805a6",
+          "schema_version": 1,
+          "source_commit": "bfecdc01c05fa1c845adf1d9d6a40039027d033f",
+          "status": "statistical-screen-pass"
+        }
+      ],
+      "original_native_levels": [
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/n8192",
+          "payload_sha256": {
+            "oracle.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+            "oracle.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "96135098c49a3be9fcc533ea894bd6991b1733589f18f5eddc19b095f5a76488",
+            "oracle.s0.indirect.pfm": "130b2abc2312a965f157e80b317ef55e326caac91b807d1670ff9a77d5117010",
+            "oracle.s0.total.pfm": "1dea7960dfb040ec9090959b7ede7fc662d921d9a80ea5de25067ad1c1efa86b",
+            "oracle.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "43f3f58ae22a8b9ce13d8f37ce924e7c7daf5d712834b41fc0e7ef71ffd07a59",
+            "oracle.s1.indirect.pfm": "266fda839e392575c4bd2d336fd419b289b88a7258ce1afe294c4ac9380cba83",
+            "oracle.s1.total.pfm": "9dbff30739674b4f34a03ffb0e418cb7d92273fdb46165a9701e8677a8732fe4",
+            "oracle.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "dabd98542403c25c0a5c3910e576fd711605cb6bb8ae28a3c42564f6b1319359",
+            "oracle.s2.indirect.pfm": "e619cf7e1cbfdb37e46c7e2d24f6288e6325fdfa22b683572765169d115c73e6",
+            "oracle.s2.total.pfm": "c314f5fd4fb2924c14508c1d8f0e788c300e1eacd7be2ce81b087e00ae27c394",
+            "oracle.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "8949d67ea57790bb063eff1903ee391a77a44353d2f859df423a49f34528c033",
+            "oracle.s3.indirect.pfm": "61c60c5253896f4989c82da9a63fc88eff38730e5cc8bc7c672520e10dbe6c25",
+            "oracle.s3.total.pfm": "1f2a88947e1b4a9b9bc9a9c34e69f983093242432daf8af26cc317a741c99870",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "001d1697ca47907f1aae0b6946f97e91a3bdea19845ff31ef199e0c3891708ee"
+          },
+          "receipt_sha256": "1cbfbe2fe41891f669ffffa9fda2aaa46cfe6e082d57eef29b6f17b0c369cdaf",
+          "source_commit": "bfecdc01c05fa1c845adf1d9d6a40039027d033f",
+          "spp": 8192
+        },
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/n16384",
+          "payload_sha256": {
+            "oracle.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+            "oracle.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "023c593a991dac8f4edd9326b9b824e2ef38facc3bb9fd5be1962e69ad7ae90b",
+            "oracle.s0.indirect.pfm": "c5e1e8ca5ce097e6829a662719c61fb851bcb4c64a0eb252507af7cfd5e9e53a",
+            "oracle.s0.total.pfm": "bfce52034b13c7e9f78921d7ca4f785ed20b714f20e8f6fe1905e5052d502ca9",
+            "oracle.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "7a781519a3ad2c2060ab7425725f8f45f777e079e08ca2625ab23b17bac5d41a",
+            "oracle.s1.indirect.pfm": "d6f38b68682d3dd09fa9335c3906d8fd74f509d7e4d7b88f4c4e710898dc54c7",
+            "oracle.s1.total.pfm": "66e5b5c08db6cdf7a0ec331a71b14ee1a372234515a68616203a5ebd9ec19403",
+            "oracle.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "4cbe7c146ea81d19e6898b1337773c55dffa86fe0a4fc9f9140ac6f29700bde9",
+            "oracle.s2.indirect.pfm": "30dbe66ac329d9a7ec9ffae0492f3c880f7044ba10f3a73ccb447f5e6c8717b6",
+            "oracle.s2.total.pfm": "257df8b135adafcab4521c6d1c52553d0abab7f4f6011fcf252dd3ed3e1e99ad",
+            "oracle.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "ef6b72a180d41841ca68ce00768e7d6b1430cb8ebce7b7a1a5a1c85b64c13672",
+            "oracle.s3.indirect.pfm": "ad5341510b0edf62f17f5291a85249a3927fee878b41437491f7434f105b0ec7",
+            "oracle.s3.total.pfm": "e99bbb1ba60ecc8684839ca815bf15fcbb4d5f69ac149529f7bef68d27f64525",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "4cd828c00dfe1f7509aa128f83bcd56cbdf86092b9fec2059d434a37ddc7a3d9"
+          },
+          "receipt_sha256": "22d65a045ed0e18b09254bf7d5d42f9db1e16492ea976e25f66e88fe8b827918",
+          "source_commit": "bfecdc01c05fa1c845adf1d9d6a40039027d033f",
+          "spp": 16384
+        }
+      ],
+      "physical_source_sha256": "289c2519dda077e079c0637c69f8690d5aec98c6685aa49bac9375a6bc7805a6",
+      "reference_eligible": true,
+      "retained_incumbent": {
+        "classification": "QUALITY_FAIL",
+        "quality": {
+          "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H02-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "97dbcaa5276c5650108a84171248fdc3676df36b2bf29307dd3f2a17184b974f",
+            "indirect.pfm": "936da9dee382a1b1e49d1af3f71512d9de8c87ed736b3e99f25d9a9daf579112",
+            "total.pfm": "6138824a1f461b8d9e9cf07f244d1584967264852994d92ccfa40365884c9fc0"
+          },
+          "cell": "H02",
+          "complete_oracle_scene_sha256": "289c2519dda077e079c0637c69f8690d5aec98c6685aa49bac9375a6bc7805a6",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "active_max_relative": 1.368679410407223e-05,
+              "active_p99_absolute": 4.422975900244749e-11,
+              "active_p99_relative": 6.19209535540581e-06,
+              "active_pixels": 6289,
+              "gpu_sum": 0.338922228733594,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.8027051128794504e-07,
+              "pixels": 57600,
+              "reference_rms": 1.994629419755363e-05,
+              "reference_sum": 0.33892229044148037,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.58498749280349e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "active_max_relative": 228.62549854217494,
+              "active_p99_absolute": 4.469377604393234e-05,
+              "active_p99_relative": 2.577293581196845,
+              "active_pixels": 6734,
+              "gpu_sum": 0.01319905393756926,
+              "gpu_zero_reference_positive": 6083,
+              "nrmse": 1.013886452545024,
+              "pixels": 57600,
+              "reference_rms": 4.410034535260377e-06,
+              "reference_sum": 0.05375852990972364,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 4.471274270556187e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.7544751696198846,
+              "whole_image_max_absolute": 0.0001519257011844956
+            },
+            "total": {
+              "active_max_relative": 9.71481574552498,
+              "active_p99_absolute": 4.4663306714442055e-05,
+              "active_p99_relative": 1.7942498440496553,
+              "active_pixels": 6748,
+              "gpu_sum": 0.35212128270151766,
+              "gpu_zero_reference_positive": 139,
+              "nrmse": 0.20505625753017723,
+              "pixels": 57600,
+              "reference_rms": 2.1805115062413006e-05,
+              "reference_sum": 0.39268082035120405,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 4.471275289713308e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.10328881765452903,
+              "whole_image_max_absolute": 0.00015192571289783497
+            }
+          },
+          "normalization": "whole-image reference RMS; linear luma",
+          "pilot_quality_target": "FAIL",
+          "reference_state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c"
+          },
+          "schema": "n010-full-image-hdr-score/1",
+          "scoring_exclusions": 0,
+          "state_bytes_equal": true,
+          "state_sha256": {
+            "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+            "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c"
+          },
+          "superiority_claim": false,
+          "transport": "T_B8"
+        },
+        "result_sha256": "69f26eebe1793a5ca328a338c28287698d4c523cc617e78ae1c44c4059f94761"
+      },
+      "state_audit": {
+        "accepted_timing": false,
+        "capture_payloads_hash_verified": [
+          "allocation-ledger.json",
+          "capture.json",
+          "frame-state.bin",
+          "geometry-state.bin",
+          "gpu/composite-lookup.bin",
+          "gpu/direct.pfm",
+          "gpu/hits.bin",
+          "gpu/indirect.pfm",
+          "gpu/probe-contributions.bin",
+          "gpu/probe-hits.bin",
+          "gpu/probe-work.bin",
+          "gpu/total.pfm",
+          "renderer-timings.jsonl"
+        ],
+        "capture_payloads_not_provided": [],
+        "capture_source_commit": "63b8a58efc9287cc9a3d35c9e8b642b8af3e7482",
+        "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+        "complete_metadata_audit": true,
+        "frozen_manifest_sha256": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+        "glTF_ordered_triangles_matched": 1224,
+        "gpu_executed_by_auditor": false,
+        "h01_receipt_sha256": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0",
+        "h02_frame": {
+          "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "resolution": [
+            320,
+            180
+          ],
+          "ubo": {
+            "camera_forward_far": [
+              -0.689671516418457,
+              -0.2206949144601822,
+              -0.689671516418457,
+              33.9779167175293
+            ],
+            "camera_pos_near": [
+              6.405184745788574,
+              3.3996591567993164,
+              6.405184745788574,
+              0.011325973086059093
+            ],
+            "camera_right_tan_x": [
+              0.7071068286895752,
+              0.0,
+              -0.7071068286895752,
+              1.2448135614395142
+            ],
+            "camera_up_tan_y": [
+              -0.15605488419532776,
+              0.975342869758606,
+              -0.15605488419532776,
+              0.7002076506614685
+            ],
+            "light_pos_interval": [
+              1.6988959312438965,
+              5.314090251922607,
+              1.1325973272323608,
+              0.08848416060209274
+            ],
+            "scene_origin_spacing": [
+              -3.8888890743255615,
+              0.0,
+              -3.8888890743255615,
+              0.17696832120418549
+            ]
+          }
+        },
+        "h02_geometry": {
+          "geometry_sha256": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c",
+          "triangles": 1224,
+          "two_sided": true,
+          "unique_primitive_ids": 1224
+        },
+        "h02_owned_memory": {
+          "events": 74,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266937920
+        },
+        "h02_receipt_sha256": "5562656fad898b07ac91903affd7d0f00423b1813f2a59dc67941fc22e23f765",
+        "quality_scored": false,
+        "reference_eligible": false,
+        "schema": "lane-m-m001-h02-state-input-audit/1"
+      },
+      "state_sha256": {
+        "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c"
+      },
+      "transport": "T_B8",
+      "verification": {
+        "cell": "H02",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "9ba7e85776375f5c1d58a95b6f8f2ab2f2046655a79ec3d2f0dfc8b0beaaca03",
+        "transport": "T_B8"
+      },
+      "verified_inputs_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/n16384.meta.json": "81544ec7bb9fe60f9c1d6608b27c3fc66f49edfa3c93c04263700cc344805132",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/n8192.meta.json": "dad4c5dcde3031ac9d23ba7a3d543432621f77b02915792a8eefe3741a5f9800",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s0.f64": "023c593a991dac8f4edd9326b9b824e2ef38facc3bb9fd5be1962e69ad7ae90b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s0.indirect.pfm": "c5e1e8ca5ce097e6829a662719c61fb851bcb4c64a0eb252507af7cfd5e9e53a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s0.total.pfm": "bfce52034b13c7e9f78921d7ca4f785ed20b714f20e8f6fe1905e5052d502ca9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s1.f64": "7a781519a3ad2c2060ab7425725f8f45f777e079e08ca2625ab23b17bac5d41a",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s1.indirect.pfm": "d6f38b68682d3dd09fa9335c3906d8fd74f509d7e4d7b88f4c4e710898dc54c7",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s1.total.pfm": "66e5b5c08db6cdf7a0ec331a71b14ee1a372234515a68616203a5ebd9ec19403",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s2.f64": "4cbe7c146ea81d19e6898b1337773c55dffa86fe0a4fc9f9140ac6f29700bde9",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s2.indirect.pfm": "30dbe66ac329d9a7ec9ffae0492f3c880f7044ba10f3a73ccb447f5e6c8717b6",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s2.total.pfm": "257df8b135adafcab4521c6d1c52553d0abab7f4f6011fcf252dd3ed3e1e99ad",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s3.f64": "ef6b72a180d41841ca68ce00768e7d6b1430cb8ebce7b7a1a5a1c85b64c13672",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s3.indirect.pfm": "ad5341510b0edf62f17f5291a85249a3927fee878b41437491f7434f105b0ec7",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n16384.s3.total.pfm": "e99bbb1ba60ecc8684839ca815bf15fcbb4d5f69ac149529f7bef68d27f64525",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.hits": "ec618800d20336fc72697da9de833e7d1ad37ddfc9ef9ae72052e57097512224",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s0.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s0.f64": "96135098c49a3be9fcc533ea894bd6991b1733589f18f5eddc19b095f5a76488",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s0.indirect.pfm": "130b2abc2312a965f157e80b317ef55e326caac91b807d1670ff9a77d5117010",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s0.total.pfm": "1dea7960dfb040ec9090959b7ede7fc662d921d9a80ea5de25067ad1c1efa86b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s1.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s1.f64": "43f3f58ae22a8b9ce13d8f37ce924e7c7daf5d712834b41fc0e7ef71ffd07a59",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s1.indirect.pfm": "266fda839e392575c4bd2d336fd419b289b88a7258ce1afe294c4ac9380cba83",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s1.total.pfm": "9dbff30739674b4f34a03ffb0e418cb7d92273fdb46165a9701e8677a8732fe4",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s2.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s2.f64": "dabd98542403c25c0a5c3910e576fd711605cb6bb8ae28a3c42564f6b1319359",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s2.indirect.pfm": "e619cf7e1cbfdb37e46c7e2d24f6288e6325fdfa22b683572765169d115c73e6",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s2.total.pfm": "c314f5fd4fb2924c14508c1d8f0e788c300e1eacd7be2ce81b087e00ae27c394",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s3.direct.pfm": "59816103b66eb3bfa2e02013ef9ec6af8b1a9f6205f77938c13a08c52bc32982",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s3.f64": "8949d67ea57790bb063eff1903ee391a77a44353d2f859df423a49f34528c033",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s3.indirect.pfm": "61c60c5253896f4989c82da9a63fc88eff38730e5cc8bc7c672520e10dbe6c25",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/o.n8192.s3.total.pfm": "1f2a88947e1b4a9b9bc9a9c34e69f983093242432daf8af26cc317a741c99870",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/qualification.json": "9ba7e85776375f5c1d58a95b6f8f2ab2f2046655a79ec3d2f0dfc8b0beaaca03",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/scene.n008": "289c2519dda077e079c0637c69f8690d5aec98c6685aa49bac9375a6bc7805a6",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/screen-n16384.json": "f213201ff8cdb6c5008663bec2472a37a55ee729ce8a95d8afa140218267fb2d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted/screen-n8192.json": "27e1382e08d3936e48dca3fcb0db6aef0dbc14b2dd0b0d4ae31fdb7e548a7236",
+        "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df"
+      }
+    },
+    {
+      "accepted_spp": 16384,
+      "canonical_raw_payload_sha256": {
+        "16384": {
+          "o.n16384.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+          "o.n16384.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s0.f64": "73448e6784236414f5d300b9c7641473012308e459bba4623cd7332b0d0f3957",
+          "o.n16384.s0.indirect.pfm": "a170897d779cfb0532c692803d7eb89a9736427329e6736f7818221d7e2fcf1c",
+          "o.n16384.s0.total.pfm": "1e9843eb754f4c727db6f1a87e370b71943828f5823c34c40a7d3637276c6234",
+          "o.n16384.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s1.f64": "53412e7619fa7b23c72366a672acd2129d636a5aa34bea53bad77489cbd531b7",
+          "o.n16384.s1.indirect.pfm": "20f9b9f8d78d5ddad4a0bab1bd80a821b9a845e32a010d9436113115950b5624",
+          "o.n16384.s1.total.pfm": "312135e853fe05dee75149b1d35636a052a616a4120dde4ca9f83458f21b3137",
+          "o.n16384.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s2.f64": "c9236ed4164023df863a75a6c7783ee8fe0bda75c41faed6018b4065716ce29b",
+          "o.n16384.s2.indirect.pfm": "116276a2f4e9c0b73e5ac3fdbe24470df0d67e2abe37e9b4e090d96ed89bed32",
+          "o.n16384.s2.total.pfm": "c126b9b5aeb94e9a91c6c7456256dae22280fdc80af6209700838413ad080719",
+          "o.n16384.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s3.f64": "1d42b74b3d6ebf7199851a5d4cedfb6fe8ba3374e5399cee94b2493d7556b2f0",
+          "o.n16384.s3.indirect.pfm": "fd7428a23715909738e78050809e0a3661a7eade70ece671d00563affe610445",
+          "o.n16384.s3.total.pfm": "25ef87e2b44a9aecd4c4245a8f4e46512e8ac3624e3bbfb10c872bb56b37bb25"
+        },
+        "8192": {
+          "o.n8192.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+          "o.n8192.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s0.f64": "066f00331ef6f686d82eaa6ebe444cf172ae293faa1ad8b70ff70d5eb3fd09cf",
+          "o.n8192.s0.indirect.pfm": "3af0294b4dc87b1fc49bf279cc0263d022ce0cccc398ae8daadf733d4be6f0b8",
+          "o.n8192.s0.total.pfm": "5d47beaa8cfd62db6271ffa6901c01ae42644f8c894a830d08a1cc3aed7b998c",
+          "o.n8192.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s1.f64": "501bed806784500ba03c3f885a1403ffb03980f1cb090996988ffe96db77efb4",
+          "o.n8192.s1.indirect.pfm": "265d13f735cfbddac1a10e43ae35172e3b7fe8e999cd2fa874db4859c27cd08b",
+          "o.n8192.s1.total.pfm": "f95183a58019644f9e36b2b767da79da85c13664d14bd243214a7562ef342b88",
+          "o.n8192.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s2.f64": "a42d610555958840d03682413f9067c87c313fe15abad07e27cc0e28d3e9da05",
+          "o.n8192.s2.indirect.pfm": "04d81e8ec31e24cab9109d9d7fd4bc0863f79434ba58152add8d5325a20bfadd",
+          "o.n8192.s2.total.pfm": "2e25fa7492c0c14ed9daedb3cf2d8abd06b37d824f2f27c2976465fa030bf6df",
+          "o.n8192.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s3.f64": "deb20b84932236d09c404c0b7930b59afce98d12dc3dd464e49e45042604846e",
+          "o.n8192.s3.indirect.pfm": "edfb0e2fad8dba0da89852ce1255df3d4e768904426c0987c76603a52f216df3",
+          "o.n8192.s3.total.pfm": "28a2cca36e2bf0bd3fb1f6ba71bace20996ee61a6778b75a60c72375398ddd0e"
+        }
+      },
+      "cell": "H03",
+      "original_N007_screens": [
+        {
+          "eligible_at_spp": null,
+          "frame_state_sha256": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+          "manifest_sha256": "2de219428c6c352e58f7d642257067b84978c7cf85410117d32309db05fe329d",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.1272222222222222,
+              "eligible": true,
+              "max_active_abs_p99": 1.0507540537218966e-07,
+              "max_active_rel_p99": 0.0010379640798419145,
+              "noise_rms_range": [
+                1.0890370406580314e-08,
+                1.159479598113299e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            }
+          ],
+          "scene_sha256": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+          "schema_version": 1,
+          "source_commit": "bfecdc01c05fa1c845adf1d9d6a40039027d033f",
+          "status": "incomplete"
+        },
+        {
+          "eligible_at_spp": 16384,
+          "frame_state_sha256": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+          "manifest_sha256": "1049fb38c0541cb1e2f8253849714ece07cba0191d005a67a40f5e0a7933cff5",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.1272222222222222,
+              "eligible": true,
+              "max_active_abs_p99": 1.0507540537218966e-07,
+              "max_active_rel_p99": 0.0010379640798419145,
+              "noise_rms_range": [
+                1.0890370406580314e-08,
+                1.159479598113299e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            },
+            {
+              "active_fraction": 0.1284722222222222,
+              "eligible": true,
+              "max_active_abs_p99": 5.972943654342105e-08,
+              "max_active_rel_p99": 0.0005747812352877819,
+              "noise_rms_range": [
+                5.71005830509052e-09,
+                6.298445477367953e-09
+              ],
+              "problems": [],
+              "signal_support_stable_vs_previous": true,
+              "spp": 16384
+            }
+          ],
+          "scene_sha256": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+          "schema_version": 1,
+          "source_commit": "711e6f8fe603f9404a8a6a82dfef98d96a7734af",
+          "status": "statistical-screen-pass"
+        }
+      ],
+      "original_native_levels": [
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/n8192",
+          "payload_sha256": {
+            "oracle.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+            "oracle.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "066f00331ef6f686d82eaa6ebe444cf172ae293faa1ad8b70ff70d5eb3fd09cf",
+            "oracle.s0.indirect.pfm": "3af0294b4dc87b1fc49bf279cc0263d022ce0cccc398ae8daadf733d4be6f0b8",
+            "oracle.s0.total.pfm": "5d47beaa8cfd62db6271ffa6901c01ae42644f8c894a830d08a1cc3aed7b998c",
+            "oracle.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "501bed806784500ba03c3f885a1403ffb03980f1cb090996988ffe96db77efb4",
+            "oracle.s1.indirect.pfm": "265d13f735cfbddac1a10e43ae35172e3b7fe8e999cd2fa874db4859c27cd08b",
+            "oracle.s1.total.pfm": "f95183a58019644f9e36b2b767da79da85c13664d14bd243214a7562ef342b88",
+            "oracle.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "a42d610555958840d03682413f9067c87c313fe15abad07e27cc0e28d3e9da05",
+            "oracle.s2.indirect.pfm": "04d81e8ec31e24cab9109d9d7fd4bc0863f79434ba58152add8d5325a20bfadd",
+            "oracle.s2.total.pfm": "2e25fa7492c0c14ed9daedb3cf2d8abd06b37d824f2f27c2976465fa030bf6df",
+            "oracle.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "deb20b84932236d09c404c0b7930b59afce98d12dc3dd464e49e45042604846e",
+            "oracle.s3.indirect.pfm": "edfb0e2fad8dba0da89852ce1255df3d4e768904426c0987c76603a52f216df3",
+            "oracle.s3.total.pfm": "28a2cca36e2bf0bd3fb1f6ba71bace20996ee61a6778b75a60c72375398ddd0e",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "c842ab2f435a7a45dc4d1438a660d4bd0a8148bbad120fa7ea92debf5d65a270"
+          },
+          "receipt_sha256": "d587910bcbee6ba8a52ce8e3100137fc746abd32169325465cf2e201aeb35b95",
+          "source_commit": "bfecdc01c05fa1c845adf1d9d6a40039027d033f",
+          "spp": 8192
+        },
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/n16384",
+          "payload_sha256": {
+            "oracle.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+            "oracle.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "73448e6784236414f5d300b9c7641473012308e459bba4623cd7332b0d0f3957",
+            "oracle.s0.indirect.pfm": "a170897d779cfb0532c692803d7eb89a9736427329e6736f7818221d7e2fcf1c",
+            "oracle.s0.total.pfm": "1e9843eb754f4c727db6f1a87e370b71943828f5823c34c40a7d3637276c6234",
+            "oracle.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "53412e7619fa7b23c72366a672acd2129d636a5aa34bea53bad77489cbd531b7",
+            "oracle.s1.indirect.pfm": "20f9b9f8d78d5ddad4a0bab1bd80a821b9a845e32a010d9436113115950b5624",
+            "oracle.s1.total.pfm": "312135e853fe05dee75149b1d35636a052a616a4120dde4ca9f83458f21b3137",
+            "oracle.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "c9236ed4164023df863a75a6c7783ee8fe0bda75c41faed6018b4065716ce29b",
+            "oracle.s2.indirect.pfm": "116276a2f4e9c0b73e5ac3fdbe24470df0d67e2abe37e9b4e090d96ed89bed32",
+            "oracle.s2.total.pfm": "c126b9b5aeb94e9a91c6c7456256dae22280fdc80af6209700838413ad080719",
+            "oracle.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "1d42b74b3d6ebf7199851a5d4cedfb6fe8ba3374e5399cee94b2493d7556b2f0",
+            "oracle.s3.indirect.pfm": "fd7428a23715909738e78050809e0a3661a7eade70ece671d00563affe610445",
+            "oracle.s3.total.pfm": "25ef87e2b44a9aecd4c4245a8f4e46512e8ac3624e3bbfb10c872bb56b37bb25",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "db5614c8f3c2b502bfb1bfaed9bbca7f8924aaeaad7f56cf2afc5ae63d96a36a"
+          },
+          "receipt_sha256": "a221cdb6d38b6f2227c787f16e755e223d5175e14550459ad5759a901afc08ce",
+          "source_commit": "711e6f8fe603f9404a8a6a82dfef98d96a7734af",
+          "spp": 16384
+        }
+      ],
+      "physical_source_sha256": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+      "reference_eligible": true,
+      "retained_incumbent": {
+        "classification": "QUALITY_FAIL",
+        "quality": {
+          "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H03-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "c797e024b56b5aaf638e7dcd4b283adc78d051b27c9b9bed39d7a600e64708b6",
+            "indirect.pfm": "b83852e9a16ac2c21e49579712a8020985c9c3fed3fe6849afaad8f9389501a6",
+            "total.pfm": "6a32acf25b343a17004f26e98963f64d6340564dd2f4b4bb6fe06608aedb4944"
+          },
+          "cell": "H03",
+          "complete_oracle_scene_sha256": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "active_max_relative": 1.0074639249272872e-05,
+              "active_p99_absolute": 2.4627739594190713e-10,
+              "active_p99_relative": 6.679119231520712e-06,
+              "active_pixels": 6093,
+              "gpu_sum": 0.2900642481565683,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 6.933547083343804e-07,
+              "pixels": 57600,
+              "reference_rms": 2.1188749668757086e-05,
+              "reference_sum": 0.2900642972130776,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 1.4691319346551268e-11,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "active_max_relative": 12234.143877515837,
+              "active_p99_absolute": 4.3243723516884147e-05,
+              "active_p99_relative": 15.785801886797968,
+              "active_pixels": 7129,
+              "gpu_sum": 0.030243381748732645,
+              "gpu_zero_reference_positive": 5797,
+              "nrmse": 1.1196259005219282,
+              "pixels": 57600,
+              "reference_rms": 4.723785228170138e-06,
+              "reference_sum": 0.04561045907089291,
+              "reference_zero_leak_energy": 0.0014343480906973127,
+              "reference_zero_leak_pixels": 49,
+              "rmse": 5.2888722899621736e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.33692003183469454,
+              "whole_image_max_absolute": 0.0001678492408245802
+            },
+            "total": {
+              "active_max_relative": 12234.143877515837,
+              "active_p99_absolute": 4.3364310343704674e-05,
+              "active_p99_relative": 14.296098912001684,
+              "active_pixels": 7400,
+              "gpu_sum": 0.3203076298627252,
+              "gpu_zero_reference_positive": 571,
+              "nrmse": 0.24146897009026247,
+              "pixels": 57600,
+              "reference_rms": 2.1902906481031484e-05,
+              "reference_sum": 0.33567475628397025,
+              "reference_zero_leak_energy": 0.0005035477224737406,
+              "reference_zero_leak_pixels": 22,
+              "rmse": 5.288872269958007e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.045779809573303014,
+              "whole_image_max_absolute": 0.00016784930032189655
+            }
+          },
+          "normalization": "whole-image reference RMS; linear luma",
+          "pilot_quality_target": "FAIL",
+          "reference_state_sha256": {
+            "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+            "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+          },
+          "schema": "n010-full-image-hdr-score/1",
+          "scoring_exclusions": 0,
+          "state_bytes_equal": true,
+          "state_sha256": {
+            "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+            "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+          },
+          "superiority_claim": false,
+          "transport": "T_B2"
+        },
+        "result_sha256": "44413002d9d36536593ddfc44c169c2eee22df27fa0c7e9bb0d3ca76d16ded69"
+      },
+      "state_audit": {
+        "accepted_timing": false,
+        "all_two_sided": true,
+        "captured_state_sha256": {
+          "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+          "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+        },
+        "classification": "H03_STATE_AND_ALL_RAW_PAYLOAD_HASHES_PASS_REFERENCE_UNQUALIFIED",
+        "complete": true,
+        "gltf_ordered_triangle_match": 1248,
+        "gpu_executed": false,
+        "hdr_quality_scored": false,
+        "owned_memory": {
+          "events": 74,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266947072
+        },
+        "physical_reference_eligibility": "NOT_RUN",
+        "reference_eligible": false,
+        "schema": "lane-m-m001-h03-state-evidence/1",
+        "triangle_count": 1248,
+        "unverified_raw_payloads": [],
+        "verified_raw_payloads": [
+          "allocation-ledger.json",
+          "capture.json",
+          "frame-state.bin",
+          "geometry-state.bin",
+          "gpu/composite-lookup.bin",
+          "gpu/direct.pfm",
+          "gpu/hits.bin",
+          "gpu/indirect.pfm",
+          "gpu/probe-contributions.bin",
+          "gpu/probe-hits.bin",
+          "gpu/probe-work.bin",
+          "gpu/total.pfm",
+          "renderer-timings.jsonl"
+        ]
+      },
+      "state_sha256": {
+        "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+        "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+      },
+      "transport": "T_B2",
+      "verification": {
+        "cell": "H03",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "127d47c758265166b967bc9ad91ff3b867977327469a11615098194f864cd1f7",
+        "transport": "T_B2"
+      },
+      "verified_inputs_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/n16384.meta.json": "2b21346d4a4c0a77698fd24b22787ea5220c7f94b7a9f9517e3b280904a7705c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/n8192.meta.json": "9ef7529ad8005bae619a70467227449cb1e19e82230b0c2d2bf3ba4c23dc5b71",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s0.f64": "73448e6784236414f5d300b9c7641473012308e459bba4623cd7332b0d0f3957",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s0.indirect.pfm": "a170897d779cfb0532c692803d7eb89a9736427329e6736f7818221d7e2fcf1c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s0.total.pfm": "1e9843eb754f4c727db6f1a87e370b71943828f5823c34c40a7d3637276c6234",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s1.f64": "53412e7619fa7b23c72366a672acd2129d636a5aa34bea53bad77489cbd531b7",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s1.indirect.pfm": "20f9b9f8d78d5ddad4a0bab1bd80a821b9a845e32a010d9436113115950b5624",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s1.total.pfm": "312135e853fe05dee75149b1d35636a052a616a4120dde4ca9f83458f21b3137",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s2.f64": "c9236ed4164023df863a75a6c7783ee8fe0bda75c41faed6018b4065716ce29b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s2.indirect.pfm": "116276a2f4e9c0b73e5ac3fdbe24470df0d67e2abe37e9b4e090d96ed89bed32",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s2.total.pfm": "c126b9b5aeb94e9a91c6c7456256dae22280fdc80af6209700838413ad080719",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s3.f64": "1d42b74b3d6ebf7199851a5d4cedfb6fe8ba3374e5399cee94b2493d7556b2f0",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s3.indirect.pfm": "fd7428a23715909738e78050809e0a3661a7eade70ece671d00563affe610445",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n16384.s3.total.pfm": "25ef87e2b44a9aecd4c4245a8f4e46512e8ac3624e3bbfb10c872bb56b37bb25",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s0.f64": "066f00331ef6f686d82eaa6ebe444cf172ae293faa1ad8b70ff70d5eb3fd09cf",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s0.indirect.pfm": "3af0294b4dc87b1fc49bf279cc0263d022ce0cccc398ae8daadf733d4be6f0b8",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s0.total.pfm": "5d47beaa8cfd62db6271ffa6901c01ae42644f8c894a830d08a1cc3aed7b998c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s1.f64": "501bed806784500ba03c3f885a1403ffb03980f1cb090996988ffe96db77efb4",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s1.indirect.pfm": "265d13f735cfbddac1a10e43ae35172e3b7fe8e999cd2fa874db4859c27cd08b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s1.total.pfm": "f95183a58019644f9e36b2b767da79da85c13664d14bd243214a7562ef342b88",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s2.f64": "a42d610555958840d03682413f9067c87c313fe15abad07e27cc0e28d3e9da05",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s2.indirect.pfm": "04d81e8ec31e24cab9109d9d7fd4bc0863f79434ba58152add8d5325a20bfadd",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s2.total.pfm": "2e25fa7492c0c14ed9daedb3cf2d8abd06b37d824f2f27c2976465fa030bf6df",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s3.f64": "deb20b84932236d09c404c0b7930b59afce98d12dc3dd464e49e45042604846e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s3.indirect.pfm": "edfb0e2fad8dba0da89852ce1255df3d4e768904426c0987c76603a52f216df3",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/o.n8192.s3.total.pfm": "28a2cca36e2bf0bd3fb1f6ba71bace20996ee61a6778b75a60c72375398ddd0e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/qualification.json": "127d47c758265166b967bc9ad91ff3b867977327469a11615098194f864cd1f7",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/scene.n008": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/screen-n16384.json": "1049fb38c0541cb1e2f8253849714ece07cba0191d005a67a40f5e0a7933cff5",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted/screen-n8192.json": "2de219428c6c352e58f7d642257067b84978c7cf85410117d32309db05fe329d",
+        "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df"
+      }
+    },
+    {
+      "accepted_spp": 16384,
+      "canonical_raw_payload_sha256": {
+        "16384": {
+          "o.n16384.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+          "o.n16384.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s0.f64": "1615b4c82f82f23ed819ff80d0778020065e5971e39586eb76e21f24a901a419",
+          "o.n16384.s0.indirect.pfm": "2e08053f58414f295bb1efb3035eccf3f9304fc9d2b0a9e0025b80897f3f80bf",
+          "o.n16384.s0.total.pfm": "fde203e6f3679f9eee2651e3aa4821afed22ff00acc249ce10d71963fa13796d",
+          "o.n16384.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s1.f64": "39f18b9204b63c14f24fe84b25e0f8483232b9bf4e2d7c7dc6375ed89637ddd0",
+          "o.n16384.s1.indirect.pfm": "7ae40d48f0e943c8bc87a0b73f8a3d45dc6804e1e375c5f7389a13fa25e5bda6",
+          "o.n16384.s1.total.pfm": "2f2f6fa61c1683f6ad4de609da88e633602df5efdf705fa3b8f609d2ace59b39",
+          "o.n16384.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s2.f64": "d405e4cebfede0b84ee9ae0b072c965fa187a7a3132aea69a8e68bc22b3b7c3e",
+          "o.n16384.s2.indirect.pfm": "6d17cc473fd48e72bca417f667b0ff9dac145d076214b2b1ef751f4da1c1897f",
+          "o.n16384.s2.total.pfm": "087bbba47990398634cab85a49219d8c9cf415c900efc16ba1fc0b812a44430b",
+          "o.n16384.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n16384.s3.f64": "36a42c7fe5ecd32752a173720e10d93f69b014b96e666046e5f6218d71a3c9dc",
+          "o.n16384.s3.indirect.pfm": "225535409a9d0b44d74caa0e3977853a37109bce95d9c9380c65826ff267b062",
+          "o.n16384.s3.total.pfm": "1c9906ccfaffa06b3d2f02caaece1475667d5233d354efd73e203f4f5ef13227"
+        },
+        "8192": {
+          "o.n8192.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+          "o.n8192.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s0.f64": "2683bee1628f009c878de36d8c1a57008d92399acdc4d8462807aa12d5813113",
+          "o.n8192.s0.indirect.pfm": "b65d73e1ef9ac838ea224a2d79d4cf1d21f83a8d7c4a6c0cd7adb30a93d45dc7",
+          "o.n8192.s0.total.pfm": "301e87173ac201ad3bcb7c49ec1e551c75e414dad909b97fc7602860a8e25be5",
+          "o.n8192.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s1.f64": "ed112462722562de8b31d56b1e0d113c6f2d524f726e04d9116b33b4eeabf65e",
+          "o.n8192.s1.indirect.pfm": "eb271ccd80df9624b7305ea721faaccf970cb1a7cd6556ee5a14ced833e55a07",
+          "o.n8192.s1.total.pfm": "f066d374b92b9f746d04c7613c279637ce0ce80804a8be4d3a12d7d947bbb113",
+          "o.n8192.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s2.f64": "44766fee6c8fcb4c9d28019736f4bf9b93fd70572ec46a0fef8b61dc22635a9c",
+          "o.n8192.s2.indirect.pfm": "634984b1e38f52e8392bdfb3d50e1640b70bcd9e8d2764b8300d7cedf2435443",
+          "o.n8192.s2.total.pfm": "d63ef44dee6ff84d165a2635f4c872772b4a72da234ef477879847d98ee66634",
+          "o.n8192.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+          "o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "o.n8192.s3.f64": "3f0c54fa36d1591c9d6da9b98039009f5445ccd59fd4da285a09bac87bb17bdf",
+          "o.n8192.s3.indirect.pfm": "8d3d87cac3cc35662ad387ff0d8aad179d34f627fc046142a4d4532493490777",
+          "o.n8192.s3.total.pfm": "0bf31489dba94bf8bb987e951b521dfe1f45733ef558053bd486e32647fa900f"
+        }
+      },
+      "cell": "H03",
+      "original_N007_screens": [
+        {
+          "eligible_at_spp": null,
+          "frame_state_sha256": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+          "manifest_sha256": "ea0333e7f5d2b68091e4acbbd965b5b31b290f3430babc4e2b8373319bf57a2f",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.13315972222222222,
+              "eligible": true,
+              "max_active_abs_p99": 2.8632890462176956e-07,
+              "max_active_rel_p99": 0.002751485703811316,
+              "noise_rms_range": [
+                3.3292417456027486e-08,
+                3.491172806424984e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            }
+          ],
+          "scene_sha256": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847",
+          "schema_version": 1,
+          "source_commit": "781aca9213e4279ef2a081b6092bf2bb443c9ff3",
+          "status": "incomplete"
+        },
+        {
+          "eligible_at_spp": 16384,
+          "frame_state_sha256": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+          "manifest_sha256": "6e85cba9bb1bf1f095acf643c489a7140ff0fa2e7c5f7a67a1434381d1617a2e",
+          "physical_correctness_proven": false,
+          "rows": [
+            {
+              "active_fraction": 0.13315972222222222,
+              "eligible": true,
+              "max_active_abs_p99": 2.8632890462176956e-07,
+              "max_active_rel_p99": 0.002751485703811316,
+              "noise_rms_range": [
+                3.3292417456027486e-08,
+                3.491172806424984e-08
+              ],
+              "problems": [],
+              "spp": 8192
+            },
+            {
+              "active_fraction": 0.13315972222222222,
+              "eligible": true,
+              "max_active_abs_p99": 2.0399500499478978e-07,
+              "max_active_rel_p99": 0.0019869600919264485,
+              "noise_rms_range": [
+                2.264477703448517e-08,
+                2.4719717687706485e-08
+              ],
+              "problems": [],
+              "signal_support_stable_vs_previous": true,
+              "spp": 16384
+            }
+          ],
+          "scene_sha256": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847",
+          "schema_version": 1,
+          "source_commit": "80f3497609bf4c03df9b82f76100bf1a2a2c7a16",
+          "status": "statistical-screen-pass"
+        }
+      ],
+      "original_native_levels": [
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/n8192",
+          "payload_sha256": {
+            "oracle.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+            "oracle.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "2683bee1628f009c878de36d8c1a57008d92399acdc4d8462807aa12d5813113",
+            "oracle.s0.indirect.pfm": "b65d73e1ef9ac838ea224a2d79d4cf1d21f83a8d7c4a6c0cd7adb30a93d45dc7",
+            "oracle.s0.total.pfm": "301e87173ac201ad3bcb7c49ec1e551c75e414dad909b97fc7602860a8e25be5",
+            "oracle.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "ed112462722562de8b31d56b1e0d113c6f2d524f726e04d9116b33b4eeabf65e",
+            "oracle.s1.indirect.pfm": "eb271ccd80df9624b7305ea721faaccf970cb1a7cd6556ee5a14ced833e55a07",
+            "oracle.s1.total.pfm": "f066d374b92b9f746d04c7613c279637ce0ce80804a8be4d3a12d7d947bbb113",
+            "oracle.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "44766fee6c8fcb4c9d28019736f4bf9b93fd70572ec46a0fef8b61dc22635a9c",
+            "oracle.s2.indirect.pfm": "634984b1e38f52e8392bdfb3d50e1640b70bcd9e8d2764b8300d7cedf2435443",
+            "oracle.s2.total.pfm": "d63ef44dee6ff84d165a2635f4c872772b4a72da234ef477879847d98ee66634",
+            "oracle.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "3f0c54fa36d1591c9d6da9b98039009f5445ccd59fd4da285a09bac87bb17bdf",
+            "oracle.s3.indirect.pfm": "8d3d87cac3cc35662ad387ff0d8aad179d34f627fc046142a4d4532493490777",
+            "oracle.s3.total.pfm": "0bf31489dba94bf8bb987e951b521dfe1f45733ef558053bd486e32647fa900f",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "1dc9b925db122105dc18e9d535b36a03ffe626619da2195152d92ced74e393cd"
+          },
+          "receipt_sha256": "223b652ae9da0ffb11d9afc9f6ec59f16970b3a819c69c0651d75cb85eb9edd7",
+          "source_commit": "781aca9213e4279ef2a081b6092bf2bb443c9ff3",
+          "spp": 8192
+        },
+        {
+          "directory": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/n16384",
+          "payload_sha256": {
+            "oracle.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+            "oracle.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s0.f64": "1615b4c82f82f23ed819ff80d0778020065e5971e39586eb76e21f24a901a419",
+            "oracle.s0.indirect.pfm": "2e08053f58414f295bb1efb3035eccf3f9304fc9d2b0a9e0025b80897f3f80bf",
+            "oracle.s0.total.pfm": "fde203e6f3679f9eee2651e3aa4821afed22ff00acc249ce10d71963fa13796d",
+            "oracle.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s1.f64": "39f18b9204b63c14f24fe84b25e0f8483232b9bf4e2d7c7dc6375ed89637ddd0",
+            "oracle.s1.indirect.pfm": "7ae40d48f0e943c8bc87a0b73f8a3d45dc6804e1e375c5f7389a13fa25e5bda6",
+            "oracle.s1.total.pfm": "2f2f6fa61c1683f6ad4de609da88e633602df5efdf705fa3b8f609d2ace59b39",
+            "oracle.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s2.f64": "d405e4cebfede0b84ee9ae0b072c965fa187a7a3132aea69a8e68bc22b3b7c3e",
+            "oracle.s2.indirect.pfm": "6d17cc473fd48e72bca417f667b0ff9dac145d076214b2b1ef751f4da1c1897f",
+            "oracle.s2.total.pfm": "087bbba47990398634cab85a49219d8c9cf415c900efc16ba1fc0b812a44430b",
+            "oracle.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+            "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+            "oracle.s3.f64": "36a42c7fe5ecd32752a173720e10d93f69b014b96e666046e5f6218d71a3c9dc",
+            "oracle.s3.indirect.pfm": "225535409a9d0b44d74caa0e3977853a37109bce95d9c9380c65826ff267b062",
+            "oracle.s3.total.pfm": "1c9906ccfaffa06b3d2f02caaece1475667d5233d354efd73e203f4f5ef13227",
+            "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "oracle.stdout.txt": "9394d1265b3673204b962c746c37cc528d15fcdd33aded3dd4ca60b6d1e9cfba"
+          },
+          "receipt_sha256": "08be113619c519f91828457dde41055e78ebc21760ce097b3f5556cdf7474a53",
+          "source_commit": "80f3497609bf4c03df9b82f76100bf1a2a2c7a16",
+          "spp": 16384
+        }
+      ],
+      "physical_source_sha256": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847",
+      "reference_eligible": true,
+      "retained_incumbent": {
+        "classification": "QUALITY_FAIL",
+        "quality": {
+          "capture_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H03-hwrt",
+          "capture_payload_sha256": {
+            "direct.pfm": "c797e024b56b5aaf638e7dcd4b283adc78d051b27c9b9bed39d7a600e64708b6",
+            "indirect.pfm": "b83852e9a16ac2c21e49579712a8020985c9c3fed3fe6849afaad8f9389501a6",
+            "total.pfm": "6a32acf25b343a17004f26e98963f64d6340564dd2f4b4bb6fe06608aedb4944"
+          },
+          "cell": "H03",
+          "complete_oracle_scene_sha256": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847",
+          "complete_physical_scene_bytes_equal": true,
+          "components": {
+            "direct": {
+              "active_max_relative": 1.0074639249272872e-05,
+              "active_p99_absolute": 2.4627739594190713e-10,
+              "active_p99_relative": 6.679119231520712e-06,
+              "active_pixels": 6093,
+              "gpu_sum": 0.2900642481565683,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 6.933547083343804e-07,
+              "pixels": 57600,
+              "reference_rms": 2.1188749668757086e-05,
+              "reference_sum": 0.2900642972130776,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 1.4691319346551268e-11,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "active_max_relative": 88.45669701870476,
+              "active_p99_absolute": 5.078548516686799e-05,
+              "active_p99_relative": 13.495937180418737,
+              "active_pixels": 7532,
+              "gpu_sum": 0.030243381748732645,
+              "gpu_zero_reference_positive": 6177,
+              "nrmse": 1.06239306286273,
+              "pixels": 57600,
+              "reference_rms": 5.59827903789468e-06,
+              "reference_sum": 0.06358214759061673,
+              "reference_zero_leak_energy": 0.0007629511273989918,
+              "reference_zero_leak_pixels": 26,
+              "rmse": 5.947572813829147e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.524341613255041,
+              "whole_image_max_absolute": 0.00019855888836672078
+            },
+            "total": {
+              "active_max_relative": 88.45669701870476,
+              "active_p99_absolute": 5.03810946968593e-05,
+              "active_p99_relative": 13.40925272167399,
+              "active_pixels": 7670,
+              "gpu_sum": 0.3203076298627252,
+              "gpu_zero_reference_positive": 819,
+              "nrmse": 0.26031660600506396,
+              "pixels": 57600,
+              "reference_rms": 2.2847459034267764e-05,
+              "reference_sum": 0.3536464448036941,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 5.947572991640321e-06,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -0.09427159647957142,
+              "whole_image_max_absolute": 0.00019855894866030693
+            }
+          },
+          "normalization": "whole-image reference RMS; linear luma",
+          "pilot_quality_target": "FAIL",
+          "reference_state_sha256": {
+            "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+            "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+          },
+          "schema": "n010-full-image-hdr-score/1",
+          "scoring_exclusions": 0,
+          "state_bytes_equal": true,
+          "state_sha256": {
+            "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+            "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+          },
+          "superiority_claim": false,
+          "transport": "T_B8"
+        },
+        "result_sha256": "d5bcd698f57ff0624a41e2f266dacebfbc8666b44a227425074bcf5de04a204b"
+      },
+      "state_audit": {
+        "accepted_timing": false,
+        "all_two_sided": true,
+        "captured_state_sha256": {
+          "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+          "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+        },
+        "classification": "H03_STATE_AND_ALL_RAW_PAYLOAD_HASHES_PASS_REFERENCE_UNQUALIFIED",
+        "complete": true,
+        "gltf_ordered_triangle_match": 1248,
+        "gpu_executed": false,
+        "hdr_quality_scored": false,
+        "owned_memory": {
+          "events": 74,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266947072
+        },
+        "physical_reference_eligibility": "NOT_RUN",
+        "reference_eligible": false,
+        "schema": "lane-m-m001-h03-state-evidence/1",
+        "triangle_count": 1248,
+        "unverified_raw_payloads": [],
+        "verified_raw_payloads": [
+          "allocation-ledger.json",
+          "capture.json",
+          "frame-state.bin",
+          "geometry-state.bin",
+          "gpu/composite-lookup.bin",
+          "gpu/direct.pfm",
+          "gpu/hits.bin",
+          "gpu/indirect.pfm",
+          "gpu/probe-contributions.bin",
+          "gpu/probe-hits.bin",
+          "gpu/probe-work.bin",
+          "gpu/total.pfm",
+          "renderer-timings.jsonl"
+        ]
+      },
+      "state_sha256": {
+        "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+        "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3"
+      },
+      "transport": "T_B8",
+      "verification": {
+        "cell": "H03",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "f731fa3dcae6de4f6667ee3fafc2ec3c6c285763998c4c8f41c6ee4d9dcb83a2",
+        "transport": "T_B8"
+      },
+      "verified_inputs_sha256": {
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/n16384.meta.json": "c49934c1fa01def510e6e7aaefa41bf3a3d847e21b684458f51c9700974bea35",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/n8192.meta.json": "6c2b42867c7e0375bd3530bba4d7ec5d208172bf035449e7fda9ac5f1f1bfaf4",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s0.f64": "1615b4c82f82f23ed819ff80d0778020065e5971e39586eb76e21f24a901a419",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s0.indirect.pfm": "2e08053f58414f295bb1efb3035eccf3f9304fc9d2b0a9e0025b80897f3f80bf",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s0.total.pfm": "fde203e6f3679f9eee2651e3aa4821afed22ff00acc249ce10d71963fa13796d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s1.f64": "39f18b9204b63c14f24fe84b25e0f8483232b9bf4e2d7c7dc6375ed89637ddd0",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s1.indirect.pfm": "7ae40d48f0e943c8bc87a0b73f8a3d45dc6804e1e375c5f7389a13fa25e5bda6",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s1.total.pfm": "2f2f6fa61c1683f6ad4de609da88e633602df5efdf705fa3b8f609d2ace59b39",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s2.f64": "d405e4cebfede0b84ee9ae0b072c965fa187a7a3132aea69a8e68bc22b3b7c3e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s2.indirect.pfm": "6d17cc473fd48e72bca417f667b0ff9dac145d076214b2b1ef751f4da1c1897f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s2.total.pfm": "087bbba47990398634cab85a49219d8c9cf415c900efc16ba1fc0b812a44430b",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s3.f64": "36a42c7fe5ecd32752a173720e10d93f69b014b96e666046e5f6218d71a3c9dc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s3.indirect.pfm": "225535409a9d0b44d74caa0e3977853a37109bce95d9c9380c65826ff267b062",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n16384.s3.total.pfm": "1c9906ccfaffa06b3d2f02caaece1475667d5233d354efd73e203f4f5ef13227",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.hits": "650b116637fe8321d800801fca451f3f02c346e9797616dd86ff8947a9495784",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s0.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s0.f64": "2683bee1628f009c878de36d8c1a57008d92399acdc4d8462807aa12d5813113",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s0.indirect.pfm": "b65d73e1ef9ac838ea224a2d79d4cf1d21f83a8d7c4a6c0cd7adb30a93d45dc7",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s0.total.pfm": "301e87173ac201ad3bcb7c49ec1e551c75e414dad909b97fc7602860a8e25be5",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s1.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s1.f64": "ed112462722562de8b31d56b1e0d113c6f2d524f726e04d9116b33b4eeabf65e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s1.indirect.pfm": "eb271ccd80df9624b7305ea721faaccf970cb1a7cd6556ee5a14ced833e55a07",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s1.total.pfm": "f066d374b92b9f746d04c7613c279637ce0ce80804a8be4d3a12d7d947bbb113",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s2.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s2.f64": "44766fee6c8fcb4c9d28019736f4bf9b93fd70572ec46a0fef8b61dc22635a9c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s2.indirect.pfm": "634984b1e38f52e8392bdfb3d50e1640b70bcd9e8d2764b8300d7cedf2435443",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s2.total.pfm": "d63ef44dee6ff84d165a2635f4c872772b4a72da234ef477879847d98ee66634",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s3.direct.pfm": "f2416ec7238148b22f1b5b1657f828dc931b3f2215e7de1bcb28da9631db12ee",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s3.f64": "3f0c54fa36d1591c9d6da9b98039009f5445ccd59fd4da285a09bac87bb17bdf",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s3.indirect.pfm": "8d3d87cac3cc35662ad387ff0d8aad179d34f627fc046142a4d4532493490777",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/o.n8192.s3.total.pfm": "0bf31489dba94bf8bb987e951b521dfe1f45733ef558053bd486e32647fa900f",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/qualification.json": "f731fa3dcae6de4f6667ee3fafc2ec3c6c285763998c4c8f41c6ee4d9dcb83a2",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/scene.n008": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/screen-n16384.json": "6e85cba9bb1bf1f095acf643c489a7140ff0fa2e7c5f7a67a1434381d1617a2e",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted/screen-n8192.json": "ea0333e7f5d2b68091e4acbbd965b5b31b290f3430babc4e2b8373319bf57a2f",
+        "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df"
+      }
+    }
+  ],
+  "schema": "lane-m-m001-six-reference-and-retained-rc-checkpoint/1",
+  "source_commit": "91c7f3b290701f2801795422b6f4dbafffc9e00a"
+}

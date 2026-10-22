@@ -1,0 +1,28 @@
+# M001 six original references admitted; retained fixed RC fails all six targets
+
+All six heldout reference slots are **ADMITTED at 16384 spp** under the original N010 method. The unchanged fixed-budget incumbent HWRT RC capture is **QUALITY_FAIL in all six comparisons**. No quality-matched RC speed ranking follows. PT, vanilla, dense RC and software comparisons remain NOT RUN; DDGI remains unqualified. This is a CPU evidence checkpoint, not completion of Lane M/M001.
+
+The [machine-readable full raw replay 016](016-six-original-references-and-retained-rc-raw-replay.json) binds each source commit, original acquisition receipt, scene/frame/geometry identity, four original seeds, two N007 screens, 21 canonical native payloads per level, immutable qualification SHA, original physical proof009 and final unchanged `reference_provenance.verify_reference` PASS. All **276 original native output hashes**, **252 canonical payload hashes** and all **13/13 retained state-capture payloads for each of three scenes** were actually rehashed in this checkout. This supersedes the *access limitation* of earlier compact-only audits; those historical audit bytes and their limited claims remain unchanged.
+
+H01/B8's uploaded first-level tar was inspected before new work: six members equal their corresponding local files, 23 native payloads rehashed, original N007 recomputed on raw PFMs, one eligible level but final status incomplete ([014](014-h01-b8-first-level-raw-audit.json)). It was **not rerun**. Its original 8192 level then received one new 16384 level. Remaining cells were explicitly invoked one cell/level at a time, with terminal screen review before each next invocation. All six slots stopped at the first two consecutive eligible levels, 8192/16384, with stable support. No 32768+ acquisition, seed replacement, R1 screen or changed numerical threshold was used. H01/B2's pre-existing admitted view was reverified read-only, not regenerated.
+
+Physical source equality includes N010's preregistered float64 camera construction and exact captured frame/geometry. Original N010 009 physical/sampler proof, executable and Sobol net hashes match. Original N007 `physical_correctness_proven=false` is unchanged because its assessor only establishes sampling eligibility; the companion N010 proof supplies the physical gate. No global-bias claim beyond those original controls is added.
+
+| Cell / transport | Reference spp | Total NRMSE | Indirect NRMSE | Indirect signed bias | Fixed HWRT RC |
+| --- | ---: | ---: | ---: | ---: | --- |
+| H01 / T_B2 | 16384 | 19.113% | 97.969% | -90.946% | QUALITY_FAIL |
+| H01 / T_B8 | 16384 | 25.157% | 97.390% | -93.719% | QUALITY_FAIL |
+| H02 / T_B2 | 16384 | 17.914% | 108.097% | -60.624% | QUALITY_FAIL |
+| H02 / T_B8 | 16384 | 20.506% | 101.389% | -75.448% | QUALITY_FAIL |
+| H03 / T_B2 | 16384 | 24.147% | 111.963% | -33.692% | QUALITY_FAIL |
+| H03 / T_B8 | 16384 | 26.032% | 106.239% | -52.434% | QUALITY_FAIL |
+
+Quality uses every one of the 57,600 pixels of linear luma HDR, unchanged total NRMSE ≤5%, indirect NRMSE ≤10%, absolute indirect signed bias ≤5%. No masks, exclusions or scene omissions. Full direct/leak/support metrics and original per-pixel error arrays are retained. The collector independently recomputes every component metric from actual captured PFM and four F64 reference files, exactly matching each score. Direct NRMSE on these three heldouts is below 7e-7; this does **not** resolve N010's distinct Sponza direct-relative-error1.0 discrepancy.
+
+Each scene's single historical fixed-budget HWRT RC image is scored against the two separately admitted finite-depth targets. This does not turn the RC estimator into a finite-depth PT-equivalent algorithm. Its same original budget/algorithm remains diagnostic as preregistered; both quality losses are retained. Original capture metadata says 512 spp; no new RC budget knob, retraining or heldout retuning was introduced.
+
+Owned memory replay: 74 events/scene; H01/H02 peak **266,937,920 bytes**, H03 **266,947,072 bytes**; all ≤8GiB and zero teardown. The B2/B8 rows share the same historical RC capture and memory ledger, not two independent GPU memory measurements. CPU and driver-private memory are excluded. No new GPU measurement was made. Original timing files were rehashed only; no timing precision or speed acceptance follows.
+
+CPU tools and outcomes: [003 continuation](../experiments/003-local-cpu-reference-continuation.md), `reference_step.py`, `score_retained.py`, `summarize_cpu_checkpoint.py`. All new native samples/failed partials/views and error maps remain under `out/research/lane-m-gi-competitiveness/m001-original-cpu-v2`. The canonical sources, prior outputs, N001–N010 evidence and default Renderer/build graph are unchanged. AI-assisted analysis and CPU execution are distinguished from the original human-operated GPU captures. [Validation 018](018-cpu-validation-and-provenance.json) records build and scoped tests; [summary preservation 015](015-cpu-continuation-and-summary-preservation.json) binds old live-summary bytes.
+
+The next single GPU unit is [H01/B2 PT 1 spp](../experiments/004-first-heldout-pt-quality-handoff.md), with exact CPU-prepared [plan 019](019-first-pt-cpu-plan.json). **GPU NOT RUN**. The initial user contract delegates GPU execution to the owner; a clarification of the later autonomous-computer instruction is pending. No approval is inferred from elapsed time. PT ladders, other controls, actual-boundary multiplicity-aware calibration/practical ratio1.20 and qualified DDGI remain open; M001 and the overall research objective are incomplete.

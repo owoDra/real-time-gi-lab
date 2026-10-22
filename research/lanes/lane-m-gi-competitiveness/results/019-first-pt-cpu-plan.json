@@ -1,0 +1,171 @@
+{
+  "accepted_timing": false,
+  "command": [
+    "bash",
+    "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt",
+    "--state",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H01-hwrt",
+    "--out",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B2/pixel-pt-n1/capture",
+    "--family",
+    "pixel-pt",
+    "--vertices",
+    "2",
+    "--spp",
+    "1",
+    "--seed",
+    "305419896",
+    "--frames",
+    "1"
+  ],
+  "gpu_executed": false,
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/build/n009/phos-n010-pixel-pt": "b96880ba40c8466b4210d9e5af0dad80855c96416496a6c47ad9dc7670d60ea0",
+    "/var/owo/workspaces/projects/gi-lab/build/n009/shaders/n010_pixel_pt.spv": "e8e03c3e7438159f9b0a4a5d4e4e61e841d054c06aab442d80c613face199069",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/n16384.meta.json": "963e945b1c12b37731811563fce29e7f02e0eb73020c85d5775711fc776c9d9f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/n8192.meta.json": "49a8bab2aad80ab0d9d3e502715235fc2bda1eb8eedfdc78794ac87858a192d3",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.f64": "b19567c35d5f20710f6ec4a0ef397663ae4b1a46f887d6b33785fba58ff8f958",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.indirect.pfm": "bff41b668e8d77d5f2b4a63a7097b2ef858783041900943897f0a073bb9cbf91",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s0.total.pfm": "65dc0e22fe3a714714b8f576173b674e296ddfc28f4caee7e7187673dcc9bdcb",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.f64": "a9e664885abfded266f10bfaa646a0e86a84a40522c573c5864e20da5d25eb21",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.indirect.pfm": "02cdab54556855638a80166a2c4a8adf711d59b41156b6417313b4b4b954e101",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s1.total.pfm": "7776015c73b70c6b4d65b73d54f79480236bf43163670484974a4508432c5b03",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.f64": "33e73555bc9e2967a30da960524fa4ba9d4a3aae405ed928cc2f4bc7a96f2764",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.indirect.pfm": "f7effd3dde483d7c60cd1ce1f0b64490fcc3ffa6e0c3570ca5836929eb3a2f27",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s2.total.pfm": "4bd9a6321c0678469ddf376cbd6966cc446f737bf8062577d890680d948a04dd",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.f64": "d185fca26cdd16b38c874a32a79a1f173b40037e6dc45f59dfe200a240c26af5",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.indirect.pfm": "fc72e738750d3c3fab5fabda94b8fe4f5aab0537ef85576f276a27f075729c39",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n16384.s3.total.pfm": "8d71e5de011ff71f7e995df6816fc246c3b8d5ae2de751d428e4d08e3c51884f",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.f64": "47eb4115ff00bd630d21b67cd0b2704541461f651c928364ca097cdb774fd4d0",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.indirect.pfm": "06cdcf4c7c67645407b761328c0af4bfdaa5f1d293c1a93aa0ef4b4f75227ee1",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s0.total.pfm": "587086df38c03ea9078bd46d0ec9b67ae3e877785aa13f504e2810bbe0587c41",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.f64": "de7ae1eb276d923046b56c7fa740510cee2af1316f853639e4bc35011fecc61c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.indirect.pfm": "b55c52082ec6c39107ddd1b790f0b4152d1bb4ec07d6d2d06e8211c360dc326b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s1.total.pfm": "7625a73e6a8116f5aa79a926b2942f677f0859b5531ea085c36e45d6202fa4b8",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.f64": "00fad195574f1262bf091c08d6b7a3a77cbe748f3a1ba3fa4a3683445a382096",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.indirect.pfm": "863d9ec813834c5d99f4f8ac16e23c53c80480edff7168373b27a9a665177827",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s2.total.pfm": "e4d5a3c71080961bd264c29337b2776db674ab07651e5449cb225b1ef8f07297",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.f64": "e15c10fd3f52e5af0835f203e37ad94cb2478af856b0d855c2843d9b89de3392",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.indirect.pfm": "96c23710c61ef19b4915ee1a913e3c8ddd204b73a728fcdec7611b63c5b40583",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/o.n8192.s3.total.pfm": "be44542747cb788e884dd2518b3d3675a685b66ae2ef1ad10d4b3d514eb31849",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/qualification.json": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/scene.n008": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/screen-n16384.json": "cef5e6a260dd4b7080759a3c64696652549b2d6d08120284f374509c3699e213",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1/screen-n8192.json": "44dd5b023e186cea9bcbd0489fb06e3601cf6f2303f8e3d416465e9db5be08d4",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/first_pt_quality.py": "1d184e52e4077efddfbcad881f89e9789828b42134a75771f45b9877d491fa43",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/reference_step.py": "289879e9f4d56a1c23ad2a9fc4037b5e41bb50845a61924cf971497f7bfae59c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/score_retained.py": "89d1cc05c26fcd2e643570adc865852371d64dcaf246daf71397bc8399eee82b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh": "9b39625714adbbf636888946ab3e4424e67ceae5c49450a6b83f6990c0451b4a",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/n010_comparison_readiness/n010_pixel_pt.comp.glsl": "ddb81baa0b701f96d78ffe297db589290d3fe4c2d6965a4df655c47a4a23d1c2",
+    "/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness/pixel_pt_main.cpp": "c2f0bc8d517e29fd3ec33641900aed47b1310b3161e2f8b61e288c8b7b2c429c"
+  },
+  "next": "Owner may execute this single case; stop and audit before another budget.",
+  "reference_verification": {
+    "cell": "H01",
+    "computational_variant": "original-full-prefix",
+    "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+    "levels": [
+      8192,
+      16384
+    ],
+    "pass": true,
+    "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+    "transport": "T_B2"
+  },
+  "schema": "lane-m-m001-first-pt-quality-plan/1",
+  "scope": "H01/T_B2 only, pixel-pt 1 spp, original seed 305419896, one static frame",
+  "source_commit": "91c7f3b290701f2801795422b6f4dbafffc9e00a",
+  "source_state_audit": {
+    "accepted_timing": false,
+    "allocation": {
+      "events": 74,
+      "teardown_zero": true,
+      "true_peak_owned_bytes": 266937920
+    },
+    "capture_payload_hashes_checked": 13,
+    "capture_payload_hashes_unverified": [],
+    "capture_source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
+    "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+    "complete": true,
+    "frame": {
+      "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+      "resolution": [
+        320,
+        180
+      ],
+      "ubo": {
+        "camera_forward_far": [
+          -0.689671516418457,
+          -0.2206949144601822,
+          -0.689671516418457,
+          33.9779167175293
+        ],
+        "camera_pos_near": [
+          6.405184745788574,
+          3.3996591567993164,
+          6.405184745788574,
+          0.011325973086059093
+        ],
+        "camera_right_tan_x": [
+          0.7071068286895752,
+          0.0,
+          -0.7071068286895752,
+          1.2448135614395142
+        ],
+        "camera_up_tan_y": [
+          -0.15605488419532776,
+          0.975342869758606,
+          -0.15605488419532776,
+          0.7002076506614685
+        ],
+        "light_pos_interval": [
+          1.6988959312438965,
+          5.314090251922607,
+          1.1325973272323608,
+          0.08848416060209274
+        ],
+        "scene_origin_spacing": [
+          -3.8888890743255615,
+          0.0,
+          -3.8888890743255615,
+          0.17696832120418549
+        ]
+      }
+    },
+    "geometry": {
+      "geometry_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+      "triangles": 1224,
+      "two_sided": true,
+      "unique_primitive_ids": 1224
+    },
+    "gpu_run": false,
+    "input_sha256": {
+      "capture_json": "0e7f7b79b20ffbe4a5964a270cf3e25e6c40116041c605a0c425493761e2e381",
+      "geometry_manifest": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+      "result": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0"
+    },
+    "reference_eligible": false,
+    "schema": "lane-m-m001-h01-state-audit/1",
+    "scope": "Full payload SHA including HDR byte hashes; no HDR pixels read, reference scored, or GPU work."
+  }
+}

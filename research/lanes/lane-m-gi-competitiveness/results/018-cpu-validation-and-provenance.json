@@ -1,0 +1,61 @@
+{
+  "schema": "lane-m-m001-cpu-validation-and-provenance/1",
+  "baseline_commit": "d5d33d9e9dccf87e675f109aff4caf152c460c6d",
+  "build": {
+    "command": "mise run build",
+    "result": "PASS",
+    "elapsed_seconds_reported": 96.92,
+    "scope": "Default CMake Release compilation and shaders only. Existing compiler warnings retained in terminal output. Does not establish Renderer runtime regression validity."
+  },
+  "tests": {
+    "lane_m_cpu_unittest_count": 14,
+    "lane_m_cpu_unittest_result": "PASS",
+    "mock_gpu_handoff_tests": 3,
+    "no_gpu_dispatched_by_tests": true,
+    "real_n004_factory_integration": {
+      "result": "PASS",
+      "new_root": "out/m001-real-factory-integration-v1",
+      "complete_manifest_equal_to_original": true,
+      "byte_identical_asset_count": 6,
+      "scene_count": 3,
+      "original_manifest_sha256": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707"
+    },
+    "lane_k_cpu_contract_binary": "build/release/phos-lane-k-contract-test",
+    "lane_k_cpu_contract_result": "PASS",
+    "renderer_gpu_runtime_smoke": "NOT_RUN",
+    "n010_sampler_physics": "Existing original 009 proof/binary/net SHA and full companion proof revalidated; original physical experiment not rerun."
+  },
+  "research_check": {
+    "command": "mise run research:check",
+    "result": "PASS",
+    "scope": "8 configured lane indexes; 548 declared result links. Lane M index is additionally verified explicitly.",
+    "lane_m_index_explicit_check": "PASS: 1 experiment and current result",
+    "live_documentation_local_links_verified": 32
+  },
+  "preservation": {
+    "old_summaries_equal_baseline_git_bytes": true,
+    "unchanged_tracked_renderer_source_shader_cmake_and_n010_results": true,
+    "h01_b8_original_first_level_tar_sha256": "d91f9733af9124cf980b6ca1b81e800872f8462a2365fc4c3bdd10e81da93015",
+    "n001_n010_outputs_not_overwritten": true,
+    "preexisting_untracked_files_left_unstaged": [
+      ".claude/",
+      "research/lanes/n010-comparison-readiness/results/072-recovered-dynamic-references.json",
+      "research/lanes/n010-comparison-readiness/results/121-hybrid-reference-qualification.json",
+      "research/lanes/n010-comparison-readiness/results/128-replayed-point-guided-reference-qualification.json"
+    ]
+  },
+  "operational_observations": [
+    "A retained-H01/B8 score preflight refused while a CPU reference native was active. No scoring output or new native process was started by that refusal; scoring proceeded only after that native terminated.",
+    "The first mock handoff test run used a temporary directory outside repo/out and hit the result-path formatter. The test fixture was moved under out; all three mock tests and all 14 CPU tests subsequently passed. This was a test-harness path failure, not a scientific/native experiment."
+  ],
+  "first_gpu_plan": {
+    "path": "out/m001-h01-b2-pt-n1-plan.json",
+    "sha256": "091825218651b649b744cac31f978e3cc32112fbd347b32c53989abd964a8892",
+    "matches_committed_compact_plan_bytes": true,
+    "gpu_executed": false,
+    "output_directory_absent": true
+  },
+  "gpu_executed": false,
+  "accepted_timing": false,
+  "scope": "CPU acquisition, independent raw reference replay and retained-image scoring; no new GPU image, timing acceptance or architecture promotion."
+}
