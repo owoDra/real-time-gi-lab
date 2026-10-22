@@ -7,8 +7,8 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "H02_RECEIPT_METADATA_AUDITED_RAW_STATE_STILL_MISSING",
-      "classification": "H01_SCOPED_STATE_AUDIT_PASS_H02_RAW_UNQUALIFIED",
+      "phase": "H01_H02_STATE_INPUT_AUDITED_H03_SINGLE_GPU_READY",
+      "classification": "H01_H02_SCOPED_STATE_INPUTS_CONSISTENT_REFERENCES_NOT_QUALIFIED",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
@@ -20,12 +20,12 @@
       "h01_complete_raw_payloads_verified": false,
       "h02_owner_receipt": "results/005-h02-owner-reported-receipt.md",
       "h02_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py",
-      "h02_state_inputs_verified": false,
+      "h02_state_inputs_verified": true,
       "h02_full_raw_payloads_verified": false,
       "h03_gpu_run": false,
       "h02_receipt_metadata_audit": "results/006-h02-receipt-metadata-audit.json",
       "h02_receipt_metadata_passed": "25/25",
-      "h02_raw_payloads_independently_verified": 0,
+      "h02_raw_payloads_independently_verified": 4,
       "h02_missing_for_independent_attestation": [
         "assets/M001-H02.gltf",
         "assets/M001-H02.bin",
@@ -33,7 +33,11 @@
         "capture/M001-H02-hwrt/frame-state.bin",
         "capture/M001-H02-hwrt/capture.json",
         "capture/M001-H02-hwrt/allocation-ledger.json"
-      ]
+      ],
+      "h02_state_cpu_audit": "results/007-h02-independent-state-audit.json",
+      "h02_physical_sources_preregistered": true,
+      "h02_n008_physical_source_preparer": "scripts/research/lane_m_gi_competitiveness/prepare_h02_reference_scene.py",
+      "h03_gpu_runner": "scripts/research/lane_m_gi_competitiveness/capture_h03.py"
     }
   ]
 }

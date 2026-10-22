@@ -1,5 +1,7 @@
 # Lane M — GI competitiveness
 
+> **2026-10-22:** H01 and H02 independent scoped state/owned-memory audits PASS, but each has only 4/13 raw GPU payloads independently rehashed. [H02 audit 007](results/007-h02-independent-state-audit.json), [H03 one-shot handoff 008](results/008-h02-audited-h03-handoff.md). H03 GPU NOT RUN. Physical reference quality INELIGIBLE; no accepted timing or architecture win.
+
 > **2026-10-22 M001 checkpoint:** H02 GPU one-shot returned success with 13 payloads **as reported by the owner**. [Exact receipt and file handoff](results/005-h02-owner-reported-receipt.md). [CPU H02 attestor](../../../scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py) committed; raw H02 evidence NOT independently inspected, H03 NOT RUN, no reference admission/quality/speed claim.
 
 > **M001 (2026-10-22): H01 state CPU audit 24/24 PASS; H01 reference still INELIGIBLE.** [Record 004](results/004-h01-state-and-h02-handoff.md) documents the compact-upload limits, physical-input hashes and next one-shot H02 GPU capture. No H02/H03/quality comparisons have run. No matched-quality GPU speed claims.
