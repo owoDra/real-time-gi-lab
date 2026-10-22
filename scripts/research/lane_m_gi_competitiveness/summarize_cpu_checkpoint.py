@@ -84,7 +84,7 @@ def collect():
             'physical_proof_009_sha256': R.sha(R.VALIDATION), 'rows': rows,
             'gpu_executed': False, 'accepted_timing': False, 'architecture_promoted': False,
             'limitations': ['Reference physical admission uses the original N010 sampler companion proof; statistical-only N007 physical_correctness_proven remains false.',
-                            'All six native state captures were human-operated historical M001 runs; this checkpoint acquired no GPU images.',
+                            'All three native state captures were human-operated historical M001 runs; this checkpoint acquired no GPU images.',
                             'RC is the unchanged fixed-budget incumbent on static controlled heldouts; no equal-quality speed or PT budget equivalence is claimed.',
                             'PT ladder, software/vanilla/dense captures, DDGI scene integration and matched-quality timing remain NOT RUN.']}
 
