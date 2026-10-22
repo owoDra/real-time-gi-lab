@@ -44,7 +44,10 @@
       "h03_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/audit_h03_evidence.py",
       "n010_camera_precision_correction": "results/010-n010-camera-precision-correction-lock.json",
       "corrected_physical_inputs_preparer": "scripts/research/lane_m_gi_competitiveness/prepare_m001_n010_physical_inputs.py",
-      "reference_qualification_protocol": "experiments/002-reference-admission-prospective.md"
+      "reference_qualification_protocol": "experiments/002-reference-admission-prospective.md",
+      "reference_first_cpu_level_runner": "scripts/research/lane_m_gi_competitiveness/run_h01_b2_reference_stage1.py",
+      "reference_cpu_acquisition_started": false,
+      "first_cpu_level_spp": 8192
     }
   ]
 }
