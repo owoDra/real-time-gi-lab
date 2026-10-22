@@ -7,8 +7,8 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "H01_H02_STATE_INPUT_AUDITED_H03_SINGLE_GPU_READY",
-      "classification": "H01_H02_SCOPED_STATE_INPUTS_CONSISTENT_REFERENCES_NOT_QUALIFIED",
+      "phase": "H01_H02_H03_STATES_AUDITED_SIX_N010_CORRECTED_REFERENCE_INPUTS_LOCKED",
+      "classification": "HELDOUT_STATE_INTEGRITY_PASS_REFERENCE_ADMISSION_NOT_RUN",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
@@ -22,7 +22,7 @@
       "h02_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py",
       "h02_state_inputs_verified": true,
       "h02_full_raw_payloads_verified": false,
-      "h03_gpu_run": false,
+      "h03_gpu_run": true,
       "h02_receipt_metadata_audit": "results/006-h02-receipt-metadata-audit.json",
       "h02_receipt_metadata_passed": "25/25",
       "h02_raw_payloads_independently_verified": 4,
@@ -37,7 +37,14 @@
       "h02_state_cpu_audit": "results/007-h02-independent-state-audit.json",
       "h02_physical_sources_preregistered": true,
       "h02_n008_physical_source_preparer": "scripts/research/lane_m_gi_competitiveness/prepare_h02_reference_scene.py",
-      "h03_gpu_runner": "scripts/research/lane_m_gi_competitiveness/capture_h03.py"
+      "h03_gpu_runner": "scripts/research/lane_m_gi_competitiveness/capture_h03.py",
+      "h03_state_inputs_verified": true,
+      "h03_raw_payloads_independently_verified": 4,
+      "h03_state_cpu_audit": "results/009-h03-independent-state-audit.json",
+      "h03_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/audit_h03_evidence.py",
+      "n010_camera_precision_correction": "results/010-n010-camera-precision-correction-lock.json",
+      "corrected_physical_inputs_preparer": "scripts/research/lane_m_gi_competitiveness/prepare_m001_n010_physical_inputs.py",
+      "reference_qualification_protocol": "experiments/002-reference-admission-prospective.md"
     }
   ]
 }
