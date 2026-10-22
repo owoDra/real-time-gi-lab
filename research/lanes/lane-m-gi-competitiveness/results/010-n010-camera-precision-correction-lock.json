@@ -1,0 +1,91 @@
+{
+  "schema": "lane-m-m001-frozen-n010-corrected-physical-inputs/1",
+  "date_jst": "2026-10-22",
+  "classification": "SIX_PHYSICAL_SCENE_SOURCE_HASHES_LOCKED_NO_REFERENCE_ADMISSION",
+  "method": "For each owner-furnished original H01/H02/H03 N007 geometry-state.bin and frame-state.bin, construct N008 state_scene then apply pre-existing N010 qualify_references.scene_for_state's origin+forward float64 camera-direction correction. Serialized via N008 Scene.text. SHA and lengths checked via independent Python reimplementation reproducing all prior H01/H02 N008 legacy source hashes.",
+  "canonical_source": "scripts/research/n010_comparison_readiness/qualify_references.py::scene_for_state",
+  "proof_source": "scripts/research/lane_m_gi_competitiveness/prepare_m001_n010_physical_inputs.py",
+  "initial_legacy_h01_h02_input_hashes_status": "SUPERSEDED_FOR_PHYSICAL_REFERENCE_ACQUISITION",
+  "corrected": {
+    "H01": {
+      "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+      "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+      "f64": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+      "max_camera_direction_delta": 9.922767449377368e-8,
+      "bytes": 142870,
+      "old": {
+        "B2": "7153f784ef601167e17aaff7fbbaec1a641f1f194b03f71d248c2965d5847618",
+        "B8": "9cc4fbfeb1aeda2851538e6318a44e0aa2165ae32ebdb5f48859b4448c92438d"
+      },
+      "new": {
+        "B2": "047834e01eec9488bcf6a9c6cd6ed38aa28fad21e15363f353224df27c3eac4e",
+        "B8": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031"
+      }
+    },
+    "H02": {
+      "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c",
+      "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+      "f64": "b40574ad76dbcc8f80250a0b1a1be0313176983b7140e96fdee18f4970ecb6e7",
+      "max_camera_direction_delta": 9.922767449377368e-8,
+      "bytes": 143266,
+      "old": {
+        "B2": "0db4c7d6616bf14edd0e5f2378bf9f4e7f95353a6c4b9ee7f2eba2df64ae0bed",
+        "B8": "c572d6f55726aa8898e23f5e03e8ddcc9b9696c64e012102bc48cb74f1416b31"
+      },
+      "new": {
+        "B2": "5c400c4848ab3faff64fd2d241f31400e172d033a8a52b9ff944b71a5268ae0d",
+        "B8": "289c2519dda077e079c0637c69f8690d5aec98c6685aa49bac9375a6bc7805a6"
+      }
+    },
+    "H03": {
+      "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3",
+      "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225",
+      "f64": "e147373b109f5317ea75744b05705ca1df329a5b12fbdc37e9d1317faddb2b4c",
+      "max_camera_direction_delta": 1.1737216509821735e-7,
+      "bytes": 145587,
+      "old": {
+        "B2": "84f704b20ccdeea15177d0ff911663666f33b627978c1334171b10de4031a8b1",
+        "B8": "808dd8fb7674a46ec1a61420482dd58ce1cd6b19271a5e1139b7c7dfc9a3898d"
+      },
+      "new": {
+        "B2": "b515c290cfeccde0a4b037262484a11ee4caaebe7a303e56df0ca944dd0acf54",
+        "B8": "a9a8c88eac98fba728c189ab90180142a0e06d48e60f7001dd3d7999f8f1f847"
+      }
+    }
+  },
+  "provenance": {
+    "prior_h01_receipt_sha256": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0",
+    "prior_h02_receipt_sha256": "5562656fad898b07ac91903affd7d0f00423b1813f2a59dc67941fc22e23f765",
+    "prior_h03_receipt_sha256": "faad4ca5f966294834d67ee137761b822daee8a8cf9d31a45b4402572dddebff",
+    "prior_m001_heldout_manifest_sha256": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707"
+  },
+  "acquisition_constraints": {
+    "level_spp": [
+      8192,
+      16384,
+      32768,
+      65536,
+      131072,
+      262144
+    ],
+    "seeds": [
+      305419896,
+      2596069104,
+      "81985529216486895",
+      "18364758544493064720"
+    ],
+    "screen": "Original N007 four-seed two consecutive statistically eligible levels, including support stability, with unchanged thresholds; no new R1 criterion silently transferred",
+    "both_transports_separately": true
+  },
+  "reference_eligible": false,
+  "physically_qualified": false,
+  "statistically_qualified": false,
+  "quality_scored": false,
+  "gpu_timing_accepted": false,
+  "disclosure": [
+    "Precision amendment is based on frozen pre-existing N010 implementation and undertaken before any independent PT reference/quality scored images of H01/H02/H03 were viewed; held-out scene recipes/geometry unchanged.",
+    "Camera forward delta of ~1e-7 is an input-generation numerical difference, NOT empirical evidence of a quality change or proof of an absence of bias.",
+    "The old H01/H02 N008 source hashes are retained for audit history; do not run reference acquisition or score HDR against them.",
+    "No oracle images or 4-seed N007 convergence produced, no DDGI scene GI, no accepted comparisons."
+  ]
+}
