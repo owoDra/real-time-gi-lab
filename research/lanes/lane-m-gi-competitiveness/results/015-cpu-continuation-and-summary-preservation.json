@@ -1,0 +1,22 @@
+{
+  "schema": "lane-m-m001-cpu-continuation/1",
+  "baseline_commit": "d5d33d9e9dccf87e675f109aff4caf152c460c6d",
+  "preserved_summary_bytes": {
+    "research/status.md": {
+      "archive": "research/archive/pre-m001-current-status-2026-10-22.md",
+      "sha256": "bd6d3957c78a9ac3f90371771a8a350db941f61776532e3af4417137111d6850"
+    },
+    "research/roadmap.md": {
+      "archive": "research/archive/pre-m001-roadmap-2026-10-22.md",
+      "sha256": "fe1657188f3cc220abdda1dcb9e0e96e2fe795a897742178d53460f75bc78f87"
+    },
+    "research/lanes/lane-m-gi-competitiveness/README.md": {
+      "archive": "research/archive/pre-m001-lane-m-readme-2026-10-22.md",
+      "sha256": "1ce8b9f65ef50324b57d9fcb7a37a93a58e85b9e19c318ef8a6c5a0877fed72f"
+    }
+  },
+  "reason": "Remove superseded current/paused statements from live summaries; retain exact historical bytes outside N001-N010. CPU artifacts are available locally now. No experiment criteria change.",
+  "historical_n001_n010_modified": false,
+  "renderer_build_graph_modified": false,
+  "new_sampling_executed": false
+}

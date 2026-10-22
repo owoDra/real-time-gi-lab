@@ -7,7 +7,7 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "H01_T_B2_ORIGINAL_N010_REFERENCE_ADMITTED_H01_T_B8_CPU_SCREEN_READY",
+      "phase": "H01_B8_8192_RAW_REPLAY_PASS_NEXT_NAMED_16384_CPU_LEVEL",
       "classification": "ONE_OF_SIX_HELDOUT_REFERENCES_QUALIFIED_NO_HDR_COMPARATOR_SCORING",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
@@ -51,7 +51,7 @@
       "h01_b2_reference_first_cpu_level_status": "8192_INDIVIDUAL_PASS_TWO_LEVEL_SCREEN_INCOMPLETE",
       "reference_first_cpu_level_audit": "results/011-h01-b2-first-level-reference-audit.json",
       "reference_second_cpu_level_runner": "scripts/research/lane_m_gi_competitiveness/run_h01_b2_reference_stage2.py",
-      "h01_b2_two_level_reference_eligible": false,
+      "h01_b2_two_level_reference_eligible": true,
       "reference_second_cpu_level_status": "8192_16384_STATISTICAL_SCREEN_PASS",
       "reference_second_cpu_level_audit": "results/012-h01-b2-two-level-statistical-screen-audit.json",
       "h01_b2_eligible_at_spp_reported": 16384,
@@ -70,7 +70,14 @@
       "h02_b8_reference_eligible": false,
       "h03_b2_reference_eligible": false,
       "h03_b8_reference_eligible": false,
-      "quality_scored": false
+      "quality_scored": false,
+      "status": "REFERENCE_ADMISSION_IN_PROGRESS",
+      "result": "014-h01-b8-first-level-raw-audit.json",
+      "h01_b8_first_cpu_level_status": "8192_INDIVIDUAL_PASS_FULL_23_RAW_HASHES_AND_N007_REPLAY",
+      "h01_b8_first_cpu_level_audit": "results/014-h01-b8-first-level-raw-audit.json",
+      "reference_step_runner": "scripts/research/lane_m_gi_competitiveness/reference_step.py",
+      "cpu_continuation_protocol": "experiments/003-local-cpu-reference-continuation.md",
+      "summary_preservation": "results/015-cpu-continuation-and-summary-preservation.json"
     }
   ]
 }

@@ -1,0 +1,11 @@
+# M001 local CPU execution continuation
+
+Baseline: d5d33d9e9dccf87e675f109aff4caf152c460c6d. Registered after H01/B8 8192 output inspection and before any new level or remaining-cell acquisition. This is an operational continuation of 001/002, with no scientific gate change.
+
+The current checkout contains the original CPU executable, Sobol net, original 009 physical proof, six frozen corrected sources and full native raw files. The old assistant-sandbox access limitation no longer applies. The user authorizes autonomous CPU work; the initial owner-only GPU contract is retained. Existing H01/B8 8192 is audited, never rerun. Existing H01/B2 admission is replayed, never regenerated.
+
+`reference_step.py acquire --cell H01 --bounce 8 --spp 16384` is the next named CPU step. Each invocation does exactly one registered cell/level, preserves a started receipt and any partial failures, rehashes complete prior inventories and reruns unchanged N007 on actual full-image PFMs. Inspect each terminal outcome before separately naming any later step. There is no unconditional queue or native retry. Remaining order is H02/B2, H02/B8, H03/B2, H03/B8, with original levels 8192/16384/32768/65536/131072/262144 in order. Stop acquisition at the first two-level/support-stable pass or the terminal sixth-level fail; operational failures stop the affected cell pending diagnosis. Do not infer a scientific fail from an operational stop.
+
+`reference_step.py admit --cell … --bounce …` makes immutable byte copies into a canonical original-full-prefix view, replays original N007 and invokes unchanged N010 `physical_proof` and `verify_reference`. Admission is a separate invocation after screen review. No R1, sampler change, new seed or quality-budget change. The statistical-only physical_correctness_proven=false field remains unchanged; original 009 is the companion physical proof.
+
+All new native files, started/terminal receipts and byte-identical views stay under `out/research/lane-m-gi-competitiveness/m001-original-cpu-v2`. Commit only compact summaries and SHA inventories. No GPU execution, scoring, timing, Renderer/source/shader/CMake change, CI or power setting change is authorized by this CPU tool. CPU reference time is diagnostic.

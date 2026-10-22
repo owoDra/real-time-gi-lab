@@ -1,0 +1,77 @@
+{
+  "schema": "lane-m-m001-h01-b8-first-level-independent-raw-audit/1",
+  "source_commit": "d5d33d9e9dccf87e675f109aff4caf152c460c6d",
+  "classification": "8192_INDIVIDUAL_STATISTICAL_PASS_REFERENCE_INCOMPLETE",
+  "archive_sha256": "d91f9733af9124cf980b6ca1b81e800872f8462a2365fc4c3bdd10e81da93015",
+  "archive_member_sha256": {
+    "result.json": "73c0d63ebc46f20be07f3b958ff8cb4e84003e1aa69c48bfd7f5d4a6f17944cf",
+    "oracle.stdout.txt": "945edbb19b6499d817476c61be348ffe8bcc4581a8f39aca7e4eb992b52e9b5a",
+    "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "level1-input-manifest.json": "5de11755978915a979902f188a7a995fcdd51838ee53bf354553a0e3cf0150fb",
+    "level1-screen.json": "ac866492da3c2bf5ea6e0b0fc9b8449c677906acee007bdfe110bd95faa1d2fb",
+    "corrected-sources-manifest.json": "faff7cae0afefa0cd66db71d7dd8a11445db7c0fffe3fb3a45111f4099c01abd"
+  },
+  "archive_members_identical_to_local_files": 6,
+  "raw_payloads_rehashed": 23,
+  "raw_payload_sha256": {
+    "oracle.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+    "oracle.s0.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "oracle.s0.f64": "b97c2d77da3d61ada00c3611fde6698d975541ebe50862815859aa5a4e298ae9",
+    "oracle.s0.indirect.pfm": "493771eaaea6af1dba4497e5a2fe5a7030d8cac3dbf900db6a10b2d239fbc3d9",
+    "oracle.s0.total.pfm": "44d346c2540b225433987838155f82e750d2063c72933e93fc2bf2e151e85be2",
+    "oracle.s1.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "oracle.s1.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "oracle.s1.f64": "3dd4b1fbe79b2c1b1802b5c4d3513aaacf4f80387f1aa6dfd2b9c16983a8efdc",
+    "oracle.s1.indirect.pfm": "8aa69bb4f893d424069088511e8e7802c1c5620d33df0d79df376b3fe955e55d",
+    "oracle.s1.total.pfm": "264b047dc74fde8c14cb505330b745c8fb656913f5d43edc117662374303ea97",
+    "oracle.s2.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "oracle.s2.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "oracle.s2.f64": "a32e4c83b454b61befe911e2bad59b4c80e3a0a7b23d069c6262e85b121fcf02",
+    "oracle.s2.indirect.pfm": "3067867746d5f892852b35a238c013e6ed7e48bd88ab9a28ae9152e7ccbf6f72",
+    "oracle.s2.total.pfm": "1ada0abe38b66764fe4d659e442b773afbbf41b9e392a8461769f06a404dfe11",
+    "oracle.s3.direct.pfm": "b85c57f24538ce6831e397d321d9ed75d017c1ad05743bf4aac4f0de90de445b",
+    "oracle.s3.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+    "oracle.s3.f64": "10503d84f94dd6636d7d515ecbda986af9a9f3a8af9a8db65e7e228d04099f7c",
+    "oracle.s3.indirect.pfm": "0343530bbc1db256012249e377698bc4214b9b91dd49e34a0fb809cc2f9e636f",
+    "oracle.s3.total.pfm": "20787ae62ea419a0c658e133bf67a3ce201bef56893231b17ea4295c3074117a",
+    "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "oracle.stdout.txt": "945edbb19b6499d817476c61be348ffe8bcc4581a8f39aca7e4eb992b52e9b5a"
+  },
+  "f64_headers_verified": 4,
+  "original_N007_raw_PFM_replay_matches": true,
+  "original_N007": {
+    "schema_version": 1,
+    "manifest_sha256": "5de11755978915a979902f188a7a995fcdd51838ee53bf354553a0e3cf0150fb",
+    "source_commit": "d5d33d9e9dccf87e675f109aff4caf152c460c6d",
+    "scene_sha256": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+    "frame_state_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+    "rows": [
+      {
+        "spp": 8192,
+        "eligible": true,
+        "active_fraction": 0.1271701388888889,
+        "noise_rms_range": [
+          5.103285016396797e-08,
+          5.2444655913326997e-08
+        ],
+        "max_active_abs_p99": 4.78995789308101e-07,
+        "max_active_rel_p99": 0.004728452768176765,
+        "problems": []
+      }
+    ],
+    "eligible_at_spp": null,
+    "status": "incomplete",
+    "physical_correctness_proven": false
+  },
+  "physical_source_sha256": "7bd24d7acb70e78d414c87009a676f62eecb2ba0d1a3f92c1bcdc23ff6e12031",
+  "binary_sha256": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+  "sobol_sha256": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+  "physical_proof_009_sha256": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+  "h01_capture_payloads_rehashed": 13,
+  "reference_eligible": false,
+  "quality_scored": false,
+  "accepted_timing": false,
+  "gpu_executed": false,
+  "note": "Full retained raw files and original CPU executable are available in this checkout. Assistant replayed existing evidence only; no first-level sampling rerun. One passing level does not qualify a reference."
+}
