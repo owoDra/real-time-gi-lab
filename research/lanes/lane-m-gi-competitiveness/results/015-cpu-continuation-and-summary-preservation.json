@@ -13,6 +13,10 @@
     "research/lanes/lane-m-gi-competitiveness/README.md": {
       "archive": "research/archive/pre-m001-lane-m-readme-2026-10-22.md",
       "sha256": "1ce8b9f65ef50324b57d9fcb7a37a93a58e85b9e19c318ef8a6c5a0877fed72f"
+    },
+    "README.md": {
+      "archive": "research/archive/pre-m001-root-readme-2026-10-22.md",
+      "sha256": "bfbdfa04be0a7e7d36bbc2094ba798b42063aaf00e619cf383343d716cadf14f"
     }
   },
   "reason": "Remove superseded current/paused statements from live summaries; retain exact historical bytes outside N001-N010. CPU artifacts are available locally now. No experiment criteria change.",

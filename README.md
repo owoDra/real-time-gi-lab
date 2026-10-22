@@ -8,7 +8,7 @@
 
 The objective is to establish a new light-transport architecture that can outperform representative existing real-time GI techniques **in a defensible combination of image quality, end-to-end GPU cost, GPU memory, and dynamic-scene coverage**. This is not merely a Split Radiance Cascades optimization project. Producer, traversal, storage and reuse components are replaceable hypotheses, not permanent commitments.
 
-## Current position (2026-10-11)
+## Historical measured position (2026-10-11)
 
 The laboratory has a functioning GPU image-producing Renderer and substantial measured performance results, **but has not established a generally superior GI solution**.
 
@@ -16,7 +16,7 @@ The laboratory has a functioning GPU image-producing Renderer and substantial me
 - **Dynamic updates:** accepted Lane E heavy-boundary revalidation, including substantial GPU-time improvements on moving-rigid and stable-topology-deforming workloads. Lane M retained the Lane E incumbent for topology-changing/high-churn regimes.
 - **N003 renderer comparison:** approximately **2.35–3.11x** faster than the tested vanilla Split RC in reported cases; **approximately 24–27% more GPU memory**. These are bounded cases, not cross-GPU or universal claims.
 - **Known weaknesses:** N004 reports quality issues under camera and dynamic-geometry motion. N005 adaptive tracing is REFINE/conditional, not one universally accepted rule. N006 demonstrated reproducible Q8 image influence, **not** detectable signed quality lift from the tested extra four rays; its P1/P2/P3 progression stopped.
-- **Next independent issue:** [N007 #43](https://github.com/owoDra/phos-gi-lab/issues/43) must establish adequate HDR reference signal and convergence eligibility before future quality claims. No new GI algorithm research is authorized by this consolidation.
+- **Reference history:** N007–N009 retained their scoped negative/incomplete findings. N010 completed the Lane M handoff; new M001 heldout references and comparisons follow their own prospective gates. Historical speed figures above do not establish a current same-quality GI advantage.
 
 **Read [research/status.md](research/status.md) first.** It is the single current architecture/status synthesis. [research/roadmap.md](research/roadmap.md) defines the next major gates; [research/branch-inventory.md](research/branch-inventory.md) locates all 25 original refs and preserves abandoned/negative experiments.
 
@@ -26,7 +26,7 @@ The laboratory has a functioning GPU image-producing Renderer and substantial me
 | --- | --- |
 | [docs/research.md](docs/research.md) | Stable objective, fairness rules, end-state criteria |
 | [research/status.md](research/status.md) | Current decision-grade synthesis and limitations |
-| [research/roadmap.md](research/roadmap.md) | Three-phase forward plan; N007 remains a separate issue |
+| [research/roadmap.md](research/roadmap.md) | Open research questions and exit gates |
 | [research/protocol.md](research/protocol.md) | Frozen measurement, correctness, provenance rules |
 | [research/decisions/](research/decisions/) | Cross-lane adoption decisions |
 | [research/lanes/](research/lanes/) | Frozen plans, results, and per-lane evidence |
