@@ -1,0 +1,701 @@
+{
+  "accepted_timing": false,
+  "all_existing_evidence_valid": true,
+  "cohort_complete": false,
+  "collector_sha256": "8b03a490ccd080f55c65f704a93f8551469fc7c62facabf5991e9d0c8a80031a",
+  "completed_gpu_units": 2045,
+  "exact_border_components": 4276224,
+  "exhausted_quality_fail_targets": [
+    "H01_T_B2"
+  ],
+  "full_copy_atlases": 6,
+  "full_copy_components": 14155776,
+  "full_error_maps": 9,
+  "gpu_executed_by_collector": false,
+  "max_true_peak_owned_bytes": 431872912,
+  "native_acquisitions": 3,
+  "next_named_case": "h01-b8-q0",
+  "operational_failure_stops_cohort": false,
+  "quality_pass_targets": [],
+  "raw_payloads_rehashed": 75,
+  "rows": [
+    {
+      "accepted_timing": false,
+      "archive_sha256": "7354fef6c7dbce86e9d0faa763fa951a711af8da911c7aec69773bd40d8e124d",
+      "classification": "QUALITY_FAIL",
+      "components": {
+        "direct": {
+          "active_max_relative": 3.0877582695224063e-06,
+          "active_p99_absolute": 4.1570931812997734e-11,
+          "active_p99_relative": 8.647686967503252e-07,
+          "active_pixels": 6939,
+          "gpu_sum": 0.4194302650539612,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 3.170989533437041e-07,
+          "pixels": 57600,
+          "reference_rms": 2.2306129441681237e-05,
+          "reference_sum": 0.4194302901038408,
+          "reference_zero_leak_energy": 0.0,
+          "reference_zero_leak_pixels": 0,
+          "rmse": 7.073250299106303e-12,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -5.972358264178099e-08,
+          "whole_image_max_absolute": 5.664375897853919e-10
+        },
+        "indirect": {
+          "active_max_relative": 1714.7186406270143,
+          "active_p99_absolute": 8.19013415823646e-06,
+          "active_p99_relative": 439.20758691119426,
+          "active_pixels": 7202,
+          "gpu_sum": 0.06269150853937333,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 0.19132679732294558,
+          "pixels": 57600,
+          "reference_rms": 4.977620562618119e-06,
+          "reference_sum": 0.07247190033843509,
+          "reference_zero_leak_energy": 8.552068237221988e-05,
+          "reference_zero_leak_pixels": 123,
+          "rmse": 9.523522005345632e-07,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -0.13495426162952126,
+          "whole_image_max_absolute": 2.9012997687867474e-05
+        },
+        "total": {
+          "active_max_relative": 1714.7186406270143,
+          "active_p99_absolute": 8.03592992451768e-06,
+          "active_p99_relative": 364.8780172217577,
+          "active_pixels": 7288,
+          "gpu_sum": 0.4821217735074157,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 0.037326231838010586,
+          "pixels": 57600,
+          "reference_rms": 2.5514286670869443e-05,
+          "reference_sum": 0.4919021904422758,
+          "reference_zero_leak_energy": 2.4026753123962408e-05,
+          "reference_zero_leak_pixels": 37,
+          "rmse": 9.52352179458336e-07,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -0.019882848917721678,
+          "whole_image_max_absolute": 2.901299355021935e-05
+        }
+      },
+      "derived_record_sha256": "43a6c8e832486e4a2f8635c326991a2b3b05ddee2f8f1c943a7833ba5ad88059",
+      "gpu_executed_by_auditor": false,
+      "name": "h01-b2-q0",
+      "native": {
+        "configuration": {
+          "api_version": 4211036,
+          "brightness_threshold": 1000000,
+          "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+          "distance_exponent": 50,
+          "driver_info": "Mesa 26.1.2",
+          "driver_name": "radv",
+          "gamma": 1,
+          "grid_side": 8,
+          "hysteresis": 0,
+          "images": [
+            {
+              "channels": 4,
+              "h": 64,
+              "layers": 8,
+              "type": 0,
+              "w": 128
+            },
+            {
+              "channels": 4,
+              "h": 64,
+              "layers": 8,
+              "type": 1,
+              "w": 64
+            },
+            {
+              "channels": 2,
+              "h": 128,
+              "layers": 8,
+              "type": 2,
+              "w": 128
+            },
+            {
+              "channels": 4,
+              "h": 8,
+              "layers": 8,
+              "type": 3,
+              "w": 8
+            },
+            {
+              "channels": 1,
+              "h": 48,
+              "layers": 8,
+              "type": 4,
+              "w": 48
+            },
+            {
+              "channels": 2,
+              "h": 3,
+              "layers": 2,
+              "type": 5,
+              "w": 3
+            }
+          ],
+          "mode": "scene",
+          "normal_view_bias": 0.004959183745086193,
+          "origin": [
+            0,
+            1.350000023841858,
+            0
+          ],
+          "ray_max": 33.9779167175293,
+          "rays": 128,
+          "rotation_updates_per_volume": 1,
+          "schema": "m001-ddgi-native/1",
+          "seed": 305419896,
+          "setup_wall_us": 44120.826,
+          "spacing": [
+            1.4693877696990967,
+            0.4959183633327484,
+            1.4693877696990967
+          ],
+          "subgroup": 64,
+          "timestamp_period_ns": 10.019036293029785,
+          "timestamp_valid_bits": 64,
+          "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+          "vertices": 2
+        },
+        "copies": [
+          {
+            "border_components": 57344,
+            "complete_components": 131072,
+            "exact_copy_pass": true,
+            "first_mismatch": null,
+            "full_copy_exact": true,
+            "interior_unchanged": true,
+            "maximum_absolute_difference": 0.0,
+            "mismatched_components": 0,
+            "mismatched_texels": 0,
+            "pre_border_zero": true,
+            "stage": 0,
+            "type": 1,
+            "zero_nonzero_mismatched_components": 0
+          },
+          {
+            "border_components": 61440,
+            "complete_components": 262144,
+            "exact_copy_pass": true,
+            "first_mismatch": null,
+            "full_copy_exact": true,
+            "interior_unchanged": true,
+            "maximum_absolute_difference": 0.0,
+            "mismatched_components": 0,
+            "mismatched_texels": 0,
+            "pre_border_zero": true,
+            "stage": 0,
+            "type": 2,
+            "zero_nonzero_mismatched_components": 0
+          }
+        ],
+        "full_copy_exact": true,
+        "full_disjoint_ray_tile_coverage": true,
+        "full_physical_state_verified": true,
+        "initial_history_exactly_zero": true,
+        "interior_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 8084368
+        },
+        "previous_atlas_immutable": true,
+        "timing": {
+          "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+          "completed_gpu_units": 31,
+          "max_unit_gpu_us_diagnostic": 81.39465084457397,
+          "sum_gpu_us_diagnostic": 576.8159574623107
+        }
+      },
+      "payload_sha256": {
+        "direct.error.npy": "1f33df722605174f89224876da9dc8c54e055e369ae736b8be26c60a85f533a0",
+        "indirect.error.npy": "12570b82d5f1267bf03388bb7fcb8a47c77be867a4adeec4788cea61aadc46e0",
+        "total.error.npy": "ac28d236477666864f9b4d10d3d72ed7d1643f84223f42082f9f36892282368c"
+      },
+      "quality_evidence_valid": true,
+      "raw_payloads_rehashed": 25,
+      "reference_verification": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+        "transport": "T_B2"
+      },
+      "result_sha256": "43e90fb0fd658ccec68e1c0d5ad42a57d72ecd4197955a085d5c99f9c0924e46",
+      "schema": "m001-ddgi-corrected-quality-independent-cpu-audit/1",
+      "scope": {
+        "cell": "H01",
+        "grid_side": 8,
+        "rays": 128,
+        "rung": 0,
+        "vertices": 2
+      },
+      "scoring_exclusions": 0,
+      "superiority_claim": false,
+      "unblinded_cohort": true
+    },
+    {
+      "accepted_timing": false,
+      "archive_sha256": "d25ff25335185ede18f6211f659470a5d040e31a4e4bfa020dc9eaa69094e27c",
+      "classification": "QUALITY_FAIL",
+      "components": {
+        "direct": {
+          "active_max_relative": 3.0877582695224063e-06,
+          "active_p99_absolute": 4.1570931812997734e-11,
+          "active_p99_relative": 8.647686967503252e-07,
+          "active_pixels": 6939,
+          "gpu_sum": 0.4194302650539612,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 3.170989533437041e-07,
+          "pixels": 57600,
+          "reference_rms": 2.2306129441681237e-05,
+          "reference_sum": 0.4194302901038408,
+          "reference_zero_leak_energy": 0.0,
+          "reference_zero_leak_pixels": 0,
+          "rmse": 7.073250299106303e-12,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -5.972358264178099e-08,
+          "whole_image_max_absolute": 5.664375897853919e-10
+        },
+        "indirect": {
+          "active_max_relative": 1336.8825211264304,
+          "active_p99_absolute": 2.3395448870293974e-05,
+          "active_p99_relative": 508.2449805414164,
+          "active_pixels": 7202,
+          "gpu_sum": 0.06557998967409176,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 0.29917344167871013,
+          "pixels": 57600,
+          "reference_rms": 4.977620562618119e-06,
+          "reference_sum": 0.07247190033843509,
+          "reference_zero_leak_energy": 2.9721030302998035e-05,
+          "reference_zero_leak_pixels": 123,
+          "rmse": 1.4891718750891803e-06,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -0.09509769486047598,
+          "whole_image_max_absolute": 3.340661335285893e-05
+        },
+        "total": {
+          "active_max_relative": 922.6824273630208,
+          "active_p99_absolute": 2.3208116207178014e-05,
+          "active_p99_relative": 206.51685412621782,
+          "active_pixels": 7288,
+          "gpu_sum": 0.4850102547046846,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 0.05836618128131834,
+          "pixels": 57600,
+          "reference_rms": 2.5514286670869443e-05,
+          "reference_sum": 0.4919021904422758,
+          "reference_zero_leak_energy": 9.035778236778362e-06,
+          "reference_zero_leak_pixels": 37,
+          "rmse": 1.4891714810954901e-06,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -0.01401078480946494,
+          "whole_image_max_absolute": 3.340661300660915e-05
+        }
+      },
+      "derived_record_sha256": "1baf9fff9a7a4a7914b30c89bfbd14e65f2627378e4b6275138dda41a2c0741a",
+      "gpu_executed_by_auditor": false,
+      "name": "h01-b2-q1",
+      "native": {
+        "configuration": {
+          "api_version": 4211036,
+          "brightness_threshold": 1000000,
+          "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+          "distance_exponent": 50,
+          "driver_info": "Mesa 26.1.2",
+          "driver_name": "radv",
+          "gamma": 1,
+          "grid_side": 16,
+          "hysteresis": 0,
+          "images": [
+            {
+              "channels": 4,
+              "h": 256,
+              "layers": 16,
+              "type": 0,
+              "w": 256
+            },
+            {
+              "channels": 4,
+              "h": 128,
+              "layers": 16,
+              "type": 1,
+              "w": 128
+            },
+            {
+              "channels": 2,
+              "h": 256,
+              "layers": 16,
+              "type": 2,
+              "w": 256
+            },
+            {
+              "channels": 4,
+              "h": 16,
+              "layers": 16,
+              "type": 3,
+              "w": 16
+            },
+            {
+              "channels": 1,
+              "h": 96,
+              "layers": 16,
+              "type": 4,
+              "w": 96
+            },
+            {
+              "channels": 2,
+              "h": 6,
+              "layers": 4,
+              "type": 5,
+              "w": 6
+            }
+          ],
+          "mode": "scene",
+          "normal_view_bias": 0.00203999993391335,
+          "origin": [
+            0,
+            1.350000023841858,
+            0
+          ],
+          "ray_max": 33.9779167175293,
+          "rays": 256,
+          "rotation_updates_per_volume": 1,
+          "schema": "m001-ddgi-native/1",
+          "seed": 305419896,
+          "setup_wall_us": 42274.734,
+          "spacing": [
+            0.6044444441795349,
+            0.20399999618530273,
+            0.6044444441795349
+          ],
+          "subgroup": 64,
+          "timestamp_period_ns": 10.019036293029785,
+          "timestamp_valid_bits": 64,
+          "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+          "vertices": 2
+        },
+        "copies": [
+          {
+            "border_components": 458752,
+            "complete_components": 1048576,
+            "exact_copy_pass": true,
+            "first_mismatch": null,
+            "full_copy_exact": true,
+            "interior_unchanged": true,
+            "maximum_absolute_difference": 0.0,
+            "mismatched_components": 0,
+            "mismatched_texels": 0,
+            "pre_border_zero": true,
+            "stage": 0,
+            "type": 1,
+            "zero_nonzero_mismatched_components": 0
+          },
+          {
+            "border_components": 491520,
+            "complete_components": 2097152,
+            "exact_copy_pass": true,
+            "first_mismatch": null,
+            "full_copy_exact": true,
+            "interior_unchanged": true,
+            "maximum_absolute_difference": 0.0,
+            "mismatched_components": 0,
+            "mismatched_texels": 0,
+            "pre_border_zero": true,
+            "stage": 0,
+            "type": 2,
+            "zero_nonzero_mismatched_components": 0
+          }
+        ],
+        "full_copy_exact": true,
+        "full_disjoint_ray_tile_coverage": true,
+        "full_physical_state_verified": true,
+        "initial_history_exactly_zero": true,
+        "interior_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 78289808
+        },
+        "previous_atlas_immutable": true,
+        "timing": {
+          "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+          "completed_gpu_units": 271,
+          "max_unit_gpu_us_diagnostic": 1777.6575713996888,
+          "sum_gpu_us_diagnostic": 7298.306873439788
+        }
+      },
+      "payload_sha256": {
+        "direct.error.npy": "1f33df722605174f89224876da9dc8c54e055e369ae736b8be26c60a85f533a0",
+        "indirect.error.npy": "edadc107a503d598cb999a96ee85f0ed77d030e7c576183238b63b6556ac24ed",
+        "total.error.npy": "f8654905df301bc90c9071145126843d2d1c46f9554af7c5fb9b4b218789a4f1"
+      },
+      "quality_evidence_valid": true,
+      "raw_payloads_rehashed": 25,
+      "reference_verification": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+        "transport": "T_B2"
+      },
+      "result_sha256": "aa0beb4fdbdc1a5e72726434570a436b5694e758ceb3f92d20a04e578c7f058f",
+      "schema": "m001-ddgi-corrected-quality-independent-cpu-audit/1",
+      "scope": {
+        "cell": "H01",
+        "grid_side": 16,
+        "rays": 256,
+        "rung": 1,
+        "vertices": 2
+      },
+      "scoring_exclusions": 0,
+      "superiority_claim": false,
+      "unblinded_cohort": true
+    },
+    {
+      "accepted_timing": false,
+      "archive_sha256": "93b43844ff74b07adc8a901c26f9d0aed0a94ecc3f83444ae96a47ccd825b2d5",
+      "classification": "QUALITY_FAIL",
+      "components": {
+        "direct": {
+          "active_max_relative": 3.0877582695224063e-06,
+          "active_p99_absolute": 4.1570931812997734e-11,
+          "active_p99_relative": 8.647686967503252e-07,
+          "active_pixels": 6939,
+          "gpu_sum": 0.4194302650539612,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 3.170989533437041e-07,
+          "pixels": 57600,
+          "reference_rms": 2.2306129441681237e-05,
+          "reference_sum": 0.4194302901038408,
+          "reference_zero_leak_energy": 0.0,
+          "reference_zero_leak_pixels": 0,
+          "rmse": 7.073250299106303e-12,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -5.972358264178099e-08,
+          "whole_image_max_absolute": 5.664375897853919e-10
+        },
+        "indirect": {
+          "active_max_relative": 1246.334983444892,
+          "active_p99_absolute": 1.2318950285263466e-05,
+          "active_p99_relative": 515.8810459719829,
+          "active_pixels": 7202,
+          "gpu_sum": 0.06964088249261541,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 0.16302717381193133,
+          "pixels": 57600,
+          "reference_rms": 4.977620562618119e-06,
+          "reference_sum": 0.07247190033843509,
+          "reference_zero_leak_energy": 3.623380494133244e-05,
+          "reference_zero_leak_pixels": 123,
+          "rmse": 8.114874126317875e-07,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -0.03906366236567785,
+          "whole_image_max_absolute": 2.2816277010838418e-05
+        },
+        "total": {
+          "active_max_relative": 806.5149703526288,
+          "active_p99_absolute": 1.2289206611458421e-05,
+          "active_p99_relative": 166.28394194434432,
+          "active_pixels": 7288,
+          "gpu_sum": 0.4890711476201746,
+          "gpu_zero_reference_positive": 0,
+          "nrmse": 0.03180519514092212,
+          "pixels": 57600,
+          "reference_rms": 2.5514286670869443e-05,
+          "reference_sum": 0.4919021904422758,
+          "reference_zero_leak_energy": 6.4316982388845645e-06,
+          "reference_zero_leak_pixels": 37,
+          "rmse": 8.114868664484309e-07,
+          "scoring_exclusions": 0,
+          "signed_sum_bias": -0.005755296229837432,
+          "whole_image_max_absolute": 2.2816277010838418e-05
+        }
+      },
+      "derived_record_sha256": "40f3a8c93fff315f344d65cdccf46e2ac7df68473b947451d37c243e0af95409",
+      "gpu_executed_by_auditor": false,
+      "name": "h01-b2-q2",
+      "native": {
+        "configuration": {
+          "api_version": 4211036,
+          "brightness_threshold": 1000000,
+          "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+          "distance_exponent": 50,
+          "driver_info": "Mesa 26.1.2",
+          "driver_name": "radv",
+          "gamma": 1,
+          "grid_side": 24,
+          "hysteresis": 0,
+          "images": [
+            {
+              "channels": 4,
+              "h": 576,
+              "layers": 24,
+              "type": 0,
+              "w": 512
+            },
+            {
+              "channels": 4,
+              "h": 192,
+              "layers": 24,
+              "type": 1,
+              "w": 192
+            },
+            {
+              "channels": 2,
+              "h": 384,
+              "layers": 24,
+              "type": 2,
+              "w": 384
+            },
+            {
+              "channels": 4,
+              "h": 24,
+              "layers": 24,
+              "type": 3,
+              "w": 24
+            },
+            {
+              "channels": 1,
+              "h": 144,
+              "layers": 24,
+              "type": 4,
+              "w": 144
+            },
+            {
+              "channels": 2,
+              "h": 9,
+              "layers": 6,
+              "type": 5,
+              "w": 9
+            }
+          ],
+          "mode": "scene",
+          "normal_view_bias": 0.001275992370210588,
+          "origin": [
+            0,
+            1.350000023841858,
+            0
+          ],
+          "ray_max": 33.9779167175293,
+          "rays": 512,
+          "rotation_updates_per_volume": 1,
+          "schema": "m001-ddgi-native/1",
+          "seed": 305419896,
+          "setup_wall_us": 53782.267,
+          "spacing": [
+            0.3780718445777893,
+            0.12759923934936523,
+            0.3780718445777893
+          ],
+          "subgroup": 64,
+          "timestamp_period_ns": 10.019036293029785,
+          "timestamp_valid_bits": 64,
+          "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+          "vertices": 2
+        },
+        "copies": [
+          {
+            "border_components": 1548288,
+            "complete_components": 3538944,
+            "exact_copy_pass": true,
+            "first_mismatch": null,
+            "full_copy_exact": true,
+            "interior_unchanged": true,
+            "maximum_absolute_difference": 0.0,
+            "mismatched_components": 0,
+            "mismatched_texels": 0,
+            "pre_border_zero": true,
+            "stage": 0,
+            "type": 1,
+            "zero_nonzero_mismatched_components": 0
+          },
+          {
+            "border_components": 1658880,
+            "complete_components": 7077888,
+            "exact_copy_pass": true,
+            "first_mismatch": null,
+            "full_copy_exact": true,
+            "interior_unchanged": true,
+            "maximum_absolute_difference": 0.0,
+            "mismatched_components": 0,
+            "mismatched_texels": 0,
+            "pre_border_zero": true,
+            "stage": 0,
+            "type": 2,
+            "zero_nonzero_mismatched_components": 0
+          }
+        ],
+        "full_copy_exact": true,
+        "full_disjoint_ray_tile_coverage": true,
+        "full_physical_state_verified": true,
+        "initial_history_exactly_zero": true,
+        "interior_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 431872912
+        },
+        "previous_atlas_immutable": true,
+        "timing": {
+          "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+          "completed_gpu_units": 1743,
+          "max_unit_gpu_us_diagnostic": 7578.1986713218685,
+          "sum_gpu_us_diagnostic": 44806.77342438126
+        }
+      },
+      "payload_sha256": {
+        "direct.error.npy": "1f33df722605174f89224876da9dc8c54e055e369ae736b8be26c60a85f533a0",
+        "indirect.error.npy": "79667115a976e33134f9c4d0fb1eb50a868f5007cf93dba03cef2a948beffd8d",
+        "total.error.npy": "9a3faeeccd67c692426ad3802e7da6fd47d9ca4237b10fbd12d3d4a1bd42f007"
+      },
+      "quality_evidence_valid": true,
+      "raw_payloads_rehashed": 25,
+      "reference_verification": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+        "transport": "T_B2"
+      },
+      "result_sha256": "0304754f37a7bfe7c11b5c018d468ba3d5a196bdef468066f0c973dcea589e0b",
+      "schema": "m001-ddgi-corrected-quality-independent-cpu-audit/1",
+      "scope": {
+        "cell": "H01",
+        "grid_side": 24,
+        "rays": 512,
+        "rung": 2,
+        "vertices": 2
+      },
+      "scoring_exclusions": 0,
+      "superiority_claim": false,
+      "unblinded_cohort": true
+    }
+  ],
+  "schema": "m001-ddgi-corrected-quality-raw-replay/1",
+  "scope": "012 corrected finite-stage static cohort only; old010evidence remains separate; no calibrated speed, general dynamics/device or architecture promotion",
+  "source_commit": "2073959176e8be08128107fe06cbb736e9561d2b",
+  "superiority_claim": false,
+  "unblinded_cohort": true,
+  "unresolved_target_count": 5
+}
