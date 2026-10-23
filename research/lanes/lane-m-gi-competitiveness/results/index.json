@@ -108,7 +108,14 @@
       "fixed_rc_quality_fail_targets": 12,
       "all_fixed_rc_quality_fail_targets": 24,
       "fixed_rc_timing": "INELIGIBLE_QUALITY_LOSS",
-      "fixed_rc_collector": "scripts/research/lane_m_gi_competitiveness/summarize_fixed_rc.py"
+      "fixed_rc_collector": "scripts/research/lane_m_gi_competitiveness/summarize_fixed_rc.py",
+      "ddgi_scene_protocol": "experiments/007-ddgi-scene-adapter-qualification.md",
+      "ddgi_scene_cpu_compilation": "results/029-ddgi-scene-cpu-compilation.json",
+      "ddgi_compiled_layout_cpu_audit": "results/030-ddgi-shader-layout-cpu-audit.json",
+      "ddgi_scene_shader": "shaders/research/lane_m_gi_competitiveness/m001_ddgi_scene.hlsl",
+      "ddgi_scene_cpu_driver": "scripts/research/lane_m_gi_competitiveness/compile_ddgi_scene.py",
+      "ddgi_scene_cpu_compilation_pass": true,
+      "ddgi_scene_runtime_qualified": false
     }
   ]
 }

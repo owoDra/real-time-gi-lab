@@ -1,0 +1,217 @@
+{
+  "schema": "lane-m-m001-ddgi-scene-cpu-compile/1",
+  "source_commit": "ac5e45b3836cf0068ea2f832bbc456e2faab7807",
+  "gpu_executed": false,
+  "complete": true,
+  "all_pass": true,
+  "scope": "CPU HLSL compilation/validation only; host, semantic/runtime/physical/finite-depth/history/memory admission NOT RUN",
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/lane_m_gi_competitiveness/m001_ddgi_scene.hlsl": "8a51be79bc8ad3f4a71bd05996f2f968085669173b12ac4559af11d178ea0114",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/compile_ddgi_scene.py": "d38261662b7d13bc366dbe78e0709306a6c56026e383fb049b797a5b678c0e2c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/021-ddgi-source-provenance.json": "632c24a7cc5863e97bde595ab937fd15d232e680ce85c7c470bff6bd6bb7c7b3",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/034-dxc-cpu-compiler-provenance.json": "2b544a1c26f31f3c4675b8d8702ac9232d657be1bda0bdc3ac1131af92481197",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc": "5d43b7eb1311bf2e75064d8f675693e97d2343347f6271717c5b8377a9a4363f",
+    "/nix/store/z5hs3p3inrq3w8cv71jycz7l4y3ny5xk-spirv-tools-1.4.363.0/bin/spirv-val": "eb4e44965a1d96bb56e5b4e42471ae333324844865ddce2eafbc4a74572ecf6e"
+  },
+  "sdk_files_verified": 330,
+  "compiler_files_verified": 10,
+  "rows": [
+    {
+      "entry": "TraceProbes",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-scene-compile-v1/m001_ddgi_scene.hlsl",
+        "-E",
+        "TraceProbes",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-fspv-target-env=vulkan1.2",
+        "-fspv-extension=SPV_KHR_ray_query",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-scene-compile-v1/TraceProbes.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0"
+      ],
+      "definitions": {
+        "HLSL": 1,
+        "RTXGI_COORDINATE_SYSTEM": 2,
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE": 0,
+        "RTXGI_DDGI_BINDLESS_RESOURCES": 0,
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT": 0,
+        "RTXGI_DDGI_SHADER_REFLECTION": 0
+      },
+      "pass": true,
+      "returncode": 0,
+      "shader_sha256": "5fe611b2307b15d20be096982ede44dfaefa1d26d204953b0e3630612cd6c811",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "Constants",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Scene",
+            "binding": 7,
+            "set": 0
+          },
+          {
+            "name": "Geometry",
+            "binding": 8,
+            "set": 0
+          },
+          {
+            "name": "frame",
+            "binding": 9,
+            "set": 0
+          },
+          {
+            "name": "PreviousIrradiance",
+            "binding": 11,
+            "set": 0
+          },
+          {
+            "name": "PreviousDistance",
+            "binding": 12,
+            "set": 0
+          },
+          {
+            "name": "PreviousProbeData",
+            "binding": 13,
+            "set": 0
+          },
+          {
+            "name": "BilinearSampler",
+            "binding": 14,
+            "set": 0
+          }
+        ]
+      },
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": ""
+    },
+    {
+      "entry": "GatherPixels",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-scene-compile-v1/m001_ddgi_scene.hlsl",
+        "-E",
+        "GatherPixels",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-fspv-target-env=vulkan1.2",
+        "-fspv-extension=SPV_KHR_ray_query",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-scene-compile-v1/GatherPixels.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0"
+      ],
+      "definitions": {
+        "HLSL": 1,
+        "RTXGI_COORDINATE_SYSTEM": 2,
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE": 0,
+        "RTXGI_DDGI_BINDLESS_RESOURCES": 0,
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT": 0,
+        "RTXGI_DDGI_SHADER_REFLECTION": 0
+      },
+      "pass": true,
+      "returncode": 0,
+      "shader_sha256": "6eb89e62e6971367dd527e4364db7b5e7076d13cdd4e52a40740741da14c490d",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "Constants",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "Scene",
+            "binding": 7,
+            "set": 0
+          },
+          {
+            "name": "Geometry",
+            "binding": 8,
+            "set": 0
+          },
+          {
+            "name": "frame",
+            "binding": 9,
+            "set": 0
+          },
+          {
+            "name": "Pixels",
+            "binding": 10,
+            "set": 0
+          },
+          {
+            "name": "PreviousIrradiance",
+            "binding": 11,
+            "set": 0
+          },
+          {
+            "name": "PreviousDistance",
+            "binding": 12,
+            "set": 0
+          },
+          {
+            "name": "PreviousProbeData",
+            "binding": 13,
+            "set": 0
+          },
+          {
+            "name": "BilinearSampler",
+            "binding": 14,
+            "set": 0
+          }
+        ]
+      },
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": ""
+    }
+  ],
+  "payload_sha256": {
+    "GatherPixels.spv": "6eb89e62e6971367dd527e4364db7b5e7076d13cdd4e52a40740741da14c490d",
+    "GatherPixels.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "GatherPixels.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "TraceProbes.spv": "5fe611b2307b15d20be096982ede44dfaefa1d26d204953b0e3630612cd6c811",
+    "TraceProbes.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "TraceProbes.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "m001_ddgi_scene.hlsl": "8a51be79bc8ad3f4a71bd05996f2f968085669173b12ac4559af11d178ea0114"
+  }
+}
