@@ -1,0 +1,41 @@
+{
+  "schema": "m001-ddgi-static-checkpoint-verification/1",
+  "source_commit": "829d36103fb705f1db87287fc6c46488e629711e",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "8 configured historical indexes,548links; not runtime validation"
+    },
+    {
+      "command": "scripts/research/verify.py verify_index(LaneM index)",
+      "returncode": 0,
+      "scope": "LaneM index checked explicitly; excluded from default configured8"
+    },
+    {
+      "command": "git diff d5d33d9e --exit-code -- src :!src/research/lane_m_gi_competitiveness :(glob)**/CMakeLists.txt research/lanes/n010-comparison-readiness",
+      "returncode": 0,
+      "scope": "historical src, all CMakeLists and tracked N010 evidence unchanged; only isolated new LaneM src excluded"
+    },
+    {
+      "command": "git diff --check",
+      "returncode": 0
+    }
+  ],
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "default_build_scope": "Default build graph/Renderer unchanged; prior018 default build remains historical. Standalone native build031 and six new GPU semantic controls033 are actual newly executed checks, not default Renderer regression acceptance.",
+  "cpu_tests": "57 unique tests plus standalone UBSan finite-transport/ray-ownership executable PASS; failed v2 test fixture attempt preserved032",
+  "gpu_semantic_controls": 6,
+  "raw_payloads_rehashed": 173,
+  "gpu_complete_units": 130,
+  "power_clock_desktop_changes": false,
+  "validation_layer_run": false,
+  "quality_admission": false,
+  "accepted_timing": false,
+  "scope": "Static DDGI semantic checkpoint only. Original001 dynamic qualification gate remains required before DDGI quality acquisition."
+}

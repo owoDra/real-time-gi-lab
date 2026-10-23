@@ -129,7 +129,8 @@
       "ddgi_static_semantic_outcome": "results/034-ddgi-static-semantic-outcome.md",
       "ddgi_static_semantics_qualified": true,
       "ddgi_dynamic_qualified": false,
-      "ddgi_quality_ladder_registered": false
+      "ddgi_quality_ladder_registered": false,
+      "ddgi_static_checkpoint_verification": "results/035-ddgi-static-checkpoint-verification.json"
     }
   ]
 }
