@@ -1,0 +1,1180 @@
+{
+  "accepted_timing": false,
+  "complete": true,
+  "finite_depth_equivalent": false,
+  "hdr_byte_identity": [
+    {
+      "all_equal": true,
+      "cell": "H01",
+      "components": {
+        "direct": {
+          "control_sha256": "4245c241b033400c776c7e48efebce3c941f26a8d8a5e04948297b4e9396a485",
+          "original_sha256": "4245c241b033400c776c7e48efebce3c941f26a8d8a5e04948297b4e9396a485"
+        },
+        "indirect": {
+          "control_sha256": "312f89677a439edf33c0a5ae4dccc3900b78f68c65b38af8bbacb8432e006851",
+          "original_sha256": "312f89677a439edf33c0a5ae4dccc3900b78f68c65b38af8bbacb8432e006851"
+        },
+        "total": {
+          "control_sha256": "b199fe6929b13febd18f2cc6b5a4fc238c19422a9c905ba95ee8c86f561b5581",
+          "original_sha256": "b199fe6929b13febd18f2cc6b5a4fc238c19422a9c905ba95ee8c86f561b5581"
+        }
+      },
+      "role": "vanilla"
+    },
+    {
+      "all_equal": true,
+      "cell": "H02",
+      "components": {
+        "direct": {
+          "control_sha256": "97dbcaa5276c5650108a84171248fdc3676df36b2bf29307dd3f2a17184b974f",
+          "original_sha256": "97dbcaa5276c5650108a84171248fdc3676df36b2bf29307dd3f2a17184b974f"
+        },
+        "indirect": {
+          "control_sha256": "936da9dee382a1b1e49d1af3f71512d9de8c87ed736b3e99f25d9a9daf579112",
+          "original_sha256": "936da9dee382a1b1e49d1af3f71512d9de8c87ed736b3e99f25d9a9daf579112"
+        },
+        "total": {
+          "control_sha256": "6138824a1f461b8d9e9cf07f244d1584967264852994d92ccfa40365884c9fc0",
+          "original_sha256": "6138824a1f461b8d9e9cf07f244d1584967264852994d92ccfa40365884c9fc0"
+        }
+      },
+      "role": "vanilla"
+    },
+    {
+      "all_equal": true,
+      "cell": "H03",
+      "components": {
+        "direct": {
+          "control_sha256": "c797e024b56b5aaf638e7dcd4b283adc78d051b27c9b9bed39d7a600e64708b6",
+          "original_sha256": "c797e024b56b5aaf638e7dcd4b283adc78d051b27c9b9bed39d7a600e64708b6"
+        },
+        "indirect": {
+          "control_sha256": "b83852e9a16ac2c21e49579712a8020985c9c3fed3fe6849afaad8f9389501a6",
+          "original_sha256": "b83852e9a16ac2c21e49579712a8020985c9c3fed3fe6849afaad8f9389501a6"
+        },
+        "total": {
+          "control_sha256": "6a32acf25b343a17004f26e98963f64d6340564dd2f4b4bb6fe06608aedb4944",
+          "original_sha256": "6a32acf25b343a17004f26e98963f64d6340564dd2f4b4bb6fe06608aedb4944"
+        }
+      },
+      "role": "vanilla"
+    },
+    {
+      "all_equal": true,
+      "cell": "H01",
+      "components": {
+        "direct": {
+          "control_sha256": "4245c241b033400c776c7e48efebce3c941f26a8d8a5e04948297b4e9396a485",
+          "original_sha256": "4245c241b033400c776c7e48efebce3c941f26a8d8a5e04948297b4e9396a485"
+        },
+        "indirect": {
+          "control_sha256": "312f89677a439edf33c0a5ae4dccc3900b78f68c65b38af8bbacb8432e006851",
+          "original_sha256": "312f89677a439edf33c0a5ae4dccc3900b78f68c65b38af8bbacb8432e006851"
+        },
+        "total": {
+          "control_sha256": "b199fe6929b13febd18f2cc6b5a4fc238c19422a9c905ba95ee8c86f561b5581",
+          "original_sha256": "b199fe6929b13febd18f2cc6b5a4fc238c19422a9c905ba95ee8c86f561b5581"
+        }
+      },
+      "role": "software"
+    },
+    {
+      "all_equal": true,
+      "cell": "H02",
+      "components": {
+        "direct": {
+          "control_sha256": "97dbcaa5276c5650108a84171248fdc3676df36b2bf29307dd3f2a17184b974f",
+          "original_sha256": "97dbcaa5276c5650108a84171248fdc3676df36b2bf29307dd3f2a17184b974f"
+        },
+        "indirect": {
+          "control_sha256": "936da9dee382a1b1e49d1af3f71512d9de8c87ed736b3e99f25d9a9daf579112",
+          "original_sha256": "936da9dee382a1b1e49d1af3f71512d9de8c87ed736b3e99f25d9a9daf579112"
+        },
+        "total": {
+          "control_sha256": "6138824a1f461b8d9e9cf07f244d1584967264852994d92ccfa40365884c9fc0",
+          "original_sha256": "6138824a1f461b8d9e9cf07f244d1584967264852994d92ccfa40365884c9fc0"
+        }
+      },
+      "role": "software"
+    },
+    {
+      "all_equal": true,
+      "cell": "H03",
+      "components": {
+        "direct": {
+          "control_sha256": "c797e024b56b5aaf638e7dcd4b283adc78d051b27c9b9bed39d7a600e64708b6",
+          "original_sha256": "c797e024b56b5aaf638e7dcd4b283adc78d051b27c9b9bed39d7a600e64708b6"
+        },
+        "indirect": {
+          "control_sha256": "b83852e9a16ac2c21e49579712a8020985c9c3fed3fe6849afaad8f9389501a6",
+          "original_sha256": "b83852e9a16ac2c21e49579712a8020985c9c3fed3fe6849afaad8f9389501a6"
+        },
+        "total": {
+          "control_sha256": "6a32acf25b343a17004f26e98963f64d6340564dd2f4b4bb6fe06608aedb4944",
+          "original_sha256": "6a32acf25b343a17004f26e98963f64d6340564dd2f4b4bb6fe06608aedb4944"
+        }
+      },
+      "role": "software"
+    }
+  ],
+  "native_audits": [
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "b74d826bb6aceb9fb9b544cff8c9bb42444021ba279232140e7b0866a38c7ff8",
+        "gpu_executed_by_auditor": false,
+        "memory": {
+          "events": 86,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266552640
+        },
+        "plan_sha256": "63095a6bee809724a395ad75c234ce34bbd4a20c79a535a21c138ec8037734a3",
+        "quality_evidence_valid": true,
+        "raw_payloads_rehashed": 22,
+        "references": {
+          "2": {
+            "cell": "H01",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+            "transport": "T_B2"
+          },
+          "8": {
+            "cell": "H01",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "ccfed4a146814320e969ac80c2241a9c8f43d83bab290a60e22b86128b04e847",
+            "transport": "T_B8"
+          }
+        },
+        "result_sha256": "97b01516314891ed8532986b616ce151ace45df9604bd1f175da724457c4e0da",
+        "rows": [
+          {
+            "cell": "H01",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 3.665566255848267e-06,
+                "active_p99_absolute": 4.5020638364231034e-11,
+                "active_p99_relative": 8.977370089431802e-07,
+                "active_pixels": 6939,
+                "gpu_sum": 0.4194302446767324,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.3390428540277356e-07,
+                "pixels": 57600,
+                "reference_rms": 2.2306129441681237e-05,
+                "reference_sum": 0.4194302901038408,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.448112211326342e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.0830669471868549e-07,
+                "whole_image_max_absolute": 5.955414202421256e-10
+              },
+              "indirect": {
+                "active_max_relative": 28076.767253772257,
+                "active_p99_absolute": 3.617722264545578e-05,
+                "active_p99_relative": 1.3148117620507698,
+                "active_pixels": 7202,
+                "gpu_sum": 0.006561379414051771,
+                "gpu_zero_reference_positive": 6878,
+                "nrmse": 0.9796933113822603,
+                "pixels": 57600,
+                "reference_rms": 4.977620562618119e-06,
+                "reference_sum": 0.07247190033843509,
+                "reference_zero_leak_energy": 0.0007171740289777517,
+                "reference_zero_leak_pixels": 15,
+                "rmse": 4.876541571795775e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.9094631245570916,
+                "whole_image_max_absolute": 0.00010681315325200558
+              },
+              "total": {
+                "active_max_relative": 28076.767253772257,
+                "active_p99_absolute": 3.6460673705070457e-05,
+                "active_p99_relative": 1.0,
+                "active_pixels": 7288,
+                "gpu_sum": 0.4259916241035171,
+                "gpu_zero_reference_positive": 255,
+                "nrmse": 0.19112984635946365,
+                "pixels": 57600,
+                "reference_rms": 2.5514286670869443e-05,
+                "reference_sum": 0.4919021904422758,
+                "reference_zero_leak_energy": 4.577706567943096e-05,
+                "reference_zero_leak_pixels": 3,
+                "rmse": 4.876541691374588e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.13399120316886098,
+                "whole_image_max_absolute": 0.00010681311398547524
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "vanilla",
+            "transport": "T_B2"
+          },
+          {
+            "cell": "H01",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 3.665566255848267e-06,
+                "active_p99_absolute": 4.5020638364231034e-11,
+                "active_p99_relative": 8.977370089431802e-07,
+                "active_pixels": 6939,
+                "gpu_sum": 0.4194302446767324,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.3390428540277356e-07,
+                "pixels": 57600,
+                "reference_rms": 2.2306129441681237e-05,
+                "reference_sum": 0.4194302901038408,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.448112211326342e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.0830669471868549e-07,
+                "whole_image_max_absolute": 5.955414202421256e-10
+              },
+              "indirect": {
+                "active_max_relative": 223.02977010689426,
+                "active_p99_absolute": 5.0930822723782285e-05,
+                "active_p99_relative": 1.3648882091194745,
+                "active_pixels": 7315,
+                "gpu_sum": 0.006561379414051771,
+                "gpu_zero_reference_positive": 6977,
+                "nrmse": 0.9738950286410251,
+                "pixels": 57600,
+                "reference_rms": 7.014371348232262e-06,
+                "reference_sum": 0.10446584661030747,
+                "reference_zero_leak_energy": 3.051804378628731e-05,
+                "reference_zero_leak_pixels": 1,
+                "rmse": 6.831261385085445e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.93719115264027,
+                "whole_image_max_absolute": 0.00010576519127827444
+              },
+              "total": {
+                "active_max_relative": 34.4958307442411,
+                "active_p99_absolute": 5.0919077831260044e-05,
+                "active_p99_relative": 1.0,
+                "active_pixels": 7325,
+                "gpu_sum": 0.4259916241035171,
+                "gpu_zero_reference_positive": 289,
+                "nrmse": 0.25157398510523327,
+                "pixels": 57600,
+                "reference_rms": 2.7154086905701627e-05,
+                "reference_sum": 0.5238961367141479,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 6.831261854761191e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.18687771439713857,
+                "whole_image_max_absolute": 0.00010576515201174389
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "vanilla",
+            "transport": "T_B8"
+          }
+        ],
+        "schema": "lane-m-m001-fixed-rc-independent-audit/1"
+      },
+      "cell": "H01",
+      "intake_sha256": "6277f3a0cdf95248ae78fdebe8cd920f7a4fcab72efb916e9fd17079f218104c",
+      "role": "vanilla",
+      "work": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/fixed-controls/H01-vanilla"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "5ab0ad3c24ad36f56b85e2aa32dead36beebc8e64b908d5032d8fd2f575bd2b3",
+        "gpu_executed_by_auditor": false,
+        "memory": {
+          "events": 86,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266552640
+        },
+        "plan_sha256": "ba852585943a70c1b5008bef971bddd9c908b170794f69440cae935bf3226eea",
+        "quality_evidence_valid": true,
+        "raw_payloads_rehashed": 22,
+        "references": {
+          "2": {
+            "cell": "H02",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "637917e8821b6789723575c1afbab87fbae042332a612f2d03ea6171e22082ed",
+            "transport": "T_B2"
+          },
+          "8": {
+            "cell": "H02",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "9ba7e85776375f5c1d58a95b6f8f2ab2f2046655a79ec3d2f0dfc8b0beaaca03",
+            "transport": "T_B8"
+          }
+        },
+        "result_sha256": "40d9b150c4fb7377f4292f6d37602ffba3943020f380f91bfaf2149bf460cbd3",
+        "rows": [
+          {
+            "cell": "H02",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.368679410407223e-05,
+                "active_p99_absolute": 4.422975900244749e-11,
+                "active_p99_relative": 6.19209535540581e-06,
+                "active_pixels": 6289,
+                "gpu_sum": 0.338922228733594,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.8027051128794504e-07,
+                "pixels": 57600,
+                "reference_rms": 1.994629419755363e-05,
+                "reference_sum": 0.33892229044148037,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.58498749280349e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.8207089974653028e-07,
+                "whole_image_max_absolute": 5.874481853111561e-10
+              },
+              "indirect": {
+                "active_max_relative": 27978.069714557478,
+                "active_p99_absolute": 3.608018316414359e-05,
+                "active_p99_relative": 3.3333351002473015,
+                "active_pixels": 6485,
+                "gpu_sum": 0.01319905393756926,
+                "gpu_zero_reference_positive": 5865,
+                "nrmse": 1.080973821510543,
+                "pixels": 57600,
+                "reference_rms": 3.4302988751093713e-06,
+                "reference_sum": 0.03352036147965673,
+                "reference_zero_leak_energy": 0.0015106431674212217,
+                "reference_zero_leak_pixels": 31,
+                "rmse": 3.7080632839502943e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.6062377207483376,
+                "whole_image_max_absolute": 0.00015259021893143654
+              },
+              "total": {
+                "active_max_relative": 27978.069714557478,
+                "active_p99_absolute": 3.702482029931236e-05,
+                "active_p99_relative": 1.6511295524462302,
+                "active_pixels": 6691,
+                "gpu_sum": 0.35212128270151766,
+                "gpu_zero_reference_positive": 101,
+                "nrmse": 0.1791432807434761,
+                "pixels": 57600,
+                "reference_rms": 2.0698870877558277e-05,
+                "reference_sum": 0.3724426519211371,
+                "reference_zero_leak_energy": 0.0002899214159697294,
+                "reference_zero_leak_pixels": 19,
+                "rmse": 3.7080636366913842e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.054562411460657434,
+                "whole_image_max_absolute": 0.00015259023064477582
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "vanilla",
+            "transport": "T_B2"
+          },
+          {
+            "cell": "H02",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.368679410407223e-05,
+                "active_p99_absolute": 4.422975900244749e-11,
+                "active_p99_relative": 6.19209535540581e-06,
+                "active_pixels": 6289,
+                "gpu_sum": 0.338922228733594,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.8027051128794504e-07,
+                "pixels": 57600,
+                "reference_rms": 1.994629419755363e-05,
+                "reference_sum": 0.33892229044148037,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.58498749280349e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.8207089974653028e-07,
+                "whole_image_max_absolute": 5.874481853111561e-10
+              },
+              "indirect": {
+                "active_max_relative": 228.62549854217494,
+                "active_p99_absolute": 4.469377604393234e-05,
+                "active_p99_relative": 2.577293581196845,
+                "active_pixels": 6734,
+                "gpu_sum": 0.01319905393756926,
+                "gpu_zero_reference_positive": 6083,
+                "nrmse": 1.013886452545024,
+                "pixels": 57600,
+                "reference_rms": 4.410034535260377e-06,
+                "reference_sum": 0.05375852990972364,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 4.471274270556187e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.7544751696198846,
+                "whole_image_max_absolute": 0.0001519257011844956
+              },
+              "total": {
+                "active_max_relative": 9.71481574552498,
+                "active_p99_absolute": 4.4663306714442055e-05,
+                "active_p99_relative": 1.7942498440496553,
+                "active_pixels": 6748,
+                "gpu_sum": 0.35212128270151766,
+                "gpu_zero_reference_positive": 139,
+                "nrmse": 0.20505625753017723,
+                "pixels": 57600,
+                "reference_rms": 2.1805115062413006e-05,
+                "reference_sum": 0.39268082035120405,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 4.471275289713308e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.10328881765452903,
+                "whole_image_max_absolute": 0.00015192571289783497
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "vanilla",
+            "transport": "T_B8"
+          }
+        ],
+        "schema": "lane-m-m001-fixed-rc-independent-audit/1"
+      },
+      "cell": "H02",
+      "intake_sha256": "ce989ae5828a4744734de436a6b81c3d16b78ca7373538f5a41e735c99d44ae3",
+      "role": "vanilla",
+      "work": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/fixed-controls/H02-vanilla"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "081c8781cc6537c177aff8fa913dcc2f401148a81256f5b22762cf4dc0bfd4d6",
+        "gpu_executed_by_auditor": false,
+        "memory": {
+          "events": 86,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266556960
+        },
+        "plan_sha256": "583d7ef279b18989bb5c231989d5685cf16be3a3f4d3770533031b1834fe6d62",
+        "quality_evidence_valid": true,
+        "raw_payloads_rehashed": 22,
+        "references": {
+          "2": {
+            "cell": "H03",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "127d47c758265166b967bc9ad91ff3b867977327469a11615098194f864cd1f7",
+            "transport": "T_B2"
+          },
+          "8": {
+            "cell": "H03",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "f731fa3dcae6de4f6667ee3fafc2ec3c6c285763998c4c8f41c6ee4d9dcb83a2",
+            "transport": "T_B8"
+          }
+        },
+        "result_sha256": "c24376eda446a6bbe41c26a8d56fe0bceb0354cc0f99aee73d4fe76b1e924a1b",
+        "rows": [
+          {
+            "cell": "H03",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.0074639249272872e-05,
+                "active_p99_absolute": 2.4627739594190713e-10,
+                "active_p99_relative": 6.679119231520712e-06,
+                "active_pixels": 6093,
+                "gpu_sum": 0.2900642481565683,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 6.933547083343804e-07,
+                "pixels": 57600,
+                "reference_rms": 2.1188749668757086e-05,
+                "reference_sum": 0.2900642972130776,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 1.4691319346551268e-11,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.6912287979215973e-07,
+                "whole_image_max_absolute": 6.048019584605456e-10
+              },
+              "indirect": {
+                "active_max_relative": 12234.143877515837,
+                "active_p99_absolute": 4.3243723516884147e-05,
+                "active_p99_relative": 15.785801886797968,
+                "active_pixels": 7129,
+                "gpu_sum": 0.030243381748732645,
+                "gpu_zero_reference_positive": 5797,
+                "nrmse": 1.1196259005219282,
+                "pixels": 57600,
+                "reference_rms": 4.723785228170138e-06,
+                "reference_sum": 0.04561045907089291,
+                "reference_zero_leak_energy": 0.0014343480906973127,
+                "reference_zero_leak_pixels": 49,
+                "rmse": 5.2888722899621736e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.33692003183469454,
+                "whole_image_max_absolute": 0.0001678492408245802
+              },
+              "total": {
+                "active_max_relative": 12234.143877515837,
+                "active_p99_absolute": 4.3364310343704674e-05,
+                "active_p99_relative": 14.296098912001684,
+                "active_pixels": 7400,
+                "gpu_sum": 0.3203076298627252,
+                "gpu_zero_reference_positive": 571,
+                "nrmse": 0.24146897009026247,
+                "pixels": 57600,
+                "reference_rms": 2.1902906481031484e-05,
+                "reference_sum": 0.33567475628397025,
+                "reference_zero_leak_energy": 0.0005035477224737406,
+                "reference_zero_leak_pixels": 22,
+                "rmse": 5.288872269958007e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.045779809573303014,
+                "whole_image_max_absolute": 0.00016784930032189655
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "vanilla",
+            "transport": "T_B2"
+          },
+          {
+            "cell": "H03",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.0074639249272872e-05,
+                "active_p99_absolute": 2.4627739594190713e-10,
+                "active_p99_relative": 6.679119231520712e-06,
+                "active_pixels": 6093,
+                "gpu_sum": 0.2900642481565683,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 6.933547083343804e-07,
+                "pixels": 57600,
+                "reference_rms": 2.1188749668757086e-05,
+                "reference_sum": 0.2900642972130776,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 1.4691319346551268e-11,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.6912287979215973e-07,
+                "whole_image_max_absolute": 6.048019584605456e-10
+              },
+              "indirect": {
+                "active_max_relative": 88.45669701870476,
+                "active_p99_absolute": 5.078548516686799e-05,
+                "active_p99_relative": 13.495937180418737,
+                "active_pixels": 7532,
+                "gpu_sum": 0.030243381748732645,
+                "gpu_zero_reference_positive": 6177,
+                "nrmse": 1.06239306286273,
+                "pixels": 57600,
+                "reference_rms": 5.59827903789468e-06,
+                "reference_sum": 0.06358214759061673,
+                "reference_zero_leak_energy": 0.0007629511273989918,
+                "reference_zero_leak_pixels": 26,
+                "rmse": 5.947572813829147e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.524341613255041,
+                "whole_image_max_absolute": 0.00019855888836672078
+              },
+              "total": {
+                "active_max_relative": 88.45669701870476,
+                "active_p99_absolute": 5.03810946968593e-05,
+                "active_p99_relative": 13.40925272167399,
+                "active_pixels": 7670,
+                "gpu_sum": 0.3203076298627252,
+                "gpu_zero_reference_positive": 819,
+                "nrmse": 0.26031660600506396,
+                "pixels": 57600,
+                "reference_rms": 2.2847459034267764e-05,
+                "reference_sum": 0.3536464448036941,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 5.947572991640321e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.09427159647957142,
+                "whole_image_max_absolute": 0.00019855894866030693
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "vanilla",
+            "transport": "T_B8"
+          }
+        ],
+        "schema": "lane-m-m001-fixed-rc-independent-audit/1"
+      },
+      "cell": "H03",
+      "intake_sha256": "313ad1f212b626183abf1b2f00174fc73ae59937e048f250d6d6c822fbbabe15",
+      "role": "vanilla",
+      "work": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/fixed-controls/H03-vanilla"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "cd1f3ca155e63a07f182defbe640a3c1c3499da0b2405745175d2641236e6999",
+        "gpu_executed_by_auditor": false,
+        "memory": {
+          "events": 88,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266694400
+        },
+        "plan_sha256": "80862b1ae489060bf0eb3c6b83eae9015d7c00a758fd38264da3819c2dea6560",
+        "quality_evidence_valid": true,
+        "raw_payloads_rehashed": 23,
+        "references": {
+          "2": {
+            "cell": "H01",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+            "transport": "T_B2"
+          },
+          "8": {
+            "cell": "H01",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "ccfed4a146814320e969ac80c2241a9c8f43d83bab290a60e22b86128b04e847",
+            "transport": "T_B8"
+          }
+        },
+        "result_sha256": "909cb8ae5188789e9fceca7d0b343110cb38a430f9779311e39aa6a1879a1062",
+        "rows": [
+          {
+            "cell": "H01",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 3.665566255848267e-06,
+                "active_p99_absolute": 4.5020638364231034e-11,
+                "active_p99_relative": 8.977370089431802e-07,
+                "active_pixels": 6939,
+                "gpu_sum": 0.4194302446767324,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.3390428540277356e-07,
+                "pixels": 57600,
+                "reference_rms": 2.2306129441681237e-05,
+                "reference_sum": 0.4194302901038408,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.448112211326342e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.0830669471868549e-07,
+                "whole_image_max_absolute": 5.955414202421256e-10
+              },
+              "indirect": {
+                "active_max_relative": 28076.767253772257,
+                "active_p99_absolute": 3.617722264545578e-05,
+                "active_p99_relative": 1.3148117620507698,
+                "active_pixels": 7202,
+                "gpu_sum": 0.006561379414051771,
+                "gpu_zero_reference_positive": 6878,
+                "nrmse": 0.9796933113822603,
+                "pixels": 57600,
+                "reference_rms": 4.977620562618119e-06,
+                "reference_sum": 0.07247190033843509,
+                "reference_zero_leak_energy": 0.0007171740289777517,
+                "reference_zero_leak_pixels": 15,
+                "rmse": 4.876541571795775e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.9094631245570916,
+                "whole_image_max_absolute": 0.00010681315325200558
+              },
+              "total": {
+                "active_max_relative": 28076.767253772257,
+                "active_p99_absolute": 3.6460673705070457e-05,
+                "active_p99_relative": 1.0,
+                "active_pixels": 7288,
+                "gpu_sum": 0.4259916241035171,
+                "gpu_zero_reference_positive": 255,
+                "nrmse": 0.19112984635946365,
+                "pixels": 57600,
+                "reference_rms": 2.5514286670869443e-05,
+                "reference_sum": 0.4919021904422758,
+                "reference_zero_leak_energy": 4.577706567943096e-05,
+                "reference_zero_leak_pixels": 3,
+                "rmse": 4.876541691374588e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.13399120316886098,
+                "whole_image_max_absolute": 0.00010681311398547524
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "software",
+            "transport": "T_B2"
+          },
+          {
+            "cell": "H01",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 3.665566255848267e-06,
+                "active_p99_absolute": 4.5020638364231034e-11,
+                "active_p99_relative": 8.977370089431802e-07,
+                "active_pixels": 6939,
+                "gpu_sum": 0.4194302446767324,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.3390428540277356e-07,
+                "pixels": 57600,
+                "reference_rms": 2.2306129441681237e-05,
+                "reference_sum": 0.4194302901038408,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.448112211326342e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.0830669471868549e-07,
+                "whole_image_max_absolute": 5.955414202421256e-10
+              },
+              "indirect": {
+                "active_max_relative": 223.02977010689426,
+                "active_p99_absolute": 5.0930822723782285e-05,
+                "active_p99_relative": 1.3648882091194745,
+                "active_pixels": 7315,
+                "gpu_sum": 0.006561379414051771,
+                "gpu_zero_reference_positive": 6977,
+                "nrmse": 0.9738950286410251,
+                "pixels": 57600,
+                "reference_rms": 7.014371348232262e-06,
+                "reference_sum": 0.10446584661030747,
+                "reference_zero_leak_energy": 3.051804378628731e-05,
+                "reference_zero_leak_pixels": 1,
+                "rmse": 6.831261385085445e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.93719115264027,
+                "whole_image_max_absolute": 0.00010576519127827444
+              },
+              "total": {
+                "active_max_relative": 34.4958307442411,
+                "active_p99_absolute": 5.0919077831260044e-05,
+                "active_p99_relative": 1.0,
+                "active_pixels": 7325,
+                "gpu_sum": 0.4259916241035171,
+                "gpu_zero_reference_positive": 289,
+                "nrmse": 0.25157398510523327,
+                "pixels": 57600,
+                "reference_rms": 2.7154086905701627e-05,
+                "reference_sum": 0.5238961367141479,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 6.831261854761191e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.18687771439713857,
+                "whole_image_max_absolute": 0.00010576515201174389
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "software",
+            "transport": "T_B8"
+          }
+        ],
+        "schema": "lane-m-m001-fixed-rc-independent-audit/1"
+      },
+      "cell": "H01",
+      "intake_sha256": "6fcf67ea4fc97f7b40e99d0103ebc8d5f2934d11e7a4b0b30bdcf12d830a261b",
+      "role": "software",
+      "work": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/fixed-controls/H01-software"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "5378e85263181d2e984c0f02437084e52d59761b1ca211d046fa2f2d08c55858",
+        "gpu_executed_by_auditor": false,
+        "memory": {
+          "events": 88,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266703680
+        },
+        "plan_sha256": "e2eae86e34f0491f3082c6e8e2c5a84cfed7978b237c510abbec66c3c245295d",
+        "quality_evidence_valid": true,
+        "raw_payloads_rehashed": 23,
+        "references": {
+          "2": {
+            "cell": "H02",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "637917e8821b6789723575c1afbab87fbae042332a612f2d03ea6171e22082ed",
+            "transport": "T_B2"
+          },
+          "8": {
+            "cell": "H02",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "9ba7e85776375f5c1d58a95b6f8f2ab2f2046655a79ec3d2f0dfc8b0beaaca03",
+            "transport": "T_B8"
+          }
+        },
+        "result_sha256": "a75d415c4c506384d385ad28ee135f756b935ae18911bcc317356c1d85455700",
+        "rows": [
+          {
+            "cell": "H02",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.368679410407223e-05,
+                "active_p99_absolute": 4.422975900244749e-11,
+                "active_p99_relative": 6.19209535540581e-06,
+                "active_pixels": 6289,
+                "gpu_sum": 0.338922228733594,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.8027051128794504e-07,
+                "pixels": 57600,
+                "reference_rms": 1.994629419755363e-05,
+                "reference_sum": 0.33892229044148037,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.58498749280349e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.8207089974653028e-07,
+                "whole_image_max_absolute": 5.874481853111561e-10
+              },
+              "indirect": {
+                "active_max_relative": 27978.069714557478,
+                "active_p99_absolute": 3.608018316414359e-05,
+                "active_p99_relative": 3.3333351002473015,
+                "active_pixels": 6485,
+                "gpu_sum": 0.01319905393756926,
+                "gpu_zero_reference_positive": 5865,
+                "nrmse": 1.080973821510543,
+                "pixels": 57600,
+                "reference_rms": 3.4302988751093713e-06,
+                "reference_sum": 0.03352036147965673,
+                "reference_zero_leak_energy": 0.0015106431674212217,
+                "reference_zero_leak_pixels": 31,
+                "rmse": 3.7080632839502943e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.6062377207483376,
+                "whole_image_max_absolute": 0.00015259021893143654
+              },
+              "total": {
+                "active_max_relative": 27978.069714557478,
+                "active_p99_absolute": 3.702482029931236e-05,
+                "active_p99_relative": 1.6511295524462302,
+                "active_pixels": 6691,
+                "gpu_sum": 0.35212128270151766,
+                "gpu_zero_reference_positive": 101,
+                "nrmse": 0.1791432807434761,
+                "pixels": 57600,
+                "reference_rms": 2.0698870877558277e-05,
+                "reference_sum": 0.3724426519211371,
+                "reference_zero_leak_energy": 0.0002899214159697294,
+                "reference_zero_leak_pixels": 19,
+                "rmse": 3.7080636366913842e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.054562411460657434,
+                "whole_image_max_absolute": 0.00015259023064477582
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "software",
+            "transport": "T_B2"
+          },
+          {
+            "cell": "H02",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.368679410407223e-05,
+                "active_p99_absolute": 4.422975900244749e-11,
+                "active_p99_relative": 6.19209535540581e-06,
+                "active_pixels": 6289,
+                "gpu_sum": 0.338922228733594,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 3.8027051128794504e-07,
+                "pixels": 57600,
+                "reference_rms": 1.994629419755363e-05,
+                "reference_sum": 0.33892229044148037,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 7.58498749280349e-12,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.8207089974653028e-07,
+                "whole_image_max_absolute": 5.874481853111561e-10
+              },
+              "indirect": {
+                "active_max_relative": 228.62549854217494,
+                "active_p99_absolute": 4.469377604393234e-05,
+                "active_p99_relative": 2.577293581196845,
+                "active_pixels": 6734,
+                "gpu_sum": 0.01319905393756926,
+                "gpu_zero_reference_positive": 6083,
+                "nrmse": 1.013886452545024,
+                "pixels": 57600,
+                "reference_rms": 4.410034535260377e-06,
+                "reference_sum": 0.05375852990972364,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 4.471274270556187e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.7544751696198846,
+                "whole_image_max_absolute": 0.0001519257011844956
+              },
+              "total": {
+                "active_max_relative": 9.71481574552498,
+                "active_p99_absolute": 4.4663306714442055e-05,
+                "active_p99_relative": 1.7942498440496553,
+                "active_pixels": 6748,
+                "gpu_sum": 0.35212128270151766,
+                "gpu_zero_reference_positive": 139,
+                "nrmse": 0.20505625753017723,
+                "pixels": 57600,
+                "reference_rms": 2.1805115062413006e-05,
+                "reference_sum": 0.39268082035120405,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 4.471275289713308e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.10328881765452903,
+                "whole_image_max_absolute": 0.00015192571289783497
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "software",
+            "transport": "T_B8"
+          }
+        ],
+        "schema": "lane-m-m001-fixed-rc-independent-audit/1"
+      },
+      "cell": "H02",
+      "intake_sha256": "c506ef20d6c555c72af57c5b359fc9f13b50cdd7bc0225c26006517e76e3a82e",
+      "role": "software",
+      "work": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/fixed-controls/H02-software"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "9547ebf20604eb40c535605a1d313ad692ff429618cf1fb308b5712239db22ee",
+        "gpu_executed_by_auditor": false,
+        "memory": {
+          "events": 88,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 266707472
+        },
+        "plan_sha256": "f82a0911d7e9fe2e12991714e9386f7366d73c2f0ba26f7f58d315e84249d3e7",
+        "quality_evidence_valid": true,
+        "raw_payloads_rehashed": 23,
+        "references": {
+          "2": {
+            "cell": "H03",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "127d47c758265166b967bc9ad91ff3b867977327469a11615098194f864cd1f7",
+            "transport": "T_B2"
+          },
+          "8": {
+            "cell": "H03",
+            "computational_variant": "original-full-prefix",
+            "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted",
+            "levels": [
+              8192,
+              16384
+            ],
+            "pass": true,
+            "qualification_sha256": "f731fa3dcae6de4f6667ee3fafc2ec3c6c285763998c4c8f41c6ee4d9dcb83a2",
+            "transport": "T_B8"
+          }
+        },
+        "result_sha256": "23c191ec0e18dfc0699df19cc9e1ed76aab94721e6306f9d83809940e6a8280b",
+        "rows": [
+          {
+            "cell": "H03",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.0074639249272872e-05,
+                "active_p99_absolute": 2.4627739594190713e-10,
+                "active_p99_relative": 6.679119231520712e-06,
+                "active_pixels": 6093,
+                "gpu_sum": 0.2900642481565683,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 6.933547083343804e-07,
+                "pixels": 57600,
+                "reference_rms": 2.1188749668757086e-05,
+                "reference_sum": 0.2900642972130776,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 1.4691319346551268e-11,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.6912287979215973e-07,
+                "whole_image_max_absolute": 6.048019584605456e-10
+              },
+              "indirect": {
+                "active_max_relative": 12234.143877515837,
+                "active_p99_absolute": 4.3243723516884147e-05,
+                "active_p99_relative": 15.785801886797968,
+                "active_pixels": 7129,
+                "gpu_sum": 0.030243381748732645,
+                "gpu_zero_reference_positive": 5797,
+                "nrmse": 1.1196259005219282,
+                "pixels": 57600,
+                "reference_rms": 4.723785228170138e-06,
+                "reference_sum": 0.04561045907089291,
+                "reference_zero_leak_energy": 0.0014343480906973127,
+                "reference_zero_leak_pixels": 49,
+                "rmse": 5.2888722899621736e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.33692003183469454,
+                "whole_image_max_absolute": 0.0001678492408245802
+              },
+              "total": {
+                "active_max_relative": 12234.143877515837,
+                "active_p99_absolute": 4.3364310343704674e-05,
+                "active_p99_relative": 14.296098912001684,
+                "active_pixels": 7400,
+                "gpu_sum": 0.3203076298627252,
+                "gpu_zero_reference_positive": 571,
+                "nrmse": 0.24146897009026247,
+                "pixels": 57600,
+                "reference_rms": 2.1902906481031484e-05,
+                "reference_sum": 0.33567475628397025,
+                "reference_zero_leak_energy": 0.0005035477224737406,
+                "reference_zero_leak_pixels": 22,
+                "rmse": 5.288872269958007e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.045779809573303014,
+                "whole_image_max_absolute": 0.00016784930032189655
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "software",
+            "transport": "T_B2"
+          },
+          {
+            "cell": "H03",
+            "classification": "QUALITY_FAIL",
+            "components": {
+              "direct": {
+                "active_max_relative": 1.0074639249272872e-05,
+                "active_p99_absolute": 2.4627739594190713e-10,
+                "active_p99_relative": 6.679119231520712e-06,
+                "active_pixels": 6093,
+                "gpu_sum": 0.2900642481565683,
+                "gpu_zero_reference_positive": 0,
+                "nrmse": 6.933547083343804e-07,
+                "pixels": 57600,
+                "reference_rms": 2.1188749668757086e-05,
+                "reference_sum": 0.2900642972130776,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 1.4691319346551268e-11,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -1.6912287979215973e-07,
+                "whole_image_max_absolute": 6.048019584605456e-10
+              },
+              "indirect": {
+                "active_max_relative": 88.45669701870476,
+                "active_p99_absolute": 5.078548516686799e-05,
+                "active_p99_relative": 13.495937180418737,
+                "active_pixels": 7532,
+                "gpu_sum": 0.030243381748732645,
+                "gpu_zero_reference_positive": 6177,
+                "nrmse": 1.06239306286273,
+                "pixels": 57600,
+                "reference_rms": 5.59827903789468e-06,
+                "reference_sum": 0.06358214759061673,
+                "reference_zero_leak_energy": 0.0007629511273989918,
+                "reference_zero_leak_pixels": 26,
+                "rmse": 5.947572813829147e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.524341613255041,
+                "whole_image_max_absolute": 0.00019855888836672078
+              },
+              "total": {
+                "active_max_relative": 88.45669701870476,
+                "active_p99_absolute": 5.03810946968593e-05,
+                "active_p99_relative": 13.40925272167399,
+                "active_pixels": 7670,
+                "gpu_sum": 0.3203076298627252,
+                "gpu_zero_reference_positive": 819,
+                "nrmse": 0.26031660600506396,
+                "pixels": 57600,
+                "reference_rms": 2.2847459034267764e-05,
+                "reference_sum": 0.3536464448036941,
+                "reference_zero_leak_energy": 0.0,
+                "reference_zero_leak_pixels": 0,
+                "rmse": 5.947572991640321e-06,
+                "scoring_exclusions": 0,
+                "signed_sum_bias": -0.09427159647957142,
+                "whole_image_max_absolute": 0.00019855894866030693
+              }
+            },
+            "finite_depth_equivalent": false,
+            "role": "software",
+            "transport": "T_B8"
+          }
+        ],
+        "schema": "lane-m-m001-fixed-rc-independent-audit/1"
+      },
+      "cell": "H03",
+      "intake_sha256": "d2bddf72d999e201b81d91a034493d3e8743560384b0ca122ba76179f26919a5",
+      "role": "software",
+      "work": "out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/fixed-controls/H03-software"
+    }
+  ],
+  "native_cases": 6,
+  "native_payload_hashes_replayed": 135,
+  "quality_fail": 12,
+  "quality_pass": 0,
+  "reference_targets": 12,
+  "schema": "lane-m-m001-fixed-traversal-controls/1",
+  "source_commit": "0191a481f2789b41769a1731c1e06c02f1f4aa1a"
+}
