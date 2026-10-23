@@ -9,3 +9,5 @@ All-image quality, independent physical references, matched-quality calibrated G
 Older chronological descriptions are preserved byte-for-byte in [the historical lane README](../../archive/pre-m001-lane-m-readme-2026-10-22.md), bound by [015](results/015-cpu-continuation-and-summary-preservation.json); they are not current status.
 
 DDGI scene adapter [qualification007](experiments/007-ddgi-scene-adapter-qualification.md) begins with isolated source/CPU compilation; it is not runtime admission.
+
+The standalone DDGI host now [builds on CPU031](results/031-ddgi-private-host-cpu-build.json) and [passes CPU contracts032](results/032-ddgi-host-cpu-contract-tests.json). [Controls008](experiments/008-ddgi-bounded-semantic-controls.md) prospectively freeze direct/black/unit/HDR and finite-stage runtime checks. GPU semantics and heldout DDGI quality remain unqualified.

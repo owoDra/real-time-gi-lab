@@ -115,7 +115,16 @@
       "ddgi_scene_shader": "shaders/research/lane_m_gi_competitiveness/m001_ddgi_scene.hlsl",
       "ddgi_scene_cpu_driver": "scripts/research/lane_m_gi_competitiveness/compile_ddgi_scene.py",
       "ddgi_scene_cpu_compilation_pass": true,
-      "ddgi_scene_runtime_qualified": false
+      "ddgi_scene_runtime_qualified": false,
+      "ddgi_host_cpu_build": "results/031-ddgi-private-host-cpu-build.json",
+      "ddgi_host_cpu_tests": "results/032-ddgi-host-cpu-contract-tests.json",
+      "ddgi_host": "src/research/lane_m_gi_competitiveness/ddgi_scene_main.cpp",
+      "ddgi_host_cpu_build_pass": true,
+      "ddgi_semantic_protocol": "experiments/008-ddgi-bounded-semantic-controls.md",
+      "ddgi_semantic_runner": "scripts/research/lane_m_gi_competitiveness/ddgi_control_step.py",
+      "ddgi_semantic_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_control_audit.py",
+      "ddgi_semantic_gpu_controls_run": 0,
+      "ddgi_semantic_gpu_controls_pass": 0
     }
   ]
 }
