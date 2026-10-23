@@ -165,7 +165,8 @@
       "ddgi_border_audit": "results/051-ddgi-border-invariant-cpu-audit.json",
       "ddgi_border_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_border_audit.py",
       "ddgi_border_failed_atlases": 53,
-      "ddgi_border_affected_quality_acquisitions": 11
+      "ddgi_border_affected_quality_acquisitions": 11,
+      "ddgi_border_correction_protocol": "experiments/011-ddgi-separated-border-requalification.md"
     }
   ]
 }
