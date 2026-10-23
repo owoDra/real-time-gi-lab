@@ -1,0 +1,85 @@
+{
+  "schema": "m001-guide-cpu-feasibility-verification/1",
+  "source_commit": "b9aa0e08c1e555fadd412ad6b7e34a6d4468b770",
+  "all_checks_pass": true,
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "scope": "historical8indexes/548links only, not runtime",
+      "returncode": 0,
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "scope": "historical source/shaders/N010evidence/all CMake unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command_description": "git diff dd739f12 --exit-code for every pre-existing research source/script/shader",
+      "files": 1148,
+      "returncode": 0,
+      "new_standalone_files": 4
+    },
+    {
+      "command_description": "every immutable earlier result099excluded, existing001\u2013098unchanged",
+      "files": 98,
+      "returncode": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "scope": "whitespace",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "exact_built_sources_verified_in_commit": "b9aa0e08c1e555fadd412ad6b7e34a6d4468b770",
+  "build_dependencies_rehashed": 343,
+  "actual_kernel_checks": 25,
+  "CPU_pilot_processes": 3,
+  "all_native_processes_returned_zero_without_timeout": true,
+  "all_samples_and_maps_replayed": true,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-guide-cpu-final-replay-v1/result.json",
+  "raw_receipt_sha256": "943ff0c5331d7b46ef43f136e89a516565ee968ce09da1954d4e1ab6a4288174",
+  "gpu_executed": false,
+  "new_reference_sampling": false,
+  "old_test_suites_rerun": false,
+  "default_build_graph_changed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "condition_passes": 0,
+  "condition_failures": 6,
+  "additional_015_process_selected": false,
+  "new_records_sha256": {
+    "099-all-bounce-guide-cpu-preparation.json": "9a2be241e5e2f2c95d8c8da58108fe122eb77a1e7b3cba32b0b05af3134c68d7",
+    "100-all-bounce-guide-cpu-feasibility-raw-replay.json": "63744a2d93f9f95da5915bac9228a616cc23aafc4582655710c8ed69a68b2965",
+    "101-all-bounce-guide-cpu-feasibility-outcome.md": "b70b814a1d9352fb994f988b3b1af62ec9f1b45cfb503a3f884173c6d4876c47"
+  }
+}

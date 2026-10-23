@@ -268,8 +268,16 @@
       "closest_primary_gpu_checkpoint_verification": "results/098-closest-primary-eight-controls-checkpoint-verification.json",
       "all_bounce_guide_cpu_protocol": "experiments/015-all-bounce-directional-guide-cpu-feasibility.md",
       "all_bounce_guide_cpu_preparation": "results/099-all-bounce-guide-cpu-preparation.json",
-      "all_bounce_guide_status": "CPU_KERNEL_TESTED_PILOT_NOT_RUN",
-      "all_bounce_guide_gpu_cases": 0
+      "all_bounce_guide_status": "CPU_FEASIBILITY_REJECTED_ALL_SIX_CONDITIONS_NO_GPU",
+      "all_bounce_guide_gpu_cases": 0,
+      "all_bounce_guide_cpu_replay": "results/100-all-bounce-guide-cpu-feasibility-raw-replay.json",
+      "all_bounce_guide_cpu_outcome": "results/101-all-bounce-guide-cpu-feasibility-outcome.md",
+      "all_bounce_guide_cpu_scene_processes": 3,
+      "all_bounce_guide_condition_passes": 0,
+      "all_bounce_guide_condition_failures": 6,
+      "all_bounce_guide_render_samples": 786432,
+      "all_bounce_guide_further_process_selected": false,
+      "all_bounce_guide_cpu_verification": "results/102-all-bounce-guide-cpu-feasibility-verification.json"
     }
   ]
 }
