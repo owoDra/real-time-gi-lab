@@ -1,0 +1,127 @@
+{
+  "schema": "m001-ddgi-separated-border-full-checkpoint-verification/1",
+  "source_commit": "77ce306785a4143dc3bfe7deab86a474401b9c7e",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "configured historical indexes, not runtime validation",
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "returncode": 0,
+      "scope": "explicit LaneM index",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "returncode": 0,
+      "scope": "historical source/shaders/N010evidence/all CMake unchanged",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command_description": "git diff4b136558 --exit-code -- every original tracked scripts/research,src/research,shaders/research path",
+      "original_paths": 1128,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "all existing source exact since first corrected GPU plan; newly added standalone tools explicitly separate"
+    },
+    {
+      "command_description": "git diffa3f6c3e1 --exit-code -- all original outcome/audit records through052, excluding the mutable current index",
+      "original_result_files": 52,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "scope": "all old outcomes, failures and supersession records preserved byte-for-byte"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import re,subprocess;from pathlib import Path;paths=[Path(p) for p in subprocess.check_output(['git','ls-files'],text=True).splitlines() if Path(p).name=='CMakeLists.txt' or Path(p).suffix=='.cmake'];assert paths;assert all('lane_m_gi_competitiveness' not in p.read_text() and not re.search(r'\\bGLOB(?:_RECURSE)?\\b',p.read_text()) for p in paths)"
+      ],
+      "returncode": 0,
+      "scope": "all tracked CMake explicit, no source GLOB or LaneM subtree registration",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "scope": "whitespace",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "new_source_files": [
+    "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_audit.py",
+    "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_cases.py",
+    "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_step.py",
+    "scripts/research/lane_m_gi_competitiveness/summarize_ddgi_border.py",
+    "scripts/research/lane_m_gi_competitiveness/summarize_ddgi_corrected_quality.py",
+    "scripts/research/lane_m_gi_competitiveness/test_ddgi_corrected_quality_cases.py",
+    "scripts/research/lane_m_gi_competitiveness/test_ddgi_corrected_quality_step.py"
+  ],
+  "existing_source_files_exact": 1128,
+  "new_corrected_gpu_controls": 20,
+  "independent_terminal_audits_pass": 20,
+  "full_raw_and_audit_replay_cases": 20,
+  "raw_payloads_rehashed": 1483,
+  "full_copy_atlases": 230,
+  "full_copy_components": 117719040,
+  "exact_border_components": 35560960,
+  "completed_gpu_units": 17738,
+  "captured_frames": 32,
+  "runtime_requalification_complete": true,
+  "remaining_dynamic_controls": 0,
+  "remaining_all_budget_controls": 0,
+  "indirect_hdr_reference_scoring": false,
+  "accepted_timing": false,
+  "prior_actual_011_cpu_unittests": 62,
+  "prior_actual_011_native_cpu_contracts": 20,
+  "new_actual_012_cpu_unittests": 25,
+  "new_actual_012_native_cpu_contracts": 12,
+  "reused_exact_011_h01_contracts": 6,
+  "negative_quality_gate": {
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-negative-gate-cpu-v1/result.json",
+    "sha256": "8153dd83567fca6ba6c3e54c8a7ad253812aacf436393304d51f880fc4d1a174",
+    "historical_index_source_commit": "38a77cce",
+    "expected_preflight_rejection_pass": true
+  },
+  "cpu_tests_and_build_rerun_for_checkpoint": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "power_clock_desktop_changes": false,
+  "scope": "Twenty actual corrected controls and CPU full replay restore only registered finite-stage/reset-all implementation eligibility. New quality CPU preparation is not image quality admission. Quality GPU execution still requires this full replay/outcome committed, unchanged012order/gates and each own CPU plan/terminal audit. No architecture promotion or speed acceptance."
+}
