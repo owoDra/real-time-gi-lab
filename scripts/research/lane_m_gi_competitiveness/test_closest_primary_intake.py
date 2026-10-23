@@ -48,7 +48,32 @@ class RetainedReadOnlyIntegration(unittest.TestCase):
         cls.c1 = F.K.Case('C1','hwrt')
         old = F.R.read(F.C.ROOT/'research/lanes/n010-comparison-readiness/results/011-rc-correctness-pilot.json')
         row = next(x for x in old['rows'] if (x['cell'],x['backend']) == ('C1','hwrt'))
-        cls.c1_capture = Path(row['command'][row['command'].index('--out')+1])
+        source_capture = Path(row['command'][row['command'].index('--out')+1])
+        # The historical directory also contains four later quality reports.
+        # Copy only the thirteen originally recorded native payloads to a new
+        # retained CPU fixture; never weaken the new acquisition inventory rule.
+        fixture = F.K.BASE/'m001-closest-primary-retained-fixtures-v1'
+        cls.c1_capture = fixture/'c1-hwrt'
+        if not fixture.exists():
+            fixture.mkdir(parents=True)
+            cls.c1_capture.mkdir()
+            for name,digest in row['payload_sha256'].items():
+                source = source_capture/name
+                if F.C.sha(source)!=digest:
+                    raise ValueError('Historical C1 native fixture source drift')
+                target = cls.c1_capture/name
+                target.parent.mkdir(parents=True,exist_ok=True)
+                with target.open('xb') as handle:handle.write(source.read_bytes())
+            F.R.write_new(fixture/'manifest.json',dict(source_capture=str(source_capture),
+                          source_report='research/lanes/n010-comparison-readiness/results/011-rc-correctness-pilot.json',
+                          native_payload_sha256=row['payload_sha256'],gpu_executed=False,
+                          scope='Exact native-only CPU fixture copy; four later score reports excluded; original untouched'))
+        manifest = F.R.read(fixture/'manifest.json')
+        if manifest['native_payload_sha256']!=row['payload_sha256']:
+            raise ValueError('Retained CPU fixture manifest changed')
+        for name,digest in row['payload_sha256'].items():
+            if F.C.sha(source_capture/name)!=digest or F.C.sha(cls.c1_capture/name)!=digest:
+                raise ValueError('Retained CPU fixture is not an exact native copy')
         cls.c1_inputs = {}
         cls.c1_refs = F.reference_inputs(cls.c1, cls.c1_inputs)
         cls.h01 = F.K.Case('H01','software')
