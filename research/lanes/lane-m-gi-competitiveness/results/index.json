@@ -234,7 +234,10 @@
       "static_family_outcome": "results/083-m001-static-screen-outcome.md",
       "static_family_consolidator": "scripts/research/lane_m_gi_competitiveness/consolidate_static_screen.py",
       "lane_m_complete": false,
-      "static_family_verification": "results/084-m001-static-screen-verification.json"
+      "static_family_verification": "results/084-m001-static-screen-verification.json",
+      "closest_primary_development_protocol": "experiments/013-closest-primary-development-validation.md",
+      "closest_primary_development_status": "PREREGISTERED_CPU_PREPARATION_NOT_RUN",
+      "closest_primary_development_gpu_cases": 0
     }
   ]
 }
