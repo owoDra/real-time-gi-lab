@@ -19,7 +19,7 @@ The allocation of work varied between experiments; the table describes the progr
 
 From N008 ([Issue #5](https://github.com/owoDra/real-time-gi-lab/issues/5), 2026-10-13) work was also carried out with **Claude Code (Anthropic)** under the same human direction. N008 Phase A (oracle source, analytic controls, Mitsuba cross-check and records) was implemented and executed by the assistant entirely on CPU in its sandbox; Phase A/B were CPU-only. N008 Phase C GPU captures were executed by the assistant on the project workstation after explicit user authorization, and are recorded as such.
 
-In Lane M (2026-10-23), the user explicitly authorized assistant GPU execution without changing power settings. M001 PT captures from that point are recorded as assistant-executed on the authorized workstation; earlier owner-operated captures retain their original attribution. CPU preparation and independent artifact audits remain distinct from actual GPU execution.
+In Lane M (2026-10-23), the user explicitly authorized assistant GPU execution without changing power settings. M001 PT, fixed-control RC and DDGI captures from that point are recorded as assistant-executed on the authorized workstation; earlier owner-operated captures retain their original attribution. CPU preparation and independent artifact audits remain distinct from actual GPU execution.
 
 ## How the loop worked
 
