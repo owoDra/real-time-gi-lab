@@ -57,6 +57,15 @@ class PrimaryContracts(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'no overwrite'):
                 B.build(Path(tmp) / 'new')
 
+    def test_original_control_manifest_matches_saved_plan_and_all_shader_bytes(self):
+        plan, started, shaders = B.original_control_manifest()
+        self.assertTrue(plan.is_file())
+        self.assertTrue(started.is_file())
+        actual = {str(p): C.sha(p) for p in (B.BUILD / 'shaders').glob('*.spv')}
+        self.assertEqual(shaders, actual)
+        self.assertIn(str(B.BUILD / 'shaders/n001_primary.spv'), shaders)
+        self.assertIn(str(B.BUILD / 'shaders/n003_primary_software.spv'), shaders)
+
     def test_actual_shader_function_float_order_and_legacy_counterexample(self):
         originals = [(C.SOURCE / name).read_bytes() for name in C.PINS]
         functions = [C.selection_function(C.overlay(raw)) for raw in originals]

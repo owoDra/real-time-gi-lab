@@ -37,6 +37,19 @@ def compile_command(entry, output, depfile, shaders):
     return result
 
 
+def original_control_manifest():
+    plan = ROOT / 'out/m001-h01-fixed-vanilla-plan.json'
+    data = json.loads(plan.read_text())
+    capture = Path(data['command'][data['command'].index('--out') + 1])
+    if not capture.is_relative_to(ROOT / 'out') or capture.name != 'capture':
+        raise ValueError('Unexpected original control capture location')
+    started = capture.parent / 'started.json'
+    if C.sha(plan) != json.loads(started.read_text())['plan_sha256']:
+        raise ValueError('Frozen original control plan identity differs')
+    shaders = {p: h for p, h in data['input_sha256'].items() if Path(p).suffix == '.spv'}
+    return plan, started, shaders
+
+
 def build(work):
     work = work.resolve()
     if work.exists() or not work.is_relative_to(ROOT / 'out'):
@@ -58,12 +71,7 @@ def build(work):
         raise ValueError('Expected all thirteen original capture translation units')
     libraries = [BUILD / '_deps/vk_bootstrap-build/libvk-bootstrap.a', BUILD / '_deps/fastgltf-build/libfastgltf.a']
     originals = sorted((BUILD / 'shaders').glob('*.spv'))
-    frozen_plan = ROOT / 'out/m001-h01-fixed-vanilla-plan.json'
-    started = ROOT / 'out/research/lane-m-gi-competitiveness/fixed-controls/H01-vanilla/started.json'
-    if C.sha(frozen_plan) != json.loads(started.read_text())['plan_sha256']:
-        raise ValueError('Frozen original control plan identity differs')
-    expected_shaders = {p: h for p, h in json.loads(frozen_plan.read_text())['input_sha256'].items()
-                        if Path(p).suffix == '.spv'}
+    frozen_plan, started, expected_shaders = original_control_manifest()
     if {str(p): C.sha(p) for p in originals} != expected_shaders:
         raise ValueError('Original shader tree differs from frozen control manifest')
     paths = tracked + [diag, original_binary, COMPILER, VALIDATOR, BUILD / 'build.ninja', frozen_plan, started] + libraries + originals
