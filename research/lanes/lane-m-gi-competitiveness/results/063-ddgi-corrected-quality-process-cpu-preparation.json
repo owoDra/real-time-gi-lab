@@ -1,0 +1,27 @@
+{
+  "schema": "m001-ddgi-corrected-quality-process-cpu-preparation/1",
+  "source_commit": "a085e971754691ec023087bbbe53417960271d85",
+  "all_pass": true,
+  "gpu_executed": false,
+  "new_actual_cpu_tests": 20,
+  "corrected_quality_cpu_tests_total": 25,
+  "new_actual_native_cpu_contracts_previously_completed": 12,
+  "exact_011_native_cpu_contracts_reused": 6,
+  "receipt": {
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-process-tests-v1/result.json",
+    "sha256": "ec8e69520c3660379bccaf8c34e208acd184ecd52262c4aaef5b5089af2487d1"
+  },
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_cases.py": "a78b17745c70457688576f9d4ba3c95067ed435af703386986fb40648d339aef",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_step.py": "8cd566e3714cfc4c4442902ddbb2a3d34db851d81d46a2546ad26a14a7466841",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_audit.py": "e6c065ebbd9eb5d59c6051ac82a00703e957d566f67dc90c018835ede20fcdf2",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_ddgi_corrected_quality_step.py": "296f03b2d082619453120ee986f5ada3f73454effa81dc321df34cb078294670"
+  },
+  "runner": "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_step.py",
+  "auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_audit.py",
+  "quality_gpu_acquisitions": 0,
+  "quality_reference_scores": 0,
+  "all_twenty_011_controls_still_required": true,
+  "quality_gpu_ready": false,
+  "scope": "CPU process mocks and retained correctness-only native fixture; no new indirect quality acquisition/scoring. Complete committed20control replay/outcome plus complete raw/control/CPU/reference/source rehash are mandatory before any012process. Undefined/nonfinite quality metrics invalidate evidence, never authorize escalation. Default Renderer graph untouched."
+}

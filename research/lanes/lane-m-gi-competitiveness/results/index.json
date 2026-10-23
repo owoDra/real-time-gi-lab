@@ -202,7 +202,11 @@
         "status": "SIX_PT_PASS_TWENTY_FOUR_FIXED_RC_LOSSES_FOUR_DDGI_TARGET_LOSSES_NO_MATCHED_TIMING",
         "result": "047-ddgi-h02-quality-outcome.md",
         "current_outcome": "results/047-ddgi-h02-quality-outcome.md"
-      }
+      },
+      "ddgi_corrected_quality_process_cpu_preparation": "results/063-ddgi-corrected-quality-process-cpu-preparation.json",
+      "ddgi_corrected_quality_runner": "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_step.py",
+      "ddgi_corrected_quality_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_audit.py",
+      "ddgi_corrected_quality_process_cpu_tests": 20
     }
   ]
 }
