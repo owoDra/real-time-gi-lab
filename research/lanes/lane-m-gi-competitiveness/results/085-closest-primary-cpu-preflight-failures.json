@@ -1,0 +1,63 @@
+{
+  "schema": "m001-closest-primary-cpu-preflight-failures/1",
+  "failures": [
+    {
+      "receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v1-preflight-failure/result.json",
+      "receipt_sha256": "e16c3a4d967be68135ce5c7f2f070be20d0e2698639b2b0974b957a2c92428de",
+      "record": {
+        "schema": "m001-closest-primary-build-preflight-failure/1",
+        "source_commit": "19b3b78fde643b0a541181d09b2388847b9bc0c8",
+        "command": [
+          "python3",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py",
+          "--out",
+          "out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v1"
+        ],
+        "returncode": 1,
+        "classification": "CPU_PREFLIGHT_FAILED_NO_BUILD_OR_GPU",
+        "error": "Original shader tree incomplete: arbitrary minimum40 exceeds actual frozen29",
+        "original_shader_count": 29,
+        "frozen_original_control_plan_shader_count": 29,
+        "work_tree_created": false,
+        "gpu_executed": false,
+        "build_commands_executed": 0,
+        "source_sha256": {
+          "scripts/research/lane_m_gi_competitiveness/closest_primary.py": "e6cc752835c074cc00f2dc87e8f5620277da0c082aab8bc0b912fed805b29ad8",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py": "6f2c599a8cfc4c1ce98c013951d79d3d82d14ee055916e353ad7b81d5578722a",
+          "scripts/research/lane_m_gi_competitiveness/test_closest_primary.py": "f905b10d3e67b1457975057a315a8689c9a57f42b6055e6168ca5044b8fd19aa"
+        },
+        "next": "Replace guessed minimum with exact frozen original-control shader manifest; use new v2 output root"
+      }
+    },
+    {
+      "receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v2-preflight-failure/result.json",
+      "receipt_sha256": "7ab8d4761a422ca47a53bbe34874464c41a720871655bafb9fc74e1f30ce9c63",
+      "record": {
+        "schema": "m001-closest-primary-build-preflight-failure/1",
+        "source_commit": "2a7cd9ed335e0c67c5b69d4a9a86b44b1eaa6835",
+        "command": [
+          "python3",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py",
+          "--out",
+          "out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v2"
+        ],
+        "returncode": 1,
+        "classification": "CPU_PREFLIGHT_FAILED_NO_BUILD_OR_GPU",
+        "error": "Incorrect guessed original started.json location; actual fixed-control root is m001-original-cpu-v2",
+        "work_tree_created": false,
+        "gpu_executed": false,
+        "build_commands_executed": 0,
+        "source_sha256": {
+          "scripts/research/lane_m_gi_competitiveness/closest_primary.py": "e6cc752835c074cc00f2dc87e8f5620277da0c082aab8bc0b912fed805b29ad8",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py": "c91217ccf62e15e752c10089c58559cef4516d6aabe6ba0a95fda516cdcb0116",
+          "scripts/research/lane_m_gi_competitiveness/test_closest_primary.py": "f905b10d3e67b1457975057a315a8689c9a57f42b6055e6168ca5044b8fd19aa"
+        },
+        "next": "Derive original started.json from exact frozen plan command; verify identity before new v3 build"
+      }
+    }
+  ],
+  "gpu_executed": false,
+  "failed_work_trees_created": false,
+  "original_evidence_changed": false,
+  "scope": "Two failed CPU builder preflights retained; new versions fix inventory assertion and provenance-path resolution, no scientific threshold change"
+}

@@ -236,8 +236,15 @@
       "lane_m_complete": false,
       "static_family_verification": "results/084-m001-static-screen-verification.json",
       "closest_primary_development_protocol": "experiments/013-closest-primary-development-validation.md",
-      "closest_primary_development_status": "PREREGISTERED_CPU_PREPARATION_NOT_RUN",
-      "closest_primary_development_gpu_cases": 0
+      "closest_primary_development_status": "CPU_BUILD_TESTS_READY_PROCESS_AUDITOR_PENDING_NO_GPU",
+      "closest_primary_development_gpu_cases": 0,
+      "closest_primary_failed_cpu_preflights": "results/085-closest-primary-cpu-preflight-failures.json",
+      "closest_primary_cpu_build": "results/086-closest-primary-isolated-cpu-build.json",
+      "closest_primary_cpu_preparation": "results/087-closest-primary-cpu-tests-and-native-contracts.json",
+      "closest_primary_cpu_outcome": "results/088-closest-primary-cpu-preparation-outcome.md",
+      "closest_primary_cpu_tests": 12,
+      "closest_primary_native_cpu_contracts": 8,
+      "closest_primary_cpu_checkpoint_verification": "results/089-closest-primary-cpu-checkpoint-verification.json"
     }
   ]
 }

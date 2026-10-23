@@ -1,0 +1,328 @@
+{
+  "schema": "m001-closest-primary-cpu-preparation/1",
+  "source_commit": "642dd9895d8cf939a6a55d6569b97b791f311b2f",
+  "current_actual_cpu_tests": 12,
+  "current_test_receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-cpu-tests-v3/result.json",
+  "test_receipts": [
+    {
+      "receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-cpu-tests-v1/result.json",
+      "receipt_sha256": "4c712bdce65874b3fd9b60830267673efb0c0be1537746159a2fa715414012e0",
+      "record": {
+        "schema": "m001-closest-primary-cpu-tests/1",
+        "source_commit": "19b3b78fde643b0a541181d09b2388847b9bc0c8",
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/research/lane_m_gi_competitiveness",
+          "-p",
+          "test_closest_primary.py",
+          "-v"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "test_actual_shader_function_float_order_and_legacy_counterexample (test_closest_primary.PrimaryContracts.test_actual_shader_function_float_order_and_legacy_counterexample) ... ok\ntest_duplicate_patch_anchor_is_rejected (test_closest_primary.PrimaryContracts.test_duplicate_patch_anchor_is_rejected) ... ok\ntest_exact_inverse_for_both_historical_shaders (test_closest_primary.PrimaryContracts.test_exact_inverse_for_both_historical_shaders) ... ok\ntest_existing_build_and_external_root_are_rejected_before_tools (test_closest_primary.PrimaryContracts.test_existing_build_and_external_root_are_rejected_before_tools) ... ok\ntest_malformed_original_command_is_rejected (test_closest_primary.PrimaryContracts.test_malformed_original_command_is_rejected) ... ok\ntest_private_command_moves_only_outputs_and_shader_macros (test_closest_primary.PrimaryContracts.test_private_command_moves_only_outputs_and_shader_macros) ... ok\ntest_unregistered_or_drifted_source_is_rejected (test_closest_primary.PrimaryContracts.test_unregistered_or_drifted_source_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 7 tests in 0.348s\n\nOK\n",
+        "gpu_executed": false,
+        "input_sha256": {
+          "scripts/research/lane_m_gi_competitiveness/closest_primary.py": "e6cc752835c074cc00f2dc87e8f5620277da0c082aab8bc0b912fed805b29ad8",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py": "6f2c599a8cfc4c1ce98c013951d79d3d82d14ee055916e353ad7b81d5578722a",
+          "scripts/research/lane_m_gi_competitiveness/test_closest_primary.py": "f905b10d3e67b1457975057a315a8689c9a57f42b6055e6168ca5044b8fd19aa"
+        }
+      }
+    },
+    {
+      "receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-cpu-tests-v2/result.json",
+      "receipt_sha256": "81991617cf598de636d9ccb37e8ae3607c47cb7a3b8cd7188e4bd0e5c7768c3d",
+      "record": {
+        "schema": "m001-closest-primary-cpu-tests/1",
+        "source_commit": "1c8a3a0b3c55b021c5082813ac3f080dad9168bd",
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/research/lane_m_gi_competitiveness",
+          "-p",
+          "test_closest_primary.py",
+          "-v"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "test_actual_shader_function_float_order_and_legacy_counterexample (test_closest_primary.PrimaryContracts.test_actual_shader_function_float_order_and_legacy_counterexample) ... ok\ntest_duplicate_patch_anchor_is_rejected (test_closest_primary.PrimaryContracts.test_duplicate_patch_anchor_is_rejected) ... ok\ntest_exact_inverse_for_both_historical_shaders (test_closest_primary.PrimaryContracts.test_exact_inverse_for_both_historical_shaders) ... ok\ntest_existing_build_and_external_root_are_rejected_before_tools (test_closest_primary.PrimaryContracts.test_existing_build_and_external_root_are_rejected_before_tools) ... ok\ntest_malformed_original_command_is_rejected (test_closest_primary.PrimaryContracts.test_malformed_original_command_is_rejected) ... ok\ntest_original_control_manifest_matches_saved_plan_and_all_shader_bytes (test_closest_primary.PrimaryContracts.test_original_control_manifest_matches_saved_plan_and_all_shader_bytes) ... ok\ntest_private_command_moves_only_outputs_and_shader_macros (test_closest_primary.PrimaryContracts.test_private_command_moves_only_outputs_and_shader_macros) ... ok\ntest_unregistered_or_drifted_source_is_rejected (test_closest_primary.PrimaryContracts.test_unregistered_or_drifted_source_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 8 tests in 0.345s\n\nOK\n",
+        "gpu_executed": false,
+        "input_sha256": {
+          "scripts/research/lane_m_gi_competitiveness/closest_primary.py": "e6cc752835c074cc00f2dc87e8f5620277da0c082aab8bc0b912fed805b29ad8",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py": "7e0cfa4ff78342e6573fd987d16143b74b1e4467c61abd1d1e13acbf2eb6283a",
+          "scripts/research/lane_m_gi_competitiveness/test_closest_primary.py": "a6adcaaeafbbcf5f2751f4324f8c0ffa1258803fbadd1c3ade0360d2bfa8085a"
+        }
+      }
+    },
+    {
+      "receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-cpu-tests-v3/result.json",
+      "receipt_sha256": "eb3384a21135de4d5ec5586e58db7d4681bae19ba6059382ab6c02705f7d2338",
+      "record": {
+        "schema": "m001-closest-primary-cpu-tests/1",
+        "source_commit": "642dd9895d8cf939a6a55d6569b97b791f311b2f",
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/research/lane_m_gi_competitiveness",
+          "-p",
+          "test_closest_primary*.py",
+          "-v"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "test_actual_shader_function_float_order_and_legacy_counterexample (test_closest_primary.PrimaryContracts.test_actual_shader_function_float_order_and_legacy_counterexample) ... ok\ntest_duplicate_patch_anchor_is_rejected (test_closest_primary.PrimaryContracts.test_duplicate_patch_anchor_is_rejected) ... ok\ntest_exact_inverse_for_both_historical_shaders (test_closest_primary.PrimaryContracts.test_exact_inverse_for_both_historical_shaders) ... ok\ntest_existing_build_and_external_root_are_rejected_before_tools (test_closest_primary.PrimaryContracts.test_existing_build_and_external_root_are_rejected_before_tools) ... ok\ntest_malformed_original_command_is_rejected (test_closest_primary.PrimaryContracts.test_malformed_original_command_is_rejected) ... ok\ntest_original_control_manifest_matches_saved_plan_and_all_shader_bytes (test_closest_primary.PrimaryContracts.test_original_control_manifest_matches_saved_plan_and_all_shader_bytes) ... ok\ntest_private_command_moves_only_outputs_and_shader_macros (test_closest_primary.PrimaryContracts.test_private_command_moves_only_outputs_and_shader_macros) ... ok\ntest_unregistered_or_drifted_source_is_rejected (test_closest_primary.PrimaryContracts.test_unregistered_or_drifted_source_is_rejected) ... ok\ntest_c1_preserves_original_two_frame_command (test_closest_primary_cases.CaseContracts.test_c1_preserves_original_two_frame_command) ... ok\ntest_exact_eight_registered_cases (test_closest_primary_cases.CaseContracts.test_exact_eight_registered_cases) ... ok\ntest_m001_matches_original_control_inputs (test_closest_primary_cases.CaseContracts.test_m001_matches_original_control_inputs) ... ok\ntest_unregistered_case_is_rejected (test_closest_primary_cases.CaseContracts.test_unregistered_case_is_rejected) ... ok\n\n----------------------------------------------------------------------\nRan 12 tests in 0.350s\n\nOK\n",
+        "gpu_executed": false,
+        "input_sha256": {
+          "scripts/research/lane_m_gi_competitiveness/closest_primary_cpu_contracts.py": "e66ab935ad134ae39a8d9b2f029601dcffe46ad8ddfb9d3f53017b71dff95953",
+          "scripts/research/lane_m_gi_competitiveness/closest_primary.py": "e6cc752835c074cc00f2dc87e8f5620277da0c082aab8bc0b912fed805b29ad8",
+          "scripts/research/lane_m_gi_competitiveness/build_closest_primary.py": "7e0cfa4ff78342e6573fd987d16143b74b1e4467c61abd1d1e13acbf2eb6283a",
+          "scripts/research/lane_m_gi_competitiveness/closest_primary_cases.py": "8b1199ad02c6d1792d8b08a6cd9bfc400bef6aba12dce115c8b57e72137690ee",
+          "scripts/research/lane_m_gi_competitiveness/test_closest_primary.py": "a6adcaaeafbbcf5f2751f4324f8c0ffa1258803fbadd1c3ade0360d2bfa8085a",
+          "scripts/research/lane_m_gi_competitiveness/test_closest_primary_cases.py": "eb8fea87fe00351c785d97d2cb1d6734ae5adda4e98706ed6eb7e89ec0502ca1"
+        }
+      }
+    }
+  ],
+  "earlier_test_suite_counts": [
+    7,
+    8
+  ],
+  "counts_are_not_unique_tests_added_together": true,
+  "actual_native_cpu_contracts": 8,
+  "native_contract_receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/result.json",
+  "native_contract_receipt_sha256": "79bb2abe082b960ab4387f948165066d892c00649099dafa040c300cd229123d",
+  "native_contract_record": {
+    "schema": "m001-closest-primary-native-cpu-contracts/1",
+    "source_commit": "642dd9895d8cf939a6a55d6569b97b791f311b2f",
+    "complete": true,
+    "gpu_executed": false,
+    "unusable_icd": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/unavailable-driver.json",
+    "build_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/result.json",
+    "build_receipt_sha256": "0c6ebb4ab7af8a493f7d861aa8ec4dfb60a4ad8bbe3683e6ff8c4e5faca16907",
+    "executable_sha256": "7aa2eb1fa61c9fba2917810bdfd02113614f814634f723e79408fb08064fdee1",
+    "rows": [
+      {
+        "name": "c1-hwrt",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "hwrt",
+          "--direct-profile",
+          "ulp4",
+          "--target-state",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/c1-hwrt/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "c1-software",
+        "command": [
+          "bash",
+          "scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "software",
+          "--direct-profile",
+          "ulp4",
+          "--target-state",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/c1-software/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "h01-hwrt",
+        "command": [
+          "bash",
+          "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H01.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "hwrt",
+          "--direct-profile",
+          "ulp4",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/h01-hwrt/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "h01-software",
+        "command": [
+          "bash",
+          "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H01.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "software",
+          "--direct-profile",
+          "ulp4",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/h01-software/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "h02-hwrt",
+        "command": [
+          "bash",
+          "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H02.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "hwrt",
+          "--direct-profile",
+          "ulp4",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/h02-hwrt/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "h02-software",
+        "command": [
+          "bash",
+          "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H02.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "software",
+          "--direct-profile",
+          "ulp4",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/h02-software/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "h03-hwrt",
+        "command": [
+          "bash",
+          "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H03.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "hwrt",
+          "--direct-profile",
+          "ulp4",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/h03-hwrt/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      },
+      {
+        "name": "h03-software",
+        "command": [
+          "bash",
+          "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-build-v3/m001-closest-primary-capture",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/assets/M001-H03.gltf",
+          "--scenario",
+          "static",
+          "--backend",
+          "software",
+          "--direct-profile",
+          "ulp4",
+          "--spp",
+          "512",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-native-cpu-contracts-v1/h03-software/capture"
+        ],
+        "returncode": 1,
+        "stdout": "",
+        "stderr": "N007: B002 Vulkan instance: failed_create_instance\n",
+        "gpu_executed": false,
+        "pass_": true
+      }
+    ],
+    "runtime_admitted": false,
+    "scope": "Actual eight native CLI launches must reject unavailable ICD; no physical/runtime PASS",
+    "payload_sha256": {
+      "c1-hwrt/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "c1-software/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "h01-hwrt/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "h01-software/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "h02-hwrt/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "h02-software/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "h03-hwrt/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704",
+      "h03-software/allocation-ledger.json": "894918bc8bc7e7d3245bbc14b7eb86ee8b81201380fce9a13867999e7a8c8704"
+    }
+  },
+  "gpu_executed": false,
+  "physical_state_runtime_validation_run": false,
+  "process_runner_independent_auditor_ready": false
+}
