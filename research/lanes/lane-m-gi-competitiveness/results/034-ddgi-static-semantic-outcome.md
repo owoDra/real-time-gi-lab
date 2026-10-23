@@ -1,0 +1,17 @@
+# M001 DDGI static semantic qualification outcome
+
+2026-10-23. [Prospective008](../experiments/008-ddgi-bounded-semantic-controls.md), [CPU host build031](031-ddgi-private-host-cpu-build.json), [CPU tests032](032-ddgi-host-cpu-contract-tests.json), [complete raw replay033](033-ddgi-six-semantic-controls-raw-replay.json).
+
+All six separately prepared/acquired/audited controls PASS: direct, black, unit, HDR8, scene-one and scene-seven. Each next GPU process started only after the preceding terminal independent CPU PASS. There were no GPU retries, output overwrites or power/clock/desktop changes. These six acquisitions were assistant-operated under the user's explicit workstation authorization; the original retained captures keep their human attribution. Total new acquisitions in this continuation are now48 (33PT,3dense,6vanilla/software,6DDGI controls).
+
+The new HLSL primary/direct path agrees with the eligible original physical direct reference at max absolute error5.664375897853919e−10 and full-image NRMSE3.1709895333637723e−7; no pixel masks. Black indirect is exactly0. Unit/HDR8 ray/blend normalization passes1e−5; HDR8 indirect gather scales8×unit under the frozen tolerance, without clamping this range. The scene seven-stage first output matches scene-one byte-for-byte. All stages retain an unchanged previous irradiance/distance/probe-data atlas, matching the preceding current output or initial0. Fixed shader/descriptor and CPU symbolic state evidence establish the stated finite static composition; estimator accuracy remains untested.
+
+CPU replay actually rehashes173native payloads,130completed GPU units, exact state/descriptor bytes, every finite array, pixel/PFM/composite identity and all allocations. Each ledger has56events, peak2,309,008owned bytes and zero teardown. Both atlas sets, AS, staging and buffers are included; CPU/driver-private memory is excluded. No validation layer run. Radeon8060S/RADV driver provenance is captured per native process; timestamps are diagnostic/uncalibrated and establish no accepted speed result.
+
+**This is scoped static semantic qualification, not DDGI HDR quality admission.** H01 grid4/rays128 qualification images are never quality-budget entries; no indirect quality scores or error maps were computed. No quality ladder has yet been registered. Broader dynamic/Sponza/device/temporal support and architecture competitiveness remain incomplete.
+
+## Required order before quality
+
+Original [001](../experiments/001-first-cohort-preregistration.md) requires DDGI dynamic-update qualification before its quality/timing comparison, in addition to finite-depth, gather and allocations. The static-only scope of007/008 does not satisfy that requirement. Follow001 without relaxing its order: register and test an explicit changed-light/geometry state schedule and full reset/invalidation lifecycle before any DDGI quality acquisition. Fresh static images alone do not prove transition/history behavior. A full-restart dynamic implementation may be studied with every rebuild/reset/setup cost reported, but must not be represented as temporal history reuse or optimized recurring DDGI.
+
+All six original references, PT selections,24fixed-RC quality losses, N001–N010 historical records and the default Renderer/build graph are unchanged. [Current status](../../status.md) remains the single live summary. Lane M and M001 are not complete.

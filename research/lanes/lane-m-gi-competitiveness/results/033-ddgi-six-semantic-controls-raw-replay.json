@@ -1,0 +1,835 @@
+{
+  "schema": "m001-ddgi-six-semantic-controls-replay/1",
+  "all_pass": true,
+  "gpu_executed_by_auditor": false,
+  "native_acquisitions": 6,
+  "raw_payloads_rehashed": 173,
+  "complete_gpu_units": 130,
+  "rows": [
+    {
+      "schema": "m001-ddgi-control-independent-cpu-audit/1",
+      "name": "direct",
+      "classification": "SEMANTIC_CONTROL_PASS",
+      "semantic_pass": true,
+      "result_sha256": "9bc693a6a37374a8266dc79bff8d716c2527c4dba5e7ec93d3d2d55c816a7781",
+      "archive_sha256": "af7406d4f5de04bfb1986459b2d77564317805a7926fdf8e0e3ffee6affed7e6",
+      "raw_payloads_rehashed": 16,
+      "detail": {
+        "completed_gpu_units": 2,
+        "stage_count": 0,
+        "previous_atlas_bytes_immutable": true,
+        "direct_max_abs_error": 5.664375897853919e-10,
+        "direct_metrics": {
+          "pixels": 57600,
+          "scoring_exclusions": 0,
+          "rmse": 7.073250298942868e-12,
+          "reference_rms": 2.2306129441681237e-05,
+          "nrmse": 3.1709895333637723e-07,
+          "signed_sum_bias": -5.972358260360869e-08,
+          "reference_sum": 0.4194302901038408,
+          "gpu_sum": 0.4194302650539612,
+          "active_pixels": 6939,
+          "active_p99_absolute": 4.1570931816250344e-11,
+          "active_p99_relative": 8.647686966774229e-07,
+          "active_max_relative": 3.0877582695224063e-06,
+          "gpu_zero_reference_positive": 0,
+          "reference_zero_leak_pixels": 0,
+          "reference_zero_leak_energy": 0.0,
+          "whole_image_max_absolute": 5.664375897853919e-10
+        }
+      },
+      "owned_memory": {
+        "events": 56,
+        "true_peak_owned_bytes": 2309008,
+        "teardown_zero": true
+      },
+      "gpu_executed_by_auditor": false,
+      "quality_admission": false,
+      "accepted_timing": false,
+      "scope": "Named static semantic control only; no HDR quality decision, temporal/dynamic support, robustness or speed claim",
+      "native_configuration": {
+        "schema": "m001-ddgi-native/1",
+        "mode": "direct",
+        "grid_side": 4,
+        "rays": 128,
+        "vertices": 1,
+        "seed": 305419896,
+        "rotation_updates_per_volume": 1,
+        "hysteresis": 0,
+        "gamma": 1,
+        "normal_view_bias": 0.014999999664723873,
+        "brightness_threshold": 1000000,
+        "distance_exponent": 50,
+        "ray_max": 33.9779167175293,
+        "origin": [
+          0,
+          1.350000023841858,
+          0
+        ],
+        "spacing": [
+          4.44444465637207,
+          1.5,
+          4.44444465637207
+        ],
+        "subgroup": 64,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 10.019036293029785,
+        "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "driver_name": "radv",
+        "driver_info": "Mesa 26.1.2",
+        "api_version": 4211036,
+        "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+        "setup_wall_us": 77216.772,
+        "images": [
+          {
+            "type": 0,
+            "w": 128,
+            "h": 16,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 1,
+            "w": 32,
+            "h": 32,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 2,
+            "w": 64,
+            "h": 64,
+            "layers": 4,
+            "channels": 2
+          },
+          {
+            "type": 3,
+            "w": 4,
+            "h": 4,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 4,
+            "w": 24,
+            "h": 24,
+            "layers": 4,
+            "channels": 1
+          },
+          {
+            "type": 5,
+            "w": 2,
+            "h": 2,
+            "layers": 1,
+            "channels": 2
+          }
+        ]
+      },
+      "payload_sha256": {
+        "capture/allocation-ledger.json": "beab81a8e0c61832979a433dba38c6ff523e8139dff037a9ef8ea5f82f77c655",
+        "capture/complete.json": "a5ef12eed0afb7628455f331613775a20677f9cb7633883898e5f6581bdf9fb9",
+        "capture/configuration.json": "624a18b6bf54ded8a0f429c6abf3d4186095750a2d77028639d31249962db2e6",
+        "capture/constants-0.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/constants-1.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/cpu-contract.json": "ff417f2d7a6d09b27b95b92669f4cef2fde8c3a978e1e35ea65647ae399619e4",
+        "capture/direct.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "capture/dispatches.jsonl": "18559a054ee25fd37984d0367bbd6f21d5e5e863b05bdd5d4197daf2f90b54dd",
+        "capture/frame-state.bin": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "capture/geometry-state.bin": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "capture/indirect.pfm": "7595a554e8cce3af07b1aa6a89521c803c12e8f70f2ed725ed74bba20220ea47",
+        "capture/pixels.f32": "a11824da60927d3608bc2bf354faecbe8c379c0da8e19852964c0bc1d3f66ad0",
+        "capture/total.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "native.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "native.stdout.txt": "d510b4ddce929fe83088d141c6405b81705f1267c77beb33764590e999bf934d",
+        "started.json": "dfbc80b94fcbc10e981225464a07a92b57fa50c431891620a64b2049e7fcee71"
+      }
+    },
+    {
+      "schema": "m001-ddgi-control-independent-cpu-audit/1",
+      "name": "black",
+      "classification": "SEMANTIC_CONTROL_PASS",
+      "semantic_pass": true,
+      "result_sha256": "05b0fb8dae0fe8531e7fde34bd2cc8ccb0ee23b5c1408bd3480330395a937a39",
+      "archive_sha256": "278ddb082b3d78ddb41716851861c8f2ba7420f3836cd86a667c81dfd5bb0202",
+      "raw_payloads_rehashed": 23,
+      "detail": {
+        "completed_gpu_units": 12,
+        "stage_count": 1,
+        "previous_atlas_bytes_immutable": true,
+        "type0_max_abs_error": 0.0,
+        "type1_max_abs_error": 0.0,
+        "type2_max_abs_error": 2.9802322387695312e-08
+      },
+      "owned_memory": {
+        "events": 56,
+        "true_peak_owned_bytes": 2309008,
+        "teardown_zero": true
+      },
+      "gpu_executed_by_auditor": false,
+      "quality_admission": false,
+      "accepted_timing": false,
+      "scope": "Named static semantic control only; no HDR quality decision, temporal/dynamic support, robustness or speed claim",
+      "native_configuration": {
+        "schema": "m001-ddgi-native/1",
+        "mode": "constant0",
+        "grid_side": 4,
+        "rays": 128,
+        "vertices": 2,
+        "seed": 305419896,
+        "rotation_updates_per_volume": 1,
+        "hysteresis": 0,
+        "gamma": 1,
+        "normal_view_bias": 0.014999999664723873,
+        "brightness_threshold": 1000000,
+        "distance_exponent": 50,
+        "ray_max": 33.9779167175293,
+        "origin": [
+          0,
+          1.350000023841858,
+          0
+        ],
+        "spacing": [
+          4.44444465637207,
+          1.5,
+          4.44444465637207
+        ],
+        "subgroup": 64,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 10.019036293029785,
+        "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "driver_name": "radv",
+        "driver_info": "Mesa 26.1.2",
+        "api_version": 4211036,
+        "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+        "setup_wall_us": 44626.079,
+        "images": [
+          {
+            "type": 0,
+            "w": 128,
+            "h": 16,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 1,
+            "w": 32,
+            "h": 32,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 2,
+            "w": 64,
+            "h": 64,
+            "layers": 4,
+            "channels": 2
+          },
+          {
+            "type": 3,
+            "w": 4,
+            "h": 4,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 4,
+            "w": 24,
+            "h": 24,
+            "layers": 4,
+            "channels": 1
+          },
+          {
+            "type": 5,
+            "w": 2,
+            "h": 2,
+            "layers": 1,
+            "channels": 2
+          }
+        ]
+      },
+      "payload_sha256": {
+        "capture/allocation-ledger.json": "5ba66f9b731e0bed9813a929b31b23f9f4223daee5438056d4d18afa8fb7cc63",
+        "capture/complete.json": "a5ef12eed0afb7628455f331613775a20677f9cb7633883898e5f6581bdf9fb9",
+        "capture/configuration.json": "f3dfb99add92e1e4a3eb7f95cf69f07d9c6723d7b72fd1d66126da34e29f93cb",
+        "capture/constants-0.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/constants-1.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/cpu-contract.json": "6d6f243ab11ca063d6fe60e11fd2871c641ce36b4b98bf3a1f52e3f593552c9a",
+        "capture/direct.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "capture/dispatches.jsonl": "0797b3185c934065140e972d947bf6ba318b5a5abf813ac5ae94ef8566e0dd3c",
+        "capture/frame-state.bin": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "capture/geometry-state.bin": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "capture/indirect.pfm": "7595a554e8cce3af07b1aa6a89521c803c12e8f70f2ed725ed74bba20220ea47",
+        "capture/pixels.f32": "a11824da60927d3608bc2bf354faecbe8c379c0da8e19852964c0bc1d3f66ad0",
+        "capture/stage-0-current-0.f32": "170e3348244ca998482410eb2dd662e12b35b3729361f33f67fcc0beabacb7d4",
+        "capture/stage-0-current-1.f32": "49b4d9e4c5be5d006f048cced25f9ee7110fbea226a14d511ffac8320eb4d68e",
+        "capture/stage-0-current-2.f32": "706552e7d16b3bd37b128370dddd1247af8e45ef2068a5e103849152c7c745c9",
+        "capture/stage-0-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-0-previous-1.f32": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "capture/stage-0-previous-2.f32": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+        "capture/stage-0-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/total.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "native.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "native.stdout.txt": "d510b4ddce929fe83088d141c6405b81705f1267c77beb33764590e999bf934d",
+        "started.json": "84c1a16f13ba15cac2883fe920c7f67faf0600af6ff8e85eef8de6cfb54c62c2"
+      }
+    },
+    {
+      "schema": "m001-ddgi-control-independent-cpu-audit/1",
+      "name": "unit",
+      "classification": "SEMANTIC_CONTROL_PASS",
+      "semantic_pass": true,
+      "result_sha256": "a3cb6e8c85da3e88e4fb63e74a877b49b3546bd11c0f3e1e7a42eed01ae1dc50",
+      "archive_sha256": "b7a419122728fb5f4f69eb8413ad8b5a732bccecfa0afb0b890625dbdf021a72",
+      "raw_payloads_rehashed": 23,
+      "detail": {
+        "completed_gpu_units": 12,
+        "stage_count": 1,
+        "previous_atlas_bytes_immutable": true,
+        "type0_max_abs_error": 0.0,
+        "type1_max_abs_error": 5.960464477539063e-08,
+        "type2_max_abs_error": 2.9802322387695312e-08
+      },
+      "owned_memory": {
+        "events": 56,
+        "true_peak_owned_bytes": 2309008,
+        "teardown_zero": true
+      },
+      "gpu_executed_by_auditor": false,
+      "quality_admission": false,
+      "accepted_timing": false,
+      "scope": "Named static semantic control only; no HDR quality decision, temporal/dynamic support, robustness or speed claim",
+      "native_configuration": {
+        "schema": "m001-ddgi-native/1",
+        "mode": "constant1",
+        "grid_side": 4,
+        "rays": 128,
+        "vertices": 2,
+        "seed": 305419896,
+        "rotation_updates_per_volume": 1,
+        "hysteresis": 0,
+        "gamma": 1,
+        "normal_view_bias": 0.014999999664723873,
+        "brightness_threshold": 1000000,
+        "distance_exponent": 50,
+        "ray_max": 33.9779167175293,
+        "origin": [
+          0,
+          1.350000023841858,
+          0
+        ],
+        "spacing": [
+          4.44444465637207,
+          1.5,
+          4.44444465637207
+        ],
+        "subgroup": 64,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 10.019036293029785,
+        "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "driver_name": "radv",
+        "driver_info": "Mesa 26.1.2",
+        "api_version": 4211036,
+        "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+        "setup_wall_us": 59045.812,
+        "images": [
+          {
+            "type": 0,
+            "w": 128,
+            "h": 16,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 1,
+            "w": 32,
+            "h": 32,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 2,
+            "w": 64,
+            "h": 64,
+            "layers": 4,
+            "channels": 2
+          },
+          {
+            "type": 3,
+            "w": 4,
+            "h": 4,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 4,
+            "w": 24,
+            "h": 24,
+            "layers": 4,
+            "channels": 1
+          },
+          {
+            "type": 5,
+            "w": 2,
+            "h": 2,
+            "layers": 1,
+            "channels": 2
+          }
+        ]
+      },
+      "payload_sha256": {
+        "capture/allocation-ledger.json": "5ba66f9b731e0bed9813a929b31b23f9f4223daee5438056d4d18afa8fb7cc63",
+        "capture/complete.json": "a5ef12eed0afb7628455f331613775a20677f9cb7633883898e5f6581bdf9fb9",
+        "capture/configuration.json": "71fb025f4ce0a7dd0b4610e7c53e3d754ca24a574c4377f8928f5e60955a46e5",
+        "capture/constants-0.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/constants-1.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/cpu-contract.json": "6d6f243ab11ca063d6fe60e11fd2871c641ce36b4b98bf3a1f52e3f593552c9a",
+        "capture/direct.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "capture/dispatches.jsonl": "7827e415dd7388b7e0a119b213f2abb43e04cc7230ace2d711f147dfacedca4b",
+        "capture/frame-state.bin": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "capture/geometry-state.bin": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "capture/indirect.pfm": "3b3371087e3e57119c98597b82819ba860b7aca0554be39fbee2e3a2fc766a5d",
+        "capture/pixels.f32": "c96e66ebdd72744acb4b681878e41040c36c088db50ae159fc046431635ccfaa",
+        "capture/stage-0-current-0.f32": "941ef28a292311ab27419dd82d5d9c28102384d5bdac7713f3c7e739f7a28592",
+        "capture/stage-0-current-1.f32": "ad4802af183b4b8fae138a294875c38910bcc009a56a1606a5b9e407612ae686",
+        "capture/stage-0-current-2.f32": "706552e7d16b3bd37b128370dddd1247af8e45ef2068a5e103849152c7c745c9",
+        "capture/stage-0-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-0-previous-1.f32": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "capture/stage-0-previous-2.f32": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+        "capture/stage-0-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/total.pfm": "a694604a381b65c3029035576dec84b523402b0e5ab6014e4761ca3dc52fe64a",
+        "native.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "native.stdout.txt": "d510b4ddce929fe83088d141c6405b81705f1267c77beb33764590e999bf934d",
+        "started.json": "1d3dc861cd099eb124b0cbe32cd900c23dc05e16ab9aeac84d91f9783da5253b"
+      }
+    },
+    {
+      "schema": "m001-ddgi-control-independent-cpu-audit/1",
+      "name": "hdr",
+      "classification": "SEMANTIC_CONTROL_PASS",
+      "semantic_pass": true,
+      "result_sha256": "1ddce28a4030f2b71df2190e954a7dff899c21139822bc3f4a2bb51e98863ddd",
+      "archive_sha256": "0859387e9650bfd36f94edacc11cee1f35d13ba3c91dbd785787111ef74bbfda",
+      "raw_payloads_rehashed": 23,
+      "detail": {
+        "completed_gpu_units": 12,
+        "stage_count": 1,
+        "previous_atlas_bytes_immutable": true,
+        "type0_max_abs_error": 0.0,
+        "type1_max_abs_error": 2.384185791015625e-07,
+        "type2_max_abs_error": 2.9802322387695312e-08,
+        "hdr_surface_gather_8x_linearity": true
+      },
+      "owned_memory": {
+        "events": 56,
+        "true_peak_owned_bytes": 2309008,
+        "teardown_zero": true
+      },
+      "gpu_executed_by_auditor": false,
+      "quality_admission": false,
+      "accepted_timing": false,
+      "scope": "Named static semantic control only; no HDR quality decision, temporal/dynamic support, robustness or speed claim",
+      "native_configuration": {
+        "schema": "m001-ddgi-native/1",
+        "mode": "constant8",
+        "grid_side": 4,
+        "rays": 128,
+        "vertices": 2,
+        "seed": 305419896,
+        "rotation_updates_per_volume": 1,
+        "hysteresis": 0,
+        "gamma": 1,
+        "normal_view_bias": 0.014999999664723873,
+        "brightness_threshold": 1000000,
+        "distance_exponent": 50,
+        "ray_max": 33.9779167175293,
+        "origin": [
+          0,
+          1.350000023841858,
+          0
+        ],
+        "spacing": [
+          4.44444465637207,
+          1.5,
+          4.44444465637207
+        ],
+        "subgroup": 64,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 10.019036293029785,
+        "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "driver_name": "radv",
+        "driver_info": "Mesa 26.1.2",
+        "api_version": 4211036,
+        "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+        "setup_wall_us": 54574.517,
+        "images": [
+          {
+            "type": 0,
+            "w": 128,
+            "h": 16,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 1,
+            "w": 32,
+            "h": 32,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 2,
+            "w": 64,
+            "h": 64,
+            "layers": 4,
+            "channels": 2
+          },
+          {
+            "type": 3,
+            "w": 4,
+            "h": 4,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 4,
+            "w": 24,
+            "h": 24,
+            "layers": 4,
+            "channels": 1
+          },
+          {
+            "type": 5,
+            "w": 2,
+            "h": 2,
+            "layers": 1,
+            "channels": 2
+          }
+        ]
+      },
+      "payload_sha256": {
+        "capture/allocation-ledger.json": "5ba66f9b731e0bed9813a929b31b23f9f4223daee5438056d4d18afa8fb7cc63",
+        "capture/complete.json": "a5ef12eed0afb7628455f331613775a20677f9cb7633883898e5f6581bdf9fb9",
+        "capture/configuration.json": "23c4d6709a6fdd08565390f6ad4f6caefb322e785c3889e7f04d565a8e06c895",
+        "capture/constants-0.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/constants-1.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/cpu-contract.json": "6d6f243ab11ca063d6fe60e11fd2871c641ce36b4b98bf3a1f52e3f593552c9a",
+        "capture/direct.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "capture/dispatches.jsonl": "b756af0b58496b5816d02e7caccabf99daa7f52f40e1f2843881d4b7f34c9d42",
+        "capture/frame-state.bin": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "capture/geometry-state.bin": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "capture/indirect.pfm": "97a2e7858d6655c1d14ab53f35ea8dce132bf7ebffe05f46994c77240a0e1166",
+        "capture/pixels.f32": "e0304bd7cae43a80f4f632b4396fb8ae8582e8880620b5739d478b356a1514d9",
+        "capture/stage-0-current-0.f32": "11fce20983882ea6862e6433afe46607e7c6f53e7f327122f0fec5990a22ce0b",
+        "capture/stage-0-current-1.f32": "71f29eadebea310c4bc18081406f73aca7cf132bb12ca4d8c3f1975791d1c005",
+        "capture/stage-0-current-2.f32": "706552e7d16b3bd37b128370dddd1247af8e45ef2068a5e103849152c7c745c9",
+        "capture/stage-0-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-0-previous-1.f32": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "capture/stage-0-previous-2.f32": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+        "capture/stage-0-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/total.pfm": "28c455c0d1387b0a993f1eebc102047916bb0d8a1c3126bf5601e2dcf80a5f4d",
+        "native.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "native.stdout.txt": "d510b4ddce929fe83088d141c6405b81705f1267c77beb33764590e999bf934d",
+        "started.json": "a31b137cdde5a8d947e7425aee4425cec935db800ac08dce54c8ff274654de57"
+      }
+    },
+    {
+      "schema": "m001-ddgi-control-independent-cpu-audit/1",
+      "name": "scene-one",
+      "classification": "SEMANTIC_CONTROL_PASS",
+      "semantic_pass": true,
+      "result_sha256": "856f1921dc4e2a61f39ad109f4e61f03c6c2e4bcf957e4429cb1a79b16764e7a",
+      "archive_sha256": "89b98fa831ab7149a55cc8268166f404aa0489c4db7a46c92f2f30c343614f71",
+      "raw_payloads_rehashed": 23,
+      "detail": {
+        "completed_gpu_units": 13,
+        "stage_count": 1,
+        "previous_atlas_bytes_immutable": true
+      },
+      "owned_memory": {
+        "events": 56,
+        "true_peak_owned_bytes": 2309008,
+        "teardown_zero": true
+      },
+      "gpu_executed_by_auditor": false,
+      "quality_admission": false,
+      "accepted_timing": false,
+      "scope": "Named static semantic control only; no HDR quality decision, temporal/dynamic support, robustness or speed claim",
+      "native_configuration": {
+        "schema": "m001-ddgi-native/1",
+        "mode": "scene",
+        "grid_side": 4,
+        "rays": 128,
+        "vertices": 2,
+        "seed": 305419896,
+        "rotation_updates_per_volume": 1,
+        "hysteresis": 0,
+        "gamma": 1,
+        "normal_view_bias": 0.014999999664723873,
+        "brightness_threshold": 1000000,
+        "distance_exponent": 50,
+        "ray_max": 33.9779167175293,
+        "origin": [
+          0,
+          1.350000023841858,
+          0
+        ],
+        "spacing": [
+          4.44444465637207,
+          1.5,
+          4.44444465637207
+        ],
+        "subgroup": 64,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 10.019036293029785,
+        "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "driver_name": "radv",
+        "driver_info": "Mesa 26.1.2",
+        "api_version": 4211036,
+        "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+        "setup_wall_us": 45817.474,
+        "images": [
+          {
+            "type": 0,
+            "w": 128,
+            "h": 16,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 1,
+            "w": 32,
+            "h": 32,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 2,
+            "w": 64,
+            "h": 64,
+            "layers": 4,
+            "channels": 2
+          },
+          {
+            "type": 3,
+            "w": 4,
+            "h": 4,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 4,
+            "w": 24,
+            "h": 24,
+            "layers": 4,
+            "channels": 1
+          },
+          {
+            "type": 5,
+            "w": 2,
+            "h": 2,
+            "layers": 1,
+            "channels": 2
+          }
+        ]
+      },
+      "payload_sha256": {
+        "capture/allocation-ledger.json": "0b00b23325f43027b64f4e458e1ff4dfc4bff4451618e8ae11be75baeac2f160",
+        "capture/complete.json": "a5ef12eed0afb7628455f331613775a20677f9cb7633883898e5f6581bdf9fb9",
+        "capture/configuration.json": "b60fa7a6ad7611576d9f027c8b094047b4c3525de01699eaf8e1029c77cd15c3",
+        "capture/constants-0.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/constants-1.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/cpu-contract.json": "6d6f243ab11ca063d6fe60e11fd2871c641ce36b4b98bf3a1f52e3f593552c9a",
+        "capture/direct.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "capture/dispatches.jsonl": "deeb24328e68f37dce6d71b1935c744a415e78a054ec4204b1bd3d760f4f94ba",
+        "capture/frame-state.bin": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "capture/geometry-state.bin": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "capture/indirect.pfm": "3d3c83daa7f1629c1fd30ac0956b5c21f3a0f454413bf0e23da665a00a6e83ab",
+        "capture/pixels.f32": "a83c63012ed6bcf386d0294d1c8d266e728dbc8fdf675d3353cd08caf0c25446",
+        "capture/stage-0-current-0.f32": "1d700975cb1242e8995cf13c664a5c7863cffe8af1c8ad4f0078dc44364719a7",
+        "capture/stage-0-current-1.f32": "0cc0f81eedf8c2a15af0cc1a2ee90e8ccebeacc151eee1bb6589daf35b9f2689",
+        "capture/stage-0-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-0-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-0-previous-1.f32": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "capture/stage-0-previous-2.f32": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+        "capture/stage-0-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/total.pfm": "f056a42ade217ad9b399c550d6ac905d0af7215da61a430b58f62a1b8d73f312",
+        "native.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "native.stdout.txt": "d510b4ddce929fe83088d141c6405b81705f1267c77beb33764590e999bf934d",
+        "started.json": "21418737bfcf3ab1caacf6d380fc9650364d7c5e73b6352858e94c9bbc9c2ed7"
+      }
+    },
+    {
+      "schema": "m001-ddgi-control-independent-cpu-audit/1",
+      "name": "scene-seven",
+      "classification": "SEMANTIC_CONTROL_PASS",
+      "semantic_pass": true,
+      "result_sha256": "6225095029f4848d90eb5d877f1e4a3cbd24500eeeaf9a79aa470ae29d4a15c7",
+      "archive_sha256": "297c0eedb296611e4a92be0338720a4f0c11811bd72c8868ff890ff73017d3f7",
+      "raw_payloads_rehashed": 65,
+      "detail": {
+        "completed_gpu_units": 79,
+        "stage_count": 7,
+        "previous_atlas_bytes_immutable": true,
+        "one_and_seven_stage_prefix_byte_identical": true
+      },
+      "owned_memory": {
+        "events": 56,
+        "true_peak_owned_bytes": 2309008,
+        "teardown_zero": true
+      },
+      "gpu_executed_by_auditor": false,
+      "quality_admission": false,
+      "accepted_timing": false,
+      "scope": "Named static semantic control only; no HDR quality decision, temporal/dynamic support, robustness or speed claim",
+      "native_configuration": {
+        "schema": "m001-ddgi-native/1",
+        "mode": "scene",
+        "grid_side": 4,
+        "rays": 128,
+        "vertices": 8,
+        "seed": 305419896,
+        "rotation_updates_per_volume": 1,
+        "hysteresis": 0,
+        "gamma": 1,
+        "normal_view_bias": 0.014999999664723873,
+        "brightness_threshold": 1000000,
+        "distance_exponent": 50,
+        "ray_max": 33.9779167175293,
+        "origin": [
+          0,
+          1.350000023841858,
+          0
+        ],
+        "spacing": [
+          4.44444465637207,
+          1.5,
+          4.44444465637207
+        ],
+        "subgroup": 64,
+        "timestamp_valid_bits": 64,
+        "timestamp_period_ns": 10.019036293029785,
+        "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+        "driver_name": "radv",
+        "driver_info": "Mesa 26.1.2",
+        "api_version": 4211036,
+        "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+        "setup_wall_us": 55299.686,
+        "images": [
+          {
+            "type": 0,
+            "w": 128,
+            "h": 16,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 1,
+            "w": 32,
+            "h": 32,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 2,
+            "w": 64,
+            "h": 64,
+            "layers": 4,
+            "channels": 2
+          },
+          {
+            "type": 3,
+            "w": 4,
+            "h": 4,
+            "layers": 4,
+            "channels": 4
+          },
+          {
+            "type": 4,
+            "w": 24,
+            "h": 24,
+            "layers": 4,
+            "channels": 1
+          },
+          {
+            "type": 5,
+            "w": 2,
+            "h": 2,
+            "layers": 1,
+            "channels": 2
+          }
+        ]
+      },
+      "payload_sha256": {
+        "capture/allocation-ledger.json": "3f23ebc0f3b363b3999ac738cf8452f2e47548df3519922ff7fee83389106905",
+        "capture/complete.json": "a5ef12eed0afb7628455f331613775a20677f9cb7633883898e5f6581bdf9fb9",
+        "capture/configuration.json": "06b6a0d989dfdb2b5746b7692e8a9daab99cc436f812a889aa77ce7d5864c696",
+        "capture/constants-0.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/constants-1.bin": "b17b383e58356175b1640082914093f719a16a3e818d80874047cb19986883a7",
+        "capture/cpu-contract.json": "079cc6cbfb5362f8a92a213849e0a35c78c020c10a4c08f4abdf64395928be97",
+        "capture/direct.pfm": "5c256d50e2ff08b62221366b1242ce3c3ab117a120ea357b09c4d49018555826",
+        "capture/dispatches.jsonl": "5c265a1d4053aa21e401599d23220feb62f20ecdc1834756605eda504f03a46d",
+        "capture/frame-state.bin": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "capture/geometry-state.bin": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "capture/indirect.pfm": "f0eefadd0d9e32fe10c5f5f3083c667c399596b6711dcd23c98ccb896c20602e",
+        "capture/pixels.f32": "db1465eb027dc6bd311e74f986db2d91f5b88abc715a87fa8620f485a7ded999",
+        "capture/stage-0-current-0.f32": "1d700975cb1242e8995cf13c664a5c7863cffe8af1c8ad4f0078dc44364719a7",
+        "capture/stage-0-current-1.f32": "0cc0f81eedf8c2a15af0cc1a2ee90e8ccebeacc151eee1bb6589daf35b9f2689",
+        "capture/stage-0-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-0-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-0-previous-1.f32": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31",
+        "capture/stage-0-previous-2.f32": "fa43239bcee7b97ca62f007cc68487560a39e19f74f3dde7486db3f98df8e471",
+        "capture/stage-0-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-1-current-0.f32": "7fadc5d19205fa063f379f65ddde0a98308e597ac1271961e5b00ca3650fcc03",
+        "capture/stage-1-current-1.f32": "0fa9b2a1b66d17e6e3672a07412f6eb01a229372fdda2243da48f923fec6ce6d",
+        "capture/stage-1-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-1-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-1-previous-1.f32": "0cc0f81eedf8c2a15af0cc1a2ee90e8ccebeacc151eee1bb6589daf35b9f2689",
+        "capture/stage-1-previous-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-1-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-2-current-0.f32": "883ca34764d7ce7ce0b627e85627d6d93f8492513d6be1ec8116c82621741835",
+        "capture/stage-2-current-1.f32": "536e5d74a85267df634358029ae3e6f83d68bc78a396b19eb43483f9570e1c9e",
+        "capture/stage-2-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-2-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-2-previous-1.f32": "0fa9b2a1b66d17e6e3672a07412f6eb01a229372fdda2243da48f923fec6ce6d",
+        "capture/stage-2-previous-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-2-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-3-current-0.f32": "e34d90810248959d3fbae6b270449e3b2a37a12d429443ffca63b42e7e344795",
+        "capture/stage-3-current-1.f32": "28aed22d615f625847362ad620562c96972e925a2df50a06a8946e52f2a81999",
+        "capture/stage-3-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-3-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-3-previous-1.f32": "536e5d74a85267df634358029ae3e6f83d68bc78a396b19eb43483f9570e1c9e",
+        "capture/stage-3-previous-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-3-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-4-current-0.f32": "e62d3fb4aa29ace11cca088dd92874481706dd5cb25df7e5768388cd3bd90fb9",
+        "capture/stage-4-current-1.f32": "4592f6ff34cec636ce762063284c18f6ad115fe5421f5e3da6089415c7e11ac1",
+        "capture/stage-4-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-4-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-4-previous-1.f32": "28aed22d615f625847362ad620562c96972e925a2df50a06a8946e52f2a81999",
+        "capture/stage-4-previous-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-4-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-5-current-0.f32": "7910ec656d66b334f34a8478bc56136fc8a565a374892e2a7429c17d4179ed73",
+        "capture/stage-5-current-1.f32": "0af033fc3b8268147cfc9798ed591a10a7c25b2a1f1886bc7453e995a672701a",
+        "capture/stage-5-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-5-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-5-previous-1.f32": "4592f6ff34cec636ce762063284c18f6ad115fe5421f5e3da6089415c7e11ac1",
+        "capture/stage-5-previous-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-5-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-6-current-0.f32": "e9add90bb1da1ba859887f58c99c31f2cdf14c2d52928dd92648b05e09ac905e",
+        "capture/stage-6-current-1.f32": "6dab2f33115f13367000d068bef142d611dc2656403bb16a2a3bad0f991eb602",
+        "capture/stage-6-current-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-6-current-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/stage-6-previous-1.f32": "0af033fc3b8268147cfc9798ed591a10a7c25b2a1f1886bc7453e995a672701a",
+        "capture/stage-6-previous-2.f32": "ab0d1de66423818376ee66d0afaf3bad0d6e00264e8efbb8d273175e3e71b456",
+        "capture/stage-6-previous-3.f32": "5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+        "capture/total.pfm": "9cc3831a0bb40840536032722e493893b01d4e53fe461c92814fcb549290e645",
+        "native.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "native.stdout.txt": "d510b4ddce929fe83088d141c6405b81705f1267c77beb33764590e999bf934d",
+        "started.json": "212f2b80bf6f20581902c51f5f6c8d30bb348598b573e5ed5233f17d3f8b26d3"
+      }
+    }
+  ],
+  "quality_admission": false,
+  "accepted_timing": false,
+  "validation_layer_run": false,
+  "scope": "Frozen008 H01 static grid4/rays128 direct/black/unit/HDR and finite-stage controls only. No arbitrary HDR-range, temporal/dynamic, quality, timing, other-device or architecture admission."
+}
