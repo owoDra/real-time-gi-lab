@@ -1,0 +1,56 @@
+{
+  "schema": "m001-ddgi-separated-border-process-cpu-preparation/1",
+  "source_commit": "4b136558c2c02a711af2af2a8f8518529c55faf4",
+  "gpu_executed": false,
+  "all_pass": true,
+  "tests_run": 17,
+  "all_corrected_cpu_unittest_executions": 62,
+  "native_cpu_contracts_previously_executed": 20,
+  "receipt": {
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-process-tests-v1/result.json",
+    "sha256": "d0eefb41b195bcb80619ad4871cc48c81c259f03409d5b5a56c7e410e20e369b"
+  },
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_border_step.py": "947d60e16369df8089643b510edc6d761a97dadfebff56d84b3a123f23aeb48a",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_border_requalification_audit.py": "5b40f926232bbb401ab2d41c1bb9814dfc90ae867ef393df3676e69eee7c37a4",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_ddgi_border_step.py": "160825284ff54a9b82cf76f7e2c5fb4afd8aea9d5162fd8314c2c3664b8377fd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_border_cases.py": "5d7a1e58a915e1ddd23891707a5df7b577590aa53829f710fc6bc8f0cee47c21",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_border_copy_check.py": "457dac5a26a80a3792a8631df34b807e015aa75524267b16cab6e3f147108bde",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_border_audit.py": "0fda84c45ae9c8f7cffd20f62b84ff077faf40f2b9ccaccf4f7d8d2f5f6cec16"
+  },
+  "scope": "Explicit synthetic native frames and mocked single-process failure/success only; never GPU evidence, runtime admission or HDR quality scoring",
+  "first_exact_plan": {
+    "path": "out/m001-ddgi-border-static-direct-plan.json",
+    "sha256": "f7007f0f7fba599e2e93091964fbe22e7e172bcf54e4a8b401c1a275a092ee33",
+    "name": "static-direct",
+    "source_commit": "4b136558c2c02a711af2af2a8f8518529c55faf4",
+    "planned_input_manifest_entries": 1230,
+    "command": [
+      "bash",
+      "/var/owo/workspaces/projects/gi-lab/scripts/run_with_vulkan.sh",
+      "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/m001-ddgi-border-transition",
+      "--state",
+      "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/capture/M001-H01-hwrt",
+      "--out",
+      "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-controls-v1/static-direct/capture",
+      "--sdk-shaders",
+      "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2",
+      "--reduction-shaders",
+      "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/ddgi-reduction-shaders-v1",
+      "--adapter-shaders",
+      "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-scene-compile-v1",
+      "--grid-side",
+      "4",
+      "--rays",
+      "128",
+      "--vertices",
+      "1",
+      "--mode",
+      "direct"
+    ]
+  },
+  "corrected_gpu_controls_executed": 0,
+  "runtime_requalified": false,
+  "accepted_timing": false,
+  "source_default_build_graph_unchanged": true
+}
