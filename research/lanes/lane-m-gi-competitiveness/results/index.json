@@ -64,15 +64,15 @@
       "h03_b2_reference_eligible": true,
       "h03_b8_reference_eligible": true,
       "quality_scored": true,
-      "status": "SIX_PT_PASS_TWENTY_FOUR_FIXED_RC_LOSSES_FOUR_DDGI_TARGET_LOSSES_NO_MATCHED_TIMING",
-      "result": "047-ddgi-h02-quality-outcome.md",
+      "status": "SIX_PT_PASS_TWENTY_FOUR_FIXED_RC_LOSSES_DDGI_REQUALIFICATION_PENDING_NO_MATCHED_TIMING",
+      "result": "060-ddgi-separated-border-static-outcome.md",
       "h01_b8_first_cpu_level_status": "8192_INDIVIDUAL_PASS_FULL_23_RAW_HASHES_AND_N007_REPLAY_SUBSEQUENT_16384_ADMISSION_IN_016",
       "h01_b8_first_cpu_level_audit": "results/014-h01-b8-first-level-raw-audit.json",
       "reference_step_runner": "scripts/research/lane_m_gi_competitiveness/reference_step.py",
       "cpu_continuation_protocol": "experiments/003-local-cpu-reference-continuation.md",
       "summary_preservation": "results/015-cpu-continuation-and-summary-preservation.json",
       "all_six_reference_raw_checkpoint": "results/016-six-original-references-and-retained-rc-raw-replay.json",
-      "current_outcome": "results/047-ddgi-h02-quality-outcome.md",
+      "current_outcome": "results/060-ddgi-separated-border-static-outcome.md",
       "validation": "results/018-cpu-validation-and-provenance.json",
       "first_pt_cpu_plan": "results/019-first-pt-cpu-plan.json",
       "first_pt_gpu_executed": true,
@@ -193,7 +193,16 @@
       "ddgi_border_static_checkpoint_verification": "results/061-ddgi-separated-border-static-checkpoint-verification.json",
       "ddgi_corrected_quality_continuation_protocol": "experiments/012-ddgi-corrected-quality-continuation.md",
       "ddgi_corrected_quality_continuation_gpu_ready": false,
-      "ddgi_corrected_quality_continuation_unblinded": true
+      "ddgi_corrected_quality_continuation_unblinded": true,
+      "ddgi_corrected_quality_input_cpu_preparation": "results/062-ddgi-corrected-quality-input-cpu-preparation.json",
+      "ddgi_corrected_quality_input_cpu_contracts_new": 12,
+      "ddgi_corrected_quality_input_cpu_contracts_reused": 6,
+      "ddgi_corrected_quality_input_cpu_tests": 5,
+      "historical_pre_border_supersession_summary": {
+        "status": "SIX_PT_PASS_TWENTY_FOUR_FIXED_RC_LOSSES_FOUR_DDGI_TARGET_LOSSES_NO_MATCHED_TIMING",
+        "result": "047-ddgi-h02-quality-outcome.md",
+        "current_outcome": "results/047-ddgi-h02-quality-outcome.md"
+      }
     }
   ]
 }

@@ -1,0 +1,320 @@
+{
+  "schema": "m001-ddgi-corrected-quality-input-cpu-preparation/1",
+  "source_commit": "a9f1121735f519fa4b3365dde50d9d3739ae5049",
+  "all_pass": true,
+  "gpu_executed": false,
+  "new_actual_cpu_tests": 5,
+  "new_actual_native_cpu_contracts": 12,
+  "reused_exact_011_native_cpu_contracts": 6,
+  "unusable_icd": true,
+  "receipts": [
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-input-tests-v1/result.json",
+      "sha256": "57dca5641a2c6419d29775fc4183398c5668e329b28d0b14f984cc94489483bb"
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/result.json",
+      "sha256": "27626a94220b9706cca854762f8306541346ea885628aebe93367afc6fce5e19"
+    }
+  ],
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_corrected_quality_cases.py": "a78b17745c70457688576f9d4ba3c95067ed435af703386986fb40648d339aef",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_ddgi_corrected_quality_cases.py": "c1fdcacdffd5bb49d14fcf9666ef8d957a38dc79c61c4ecc61f9c5b3251dd66b"
+  },
+  "contracts": [
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 16,
+        "total_rays_per_stage": 65536,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h01-b2-q0",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/integrity-h01-q0-b2/result.json",
+      "reused_011": true,
+      "sha256": "fc70d2212b46697463da80a1bd562c8d92a50feb6f680c855922f445c49bd7b7"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 256,
+        "total_rays_per_stage": 1048576,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h01-b2-q1",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/integrity-h01-q1-b2/result.json",
+      "reused_011": true,
+      "sha256": "5688e8beb4c96189c59d57656ae337755e93dd8798e649d6871950f9f4a4756b"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 1728,
+        "total_rays_per_stage": 7077888,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h01-b2-q2",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/integrity-h01-q2-b2/result.json",
+      "reused_011": true,
+      "sha256": "2e679f354cc0e0ae417f94a93372bbe9b7dc3fc63998738713151df91c255e52"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 16,
+        "total_rays_per_stage": 65536,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h01-b8-q0",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/integrity-h01-q0-b8/result.json",
+      "reused_011": true,
+      "sha256": "1f033ab3e1bf02d321c9948c11e2f0eed9f69c9446ea2d6373b26f2c5aa19909"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 256,
+        "total_rays_per_stage": 1048576,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h01-b8-q1",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/integrity-h01-q1-b8/result.json",
+      "reused_011": true,
+      "sha256": "e4ea771601d36985dcfa54e91b497ccf15c3effbcea1c5554e93ab0be0945b1b"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 1728,
+        "total_rays_per_stage": 7077888,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h01-b8-q2",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/integrity-h01-q2-b8/result.json",
+      "reused_011": true,
+      "sha256": "5e1eb300bdaa824a90c0c82ef09a1645f56faf605e7d393a31c9d8a50d4bf736"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 16,
+        "total_rays_per_stage": 65536,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h02-b2-q0",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h02-b2-q0/result.json",
+      "reused_011": false,
+      "sha256": "3b66c4dfdfa4666de197ff7c929d80ba1d6d5aed50d1d60962728b8f34e73258"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 256,
+        "total_rays_per_stage": 1048576,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h02-b2-q1",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h02-b2-q1/result.json",
+      "reused_011": false,
+      "sha256": "a86c451ca1683edecfeadf2eee205400adb2459f36d52609a91b48f7b071f50c"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 1728,
+        "total_rays_per_stage": 7077888,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h02-b2-q2",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h02-b2-q2/result.json",
+      "reused_011": false,
+      "sha256": "22c136822a18e37fbe6fd37cc31129c6968a00e8121a4446be547c66f5fc4883"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 16,
+        "total_rays_per_stage": 65536,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h02-b8-q0",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h02-b8-q0/result.json",
+      "reused_011": false,
+      "sha256": "1159c5bd5bf8c83812be3a01a3ffc3922e04c9f3bdc88adf1f65e138189c9f94"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 256,
+        "total_rays_per_stage": 1048576,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h02-b8-q1",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h02-b8-q1/result.json",
+      "reused_011": false,
+      "sha256": "5a1e3392ad8be580cc51293a67ddc71b28b525be466902452f16450d8567e263"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 1728,
+        "total_rays_per_stage": 7077888,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h02-b8-q2",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h02-b8-q2/result.json",
+      "reused_011": false,
+      "sha256": "dbe8f05063976c72911b0726f3ced1d6535780217772c91183ec3682a940dc4e"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 16,
+        "total_rays_per_stage": 65536,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h03-b2-q0",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h03-b2-q0/result.json",
+      "reused_011": false,
+      "sha256": "adcebe4f8f8dcdad3b2cb229aa03e30db9820882f466d466d1454336f4acedd3"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 256,
+        "total_rays_per_stage": 1048576,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h03-b2-q1",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h03-b2-q1/result.json",
+      "reused_011": false,
+      "sha256": "977f51b1b78ccc9c79123136a952e3a106f9d7e44d9f57d11e144ee6b9084047"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 1,
+        "tile_count_per_stage": 1728,
+        "total_rays_per_stage": 7077888,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h03-b2-q2",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h03-b2-q2/result.json",
+      "reused_011": false,
+      "sha256": "6c67d3fa86de05b6e24352c677648a480a83046e11da0b2bc8ec8a834863fef1"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 16,
+        "total_rays_per_stage": 65536,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h03-b8-q0",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h03-b8-q0/result.json",
+      "reused_011": false,
+      "sha256": "62584194822f7c7bed1d42478b5c235c9f0dc4cdb8f5a6b9edcc423e29fa454a"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 256,
+        "total_rays_per_stage": 1048576,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h03-b8-q1",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h03-b8-q1/result.json",
+      "reused_011": false,
+      "sha256": "dbce455bd7b0ec2b4a84214fbce909c437a9ec08f231e6fe908602152b5ecce4"
+    },
+    {
+      "contract": {
+        "frame_bytes": 128,
+        "gpu_initialized": false,
+        "push_bytes": 16,
+        "stage_count": 7,
+        "tile_count_per_stage": 1728,
+        "total_rays_per_stage": 7077888,
+        "triangle_stride": 64
+      },
+      "gpu_executed": false,
+      "name": "h03-b8-q2",
+      "path": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-quality-cpu-v1/h03-b8-q2/result.json",
+      "reused_011": false,
+      "sha256": "b62f10467e55b92586fded74c54d4baec0e5b388aab4f766ea83f7d6ace0cfe8"
+    }
+  ],
+  "quality_gpu_runner_implemented": false,
+  "quality_independent_auditor_implemented": false,
+  "quality_acquisition_authorized": false,
+  "quality_scoring": false,
+  "all_twenty_011_controls_required": true,
+  "scope": "012 CPU-only preparation during incomplete011 controls. Original state/reference inputs,011runner/auditor and all historical source/evidence unchanged. H01 uses exact matching original corrected-binary CPU receipts; H02/H03 different states get12new CPU contracts. No quality GPU process or scoring."
+}
