@@ -1,0 +1,128 @@
+{
+  "schema": "m001-static-screen-cpu-consolidation-verification/1",
+  "source_commit": "a75f5459924ca95659f072f28c026f69c0c988c1",
+  "consolidation_command": [
+    "python3",
+    "scripts/research/lane_m_gi_competitiveness/consolidate_static_screen.py"
+  ],
+  "consolidation_returncode": 0,
+  "committed_input_reports": 11,
+  "consolidator_path": "scripts/research/lane_m_gi_competitiveness/consolidate_static_screen.py",
+  "consolidator_sha256": "f8e59d08a0c638a41a7f98af62c436e26ddfe23a3306c692838fab4af22e4f39",
+  "new_code_scope": "One standalone CPU-only immutable-report consolidator; all pre-existing executable research code/shaders/default CMake graph unchanged",
+  "terminal_role_target_decisions": 36,
+  "reference_provenance_normalization_identical": true,
+  "classification_recomputed_from_reported_metrics": true,
+  "reference_qualification_files_rehashed": 6,
+  "old_pt_rc_raw_metrics_recomputed": false,
+  "new_ddgi_raw_replay": "079-ddgi-corrected-six-targets-quality-raw-replay.json",
+  "quality_pass_fail_by_role": {
+    "pixel-pt": {
+      "quality_pass": 6,
+      "quality_fail": 0
+    },
+    "retained-hwrt-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "vanilla-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "software-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "dense-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "corrected-ddgi": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    }
+  },
+  "quality_matched_supported_pt_ddgi_targets": [],
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "scope": "configured eight historical result indexes, not LaneM/runtime",
+      "returncode": 0,
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "scope": "explicit LaneM index",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command_description": "git diff20739591 --exit-code -- all pre-existing research code and shaders",
+      "files": 1135,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "scope": "historical source/shaders/N010evidence/all CMake unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command_description": "all prior result files through081 unchanged from committed d1e78f5b; mutable index excluded",
+      "files": 81,
+      "returncode": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "scope": "whitespace",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "prior_cpu_tests_builds_rerun": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "gpu_executed": false,
+  "cpu_reference_sampling_executed": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "power_clock_desktop_changes": false,
+  "ci_actions_added": false,
+  "new_report_sha256": {
+    "082-m001-static-screen-family-summary.json": "6a82235d7dc729241b35db4e05c6df7f7394d1cee2cd1ddd98b066419857b8cf",
+    "083-m001-static-screen-outcome.md": "6efc67623b0fd692849956e48fd62948062b01de4441477fa975dbc96b3d4f06"
+  }
+}

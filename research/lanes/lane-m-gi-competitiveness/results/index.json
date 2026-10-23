@@ -7,8 +7,8 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "CORRECTED_DDGI_STATIC_COHORT_COMPLETE",
-      "classification": "CORRECTED_DDGI_0_PASS_6_LOSS_NO_MATCHED_TIMING",
+      "phase": "STATIC_FAMILY_QUALITY_SCREEN_COMPLETE",
+      "classification": "SIX_PT_PASS_FIVE_CONFIGURED_RC_DDGI_ROLES_FAIL_ALL_TARGETS_NO_MATCHED_TIMING",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
@@ -65,14 +65,14 @@
       "h03_b8_reference_eligible": true,
       "quality_scored": true,
       "status": "SIX_PT_PASS_TWENTY_FOUR_FIXED_RC_LOSSES_CORRECTED_DDGI_0_PASS_6_LOSS_NO_MATCHED_TIMING",
-      "result": "080-ddgi-corrected-six-targets-quality-outcome.md",
+      "result": "083-m001-static-screen-outcome.md",
       "h01_b8_first_cpu_level_status": "8192_INDIVIDUAL_PASS_FULL_23_RAW_HASHES_AND_N007_REPLAY_SUBSEQUENT_16384_ADMISSION_IN_016",
       "h01_b8_first_cpu_level_audit": "results/014-h01-b8-first-level-raw-audit.json",
       "reference_step_runner": "scripts/research/lane_m_gi_competitiveness/reference_step.py",
       "cpu_continuation_protocol": "experiments/003-local-cpu-reference-continuation.md",
       "summary_preservation": "results/015-cpu-continuation-and-summary-preservation.json",
       "all_six_reference_raw_checkpoint": "results/016-six-original-references-and-retained-rc-raw-replay.json",
-      "current_outcome": "results/080-ddgi-corrected-six-targets-quality-outcome.md",
+      "current_outcome": "results/083-m001-static-screen-outcome.md",
       "validation": "results/018-cpu-validation-and-provenance.json",
       "first_pt_cpu_plan": "results/019-first-pt-cpu-plan.json",
       "first_pt_gpu_executed": true,
@@ -228,7 +228,13 @@
       "ddgi_corrected_quality_raw_replay": "results/079-ddgi-corrected-six-targets-quality-raw-replay.json",
       "ddgi_corrected_quality_outcome": "results/080-ddgi-corrected-six-targets-quality-outcome.md",
       "ddgi_corrected_quality_checkpoint_verification": "results/081-ddgi-corrected-six-targets-checkpoint-verification.json",
-      "ddgi_corrected_quality_cohort_complete": true
+      "ddgi_corrected_quality_cohort_complete": true,
+      "static_quality_screen_complete": true,
+      "static_family_consolidation": "results/082-m001-static-screen-family-summary.json",
+      "static_family_outcome": "results/083-m001-static-screen-outcome.md",
+      "static_family_consolidator": "scripts/research/lane_m_gi_competitiveness/consolidate_static_screen.py",
+      "lane_m_complete": false,
+      "static_family_verification": "results/084-m001-static-screen-verification.json"
     }
   ]
 }

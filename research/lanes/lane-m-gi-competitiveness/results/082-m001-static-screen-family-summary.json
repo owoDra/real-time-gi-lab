@@ -1,0 +1,1433 @@
+{
+  "schema": "m001-static-screen-immutable-report-consolidation/1",
+  "source_commit": "a75f5459924ca95659f072f28c026f69c0c988c1",
+  "consolidator_path": "scripts/research/lane_m_gi_competitiveness/consolidate_static_screen.py",
+  "consolidator_matches_committed_bytes": true,
+  "consolidator_sha256": "f8e59d08a0c638a41a7f98af62c436e26ddfe23a3306c692838fab4af22e4f39",
+  "input_report_sha256": {
+    "research/lanes/lane-m-gi-competitiveness/results/016-six-original-references-and-retained-rc-raw-replay.json": "b16cb2c76586b975686ed7fa7eb58e5d81703e27b5537ec230fe17f61c2bf909",
+    "research/lanes/lane-m-gi-competitiveness/results/022-six-pt-ladders-raw-replay.json": "060e48a91fb682fe5d01b08cd4e3e4e79163a06923d8159635ece7b9e20c0d47",
+    "research/lanes/lane-m-gi-competitiveness/results/025-dense-fixed-control-replay.json": "66c378e51ab6c9b3b112ae74560094ebc41804fb18f5831d2c4bd4b1e3fb47d3",
+    "research/lanes/lane-m-gi-competitiveness/results/027-fixed-traversal-controls-raw-replay.json": "2573bf907aa2c62b4ab43f5e8e924adff90918d65f89babb39f4861d39c77711",
+    "research/lanes/lane-m-gi-competitiveness/results/079-ddgi-corrected-six-targets-quality-raw-replay.json": "a8b9dd89e3c044a53af8ac2405a901bd29f07997aebc03891a17888f9a1c4bfd",
+    "research/lanes/lane-m-gi-competitiveness/results/028-fixed-control-quality-outcome.md": "3631145deec96ac732f96dae7f4263209c3254f65823bcd4ba9c7b4f127055c6",
+    "research/lanes/lane-m-gi-competitiveness/results/050-ddgi-quality-screen-border-integrity-supersession.md": "c404a3fc68049dac932d360e344a51643838f33e85c8a71b4dca767a06c2946b",
+    "research/lanes/lane-m-gi-competitiveness/results/067-ddgi-separated-border-twenty-controls-raw-replay.json": "52ac26f01604c619ad966b27efc3ab51a564e1d3e97399831ef95de613e5998e",
+    "research/lanes/lane-m-gi-competitiveness/results/068-ddgi-separated-border-requalification-outcome.md": "6704d8bcd692ebbda409df679479fd2f2720a731bc8414ddb6cc9386fd93b9ae",
+    "research/lanes/lane-m-gi-competitiveness/results/080-ddgi-corrected-six-targets-quality-outcome.md": "3fb89bf9b5a6464c6d3e4406e6fcd1ecb80ff794f29197ee8363d2bd74609fa7",
+    "research/lanes/lane-m-gi-competitiveness/results/081-ddgi-corrected-six-targets-checkpoint-verification.json": "2ef8656cdcd1425571b1391829bf03d6327c245e30139b1508c0e0884095fd37"
+  },
+  "all_inputs_match_committed_bytes": true,
+  "all_source_ancestry_pass": true,
+  "reference_qualification_files_rehashed": 6,
+  "reference_provenance_identical_across_all_roles": true,
+  "reference_rms_normalization_identical_across_all_roles": true,
+  "inclusive_classifications_recomputed_from_reported_metrics": true,
+  "old_pt_rc_raw_metrics_recomputed": false,
+  "new_ddgi_complete_raw_replay": "079-ddgi-corrected-six-targets-quality-raw-replay.json",
+  "old_raw_replay_provenance": "Immutable prior016/022/025/027 records; no new sampling, acquisition, old error-map replay or old raw-byte validation claimed by this consolidation",
+  "terminal_role_target_decisions": 36,
+  "quality_pass_fail_by_role": {
+    "pixel-pt": {
+      "quality_pass": 6,
+      "quality_fail": 0
+    },
+    "retained-hwrt-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "vanilla-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "software-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "dense-rc": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    },
+    "corrected-ddgi": {
+      "quality_pass": 0,
+      "quality_fail": 6
+    }
+  },
+  "quality_matched_supported_pt_ddgi_targets": [],
+  "accepted_timing": false,
+  "speed_comparison_eligible_for_fixed_rc": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "gpu_executed": false,
+  "cpu_reference_sampling_executed": false,
+  "rows": [
+    {
+      "cell": "H01",
+      "transport": "T_B2",
+      "reference": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-h01-b2-original-admitted-reference-v1",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "69f3ce7ffa86b8cb83739a56e06f7dec10555795ce709f315646f06fc8bc98e9",
+        "transport": "T_B2"
+      },
+      "roles": [
+        {
+          "role": "pixel-pt",
+          "classification": "PASS",
+          "budget": {
+            "selected_spp": 256
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.170989533437041e-07,
+              "signed_sum_bias": -5.972358264178099e-08,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "indirect": {
+              "nrmse": 0.09954445195098009,
+              "signed_sum_bias": 0.002255680698555258,
+              "reference_rms": 4.977620562618119e-06,
+              "whole_image_max_absolute": 7.429360612924212e-06
+            },
+            "total": {
+              "nrmse": 0.019420274849434843,
+              "signed_sum_bias": 0.0003322780320325851,
+              "reference_rms": 2.5514286670869443e-05,
+              "whole_image_max_absolute": 7.429356540168381e-06
+            }
+          },
+          "observed_levels": [
+            {
+              "spp": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 4,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 16,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 64,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 256,
+              "classification": "PASS"
+            }
+          ]
+        },
+        {
+          "role": "retained-hwrt-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.3390428540277356e-07,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "nrmse": 0.9796933113822603,
+              "signed_sum_bias": -0.9094631245570916,
+              "reference_rms": 4.977620562618119e-06,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "nrmse": 0.19112984635946365,
+              "signed_sum_bias": -0.13399120316886098,
+              "reference_rms": 2.5514286670869443e-05,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          }
+        },
+        {
+          "role": "vanilla-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.3390428540277356e-07,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "nrmse": 0.9796933113822603,
+              "signed_sum_bias": -0.9094631245570916,
+              "reference_rms": 4.977620562618119e-06,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "nrmse": 0.19112984635946365,
+              "signed_sum_bias": -0.13399120316886098,
+              "reference_rms": 2.5514286670869443e-05,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          }
+        },
+        {
+          "role": "software-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.3390428540277356e-07,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "nrmse": 0.9796933113822603,
+              "signed_sum_bias": -0.9094631245570916,
+              "reference_rms": 4.977620562618119e-06,
+              "whole_image_max_absolute": 0.00010681315325200558
+            },
+            "total": {
+              "nrmse": 0.19112984635946365,
+              "signed_sum_bias": -0.13399120316886098,
+              "reference_rms": 2.5514286670869443e-05,
+              "whole_image_max_absolute": 0.00010681311398547524
+            }
+          }
+        },
+        {
+          "role": "dense-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed dense RC budget; ignores finite-depth/sample pushes, same image for B2/B8",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.170989533437041e-07,
+              "signed_sum_bias": -5.972358264178099e-08,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "indirect": {
+              "nrmse": 1.0096833382878,
+              "signed_sum_bias": -0.17187709714793203,
+              "reference_rms": 4.977620562618119e-06,
+              "whole_image_max_absolute": 0.00011267012586811628
+            },
+            "total": {
+              "nrmse": 0.19698066445486387,
+              "signed_sum_bias": -0.025322686411986352,
+              "reference_rms": 2.5514286670869443e-05,
+              "whole_image_max_absolute": 0.00011267007609876908
+            }
+          }
+        },
+        {
+          "role": "corrected-ddgi",
+          "classification": "QUALITY_FAIL",
+          "budget": {
+            "rung": 2,
+            "grid_side": 24,
+            "rays_per_probe": 512,
+            "stages": 1,
+            "reset_all": true,
+            "temporal_history": false
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.170989533437041e-07,
+              "signed_sum_bias": -5.972358264178099e-08,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "indirect": {
+              "nrmse": 0.16302717381193133,
+              "signed_sum_bias": -0.03906366236567785,
+              "reference_rms": 4.977620562618119e-06,
+              "whole_image_max_absolute": 2.2816277010838418e-05
+            },
+            "total": {
+              "nrmse": 0.03180519514092212,
+              "signed_sum_bias": -0.005755296229837432,
+              "reference_rms": 2.5514286670869443e-05,
+              "whole_image_max_absolute": 2.2816277010838418e-05
+            }
+          },
+          "observed_levels": [
+            {
+              "rung": 0,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 2,
+              "classification": "QUALITY_FAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cell": "H01",
+      "transport": "T_B8",
+      "reference": {
+        "cell": "H01",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H01_T_B8/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "ccfed4a146814320e969ac80c2241a9c8f43d83bab290a60e22b86128b04e847",
+        "transport": "T_B8"
+      },
+      "roles": [
+        {
+          "role": "pixel-pt",
+          "classification": "PASS",
+          "budget": {
+            "selected_spp": 1024
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.170989533437041e-07,
+              "signed_sum_bias": -5.972358264178099e-08,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "indirect": {
+              "nrmse": 0.05543466650188694,
+              "signed_sum_bias": -0.0009005307276165321,
+              "reference_rms": 7.014371348232262e-06,
+              "whole_image_max_absolute": 5.134869011783881e-06
+            },
+            "total": {
+              "nrmse": 0.014319735755227297,
+              "signed_sum_bias": -0.00017961534783702434,
+              "reference_rms": 2.7154086905701627e-05,
+              "whole_image_max_absolute": 5.1348563580297716e-06
+            }
+          },
+          "observed_levels": [
+            {
+              "spp": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 4,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 16,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 64,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 256,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 1024,
+              "classification": "PASS"
+            }
+          ]
+        },
+        {
+          "role": "retained-hwrt-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.3390428540277356e-07,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "nrmse": 0.9738950286410251,
+              "signed_sum_bias": -0.93719115264027,
+              "reference_rms": 7.014371348232262e-06,
+              "whole_image_max_absolute": 0.00010576519127827444
+            },
+            "total": {
+              "nrmse": 0.25157398510523327,
+              "signed_sum_bias": -0.18687771439713857,
+              "reference_rms": 2.7154086905701627e-05,
+              "whole_image_max_absolute": 0.00010576515201174389
+            }
+          }
+        },
+        {
+          "role": "vanilla-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.3390428540277356e-07,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "nrmse": 0.9738950286410251,
+              "signed_sum_bias": -0.93719115264027,
+              "reference_rms": 7.014371348232262e-06,
+              "whole_image_max_absolute": 0.00010576519127827444
+            },
+            "total": {
+              "nrmse": 0.25157398510523327,
+              "signed_sum_bias": -0.18687771439713857,
+              "reference_rms": 2.7154086905701627e-05,
+              "whole_image_max_absolute": 0.00010576515201174389
+            }
+          }
+        },
+        {
+          "role": "software-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.3390428540277356e-07,
+              "signed_sum_bias": -1.0830669471868549e-07,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.955414202421256e-10
+            },
+            "indirect": {
+              "nrmse": 0.9738950286410251,
+              "signed_sum_bias": -0.93719115264027,
+              "reference_rms": 7.014371348232262e-06,
+              "whole_image_max_absolute": 0.00010576519127827444
+            },
+            "total": {
+              "nrmse": 0.25157398510523327,
+              "signed_sum_bias": -0.18687771439713857,
+              "reference_rms": 2.7154086905701627e-05,
+              "whole_image_max_absolute": 0.00010576515201174389
+            }
+          }
+        },
+        {
+          "role": "dense-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed dense RC budget; ignores finite-depth/sample pushes, same image for B2/B8",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.170989533437041e-07,
+              "signed_sum_bias": -5.972358264178099e-08,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "indirect": {
+              "nrmse": 0.890699406786773,
+              "signed_sum_bias": -0.4254998889029349,
+              "reference_rms": 7.014371348232262e-06,
+              "whole_image_max_absolute": 0.00011110761497992353
+            },
+            "total": {
+              "nrmse": 0.23008312424966054,
+              "signed_sum_bias": -0.08484550289796142,
+              "reference_rms": 2.7154086905701627e-05,
+              "whole_image_max_absolute": 0.00011110756521057668
+            }
+          }
+        },
+        {
+          "role": "corrected-ddgi",
+          "classification": "QUALITY_FAIL",
+          "budget": {
+            "rung": 2,
+            "grid_side": 24,
+            "rays_per_probe": 512,
+            "stages": 7,
+            "reset_all": true,
+            "temporal_history": false
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.170989533437041e-07,
+              "signed_sum_bias": -5.972358264178099e-08,
+              "reference_rms": 2.2306129441681237e-05,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "indirect": {
+              "nrmse": 0.12924352652803897,
+              "signed_sum_bias": 0.03025395590009847,
+              "reference_rms": 7.014371348232262e-06,
+              "whole_image_max_absolute": 3.0796575905612466e-05
+            },
+            "total": {
+              "nrmse": 0.033385802812212005,
+              "signed_sum_bias": 0.006032645775104764,
+              "reference_rms": 2.7154086905701627e-05,
+              "whole_image_max_absolute": 3.079656851315189e-05
+            }
+          },
+          "observed_levels": [
+            {
+              "rung": 0,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 2,
+              "classification": "QUALITY_FAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cell": "H02",
+      "transport": "T_B2",
+      "reference": {
+        "cell": "H02",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B2/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "637917e8821b6789723575c1afbab87fbae042332a612f2d03ea6171e22082ed",
+        "transport": "T_B2"
+      },
+      "roles": [
+        {
+          "role": "pixel-pt",
+          "classification": "PASS",
+          "budget": {
+            "selected_spp": 256
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.713625724005728e-07,
+              "signed_sum_bias": -1.4086531813886748e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 6.111172751925662e-10
+            },
+            "indirect": {
+              "nrmse": 0.09746996989586255,
+              "signed_sum_bias": 0.0003702153284678069,
+              "reference_rms": 3.4302988751093713e-06,
+              "whole_image_max_absolute": 7.461775452948424e-06
+            },
+            "total": {
+              "nrmse": 0.016153109511299328,
+              "signed_sum_bias": 3.3191460117138436e-05,
+              "reference_rms": 2.0698870877558277e-05,
+              "whole_image_max_absolute": 7.461775452948424e-06
+            }
+          },
+          "observed_levels": [
+            {
+              "spp": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 4,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 16,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 64,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 256,
+              "classification": "PASS"
+            }
+          ]
+        },
+        {
+          "role": "retained-hwrt-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.8027051128794504e-07,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "nrmse": 1.080973821510543,
+              "signed_sum_bias": -0.6062377207483376,
+              "reference_rms": 3.4302988751093713e-06,
+              "whole_image_max_absolute": 0.00015259021893143654
+            },
+            "total": {
+              "nrmse": 0.1791432807434761,
+              "signed_sum_bias": -0.054562411460657434,
+              "reference_rms": 2.0698870877558277e-05,
+              "whole_image_max_absolute": 0.00015259023064477582
+            }
+          }
+        },
+        {
+          "role": "vanilla-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.8027051128794504e-07,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "nrmse": 1.080973821510543,
+              "signed_sum_bias": -0.6062377207483376,
+              "reference_rms": 3.4302988751093713e-06,
+              "whole_image_max_absolute": 0.00015259021893143654
+            },
+            "total": {
+              "nrmse": 0.1791432807434761,
+              "signed_sum_bias": -0.054562411460657434,
+              "reference_rms": 2.0698870877558277e-05,
+              "whole_image_max_absolute": 0.00015259023064477582
+            }
+          }
+        },
+        {
+          "role": "software-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.8027051128794504e-07,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "nrmse": 1.080973821510543,
+              "signed_sum_bias": -0.6062377207483376,
+              "reference_rms": 3.4302988751093713e-06,
+              "whole_image_max_absolute": 0.00015259021893143654
+            },
+            "total": {
+              "nrmse": 0.1791432807434761,
+              "signed_sum_bias": -0.054562411460657434,
+              "reference_rms": 2.0698870877558277e-05,
+              "whole_image_max_absolute": 0.00015259023064477582
+            }
+          }
+        },
+        {
+          "role": "dense-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed dense RC budget; ignores finite-depth/sample pushes, same image for B2/B8",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.713625724005728e-07,
+              "signed_sum_bias": -1.4086531813886748e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 6.111172751925662e-10
+            },
+            "indirect": {
+              "nrmse": 1.7403902967387364,
+              "signed_sum_bias": -0.07733304074195,
+              "reference_rms": 3.4302988751093713e-06,
+              "whole_image_max_absolute": 0.00017949544138365416
+            },
+            "total": {
+              "nrmse": 0.2884243411779034,
+              "signed_sum_bias": -0.006960210793192156,
+              "reference_rms": 2.0698870877558277e-05,
+              "whole_image_max_absolute": 0.00017949541764006706
+            }
+          }
+        },
+        {
+          "role": "corrected-ddgi",
+          "classification": "QUALITY_FAIL",
+          "budget": {
+            "rung": 2,
+            "grid_side": 24,
+            "rays_per_probe": 512,
+            "stages": 1,
+            "reset_all": true,
+            "temporal_history": false
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.713625724005728e-07,
+              "signed_sum_bias": -1.4086531813886748e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 6.111172751925662e-10
+            },
+            "indirect": {
+              "nrmse": 0.44170227729986783,
+              "signed_sum_bias": -0.2205897981166534,
+              "reference_rms": 3.4302988751093713e-06,
+              "whole_image_max_absolute": 3.968741532312865e-05
+            },
+            "total": {
+              "nrmse": 0.0732006693200886,
+              "signed_sum_bias": -0.019853519443542994,
+              "reference_rms": 2.0698870877558277e-05,
+              "whole_image_max_absolute": 3.9687422531332e-05
+            }
+          },
+          "observed_levels": [
+            {
+              "rung": 0,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 2,
+              "classification": "QUALITY_FAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cell": "H02",
+      "transport": "T_B8",
+      "reference": {
+        "cell": "H02",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H02_T_B8/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "9ba7e85776375f5c1d58a95b6f8f2ab2f2046655a79ec3d2f0dfc8b0beaaca03",
+        "transport": "T_B8"
+      },
+      "roles": [
+        {
+          "role": "pixel-pt",
+          "classification": "PASS",
+          "budget": {
+            "selected_spp": 1024
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.713625724005728e-07,
+              "signed_sum_bias": -1.4086531813886748e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 6.111172751925662e-10
+            },
+            "indirect": {
+              "nrmse": 0.0566882055604233,
+              "signed_sum_bias": -0.001985461405459644,
+              "reference_rms": 4.410034535260377e-06,
+              "whole_image_max_absolute": 5.842859538368116e-06
+            },
+            "total": {
+              "nrmse": 0.011465060110164122,
+              "signed_sum_bias": -0.00027193417831683053,
+              "reference_rms": 2.1805115062413006e-05,
+              "whole_image_max_absolute": 5.842864177794343e-06
+            }
+          },
+          "observed_levels": [
+            {
+              "spp": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 4,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 16,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 64,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 256,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 1024,
+              "classification": "PASS"
+            }
+          ]
+        },
+        {
+          "role": "retained-hwrt-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.8027051128794504e-07,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "nrmse": 1.013886452545024,
+              "signed_sum_bias": -0.7544751696198846,
+              "reference_rms": 4.410034535260377e-06,
+              "whole_image_max_absolute": 0.0001519257011844956
+            },
+            "total": {
+              "nrmse": 0.20505625753017723,
+              "signed_sum_bias": -0.10328881765452903,
+              "reference_rms": 2.1805115062413006e-05,
+              "whole_image_max_absolute": 0.00015192571289783497
+            }
+          }
+        },
+        {
+          "role": "vanilla-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.8027051128794504e-07,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "nrmse": 1.013886452545024,
+              "signed_sum_bias": -0.7544751696198846,
+              "reference_rms": 4.410034535260377e-06,
+              "whole_image_max_absolute": 0.0001519257011844956
+            },
+            "total": {
+              "nrmse": 0.20505625753017723,
+              "signed_sum_bias": -0.10328881765452903,
+              "reference_rms": 2.1805115062413006e-05,
+              "whole_image_max_absolute": 0.00015192571289783497
+            }
+          }
+        },
+        {
+          "role": "software-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.8027051128794504e-07,
+              "signed_sum_bias": -1.8207089974653028e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 5.874481853111561e-10
+            },
+            "indirect": {
+              "nrmse": 1.013886452545024,
+              "signed_sum_bias": -0.7544751696198846,
+              "reference_rms": 4.410034535260377e-06,
+              "whole_image_max_absolute": 0.0001519257011844956
+            },
+            "total": {
+              "nrmse": 0.20505625753017723,
+              "signed_sum_bias": -0.10328881765452903,
+              "reference_rms": 2.1805115062413006e-05,
+              "whole_image_max_absolute": 0.00015192571289783497
+            }
+          }
+        },
+        {
+          "role": "dense-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed dense RC budget; ignores finite-depth/sample pushes, same image for B2/B8",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.713625724005728e-07,
+              "signed_sum_bias": -1.4086531813886748e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 6.111172751925662e-10
+            },
+            "indirect": {
+              "nrmse": 1.4424220951213138,
+              "signed_sum_bias": -0.42468423054717175,
+              "reference_rms": 4.410034535260377e-06,
+              "whole_image_max_absolute": 0.00017929350724443793
+            },
+            "total": {
+              "nrmse": 0.291726551468454,
+              "signed_sum_bias": -0.05813996154789151,
+              "reference_rms": 2.1805115062413006e-05,
+              "whole_image_max_absolute": 0.00017929325190379618
+            }
+          }
+        },
+        {
+          "role": "corrected-ddgi",
+          "classification": "QUALITY_FAIL",
+          "budget": {
+            "rung": 2,
+            "grid_side": 24,
+            "rays_per_probe": 512,
+            "stages": 7,
+            "reset_all": true,
+            "temporal_history": false
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 3.713625724005728e-07,
+              "signed_sum_bias": -1.4086531813886748e-07,
+              "reference_rms": 1.994629419755363e-05,
+              "whole_image_max_absolute": 6.111172751925662e-10
+            },
+            "indirect": {
+              "nrmse": 0.19948973036343798,
+              "signed_sum_bias": 0.03948592482807535,
+              "reference_rms": 4.410034535260377e-06,
+              "whole_image_max_absolute": 2.8869315059981912e-05
+            },
+            "total": {
+              "nrmse": 0.04034631974482731,
+              "signed_sum_bias": 0.005405554458122528,
+              "reference_rms": 2.1805115062413006e-05,
+              "whole_image_max_absolute": 2.8869321558645973e-05
+            }
+          },
+          "observed_levels": [
+            {
+              "rung": 0,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 2,
+              "classification": "QUALITY_FAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cell": "H03",
+      "transport": "T_B2",
+      "reference": {
+        "cell": "H03",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B2/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "127d47c758265166b967bc9ad91ff3b867977327469a11615098194f864cd1f7",
+        "transport": "T_B2"
+      },
+      "roles": [
+        {
+          "role": "pixel-pt",
+          "classification": "PASS",
+          "budget": {
+            "selected_spp": 256
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.590017038154323e-07,
+              "signed_sum_bias": -2.5394718792076413e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 4.707563403764242e-10
+            },
+            "indirect": {
+              "nrmse": 0.0996190958283295,
+              "signed_sum_bias": 1.4953801157946601e-05,
+              "reference_rms": 4.723785228170138e-06,
+              "whole_image_max_absolute": 2.5021469429271378e-05
+            },
+            "total": {
+              "nrmse": 0.021484781255453354,
+              "signed_sum_bias": 1.8125540643148977e-06,
+              "reference_rms": 2.1902906481031484e-05,
+              "whole_image_max_absolute": 2.5021409637689468e-05
+            }
+          },
+          "observed_levels": [
+            {
+              "spp": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 4,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 16,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 64,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 256,
+              "classification": "PASS"
+            }
+          ]
+        },
+        {
+          "role": "retained-hwrt-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.933547083343804e-07,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "nrmse": 1.1196259005219282,
+              "signed_sum_bias": -0.33692003183469454,
+              "reference_rms": 4.723785228170138e-06,
+              "whole_image_max_absolute": 0.0001678492408245802
+            },
+            "total": {
+              "nrmse": 0.24146897009026247,
+              "signed_sum_bias": -0.045779809573303014,
+              "reference_rms": 2.1902906481031484e-05,
+              "whole_image_max_absolute": 0.00016784930032189655
+            }
+          }
+        },
+        {
+          "role": "vanilla-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.933547083343804e-07,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "nrmse": 1.1196259005219282,
+              "signed_sum_bias": -0.33692003183469454,
+              "reference_rms": 4.723785228170138e-06,
+              "whole_image_max_absolute": 0.0001678492408245802
+            },
+            "total": {
+              "nrmse": 0.24146897009026247,
+              "signed_sum_bias": -0.045779809573303014,
+              "reference_rms": 2.1902906481031484e-05,
+              "whole_image_max_absolute": 0.00016784930032189655
+            }
+          }
+        },
+        {
+          "role": "software-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.933547083343804e-07,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "nrmse": 1.1196259005219282,
+              "signed_sum_bias": -0.33692003183469454,
+              "reference_rms": 4.723785228170138e-06,
+              "whole_image_max_absolute": 0.0001678492408245802
+            },
+            "total": {
+              "nrmse": 0.24146897009026247,
+              "signed_sum_bias": -0.045779809573303014,
+              "reference_rms": 2.1902906481031484e-05,
+              "whole_image_max_absolute": 0.00016784930032189655
+            }
+          }
+        },
+        {
+          "role": "dense-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed dense RC budget; ignores finite-depth/sample pushes, same image for B2/B8",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.590017038154323e-07,
+              "signed_sum_bias": -2.5394718792076413e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 4.707563403764242e-10
+            },
+            "indirect": {
+              "nrmse": 1.3539403765078233,
+              "signed_sum_bias": 0.051577237823333844,
+              "reference_rms": 4.723785228170138e-06,
+              "whole_image_max_absolute": 0.00016954613285816795
+            },
+            "total": {
+              "nrmse": 0.29200345338158423,
+              "signed_sum_bias": 0.0070079378091923656,
+              "reference_rms": 2.1902906481031484e-05,
+              "whole_image_max_absolute": 0.00016954613285816795
+            }
+          }
+        },
+        {
+          "role": "corrected-ddgi",
+          "classification": "QUALITY_FAIL",
+          "budget": {
+            "rung": 2,
+            "grid_side": 24,
+            "rays_per_probe": 512,
+            "stages": 1,
+            "reset_all": true,
+            "temporal_history": false
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.590017038154323e-07,
+              "signed_sum_bias": -2.5394718792076413e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 4.707563403764242e-10
+            },
+            "indirect": {
+              "nrmse": 0.5505248816080417,
+              "signed_sum_bias": -0.060266693670076144,
+              "reference_rms": 4.723785228170138e-06,
+              "whole_image_max_absolute": 0.00015534738668347952
+            },
+            "total": {
+              "nrmse": 0.11873140108996721,
+              "signed_sum_bias": -0.008189073466020892,
+              "reference_rms": 2.1902906481031484e-05,
+              "whole_image_max_absolute": 0.0001553474510697944
+            }
+          },
+          "observed_levels": [
+            {
+              "rung": 0,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 2,
+              "classification": "QUALITY_FAIL"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "cell": "H03",
+      "transport": "T_B8",
+      "reference": {
+        "cell": "H03",
+        "computational_variant": "original-full-prefix",
+        "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-original-cpu-v2/H03_T_B8/admitted",
+        "levels": [
+          8192,
+          16384
+        ],
+        "pass": true,
+        "qualification_sha256": "f731fa3dcae6de4f6667ee3fafc2ec3c6c285763998c4c8f41c6ee4d9dcb83a2",
+        "transport": "T_B8"
+      },
+      "roles": [
+        {
+          "role": "pixel-pt",
+          "classification": "PASS",
+          "budget": {
+            "selected_spp": 1024
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.590017038154323e-07,
+              "signed_sum_bias": -2.5394718792076413e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 4.707563403764242e-10
+            },
+            "indirect": {
+              "nrmse": 0.05355310423624765,
+              "signed_sum_bias": 0.0012981370002725324,
+              "reference_rms": 5.59827903789468e-06,
+              "whole_image_max_absolute": 1.2756518528540605e-05
+            },
+            "total": {
+              "nrmse": 0.013122041597249138,
+              "signed_sum_bias": 0.00023318456652182681,
+              "reference_rms": 2.2847459034267764e-05,
+              "whole_image_max_absolute": 1.2756452091412915e-05
+            }
+          },
+          "observed_levels": [
+            {
+              "spp": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 4,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 16,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 64,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 256,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "spp": 1024,
+              "classification": "PASS"
+            }
+          ]
+        },
+        {
+          "role": "retained-hwrt-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.933547083343804e-07,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "nrmse": 1.06239306286273,
+              "signed_sum_bias": -0.524341613255041,
+              "reference_rms": 5.59827903789468e-06,
+              "whole_image_max_absolute": 0.00019855888836672078
+            },
+            "total": {
+              "nrmse": 0.26031660600506396,
+              "signed_sum_bias": -0.09427159647957142,
+              "reference_rms": 2.2847459034267764e-05,
+              "whole_image_max_absolute": 0.00019855894866030693
+            }
+          }
+        },
+        {
+          "role": "vanilla-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.933547083343804e-07,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "nrmse": 1.06239306286273,
+              "signed_sum_bias": -0.524341613255041,
+              "reference_rms": 5.59827903789468e-06,
+              "whole_image_max_absolute": 0.00019855888836672078
+            },
+            "total": {
+              "nrmse": 0.26031660600506396,
+              "signed_sum_bias": -0.09427159647957142,
+              "reference_rms": 2.2847459034267764e-05,
+              "whole_image_max_absolute": 0.00019855894866030693
+            }
+          }
+        },
+        {
+          "role": "software-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed RC budget; one scene image scored against B2/B8, not PT-equivalent",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.933547083343804e-07,
+              "signed_sum_bias": -1.6912287979215973e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 6.048019584605456e-10
+            },
+            "indirect": {
+              "nrmse": 1.06239306286273,
+              "signed_sum_bias": -0.524341613255041,
+              "reference_rms": 5.59827903789468e-06,
+              "whole_image_max_absolute": 0.00019855888836672078
+            },
+            "total": {
+              "nrmse": 0.26031660600506396,
+              "signed_sum_bias": -0.09427159647957142,
+              "reference_rms": 2.2847459034267764e-05,
+              "whole_image_max_absolute": 0.00019855894866030693
+            }
+          }
+        },
+        {
+          "role": "dense-rc",
+          "classification": "QUALITY_FAIL",
+          "budget": "Original fixed dense RC budget; ignores finite-depth/sample pushes, same image for B2/B8",
+          "finite_depth_semantics_qualified": false,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.590017038154323e-07,
+              "signed_sum_bias": -2.5394718792076413e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 4.707563403764242e-10
+            },
+            "indirect": {
+              "nrmse": 1.2040074711098736,
+              "signed_sum_bias": -0.24565428531228148,
+              "reference_rms": 5.59827903789468e-06,
+              "whole_image_max_absolute": 0.00016508644660785855
+            },
+            "total": {
+              "nrmse": 0.2950162124438475,
+              "signed_sum_bias": -0.044166429305517514,
+              "reference_rms": 2.2847459034267764e-05,
+              "whole_image_max_absolute": 0.00016508644660785855
+            }
+          }
+        },
+        {
+          "role": "corrected-ddgi",
+          "classification": "QUALITY_FAIL",
+          "budget": {
+            "rung": 2,
+            "grid_side": 24,
+            "rays_per_probe": 512,
+            "stages": 7,
+            "reset_all": true,
+            "temporal_history": false
+          },
+          "finite_depth_semantics_qualified": true,
+          "scoring_exclusions": 0,
+          "components": {
+            "direct": {
+              "nrmse": 6.590017038154323e-07,
+              "signed_sum_bias": -2.5394718792076413e-07,
+              "reference_rms": 2.1188749668757086e-05,
+              "whole_image_max_absolute": 4.707563403764242e-10
+            },
+            "indirect": {
+              "nrmse": 0.5515474996241763,
+              "signed_sum_bias": 0.00645460490966902,
+              "reference_rms": 5.59827903789468e-06,
+              "whole_image_max_absolute": 0.0001901756109486871
+            },
+            "total": {
+              "nrmse": 0.13514490594540482,
+              "signed_sum_bias": 0.0011602654974856093,
+              "reference_rms": 2.2847459034267764e-05,
+              "whole_image_max_absolute": 0.00019017567578974675
+            }
+          },
+          "observed_levels": [
+            {
+              "rung": 0,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 1,
+              "classification": "QUALITY_FAIL"
+            },
+            {
+              "rung": 2,
+              "classification": "QUALITY_FAIL"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Original DDGI010scores remain superseded; corrected012is explicitly unblinded, not a fresh unseen cohort",
+    "Fixed RC shared-image observations are diagnostic targets and not PT-equivalent finite budgets",
+    "One Radeon8060S only; new dynamic/Sponza/representative-device strata and historical direct/timing issues remain open",
+    "Prior builds/tests and default Renderer runtime not rerun; no active build graph change"
+  ]
+}

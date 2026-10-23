@@ -8,6 +8,8 @@
 
 The objective is to establish a new light-transport architecture that can outperform representative existing real-time GI techniques **in a defensible combination of image quality, end-to-end GPU cost, GPU memory, and dynamic-scene coverage**. This is not merely a Split Radiance Cascades optimization project. Producer, traversal, storage and reuse components are replaceable hypotheses, not permanent commitments.
 
+The [M001 static quality screen](research/lanes/lane-m-gi-competitiveness/results/083-m001-static-screen-outcome.md) is complete: PT passes six targets; the configured RC and corrected DDGI roles fail their quality gates. Lane M research continues; no GI speed or architecture win is accepted.
+
 ## Historical measured position (2026-10-11)
 
 The laboratory has a functioning GPU image-producing Renderer and substantial measured performance results, **but has not established a generally superior GI solution**.
