@@ -1,0 +1,117 @@
+{
+  "schema": "m001-ddgi-corrected-h01-checkpoint-verification/1",
+  "source_commit": "478b0aecb9769210b9b9079374438c4b12b0cc88",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "configured historical indexes; not runtime validation",
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "returncode": 0,
+      "scope": "explicit LaneM index before adding verification self-link; final index also checked afterward",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "20739591",
+        "--exit-code",
+        "--",
+        "scripts/research",
+        "src/research",
+        "shaders/research",
+        ":(glob)**/CMakeLists.txt"
+      ],
+      "returncode": 0,
+      "scope": "all executable research code and build graph unchanged since full20control qualification",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "returncode": 0,
+      "scope": "historical source/shaders/N010evidence/CMake unchanged",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command_description": "git diff478b0aec --exit-code -- all existing result files through072, excluding mutable index",
+      "original_result_files": 72,
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "scope": "whitespace",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "native_acquisitions": 6,
+  "all_existing_evidence_valid": true,
+  "quality_pass_targets": [],
+  "exhausted_quality_fail_targets": [
+    "H01_T_B2",
+    "H01_T_B8"
+  ],
+  "unresolved_target_count": 4,
+  "raw_payloads_rehashed": 312,
+  "full_error_maps": 18,
+  "completed_gpu_units": 16324,
+  "full_copy_atlases": 48,
+  "full_copy_components": 113246208,
+  "exact_border_components": 34209792,
+  "max_true_peak_owned_bytes": 431872912,
+  "next_named_case": "h02-b2-q0",
+  "runtime_twenty_control_qualification_preserved": true,
+  "prior_runtime_verification": {
+    "path": "research/lanes/lane-m-gi-competitiveness/results/069-ddgi-separated-border-full-checkpoint-verification.json",
+    "sha256": "92075654f1b2f9a61075a87b8e38f9822ae4bc4bbb47935da18533fe896c54a6"
+  },
+  "cpu_tests_build_rerun": false,
+  "prior_actual_011_cpu_tests": 62,
+  "prior_actual_012_cpu_tests": 25,
+  "prior_011_actual_native_cpu_contracts": 20,
+  "prior_new_012_actual_native_cpu_contracts": 12,
+  "reused_exact_h01_cpu_contracts": 6,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "superiority_claim": false,
+  "power_clock_desktop_changes": false,
+  "scope": "Six corrected quality captures and full CPU raw/metric/error-map/runtime/reference replay; both H01ladders exhausted, four targets unresolved, Lane M incomplete."
+}
