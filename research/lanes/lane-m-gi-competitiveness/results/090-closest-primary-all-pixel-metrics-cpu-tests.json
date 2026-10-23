@@ -1,0 +1,30 @@
+{
+  "schema": "m001-closest-primary-metrics-cpu-tests/1",
+  "source_commit": "d0e202d0d95845450a3e848e770393ace009f48f",
+  "command": [
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "scripts/research/lane_m_gi_competitiveness",
+    "-p",
+    "test_closest_primary_metrics.py",
+    "-v"
+  ],
+  "returncode": 0,
+  "stdout": "",
+  "stderr": "test_inclusive_direct_physical_bounds (test_closest_primary_metrics.DecisionMetrics.test_inclusive_direct_physical_bounds) ... ok\ntest_inclusive_quality_bounds_and_both_bias_signs (test_closest_primary_metrics.DecisionMetrics.test_inclusive_quality_bounds_and_both_bias_signs) ... ok\ntest_indirect_quality_loss_does_not_become_direct_correctness_loss (test_closest_primary_metrics.DecisionMetrics.test_indirect_quality_loss_does_not_become_direct_correctness_loss) ... ok\ntest_invalid_primary_report_cannot_authorize_next_process (test_closest_primary_metrics.DecisionMetrics.test_invalid_primary_report_cannot_authorize_next_process) ... ok\ntest_named_wrong_surface_zero_or_relative_error_one_fails (test_closest_primary_metrics.DecisionMetrics.test_named_wrong_surface_zero_or_relative_error_one_fails) ... ok\ntest_undefined_nonfinite_and_excluded_pixels_invalidate (test_closest_primary_metrics.DecisionMetrics.test_undefined_nonfinite_and_excluded_pixels_invalidate) ... ok\ntest_zero_positive_direct_is_not_ignored (test_closest_primary_metrics.DecisionMetrics.test_zero_positive_direct_is_not_ignored) ... ok\ntest_complete_all_pixel_arrays_and_serializable_report (test_closest_primary_metrics.PrimaryMetrics.test_complete_all_pixel_arrays_and_serializable_report) ... ok\ntest_hit_presence_mismatch_is_correctness_failure (test_closest_primary_metrics.PrimaryMetrics.test_hit_presence_mismatch_is_correctness_failure) ... ok\ntest_inclusive_depth_bound_then_next_float_fails (test_closest_primary_metrics.PrimaryMetrics.test_inclusive_depth_bound_then_next_float_fails) ... ok\ntest_incomplete_coverage_and_wrong_abi_are_rejected (test_closest_primary_metrics.PrimaryMetrics.test_incomplete_coverage_and_wrong_abi_are_rejected) ... ok\ntest_invalid_flags_miss_clear_and_reference_triangle_are_rejected (test_closest_primary_metrics.PrimaryMetrics.test_invalid_flags_miss_clear_and_reference_triangle_are_rejected) ... ok\ntest_nonfinite_geometry_and_duplicate_identity_are_rejected (test_closest_primary_metrics.PrimaryMetrics.test_nonfinite_geometry_and_duplicate_identity_are_rejected) ... ok\ntest_nonfinite_hit_or_nonunit_normal_is_invalid (test_closest_primary_metrics.PrimaryMetrics.test_nonfinite_hit_or_nonunit_normal_is_invalid) ... ok\ntest_normal_difference_is_reported_without_pixel_exclusion (test_closest_primary_metrics.PrimaryMetrics.test_normal_difference_is_reported_without_pixel_exclusion) ... ok\ntest_unknown_primitive_or_inconsistent_metadata_is_invalid (test_closest_primary_metrics.PrimaryMetrics.test_unknown_primitive_or_inconsistent_metadata_is_invalid) ... ok\n\n----------------------------------------------------------------------\nRan 16 tests in 0.053s\n\nOK\n",
+  "gpu_executed": false,
+  "input_sha256": {
+    "scripts/research/lane_m_gi_competitiveness/closest_primary_metrics.py": "51fdebe8760cc44c36956643d417913a10dbde6efda0d9b107a66208ab0ce626",
+    "scripts/research/lane_m_gi_competitiveness/test_closest_primary_metrics.py": "106d30263813bb3efa54826990a89ce8650bed5ebfde95df0e527559388bdf25"
+  },
+  "raw_receipt": "out/research/lane-m-gi-competitiveness/m001-closest-primary-metrics-cpu-tests-v1/result.json",
+  "raw_receipt_sha256": "7315af50f91e4a276c403292b27d6284c3161ef22128d46704e38c7e0c33edf6",
+  "actual_new_metric_tests": 16,
+  "prior_distinct_actual_source_case_tests": 12,
+  "total_distinct_actual_tests": 28,
+  "full_acquisition_auditor_ready": false,
+  "process_runner_ready": false
+}
