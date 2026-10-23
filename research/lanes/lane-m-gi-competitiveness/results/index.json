@@ -265,7 +265,11 @@
       "closest_primary_owned_peak_bytes": 416697040,
       "closest_primary_all_teardown_zero": true,
       "closest_primary_further_gpu_process_selected": false,
-      "closest_primary_gpu_checkpoint_verification": "results/098-closest-primary-eight-controls-checkpoint-verification.json"
+      "closest_primary_gpu_checkpoint_verification": "results/098-closest-primary-eight-controls-checkpoint-verification.json",
+      "all_bounce_guide_cpu_protocol": "experiments/015-all-bounce-directional-guide-cpu-feasibility.md",
+      "all_bounce_guide_cpu_preparation": "results/099-all-bounce-guide-cpu-preparation.json",
+      "all_bounce_guide_status": "CPU_KERNEL_TESTED_PILOT_NOT_RUN",
+      "all_bounce_guide_gpu_cases": 0
     }
   ]
 }
