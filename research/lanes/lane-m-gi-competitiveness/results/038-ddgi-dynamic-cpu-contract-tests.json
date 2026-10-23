@@ -1,0 +1,138 @@
+{
+  "schema": "m001-ddgi-dynamic-cpu-tests/1",
+  "all_pass": true,
+  "gpu_executed": false,
+  "unique_tests_passed": 70,
+  "python_discovery_passed": 53,
+  "native_static_input_tests_passed": 11,
+  "native_dynamic_input_tests_passed": 6,
+  "discovery_skipped_native_tests_executed_separately": 17,
+  "standalone_ubsan_transport_ray_ownership_pass": true,
+  "rows": [
+    {
+      "root": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-transition-cpu-tests-v1",
+      "receipt": {
+        "schema": "m001-ddgi-transition-cpu-tests/1",
+        "gpu_executed": false,
+        "rows": [
+          {
+            "command": [
+              "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-transition-host-build-v1/ddgi-contract-test"
+            ],
+            "returncode": 0,
+            "pass_": true
+          },
+          {
+            "command": [
+              "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python",
+              "scripts/research/lane_m_gi_competitiveness/test_ddgi_host.py",
+              "--native",
+              "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-transition-host-build-v1/m001-ddgi-transition"
+            ],
+            "returncode": 0,
+            "pass_": true
+          },
+          {
+            "command": [
+              "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python",
+              "scripts/research/lane_m_gi_competitiveness/test_ddgi_transition_host.py",
+              "--native",
+              "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-transition-host-build-v1/m001-ddgi-transition"
+            ],
+            "returncode": 0,
+            "pass_": true
+          }
+        ],
+        "all_pass": true,
+        "input_sha256": {
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-transition-host-build-v1/m001-ddgi-transition": "24c7503230a13569d7606dbcaed7cd984cf214af2ac04b310f633b735280b25f",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-transition-host-build-v1/result.json": "032cd5c3b4a94b2eb1b164f206ed879aef59b018c768cdbf4ae27a7c8e47903a",
+          "scripts/research/lane_m_gi_competitiveness/test_ddgi_transition_host.py": "ad78b07fbd0a1608dc41c07007b543f301eb4457654f89e03d49c663938e42d6",
+          "scripts/research/lane_m_gi_competitiveness/test_ddgi_host.py": "7d3a4f778ec9ca60d5f2b94bd3584e7761b7e9475faf7fa9bce613bb9d8d23a9"
+        }
+      },
+      "payload_sha256": {
+        "0.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "0.stdout.txt": "02ba12089511eb681d1b4d21e5ce141e770352a54b1e6a47b85dbc8ab09e58d9",
+        "1.stderr.txt": "d60118aba92dffec05089396e17ffee9c80fe2123d39c1585b0cad51fed87f05",
+        "1.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "2.stderr.txt": "d840f34b33e77b319faf8d8263bffc7f57cf9c70c73551efc84271f393d69deb",
+        "2.stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "result.json": "46751126098971bc5f1056cd0d70b9d2d4894aeb2d446e1e2bd47be2adb79a35"
+      }
+    },
+    {
+      "root": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-process-tests-v1",
+      "receipt": {
+        "schema": "m001-ddgi-dynamic-process-cpu-tests/1",
+        "command": [
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "scripts/research/lane_m_gi_competitiveness",
+          "-p",
+          "test_*.py",
+          "-v"
+        ],
+        "returncode": 0,
+        "all_pass": true,
+        "gpu_executed": false,
+        "input_sha256": {
+          "scripts/research/lane_m_gi_competitiveness/ddgi_control_step.py": "4ff3d68dd7614f5cd01d5da103a3be8dc34150989c9af2073b57af50b50904d8",
+          "scripts/research/lane_m_gi_competitiveness/capture_h02.py": "edb94483ff6fb1f98f9b28f5b411d60d8a0bf3a6713393214a77574943238289",
+          "scripts/research/lane_m_gi_competitiveness/run_h01_b2_reference_stage2.py": "48f5107ca8f99d62dd579be075a3012f09b0fc186ac45135e3be31b0861ad69c",
+          "scripts/research/lane_m_gi_competitiveness/admit_h01_b2_original_reference.py": "d653e335059eb36bc03e0a1ea06d283c07401cd36b02ec9a9ca050e69bd6f6f5",
+          "scripts/research/lane_m_gi_competitiveness/test_ddgi_control_step.py": "b14ff2bbdab14e747781dafd8cec442fafa6757576235aa8ed5da5a4560602c2",
+          "scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_inputs.py": "fb0c2009019db805c2c606ed64859f52757649653b7a90ed329fe60807b4f6df",
+          "scripts/research/lane_m_gi_competitiveness/test_ddgi_dynamic_step.py": "2fa37dc44042fb8c03a390fb0e35b7417748b3b6bf7cb9b9a6c734156b31f2aa",
+          "scripts/research/lane_m_gi_competitiveness/capture_h03.py": "89b8e8b6c4322b193693cef466914c57b6e040bc2436394fe63a1247f5506cb2",
+          "scripts/research/lane_m_gi_competitiveness/score_fixed_control_target.py": "3c96b4d732ef14a6b7a3f7a0fc7ed7128bd95b47fe0e7764cc4c30df1a0edc47",
+          "scripts/research/lane_m_gi_competitiveness/ddgi_control_audit.py": "3ed3005335cb57198aa813df1d1cfee79e09ca0d8499ec947c479406a8ed01ab",
+          "scripts/research/lane_m_gi_competitiveness/fixed_rc_step.py": "cd736cb52ec0f4a1d5ad4f621f5f79c625824bbf50a0d0b6a838160851b2308b",
+          "scripts/research/lane_m_gi_competitiveness/frozen_quality_step.py": "8be96ee41ef3842554235dda4103a628cd9dad5a041d20e5fd32242b23b08699",
+          "scripts/research/lane_m_gi_competitiveness/audit_h03_evidence.py": "456b6b35fb83f506fd7f9a7bf3efbdb9378ecd8cd9f799370d47824221af8341",
+          "scripts/research/lane_m_gi_competitiveness/test_first_pt_audit.py": "fe2e0165e8cf100db39155e5f13dfcaabc7b7dde9c22278b0192e99bd2fbf729",
+          "scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_audit.py": "b3e50dd0323fa86e0a66acff2c7e2d282d7e31c1b4f7424fe29d9e76b1b571cc",
+          "scripts/research/lane_m_gi_competitiveness/score_retained.py": "89d1cc05c26fcd2e643570adc865852371d64dcaf246daf71397bc8399eee82b",
+          "scripts/research/lane_m_gi_competitiveness/generate_heldout_geometry.py": "88b193bc1f3535af3ceee57a51975ae59eef57554300c75481e50e2a49e8ddc1",
+          "scripts/research/lane_m_gi_competitiveness/audit_first_pt_quality.py": "1c8de7ef9a284fc01aa6d89e6be667fe99a880b70a3a7a2589a028b8a0176cdb",
+          "scripts/research/lane_m_gi_competitiveness/test_ddgi_host.py": "7d3a4f778ec9ca60d5f2b94bd3584e7761b7e9475faf7fa9bce613bb9d8d23a9",
+          "scripts/research/lane_m_gi_competitiveness/prepare_m001_n010_physical_inputs.py": "53406cc78cb647d74e3aa0f34ceedac848acb5fc4daacff9f7a5b14738ac0887",
+          "scripts/research/lane_m_gi_competitiveness/summarize_fixed_rc.py": "cd198fc9e7c1e6213af5f41ef8ac792560ba81eb983bad6fe7933646120c4cd4",
+          "scripts/research/lane_m_gi_competitiveness/first_pt_quality.py": "1d184e52e4077efddfbcad881f89e9789828b42134a75771f45b9877d491fa43",
+          "scripts/research/lane_m_gi_competitiveness/run_h01_b8_reference_stage1.py": "fb4517fc5829f712386326755ee31e6f5b9d6d5f8c03114e2f5c6fa649d791cd",
+          "scripts/research/lane_m_gi_competitiveness/audit_quality_step.py": "3c4800046530405cdabfb5894f60015cc6ca7f5690137b15e2b9ae4032aeca6b",
+          "scripts/research/lane_m_gi_competitiveness/build_ddgi_transition_host.py": "feb0f3928e247e494bcce667546cbf1ba5cb8c71c83ade16b6ab346595707d41",
+          "scripts/research/lane_m_gi_competitiveness/summarize_cpu_checkpoint.py": "b5b9239d5bc76067115cc85629ccfd8e6fa22d371251bbc650c95642bf7f5aa9",
+          "scripts/research/lane_m_gi_competitiveness/summarize_quality_screen.py": "6eb070460235da7aef95363e8c9f7431f2ea912e3902c06f38a0943e63371cef",
+          "scripts/research/lane_m_gi_competitiveness/test_quality_screen_selection.py": "abfd93bd970c48cf27d3d512baa968e260f09bed3b1dec22de44940750f5c806",
+          "scripts/research/lane_m_gi_competitiveness/m001_first_capture.py": "a163dd006a759cee7f793e2afa8c73166578908e24cb7686720044814d81c352",
+          "scripts/research/lane_m_gi_competitiveness/test_fixed_rc_step.py": "283df99121c83c38a0bf499c7d6885849c07a35b8520f468a118fabac555554d",
+          "scripts/research/lane_m_gi_competitiveness/test_reference_step.py": "84520fec72dabb487268db5ba37a2eee3cf5a9c13544c01e49e6139f5e24b647",
+          "scripts/research/lane_m_gi_competitiveness/prepare_h02_reference_scene.py": "456ce85d0dcce8f6e2d8bde1d7b5cddd65bbff83549dcd03f67f6f438458a5f7",
+          "scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_step.py": "7c36585c7b83e3a44f1db3fee0dcee7259326e156f86d7bb3b016cfd970130af",
+          "scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py": "a38a7a6cca768a74efd9e2f6abe1473099543eb464dca0d2f7c6a2a4fc5e4ba2",
+          "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py": "5a83c0661a35b61cb9a6c66580da521321fe638c25bd3031391afcd08c08d8ca",
+          "scripts/research/lane_m_gi_competitiveness/compile_ddgi_scene.py": "d38261662b7d13bc366dbe78e0709306a6c56026e383fb049b797a5b678c0e2c",
+          "scripts/research/lane_m_gi_competitiveness/test_ddgi_transition_host.py": "ad78b07fbd0a1608dc41c07007b543f301eb4457654f89e03d49c663938e42d6",
+          "scripts/research/lane_m_gi_competitiveness/test_first_pt_quality.py": "2fd7526609ef2172e64bebdaa93871db8e7d13f2f6ed4a3b6ec2973f707ac935",
+          "scripts/research/lane_m_gi_competitiveness/run_h01_b2_reference_stage1.py": "ab936187dea2bb3602d570725ab984ca16d066ccb638420e4c4af853e2e81734",
+          "scripts/research/lane_m_gi_competitiveness/prepare_h01_reference_scene.py": "aa6cf28e0b13acda4348fe9393f53d281104171a581259ce991f61f2eb318394",
+          "scripts/research/lane_m_gi_competitiveness/reference_step.py": "289879e9f4d56a1c23ad2a9fc4037b5e41bb50845a61924cf971497f7bfae59c",
+          "scripts/research/lane_m_gi_competitiveness/test_heldout_geometry.py": "d1538371e864a960009c705efa18a5e1237e01dbdf30216f701088fa4b761406",
+          "scripts/research/lane_m_gi_competitiveness/build_ddgi_host.py": "5f10e1037d7c05c1b55eca08b9ca50282c042277d03874aad3799a0d1081634d",
+          "scripts/research/lane_m_gi_competitiveness/test_frozen_quality_step.py": "46e1f2534105cf9a8fb9d50e57bf831b424c33cdebea2a22829b5aa3b4f1577e"
+        }
+      },
+      "payload_sha256": {
+        "result.json": "ea8dbf270de13d478ae43b35245398b4bb2741afe7c9a4442abc517c30c6b03d",
+        "stderr.txt": "f1c6732c27dafc5bd17151d340524420dc195d38cb96b52b5843681becdb6dac",
+        "stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "source_commit": "1eceb08e03c5db03237502ffb72515925d304cdf",
+  "scope": "CPU preparation only; dynamic GPU reset/update NOT RUN. Original static host/shaders and all old evidence remain unchanged."
+}

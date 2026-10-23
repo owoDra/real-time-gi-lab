@@ -1,0 +1,471 @@
+{
+  "schema": "m001-ddgi-dynamic-state-and-direct-cpu-audit/1",
+  "gpu_executed": false,
+  "state_lock": {
+    "state_lock_sha256": "3facd2199d3cd1b3b43370c125cab4f73396603c6f88d2112242dc1ecdaaf036",
+    "all_pass": true,
+    "gpu_executed": false,
+    "rows": [
+      {
+        "holdout": false,
+        "indirect_reference_eligible": false,
+        "kind": "light",
+        "physical_scenes": [
+          {
+            "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+            "path": "T_B2.n008",
+            "sha256": "f1eca3443533b898e5756b17726dca0961f536078d1a1fbbac28e741d49a0b31",
+            "vertices": 2
+          },
+          {
+            "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+            "path": "T_B8.n008",
+            "sha256": "5599d857088cf08b9d2c07f89f1378844a99567572f584eb2a9f90d550ad0673",
+            "vertices": 8
+          }
+        ],
+        "state_sha256": {
+          "frame": "5d8d35fbb1a39204615175f285cda7e0ad1b7edc78712860ff420e191f07b817",
+          "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+        }
+      },
+      {
+        "holdout": false,
+        "indirect_reference_eligible": false,
+        "kind": "geometry",
+        "physical_scenes": [
+          {
+            "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+            "path": "T_B2.n008",
+            "sha256": "a6b6b819c6cf33f912585f227e52a5acf2f8a5fad756313eb8527464a833f5f8",
+            "vertices": 2
+          },
+          {
+            "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+            "path": "T_B8.n008",
+            "sha256": "828d91789b7aa5dc15efcebad14a239773e8751d1454ae832746b35d60f7c443",
+            "vertices": 8
+          }
+        ],
+        "state_sha256": {
+          "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "geometry": "366ecc68af5999b8538562e9261cb60b69ee2465c018ed966dedd62e5afa7fd3"
+        }
+      }
+    ]
+  },
+  "manifest": {
+    "gpu_executed": false,
+    "input_sha256": {
+      "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/n010_rqmc_oracle": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+      "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+      "/var/owo/workspaces/projects/gi-lab/research/lanes/n010-comparison-readiness/results/009-iid-precision-confirmation.json": "dd58ddcdbc9b4975398ca1e0069aad9d1ed40a213f7d578f97fa827bdd3523df",
+      "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_inputs.py": "fb0c2009019db805c2c606ed64859f52757649653b7a90ed329fe60807b4f6df"
+    },
+    "oracle_executed": false,
+    "rows": [
+      {
+        "holdout": false,
+        "indirect_reference_eligible": false,
+        "kind": "light",
+        "physical_scenes": [
+          {
+            "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+            "path": "T_B2.n008",
+            "sha256": "f1eca3443533b898e5756b17726dca0961f536078d1a1fbbac28e741d49a0b31",
+            "vertices": 2
+          },
+          {
+            "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+            "path": "T_B8.n008",
+            "sha256": "5599d857088cf08b9d2c07f89f1378844a99567572f584eb2a9f90d550ad0673",
+            "vertices": 8
+          }
+        ],
+        "state_sha256": {
+          "frame": "5d8d35fbb1a39204615175f285cda7e0ad1b7edc78712860ff420e191f07b817",
+          "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+        }
+      },
+      {
+        "holdout": false,
+        "indirect_reference_eligible": false,
+        "kind": "geometry",
+        "physical_scenes": [
+          {
+            "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+            "path": "T_B2.n008",
+            "sha256": "a6b6b819c6cf33f912585f227e52a5acf2f8a5fad756313eb8527464a833f5f8",
+            "vertices": 2
+          },
+          {
+            "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+            "path": "T_B8.n008",
+            "sha256": "828d91789b7aa5dc15efcebad14a239773e8751d1454ae832746b35d60f7c443",
+            "vertices": 8
+          }
+        ],
+        "state_sha256": {
+          "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+          "geometry": "366ecc68af5999b8538562e9261cb60b69ee2465c018ed966dedd62e5afa7fd3"
+        }
+      }
+    ],
+    "schema": "m001-ddgi-dynamic-state-lock/1",
+    "scope": "Derived009 tuning/diagnostic state bytes only; never new heldouts or indirect physical references",
+    "source_commit": "74b715899a450c088b372c28a4204e0e37795035",
+    "source_physical_audit": {
+      "accepted_timing": false,
+      "allocation": {
+        "events": 74,
+        "teardown_zero": true,
+        "true_peak_owned_bytes": 266937920
+      },
+      "capture_payload_hashes_checked": 13,
+      "capture_payload_hashes_unverified": [],
+      "capture_source_commit": "948d38c339190340b9e3f91f8ec0347b3b4a0109",
+      "classification": "STATE_EVIDENCE_CONSISTENT_REFERENCE_NOT_YET_ELIGIBLE",
+      "complete": true,
+      "frame": {
+        "frame_sha256": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+        "resolution": [
+          320,
+          180
+        ],
+        "ubo": {
+          "camera_forward_far": [
+            -0.689671516418457,
+            -0.2206949144601822,
+            -0.689671516418457,
+            33.9779167175293
+          ],
+          "camera_pos_near": [
+            6.405184745788574,
+            3.3996591567993164,
+            6.405184745788574,
+            0.011325973086059093
+          ],
+          "camera_right_tan_x": [
+            0.7071068286895752,
+            0.0,
+            -0.7071068286895752,
+            1.2448135614395142
+          ],
+          "camera_up_tan_y": [
+            -0.15605488419532776,
+            0.975342869758606,
+            -0.15605488419532776,
+            0.7002076506614685
+          ],
+          "light_pos_interval": [
+            1.6988959312438965,
+            5.314090251922607,
+            1.1325973272323608,
+            0.08848416060209274
+          ],
+          "scene_origin_spacing": [
+            -3.8888890743255615,
+            0.0,
+            -3.8888890743255615,
+            0.17696832120418549
+          ]
+        }
+      },
+      "geometry": {
+        "geometry_sha256": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "triangles": 1224,
+        "two_sided": true,
+        "unique_primitive_ids": 1224
+      },
+      "gpu_run": false,
+      "input_sha256": {
+        "capture_json": "0e7f7b79b20ffbe4a5964a270cf3e25e6c40116041c605a0c425493761e2e381",
+        "geometry_manifest": "55e656caa352352fba160c1e02151f17237c116f37de2f2f0c2517893f25a707",
+        "result": "27e612439447bd1afd73f9346a679682c46eb0babe053883f17e9a53455a6cc0"
+      },
+      "reference_eligible": false,
+      "schema": "lane-m-m001-h01-state-audit/1",
+      "scope": "Full payload SHA including HDR byte hashes; no HDR pixels read, reference scored, or GPU work."
+    },
+    "source_state_sha256": {
+      "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+      "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+    }
+  },
+  "targets": [
+    {
+      "audit": {
+        "kind": "light",
+        "complete": true,
+        "all_pass": true,
+        "result_sha256": "c282be6824ca1fed9987b003d1d0033f68b81af84c5045ebb6bb6f3f75e58ecf",
+        "raw_payloads_rehashed": 9,
+        "direct_nonzero_pixels": 6933,
+        "direct_max": 0.0002044638617148705,
+        "indirect_reference_eligible": false,
+        "gpu_executed": false
+      },
+      "receipt": {
+        "classification": "DETERMINISTIC_DIRECT_CONTROL_ONLY_INDIRECT_INELIGIBLE",
+        "command": [
+          "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/n010_rqmc_oracle",
+          "--net",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/light/T_B2.n008",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/light/cpu-direct-v1/oracle",
+          "--seeds",
+          "305419896",
+          "--spp",
+          "1",
+          "--threads",
+          "1"
+        ],
+        "complete": true,
+        "gpu_executed": false,
+        "indirect_reference_eligible": false,
+        "input_sha256": {
+          "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/n010_rqmc_oracle": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/light/T_B2.n008": "f1eca3443533b898e5756b17726dca0961f536078d1a1fbbac28e741d49a0b31",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/manifest.json": "3facd2199d3cd1b3b43370c125cab4f73396603c6f88d2112242dc1ecdaaf036",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+          "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_inputs.py": "fb0c2009019db805c2c606ed64859f52757649653b7a90ed329fe60807b4f6df"
+        },
+        "kind": "light",
+        "metadata": {
+          "geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+          "height": 180,
+          "oracle": "n010-rqmc-digital-shift",
+          "point_lights": 1,
+          "ray_offset": 1.1631422967869927e-11,
+          "runs": [
+            {
+              "backface_absorbed": 0,
+              "cpu_seconds_diagnostic": 0.01,
+              "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/light/cpu-direct-v1/oracle.s0",
+              "primary_hits": 7325,
+              "seed": 305419896,
+              "shadow_blocked": 239,
+              "shadow_tests": 8412
+            }
+          ],
+          "scene_sha256": "f1eca3443533b898e5756b17726dca0961f536078d1a1fbbac28e741d49a0b31",
+          "seeds": [
+            305419896
+          ],
+          "spp": 1,
+          "triangles": 1224,
+          "version": 1,
+          "width": 320
+        },
+        "payload_sha256": {
+          "oracle.hits": "9c7b42841680f5d3813c104591fa732f332127c910d1dd0f213e19d2f45b6b40",
+          "oracle.s0.direct.pfm": "262293f5eb352f4596c6595f1dd4827d87e8a400b756e6ecd3ba651bdf7ffda1",
+          "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "oracle.s0.f64": "81696b6ee1863f7079ac477581eff7a4f161d9e09511b3bb861666e3fc55231c",
+          "oracle.s0.indirect.pfm": "4e53338c32fa8a01bce82288c5bbc6ccd3ba025b71f71ff19c2a393135ee66af",
+          "oracle.s0.total.pfm": "1fca73f7ec59a3d42f3eb5b664ec6cd5f73bf180b74b18dfa3e57d476e03d634",
+          "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "oracle.stdout.txt": "81524de81d2b63e6b930f8d9da3f7bd07bc578c5c1c1b9f15f486bd8ba314534",
+          "started.json": "0f0b9e534000655c1836c55075b232be375107f0a0a71b0575c3e305e414c8fc"
+        },
+        "physical_proof": {
+          "all_pass": true,
+          "gpu_executed": false,
+          "rows": [
+            {
+              "holdout": false,
+              "indirect_reference_eligible": false,
+              "kind": "light",
+              "physical_scenes": [
+                {
+                  "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+                  "path": "T_B2.n008",
+                  "sha256": "f1eca3443533b898e5756b17726dca0961f536078d1a1fbbac28e741d49a0b31",
+                  "vertices": 2
+                },
+                {
+                  "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+                  "path": "T_B8.n008",
+                  "sha256": "5599d857088cf08b9d2c07f89f1378844a99567572f584eb2a9f90d550ad0673",
+                  "vertices": 8
+                }
+              ],
+              "state_sha256": {
+                "frame": "5d8d35fbb1a39204615175f285cda7e0ad1b7edc78712860ff420e191f07b817",
+                "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+              }
+            },
+            {
+              "holdout": false,
+              "indirect_reference_eligible": false,
+              "kind": "geometry",
+              "physical_scenes": [
+                {
+                  "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+                  "path": "T_B2.n008",
+                  "sha256": "a6b6b819c6cf33f912585f227e52a5acf2f8a5fad756313eb8527464a833f5f8",
+                  "vertices": 2
+                },
+                {
+                  "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+                  "path": "T_B8.n008",
+                  "sha256": "828d91789b7aa5dc15efcebad14a239773e8751d1454ae832746b35d60f7c443",
+                  "vertices": 8
+                }
+              ],
+              "state_sha256": {
+                "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+                "geometry": "366ecc68af5999b8538562e9261cb60b69ee2465c018ed966dedd62e5afa7fd3"
+              }
+            }
+          ],
+          "state_lock_sha256": "3facd2199d3cd1b3b43370c125cab4f73396603c6f88d2112242dc1ecdaaf036"
+        },
+        "quality_admission": false,
+        "returncode": 0,
+        "schema": "m001-ddgi-deterministic-direct-control/1",
+        "source_commit": "74b715899a450c088b372c28a4204e0e37795035"
+      }
+    },
+    {
+      "audit": {
+        "kind": "geometry",
+        "complete": true,
+        "all_pass": true,
+        "result_sha256": "55e95aabf47a198035d30956ab5484a6c04027319d1a8232522377a67426a5ee",
+        "raw_payloads_rehashed": 9,
+        "direct_nonzero_pixels": 7164,
+        "direct_max": 0.00023107714555373863,
+        "indirect_reference_eligible": false,
+        "gpu_executed": false
+      },
+      "receipt": {
+        "classification": "DETERMINISTIC_DIRECT_CONTROL_ONLY_INDIRECT_INELIGIBLE",
+        "command": [
+          "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/n010_rqmc_oracle",
+          "--net",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin",
+          "--scene",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/geometry/T_B2.n008",
+          "--out",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/geometry/cpu-direct-v1/oracle",
+          "--seeds",
+          "305419896",
+          "--spp",
+          "1",
+          "--threads",
+          "1"
+        ],
+        "complete": true,
+        "gpu_executed": false,
+        "indirect_reference_eligible": false,
+        "input_sha256": {
+          "/var/owo/workspaces/projects/gi-lab/build/n010-cpu/n010_rqmc_oracle": "cbe1186c0b8b15ebd2fcd19d081d61898b827fcea59d96ce5ba09c015407d0a5",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/geometry/T_B2.n008": "a6b6b819c6cf33f912585f227e52a5acf2f8a5fad756313eb8527464a833f5f8",
+          "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/manifest.json": "3facd2199d3cd1b3b43370c125cab4f73396603c6f88d2112242dc1ecdaaf036",
+          "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/sobol16x262144.bin": "e4020cf0c0e521d16dab5d4e0aa9860943aa6de843e558978ea544842a13a439",
+          "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_inputs.py": "fb0c2009019db805c2c606ed64859f52757649653b7a90ed329fe60807b4f6df"
+        },
+        "kind": "geometry",
+        "metadata": {
+          "geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+          "height": 180,
+          "oracle": "n010-rqmc-digital-shift",
+          "point_lights": 1,
+          "ray_offset": 1.163142280388753e-11,
+          "runs": [
+            {
+              "backface_absorbed": 0,
+              "cpu_seconds_diagnostic": 0.01,
+              "prefix": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-dynamic-inputs-v1/geometry/cpu-direct-v1/oracle.s0",
+              "primary_hits": 7548,
+              "seed": 305419896,
+              "shadow_blocked": 228,
+              "shadow_tests": 8673
+            }
+          ],
+          "scene_sha256": "a6b6b819c6cf33f912585f227e52a5acf2f8a5fad756313eb8527464a833f5f8",
+          "seeds": [
+            305419896
+          ],
+          "spp": 1,
+          "triangles": 1224,
+          "version": 1,
+          "width": 320
+        },
+        "payload_sha256": {
+          "oracle.hits": "07e1b3b7932f25f27ad6733e4820a5b637caf6cc3ec894c1dfd8e27564edae39",
+          "oracle.s0.direct.pfm": "c456c18b2ce1036f96233aa8fc1e0d8ad67c11c3121751c5652e9d9a373e9825",
+          "oracle.s0.emission.pfm": "d92f25d1c73916bdfaf61cfc8764ca9d84ee6ca5dd8989324c839611e3e7139c",
+          "oracle.s0.f64": "1106e8bd2918f8ee05ca03bdb80d8de35420d256870d48cf6b47748db354d7d5",
+          "oracle.s0.indirect.pfm": "92b830c1b77c21beac9393f6818cfc2b9b7f3aa58f7c53172b7d48ae79866275",
+          "oracle.s0.total.pfm": "92832241e5eae83760ed8ebd60cb409dcf41ec82ff1c62667dc29592bdef4638",
+          "oracle.stderr.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "oracle.stdout.txt": "cbf7ad4edf16e120e801562c1545950ec0ca75c4d8a271ce5ded91d7463672cc",
+          "started.json": "fdb83f5d515d6f7b6f7a9841b68eab10e649f3387f5347de98a3b11aec0679c2"
+        },
+        "physical_proof": {
+          "all_pass": true,
+          "gpu_executed": false,
+          "rows": [
+            {
+              "holdout": false,
+              "indirect_reference_eligible": false,
+              "kind": "light",
+              "physical_scenes": [
+                {
+                  "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+                  "path": "T_B2.n008",
+                  "sha256": "f1eca3443533b898e5756b17726dca0961f536078d1a1fbbac28e741d49a0b31",
+                  "vertices": 2
+                },
+                {
+                  "f64_geometry_sha256": "fd6380ce0848e37d19f06c622f03dbbd76d0c900ff34b9195d2be155b4934966",
+                  "path": "T_B8.n008",
+                  "sha256": "5599d857088cf08b9d2c07f89f1378844a99567572f584eb2a9f90d550ad0673",
+                  "vertices": 8
+                }
+              ],
+              "state_sha256": {
+                "frame": "5d8d35fbb1a39204615175f285cda7e0ad1b7edc78712860ff420e191f07b817",
+                "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca"
+              }
+            },
+            {
+              "holdout": false,
+              "indirect_reference_eligible": false,
+              "kind": "geometry",
+              "physical_scenes": [
+                {
+                  "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+                  "path": "T_B2.n008",
+                  "sha256": "a6b6b819c6cf33f912585f227e52a5acf2f8a5fad756313eb8527464a833f5f8",
+                  "vertices": 2
+                },
+                {
+                  "f64_geometry_sha256": "f0ad179d62ad1453481e47e804916fdcd03f5577e5e89e69945b82c72c3bd2b1",
+                  "path": "T_B8.n008",
+                  "sha256": "828d91789b7aa5dc15efcebad14a239773e8751d1454ae832746b35d60f7c443",
+                  "vertices": 8
+                }
+              ],
+              "state_sha256": {
+                "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4",
+                "geometry": "366ecc68af5999b8538562e9261cb60b69ee2465c018ed966dedd62e5afa7fd3"
+              }
+            }
+          ],
+          "state_lock_sha256": "3facd2199d3cd1b3b43370c125cab4f73396603c6f88d2112242dc1ecdaaf036"
+        },
+        "quality_admission": false,
+        "returncode": 0,
+        "schema": "m001-ddgi-deterministic-direct-control/1",
+        "source_commit": "74b715899a450c088b372c28a4204e0e37795035"
+      }
+    }
+  ],
+  "all_pass": true,
+  "scope": "Exact009 diagnostic states and deterministic direct only; 1spp indirect remains INELIGIBLE, no quality admission."
+}
