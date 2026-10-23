@@ -131,3 +131,14 @@ repair cannot explain the historical88.8399% indirect NRMSE loss. Broader Lane M
 remains incomplete; new independent heldouts are required for new architecture
 claims. Default Renderer build/runtime regression and validation layers are
 NOT_RUN unless separately actually executed.
+
+## Pre-acquisition numerical clarification
+
+2026-10-24, after CPU build088and before implementing the full-image auditor or
+any variant GPU acquisition: finite unit normal means
+`abs(length(normal)-1) <= 1e-4`, inclusive, for each actual hit. Miss records must
+retain the original invalid-ID/clear convention. This fixes the previously
+unspecified float normalization tolerance before any candidate observations;
+none of the image, depth or named-pixel gates changes. Position differences are
+diagnostics reconstructed from captured camera/hit distance and the canonical
+reference ray, not exported GPU positions or proof of exact GPU arithmetic.
