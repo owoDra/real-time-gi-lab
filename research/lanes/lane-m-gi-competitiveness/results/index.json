@@ -7,7 +7,7 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "SIX_PT_LADDERS_COMPLETE_OTHER_CONTROLS_AND_DDGI_PENDING",
+      "phase": "PT_COMPLETE_FIXED_DENSE_FAIL_VANILLA_SOFTWARE_DDGI_PENDING",
       "classification": "PT_QUALITY_SCREEN_COMPLETE_NOT_LANE_COMPLETION",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
@@ -64,7 +64,7 @@
       "h03_b2_reference_eligible": true,
       "h03_b8_reference_eligible": true,
       "quality_scored": true,
-      "status": "SIX_REFERENCE_PASS_SIX_PT_PASS_SIX_INCUMBENT_FAIL_NO_MATCHED_TIMING",
+      "status": "SIX_REFERENCE_PASS_SIX_PT_PASS_TWELVE_RC_QUALITY_LOSSES_NO_MATCHED_TIMING",
       "result": "023-six-pt-quality-outcome.md",
       "h01_b8_first_cpu_level_status": "8192_INDIVIDUAL_PASS_FULL_23_RAW_HASHES_AND_N007_REPLAY_SUBSEQUENT_16384_ADMISSION_IN_016",
       "h01_b8_first_cpu_level_audit": "results/014-h01-b8-first-level-raw-audit.json",
@@ -93,7 +93,14 @@
         "T_B2": 256,
         "T_B8": 1024
       },
-      "pt_collector": "scripts/research/lane_m_gi_competitiveness/summarize_quality_screen.py"
+      "pt_collector": "scripts/research/lane_m_gi_competitiveness/summarize_quality_screen.py",
+      "fixed_control_protocol": "experiments/006-fixed-controls-execution.md",
+      "dense_source_cpu_audit": "results/024-dense-source-cpu-replay.json",
+      "dense_native_replay": "results/025-dense-fixed-control-replay.json",
+      "dense_outcome": "results/026-dense-quality-outcome.md",
+      "dense_native_cases": 3,
+      "dense_quality_fail_targets": 6,
+      "dense_quality_pass_targets": 0
     }
   ]
 }
