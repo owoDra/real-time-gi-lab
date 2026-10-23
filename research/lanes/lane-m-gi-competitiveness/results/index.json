@@ -166,7 +166,18 @@
       "ddgi_border_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_border_audit.py",
       "ddgi_border_failed_atlases": 53,
       "ddgi_border_affected_quality_acquisitions": 11,
-      "ddgi_border_correction_protocol": "experiments/011-ddgi-separated-border-requalification.md"
+      "ddgi_border_correction_protocol": "experiments/011-ddgi-separated-border-requalification.md",
+      "ddgi_border_failed_compile_attempt": "results/053-ddgi-separated-border-compiler-failed-attempt.json",
+      "ddgi_border_private_host_build": "results/054-ddgi-separated-border-host-cpu-build.json",
+      "ddgi_border_cpu_tests": "results/055-ddgi-separated-border-cpu-tests-and-native-contracts.json",
+      "ddgi_border_shader_compilation": "results/056-ddgi-separated-border-shaders-cpu-compilation.json",
+      "ddgi_border_shader_compiler": "scripts/research/lane_m_gi_competitiveness/compile_ddgi_border_v2.py",
+      "ddgi_border_host_builder": "scripts/research/lane_m_gi_competitiveness/build_ddgi_border_host.py",
+      "ddgi_border_shader": "shaders/research/lane_m_gi_competitiveness/m001_ddgi_border_copy.hlsl",
+      "ddgi_border_qualification_inventory": "scripts/research/lane_m_gi_competitiveness/ddgi_border_cases.py",
+      "ddgi_border_corrected_gpu_cases": 0,
+      "ddgi_border_runtime_requalified": false,
+      "ddgi_border_cpu_checkpoint_verification": "results/057-ddgi-separated-border-cpu-checkpoint-verification.json"
     }
   ]
 }

@@ -1,0 +1,140 @@
+{
+  "schema": "m001-ddgi-separated-border-cpu-preparation/1",
+  "gpu_executed": false,
+  "all_pass": true,
+  "receipts": {
+    "m001-ddgi-border-correction-tests-v1": {
+      "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-correction-tests-v1/result.json",
+      "sha256": "3df228ad73778ad64a07a933ed3fb92d609c4516cd5f48135c18189e4f7ea540"
+    },
+    "m001-ddgi-border-compiler-context-tests-v1": {
+      "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-compiler-context-tests-v1/result.json",
+      "sha256": "36a744e7028b773e223ce22bcc7ce1479f9581c2161e36f9f13dd0626e4a349b"
+    },
+    "m001-ddgi-border-input-tests-v1": {
+      "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-input-tests-v1/result.json",
+      "sha256": "f5ce49232050f5044e1b81097694c0e47d91b2036a8cf6955ae1dddec97e1bec"
+    },
+    "m001-ddgi-border-native-cpu-v1": {
+      "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-native-cpu-v1/result.json",
+      "sha256": "051d64329f44d45b8f57682bfd647e10b8e8dda500b7175fa4d87ad24bc421b2"
+    }
+  },
+  "actual_unittest_executions": 45,
+  "test_breakdown": {
+    "border_mapping_corruption_and_reversible_overlays": 21,
+    "compiler_include_context": 1,
+    "fixed_twenty_case_inventory": 4,
+    "existing_static_native_suite": 11,
+    "existing_transition_and_input_factory_suite": 8
+  },
+  "scope": "45actual unittest executions, including17native-input tests and2CPU input-factory tests in the unchanged11+8 existing suites, plus26new border/correction/compiler/inventory tests. Native tests use corrected binary with unusable ICD. UBSan C++ contract test is separately recorded054.",
+  "native_twenty_budget_depth_transition_cpu_contracts": 20,
+  "native_cpu_contracts": [
+    {
+      "all_pass": true,
+      "name": "static-direct",
+      "sha256": "209c2cad02f219d20f08413d873030d5f91d30871db2f0ebbe13048b02ae5cfa"
+    },
+    {
+      "all_pass": true,
+      "name": "static-black",
+      "sha256": "546289d2d9b966ca2ff5f9f4c006eaf31b06969c9ff0d3c63f1db56f76cf8f7d"
+    },
+    {
+      "all_pass": true,
+      "name": "static-unit",
+      "sha256": "86dd058d4104aefea60bcb2d142a06ef475b958fafc91bb4faf969773caf24dd"
+    },
+    {
+      "all_pass": true,
+      "name": "static-hdr",
+      "sha256": "330883eb1cb3f3862fcd7058b726197c0ff097fdc849782bcc34c4c747d7d57b"
+    },
+    {
+      "all_pass": true,
+      "name": "static-scene-one",
+      "sha256": "42ac212ac92f2ce6bcdaddc20cb9b235e048eedc62d7d82a315ba703e9e64444"
+    },
+    {
+      "all_pass": true,
+      "name": "static-scene-seven",
+      "sha256": "802bf80e316ebeb14eaeff340107582d9b362fb03728fed9867ecf4c0c9e29ad"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-light-fresh-b2",
+      "sha256": "a80f4a849310d299664c27dbbb30446aa981b2f857b4e5ec00e935bacb71c6af"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-light-fresh-b8",
+      "sha256": "83af34590d57ecd4a0a362fa72b4a37994484e9801e459c2097fa26b76c28296"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-light-transition-b2",
+      "sha256": "24ee620d3b1663b233207d9713f7359967f5c6b7e445843a2106b63bebd7978e"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-light-transition-b8",
+      "sha256": "40dfc151e7d2fc30d1e9177f112862dc580495843118e32f2924351e5d24a23a"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-geometry-fresh-b2",
+      "sha256": "b7b2f2af044da45d998cdfb27ba5ecdf318f0b99941cebb840157c73b2fed481"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-geometry-fresh-b8",
+      "sha256": "d0fb7070d4d59bfd2ebc33c3a982dccded1e50081102016851716a0625a5b119"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-geometry-transition-b2",
+      "sha256": "0790ac7e7ba6f9daad36e45109cac6822d55b7f799664ef1c9b4db858ebc1447"
+    },
+    {
+      "all_pass": true,
+      "name": "dynamic-geometry-transition-b8",
+      "sha256": "0da491083db59cf4a554b16bc6e3fe89e1d68c164c78ab6701937671055765a1"
+    },
+    {
+      "all_pass": true,
+      "name": "integrity-h01-q0-b2",
+      "sha256": "fc70d2212b46697463da80a1bd562c8d92a50feb6f680c855922f445c49bd7b7"
+    },
+    {
+      "all_pass": true,
+      "name": "integrity-h01-q0-b8",
+      "sha256": "1f033ab3e1bf02d321c9948c11e2f0eed9f69c9446ea2d6373b26f2c5aa19909"
+    },
+    {
+      "all_pass": true,
+      "name": "integrity-h01-q1-b2",
+      "sha256": "5688e8beb4c96189c59d57656ae337755e93dd8798e649d6871950f9f4a4756b"
+    },
+    {
+      "all_pass": true,
+      "name": "integrity-h01-q1-b8",
+      "sha256": "e4ea771601d36985dcfa54e91b497ccf15c3effbcea1c5554e93ab0be0945b1b"
+    },
+    {
+      "all_pass": true,
+      "name": "integrity-h01-q2-b2",
+      "sha256": "2e679f354cc0e0ae417f94a93372bbe9b7dc3fc63998738713151df91c255e52"
+    },
+    {
+      "all_pass": true,
+      "name": "integrity-h01-q2-b8",
+      "sha256": "5e1eb300bdaa824a90c0c82ef09a1645f56faf605e7d393a31c9d8a50d4bf736"
+    }
+  ],
+  "unusable_icd": true,
+  "runtime_requalified": false,
+  "remaining_before_gpu": "Dedicated011 one-process runner/independent auditor and process/order/failure/missing-evidence tests must be implemented, committed and CPU-tested. Do not run corrected GPU from build success alone.",
+  "default_renderer_build_runtime_rerun": false,
+  "accepted_timing": false
+}

@@ -1,0 +1,1004 @@
+{
+  "schema": "m001-ddgi-separated-border-shader-cpu-compile/2",
+  "source_commit": "18cf745df6e6c41bda75aafd7927f8002d3d41aa",
+  "gpu_executed": false,
+  "all_pass": true,
+  "receipt": {
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/result.json",
+    "sha256": "01795179711aa2bf16fe9ec804b9b5db642a2a11548bccae32adb4ad447dddd4"
+  },
+  "sdk_modified_derivative": true,
+  "original_sdk_unchanged": true,
+  "inverse_overlay_exact": true,
+  "sdk_files_verified": 330,
+  "compiler_files_verified": 10,
+  "input_manifest_entries": 358,
+  "rows": [
+    {
+      "name": "blend-128-irradiance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/blend-128-irradiance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=2",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=1",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=128",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=6",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=8",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders/ddgi"
+      ],
+      "expected_local_size": [
+        8,
+        8,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 2,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        },
+        {
+          "name": "ProbeVariability",
+          "binding": 5,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "edfd00ce1c69a3d72ccd40660b93436b0efb55e3f4a8ec021dc886a78d02ccc1",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "DDGIVolumes",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Output",
+            "binding": 2,
+            "set": 0
+          },
+          {
+            "name": "ProbeData",
+            "binding": 4,
+            "set": 0
+          },
+          {
+            "name": "ProbeVariability",
+            "binding": 5,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        8,
+        8,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "blend-128-distance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/blend-128-distance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=3",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=128",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=14",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=16",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders/ddgi"
+      ],
+      "expected_local_size": [
+        16,
+        16,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 3,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "1d088553844afab50bd1f49d46943625d1dda914a0518904553c2dbdc4995182",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "DDGIVolumes",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Output",
+            "binding": 3,
+            "set": 0
+          },
+          {
+            "name": "ProbeData",
+            "binding": 4,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        16,
+        16,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "blend-256-irradiance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/blend-256-irradiance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=2",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=1",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=256",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=6",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=8",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders/ddgi"
+      ],
+      "expected_local_size": [
+        8,
+        8,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 2,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        },
+        {
+          "name": "ProbeVariability",
+          "binding": 5,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "2292395c427e6b512f0bb98a893f3b5982e2a8df42b00b80483863af41ba8db8",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "DDGIVolumes",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Output",
+            "binding": 2,
+            "set": 0
+          },
+          {
+            "name": "ProbeData",
+            "binding": 4,
+            "set": 0
+          },
+          {
+            "name": "ProbeVariability",
+            "binding": 5,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        8,
+        8,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "blend-256-distance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/blend-256-distance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=3",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=256",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=14",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=16",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders/ddgi"
+      ],
+      "expected_local_size": [
+        16,
+        16,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 3,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "54d19337bd76ad856e8bdd2f9cae379c2392a8019ff36c2ab1be85a54c4194b2",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "DDGIVolumes",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Output",
+            "binding": 3,
+            "set": 0
+          },
+          {
+            "name": "ProbeData",
+            "binding": 4,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        16,
+        16,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "blend-512-irradiance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/blend-512-irradiance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=2",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=1",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=512",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=6",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=8",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders/ddgi"
+      ],
+      "expected_local_size": [
+        8,
+        8,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 2,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        },
+        {
+          "name": "ProbeVariability",
+          "binding": 5,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "a0b81fc482f8da013d457456ffe35dab0e0653f3b388eba65a34d3acbf26e5a2",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "DDGIVolumes",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Output",
+            "binding": 2,
+            "set": 0
+          },
+          {
+            "name": "ProbeData",
+            "binding": 4,
+            "set": 0
+          },
+          {
+            "name": "ProbeVariability",
+            "binding": 5,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        8,
+        8,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "blend-512-distance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/blend-512-distance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=3",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=512",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=14",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=16",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders/ddgi"
+      ],
+      "expected_local_size": [
+        16,
+        16,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 3,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "e2a1a3474588e7ab50ae904a5842bd4cec7fbdd8de11e27b7fa32b9e11deae56",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "DDGIVolumes",
+            "binding": 0,
+            "set": 0
+          },
+          {
+            "name": "RayData",
+            "binding": 1,
+            "set": 0
+          },
+          {
+            "name": "Output",
+            "binding": 3,
+            "set": 0
+          },
+          {
+            "name": "ProbeData",
+            "binding": 4,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        16,
+        16,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "border-irradiance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/m001_ddgi_border_copy.hlsl",
+        "-E",
+        "CopyIrradianceBorder",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-fspv-target-env=vulkan1.2",
+        "-D",
+        "__spirv__",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/border-irradiance.spv"
+      ],
+      "expected_local_size": [
+        8,
+        8,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "Irradiance",
+          "binding": 2,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "79676a940a0eae1eba2ca7dc26eb49691f26267459ef4dc13088855e53d08890",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "Irradiance",
+            "binding": 2,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        8,
+        8,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    },
+    {
+      "name": "border-distance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/m001_ddgi_border_copy.hlsl",
+        "-E",
+        "CopyDistanceBorder",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-fspv-target-env=vulkan1.2",
+        "-D",
+        "__spirv__",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v2/border-distance.spv"
+      ],
+      "expected_local_size": [
+        16,
+        16,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "Distance",
+          "binding": 3,
+          "set": 0
+        }
+      ],
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "shader_sha256": "84792849efc2ff2da444f8d7be686b8f3ecc0baa9e9af3dcf079a6bbd4555ad0",
+      "reflection": {
+        "version_word": 66816,
+        "bindings": [
+          {
+            "name": "Distance",
+            "binding": 3,
+            "set": 0
+          }
+        ]
+      },
+      "local_size": [
+        16,
+        16,
+        1
+      ],
+      "validation_returncode": 0,
+      "validation_stdout": "",
+      "validation_stderr": "",
+      "pass": true
+    }
+  ],
+  "preserved_failed_first_attempt": "053-ddgi-separated-border-compiler-failed-attempt.json",
+  "runtime_admission": false,
+  "accepted_timing": false,
+  "scope": "Six interior-only modified-SDK blend variants and two standalone border entries compiled/validated on CPU; unchanged ancillary SDK kernels copied with exact original hashes; original adapter/reduction/native evidence untouched. Runtime and HDR quality NOT_RUN."
+}

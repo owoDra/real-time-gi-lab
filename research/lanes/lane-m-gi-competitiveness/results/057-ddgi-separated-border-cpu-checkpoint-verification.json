@@ -1,0 +1,88 @@
+{
+  "schema": "m001-ddgi-separated-border-cpu-checkpoint-verification/1",
+  "source_commit": "d4d304292fd3f2982184d3882d71c056752c11d1",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "scope": "configured historical indexes",
+      "returncode": 0,
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "scope": "explicit LaneM index",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "scope": "historical source/shaders/N010 evidence/all CMake unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "ec170c59",
+        "--exit-code",
+        "--",
+        "src/research/lane_m_gi_competitiveness",
+        "shaders/research/lane_m_gi_competitiveness/m001_ddgi_scene.hlsl",
+        "scripts/research/lane_m_gi_competitiveness/ddgi_quality_step.py",
+        "scripts/research/lane_m_gi_competitiveness/ddgi_quality_audit.py"
+      ],
+      "scope": "old DDGI hosts/shader/quality tools unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "scope": "whitespace",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "cpu_unit_tests_executed": 45,
+  "native_cpu_contracts_executed": 20,
+  "private_native_build_and_ubsan_contract_pass": true,
+  "shader_compile_and_spirv_validation_pass": 8,
+  "retained_failed_first_compile": true,
+  "gpu_executed": false,
+  "corrected_gpu_controls_executed": 0,
+  "runtime_requalified": false,
+  "default_renderer_build_runtime_rerun": false,
+  "validation_layer_run": false,
+  "accepted_timing": false,
+  "power_clock_desktop_changes": false
+}

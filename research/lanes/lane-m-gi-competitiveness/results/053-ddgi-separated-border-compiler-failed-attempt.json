@@ -1,0 +1,124 @@
+{
+  "schema": "m001-ddgi-separated-border-compiler-failed-attempt/1",
+  "source_commit": "9b8cf8f04e103dda6936321428e2e1b6e932030d",
+  "gpu_executed": false,
+  "all_pass": false,
+  "receipt": {
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v1/result.json",
+    "sha256": "b32ac2be252b3ec01fca88a7b719404abcb1d470b54511f71987fd72518e9306"
+  },
+  "rows": [
+    {
+      "name": "blend-128-irradiance",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/dxc-v1.7.2308/package/bin/dxc",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v1/ProbeBlendingInteriorCS.hlsl",
+        "-E",
+        "DDGIProbeBlendingCS",
+        "-T",
+        "cs_6_6",
+        "-spirv",
+        "-D",
+        "__spirv__",
+        "-fspv-target-env=vulkan1.2",
+        "-I",
+        "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/shaders",
+        "-Fo",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v1/blend-128-irradiance.spv",
+        "-D",
+        "HLSL=1",
+        "-D",
+        "OUTPUT_REGISTER=2",
+        "-D",
+        "OUTPUT_SPACE=0",
+        "-D",
+        "PROBE_DATA_REGISTER=4",
+        "-D",
+        "PROBE_DATA_SPACE=0",
+        "-D",
+        "PROBE_VARIABILITY_AVERAGE_REGISTER=6",
+        "-D",
+        "PROBE_VARIABILITY_REGISTER=5",
+        "-D",
+        "PROBE_VARIABILITY_SPACE=0",
+        "-D",
+        "RAY_DATA_REGISTER=1",
+        "-D",
+        "RAY_DATA_SPACE=0",
+        "-D",
+        "RTXGI_COORDINATE_SYSTEM=2",
+        "-D",
+        "RTXGI_DDGI_BINDLESS_RESOURCES=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_RADIANCE=1",
+        "-D",
+        "RTXGI_DDGI_BLEND_RAYS_PER_PROBE=128",
+        "-D",
+        "RTXGI_DDGI_BLEND_SCROLL_SHARED_MEMORY=0",
+        "-D",
+        "RTXGI_DDGI_BLEND_SHARED_MEMORY=1",
+        "-D",
+        "RTXGI_DDGI_DEBUG_BORDER_COPY_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_OCTAHEDRAL_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_DEBUG_PROBE_INDEXING=0",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_INTERIOR_TEXELS=6",
+        "-D",
+        "RTXGI_DDGI_PROBE_NUM_TEXELS=8",
+        "-D",
+        "RTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-D",
+        "RTXGI_DDGI_SHADER_REFLECTION=0",
+        "-D",
+        "RTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-D",
+        "RTXGI_PUSH_CONSTS_TYPE=1",
+        "-D",
+        "VOLUME_CONSTS_REGISTER=0",
+        "-D",
+        "VOLUME_CONSTS_SPACE=0"
+      ],
+      "expected_local_size": [
+        8,
+        8,
+        1
+      ],
+      "expected_bindings": [
+        {
+          "name": "DDGIVolumes",
+          "binding": 0,
+          "set": 0
+        },
+        {
+          "name": "RayData",
+          "binding": 1,
+          "set": 0
+        },
+        {
+          "name": "Output",
+          "binding": 2,
+          "set": 0
+        },
+        {
+          "name": "ProbeData",
+          "binding": 4,
+          "set": 0
+        },
+        {
+          "name": "ProbeVariability",
+          "binding": 5,
+          "set": 0
+        }
+      ],
+      "returncode": 5,
+      "stdout": "",
+      "stderr": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-shaders-v1/ProbeBlendingInteriorCS.hlsl:21:10: fatal error: 'include/validation/ProbeBlendingDefines.hlsl' file not found\n#include \"include/validation/ProbeBlendingDefines.hlsl\"\n         ^\n\n",
+      "pass": false
+    }
+  ],
+  "cause": "Relocated generated SDK shader lacked its original ddgi source directory in include search path. DXC could not find include/validation/ProbeBlendingDefines.hlsl; no SPIR-V produced.",
+  "preservation": "Original v1 tool/source/receipt unchanged. New v2 adds only original source include context, new output root. No shader math/threshold/guard changes. No GPU run or blind retry.",
+  "replacement": "056-ddgi-separated-border-shaders-cpu-compilation.json"
+}

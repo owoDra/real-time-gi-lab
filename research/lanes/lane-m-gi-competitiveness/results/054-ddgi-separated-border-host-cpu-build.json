@@ -1,0 +1,145 @@
+{
+  "schema": "m001-ddgi-separated-border-host-cpu-build/1",
+  "source_commit": "9b8cf8f04e103dda6936321428e2e1b6e932030d",
+  "gpu_executed": false,
+  "all_pass": true,
+  "receipt": {
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/result.json",
+    "sha256": "0efa4d55dcc3ae85112c83b54981ecbc463f5671625b4ce4f7dcb15d028d8b57"
+  },
+  "inverse_host_overlays_exact": true,
+  "private_context_overlay_inverse_exact": true,
+  "generated_host_sha256": {
+    "ddgi_transition_main.cpp": "cd7e4f2551c55b7e8fcf7b2efeca50d6af566ebd419514fa245c9c2abd823c12",
+    "ddgi_scene_main.cpp": "03485d8553c0f3d0c69dd913e362c6c916656f4bd6e702f321de3ce711556329"
+  },
+  "input_manifest_entries": 747,
+  "compiled_dependency_entries": 406,
+  "rows": [
+    {
+      "label": "host",
+      "command": [
+        "/run/current-system/sw/bin/c++",
+        "-DPHOS_GI_INTEGRATION_SHADER_DIR=\"/var/owo/workspaces/projects/gi-lab/build/n009/shaders\"",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/src",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/integration",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vk_bootstrap-src/src",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-MD",
+        "-MT",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/host.o",
+        "-MF",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/host.d",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/host.o",
+        "-c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/ddgi_transition_main.cpp",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include"
+      ],
+      "cwd": "/var/owo/workspaces/projects/gi-lab/build/n009",
+      "returncode": 0,
+      "pass": true
+    },
+    {
+      "label": "context",
+      "command": [
+        "/run/current-system/sw/bin/c++",
+        "-DPHOS_GI_INTEGRATION_SHADER_DIR=\"/var/owo/workspaces/projects/gi-lab/build/n009/shaders\"",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/n010_comparison_readiness",
+        "-I/var/owo/workspaces/projects/gi-lab/src",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_a_split_rc",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/lane_b_traversal",
+        "-I/var/owo/workspaces/projects/gi-lab/src/research/lane_n_end_to_end_renderer/imported/integration",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vk_bootstrap-src/src",
+        "-I/var/owo/workspaces/projects/gi-lab/build/n007/_deps/vulkan-headers-for-vk-bootstrap-src/include",
+        "-O3",
+        "-DNDEBUG",
+        "-std=c++20",
+        "-MD",
+        "-MT",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/context.o",
+        "-MF",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/context.d",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/context.o",
+        "-c",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/m001_b002_vulkan.cpp",
+        "-DRTXGI_COORDINATE_SYSTEM=2",
+        "-DRTXGI_DDGI_RESOURCE_MANAGEMENT=0",
+        "-DRTXGI_DDGI_USE_SHADER_CONFIG_FILE=0",
+        "-DRTXGI_GFX_NAME_OBJECTS",
+        "-I/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/RTXGI-DDGI/rtxgi-sdk/include",
+        "-I/nix/store/1rhchilgcirwrwmq4h8xqldkn8lx209x-libx11-1.8.13-dev/include",
+        "-I/nix/store/h11h9pq0d23c8n2k0pd162mgzg1z4jca-xorgproto-2025.1/include"
+      ],
+      "cwd": "/var/owo/workspaces/projects/gi-lab/build/n009",
+      "returncode": 0,
+      "pass": true
+    },
+    {
+      "label": "link",
+      "command": [
+        "/run/current-system/sw/bin/c++",
+        "-O3",
+        "-DNDEBUG",
+        "-Wl,--dependency-file=/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/link.d",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/host.o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/context.o",
+        "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_compute.cpp.o",
+        "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/lane_b_traversal/b002_hwrt.cpp.o",
+        "src/research/n010_comparison_readiness/CMakeFiles/phos-n010-pixel-pt.dir/__/lane_n_end_to_end_renderer/imported/integration/i001_compute.cpp.o",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/m001-ddgi-border-transition",
+        "_deps/vk_bootstrap-build/libvk-bootstrap.a",
+        "-ldl",
+        "/var/owo/workspaces/projects/gi-lab/build/n010-ddgi-sdk/lib/librtxgi-vulkan.a",
+        "/run/current-system/sw/share/nix-ld/lib/libvulkan.so",
+        "-pthread"
+      ],
+      "cwd": "/var/owo/workspaces/projects/gi-lab/build/n009",
+      "returncode": 0,
+      "pass": true
+    },
+    {
+      "label": "contract-test-build",
+      "command": [
+        "/nix/store/788mx070y81zjlg5ipcl0cra3afviw9k-gcc-wrapper-15.2.0/bin/g++",
+        "-std=c++20",
+        "-O2",
+        "-g",
+        "-fsanitize=undefined",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/ddgi_contract_test.cpp",
+        "-o",
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/ddgi-contract-test"
+      ],
+      "cwd": "/var/owo/workspaces/projects/gi-lab",
+      "returncode": 0,
+      "pass": true
+    },
+    {
+      "label": "contract-test-run",
+      "command": [
+        "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-ddgi-border-host-build-v1/ddgi-contract-test"
+      ],
+      "cwd": "/var/owo/workspaces/projects/gi-lab",
+      "returncode": 0,
+      "pass": true
+    }
+  ],
+  "scope": "CPU compile/link and UBSan contract test only; Vulkan runtime/quality NOT_RUN",
+  "native_binary_sha256": "d2f9ae97e374939090d6170ab3db680a58e6371b42e09c9429933383b3d5adce",
+  "active_build_graph_changed": false,
+  "accepted_timing": false
+}
