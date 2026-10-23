@@ -58,9 +58,15 @@ def build(work):
         raise ValueError('Expected all thirteen original capture translation units')
     libraries = [BUILD / '_deps/vk_bootstrap-build/libvk-bootstrap.a', BUILD / '_deps/fastgltf-build/libfastgltf.a']
     originals = sorted((BUILD / 'shaders').glob('*.spv'))
-    if len(originals) < 40:
-        raise ValueError('Original shader tree incomplete')
-    paths = tracked + [diag, original_binary, COMPILER, VALIDATOR, BUILD / 'build.ninja'] + libraries + originals
+    frozen_plan = ROOT / 'out/m001-h01-fixed-vanilla-plan.json'
+    started = ROOT / 'out/research/lane-m-gi-competitiveness/fixed-controls/H01-vanilla/started.json'
+    if C.sha(frozen_plan) != json.loads(started.read_text())['plan_sha256']:
+        raise ValueError('Frozen original control plan identity differs')
+    expected_shaders = {p: h for p, h in json.loads(frozen_plan.read_text())['input_sha256'].items()
+                        if Path(p).suffix == '.spv'}
+    if {str(p): C.sha(p) for p in originals} != expected_shaders:
+        raise ValueError('Original shader tree differs from frozen control manifest')
+    paths = tracked + [diag, original_binary, COMPILER, VALIDATOR, BUILD / 'build.ninja', frozen_plan, started] + libraries + originals
     paths += [Path(x['file']) for x in entries] + [C.SOURCE / name for name in C.PINS]
     inputs = {str(p): C.sha(p) for p in paths}
     for name, pin in C.PINS.items():
