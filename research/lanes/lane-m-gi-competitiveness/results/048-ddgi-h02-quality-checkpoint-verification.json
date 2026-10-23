@@ -1,0 +1,70 @@
+{
+  "schema": "m001-ddgi-h02-quality-checkpoint-verification/1",
+  "source_commit": "d5d40a6d531896c1eb2a90e6af4e8dfd4ec7a215",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "8 configured historical indexes,548links; not runtime validation"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "returncode": 0,
+      "scope": "explicit LaneM result index"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "returncode": 0,
+      "scope": "Historical source/evidence/all CMake unchanged, excludes only standalone new LaneM source"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "scope": "whitespace"
+    }
+  ],
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "scope": "Unchanged default Renderer/all CMake/native source.6new H02 GPU quality acquisitions and cumulative12-case CPU raw/score/error-map replay046 actually executed. Earlier CPU tests/build042/038 not rerun; no release acceptance.",
+  "native_gpu_quality_cases": 12,
+  "quality_pass_cases": 0,
+  "quality_fail_cases": 12,
+  "quality_fail_targets": 4,
+  "quality_not_run_targets": 2,
+  "raw_payloads_rehashed": 528,
+  "completed_gpu_units": 32456,
+  "whole_error_maps": 36,
+  "power_clock_desktop_changes": false,
+  "validation_layer_run": false,
+  "accepted_timing": false,
+  "prior_cpu_preparation": {
+    "record": "042-ddgi-quality-cpu-preparation.json",
+    "python_tests_executed_in_042": 70,
+    "native_cpu_budget_contracts_executed_in_042": 18,
+    "native_input_tests_executed_in_038": 17,
+    "tests_rerun_for_this_checkpoint": false,
+    "current_dependencies_rehashed_by_each_010_plan": true
+  }
+}
