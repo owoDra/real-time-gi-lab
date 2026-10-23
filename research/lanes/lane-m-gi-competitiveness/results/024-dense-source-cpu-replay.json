@@ -1,0 +1,16 @@
+{
+  "schema": "lane-m-m001-dense-source-cpu-audit/1",
+  "gpu_executed": false,
+  "exact_generator_replay": true,
+  "fixed_directions": 8,
+  "finite_depth_knob_used": false,
+  "pt_equivalence": false,
+  "input_sha256": {
+    "scripts/research/n010_comparison_readiness/generate_dense_rc.py": "dd83c61aa2426ab40e161e62364e3c5070ec5160df47364120750d263e0fa548",
+    "shaders/research/n010_comparison_readiness/n010_pixel_pt.comp.glsl": "ddb81baa0b701f96d78ffe297db589290d3fe4c2d6965a4df655c47a4a23d1c2",
+    "build/n009/src/research/n010_comparison_readiness/generated/n010_dense_rc.comp.glsl": "4f34e696d1f32202c741329376531b78f6a80f1d119030401309873ef27b5955",
+    "out/m001-dense-generator-replay-v1.comp.glsl": "4f34e696d1f32202c741329376531b78f6a80f1d119030401309873ef27b5955",
+    "build/n009/shaders/n010_dense_rc.spv": "78404906bffd1d144e2411970159a4d27a8fff0585293e74d0c645fb805cfb7e"
+  },
+  "source_inspection": "direct tracing unchanged; dense cascades ignore spp/vertices/RNG, preserve unshadowed secondary Lambert light leak; inherited finite-depth comment does not describe indirect loop"
+}
