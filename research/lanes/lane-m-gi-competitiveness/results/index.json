@@ -147,7 +147,11 @@
       "ddgi_dynamic_gpu_controls_pass": 8,
       "ddgi_quality_gpu_cases": 0,
       "ddgi_quality_admitted": false,
-      "ddgi_dynamic_checkpoint_verification": "results/041-ddgi-dynamic-checkpoint-verification.json"
+      "ddgi_dynamic_checkpoint_verification": "results/041-ddgi-dynamic-checkpoint-verification.json",
+      "ddgi_quality_cpu_preparation": "results/042-ddgi-quality-cpu-preparation.json",
+      "ddgi_quality_runner": "scripts/research/lane_m_gi_competitiveness/ddgi_quality_step.py",
+      "ddgi_quality_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_quality_audit.py",
+      "ddgi_quality_native_cpu_contracts_pass": 18
     }
   ]
 }
