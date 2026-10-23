@@ -190,7 +190,10 @@
       "ddgi_border_control_collector": "scripts/research/lane_m_gi_competitiveness/summarize_ddgi_border.py",
       "ddgi_border_controls_raw_replay": "results/059-ddgi-separated-border-six-static-raw-replay.json",
       "ddgi_border_controls_outcome": "results/060-ddgi-separated-border-static-outcome.md",
-      "ddgi_border_static_checkpoint_verification": "results/061-ddgi-separated-border-static-checkpoint-verification.json"
+      "ddgi_border_static_checkpoint_verification": "results/061-ddgi-separated-border-static-checkpoint-verification.json",
+      "ddgi_corrected_quality_continuation_protocol": "experiments/012-ddgi-corrected-quality-continuation.md",
+      "ddgi_corrected_quality_continuation_gpu_ready": false,
+      "ddgi_corrected_quality_continuation_unblinded": true
     }
   ]
 }
