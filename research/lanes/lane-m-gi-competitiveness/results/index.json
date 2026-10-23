@@ -7,8 +7,8 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "FROZEN_PT_LADDER_ACTIVE_FIRST_UNIT_AUDITED",
-      "classification": "FIRST_HELDOUT_PT_QUALITY_FAIL_NO_MATCHED_TIMING",
+      "phase": "SIX_PT_LADDERS_COMPLETE_OTHER_CONTROLS_AND_DDGI_PENDING",
+      "classification": "PT_QUALITY_SCREEN_COMPLETE_NOT_LANE_COMPLETION",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
@@ -64,15 +64,15 @@
       "h03_b2_reference_eligible": true,
       "h03_b8_reference_eligible": true,
       "quality_scored": true,
-      "status": "SIX_REFERENCES_ADMITTED_RC_FAIL_FIRST_PT_QUALITY_FAIL",
-      "result": "017-reference-and-retained-incumbent-outcome.md",
+      "status": "SIX_REFERENCE_PASS_SIX_PT_PASS_SIX_INCUMBENT_FAIL_NO_MATCHED_TIMING",
+      "result": "023-six-pt-quality-outcome.md",
       "h01_b8_first_cpu_level_status": "8192_INDIVIDUAL_PASS_FULL_23_RAW_HASHES_AND_N007_REPLAY_SUBSEQUENT_16384_ADMISSION_IN_016",
       "h01_b8_first_cpu_level_audit": "results/014-h01-b8-first-level-raw-audit.json",
       "reference_step_runner": "scripts/research/lane_m_gi_competitiveness/reference_step.py",
       "cpu_continuation_protocol": "experiments/003-local-cpu-reference-continuation.md",
       "summary_preservation": "results/015-cpu-continuation-and-summary-preservation.json",
       "all_six_reference_raw_checkpoint": "results/016-six-original-references-and-retained-rc-raw-replay.json",
-      "current_outcome": "results/017-reference-and-retained-incumbent-outcome.md",
+      "current_outcome": "results/023-six-pt-quality-outcome.md",
       "validation": "results/018-cpu-validation-and-provenance.json",
       "first_pt_cpu_plan": "results/019-first-pt-cpu-plan.json",
       "first_pt_gpu_executed": true,
@@ -84,7 +84,16 @@
       "first_pt_independent_audit": "results/021-first-pt-independent-audit.json",
       "quality_step_protocol": "experiments/005-frozen-quality-step-execution.md",
       "quality_step_runner": "scripts/research/lane_m_gi_competitiveness/frozen_quality_step.py",
-      "quality_step_auditor": "scripts/research/lane_m_gi_competitiveness/audit_quality_step.py"
+      "quality_step_auditor": "scripts/research/lane_m_gi_competitiveness/audit_quality_step.py",
+      "pt_raw_replay": "results/022-six-pt-ladders-raw-replay.json",
+      "pt_quality_pass_cells": 6,
+      "pt_native_cases": 33,
+      "pt_quality_fail_levels": 27,
+      "pt_first_pass_spp": {
+        "T_B2": 256,
+        "T_B8": 1024
+      },
+      "pt_collector": "scripts/research/lane_m_gi_competitiveness/summarize_quality_screen.py"
     }
   ]
 }
