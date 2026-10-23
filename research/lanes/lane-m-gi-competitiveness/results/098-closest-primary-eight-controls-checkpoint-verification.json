@@ -1,0 +1,95 @@
+{
+  "schema": "m001-closest-primary-eight-controls-checkpoint-verification/1",
+  "source_commit": "b5b03cd163587c40fafa61cba114d1f576c77286",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "scope": "historical8indexes/548links only; not runtime",
+      "returncode": 0,
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "b5b03cd1",
+        "--exit-code",
+        "--",
+        "scripts",
+        "src",
+        "shaders",
+        ":(glob)**/CMakeLists.txt"
+      ],
+      "scope": "all executable research/Renderer code, shaders and CMake unchanged since actual GPU plan source",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "scope": "historical source/shaders/N010evidence/all CMake unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command_description": "git diff b5b03cd1 --exit-code for all existing Lane M immutable result files excluding mutable index",
+      "files": 95,
+      "returncode": 0
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "scope": "whitespace",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "final_raw_replay_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-final-replay-v1/result.json",
+  "final_raw_replay_receipt_sha256": "2bf72a15a5c0c6acf7a873f1b745657e73a4786efbf2c49cbb57bf6b734c599c",
+  "all_eight_ordered_plans_use_committed_source": true,
+  "actual_gpu_processes": 8,
+  "actual_native_frames": 10,
+  "independent_correctness_passes": 8,
+  "quality_failures": 14,
+  "raw_payloads_rehashed": 132,
+  "full_error_primary_maps_replayed": 56,
+  "source_tests_previously_run_not_repeated": 52,
+  "native_negative_contracts_previously_run_not_repeated": 8,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "default_build_graph_changed": false,
+  "references_sampled": false,
+  "power_clock_desktop_changes": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "further_013_gpu_process_selected": false,
+  "new_record_sha256": {
+    "096-closest-primary-eight-controls-raw-replay.json": "6b41fec7b2bf8d7cd5bf66988b8d8d190e25ccde8fe0c0de9c94d26afe790862",
+    "097-closest-primary-eight-controls-outcome.md": "8989095a5d7a38265ab584ff65b316e8b1771fbc5439f78a44e658dbbb03a2f8"
+  }
+}

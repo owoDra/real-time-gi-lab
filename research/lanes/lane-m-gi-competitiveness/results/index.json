@@ -236,8 +236,8 @@
       "lane_m_complete": false,
       "static_family_verification": "results/084-m001-static-screen-verification.json",
       "closest_primary_development_protocol": "experiments/013-closest-primary-development-validation.md",
-      "closest_primary_development_status": "PROCESS_AND_FULL_IMAGE_CPU_ADMISSION_READY_GPU_NOT_RUN",
-      "closest_primary_development_gpu_cases": 0,
+      "closest_primary_development_status": "EIGHT_REGISTERED_CORRECTNESS_CONTROLS_PASS_OBSERVED_DEVELOPMENT_GI_QUALITY_FAIL",
+      "closest_primary_development_gpu_cases": 8,
       "closest_primary_failed_cpu_preflights": "results/085-closest-primary-cpu-preflight-failures.json",
       "closest_primary_cpu_build": "results/086-closest-primary-isolated-cpu-build.json",
       "closest_primary_cpu_preparation": "results/087-closest-primary-cpu-tests-and-native-contracts.json",
@@ -253,8 +253,19 @@
       "closest_primary_process_outcome": "results/094-closest-primary-process-readiness-outcome.md",
       "closest_primary_process_cpu_tests": 24,
       "closest_primary_process_ready": true,
-      "closest_primary_next_named_case": "c1-hwrt",
-      "closest_primary_process_checkpoint_verification": "results/095-closest-primary-process-checkpoint-verification.json"
+      "closest_primary_next_named_case": null,
+      "closest_primary_process_checkpoint_verification": "results/095-closest-primary-process-checkpoint-verification.json",
+      "closest_primary_sequence_complete": true,
+      "closest_primary_correctness_passes": 8,
+      "closest_primary_diagnostic_depth_rows": 14,
+      "closest_primary_quality_passes": 0,
+      "closest_primary_quality_failures": 14,
+      "closest_primary_raw_replay": "results/096-closest-primary-eight-controls-raw-replay.json",
+      "closest_primary_outcome": "results/097-closest-primary-eight-controls-outcome.md",
+      "closest_primary_owned_peak_bytes": 416697040,
+      "closest_primary_all_teardown_zero": true,
+      "closest_primary_further_gpu_process_selected": false,
+      "closest_primary_gpu_checkpoint_verification": "results/098-closest-primary-eight-controls-checkpoint-verification.json"
     }
   ]
 }
