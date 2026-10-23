@@ -18,6 +18,7 @@ SOURCE=ROOT/'out/research/lane-m-gi-competitiveness/m001-first-heldout-v1/captur
 
 class NativeContract(unittest.TestCase):
     def setUp(self):
+        if NATIVE is None:self.skipTest('run this native CPU suite with --native PRIVATE_BINARY')
         self.temp=tempfile.TemporaryDirectory(prefix='m001-ddgi-contract-',dir=ROOT/'out')
         self.root=Path(self.temp.name);self.state=self.root/'state'
         shutil.copytree(SOURCE/'M001-H01-hwrt',self.state,ignore=lambda _,names:[n for n in names if n not in ('geometry-state.bin','frame-state.bin')])
