@@ -30,7 +30,7 @@ class Controls(unittest.TestCase):
             native.assert_not_called();self.assertFalse((Path(t)/'work').exists())
 
     def fake_run(self,timeout=False):
-        with tempfile.TemporaryDirectory() as t,patch.object(F,'paths',return_value=(Path(t)/'plan',Path(t)/'work',Path(t)/'proof.tar')):
+        with tempfile.TemporaryDirectory(dir=F.R.ROOT/'out') as t,patch.object(F,'paths',return_value=(Path(t)/'plan',Path(t)/'work',Path(t)/'proof.tar')):
             plan=dict(name='direct',command=F.command('direct'),input_sha256={},previous_control_audit=None,reference_verification={})
             F.R.write_new(Path(t)/'plan',plan);native=Mock(returncode=-6,pid=123456)
             native.communicate.side_effect=[subprocess.TimeoutExpired('native',180),('partial','timeout')] if timeout else [('partial','failed')]

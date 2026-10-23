@@ -14,7 +14,7 @@ from score_retained import reference
 
 CASES=('direct','black','unit','hdr','scene-one','scene-seven')
 BUILD=R.ROOT/'out/research/lane-m-gi-competitiveness/m001-ddgi-host-build-v1'
-TESTS=BUILD.with_name('m001-ddgi-host-cpu-tests-v2')
+TESTS=BUILD.with_name('m001-ddgi-host-cpu-tests-v3')
 ADAPTER=BUILD.with_name('m001-ddgi-scene-compile-v1')
 SDK=R.ROOT/'out/research/n010-comparison-readiness/ddgi-shaders-v2'
 REDUCTION=SDK.with_name('ddgi-reduction-shaders-v1')
