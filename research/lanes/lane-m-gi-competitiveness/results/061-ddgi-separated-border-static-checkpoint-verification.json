@@ -1,0 +1,107 @@
+{
+  "schema": "m001-ddgi-separated-border-static-checkpoint-verification/1",
+  "source_commit": "4f0360d90af51195ca743aec01ec4cd283df6c26",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "configured historical indexes; not runtime validation",
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "returncode": 0,
+      "scope": "explicit LaneM index",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "returncode": 0,
+      "scope": "historical tracked source/shaders/N010 evidence/all CMake unchanged",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "4b136558",
+        "--exit-code",
+        "--",
+        "scripts/research",
+        ":!scripts/research/lane_m_gi_competitiveness/summarize_ddgi_border.py",
+        "src/research",
+        "shaders/research"
+      ],
+      "returncode": 0,
+      "scope": "project source unchanged since first corrected GPU plan; excludes only new read-only collector, never imported by runner/auditor",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import re,subprocess;from pathlib import Path;paths=[Path(p) for p in subprocess.check_output(['git','ls-files'],text=True).splitlines() if Path(p).name=='CMakeLists.txt' or Path(p).suffix=='.cmake'];assert paths;assert all('lane_m_gi_competitiveness' not in p.read_text() and not re.search(r'\\bGLOB(?:_RECURSE)?\\b',p.read_text()) for p in paths)"
+      ],
+      "returncode": 0,
+      "scope": "all tracked CMake files have no source GLOB and no LaneM competitiveness subtree registration; added standalone source/shader cannot join default build",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "scope": "whitespace",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "new_corrected_gpu_controls": 6,
+  "independent_terminal_audits_pass": 6,
+  "full_raw_and_audit_replay_cases": 6,
+  "raw_payloads_rehashed": 195,
+  "full_copy_atlases": 22,
+  "full_copy_components": 540672,
+  "completed_gpu_units": 174,
+  "runtime_requalification_complete": false,
+  "remaining_dynamic_controls": 8,
+  "remaining_all_budget_controls": 6,
+  "indirect_hdr_reference_scoring": false,
+  "accepted_timing": false,
+  "cpu_tests_and_build_rerun_for_checkpoint": false,
+  "prior_actual_cpu_unittests": 62,
+  "prior_actual_native_cpu_contracts": 20,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "power_clock_desktop_changes": false,
+  "scope": "Six actually executed corrected static GPU controls and CPU full replay; default Renderer/all CMake unchanged, no architecture/release/quality admission."
+}

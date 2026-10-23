@@ -1,0 +1,1194 @@
+{
+  "accepted_timing": false,
+  "all_existing_evidence_valid": true,
+  "captured_frames": 6,
+  "collector_sha256": "402bd273dae5b01e5fdd54a4d3da745829d6de6dd45d198ed69c144b722f30a8",
+  "completed_gpu_units": 174,
+  "controls_pass": 6,
+  "controls_required": 20,
+  "exact_border_components": 163328,
+  "full_copy_atlases": 22,
+  "full_copy_components": 540672,
+  "gpu_executed_by_collector": false,
+  "indirect_quality_scoring": false,
+  "max_true_peak_owned_bytes": 2309008,
+  "native_acquisitions": 6,
+  "next_named_case": "dynamic-light-fresh-b2",
+  "quality_admission": false,
+  "raw_payloads_rehashed": 195,
+  "registered_requalification_complete": false,
+  "rows": [
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "5fac60f59a9a1fdcdaa98fd0e9f20a970b1a7a03d51f77a307289254fcafaf82",
+        "classification": "BORDER_CONTROL_PASS",
+        "frames": [
+          {
+            "configuration": {
+              "api_version": 4211036,
+              "brightness_threshold": 1000000,
+              "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+              "distance_exponent": 50,
+              "driver_info": "Mesa 26.1.2",
+              "driver_name": "radv",
+              "gamma": 1,
+              "grid_side": 4,
+              "hysteresis": 0,
+              "images": [
+                {
+                  "channels": 4,
+                  "h": 16,
+                  "layers": 4,
+                  "type": 0,
+                  "w": 128
+                },
+                {
+                  "channels": 4,
+                  "h": 32,
+                  "layers": 4,
+                  "type": 1,
+                  "w": 32
+                },
+                {
+                  "channels": 2,
+                  "h": 64,
+                  "layers": 4,
+                  "type": 2,
+                  "w": 64
+                },
+                {
+                  "channels": 4,
+                  "h": 4,
+                  "layers": 4,
+                  "type": 3,
+                  "w": 4
+                },
+                {
+                  "channels": 1,
+                  "h": 24,
+                  "layers": 4,
+                  "type": 4,
+                  "w": 24
+                },
+                {
+                  "channels": 2,
+                  "h": 2,
+                  "layers": 1,
+                  "type": 5,
+                  "w": 2
+                }
+              ],
+              "mode": "direct",
+              "normal_view_bias": 0.014999999664723873,
+              "origin": [
+                0,
+                1.350000023841858,
+                0
+              ],
+              "ray_max": 33.9779167175293,
+              "rays": 128,
+              "rotation_updates_per_volume": 1,
+              "schema": "m001-ddgi-native/1",
+              "seed": 305419896,
+              "setup_wall_us": 124287.919,
+              "spacing": [
+                4.44444465637207,
+                1.5,
+                4.44444465637207
+              ],
+              "subgroup": 64,
+              "timestamp_period_ns": 10.019036293029785,
+              "timestamp_valid_bits": 64,
+              "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+              "vertices": 1
+            },
+            "copies": [],
+            "direct_metrics": {
+              "active_max_relative": 3.0877582695224063e-06,
+              "active_p99_absolute": 4.1570931816250344e-11,
+              "active_p99_relative": 8.647686966774229e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302650539612,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.1709895333637723e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.073250298942868e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -5.972358260360869e-08,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "initial_history_exactly_zero": true,
+            "old_primary_direct_unchanged": true,
+            "old_stage0_rays_and_interiors_unchanged": true,
+            "previous_atlas_immutable": true,
+            "quality_scoring": false,
+            "timing": {
+              "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+              "completed_gpu_units": 2,
+              "max_unit_gpu_us_diagnostic": 62.19817730712891,
+              "sum_gpu_us_diagnostic": 118.06432367706299
+            }
+          }
+        ],
+        "full_copy_exact": true,
+        "gpu_executed_by_auditor": false,
+        "interior_unchanged": true,
+        "name": "static-direct",
+        "old_stage0_rays_and_interiors_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 2309008
+        },
+        "quality_admission": false,
+        "quality_scoring": false,
+        "raw_payloads_rehashed": 16,
+        "result_sha256": "ed3f86a9c9ff2578a36a8d3eb77ea45592daf323a45a6f90effde8780bf16b59",
+        "schema": "m001-ddgi-separated-border-independent-cpu-audit/1",
+        "scope": "Named011 correctness control only; no indirect HDR quality decision, general dynamics, temporal support or speed claim",
+        "semantic_pass": true
+      },
+      "audit_sha256": "c7004eb54a3510c0c182a0b706921d8322257453296849664c6cf6320893acda",
+      "family": "static",
+      "name": "static-direct"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "2807b28d0ee6ffb6ec2bf68afe388fd0a7945dbecd96d323b0a4a2e2c72d3e74",
+        "classification": "BORDER_CONTROL_PASS",
+        "frames": [
+          {
+            "configuration": {
+              "api_version": 4211036,
+              "brightness_threshold": 1000000,
+              "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+              "distance_exponent": 50,
+              "driver_info": "Mesa 26.1.2",
+              "driver_name": "radv",
+              "gamma": 1,
+              "grid_side": 4,
+              "hysteresis": 0,
+              "images": [
+                {
+                  "channels": 4,
+                  "h": 16,
+                  "layers": 4,
+                  "type": 0,
+                  "w": 128
+                },
+                {
+                  "channels": 4,
+                  "h": 32,
+                  "layers": 4,
+                  "type": 1,
+                  "w": 32
+                },
+                {
+                  "channels": 2,
+                  "h": 64,
+                  "layers": 4,
+                  "type": 2,
+                  "w": 64
+                },
+                {
+                  "channels": 4,
+                  "h": 4,
+                  "layers": 4,
+                  "type": 3,
+                  "w": 4
+                },
+                {
+                  "channels": 1,
+                  "h": 24,
+                  "layers": 4,
+                  "type": 4,
+                  "w": 24
+                },
+                {
+                  "channels": 2,
+                  "h": 2,
+                  "layers": 1,
+                  "type": 5,
+                  "w": 2
+                }
+              ],
+              "mode": "constant0",
+              "normal_view_bias": 0.014999999664723873,
+              "origin": [
+                0,
+                1.350000023841858,
+                0
+              ],
+              "ray_max": 33.9779167175293,
+              "rays": 128,
+              "rotation_updates_per_volume": 1,
+              "schema": "m001-ddgi-native/1",
+              "seed": 305419896,
+              "setup_wall_us": 58955.246,
+              "spacing": [
+                4.44444465637207,
+                1.5,
+                4.44444465637207
+              ],
+              "subgroup": 64,
+              "timestamp_period_ns": 10.019036293029785,
+              "timestamp_valid_bits": 64,
+              "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+              "vertices": 2
+            },
+            "copies": [
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              }
+            ],
+            "direct_metrics": {
+              "active_max_relative": 3.0877582695224063e-06,
+              "active_p99_absolute": 4.1570931816250344e-11,
+              "active_p99_relative": 8.647686966774229e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302650539612,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.1709895333637723e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.073250298942868e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -5.972358260360869e-08,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "initial_history_exactly_zero": true,
+            "old_primary_direct_unchanged": true,
+            "old_stage0_rays_and_interiors_unchanged": true,
+            "previous_atlas_immutable": true,
+            "quality_scoring": false,
+            "timing": {
+              "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+              "completed_gpu_units": 16,
+              "max_unit_gpu_us_diagnostic": 22.96363118362427,
+              "sum_gpu_us_diagnostic": 172.88849027252198
+            }
+          }
+        ],
+        "full_copy_exact": true,
+        "gpu_executed_by_auditor": false,
+        "interior_unchanged": true,
+        "name": "static-black",
+        "old_stage0_rays_and_interiors_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 2309008
+        },
+        "quality_admission": false,
+        "quality_scoring": false,
+        "raw_payloads_rehashed": 25,
+        "result_sha256": "1c20dba80f12ecd4b4d9d608666be2622a36bffc21d1886c15ddff84949540c3",
+        "schema": "m001-ddgi-separated-border-independent-cpu-audit/1",
+        "scope": "Named011 correctness control only; no indirect HDR quality decision, general dynamics, temporal support or speed claim",
+        "semantic_pass": true
+      },
+      "audit_sha256": "7e64b92f5626f61e88dcb504ab8a9f196c1844468ae824058c6211ed830f28d1",
+      "family": "static",
+      "name": "static-black"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "69ccc60eaec0dbfa96117f7d12dedbda7ee98bd62c28a46943ac7e41b868f48e",
+        "classification": "BORDER_CONTROL_PASS",
+        "frames": [
+          {
+            "configuration": {
+              "api_version": 4211036,
+              "brightness_threshold": 1000000,
+              "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+              "distance_exponent": 50,
+              "driver_info": "Mesa 26.1.2",
+              "driver_name": "radv",
+              "gamma": 1,
+              "grid_side": 4,
+              "hysteresis": 0,
+              "images": [
+                {
+                  "channels": 4,
+                  "h": 16,
+                  "layers": 4,
+                  "type": 0,
+                  "w": 128
+                },
+                {
+                  "channels": 4,
+                  "h": 32,
+                  "layers": 4,
+                  "type": 1,
+                  "w": 32
+                },
+                {
+                  "channels": 2,
+                  "h": 64,
+                  "layers": 4,
+                  "type": 2,
+                  "w": 64
+                },
+                {
+                  "channels": 4,
+                  "h": 4,
+                  "layers": 4,
+                  "type": 3,
+                  "w": 4
+                },
+                {
+                  "channels": 1,
+                  "h": 24,
+                  "layers": 4,
+                  "type": 4,
+                  "w": 24
+                },
+                {
+                  "channels": 2,
+                  "h": 2,
+                  "layers": 1,
+                  "type": 5,
+                  "w": 2
+                }
+              ],
+              "mode": "constant1",
+              "normal_view_bias": 0.014999999664723873,
+              "origin": [
+                0,
+                1.350000023841858,
+                0
+              ],
+              "ray_max": 33.9779167175293,
+              "rays": 128,
+              "rotation_updates_per_volume": 1,
+              "schema": "m001-ddgi-native/1",
+              "seed": 305419896,
+              "setup_wall_us": 58419.055,
+              "spacing": [
+                4.44444465637207,
+                1.5,
+                4.44444465637207
+              ],
+              "subgroup": 64,
+              "timestamp_period_ns": 10.019036293029785,
+              "timestamp_valid_bits": 64,
+              "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+              "vertices": 2
+            },
+            "copies": [
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              }
+            ],
+            "direct_metrics": {
+              "active_max_relative": 3.0877582695224063e-06,
+              "active_p99_absolute": 4.1570931816250344e-11,
+              "active_p99_relative": 8.647686966774229e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302650539612,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.1709895333637723e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.073250298942868e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -5.972358260360869e-08,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "initial_history_exactly_zero": true,
+            "old_primary_direct_unchanged": true,
+            "old_stage0_rays_and_interiors_unchanged": true,
+            "previous_atlas_immutable": true,
+            "quality_scoring": false,
+            "timing": {
+              "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+              "completed_gpu_units": 16,
+              "max_unit_gpu_us_diagnostic": 27.291854862213135,
+              "sum_gpu_us_diagnostic": 137.66155866622924
+            }
+          }
+        ],
+        "full_copy_exact": true,
+        "gpu_executed_by_auditor": false,
+        "interior_unchanged": true,
+        "name": "static-unit",
+        "old_stage0_rays_and_interiors_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 2309008
+        },
+        "quality_admission": false,
+        "quality_scoring": false,
+        "raw_payloads_rehashed": 25,
+        "result_sha256": "97c4dac9486a24c2aeda7aedd3fbc0318992905b53592d4cbad7be70c701d33d",
+        "schema": "m001-ddgi-separated-border-independent-cpu-audit/1",
+        "scope": "Named011 correctness control only; no indirect HDR quality decision, general dynamics, temporal support or speed claim",
+        "semantic_pass": true
+      },
+      "audit_sha256": "5ec33690d0bbb5e8acb0e94e0026cc614d825a55882f5ae4cdf4a14a0f62cb21",
+      "family": "static",
+      "name": "static-unit"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "4c5f740db6522d75e00326ab0b5eb8e471e7d69d1aa9830a0b6b1a85a3b099e1",
+        "classification": "BORDER_CONTROL_PASS",
+        "frames": [
+          {
+            "configuration": {
+              "api_version": 4211036,
+              "brightness_threshold": 1000000,
+              "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+              "distance_exponent": 50,
+              "driver_info": "Mesa 26.1.2",
+              "driver_name": "radv",
+              "gamma": 1,
+              "grid_side": 4,
+              "hysteresis": 0,
+              "images": [
+                {
+                  "channels": 4,
+                  "h": 16,
+                  "layers": 4,
+                  "type": 0,
+                  "w": 128
+                },
+                {
+                  "channels": 4,
+                  "h": 32,
+                  "layers": 4,
+                  "type": 1,
+                  "w": 32
+                },
+                {
+                  "channels": 2,
+                  "h": 64,
+                  "layers": 4,
+                  "type": 2,
+                  "w": 64
+                },
+                {
+                  "channels": 4,
+                  "h": 4,
+                  "layers": 4,
+                  "type": 3,
+                  "w": 4
+                },
+                {
+                  "channels": 1,
+                  "h": 24,
+                  "layers": 4,
+                  "type": 4,
+                  "w": 24
+                },
+                {
+                  "channels": 2,
+                  "h": 2,
+                  "layers": 1,
+                  "type": 5,
+                  "w": 2
+                }
+              ],
+              "mode": "constant8",
+              "normal_view_bias": 0.014999999664723873,
+              "origin": [
+                0,
+                1.350000023841858,
+                0
+              ],
+              "ray_max": 33.9779167175293,
+              "rays": 128,
+              "rotation_updates_per_volume": 1,
+              "schema": "m001-ddgi-native/1",
+              "seed": 305419896,
+              "setup_wall_us": 57528.775,
+              "spacing": [
+                4.44444465637207,
+                1.5,
+                4.44444465637207
+              ],
+              "subgroup": 64,
+              "timestamp_period_ns": 10.019036293029785,
+              "timestamp_valid_bits": 64,
+              "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+              "vertices": 2
+            },
+            "copies": [
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              }
+            ],
+            "direct_metrics": {
+              "active_max_relative": 3.0877582695224063e-06,
+              "active_p99_absolute": 4.1570931816250344e-11,
+              "active_p99_relative": 8.647686966774229e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302650539612,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.1709895333637723e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.073250298942868e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -5.972358260360869e-08,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "initial_history_exactly_zero": true,
+            "old_primary_direct_unchanged": true,
+            "old_stage0_rays_and_interiors_unchanged": true,
+            "previous_atlas_immutable": true,
+            "quality_scoring": false,
+            "timing": {
+              "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+              "completed_gpu_units": 16,
+              "max_unit_gpu_us_diagnostic": 24.72698157119751,
+              "sum_gpu_us_diagnostic": 144.0336657485962
+            }
+          }
+        ],
+        "full_copy_exact": true,
+        "gpu_executed_by_auditor": false,
+        "interior_unchanged": true,
+        "name": "static-hdr",
+        "old_stage0_rays_and_interiors_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 2309008
+        },
+        "quality_admission": false,
+        "quality_scoring": false,
+        "raw_payloads_rehashed": 25,
+        "result_sha256": "d27637ce414a57abf40ddc47868a7a2a6b91e09f244da68db2baf480751cb448",
+        "schema": "m001-ddgi-separated-border-independent-cpu-audit/1",
+        "scope": "Named011 correctness control only; no indirect HDR quality decision, general dynamics, temporal support or speed claim",
+        "semantic_pass": true
+      },
+      "audit_sha256": "7a0e6e98fe664b58fe5cf6ecc05ab7fd679e19d5ec3b58ca4a9326c7b80b5d8b",
+      "family": "static",
+      "name": "static-hdr"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "ca08e4a47b0fc57b0cf6be0bd5c0a9f38c93e858c7408b4361ebc7385203ead8",
+        "classification": "BORDER_CONTROL_PASS",
+        "frames": [
+          {
+            "configuration": {
+              "api_version": 4211036,
+              "brightness_threshold": 1000000,
+              "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+              "distance_exponent": 50,
+              "driver_info": "Mesa 26.1.2",
+              "driver_name": "radv",
+              "gamma": 1,
+              "grid_side": 4,
+              "hysteresis": 0,
+              "images": [
+                {
+                  "channels": 4,
+                  "h": 16,
+                  "layers": 4,
+                  "type": 0,
+                  "w": 128
+                },
+                {
+                  "channels": 4,
+                  "h": 32,
+                  "layers": 4,
+                  "type": 1,
+                  "w": 32
+                },
+                {
+                  "channels": 2,
+                  "h": 64,
+                  "layers": 4,
+                  "type": 2,
+                  "w": 64
+                },
+                {
+                  "channels": 4,
+                  "h": 4,
+                  "layers": 4,
+                  "type": 3,
+                  "w": 4
+                },
+                {
+                  "channels": 1,
+                  "h": 24,
+                  "layers": 4,
+                  "type": 4,
+                  "w": 24
+                },
+                {
+                  "channels": 2,
+                  "h": 2,
+                  "layers": 1,
+                  "type": 5,
+                  "w": 2
+                }
+              ],
+              "mode": "scene",
+              "normal_view_bias": 0.014999999664723873,
+              "origin": [
+                0,
+                1.350000023841858,
+                0
+              ],
+              "ray_max": 33.9779167175293,
+              "rays": 128,
+              "rotation_updates_per_volume": 1,
+              "schema": "m001-ddgi-native/1",
+              "seed": 305419896,
+              "setup_wall_us": 50460.893,
+              "spacing": [
+                4.44444465637207,
+                1.5,
+                4.44444465637207
+              ],
+              "subgroup": 64,
+              "timestamp_period_ns": 10.019036293029785,
+              "timestamp_valid_bits": 64,
+              "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+              "vertices": 2
+            },
+            "copies": [
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              }
+            ],
+            "direct_metrics": {
+              "active_max_relative": 3.0877582695224063e-06,
+              "active_p99_absolute": 4.1570931816250344e-11,
+              "active_p99_relative": 8.647686966774229e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302650539612,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.1709895333637723e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.073250298942868e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -5.972358260360869e-08,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "initial_history_exactly_zero": true,
+            "old_primary_direct_unchanged": true,
+            "old_stage0_rays_and_interiors_unchanged": true,
+            "previous_atlas_immutable": true,
+            "quality_scoring": false,
+            "timing": {
+              "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+              "completed_gpu_units": 17,
+              "max_unit_gpu_us_diagnostic": 23.2441641998291,
+              "sum_gpu_us_diagnostic": 190.92275559997557
+            }
+          }
+        ],
+        "full_copy_exact": true,
+        "gpu_executed_by_auditor": false,
+        "interior_unchanged": true,
+        "name": "static-scene-one",
+        "old_stage0_rays_and_interiors_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 2309008
+        },
+        "quality_admission": false,
+        "quality_scoring": false,
+        "raw_payloads_rehashed": 25,
+        "result_sha256": "cd27c708033c189d7f19d5b03fb29d98249682492c68bb8842940fbc3789ef1e",
+        "schema": "m001-ddgi-separated-border-independent-cpu-audit/1",
+        "scope": "Named011 correctness control only; no indirect HDR quality decision, general dynamics, temporal support or speed claim",
+        "semantic_pass": true
+      },
+      "audit_sha256": "f6de4acbdb9f66554ae93976eaec6155ff955d8d12601e29d97ca23a05c0c8a5",
+      "family": "static",
+      "name": "static-scene-one"
+    },
+    {
+      "audit": {
+        "accepted_timing": false,
+        "archive_sha256": "a8917946a0773a9ae23c8dc6b11e8003f8f6aabaf62d6b28d0103bcb485ff140",
+        "classification": "BORDER_CONTROL_PASS",
+        "frames": [
+          {
+            "configuration": {
+              "api_version": 4211036,
+              "brightness_threshold": 1000000,
+              "device": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+              "distance_exponent": 50,
+              "driver_info": "Mesa 26.1.2",
+              "driver_name": "radv",
+              "gamma": 1,
+              "grid_side": 4,
+              "hysteresis": 0,
+              "images": [
+                {
+                  "channels": 4,
+                  "h": 16,
+                  "layers": 4,
+                  "type": 0,
+                  "w": 128
+                },
+                {
+                  "channels": 4,
+                  "h": 32,
+                  "layers": 4,
+                  "type": 1,
+                  "w": 32
+                },
+                {
+                  "channels": 2,
+                  "h": 64,
+                  "layers": 4,
+                  "type": 2,
+                  "w": 64
+                },
+                {
+                  "channels": 4,
+                  "h": 4,
+                  "layers": 4,
+                  "type": 3,
+                  "w": 4
+                },
+                {
+                  "channels": 1,
+                  "h": 24,
+                  "layers": 4,
+                  "type": 4,
+                  "w": 24
+                },
+                {
+                  "channels": 2,
+                  "h": 2,
+                  "layers": 1,
+                  "type": 5,
+                  "w": 2
+                }
+              ],
+              "mode": "scene",
+              "normal_view_bias": 0.014999999664723873,
+              "origin": [
+                0,
+                1.350000023841858,
+                0
+              ],
+              "ray_max": 33.9779167175293,
+              "rays": 128,
+              "rotation_updates_per_volume": 1,
+              "schema": "m001-ddgi-native/1",
+              "seed": 305419896,
+              "setup_wall_us": 42487.869,
+              "spacing": [
+                4.44444465637207,
+                1.5,
+                4.44444465637207
+              ],
+              "subgroup": 64,
+              "timestamp_period_ns": 10.019036293029785,
+              "timestamp_valid_bits": 64,
+              "timing_classification": "DIAGNOSTIC_UNCALIBRATED",
+              "vertices": 8
+            },
+            "copies": [
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 0,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 1,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 1,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 2,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 2,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 3,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 3,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 4,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 4,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 5,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 5,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7168,
+                "complete_components": 16384,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 6,
+                "type": 1,
+                "zero_nonzero_mismatched_components": 0
+              },
+              {
+                "border_components": 7680,
+                "complete_components": 32768,
+                "exact_copy_pass": true,
+                "first_mismatch": null,
+                "full_copy_exact": true,
+                "interior_unchanged": true,
+                "maximum_absolute_difference": 0.0,
+                "mismatched_components": 0,
+                "mismatched_texels": 0,
+                "pre_border_zero": true,
+                "stage": 6,
+                "type": 2,
+                "zero_nonzero_mismatched_components": 0
+              }
+            ],
+            "direct_metrics": {
+              "active_max_relative": 3.0877582695224063e-06,
+              "active_p99_absolute": 4.1570931816250344e-11,
+              "active_p99_relative": 8.647686966774229e-07,
+              "active_pixels": 6939,
+              "gpu_sum": 0.4194302650539612,
+              "gpu_zero_reference_positive": 0,
+              "nrmse": 3.1709895333637723e-07,
+              "pixels": 57600,
+              "reference_rms": 2.2306129441681237e-05,
+              "reference_sum": 0.4194302901038408,
+              "reference_zero_leak_energy": 0.0,
+              "reference_zero_leak_pixels": 0,
+              "rmse": 7.073250298942868e-12,
+              "scoring_exclusions": 0,
+              "signed_sum_bias": -5.972358260360869e-08,
+              "whole_image_max_absolute": 5.664375897853919e-10
+            },
+            "initial_history_exactly_zero": true,
+            "old_primary_direct_unchanged": true,
+            "old_stage0_rays_and_interiors_unchanged": true,
+            "previous_atlas_immutable": true,
+            "quality_scoring": false,
+            "timing": {
+              "classification": "DIAGNOSTIC_UNCALIBRATED_NO_SPEED_CLAIM",
+              "completed_gpu_units": 107,
+              "max_unit_gpu_us_diagnostic": 63.36038551712036,
+              "sum_gpu_us_diagnostic": 1190.061130886078
+            }
+          }
+        ],
+        "full_copy_exact": true,
+        "gpu_executed_by_auditor": false,
+        "interior_unchanged": true,
+        "name": "static-scene-seven",
+        "old_stage0_rays_and_interiors_unchanged": true,
+        "owned_memory": {
+          "events": 56,
+          "teardown_zero": true,
+          "true_peak_owned_bytes": 2309008
+        },
+        "quality_admission": false,
+        "quality_scoring": false,
+        "raw_payloads_rehashed": 79,
+        "result_sha256": "172eb8a1dd60e0a3be32b65174d2fd7cdd6859ca9bb6dd27631d3611cbfecffe",
+        "schema": "m001-ddgi-separated-border-independent-cpu-audit/1",
+        "scope": "Named011 correctness control only; no indirect HDR quality decision, general dynamics, temporal support or speed claim",
+        "semantic_pass": true
+      },
+      "audit_sha256": "010881c760df8dd47f0437a6c343920f48e11471e0112b2092c76a3693915a16",
+      "family": "static",
+      "name": "static-scene-seven"
+    }
+  ],
+  "schema": "m001-ddgi-separated-border-controls-raw-replay/1",
+  "scope": "Existing ordered011correctness captures only; partial prefix is not runtime requalification or HDR quality admission",
+  "source_commit": "4f0360d90af51195ca743aec01ec4cd283df6c26"
+}

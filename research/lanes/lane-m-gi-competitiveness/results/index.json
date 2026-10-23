@@ -7,8 +7,8 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "DDGI_18_ACQUISITIONS_COMPLETE_BORDER_INVARIANT_FAILED_REPAIR_REQUIRED",
-      "classification": "DDGI_RUNTIME_INELIGIBLE_CORRUPT_BORDER_NOT_FAIR_FAMILY_LOSS",
+      "phase": "DDGI_BORDER_CORRECTION_SIX_STATIC_PASS_FOURTEEN_CONTROLS_PENDING",
+      "classification": "PARTIAL_REQUALIFICATION_NO_FAIR_DDGI_QUALITY_DECISION",
       "accepted_timing": false,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
@@ -175,12 +175,22 @@
       "ddgi_border_host_builder": "scripts/research/lane_m_gi_competitiveness/build_ddgi_border_host.py",
       "ddgi_border_shader": "shaders/research/lane_m_gi_competitiveness/m001_ddgi_border_copy.hlsl",
       "ddgi_border_qualification_inventory": "scripts/research/lane_m_gi_competitiveness/ddgi_border_cases.py",
-      "ddgi_border_corrected_gpu_cases": 0,
+      "ddgi_border_corrected_gpu_cases": 6,
       "ddgi_border_runtime_requalified": false,
       "ddgi_border_cpu_checkpoint_verification": "results/057-ddgi-separated-border-cpu-checkpoint-verification.json",
       "ddgi_border_process_cpu_preparation": "results/058-ddgi-separated-border-process-cpu-preparation.json",
       "ddgi_border_control_runner": "scripts/research/lane_m_gi_competitiveness/ddgi_border_step.py",
-      "ddgi_border_control_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_border_requalification_audit.py"
+      "ddgi_border_control_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_border_requalification_audit.py",
+      "ddgi_border_corrected_controls_pass": 6,
+      "ddgi_border_corrected_controls_required": 20,
+      "ddgi_border_corrected_next_pending": "dynamic-light-fresh-b2",
+      "ddgi_border_static_controls_pass": 6,
+      "ddgi_border_dynamic_controls_pass": 0,
+      "ddgi_border_all_budget_controls_pass": 0,
+      "ddgi_border_control_collector": "scripts/research/lane_m_gi_competitiveness/summarize_ddgi_border.py",
+      "ddgi_border_controls_raw_replay": "results/059-ddgi-separated-border-six-static-raw-replay.json",
+      "ddgi_border_controls_outcome": "results/060-ddgi-separated-border-static-outcome.md",
+      "ddgi_border_static_checkpoint_verification": "results/061-ddgi-separated-border-static-checkpoint-verification.json"
     }
   ]
 }
