@@ -1,0 +1,60 @@
+{
+  "schema": "m001-ddgi-dynamic-checkpoint-verification/1",
+  "source_commit": "1ef6b3a1cdcaf2c088d239fc510679b25b9c6e54",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "8 configured historical indexes,548links; no runtime validation"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "returncode": 0,
+      "scope": "explicit LaneM result-index check"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "returncode": 0,
+      "scope": "Historical sources/N010 evidence/all CMake unchanged; excludes only new isolated LaneM source"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "scope": "whitespace"
+    }
+  ],
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "default_build_scope": "Default Renderer/build graph unchanged; previous018 remains historical. Standalone build036,70unique CPU tests038 and8actual GPU controls039 are newly executed, not release acceptance.",
+  "native_gpu_acquisitions": 8,
+  "native_frames": 20,
+  "raw_payloads_rehashed": 816,
+  "completed_gpu_units": 920,
+  "power_clock_desktop_changes": false,
+  "validation_layer_run": false,
+  "quality_admission": false,
+  "accepted_timing": false,
+  "scope": "009 within-context reset-all only. 010 quality ladder registered; no DDGI quality candidate or score yet."
+}

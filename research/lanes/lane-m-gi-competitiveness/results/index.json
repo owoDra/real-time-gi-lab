@@ -115,7 +115,7 @@
       "ddgi_scene_shader": "shaders/research/lane_m_gi_competitiveness/m001_ddgi_scene.hlsl",
       "ddgi_scene_cpu_driver": "scripts/research/lane_m_gi_competitiveness/compile_ddgi_scene.py",
       "ddgi_scene_cpu_compilation_pass": true,
-      "ddgi_scene_runtime_qualified": false,
+      "ddgi_scene_runtime_qualified": true,
       "ddgi_host_cpu_build": "results/031-ddgi-private-host-cpu-build.json",
       "ddgi_host_cpu_tests": "results/032-ddgi-host-cpu-contract-tests.json",
       "ddgi_host": "src/research/lane_m_gi_competitiveness/ddgi_scene_main.cpp",
@@ -128,8 +128,8 @@
       "ddgi_static_semantic_replay": "results/033-ddgi-six-semantic-controls-raw-replay.json",
       "ddgi_static_semantic_outcome": "results/034-ddgi-static-semantic-outcome.md",
       "ddgi_static_semantics_qualified": true,
-      "ddgi_dynamic_qualified": false,
-      "ddgi_quality_ladder_registered": false,
+      "ddgi_dynamic_qualified": true,
+      "ddgi_quality_ladder_registered": true,
       "ddgi_static_checkpoint_verification": "results/035-ddgi-static-checkpoint-verification.json",
       "ddgi_dynamic_protocol": "experiments/009-ddgi-dynamic-reset-qualification.md",
       "ddgi_dynamic_host_cpu_build": "results/036-ddgi-transition-host-cpu-build.json",
@@ -137,7 +137,17 @@
       "ddgi_dynamic_cpu_tests": "results/038-ddgi-dynamic-cpu-contract-tests.json",
       "ddgi_dynamic_host": "src/research/lane_m_gi_competitiveness/ddgi_transition_main.cpp",
       "ddgi_dynamic_runner": "scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_step.py",
-      "ddgi_dynamic_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_audit.py"
+      "ddgi_dynamic_auditor": "scripts/research/lane_m_gi_competitiveness/ddgi_dynamic_audit.py",
+      "ddgi_runtime_qualification_scope": "008 static semantics and009 H01-derived 4^3/128ray one/seven-stage within-context reset-all only; not temporal accumulation or general dynamic quality",
+      "ddgi_temporal_accumulation_supported": false,
+      "ddgi_quality_protocol": "experiments/010-ddgi-static-quality-budget-ladder.md",
+      "ddgi_dynamic_raw_replay": "results/039-ddgi-eight-dynamic-controls-raw-replay.json",
+      "ddgi_dynamic_outcome": "results/040-ddgi-dynamic-reset-outcome.md",
+      "ddgi_dynamic_gpu_controls_run": 8,
+      "ddgi_dynamic_gpu_controls_pass": 8,
+      "ddgi_quality_gpu_cases": 0,
+      "ddgi_quality_admitted": false,
+      "ddgi_dynamic_checkpoint_verification": "results/041-ddgi-dynamic-checkpoint-verification.json"
     }
   ]
 }
