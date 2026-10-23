@@ -1,0 +1,93 @@
+{
+  "schema": "m001-ddgi-border-discovery-checkpoint-verification/1",
+  "source_commit": "ec170c59a3ecf313e7ab9c62882aae6e6e81e842",
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "returncode": 0,
+      "scope": "8 configured historical result indexes; no runtime validation",
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-c",
+        "import sys;from pathlib import Path;sys.path.insert(0,'scripts/research');from verify import verify_index;assert verify_index(Path('research/lanes/lane-m-gi-competitiveness/results/index.json'),'lane-m-gi-competitiveness')==1"
+      ],
+      "returncode": 0,
+      "scope": "explicit LaneM index",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "returncode": 0,
+      "scope": "historical source/N010 evidence/all CMake unchanged",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "ec170c59",
+        "--exit-code",
+        "--",
+        "scripts/research/lane_m_gi_competitiveness/ddgi_quality_step.py",
+        "scripts/research/lane_m_gi_competitiveness/ddgi_quality_audit.py",
+        "scripts/research/lane_m_gi_competitiveness/summarize_ddgi_quality.py",
+        "src/research/lane_m_gi_competitiveness",
+        "shaders/research/lane_m_gi_competitiveness",
+        "research/lanes/lane-m-gi-competitiveness/results/034-ddgi-static-semantic-outcome.md",
+        "research/lanes/lane-m-gi-competitiveness/results/040-ddgi-dynamic-reset-outcome.md",
+        "research/lanes/lane-m-gi-competitiveness/results/044-ddgi-h01-quality-outcome.md",
+        "research/lanes/lane-m-gi-competitiveness/results/047-ddgi-h02-quality-outcome.md"
+      ],
+      "returncode": 0,
+      "scope": "old native/shader/runner/auditor and outcome evidence preserved",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "scope": "whitespace",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "all_checks_pass": true,
+  "new_border_cpu_tests": 10,
+  "new_border_cpu_tests_returncode": 0,
+  "real_data_border_predicate_pass": false,
+  "real_data_border_audit_returncode": 1,
+  "raw_quality_acquisitions": 18,
+  "original_quality_fail_classifications": 18,
+  "accepted_fair_ddgi_family_outcome": false,
+  "quality_targets_unresolved": 6,
+  "new_gpu_executed_for_border_diagnosis": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layer_run": false,
+  "accepted_timing": false,
+  "power_clock_desktop_changes": false
+}

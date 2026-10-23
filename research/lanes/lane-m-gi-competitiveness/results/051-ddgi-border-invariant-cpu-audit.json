@@ -1,0 +1,301 @@
+{
+  "accepted_timing": false,
+  "acquisitions": 32,
+  "affected_acquisitions": 11,
+  "affected_atlas": "distance only; every irradiance atlas passes",
+  "atlases": 652,
+  "auditor_sha256": "0fda84c45ae9c8f7cffd20f62b84ff077faf40f2b9ccaccf4f7d8d2f5f6cec16",
+  "cases": [
+    {
+      "atlases": 0,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "static",
+      "name": "direct"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "static",
+      "name": "black"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "static",
+      "name": "unit"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "static",
+      "name": "hdr"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "static",
+      "name": "scene-one"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "static",
+      "name": "scene-seven"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "light-fresh-b2"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "light-fresh-b8"
+    },
+    {
+      "atlases": 16,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "light-transition-b2"
+    },
+    {
+      "atlases": 112,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "light-transition-b8"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "geometry-fresh-b2"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "geometry-fresh-b8"
+    },
+    {
+      "atlases": 16,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "geometry-transition-b2"
+    },
+    {
+      "atlases": 112,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "dynamic",
+      "name": "geometry-transition-b8"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 1,
+      "failed_atlases": 1,
+      "family": "quality",
+      "name": "h01-b2-q0"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h01-b2-q1"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h01-b2-q2"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 5,
+      "failed_atlases": 10,
+      "family": "quality",
+      "name": "h01-b8-q0"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 1,
+      "failed_atlases": 2,
+      "family": "quality",
+      "name": "h01-b8-q1"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 1,
+      "failed_atlases": 2,
+      "family": "quality",
+      "name": "h01-b8-q2"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h02-b2-q0"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h02-b2-q1"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h02-b2-q2"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 6,
+      "failed_atlases": 11,
+      "family": "quality",
+      "name": "h02-b8-q0"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 2,
+      "failed_atlases": 4,
+      "family": "quality",
+      "name": "h02-b8-q1"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 2,
+      "failed_atlases": 3,
+      "family": "quality",
+      "name": "h02-b8-q2"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 1,
+      "failed_atlases": 1,
+      "family": "quality",
+      "name": "h03-b2-q0"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h03-b2-q1"
+    },
+    {
+      "atlases": 4,
+      "current_failed_atlases": 1,
+      "failed_atlases": 1,
+      "family": "quality",
+      "name": "h03-b2-q2"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 7,
+      "failed_atlases": 13,
+      "family": "quality",
+      "name": "h03-b8-q0"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 0,
+      "failed_atlases": 0,
+      "family": "quality",
+      "name": "h03-b8-q1"
+    },
+    {
+      "atlases": 28,
+      "current_failed_atlases": 3,
+      "failed_atlases": 5,
+      "family": "quality",
+      "name": "h03-b8-q2"
+    }
+  ],
+  "cpu_audit_returncode": 1,
+  "cpu_audit_returncode_meaning": "Expected failed scientific predicate with complete retained diagnostic receipt, not a process crash",
+  "current_failed_atlases": 30,
+  "current_mismatched_components": 2528,
+  "exact_copy_pass": false,
+  "failed_atlases": 53,
+  "first_mismatch": {
+    "atlas": "distance",
+    "border_components": 61440,
+    "exact_copy_pass": false,
+    "family": "quality",
+    "first_mismatch": {
+      "actual": 0.0,
+      "destination": [
+        0,
+        8,
+        96,
+        0
+      ],
+      "expected": 1.602287769317627,
+      "source": [
+        0,
+        7,
+        97,
+        0
+      ]
+    },
+    "frame": null,
+    "maximum_absolute_difference": 5.134652614593506,
+    "mismatched_components": 32,
+    "mismatched_texels": 16,
+    "name": "h01-b2-q0",
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-quality-v1/h01-b2-q0/capture/stage-0-current-2.f32",
+    "role": "current",
+    "sha256": "c0dc7080ddd73161adb476b582432e4d3846222a32dc0d524f7c17665b32e217",
+    "stage": 0,
+    "zero_nonzero_mismatched_components": 32
+  },
+  "full_report_path": "out/research/lane-m-gi-competitiveness/m001-ddgi-border-cpu-v1/result.json",
+  "full_report_sha256": "aaa1b10a00d65aaeb02340a3b9a3ec8be7e14854cf7d56b893248d02f574316e",
+  "gpu_executed": false,
+  "input_sha256_manifest_entries": 729,
+  "invariant": "Every captured current/previous irradiance/distance border component equals its SDK-specified same-probe interior component bit-for-bit",
+  "maximum_absolute_difference": 5.151291847229004,
+  "previous_mismatched_components": 2256,
+  "prior_failed_prefix_attempt": {
+    "all_other_stage0_arrays_identical": true,
+    "different_interiors": 0,
+    "different_stage0_distance_pairs": 5,
+    "full_nine_pairs_path": "out/research/lane-m-gi-competitiveness/m001-ddgi-prefix-cpu-v1/differences.json",
+    "full_nine_pairs_sha256": "04262b014df40399f0f26dccca0878724b5257f37cf89b3220992e084bf62283",
+    "path": "out/research/lane-m-gi-competitiveness/m001-ddgi-prefix-cpu-v1/result.json",
+    "sha256": "34d2f42e9c720cc4d4e7a48060e792a710390cc16512179ab159adc9b132b387",
+    "total_pairs": 9
+  },
+  "qualification": "SUPERSEDES_GENERAL_RUNTIME_ADMISSION_FROM_034_040_AND_FAIR_FAMILY_LOSS_FROM_044_047_049; old records/bytes unchanged",
+  "raw_evidence_modified": false,
+  "schema": "m001-ddgi-retrospective-border-audit/1",
+  "source_commit": "ec170c59a3ecf313e7ab9c62882aae6e6e81e842",
+  "tests": {
+    "command": "LD_LIBRARY_PATH=\"${NIX_LD_LIBRARY_PATH:-${LD_LIBRARY_PATH:-}}\" OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 out/research/n010-comparison-readiness/venv/bin/python -m unittest discover -s scripts/research/lane_m_gi_competitiveness -p test_ddgi_border_audit.py -v",
+    "gpu_executed": false,
+    "returncode": 0,
+    "source_sha256": "5a23d62c57f60a340c59ddf7645f0a840516e0d97f7440a03545aa5f3c620446",
+    "tests_run": 10
+  },
+  "zero_nonzero_mismatched_components": 4784
+}
