@@ -236,19 +236,25 @@
       "lane_m_complete": false,
       "static_family_verification": "results/084-m001-static-screen-verification.json",
       "closest_primary_development_protocol": "experiments/013-closest-primary-development-validation.md",
-      "closest_primary_development_status": "CPU_BUILD_AND_ALL_PIXEL_PREDICATES_TESTED_FULL_PROCESS_AUDITOR_PENDING_NO_GPU",
+      "closest_primary_development_status": "PROCESS_AND_FULL_IMAGE_CPU_ADMISSION_READY_GPU_NOT_RUN",
       "closest_primary_development_gpu_cases": 0,
       "closest_primary_failed_cpu_preflights": "results/085-closest-primary-cpu-preflight-failures.json",
       "closest_primary_cpu_build": "results/086-closest-primary-isolated-cpu-build.json",
       "closest_primary_cpu_preparation": "results/087-closest-primary-cpu-tests-and-native-contracts.json",
       "closest_primary_cpu_outcome": "results/088-closest-primary-cpu-preparation-outcome.md",
-      "closest_primary_cpu_tests": 28,
+      "closest_primary_cpu_tests": 52,
       "closest_primary_native_cpu_contracts": 8,
       "closest_primary_cpu_checkpoint_verification": "results/089-closest-primary-cpu-checkpoint-verification.json",
       "closest_primary_numerical_clarification": "experiments/014-closest-primary-pre-acquisition-numerical-clarification.md",
       "closest_primary_metric_tests": "results/090-closest-primary-all-pixel-metrics-cpu-tests.json",
       "closest_primary_metric_outcome": "results/091-closest-primary-all-pixel-predicates-outcome.md",
-      "closest_primary_metrics_checkpoint_verification": "results/092-closest-primary-metrics-checkpoint-verification.json"
+      "closest_primary_metrics_checkpoint_verification": "results/092-closest-primary-metrics-checkpoint-verification.json",
+      "closest_primary_process_cpu_preparation": "results/093-closest-primary-process-cpu-preparation.json",
+      "closest_primary_process_outcome": "results/094-closest-primary-process-readiness-outcome.md",
+      "closest_primary_process_cpu_tests": 24,
+      "closest_primary_process_ready": true,
+      "closest_primary_next_named_case": "c1-hwrt",
+      "closest_primary_process_checkpoint_verification": "results/095-closest-primary-process-checkpoint-verification.json"
     }
   ]
 }
