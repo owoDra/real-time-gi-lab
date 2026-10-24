@@ -1,0 +1,26 @@
+# NRD026 cold/warm HDR: first target checkpoint
+
+**H01_B2_LADDER_EXHAUSTED_QUALITY_FAIL_FIVE_TARGETS_PENDING.** H01/B2 is terminal after its registered ladder; five targets remain. This checkpoint is not the completion of026 or Lane M. No accepted timing, memory superiority or novel architecture.
+
+[Registration026](../experiments/026-nrd-cold-and-64-frame-static-hdr-quality.md), [CPU preparation146](146-nrd-cold-warm-hdr-cpu-preparation.json), [full first-target checkpoint147](147-nrd-cold-warm-h01-b2-hdr-outcome.json), [verification149](149-nrd-cold-warm-first-target-verification.json).
+
+Original registration5753113e and pre-execution source clarification88bb0b19 precede sourceacb968a1, CPU readiness/all GPU plans4712178d. SDK setting max accumulated history30 stores up to31 including the current frame, as the pinned shader explicitly specifies; no SDK setting or HDR criterion changed. Only the reversible private host/header schedule and1/4spp acceptance compile/relink; all025 library/pipeline/other native objects and physical producer/packing/composition SPIR-V are reused unchanged. CPU52 checks pass with24 actual valid native commands/eight expected rejections and all six admitted reference identities. Original025/024/023 and N001–N010 evidence stay unchanged.
+
+Each separately announced process captures64 actual static frames (only frame0CLEAR, then63CONTINUE), the fixed distinct seed schedule, every raw sample witness/guide/constant/pool/RGB field and all costs. Each preceding native and independent terminal audit is complete before preparing the next rung. The exact same16384spp/four-seed admitted physical reference and original all-pixel gates apply; no masks or pixel exclusion. Cold is frame0; warm requires each of frames48..63 to pass, with all64 settling/terminal scores retained. A temporal mean cannot replace a failing warm frame.
+
+| spp/frame | Cold indirect NRMSE | Final indirect NRMSE | Final signed indirect bias | Cold | Warm | Joint |
+| ---: | ---: | ---: | ---: | :---: | :---: | :---: |
+| 1 | 32.9931% | 32.1770% | -27.6437% | FAIL | FAIL | FAIL |
+| 4 | 27.9786% | 25.7895% | -13.4444% | FAIL | FAIL | FAIL |
+| 16 | 28.2691% | 25.0642% | -10.1597% | FAIL | FAIL | FAIL |
+| 64 | 28.1767% | 24.9786% | -9.2795% | FAIL | FAIL | FAIL |
+
+NRMSE and bias losses remain evidence, not implementation-failure labels or a rejection of NRD as a family. These findings concern the disclosed sky-initialized default RELAX_DIFFUSE role, original sparse-lighting input and known static H01/B2 corpus. No settings are retuned, successful/failed rungs repeated, new rung added or temporal mean substituted. The individual64-frame pass flags and complete raw metric/error arrays preserve every result.
+
+All64 frames per rung pass primary presence/primitive/depth/canonical/unit-normal, every sample miss/unit/in-lobe/float32 sum/mean, actual official guide/UNORM/viewZ/static motion/pre-sanitization errors and GPU RGB composition checks. Primary winding-normal differences stay visible in all full reports/maps; this is not a claim of winding-normal equality. All active histories follow1..31 then clamp, not repeated clearing. All samples in frames0,1,63 receive double-precision physical intersections with unchanged024 bounds/zero primitive or presence mismatches. Other61 frames check all saved witnesses/guides/primary records without claiming independent secondary intersections. Full field/error arrays remain saved for every frame; the fixed physical coverage is not a post-hoc exclusion.
+
+Frame0 raw PT equals its original same-spp/depth/seed capture, and at16spp all47 saved cold binary fields/constants additionally match025's H01 control. Every651 actual SDK resource/dispatch and481,632 constant bytes per rung agrees with the existing025 CPU export; every native pipeline byte equals that variant. Full bounded journals30,540 units per process, every frame's envelope/active timestamps and all37 owned allocation/free pairs (15images/13mapped pipeline buffers plus AS/scratch/staging) reconcile to zero teardown. Driver-private/CPU memory excluded. Timestamps, pauses/readback/initial setup and peak ownership remain diagnostics, not performance/memory wins at unequal quality.
+
+All acquisitions are explicitly authorized assistant-operated runs on the same Radeon8060S/RADV workstation. All new captures/failed quality rows/source/compiler receipts/full ray and image/error data stay in repository out/, with no large raw data in Git. CPU references and old successful cohorts are not rerun. Each run keeps120CPU/180wall/4GiB process,8GiB aggregate owned pre-allocation,250ms waits,2ms pauses and32GiB free-disk guards. No power/clock/desktop changes. Default Renderer build/runtime regression NOT_RERUN; validation layers NOT_RUN. No Actions/CI/main promotion.
+
+Next registered case is H01/B8/1spp, then its ladder under the same prospective rules, followed by H02/B2,H02/B8,H03/B2,H03/B8. No more H01/B2 processes. Complete all six targets or stop on an operational failure before any separately calibrated matched-quality full-system comparison. New heldouts/dynamic/Sponza/multiple-device/deployability and novel competitive transport remain required. Lane M remains active and incomplete; Issue7OPEN.

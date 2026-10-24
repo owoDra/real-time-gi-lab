@@ -420,10 +420,16 @@
       "nrd_sky_intervention_study_complete": true,
       "nrd_sky_intervention_further_gpu_selected": false,
       "nrd_cold_warm_hdr_protocol": "experiments/026-nrd-cold-and-64-frame-static-hdr-quality.md",
-      "nrd_cold_warm_hdr_status": "CPU_READY_GPU_NOT_RUN",
+      "nrd_cold_warm_hdr_status": "H01_B2_LADDER_EXHAUSTED_QUALITY_FAIL_FIVE_TARGETS_PENDING",
       "nrd_cold_warm_hdr_cpu_preparation": "results/146-nrd-cold-warm-hdr-cpu-preparation.json",
       "nrd_cold_warm_hdr_process": "scripts/research/lane_m_gi_competitiveness/nrd_quality_process.py",
-      "nrd_cold_warm_hdr_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_quality_audit.py"
+      "nrd_cold_warm_hdr_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_quality_audit.py",
+      "nrd_cold_warm_hdr_first_target_outcome": "results/147-nrd-cold-warm-h01-b2-hdr-outcome.json",
+      "nrd_cold_warm_hdr_first_checkpoint": "results/148-nrd-cold-warm-first-target-checkpoint.md",
+      "nrd_cold_warm_hdr_first_checkpoint_verification": "results/149-nrd-cold-warm-first-target-verification.json",
+      "nrd_cold_warm_hdr_targets_terminal": 1,
+      "nrd_cold_warm_hdr_targets_pending": 5,
+      "nrd_cold_warm_hdr_study_complete": false
     }
   ]
 }
