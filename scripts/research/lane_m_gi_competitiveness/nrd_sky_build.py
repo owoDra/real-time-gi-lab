@@ -17,6 +17,7 @@ PROTOCOL=ROOT/'research/lanes/lane-m-gi-competitiveness/experiments/025-nrd-sky-
 OWN=[PROTOCOL]+[Path(__file__).with_name(n) for n in ('nrd_sky_build.py','test_nrd_sky.py','nrd_sky_process.py','nrd_sky_audit.py')]
 OLD='float4 centerWorldPosMaterialID = s_WorldPos_MaterialID[sharedMemoryIndex.y][sharedMemoryIndex.x];'
 NEW='float4 centerWorldPosMaterialID = isSky == 0.0 ? s_WorldPos_MaterialID[sharedMemoryIndex.y][sharedMemoryIndex.x] : float4(0.0, 0.0, 0.0, 0.0);'
+REUSE_SHA='cfe27b37fb727cb7f5411761e99e80647c8ec06f46819629fde1b4043aa844b8'
 
 def patch(data):
     need(data.count(OLD.encode())==1 and NEW.encode() not in data,'025 exact single upstream patch site')
@@ -45,8 +46,55 @@ def execute(label,command,work,cwd=None):
     print(label,row.get('returncode'),row['pass_'],flush=True)
     return row
 
-def run(work):
+def qualify(r,work,headers,library,ar,origin):
+    # ShaderMake writes one cache signature as well as the sole shader header.
+    # Its exact presence/configuration must be checked, not silently ignored.
+    signatures=list(headers.glob('.ShaderMake.SPIRV.*.signature'))
+    need(len(signatures)==1 and {p.name for p in headers.iterdir()}=={'RELAX_AtrousSmem.cs.spirv.h',signatures[0].name},'025 sole header and one ShaderMake signature')
+    signature=signatures[0].read_text()
+    need(all(token in signature for token in ('version=1:2\n','platform=5:SPIRV\n','warningsAreErrors=1:1\n','allResourcesBound=1:1\n','vulkanVersion=3:1.2\n',str(origin/'Shaders025.cfg'),str(origin/'source/NRD-e06852bd/Shaders'),str(origin/'headers'))),'025 ShaderMake signature configuration')
+    need('6 task(s) completed successfully' in (work/'atrous-six-permutations.stdout.txt').read_text(),'025 all six shader tasks completed')
+    old_members=subprocess.check_output([str(ar),'t',str(SDK/'artifacts/libNRD.a')],text=True).splitlines();new_members=subprocess.check_output([str(ar),'t',str(library)],text=True).splitlines()
+    need(old_members==new_members and len(new_members)==7 and len(set(new_members))==7,'025 archive member identity')
+    identities={}
+    for member in new_members:
+        a=subprocess.check_output([str(ar),'p',str(SDK/'artifacts/libNRD.a'),member]);b=subprocess.check_output([str(ar),'p',str(library),member])
+        need((a!=b)==(member=='Relax.cpp.o'),'025 unregistered archive member difference');identities[member]=dict(original_sha256=hashlib_sha(a),new_sha256=hashlib_sha(b),unchanged=a==b)
+    r['archive_members']=identities
+    for name in shlex.split((work/'Relax.cpp.d').read_text().replace('\\\n',' '))[1:]:
+        p=Path(name);p=p if p.is_absolute() else V.B.D.BUILD/p
+        if p.is_file():r['compiled_dependency_sha256'][str(p)]=SHA(p)
+    need(str(origin/'headers/RELAX_AtrousSmem.cs.spirv.h') in r['compiled_dependency_sha256'],'025 replacement header compilation absent')
+    rehash(r['input_sha256']);r['all_pass']=True
+
+def reuse_completed(work,previous,head):
+    receipt=previous/'result.json'
+    need(SHA(receipt)==REUSE_SHA,'025 pinned completed-build manifest failure required')
+    old=read(receipt);need(old['complete'] and not old['all_pass'] and old['error']=='ValueError: 025 only registered SDK header generated' and len(old['rows'])==5 and all(row['pass_'] for row in old['rows']),'025 identified signature-manifest repair only')
+    rehash({str(previous/name):h for name,h in old['payload_sha256'].items()})
+    old_pins={}
+    for name,h in old['input_sha256'].items():
+        p=Path(name)
+        if p in OWN:
+            data=subprocess.check_output(['git','show',old['source_commit']+':'+str(p.relative_to(ROOT))])
+            need(hashlib_sha(data)==h,'025 previous build source identity')
+        else:old_pins[name]=h
+    rehash(old_pins);shutil.copytree(previous,work,ignore=shutil.ignore_patterns('result.json'))
+    r=dict(old,source_commit=head,original_execution_source_commit=old['source_commit'],complete=False,all_pass=False,
+           executable=str(work/'nrd-vulkan'),api_executable=str(work/'nrd-api-probe'),
+           preserved_failed_build=str(receipt),preserved_failed_build_sha256=SHA(receipt),successful_build_steps_reused=5,
+           rows=[dict(row,reused_from_receipt=str(receipt),executed_again=False) for row in old['rows']],
+           input_sha256={**old_pins,**{str(p):SHA(p) for p in OWN},str(receipt):SHA(receipt),**{str(previous/name):h for name,h in old['payload_sha256'].items()}})
+    r.pop('error',None)
+    try:qualify(r,work,work/'headers',work/'libNRD.a',Path('/run/current-system/sw/bin/ar').resolve(),previous)
+    except Exception as e:r['error']=type(e).__name__+': '+str(e)
+    r.update(complete=True,payload_sha256=inventory(work))
+    with (work/'result.json').open('x') as f:json.dump(r,f,indent=2);f.write('\n')
+    return r
+
+def run(work,reuse=None):
     head=committed();work=work.resolve();need(work.is_relative_to(BASE) and not work.exists(),'025 exclusive build output')
+    if reuse is not None:return reuse_completed(work,reuse,head)
     pins,_=V.inputs()
     for p in OWN:pins[str(p)]=SHA(p)
     sdk=read(SDK/'result.json');native=read(NATIVE/'result.json')
@@ -85,19 +133,7 @@ def run(work):
     try:
         for label,command in rows:
             row=execute(label,command,work);r['rows'].append(row);need(row['pass_'],'025 build step failed: '+label)
-        need([p.name for p in headers.iterdir()]==['RELAX_AtrousSmem.cs.spirv.h'],'025 only registered SDK header generated')
-        old_members=subprocess.check_output([str(ar),'t',str(SDK/'artifacts/libNRD.a')],text=True).splitlines();new_members=subprocess.check_output([str(ar),'t',str(library)],text=True).splitlines()
-        need(old_members==new_members and len(new_members)==7 and len(set(new_members))==7,'025 archive member identity')
-        identities={}
-        for member in new_members:
-            a=subprocess.check_output([str(ar),'p',str(SDK/'artifacts/libNRD.a'),member]);b=subprocess.check_output([str(ar),'p',str(library),member])
-            need((a!=b)==(member=='Relax.cpp.o'),'025 unregistered archive member difference');identities[member]=dict(original_sha256=hashlib_sha(a),new_sha256=hashlib_sha(b),unchanged=a==b)
-        r['archive_members']=identities
-        for name in shlex.split((work/'Relax.cpp.d').read_text().replace('\\\n',' '))[1:]:
-            p=Path(name);p=p if p.is_absolute() else V.B.D.BUILD/p
-            if p.is_file():r['compiled_dependency_sha256'][str(p)]=SHA(p)
-        need(str(target) in r['compiled_dependency_sha256'] or str(headers/'RELAX_AtrousSmem.cs.spirv.h') in r['compiled_dependency_sha256'],'025 replacement header compilation absent')
-        rehash(pins);r['all_pass']=True
+        qualify(r,work,headers,library,ar,work)
     except Exception as e:r['error']=type(e).__name__+': '+str(e)
     r.update(complete=True,payload_sha256=inventory(work))
     with (work/'result.json').open('x') as f:json.dump(r,f,indent=2);f.write('\n')
@@ -108,4 +144,4 @@ def hashlib_sha(data):
     return hashlib.sha256(data).hexdigest()
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',type=Path,required=True);a=ap.parse_args();r=run(a.work);print(json.dumps({k:r.get(k) for k in ('all_pass','error')}));sys.exit(0 if r['all_pass'] else 2)
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',type=Path,required=True);ap.add_argument('--reuse-build',type=Path);a=ap.parse_args();r=run(a.work,a.reuse_build.resolve() if a.reuse_build else None);print(json.dumps({k:r.get(k) for k in ('all_pass','error')}));sys.exit(0 if r['all_pass'] else 2)
