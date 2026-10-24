@@ -11,7 +11,7 @@ import nrd_vulkan_audit as A
 import guided_transport_cpu as G
 import integrated_pt_process as I
 BASE=B.BASE;ROOT=B.ROOT;TARGETS=[('H01',2,16),('H02',8,64),('H03',2,64)]
-BUILD=BASE/'m001-nrd024-cpu-build-v1/result.json';CPU=BASE/'m001-nrd024-cpu-contracts-v1/result.json'
+BUILD=BASE/'m001-nrd024-cpu-build-v2/result.json';CPU=BASE/'m001-nrd024-cpu-contracts-v1/result.json'
 
 def tag(cell,depth):return f'm001-nrd024-gpu-{cell.lower()}-b{depth}'
 def write(p,x):

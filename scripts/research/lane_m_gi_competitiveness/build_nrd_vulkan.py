@@ -49,7 +49,7 @@ def inputs():
  for p in (B.GLSLANG,B.VAL,B.S.DXC,B.D.LOADER):pins[str(p)]=SHA(p)
  return pins,cc
 
-def run(work):
+def run(work,reuse=None):
  head=committed();work=work.resolve();need(work.is_relative_to(BASE) and not work.exists(),'024 exclusive build output');pins,original=inputs();work.mkdir(parents=True)
  for p in OWN:
   if p.suffix in ('.hpp','.cpp','.hlsl'):shutil.copyfile(p,work/p.name)
@@ -74,9 +74,23 @@ def run(work):
  rows.append(('composite-compile',[str(B.S.DXC),str(work/'nrd_composite_rgb.hlsl'),'-E','main','-T','cs_6_0','-spirv','-fspv-target-env=vulkan1.2','-WX','-I',str(sdk/'Shaders'),'-I',str(SDK_BUILD/'source/MathLib-aa432ad9'),'-Fo',str(work/'nrd_composite.spv')]))
  rows.append(('composite-validate',[str(B.VAL),'--target-env','vulkan1.2',str(work/'nrd_composite.spv')]))
  r=dict(schema='m001-nrd024-private-build/1',source_commit=head,complete=False,all_pass=False,gpu_executed=False,sdk_rebuilt=False,old_objects_rebuilt=False,input_sha256=pins,compiled_dependency_sha256={},rows=[],executable=str(work/'nrd-vulkan'),contract_executable=str(work/'nrd-vulkan-contract'),shader_directory=str(work))
+ previous=None
+ if reuse is not None:
+  need(SHA(reuse/'result.json')=='b72cace8eef6067dd7741331cbb844d65717a93a436a1f758225aeb086b029d3','024 pinned original composite compile failure required');previous=read(reuse/'result.json');need(previous['complete'] and not previous['all_pass'] and previous['rows'][-1]['label']=='composite-compile' and previous['rows'][-1]['returncode']==5,'024 identified vector-width compile repair')
+  rehash({str(reuse/p):h for p,h in previous['payload_sha256'].items()});rehash(previous['compiled_dependency_sha256']);r['compiled_dependency_sha256'].update(previous['compiled_dependency_sha256']);pins[str(reuse/'result.json')]=SHA(reuse/'result.json')
+  for p,h in previous['payload_sha256'].items():pins[str(reuse/p)]=h
+  for p in OWN:
+   if p.suffix in ('.cpp','.hpp'):need((reuse/p.name).read_bytes()==p.read_bytes(),'024 reused compiled source changed')
+  need((reuse/'nrd_context.cpp').read_bytes()==private and (reuse/'nrd_producer.comp.glsl').read_bytes()==(work/'nrd_producer.comp.glsl').read_bytes(),'024 reused generated source changed')
+  for name in ('host.o','context.o','contract.o','nrd-vulkan','nrd-vulkan-contract','nrd_producer.spv'):shutil.copyfile(reuse/name,work/name)
+  # Executable mode is part of practical reuse, not just file contents.
+  for name in ('nrd-vulkan','nrd-vulkan-contract'):shutil.copymode(reuse/name,work/name)
+  r['preserved_failed_build']=str(reuse/'result.json');r['successful_build_steps_reused']=7
  env={**os.environ,'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','LD_LIBRARY_PATH':str(B.S.DXC.parent.parent/'lib')+':'+os.environ.get('NIX_LD_LIBRARY_PATH',os.environ.get('LD_LIBRARY_PATH',''))}
  def limits():resource.setrlimit(resource.RLIMIT_CPU,(120,120));resource.setrlimit(resource.RLIMIT_AS,(4*1024**3,4*1024**3))
  for label,cmd in rows:
+  if previous is not None and label in {x['label'] for x in previous['rows'] if x['pass_']}:
+   old=next(x for x in previous['rows'] if x['label']==label);r['rows'].append(dict(old,reused_from_receipt=str(reuse/'result.json'),executed_again=False));print(label,'REUSED',flush=True);continue
   row=dict(label=label,command=cmd,cwd=str(B.D.BUILD),pass_=False)
   try:
    p=subprocess.run(cmd,cwd=B.D.BUILD,env=env,capture_output=True,timeout=180,preexec_fn=limits);row.update(returncode=p.returncode,pass_=p.returncode==0)
@@ -95,4 +109,4 @@ def run(work):
  with (work/'result.json').open('x') as f:json.dump(r,f,indent=2);f.write('\n')
  return r
 if __name__=='__main__':
- ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',type=Path,required=True);a=ap.parse_args();r=run(a.work);print(json.dumps(dict(all_pass=r['all_pass'],gpu_executed=False)));sys.exit(0 if r['all_pass'] else 2)
+ ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',type=Path,required=True);ap.add_argument('--reuse-build',type=Path);a=ap.parse_args();r=run(a.work,a.reuse_build.resolve() if a.reuse_build else None);print(json.dumps(dict(all_pass=r['all_pass'],gpu_executed=False)));sys.exit(0 if r['all_pass'] else 2)
