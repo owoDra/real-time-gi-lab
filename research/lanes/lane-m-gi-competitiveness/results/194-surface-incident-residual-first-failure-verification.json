@@ -1,0 +1,50 @@
+{
+  "schema": "m001-residual029-first-failure-verification/1",
+  "complete": true,
+  "all_pass": true,
+  "lane_m_complete": false,
+  "preservation_base": "8d8b12fc",
+  "unchanged_counts": {
+    "prior_protocols": 28,
+    "prior_results": 196,
+    "code": 1247
+  },
+  "all_lane_m_index_paths_checked": 263,
+  "current_markdown_links_checked": 213,
+  "raw_receipts_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-residual029-cpu-contracts-v1/result.json": "b05d0d561699c3fdfcb54dab955eb51665d7734f1b6076a5bbe7d9c0bb1661d6",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-residual029-h01-b2-v1/result.json": "094c37afa46fdbf87e4703ca1320f0873aba253c986dc55a60f49fb1dedf823c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-residual029-first-failure-diagnostic-v1/result.json": "0a93370da0321c98b9775f0417cff56ff775aeea724d389318f09a2b58cf5465"
+  },
+  "source_and_document_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/surface_residual_cv.py": "dc8284307b2707d8d68f5c55cfe97ab0bb03311a9820954942e9ac9e872f6007",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/surface_residual_replay.py": "140974cbdc0511dd643f2dc78de8b0e4ac8ebf65f1fcb05e260949f53c1793f1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/surface_residual_audit.py": "bcf8c7f3e798401d3b1831446418c822140cb6f8f67380e23d7ab6aaf2bedcc9",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_surface_residual_cv.py": "0d5073b2987ea2daddb304d381f89b4a4678ad1a7ba4c09c8391fe0671499822",
+    "/var/owo/workspaces/projects/gi-lab/research/status.md": "672605f2e7752ce0235b922e2c3156a429073326a2e1d5879d930e3bbf926fc5",
+    "/var/owo/workspaces/projects/gi-lab/research/roadmap.md": "e765a9da1a5c5b9cd07ff2a0818c4e1b0d5aa1e5b8fe71b09359e25cf206c76e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/README.md": "9b0549962dadc8a6d2be9101ffad35d3ef55144245bfd9f14d9e1a5c153543f8",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/029-surface-incident-residual-cpu-replay.md": "5d1055be394919fe43e9de454e5f3ff293213630a0bb1f92be18f9bf247be293",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/193-surface-incident-residual-first-failure-outcome.md": "08d71a39e157aa22cb4506c8692a60e1ac8dc5af6f1d5bb727a83134bf6ca1ad",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/191-surface-incident-residual-cpu-contracts.json": "86d7b331d0782c2bdf2d93a159a026705abcb5df248dd93ec7d36827a8cf9f90",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/192-surface-incident-residual-first-scoring-failure.json": "8c6b9c7f3c21af2861223835dfe61f8d425737c18e735c2d894acaf0d0d6956e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/index.json": "074b992d752fc9ca486e012990cca2e58ec28b39421a839f375d9301b5ba8f10",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/score_hdr.py": "86759d0dd1a0ba8c810cb98206274d1a92e78d03be491b4d33c3bcef3f8b6592"
+  },
+  "auxiliary_evidence_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/m001-residual029-failure-publication-v1.py": "92f152c8ed16f267df1863e67eabbd6c271ce6ce522ec3bddc68a6f49ca7cf07"
+  },
+  "new_cpu_contracts": 15,
+  "invalid_cpu_replay_attempts": 1,
+  "valid029_quality_decisions": 0,
+  "old_successful_tests_or_fit_or_evaluation_or_metric_or_reference_or_gpu_repeated": false,
+  "native_input_manifest_missing_explicit": true,
+  "all_partial_bytes_preserved": true,
+  "new_gpu_acquisitions": 0,
+  "total_assistant_gpu_acquisitions": 184,
+  "default_build_graph_unchanged": true,
+  "default_build_or_renderer_runtime_rerun": false,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n[research:check] $ python scripts/research/verify.py\n",
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-residual029-failure-publication-verification-v1.json",
+  "raw_receipt_sha256": "609c785d587727237ea5ffe7d8d01e9ce4e0efb365efbb55be5af956e6b2454c"
+}
