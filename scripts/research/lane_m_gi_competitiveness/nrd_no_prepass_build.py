@@ -22,11 +22,23 @@ def committed():
 
 def run(work):
     head=committed();work=work.resolve();need(work.is_relative_to(BASE) and not work.exists(),'028 exclusive build')
-    pins={str(p):SHA(p) for p in OWN};parents={}
+    pins={str(p):SHA(p) for p in OWN};parents={};historical=[]
     for folder in (PARENT,Q.SKY,SDK):
         r=read(folder/'result.json');need(r['all_pass'],'028 qualified parent build')
         pins[str(folder/'result.json')]=SHA(folder/'result.json')
-        for key in ('input_sha256','compiled_dependency_sha256'):rehash(r.get(key,{}));pins.update(r.get(key,{}))
+        # Old test sources can legitimately have later committed revisions.
+        # Retain their original identity in Git; actual compiled dependencies
+        # and payloads must still match byte-for-byte on disk below.
+        for name,h in r.get('input_sha256',{}).items():
+            p=Path(name)
+            if p.is_file() and SHA(p)==h:pins[name]=h
+            else:
+                need(p.is_relative_to(ROOT),'028 changed external parent input')
+                import hashlib
+                data=subprocess.check_output(['git','show',r['source_commit']+':'+str(p.relative_to(ROOT))],cwd=ROOT)
+                need(hashlib.sha256(data).hexdigest()==h,'028 unavailable historical Git input')
+                historical.append(dict(path=name,sha256=h,source_commit=r['source_commit'],verified_from_git=True))
+        rehash(r.get('compiled_dependency_sha256',{}));pins.update(r.get('compiled_dependency_sha256',{}))
         pins.update({str(folder/name):h for name,h in r['payload_sha256'].items()});parents[folder]=r
     rehash(pins);work.mkdir()
     host=Q.S.V.SRC/'nrd_vulkan_runtime.cpp';header=Q.S.V.SRC/'nrd_vulkan_contract.hpp';probe=Q.S.V.SRC/'nrd_api_probe.cpp'
@@ -46,7 +58,7 @@ def run(work):
     commands.append(('host-link',link))
     api=list(next(x['command'] for x in parents[SDK]['rows'] if x['label']=='api-link'))
     api[api.index(str(SDK/'api.o'))]=str(work/'api.o');api[api.index(str(SDK/'artifacts/libNRD.a'))]=str(library);api[api.index('-o')+1]=str(work/'nrd-api-probe');commands.append(('api-link',api))
-    r=dict(schema='m001-nrd028-private-host-api-build/1',source_commit=head,complete=False,all_pass=False,gpu_executed=False,input_sha256=pins,compiled_dependency_sha256={},rows=[],executable=str(work/'nrd-vulkan'),api_executable=str(work/'nrd-api-probe'),sdk_library=str(library),shader_directory=parents[PARENT]['shader_directory'],sdk_shaders_other_objects_rebuilt=False,only_setting_changed={'diffusePrepassBlurRadius':[30,0]})
+    r=dict(schema='m001-nrd028-private-host-api-build/1',source_commit=head,complete=False,all_pass=False,gpu_executed=False,input_sha256=pins,historical_git_input_sha256=historical,compiled_dependency_sha256={},rows=[],executable=str(work/'nrd-vulkan'),api_executable=str(work/'nrd-api-probe'),sdk_library=str(library),shader_directory=parents[PARENT]['shader_directory'],sdk_shaders_other_objects_rebuilt=False,only_setting_changed={'diffusePrepassBlurRadius':[30,0]})
     try:
         for label,cmd in commands:
             row=Q.S.execute(label,cmd,work);r['rows'].append(row);need(row['pass_'],'028 build failure: '+label)
