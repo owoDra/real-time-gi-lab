@@ -449,7 +449,10 @@
       "nrd_cold_warm_hdr_gpu_acquisitions": 24,
       "nrd_cold_warm_hdr_gpu_frames": 1536,
       "nrd_cold_warm_hdr_joint_pass_targets": 0,
-      "nrd_cold_warm_hdr_further_gpu_selected": false
+      "nrd_cold_warm_hdr_further_gpu_selected": false,
+      "nrd_saved_input_semantic_audit_protocol": "experiments/027-nrd-saved-input-semantic-audit.md",
+      "nrd_saved_input_semantic_audit_status": "PREREGISTERED_CPU_ONLY_NOT_RUN",
+      "nrd_saved_input_semantic_audit_gpu_selected": false
     }
   ]
 }
