@@ -420,19 +420,22 @@
       "nrd_sky_intervention_study_complete": true,
       "nrd_sky_intervention_further_gpu_selected": false,
       "nrd_cold_warm_hdr_protocol": "experiments/026-nrd-cold-and-64-frame-static-hdr-quality.md",
-      "nrd_cold_warm_hdr_status": "H01_B8_LADDER_EXHAUSTED_QUALITY_FAIL_FOUR_TARGETS_PENDING",
+      "nrd_cold_warm_hdr_status": "H02_B2_LADDER_EXHAUSTED_QUALITY_FAIL_THREE_TARGETS_PENDING",
       "nrd_cold_warm_hdr_cpu_preparation": "results/146-nrd-cold-warm-hdr-cpu-preparation.json",
       "nrd_cold_warm_hdr_process": "scripts/research/lane_m_gi_competitiveness/nrd_quality_process.py",
       "nrd_cold_warm_hdr_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_quality_audit.py",
       "nrd_cold_warm_hdr_first_target_outcome": "results/147-nrd-cold-warm-h01-b2-hdr-outcome.json",
       "nrd_cold_warm_hdr_first_checkpoint": "results/148-nrd-cold-warm-first-target-checkpoint.md",
       "nrd_cold_warm_hdr_first_checkpoint_verification": "results/149-nrd-cold-warm-first-target-verification.json",
-      "nrd_cold_warm_hdr_targets_terminal": 2,
-      "nrd_cold_warm_hdr_targets_pending": 4,
+      "nrd_cold_warm_hdr_targets_terminal": 3,
+      "nrd_cold_warm_hdr_targets_pending": 3,
       "nrd_cold_warm_hdr_study_complete": false,
       "nrd_cold_warm_hdr_second_target_outcome": "results/150-nrd-cold-warm-h01-b8-hdr-outcome.json",
       "nrd_cold_warm_hdr_second_checkpoint": "results/151-nrd-cold-warm-second-target-checkpoint.md",
-      "nrd_cold_warm_hdr_second_checkpoint_verification": "results/152-nrd-cold-warm-second-target-verification.json"
+      "nrd_cold_warm_hdr_second_checkpoint_verification": "results/152-nrd-cold-warm-second-target-verification.json",
+      "nrd_cold_warm_hdr_third_target_outcome": "results/153-nrd-cold-warm-h02-b2-hdr-outcome.json",
+      "nrd_cold_warm_hdr_third_checkpoint": "results/154-nrd-cold-warm-third-target-checkpoint.md",
+      "nrd_cold_warm_hdr_third_checkpoint_verification": "results/155-nrd-cold-warm-third-target-verification.json"
     }
   ]
 }
