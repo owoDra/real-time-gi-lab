@@ -1,0 +1,84 @@
+{
+  "schema": "m001-nrd026-cpu-quality-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_executed": false,
+  "classification": "CPU_READY_GPU_NOT_RUN",
+  "preregistration_commit": "5753113e",
+  "pre_execution_stored_history_semantics_clarification": "88bb0b19",
+  "source_commit": "acb968a1",
+  "new_host_compile_and_link_steps": 2,
+  "old_sdk_shaders_other_objects_rebuilt": false,
+  "actual_python_contracts": 52,
+  "actual_native_cpu_commands": 32,
+  "actual_valid_native_cpu_commands": 24,
+  "expected_native_input_rejections": 8,
+  "admitted_reference_slots_verified": 6,
+  "per_frame_spp_ladder": [
+    1,
+    4,
+    16,
+    64
+  ],
+  "frames": 64,
+  "frame_schedule": "frame0CLEAR, frames1..63CONTINUE",
+  "seed_schedule": "(0x12345678+0x9e3779b9*i) mod 2^32",
+  "stored_history_limit_including_current": 31,
+  "configured_max_accumulated_frames": 30,
+  "full_secondary_intersection_frames": [
+    0,
+    1,
+    63
+  ],
+  "all64_sample_witness_guide_primary_checks_required": true,
+  "all64_hdr_scores_required": true,
+  "cold_frame": 0,
+  "warm_frames": [
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63
+  ],
+  "joint_pass_requires_cold_and_all_warm_frames": true,
+  "old024_025_contracts_reused_not_rerun": true,
+  "records": [
+    {
+      "kind": "build",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd026-cpu-build-v1/result.json",
+      "raw_receipt_sha256": "dd2f9142d665ea6b7aa55ea8a793260124d685ba660486a4cc5dff43f5c8984a",
+      "payloads_rehashed": 10
+    },
+    {
+      "kind": "cpu-contracts",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd026-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "26ad1ed7a24a75d2b6450b7baeaf3df7b8a8e8f2b1908c4810b2d9945693c19c",
+      "payloads_rehashed": 160
+    }
+  ],
+  "source_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/026-nrd-cold-and-64-frame-static-hdr-quality.md": "805de69a2df9d4c2f729293c2916af374cb6a9eb6ad0d3f7d4c1779d82c58a44",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_quality_build.py": "889980a4974c54aa1404fb1bf548614220e07234e6942e75d5d3a291e3314dbd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_quality_overlay.py": "83041f0a93b335716db752ca566b147964ccc5c477662fd4fcfae434b0491f4f",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_quality_process.py": "4af3f883edcabf2490383d665eefe85444293fa942b83e98169968f6f8d8a4db",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_quality_audit.py": "36daff8cd87481bbe9a5734cfea030fea740cf05dd5e09ca2eebd22a78a17030",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_nrd_quality.py": "4848df3a90caf866f9786fed2d7f41e991ac7fc7669d3fc23d563e77726c6a78"
+  },
+  "executable": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd026-cpu-build-v1/nrd-vulkan",
+  "executable_sha256": "0356a50380431fc19356f5957593526c6bd5023699159fffc6ff86963bea79c2",
+  "shader_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-build-v2",
+  "accepted_timing": false,
+  "quality_admitted": false,
+  "lane_m_complete": false
+}

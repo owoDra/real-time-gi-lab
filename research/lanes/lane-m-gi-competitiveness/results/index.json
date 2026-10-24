@@ -418,7 +418,12 @@
       "nrd_sky_intervention_controls_pass": 3,
       "nrd_sky_intervention_gpu_acquisitions": 3,
       "nrd_sky_intervention_study_complete": true,
-      "nrd_sky_intervention_further_gpu_selected": false
+      "nrd_sky_intervention_further_gpu_selected": false,
+      "nrd_cold_warm_hdr_protocol": "experiments/026-nrd-cold-and-64-frame-static-hdr-quality.md",
+      "nrd_cold_warm_hdr_status": "CPU_READY_GPU_NOT_RUN",
+      "nrd_cold_warm_hdr_cpu_preparation": "results/146-nrd-cold-warm-hdr-cpu-preparation.json",
+      "nrd_cold_warm_hdr_process": "scripts/research/lane_m_gi_competitiveness/nrd_quality_process.py",
+      "nrd_cold_warm_hdr_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_quality_audit.py"
     }
   ]
 }
