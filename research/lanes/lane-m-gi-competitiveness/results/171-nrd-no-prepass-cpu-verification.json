@@ -1,0 +1,47 @@
+{
+  "schema": "m001-nrd028-cpu-preparation-verification/1",
+  "all_pass": true,
+  "complete": true,
+  "gpu_executed": false,
+  "lane_m_complete": false,
+  "preservation_base": "892708b3667a0415ebcee5111a0bb987baf89bf9",
+  "unchanged_counts": {
+    "prior_protocols": 28,
+    "prior_results": 172,
+    "code": 1242
+  },
+  "preregistration_before_implementation_and_execution_verified": true,
+  "raw_receipts_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-build-v1-startup-failure.json": "505b6f6511b6690093d7e38bf47f6e20fe5a6726683062182c288bfb8168bed9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-build-v2/result.json": "2d6e906390b8cd98c77f1d424947817511dc9d7016840160d7fa61384d45d06d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-build-v3/result.json": "257548f2c4cc269f1ef9e64e2b0164371982d28e66033e230da27f50e90bbfe2",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-contracts-v1/result.json": "28839830540c425a79a2cb1cd5f525889930b754e403c04b4a26adcee0cd941c",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-contracts-v2/result.json": "70fd836dbc072570cd73f2a38836e9e734760140750d4208f6ed84cd685f0f9b"
+  },
+  "all_lane_m_index_paths_checked": 239,
+  "current_markdown_links_checked": 195,
+  "source_and_document_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md": "4db85a2343f2b9665562dd67da293f484a12857445ed5a756d517d37dc6cab83",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_build.py": "f9f5d05d7f34f268bd27c26567e9f7b37c7291de3bf8ee2e2d3ad9fe9b8a3467",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_overlay.py": "244dd10944ca017ac99526bddab8bb26e98c5498bb415847e23b966239ab1263",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_process.py": "5843d89ec1729238fa6e31661cc0cc155fd6aad5f350db569b4ef594947e5cd1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_audit.py": "a32b69b50ed83688c671af039d8ef9e5cf0f1e24788f5215dfecd49ba8030b5b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_nrd_no_prepass.py": "709011ec384bb2eb1fc40ba5a200ba1ea9539f0d24f2f2fcdf7423c6c9f631dd",
+    "/var/owo/workspaces/projects/gi-lab/research/status.md": "284b8e6fe37750c250177bd5006266acaf047f9813d8c60013eb5e0a0ed1e74a",
+    "/var/owo/workspaces/projects/gi-lab/research/roadmap.md": "da3331edc8b90a97f017c10309e783c85988c00802518ecfb67e0ab7b09e6872",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/README.md": "9caf3572edd9e0fed80c3e25c29080ee43431ad046a0218cadfbdd86507d15e7",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/170-nrd-no-prepass-cpu-preparation.json": "125cccdfafbdaecd90cd48a0cf54a194830e74bfcb904e4ad0a89eb328350eac",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/index.json": "3fc0fdae862110b9528903d5020458a6ac377bf89495a9784e3c7f4d7b93b039"
+  },
+  "default_build_graph_unchanged": true,
+  "default_build_or_renderer_runtime_rerun": false,
+  "original026_gpu_metrics_or_geometric_cohorts_rerun": false,
+  "new_sdk_frames": 195,
+  "new_gpu_acquisitions": 0,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n[research:check] $ python scripts/research/verify.py\n",
+  "auxiliary_evidence_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/m001-nrd028-cpu-publication-v1.py": "7e425ba92f37e8e24484231ec7b8d866dab21a214b0f35ca45c4941304c6307b"
+  },
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-nrd028-cpu-publication-verification-v1.json",
+  "raw_receipt_sha256": "173b0202f6b89eea8e4eaba1a1c1203fd2fb4b99dbbac7b10a467edab1a388ac"
+}

@@ -460,8 +460,13 @@
       "nrd_saved_input_semantic_audit_complete": true,
       "nrd_saved_input_semantic_audit_new_gpu_acquisitions": 0,
       "nrd_no_prepass_protocol": "experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md",
-      "nrd_no_prepass_status": "PREREGISTERED_IMPLEMENTATION_CPU_READINESS_NOT_RUN",
-      "nrd_no_prepass_gpu_selected": false
+      "nrd_no_prepass_status": "CPU_READY_NO_GPU_EXECUTED",
+      "nrd_no_prepass_gpu_selected": false,
+      "nrd_no_prepass_cpu_preparation": "results/170-nrd-no-prepass-cpu-preparation.json",
+      "nrd_no_prepass_cpu_verification": "results/171-nrd-no-prepass-cpu-verification.json",
+      "nrd_no_prepass_process": "scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_process.py",
+      "nrd_no_prepass_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_audit.py",
+      "nrd_no_prepass_gpu_acquisitions": 0
     }
   ]
 }

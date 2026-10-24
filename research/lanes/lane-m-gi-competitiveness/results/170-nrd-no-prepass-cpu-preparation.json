@@ -1,0 +1,140 @@
+{
+  "schema": "m001-nrd028-cpu-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "classification": "ONE_SETTING_CPU_READY_NO_GPU_EXECUTED",
+  "protocol": "experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md",
+  "implementation_commit": "f871c8c733103eb3f28f3cea1e55f06b349932b9",
+  "records": [
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-build-v1-startup-failure.json",
+      "raw_receipt_sha256": "505b6f6511b6690093d7e38bf47f6e20fe5a6726683062182c288bfb8168bed9",
+      "source_commit": "a9efec9d8e06e88989dae19d69265ba360aa2b14",
+      "all_pass": false,
+      "error": "ValueError: 024 changed evidence: /var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_nrd_cpu.py",
+      "inputs_checked": 0,
+      "payloads_checked": 0
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-build-v2/result.json",
+      "raw_receipt_sha256": "2d6e906390b8cd98c77f1d424947817511dc9d7016840160d7fa61384d45d06d",
+      "source_commit": "58dc798262dcf8d8d03afe09574ba76e4f8fdd76",
+      "all_pass": true,
+      "error": null,
+      "inputs_checked": 1559,
+      "payloads_checked": 18
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-build-v3/result.json",
+      "raw_receipt_sha256": "257548f2c4cc269f1ef9e64e2b0164371982d28e66033e230da27f50e90bbfe2",
+      "source_commit": "f871c8c733103eb3f28f3cea1e55f06b349932b9",
+      "all_pass": true,
+      "error": null,
+      "inputs_checked": 1578,
+      "payloads_checked": 0
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "28839830540c425a79a2cb1cd5f525889930b754e403c04b4a26adcee0cd941c",
+      "source_commit": "58dc798262dcf8d8d03afe09574ba76e4f8fdd76",
+      "all_pass": false,
+      "error": "AssertionError: 028 expected rejection",
+      "inputs_checked": 12,
+      "payloads_checked": 160
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-cpu-contracts-v2/result.json",
+      "raw_receipt_sha256": "70fd836dbc072570cd73f2a38836e9e734760140750d4208f6ed84cd685f0f9b",
+      "source_commit": "f871c8c733103eb3f28f3cea1e55f06b349932b9",
+      "all_pass": true,
+      "error": null,
+      "inputs_checked": 2755,
+      "payloads_checked": 2088
+    }
+  ],
+  "only_setting_changed": {
+    "diffusePrepassBlurRadius": [
+      30,
+      0
+    ]
+  },
+  "python_contract_checks": 90,
+  "new_contract_checks_after_repair": 34,
+  "reused_successful_contract_checks": 56,
+  "actual_native_cpu_cases": 32,
+  "valid_native_cpu_cases": 24,
+  "rejected_native_cpu_cases": 8,
+  "successful_native_cases_repeated": 0,
+  "compiled_objects": 2,
+  "linked_executables": 2,
+  "successful_compiles_or_links_repeated": 0,
+  "actual_sdk_processes": 3,
+  "actual_sdk_api_frames": 195,
+  "probes": [
+    {
+      "cell": "H01",
+      "api_frames": 65,
+      "RELAX_changed_records": 650,
+      "Clear_unchanged_records": 22,
+      "changed_bytes": 2600,
+      "all15_pipeline_bytes_unchanged": true,
+      "reset_to_cold_constants_exact": true,
+      "all_other_bytes_resources_dispatches_settings_equal": true
+    },
+    {
+      "cell": "H02",
+      "api_frames": 65,
+      "RELAX_changed_records": 650,
+      "Clear_unchanged_records": 22,
+      "changed_bytes": 2600,
+      "all15_pipeline_bytes_unchanged": true,
+      "reset_to_cold_constants_exact": true,
+      "all_other_bytes_resources_dispatches_settings_equal": true
+    },
+    {
+      "cell": "H03",
+      "api_frames": 65,
+      "RELAX_changed_records": 650,
+      "Clear_unchanged_records": 22,
+      "changed_bytes": 2600,
+      "all15_pipeline_bytes_unchanged": true,
+      "reset_to_cold_constants_exact": true,
+      "all_other_bytes_resources_dispatches_settings_equal": true
+    }
+  ],
+  "failed_preparation_attempts_retained": 2,
+  "failures": [
+    {
+      "kind": "parent historical-source preflight",
+      "compiler_executed": false,
+      "gpu_executed": false,
+      "resolution": "Original023 test bytes verified at322c9890; current compiled dependencies/artifacts require exact disk hashes."
+    },
+    {
+      "kind": "overlay idempotence contract",
+      "completed_native_cases": 32,
+      "completed_python_checks": 56,
+      "sdk_executed": false,
+      "gpu_executed": false,
+      "resolution": "Reject already applied overlays. New committed source produces exact same private C++; successful builds/32CPU cases reused after hashes, no repetition."
+    }
+  ],
+  "sdk_or_shader_rebuilds": 0,
+  "all15_spirv_unchanged": true,
+  "all_other_resource_dispatch_setting_constant_bytes_equal": true,
+  "reset_to_cold_constants_exact": true,
+  "original026_metrics_or_physical_suites_rerun": false,
+  "gpu_executed": false,
+  "gpu_acquisitions": 0,
+  "first_target": {
+    "cell": "H01",
+    "depth": 2,
+    "spp": 1,
+    "frames": 64,
+    "status": "ELIGIBLE_NOT_RUN"
+  },
+  "accepted_timing": false,
+  "quality_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false
+}
