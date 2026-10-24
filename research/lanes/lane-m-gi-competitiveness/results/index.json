@@ -277,7 +277,11 @@
       "all_bounce_guide_condition_failures": 6,
       "all_bounce_guide_render_samples": 786432,
       "all_bounce_guide_further_process_selected": false,
-      "all_bounce_guide_cpu_verification": "results/102-all-bounce-guide-cpu-feasibility-verification.json"
+      "all_bounce_guide_cpu_verification": "results/102-all-bounce-guide-cpu-feasibility-verification.json",
+      "normal_product_guide_cpu_protocol": "experiments/016-normal-product-guide-cpu-feasibility.md",
+      "normal_product_guide_cpu_preparation": "results/103-normal-product-guide-cpu-preparation.json",
+      "normal_product_guide_status": "CPU_PREPARED_PILOT_NOT_RUN",
+      "normal_product_guide_gpu_cases": 0
     }
   ]
 }
