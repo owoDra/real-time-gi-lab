@@ -460,18 +460,18 @@
       "nrd_saved_input_semantic_audit_complete": true,
       "nrd_saved_input_semantic_audit_new_gpu_acquisitions": 0,
       "nrd_no_prepass_protocol": "experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md",
-      "nrd_no_prepass_status": "H03_B2_LADDER_EXHAUSTED_QUALITY_FAIL_ONE_TARGET_PENDING",
+      "nrd_no_prepass_status": "SIX_TARGETS_COMPLETE_0_JOINT_PASS_6_EXHAUSTED_NO_ACCEPTED_TIMING",
       "nrd_no_prepass_gpu_selected": false,
       "nrd_no_prepass_cpu_preparation": "results/170-nrd-no-prepass-cpu-preparation.json",
       "nrd_no_prepass_cpu_verification": "results/171-nrd-no-prepass-cpu-verification.json",
       "nrd_no_prepass_process": "scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_process.py",
       "nrd_no_prepass_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_audit.py",
-      "nrd_no_prepass_gpu_acquisitions": 20,
+      "nrd_no_prepass_gpu_acquisitions": 24,
       "nrd_no_prepass_first_target_outcome": "results/172-nrd-no-prepass-h01-b2-hdr-outcome.json",
       "nrd_no_prepass_first_target_checkpoint": "results/173-nrd-no-prepass-first-target-checkpoint.md",
       "nrd_no_prepass_first_target_verification": "results/174-nrd-no-prepass-h01-b2-verification.json",
-      "nrd_no_prepass_targets_terminal": 5,
-      "nrd_no_prepass_targets_pending": 1,
+      "nrd_no_prepass_targets_terminal": 6,
+      "nrd_no_prepass_targets_pending": 0,
       "nrd_no_prepass_second_target_outcome": "results/175-nrd-no-prepass-h01-b8-hdr-outcome.json",
       "nrd_no_prepass_second_target_checkpoint": "results/176-nrd-no-prepass-second-target-checkpoint.md",
       "nrd_no_prepass_second_target_verification": "results/177-nrd-no-prepass-h01-b8-verification.json",
@@ -483,7 +483,14 @@
       "nrd_no_prepass_fourth_target_verification": "results/183-nrd-no-prepass-h02-b8-verification.json",
       "nrd_no_prepass_fifth_target_outcome": "results/184-nrd-no-prepass-h03-b2-hdr-outcome.json",
       "nrd_no_prepass_fifth_target_checkpoint": "results/185-nrd-no-prepass-fifth-target-checkpoint.md",
-      "nrd_no_prepass_fifth_target_verification": "results/186-nrd-no-prepass-h03-b2-verification.json"
+      "nrd_no_prepass_fifth_target_verification": "results/186-nrd-no-prepass-h03-b2-verification.json",
+      "nrd_no_prepass_final_target_outcome": "results/187-nrd-no-prepass-h03-b8-hdr-outcome.json",
+      "nrd_no_prepass_six_target_summary": "results/188-nrd-no-prepass-six-targets-summary.json",
+      "nrd_no_prepass_six_target_outcome": "results/189-nrd-no-prepass-six-targets-outcome.md",
+      "nrd_no_prepass_six_target_verification": "results/190-nrd-no-prepass-six-targets-verification.json",
+      "nrd_no_prepass_joint_passes": 0,
+      "nrd_no_prepass_exhausted_quality_losses": 6,
+      "nrd_no_prepass_study_complete": true
     }
   ]
 }
