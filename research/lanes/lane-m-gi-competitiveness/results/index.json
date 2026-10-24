@@ -343,7 +343,10 @@
       "surface_quadratic_device_cpu_rehearsal_contract_tests": 18,
       "surface_quadratic_device_failure_replay": "results/118-surface-quadratic-first-cpu-failure-raw-audit.json",
       "surface_quadratic_device_failure_outcome": "results/119-surface-quadratic-first-cpu-failure-outcome.md",
-      "surface_quadratic_device_failure_verification": "results/120-surface-quadratic-first-cpu-failure-verification.json"
+      "surface_quadratic_device_failure_verification": "results/120-surface-quadratic-first-cpu-failure-verification.json",
+      "surface_quadratic_material_abi_repair_protocol": "experiments/020-surface-quadratic-material-abi-repair.md",
+      "surface_quadratic_material_abi_repair_status": "PREREGISTERED_CODE_BUILD_CPU_NOT_RUN",
+      "surface_quadratic_material_abi_repair_gpu_authorized": false
     }
   ]
 }
