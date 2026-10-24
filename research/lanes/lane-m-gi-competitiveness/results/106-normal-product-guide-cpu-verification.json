@@ -1,0 +1,97 @@
+{
+  "schema": "m001-normal-product-guide-cpu-verification/1",
+  "source_commit": "29e7ddc6850897b5893b647b53a724f64b2ed874",
+  "all_checks_pass": true,
+  "checks": [
+    {
+      "command": [
+        "mise",
+        "run",
+        "research:check"
+      ],
+      "scope": "8historical indexes/548links only, not runtime",
+      "returncode": 0,
+      "stdout": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+      "stderr": "[research:check] $ python scripts/research/verify.py\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "d5d33d9e",
+        "--exit-code",
+        "--",
+        "src",
+        ":!src/research/lane_m_gi_competitiveness",
+        "shaders",
+        ":!shaders/research/lane_m_gi_competitiveness",
+        ":(glob)**/CMakeLists.txt",
+        "research/lanes/n010-comparison-readiness"
+      ],
+      "scope": "historical source/shaders/N010/all CMake unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "scope": "whitespace",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "scope": "all1172pre-existing code files unchanged; four new standalone source files only",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "command_description": "git diff c8b77521 --exit-code on exact git ls-tree tracked path inventory"
+    },
+    {
+      "scope": "all102immutable prior result records unchanged",
+      "returncode": 0,
+      "stdout": "",
+      "stderr": "",
+      "command_description": "git diff c8b77521 --exit-code on exact git ls-tree tracked path inventory"
+    }
+  ],
+  "exact_built_sources_verified_in_commit": "29e7ddc6850897b5893b647b53a724f64b2ed874",
+  "build_dependencies_rehashed": 344,
+  "actual_new_kernel_checks": 26,
+  "prior_kernel_checks_reused_not_rerun": 25,
+  "CPU_pilot_processes": 3,
+  "all_native_processes_returned_zero_without_timeout": true,
+  "all_samples_and_arrays_replayed": true,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-product-cpu-final-replay-v1/result.json",
+  "raw_receipt_sha256": "7bf75552aa8a3aefcb28d282af90172d599d31ff6503f86b432b5f46b85f7e04",
+  "gpu_executed": false,
+  "new_reference_sampling": false,
+  "new_training_paths": 0,
+  "new_candidate_render_samples": 393216,
+  "reused_cosine_render_samples": 393216,
+  "old_test_suites_rerun": false,
+  "default_build_graph_changed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "condition_passes": 0,
+  "condition_failures": 6,
+  "additional_016_process_selected": false,
+  "new_records_sha256": {
+    "103-normal-product-guide-cpu-preparation.json": "2061f18026f9c84b51579de8bd77b3a211d0b1a1045b6af0e4f2941c81f1fb30",
+    "105-normal-product-guide-cpu-outcome.md": "b8516878aefea2a6e3bee2c945cfb8276cd15692f0217fc39937f47f8ce1d98f",
+    "104-normal-product-guide-six-conditions-raw-replay.json": "c12b2ff9f32f4ecae1b1269cf7a85f492c452e9ed2a55a50bb9dd7e592463276"
+  },
+  "all_lane_m_index_paths_checked": 145,
+  "current_markdown_links_checked": 102,
+  "current_summary_unique_and_terminal": true,
+  "final_index_link_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-product-cpu-final-index-verification.json",
+  "final_index_link_receipt_sha256": "dbc49d788dddcf3e1a868f14d69585b6b23df25581353d3f822297bbf0c138a2"
+}
