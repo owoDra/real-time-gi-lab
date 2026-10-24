@@ -20,8 +20,30 @@ def committed():
     subprocess.run(['git','merge-base','--is-ancestor','892708b3',head],cwd=ROOT,check=True)
     return head
 
-def run(work):
+def reuse_build(work,previous,head):
+    import hashlib
+    path=previous/'result.json';old=read(path)
+    need(old['complete'] and old['all_pass'] and not old['gpu_executed'] and len(old['rows'])==4 and all(x['pass_'] for x in old['rows']),'028 reuse four completed build steps only')
+    pins={str(path):SHA(path),**{str(previous/n):h for n,h in old['payload_sha256'].items()}}
+    historical=list(old.get('historical_git_input_sha256',[]))
+    for name,h in old['input_sha256'].items():
+        p=Path(name)
+        if p in OWN:
+            data=subprocess.check_output(['git','show',old['source_commit']+':'+str(p.relative_to(ROOT))],cwd=ROOT)
+            need(hashlib.sha256(data).hexdigest()==h,'028 old build source provenance')
+            historical.append(dict(path=name,sha256=h,source_commit=old['source_commit'],verified_from_git=True))
+        else:pins[name]=h
+    pins.update({str(p):SHA(p) for p in OWN});rehash(pins);rehash(old['compiled_dependency_sha256'])
+    for name,fn in (('nrd_vulkan_runtime.cpp',O.host),('nrd_vulkan_contract.hpp',O.header),('nrd_api_probe.cpp',O.probe)):
+        need((previous/name).read_bytes()==fn((Q.S.V.SRC/name).read_bytes()),'028 completed build private source no longer exact')
+    work.mkdir();r=dict(old,source_commit=head,input_sha256=pins,historical_git_input_sha256=historical,
+        reused_build_receipt=str(path),reused_build_receipt_sha256=SHA(path),build_steps_executed_again=0,
+        rows=[dict(x,executed_again=False,reused_from_receipt=str(path)) for x in old['rows']],payload_sha256={})
+    write(work/'result.json',r);return r
+
+def run(work,reuse=None):
     head=committed();work=work.resolve();need(work.is_relative_to(BASE) and not work.exists(),'028 exclusive build')
+    if reuse is not None:return reuse_build(work,reuse.resolve(),head)
     pins={str(p):SHA(p) for p in OWN};parents={};historical=[]
     for folder in (PARENT,Q.SKY,SDK):
         r=read(folder/'result.json');need(r['all_pass'],'028 qualified parent build')
@@ -72,4 +94,4 @@ def run(work):
     r.update(complete=True,payload_sha256=inventory(work));write(work/'result.json',r);return r
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',required=True,type=Path);a=ap.parse_args();r=run(a.work);print({k:r.get(k) for k in ('all_pass','error')});sys.exit(0 if r['all_pass'] else 2)
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',required=True,type=Path);ap.add_argument('--reuse-build',type=Path);a=ap.parse_args();r=run(a.work,a.reuse_build);print({k:r.get(k) for k in ('all_pass','error')});sys.exit(0 if r['all_pass'] else 2)

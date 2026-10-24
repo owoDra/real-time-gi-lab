@@ -14,8 +14,8 @@ import guided_transport_cpu as G
 
 TARGETS=[(c,d) for c in ('H01','H02','H03') for d in (2,8)]
 LADDER=(1,4,16,64)
-BUILD=B.BASE/'m001-nrd028-cpu-build-v2/result.json'
-CPU=B.BASE/'m001-nrd028-cpu-contracts-v1/result.json'
+BUILD=B.BASE/'m001-nrd028-cpu-build-v3/result.json'
+CPU=B.BASE/'m001-nrd028-cpu-contracts-v2/result.json'
 
 def tag(cell,depth,spp):return f'm001-nrd028-gpu-{cell.lower()}-b{depth}-n{spp}'
 

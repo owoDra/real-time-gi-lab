@@ -13,7 +13,7 @@ import nrd_no_prepass_overlay as O
 import nrd_no_prepass_process as P
 import nrd_no_prepass_audit as A
 
-def run(work,build_path):
+def run(work,build_path,reuse=None):
  head=B.committed();work=work.resolve();B.need(work.is_relative_to(B.BASE) and not work.exists(),'028 exclusive CPU test output');b=B.read(build_path);B.need(b['all_pass'] and not b['gpu_executed'],'028 actual passing build required');B.rehash(b['input_sha256']);B.rehash(b['compiled_dependency_sha256']);B.rehash({str(build_path.parent/name):h for name,h in b['payload_sha256'].items()});work.mkdir()
  r=dict(schema='m001-nrd028-cpu-quality-contracts/1',source_commit=head,complete=False,all_pass=False,gpu_executed=False,input_sha256={str(p):B.SHA(p) for p in B.OWN},build_receipt=str(build_path),build_receipt_sha256=B.SHA(build_path),checks=[],commands=[],references=[],probes=[])
  def check(name,fn):fn();r['checks'].append(dict(name=name,pass_=True))
@@ -22,45 +22,60 @@ def run(work,build_path):
   except (ValueError,FileNotFoundError,KeyError):return
   raise AssertionError('028 expected rejection')
  try:
-  check('actual compiled private host equals exact reversible overlay',lambda:B.need((build_path.parent/'nrd_vulkan_runtime.cpp').read_bytes()==O.host((B.Q.S.V.SRC/'nrd_vulkan_runtime.cpp').read_bytes()),'host source'))
-  check('actual compiled API probe overlay',lambda:B.need((build_path.parent/'nrd_api_probe.cpp').read_bytes()==O.probe((B.Q.S.V.SRC/'nrd_api_probe.cpp').read_bytes()),'probe source'))
-  check('actual compiled budget header equals exact reversible overlay',lambda:B.need((build_path.parent/'nrd_vulkan_contract.hpp').read_bytes()==O.header((B.Q.S.V.SRC/'nrd_vulkan_contract.hpp').read_bytes()),'header source'))
-  check('reject changed physical host schedule source',lambda:reject(lambda:O.host(b'broken')))
-  check('reject changed budget contract site',lambda:reject(lambda:O.header(b'broken')))
-  check('64 distinct fixed seeds and original cold seed',lambda:B.need(len(set(O.seed(i) for i in range(64)))==64 and O.seed(0)==305419896 and O.seed(1)==2959855665,'seed sequence'))
-  for i in (-1,64,True):check('reject seed index '+str(i),lambda i=i:reject(lambda:O.seed(i)))
-  rows=[dict(iteration=i,quality_pass=True) for i in range(64)]
-  check('all64 passes admit cold and warm',lambda:B.need(A.decision(rows)==dict(cold_pass=True,warm_pass=True,joint_pass=True),'all pass'))
-  bad=[dict(x) for x in rows];bad[63]['quality_pass']=False
-  check('one terminal warm loss rejects warm despite63 passes',lambda:B.need(A.decision(bad)==dict(cold_pass=True,warm_pass=False,joint_pass=False),'terminal loss'))
-  cold=[dict(x) for x in rows];cold[0]['quality_pass']=False
-  check('warm-only pass preserves cold loss',lambda:B.need(A.decision(cold)==dict(cold_pass=False,warm_pass=True,joint_pass=False),'cold loss'))
-  settling=[dict(x) for x in rows];settling[47]['quality_pass']=False
-  check('settling row retained outside fixed last16 window',lambda:B.need(A.decision(settling)['joint_pass'],'settling window'))
-  check('reject missing warm frame',lambda:reject(lambda:A.decision(rows[:-1])))
-  check('reject reordered frame sequence',lambda:reject(lambda:A.decision(list(reversed(rows)))))
-  check('original quality gate rejects excessive energy bias',lambda:B.need(A.M.quality({name:dict(pixels=57600,scoring_exclusions=0,nrmse=0.,signed_sum_bias=.06 if name=='indirect' else 0.,whole_image_max_absolute=0.) for name in ('direct','indirect','total')})=='QUALITY_FAIL','bias gate'))
-  for cell,depth in P.TARGETS:
-   oldplan=B.BASE/f'm001-nrd026-gpu-{cell.lower()}-b{depth}-n1-v1/plan.json'; original=B.read(oldplan);proof=original['proof'];r['input_sha256'][str(oldplan)]=B.SHA(oldplan);r['references'].append(dict(cell=cell,depth=depth,verification=proof['reference_verification'],reused=True))
-   for spp in P.LADDER:
-    dest=work/f'cpu-{cell.lower()}-b{depth}-n{spp}';cmd=[b['executable'],'--cpu-check','--state',proof['primary_capture'],'--out',str(dest),'--spp',str(spp),'--vertices',str(depth),'--shaders',b['shader_directory']]
-    row=B.Q.S.execute(f'{cell.lower()}-b{depth}-n{spp}',cmd,work);row.update(expected_returncode=0,contract_pass=row['returncode']==0);r['commands'].append(row);B.need(row['pass_'],'028 actual CPU native command');c=B.read(dest/'complete.json');check(f'{cell}-b{depth}-n{spp} actual dimensions noGPU',lambda c=c,spp=spp:B.need(c['complete'] and not c['gpu_initialized'] and c['spp']==spp and c['secondary_ray_bytes']==57600*spp*16 and c['secondary_primitive_bytes']==57600*spp*4,'actual shape'))
-  first=work/'cpu-h01-b2-n1';base=list(r['commands'][0]['command']);base[5]=str(work/'forbidden')
-  for spp in ('0','2','3','32','65','-1','4294967296'):
-   cmd=list(base);cmd[7]=spp;row=B.Q.S.execute('reject-spp-'+spp,cmd,work);row.update(expected_returncode=2,contract_pass=row['returncode']==2);r['commands'].append(row);check('actual native rejects spp '+spp,lambda row=row:B.need(row['returncode']==2 and not (work/'forbidden').exists(),'budget reject'))
-  before=B.inventory(first);cmd=list(base);cmd[5]=str(first);row=B.Q.S.execute('reject-overwrite',cmd,work);row.update(expected_returncode=2,contract_pass=row['returncode']==2);r['commands'].append(row);check('actual existing CPU output unchanged',lambda:B.need(row['returncode']==2 and B.inventory(first)==before,'overwrite'))
-  with tempfile.TemporaryDirectory(dir=work) as directory:
-   fixture=Path(directory)
-   check('initial first-rung plan has no dependency',lambda:B.need(P.previous('H01',2,1,fixture)=={},'initial gate'))
-   check('missing preceding rung stops without GPU',lambda:reject(lambda:P.previous('H01',2,4,fixture)))
-   for spp,passed in ((1,False),(4,False),(16,True)):
-    native=fixture/f'native-{spp}.json';B.write(native,dict(complete=True,valid=True));out=fixture/(P.tag('H01',2,spp)+'-audit-v1');out.mkdir();B.write(out/'result.json',dict(cell='H01',depth=2,spp=spp,complete=True,valid=True,classification='JOINT_QUALITY_PASS' if passed else 'QUALITY_FAIL',joint_pass=passed,cold_pass=passed,warm_pass=passed,native_receipt=str(native),native_receipt_sha256=B.SHA(native),payload_sha256={}))
-   check('first joint pass blocks later rung',lambda:reject(lambda:P.previous('H01',2,64,fixture)))
-   check('terminal prior target permits next target',lambda:B.need(bool(P.previous('H01',8,1,fixture)),'next target'))
-   bad=fixture/(P.tag('H01',2,16)+'-audit-v1/result.json');v=B.read(bad);v['valid']=False;bad.write_text(json.dumps(v));check('operational failure blocks next target',lambda:reject(lambda:P.previous('H01',8,1,fixture)))
+  if reuse is not None:
+   prior=B.read(reuse);B.need(prior['complete'] and not prior['all_pass'] and prior['error']=='AssertionError: 028 expected rejection' and len(prior['checks'])==56 and len(prior['commands'])==32 and not prior['probes'],'028 identified idempotence-contract failure only')
+   B.rehash({str(reuse.parent/n):h for n,h in prior['payload_sha256'].items()})
+   import hashlib,subprocess
+   for name,h in prior['input_sha256'].items():
+    p=Path(name)
+    if p in B.OWN:
+     data=subprocess.check_output(['git','show',prior['source_commit']+':'+str(p.relative_to(B.ROOT))]);B.need(hashlib.sha256(data).hexdigest()==h,'028 prior CPU source')
+    else:B.rehash({name:h});r['input_sha256'][name]=h
+   B.need(all(x['contract_pass'] for x in prior['commands']),'028 all32 native CPU contracts completed')
+   r['checks']=[dict(x,executed_again=False,reused_from_receipt=str(reuse)) for x in prior['checks']]
+   r['commands']=[dict(x,executed_again=False,reused_from_receipt=str(reuse)) for x in prior['commands']]
+   r['references']=prior['references'];r['reused_failure_receipt']=str(reuse);r['reused_failure_receipt_sha256']=B.SHA(reuse);r['input_sha256'][str(reuse)]=B.SHA(reuse)
+   r['input_sha256'].update({str(reuse.parent/n):h for n,h in prior['payload_sha256'].items()})
+  else:
+   check('actual compiled private host equals exact reversible overlay',lambda:B.need((build_path.parent/'nrd_vulkan_runtime.cpp').read_bytes()==O.host((B.Q.S.V.SRC/'nrd_vulkan_runtime.cpp').read_bytes()),'host source'))
+   check('actual compiled API probe overlay',lambda:B.need((build_path.parent/'nrd_api_probe.cpp').read_bytes()==O.probe((B.Q.S.V.SRC/'nrd_api_probe.cpp').read_bytes()),'probe source'))
+   check('actual compiled budget header equals exact reversible overlay',lambda:B.need((build_path.parent/'nrd_vulkan_contract.hpp').read_bytes()==O.header((B.Q.S.V.SRC/'nrd_vulkan_contract.hpp').read_bytes()),'header source'))
+   check('reject changed physical host schedule source',lambda:reject(lambda:O.host(b'broken')))
+   check('reject changed budget contract site',lambda:reject(lambda:O.header(b'broken')))
+   check('64 distinct fixed seeds and original cold seed',lambda:B.need(len(set(O.seed(i) for i in range(64)))==64 and O.seed(0)==305419896 and O.seed(1)==2959855665,'seed sequence'))
+   for i in (-1,64,True):check('reject seed index '+str(i),lambda i=i:reject(lambda:O.seed(i)))
+   rows=[dict(iteration=i,quality_pass=True) for i in range(64)]
+   check('all64 passes admit cold and warm',lambda:B.need(A.decision(rows)==dict(cold_pass=True,warm_pass=True,joint_pass=True),'all pass'))
+   bad=[dict(x) for x in rows];bad[63]['quality_pass']=False
+   check('one terminal warm loss rejects warm despite63 passes',lambda:B.need(A.decision(bad)==dict(cold_pass=True,warm_pass=False,joint_pass=False),'terminal loss'))
+   cold=[dict(x) for x in rows];cold[0]['quality_pass']=False
+   check('warm-only pass preserves cold loss',lambda:B.need(A.decision(cold)==dict(cold_pass=False,warm_pass=True,joint_pass=False),'cold loss'))
+   settling=[dict(x) for x in rows];settling[47]['quality_pass']=False
+   check('settling row retained outside fixed last16 window',lambda:B.need(A.decision(settling)['joint_pass'],'settling window'))
+   check('reject missing warm frame',lambda:reject(lambda:A.decision(rows[:-1])))
+   check('reject reordered frame sequence',lambda:reject(lambda:A.decision(list(reversed(rows)))))
+   check('original quality gate rejects excessive energy bias',lambda:B.need(A.M.quality({name:dict(pixels=57600,scoring_exclusions=0,nrmse=0.,signed_sum_bias=.06 if name=='indirect' else 0.,whole_image_max_absolute=0.) for name in ('direct','indirect','total')})=='QUALITY_FAIL','bias gate'))
+   for cell,depth in P.TARGETS:
+    oldplan=B.BASE/f'm001-nrd026-gpu-{cell.lower()}-b{depth}-n1-v1/plan.json'; original=B.read(oldplan);proof=original['proof'];r['input_sha256'][str(oldplan)]=B.SHA(oldplan);r['references'].append(dict(cell=cell,depth=depth,verification=proof['reference_verification'],reused=True))
+    for spp in P.LADDER:
+     dest=work/f'cpu-{cell.lower()}-b{depth}-n{spp}';cmd=[b['executable'],'--cpu-check','--state',proof['primary_capture'],'--out',str(dest),'--spp',str(spp),'--vertices',str(depth),'--shaders',b['shader_directory']]
+     row=B.Q.S.execute(f'{cell.lower()}-b{depth}-n{spp}',cmd,work);row.update(expected_returncode=0,contract_pass=row['returncode']==0);r['commands'].append(row);B.need(row['pass_'],'028 actual CPU native command');c=B.read(dest/'complete.json');check(f'{cell}-b{depth}-n{spp} actual dimensions noGPU',lambda c=c,spp=spp:B.need(c['complete'] and not c['gpu_initialized'] and c['spp']==spp and c['secondary_ray_bytes']==57600*spp*16 and c['secondary_primitive_bytes']==57600*spp*4,'actual shape'))
+   first=work/'cpu-h01-b2-n1';base=list(r['commands'][0]['command']);base[5]=str(work/'forbidden')
+   for spp in ('0','2','3','32','65','-1','4294967296'):
+    cmd=list(base);cmd[7]=spp;row=B.Q.S.execute('reject-spp-'+spp,cmd,work);row.update(expected_returncode=2,contract_pass=row['returncode']==2);r['commands'].append(row);check('actual native rejects spp '+spp,lambda row=row:B.need(row['returncode']==2 and not (work/'forbidden').exists(),'budget reject'))
+   before=B.inventory(first);cmd=list(base);cmd[5]=str(first);row=B.Q.S.execute('reject-overwrite',cmd,work);row.update(expected_returncode=2,contract_pass=row['returncode']==2);r['commands'].append(row);check('actual existing CPU output unchanged',lambda:B.need(row['returncode']==2 and B.inventory(first)==before,'overwrite'))
+   with tempfile.TemporaryDirectory(dir=work) as directory:
+    fixture=Path(directory)
+    check('initial first-rung plan has no dependency',lambda:B.need(P.previous('H01',2,1,fixture)=={},'initial gate'))
+    check('missing preceding rung stops without GPU',lambda:reject(lambda:P.previous('H01',2,4,fixture)))
+    for spp,passed in ((1,False),(4,False),(16,True)):
+     native=fixture/f'native-{spp}.json';B.write(native,dict(complete=True,valid=True));out=fixture/(P.tag('H01',2,spp)+'-audit-v1');out.mkdir();B.write(out/'result.json',dict(cell='H01',depth=2,spp=spp,complete=True,valid=True,classification='JOINT_QUALITY_PASS' if passed else 'QUALITY_FAIL',joint_pass=passed,cold_pass=passed,warm_pass=passed,native_receipt=str(native),native_receipt_sha256=B.SHA(native),payload_sha256={}))
+    check('first joint pass blocks later rung',lambda:reject(lambda:P.previous('H01',2,64,fixture)))
+    check('terminal prior target permits next target',lambda:B.need(bool(P.previous('H01',8,1,fixture)),'next target'))
+    bad=fixture/(P.tag('H01',2,16)+'-audit-v1/result.json');v=B.read(bad);v['valid']=False;bad.write_text(json.dumps(v));check('operational failure blocks next target',lambda:reject(lambda:P.previous('H01',8,1,fixture)))
   extra_contracts(check,reject,work)
   sdk_probes(r,work,b)
-  r.update(all_pass=True,actual_native_cpu_commands=sum(not x['label'].startswith('sdk-') for x in r['commands']),actual_sdk_processes=3,python_checks=len(r['checks']),qualified_reference_slots=6,prior024_025_026_mathematical_physical_contracts_reused_not_rerun=True,actual_sdk_api_frames=195)
+  r.update(all_pass=True,actual_native_cpu_commands=sum(not x['label'].startswith('sdk-') and x.get('executed_again',True) for x in r['commands']),native_cpu_commands_reused=sum(not x.get('executed_again',True) for x in r['commands']),actual_sdk_processes=3,python_checks=len(r['checks']),qualified_reference_slots=6,prior024_025_026_mathematical_physical_contracts_reused_not_rerun=True,actual_sdk_api_frames=195)
  except Exception as e:r['error']=type(e).__name__+': '+str(e)
  B.rehash(r['input_sha256']);r.update(complete=True,payload_sha256=B.inventory(work));B.write(work/'result.json',r);return r
 
@@ -129,4 +144,4 @@ def sdk_probes(r,work,build):
   r['probes'].append(dict(cell=cell,api_frames=65,RELAX_changed_records=changed,Clear_unchanged_records=clears,changed_bytes=changed*4,all15_pipeline_bytes_unchanged=True,reset_to_cold_constants_exact=True,all_other_bytes_resources_dispatches_settings_equal=True))
 
 if __name__=='__main__':
- ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',type=Path,required=True);ap.add_argument('--build',type=Path,required=True);a=ap.parse_args();r=run(a.work,a.build.resolve());print(json.dumps({k:r.get(k) for k in ('all_pass','python_checks','actual_native_cpu_commands','qualified_reference_slots','error')}));raise SystemExit(0 if r['all_pass'] else 2)
+ ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--work',type=Path,required=True);ap.add_argument('--build',type=Path,required=True);ap.add_argument('--reuse-contracts',type=Path);a=ap.parse_args();r=run(a.work,a.build.resolve(),a.reuse_contracts.resolve() if a.reuse_contracts else None);print(json.dumps({k:r.get(k) for k in ('all_pass','python_checks','actual_native_cpu_commands','qualified_reference_slots','error')}));raise SystemExit(0 if r['all_pass'] else 2)

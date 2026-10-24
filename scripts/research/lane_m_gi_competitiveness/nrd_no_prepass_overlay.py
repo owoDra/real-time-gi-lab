@@ -6,7 +6,9 @@ SETTING=('nrd::RelaxSettings settings{};',
 
 def apply(raw, changes):
     text=raw.decode()
-    for old,new in changes:text=Q.replace(text,old,new)
+    for old,new in changes:
+        if new in text:raise ValueError('028 overlay already applied')
+        text=Q.replace(text,old,new)
     inverse=text
     for old,new in reversed(changes):inverse=Q.replace(inverse,new,old)
     if inverse!=raw.decode():raise ValueError('028 inverse overlay failed')
