@@ -1,0 +1,43 @@
+{
+  "schema": "m001-q019-first-cpu-failure-verification/1",
+  "all_checks_pass": true,
+  "preservation_base": "bc73e378",
+  "rehearsal_source_commit": "54460fa5efa9ae5c947cf017e48df3d487cf8673",
+  "gpu_executed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "unchanged_counts": {
+    "prior_protocols": 19,
+    "prior_results": 117,
+    "code": 1192
+  },
+  "failed_native_payloads_rehashed": 8,
+  "failed_plan_input_files_rehashed": 1937,
+  "new_cpu_contract_tests": 18,
+  "prior_tests_reused_not_rerun": 58,
+  "native_cpu_attempts": 1,
+  "completed_cpu_rehearsals": 0,
+  "later_cpu_targets_not_run": 5,
+  "all_three_original_material_metadata_matches": true,
+  "original_hit_pixels": 21743,
+  "total_audited_gpu_acquisitions_unchanged": 120,
+  "default_build_graph_changed": false,
+  "all_lane_m_index_paths_checked": 166,
+  "current_markdown_links_checked": 126,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n[research:check] $ python scripts/research/verify.py\n",
+  "source_and_document_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/index.json": "db0e38befd2748437786cd6a199598aed0c1abd90624c668af471d33fe02f6a2",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/118-surface-quadratic-first-cpu-failure-raw-audit.json": "d00dd5b17a7c44bd11c0d42009335899f5dd4bc89aa9f7ccfd5474716e0f441d",
+    "/var/owo/workspaces/projects/gi-lab/research/status.md": "9f2b2efcb466ca6e462c0204b165d074c5eca60eb2d7de02527614d07d0680ad",
+    "/var/owo/workspaces/projects/gi-lab/research/roadmap.md": "ae5a310590ae224dfe48aee66780a0a3b7a2cae98bf694388c05ea443b7b5bae",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/README.md": "3e2308958ba7e9af3279a9483e344ad009ac44bd45ad8d331e6855aedc0ebb1d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/019-surface-quadratic-device-correctness.md": "7fc8c947fedb5bfaa5e578f10c389965756095663cbaf60a8e3a7268edd731c0",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/119-surface-quadratic-first-cpu-failure-outcome.md": "cd6e85263846af4dafc938b5713b24f63a9603b05d531e26d27cb0083b0929a9"
+  },
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-q019-failure-checkpoint-verification-v1.json",
+  "raw_receipt_sha256": "2a27a0277f1ffdcf75518c5668e45cb1a84c8201aa1192f05086fde73b195fa2"
+}

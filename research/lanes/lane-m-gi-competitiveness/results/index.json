@@ -328,7 +328,7 @@
       "surface_quadratic_device_preparation": "results/115-surface-quadratic-device-kernel-host-cpu-preparation.json",
       "surface_quadratic_device_outcome": "results/116-surface-quadratic-device-kernel-host-cpu-outcome.md",
       "surface_quadratic_device_verification": "results/117-surface-quadratic-device-kernel-host-cpu-verification.json",
-      "surface_quadratic_device_status": "CPU_KERNEL_HOST_COMPILED_TESTED_M001_REPLAYS_NOT_RUN_NOT_GPU_READY",
+      "surface_quadratic_device_status": "STOP_NO_RETRY_FIRST_CPU_INPUT_ABI_IMPLEMENTATION_FAILURE",
       "surface_quadratic_device_actual_new_cpu_contract_tests": 58,
       "surface_quadratic_device_m001_cpu_replays": 0,
       "surface_quadratic_device_gpu_cases": 0,
@@ -336,7 +336,14 @@
       "surface_quadratic_device_shader": "shaders/research/lane_m_gi_competitiveness/surface_quadratic_device.comp.glsl",
       "surface_quadratic_device_host": "src/research/lane_m_gi_competitiveness/surface_quadratic_device.cpp",
       "surface_quadratic_device_host_builder": "scripts/research/lane_m_gi_competitiveness/build_surface_quadratic_host.py",
-      "surface_quadratic_device_host_tests": "scripts/research/lane_m_gi_competitiveness/test_surface_quadratic_host.py"
+      "surface_quadratic_device_host_tests": "scripts/research/lane_m_gi_competitiveness/test_surface_quadratic_host.py",
+      "surface_quadratic_device_cpu_native_attempts": 1,
+      "surface_quadratic_device_cpu_native_failures": 1,
+      "surface_quadratic_device_later_cpu_targets_not_run": 5,
+      "surface_quadratic_device_cpu_rehearsal_contract_tests": 18,
+      "surface_quadratic_device_failure_replay": "results/118-surface-quadratic-first-cpu-failure-raw-audit.json",
+      "surface_quadratic_device_failure_outcome": "results/119-surface-quadratic-first-cpu-failure-outcome.md",
+      "surface_quadratic_device_failure_verification": "results/120-surface-quadratic-first-cpu-failure-verification.json"
     }
   ]
 }

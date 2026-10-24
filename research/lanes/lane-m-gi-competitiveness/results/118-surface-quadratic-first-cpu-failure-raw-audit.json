@@ -1,0 +1,111 @@
+{
+  "schema": "m001-q019-first-cpu-failure-audit/1",
+  "complete": true,
+  "gpu_executed": false,
+  "classification": "STOP_NO_RETRY",
+  "new_render_paths": 0,
+  "new_reference_paths": 0,
+  "source_commit": "54460fa5efa9ae5c947cf017e48df3d487cf8673",
+  "native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-q019-cpu-h01-b2-v1/result.json",
+  "native_receipt_sha256": "d6716b31051e3d22174196da9014060853fbc241a7f400f4ec4eed06b90ad2a0",
+  "native_record": {
+    "schema": "m001-q019-one-target-native-cpu-rehearsal/1",
+    "cell": "H01",
+    "depth": 2,
+    "complete": false,
+    "valid": false,
+    "gpu_executed": false,
+    "new_render_paths": 0,
+    "new_reference_paths": 0,
+    "source_commit": "54460fa5efa9ae5c947cf017e48df3d487cf8673",
+    "error": "ValueError('019 native CPU failure; stop/no identical retry')",
+    "classification": "STOP_NO_RETRY",
+    "payload_sha256": {
+      "input/camera.f32": "5154458cef774319640c1002f5cee14db4955544daeb9c53b36349b35e325dab",
+      "input/hits.u32": "1a79adcde91009005911dc4661f465122334501abeb4fac51fa9d0a6a9667a1a",
+      "input/sources.f32": "60100c5ab45c80fcaf5ce1db4efd9c2582ab3df0ae7935d73df2462a5766629c",
+      "launch/result.json": "46eca19e8fdbd2bd8e5b4ffb9358aade0678fe51c80a0b91155b1180f521f963",
+      "launch/stderr.txt": "2e7ad52af5f2ba645ad8dd17d4c0939f77a7a2eb0019fa7bb8b151b97930b478",
+      "launch/stdout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "plan.json": "46021cccacdcc36168cc735b59061f1824fabfd7b855bf0f5baea2c5ff83ad06",
+      "started.json": "0cc3a6d585b46b533db33a51fd47e1c0106b9965a9eb8a025d6ebd9808d257d5"
+    }
+  },
+  "plan_sha256": "46021cccacdcc36168cc735b59061f1824fabfd7b855bf0f5baea2c5ff83ad06",
+  "launch_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-q019-cpu-h01-b2-v1/launch/result.json",
+  "launch_receipt_sha256": "46eca19e8fdbd2bd8e5b4ffb9358aade0678fe51c80a0b91155b1180f521f963",
+  "native_returncode": 2,
+  "native_timeout": false,
+  "failure_boundary": "native input validation before capture creation and all geometry/coefficient/filter execution",
+  "cpu_native_processes_attempted": 1,
+  "completed_cpu_rehearsals": 0,
+  "later_cpu_targets_not_run": 5,
+  "gpu_acquisitions": 0,
+  "diagnosis": "The added019loader wrongly treats every0xffffffffmaterial token as an invalid hit. All three original admitted scene captures use this exact material token and match their canonical primitive/material/instance metadata. Hit presence is flag1, not material-token validity.",
+  "original_canonical_metadata_checks": [
+    {
+      "cell": "H01",
+      "hit_pixels": 7325,
+      "material_sentinel_hits": 7325,
+      "primitive_sentinel_hits": 0,
+      "instance_sentinel_hits": 0,
+      "exact_original_metadata_match": {
+        "primitive": true,
+        "material": true,
+        "instance": true
+      },
+      "primary_capture": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-validation-v1/h01-hwrt/capture",
+      "primary_hits_sha256": "1a79adcde91009005911dc4661f465122334501abeb4fac51fa9d0a6a9667a1a",
+      "canonical_state_sha256": {
+        "geometry": "f8b25b1c20ad84b6b9b030a2edd12c4a812af7199e21002897be9cf974ad75ca",
+        "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4"
+      },
+      "input_files_rehashed": 1934
+    },
+    {
+      "cell": "H02",
+      "hit_pixels": 6748,
+      "material_sentinel_hits": 6748,
+      "primitive_sentinel_hits": 0,
+      "instance_sentinel_hits": 0,
+      "exact_original_metadata_match": {
+        "primitive": true,
+        "material": true,
+        "instance": true
+      },
+      "primary_capture": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-validation-v1/h02-hwrt/capture",
+      "primary_hits_sha256": "fb54bea3b44c1fe1893198c83408417133d389924f6d5ac01983fc9d6cb612b8",
+      "canonical_state_sha256": {
+        "geometry": "9d7c434202d2c9d14a7b3c4fb024b13cbd5240fc5251c22d3b533f719f968b5c",
+        "frame": "70745baa8ebeabe9ffe20a8ba284261bfc7ea060eda1d318bc2ad338f1b8e7e4"
+      },
+      "input_files_rehashed": 1934
+    },
+    {
+      "cell": "H03",
+      "hit_pixels": 7670,
+      "material_sentinel_hits": 7670,
+      "primitive_sentinel_hits": 0,
+      "instance_sentinel_hits": 0,
+      "exact_original_metadata_match": {
+        "primitive": true,
+        "material": true,
+        "instance": true
+      },
+      "primary_capture": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-closest-primary-validation-v1/h03-hwrt/capture",
+      "primary_hits_sha256": "3f9da081fbd0771578b6792bfeed993e1a2565904d9a520a59b27509fb362d58",
+      "canonical_state_sha256": {
+        "geometry": "6ef490de5bb43658aac6c83852316146971cbf6f80a7ffad36ef88649cfe98a3",
+        "frame": "a2cc0b4a730971e78e857054490d0f53b7fe89e5f0c0e50628f0ebb6ebb0f225"
+      },
+      "input_files_rehashed": 1934
+    }
+  ],
+  "readonly_diagnostic_input_files_rehashed_total": 5802,
+  "next_action": "Keep019stopped. Register a separately identified loader ABI repair before new code/build/CPU attempts. Preserve all019failed bytes and old kernel/shaders; do not alter quality gates or source images.",
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-q019-first-cpu-failure-audit-v1/result.json",
+  "raw_receipt_sha256": "8b53f24a3be61db141017e6abde9837c78638889d37a739f619e7df0b39b5d8e",
+  "new_rehearsal_intake_cpu_contract_tests": 18,
+  "new_cpu_contract_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-q019-cpu-rehearsal-contracts-v1/result.json",
+  "new_cpu_contract_receipt_sha256": "088eaf96a3bda90d758fb217abc751692b3f315ecebad8203b79c4772d0f8cf5"
+}
