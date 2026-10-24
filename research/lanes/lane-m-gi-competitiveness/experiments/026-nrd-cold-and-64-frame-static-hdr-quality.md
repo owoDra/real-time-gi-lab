@@ -70,8 +70,14 @@ strict reset was separately qualified in025, not inferred here.
 All15 native pipeline bytes must equal025's CPU export; disclose only pipeline9
 differs from unmodified023. Correctly name this reference in new reports,
 without inheriting the old helper's misleading key. Continuing relevant
-history must advance/clamp consistently with default maximum30 and must not
-be cleared every frame. Replay all owned allocation lifetimes, full peak and
+history must advance/clamp consistently with the default maximum accumulated
+history setting30 and must not be cleared every frame. Pre-execution source
+clarification: RELAX_TemporalAccumulation.cs.hlsl increments the stored length
+and caps it at `1 + gDiffMaxAccumulatedFrameNum`, so the stored byte sequence
+includes the current frame and reaches31, not30. This clarification follows
+source inspection before new CPU/GPU execution, changes no SDK setting or
+HDR/physical gate, and resolves the original draft's ambiguous use of30.
+Replay all owned allocation lifetimes, full peak and
 zero teardown. Check complete ordered bounded-unit journal: initialization1,
 frame0=488 units, each remaining frame=477 units, total30,540; SDK651 dispatches.
 GPU timestamps/whole envelopes/startup/readbacks remain uncalibrated diagnostics.
