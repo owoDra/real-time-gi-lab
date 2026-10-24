@@ -353,7 +353,9 @@
       "surface_quadratic_material_abi_repair_verification": "results/124-surface-quadratic-material-abi-cpu-verification.json",
       "surface_quadratic_material_abi_repair_cpu_targets_pass": 6,
       "surface_quadratic_material_abi_repair_native_contract_tests": 19,
-      "surface_quadratic_material_abi_repair_canonical_derivation_contracts": 16
+      "surface_quadratic_material_abi_repair_canonical_derivation_contracts": 16,
+      "surface_quadratic_repaired_device_protocol": "experiments/021-surface-quadratic-repaired-device-correctness.md",
+      "surface_quadratic_repaired_device_status": "PREREGISTERED_PROCESS_CODE_TESTS_PLANS_GPU_NOT_RUN"
     }
   ]
 }
