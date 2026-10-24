@@ -1,0 +1,34 @@
+# Integrated physical PT and reconstruction022 outcome
+
+**INTEGRATED_STATIC_CORRECTNESS_PASS: all six fixed static targets pass.** One GPU context newly traces original physical PT, produces its own primary/indirect buffers, fits the unchanged021operator, filters one image and composes new direct+indirect without intermediate host readback/upload. This closes022only; Lane M remains incomplete.
+
+[Registration022](../experiments/022-integrated-pt-reconstruction-correctness.md), [CPU preparation129](129-integrated-pt-reconstruction-cpu-preparation.json), [full raw replay130](130-integrated-pt-reconstruction-six-targets-raw-replay.json), [verification132](132-integrated-pt-reconstruction-verification.json). Registration0facc60f preceded native sourcee690f331, process/audit sourcef6d7f288, all actual CPU checks and GPU plans. CPU preparation28f4925e preceded all six acquisitions at that exact source checkpoint.
+
+CPU:11compile/link/SPIR-V validation steps pass.102Python input/native checks,9actual C++ scalar/safety checks and40new process/intake/order/stop checks pass. New native code uses UBSan; reused historical objects are pinned, not rebuilt or claimed newly instrumented. Original019quadratic SPIR-V and020CPU oracle are reused byte-exact. Private PT/context/HWRT overlays prove exact inverse. All three canonical cameras/epsilon match exactly. No old successful CPU/GPU cohort or original reference is rerun.
+
+| Target | spp | Total NRMSE | Indirect NRMSE | Indirect signed bias | Reference-bias indirect NRMSE | Owned peak B | GPU frame envelope ms | Active GPU sum ms |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| H01/B2 | 16 | 1.650355% | 8.459391% | -0.279337% | 0.922528% | 26,331,840 | 3854.919 | 56.816 |
+| H01/B8 | 64 | 1.402602% | 5.429765% | -0.069919% | 1.264412% | 26,331,840 | 4038.434 | 182.802 |
+| H02/B2 | 64 | 0.981611% | 5.923170% | 0.280545% | 1.872154% | 26,331,840 | 3937.471 | 133.734 |
+| H02/B8 | 64 | 1.357213% | 6.710649% | -0.367424% | 2.491904% | 26,331,840 | 4012.746 | 223.946 |
+| H03/B2 | 64 | 1.468239% | 6.807827% | -0.352913% | 0.603106% | 26,340,992 | 3911.658 | 108.669 |
+| H03/B8 | 64 | 1.962805% | 8.010513% | -0.375285% | 1.473294% | 26,340,992 | 4005.742 | 188.192 |
+
+All fixed noisy images AND reference-bias diagnostics pass unchanged inclusive total<=5%, indirect<=10%, absolute indirect signed-energy bias<=5%, all57,600pixels/no exclusions. The independent fsum RMS/energy audit passes. Signed coefficients, all negative preclip counts/minima/absolute energies, complete stage fields and errors remain saved; clipping follows the unchanged operator. Bias diagnostics apply actual GPU coefficients on CPU to the original admitted16384spp four-seed mean; they are neither new physical references nor GPU measurements.
+
+All345,600primary records match original CPU-oracle hit presence and canonical primitive IDs; zero depth-bound failures. Maximum absolute depth error7.86071724335e-06. Every hit has canonical metadata and a valid unit normal; misses preserve zero normal/+infinite distance/invalid IDs. The original valid material0xffffffff is preserved. Oriented shader normal vs the unoriented oracle normal has maximum vector difference2.0 and remains the preregistered diagnostic, not a hidden exclusion.
+
+All18new raw PT direct/indirect/total components are bit-exact to original same-seed/spp/depth PT images. GPU source equals its new raw indirect, final direct equals its new direct, final indirect equals the final filter stage and GPU total is exact float32 direct+indirect. All exported PFMs equal captured buffers. Native inputs contain only original physical geometry/frame and deterministic camera metadata. No archived hit/image/geometry-position/weight input or CPU-fitted coefficient enters the GPU path.
+
+Complete-field geometry, all float32 masks/model/rank fields, coefficients and all preclip/clipped stages pass unchanged021bounds against the unchanged native CPU oracle on actual new GPU geometry. The audit-only one->five ABI replication never feeds GPU. 1,272independent double/SVD hit vectors plus1,032analytic miss vectors and9,216sampled preclip/clipped outputs pass. Maximum SVD coefficient absolute error3.35157696897e-06; maximum normalized SVD stage error5.92160576156e-07. 174native and126terminal-audit payloads plus180full NPZ arrays rehash exactly.
+
+Six separately announced one-time GPU commands, no automatic queue/retry/timeout/overwrite. Every prior complete terminal audit was pinned before the next target. 10,830units complete (450PT+1geometry+1350fit+3filter+1composite per target); independent timestamp arithmetic and all paired journal entries pass. All old context/HWRT and new per-unit waits are bounded250ms; aggregate allocation cap is checked before allocation. Complete lifetimes include AS/vertices/instances/scratch/staging and all11pipeline buffers. Peak26,340,992owned bytes<=8GiB, zero teardown all six; aggregate counter exactly reconciles with ledger. CPU/driver-private memory excluded.
+
+Frame-envelope times include the bounded fences and2ms inter-unit pauses. The active-unit sum is reported separately and must not replace that envelope. Initial allocation/upload/BLAS/TLAS/pipeline setup wall costs and AS GPU costs remain separately saved, along with native frame/readback wall diagnostics. These are uncalibrated correctness diagnostics: no accepted speed, real-time operation or memory-superiority claim. Full-system precision calibration and fair quality-matched denoised baselines remain mandatory.
+
+Native new_indirect_paths is the frozen nominal full-viewport spp budget, not a hardware ray-query counter. Actual hit-only sample-loop iterations are separately derived; early-terminated continuation queries are not instrumented. Native bytes preserved.
+
+One assistant-operated Radeon8060S/RADV STRIX_HALO/Mesa26.1.2 under explicit user authorization; no power/clock/desktop setting changes. Original human-operated evidence attribution stays visible. Total independently audited assistant-operated GPU acquisitions132=126prior+6integrated images. Raw builds/binaries/captures/all fields/logs/error maps/receipts remain repository/out; no large raw data in Git. N001–N010, old failures and accepted bytes, default CMake/Renderer graph stay unchanged. Default Renderer build/runtime regression NOT_RERUN; validation layers NOT_RUN. No Actions/CI or architecture promotion.
+
+022ends at six static integration passes, with no further022process or timing selected. M001 is already observed development data. This known spatial quadratic component does not establish a novel competitive GI architecture. Next separately qualify a fair source-pinned standard denoised family with complete guides/conversion/history costs and fair temporal warmup, then freeze full-cost calibrated comparisons and new heldout/dynamic/Sponza/representative-device gates. Broader Lane M remains incomplete; Issue7stays open.
