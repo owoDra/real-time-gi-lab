@@ -1,0 +1,82 @@
+{
+  "schema": "m001-surface-quadratic-cpu-verification/1",
+  "all_checks_pass": true,
+  "source_commit": "72a45eddf5073c55d320091f70131d0f05eb8fd0",
+  "source_base": "7afa141c",
+  "checkpoint_checks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "c99789",
+        "wall_time_seconds": 0.834687784,
+        "exit_code": 0,
+        "original_token_count": 39,
+        "output": "[research:check] $ python scripts/research/verify.py\nresearch harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "3b6837",
+        "wall_time_seconds": 1.098e-05,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    }
+  ],
+  "old_code_files_unchanged": 1179,
+  "immutable_old_result_records_unchanged": 110,
+  "new_standalone_python_files": 3,
+  "exact_prepared_sources_verified_in_commit": "72a45eddf5073c55d320091f70131d0f05eb8fd0",
+  "prepared_source_files": 34,
+  "actual_new_contract_tests": 14,
+  "prior017_tests_reused_not_rerun": 16,
+  "old_test_suites_rerun": false,
+  "cpu_target_processes": 6,
+  "all_target_processes_returned_zero_without_timeout": true,
+  "all_complete_stage_error_arrays_replayed": 270,
+  "all_coefficient_model_rank_tensors_replayed": 24,
+  "all_target_payloads_rehashed": 78,
+  "independent_svd_coefficient_vectors": 2304,
+  "independent_scalar_preclip_clipped_pixel_comparisons": 23040,
+  "independent_fsum_metrics_verified": true,
+  "maximum_independent_coefficient_absolute_error": 4.884981308350689e-15,
+  "maximum_independent_preclip_absolute_error": 1.4907779871675686e-19,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-quadratic-final-replay-v1/result.json",
+  "raw_receipt_sha256": "d24718c06748cd73f305444c1abbe46bc1126bb5a677fadc6bd34d6e3149f707",
+  "gpu_executed": false,
+  "new_render_paths": 0,
+  "new_reference_paths": 0,
+  "target_passes": 6,
+  "target_failures": 0,
+  "reference_bias_passes": 6,
+  "noisy_quality_passes": 7,
+  "noisy_quality_rows": 24,
+  "reference_bias_rows": 6,
+  "default_build_graph_changed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "additional_018_process_selected": false,
+  "new_records_sha256": {
+    "111-surface-quadratic-reconstruction-cpu-preparation.json": "11cde28bde9c23038c04ff5719ec90c4b816ef34bc2d7404128fbd8099ba5f0f",
+    "112-surface-quadratic-reconstruction-six-targets-raw-replay.json": "4a8a4cab84bbcfa4cd6c02300fb2204cae3e43c1d8e111600d33b570ce165302",
+    "113-surface-quadratic-reconstruction-cpu-outcome.md": "5fab70ff4c77650425615d10be978e1be0e1c1ec6214eeca022e88777b9d5391"
+  },
+  "auxiliary_analysis_sources_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/m001-quadratic-launch-v1.py": "3a4e6ef0300b2f9c2978aa17e92e2e464f4d8cdd40f726f32b522be2271e1605",
+    "/var/owo/workspaces/projects/gi-lab/out/m001-quadratic-terminal-audit-v1.py": "337b7597660ce460789866509cdfff6ea163a41d197dcbdd51fc75a86d155c27",
+    "/var/owo/workspaces/projects/gi-lab/out/m001-quadratic-finalize-v1.py": "b4ca8c4d9e49c8e96ad0df6c57727dc8a021f696ccaef53c959590697ccb6e03",
+    "/var/owo/workspaces/projects/gi-lab/out/m001-quadratic-verify-checkpoint-v1.py": "5b0a1bc95043cb761f7b6321265b70cf6a749feda6fca5eefe29e0ba33303fd8",
+    "/var/owo/workspaces/projects/gi-lab/out/m001-quadratic-update-summaries-v1.py": "3fa415f630bd03147ea249a310aa4aa5383e0f3917f11d41eaf06e8928ccf4d8"
+  },
+  "all_lane_m_index_paths_checked": 155,
+  "current_markdown_links_checked": 120,
+  "current_summary_unique_and_terminal": true,
+  "final_index_link_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-quadratic-final-index-verification-v1.json",
+  "final_index_link_receipt_sha256": "65b0ab58de326e58512ad327be1d0b5461922edc71af5667e02f3306cebaf033"
+}

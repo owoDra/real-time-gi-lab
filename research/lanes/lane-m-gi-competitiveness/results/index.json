@@ -310,8 +310,20 @@
       "geometry_barrier_reconstruction_further_process_selected": false,
       "surface_quadratic_reconstruction_protocol": "experiments/018-surface-quadratic-reconstruction-cpu-screen.md",
       "surface_quadratic_reconstruction_preparation": "results/111-surface-quadratic-reconstruction-cpu-preparation.json",
-      "surface_quadratic_reconstruction_status": "CPU_PREPARED_FITTING_RECONSTRUCTION_NOT_RUN",
-      "surface_quadratic_reconstruction_gpu_cases": 0
+      "surface_quadratic_reconstruction_status": "CPU_FEASIBILITY_PASS_ALL_SIX_GPU_NOT_QUALIFIED",
+      "surface_quadratic_reconstruction_gpu_cases": 0,
+      "surface_quadratic_reconstruction_replay": "results/112-surface-quadratic-reconstruction-six-targets-raw-replay.json",
+      "surface_quadratic_reconstruction_outcome": "results/113-surface-quadratic-reconstruction-cpu-outcome.md",
+      "surface_quadratic_reconstruction_verification": "results/114-surface-quadratic-reconstruction-cpu-verification.json",
+      "surface_quadratic_reconstruction_cpu_target_processes": 6,
+      "surface_quadratic_reconstruction_target_passes": 6,
+      "surface_quadratic_reconstruction_target_failures": 0,
+      "surface_quadratic_reconstruction_noisy_quality_rows": 24,
+      "surface_quadratic_reconstruction_reference_bias_rows": 6,
+      "surface_quadratic_reconstruction_noisy_quality_passes": 7,
+      "surface_quadratic_reconstruction_reference_bias_passes": 6,
+      "surface_quadratic_reconstruction_new_render_paths": 0,
+      "surface_quadratic_reconstruction_further_process_selected": false
     }
   ]
 }
