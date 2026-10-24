@@ -1,0 +1,213 @@
+{
+  "schema": "m001-nrd024-first-native-runtime-failure/1",
+  "complete": true,
+  "study_stopped": true,
+  "valid_runtime_capture": true,
+  "control_pass": false,
+  "classification": "STOP_FIRST_CONTROL_RESET_POOL_DETERMINISM_FAIL",
+  "preregistration_commit": "085aa453",
+  "native_source_commit": "bd752204",
+  "rgb_build_repair_commit": "97e621ad",
+  "cpu_readiness_and_gpu_plan_source_commit": "1511ff61ee6a261de10bf8fc1f86d5f03e85de71",
+  "new_gpu_acquisitions": 1,
+  "gpu_frames": 3,
+  "cell": "H01",
+  "depth": 2,
+  "spp": 16,
+  "gpu_executed": true,
+  "remaining_controls": [
+    {
+      "cell": "H02",
+      "depth": 8,
+      "spp": 64,
+      "status": "NOT_RUN_STOPPED_AFTER_FIRST_CONTROL"
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "spp": 64,
+      "status": "NOT_RUN_STOPPED_AFTER_FIRST_CONTROL"
+    }
+  ],
+  "same_seed_original022_raw_pt_bit_exact": true,
+  "reset_binary_fields_exact": [
+    "camera.f32",
+    "constants/0.bin",
+    "constants/1.bin",
+    "constants/10.bin",
+    "constants/11.bin",
+    "constants/12.bin",
+    "constants/13.bin",
+    "constants/14.bin",
+    "constants/15.bin",
+    "constants/16.bin",
+    "constants/17.bin",
+    "constants/18.bin",
+    "constants/19.bin",
+    "constants/2.bin",
+    "constants/20.bin",
+    "constants/3.bin",
+    "constants/4.bin",
+    "constants/5.bin",
+    "constants/6.bin",
+    "constants/7.bin",
+    "constants/8.bin",
+    "constants/9.bin",
+    "denoised.bin",
+    "final-rgb.f32",
+    "hits.u32",
+    "input-errors.u32",
+    "motion.bin",
+    "noisy-diffuse.bin",
+    "normal-roughness.bin",
+    "params.bin",
+    "permanent-0.bin",
+    "permanent-1.bin",
+    "permanent-2.bin",
+    "permanent-3.bin",
+    "permanent-5.bin",
+    "raw-pt.f32",
+    "secondary-origins.f32",
+    "secondary-primitives.u32",
+    "secondary-rays.f32",
+    "secondary-stats.f32",
+    "source.f32",
+    "transient-0.bin",
+    "transient-1.bin",
+    "transient-2.bin",
+    "transient-3.bin",
+    "view-z.bin"
+  ],
+  "reset_binary_fields_different": [
+    {
+      "name": "permanent-4.bin",
+      "different_bytes": 12363,
+      "total_bytes": 57600
+    }
+  ],
+  "fully_sky_pixels": 46592,
+  "reset_material_mismatch_pixels": 12363,
+  "reset_material_mismatches_outside_fully_sky_tiles": 0,
+  "active_surface_material_mismatches": 0,
+  "final_rgb_reset_bit_exact": true,
+  "other46binary_fields_reset_bit_exact": true,
+  "actual_sdk": {
+    "dispatches": 52,
+    "constant_bytes": 23264,
+    "pipeline_bytes_exact_to023": true,
+    "all_numeric_resource_bindings_match": true
+  },
+  "ownership": {
+    "true_peak_owned_bytes": 31890864,
+    "allocation_pairs": 37,
+    "allocation_events": 74,
+    "image_allocations": 15,
+    "teardown_zero": true,
+    "driver_private_and_cpu_memory_excluded": true
+  },
+  "timestamps": {
+    "completed_units": 1454,
+    "maximum_gpu_unit_us_diagnostic": 737.5212996025085,
+    "active_gpu_us_diagnostic": [
+      20319.447201313007,
+      22445.847388000468,
+      20940.988136787426
+    ],
+    "accepted_timing": false
+  },
+  "actual_unique_saved_secondary_rays_independently_audited": 234400,
+  "physical_guides_diagnostic_checks": [
+    {
+      "pixels": 57600,
+      "active_primary_pixels": 7325,
+      "nominal_viewport_spp_slots": 921600,
+      "actual_first_secondary_samples_audited": 117200,
+      "actual_ray_query_count_instrumented": false,
+      "primary": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "gpu_hit_pixels": 7325,
+        "reference_hit_pixels": 7325,
+        "hit_presence_mismatches": 0,
+        "primitive_mismatches": 0,
+        "depth_bound_failures": 0,
+        "maximum_absolute_depth_error": 5.372578511853021e-06,
+        "maximum_normal_vector_error": 2.0,
+        "normal_vector_mismatch_pixels": 5056,
+        "pass_": true
+      },
+      "secondary_primitive_mismatches": 0,
+      "maximum_secondary_distance_error": 1.4040840321527526e-06,
+      "all_secondary_distance_bounds_pass": true,
+      "all_sample_sum_mean_exact": true,
+      "all_actual_guide_contracts_pass": true,
+      "all_pixels_included": true,
+      "quality_admitted": false
+    },
+    {
+      "pixels": 57600,
+      "active_primary_pixels": 7325,
+      "nominal_viewport_spp_slots": 921600,
+      "actual_first_secondary_samples_audited": 117200,
+      "actual_ray_query_count_instrumented": false,
+      "primary": {
+        "pixels": 57600,
+        "scoring_exclusions": 0,
+        "gpu_hit_pixels": 7325,
+        "reference_hit_pixels": 7325,
+        "hit_presence_mismatches": 0,
+        "primitive_mismatches": 0,
+        "depth_bound_failures": 0,
+        "maximum_absolute_depth_error": 5.372578511853021e-06,
+        "maximum_normal_vector_error": 2.0,
+        "normal_vector_mismatch_pixels": 5056,
+        "pass_": true
+      },
+      "secondary_primitive_mismatches": 0,
+      "maximum_secondary_distance_error": 1.4623863204832332e-06,
+      "all_secondary_distance_bounds_pass": true,
+      "all_sample_sum_mean_exact": true,
+      "all_actual_guide_contracts_pass": true,
+      "all_pixels_included": true,
+      "quality_admitted": false
+    }
+  ],
+  "remaining_cpu_diagnostics_pass": true,
+  "original_failed_audit_admission_unchanged": true,
+  "upstream_source_diagnosis": "Upstream tile-based preload skips shared world-position/material initialization for fully sky tiles, but A-trous SMEM writes that shared material component before its sky early-out. Saved mismatches are wholly inside those tiles. This source/data diagnosis is not an isolation-run proof or a repaired-GPU result.",
+  "upstream_source_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/NRD-e06852bd/Shaders/RELAX_AtrousSmem.cs.hlsl": "f838a697cf1dd9960313d840ee566d064537995ed44328bad2fe6b144ddf31aa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-build-v1/source/NRD-e06852bd/Shaders/RELAX_AtrousSmem.cs.hlsl": "f838a697cf1dd9960313d840ee566d064537995ed44328bad2fe6b144ddf31aa",
+    "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/external/NRD-e06852bd/Shaders/Common.hlsli": "0948feaecf5faa50442710dbaaa3d439f2539e52d5b8eabfc7cf569a2c208525",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-build-v1/source/NRD-e06852bd/Shaders/Common.hlsli": "0948feaecf5faa50442710dbaaa3d439f2539e52d5b8eabfc7cf569a2c208525"
+  },
+  "records": [
+    {
+      "kind": "native",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-gpu-h01-b2-v1/result.json",
+      "raw_receipt_sha256": "943bc40e1aba5655d08b855af6f0acea4fd84eb806daf97a65a32d878341ef9c",
+      "payloads_rehashed": 167
+    },
+    {
+      "kind": "failed-independent-audit",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-gpu-h01-b2-audit-v1/result.json",
+      "raw_receipt_sha256": "ab22707d74076bd6a2367a5894859efa4e97836cf2406e97fc6018039cceb432",
+      "payloads_rehashed": 0
+    },
+    {
+      "kind": "remaining-cpu-diagnostics",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-h01-b2-failure-cpu-diagnostics-v1/result.json",
+      "raw_receipt_sha256": "06881155ae3be25b663a5a2deb91d851d1b7008ba5e275072d090c55d8edb259",
+      "payloads_rehashed": 3
+    }
+  ],
+  "quality_admitted": false,
+  "nrd_gpu_runtime_qualified": false,
+  "accepted_timing": false,
+  "gpu_memory_superiority_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "old_successful_cohorts_rerun": false,
+  "new_reference_paths": 0,
+  "total_audited_gpu_acquisitions_including_failed": 133
+}
