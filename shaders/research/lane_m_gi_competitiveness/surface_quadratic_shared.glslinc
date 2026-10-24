@@ -1,0 +1,111 @@
+//019 actual ordered float32 kernel, shared verbatim by GLSL and native CPU.
+// Storage access and math wrappers are supplied by the caller. No radiance fit.
+float q_dot(float a[3],float b[3]) {
+    precise float s=a[0]*b[0];s=s+a[1]*b[1];s=s+a[2]*b[2];return s;
+}
+void q_cross(float a[3],float b[3],Q_OUT float c[3]) {
+    precise float x=a[1]*b[2]-a[2]*b[1];precise float y=a[2]*b[0]-a[0]*b[2];precise float z=a[0]*b[1]-a[1]*b[0];
+    c[0]=x;c[1]=y;c[2]=z;
+}
+void q_geometry(uint pixel) {
+    for(uint a=0;a<8;a++)q_setgeo(pixel,a,0.0f);
+    if(q_hit(pixel,7)!=1)return;
+    precise float x=float(pixel%q_width());precise float y=float(pixel/q_width());
+    precise float nx=2.0f*((x+0.5f)/float(q_width()))-1.0f;
+    precise float ny=1.0f-2.0f*((y+0.5f)/float(q_height()));
+    precise float rx=nx*q_camera(11);precise float uy=ny*q_camera(15);
+    precise float ray[3];precise float normal[3];
+    for(uint a=0;a<3;a++) {
+        ray[a]=(q_camera(4+a)+q_camera(8+a)*rx)+q_camera(12+a)*uy;
+        normal[a]=q_fbits(q_hit(pixel,a));
+    }
+    precise float length=q_sqrt(q_dot(ray,ray));
+    precise float nl=q_sqrt(q_dot(normal,normal));
+    for(uint a=0;a<3;a++){ray[a]=ray[a]/length;normal[a]=normal[a]/nl;}
+    if(q_dot(normal,ray)>0.0f)for(uint a=0;a<3;a++)normal[a]=-normal[a];
+    precise float t=q_fbits(q_hit(pixel,3));
+    for(uint a=0;a<3;a++){precise float position=q_camera(a)+ray[a]*t;q_setgeo(pixel,a,position);q_setgeo(pixel,4+a,normal[a]);}
+}
+bool q_accept(uint pixel,int dy,int dx,uint stride) {
+    int sy=dy*int(stride),sx=dx*int(stride);int steps=q_imax(q_iabs(sy),q_iabs(sx));
+    precise float normal[3];for(uint a=0;a<3;a++)normal[a]=q_getgeo(pixel,4+a);
+    for(int k=1;k<=steps;k++) {
+        int yy=int(pixel/q_width())+int(q_floor(float(k*sy)/float(steps)+0.5f));
+        int xx=int(pixel%q_width())+int(q_floor(float(k*sx)/float(steps)+0.5f));
+        if(yy<0 || xx<0 || yy>=int(q_height()) || xx>=int(q_width()))return false;
+        uint other=uint(yy)*q_width()+uint(xx);
+        if(q_hit(other,7)!=1 || q_hit(other,5)!=q_hit(pixel,5))return false;
+        precise float on[3];precise float delta[3];
+        for(uint a=0;a<3;a++){on[a]=q_getgeo(other,4+a);delta[a]=q_getgeo(other,a)-q_getgeo(pixel,a);}
+        if(q_dot(normal,on)<0.999f || q_abs(q_dot(normal,delta))>q_camera(16))return false;
+    }
+    return true;
+}
+uint q_neighbour(uint pixel,int dy,int dx,uint stride) {
+    return uint(int(pixel/q_width())+dy*int(stride))*q_width()+uint(int(pixel%q_width())+dx*int(stride));
+}
+uint q_l1_model(float quadratic[25],float affine[25]) {
+    precise float ql=0.0f;precise float al=0.0f;
+    for(uint j=0;j<25;j++){ql=ql+q_abs(quadratic[j]);al=al+q_abs(affine[j]);}
+    return ql<=4.0f?0u:(al<=4.0f?1u:2u);
+}
+void q_fit(uint pixel,uint stride,uint stage) {
+    for(uint j=0;j<25;j++)q_setcoeff(stage,j,pixel,0.0f);
+    q_setmask(stage,pixel,0);q_setselector(stage,pixel,255);
+    if(q_hit(pixel,7)!=1)return;
+    precise float n[3];precise float helper[3];precise float tangent[3];precise float bitangent[3];
+    for(uint a=0;a<3;a++){n[a]=q_getgeo(pixel,4+a);helper[a]=0.0f;}
+    if(q_abs(n[2])<0.999f)helper[2]=1.0f;else helper[1]=1.0f;
+    q_cross(helper,n,tangent);precise float tl=q_sqrt(q_dot(tangent,tangent));
+    for(uint a=0;a<3;a++)tangent[a]=tangent[a]/tl;q_cross(n,tangent,bitangent);
+    precise float raw[25];precise float delta[75];precise float total=0.0f;precise float scale=0.0f;
+    uint mask=0;
+    for(int dy=-2;dy<=2;dy++)for(int dx=-2;dx<=2;dx++) {
+        uint j=uint((dy+2)*5+dx+2);bool accept=q_accept(pixel,dy,dx,stride);
+        int ky=dy==0?6:(q_iabs(dy)==1?4:1);int kx=dx==0?6:(q_iabs(dx)==1?4:1);
+        raw[j]=accept?float(ky*kx):0.0f;total=total+raw[j];precise float d[3];
+        for(uint a=0;a<3;a++){d[a]=accept?q_getgeo(q_neighbour(pixel,dy,dx,stride),a)-q_getgeo(pixel,a):0.0f;delta[j*3+a]=d[a];}
+        scale=q_max(scale,q_sqrt(q_dot(d,d)));if(accept)mask=mask|(1u<<j);
+    }
+    if(scale==0.0f)scale=1.0f;
+    precise float basis[150];precise float qs[150];precise float centers[6];
+    precise float coefficient[25];precise float affine[25];uint retained=0;uint affine_bits=0;
+    for(uint j=0;j<25;j++) {
+        precise float d[3];for(uint a=0;a<3;a++)d[a]=delta[j*3+a];
+        precise float u=q_dot(tangent,d)/scale;precise float v=q_dot(bitangent,d)/scale;
+        basis[j]=1.0f;basis[25+j]=u;basis[50+j]=v;basis[75+j]=u*u;basis[100+j]=u*v;basis[125+j]=v*v;
+        coefficient[j]=0.0f;affine[j]=0.0f;
+    }
+    for(uint column=0;column<6;column++) {
+        precise float residual[25];for(uint j=0;j<25;j++)residual[j]=basis[column*25+j];
+        precise float evaluation=column==0?1.0f:0.0f;
+        for(uint sweep=0;sweep<2;sweep++)for(uint previous=0;previous<column;previous++) {
+            precise float projection=0.0f;
+            for(uint j=0;j<25;j++)projection=projection+(raw[j]*residual[j])*qs[previous*25+j];
+            for(uint j=0;j<25;j++)residual[j]=residual[j]-projection*qs[previous*25+j];
+            evaluation=evaluation-projection*centers[previous];
+        }
+        precise float norm2=0.0f;for(uint j=0;j<25;j++)norm2=norm2+(raw[j]*residual[j])*residual[j];
+        bool keep=norm2>0.000001f*total;precise float denominator=q_sqrt(keep?norm2:1.0f);
+        centers[column]=keep?evaluation/denominator:0.0f;if(keep)retained=retained|(1u<<column);
+        for(uint j=0;j<25;j++){qs[column*25+j]=keep?residual[j]/denominator:0.0f;
+            coefficient[j]=coefficient[j]+(raw[j]*qs[column*25+j])*centers[column];}
+        if(column==2){for(uint j=0;j<25;j++)affine[j]=coefficient[j];affine_bits=retained;}
+    }
+    uint model=q_l1_model(coefficient,affine);uint selected=model==0?retained:(model==1?affine_bits:1u);
+    for(uint j=0;j<25;j++)q_setcoeff(stage,j,pixel,model==0?coefficient[j]:(model==1?affine[j]:raw[j]/total));
+    q_setmask(stage,pixel,mask);q_setselector(stage,pixel,model|(retained<<8)|(selected<<16));
+}
+void q_apply(uint pixel,uint stride,uint stage) {
+    for(uint image=0;image<q_images();image++) {
+        precise float raw=0.0f;
+        for(int dy=-2;dy<=2;dy++)for(int dx=-2;dx<=2;dx++) {
+            int yy=int(pixel/q_width())+dy*int(stride),xx=int(pixel%q_width())+dx*int(stride);
+            if(yy<0 || xx<0 || yy>=int(q_height()) || xx>=int(q_width()))continue;
+            uint j=uint((dy+2)*5+dx+2);uint other=uint(yy)*q_width()+uint(xx);
+            precise float value=stage==0?q_source(image,other):q_readstage(image,stage-1,other);
+            raw=raw+q_getcoeff(stage,j,pixel)*value;
+        }
+        q_writestage(image,stage,pixel,raw,q_max(raw,0.0f));
+    }
+}
