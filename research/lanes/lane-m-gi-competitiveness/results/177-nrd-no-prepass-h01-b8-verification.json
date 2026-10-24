@@ -1,0 +1,63 @@
+{
+  "schema": "m001-nrd028-second-target-verification/1",
+  "complete": true,
+  "all_pass": true,
+  "lane_m_complete": false,
+  "preservation_base": "717cd9e5",
+  "unchanged_counts": {
+    "prior_protocols": 28,
+    "prior_results": 177,
+    "code": 1247
+  },
+  "all_lane_m_index_paths_checked": 245,
+  "current_markdown_links_checked": 206,
+  "raw_receipts_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n1-v1/result.json": "c46f0cba47fd0eee7448abcb70403146478b50d18942bdb6b23414bdd1e818f9",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n1-audit-v1/result.json": "bad7d73ba2b1fe9162e3c0ece059f0a578a47f68d8dc63bd70205e4b27c4958d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n4-v1/result.json": "57521016b7886f4ba392165d56676bab8e1f1d5cfa2d6b0d5ac455733faf9717",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n4-audit-v1/result.json": "b4613d0af3fc1be3f9d50d44bd309b98da98047bfc89a6277bffd04848cd0f0d",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n16-v1/result.json": "665161fa91f1ee7a6c3fd714938a955817767347245b78c7285229c0e54499f4",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n16-audit-v1/result.json": "6ee7072b3483fc674bfbd287cefbabeaeb9276a3cccf91b024c9f4816fe55205",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n64-v1/result.json": "38a0034042005c4da463d6fdffd6a4c25e88b3ee1de72a212b118a3f62fe5d07",
+    "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd028-gpu-h01-b8-n64-audit-v1/result.json": "9f66ab3b82695286923af467438e4c2f51568793e4910a48c84738bc3f28b145"
+  },
+  "new_gpu_acquisitions": 4,
+  "gpu_processes_retried": 0,
+  "all_new_actual_input_fields_match_anchored026": true,
+  "reused026_full_secondary_intersection_frames": [
+    0,
+    1,
+    63
+  ],
+  "new_secondary_intersections": 0,
+  "source_and_document_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md": "4db85a2343f2b9665562dd67da293f484a12857445ed5a756d517d37dc6cab83",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_build.py": "f9f5d05d7f34f268bd27c26567e9f7b37c7291de3bf8ee2e2d3ad9fe9b8a3467",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_overlay.py": "244dd10944ca017ac99526bddab8bb26e98c5498bb415847e23b966239ab1263",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_process.py": "5843d89ec1729238fa6e31661cc0cc155fd6aad5f350db569b4ef594947e5cd1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_no_prepass_audit.py": "a32b69b50ed83688c671af039d8ef9e5cf0f1e24788f5215dfecd49ba8030b5b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_nrd_no_prepass.py": "709011ec384bb2eb1fc40ba5a200ba1ea9539f0d24f2f2fcdf7423c6c9f631dd",
+    "/var/owo/workspaces/projects/gi-lab/research/status.md": "e7fee2786eabd988a9da41fdd5ac6a9cf3985b7c08aaafdf6b7f4d27bdf7e679",
+    "/var/owo/workspaces/projects/gi-lab/research/roadmap.md": "95e921bb01280a408bc94a28a06219badeaf4d86d473884d5030890c5c8e5e1b",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/README.md": "2b7d3ce97317aa6cfa925db3c5ed66471f81b0a4618c1077d1fd9ba92ed9e202",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/176-nrd-no-prepass-second-target-checkpoint.md": "5caa0e47f73f7440f866a7ea051ddc42bb441c9fbc8b036804a6c291f31e0e77",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/175-nrd-no-prepass-h01-b8-hdr-outcome.json": "dce0de8327d1f8db216e62643e5604c059c8d7aab45e124fda0db451f0041d3c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/index.json": "16b08694dd763295d542cb0574d296c64d78ad4b868624e7493297f1c3641899"
+  },
+  "all_owned_teardown_zero": true,
+  "default_build_graph_unchanged": true,
+  "default_build_or_renderer_runtime_rerun": false,
+  "original026_gpu_metrics_or_geometric_cohorts_rerun": false,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n[research:check] $ python scripts/research/verify.py\n",
+  "auxiliary_evidence_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/out/m001-nrd028-h01-b8-publication-v1.py": "0771af7e6f6933d1ac94be7147bf78bdfbbbbfad410c4cacee2d51dcb080a71a"
+  },
+  "next_target_not_run": {
+    "cell": "H02",
+    "depth": 2,
+    "spp": 1
+  },
+  "accepted_timing": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-nrd028-h01-b8-publication-verification-v1.json",
+  "raw_receipt_sha256": "bb4f4552a5c12d9f395168165467d7aa7236d15e86fa912922053e78bb5c4bfc"
+}
