@@ -1,0 +1,60 @@
+{
+  "schema": "m001-nrd024-native-cpu-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_executed": false,
+  "classification": "CPU_READY_GPU_NOT_RUN",
+  "preregistration_commit": "085aa453",
+  "native_source_commit": "bd752204",
+  "build_repair_source_commit": "97e621ad",
+  "native_cpp_checks": 33,
+  "python_checks": 39,
+  "actual_native_cpu_commands": 18,
+  "accepted_build_validation_steps": 9,
+  "successful_build_steps_reused": 7,
+  "new_repaired_shader_compile_validate_steps": 2,
+  "sdk_rebuilt": false,
+  "old022_or023_cohorts_rerun": false,
+  "old_native_objects_rebuilt": false,
+  "failed_build_preserved": true,
+  "failed_build_cause": "Upstream RELAX_BackEnd_UnpackRadiance returns float4; strict DXC rejected implicit float3 conversion. Explicit .xyz keeps intended RGB and all SDK/transport/math/settings unchanged.",
+  "records": [
+    {
+      "kind": "failed-build",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-build-v1/result.json",
+      "raw_receipt_sha256": "b72cace8eef6067dd7741331cbb844d65717a93a436a1f758225aeb086b029d3",
+      "payloads_rehashed": 33
+    },
+    {
+      "kind": "accepted-build",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-build-v2/result.json",
+      "raw_receipt_sha256": "c58974f566e3ca769fc7f903cb729bfb9e1057e6124b7f98b3f0f8513070baf4",
+      "payloads_rehashed": 18
+    },
+    {
+      "kind": "cpu-contracts",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "abc28ec956a7d22afe07802f28eaa11d07c24d2e551779652a670dce56b3b9b1",
+      "payloads_rehashed": 52
+    }
+  ],
+  "actual_executable": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-build-v2/nrd-vulkan",
+  "actual_executable_sha256": "84e6de9ca347e82bc0355487e282e52e9556fe7bef912ec00008795e396d58d1",
+  "shader_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-build-v2",
+  "source_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/build_nrd_vulkan.py": "7fe897b67767dfffac1e255f56677f99064f5846e236de4426b450b805aaccd8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_vulkan_overlay.py": "5fdbb7cd8713c1e942b0b99bc338da6f8bc4490486994b6ac58fc4787ee73462",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/024-nrd-native-vulkan-guide-runtime-controls.md": "499d0208170777fb644137014678d009031a5210308a86ea8c2372e3d1d692e5",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_nrd_vulkan.py": "3e4411183ec225f28ac7f1c69b63928e44cfd2e8a77bce1cdae81b09e7613817",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_vulkan_process.py": "10a2c8e26cdbff1144432496720b281705b3bf39772b5c1681e8ed1ad253f224",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_vulkan_audit.py": "3246627427b996905269f44d6c67fe3a85a36285ac12faa7459a26e45d666714",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_m_gi_competitiveness/nrd_vulkan_runtime.cpp": "b5a8deeac663bf1e3ac3c63a32d867aa2adeab3e91b93a4e268630c8162ec2ec",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_m_gi_competitiveness/nrd_vulkan_contract.hpp": "c5e3d145b7b012b179ad9c28c0bfe0dd600fcadcdbd38fb08a4f2068f79c77b6",
+    "/var/owo/workspaces/projects/gi-lab/src/research/lane_m_gi_competitiveness/test_nrd_vulkan_contract.cpp": "1dfbcef8cce3e301bdefe6543f9515d15cf93dcf296ea0d3c8f4c04ea77b9946",
+    "/var/owo/workspaces/projects/gi-lab/shaders/research/lane_m_gi_competitiveness/nrd_composite_rgb.hlsl": "0ecc9ccc5a90df188fa33e30d9fc89b1cb54e020fbfdaba3c27e9c6e68fd4538"
+  },
+  "accepted_timing": false,
+  "quality_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false
+}

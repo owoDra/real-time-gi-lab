@@ -397,7 +397,8 @@
       "nrd_relax_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/test_nrd_cpu.py",
       "nrd_relax_guide_source_contract": "scripts/research/lane_m_gi_competitiveness/nrd_source_contract.py",
       "nrd_native_runtime_protocol": "experiments/024-nrd-native-vulkan-guide-runtime-controls.md",
-      "nrd_native_runtime_status": "PREREGISTERED_CPU_BUILD_TESTS_GPU_NOT_RUN"
+      "nrd_native_runtime_status": "CPU_READY_GPU_NOT_RUN",
+      "nrd_native_runtime_cpu_preparation": "results/138-nrd-native-vulkan-cpu-preparation.json"
     }
   ]
 }
