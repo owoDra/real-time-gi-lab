@@ -307,7 +307,11 @@
       "geometry_barrier_reconstruction_noisy_quality_passes": 4,
       "geometry_barrier_reconstruction_reference_bias_passes": 3,
       "geometry_barrier_reconstruction_new_render_paths": 0,
-      "geometry_barrier_reconstruction_further_process_selected": false
+      "geometry_barrier_reconstruction_further_process_selected": false,
+      "surface_quadratic_reconstruction_protocol": "experiments/018-surface-quadratic-reconstruction-cpu-screen.md",
+      "surface_quadratic_reconstruction_preparation": "results/111-surface-quadratic-reconstruction-cpu-preparation.json",
+      "surface_quadratic_reconstruction_status": "CPU_PREPARED_FITTING_RECONSTRUCTION_NOT_RUN",
+      "surface_quadratic_reconstruction_gpu_cases": 0
     }
   ]
 }
