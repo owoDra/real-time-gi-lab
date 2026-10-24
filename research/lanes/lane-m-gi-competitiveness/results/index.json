@@ -294,8 +294,20 @@
       "normal_product_guide_further_process_selected": false,
       "geometry_barrier_reconstruction_protocol": "experiments/017-geometry-barrier-reconstruction-cpu-screen.md",
       "geometry_barrier_reconstruction_preparation": "results/107-geometry-barrier-reconstruction-cpu-preparation.json",
-      "geometry_barrier_reconstruction_status": "CPU_PREPARED_RECONSTRUCTION_NOT_RUN",
-      "geometry_barrier_reconstruction_gpu_cases": 0
+      "geometry_barrier_reconstruction_status": "CPU_FEASIBILITY_REJECTED_TWO_TARGET_PASS_FOUR_FAIL_NO_GPU",
+      "geometry_barrier_reconstruction_gpu_cases": 0,
+      "geometry_barrier_reconstruction_replay": "results/108-geometry-barrier-reconstruction-six-targets-raw-replay.json",
+      "geometry_barrier_reconstruction_outcome": "results/109-geometry-barrier-reconstruction-cpu-outcome.md",
+      "geometry_barrier_reconstruction_verification": "results/110-geometry-barrier-reconstruction-cpu-verification.json",
+      "geometry_barrier_reconstruction_cpu_target_processes": 6,
+      "geometry_barrier_reconstruction_target_passes": 2,
+      "geometry_barrier_reconstruction_target_failures": 4,
+      "geometry_barrier_reconstruction_noisy_quality_rows": 24,
+      "geometry_barrier_reconstruction_reference_bias_rows": 6,
+      "geometry_barrier_reconstruction_noisy_quality_passes": 4,
+      "geometry_barrier_reconstruction_reference_bias_passes": 3,
+      "geometry_barrier_reconstruction_new_render_paths": 0,
+      "geometry_barrier_reconstruction_further_process_selected": false
     }
   ]
 }

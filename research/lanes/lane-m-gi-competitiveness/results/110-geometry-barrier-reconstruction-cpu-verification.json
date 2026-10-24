@@ -1,0 +1,80 @@
+{
+  "schema": "m001-geometry-barrier-reconstruction-cpu-verification/1",
+  "all_checks_pass": true,
+  "source_commit": "a94bd7df04dfdbb32881e3b07fdddcbb18c4fe39",
+  "checkpoint_checks": [
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "047f0a",
+        "wall_time_seconds": 0.87606614,
+        "exit_code": 0,
+        "original_token_count": 39,
+        "output": "[research:check] $ python scripts/research/verify.py\nresearch harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n"
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "f69f8d",
+        "wall_time_seconds": 1.0949e-05,
+        "exit_code": 0,
+        "original_token_count": 0,
+        "output": ""
+      }
+    },
+    {
+      "status": "fulfilled",
+      "value": {
+        "chunk_id": "36c96a",
+        "wall_time_seconds": 1.4569e-05,
+        "exit_code": 0,
+        "original_token_count": 18,
+        "output": "{\"old_code_files\": 1176, \"old_result_files\": 106, \"unchanged\": true}\n"
+      }
+    }
+  ],
+  "old_code_files_unchanged": 1176,
+  "immutable_old_result_records_unchanged": 106,
+  "source_base": "f646271f",
+  "new_standalone_python_files": 3,
+  "exact_prepared_sources_verified_in_commit": "a94bd7df04dfdbb32881e3b07fdddcbb18c4fe39",
+  "prepared_source_files": 30,
+  "actual_new_contract_tests": 16,
+  "old_test_suites_rerun": false,
+  "CPU_target_processes": 6,
+  "all_target_processes_returned_zero_without_timeout": true,
+  "all_complete_stage_error_arrays_replayed": 180,
+  "all_target_payloads_rehashed": 84,
+  "independent_scalar_pixel_stage_comparisons": 11520,
+  "independent_fsum_metrics_verified": true,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-geometry-filter-final-replay-v1/result.json",
+  "raw_receipt_sha256": "7bc526c23444030fe2668497a147a3ddb0f366d5f306c5a4f1a1f0d880e59f8e",
+  "gpu_executed": false,
+  "new_render_paths": 0,
+  "new_reference_paths": 0,
+  "target_passes": 2,
+  "target_failures": 4,
+  "reference_bias_passes": 3,
+  "noisy_quality_passes": 4,
+  "noisy_quality_rows": 24,
+  "reference_bias_rows": 6,
+  "default_build_graph_changed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "additional_017_process_selected": false,
+  "new_records_sha256": {
+    "107-geometry-barrier-reconstruction-cpu-preparation.json": "f6c56a7f5148ba2cd4e5102b2ef400fe4c7b5f9b8180f1629278216795bbdb30",
+    "108-geometry-barrier-reconstruction-six-targets-raw-replay.json": "1310bfe8cd90ad092de33a7370046e6428de355ec5504c10afc7a6f3c69dfbfe",
+    "109-geometry-barrier-reconstruction-cpu-outcome.md": "edbd746bb47d12c5c9f714711bee6e9886f57de17959bec4fc9e50d09aca7140"
+  },
+  "all_lane_m_index_paths_checked": 150,
+  "current_markdown_links_checked": 111,
+  "current_summary_unique_and_terminal": true,
+  "final_index_link_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-geometry-filter-final-index-verification.json",
+  "final_index_link_receipt_sha256": "efa726fc6f38e5884638ab3001219a8ca83c78901bae740af5e7102b9922f750"
+}
