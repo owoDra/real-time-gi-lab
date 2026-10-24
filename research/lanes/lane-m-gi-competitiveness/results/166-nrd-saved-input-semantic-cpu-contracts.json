@@ -1,0 +1,26 @@
+{
+  "schema": "m001-nrd027-cpu-audit-contracts/1",
+  "complete": true,
+  "all_pass": true,
+  "actual_python_tests": 26,
+  "semantic_reflection_geometry_contracts": 18,
+  "static_pointer_relevance_contracts": 8,
+  "records": [
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd027-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "e2863ac00dcb7290e8411ee5713a10c5f786b937bbf1e1dce2f39597da41de69",
+      "source_commit": "0d0ccfdf6c58fbcf7138b26ba02bea1dfa429d21",
+      "consumed_inputs_rehashed": 5,
+      "payloads_rehashed": 1
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd027-relevance-contracts-v1/result.json",
+      "raw_receipt_sha256": "4595663940313c4841924d9e2a88e559373b923641796941936080afde715767",
+      "source_commit": "ad7af1685b0ce654bd73d2ca755cb3b4035bad19",
+      "consumed_inputs_rehashed": 2,
+      "payloads_rehashed": 1
+    }
+  ],
+  "gpu_executed": false,
+  "old_successful_suites_rerun": false
+}

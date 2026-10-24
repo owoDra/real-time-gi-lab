@@ -1,0 +1,597 @@
+{
+  "schema": "m001-nrd027-saved-input-semantics-outcome/1",
+  "complete": true,
+  "valid": true,
+  "all_pass": true,
+  "classification": "SEMANTIC_BOUNDARY_PASS_CONFIGURED_QUALITY_FAIL_RETAINED",
+  "study_complete": true,
+  "preregistration_commit": "a3c05de1",
+  "semantic_source_commit": "0d0ccfdf6c58fbcf7138b26ba02bea1dfa429d21",
+  "supplemental_relevance_source_commit": "ad7af1685b0ce654bd73d2ca755cb3b4035bad19",
+  "records": [
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd027-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "e2863ac00dcb7290e8411ee5713a10c5f786b937bbf1e1dce2f39597da41de69",
+      "source_commit": "0d0ccfdf6c58fbcf7138b26ba02bea1dfa429d21",
+      "consumed_inputs_rehashed": 5,
+      "payloads_rehashed": 1
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd027-saved-semantics-v1/result.json",
+      "raw_receipt_sha256": "3f346e3fc15340f6c3d9d0a4169f8c81bd905b7f624c20dd9ea23d22a2ffea57",
+      "source_commit": "0d0ccfdf6c58fbcf7138b26ba02bea1dfa429d21",
+      "consumed_inputs_rehashed": 18475,
+      "payloads_rehashed": 3
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd027-relevance-contracts-v1/result.json",
+      "raw_receipt_sha256": "4595663940313c4841924d9e2a88e559373b923641796941936080afde715767",
+      "source_commit": "ad7af1685b0ce654bd73d2ca755cb3b4035bad19",
+      "consumed_inputs_rehashed": 2,
+      "payloads_rehashed": 1
+    },
+    {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd027-field-relevance-v1/result.json",
+      "raw_receipt_sha256": "9fe7cc55b8ec7e32848a5a0e3e3516d1322885c6b0d18869c8e1b3328aef6693",
+      "source_commit": "ad7af1685b0ce654bd73d2ca755cb3b4035bad19",
+      "consumed_inputs_rehashed": 22,
+      "payloads_rehashed": 0
+    }
+  ],
+  "actual_gpu_acquisitions": 0,
+  "new_image_or_reference_samples": 0,
+  "original_quality_metrics_rerun": false,
+  "sdk_constant_records": 15624,
+  "relax_constant_records": 15360,
+  "clear_constant_records": 264,
+  "actual_captures": 24,
+  "saved_guide_frame_instances": 72,
+  "unique_geometry_maps": 3,
+  "consumed_semantic_inputs_rehashed": 18475,
+  "geometry": [
+    {
+      "cell": "H01",
+      "representative_capture": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd026-gpu-h01-b2-n1-v1/capture",
+      "representative_frame": 0,
+      "pass_": true,
+      "checks": {
+        "position": true,
+        "previous_position": true,
+        "positive_viewz": true,
+        "static_motion": true,
+        "gWorldToClip": true,
+        "gWorldToClipPrev": true,
+        "normal": true,
+        "roughness": true,
+        "material": true
+      },
+      "pixels": 57600,
+      "active_primary_pixels": 7325,
+      "sky_pixels": 50275,
+      "maximum_position_coordinate_error": 3.013853927313903e-06,
+      "maximum_previous_position_coordinate_error": 3.013853927313903e-06,
+      "maximum_normal_coordinate_error": 0.0009784731128131784,
+      "maximum_ndc_xy_errors": {
+        "gWorldToClip": 1.193424415957267e-07,
+        "gWorldToClipPrev": 1.193424415957267e-07
+      }
+    },
+    {
+      "cell": "H02",
+      "representative_capture": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd026-gpu-h02-b2-n1-v1/capture",
+      "representative_frame": 0,
+      "pass_": true,
+      "checks": {
+        "position": true,
+        "previous_position": true,
+        "positive_viewz": true,
+        "static_motion": true,
+        "gWorldToClip": true,
+        "gWorldToClipPrev": true,
+        "normal": true,
+        "roughness": true,
+        "material": true
+      },
+      "pixels": 57600,
+      "active_primary_pixels": 6748,
+      "sky_pixels": 50852,
+      "maximum_position_coordinate_error": 3.013853927313903e-06,
+      "maximum_previous_position_coordinate_error": 3.013853927313903e-06,
+      "maximum_normal_coordinate_error": 0.0009508603682434891,
+      "maximum_ndc_xy_errors": {
+        "gWorldToClip": 1.193424415957267e-07,
+        "gWorldToClipPrev": 1.193424415957267e-07
+      }
+    },
+    {
+      "cell": "H03",
+      "representative_capture": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd026-gpu-h03-b2-n1-v1/capture",
+      "representative_frame": 0,
+      "pass_": true,
+      "checks": {
+        "position": true,
+        "previous_position": true,
+        "positive_viewz": true,
+        "static_motion": true,
+        "gWorldToClip": true,
+        "gWorldToClipPrev": true,
+        "normal": true,
+        "roughness": true,
+        "material": true
+      },
+      "pixels": 57600,
+      "active_primary_pixels": 7670,
+      "sky_pixels": 49930,
+      "maximum_position_coordinate_error": 1.6000748512823293e-06,
+      "maximum_previous_position_coordinate_error": 1.6000748512823293e-06,
+      "maximum_normal_coordinate_error": 0.0009784731128131784,
+      "maximum_ndc_xy_errors": {
+        "gWorldToClip": 6.752027603695865e-08,
+        "gWorldToClipPrev": 6.752027603695865e-08
+      }
+    }
+  ],
+  "rows": [
+    {
+      "cell": "H01",
+      "depth": 2,
+      "spp": 1,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 2,
+      "spp": 4,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 2,
+      "spp": 16,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 2,
+      "spp": 64,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 8,
+      "spp": 1,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 8,
+      "spp": 4,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 8,
+      "spp": 16,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H01",
+      "depth": 8,
+      "spp": 64,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 2,
+      "spp": 1,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 2,
+      "spp": 4,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 2,
+      "spp": 16,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 2,
+      "spp": 64,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "spp": 1,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "spp": 4,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "spp": 16,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "spp": 64,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "spp": 1,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "spp": 4,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "spp": 16,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "spp": 64,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 8,
+      "spp": 1,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 8,
+      "spp": 4,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 8,
+      "spp": 16,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    },
+    {
+      "cell": "H03",
+      "depth": 8,
+      "spp": 64,
+      "sdk_records": 651,
+      "relax_records": 640,
+      "clear_records": 11,
+      "all_constant_predicates_pass": true,
+      "constant_failures": [],
+      "guide_frames": [
+        0,
+        1,
+        63
+      ],
+      "static_guide_identity_verified": true
+    }
+  ],
+  "source_default_discrepancy": {
+    "setting": "luminanceEdgeStoppingRelaxation",
+    "declared_default": 0.5,
+    "constant": "gLuminanceEdgeStoppingRelaxation",
+    "actual_source_setting": "roughnessEdgeStoppingRelaxation",
+    "actual_default_constant": 1.0,
+    "actual_constant_records_verified": 15360,
+    "quality_impact_tested": false
+  },
+  "actual_disputed_field_loads": 0,
+  "actual_diffuse_phi_positive_control_loads": 2,
+  "disputed_field_irrelevant_to_selected_diffuse_binaries": true,
+  "source_assignment_does_not_explain026_losses": true,
+  "geometry_map_domain_checks": [
+    {
+      "cell": "H01",
+      "all_hit_domain_values_finite": true,
+      "nonfinite_entries_by_field": {
+        "expected_camera_relative_position": 150825,
+        "sdk_camera_relative_position": 0,
+        "position_coordinate_error": 150825,
+        "previous_position_coordinate_error": 150825,
+        "position_coordinate_bound": 150825,
+        "decoded_normal": 0,
+        "normal_coordinate_error": 0,
+        "gWorldToClip": 100550,
+        "gWorldToClipPrev": 100550
+      },
+      "nonfinite_entries_outside_primary_hit_domain_only": true
+    },
+    {
+      "cell": "H02",
+      "all_hit_domain_values_finite": true,
+      "nonfinite_entries_by_field": {
+        "expected_camera_relative_position": 152556,
+        "sdk_camera_relative_position": 0,
+        "position_coordinate_error": 152556,
+        "previous_position_coordinate_error": 152556,
+        "position_coordinate_bound": 152556,
+        "decoded_normal": 0,
+        "normal_coordinate_error": 0,
+        "gWorldToClip": 101704,
+        "gWorldToClipPrev": 101704
+      },
+      "nonfinite_entries_outside_primary_hit_domain_only": true
+    },
+    {
+      "cell": "H03",
+      "all_hit_domain_values_finite": true,
+      "nonfinite_entries_by_field": {
+        "expected_camera_relative_position": 149790,
+        "sdk_camera_relative_position": 0,
+        "position_coordinate_error": 149790,
+        "previous_position_coordinate_error": 149790,
+        "position_coordinate_bound": 149790,
+        "decoded_normal": 0,
+        "normal_coordinate_error": 0,
+        "gWorldToClip": 99860,
+        "gWorldToClipPrev": 99860
+      },
+      "nonfinite_entries_outside_primary_hit_domain_only": true
+    }
+  ],
+  "geometry_warnings_explanation": "Original primary-miss t is nonfinite. Full maps retain nonfinite camera-relative/projection diagnostics only outside explicit primary-hit domain; all actual-hit values are finite. Original HDR scoring still includes every pixel.",
+  "matrix_operand_semantics": {
+    "spirv_opcode": 144,
+    "name": "OpVectorTimesMatrix",
+    "logical_matrix_transposed_for_column_apply": true
+  },
+  "original026_quality_joint_pass_targets": 0,
+  "accepted_timing": false,
+  "gpu_memory_superiority_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "total_audited_gpu_acquisitions_including_failed": 160,
+  "next_protocol": "experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md",
+  "next_gpu_selected": false
+}

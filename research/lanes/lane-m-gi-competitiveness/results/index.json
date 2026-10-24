@@ -451,8 +451,17 @@
       "nrd_cold_warm_hdr_joint_pass_targets": 0,
       "nrd_cold_warm_hdr_further_gpu_selected": false,
       "nrd_saved_input_semantic_audit_protocol": "experiments/027-nrd-saved-input-semantic-audit.md",
-      "nrd_saved_input_semantic_audit_status": "PREREGISTERED_CPU_ONLY_NOT_RUN",
-      "nrd_saved_input_semantic_audit_gpu_selected": false
+      "nrd_saved_input_semantic_audit_status": "SEMANTIC_BOUNDARY_PASS_CONFIGURED_QUALITY_FAIL_RETAINED",
+      "nrd_saved_input_semantic_audit_gpu_selected": false,
+      "nrd_saved_input_semantic_audit_cpu_contracts": "results/166-nrd-saved-input-semantic-cpu-contracts.json",
+      "nrd_saved_input_semantic_audit_result": "results/167-nrd-saved-input-semantic-audit.json",
+      "nrd_saved_input_semantic_audit_outcome": "results/168-nrd-saved-input-semantic-outcome.md",
+      "nrd_saved_input_semantic_audit_verification": "results/169-nrd-saved-input-semantic-verification.json",
+      "nrd_saved_input_semantic_audit_complete": true,
+      "nrd_saved_input_semantic_audit_new_gpu_acquisitions": 0,
+      "nrd_no_prepass_protocol": "experiments/028-nrd-diffuse-no-prepass-cold-warm-quality.md",
+      "nrd_no_prepass_status": "PREREGISTERED_IMPLEMENTATION_CPU_READINESS_NOT_RUN",
+      "nrd_no_prepass_gpu_selected": false
     }
   ]
 }
