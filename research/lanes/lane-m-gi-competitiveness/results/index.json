@@ -381,7 +381,10 @@
       "integrated_pt_reconstruction_host": "src/research/lane_m_gi_competitiveness/integrated_pt_reconstruction.cpp",
       "integrated_pt_reconstruction_builder": "scripts/research/lane_m_gi_competitiveness/build_integrated_pt.py",
       "integrated_pt_reconstruction_process": "scripts/research/lane_m_gi_competitiveness/integrated_pt_process.py",
-      "integrated_pt_reconstruction_auditor": "scripts/research/lane_m_gi_competitiveness/integrated_pt_audit.py"
+      "integrated_pt_reconstruction_auditor": "scripts/research/lane_m_gi_competitiveness/integrated_pt_audit.py",
+      "nrd_relax_cpu_protocol": "experiments/023-nrd-relax-source-cpu-qualification.md",
+      "nrd_relax_cpu_status": "PREREGISTERED_CODE_BUILD_API_TESTS_NOT_RUN",
+      "nrd_relax_gpu_runtime_qualified": false
     }
   ]
 }
