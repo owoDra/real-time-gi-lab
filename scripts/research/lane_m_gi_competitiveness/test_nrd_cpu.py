@@ -8,6 +8,7 @@ import math
 import os
 from pathlib import Path
 import resource
+import re
 import shutil
 import struct
 import subprocess
@@ -87,12 +88,25 @@ def audit_probe(out,state,camera):
         need(set(map(tuple,r['descriptors']))<=allowed,'023 SPIR-V binding outside actual SDK layout')
         need(any(a==0 for a,b in r['descriptors']),'023 pipeline missing resource bindings')
         reflections.append(r)
+    header=(B.S.EXTERNAL/'NRD-e06852bd/Include/NRDDescs.h').read_text()
+    body=re.search(r'enum class ResourceType : uint32_t\s*\{(.*?)\n    \};',header,re.S).group(1)
+    body=re.sub(r'//[^\n]*','',body);names=re.findall(r'^\s*([A-Z][A-Z0-9_]*)\s*,',body,re.M)
+    need(names[-1]=='MAX_NUM' and len(names)==33 and names[6]=='IN_DIFF_RADIANCE_HITDIST','023 pinned actual enum declaration')
+    semantic_mismatches=set()
     frames=[json.loads(line) for line in (out/'dispatches.jsonl').read_text().splitlines()];need(len(frames)==65,'023 frame journal')
     users=set();dispatches=0;constant_bytes=0;grid_checks=0;history_frames=0;transient_cycles=0
     for i,frame in enumerate(frames):
         need(frame['iteration']==i and frame['frame']==(0 if i==64 else i) and frame['clear']==(i in (0,64)),'023 frame/reset sequence')
         prev=None;reads=set();writes=set();atrous=[]
-        for d in frame['dispatches']:
+        for original_d in frame['dispatches']:
+            resources=[]
+            for a in original_d['resources']:
+                need(0<=a['type']<32,'023 resource enum range');canonical=names[a['type']]
+                if a['name']!=canonical:semantic_mismatches.add((a['type'],a['name'],canonical))
+                resources.append({**a,'name':canonical})
+            # Decode numeric enums in memory; preserve the SDK's raw (wrong)
+            # diagnostic names and all original journal bytes on disk.
+            d={**original_d,'resources':resources}
             dispatches+=1;pipe=pipelines[d['pipeline']];r=reflections[d['pipeline']]
             need(d['identifier']==23 and len(d['grid'])==2 and all(0<n<=4096 for n in d['grid']),'023 dispatch index/grid')
             raw=(out/'constants'/d['constant_file']).read_bytes();need(len(raw)==d['constant_bytes']<=config['constant_max_bytes'] and (len(raw)>0)==pipe['constant_data'],'023 constants range')
@@ -136,7 +150,7 @@ def audit_probe(out,state,camera):
         return [(dict((k,v) for k,v in d.items() if k!='constant_file'),(out/'constants'/d['constant_file']).read_bytes()) for d in frame['dispatches']]
     need(cold(frames[0])==cold(frames[64]),'023 reset differs from cold dispatch/constants')
     need(dispatches==complete['dispatches'],'023 total dispatches')
-    return dict(projection_checks=projection_checks,dispatches=dispatches,grid_checks=grid_checks,constant_bytes=constant_bytes,history_frames=history_frames,transient_dependencies=transient_cycles,reset_to_cold_exact=True,inter_frame_pool_index_swaps=0,required_user_resources=sorted(users),reflections=reflections)
+    return dict(projection_checks=projection_checks,dispatches=dispatches,grid_checks=grid_checks,constant_bytes=constant_bytes,history_frames=history_frames,transient_dependencies=transient_cycles,reset_to_cold_exact=True,inter_frame_pool_index_swaps=0,required_user_resources=sorted(users),upstream_diagnostic_name_mismatches=[dict(type=n,sdk_reported_name=s,canonical_header_name=c) for n,s,c in sorted(semantic_mismatches)],reflections=reflections)
 
 
 def run(build,work,reuse):
@@ -151,9 +165,12 @@ def run(build,work,reuse):
     need(sha(reuse)=='98e8419b078ca5ffe43bacfa44f2e230b9983def40a7cd5a7030cf150dce4397','023 pinned first audit failure required')
     first=read(reuse);check_hashes(first['payload_sha256'],reuse.parent)
     need(first['error']=='ValueError: 023 independent grid/texture dimensions' and first['build_receipt_sha256']==sha(build/'result.json'),'023 identified audit-only repair')
+    second_path=BASE/'m001-nrd023-cpu-contracts-v2/result.json';need(sha(second_path)=='9f0048aa217f4a77541eb9f3f78d28294f3abaf16c403cf346f45dcbf4ca7a0d','023 pinned second audit failure');second=read(second_path);check_hashes(second['payload_sha256'],second_path.parent)
+    need(second['error']=='ValueError: 023 required guide resources','023 identified upstream diagnostic-name mismatch')
     need(work.is_relative_to(BASE) and not work.exists(),'023 exclusive contract output');work.mkdir(parents=True)
     result=dict(schema='m001-nrd023-real-sdk-cpu-contracts/1',source_commit=commit,complete=False,all_pass=False,gpu_executed=False,sdk_api_executed=False,build_receipt=str(build/'result.json'),build_receipt_sha256=sha(build/'result.json'),rows=[],probes=[],input_sha256={str(p):sha(p) for p in B.OWN})
     result['input_sha256'][str(reuse)]=sha(reuse);result['preserved_first_failure']=str(reuse)
+    result['input_sha256'][str(second_path)]=sha(second_path);result['preserved_second_failure']=str(second_path)
     env={**os.environ,'VK_ICD_FILENAMES':'/nonexistent/m023-no-gpu.json','VK_DRIVER_FILES':'/nonexistent/m023-no-gpu.json','OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','LD_LIBRARY_PATH':os.environ.get('NIX_LD_LIBRARY_PATH',os.environ.get('LD_LIBRARY_PATH',''))}
     def command(label,args,expect=0):
         if label in ('cpp-scalar-contract','native-undefined-symbols','h01-real-sdk'):
