@@ -70,6 +70,12 @@ required user resources, full pipeline exports, history ping-pong and exact
 reset-to-cold sequence/constant equality. Actual GPU histories are NOT_RUN;
 CPU API history tests cannot qualify temporal image behavior.
 
+Pre-execution source clarification: RELAX_DIFFUSE declares no inter-frame SDK
+pool-index swaps; it reads then writes six fixed permanent histories and cycles
+the two transient illumination slots within its a-trous passes. Audit those
+actual dependencies and cycling, rather than demand an invented frame-parity
+swap. This preserves the unmodified upstream algorithm and the reset gate.
+
 Implement/compile the prospective physical producer and packing boundary:
 
 - Exactly reversible additive overlay on the original N010PT source, retaining
