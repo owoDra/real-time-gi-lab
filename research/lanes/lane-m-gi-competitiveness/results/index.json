@@ -367,7 +367,9 @@
       "surface_quadratic_repaired_device_study_complete": true,
       "surface_quadratic_repaired_device_further_gpu_selected": false,
       "integrated_pt_reconstruction_protocol": "experiments/022-integrated-pt-reconstruction-correctness.md",
-      "integrated_pt_reconstruction_status": "PREREGISTERED_CODE_BUILD_TESTS_GPU_NOT_RUN"
+      "integrated_pt_reconstruction_status": "CPU_PREPARATION_PASS_GPU_NOT_RUN",
+      "integrated_pt_reconstruction_cpu_preparation": "results/129-integrated-pt-reconstruction-cpu-preparation.json",
+      "integrated_pt_reconstruction_cpu_preparation_pass": true
     }
   ]
 }

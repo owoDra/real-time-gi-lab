@@ -1,0 +1,45 @@
+{
+  "schema": "m001-integrated022-cpu-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "gpu_executed": false,
+  "registration_commit": "0facc60f4f759665cfd4872b2d980616e13bd742",
+  "native_source_commit": "e690f331c548f66a613b255fc9a35f57254c9548",
+  "process_source_commit": "f6d7f28837ba1c0094506caa5b14bf582d90eb2b",
+  "records": {
+    "build": {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-integrated022-cpu-build-v1/result.json",
+      "raw_receipt_sha256": "073159438ecb0e92502e3112f1872b16a18b5d781bc1f4399b029c4b47d9a494",
+      "complete": true,
+      "all_pass": true,
+      "payloads": 44,
+      "compile_link_validation_steps": 11,
+      "input_dependencies": 420,
+      "compiled_dependencies": 414,
+      "executable": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-integrated022-cpu-build-v1/integrated-pt",
+      "executable_sha256": "97cdad48cfb326e385a3cd780d6e4cc9560013a7d64e5db4c2b134686e916805"
+    },
+    "native_contracts": {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-integrated022-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "aaea1ed73b0e369cc0868efc0b127e4d350b770206d2b81cab1404d27283e932",
+      "complete": true,
+      "all_pass": true,
+      "payloads": 153,
+      "python_checks": 102,
+      "actual_new_cpp_checks": 9
+    },
+    "process_contracts": {
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-integrated022-process-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "2dbbeb5202b4441b96b3aec2c146fe5f54bc46fd8c34047aa9dff748c13984dd",
+      "complete": true,
+      "all_pass": true,
+      "payloads": 3,
+      "checks": 40
+    }
+  },
+  "unchanged_quadratic_spirv_sha256": "fc29a8d59cb4f1a57c304e1265f36a1f3ff8f1f28d295bf4172d9d5a7d944827",
+  "default_renderer_regression": "NOT_RERUN",
+  "validation_layers": "NOT_RUN",
+  "accepted_timing": false,
+  "lane_m_complete": false
+}
