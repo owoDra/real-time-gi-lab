@@ -345,8 +345,15 @@
       "surface_quadratic_device_failure_outcome": "results/119-surface-quadratic-first-cpu-failure-outcome.md",
       "surface_quadratic_device_failure_verification": "results/120-surface-quadratic-first-cpu-failure-verification.json",
       "surface_quadratic_material_abi_repair_protocol": "experiments/020-surface-quadratic-material-abi-repair.md",
-      "surface_quadratic_material_abi_repair_status": "PREREGISTERED_CODE_BUILD_CPU_NOT_RUN",
-      "surface_quadratic_material_abi_repair_gpu_authorized": false
+      "surface_quadratic_material_abi_repair_status": "REPAIRED_HOST_CPU_COHORT_PASS",
+      "surface_quadratic_material_abi_repair_gpu_authorized": false,
+      "surface_quadratic_material_abi_repair_preparation": "results/121-surface-quadratic-material-abi-cpu-preparation.json",
+      "surface_quadratic_material_abi_repair_replay": "results/122-surface-quadratic-material-abi-six-cpu-targets-raw-replay.json",
+      "surface_quadratic_material_abi_repair_outcome": "results/123-surface-quadratic-material-abi-cpu-outcome.md",
+      "surface_quadratic_material_abi_repair_verification": "results/124-surface-quadratic-material-abi-cpu-verification.json",
+      "surface_quadratic_material_abi_repair_cpu_targets_pass": 6,
+      "surface_quadratic_material_abi_repair_native_contract_tests": 19,
+      "surface_quadratic_material_abi_repair_canonical_derivation_contracts": 16
     }
   ]
 }

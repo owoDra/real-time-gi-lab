@@ -1,0 +1,43 @@
+{
+  "schema": "m001-q020-material-abi-cpu-verification/1",
+  "all_checks_pass": true,
+  "preservation_base": "70ebae2e",
+  "rehearsal_source_commit": "428bd6b4505af64b20227c919a68a1b5c90d98f1",
+  "gpu_executed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "validation_layers_run": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "unchanged_counts": {
+    "prior_protocols": 20,
+    "prior_results": 120,
+    "code": 1195
+  },
+  "build_payloads_rehashed": 142,
+  "compiler_dependencies_rehashed": 369,
+  "actual_new_native_cli_tests": 19,
+  "canonical_overlay_derivation_tests": 16,
+  "native_cpu_rehearsals_pass": 6,
+  "captured_geometry_cpu_replays_pass": 6,
+  "all_prior_terminal_audits_pinned_before_next_native": true,
+  "all_original_material_metadata_matches": true,
+  "total_audited_gpu_acquisitions_unchanged": 120,
+  "default_build_graph_changed": false,
+  "all_lane_m_index_paths_checked": 171,
+  "current_markdown_links_checked": 135,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n[research:check] $ python scripts/research/verify.py\n",
+  "source_and_document_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/index.json": "831a9993977ae0ae59c6a7d003d67722c3f2d951b2e3a8565438f1a9bb24e80e",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/121-surface-quadratic-material-abi-cpu-preparation.json": "303566df7d6d0999a65e9181d483fe0183b3f552bed2096eacc926b332713e71",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/122-surface-quadratic-material-abi-six-cpu-targets-raw-replay.json": "f28e996110a8f8823809dd71fd78c49c4f94fedd573e957b5f292218d607b3c3",
+    "/var/owo/workspaces/projects/gi-lab/research/status.md": "6c2d63ba9f1824e47bcb208e1451cb992151cecb6f7b6dbb565299be896dff70",
+    "/var/owo/workspaces/projects/gi-lab/research/roadmap.md": "912e6f6f8acc80f9cc2fd106143a6ba2ef23f96516a248b7330a51cda012db4c",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/README.md": "d19530f37e3984cd114f6e99110be925a5c24f03ae07a4b727d67b88ecdb640d",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/020-surface-quadratic-material-abi-repair.md": "1815fae89c82f10e112dc0866022bffdbe0e2e347a46dd66c97916e2c6d7c58f",
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/results/123-surface-quadratic-material-abi-cpu-outcome.md": "2b0a03f8da0a8a91cbe3abeb7ecd91df5b157de550b432d3ef83add1331b46df"
+  },
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-q020-cpu-checkpoint-verification-v1.json",
+  "raw_receipt_sha256": "c693df4a3cd68e34af4c9bdc381f48cce8a2b936e022af78a12c6ceb370c3220"
+}
