@@ -43,7 +43,7 @@ def analyze(raw,target='gLuminanceEdgeStoppingRelaxation'):
         elif op==43 and len(a)==3:constants[a[1]]=a[2]
         at+=n
     for op,a in instructions:
-        if len(a)>=2 and a[0] in pointers:
+        if op>=41 and op not in (71,72) and len(a)>=2 and a[0] in pointers:
             A.need(op in (59,65,66,83),'unsupported pointer-producing opcode '+str(op))
     candidates=[k for k in vars if decs.get(k,{}).get(34)==[1] and decs.get(k,{}).get(33)==[2]];A.need(len(candidates)==1,'one constant root')
     root=candidates[0];A.need(vars[root][1]==2,'uniform storage');block=pointers[vars[root][0]][1]
