@@ -490,7 +490,10 @@
       "nrd_no_prepass_six_target_verification": "results/190-nrd-no-prepass-six-targets-verification.json",
       "nrd_no_prepass_joint_passes": 0,
       "nrd_no_prepass_exhausted_quality_losses": 6,
-      "nrd_no_prepass_study_complete": true
+      "nrd_no_prepass_study_complete": true,
+      "surface_incident_residual_protocol": "experiments/029-surface-incident-residual-cpu-replay.md",
+      "surface_incident_residual_status": "PREREGISTERED_CPU_IMPLEMENTATION_NOT_RUN",
+      "surface_incident_residual_gpu_selected": false
     }
   ]
 }
