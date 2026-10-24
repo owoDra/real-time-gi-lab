@@ -409,9 +409,16 @@
       "nrd_native_runtime_further_gpu_selected": false,
       "nrd_sky_intervention_protocol": "experiments/025-nrd-sky-material-initialization-intervention.md",
       "nrd_sky_intervention_cpu_preparation": "results/142-nrd-sky-material-intervention-cpu-preparation.json",
-      "nrd_sky_intervention_status": "CPU_READY_GPU_NOT_RUN",
+      "nrd_sky_intervention_status": "SKY_INITIALIZED_VARIANT_THREE_RUNTIME_CONTROLS_PASS",
       "nrd_sky_intervention_process": "scripts/research/lane_m_gi_competitiveness/nrd_sky_process.py",
-      "nrd_sky_intervention_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_sky_audit.py"
+      "nrd_sky_intervention_auditor": "scripts/research/lane_m_gi_competitiveness/nrd_sky_audit.py",
+      "nrd_sky_intervention_replay": "results/143-nrd-sky-material-intervention-three-runtime-controls.json",
+      "nrd_sky_intervention_outcome": "results/144-nrd-sky-material-intervention-outcome.md",
+      "nrd_sky_intervention_verification": "results/145-nrd-sky-material-intervention-verification.json",
+      "nrd_sky_intervention_controls_pass": 3,
+      "nrd_sky_intervention_gpu_acquisitions": 3,
+      "nrd_sky_intervention_study_complete": true,
+      "nrd_sky_intervention_further_gpu_selected": false
     }
   ]
 }

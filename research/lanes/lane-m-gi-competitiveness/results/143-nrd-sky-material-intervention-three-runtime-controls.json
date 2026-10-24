@@ -1,0 +1,615 @@
+{
+  "schema": "m001-nrd025-isolated-sky-intervention-runtime-cohort/1",
+  "complete": true,
+  "all_pass": true,
+  "classification": "SKY_INITIALIZED_VARIANT_THREE_RUNTIME_CONTROLS_PASS",
+  "study_complete": true,
+  "further025gpu_selected": false,
+  "private_source_variant": "SKY_WORLD_POSITION_MATERIAL_ZERO_BEFORE_EARLY_OUT",
+  "upstream_unmodified_sdk_qualified": false,
+  "preregistration_commit": "e3a670e2",
+  "initial_source_commit": "0f0ef0a1",
+  "manifest_repair_commit": "db0654e9",
+  "cpu_readiness_and_all_gpu_plan_source_commit": "40fa9fa0",
+  "new_gpu_acquisitions": 3,
+  "actual_gpu_frames": 9,
+  "controls_pass": 3,
+  "controls_total": 3,
+  "actual_saved_unique_secondary_rays_covered": 2079904,
+  "actual_saved_secondary_rays_newly_intersected_on_cpu": 1845504,
+  "actual_saved_secondary_rays_reused_only_after_all_input_bytes_equal": 234400,
+  "actual_sdk_dispatches": 156,
+  "actual_sdk_constant_bytes": 69792,
+  "completed_bounded_units": 4362,
+  "all_owned_teardown_zero": true,
+  "rows": [
+    {
+      "cell": "H01",
+      "depth": 2,
+      "spp": 16,
+      "all_pass": true,
+      "classification": "NATIVE_NRD_CONTROL_PASS",
+      "frames": 3,
+      "reset_binary_fields_bit_exact": 47,
+      "physical_ray_audits": [
+        {
+          "pixels": 57600,
+          "active_primary_pixels": 7325,
+          "nominal_viewport_spp_slots": 921600,
+          "actual_first_secondary_samples_audited": 117200,
+          "actual_ray_query_count_instrumented": false,
+          "primary": {
+            "pixels": 57600,
+            "scoring_exclusions": 0,
+            "gpu_hit_pixels": 7325,
+            "reference_hit_pixels": 7325,
+            "hit_presence_mismatches": 0,
+            "primitive_mismatches": 0,
+            "depth_bound_failures": 0,
+            "maximum_absolute_depth_error": 5.372578511853021e-06,
+            "maximum_normal_vector_error": 2.0,
+            "normal_vector_mismatch_pixels": 5056,
+            "pass_": true
+          },
+          "secondary_primitive_mismatches": 0,
+          "maximum_secondary_distance_error": 1.4040840321527526e-06,
+          "all_secondary_distance_bounds_pass": true,
+          "all_sample_sum_mean_exact": true,
+          "all_actual_guide_contracts_pass": true,
+          "all_pixels_included": true,
+          "quality_admitted": false,
+          "reused_from_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-h01-b2-failure-cpu-diagnostics-v1/result.json",
+          "reused_only_after_all_input_bytes_equal": true
+        },
+        {
+          "pixels": 57600,
+          "active_primary_pixels": 7325,
+          "nominal_viewport_spp_slots": 921600,
+          "actual_first_secondary_samples_audited": 117200,
+          "actual_ray_query_count_instrumented": false,
+          "primary": {
+            "pixels": 57600,
+            "scoring_exclusions": 0,
+            "gpu_hit_pixels": 7325,
+            "reference_hit_pixels": 7325,
+            "hit_presence_mismatches": 0,
+            "primitive_mismatches": 0,
+            "depth_bound_failures": 0,
+            "maximum_absolute_depth_error": 5.372578511853021e-06,
+            "maximum_normal_vector_error": 2.0,
+            "normal_vector_mismatch_pixels": 5056,
+            "pass_": true
+          },
+          "secondary_primitive_mismatches": 0,
+          "maximum_secondary_distance_error": 1.4623863204832332e-06,
+          "all_secondary_distance_bounds_pass": true,
+          "all_sample_sum_mean_exact": true,
+          "all_actual_guide_contracts_pass": true,
+          "all_pixels_included": true,
+          "quality_admitted": false,
+          "reused_from_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-h01-b2-failure-cpu-diagnostics-v1/result.json",
+          "reused_only_after_all_input_bytes_equal": true
+        }
+      ],
+      "intervention": {
+        "all_three_frames_pass": true,
+        "frames": [
+          {
+            "iteration": 0,
+            "exact_other_binary_fields": [
+              "camera.f32",
+              "constants/0.bin",
+              "constants/1.bin",
+              "constants/10.bin",
+              "constants/11.bin",
+              "constants/12.bin",
+              "constants/13.bin",
+              "constants/14.bin",
+              "constants/15.bin",
+              "constants/16.bin",
+              "constants/17.bin",
+              "constants/18.bin",
+              "constants/19.bin",
+              "constants/2.bin",
+              "constants/20.bin",
+              "constants/3.bin",
+              "constants/4.bin",
+              "constants/5.bin",
+              "constants/6.bin",
+              "constants/7.bin",
+              "constants/8.bin",
+              "constants/9.bin",
+              "denoised.bin",
+              "final-rgb.f32",
+              "hits.u32",
+              "input-errors.u32",
+              "motion.bin",
+              "noisy-diffuse.bin",
+              "normal-roughness.bin",
+              "params.bin",
+              "permanent-0.bin",
+              "permanent-1.bin",
+              "permanent-2.bin",
+              "permanent-3.bin",
+              "permanent-5.bin",
+              "raw-pt.f32",
+              "secondary-origins.f32",
+              "secondary-primitives.u32",
+              "secondary-rays.f32",
+              "secondary-stats.f32",
+              "source.f32",
+              "transient-0.bin",
+              "transient-1.bin",
+              "transient-2.bin",
+              "transient-3.bin",
+              "view-z.bin"
+            ],
+            "changed_bytes": 11259,
+            "sky_bytes": 46592,
+            "outside_sky_changed_bytes": 0
+          },
+          {
+            "iteration": 1,
+            "exact_other_binary_fields": [
+              "camera.f32",
+              "constants/0.bin",
+              "constants/1.bin",
+              "constants/2.bin",
+              "constants/3.bin",
+              "constants/4.bin",
+              "constants/5.bin",
+              "constants/6.bin",
+              "constants/7.bin",
+              "constants/8.bin",
+              "constants/9.bin",
+              "denoised.bin",
+              "final-rgb.f32",
+              "hits.u32",
+              "input-errors.u32",
+              "motion.bin",
+              "noisy-diffuse.bin",
+              "normal-roughness.bin",
+              "params.bin",
+              "permanent-0.bin",
+              "permanent-1.bin",
+              "permanent-2.bin",
+              "permanent-3.bin",
+              "permanent-5.bin",
+              "raw-pt.f32",
+              "secondary-origins.f32",
+              "secondary-primitives.u32",
+              "secondary-rays.f32",
+              "secondary-stats.f32",
+              "source.f32",
+              "transient-0.bin",
+              "transient-1.bin",
+              "transient-2.bin",
+              "transient-3.bin",
+              "view-z.bin"
+            ],
+            "changed_bytes": 11287,
+            "sky_bytes": 46592,
+            "outside_sky_changed_bytes": 0
+          },
+          {
+            "iteration": 2,
+            "exact_other_binary_fields": [
+              "camera.f32",
+              "constants/0.bin",
+              "constants/1.bin",
+              "constants/10.bin",
+              "constants/11.bin",
+              "constants/12.bin",
+              "constants/13.bin",
+              "constants/14.bin",
+              "constants/15.bin",
+              "constants/16.bin",
+              "constants/17.bin",
+              "constants/18.bin",
+              "constants/19.bin",
+              "constants/2.bin",
+              "constants/20.bin",
+              "constants/3.bin",
+              "constants/4.bin",
+              "constants/5.bin",
+              "constants/6.bin",
+              "constants/7.bin",
+              "constants/8.bin",
+              "constants/9.bin",
+              "denoised.bin",
+              "final-rgb.f32",
+              "hits.u32",
+              "input-errors.u32",
+              "motion.bin",
+              "noisy-diffuse.bin",
+              "normal-roughness.bin",
+              "params.bin",
+              "permanent-0.bin",
+              "permanent-1.bin",
+              "permanent-2.bin",
+              "permanent-3.bin",
+              "permanent-5.bin",
+              "raw-pt.f32",
+              "secondary-origins.f32",
+              "secondary-primitives.u32",
+              "secondary-rays.f32",
+              "secondary-stats.f32",
+              "source.f32",
+              "transient-0.bin",
+              "transient-1.bin",
+              "transient-2.bin",
+              "transient-3.bin",
+              "view-z.bin"
+            ],
+            "changed_bytes": 11485,
+            "sky_bytes": 46592,
+            "outside_sky_changed_bytes": 0
+          }
+        ],
+        "original_failed_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-gpu-h01-b2-v1/result.json",
+        "original_failed_native_receipt_sha256": "943bc40e1aba5655d08b855af6f0acea4fd84eb806daf97a65a32d878341ef9c",
+        "original_cpu_diagnostics_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-h01-b2-failure-cpu-diagnostics-v1/result.json",
+        "original_cpu_diagnostics_receipt_sha256": "06881155ae3be25b663a5a2deb91d851d1b7008ba5e275072d090c55d8edb259",
+        "reused_physical_error_maps": [
+          {
+            "path": "frame-0-physical-rays.npz",
+            "reused_from": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-h01-b2-failure-cpu-diagnostics-v1/frame-0-physical-rays.npz",
+            "sha256": "5775e569e72b2c927fd133b5a3dd350efce83833e94393dac2123d517c81325b"
+          },
+          {
+            "path": "frame-1-physical-rays.npz",
+            "reused_from": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-h01-b2-failure-cpu-diagnostics-v1/frame-1-physical-rays.npz",
+            "sha256": "b94a15f35283d1bc4eae642de9b774695ad952a6ce2ab24b72e0a228700ca339"
+          }
+        ]
+      },
+      "history": [
+        {
+          "iteration": 0,
+          "active_pixels": 7325,
+          "minimum": 1,
+          "maximum": 1
+        },
+        {
+          "iteration": 1,
+          "active_pixels": 7325,
+          "minimum": 2,
+          "maximum": 2
+        },
+        {
+          "iteration": 2,
+          "active_pixels": 7325,
+          "minimum": 1,
+          "maximum": 1
+        }
+      ],
+      "ownership": {
+        "true_peak_owned_bytes": 31890864,
+        "allocation_pairs": 37,
+        "allocation_events": 74,
+        "image_allocations": 15,
+        "teardown_zero": true,
+        "driver_private_and_cpu_memory_excluded": true
+      },
+      "timestamps": {
+        "completed_units": 1454,
+        "maximum_gpu_unit_us_diagnostic": 437.631505279541,
+        "active_gpu_us_diagnostic": [
+          16223.58501243211,
+          16007.374209228528,
+          15578.27892287064
+        ],
+        "accepted_timing": false
+      },
+      "sdk": {
+        "dispatches": 52,
+        "constant_bytes": 23264,
+        "all_numeric_resource_bindings_match": true,
+        "pipeline_bytes_exact_to025_variant_cpu": true,
+        "only_selected_pipeline_changed_from023": [
+          9
+        ]
+      },
+      "native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h01-b2-v1/result.json",
+      "native_receipt_sha256": "f92c12d6540dccd9483d669f98aeb51077bcca9627e76367d3d8dcd4a59a9b77",
+      "audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h01-b2-audit-v1/result.json",
+      "audit_receipt_sha256": "79427bbcfd2c33ea5982e8e406aa70d7c70384d124547f45646f914bec175426"
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "spp": 64,
+      "all_pass": true,
+      "classification": "NATIVE_NRD_CONTROL_PASS",
+      "frames": 3,
+      "reset_binary_fields_bit_exact": 47,
+      "physical_ray_audits": [
+        {
+          "pixels": 57600,
+          "active_primary_pixels": 6748,
+          "nominal_viewport_spp_slots": 3686400,
+          "actual_first_secondary_samples_audited": 431872,
+          "actual_ray_query_count_instrumented": false,
+          "primary": {
+            "pixels": 57600,
+            "scoring_exclusions": 0,
+            "gpu_hit_pixels": 6748,
+            "reference_hit_pixels": 6748,
+            "hit_presence_mismatches": 0,
+            "primitive_mismatches": 0,
+            "depth_bound_failures": 0,
+            "maximum_absolute_depth_error": 7.860717243346471e-06,
+            "maximum_normal_vector_error": 2.0,
+            "normal_vector_mismatch_pixels": 6744,
+            "pass_": true
+          },
+          "secondary_primitive_mismatches": 0,
+          "maximum_secondary_distance_error": 1.178947755242632e-05,
+          "all_secondary_distance_bounds_pass": true,
+          "all_sample_sum_mean_exact": true,
+          "all_actual_guide_contracts_pass": true,
+          "all_pixels_included": true,
+          "quality_admitted": false
+        },
+        {
+          "pixels": 57600,
+          "active_primary_pixels": 6748,
+          "nominal_viewport_spp_slots": 3686400,
+          "actual_first_secondary_samples_audited": 431872,
+          "actual_ray_query_count_instrumented": false,
+          "primary": {
+            "pixels": 57600,
+            "scoring_exclusions": 0,
+            "gpu_hit_pixels": 6748,
+            "reference_hit_pixels": 6748,
+            "hit_presence_mismatches": 0,
+            "primitive_mismatches": 0,
+            "depth_bound_failures": 0,
+            "maximum_absolute_depth_error": 7.860717243346471e-06,
+            "maximum_normal_vector_error": 2.0,
+            "normal_vector_mismatch_pixels": 6744,
+            "pass_": true
+          },
+          "secondary_primitive_mismatches": 0,
+          "maximum_secondary_distance_error": 1.9995217044765923e-05,
+          "all_secondary_distance_bounds_pass": true,
+          "all_sample_sum_mean_exact": true,
+          "all_actual_guide_contracts_pass": true,
+          "all_pixels_included": true,
+          "quality_admitted": false
+        }
+      ],
+      "intervention": null,
+      "history": [
+        {
+          "iteration": 0,
+          "active_pixels": 6748,
+          "minimum": 1,
+          "maximum": 1
+        },
+        {
+          "iteration": 1,
+          "active_pixels": 6748,
+          "minimum": 2,
+          "maximum": 2
+        },
+        {
+          "iteration": 2,
+          "active_pixels": 6748,
+          "minimum": 1,
+          "maximum": 1
+        }
+      ],
+      "ownership": {
+        "true_peak_owned_bytes": 87186864,
+        "allocation_pairs": 37,
+        "allocation_events": 74,
+        "image_allocations": 15,
+        "teardown_zero": true,
+        "driver_private_and_cpu_memory_excluded": true
+      },
+      "timestamps": {
+        "completed_units": 1454,
+        "maximum_gpu_unit_us_diagnostic": 3034.5657124328613,
+        "active_gpu_us_diagnostic": [
+          189860.2969153175,
+          194053.55415600297,
+          192176.61795397545
+        ],
+        "accepted_timing": false
+      },
+      "sdk": {
+        "dispatches": 52,
+        "constant_bytes": 23264,
+        "all_numeric_resource_bindings_match": true,
+        "pipeline_bytes_exact_to025_variant_cpu": true,
+        "only_selected_pipeline_changed_from023": [
+          9
+        ]
+      },
+      "native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h02-b8-v1/result.json",
+      "native_receipt_sha256": "5914ec647325e1851a3e5f4b1c9236bbba36249797c0c0778d6d4d3e0bcad5b3",
+      "audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h02-b8-audit-v1/result.json",
+      "audit_receipt_sha256": "aff40e04d5f8e8db08c80d1d041e3cba68c70aa41224aa2cdebf0e171a1e5e12"
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "spp": 64,
+      "all_pass": true,
+      "classification": "NATIVE_NRD_CONTROL_PASS",
+      "frames": 3,
+      "reset_binary_fields_bit_exact": 47,
+      "physical_ray_audits": [
+        {
+          "pixels": 57600,
+          "active_primary_pixels": 7670,
+          "nominal_viewport_spp_slots": 3686400,
+          "actual_first_secondary_samples_audited": 490880,
+          "actual_ray_query_count_instrumented": false,
+          "primary": {
+            "pixels": 57600,
+            "scoring_exclusions": 0,
+            "gpu_hit_pixels": 7670,
+            "reference_hit_pixels": 7670,
+            "hit_presence_mismatches": 0,
+            "primitive_mismatches": 0,
+            "depth_bound_failures": 0,
+            "maximum_absolute_depth_error": 6.387571332311381e-06,
+            "maximum_normal_vector_error": 2.0,
+            "normal_vector_mismatch_pixels": 4659,
+            "pass_": true
+          },
+          "secondary_primitive_mismatches": 0,
+          "maximum_secondary_distance_error": 3.033366843929741e-06,
+          "all_secondary_distance_bounds_pass": true,
+          "all_sample_sum_mean_exact": true,
+          "all_actual_guide_contracts_pass": true,
+          "all_pixels_included": true,
+          "quality_admitted": false
+        },
+        {
+          "pixels": 57600,
+          "active_primary_pixels": 7670,
+          "nominal_viewport_spp_slots": 3686400,
+          "actual_first_secondary_samples_audited": 490880,
+          "actual_ray_query_count_instrumented": false,
+          "primary": {
+            "pixels": 57600,
+            "scoring_exclusions": 0,
+            "gpu_hit_pixels": 7670,
+            "reference_hit_pixels": 7670,
+            "hit_presence_mismatches": 0,
+            "primitive_mismatches": 0,
+            "depth_bound_failures": 0,
+            "maximum_absolute_depth_error": 6.387571332311381e-06,
+            "maximum_normal_vector_error": 2.0,
+            "normal_vector_mismatch_pixels": 4659,
+            "pass_": true
+          },
+          "secondary_primitive_mismatches": 0,
+          "maximum_secondary_distance_error": 3.376126761621412e-06,
+          "all_secondary_distance_bounds_pass": true,
+          "all_sample_sum_mean_exact": true,
+          "all_actual_guide_contracts_pass": true,
+          "all_pixels_included": true,
+          "quality_admitted": false
+        }
+      ],
+      "intervention": null,
+      "history": [
+        {
+          "iteration": 0,
+          "active_pixels": 7670,
+          "minimum": 1,
+          "maximum": 1
+        },
+        {
+          "iteration": 1,
+          "active_pixels": 7670,
+          "minimum": 2,
+          "maximum": 2
+        },
+        {
+          "iteration": 2,
+          "active_pixels": 7670,
+          "minimum": 1,
+          "maximum": 1
+        }
+      ],
+      "ownership": {
+        "true_peak_owned_bytes": 87196016,
+        "allocation_pairs": 37,
+        "allocation_events": 74,
+        "image_allocations": 15,
+        "teardown_zero": true,
+        "driver_private_and_cpu_memory_excluded": true
+      },
+      "timestamps": {
+        "completed_units": 1454,
+        "maximum_gpu_unit_us_diagnostic": 1374.812160129547,
+        "active_gpu_us_diagnostic": [
+          53615.800685265494,
+          66555.89702856448,
+          65364.353080306995
+        ],
+        "accepted_timing": false
+      },
+      "sdk": {
+        "dispatches": 52,
+        "constant_bytes": 23264,
+        "all_numeric_resource_bindings_match": true,
+        "pipeline_bytes_exact_to025_variant_cpu": true,
+        "only_selected_pipeline_changed_from023": [
+          9
+        ]
+      },
+      "native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h03-b2-v1/result.json",
+      "native_receipt_sha256": "b3c17e2e18e02df6dc5bdcd352a6cafa7db5a0009d9bef46038ce3f7c4a7f549",
+      "audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h03-b2-audit-v1/result.json",
+      "audit_receipt_sha256": "3db7fe64fdc20d27b46de83cb51127b17a547c7cf5355840c4f7622a4bd6a678"
+    }
+  ],
+  "records": [
+    {
+      "kind": "native",
+      "cell": "H01",
+      "depth": 2,
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h01-b2-v1/result.json",
+      "raw_receipt_sha256": "f92c12d6540dccd9483d669f98aeb51077bcca9627e76367d3d8dcd4a59a9b77",
+      "payloads_rehashed": 167
+    },
+    {
+      "kind": "audit",
+      "cell": "H01",
+      "depth": 2,
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h01-b2-audit-v1/result.json",
+      "raw_receipt_sha256": "79427bbcfd2c33ea5982e8e406aa70d7c70384d124547f45646f914bec175426",
+      "payloads_rehashed": 5
+    },
+    {
+      "kind": "native",
+      "cell": "H02",
+      "depth": 8,
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h02-b8-v1/result.json",
+      "raw_receipt_sha256": "5914ec647325e1851a3e5f4b1c9236bbba36249797c0c0778d6d4d3e0bcad5b3",
+      "payloads_rehashed": 167
+    },
+    {
+      "kind": "audit",
+      "cell": "H02",
+      "depth": 8,
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h02-b8-audit-v1/result.json",
+      "raw_receipt_sha256": "aff40e04d5f8e8db08c80d1d041e3cba68c70aa41224aa2cdebf0e171a1e5e12",
+      "payloads_rehashed": 2
+    },
+    {
+      "kind": "native",
+      "cell": "H03",
+      "depth": 2,
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h03-b2-v1/result.json",
+      "raw_receipt_sha256": "b3c17e2e18e02df6dc5bdcd352a6cafa7db5a0009d9bef46038ce3f7c4a7f549",
+      "payloads_rehashed": 167
+    },
+    {
+      "kind": "audit",
+      "cell": "H03",
+      "depth": 2,
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-gpu-h03-b2-audit-v1/result.json",
+      "raw_receipt_sha256": "3db7fe64fdc20d27b46de83cb51127b17a547c7cf5355840c4f7622a4bd6a678",
+      "payloads_rehashed": 2
+    }
+  ],
+  "legacy_sdk_helper_key_note": "Raw025 audits reuse024 sdk_report; its legacy pipeline_bytes_exact_to023 key compares actual binaries to the supplied025 variant CPU directory, not unmodified023. The explicit paths, native/API binary hashes and independent 15-pipeline byte comparison establish all15 equal025 and only pipeline9 differs from023. Retain raw bytes; do not interpret the legacy name as unmodified-SDK equality.",
+  "original024_failed_gate_preserved": true,
+  "original024_remaining_gpu_controls_not_run": true,
+  "old_successful_cpu_gpu_cohorts_rerun": false,
+  "new_reference_sampling": 0,
+  "nrd_variant_runtime_qualified": true,
+  "quality_admitted": false,
+  "accepted_timing": false,
+  "gpu_memory_superiority_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "total_audited_gpu_acquisitions_including_failed": 136
+}
