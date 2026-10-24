@@ -323,7 +323,20 @@
       "surface_quadratic_reconstruction_noisy_quality_passes": 7,
       "surface_quadratic_reconstruction_reference_bias_passes": 6,
       "surface_quadratic_reconstruction_new_render_paths": 0,
-      "surface_quadratic_reconstruction_further_process_selected": false
+      "surface_quadratic_reconstruction_further_process_selected": false,
+      "surface_quadratic_device_protocol": "experiments/019-surface-quadratic-device-correctness.md",
+      "surface_quadratic_device_preparation": "results/115-surface-quadratic-device-kernel-host-cpu-preparation.json",
+      "surface_quadratic_device_outcome": "results/116-surface-quadratic-device-kernel-host-cpu-outcome.md",
+      "surface_quadratic_device_verification": "results/117-surface-quadratic-device-kernel-host-cpu-verification.json",
+      "surface_quadratic_device_status": "CPU_KERNEL_HOST_COMPILED_TESTED_M001_REPLAYS_NOT_RUN_NOT_GPU_READY",
+      "surface_quadratic_device_actual_new_cpu_contract_tests": 58,
+      "surface_quadratic_device_m001_cpu_replays": 0,
+      "surface_quadratic_device_gpu_cases": 0,
+      "surface_quadratic_device_gpu_process_ready": false,
+      "surface_quadratic_device_shader": "shaders/research/lane_m_gi_competitiveness/surface_quadratic_device.comp.glsl",
+      "surface_quadratic_device_host": "src/research/lane_m_gi_competitiveness/surface_quadratic_device.cpp",
+      "surface_quadratic_device_host_builder": "scripts/research/lane_m_gi_competitiveness/build_surface_quadratic_host.py",
+      "surface_quadratic_device_host_tests": "scripts/research/lane_m_gi_competitiveness/test_surface_quadratic_host.py"
     }
   ]
 }
