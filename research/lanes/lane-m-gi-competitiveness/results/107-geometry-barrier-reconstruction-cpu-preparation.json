@@ -1,0 +1,99 @@
+{
+  "schema": "m001-geometry-filter-cpu-preparation/1",
+  "complete": true,
+  "gpu_executed": false,
+  "new_reconstructions": 0,
+  "protocol": "experiments/017-geometry-barrier-reconstruction-cpu-screen.md",
+  "actual_new_contract_tests": 16,
+  "raw_test_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-geometry-filter-cpu-tests-v1/result.json",
+  "raw_test_receipt_sha256": "4c9130ac81b5254e4fd06f779626ebad6d065b43663dbda8b670cbcdb1ac0859",
+  "test_stdout": "{\"actual_new_contract_tests\": 16, \"pass_\": true}\n",
+  "raw_preflight_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-geometry-filter-cpu-preflight-v1/result.json",
+  "raw_preflight_receipt_sha256": "44d268bbbb76dae43b782eb404ea4c59f02e3abf07f5c8973a81a7ce8d0a4d3c",
+  "preflight_targets": [
+    {
+      "cell": "H01",
+      "depth": 2,
+      "input_files": 1408,
+      "hit_pixels": 7325,
+      "epsilon": 0.00011631422967869928
+    },
+    {
+      "cell": "H01",
+      "depth": 8,
+      "input_files": 1408,
+      "hit_pixels": 7325,
+      "epsilon": 0.00011631422967869928
+    },
+    {
+      "cell": "H02",
+      "depth": 2,
+      "input_files": 1408,
+      "hit_pixels": 6748,
+      "epsilon": 0.00011631422967869928
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "input_files": 1408,
+      "hit_pixels": 6748,
+      "epsilon": 0.00011631422967869928
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "input_files": 1408,
+      "hit_pixels": 7670,
+      "epsilon": 0.00011650253209305243
+    },
+    {
+      "cell": "H03",
+      "depth": 8,
+      "input_files": 1408,
+      "hit_pixels": 7670,
+      "epsilon": 0.00011650253209305243
+    }
+  ],
+  "input_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/017-geometry-barrier-reconstruction-cpu-screen.md": "64c30d29bc4125886db50978b1ab24e0f3d6298bb3ee8b6b24a5ac73c4988fa0",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/audit_first_pt_quality.py": "1c8de7ef9a284fc01aa6d89e6be667fe99a880b70a3a7a2589a028b8a0176cdb",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py": "5a83c0661a35b61cb9a6c66580da521321fe638c25bd3031391afcd08c08d8ca",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/audit_h02_evidence.py": "a38a7a6cca768a74efd9e2f6abe1473099543eb464dca0d2f7c6a2a4fc5e4ba2",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/audit_h03_evidence.py": "456b6b35fb83f506fd7f9a7bf3efbdb9378ecd8cd9f799370d47824221af8341",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/closest_primary.py": "e6cc752835c074cc00f2dc87e8f5620277da0c082aab8bc0b912fed805b29ad8",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/closest_primary_audit.py": "b137cc373031f22c3564447c8eb004262c6168ae2175e55baf1ac76a6dd4e8ff",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/closest_primary_cases.py": "8b1199ad02c6d1792d8b08a6cd9bfc400bef6aba12dce115c8b57e72137690ee",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/closest_primary_metrics.py": "51fdebe8760cc44c36956643d417913a10dbde6efda0d9b107a66208ab0ce626",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/closest_primary_step.py": "25e5e1ee14902230ae20ab54676c516eaa0ccea83f3b00914bd3007515ac8d7e",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/first_pt_quality.py": "1d184e52e4077efddfbcad881f89e9789828b42134a75771f45b9877d491fa43",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/fixed_rc_step.py": "cd736cb52ec0f4a1d5ad4f621f5f79c625824bbf50a0d0b6a838160851b2308b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/frozen_quality_step.py": "8be96ee41ef3842554235dda4103a628cd9dad5a041d20e5fd32242b23b08699",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/generate_heldout_geometry.py": "88b193bc1f3535af3ceee57a51975ae59eef57554300c75481e50e2a49e8ddc1",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/geometry_barrier_filter.py": "66cc0fe1d529e948face032c97e9e136663b18c769cdf453b8092dfab5d4367d",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/geometry_filter_cpu.py": "736c3cc582b083f19a710aea915fcbd650dd654c0a00da9562bda550a9f920f9",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/guided_transport_cpu.py": "5c008367c253ecd31cfcaafa70eed1514f41cbc5f1057421082a1c40ffc04dbb",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/m001_first_capture.py": "a163dd006a759cee7f793e2afa8c73166578908e24cb7686720044814d81c352",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/prepare_m001_n010_physical_inputs.py": "53406cc78cb647d74e3aa0f34ceedac848acb5fc4daacff9f7a5b14738ac0887",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/reference_step.py": "289879e9f4d56a1c23ad2a9fc4037b5e41bb50845a61924cf971497f7bfae59c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/run_h01_b2_reference_stage1.py": "ab936187dea2bb3602d570725ab984ca16d066ccb638420e4c4af853e2e81734",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/run_h01_b8_reference_stage1.py": "fb4517fc5829f712386326755ee31e6f5b9d6d5f8c03114e2f5c6fa649d791cd",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/score_retained.py": "89d1cc05c26fcd2e643570adc865852371d64dcaf246daf71397bc8399eee82b",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_geometry_barrier_filter.py": "c5998a5404dfdd8a91df3999b914cfd5837f00046be17f694c636d6c1369b1db",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n007_reference_validity/check_convergence.py": "8a5dec1373eeba0dfa3ef88ab89518ebe48717ebe53d1a743c9445ead3052d55",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n007_reference_validity/inspect_hdr.py": "532029f8063c502ba9bc807367acab9c8b55ddbe28ed9d27f54c15df61cc649e",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n008_hdr_oracle/n008lib.py": "28fd7658ab3b728afcc70675e1c7a7aa913af254d81d35df71b37da80079386c",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/qualify_references.py": "2d26cca6db3ecfb7db714333f5502a280c6c00e2c2ca645ee9769554648404ca",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/reference_provenance.py": "fa56d08c293fd0373f180314373d454cc58869c12d006b8f309297511ab9ad6a",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/n010_comparison_readiness/score_hdr.py": "86759d0dd1a0ba8c810cb98206274d1a92e78d03be491b4d33c3bcef3f8b6592"
+  },
+  "numpy_version": "2.5.4",
+  "python_executable": "/var/owo/workspaces/projects/gi-lab/out/research/n010-comparison-readiness/venv/bin/python",
+  "python_version": "3.13.13 (main, Apr  7 2026, 18:19:01) [GCC 15.2.0]",
+  "source_identity": "Exact working-tree source hashes committed with this record before any reconstruction; preregistration parent is not an attribution for these new files.",
+  "old_tests_rerun": false,
+  "default_build_graph_changed": false,
+  "default_renderer_build_rerun": false,
+  "default_renderer_runtime_regression_rerun": false,
+  "accepted_timing": false,
+  "lane_m_complete": false
+}

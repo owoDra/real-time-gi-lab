@@ -291,7 +291,11 @@
       "normal_product_guide_new_render_samples": 393216,
       "normal_product_guide_reused_cosine_samples": 393216,
       "normal_product_guide_new_training_paths": 0,
-      "normal_product_guide_further_process_selected": false
+      "normal_product_guide_further_process_selected": false,
+      "geometry_barrier_reconstruction_protocol": "experiments/017-geometry-barrier-reconstruction-cpu-screen.md",
+      "geometry_barrier_reconstruction_preparation": "results/107-geometry-barrier-reconstruction-cpu-preparation.json",
+      "geometry_barrier_reconstruction_status": "CPU_PREPARED_RECONSTRUCTION_NOT_RUN",
+      "geometry_barrier_reconstruction_gpu_cases": 0
     }
   ]
 }
