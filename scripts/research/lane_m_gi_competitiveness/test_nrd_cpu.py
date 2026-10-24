@@ -2,6 +2,7 @@
 """023 real SDK CPU/API/guide contracts; deliberately unusable Vulkan ICD."""
 import argparse
 import collections
+import hashlib
 import json
 import math
 import os
@@ -112,7 +113,13 @@ def audit_probe(out,state,camera):
                 a=d['resources'][0]
                 if a['name']=='TRANSIENT_POOL':
                     down=config['pools']['transient'][a['pool_index']]['downsample'];w=(w+down-1)//down;h=(h+down-1)//down
-            gx,gy,_=r['local_size'];need(d['grid']==[(w+gx-1)//gx,(h+gy-1)//gy],'023 independent grid/texture dimensions');grid_checks+=1
+            gx,gy,_=r['local_size']
+            if d['name'].endswith(' - Classify tiles'):
+                # Official shader has 8x4 threads, each covering 2x4 pixels.
+                # SDK's ClassifyTilesGroupX/Y is the 16x16 coverage, rather
+                # than SPIR-V LocalSize. No shader or dispatch is changed.
+                need((gx,gy)==(8,4),'023 changed tile classifier thread size');gx*=2;gy*=4
+            need(d['grid']==[(w+gx-1)//gx,(h+gy-1)//gy],'023 independent grid/texture dimensions');grid_checks+=1
             if ' - A-trous' in d['name']:
                 atrous.append(d)
         need(reads==set(range(6)) and writes==set(range(6)),'023 six actual permanent histories read/write')
@@ -132,14 +139,27 @@ def audit_probe(out,state,camera):
     return dict(projection_checks=projection_checks,dispatches=dispatches,grid_checks=grid_checks,constant_bytes=constant_bytes,history_frames=history_frames,transient_dependencies=transient_cycles,reset_to_cold_exact=True,inter_frame_pool_index_swaps=0,required_user_resources=sorted(users),reflections=reflections)
 
 
-def run(build,work):
+def run(build,work,reuse):
     commit=B.committed();build=build.resolve();work=work.resolve();b=read(build/'result.json')
     need(b['complete'] and b['all_pass'] and b['gpu_executed'] is False,'023 actual complete build required')
-    check_hashes(b['input_sha256']);check_hashes(b['compiled_dependency_sha256']);check_hashes(b['payload_sha256'],build)
+    for name,digest in b['input_sha256'].items():
+        if Path(name)==Path(__file__).resolve():
+            original=subprocess.check_output(['git','show',b['source_commit']+':'+str(Path(name).relative_to(ROOT))],cwd=ROOT)
+            need(hashlib.sha256(original).hexdigest()==digest,'023 original build-time test bytes changed')
+        else:check_hashes({name:digest})
+    check_hashes(b['compiled_dependency_sha256']);check_hashes(b['payload_sha256'],build)
+    need(sha(reuse)=='98e8419b078ca5ffe43bacfa44f2e230b9983def40a7cd5a7030cf150dce4397','023 pinned first audit failure required')
+    first=read(reuse);check_hashes(first['payload_sha256'],reuse.parent)
+    need(first['error']=='ValueError: 023 independent grid/texture dimensions' and first['build_receipt_sha256']==sha(build/'result.json'),'023 identified audit-only repair')
     need(work.is_relative_to(BASE) and not work.exists(),'023 exclusive contract output');work.mkdir(parents=True)
     result=dict(schema='m001-nrd023-real-sdk-cpu-contracts/1',source_commit=commit,complete=False,all_pass=False,gpu_executed=False,sdk_api_executed=False,build_receipt=str(build/'result.json'),build_receipt_sha256=sha(build/'result.json'),rows=[],probes=[],input_sha256={str(p):sha(p) for p in B.OWN})
+    result['input_sha256'][str(reuse)]=sha(reuse);result['preserved_first_failure']=str(reuse)
     env={**os.environ,'VK_ICD_FILENAMES':'/nonexistent/m023-no-gpu.json','VK_DRIVER_FILES':'/nonexistent/m023-no-gpu.json','OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','LD_LIBRARY_PATH':os.environ.get('NIX_LD_LIBRARY_PATH',os.environ.get('LD_LIBRARY_PATH',''))}
     def command(label,args,expect=0):
+        if label in ('cpp-scalar-contract','native-undefined-symbols','h01-real-sdk'):
+            old=next(r for r in first['rows'] if r['label']==label);need(old['pass_'] and old['returncode']==expect,'023 reused actual CPU command not successful')
+            row={**old,'reused_from_receipt':str(reuse),'executed_again':False};result['rows'].append(row)
+            return subprocess.CompletedProcess(old['command'],old['returncode'],(reuse.parent/(label+'.stdout.txt')).read_bytes(),(reuse.parent/(label+'.stderr.txt')).read_bytes())
         def limits():resource.setrlimit(resource.RLIMIT_CPU,(120,120));resource.setrlimit(resource.RLIMIT_AS,(4*1024**3,4*1024**3))
         p=subprocess.run(list(map(str,args)),env=env,capture_output=True,timeout=180,preexec_fn=limits)
         for key,value in (('stdout',p.stdout),('stderr',p.stderr)):(work/(label+'.'+key+'.txt')).write_bytes(value)
@@ -163,18 +183,18 @@ def run(build,work):
             prior=read(receipt);check_hashes(prior['payload_sha256'],receipt.parent);plan=receipt.parent/'plan.json';need(sha(plan)==prior['plan_sha256'],'023 changed022plan')
             state=Path(read(plan)['proof']['primary_capture']);camera=receipt.parent/'capture/camera.f32';states.append(state)
             for p in (receipt,plan,camera,state/'geometry-state.bin',state/'frame-state.bin'):result['input_sha256'][str(p)]=sha(p)
-            out=work/cell.lower();command(cell.lower()+'-real-sdk',[build/'nrd-api-probe','--cpu-inspect','--state',state,'--out',out]);result['sdk_api_executed']=True
+            out=(reuse.parent if cell=='H01' else work)/cell.lower();command(cell.lower()+'-real-sdk',[build/'nrd-api-probe','--cpu-inspect','--state',state,'--out',out]);result['sdk_api_executed']=True
             audit=audit_probe(out,state,camera);result['probes'].append(dict(cell=cell,directory=str(out),audit=audit));print(cell,'actual SDK audit PASS',audit['dispatches'],flush=True)
         reflections=result['probes'][0]['audit']['reflections']
         need(all(p['audit']['reflections']==reflections for p in result['probes']),'023 static-scene pipeline bytes differ')
         # Every exported pipeline is independently validated once; the other
         # two scenes prove byte identity, rather than repeat identical binaries.
-        for i in range(len(reflections)):command('sdk-spv-'+str(i),[B.VAL,'--target-env','vulkan1.2',work/'h01/pipelines'/f'{i}.spv'])
+        for i in range(len(reflections)):command('sdk-spv-'+str(i),[B.VAL,'--target-env','vulkan1.2',reuse.parent/'h01/pipelines'/f'{i}.spv'])
         result['validated_pipelines']=len(reflections);result['identical_pipeline_exports_reused']=2*len(reflections)
         exe=build/'nrd-api-probe';state=states[0];original_state={n:(state/n).read_bytes() for n in ('geometry-state.bin','frame-state.bin')}
         command('reject-gpu-mode',[exe,'--gpu-inspect','--state',state,'--out',work/'forbidden-gpu'],2);need(not (work/'forbidden-gpu').exists(),'023 unknown mode created output')
         command('reject-absent-arguments',[exe],2)
-        before=B.inventory(work/'h01');command('reject-overwrite',[exe,'--cpu-inspect','--state',state,'--out',work/'h01'],2);need(B.inventory(work/'h01')==before,'023 existing output changed')
+        before=B.inventory(reuse.parent/'h01');command('reject-overwrite',[exe,'--cpu-inspect','--state',state,'--out',reuse.parent/'h01'],2);need(B.inventory(reuse.parent/'h01')==before,'023 existing output changed')
         for label,offset,value in (('near-zero',32,0.),('far-before-near',80,.0001),('near-nan',32,float('nan'))):
             invalid=work/('invalid-'+label);invalid.mkdir()
             for n,data in original_state.items():(invalid/n).write_bytes(data)
@@ -182,11 +202,11 @@ def run(build,work):
             out=work/('rejected-'+label);command('reject-'+label,[exe,'--cpu-inspect','--state',invalid,'--out',out],2);need(not out.exists(),'023 malformed camera allocated SDK/output')
         result['all_pass']=True
     except Exception as error:result['error']=type(error).__name__+': '+str(error)
-    check_hashes(result['input_sha256']);check_hashes(b['payload_sha256'],build)
+    check_hashes(result['input_sha256']);check_hashes(b['payload_sha256'],build);check_hashes(first['payload_sha256'],reuse.parent)
     result.update(complete=True,payload_sha256=B.inventory(work),quality_admitted=False,accepted_timing=False,lane_m_complete=False)
     with (work/'result.json').open('x') as f:json.dump(result,f,indent=2);f.write('\n')
     print(json.dumps({k:result.get(k) for k in ('all_pass','cpp_checks','validated_pipelines','sdk_api_executed','gpu_executed','error')}));return result
 
 
 if __name__=='__main__':
-    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--build',required=True,type=Path);ap.add_argument('--work',required=True,type=Path);a=ap.parse_args();r=run(a.build,a.work);sys.exit(0 if r['all_pass'] else 2)
+    ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--build',required=True,type=Path);ap.add_argument('--work',required=True,type=Path);ap.add_argument('--reuse-first-failure',required=True,type=Path);a=ap.parse_args();r=run(a.build,a.work,a.reuse_first_failure.resolve());sys.exit(0 if r['all_pass'] else 2)
