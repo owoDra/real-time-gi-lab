@@ -1,0 +1,39 @@
+{
+  "schema": "m001-nrd023-preserved-cpu-audit-failures/1",
+  "complete": true,
+  "classification": "CPU_AUDIT_IMPLEMENTATION_FAILURES_PRESERVED",
+  "failures": [
+    {
+      "attempt": 1,
+      "source_commit": "322c9890348c6684ae63b9e3959fd77fc1e27464",
+      "error": "ValueError: 023 independent grid/texture dimensions",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "98e8419b078ca5ffe43bacfa44f2e230b9983def40a7cd5a7030cf150dce4397",
+      "payloads": 700,
+      "new_sdk_scene_inspections": 1
+    },
+    {
+      "attempt": 2,
+      "source_commit": "677118caac21c6c0b92f35d32c4c6bc53af1d4f4",
+      "error": "ValueError: 023 required guide resources",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-contracts-v2/result.json",
+      "raw_receipt_sha256": "9f0048aa217f4a77541eb9f3f78d28294f3abaf16c403cf346f45dcbf4ca7a0d",
+      "payloads": 0,
+      "new_sdk_scene_inspections": 0
+    }
+  ],
+  "first_repair_commit": "677118caac21c6c0b92f35d32c4c6bc53af1d4f4",
+  "second_repair_commit": "4008497021967acad9b2fbcb31ad2d610478d2f6",
+  "first_cause": "Audit incorrectly equated LocalSize8x4 with classifier coverage16x16; each thread covers2x4pixels. SDK grid20x12 is correct.",
+  "second_cause": "Pinned upstream GetResourceTypeString table is inconsistent with NRDDescs enum order: numeric6 is IN_DIFF_RADIANCE_HITDIST, reported IN_SPEC_HITDIST. Decode canonical numeric enums from the pinned header, retain raw diagnostic names.",
+  "sdk_source_changed": false,
+  "native_probe_changed": false,
+  "successful_build_scalar_and_h01_api_repeated": false,
+  "gpu_executed": false,
+  "new_reference_paths": 0,
+  "quality_admitted": false,
+  "accepted_timing": false,
+  "gpu_memory_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false
+}

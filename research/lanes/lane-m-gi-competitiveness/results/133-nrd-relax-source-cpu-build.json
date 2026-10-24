@@ -1,0 +1,38 @@
+{
+  "schema": "m001-nrd023-source-build/1",
+  "complete": true,
+  "all_pass": true,
+  "source_commit": "322c9890348c6684ae63b9e3959fd77fc1e27464",
+  "source_pins": {
+    "NRD-e06852bd": "e06852bd545973cb224eb28820b891205cfc1624",
+    "ShaderMake-3f01623a": "3f01623a76b092ac127d2debd79a672f55d77665",
+    "MathLib-aa432ad9": "aa432ad9a80691eb8c3ec4d576bbad5ac100fdc8"
+  },
+  "compiler_archive_sha256": "96faadc7f5c282d2ffda49804beb4c3ee38127bc252b723234e3c5cdf7aa39a1",
+  "source_tracked_file_counts": {
+    "NRD-e06852bd": 132,
+    "ShaderMake-3f01623a": 15,
+    "MathLib-aa432ad9": 20
+  },
+  "build_validation_steps": 10,
+  "upstream_serial_shader_tasks": 159,
+  "source_input_files": 208,
+  "compiled_dependencies": 713,
+  "build_payloads": 273,
+  "original_inputs_unchanged": true,
+  "upstream_private_tracked_sources_exact": true,
+  "all_default_feature_switches_preserved": true,
+  "normal_encoding": 2,
+  "roughness_encoding": 1,
+  "quad_intrinsics_enabled": true,
+  "compiler_package_retrieval_first_tls_failure_preserved": true,
+  "gpu_executed": false,
+  "new_reference_paths": 0,
+  "quality_admitted": false,
+  "accepted_timing": false,
+  "gpu_memory_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-build-v1/result.json",
+  "raw_receipt_sha256": "00003730a26585c0542e760f7fb572958336e42ef2893e02d75c2e98eeff53fd"
+}

@@ -1,0 +1,2247 @@
+{
+  "schema": "m001-nrd023-real-sdk-cpu-qualification/1",
+  "complete": true,
+  "all_pass": true,
+  "classification": "CPU_SOURCE_DISPATCH_GUIDE_PASS",
+  "preregistration_commit": "7f7da7ca",
+  "native_build_source_commit": "322c9890348c6684ae63b9e3959fd77fc1e27464",
+  "audit_source_commit": "4008497021967acad9b2fbcb31ad2d610478d2f6",
+  "actual_cpp_scalar_checks": 38,
+  "reused_successful_command_receipts": 3,
+  "actual_sdk_scene_inspections": 3,
+  "actual_sdk_api_frames": 195,
+  "dispatches": 2016,
+  "independent_grid_checks": 2016,
+  "captured_constant_bytes": 1468512,
+  "independent_camera_projection_checks": 27,
+  "history_dependency_frames": 195,
+  "transient_ping_pong_dependencies": 780,
+  "reset_to_cold_exact_all_scenes": true,
+  "sdk_pipeline_spirv_validated": 15,
+  "byte_identical_other_scene_pipeline_exports": 30,
+  "sdk_spirv_capabilities": [
+    1,
+    56
+  ],
+  "sdk_spirv_extensions": [],
+  "unusable_icd_cpu_contracts": true,
+  "baseline_defaults_unchanged": true,
+  "original022_native_payloads_rehashed": 87,
+  "old_successful_cpu_gpu_cohorts_rerun": false,
+  "total_audited_gpu_acquisitions": 132,
+  "records": [
+    {
+      "cell": "H01",
+      "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-contracts-v1/h01",
+      "audit": {
+        "projection_checks": 9,
+        "dispatches": 672,
+        "grid_checks": 672,
+        "constant_bytes": 489504,
+        "history_frames": 65,
+        "transient_dependencies": 260,
+        "reset_to_cold_exact": true,
+        "inter_frame_pool_index_swaps": 0,
+        "required_user_resources": [
+          "IN_DIFF_RADIANCE_HITDIST",
+          "IN_MV",
+          "IN_NORMAL_ROUGHNESS",
+          "IN_VIEWZ",
+          "OUT_DIFF_RADIANCE_HITDIST"
+        ],
+        "upstream_diagnostic_name_mismatches": [
+          {
+            "type": 6,
+            "sdk_reported_name": "IN_SPEC_HITDIST",
+            "canonical_header_name": "IN_DIFF_RADIANCE_HITDIST"
+          }
+        ],
+        "reflections": [
+          {
+            "sha256": "966a22a44b5caa5f1514ca5191ae9c82538af558bd85c034fe045f6a1534fc25",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              4,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "58438490f3b5e099a329f401773136fe777a36e04b17843b271cd7f732763845",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "cc35b4a501b0f06a9443da8d235917569135d842bf7465f09d5c69170c0a309e",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "4ec6e8f9b59aa943c457bf85bc6a96cd79eafa1c81d260c5ee7825595e4de3f4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "05fe258fe398df00c4a71b2214f0c74313e424c209187afaa14a8a545af9f950",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                0,
+                26
+              ],
+              [
+                0,
+                27
+              ],
+              [
+                0,
+                28
+              ],
+              [
+                0,
+                29
+              ],
+              [
+                0,
+                30
+              ],
+              [
+                0,
+                31
+              ],
+              [
+                0,
+                32
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "5cb40723d545aef0893b90f122855c55cb5a938c3b27b6a880f9a51a2b054c54",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "a809a81941508c33e8a3b1d1fcdcc988536b38968075eb0a53267504802875b9",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "59814706ca2476dd4f1cc0fe03b8f042b8793e13e5fd7824c18f32e16583d186",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "6e0e98c100c373cf9fa2c1e0eeab037828e523cccedd07794c1552ebe36ee3f4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "3fa6a23c92659e45ed107ca41e0d0142055b43d7d9ae51e2c273e996a74591f0",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "4183cd2f5923bac800d61ebd5e724b385f6f76bc8203959ac8a708a69ece0fa1",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "1a70ffc9686555fefffab729398026560b24878152f7f4b5193f8cfc625d2dc4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "05e85bb19fbd546a473c515fa325a0e942ed0c4058cb6f81f7a2b8f722f09a87",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "8b3e2fc719fa415ddebe05c095a52f9aa8af682b4939f2b3c7a1fc57c7422a3e",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "e795b2720034dd5365ec7f931b453bf545b84d3547be0f7de7d01e1dab57585d",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "cell": "H02",
+      "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-contracts-v3/h02",
+      "audit": {
+        "projection_checks": 9,
+        "dispatches": 672,
+        "grid_checks": 672,
+        "constant_bytes": 489504,
+        "history_frames": 65,
+        "transient_dependencies": 260,
+        "reset_to_cold_exact": true,
+        "inter_frame_pool_index_swaps": 0,
+        "required_user_resources": [
+          "IN_DIFF_RADIANCE_HITDIST",
+          "IN_MV",
+          "IN_NORMAL_ROUGHNESS",
+          "IN_VIEWZ",
+          "OUT_DIFF_RADIANCE_HITDIST"
+        ],
+        "upstream_diagnostic_name_mismatches": [
+          {
+            "type": 6,
+            "sdk_reported_name": "IN_SPEC_HITDIST",
+            "canonical_header_name": "IN_DIFF_RADIANCE_HITDIST"
+          }
+        ],
+        "reflections": [
+          {
+            "sha256": "966a22a44b5caa5f1514ca5191ae9c82538af558bd85c034fe045f6a1534fc25",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              4,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "58438490f3b5e099a329f401773136fe777a36e04b17843b271cd7f732763845",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "cc35b4a501b0f06a9443da8d235917569135d842bf7465f09d5c69170c0a309e",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "4ec6e8f9b59aa943c457bf85bc6a96cd79eafa1c81d260c5ee7825595e4de3f4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "05fe258fe398df00c4a71b2214f0c74313e424c209187afaa14a8a545af9f950",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                0,
+                26
+              ],
+              [
+                0,
+                27
+              ],
+              [
+                0,
+                28
+              ],
+              [
+                0,
+                29
+              ],
+              [
+                0,
+                30
+              ],
+              [
+                0,
+                31
+              ],
+              [
+                0,
+                32
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "5cb40723d545aef0893b90f122855c55cb5a938c3b27b6a880f9a51a2b054c54",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "a809a81941508c33e8a3b1d1fcdcc988536b38968075eb0a53267504802875b9",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "59814706ca2476dd4f1cc0fe03b8f042b8793e13e5fd7824c18f32e16583d186",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "6e0e98c100c373cf9fa2c1e0eeab037828e523cccedd07794c1552ebe36ee3f4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "3fa6a23c92659e45ed107ca41e0d0142055b43d7d9ae51e2c273e996a74591f0",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "4183cd2f5923bac800d61ebd5e724b385f6f76bc8203959ac8a708a69ece0fa1",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "1a70ffc9686555fefffab729398026560b24878152f7f4b5193f8cfc625d2dc4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "05e85bb19fbd546a473c515fa325a0e942ed0c4058cb6f81f7a2b8f722f09a87",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "8b3e2fc719fa415ddebe05c095a52f9aa8af682b4939f2b3c7a1fc57c7422a3e",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "e795b2720034dd5365ec7f931b453bf545b84d3547be0f7de7d01e1dab57585d",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "cell": "H03",
+      "directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-contracts-v3/h03",
+      "audit": {
+        "projection_checks": 9,
+        "dispatches": 672,
+        "grid_checks": 672,
+        "constant_bytes": 489504,
+        "history_frames": 65,
+        "transient_dependencies": 260,
+        "reset_to_cold_exact": true,
+        "inter_frame_pool_index_swaps": 0,
+        "required_user_resources": [
+          "IN_DIFF_RADIANCE_HITDIST",
+          "IN_MV",
+          "IN_NORMAL_ROUGHNESS",
+          "IN_VIEWZ",
+          "OUT_DIFF_RADIANCE_HITDIST"
+        ],
+        "upstream_diagnostic_name_mismatches": [
+          {
+            "type": 6,
+            "sdk_reported_name": "IN_SPEC_HITDIST",
+            "canonical_header_name": "IN_DIFF_RADIANCE_HITDIST"
+          }
+        ],
+        "reflections": [
+          {
+            "sha256": "966a22a44b5caa5f1514ca5191ae9c82538af558bd85c034fe045f6a1534fc25",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              4,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "58438490f3b5e099a329f401773136fe777a36e04b17843b271cd7f732763845",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "cc35b4a501b0f06a9443da8d235917569135d842bf7465f09d5c69170c0a309e",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "4ec6e8f9b59aa943c457bf85bc6a96cd79eafa1c81d260c5ee7825595e4de3f4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "05fe258fe398df00c4a71b2214f0c74313e424c209187afaa14a8a545af9f950",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                0,
+                26
+              ],
+              [
+                0,
+                27
+              ],
+              [
+                0,
+                28
+              ],
+              [
+                0,
+                29
+              ],
+              [
+                0,
+                30
+              ],
+              [
+                0,
+                31
+              ],
+              [
+                0,
+                32
+              ],
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "5cb40723d545aef0893b90f122855c55cb5a938c3b27b6a880f9a51a2b054c54",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "a809a81941508c33e8a3b1d1fcdcc988536b38968075eb0a53267504802875b9",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "59814706ca2476dd4f1cc0fe03b8f042b8793e13e5fd7824c18f32e16583d186",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "6e0e98c100c373cf9fa2c1e0eeab037828e523cccedd07794c1552ebe36ee3f4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "3fa6a23c92659e45ed107ca41e0d0142055b43d7d9ae51e2c273e996a74591f0",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              8,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                4
+              ],
+              [
+                0,
+                5
+              ],
+              [
+                0,
+                6
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "4183cd2f5923bac800d61ebd5e724b385f6f76bc8203959ac8a708a69ece0fa1",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                0,
+                24
+              ],
+              [
+                0,
+                25
+              ],
+              [
+                1,
+                1
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "1a70ffc9686555fefffab729398026560b24878152f7f4b5193f8cfc625d2dc4",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              8,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "05e85bb19fbd546a473c515fa325a0e942ed0c4058cb6f81f7a2b8f722f09a87",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                0,
+                20
+              ],
+              [
+                0,
+                21
+              ],
+              [
+                0,
+                22
+              ],
+              [
+                0,
+                23
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "8b3e2fc719fa415ddebe05c095a52f9aa8af682b4939f2b3c7a1fc57c7422a3e",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          },
+          {
+            "sha256": "e795b2720034dd5365ec7f931b453bf545b84d3547be0f7de7d01e1dab57585d",
+            "capabilities": [
+              1,
+              56
+            ],
+            "extensions": [],
+            "entry": {
+              "model": 5,
+              "id": 2,
+              "name": "main"
+            },
+            "local_size": [
+              16,
+              16,
+              1
+            ],
+            "descriptors": [
+              [
+                0,
+                3
+              ],
+              [
+                1,
+                2
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "preserved_payloads": 2413,
+  "gpu_executed": false,
+  "new_reference_paths": 0,
+  "quality_admitted": false,
+  "accepted_timing": false,
+  "gpu_memory_admitted": false,
+  "architecture_promoted": false,
+  "lane_m_complete": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd023-cpu-contracts-v3/result.json",
+  "raw_receipt_sha256": "cb498ade44bc96b8d4439dc7e478331f318a4883e7e47360661590af798c697d",
+  "actual_unique_cpu_contract_commands": 26
+}

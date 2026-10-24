@@ -383,8 +383,19 @@
       "integrated_pt_reconstruction_process": "scripts/research/lane_m_gi_competitiveness/integrated_pt_process.py",
       "integrated_pt_reconstruction_auditor": "scripts/research/lane_m_gi_competitiveness/integrated_pt_audit.py",
       "nrd_relax_cpu_protocol": "experiments/023-nrd-relax-source-cpu-qualification.md",
-      "nrd_relax_cpu_status": "PREREGISTERED_CODE_BUILD_API_TESTS_NOT_RUN",
-      "nrd_relax_gpu_runtime_qualified": false
+      "nrd_relax_cpu_status": "CPU_SOURCE_DISPATCH_GUIDE_PASS",
+      "nrd_relax_gpu_runtime_qualified": false,
+      "nrd_relax_cpu_source_build": "results/133-nrd-relax-source-cpu-build.json",
+      "nrd_relax_cpu_audit_failures": "results/134-nrd-relax-cpu-audit-failures.json",
+      "nrd_relax_cpu_qualification": "results/135-nrd-relax-real-sdk-cpu-qualification.json",
+      "nrd_relax_cpu_outcome": "results/136-nrd-relax-cpu-outcome.md",
+      "nrd_relax_cpu_verification": "results/137-nrd-relax-cpu-verification.json",
+      "nrd_relax_cpu_study_complete": true,
+      "nrd_relax_cpu_sdk_scene_inspections": 3,
+      "nrd_relax_cpu_dispatches": 2016,
+      "nrd_relax_cpu_builder": "scripts/research/lane_m_gi_competitiveness/build_nrd_cpu.py",
+      "nrd_relax_cpu_auditor": "scripts/research/lane_m_gi_competitiveness/test_nrd_cpu.py",
+      "nrd_relax_guide_source_contract": "scripts/research/lane_m_gi_competitiveness/nrd_source_contract.py"
     }
   ]
 }
