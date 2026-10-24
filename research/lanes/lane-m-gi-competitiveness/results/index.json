@@ -501,7 +501,9 @@
       "surface_incident_residual_cpu_replay_attempts": 1,
       "surface_incident_residual_valid_quality_targets": 0,
       "surface_incident_residual_other_targets_not_run": 5,
-      "surface_incident_residual_stopped": true
+      "surface_incident_residual_stopped": true,
+      "surface_incident_residual_correction_protocol": "experiments/030-signed-residual-scoring-and-provenance-correction.md",
+      "surface_incident_residual_correction_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
