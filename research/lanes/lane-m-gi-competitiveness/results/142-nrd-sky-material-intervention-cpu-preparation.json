@@ -1,0 +1,64 @@
+{
+  "schema": "m001-nrd025-sky-variant-cpu-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "classification": "CPU_READY_GPU_NOT_RUN",
+  "gpu_executed": false,
+  "preregistration_commit": "e3a670e2",
+  "initial_source_commit": "0f0ef0a1",
+  "manifest_repair_commit": "db0654e9",
+  "private_source_variant": "SKY_WORLD_POSITION_MATERIAL_ZERO_BEFORE_EARLY_OUT",
+  "private_source_sha256": "609dc55565adb7bc5f8ac3359d5cbc081cf3c14808af28260c8c17f4f1ad1c2e",
+  "original_source_sha256": "f838a697cf1dd9960313d840ee566d064537995ed44328bad2fe6b144ddf31aa",
+  "sdk_shader_family_permutations": 6,
+  "new_sdk_objects": 1,
+  "unchanged_sdk_archive_members": 6,
+  "unchanged_native_api_objects": true,
+  "old_producer_pack_composite_spirv_reused": true,
+  "python_checks": 13,
+  "actual_sdk_scene_inspections": 3,
+  "actual_sdk_api_frames": 195,
+  "actual_sdk_dispatches": 2016,
+  "changed_selected_pipeline_index": 9,
+  "other_selected_pipeline_bytes_exact": true,
+  "all_sdk_dispatch_resource_setting_constant_bytes_exact_to023": true,
+  "prior024contracts_reused_not_rerun": true,
+  "failed_build_manifest_audit_preserved": true,
+  "failed_build_reason": "ValueError: 025 only registered SDK header generated",
+  "all_five_successful_build_steps_reused": true,
+  "new_compile_or_link_commands_after_manifest_repair": 0,
+  "records": [
+    {
+      "kind": "preserved-manifest-failure",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-cpu-build-v1/result.json",
+      "raw_receipt_sha256": "cfe27b37fb727cb7f5411761e99e80647c8ec06f46819629fde1b4043aa844b8",
+      "payloads_rehashed": 153
+    },
+    {
+      "kind": "accepted-reused-build",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-cpu-build-v2/result.json",
+      "raw_receipt_sha256": "9b71701ba4ab660ba0bef69b8e799cf7f4045c84135cc22b8135a28aaef30d96",
+      "payloads_rehashed": 153
+    },
+    {
+      "kind": "actual-sdk-cpu-contracts",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-cpu-contracts-v1/result.json",
+      "raw_receipt_sha256": "24dd0103a7ae408cb107b3474d89d943b4daa9785025d610f5ccfbe460602b42",
+      "payloads_rehashed": 2090
+    }
+  ],
+  "executable": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd025-cpu-build-v2/nrd-vulkan",
+  "executable_sha256": "97ce6c619251b6e783db96263f851ddeabc2d6480befa01ec94fdf8c0554a011",
+  "shader_directory": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-nrd024-cpu-build-v2",
+  "source_sha256": {
+    "/var/owo/workspaces/projects/gi-lab/research/lanes/lane-m-gi-competitiveness/experiments/025-nrd-sky-material-initialization-intervention.md": "995259b3b85c7bab88d8f6f6c769b89a43037a2c50a8bdc2fd00a895ca262a24",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_sky_build.py": "a453080832e92e65a6a5e5c0ad6777af91c6f30588803255a23ca44b40b80251",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/test_nrd_sky.py": "70815001be704c76d97fe9a75640a364126c810fffec8efede9aef1fc632911a",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_sky_process.py": "ceddf20f27984a22c914e26da0151fccd041cb06f16c373d091c2e04563b2bf0",
+    "/var/owo/workspaces/projects/gi-lab/scripts/research/lane_m_gi_competitiveness/nrd_sky_audit.py": "b0760b90bbec525597214c15250a948cb21f6dc0a81f5a022015b5404754c2d7"
+  },
+  "accepted_timing": false,
+  "quality_admitted": false,
+  "nrd_gpu_runtime_qualified": false,
+  "lane_m_complete": false
+}
