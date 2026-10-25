@@ -603,7 +603,17 @@
       "restir_gi_local_verification": "results/239-restir-gi-local-candidates-stop-verification.json",
       "restir_gi_local_admitted_conditions": 2,
       "restir_gi_local_failed_conditions": 1,
-      "restir_gi_local_not_run_conditions": 3
+      "restir_gi_local_not_run_conditions": 3,
+      "restir_gi_unit_protocol": "experiments/041-sdk-radiance-unit-range-correction.md",
+      "restir_gi_unit_addendum": "experiments/041a-exact-sdk-black-bin-addendum.md",
+      "restir_gi_unit_status": "RAY_PARAMETRIC_FIXED_UNIT_GPU_CONSTRUCTION_PASS",
+      "restir_gi_unit_preparation": "results/240-restir-gi-fixed-unit-cpu-preparation.json",
+      "restir_gi_unit_six_conditions": "results/241-restir-gi-fixed-unit-six-gpu-conditions.json",
+      "restir_gi_unit_outcome": "results/242-restir-gi-fixed-unit-six-gpu-outcome.md",
+      "restir_gi_unit_verification": "results/243-restir-gi-fixed-unit-verification.json",
+      "restir_gi_unit_admitted_conditions": 6,
+      "restir_gi_unit_spatial_temporal_reuse_qualified": false,
+      "restir_gi_unit_hdr_quality_scored": false
     }
   ]
 }
