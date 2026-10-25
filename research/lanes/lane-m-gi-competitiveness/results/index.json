@@ -562,7 +562,9 @@
       "restir_gi_physical_candidate_admission_withdrawn": true,
       "restir_gi_physical_candidate_audit_envelope_supersession": "results/219-restir-gi-physical-audit-envelope-supersession.json",
       "restir_gi_physical_candidate_audit_envelope_outcome": "results/220-restir-gi-physical-audit-envelope-outcome.md",
-      "restir_gi_physical_candidate_audit_envelope_verification": "results/221-restir-gi-physical-audit-envelope-verification.json"
+      "restir_gi_physical_candidate_audit_envelope_verification": "results/221-restir-gi-physical-audit-envelope-verification.json",
+      "restir_gi_physical_supervised_protocol": "experiments/036-physical-candidate-audit-supervisor-correction.md",
+      "restir_gi_physical_supervised_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
