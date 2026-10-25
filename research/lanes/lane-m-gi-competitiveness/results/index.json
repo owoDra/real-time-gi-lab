@@ -564,7 +564,15 @@
       "restir_gi_physical_candidate_audit_envelope_outcome": "results/220-restir-gi-physical-audit-envelope-outcome.md",
       "restir_gi_physical_candidate_audit_envelope_verification": "results/221-restir-gi-physical-audit-envelope-verification.json",
       "restir_gi_physical_supervised_protocol": "experiments/036-physical-candidate-audit-supervisor-correction.md",
-      "restir_gi_physical_supervised_status": "PREREGISTERED_NOT_RUN"
+      "restir_gi_physical_supervised_status": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_AUDIT_PASS",
+      "restir_gi_physical_supervised_preparation": "results/222-restir-gi-supervised-audit-preparation.json",
+      "restir_gi_physical_supervised_six_targets": "results/223-restir-gi-supervised-six-targets.json",
+      "restir_gi_physical_supervised_outcome": "results/224-restir-gi-supervised-audit-outcome.md",
+      "restir_gi_physical_supervised_verification": "results/225-restir-gi-supervised-audit-verification.json",
+      "restir_gi_physical_supervised_targets_passed": 6,
+      "restir_gi_physical_supervised_study_complete": true,
+      "restir_gi_physical_supervised_new_paths": 0,
+      "restir_gi_physical_supervised_gpu_executed": false
     }
   ]
 }

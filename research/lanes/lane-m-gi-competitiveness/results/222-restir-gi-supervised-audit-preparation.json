@@ -1,0 +1,38 @@
+{
+  "schema": "m001-restir036-actual-probe-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "classification": "CPU_AUDIT_SUPERVISOR_PROBE_PASS",
+  "source_commit": "24822db3b387fa303413beecbfa412a1c83f5b6c",
+  "actual_new_probe_processes": 1,
+  "probe_envelope": {
+    "worker_pid": 1407447,
+    "effective_worker": {
+      "cpu": [
+        1200,
+        1200
+      ],
+      "address": [
+        4294967296,
+        4294967296
+      ],
+      "core": [
+        0,
+        0
+      ],
+      "sigxcpu_default": true,
+      "sigxcpu_unblocked": true
+    },
+    "cpu_limit_seconds": 1200,
+    "outer_wall_deadline_seconds": 1800,
+    "reaped": true,
+    "returncode": 0,
+    "timed_out": false
+  },
+  "probe_native_paths_read": 0,
+  "new_native_compilations": 0,
+  "old_tests_reexecuted": false,
+  "gpu_executed": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-supervisor-probe-v1/result.json",
+  "raw_receipt_sha256": "cc71a45badd096f422ed3a8618fd14fe540ef7e19ff3c9e5bf1bb0b607bbef2a"
+}

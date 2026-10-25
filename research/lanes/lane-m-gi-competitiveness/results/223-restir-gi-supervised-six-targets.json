@@ -1,0 +1,687 @@
+{
+  "source_commit": "24822db3b387fa303413beecbfa412a1c83f5b6c",
+  "preregistration_commit": "70374817",
+  "complete": true,
+  "all_pass": true,
+  "study_complete": true,
+  "lane_m_complete": false,
+  "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_AUDIT_PASS",
+  "new_gpu_acquisitions": 0,
+  "total_assistant_gpu_acquisitions": 186,
+  "new_native_path_acquisitions": 0,
+  "new_reference_samples": 0,
+  "gpu_physical_bridge_qualified": false,
+  "hdr_quality_scored": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "consumed_input_manifest": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-six-supervised-summary-v1/consumed-input-sha256.json",
+  "consumed_input_manifest_sha256": "10306758b548294eff393d74c196b21b934ec0049d093c17d929cba7134499df",
+  "payload_manifest": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-six-supervised-summary-v1/all-payload-sha256.json",
+  "payload_manifest_sha256": "852f0807343ac20cc6cc9113d7bae89f875123d9f18583414c2de099c3720122",
+  "schema": "m001-restir036-six-supervised-summary/1",
+  "targets": [
+    {
+      "cell": "H01",
+      "depth": 2,
+      "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_CASE_PASS",
+      "all_pass": true,
+      "paths_per_imported_role": 230400,
+      "allocated_imported_vertex_slots": 460800,
+      "max_absolute_recovery_error": 2.290377089375628e-18,
+      "envelope": {
+        "worker_pid": 1407720,
+        "effective_worker": {
+          "cpu": [
+            1200,
+            1200
+          ],
+          "address": [
+            4294967296,
+            4294967296
+          ],
+          "core": [
+            0,
+            0
+          ],
+          "sigxcpu_default": true,
+          "sigxcpu_unblocked": true
+        },
+        "cpu_limit_seconds": 1200,
+        "outer_wall_deadline_seconds": 1800,
+        "reaped": true,
+        "returncode": 0,
+        "timed_out": false
+      },
+      "rows": [
+        {
+          "seed": 11544309372314318413,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64925,
+          "hit_slots": 8717,
+          "primary_invalid": 50275,
+          "secondary_misses": 5933,
+          "secondary_hits": 1392,
+          "black_secondary_hits": 119,
+          "backfacing_hits": 5722,
+          "max_absolute_recovery_error": 1.8973538018496328e-19,
+          "shadow_tests_original": 8449,
+          "shadow_tests_observed": 8449
+        },
+        {
+          "seed": 11544309370309934789,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64925,
+          "hit_slots": 8705,
+          "primary_invalid": 50275,
+          "secondary_misses": 5945,
+          "secondary_hits": 1380,
+          "black_secondary_hits": 119,
+          "backfacing_hits": 5691,
+          "max_absolute_recovery_error": 5.285485590866834e-19,
+          "shadow_tests_original": 8431,
+          "shadow_tests_observed": 8431
+        },
+        {
+          "seed": 11607717230642359770,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64925,
+          "hit_slots": 8667,
+          "primary_invalid": 50275,
+          "secondary_misses": 5983,
+          "secondary_hits": 1342,
+          "black_secondary_hits": 114,
+          "backfacing_hits": 5676,
+          "max_absolute_recovery_error": 2.290377089375628e-18,
+          "shadow_tests_original": 8403,
+          "shadow_tests_observed": 8403
+        },
+        {
+          "seed": 6839026843067191845,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64925,
+          "hit_slots": 8646,
+          "primary_invalid": 50275,
+          "secondary_misses": 6004,
+          "secondary_hits": 1321,
+          "black_secondary_hits": 135,
+          "backfacing_hits": 5661,
+          "max_absolute_recovery_error": 9.639234939753938e-19,
+          "shadow_tests_original": 8363,
+          "shadow_tests_observed": 8363
+        }
+      ],
+      "original_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-h01-b2-v1/result.json",
+      "original_native_receipt_sha256": "06f1c9faeb2fab035b96d7e648e0acbe68bdc0c56f7dff46bcc57d7f21485243",
+      "original_native_source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+      "corrected_audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h01-b2-v1/result.json",
+      "corrected_audit_receipt_sha256": "3e063db397988262a82d1bd99f7b73ef4088c7947d0cd33c1d7f30de20e6432d",
+      "worker_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h01-b2-v1/worker/result.json",
+      "worker_receipt_sha256": "734763d0dcbdd6df4ad806a82ea9849974d739cea60af6f5b7fb936f5b61966f"
+    },
+    {
+      "cell": "H01",
+      "depth": 8,
+      "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_CASE_PASS",
+      "all_pass": true,
+      "paths_per_imported_role": 230400,
+      "allocated_imported_vertex_slots": 1843200,
+      "max_absolute_recovery_error": 4.662069341687669e-18,
+      "envelope": {
+        "worker_pid": 1407832,
+        "effective_worker": {
+          "cpu": [
+            1200,
+            1200
+          ],
+          "address": [
+            4294967296,
+            4294967296
+          ],
+          "core": [
+            0,
+            0
+          ],
+          "sigxcpu_default": true,
+          "sigxcpu_unblocked": true
+        },
+        "cpu_limit_seconds": 1200,
+        "outer_wall_deadline_seconds": 1800,
+        "reaped": true,
+        "returncode": 0,
+        "timed_out": false
+      },
+      "rows": [
+        {
+          "seed": 11544309372314318413,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 67011,
+          "hit_slots": 9415,
+          "primary_invalid": 50275,
+          "secondary_misses": 5933,
+          "secondary_hits": 1392,
+          "black_secondary_hits": 100,
+          "backfacing_hits": 6063,
+          "max_absolute_recovery_error": 2.303929616531697e-19,
+          "shadow_tests_original": 9112,
+          "shadow_tests_observed": 9112
+        },
+        {
+          "seed": 11544309370309934789,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 66898,
+          "hit_slots": 9299,
+          "primary_invalid": 50275,
+          "secondary_misses": 5945,
+          "secondary_hits": 1380,
+          "black_secondary_hits": 99,
+          "backfacing_hits": 5989,
+          "max_absolute_recovery_error": 4.662069341687669e-18,
+          "shadow_tests_original": 8992,
+          "shadow_tests_observed": 8992
+        },
+        {
+          "seed": 11607717230642359770,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 66977,
+          "hit_slots": 9384,
+          "primary_invalid": 50275,
+          "secondary_misses": 5983,
+          "secondary_hits": 1342,
+          "black_secondary_hits": 95,
+          "backfacing_hits": 6009,
+          "max_absolute_recovery_error": 2.8731357570865868e-18,
+          "shadow_tests_original": 9070,
+          "shadow_tests_observed": 9070
+        },
+        {
+          "seed": 6839026843067191845,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 66871,
+          "hit_slots": 9277,
+          "primary_invalid": 50275,
+          "secondary_misses": 6004,
+          "secondary_hits": 1321,
+          "black_secondary_hits": 112,
+          "backfacing_hits": 5946,
+          "max_absolute_recovery_error": 9.639234939753938e-19,
+          "shadow_tests_original": 8961,
+          "shadow_tests_observed": 8961
+        }
+      ],
+      "original_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-h01-b8-v1/result.json",
+      "original_native_receipt_sha256": "3854221bfd7245aee75d062c37bf21eb381d86dc7342ff0215c78afed3aeef2d",
+      "original_native_source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+      "corrected_audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h01-b8-v1/result.json",
+      "corrected_audit_receipt_sha256": "edbbd28deb1c13b3b779c1bf2033e7ee14fc46f7ab2c0477f5ee45252d9483bc",
+      "worker_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h01-b8-v1/worker/result.json",
+      "worker_receipt_sha256": "00d9f4969078030e0cbe6f48e540a3f471db6ae8a330ad021238aacb8c02d6d7"
+    },
+    {
+      "cell": "H02",
+      "depth": 2,
+      "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_CASE_PASS",
+      "all_pass": true,
+      "paths_per_imported_role": 230400,
+      "allocated_imported_vertex_slots": 460800,
+      "max_absolute_recovery_error": 1.8770250111155296e-18,
+      "envelope": {
+        "worker_pid": 1408029,
+        "effective_worker": {
+          "cpu": [
+            1200,
+            1200
+          ],
+          "address": [
+            4294967296,
+            4294967296
+          ],
+          "core": [
+            0,
+            0
+          ],
+          "sigxcpu_default": true,
+          "sigxcpu_unblocked": true
+        },
+        "cpu_limit_seconds": 1200,
+        "outer_wall_deadline_seconds": 1800,
+        "reaped": true,
+        "returncode": 0,
+        "timed_out": false
+      },
+      "rows": [
+        {
+          "seed": 11544309372314318413,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64348,
+          "hit_slots": 7811,
+          "primary_invalid": 50852,
+          "secondary_misses": 5685,
+          "secondary_hits": 1063,
+          "black_secondary_hits": 189,
+          "backfacing_hits": 5593,
+          "max_absolute_recovery_error": 1.8770250111155296e-18,
+          "shadow_tests_original": 7285,
+          "shadow_tests_observed": 7285
+        },
+        {
+          "seed": 11544309370309934789,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64348,
+          "hit_slots": 7832,
+          "primary_invalid": 50852,
+          "secondary_misses": 5664,
+          "secondary_hits": 1084,
+          "black_secondary_hits": 213,
+          "backfacing_hits": 5578,
+          "max_absolute_recovery_error": 1.5449880957918438e-18,
+          "shadow_tests_original": 7288,
+          "shadow_tests_observed": 7288
+        },
+        {
+          "seed": 11607717230642359770,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64348,
+          "hit_slots": 7880,
+          "primary_invalid": 50852,
+          "secondary_misses": 5616,
+          "secondary_hits": 1132,
+          "black_secondary_hits": 204,
+          "backfacing_hits": 5587,
+          "max_absolute_recovery_error": 3.6591823321385775e-19,
+          "shadow_tests_original": 7341,
+          "shadow_tests_observed": 7341
+        },
+        {
+          "seed": 6839026843067191845,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 64348,
+          "hit_slots": 7837,
+          "primary_invalid": 50852,
+          "secondary_misses": 5659,
+          "secondary_hits": 1089,
+          "black_secondary_hits": 195,
+          "backfacing_hits": 5569,
+          "max_absolute_recovery_error": 7.182839392716467e-19,
+          "shadow_tests_original": 7308,
+          "shadow_tests_observed": 7308
+        }
+      ],
+      "original_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-h02-b2-v1/result.json",
+      "original_native_receipt_sha256": "834f5846986003b8b1b71c26a481805a4d13c4a81eecb1f89dbfa85a094cfbfe",
+      "original_native_source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+      "corrected_audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h02-b2-v1/result.json",
+      "corrected_audit_receipt_sha256": "c7ab2fcd7833e6617de834a2445a36061e1a23b9db1401b9b1562ac6ea0e4fa0",
+      "worker_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h02-b2-v1/worker/result.json",
+      "worker_receipt_sha256": "2ff523e077d5e8a35f933537709fc522cd521b8f5cbc948f2dbcfd7bf2d029ee"
+    },
+    {
+      "cell": "H02",
+      "depth": 8,
+      "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_CASE_PASS",
+      "all_pass": true,
+      "paths_per_imported_role": 230400,
+      "allocated_imported_vertex_slots": 1843200,
+      "max_absolute_recovery_error": 4.2825985813177425e-18,
+      "envelope": {
+        "worker_pid": 1408135,
+        "effective_worker": {
+          "cpu": [
+            1200,
+            1200
+          ],
+          "address": [
+            4294967296,
+            4294967296
+          ],
+          "core": [
+            0,
+            0
+          ],
+          "sigxcpu_default": true,
+          "sigxcpu_unblocked": true
+        },
+        "cpu_limit_seconds": 1200,
+        "outer_wall_deadline_seconds": 1800,
+        "reaped": true,
+        "returncode": 0,
+        "timed_out": false
+      },
+      "rows": [
+        {
+          "seed": 11544309372314318413,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 65927,
+          "hit_slots": 8330,
+          "primary_invalid": 50852,
+          "secondary_misses": 5685,
+          "secondary_hits": 1063,
+          "black_secondary_hits": 151,
+          "backfacing_hits": 5877,
+          "max_absolute_recovery_error": 4.2825985813177425e-18,
+          "shadow_tests_original": 7768,
+          "shadow_tests_observed": 7768
+        },
+        {
+          "seed": 11544309370309934789,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 65940,
+          "hit_slots": 8342,
+          "primary_invalid": 50852,
+          "secondary_misses": 5664,
+          "secondary_hits": 1084,
+          "black_secondary_hits": 169,
+          "backfacing_hits": 5842,
+          "max_absolute_recovery_error": 1.5449880957918438e-18,
+          "shadow_tests_original": 7752,
+          "shadow_tests_observed": 7752
+        },
+        {
+          "seed": 11607717230642359770,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 66052,
+          "hit_slots": 8457,
+          "primary_invalid": 50852,
+          "secondary_misses": 5616,
+          "secondary_hits": 1132,
+          "black_secondary_hits": 166,
+          "backfacing_hits": 5894,
+          "max_absolute_recovery_error": 3.6591823321385775e-19,
+          "shadow_tests_original": 7864,
+          "shadow_tests_observed": 7864
+        },
+        {
+          "seed": 6839026843067191845,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 66007,
+          "hit_slots": 8413,
+          "primary_invalid": 50852,
+          "secondary_misses": 5659,
+          "secondary_hits": 1089,
+          "black_secondary_hits": 149,
+          "backfacing_hits": 5879,
+          "max_absolute_recovery_error": 1.328147661294743e-18,
+          "shadow_tests_original": 7843,
+          "shadow_tests_observed": 7843
+        }
+      ],
+      "original_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-h02-b8-v1/result.json",
+      "original_native_receipt_sha256": "decaf872322f3ae2d84fe033dc9e7fe5877b854e6a19e6018412b0fb1a040e4c",
+      "original_native_source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+      "corrected_audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h02-b8-v1/result.json",
+      "corrected_audit_receipt_sha256": "fe1075f1ebc3fe55b514f6f108bad14ebfa4d2067b886dadf601e92499b6839c",
+      "worker_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h02-b8-v1/worker/result.json",
+      "worker_receipt_sha256": "cf419ba01d4e6b02863b0b1e3be1a6ba17a836078045fd2a7467da592e166e89"
+    },
+    {
+      "cell": "H03",
+      "depth": 2,
+      "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_CASE_PASS",
+      "all_pass": true,
+      "paths_per_imported_role": 230400,
+      "allocated_imported_vertex_slots": 460800,
+      "max_absolute_recovery_error": 7.529784087911828e-17,
+      "envelope": {
+        "worker_pid": 1408264,
+        "effective_worker": {
+          "cpu": [
+            1200,
+            1200
+          ],
+          "address": [
+            4294967296,
+            4294967296
+          ],
+          "core": [
+            0,
+            0
+          ],
+          "sigxcpu_default": true,
+          "sigxcpu_unblocked": true
+        },
+        "cpu_limit_seconds": 1200,
+        "outer_wall_deadline_seconds": 1800,
+        "reaped": true,
+        "returncode": 0,
+        "timed_out": false
+      },
+      "rows": [
+        {
+          "seed": 11544309372314318413,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 65270,
+          "hit_slots": 9087,
+          "primary_invalid": 49930,
+          "secondary_misses": 6253,
+          "secondary_hits": 1417,
+          "black_secondary_hits": 399,
+          "backfacing_hits": 5324,
+          "max_absolute_recovery_error": 3.1387652893455353e-17,
+          "shadow_tests_original": 7978,
+          "shadow_tests_observed": 7978
+        },
+        {
+          "seed": 11544309370309934789,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 65270,
+          "hit_slots": 9055,
+          "primary_invalid": 49930,
+          "secondary_misses": 6285,
+          "secondary_hits": 1385,
+          "black_secondary_hits": 401,
+          "backfacing_hits": 5267,
+          "max_absolute_recovery_error": 2.043721095135176e-17,
+          "shadow_tests_original": 7930,
+          "shadow_tests_observed": 7930
+        },
+        {
+          "seed": 11607717230642359770,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 65270,
+          "hit_slots": 9153,
+          "primary_invalid": 49930,
+          "secondary_misses": 6187,
+          "secondary_hits": 1483,
+          "black_secondary_hits": 397,
+          "backfacing_hits": 5341,
+          "max_absolute_recovery_error": 7.529784087911828e-17,
+          "shadow_tests_original": 8033,
+          "shadow_tests_observed": 8033
+        },
+        {
+          "seed": 6839026843067191845,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 65270,
+          "hit_slots": 9086,
+          "primary_invalid": 49930,
+          "secondary_misses": 6254,
+          "secondary_hits": 1416,
+          "black_secondary_hits": 425,
+          "backfacing_hits": 5330,
+          "max_absolute_recovery_error": 1.3986208025063007e-17,
+          "shadow_tests_original": 7963,
+          "shadow_tests_observed": 7963
+        }
+      ],
+      "original_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-h03-b2-v1/result.json",
+      "original_native_receipt_sha256": "f59d21f375aed6750bba4a988faa5e4df72c9cc732a68e4bffea92a859f56faa",
+      "original_native_source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+      "corrected_audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h03-b2-v1/result.json",
+      "corrected_audit_receipt_sha256": "4e2e8521690972ea8b85a181a25379ba4e16a9d4e4349d4e31a1f6b25b3bab8d",
+      "worker_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h03-b2-v1/worker/result.json",
+      "worker_receipt_sha256": "49c561083d8a0d8fae73f2b6d73295b669be6b08cd8afef74256ccc748032e17"
+    },
+    {
+      "cell": "H03",
+      "depth": 8,
+      "classification": "CPU_PHYSICAL_EXTRACTION_SUPERVISED_CASE_PASS",
+      "all_pass": true,
+      "paths_per_imported_role": 230400,
+      "allocated_imported_vertex_slots": 1843200,
+      "max_absolute_recovery_error": 1.5460722979643293e-16,
+      "envelope": {
+        "worker_pid": 1408370,
+        "effective_worker": {
+          "cpu": [
+            1200,
+            1200
+          ],
+          "address": [
+            4294967296,
+            4294967296
+          ],
+          "core": [
+            0,
+            0
+          ],
+          "sigxcpu_default": true,
+          "sigxcpu_unblocked": true
+        },
+        "cpu_limit_seconds": 1200,
+        "outer_wall_deadline_seconds": 1800,
+        "reaped": true,
+        "returncode": 0,
+        "timed_out": false
+      },
+      "rows": [
+        {
+          "seed": 11544309372314318413,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 67294,
+          "hit_slots": 9696,
+          "primary_invalid": 49930,
+          "secondary_misses": 6253,
+          "secondary_hits": 1417,
+          "black_secondary_hits": 366,
+          "backfacing_hits": 5623,
+          "max_absolute_recovery_error": 3.1387652893455353e-17,
+          "shadow_tests_original": 8499,
+          "shadow_tests_observed": 8499
+        },
+        {
+          "seed": 11544309370309934789,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 67124,
+          "hit_slots": 9525,
+          "primary_invalid": 49930,
+          "secondary_misses": 6285,
+          "secondary_hits": 1385,
+          "black_secondary_hits": 366,
+          "backfacing_hits": 5511,
+          "max_absolute_recovery_error": 2.043721095135176e-17,
+          "shadow_tests_original": 8338,
+          "shadow_tests_observed": 8338
+        },
+        {
+          "seed": 11607717230642359770,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 67399,
+          "hit_slots": 9805,
+          "primary_invalid": 49930,
+          "secondary_misses": 6187,
+          "secondary_hits": 1483,
+          "black_secondary_hits": 360,
+          "backfacing_hits": 5683,
+          "max_absolute_recovery_error": 1.5460722979643293e-16,
+          "shadow_tests_original": 8600,
+          "shadow_tests_observed": 8600
+        },
+        {
+          "seed": 6839026843067191845,
+          "all_pass": true,
+          "old_new_semantic_arrays_exact": true,
+          "paths": 57600,
+          "visited_slots": 67273,
+          "hit_slots": 9675,
+          "primary_invalid": 49930,
+          "secondary_misses": 6254,
+          "secondary_hits": 1416,
+          "black_secondary_hits": 391,
+          "backfacing_hits": 5630,
+          "max_absolute_recovery_error": 1.3986208025063007e-17,
+          "shadow_tests_original": 8468,
+          "shadow_tests_observed": 8468
+        }
+      ],
+      "original_native_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-h03-b8-v1/result.json",
+      "original_native_receipt_sha256": "cbb99e094706ed1f6e1ca74f9e554beb91bca7bb0956f3f028eef92ca88fdc7d",
+      "original_native_source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+      "corrected_audit_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h03-b8-v1/result.json",
+      "corrected_audit_receipt_sha256": "5a921c8b3c4da0ca327094b8815f49540918c53b4bf714d72f2f9c47588f012a",
+      "worker_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-h03-b8-v1/worker/result.json",
+      "worker_receipt_sha256": "d77eb615c4242bf539ad73bd7a839dc1fb4b24bee9f2327c051b692dba365125"
+    }
+  ],
+  "targets_passed": 6,
+  "targets_failed": 0,
+  "targets_pending": 0,
+  "actual_new_integration_probes": 1,
+  "actual_new_numeric_workers": 6,
+  "actual_new_supervised_processes": 7,
+  "imported_paths_per_original_role": 1382400,
+  "imported_observed_vertex_slots": 6912000,
+  "max_absolute_recovery_error": 1.5460722979643293e-16,
+  "all_old_new_semantic_arrays_exact": true,
+  "all_actual_worker_envelopes_qualified": true,
+  "original035_source_commit": "9c22bc21",
+  "original035_native_paths_exact_reused": true,
+  "original035_model_exact_reused": true,
+  "original035_withdrawal_still_effective": true,
+  "old035_protocol_qualified_targets": 0,
+  "old035_numerical_targets_passed": 6,
+  "new_native_compilations": 0,
+  "old_successful_native_or_python_tests_reexecuted": false,
+  "old_native_paths_reexecuted": false,
+  "independent_full_ray_or_shadow_retracing": false,
+  "physical_float32_packing_or_gpu_qualified": false,
+  "arbitrary_reuse_unbiasedness_proven": false,
+  "default_renderer_build_or_runtime": "NOT_RERUN",
+  "validation_layers": "NOT_RUN",
+  "raw_summary": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir036-six-supervised-summary-v1/result.json",
+  "raw_summary_sha256": "75b2dfd7c9b77cb5c89ad0ffdb6fee0acc6b67b3999f4fb8e6756e362fcab779"
+}
