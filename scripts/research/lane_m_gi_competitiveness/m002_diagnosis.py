@@ -132,7 +132,7 @@ def target(cell,depth):
         lin=linear(images[('PT_REF',n)],coefficients);op=clipped(images[('PT_REF',n)],coefficients)
         row['clip_bias'][n]=float((op-lin).sum()/r_ind.sum());row['replica_ptr'][n]=dict(indirect_nrmse=nrmse(op,r_ind),signed_bias=float((op-r_ind).sum()/r_ind.sum()),
                                                                                        raw_pt_indirect_nrmse=nrmse(images[('PT_REF',n)],r_ind))
-    saved={s:Q.score(np.zeros(57600),images[('PTR',s)].ravel(),dict(direct=np.zeros(57600),indirect=r_ind.ravel(),total=r_ind.ravel()))['indirect'] for r,s in images if r=='PTR'}
+    saved={s:dict(nrmse=nrmse(images[('PTR',s)],r_ind),signed_sum_bias=float((images[('PTR',s)]-r_ind).sum()/r_ind.sum())) for r,s in images if r=='PTR'}
     row['saved_ptr_indirect']=saved
     n64=max(s for s in pt if s<=64);op=clipped(images[('PT_REF',n64)],coefficients);err=(op-r_ind)**2;total=float(err.sum())
     model=maps['model'][0];taps=masks[2].sum(axis=0)
