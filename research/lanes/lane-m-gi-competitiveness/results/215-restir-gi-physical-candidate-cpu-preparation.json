@@ -1,0 +1,23 @@
+{
+  "schema": "m001-restir035-cpu-preparation-publication/1",
+  "complete": true,
+  "all_pass": true,
+  "source_commit": "9c22bc210f9e1fb96aa601700d81bf5581c5e791",
+  "classification": "CPU_PHYSICAL_EXTRACTION_PREPARATION_PASS",
+  "new_native_cases": 8,
+  "new_native_path_pairs": 128,
+  "new_python_contracts": 11,
+  "actual_native_compilations": 1,
+  "no_gpu_or_vulkan_initialization": true,
+  "unusable_icd": true,
+  "original_oracle_unchanged": true,
+  "observer_inverse": {
+    "exact_inverse": true,
+    "original_sha256": "dc47c4e1d8145fea21988313547b35e13a917c3929a838aa91ae7a5bc21bba4c",
+    "generated_sha256": "282186a4fd24844e66c5f0608aca41661846fd64110114176ae9dd6c96813daf",
+    "changes": "namespace, optional observation pointer and writes only; original sampling statements retained"
+  },
+  "old_successful_tests_reexecuted": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir035-cpu-build-v1/result.json",
+  "raw_receipt_sha256": "85f7d1438b4db29a623da795c4561928a99b78e0ea792f4bee80f31ce018ad54"
+}
