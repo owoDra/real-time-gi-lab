@@ -17,7 +17,8 @@ CAPTURES=BASE/'m002-captures-v1';CONTROL=BASE/'m002-positive-control-v2'
 REFUSED_CONTROL=BASE/'m002-positive-control-v1'  # quiet-gate refusal before any GPU work (reference oracles active)
 PT_LADDER=(16,64,256,1024);PTR_LADDER=(4,16,64)
 read,sha,need=T.read,T.sha,T.need
-T.PREP=BASE/'m002-cpu-build-v1';T.CAL=BASE/'m002-calibration-v1'
+T.PREP=BASE/'m002-cpu-build-v2';T.CAL=BASE/'m002-calibration-v1'
+CAPTURE_PREP=BASE/'m002-cpu-build-v1'  # positive control and ladders used this build (pins predate the control-root edit)
 
 
 def committed():
