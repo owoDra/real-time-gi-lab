@@ -518,7 +518,9 @@
       "surface_anchor_coupled_difference_outcome": "results/201-surface-anchor-coupled-path-first-failure-outcome.md",
       "surface_anchor_coupled_difference_verification": "results/202-surface-anchor-coupled-path-first-failure-verification.json",
       "surface_anchor_coupled_difference_stopped": true,
-      "surface_anchor_coupled_difference_valid_quality_targets": 0
+      "surface_anchor_coupled_difference_valid_quality_targets": 0,
+      "surface_anchor_process_correction_protocol": "experiments/032-anchor-process-limit-correction.md",
+      "surface_anchor_process_correction_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
