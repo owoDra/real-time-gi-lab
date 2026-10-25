@@ -28,6 +28,10 @@ layout(std430,binding=11) readonly buffer TileRatio { float tile_ratio[]; };
 layout(std430,binding=12) buffer Gradient { float gradient[]; };
 // ROLE 4: per-pixel sample pass output (f1 mean, replay difference mean, previous pixel or -1, f1^2 mean)
 layout(std430,binding=13) buffer Scratch { vec4 scratch[]; };
+// ROLE 5 (PTR): 022 hit records and sources for the unchanged 018/022 quadratic operator
+layout(std430,binding=14) buffer Hits { uint hits[]; };
+layout(std430,binding=15) buffer Sources { float sources[]; };
+layout(std430,binding=16) readonly buffer Stages { float stages[]; };
 layout(push_constant) uniform Push { uint mode; uint seed; uint start; uint k; uint k_new; uint vertices; uint flags; uint n_max; uint ratio_bits; } pc;
 const float PI=3.14159265358979323846;
 const uint INVALID=0xffffffffu;
@@ -125,8 +129,17 @@ void primary(uint id) {
                         ny*p.camera_up_tan_y.w*p.camera_up_tan_y.xyz);
     uint prim; vec3 pos,normal; vec2 b;
     if(!trace_in(false,p.camera_pos_near.xyz,view,p.camera_forward_far.w,INVALID,prim,pos,normal,b)) {
-        anchors[id*3u]=vec4(0); anchors[id*3u+1u]=vec4(0); anchors[id*3u+2u]=vec4(0); return;
+        anchors[id*3u]=vec4(0); anchors[id*3u+1u]=vec4(0); anchors[id*3u+2u]=vec4(0);
+#if ROLE==5
+        for(uint a=0u;a<8u;a++) hits[id*8u+a]=0u; hits[id*8u+3u]=0x7f800000u; hits[id*8u+4u]=hits[id*8u+5u]=hits[id*8u+6u]=INVALID;
+#endif
+        return;
     }
+#if ROLE==5
+    hits[id*8u]=floatBitsToUint(normal.x); hits[id*8u+1u]=floatBitsToUint(normal.y); hits[id*8u+2u]=floatBitsToUint(normal.z);
+    hits[id*8u+3u]=floatBitsToUint(length(pos-p.camera_pos_near.xyz));
+    hits[id*8u+4u]=triangles[prim].metadata.x; hits[id*8u+5u]=triangles[prim].metadata.y; hits[id*8u+6u]=triangles[prim].metadata.z; hits[id*8u+7u]=1u;
+#endif
     float direct=direct_light(false,p.light_pos_interval,pos,normal,prim);
     anchors[id*3u]=vec4(pos,uintBitsToFloat(prim));
     anchors[id*3u+1u]=vec4(normal,uintBitsToFloat(triangles[prim].metadata.z));
@@ -161,13 +174,13 @@ void paths(uint id) {
     if(a2.w!=1.0) { pixels[id]=vec4(0,0,0,1); history[id*2u]=vec4(0); history[id*2u+1u]=vec4(0); return; }
     vec3 x=a0.xyz, n=a1.xyz; uint prim=floatBitsToUint(a0.w); float direct=a2.z;
     vec3 xp=x, np=n; int j=-1;
-#if ROLE!=0
+#if ROLE!=0 && ROLE!=5
     if((pc.flags&NO_HISTORY)==0u) j=reproject(n,prim,a2.xy,xp,np);
 #endif
     uint base=mix32(pc.seed^mix32(id));
     float H, v, m1, m2, d2, count, replays=0.0;
     if(j<0) {
-        uint k=ROLE==0 ? pc.k : pc.k_new; float s=0.0, ss=0.0;
+        uint k=(ROLE==0||ROLE==5) ? pc.k : pc.k_new; float s=0.0, ss=0.0;
         for(uint i=0u;i<k;++i){ float f=path(false,p.light_pos_interval,x,n,prim,mix32(base+i)); s+=f; ss+=f*f; }
         H=s/float(k); m1=H; m2=ss/float(k); v=1.0/float(k); d2=0.0; count=1.0;
     } else {
@@ -225,7 +238,13 @@ void paths(uint id) {
     history[id*2u]=vec4(H,v,m1,m2); history[id*2u+1u]=vec4(d2,count,1.0,replays);
     float indirect=max(H,0.0);
     pixels[id]=vec4(direct,indirect,direct+indirect,1);
+#if ROLE==5
+    sources[id]=H;
+#endif
 }
+#if ROLE==5
+void composite(uint id) { float direct=anchors[id*3u+2u].z, indirect=stages[2u*p.counts.y*p.counts.z+id]; pixels[id]=vec4(direct,indirect,direct+indirect,1); }
+#endif
 
 #if ROLE==4
 #ifndef GAMMA
@@ -241,14 +260,19 @@ void samples(uint id) {
     vec3 x=a0.xyz, n=a1.xyz, xp=x, np=n; uint prim=floatBitsToUint(a0.w); int j=-1;
     if((pc.flags&NO_HISTORY)==0u) j=reproject(n,prim,a2.xy,xp,np);
     uint base=mix32(pc.seed^mix32(id)); float s1=0.0, sd=0.0, ss1=0.0;
-    uint k=j<0 ? pc.k_new : pc.k;
+    uint k=j<0 ? pc.k_new : pc.k; uint yprim=prim;
+#ifndef REPLAY_FROM_XPRIME
+    // Replay from the previous pixel's anchor y (the point H_{t-1} estimates): the filtered
+    // difference then also corrects the sub-pixel anchor shift under camera motion.
+    if(j>=0){ vec4 b0=previous_anchors[uint(j)*3u], b1=previous_anchors[uint(j)*3u+1u]; xp=b0.xyz; np=b1.xyz; yprim=floatBitsToUint(b0.w); }
+#endif
     bool same_point=j>=0 && all(equal(xp,x)) && (pc.flags&GEOMETRY_CHANGED)==0u;
     bool same=j<0 || (same_point && (pc.flags&LIGHT_CHANGED)==0u);
     for(uint i=0u;i<k;++i) {
         uint stream=mix32(base+i); float f1,f0;
         if(same) { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=f1; }
         else if(same_point) { vec2 f=path_shared(x,n,prim,stream); f1=f.x; f0=f.y; }
-        else { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=path(true,q.light_pos_interval,xp,np,prim,stream); }
+        else { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=path(true,q.light_pos_interval,xp,np,yprim,stream); }
         s1+=f1; sd+=f1-f0; ss1+=f1*f1;
     }
     scratch[id]=vec4(s1/float(k), same ? 0.0 : sd/float(k), float(j), ss1/float(k));
@@ -275,7 +299,7 @@ void combine(uint id) {
         }
         float D=num>0.0 ? sum/num : c.y;
         uint tile=(id/w/16u)*((w+15u)/16u)+(id%w)/16u;
-        bool moved=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED))!=0u || !all(equal(a0.xyz,a0.xyz));
+        bool moved=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u;
         float r=moved ? tile_ratio[tile] : 0.0, hv=h0.y;
         float wt=clamp((1.0-0.5*r)/(1.0+float(pc.k)*hv),0.0,1.0-1.0/float(pc.n_max));
         // A filtered difference is biased where the change has edges, and that bias is
@@ -317,6 +341,8 @@ void main() {
     if(id>=p.counts.y*p.counts.z) return;
 #if ROLE==3
     if(pc.mode==0u) primary(id); else if(pc.mode==1u) gradients(id); else paths(id);
+#elif ROLE==5
+    if(pc.mode==0u) primary(id); else if(pc.mode==1u) paths(id); else composite(id);
 #elif ROLE==4
     if(pc.mode==0u) primary(id); else if(pc.mode==1u) samples(id); else combine(id);
 #else

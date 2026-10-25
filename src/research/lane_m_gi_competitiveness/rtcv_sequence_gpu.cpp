@@ -67,7 +67,7 @@ int main(int argc,char** argv){fs::path output;
         std::map<std::string,std::string> args;for(int j=1;j<argc;j+=2){need(j+1<argc&&args.emplace(argv[j],argv[j+1]).second,"049 duplicate/missing option");}
         for(auto key:{"--sequence","--frames","--out","--vertices","--shaders","--role","--k","--k-new","--n-max","--capture","--seed","--ref-spp"})need(args.contains(key),"049 options");
         need(args.size()==12,"049 unknown option");
-        const std::string role=args["--role"];need(role=="PT"||role=="PTA"||role=="RTCV"||role=="PTG"||role=="RTCVF","049 role");const u32 role_id=role=="PT"?0:role=="PTA"?1:role=="RTCV"?2:role=="PTG"?3:4;
+        const std::string role=args["--role"];need(role=="PT"||role=="PTA"||role=="RTCV"||role=="PTG"||role=="RTCVF"||role=="PTR","049 role");const u32 role_id=role=="PT"?0:role=="PTA"?1:role=="RTCV"?2:role=="PTG"?3:role=="RTCVF"?4:5;
         const u32 frames=integer(args["--frames"]),vertices=integer(args["--vertices"]),k=integer(args["--k"]),k_new=integer(args["--k-new"]),n_max=integer(args["--n-max"]),seed=integer(args["--seed"]),ref_spp=integer(args["--ref-spp"]);
         need(frames>0&&frames<=4096&&vertices>=2&&vertices<=8&&k>0&&k<=65536&&k_new>0&&k_new<=256&&n_max>=1&&n_max<=4096,"049 parameter range");
         std::set<u32> capture;{std::stringstream ss(args["--capture"]);std::string item;while(std::getline(ss,item,','))if(!item.empty()){u32 c=integer(item);need(c<frames,"049 capture frame");capture.insert(c);}}
@@ -79,23 +79,28 @@ int main(int argc,char** argv){fs::path output;
         std::ofstream log(output/"frames.jsonl");log<<std::setprecision(17);
         {
             Ledger::instance().phase("context-as-pipelines");b::B002VulkanContext context(false,b::kB002TargetDeviceName,true);
-            const bool pingpong=role!="PT";
+            const bool pingpong=role!="PT"&&role!="PTR";
             std::array<std::unique_ptr<b::B002HwrtTraversal>,2> trav;std::array<u32,2> held{0,0};
             trav[0]=std::make_unique<b::B002HwrtTraversal>(context,seq[0].triangles,"",false);
             if(pingpong)trav[1]=std::make_unique<b::B002HwrtTraversal>(context,seq[0].triangles,"",false);
             VkPhysicalDeviceProperties props{};vkGetPhysicalDeviceProperties(context.physical_device(),&props);
             std::array<b::B002Buffer,2> params,anchor,hist;b::B002Buffer image,tiles,grad,scratch;
+            // PTR: unchanged 022 quadratic operator buffers (tiny placeholders for other roles)
+            const bool ptr=role_id==5;std::array<b::B002Buffer,8> q{};const std::array<std::uint64_t,8> qsize{32ull*N,80,32ull*N,300ull*N,24ull*N,4ull*N,12ull*N,12ull*N};
             for(u32 s=0;s<2;s++){params[s]=context.create_host_buffer(sizeof(a::A001ParamsGpu),VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);
                 anchor[s]=context.create_host_buffer(48ull*N,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);hist[s]=context.create_host_buffer(32ull*N,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
                 std::memset(anchor[s].mapped,0,48ull*N);std::memset(hist[s].mapped,0,32ull*N);}
             image=context.create_host_buffer(16ull*N,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);tiles=context.create_host_buffer(4ull*TILES,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);grad=context.create_host_buffer(4ull*STRATA,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);scratch=context.create_host_buffer(16ull*N,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);
+            for(u32 j=0;j<8;j++){q[j]=context.create_host_buffer(ptr?qsize[j]:16,VK_BUFFER_USAGE_STORAGE_BUFFER_BIT);std::memset(q[j].mapped,0,ptr?qsize[j]:16);}
             for(u32 t=0;t<TILES;t++)static_cast<float*>(tiles.mapped)[t]=1.0f;
             const VkDescriptorType S=VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,A=VK_DESCRIPTOR_TYPE_ACCELERATION_STRUCTURE_KHR,U=VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
             std::array<std::unique_ptr<i::I001ComputeStage>,2> stage;
             for(u32 s=0;s<2;s++){auto& cur=*trav[pingpong?s:0];auto& prev=*trav[pingpong?1-s:0];
                 std::vector<i::I001Binding> bind{{0,S,&image},{1,A,nullptr,cur.top_level()},{2,S,&cur.triangle_buffer()},{3,U,&params[s]},{4,A,nullptr,prev.top_level()},{5,S,&prev.triangle_buffer()},{6,U,&params[1-s]},
-                    {7,S,&anchor[s]},{8,S,&anchor[1-s]},{9,S,&hist[s]},{10,S,&hist[1-s]},{11,S,&tiles},{12,S,&grad},{13,S,&scratch}};
+                    {7,S,&anchor[s]},{8,S,&anchor[1-s]},{9,S,&hist[s]},{10,S,&hist[1-s]},{11,S,&tiles},{12,S,&grad},{13,S,&scratch},{14,S,&q[0]},{15,S,&q[5]},{16,S,&q[6]}};
                 stage[s]=std::make_unique<i::I001ComputeStage>(context,spv.string(),bind,sizeof(Push));}
+            std::unique_ptr<i::I001ComputeStage> quadratic;
+            if(ptr){std::vector<i::I001Binding> qb;for(u32 j=0;j<8;j++)qb.push_back({j,S,&q[j]});quadratic=std::make_unique<i::I001ComputeStage>(context,(fs::path(args["--shaders"])/"surface_quadratic_device.spv").string(),qb,16);}
             VkCommandPool pool{};VkCommandBuffer cmd{};VkFence fence{};VkQueryPool query{};
             VkCommandPoolCreateInfo pi{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};pi.queueFamilyIndex=context.queue_family();pi.flags=VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;check(context.vk().createCommandPool(&pi,nullptr,&pool));
             VkCommandBufferAllocateInfo ai{VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO};ai.commandPool=pool;ai.level=VK_COMMAND_BUFFER_LEVEL_PRIMARY;ai.commandBufferCount=1;check(context.vk().allocateCommandBuffers(&ai,&cmd));
@@ -121,8 +126,17 @@ int main(int argc,char** argv){fs::path output;
                 check(context.vk().resetFences(1,&fence));check(context.vk().resetCommandPool(pool,0));
                 VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};bi.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;check(context.vk().beginCommandBuffer(cmd,&bi));
                 context.vk().cmdResetQueryPool(cmd,query,0,2);barrier();context.vk().cmdWriteTimestamp(cmd,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,query,0);
-                const u32 modes=role_id>=3?3:2;
-                for(u32 mode=0;mode<modes;mode++){const u32 count=(role_id==3&&mode==1)?STRATA:N;for(u32 p=0;p<count;p+=CHUNK){u32 rb;std::memcpy(&rb,&ratio,4);Push push{mode,fseed,p,kk,k_new,vertices,flags,n_max,rb};stage[s]->record(cmd,CHUNK/32,1,1,&push,sizeof push);}barrier();}
+                if(ptr){float* cam=static_cast<float*>(q[1].mapped);const auto& pp=now.params;
+                    for(int a=0;a<4;a++){cam[a]=pp.camera_pos_near[a];cam[4+a]=pp.camera_forward_far[a];cam[8+a]=pp.camera_right_tan_x[a];cam[12+a]=pp.camera_up_tan_y[a];}
+                    float lo[3]{INFINITY,INFINITY,INFINITY},hi[3]{-INFINITY,-INFINITY,-INFINITY};
+                    for(const auto& t:now.triangles)for(auto v:{t.v0,t.v1,t.v2}){float x[3]{v.x,v.y,v.z};for(int a=0;a<3;a++){lo[a]=std::min(lo[a],x[a]);hi[a]=std::max(hi[a],x[a]);}}
+                    float dx=hi[0]-lo[0],dy=hi[1]-lo[1],dz=hi[2]-lo[2];cam[16]=float(1e-5*std::max(1.,double(std::sqrt((dx*dx+dy*dy)+dz*dz))));cam[17]=1;cam[18]=W;cam[19]=H;}
+                const u32 modes=role_id>=3?3:2;  // PTR: primary, PT, quadratic, composite
+                for(u32 mode=0;mode<modes;mode++){
+                    if(ptr&&mode==2){std::array<u32,4> qp{0,0,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();
+                        for(u32 st=0;st<3;st++){for(u32 p=0;p<N;p+=CHUNK){qp={1,st,p,CHUNK};quadratic->record(cmd,CHUNK/32,1,1,qp.data(),16);}barrier();}
+                        for(u32 st=0;st<3;st++){qp={2,st,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();}}
+                    const u32 count=(role_id==3&&mode==1)?STRATA:N;for(u32 p=0;p<count;p+=CHUNK){u32 rb;std::memcpy(&rb,&ratio,4);Push push{mode,fseed,p,kk,k_new,vertices,flags,n_max,rb};stage[s]->record(cmd,CHUNK/32,1,1,&push,sizeof push);}barrier();}
                 context.vk().cmdWriteTimestamp(cmd,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,query,1);check(context.vk().endCommandBuffer(cmd));
                 VkSubmitInfo si{VK_STRUCTURE_TYPE_SUBMIT_INFO};si.commandBufferCount=1;si.pCommandBuffers=&cmd;check(context.vk().queueSubmit(context.queue(),1,&si,fence));
                 if(context.vk().waitForFences(1,&fence,VK_TRUE,2000000000ull)!=VK_SUCCESS)incomplete_fence("049-frame");
@@ -138,8 +152,8 @@ int main(int argc,char** argv){fs::path output;
             }
             Ledger::instance().phase("teardown");
             context.vk().destroyQueryPool(query,nullptr);context.vk().destroyFence(fence,nullptr);context.vk().destroyCommandPool(pool,nullptr);
-            for(auto& st:stage)st.reset();
-            for(u32 s=0;s<2;s++){context.destroy_buffer(params[s]);context.destroy_buffer(anchor[s]);context.destroy_buffer(hist[s]);}context.destroy_buffer(image);context.destroy_buffer(tiles);context.destroy_buffer(grad);context.destroy_buffer(scratch);
+            for(auto& st:stage)st.reset();quadratic.reset();
+            for(u32 s=0;s<2;s++){context.destroy_buffer(params[s]);context.destroy_buffer(anchor[s]);context.destroy_buffer(hist[s]);}context.destroy_buffer(image);context.destroy_buffer(tiles);context.destroy_buffer(grad);context.destroy_buffer(scratch);for(auto& b:q)context.destroy_buffer(b);
             for(auto& t:trav)t.reset();
         }
         Ledger::instance().save(output/"allocation-ledger.json");need(reserved_bytes==0,"049 ownership teardown");
