@@ -21,7 +21,8 @@ namespace a=phos::gi::lane_a;
 namespace i=phos::gi::research::integration;
 namespace fs=std::filesystem;
 using u32=std::uint32_t;
-constexpr u32 W=320,H=180,N=W*H,CHUNK=128,TX=(W+15)/16,TY=(H+15)/16,TILES=TX*TY,STRATA=((W+2)/3)*((H+2)/3);
+constexpr u32 W=320,H=180,N=W*H,CHUNK=4096,  // pixels per bounded dispatch (shader CHUNK_PIXELS)
+             TX=(W+15)/16,TY=(H+15)/16,TILES=TX*TY,STRATA=((W+2)/3)*((H+2)/3);
 constexpr u32 MAX_TRIANGLES=4u*1024u*1024u;
 static void check(VkResult v){need(v==VK_SUCCESS,"049 Vulkan operation");}
 static u32 integer(const std::string& s){u32 v=0;auto r=std::from_chars(s.data(),s.data()+s.size(),v);need(r.ec==std::errc{}&&r.ptr==s.data()+s.size(),"049 unsigned option");return v;}
@@ -63,7 +64,7 @@ static bool same_light(const a::A001ParamsGpu& x,const a::A001ParamsGpu& y){retu
 static bool same_camera(const a::A001ParamsGpu& x,const a::A001ParamsGpu& y){return std::memcmp(&x,&y,64)==0;}
 struct Push {u32 mode,seed,start,k,k_new,vertices,flags,n_max,ratio_bits,batch_begin,batch_count;};
 static u32 role_id(const std::string& r){
-    static const std::map<std::string,u32> ids{{"PT",0},{"PTA",1},{"RTCV",2},{"PTG",3},{"RTCVF",4},{"PTR",5}};
+    static const std::map<std::string,u32> ids{{"PT",0},{"PTA",1},{"RTCV",2},{"PTG",3},{"RTCVF",4},{"PTR",5},{"SPR",6},{"RTCVS",7}};
     need(ids.contains(r),"049 role");return ids.at(r);
 }
 struct Config {std::string role;u32 k{},k_new{},n_max{},vertices{},seed{};};
@@ -74,18 +75,18 @@ struct RoleRun {
     struct Result {double render_us{},as_us{},upload_wall_us{};u32 flags{};std::size_t moved{};};
     b::B002VulkanContext& context;const std::vector<Frame>& seq;Config c;u32 id;bool pingpong,ptr;
     std::array<std::unique_ptr<b::B002HwrtTraversal>,2> trav;std::array<u32,2> held{0,0};VkPhysicalDeviceProperties props{};
-    std::array<b::B002Buffer,2> params,anchor,hist;b::B002Buffer image{},tiles{},grad{},scratch{};std::array<b::B002Buffer,8> q{};
+    std::array<b::B002Buffer,2> params,anchor,hist;b::B002Buffer image{},tiles{},grad{},scratch{},samples{};std::array<b::B002Buffer,8> q{};
     std::array<std::unique_ptr<i::I001ComputeStage>,2> stage;std::unique_ptr<i::I001ComputeStage> quadratic;
     VkCommandPool pool{};VkCommandBuffer cmd{};VkFence fence{};VkQueryPool query{};std::uint64_t owned{};
     b::B002Buffer host(std::uint64_t bytes,VkBufferUsageFlags usage){auto x=context.create_host_buffer(bytes,usage);std::memset(x.mapped,0,bytes);owned+=bytes;return x;}
     RoleRun(b::B002VulkanContext& ctx,const std::vector<Frame>& s,Config cfg,const fs::path& shaders):context(ctx),seq(s),c(std::move(cfg)),id(role_id(c.role)){
-        pingpong=c.role!="PT"&&c.role!="PTR";ptr=id==5;
+        pingpong=c.role!="PT"&&c.role!="PTR"&&c.role!="SPR";ptr=id==5;
         trav[0]=std::make_unique<b::B002HwrtTraversal>(context,seq[0].triangles,"",false);
         if(pingpong)trav[1]=std::make_unique<b::B002HwrtTraversal>(context,seq[0].triangles,"",false);
         vkGetPhysicalDeviceProperties(context.physical_device(),&props);
         const VkBufferUsageFlags SB=VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
         for(u32 j=0;j<2;j++){params[j]=host(sizeof(a::A001ParamsGpu),VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);anchor[j]=host(48ull*N,SB);hist[j]=host(32ull*N,SB);}
-        image=host(16ull*N,SB);tiles=host(4ull*TILES,SB);grad=host(id==3?4ull*STRATA:16,SB);scratch=host((id==4||id==0||id==5)?16ull*N:16,SB);
+        image=host(16ull*N,SB);tiles=host(4ull*TILES,SB);grad=host(id==3?4ull*STRATA:16,SB);scratch=host((id==4||id==7||id==0||id==5)?16ull*N:16,SB);samples=host(id==6?32ull*N*c.k:id==7?32ull*N*std::max(c.k,c.k_new):16,SB);
         const std::array<std::uint64_t,8> qsize{32ull*N,80,32ull*N,300ull*N,24ull*N,4ull*N,12ull*N,12ull*N};
         for(u32 j=0;j<8;j++)q[j]=host(ptr?qsize[j]:16,SB);
         for(u32 t=0;t<TILES;t++)static_cast<float*>(tiles.mapped)[t]=1.0f;
@@ -93,7 +94,7 @@ struct RoleRun {
         fs::path spv=shaders/("rtcv_role"+std::to_string(id)+".spv");need(fs::is_regular_file(spv),"049 shader");
         for(u32 j=0;j<2;j++){auto& cur=*trav[pingpong?j:0];auto& prev=*trav[pingpong?1-j:0];
             std::vector<i::I001Binding> bind{{0,S,&image},{1,A,nullptr,cur.top_level()},{2,S,&cur.triangle_buffer()},{3,U,&params[j]},{4,A,nullptr,prev.top_level()},{5,S,&prev.triangle_buffer()},{6,U,&params[1-j]},
-                {7,S,&anchor[j]},{8,S,&anchor[1-j]},{9,S,&hist[j]},{10,S,&hist[1-j]},{11,S,&tiles},{12,S,&grad},{13,S,&scratch},{14,S,&q[0]},{15,S,&q[5]},{16,S,&q[6]}};
+                {7,S,&anchor[j]},{8,S,&anchor[1-j]},{9,S,&hist[j]},{10,S,&hist[1-j]},{11,S,&tiles},{12,S,&grad},{13,S,&scratch},{14,S,&q[0]},{15,S,&q[5]},{16,S,&q[6]},{17,S,&samples}};
             stage[j]=std::make_unique<i::I001ComputeStage>(context,spv.string(),bind,sizeof(Push));}
         if(ptr){std::vector<i::I001Binding> qb;for(u32 j=0;j<8;j++)qb.push_back({j,S,&q[j]});quadratic=std::make_unique<i::I001ComputeStage>(context,(shaders/"surface_quadratic_device.spv").string(),qb,16);}
         VkCommandPoolCreateInfo pi{VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO};pi.queueFamilyIndex=context.queue_family();pi.flags=VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;check(context.vk().createCommandPool(&pi,nullptr,&pool));
@@ -105,7 +106,7 @@ struct RoleRun {
         if(query)context.vk().destroyQueryPool(query,nullptr);if(fence)context.vk().destroyFence(fence,nullptr);if(pool)context.vk().destroyCommandPool(pool,nullptr);
         for(auto& st:stage)st.reset();quadratic.reset();
         for(u32 j=0;j<2;j++){context.destroy_buffer(params[j]);context.destroy_buffer(anchor[j]);context.destroy_buffer(hist[j]);}
-        context.destroy_buffer(image);context.destroy_buffer(tiles);context.destroy_buffer(grad);context.destroy_buffer(scratch);for(auto& x:q)context.destroy_buffer(x);
+        context.destroy_buffer(image);context.destroy_buffer(tiles);context.destroy_buffer(grad);context.destroy_buffer(scratch);context.destroy_buffer(samples);for(auto& x:q)context.destroy_buffer(x);
         for(auto& t:trav)t.reset();
     }
     void barrier(){VkMemoryBarrier m{VK_STRUCTURE_TYPE_MEMORY_BARRIER};m.srcAccessMask=VK_ACCESS_SHADER_WRITE_BIT|VK_ACCESS_HOST_WRITE_BIT;m.dstAccessMask=VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT|VK_ACCESS_HOST_READ_BIT;
@@ -153,6 +154,8 @@ struct RoleRun {
         if(id==3){record(1,STRATA,base);record(2,N,base);}
         else if(id==4){record(1,N,base);record(2,N,base);if(flags&7u)record(3,TILES,base);}  // no change: no replays, tile ratios stay
         else if(id==2){record(1,N,base);record(2,TILES,base);}
+        else if(id==6){record(1,N,base);record(2,N,base);}
+        else if(id==7){record(1,N,base);record(2,N,base);record(3,N,base);if(flags&7u)record(4,TILES,base);}
         else if(id==5){paths(base);std::array<u32,4> qp{0,0,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();
             for(u32 st=0;st<3;st++){for(u32 p=0;p<N;p+=CHUNK){qp={1,st,p,CHUNK};quadratic->record(cmd,CHUNK/32,1,1,qp.data(),16);}barrier();}
             for(u32 st=0;st<3;st++){qp={2,st,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();}

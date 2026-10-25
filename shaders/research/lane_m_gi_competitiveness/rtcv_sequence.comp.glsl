@@ -5,6 +5,10 @@
 // surfaces, point-light NEE with soft falloff, finite vertex count, black background.
 layout(local_size_x=32) in;
 // 049 development defaults (frozen for 050 by registration)
+// Pixels per bounded dispatch (host CHUNK must match).
+#ifndef CHUNK_PIXELS
+#define CHUNK_PIXELS 4096
+#endif
 #ifndef BILINEAR
 #define BILINEAR 1
 #endif
@@ -25,6 +29,15 @@ layout(local_size_x=32) in;
 #endif
 #ifndef LINEAR_D
 #define LINEAR_D 1
+#endif
+#ifndef SPR_GAIN
+#define SPR_GAIN 4
+#endif
+#ifndef KSLOTS
+#define KSLOTS (max(pc.k,pc.k_new))
+#endif
+#ifndef SPR_RADIUS
+#define SPR_RADIUS 1
 #endif
 #ifndef ADAPTIVE
 #define ADAPTIVE 0
@@ -66,6 +79,8 @@ layout(std430,binding=13) buffer Scratch { vec4 scratch[]; };
 layout(std430,binding=14) buffer Hits { uint hits[]; };
 layout(std430,binding=15) buffer Sources { float sources[]; };
 layout(std430,binding=16) readonly buffer Stages { float stages[]; };
+// ROLE 6 (SPR): per-pixel path samples: [2i]=secondary vertex z, primitive bits  [2i+1]=normal at z (facing the pixel), tail radiance L(z)
+layout(std430,binding=17) buffer PathSamples { vec4 path_samples[]; };
 layout(push_constant) uniform Push { uint mode; uint seed; uint start; uint k; uint k_new; uint vertices; uint flags; uint n_max; uint ratio_bits; uint batch_begin; uint batch_count; } pc;
 const float PI=3.14159265358979323846;
 const uint INVALID=0xffffffffu;
@@ -129,12 +144,14 @@ vec3 cosine_direction(vec3 normal, float u, float v) {
 }
 // One raw-PT indirect sample; the random stream is fixed by `stream`, so the
 // same stream replays the same primary-sample-space path in another scene.
+vec3 first_z, first_nz; uint first_p; bool first_hit;  // first vertex of the last current-scene path
 float path(bool old, vec4 light, vec3 position, vec3 normal, uint self, uint stream) {
-    rng=stream; float indirect=0.0; vec3 origin=position, n=normal; uint s=self;
+    rng=stream; float indirect=0.0; vec3 origin=position, n=normal; uint s=self; if(!old) first_hit=false;
     for(uint vertex=1u;vertex<pc.vertices;++vertex) {
         float u=uniform01(), v=uniform01();
         vec3 wi=cosine_direction(n,u,v), next_position,next_normal; uint next_primitive; vec2 b;
         if(!trace_in(old,offset_position(origin,n),wi,1.0e30,s,next_primitive,next_position,next_normal,b)) break;
+        if(vertex==1u && !old){ first_z=next_position; first_nz=next_normal; first_p=next_primitive; first_hit=true; }
         indirect+=direct_light(old,light,next_position,next_normal,next_primitive);
         origin=next_position; n=next_normal; s=next_primitive;
     }
@@ -142,11 +159,12 @@ float path(bool old, vec4 light, vec3 position, vec3 normal, uint self, uint str
 }
 // Shared-geometry replay: one traced path, next-event estimation for both lights.
 vec2 path_shared(vec3 position, vec3 normal, uint self, uint stream) {
-    rng=stream; vec2 indirect=vec2(0); vec3 origin=position, n=normal; uint s=self;
+    rng=stream; vec2 indirect=vec2(0); vec3 origin=position, n=normal; uint s=self; first_hit=false;
     for(uint vertex=1u;vertex<pc.vertices;++vertex) {
         float u=uniform01(), v=uniform01();
         vec3 wi=cosine_direction(n,u,v), next_position,next_normal; uint next_primitive; vec2 b;
         if(!trace_in(false,offset_position(origin,n),wi,1.0e30,s,next_primitive,next_position,next_normal,b)) break;
+        if(vertex==1u){ first_z=next_position; first_nz=next_normal; first_p=next_primitive; first_hit=true; }
         indirect+=vec2(direct_light(false,p.light_pos_interval,next_position,next_normal,next_primitive),
                        direct_light(false,q.light_pos_interval,next_position,next_normal,next_primitive));
         origin=next_position; n=next_normal; s=next_primitive;
@@ -308,7 +326,7 @@ void paths(uint id) {
 void composite(uint id) { float direct=anchors[id*3u+2u].z, indirect=stages[2u*p.counts.y*p.counts.z+id]; pixels[id]=vec4(direct,indirect,direct+indirect,1); }
 #endif
 
-#if ROLE==4
+#if ROLE==4 || ROLE==7
 // Sample pass: fresh samples and the replayed difference d = mean(f1-f0) (0 when nothing changed).
 void samples(uint id) {
     vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u];
@@ -349,18 +367,67 @@ void samples(uint id) {
         else if(same_point) { vec2 f=path_shared(x,n,prim,stream); f1=f.x; f0=f.y; }
         else { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=path(true,q.light_pos_interval,xp,np,yprim,stream); }
         s1+=f1; sd+=f1-f0; ss1+=f1*f1;
+#if ROLE==7
+        uint slot=(id*KSLOTS+i)*2u;
+        if(first_hit){ path_samples[slot]=vec4(first_z,uintBitsToFloat(first_p)); path_samples[slot+1u]=vec4(first_nz,f1); }
+        else { path_samples[slot]=vec4(0); path_samples[slot+1u]=vec4(0); }
+#endif
     }
     scratch[id]=vec4(s1/float(k), same ? 0.0 : sd/float(r), j<0 ? -1.0 : float(uint(j)*8u+boost), ss1/float(k));
 }
+#if ROLE==7
+float area_pdf7(vec3 y, vec3 ny, vec3 z, vec3 nz) {
+    vec3 d=z-y; float d2=dot(d,d); if(d2<=0.0) return 0.0; vec3 w=d*inversesqrt(d2);
+    float cy=dot(ny,w), cz=-dot(nz,w); return (cy>0.0 && cz>0.0) ? cy*cz/(3.14159265358979323846*d2) : 0.0;
+}
+// Spatial path reuse: multi-sample balance-heuristic estimate of this pixel's indirect from the
+// current-scene paths of the coplanar neighbours, reconnected at their secondary vertex z
+// (two-sided Lambert: L(z->x)=L(z->y) on the same side); one visibility ray per reused path.
+// Other techniques' pdfs ignore their visibility to z (approximation). Replaces scratch.x.
+void spr(uint id) {
+    vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u]; vec4 c=scratch[id];
+    if(a2.w!=1.0 || c.z<-1.5) return;
+    vec3 x=a0.xyz, n=a1.xyz; uint inst=floatBitsToUint(a1.w), prim=floatBitsToUint(a0.w);
+    uint w=p.counts.y, h=p.counts.z; int cx=int(id%w), cy=int(id/w);
+    uint tech[(2*SPR_RADIUS+1)*(2*SPR_RADIUS+1)]; float tn[(2*SPR_RADIUS+1)*(2*SPR_RADIUS+1)]; uint nt=0u;
+    for(int dy=-SPR_RADIUS;dy<=SPR_RADIUS;dy++)for(int dx=-SPR_RADIUS;dx<=SPR_RADIUS;dx++){int ox=cx+dx, oy=cy+dy;
+        if(ox<0||oy<0||ox>=int(w)||oy>=int(h)) continue; uint o=uint(oy)*w+uint(ox); vec4 b1=anchors[o*3u+1u]; vec4 so=scratch[o];
+        if(anchors[o*3u+2u].w!=1.0 || so.z<-1.5 || floatBitsToUint(b1.w)!=inst || dot(b1.xyz,n)<0.95) continue;
+        tech[nt]=o; tn[nt]=so.z<0.0 ? float(pc.k_new) : float(pc.k*(uint(so.z)%8u)); nt++;}
+    float sum=0.0;
+    for(uint t=0u;t<nt;t++){ uint o=tech[t];
+        for(uint i=0u;i<uint(tn[t]);i++){ uint slot=(o*KSLOTS+i)*2u; vec4 s0=path_samples[slot], s1=path_samples[slot+1u];
+            if(s0==vec4(0) && s1==vec4(0)) continue;
+            vec3 z=s0.xyz, nz=s1.xyz; float px=area_pdf7(x,n,z,nz); if(px<=0.0) continue;
+            vec3 d=z-x; float dist=length(d);
+            if(o!=id && blocked_in(false,offset_position(x,n),d/dist,dist*(1.0-1.0e-4),prim)) continue;
+            float den=0.0; for(uint u2=0u;u2<nt;u2++){ uint q2=tech[u2]; den+=tn[u2]*area_pdf7(anchors[q2*3u].xyz,anchors[q2*3u+1u].xyz,z,nz); }
+            if(den>0.0) sum+=s1.w*px/den;
+        } }
+    scratch[id].x=sum;
+}
+#endif
 // Combine pass: geometry-aware box filter of the replay difference only (radiance is never
 // filtered), then H = (1-w) f1 + w (H_{t-1} + filtered difference).
 void combine(uint id) {
     vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u], c=scratch[id];
     if(a2.w!=1.0) { pixels[id]=vec4(0,0,0,1); history[id*2u]=vec4(0); history[id*2u+1u]=vec4(0); return; }
     float direct=a2.z, H, v, m1, m2, dd=0.0, count, replays=0.0, thin_flag=1.0;
-    if(c.z<0.0) { H=c.x; m1=c.x; m2=c.w; v=1.0/float(pc.k_new); count=1.0; }
+    if(c.z<0.0) { H=c.x; m1=c.x; m2=c.w; count=1.0;
+#if ROLE==7
+        v=1.0/(float(pc.k_new)*float(SPR_GAIN));
+#else
+        v=1.0/float(pc.k_new);
+#endif
+    }
     else {
-        uint j=uint(c.z)/8u; float kp=float(pc.k*(uint(c.z)%8u)); vec4 h0=previous_history[j*2u], h1=previous_history[j*2u+1u];
+        uint j=uint(c.z)/8u; float kp=float(pc.k*(uint(c.z)%8u));
+#if ROLE==7
+        float kp_fresh=kp*float(SPR_GAIN);  // reused fresh estimate counts as SPR_GAIN x samples
+#else
+        float kp_fresh=kp;
+#endif
+        vec4 h0=previous_history[j*2u], h1=previous_history[j*2u+1u];
         bool camera_only=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED))==0u && (pc.flags&CAMERA_CHANGED)!=0u;
 #if CAMERA_REPROJECT
         if(camera_only){ vec3 xp0,np0; if(reproject(a1.xyz,floatBitsToUint(a0.w),a2.xy,xp0,np0)>=0) history_at(int(j),h0,h1); }
@@ -430,7 +497,7 @@ void combine(uint id) {
         // r: per-replay variance of the filtered difference in units of the per-sample variance;
         // with re replays per pixel this minimizes (1-w)^2/k + w r/re + w^2 v.
         float re=min(float(REPLAYS),kp);
-        float wt=clamp((1.0-0.5*kp*r/re)/(1.0+kp*hv),0.0,1.0-1.0/float(pc.n_max));
+        float wt=clamp((1.0-0.5*kp_fresh*r/re)/(1.0+kp_fresh*hv),0.0,1.0-1.0/float(pc.n_max));
         // A filtered difference is biased where the change has edges, and that bias is
         // amplified by w/(1-w) in the history; limit the history where the change is large.
         // Relative to the window mean of fresh samples, not to this pixel's own values
@@ -441,12 +508,66 @@ void combine(uint id) {
         if(camera_only) wt=min(wt,1.0-1.0/float(N_CAM));  // reprojection drift bound, as in accumulation
 #endif
         H=(1.0-wt)*c.x+wt*(h0.x+D);
-        v=(1.0-wt)*(1.0-wt)/kp+wt*r/re+wt*wt*hv;
+        v=(1.0-wt)*(1.0-wt)/kp_fresh+wt*r/re+wt*wt*hv;
         dd=moved ? D*D : 0.0; replays=moved ? 1.0 : 0.0;
         m1=mix(h0.z,c.x,BETA); m2=mix(h0.w,c.w,BETA); count=min(h1.y+1.0,float(pc.n_max));
     }
     history[id*2u]=vec4(H,v,m1,m2); history[id*2u+1u]=vec4(dd,count,thin_flag,replays);
     float indirect=max(H,0.0);
+    pixels[id]=vec4(direct,indirect,direct+indirect,1);
+}
+#endif
+
+#if ROLE==6
+#ifndef SPR_RADIUS
+#define SPR_RADIUS 1
+#endif
+// Own paths: store the secondary vertex z and the tail estimate L(z) (all NEE from z onwards).
+void spr_paths(uint id) {
+    vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u]; uint k=pc.k;
+    for(uint i=0u;i<k;++i){ path_samples[(id*k+i)*2u]=vec4(0); path_samples[(id*k+i)*2u+1u]=vec4(0); }
+    if(a2.w!=1.0) return;
+    vec3 x=a0.xyz, n=a1.xyz; uint prim=floatBitsToUint(a0.w); uint base=mix32(pc.seed^mix32(id));
+    for(uint i=0u;i<k;++i){
+        rng=mix32(base+i); float u=uniform01(), v=uniform01();
+        vec3 wi=cosine_direction(n,u,v), z, nz; uint pz; vec2 b;
+        if(!trace_in(false,offset_position(x,n),wi,1.0e30,prim,pz,z,nz,b)) continue;
+        float tail=direct_light(false,p.light_pos_interval,z,nz,pz);
+        if(pc.vertices>2u){ vec3 origin=z, nn=nz; uint sp=pz;
+            for(uint vertex=2u;vertex<pc.vertices;++vertex){
+                float uu=uniform01(), vv=uniform01(); vec3 w2=cosine_direction(nn,uu,vv), np2, nn2; uint p2; vec2 b2;
+                if(!trace_in(false,offset_position(origin,nn),w2,1.0e30,sp,p2,np2,nn2,b2)) break;
+                tail+=direct_light(false,p.light_pos_interval,np2,nn2,p2); origin=np2; nn=nn2; sp=p2; } }
+        path_samples[(id*k+i)*2u]=vec4(z,uintBitsToFloat(pz)); path_samples[(id*k+i)*2u+1u]=vec4(nz,tail);
+    }
+}
+float area_pdf(vec3 y, vec3 ny, vec3 z, vec3 nz) {
+    vec3 d=z-y; float d2=dot(d,d); if(d2<=0.0) return 0.0; vec3 w=d*inversesqrt(d2);
+    float cy=dot(ny,w), cz=-dot(nz,w); return (cy>0.0 && cz>0.0) ? cy*cz/(3.14159265358979323846*d2) : 0.0;
+}
+// Multi-sample balance-heuristic reuse of the neighbours' paths through their secondary vertex z
+// (reconnection; two-sided Lambert so L(z->x)=L(z->y) on the same side). Other techniques'
+// pdfs ignore their visibility to z (approximation, small bias near occluders).
+void spr_reuse(uint id) {
+    vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u];
+    if(a2.w!=1.0){ pixels[id]=vec4(0,0,0,1); return; }
+    vec3 x=a0.xyz, n=a1.xyz; uint inst=floatBitsToUint(a1.w), prim=floatBitsToUint(a0.w); float direct=a2.z;
+    uint w=p.counts.y, h=p.counts.z; int cx=int(id%w), cy=int(id/w); uint k=pc.k;
+    uint tech[(2*SPR_RADIUS+1)*(2*SPR_RADIUS+1)]; uint nt=0u;
+    for(int dy=-SPR_RADIUS;dy<=SPR_RADIUS;dy++)for(int dx=-SPR_RADIUS;dx<=SPR_RADIUS;dx++){int ox=cx+dx, oy=cy+dy;
+        if(ox<0||oy<0||ox>=int(w)||oy>=int(h)) continue; uint o=uint(oy)*w+uint(ox); vec4 b1=anchors[o*3u+1u];
+        if(anchors[o*3u+2u].w!=1.0 || floatBitsToUint(b1.w)!=inst || dot(b1.xyz,n)<0.95) continue; tech[nt++]=o;}
+    float sum=0.0;
+    for(uint t=0u;t<nt;t++){ uint o=tech[t];
+        for(uint i=0u;i<k;i++){ vec4 s0=path_samples[(o*k+i)*2u], s1=path_samples[(o*k+i)*2u+1u]; if(s1.w==0.0 && s0==vec4(0)) continue;
+            vec3 z=s0.xyz, nz=s1.xyz; float L=s1.w;
+            float px=area_pdf(x,n,z,nz); if(px<=0.0) continue;
+            vec3 d=z-x; float dist=length(d);
+            if(o!=id && blocked_in(false,offset_position(x,n),d/dist,dist*(1.0-1.0e-4),prim)) continue;
+            float den=0.0; for(uint u2=0u;u2<nt;u2++){ uint q2=tech[u2]; den+=area_pdf(anchors[q2*3u].xyz,anchors[q2*3u+1u].xyz,z,nz); }
+            sum+=L*px/den;  // F_x(z)/sum_l p_l(z), with F_x = L*G_x/pi = L*p_x(z); each technique has k samples
+        } }
+    float indirect=sum/float(k);
     pixels[id]=vec4(direct,indirect,direct+indirect,1);
 }
 #endif
@@ -468,7 +589,7 @@ void gradients(uint id) {
 }
 #endif
 
-#if ROLE==2 || ROLE==4
+#if ROLE==2 || ROLE==4 || ROLE==7
 // GPU reduction (one invocation per 16x16 tile) of this frame's replay-difference and sample
 // variance into the ratio the next frame uses; tiles with <16 replayed pixels keep their value.
 void ratios(uint t) {
@@ -480,11 +601,15 @@ void ratios(uint t) {
 }
 #endif
 void main() {
-    if(gl_GlobalInvocationID.x>=128u) return;
+    if(gl_GlobalInvocationID.x>=uint(CHUNK_PIXELS)) return;
     uint id=pixel_index();
     if(id>=p.counts.y*p.counts.z) return;
 #if ROLE==3
     if(pc.mode==0u) primary(id); else if(pc.mode==1u) gradients(id); else paths(id);
+#elif ROLE==7
+    if(pc.mode==0u) primary(id); else if(pc.mode==1u) samples(id); else if(pc.mode==2u) spr(id); else if(pc.mode==3u) combine(id); else ratios(id);
+#elif ROLE==6
+    if(pc.mode==0u) primary(id); else if(pc.mode==1u) spr_paths(id); else spr_reuse(id);
 #elif ROLE==5
     if(pc.mode==0u) primary(id); else if(pc.mode==1u) paths(id); else composite(id);
 #elif ROLE==4
