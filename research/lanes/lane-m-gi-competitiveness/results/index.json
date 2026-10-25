@@ -7,7 +7,7 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "LANE_M_CLOSED",
+      "phase": "LANE_M_REOPENED_PENDING_NEXT_SESSION",
       "classification": "SIX_PT_PASS_FIVE_CONFIGURED_RC_DDGI_ROLES_FAIL_ALL_TARGETS_NO_MATCHED_TIMING",
       "accepted_timing": true,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
@@ -671,7 +671,11 @@
       "closure_matrix": "results/262-lane-m-closure-matrix.json",
       "closure_outcome": "results/263-lane-m-closure-outcome.md",
       "closure_verification": "results/264-lane-m-closure-verification.json",
-      "lane_m_verdict": "LANE_M_COMPLETE_CHARTER_NOT_MET"
+      "lane_m_verdict": "REOPENED_GOAL_NOT_YET_ACHIEVED",
+      "historical_closure_verdict": "LANE_M_COMPLETE_CHARTER_NOT_MET (superseded by reopen decision)",
+      "reopen_decision": "../../decisions/2026-10-25-lane-m-reopen.md",
+      "reopen_handoff": "results/265-session-handoff-reopen-2026-10-25.md",
+      "multi_gpu_in_scope": false
     }
   ]
 }
