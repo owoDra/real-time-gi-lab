@@ -572,7 +572,13 @@
       "restir_gi_physical_supervised_targets_passed": 6,
       "restir_gi_physical_supervised_study_complete": true,
       "restir_gi_physical_supervised_new_paths": 0,
-      "restir_gi_physical_supervised_gpu_executed": false
+      "restir_gi_physical_supervised_gpu_executed": false,
+      "restir_gi_on_device_protocol": "experiments/037-restir-gi-on-device-physical-candidate-bridge.md",
+      "restir_gi_on_device_status": "STOP_UNDECLARED_SDK_PI_NO_RETRY",
+      "restir_gi_on_device_preparation_failure": "results/226-restir-gi-physical-gpu-preparation-failure.json",
+      "restir_gi_on_device_outcome": "results/227-restir-gi-physical-gpu-preparation-outcome.md",
+      "restir_gi_on_device_verification": "results/228-restir-gi-physical-gpu-failure-verification.json",
+      "restir_gi_on_device_gpu_executed": false
     }
   ]
 }
