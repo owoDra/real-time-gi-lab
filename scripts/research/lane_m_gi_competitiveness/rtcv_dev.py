@@ -15,7 +15,7 @@ N=57600
 
 def run(seq,out,role,k,frames,capture,depth,seed=1,k_new=4,n_max=64,ref_spp=0,build=BUILD):
     if out.exists():return out
-    cmd=[str(build/'rtcv-sequence'),'--sequence',str(seq),'--frames',str(frames),'--out',str(out),'--vertices',str(depth),'--shaders',str(build),'--role',role,
+    cmd=[str(build/'rtcv-sequence'),'--capture','--sequence',str(seq),'--frames',str(frames),'--out',str(out),'--vertices',str(depth),'--shaders',str(build),'--role',role,
          '--k',str(k),'--k-new',str(k_new),'--n-max',str(n_max),'--capture',','.join(map(str,capture)),'--seed',str(seed),'--ref-spp',str(ref_spp)]
     r=subprocess.run(cmd,capture_output=True,text=True)
     if r.returncode!=0:raise RuntimeError(f'{out.name}: {r.stderr[-400:]}')

@@ -20,10 +20,10 @@ layout(std140,binding=6) uniform Previous { Params q; };
 layout(std430,binding=7) buffer Anchor { vec4 anchors[]; };
 layout(std430,binding=8) readonly buffer PreviousAnchor { vec4 previous_anchors[]; };
 // history: [0]=H,V,m1,m2  [1]=d2,n,valid,replays
-layout(std430,binding=9) writeonly buffer History { vec4 history[]; };
+layout(std430,binding=9) buffer History { vec4 history[]; };
 layout(std430,binding=10) readonly buffer PreviousHistory { vec4 previous_history[]; };
 // previous-frame replay-difference/sample-variance ratio per 16x16 tile (host reduced)
-layout(std430,binding=11) readonly buffer TileRatio { float tile_ratio[]; };
+layout(std430,binding=11) buffer TileRatio { float tile_ratio[]; };
 // ROLE 3: A-SVGF-style normalized temporal gradient per 3x3 stratum (-1 = none)
 layout(std430,binding=12) buffer Gradient { float gradient[]; };
 // ROLE 4: per-pixel sample pass output (f1 mean, replay difference mean, previous pixel or -1, f1^2 mean)
@@ -247,6 +247,9 @@ void composite(uint id) { float direct=anchors[id*3u+2u].z, indirect=stages[2u*p
 #endif
 
 #if ROLE==4
+#ifndef REPLAYS
+#define REPLAYS 65536
+#endif
 #ifndef GAMMA
 #define GAMMA 4.0
 #endif
@@ -268,14 +271,17 @@ void samples(uint id) {
 #endif
     bool same_point=j>=0 && all(equal(xp,x)) && (pc.flags&GEOMETRY_CHANGED)==0u;
     bool same=j<0 || (same_point && (pc.flags&LIGHT_CHANGED)==0u);
+    // The first REPLAYS samples are replayed (default: all). Replaying fewer was tried in 049
+    // development and lost more quality than it saved cost.
+    uint r=min(uint(REPLAYS),k);
     for(uint i=0u;i<k;++i) {
         uint stream=mix32(base+i); float f1,f0;
-        if(same) { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=f1; }
+        if(same || i>=r) { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=f1; }
         else if(same_point) { vec2 f=path_shared(x,n,prim,stream); f1=f.x; f0=f.y; }
         else { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=path(true,q.light_pos_interval,xp,np,yprim,stream); }
         s1+=f1; sd+=f1-f0; ss1+=f1*f1;
     }
-    scratch[id]=vec4(s1/float(k), same ? 0.0 : sd/float(k), float(j), ss1/float(k));
+    scratch[id]=vec4(s1/float(k), same ? 0.0 : sd/float(r), float(j), ss1/float(k));
 }
 // Combine pass: geometry-aware box filter of the replay difference only (radiance is never
 // filtered), then H = (1-w) f1 + w (H_{t-1} + filtered difference).
@@ -301,7 +307,10 @@ void combine(uint id) {
         uint tile=(id/w/16u)*((w+15u)/16u)+(id%w)/16u;
         bool moved=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u;
         float r=moved ? tile_ratio[tile] : 0.0, hv=h0.y;
-        float wt=clamp((1.0-0.5*r)/(1.0+float(pc.k)*hv),0.0,1.0-1.0/float(pc.n_max));
+        // r: per-replay variance of the filtered difference in units of the per-sample variance;
+        // with re replays per pixel this minimizes (1-w)^2/k + w r/re + w^2 v.
+        float re=float(min(uint(REPLAYS),pc.k));
+        float wt=clamp((1.0-0.5*float(pc.k)*r/re)/(1.0+float(pc.k)*hv),0.0,1.0-1.0/float(pc.n_max));
         // A filtered difference is biased where the change has edges, and that bias is
         // amplified by w/(1-w) in the history; limit the history where the change is large.
         // Relative to the window mean of fresh samples, not to this pixel's own values
@@ -309,7 +318,7 @@ void combine(uint id) {
         float rel=num>0.0 ? abs(D)/max(fsum/num,1.0e-12) : 0.0;
         wt=min(wt,1.0-clamp(GAMMA*rel,0.0,1.0));
         H=(1.0-wt)*c.x+wt*(h0.x+D);
-        v=((1.0-wt)*(1.0-wt)+wt*r)/float(pc.k)+wt*wt*hv;
+        v=(1.0-wt)*(1.0-wt)/float(pc.k)+wt*r/re+wt*wt*hv;
         dd=moved ? D*D : 0.0; replays=moved ? 1.0 : 0.0;
         m1=mix(h0.z,c.x,BETA); m2=mix(h0.w,c.w,BETA); count=min(h1.y+1.0,float(pc.n_max));
     }
@@ -335,6 +344,18 @@ void gradients(uint id) {
     float m=max(f1,f0); gradient[id]=m>0.0 ? abs(f1-f0)/m : 0.0;
 }
 #endif
+
+#if ROLE==2 || ROLE==4
+// GPU reduction (one invocation per 16x16 tile) of this frame's replay-difference and sample
+// variance into the ratio the next frame uses; tiles with <16 replayed pixels keep their value.
+void ratios(uint t) {
+    uint w=p.counts.y, h=p.counts.z, tx=(w+15u)/16u, ty=(h+15u)/16u; if(t>=tx*ty) return;
+    uint x0=(t%tx)*16u, y0=(t/tx)*16u; float sd=0.0, sv=0.0, n=0.0;
+    for(uint y=y0;y<min(y0+16u,h);y++)for(uint x=x0;x<min(x0+16u,w);x++){uint j=y*w+x; vec4 h0=history[j*2u], h1=history[j*2u+1u];
+        if(h1.w>0.0){sd+=h1.x; sv+=max(h0.w-h0.z*h0.z,0.0); n+=1.0;}}
+    if(n>=16.0 && sv>0.0) tile_ratio[t]=min(sd/sv,2.0);
+}
+#endif
 void main() {
     if(gl_GlobalInvocationID.x>=128u) return;
     uint id=pixel_index();
@@ -344,7 +365,9 @@ void main() {
 #elif ROLE==5
     if(pc.mode==0u) primary(id); else if(pc.mode==1u) paths(id); else composite(id);
 #elif ROLE==4
-    if(pc.mode==0u) primary(id); else if(pc.mode==1u) samples(id); else combine(id);
+    if(pc.mode==0u) primary(id); else if(pc.mode==1u) samples(id); else if(pc.mode==2u) combine(id); else ratios(id);
+#elif ROLE==2
+    if(pc.mode==0u) primary(id); else if(pc.mode==1u) paths(id); else ratios(id);
 #else
     if(pc.mode==0u) primary(id); else paths(id);
 #endif
