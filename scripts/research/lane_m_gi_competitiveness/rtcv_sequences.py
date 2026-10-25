@@ -71,3 +71,19 @@ if __name__=='__main__':
     ap=argparse.ArgumentParser();ap.add_argument('state');ap.add_argument('out');ap.add_argument('--regime',choices=REGIMES,required=True)
     ap.add_argument('--frames',type=int,required=True);ap.add_argument('--speed',type=float,default=1.0);ap.add_argument('--instance',type=int);a=ap.parse_args()
     print(generate(a.state,a.out,a.regime,a.frames,a.speed,a.instance))
+
+
+def transition(source,target,out,frames):
+    """Continuous sequence from a source state to a target state (linear camera, light and
+    per-vertex interpolation); the last frame is a byte copy of the target state."""
+    out=Path(out);assert not out.exists();a,b=read(source),read(target);assert len(a['rec'])==len(b['rec']) and frames>=2
+    assert (a['rec']['meta']==b['rec']['meta']).all() and a['frame'][:20]==b['frame'][:20] and a['frame'][116:]==b['frame'][116:]
+    out.mkdir(parents=True);va,vb=a['rec']['v'].astype(np.float64),b['rec']['v'].astype(np.float64)
+    for t in range(frames-1):
+        s=t/(frames-1);p=a['params']*(1-s)+b['params']*s
+        for row in (1,2,3):p[row,:3]/=np.linalg.norm(p[row,:3])
+        write(out/f'{t:04d}',a,va*(1-s)+vb*s,p)
+    d=out/f'{frames-1:04d}';d.mkdir()
+    for name in ('geometry-state.bin','frame-state.bin'):(d/name).write_bytes((Path(target)/name).read_bytes())
+    (out/'sequence.json').write_text(json.dumps(dict(source=str(source),target=str(target),regime='transition',frames=frames),indent=1)+'\n')
+    return out
