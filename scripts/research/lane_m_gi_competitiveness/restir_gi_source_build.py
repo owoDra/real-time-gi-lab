@@ -115,7 +115,9 @@ def run(out):
                 else:shutil.copy2(source,destination)
             r['commands'].append(dict(label=label,command=args,executed_in_this_attempt=False,reused_from=str(previous)))
             print(label,'REUSED_EXACT_NO_EXECUTION',flush=True);return
-        row=C.guarded(args,out,label,cpu=120,wall=180);r['commands'].append(dict(row,label=label,executed_in_this_attempt=True));print(label,'PASS',flush=True)
+        row=C.guarded(args,out,label,cpu=120,wall=180);r['commands'].append(dict(row,label=label,executed_in_this_attempt=True))
+        if any(not (out/name).exists() for name in outputs):raise ValueError('033 command returned zero but required output missing: '+label)
+        print(label,'PASS',flush=True)
     try:
         r['effective_parent_limits']=C.limits()
         flags=['-std=c++20','-O2','-fno-fast-math','-ffp-contract=off','-fsanitize=undefined','-fno-sanitize-recover=all','-I'+str(LIB/'Include')]
@@ -136,7 +138,10 @@ def run(out):
         r['new_analytic_contracts']=int(match[1])
         shader_inputs={k:v for k,v in inputs.items() if k.startswith(str(LIB)+'/') or k.startswith(str(N.DXC.parent.parent)+'/') or k==str(HLSL)}
         for index,name in enumerate(PERMUTATIONS):
-            command(name+'-compile',[N.DXC,HLSL,'-T','cs_6_5','-E','main','-spirv','-fspv-target-env=vulkan1.2','-fvk-use-dx-layout','-Od','-WX','-D',f'PASS={index}','-I',LIB/'Include','-Fo',out/(name+'.spv'),'-MD','-MF',out/(name+'.shader.d')],(name+'.spv',name+'.shader.d'),shader_inputs)
+            args=[N.DXC,HLSL,'-T','cs_6_5','-E','main','-spirv','-fspv-target-env=vulkan1.2','-fvk-use-dx-layout','-Od','-WX','-D',f'PASS={index}','-I',LIB/'Include']
+            # DXC -MD writes dependencies WITHOUT emitting SPIR-V. Keep that phase explicit.
+            command(name+'-dependencies',[*args,'-Fo',out/(name+'.spv'),'-MD','-MF',out/(name+'.shader.d')],(name+'.shader.d',),shader_inputs)
+            command(name+'-compile',[*args,'-Fo',out/(name+'.spv')],(name+'.spv',),shader_inputs)
             command(name+'-validate',[VAL,'--target-env','vulkan1.2',out/(name+'.spv')],(),{str(x):B.SHA(x) for x in (VAL,out/(name+'.spv'))})
             command(name+'-disassemble',[VAL.parent/'spirv-dis',out/(name+'.spv'),'-o',out/(name+'.spvasm')],(name+'.spvasm',),{str(x):B.SHA(x) for x in (VAL.parent/'spirv-dis',out/(name+'.spv'))})
         r['all_six_compiled']=True
