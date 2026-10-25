@@ -13,7 +13,8 @@ import m002_states as M
 Q,G,C=T.Q,T.G,T.C
 ROOT,BASE,EXP=T.ROOT,T.BASE,T.EXP
 OWN=[EXP/'046-m002-new-heldout-and-dynamic-validation.md',EXP/'046a-capture-details-and-positive-control.md',T.CPP,*T.GLSL,Path(T.__file__),Path(__file__).resolve(),Path(M.__file__)]
-CAPTURES=BASE/'m002-captures-v1';CONTROL=BASE/'m002-positive-control-v1'
+CAPTURES=BASE/'m002-captures-v1';CONTROL=BASE/'m002-positive-control-v2'
+REFUSED_CONTROL=BASE/'m002-positive-control-v1'  # quiet-gate refusal before any GPU work (reference oracles active)
 PT_LADDER=(16,64,256,1024);PTR_LADDER=(4,16,64)
 read,sha,need=T.read,T.sha,T.need
 T.PREP=BASE/'m002-cpu-build-v1';T.CAL=BASE/'m002-calibration-v1'
