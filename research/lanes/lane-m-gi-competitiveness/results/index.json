@@ -528,7 +528,9 @@
       "surface_anchor_process_correction_joint_passes": 0,
       "surface_anchor_process_correction_quality_rejections": 6,
       "surface_anchor_process_correction_variance_passes": 2,
-      "surface_anchor_process_correction_study_complete": true
+      "surface_anchor_process_correction_study_complete": true,
+      "restir_gi_source_bridge_protocol": "experiments/033-restir-gi-source-bridge-cpu-qualification.md",
+      "restir_gi_source_bridge_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
