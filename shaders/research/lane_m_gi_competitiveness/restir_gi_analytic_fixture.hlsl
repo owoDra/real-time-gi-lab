@@ -32,7 +32,8 @@ bool RAB_IsSurfaceValid(RAB_Surface s) { return s.valid != 0 && s.depth > 0; }
 RAB_Surface RAB_GetGBufferSurface(int2 p, bool previous) {
     if (any(p < 0) || p.x >= int(width) || p.y >= int(height)) return RAB_EmptySurface();
     uint i=uint(p.y)*width+uint(p.x);
-    return previous ? previousSurfaces[i] : currentSurfaces[i];
+    if (previous) return previousSurfaces[i];
+    return currentSurfaces[i];
 }
 float3 RAB_GetSurfaceNormal(RAB_Surface s) { return s.normal; }
 float3 RAB_GetSurfaceWorldPos(RAB_Surface s) { return s.position; }
