@@ -32,7 +32,7 @@ layout(std430,binding=13) buffer Scratch { vec4 scratch[]; };
 layout(std430,binding=14) buffer Hits { uint hits[]; };
 layout(std430,binding=15) buffer Sources { float sources[]; };
 layout(std430,binding=16) readonly buffer Stages { float stages[]; };
-layout(push_constant) uniform Push { uint mode; uint seed; uint start; uint k; uint k_new; uint vertices; uint flags; uint n_max; uint ratio_bits; } pc;
+layout(push_constant) uniform Push { uint mode; uint seed; uint start; uint k; uint k_new; uint vertices; uint flags; uint n_max; uint ratio_bits; uint batch_begin; uint batch_count; } pc;
 const float PI=3.14159265358979323846;
 const uint INVALID=0xffffffffu;
 const uint GEOMETRY_CHANGED=1u, LIGHT_CHANGED=2u, CAMERA_CHANGED=4u, NO_HISTORY=8u;
@@ -181,7 +181,15 @@ void paths(uint id) {
     float H, v, m1, m2, d2, count, replays=0.0;
     if(j<0) {
         uint k=(ROLE==0||ROLE==5) ? pc.k : pc.k_new; float s=0.0, ss=0.0;
+#if ROLE==0 || ROLE==5
+        // Stateless roles accumulate large sample counts over several full-image batches
+        // (one submission each) so every dispatch keeps the whole image in flight.
+        if(pc.batch_begin>0u){ s=scratch[id].x; ss=scratch[id].y; }
+        for(uint i=pc.batch_begin;i<min(pc.batch_begin+pc.batch_count,k);++i){ float f=path(false,p.light_pos_interval,x,n,prim,mix32(base+i)); s+=f; ss+=f*f; }
+        if(pc.batch_begin+pc.batch_count<k){ scratch[id]=vec4(s,ss,0,0); return; }
+#else
         for(uint i=0u;i<k;++i){ float f=path(false,p.light_pos_interval,x,n,prim,mix32(base+i)); s+=f; ss+=f*f; }
+#endif
         H=s/float(k); m1=H; m2=ss/float(k); v=1.0/float(k); d2=0.0; count=1.0;
     } else {
         vec4 h0=previous_history[uint(j)*2u], h1=previous_history[uint(j)*2u+1u];

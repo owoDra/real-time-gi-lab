@@ -61,7 +61,7 @@ static std::vector<u32> moved(const Frame& from,const Frame& to){
 }
 static bool same_light(const a::A001ParamsGpu& x,const a::A001ParamsGpu& y){return std::memcmp(x.light_pos_interval,y.light_pos_interval,16)==0;}
 static bool same_camera(const a::A001ParamsGpu& x,const a::A001ParamsGpu& y){return std::memcmp(&x,&y,64)==0;}
-struct Push {u32 mode,seed,start,k,k_new,vertices,flags,n_max,ratio_bits;};
+struct Push {u32 mode,seed,start,k,k_new,vertices,flags,n_max,ratio_bits,batch_begin,batch_count;};
 static u32 role_id(const std::string& r){
     static const std::map<std::string,u32> ids{{"PT",0},{"PTA",1},{"RTCV",2},{"PTG",3},{"RTCVF",4},{"PTR",5}};
     need(ids.contains(r),"049 role");return ids.at(r);
@@ -85,7 +85,7 @@ struct RoleRun {
         vkGetPhysicalDeviceProperties(context.physical_device(),&props);
         const VkBufferUsageFlags SB=VK_BUFFER_USAGE_STORAGE_BUFFER_BIT;
         for(u32 j=0;j<2;j++){params[j]=host(sizeof(a::A001ParamsGpu),VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT);anchor[j]=host(48ull*N,SB);hist[j]=host(32ull*N,SB);}
-        image=host(16ull*N,SB);tiles=host(4ull*TILES,SB);grad=host(id==3?4ull*STRATA:16,SB);scratch=host(id==4?16ull*N:16,SB);
+        image=host(16ull*N,SB);tiles=host(4ull*TILES,SB);grad=host(id==3?4ull*STRATA:16,SB);scratch=host((id==4||id==0||id==5)?16ull*N:16,SB);
         const std::array<std::uint64_t,8> qsize{32ull*N,80,32ull*N,300ull*N,24ull*N,4ull*N,12ull*N,12ull*N};
         for(u32 j=0;j<8;j++)q[j]=host(ptr?qsize[j]:16,SB);
         for(u32 t=0;t<TILES;t++)static_cast<float*>(tiles.mapped)[t]=1.0f;
@@ -110,9 +110,27 @@ struct RoleRun {
     }
     void barrier(){VkMemoryBarrier m{VK_STRUCTURE_TYPE_MEMORY_BARRIER};m.srcAccessMask=VK_ACCESS_SHADER_WRITE_BIT|VK_ACCESS_HOST_WRITE_BIT;m.dstAccessMask=VK_ACCESS_SHADER_READ_BIT|VK_ACCESS_SHADER_WRITE_BIT|VK_ACCESS_HOST_READ_BIT;
         context.vk().cmdPipelineBarrier(cmd,VK_PIPELINE_STAGE_HOST_BIT|VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT|VK_PIPELINE_STAGE_ACCELERATION_STRUCTURE_BUILD_BIT_KHR,VK_PIPELINE_STAGE_HOST_BIT|VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT,0,1,&m,0,nullptr,0,nullptr);}
-    void record(u32 mode,u32 count,const Push& base){for(u32 p=0;p<count;p+=CHUNK){Push push=base;push.mode=mode;push.start=p;stage[cur_slot]->record(cmd,CHUNK/32,1,1,&push,sizeof push);}barrier();}
-    u32 cur_slot{};
-    Result frame(u32 f,u32 k_override=0){
+    // Stateless roles with large k run their samples in full-image batches of 512/vertices
+    // samples, one submission each, so no submission approaches the fence/watchdog bound;
+    // GPU time is the sum of all submissions of the frame.
+    u32 cur_slot{};double gpu_us{};
+    void begin(){check(context.vk().resetFences(1,&fence));check(context.vk().resetCommandPool(pool,0));
+        VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};bi.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;check(context.vk().beginCommandBuffer(cmd,&bi));
+        context.vk().cmdResetQueryPool(cmd,query,0,2);barrier();context.vk().cmdWriteTimestamp(cmd,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,query,0);}
+    void end(){context.vk().cmdWriteTimestamp(cmd,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,query,1);check(context.vk().endCommandBuffer(cmd));
+        VkSubmitInfo si{VK_STRUCTURE_TYPE_SUBMIT_INFO};si.commandBufferCount=1;si.pCommandBuffers=&cmd;check(context.vk().queueSubmit(context.queue(),1,&si,fence));
+        if(context.vk().waitForFences(1,&fence,VK_TRUE,2000000000ull)!=VK_SUCCESS)incomplete_fence("049-frame");
+        std::uint64_t tick[2]{};check(context.vk().getQueryPoolResults(query,0,2,sizeof tick,tick,8,VK_QUERY_RESULT_64_BIT));
+        double us=double(tick[1]-tick[0])*props.limits.timestampPeriod/1000.;need(std::isfinite(us)&&us>0,"049 timestamp");gpu_us+=us;}
+    void record(u32 mode,u32 count,const Push& base){
+        for(u32 p=0;p<count;p+=CHUNK){Push push=base;push.mode=mode;push.start=p;stage[cur_slot]->record(cmd,CHUNK/32,1,1,&push,sizeof push);}
+        barrier();}
+    void paths(const Push& base){
+        const u32 batch=std::max(1u,512u/c.vertices);
+        if(!stateless()||base.k<=batch){Push b=base;b.batch_begin=0;b.batch_count=base.k;record(1,N,b);return;}
+        for(u32 first=0;first<base.k;first+=batch){Push b=base;b.batch_begin=first;b.batch_count=batch;record(1,N,b);if(first+batch<base.k){end();begin();}}}
+    bool stateless()const{return id==0||id==5;}
+    Result frame(u32 f,u32 k_override=0,bool render=true){
         wall_guard();Result r;const u32 s=pingpong?f%2:0;cur_slot=s;auto& cur=*trav[pingpong?s:0];
         const Frame& now=seq[f];const Frame& before=seq[f?f-1:0];
         // Bring this traversal from the state it holds to frame f (refit, GPU-timestamped).
@@ -127,25 +145,20 @@ struct RoleRun {
             float lo[3]{INFINITY,INFINITY,INFINITY},hi[3]{-INFINITY,-INFINITY,-INFINITY};
             for(const auto& t:now.triangles)for(auto v:{t.v0,t.v1,t.v2}){float x[3]{v.x,v.y,v.z};for(int a=0;a<3;a++){lo[a]=std::min(lo[a],x[a]);hi[a]=std::max(hi[a],x[a]);}}
             float dx=hi[0]-lo[0],dy=hi[1]-lo[1],dz=hi[2]-lo[2];cam[16]=float(1e-5*std::max(1.,double(std::sqrt((dx*dx+dy*dy)+dz*dz))));cam[17]=1;cam[18]=W;cam[19]=H;}
-        check(context.vk().resetFences(1,&fence));check(context.vk().resetCommandPool(pool,0));
-        VkCommandBufferBeginInfo bi{VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO};bi.flags=VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;check(context.vk().beginCommandBuffer(cmd,&bi));
-        context.vk().cmdResetQueryPool(cmd,query,0,2);barrier();context.vk().cmdWriteTimestamp(cmd,VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,query,0);
-        Push base{0,jenkins(c.seed*0x9e3779b9u+f),0,k_override?k_override:c.k,c.k_new,c.vertices,flags,c.n_max,0};
+        if(!render)return r;
+        Push base{0,jenkins(c.seed*0x9e3779b9u+f),0,k_override?k_override:c.k,c.k_new,c.vertices,flags,c.n_max,0,0,k_override?k_override:c.k};
+        need(stateless()||std::max(base.k,base.k_new)*c.vertices<=2048,"049 history-role sample budget per submission");
+        gpu_us=0;begin();
         record(0,N,base);
         if(id==3){record(1,STRATA,base);record(2,N,base);}
         else if(id==4){record(1,N,base);record(2,N,base);record(3,TILES,base);}
         else if(id==2){record(1,N,base);record(2,TILES,base);}
-        else if(id==5){record(1,N,base);std::array<u32,4> qp{0,0,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();
+        else if(id==5){paths(base);std::array<u32,4> qp{0,0,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();
             for(u32 st=0;st<3;st++){for(u32 p=0;p<N;p+=CHUNK){qp={1,st,p,CHUNK};quadratic->record(cmd,CHUNK/32,1,1,qp.data(),16);}barrier();}
             for(u32 st=0;st<3;st++){qp={2,st,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();}
             record(2,N,base);}
-        else record(1,N,base);
-        context.vk().cmdWriteTimestamp(cmd,VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT,query,1);check(context.vk().endCommandBuffer(cmd));
-        VkSubmitInfo si{VK_STRUCTURE_TYPE_SUBMIT_INFO};si.commandBufferCount=1;si.pCommandBuffers=&cmd;check(context.vk().queueSubmit(context.queue(),1,&si,fence));
-        if(context.vk().waitForFences(1,&fence,VK_TRUE,2000000000ull)!=VK_SUCCESS)incomplete_fence("049-frame");
-        std::uint64_t tick[2]{};check(context.vk().getQueryPoolResults(query,0,2,sizeof tick,tick,8,VK_QUERY_RESULT_64_BIT));
-        r.render_us=double(tick[1]-tick[0])*props.limits.timestampPeriod/1000.;need(std::isfinite(r.render_us)&&r.render_us>0,"049 timestamp");
-        return r;
+        else paths(base);
+        end();r.render_us=gpu_us;return r;
     }
     void save(const fs::path& path){const float* px=static_cast<const float*>(image.mapped);std::vector<float> out(2ull*N);for(u32 j=0;j<N;j++){out[2*j]=px[4*j];out[2*j+1]=px[4*j+1];}
         std::ofstream img(path,std::ios::binary);img.write(reinterpret_cast<const char*>(out.data()),std::streamsize(out.size()*4));need(bool(img),"049 image write");}
@@ -162,7 +175,7 @@ int main(int argc,char** argv){fs::path output;
         std::map<std::string,std::string> args;for(int j=2;j<argc;j+=2){need(j+1<argc&&args.emplace(argv[j],argv[j+1]).second,"049 duplicate/missing option");}
         const bool timing=mode=="--timing";
         const std::vector<std::string> keys=timing?std::vector<std::string>{"--sequence","--out","--vertices","--shaders","--k-new","--seed","--role-a","--k-a","--n-max-a","--role-b","--k-b","--n-max-b","--settle","--measured","--process"}
-                                                :std::vector<std::string>{"--sequence","--frames","--out","--vertices","--shaders","--role","--k","--k-new","--n-max","--capture","--seed","--ref-spp"};
+                                                :std::vector<std::string>{"--sequence","--frames","--out","--vertices","--shaders","--role","--k","--k-new","--n-max","--capture","--seed","--ref-spp","--stateless-skip"};
         for(const auto& key:keys)need(args.contains(key),"049 options");need(args.size()==keys.size(),"049 unknown option");
         fs::path target=args["--out"];need(!fs::exists(target)&&fs::is_directory(target.parent_path()),"049 exclusive output");
         constexpr u32 WARMUP=4;u32 frames=0,settle=0,measured=0,process=0;
@@ -179,7 +192,8 @@ int main(int argc,char** argv){fs::path output;
                 Config c=config(args,"");const u32 ref_spp=integer(args["--ref-spp"]);need(ref_spp==0||c.role=="PT","049 reference spp only for PT");
                 std::set<u32> capture;{std::stringstream ss(args["--capture"]);std::string item;while(std::getline(ss,item,','))if(!item.empty()){u32 x=integer(item);need(x<frames,"049 capture frame");capture.insert(x);}}
                 RoleRun run(context,seq,c,args["--shaders"]);owned_a=run.owned;Ledger::instance().phase("frames");
-                for(u32 f=0;f<frames;f++){const bool cap=capture.contains(f);auto r=run.frame(f,(ref_spp&&cap)?ref_spp:0);
+                const bool skip=run.stateless()&&args["--stateless-skip"]=="1";
+                for(u32 f=0;f<frames;f++){const bool cap=capture.contains(f);auto r=run.frame(f,(ref_spp&&cap)?ref_spp:0,cap||!skip);
                     log<<"{\"frame\":"<<f<<",\"flags\":"<<r.flags<<",\"moved\":"<<r.moved<<",\"as_gpu_us\":"<<r.as_us<<",\"as_upload_wall_us\":"<<r.upload_wall_us<<",\"render_gpu_us\":"<<r.render_us
                        <<",\"replays\":"<<run.history_sum(f,7)<<",\"captured\":"<<(cap?"true":"false")<<"}\n";log.flush();
                     if(cap){std::ostringstream name;name<<"frame-"<<std::setw(4)<<std::setfill('0')<<f<<".f32";run.save(output/name.str());}}

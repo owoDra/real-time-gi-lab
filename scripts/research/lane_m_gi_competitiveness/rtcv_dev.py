@@ -16,7 +16,7 @@ N=57600
 def run(seq,out,role,k,frames,capture,depth,seed=1,k_new=4,n_max=64,ref_spp=0,build=BUILD):
     if out.exists():return out
     cmd=[str(build/'rtcv-sequence'),'--capture','--sequence',str(seq),'--frames',str(frames),'--out',str(out),'--vertices',str(depth),'--shaders',str(build),'--role',role,
-         '--k',str(k),'--k-new',str(k_new),'--n-max',str(n_max),'--capture',','.join(map(str,capture)),'--seed',str(seed),'--ref-spp',str(ref_spp)]
+         '--k',str(k),'--k-new',str(k_new),'--n-max',str(n_max),'--capture',','.join(map(str,capture)),'--seed',str(seed),'--ref-spp',str(ref_spp),'--stateless-skip','0']
     r=subprocess.run(cmd,capture_output=True,text=True)
     if r.returncode!=0:raise RuntimeError(f'{out.name}: {r.stderr[-400:]}')
     return out
@@ -25,8 +25,8 @@ def run(seq,out,role,k,frames,capture,depth,seed=1,k_new=4,n_max=64,ref_spp=0,bu
 def image(out,f):return np.fromfile(out/f'frame-{f:04d}.f32','<f4').reshape(N,2).astype(float)
 
 
-def reference(seq,depth,frames,capture,spp=16384,seeds=4):
-    outs=[run(seq,RUNS/f'ref-{seq.name}-b{depth}-s{s}',"PT",1,frames,capture,depth,seed=1000+s,ref_spp=spp) for s in range(seeds)]
+def reference(seq,depth,frames,capture,spp=16384,seeds=4,build=BUILD):
+    outs=[run(seq,RUNS/f'ref-{seq.name}-b{depth}-s{s}',"PT",1,frames,capture,depth,seed=1000+s,ref_spp=spp,build=build) for s in range(seeds)]
     return {f:np.mean([image(o,f) for o in outs],axis=0) for f in capture}
 
 
@@ -49,7 +49,7 @@ if __name__=='__main__':
     ap.add_argument('--n-max',type=int,default=64);ap.add_argument('--k-new',type=int,default=4);ap.add_argument('--build',default=str(BUILD));a=ap.parse_args()
     RUNS.mkdir(exist_ok=True);cap=[int(x) for x in a.capture.split(',')];build=Path(a.build)
     for name in a.seqs:
-        seq=SEQ/name;ref=reference(seq,a.depth,a.frames,cap)
+        seq=SEQ/name;ref=reference(seq,a.depth,a.frames,cap,build=build)
         for spec in a.roles:
             role,k,*rest=spec.split(':');nm=int(rest[0]) if rest else a.n_max
             out=run(seq,RUNS/f'{a.tag}-{name}-b{a.depth}-{role}-k{k}-n{nm}',role,int(k),a.frames,cap,a.depth,n_max=nm,k_new=a.k_new,build=build)
