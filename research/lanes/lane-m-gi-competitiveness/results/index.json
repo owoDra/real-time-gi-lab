@@ -613,7 +613,12 @@
       "restir_gi_unit_verification": "results/243-restir-gi-fixed-unit-verification.json",
       "restir_gi_unit_admitted_conditions": 6,
       "restir_gi_unit_spatial_temporal_reuse_qualified": false,
-      "restir_gi_unit_hdr_quality_scored": false
+      "restir_gi_unit_hdr_quality_scored": false,
+      "session_research_state": "PAUSED_AT_USER_REQUEST_AFTER_041_NOT_COMPLETE",
+      "session_handoff": "results/244-session-handoff-2026-10-25.md",
+      "session_handoff_verification": "results/245-session-pause-handoff-verification.json",
+      "resume_requires_user_instruction": true,
+      "next_042_registered": false
     }
   ]
 }

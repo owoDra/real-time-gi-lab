@@ -1,0 +1,274 @@
+{
+  "schema": "m001-user-requested-pause-handoff-verification/1",
+  "complete": true,
+  "all_verification_checks_pass": true,
+  "checked_at_utc": "2026-10-25T07:59:01.263806+00:00",
+  "pause_requested_by_user": true,
+  "research_state": "PAUSED_AT_USER_REQUEST",
+  "lane_m_complete": false,
+  "research_result_base_commit": "d671ef4b3015f2214e7c31ad1dea358897a42e71",
+  "unchanged_counts": {
+    "default_build_graph": 1,
+    "prior_protocols": 42,
+    "prior_results": 249,
+    "code": 1301
+  },
+  "immutable_inventory_checks": {
+    "out/research/lane-m-gi-competitiveness/m001-restir040-stopped-summary-v1/consumed-input-sha256.json": {
+      "entries": 1306,
+      "sha256": "ddce064f37cceeecb2cc6a34f54ad9f9f6fafa33106806d295331bb60df7a904"
+    },
+    "out/research/lane-m-gi-competitiveness/m001-restir040-stopped-summary-v1/all-payload-sha256.json": {
+      "entries": 553,
+      "sha256": "ecf78d3f163325c32570e8672075d923b29750e20b8ef8fe80eb804809991188"
+    },
+    "out/research/lane-m-gi-competitiveness/m001-restir041-six-summary-v1/consumed-input-sha256.json": {
+      "entries": 2206,
+      "sha256": "344df22699bf79b7412fe877d82f521e26786ef8ecdef892f375040cdae5ec8b"
+    },
+    "out/research/lane-m-gi-competitiveness/m001-restir041-six-summary-v1/all-payload-sha256.json": {
+      "entries": 890,
+      "sha256": "03d5133d698b91f3ea9bb09d62ea06b33c7ceaa8a0db29b12ba39a3bb754f6f4"
+    }
+  },
+  "rehashed_distinct_files": 2340,
+  "actual041_reaped_successful_processes": [
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/diagnosis.process.json",
+      "sha256": "985b37e7a034a2944de041d46dfc37495a66aa1e46109ebfb8089f2f36ace2a1",
+      "pid": 1438264,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 1.8692361440043896,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/load-compile.process.json",
+      "sha256": "2fcfcecdcc73e138cf572aaafe2d9ffa3f2bdacd52a802a2fd7f956feb600f2a",
+      "pid": 1438324,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.017821030924096704,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/load-dependencies.process.json",
+      "sha256": "30dd4b8e3a05c56a9fe7f9ac291c974d9acae746a13592c3c03546f4c4db734b",
+      "pid": 1438322,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.009939557989127934,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/load-disassemble.process.json",
+      "sha256": "cfa43e0b7185f442e379fa2b9dd78999d815e79df3d59fd4e32c1e1487cb12fd",
+      "pid": 1438326,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.004024713998660445,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/load-validate.process.json",
+      "sha256": "7da0dde4b7a2b9052d517d130964c970fa8ea7ce221325a266916df530b25eea",
+      "pid": 1438325,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.006219707080163062,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/make-compile.process.json",
+      "sha256": "cb7edeb2292abe70a9e6408ff1d624a5705167828561bea8ad1243eabfce48c4",
+      "pid": 1438316,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.018015025998465717,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/make-dependencies.process.json",
+      "sha256": "2a39dffee45dd5c0a2e7298d321e0e06213218690aea22ab8429db4ee6e27d9e",
+      "pid": 1438315,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.010670878924429417,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/make-disassemble.process.json",
+      "sha256": "496140f00d6af65e9d3fccb6f4ae1c76b1e63be9f03c5fc2cf05b68614800be3",
+      "pid": 1438321,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.00403273303527385,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/make-validate.process.json",
+      "sha256": "da2b0fa2ff71a68219816877c42eb3f8ecb0f72c3784c089349913b5f3588187",
+      "pid": 1438320,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.0063166540348902345,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-cpu-build-v1/new-python-contracts.process.json",
+      "sha256": "78ca1b7981f0db851c3a0dc37dd1639b31d2e1970d359e137f7311b1d6500d52",
+      "pid": 1438313,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.11748783593066037,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h01-b2-v1/native.process.json",
+      "sha256": "1f0d5ed7036c71002993fd02df96b25b389aa0665fe9585d8250609afe49bcf4",
+      "pid": 1438645,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 15.886275251046754,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h01-b2-v1/numeric.process.json",
+      "sha256": "f84b18c2664fddd28106b51a2f3ede1e99d038fa2c2d68288f1ac92b4cad9ec3",
+      "pid": 1439067,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.6675730920396745,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h01-b8-v1/native.process.json",
+      "sha256": "1fcd91f6b7ba2d44dcf6c59fa76093716eaa4f5854a7717313b79d7b2483f4e8",
+      "pid": 1439685,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 16.48816478799563,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h01-b8-v1/numeric.process.json",
+      "sha256": "d0038758dd4f9e18f8566191fb4dcb33f6560e125a80cd940def325e556210d2",
+      "pid": 1439908,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.9691762219881639,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h02-b2-v1/native.process.json",
+      "sha256": "ecf6f9c4f90bb30db960e17dae667fa2cd95164c94842f4a86e3c6475131f366",
+      "pid": 1441174,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 16.239197897957638,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h02-b2-v1/numeric.process.json",
+      "sha256": "1803577acd5b5cf395d3ff316748140a86e7164c8fabf3f664e3bfdb51bc7778",
+      "pid": 1441442,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.5685792310396209,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h02-b8-v1/native.process.json",
+      "sha256": "3e5414fb869456a75ed533ebeb6896985c5f9019b3931dd4e29fbd1b230856a0",
+      "pid": 1442149,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 16.24042600893881,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h02-b8-v1/numeric.process.json",
+      "sha256": "cf125ddaae68125dbb019b47d1fd295733fc0caef47fc78260a2c7eed9f3e0bc",
+      "pid": 1442271,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.9182680060621351,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h03-b2-v1/native.process.json",
+      "sha256": "fa9bcfa59a547c51ebecd247fa9e5357faca3e260c112a2c8022af57e855b0f5",
+      "pid": 1442850,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 15.884930289001204,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h03-b2-v1/numeric.process.json",
+      "sha256": "07b61e3bfb5a967d1376b98cd7b97fe744de5fd4131263748f9fa18a850123c5",
+      "pid": 1442958,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.5682808749843389,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h03-b8-v1/native.process.json",
+      "sha256": "1511315c6617dc2426e61210ba1cbd52126d118d86ff8977fed12f14f1a05929",
+      "pid": 1443767,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 16.33621200802736,
+      "pid_currently_exists": false
+    },
+    {
+      "path": "out/research/lane-m-gi-competitiveness/m001-restir041-h03-b8-v1/numeric.process.json",
+      "sha256": "67cc97c8042f86a3275907626800e349044aea7344a7457dbb1d0dc538419d6e",
+      "pid": 1443854,
+      "returncode": 0,
+      "timed_out": false,
+      "reaped": true,
+      "diagnostic_cpu_wall_seconds": 0.9684341009706259,
+      "pid_currently_exists": false
+    }
+  ],
+  "proc_processes_inspected": 73,
+  "active_lane_m_study_processes": [],
+  "next_042_registered": false,
+  "new_study_executions_during_handoff": 0,
+  "all_lane_m_index_paths": 327,
+  "markdown_links_checked": 412,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n[research:check] $ python scripts/research/verify.py\n",
+  "handoff_sha256": "e55cfe064c7cbbeaf13d6b01c27f50db7c87b9898cf84d4bd2cb161cf37449d8",
+  "helper_sha256": "648a905521169ccb37fa1b46897f1e7a6373c2708075250eef7a58e999c017ed",
+  "default_renderer_build_and_runtime": "NOT_RERUN",
+  "validation_layers": "NOT_RUN",
+  "prior_successful_tests": "NOT_RERUN",
+  "accepted_timing": false,
+  "hdr_family_quality_admitted": false,
+  "architecture_promoted": false,
+  "total_assistant_gpu_acquisitions": 196,
+  "final_remote_issue_and_raw_confirmation": "out/m001-restir041-pause-confirmation-v1.json"
+}

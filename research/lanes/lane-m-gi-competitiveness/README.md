@@ -1,5 +1,7 @@
 # Lane M — GI competitiveness
 
+**USER-REQUESTED PAUSE — 2026-10-25.** Research is paused after the completed041 six-condition candidate-construction study (6/6conditions,24/24seeds). Lane M is incomplete; no new042+ study is registered or running. [Session handoff244](results/244-session-handoff-2026-10-25.md) records the exact restart boundary, evidence locations and remaining gates; [handoff verification245](results/245-session-pause-handoff-verification.json) records preservation checks. Resume new research only on user instruction. HDR family quality, competitive GPU timing and architecture promotion remain unqualified. Earlier outcome paragraphs below retain their historical scope.
+
 [Current research status](../../status.md) is the single live summary. M001 is the first prospective static controlled heldout study, distinct from historical topology Lane M. [Issue #7](https://github.com/owoDra/real-time-gi-lab/issues/7) tracks execution.
 
 [Static family outcome083](results/083-m001-static-screen-outcome.md) closes the bounded six-target quality screen: PT6PASS, four configured RC roles24losses, corrected DDGI6exhausted targets/18losses. [Consolidation082](results/082-m001-static-screen-family-summary.json) verifies identical reference identities/normalization and36terminal role/target decisions. No accepted same-quality timing or Lane M completion.
