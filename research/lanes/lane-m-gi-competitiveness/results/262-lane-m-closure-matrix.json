@@ -1,0 +1,186 @@
+{
+  "schema": "lane-m-closure-matrix/1",
+  "complete": true,
+  "closure_criteria": "experiments/047-lane-m-closure-criteria.md",
+  "verdict": "LANE_M_COMPLETE_CHARTER_NOT_MET",
+  "families": [
+    {
+      "family": "raw path tracing (PT)",
+      "sources": [
+        "023-six-pt-quality-outcome.md",
+        "259-m002-summary.json"
+      ],
+      "m001_quality": "6/6 PASS (256spp B2, 1024spp B8)",
+      "m002_quality": "10/12 PASS (S3L both FAIL at 1024)",
+      "owned_memory": "2.37 MB (023 ledger); 3.9 MB role buffers in 045 harness",
+      "timing": "matched-quality comparator in 045/M002"
+    },
+    {
+      "family": "PT + fixed geometry-only quadratic reconstruction (PTR)",
+      "sources": [
+        "131-integrated-pt-reconstruction-outcome.md",
+        "257-final-timing-revision-outcome.md",
+        "260-m002-outcome.md"
+      ],
+      "m001_quality": "6/6 PASS (16spp H01/B2, 64spp others)",
+      "m002_quality": "6/12 PASS (fails S4, S1L, S3L)",
+      "owned_memory": "26.3 MB (022 peak); 25.8 MB role buffers",
+      "timing": "ACCEPTED FASTER than raw PT at matched quality on 5 targets (M001 H01/B2 2.2x, H03/B2 1.48x, H03/B8 10.0x; M002 S1/B2 2.2x, S1C/B2 6.4x); 7 INCONCLUSIVE (same direction, stability criteria); 0 SLOWER"
+    },
+    {
+      "family": "fixed Split RC (HWRT, software fallback, vanilla, dense)",
+      "sources": [
+        "028-fixed-control-quality-outcome.md",
+        "026-dense-quality-outcome.md"
+      ],
+      "m001_quality": "0/6 for each of 4 roles (24 losses)",
+      "m002_quality": "NOT_RUN",
+      "owned_memory": "~266.6-266.9 MB (HWRT/vanilla/software); dense 2.37 MB",
+      "timing": "ineligible (quality)"
+    },
+    {
+      "family": "corrected DDGI (RTXGI SDK derivative)",
+      "sources": [
+        "080-ddgi-corrected-six-targets-quality-outcome.md"
+      ],
+      "m001_quality": "0/6 (18 losses)",
+      "m002_quality": "NOT_RUN",
+      "owned_memory": "431.9 MB",
+      "timing": "ineligible (quality)"
+    },
+    {
+      "family": "NRD RELAX on PT 1-64spp (default and no-prepass)",
+      "sources": [
+        "164-nrd-cold-warm-six-targets-outcome.md",
+        "189-nrd-no-prepass-six-targets-outcome.md"
+      ],
+      "m001_quality": "0/6 joint (each config; warm indirect 25-39%, bias -9..-31%)",
+      "m002_quality": "NOT_RUN",
+      "owned_memory": "31.9-87.2 MB",
+      "timing": "ineligible (quality)"
+    },
+    {
+      "family": "ReSTIR GI (RTXDI SDK, explicit null trials)",
+      "sources": [
+        "248-restir-gi-reuse-outcome.md"
+      ],
+      "m001_quality": "0/6 (warm indirect 47-57%)",
+      "m002_quality": "NOT_RUN",
+      "owned_memory": "50.3-78.0 MB",
+      "timing": "ineligible (quality)"
+    },
+    {
+      "family": "ReSTIR GI + quadratic reconstruction",
+      "sources": [
+        "251-restir-reconstruction-cpu-outcome.md",
+        "257-final-timing-revision-outcome.md"
+      ],
+      "m001_quality": "0/6 per frame (warm indirect 12.5-26%)",
+      "m002_quality": "not scored (descriptive T4 timing only)",
+      "owned_memory": "72.6-100.2 MB role buffers",
+      "timing": "equal cost: PT16+reconstruction dominates it 6/6 (045)"
+    }
+  ],
+  "charter": [
+    {
+      "requirement": "novel GI transport architecture",
+      "status": "NOT_MET",
+      "evidence": "every candidate tested is a known technique or combination; no novelty claim"
+    },
+    {
+      "requirement": "same-quality GPU-time superiority over fair families",
+      "status": "NOT_MET (bounded partial)",
+      "evidence": "PTR accepted faster than raw PT at matched quality on 5 targets, but every denoised/probe/RC/ReSTIR family fails quality, PTR fails 6/12 M002 targets and M002 speed majority rule not held"
+    },
+    {
+      "requirement": "same-quality memory superiority",
+      "status": "NOT_MET",
+      "evidence": "PTR owns 6.6x more buffer memory than raw PT"
+    },
+    {
+      "requirement": "same-cost quality superiority",
+      "status": "NOT_MET (bounded partial)",
+      "evidence": "PT16+reconstruction dominates ReSTIR+reconstruction 6/6 at equal cost; both fail absolute gates"
+    },
+    {
+      "requirement": "new heldouts",
+      "status": "MET (tested), result negative for generalization",
+      "evidence": "M002 12 eligible unseen targets"
+    },
+    {
+      "requirement": "dynamic camera/light",
+      "status": "PARTIAL",
+      "evidence": "M002 single changed camera/light states for stateless roles; no temporal sequences"
+    },
+    {
+      "requirement": "dynamic rigid/deforming/topology/churn",
+      "status": "NOT_MET",
+      "evidence": "not run for matched-quality roles; DDGI 011 controls only"
+    },
+    {
+      "requirement": "Sponza / broader scenes",
+      "status": "BLOCKED",
+      "evidence": "M002 harness limited to <=2048 triangles; Sponza ~262k triangles not run"
+    },
+    {
+      "requirement": "multiple GPU classes",
+      "status": "BLOCKED",
+      "evidence": "only one AMD Radeon 8060S/RADV available"
+    },
+    {
+      "requirement": "software fallback",
+      "status": "PARTIAL",
+      "evidence": "software RC role tested (fails quality); no software path for PT/PTR"
+    },
+    {
+      "requirement": "deployability",
+      "status": "NOT_MET",
+      "evidence": "not evaluated"
+    },
+    {
+      "requirement": "true-peak memory accounting",
+      "status": "MET",
+      "evidence": "owned allocation ledgers with zero teardown in every Lane M GPU study (driver-private/CPU excluded)"
+    }
+  ],
+  "accepted_timing": [
+    {
+      "study": "045",
+      "faster": [
+        "H01/B2",
+        "H03/B2",
+        "H03/B8"
+      ],
+      "inconclusive": [
+        "H01/B8",
+        "H02/B2",
+        "H02/B8"
+      ]
+    },
+    {
+      "study": "046/M002",
+      "faster": [
+        "S1/B2",
+        "S1C/B2"
+      ],
+      "inconclusive": [
+        "S1/B8",
+        "S2/B2",
+        "S2/B8",
+        "S1C/B8"
+      ]
+    }
+  ],
+  "handoff": {
+    "proposal": "lane-o-generalization-and-devices (proposed, NOT started)",
+    "items": [
+      "multiple GPU classes and software fallback for matched roles",
+      "Sponza and >2048-triangle scenes",
+      "temporal dynamic sequences incl. rigid/deforming/topology/churn with AS update costs",
+      "a reconstruction that holds on box-field and light-change states (S4, S1L, S3L failures)",
+      "novel transport candidates",
+      "deployability"
+    ]
+  },
+  "total_assistant_gpu_acquisitions": 465
+}

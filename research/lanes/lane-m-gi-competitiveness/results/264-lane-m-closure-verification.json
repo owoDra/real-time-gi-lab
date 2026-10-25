@@ -1,0 +1,16 @@
+{
+  "schema": "lane-m-closure-verification/1",
+  "verdict": "LANE_M_COMPLETE_CHARTER_NOT_MET",
+  "matrix_sha256": "6e91697d8118a070efcd0eac0ab76bf403b60089614eefebe6e7c6007f50774c",
+  "outcome_sha256": "c45ee80ed8d98c4b20c06adbf18c39fc806ef0d062b118fc4c86ffcad76d1971",
+  "running_research_processes": 0,
+  "source_commit": "f78bc86188d7129f1192e69d626365c3024db1e2",
+  "complete": true,
+  "all_pass": true,
+  "all_lane_m_index_paths": 301,
+  "markdown_links_checked": 525,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+  "default_build_graph_unchanged": true,
+  "default_renderer_build_and_runtime": "NOT_RERUN",
+  "validation_layers": "NOT_RUN"
+}

@@ -7,7 +7,7 @@
       "name": "Prospective controlled first-cohort screen",
       "plan": "experiments/001-first-cohort-preregistration.md",
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
-      "phase": "STATIC_FAMILY_QUALITY_SCREEN_COMPLETE",
+      "phase": "LANE_M_CLOSED",
       "classification": "SIX_PT_PASS_FIVE_CONFIGURED_RC_DDGI_ROLES_FAIL_ALL_TARGETS_NO_MATCHED_TIMING",
       "accepted_timing": true,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
@@ -660,7 +660,18 @@
         "H03/B2",
         "H03/B8"
       ],
-      "accepted_timing_scope": "045 T1 matched-quality cost only; known components; one GPU; static targets"
+      "accepted_timing_scope": "045 T1 matched-quality cost only; known components; one GPU; static targets",
+      "m002_protocol": "experiments/046-m002-new-heldout-and-dynamic-validation.md",
+      "m002_addendum": "experiments/046a-capture-details-and-positive-control.md",
+      "m002_status": "M002_QUALITY_GENERALIZATION_NOT_HELD_PTR_6_12_SPEED_GENERALIZATION_NOT_HELD_FASTER_2_6",
+      "m002_summary": "results/259-m002-summary.json",
+      "m002_outcome": "results/260-m002-outcome.md",
+      "m002_verification": "results/261-m002-verification.json",
+      "closure_criteria": "experiments/047-lane-m-closure-criteria.md",
+      "closure_matrix": "results/262-lane-m-closure-matrix.json",
+      "closure_outcome": "results/263-lane-m-closure-outcome.md",
+      "closure_verification": "results/264-lane-m-closure-verification.json",
+      "lane_m_verdict": "LANE_M_COMPLETE_CHARTER_NOT_MET"
     }
   ]
 }
