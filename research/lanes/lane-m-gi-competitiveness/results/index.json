@@ -537,7 +537,9 @@
       "restir_gi_source_bridge_verification": "results/210-restir-gi-source-bridge-verification.json",
       "restir_gi_source_bridge_study_complete": true,
       "restir_gi_source_bridge_gpu_executed": false,
-      "restir_gi_source_bridge_m001_physical_qualified": false
+      "restir_gi_source_bridge_m001_physical_qualified": false,
+      "restir_gi_analytic_device_protocol": "experiments/034-restir-gi-analytic-device-controls.md",
+      "restir_gi_analytic_device_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
