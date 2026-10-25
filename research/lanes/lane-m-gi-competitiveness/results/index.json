@@ -9,7 +9,7 @@
       "cpu_audit": "results/001-n010-input-metadata-audit.json",
       "phase": "STATIC_FAMILY_QUALITY_SCREEN_COMPLETE",
       "classification": "SIX_PT_PASS_FIVE_CONFIGURED_RC_DDGI_ROLES_FAIL_ALL_TARGETS_NO_MATCHED_TIMING",
-      "accepted_timing": false,
+      "accepted_timing": true,
       "checkpoint": "results/002-h01-owner-reported-checkpoint.md",
       "auditor": "scripts/research/lane_m_gi_competitiveness/audit_h01_evidence.py",
       "actual_h01_evidence_verified": true,
@@ -648,7 +648,19 @@
       "calibrated_timing_summary": "results/253-calibrated-timing-summary.json",
       "calibrated_timing_outcome": "results/254-calibrated-timing-outcome.md",
       "calibrated_timing_verification": "results/255-calibrated-timing-verification.json",
-      "calibrated_timing_accepted": false
+      "calibrated_timing_accepted": false,
+      "final_timing_protocol": "experiments/045-timing-protocol-revision-32-pairs.md",
+      "final_timing_status": "CALIBRATED_MDE5_T1_ACCEPTED_FASTER_3_6_INCONCLUSIVE_3_6_PT16R_DOMINATES_RSR_6_6",
+      "final_timing_summary": "results/256-final-timing-revision-summary.json",
+      "final_timing_outcome": "results/257-final-timing-revision-outcome.md",
+      "final_timing_verification": "results/258-final-timing-revision-verification.json",
+      "final_timing_minimum_detectable_effect": 0.05,
+      "final_timing_t1_accepted_faster_targets": [
+        "H01/B2",
+        "H03/B2",
+        "H03/B8"
+      ],
+      "accepted_timing_scope": "045 T1 matched-quality cost only; known components; one GPU; static targets"
     }
   ]
 }

@@ -1,0 +1,22 @@
+{
+  "schema": "m001-timing045-verification/1",
+  "source_commit": "203e7c306d6937500faf7c1e68a6bf1c6d5265f4",
+  "complete": true,
+  "all_pass": true,
+  "study_complete": true,
+  "classification": "CALIBRATED_MDE5_T1_ACCEPTED_FASTER_3_6_INCONCLUSIVE_3_6_PT16R_DOMINATES_RSR_6_6",
+  "lane_m_complete": false,
+  "new_gpu_acquisitions": 56,
+  "total_assistant_gpu_acquisitions": 328,
+  "accepted_timing": true,
+  "accepted_timing_scope": "T1 matched-quality cost on H01/B2,H03/B2,H03/B8 only (known components; raw PT comparator)",
+  "architecture_promoted": false,
+  "rehashed_payloads": 914,
+  "summary_sha256": "47242f29b4b060ddece85620d5dd842716e1f97bf39a5f87ffbc8cc16eb9d2c8",
+  "all_lane_m_index_paths": 292,
+  "markdown_links_checked": 500,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+  "default_build_graph_unchanged": true,
+  "default_renderer_build_and_runtime": "NOT_RERUN",
+  "validation_layers": "NOT_RUN"
+}
