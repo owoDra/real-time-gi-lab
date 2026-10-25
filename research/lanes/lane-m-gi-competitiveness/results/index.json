@@ -578,7 +578,16 @@
       "restir_gi_on_device_preparation_failure": "results/226-restir-gi-physical-gpu-preparation-failure.json",
       "restir_gi_on_device_outcome": "results/227-restir-gi-physical-gpu-preparation-outcome.md",
       "restir_gi_on_device_verification": "results/228-restir-gi-physical-gpu-failure-verification.json",
-      "restir_gi_on_device_gpu_executed": false
+      "restir_gi_on_device_gpu_executed": false,
+      "restir_gi_physical_gpu_include_protocol": "experiments/038-physical-gpu-sdk-math-include-correction.md",
+      "restir_gi_physical_gpu_include_status": "STOP_FLOAT32_ENDPOINT_DIRECTION_MISMATCH_NO_RETRY",
+      "restir_gi_physical_gpu_include_preparation": "results/229-restir-gi-sdk-include-correction-preparation.json",
+      "restir_gi_physical_gpu_first_condition": "results/230-restir-gi-physical-gpu-first-condition-stop.json",
+      "restir_gi_physical_gpu_include_outcome": "results/231-restir-gi-physical-gpu-float32-outcome.md",
+      "restir_gi_physical_gpu_include_verification": "results/232-restir-gi-physical-gpu-stop-verification.json",
+      "restir_gi_physical_gpu_conditions_executed": 1,
+      "restir_gi_physical_gpu_conditions_admitted": 0,
+      "restir_gi_physical_gpu_later_conditions_not_run": 5
     }
   ]
 }

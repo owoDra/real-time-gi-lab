@@ -1,0 +1,153 @@
+{
+  "schema": "m001-restir038-cpu-preparation/1",
+  "complete": true,
+  "all_pass": true,
+  "source_commit": "8479f80eb696105f536df3d3045bf95c5f69dbc2",
+  "classification": "CPU_GPU_BRIDGE_INCLUDE_CORRECTION_PASS",
+  "new_python_contracts": 8,
+  "new_hlsl_compilations": 2,
+  "native_cpu_input_checks": 6,
+  "new_host_or_glsl_compilations": 0,
+  "exact037_executable_and_physical_producer_reused": true,
+  "include_only_inverse_exact": true,
+  "actual_process_envelopes": [
+    {
+      "label": "make-dependencies",
+      "pid": 1423311,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "make-compile",
+      "pid": 1423312,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "make-validate",
+      "pid": 1423313,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "make-disassemble",
+      "pid": 1423314,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "load-dependencies",
+      "pid": 1423315,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "load-compile",
+      "pid": 1423316,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "load-validate",
+      "pid": 1423317,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "load-disassemble",
+      "pid": 1423318,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "new-python-contracts",
+      "pid": 1423319,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h01-b2",
+      "pid": 1423320,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h01-b8",
+      "pid": 1423321,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h02-b2",
+      "pid": 1423322,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h02-b8",
+      "pid": 1423323,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h03-b2",
+      "pid": 1423324,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h03-b8",
+      "pid": 1423325,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    }
+  ],
+  "old_successful_tests_reexecuted": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir038-cpu-build-v1/result.json",
+  "raw_receipt_sha256": "e72cd49a638b58e146cbb7926a1b5c9731f0dee169bc3ca0197c7573c5e72a59"
+}
