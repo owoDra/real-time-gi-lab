@@ -1,0 +1,22 @@
+{
+  "schema": "m001-timing044-verification/1",
+  "source_commit": "041c1834167f488987e9395eb120513b698a83b7",
+  "complete": true,
+  "all_pass": true,
+  "study_complete": true,
+  "classification": "CALIBRATION_CONTROL_ORDER_BIAS_FAIL_ALL_TARGET_TIMINGS_INCONCLUSIVE_DESCRIPTIVE_RECORDED",
+  "lane_m_complete": false,
+  "new_gpu_acquisitions": 68,
+  "development_gpu_acquisitions": 4,
+  "total_assistant_gpu_acquisitions": 272,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "rehashed_payloads": 1156,
+  "summary_sha256": "6ce26423d49a7449f23deadcfe880cc2f496fe25b3117e93f2e3028a6dc5971c",
+  "all_lane_m_index_paths": 288,
+  "markdown_links_checked": 482,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+  "default_build_graph_unchanged": true,
+  "default_renderer_build_and_runtime": "NOT_RERUN",
+  "validation_layers": "NOT_RUN"
+}

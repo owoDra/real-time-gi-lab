@@ -638,7 +638,17 @@
       "restir_reconstruction_outcome": "results/251-restir-reconstruction-cpu-outcome.md",
       "restir_reconstruction_verification": "results/252-restir-reconstruction-verification.json",
       "restir_reconstruction_per_frame_passing_targets": 0,
-      "restir_reconstruction_gpu_executed": false
+      "restir_reconstruction_gpu_executed": false,
+      "calibrated_timing_protocol": "experiments/044-calibrated-matched-quality-and-equal-cost-timing.md",
+      "calibrated_timing_development": "experiments/044a-timing-development-disclosure.md",
+      "calibrated_timing_sizes": "experiments/044b-calibration-boundary-sizes.md",
+      "calibrated_timing_comparator": "experiments/044c-equal-cost-comparator.md",
+      "calibrated_timing_order_correction": "experiments/044d-pair-order-counterbalance-correction.md",
+      "calibrated_timing_status": "CALIBRATION_CONTROL_ORDER_BIAS_FAIL_ALL_TARGET_TIMINGS_INCONCLUSIVE_DESCRIPTIVE_RECORDED",
+      "calibrated_timing_summary": "results/253-calibrated-timing-summary.json",
+      "calibrated_timing_outcome": "results/254-calibrated-timing-outcome.md",
+      "calibrated_timing_verification": "results/255-calibrated-timing-verification.json",
+      "calibrated_timing_accepted": false
     }
   ]
 }
