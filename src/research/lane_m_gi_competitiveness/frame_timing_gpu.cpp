@@ -12,7 +12,8 @@
 using namespace m022;
 namespace i=phos::gi::research::integration;
 using u32=std::uint32_t;
-constexpr u32 W=320,H=180,N=W*H,BLOCK_ROW=((W+15)/16)*256,PITCH=BLOCK_ROW*((H+15)/16),WARMUP=4,MEASURED=12;
+constexpr u32 W=320,H=180,N=W*H,BLOCK_ROW=((W+15)/16)*256,PITCH=BLOCK_ROW*((H+15)/16),WARMUP=4;
+static u32 MEASURED=12;
 static void check(VkResult value){need(value==VK_SUCCESS,"044 Vulkan operation");}
 static u32 integer(const std::string& s){u32 v=0;auto r=std::from_chars(s.data(),s.data()+s.size(),v);need(r.ec==std::errc{}&&r.ptr==s.data()+s.size(),"044 unsigned option");return v;}
 static u32 jenkins(u32 a){
@@ -158,7 +159,8 @@ int main(int argc,char** argv){fs::path output;
         for(int j=2;j<argc;j+=2){need(j+1<argc&&args.emplace(argv[j],argv[j+1]).second,"044 duplicate/missing option");}
         auto has=[&](std::initializer_list<const char*> keys){for(auto k:keys)if(!args.contains(k))return false;return args.size()==keys.size();};
         bool calibration=mode=="--calibration";
-        need(calibration?has({"--out","--shaders","--process","--tiny","--short","--multi"}):has({"--state","--out","--vertices","--shaders","--offsets","--process","--reference-spp","--recon-spp"}),"044 options");
+        need(calibration?has({"--out","--shaders","--process","--tiny","--short","--multi","--measured"}):has({"--state","--out","--vertices","--shaders","--offsets","--process","--reference-spp","--recon-spp","--measured"}),"044 options");
+        MEASURED=integer(args["--measured"]);need(MEASURED==12||MEASURED==32,"045 measured pairs");
         fs::path target=args["--out"];need(!fs::exists(target)&&fs::is_directory(target.parent_path()),"044 exclusive output");
         u32 process=integer(args["--process"]);need(process<8,"044 process index");std::optional<State> state;u32 vertices=0;
         if(!calibration){state=load_state(args["--state"]);vertices=integer(args["--vertices"]);need(vertices==2||vertices==8,"044 depth");
@@ -182,7 +184,7 @@ int main(int argc,char** argv){fs::path output;
             campaign(run,list,process);samples=run.samples;submits=run.submits;Ledger::instance().phase("teardown");
         }
         Ledger::instance().save(output/"allocation-ledger.json");need(reserved_bytes==0,"044 ownership teardown");
-        std::ofstream f(output/"complete.json");f<<std::setprecision(17)<<"{\"complete\":true,\"gpu_initialized\":true,\"mode\":"<<std::quoted(mode)<<",\"process\":"<<process<<",\"comparisons\":"<<list.size()<<",\"pairs_per_comparison\":"<<WARMUP+MEASURED<<",\"warmup_pairs\":"<<WARMUP<<",\"samples\":"<<samples<<",\"submits\":"<<submits<<",\"aggregate_reserved_peak\":"<<reserved_peak<<",\"aggregate_reserved_at_teardown\":"<<reserved_bytes<<",\"setup_wall_us\":"<<setup_us<<",\"accepted_timing_requires_analysis\":true}\n";
+        std::ofstream f(output/"complete.json");f<<std::setprecision(17)<<"{\"complete\":true,\"gpu_initialized\":true,\"mode\":"<<std::quoted(mode)<<",\"process\":"<<process<<",\"comparisons\":"<<list.size()<<",\"pairs_per_comparison\":"<<WARMUP+MEASURED<<",\"warmup_pairs\":"<<WARMUP<<",\"measured_pairs\":"<<MEASURED<<",\"samples\":"<<samples<<",\"submits\":"<<submits<<",\"aggregate_reserved_peak\":"<<reserved_peak<<",\"aggregate_reserved_at_teardown\":"<<reserved_bytes<<",\"setup_wall_us\":"<<setup_us<<",\"accepted_timing_requires_analysis\":true}\n";
         need(bool(f),"044 completion receipt");return 0;
     }catch(const std::exception& e){if(!output.empty()){Ledger::instance().save(output/"allocation-ledger.json");std::ofstream(output/"failure.txt")<<e.what()<<'\n';}std::cerr<<e.what()<<'\n';return 2;}
 }

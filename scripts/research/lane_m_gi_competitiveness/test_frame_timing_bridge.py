@@ -26,7 +26,7 @@ class Contracts(unittest.TestCase):
             for x in rows[:T.WARMUP]:x['log_b_over_a']=9.
             (roots[0]/'capture/pairs.jsonl').write_text(''.join(json.dumps(x)+'\n' for x in rows))
             s=T.campaign(roots,['X'])['X']
-            self.assertAlmostEqual(s['effect'],np.median([.1+.001*k for k in range(8)]));self.assertAlmostEqual(s['span'],.007);self.assertEqual(s['pairs'],96);self.assertEqual(s['same_sign_pair_fraction'],1.)
+            self.assertAlmostEqual(s['effect'],np.median([.1+.001*k for k in range(8)]));self.assertAlmostEqual(s['span'],.007);self.assertEqual(s['pairs'],8*T.MEASURED);self.assertEqual(s['same_sign_pair_fraction'],1.)
 
     def test_calibration_requires_all_sizes_and_quiet_control(self):
         stats={}
@@ -55,7 +55,8 @@ class Contracts(unittest.TestCase):
             for comparisons in (4,12):
                 for c in range(comparisons):
                     orders=[T.ab_order(p,process) for p in range(T.WARMUP,T.WARMUP+T.MEASURED)]
-                    self.assertEqual(sum(orders),6);self.assertEqual(len(set(orders[::2])),1);self.assertNotEqual(orders[0],orders[1])
+                    self.assertEqual(sum(orders),T.MEASURED//2);self.assertEqual(len(set(orders[::2])),1);self.assertNotEqual(orders[0],orders[1])
+        self.assertEqual(T.MEASURED,32);self.assertEqual(source.count('need(MEASURED==12||MEASURED==32,"045 measured pairs");'),1)
 
     def test_sizes_are_exact_percent_deltas(self):
         for count,base in T.SIZES.values():

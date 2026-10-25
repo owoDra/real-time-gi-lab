@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""044 calibrated AB/BA GPU timing: preparation, neutral calibration, six target campaigns, analysis."""
+"""044/045 calibrated AB/BA GPU timing: preparation, neutral calibration, six target campaigns, analysis.
+
+The module now runs the 045 revision (32 measured pairs); 044 evidence is pinned by its commits."""
 import argparse
 import json
 import math
@@ -14,13 +16,13 @@ import restir_gi_reuse_bridge as Q
 
 G,C,I,S=Q.G,Q.C,Q.I,Q.S
 ROOT,BASE,EXP=Q.ROOT,Q.BASE,Q.EXP
-PROTOCOLS=[EXP/n for n in ('044-calibrated-matched-quality-and-equal-cost-timing.md','044a-timing-development-disclosure.md','044b-calibration-boundary-sizes.md','044c-equal-cost-comparator.md','044d-pair-order-counterbalance-correction.md')]
+PROTOCOLS=[EXP/n for n in ('044-calibrated-matched-quality-and-equal-cost-timing.md','044a-timing-development-disclosure.md','044b-calibration-boundary-sizes.md','044c-equal-cost-comparator.md','044d-pair-order-counterbalance-correction.md','045-timing-protocol-revision-32-pairs.md')]
 CPP=I.SOURCE/'frame_timing_gpu.cpp';GLSL=[I.SHADERS/f'timing_{n}.comp.glsl' for n in ('accumulate','copy','neutral')]
 OWN=[*PROTOCOLS,CPP,*GLSL,Path(__file__).resolve(),Path(__file__).with_name('test_frame_timing_bridge.py')]
-PREP=BASE/'m001-timing044-cpu-build-v2';CAL=BASE/'m001-timing044-calibration-v2'
+PREP=BASE/'m001-timing045-cpu-build-v1';CAL=BASE/'m001-timing045-calibration-v1'
 STOPPED=dict(preparation=BASE/'m001-timing044-cpu-build-v1',calibration=BASE/'m001-timing044-calibration-v1')
 REUSED={'integrated_producer.spv':Q.OLD022,'surface_quadratic_device.spv':Q.OLD022,'integrated_composite.spv':Q.OLD022,'physical_producer.spv':Q.OLD041,**{f'reuse_s{s}.spv':Q.PREP for s in range(5)}}
-SIZES=dict(tiny=(1,600),short=(1,4400),multi=(16,1100));DELTAS=(0,5,10,20);PROCESSES=8;WARMUP=4;MEASURED=12
+SIZES=dict(tiny=(1,600),short=(1,4400),multi=(16,1100));DELTAS=(0,5,10,20);PROCESSES=8;WARMUP=4;MEASURED=32
 RUNGS={('H01',2):(256,16),('H01',8):(1024,64),('H02',2):(256,64),('H02',8):(1024,64),('H03',2):(256,64),('H03',8):(1024,64)}
 L102,L103,L105=math.log(1.02),math.log(1.03),math.log(1.05)
 read,sha=Q.read,Q.sha
@@ -37,7 +39,7 @@ def ab_order(pair,process):
 
 def committed():
     head=Q.git('rev-parse','HEAD');need(Q.git('branch','--show-current')=='research-lane-m-gi-competitiveness','research branch')
-    for anchor in ('1f900a16','712a2907','5bf2dc2e','357208bb','087c3020'):subprocess.run(['git','merge-base','--is-ancestor',anchor,head],cwd=ROOT,check=True)
+    for anchor in ('1f900a16','712a2907','5bf2dc2e','357208bb','087c3020','a8d5f412','9ffb32fd'):subprocess.run(['git','merge-base','--is-ancestor',anchor,head],cwd=ROOT,check=True)
     for p in OWN:need(subprocess.check_output(['git','show',head+':'+str(p.relative_to(ROOT))],cwd=ROOT)==p.read_bytes(),'commit all044 sources before use '+p.name)
     return head
 
@@ -95,7 +97,7 @@ def build():
     old022=G.pin_archive(Q.OLD022/'result.json',pins);G.pin_archive(Q.OLD041/'result.json',pins);prep042=G.pin_archive(Q.PREP/'result.json',pins);need(prep042['all_pass'],'qualified042 preparation')
     for cell,depth in Q.TARGETS:G.source_state(cell,depth,pins)
     pins[str(Q.OFFSETS)]=sha(Q.OFFSETS);PREP.mkdir();C.write(PREP/'inputs-before.json',dict(source_commit=head,input_sha256=pins))
-    r=dict(schema='m001-timing044-cpu-preparation/1',source_commit=head,complete=False,all_pass=False,classification='INVALID_STOP_NO_RETRY',gpu_executed=False,input_sha256=pins,rows=[],compiled_dependency_sha256={})
+    r=dict(schema='m001-timing045-cpu-preparation/1',source_commit=head,complete=False,all_pass=False,classification='INVALID_STOP_NO_RETRY',gpu_executed=False,input_sha256=pins,rows=[],compiled_dependency_sha256={})
     try:
         r['effective_parent']=C.limits();os.chdir(I.BUILD);os.environ.update(VK_ICD_FILENAMES='/044-no-gpu.json',VK_DRIVER_FILES='/044-no-gpu.json')
         for name,folder in REUSED.items():
@@ -110,7 +112,7 @@ def build():
         rows.append(('new-python-contracts',[sys.executable,'-m','unittest','discover','-s',Path(__file__).parent,'-p','test_frame_timing_bridge.py','-v']))
         for cell,depth in Q.TARGETS:
             ref,recon=RUNGS[(cell,depth)];state=G.source_state(cell,depth,pins)
-            rows.append((f'cpu-{cell.lower()}-b{depth}',[PREP/'frame-timing','--cpu-check','--state',state,'--out',PREP/f'cpu-{cell.lower()}-b{depth}','--vertices',depth,'--shaders',PREP,'--offsets',Q.OFFSETS,'--process',0,'--reference-spp',ref,'--recon-spp',recon]))
+            rows.append((f'cpu-{cell.lower()}-b{depth}',[PREP/'frame-timing','--cpu-check','--state',state,'--out',PREP/f'cpu-{cell.lower()}-b{depth}','--vertices',depth,'--shaders',PREP,'--offsets',Q.OFFSETS,'--process',0,'--reference-spp',ref,'--recon-spp',recon,'--measured',MEASURED]))
         for label,args in rows:print('044',label,'START',flush=True);r['rows'].append(dict(label=label,process=G.guard(args,PREP,label)));print('044',label,'PASS',flush=True)
         for name in shlex.split((PREP/'host.d').read_text().replace('\\\n',' '))[1:]:
             file=Path(name);file=file if file.is_absolute() else I.BUILD/file
@@ -126,21 +128,21 @@ def process_root(base,k):return base/f'process-{k}'
 def calibrate():
     head=committed();prep=G.pin_archive(PREP/'result.json',{});need(prep['all_pass'],'preparation before GPU');need(not CAL.exists(),'exclusive calibration, no rerun');CAL.mkdir()
     import integrated_pt_process as P
-    r=dict(schema='m001-timing044-calibration/1',source_commit=head,complete=False,all_pass=False,classification='INVALID_STOP_NO_RETRY',processes=[],sizes={k:dict(submits=v[0],base=v[1]) for k,v in SIZES.items()})
+    r=dict(schema='m001-timing045-calibration/1',source_commit=head,complete=False,all_pass=False,classification='INVALID_STOP_NO_RETRY',processes=[],sizes={k:dict(submits=v[0],base=v[1]) for k,v in SIZES.items()})
     try:
         r['effective_parent']=C.limits()
         for k in range(PROCESSES):
             P.quiet();root=process_root(CAL,k);root.mkdir()
-            args=[str(PREP/'frame-timing'),'--calibration','--out',str(root/'capture'),'--shaders',str(PREP),'--process',str(k),'--tiny',str(SIZES['tiny'][1]),'--short',str(SIZES['short'][1]),'--multi',str(SIZES['multi'][1])]
+            args=[str(PREP/'frame-timing'),'--calibration','--out',str(root/'capture'),'--shaders',str(PREP),'--process',str(k),'--tiny',str(SIZES['tiny'][1]),'--short',str(SIZES['short'][1]),'--multi',str(SIZES['multi'][1]),'--measured',str(MEASURED)]
             print('044 calibration process',k,'START',flush=True);row=native(args,root,'native');j=read(root/'capture/complete.json')
-            need(j['complete'] and j['comparisons']==12 and j['aggregate_reserved_at_teardown']==0,'complete calibration process');r['processes'].append(dict(process=k,native=row,complete=j))
+            need(j['complete'] and j['comparisons']==12 and j['measured_pairs']==MEASURED and j['aggregate_reserved_at_teardown']==0,'complete calibration process');r['processes'].append(dict(process=k,native=row,complete=j))
         stats=campaign([process_root(CAL,k) for k in range(PROCESSES)],[f'{s}-plus{d}' for s in SIZES for d in DELTAS])
         r.update(statistics=stats,decision=calibration_decision(stats),complete=True,all_pass=True,classification='CALIBRATION_COMPLETE')
     except Exception as e:r['error']=type(e).__name__+': '+str(e)
     return G.finish(CAL,r)
 
 
-def target_root(cell,depth):return BASE/f'm001-timing044-{cell.lower()}-b{depth}-v2'
+def target_root(cell,depth):return BASE/f'm001-timing045-{cell.lower()}-b{depth}-v1'
 
 
 def quality_inputs(cell,depth):
@@ -157,14 +159,14 @@ def target(cell,depth):
     for c,b in Q.TARGETS[:Q.TARGETS.index((cell,depth))]:need(read(target_root(c,b)/'result.json')['all_pass'],'previous target complete')
     pins={};state=G.source_state(cell,depth,pins);ref,recon=RUNGS[(cell,depth)];root.mkdir()
     import integrated_pt_process as P
-    r=dict(schema='m001-timing044-target/1',source_commit=head,cell=cell,depth=depth,reference_spp=ref,recon_spp=recon,complete=False,all_pass=False,classification='INVALID_STOP_NO_RETRY',processes=[])
+    r=dict(schema='m001-timing045-target/1',source_commit=head,cell=cell,depth=depth,reference_spp=ref,recon_spp=recon,complete=False,all_pass=False,classification='INVALID_STOP_NO_RETRY',processes=[])
     try:
         r['effective_parent']=C.limits()
         for k in range(PROCESSES):
             P.quiet();pr=process_root(root,k);pr.mkdir()
-            args=[str(PREP/'frame-timing'),'--target','--state',str(state),'--out',str(pr/'capture'),'--vertices',str(depth),'--shaders',str(PREP),'--offsets',str(Q.OFFSETS),'--process',str(k),'--reference-spp',str(ref),'--recon-spp',str(recon)]
+            args=[str(PREP/'frame-timing'),'--target','--state',str(state),'--out',str(pr/'capture'),'--vertices',str(depth),'--shaders',str(PREP),'--offsets',str(Q.OFFSETS),'--process',str(k),'--reference-spp',str(ref),'--recon-spp',str(recon),'--measured',str(MEASURED)]
             print('044',cell,depth,'process',k,'START',flush=True);row=native(args,pr,'native');j=read(pr/'capture/complete.json')
-            need(j['complete'] and j['comparisons']==4 and j['aggregate_reserved_at_teardown']==0,'complete target process')
+            need(j['complete'] and j['comparisons']==4 and j['measured_pairs']==MEASURED and j['aggregate_reserved_at_teardown']==0,'complete target process')
             for name in ('geometry-state.bin','frame-state.bin'):need((pr/'capture'/name).read_bytes()==(state/name).read_bytes(),'exact state')
             r['processes'].append(dict(process=k,native=row,complete=j))
         stats=campaign([process_root(root,k) for k in range(PROCESSES)],['T1','T2','T3','T4']);mde=cal['decision']['minimum_detectable_effect']
