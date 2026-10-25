@@ -547,7 +547,9 @@
       "restir_gi_analytic_device_study_complete": true,
       "restir_gi_analytic_device_gpu_processes": 2,
       "restir_gi_analytic_device_configurations": 96,
-      "restir_gi_analytic_device_m001_physical_or_quality_qualified": false
+      "restir_gi_analytic_device_m001_physical_or_quality_qualified": false,
+      "restir_gi_physical_candidate_protocol": "experiments/035-restir-gi-physical-candidate-semantics.md",
+      "restir_gi_physical_candidate_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
