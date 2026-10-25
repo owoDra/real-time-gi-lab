@@ -1,0 +1,62 @@
+{
+  "schema": "m001-restir033-preserved-cpu-preparation-failures/1",
+  "complete": true,
+  "all_pass": true,
+  "evidence_class": "failure preservation, not successful compilation",
+  "attempts": [
+    {
+      "attempt": 1,
+      "source_commit": "135007335650bfe46b21e8aeb959e9ce5eb99dab",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir033-cpu-build-v1/result.json",
+      "raw_receipt_sha256": "58b8ab52158f41e83747f5b8e5f3f3bcc7ca64af9500de86cd9e6eaf4df74a8f",
+      "complete": false,
+      "all_pass": false,
+      "classification": "INVALID_PREPARATION",
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir033-cpu-build-v1/make.spv'",
+      "actually_executed_successful_commands": [
+        "sdk-gi-compile",
+        "sdk-utils-compile",
+        "host-contract-compile",
+        "host-link",
+        "host-execute",
+        "analytic-tests",
+        "make-compile"
+      ],
+      "qualified_steps_reused_without_execution": [],
+      "produced_spirv": []
+    },
+    {
+      "attempt": 2,
+      "source_commit": "f12dd90ccf371762cdd003716a5ce8774606fb70",
+      "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir033-cpu-build-v2/result.json",
+      "raw_receipt_sha256": "adc193c85e79cf1018ca843fe14b244fda7dc9b4fe9dcd5cb1232bfaf67b3a98",
+      "complete": false,
+      "all_pass": false,
+      "classification": "INVALID_PREPARATION",
+      "error": "ValueError: 032 process failure/timeout; preserve and stop: make-compile",
+      "actually_executed_successful_commands": [
+        "make-dependencies"
+      ],
+      "qualified_steps_reused_without_execution": [
+        "sdk-gi-compile",
+        "sdk-utils-compile",
+        "host-contract-compile",
+        "host-link",
+        "host-execute",
+        "analytic-tests"
+      ],
+      "produced_spirv": []
+    }
+  ],
+  "first_failure": "DXC -MD emitted dependencies only; exit zero but required make.spv absent. Initial step label PASS was command status only, not a shader build; preparation invalid.",
+  "second_failure": "/var/owo/workspaces/projects/gi-lab/shaders/research/lane_m_gi_competitiveness/restir_gi_analytic_fixture.hlsl:35:21: error: conditional operator only supports results with numeric scalar, vector, or matrix types.\n    return previous ? previousSurfaces[i] : currentSurfaces[i];\n                    ^\n\n",
+  "fixes": [
+    "f12dd90c separates dependency emission and real compilation, checks required outputs",
+    "3bec203a replaces HLSL unsupported struct ternary with equivalent if/return"
+  ],
+  "sdk_algorithm_changed": false,
+  "successful_host_objects_executable_data_and18_tests_reused_exact_without_rerun": true,
+  "attempt_cap": 3,
+  "third_attempt_passed": true,
+  "no_m001_or_gpu_execution": true
+}

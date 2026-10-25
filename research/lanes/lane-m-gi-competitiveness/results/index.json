@@ -530,7 +530,14 @@
       "surface_anchor_process_correction_variance_passes": 2,
       "surface_anchor_process_correction_study_complete": true,
       "restir_gi_source_bridge_protocol": "experiments/033-restir-gi-source-bridge-cpu-qualification.md",
-      "restir_gi_source_bridge_status": "PREREGISTERED_NOT_RUN"
+      "restir_gi_source_bridge_status": "CPU_SOURCE_BRIDGE_COMPILE_PASS",
+      "restir_gi_source_bridge_qualification": "results/207-restir-gi-source-bridge-cpu-qualification.json",
+      "restir_gi_source_bridge_failures": "results/208-restir-gi-source-bridge-preparation-failures.json",
+      "restir_gi_source_bridge_outcome": "results/209-restir-gi-source-bridge-cpu-outcome.md",
+      "restir_gi_source_bridge_verification": "results/210-restir-gi-source-bridge-verification.json",
+      "restir_gi_source_bridge_study_complete": true,
+      "restir_gi_source_bridge_gpu_executed": false,
+      "restir_gi_source_bridge_m001_physical_qualified": false
     }
   ]
 }
