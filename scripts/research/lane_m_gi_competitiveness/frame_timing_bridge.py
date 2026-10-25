@@ -14,20 +14,30 @@ import restir_gi_reuse_bridge as Q
 
 G,C,I,S=Q.G,Q.C,Q.I,Q.S
 ROOT,BASE,EXP=Q.ROOT,Q.BASE,Q.EXP
-PROTOCOLS=[EXP/n for n in ('044-calibrated-matched-quality-and-equal-cost-timing.md','044a-timing-development-disclosure.md','044b-calibration-boundary-sizes.md','044c-equal-cost-comparator.md')]
+PROTOCOLS=[EXP/n for n in ('044-calibrated-matched-quality-and-equal-cost-timing.md','044a-timing-development-disclosure.md','044b-calibration-boundary-sizes.md','044c-equal-cost-comparator.md','044d-pair-order-counterbalance-correction.md')]
 CPP=I.SOURCE/'frame_timing_gpu.cpp';GLSL=[I.SHADERS/f'timing_{n}.comp.glsl' for n in ('accumulate','copy','neutral')]
 OWN=[*PROTOCOLS,CPP,*GLSL,Path(__file__).resolve(),Path(__file__).with_name('test_frame_timing_bridge.py')]
-PREP=BASE/'m001-timing044-cpu-build-v1';CAL=BASE/'m001-timing044-calibration-v1'
+PREP=BASE/'m001-timing044-cpu-build-v2';CAL=BASE/'m001-timing044-calibration-v2'
+STOPPED=dict(preparation=BASE/'m001-timing044-cpu-build-v1',calibration=BASE/'m001-timing044-calibration-v1')
 REUSED={'integrated_producer.spv':Q.OLD022,'surface_quadratic_device.spv':Q.OLD022,'integrated_composite.spv':Q.OLD022,'physical_producer.spv':Q.OLD041,**{f'reuse_s{s}.spv':Q.PREP for s in range(5)}}
 SIZES=dict(tiny=(1,600),short=(1,4400),multi=(16,1100));DELTAS=(0,5,10,20);PROCESSES=8;WARMUP=4;MEASURED=12
 RUNGS={('H01',2):(256,16),('H01',8):(1024,64),('H02',2):(256,64),('H02',8):(1024,64),('H03',2):(256,64),('H03',8):(1024,64)}
 L102,L103,L105=math.log(1.02),math.log(1.03),math.log(1.05)
-need,read,sha=Q.need,Q.read,Q.sha
+read,sha=Q.read,Q.sha
+
+
+def need(ok,why):
+    if not ok:raise ValueError('044 '+why)
+
+
+def ab_order(pair,process):
+    """044d host rule: AB iff (pair+process) is even."""
+    return (pair+process)%2==0
 
 
 def committed():
     head=Q.git('rev-parse','HEAD');need(Q.git('branch','--show-current')=='research-lane-m-gi-competitiveness','research branch')
-    for anchor in ('1f900a16','712a2907','5bf2dc2e','357208bb'):subprocess.run(['git','merge-base','--is-ancestor',anchor,head],cwd=ROOT,check=True)
+    for anchor in ('1f900a16','712a2907','5bf2dc2e','357208bb','087c3020'):subprocess.run(['git','merge-base','--is-ancestor',anchor,head],cwd=ROOT,check=True)
     for p in OWN:need(subprocess.check_output(['git','show',head+':'+str(p.relative_to(ROOT))],cwd=ROOT)==p.read_bytes(),'commit all044 sources before use '+p.name)
     return head
 
@@ -35,7 +45,7 @@ def committed():
 def comparison_stats(rows):
     """rows: measured pair records of one comparison in one process."""
     x=np.array([r['log_b_over_a'] for r in rows]);ab=np.array([r['log_b_over_a'] for r in rows if r['order']=='AB']);ba=np.array([r['log_b_over_a'] for r in rows if r['order']=='BA'])
-    need(len(x)==MEASURED and len(ab)>0 and len(ba)>0 and np.isfinite(x).all(),'complete measured AB/BA pairs')
+    need(len(x)==MEASURED and len(ab)==MEASURED//2 and len(ba)==MEASURED//2 and np.isfinite(x).all(),'complete measured 6AB/6BA pairs')
     return dict(median=float(np.median(x)),order_bias=float(abs(np.median(ab)-np.median(ba))),values=x.tolist())
 
 
@@ -130,7 +140,7 @@ def calibrate():
     return G.finish(CAL,r)
 
 
-def target_root(cell,depth):return BASE/f'm001-timing044-{cell.lower()}-b{depth}-v1'
+def target_root(cell,depth):return BASE/f'm001-timing044-{cell.lower()}-b{depth}-v2'
 
 
 def quality_inputs(cell,depth):

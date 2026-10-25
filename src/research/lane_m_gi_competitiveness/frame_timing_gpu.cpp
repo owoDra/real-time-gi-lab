@@ -146,7 +146,7 @@ static void campaign(Runtime& run,const std::vector<Comparison>& list,u32 proces
     std::ofstream f(run.out/"pairs.jsonl");f<<std::setprecision(17);need(bool(f),"044 pair journal");
     std::this_thread::sleep_for(std::chrono::seconds(1));
     for(u32 pair=0;pair<WARMUP+MEASURED;pair++)for(u32 j=0;j<list.size();j++){
-        const Comparison& k=list[(pair+j)%list.size()];bool ab=((pair+j+process)%2)==0;double ta=0,tb=0;
+        const Comparison& k=list[(pair+j)%list.size()];bool ab=((pair+process)%2)==0;double ta=0,tb=0;
         Ledger::instance().phase(k.name+"-pair"+std::to_string(pair));
         if(ab){ta=run.sample(k.a,k.pa);tb=run.sample(k.b,k.pb);}else{tb=run.sample(k.b,k.pb);ta=run.sample(k.a,k.pa);}
         f<<"{\"comparison\":"<<std::quoted(k.name)<<",\"pair\":"<<pair<<",\"warmup\":"<<(pair<WARMUP?"true":"false")<<",\"order\":\""<<(ab?"AB":"BA")<<"\",\"position\":"<<j<<",\"a_us\":"<<ta<<",\"b_us\":"<<tb<<",\"log_b_over_a\":"<<std::log(tb/ta)<<"}\n";f.flush();

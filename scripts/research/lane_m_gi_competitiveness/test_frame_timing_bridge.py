@@ -12,7 +12,7 @@ def write_process(root,comparisons,effects,noise=0.,rng=None):
     (root/'capture').mkdir(parents=True);rows=[]
     for pair in range(T.WARMUP+T.MEASURED):
         for j,name in enumerate(comparisons):
-            e=effects[name]+(rng.normal()*noise if rng is not None else 0.);rows.append(dict(comparison=name,pair=pair,warmup=pair<T.WARMUP,order='AB' if (pair+j)%2==0 else 'BA',position=j,a_us=1000.,b_us=1000.*math.exp(e),log_b_over_a=e))
+            e=effects[name]+(rng.normal()*noise if rng is not None else 0.);rows.append(dict(comparison=name,pair=pair,warmup=pair<T.WARMUP,order='AB' if T.ab_order(pair,int(root.name[1:]) if root.name[1:].isdigit() else 0) else 'BA',position=j,a_us=1000.,b_us=1000.*math.exp(e),log_b_over_a=e))
     (root/'capture/pairs.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in rows))
 
 
@@ -48,6 +48,14 @@ class Contracts(unittest.TestCase):
     def test_registered_rungs_and_published_quality_inputs(self):
         self.assertEqual(T.RUNGS[('H01',2)],(256,16));self.assertEqual({v[0] for k,v in T.RUNGS.items() if k[1]==8},{1024})
         q=T.quality_inputs('H01',2);self.assertAlmostEqual(q['PT16R'],0.08459497891888781);self.assertTrue(0.12<q['RSR']<0.16);self.assertGreater(q['PT1R'],q['PT4R'])
+
+    def test_host_schedule_alternates_inside_every_process(self):
+        source=T.CPP.read_text();self.assertEqual(source.count('bool ab=((pair+process)%2)==0;'),1)
+        for process in range(8):
+            for comparisons in (4,12):
+                for c in range(comparisons):
+                    orders=[T.ab_order(p,process) for p in range(T.WARMUP,T.WARMUP+T.MEASURED)]
+                    self.assertEqual(sum(orders),6);self.assertEqual(len(set(orders[::2])),1);self.assertNotEqual(orders[0],orders[1])
 
     def test_sizes_are_exact_percent_deltas(self):
         for count,base in T.SIZES.values():
