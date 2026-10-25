@@ -87,3 +87,12 @@ def transition(source,target,out,frames):
     for name in ('geometry-state.bin','frame-state.bin'):(d/name).write_bytes((Path(target)/name).read_bytes())
     (out/'sequence.json').write_text(json.dumps(dict(source=str(source),target=str(target),regime='transition',frames=frames),indent=1)+'\n')
     return out
+
+
+def m003_instance(state):
+    """050 rule: drop the instance with the most triangles (environment); move the largest
+    remaining instance, ties broken by the highest instance id."""
+    meta=read(state)['rec']['meta'];inst,count=np.unique(meta[:,2],return_counts=True)
+    if len(inst)==1:return int(inst[0])
+    rows=sorted(zip(count.tolist(),inst.tolist()),reverse=True)[1:]
+    return int(rows[0][1])

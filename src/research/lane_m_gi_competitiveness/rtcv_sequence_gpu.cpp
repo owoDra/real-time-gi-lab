@@ -151,7 +151,7 @@ struct RoleRun {
         gpu_us=0;begin();
         record(0,N,base);
         if(id==3){record(1,STRATA,base);record(2,N,base);}
-        else if(id==4){record(1,N,base);record(2,N,base);record(3,TILES,base);}
+        else if(id==4){record(1,N,base);record(2,N,base);if(flags&7u)record(3,TILES,base);}  // no change: no replays, tile ratios stay
         else if(id==2){record(1,N,base);record(2,TILES,base);}
         else if(id==5){paths(base);std::array<u32,4> qp{0,0,0,N};quadratic->record(cmd,(N+31)/32,1,1,qp.data(),16);barrier();
             for(u32 st=0;st<3;st++){for(u32 p=0;p<N;p+=CHUNK){qp={1,st,p,CHUNK};quadratic->record(cmd,CHUNK/32,1,1,qp.data(),16);}barrier();}

@@ -255,6 +255,12 @@ void composite(uint id) { float direct=anchors[id*3u+2u].z, indirect=stages[2u*p
 #endif
 
 #if ROLE==4
+#ifndef LINEAR_D
+#define LINEAR_D 1
+#endif
+#ifndef ADAPTIVE
+#define ADAPTIVE 1
+#endif
 #ifndef REPLAYS
 #define REPLAYS 65536
 #endif
@@ -271,7 +277,12 @@ void samples(uint id) {
     vec3 x=a0.xyz, n=a1.xyz, xp=x, np=n; uint prim=floatBitsToUint(a0.w); int j=-1;
     if((pc.flags&NO_HISTORY)==0u) j=reproject(n,prim,a2.xy,xp,np);
     uint base=mix32(pc.seed^mix32(id)); float s1=0.0, sd=0.0, ss1=0.0;
-    uint k=j<0 ? pc.k_new : pc.k; uint yprim=prim;
+    uint k=j<0 ? pc.k_new : pc.k; uint yprim=prim, boost=1u;
+#if ADAPTIVE
+    // Pixels whose propagated history variance v (previous frame, data-independent of this
+    // pixel's samples) is still above 1/(2k) get up to 4x samples.
+    if(j>=0){ float hv=previous_history[uint(j)*2u].y; boost=uint(clamp(ceil(2.0*hv*float(pc.k)),1.0,4.0)); k*=boost; }
+#endif
 #ifndef REPLAY_FROM_XPRIME
     // Replay from the previous pixel's anchor y (the point H_{t-1} estimates): the filtered
     // difference then also corrects the sub-pixel anchor shift under camera motion.
@@ -289,7 +300,7 @@ void samples(uint id) {
         else { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=path(true,q.light_pos_interval,xp,np,yprim,stream); }
         s1+=f1; sd+=f1-f0; ss1+=f1*f1;
     }
-    scratch[id]=vec4(s1/float(k), same ? 0.0 : sd/float(r), float(j), ss1/float(k));
+    scratch[id]=vec4(s1/float(k), same ? 0.0 : sd/float(r), j<0 ? -1.0 : float(uint(j)*8u+boost), ss1/float(k));
 }
 // Combine pass: geometry-aware box filter of the replay difference only (radiance is never
 // filtered), then H = (1-w) f1 + w (H_{t-1} + filtered difference).
@@ -299,34 +310,62 @@ void combine(uint id) {
     float direct=a2.z, H, v, m1, m2, dd=0.0, count, replays=0.0;
     if(c.z<0.0) { H=c.x; m1=c.x; m2=c.w; v=1.0/float(pc.k_new); count=1.0; }
     else {
-        uint j=uint(c.z); vec4 h0=previous_history[j*2u], h1=previous_history[j*2u+1u];
+        uint j=uint(c.z)/8u; float kp=float(pc.k*(uint(c.z)%8u)); vec4 h0=previous_history[j*2u], h1=previous_history[j*2u+1u];
         uint w=p.counts.y, h=p.counts.z; int cx=int(id%w), cy=int(id/w);
         vec3 x=a0.xyz, n=a1.xyz; uint inst=floatBitsToUint(a1.w);
         float dist=length(x-p.camera_pos_near.xyz), tol=4.0*float(RADIUS)*dist*p.camera_right_tan_x.w/float(w);
         float sum=0.0, num=0.0, fsum=0.0; bool changed=false;
+#if LINEAR_D
+        // Local regression of the replay difference on the anchor shift (x - y) in the tangent
+        // plane: d ~ a + g.(x - y). a estimates the scene change, g the spatial gradient, so each
+        // pixel is corrected for its own sub-pixel shift instead of the window-mean shift.
+        vec3 helper=abs(n.z)<0.999 ? vec3(0,0,1) : vec3(0,1,0), tu=normalize(cross(helper,n)), tv=cross(n,tu);
+        float fp=max(2.0*dist*p.camera_right_tan_x.w/float(w),1.0e-12);
+        float s00=0.0,s01=0.0,s02=0.0,s11=0.0,s12=0.0,s22=0.0,r0=0.0,r1=0.0,r2=0.0;
+#endif
+        // Nothing changed this frame: every difference is exactly zero, skip the filter.
+        if((pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u)
         for(int dy=-RADIUS;dy<=RADIUS;dy++)for(int dx=-RADIUS;dx<=RADIUS;dx++) {
             int ox=cx+dx, oy=cy+dy; if(ox<0||oy<0||ox>=int(w)||oy>=int(h)) continue;
             uint o=uint(oy)*w+uint(ox); vec4 co=scratch[o]; if(co.z<0.0) continue;
             vec4 b0=anchors[o*3u], b1=anchors[o*3u+1u];
             if(floatBitsToUint(b1.w)!=inst || dot(b1.xyz,n)<0.95 || abs(dot(n,b0.xyz-x))>tol) continue;
             sum+=co.y; fsum+=co.x; num+=1.0; changed=changed||co.y!=0.0;
+#if LINEAR_D
+            vec3 sh=b0.xyz-previous_anchors[(uint(co.z)/8u)*3u].xyz; float u=dot(sh,tu)/fp, vv=dot(sh,tv)/fp;
+            s00+=1.0; s01+=u; s02+=vv; s11+=u*u; s12+=u*vv; s22+=vv*vv; r0+=co.y; r1+=co.y*u; r2+=co.y*vv;
+#endif
         }
-        float D=num>0.0 ? sum/num : c.y;
+        float D=num>0.0 ? sum/num : c.y, A=D;
+#if LINEAR_D
+        if(num>=6.0) {
+            float lam=0.25*num; s11+=lam; s22+=lam;  // ridge on the gradient terms only
+            float c00=s11*s22-s12*s12, c01=s02*s12-s01*s22, c02=s01*s12-s02*s11;
+            float det=s00*c00+s01*c01+s02*c02;
+            if(abs(det)>1.0e-20) {
+                float ga=(r0*c00+r1*c01+r2*c02)/det;
+                float gu=(r0*c01+r1*(s00*s22-s02*s02)+r2*(s01*s02-s00*s12))/det;
+                float gv=(r0*c02+r1*(s01*s02-s00*s12)+r2*(s00*s11-s01*s01))/det;
+                vec3 sh=x-previous_anchors[j*3u].xyz;
+                A=ga; D=ga+gu*dot(sh,tu)/fp+gv*dot(sh,tv)/fp;
+            }
+        }
+#endif
         uint tile=(id/w/16u)*((w+15u)/16u)+(id%w)/16u;
         bool moved=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u;
         float r=moved ? tile_ratio[tile] : 0.0, hv=h0.y;
         // r: per-replay variance of the filtered difference in units of the per-sample variance;
         // with re replays per pixel this minimizes (1-w)^2/k + w r/re + w^2 v.
-        float re=float(min(uint(REPLAYS),pc.k));
-        float wt=clamp((1.0-0.5*float(pc.k)*r/re)/(1.0+float(pc.k)*hv),0.0,1.0-1.0/float(pc.n_max));
+        float re=min(float(REPLAYS),kp);
+        float wt=clamp((1.0-0.5*kp*r/re)/(1.0+kp*hv),0.0,1.0-1.0/float(pc.n_max));
         // A filtered difference is biased where the change has edges, and that bias is
         // amplified by w/(1-w) in the history; limit the history where the change is large.
         // Relative to the window mean of fresh samples, not to this pixel's own values
         // (weights coupled to a pixel's own samples are biased).
-        float rel=num>0.0 ? abs(D)/max(fsum/num,1.0e-12) : 0.0;
+        float rel=num>0.0 ? abs(A)/max(fsum/num,1.0e-12) : 0.0;
         wt=min(wt,1.0-clamp(GAMMA*rel,0.0,1.0));
         H=(1.0-wt)*c.x+wt*(h0.x+D);
-        v=(1.0-wt)*(1.0-wt)/float(pc.k)+wt*r/re+wt*wt*hv;
+        v=(1.0-wt)*(1.0-wt)/kp+wt*r/re+wt*wt*hv;
         dd=moved ? D*D : 0.0; replays=moved ? 1.0 : 0.0;
         m1=mix(h0.z,c.x,BETA); m2=mix(h0.w,c.w,BETA); count=min(h1.y+1.0,float(pc.n_max));
     }
