@@ -512,7 +512,13 @@
       "surface_incident_residual_correction_quality_rejections": 6,
       "surface_incident_residual_correction_study_complete": true,
       "surface_anchor_coupled_difference_protocol": "experiments/031-surface-anchor-coupled-path-difference.md",
-      "surface_anchor_coupled_difference_status": "PREREGISTERED_NOT_RUN"
+      "surface_anchor_coupled_difference_status": "STOP_FIRST_PARENT_CHILD_CPU_LIMIT_INCOMPATIBILITY_NO_RETRY",
+      "surface_anchor_coupled_difference_cpu_contracts": "results/199-surface-anchor-coupled-path-cpu-contracts.json",
+      "surface_anchor_coupled_difference_first_failure": "results/200-surface-anchor-coupled-path-first-launch-failure.json",
+      "surface_anchor_coupled_difference_outcome": "results/201-surface-anchor-coupled-path-first-failure-outcome.md",
+      "surface_anchor_coupled_difference_verification": "results/202-surface-anchor-coupled-path-first-failure-verification.json",
+      "surface_anchor_coupled_difference_stopped": true,
+      "surface_anchor_coupled_difference_valid_quality_targets": 0
     }
   ]
 }
