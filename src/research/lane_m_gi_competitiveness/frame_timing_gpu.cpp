@@ -123,8 +123,8 @@ struct Runtime {
         u32 seed=jenkins(0x0a440000u+samples);double us=0;std::vector<double> parts;
         auto add=[&](double x){us+=x;parts.push_back(x);};
         if(role=="neutral"){u32 count=parameter>>16,iterations=parameter&0xffff;for(u32 k=0;k<count;k++)add(submit([&]{std::array<u32,4> push{iterations*64,N,seed+k,0};neutral->record(command,N/64,1,1,push.data(),16);}));}
-        else if(role=="PT_REF"){u32 chunks=parameter/64;need(parameter%64==0&&chunks>0,"044 reference chunks");
-            for(u32 k=0;k<chunks;k++)add(submit([&]{dispatch_producer(producer,64,seed^jenkins(k));barrier();std::array<u32,4> push{k==0?0u:1u,N,chunks,0};accumulate->record(command,N/64,1,1,push.data(),16);}));}
+        else if(role=="PT_REF"){u32 chunk=std::min(parameter,64u),chunks=chunk?parameter/chunk:0;need(chunk>0&&parameter%chunk==0&&chunks>0,"044 reference chunks");
+            for(u32 k=0;k<chunks;k++)add(submit([&]{dispatch_producer(producer,chunk,seed^jenkins(k));barrier();std::array<u32,4> push{k==0?0u:1u,N,chunks,0};accumulate->record(command,N/64,1,1,push.data(),16);}));}
         else if(role=="PTR")add(submit([&]{dispatch_producer(producer,parameter,seed);barrier();reconstruction();}));
         else if(role=="RSR"){
             u32 index=frame_index++;
@@ -155,14 +155,14 @@ static void campaign(Runtime& run,const std::vector<Comparison>& list,u32 proces
 }
 int main(int argc,char** argv){fs::path output;
     try{
-        need(argc>=2,"044 usage --calibration|--target ...");std::string mode=argv[1];need(mode=="--calibration"||mode=="--target"||mode=="--cpu-check","044 mode");std::map<std::string,std::string> args;
+        need(argc>=2,"044 usage --calibration|--target ...");std::string mode=argv[1];need(mode=="--calibration"||mode=="--target"||mode=="--cpu-check"||mode=="--capture","044 mode");std::map<std::string,std::string> args;
         for(int j=2;j<argc;j+=2){need(j+1<argc&&args.emplace(argv[j],argv[j+1]).second,"044 duplicate/missing option");}
         auto has=[&](std::initializer_list<const char*> keys){for(auto k:keys)if(!args.contains(k))return false;return args.size()==keys.size();};
-        bool calibration=mode=="--calibration";
-        need(calibration?has({"--out","--shaders","--process","--tiny","--short","--multi","--measured"}):has({"--state","--out","--vertices","--shaders","--offsets","--process","--reference-spp","--recon-spp","--measured"}),"044 options");
-        MEASURED=integer(args["--measured"]);need(MEASURED==12||MEASURED==32,"045 measured pairs");
+        bool calibration=mode=="--calibration",capture=mode=="--capture";
+        need(capture?has({"--state","--out","--vertices","--shaders","--offsets","--role","--spp"}):calibration?has({"--out","--shaders","--process","--tiny","--short","--multi","--measured"}):has({"--state","--out","--vertices","--shaders","--offsets","--process","--reference-spp","--recon-spp","--measured"}),"044 options");
+        if(!capture)MEASURED=integer(args["--measured"]);need(MEASURED==12||MEASURED==32,"045 measured pairs");
         fs::path target=args["--out"];need(!fs::exists(target)&&fs::is_directory(target.parent_path()),"044 exclusive output");
-        u32 process=integer(args["--process"]);need(process<8,"044 process index");std::optional<State> state;u32 vertices=0;
+        u32 process=capture?0:integer(args["--process"]);need(process<8,"044 process index");std::optional<State> state;u32 vertices=0;
         if(!calibration){state=load_state(args["--state"]);vertices=integer(args["--vertices"]);need(vertices==2||vertices==8,"044 depth");
             for(const char* name:{"integrated_producer.spv","surface_quadratic_device.spv","integrated_composite.spv","physical_producer.spv","reuse_s0.spv","reuse_s1.spv","reuse_s2.spv","reuse_s3.spv","reuse_s4.spv","timing_accumulate.spv","timing_copy.spv"})shader(fs::path(args["--shaders"])/name);}
         shader(fs::path(args["--shaders"])/"timing_neutral.spv");
@@ -173,7 +173,7 @@ int main(int argc,char** argv){fs::path output;
         if(calibration){u32 t=integer(args["--tiny"]),s=integer(args["--short"]),l=integer(args["--multi"]);need(t>0&&s>0&&l>0&&t%100==0&&s%100==0&&l%100==0&&s*12/10<=0xffff,"044 calibration iterations");
             for(auto [size,count,base]:{std::tuple{"tiny",1u,t},std::tuple{"short",1u,s},std::tuple{"multi",16u,l}})for(u32 delta:{0u,5u,10u,20u})
                 list.push_back({std::string(size)+"-plus"+std::to_string(delta),"neutral",(count<<16)|base,"neutral",(count<<16)|(base*(100+delta)/100)});}
-        else{u32 ref=integer(args["--reference-spp"]),recon=integer(args["--recon-spp"]);need((ref==256||ref==1024)&&(recon==16||recon==64),"044 registered rungs");
+        else if(!capture){u32 ref=integer(args["--reference-spp"]),recon=integer(args["--recon-spp"]);need((ref==16||ref==64||ref==256||ref==1024)&&(recon==4||recon==16||recon==64),"044 registered rungs");
             list={{"T1","PT_REF",ref,"PTR",recon},{"T2","PTR",1,"RSR",0},{"T3","PTR",4,"RSR",0},{"T4","PTR",16,"RSR",0}};}
         double setup_us=0;u32 samples=0,submits=0;
         {
@@ -181,7 +181,11 @@ int main(int argc,char** argv){fs::path output;
             std::unique_ptr<b::B002HwrtTraversal> hwrt;if(state)hwrt=std::make_unique<b::B002HwrtTraversal>(context,state->triangles,"",false);
             Runtime run(context,output);run.allocate(state?&*state:nullptr,hwrt.get(),args["--shaders"],state?fs::path(args["--offsets"]):fs::path(),vertices);run.device();
             setup_us=std::chrono::duration<double,std::micro>(Clock::now()-start).count();
-            campaign(run,list,process);samples=run.samples;submits=run.submits;Ledger::instance().phase("teardown");
+            if(capture){std::string role=args["--role"];u32 spp=integer(args["--spp"]);need(role=="PT_REF"||role=="PTR","046 capture role");double us=run.sample(role,spp);
+                const float* image=run.map<float>(role=="PT_REF"?ACC:FINAL);std::vector<float> out(2ull*N);for(u32 j=0;j<N;j++){out[2*j]=image[4*j];out[2*j+1]=image[4*j+1];}
+                std::ofstream img(output/"image.f32",std::ios::binary);img.write(reinterpret_cast<const char*>(out.data()),std::streamsize(out.size()*4));need(bool(img),"046 image write");
+                std::ofstream cj(output/"capture.json");cj<<std::setprecision(17)<<"{\"role\":"<<std::quoted(role)<<",\"spp\":"<<spp<<",\"gpu_us_diagnostic\":"<<us<<"}\n";}
+            else campaign(run,list,process);samples=run.samples;submits=run.submits;Ledger::instance().phase("teardown");
         }
         Ledger::instance().save(output/"allocation-ledger.json");need(reserved_bytes==0,"044 ownership teardown");
         std::ofstream f(output/"complete.json");f<<std::setprecision(17)<<"{\"complete\":true,\"gpu_initialized\":true,\"mode\":"<<std::quoted(mode)<<",\"process\":"<<process<<",\"comparisons\":"<<list.size()<<",\"pairs_per_comparison\":"<<WARMUP+MEASURED<<",\"warmup_pairs\":"<<WARMUP<<",\"measured_pairs\":"<<MEASURED<<",\"samples\":"<<samples<<",\"submits\":"<<submits<<",\"aggregate_reserved_peak\":"<<reserved_peak<<",\"aggregate_reserved_at_teardown\":"<<reserved_bytes<<",\"setup_wall_us\":"<<setup_us<<",\"accepted_timing_requires_analysis\":true}\n";
