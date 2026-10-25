@@ -503,7 +503,14 @@
       "surface_incident_residual_other_targets_not_run": 5,
       "surface_incident_residual_stopped": true,
       "surface_incident_residual_correction_protocol": "experiments/030-signed-residual-scoring-and-provenance-correction.md",
-      "surface_incident_residual_correction_status": "PREREGISTERED_NOT_RUN"
+      "surface_incident_residual_correction_status": "SIX_TARGETS_COMPLETE_0_JOINT_PASS_6_QUALITY_REJECTIONS_NO_GPU",
+      "surface_incident_residual_correction_cpu_contracts": "results/195-signed-residual-correction-cpu-contracts.json",
+      "surface_incident_residual_correction_six_target_summary": "results/196-signed-residual-correction-six-target-summary.json",
+      "surface_incident_residual_correction_outcome": "results/197-signed-residual-correction-six-target-outcome.md",
+      "surface_incident_residual_correction_verification": "results/198-signed-residual-correction-six-target-verification.json",
+      "surface_incident_residual_correction_joint_passes": 0,
+      "surface_incident_residual_correction_quality_rejections": 6,
+      "surface_incident_residual_correction_study_complete": true
     }
   ]
 }
