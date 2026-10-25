@@ -549,15 +549,20 @@
       "restir_gi_analytic_device_configurations": 96,
       "restir_gi_analytic_device_m001_physical_or_quality_qualified": false,
       "restir_gi_physical_candidate_protocol": "experiments/035-restir-gi-physical-candidate-semantics.md",
-      "restir_gi_physical_candidate_status": "CPU_PHYSICAL_CANDIDATE_EXTRACTION_PASS",
+      "restir_gi_physical_candidate_status": "STOP_AUDIT_WALL_LIMIT_NOT_ENFORCED_NO_RETRY",
       "restir_gi_physical_candidate_cpu_preparation": "results/215-restir-gi-physical-candidate-cpu-preparation.json",
       "restir_gi_physical_candidate_six_targets": "results/216-restir-gi-physical-candidate-six-targets.json",
       "restir_gi_physical_candidate_outcome": "results/217-restir-gi-physical-candidate-outcome.md",
       "restir_gi_physical_candidate_verification": "results/218-restir-gi-physical-candidate-verification.json",
       "restir_gi_physical_candidate_study_complete": true,
-      "restir_gi_physical_candidate_targets_passed": 6,
+      "restir_gi_physical_candidate_targets_passed": 0,
       "restir_gi_physical_candidate_gpu_executed": false,
-      "restir_gi_physical_candidate_hdr_quality_scored": false
+      "restir_gi_physical_candidate_hdr_quality_scored": false,
+      "restir_gi_physical_candidate_numerical_targets_passed": 6,
+      "restir_gi_physical_candidate_admission_withdrawn": true,
+      "restir_gi_physical_candidate_audit_envelope_supersession": "results/219-restir-gi-physical-audit-envelope-supersession.json",
+      "restir_gi_physical_candidate_audit_envelope_outcome": "results/220-restir-gi-physical-audit-envelope-outcome.md",
+      "restir_gi_physical_candidate_audit_envelope_verification": "results/221-restir-gi-physical-audit-envelope-verification.json"
     }
   ]
 }
