@@ -1,0 +1,357 @@
+{
+  "schema": "m001-restir039-frozen-endpoint-diagnosis/1",
+  "source_commit": "d5653ad056c0f16ba5463deb7dfb6150747f7083",
+  "preregistration_commit": "a8a5ee33",
+  "complete": true,
+  "diagnostic_execution_pass": true,
+  "classification": "FROZEN_ENDPOINT_DIAGNOSIS_EXECUTED_NO_ADMISSION",
+  "physical_bridge_admitted": false,
+  "old038_still_stopped": true,
+  "lane_m_complete": false,
+  "new_gpu_acquisitions": 0,
+  "total_assistant_gpu_acquisitions": 187,
+  "new_reference_samples": 0,
+  "new_path_acquisitions": 0,
+  "full037_audit_reexecuted": false,
+  "hdr_quality_scored": false,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "diagnostic_study_id": "039",
+  "raw_inherited_study_metadata_tag": "038",
+  "raw_inherited_study_tag_authoritative": false,
+  "rows": [
+    {
+      "seed": 2986604111,
+      "seed_index": 0,
+      "paths": 57600,
+      "secondary_hits": 1338,
+      "paired_original_observed_bytes_exact": true,
+      "direction_failed_pixels": 0,
+      "direction_failed_components": 0,
+      "indirect_recovery_failed_pixels": 0,
+      "saved_unpacked_hemisphere_failures": 0,
+      "saved_unpacked_visibility_failures": 0,
+      "saved_packed_hemisphere_failures": 0,
+      "saved_packed_visibility_failures": 0,
+      "distance": {
+        "count": 1338,
+        "zero": 0,
+        "minimum": 0.004658817795782551,
+        "median": 1.9482894336755807,
+        "p90": 4.113983776411095,
+        "p99": 5.503250321364421,
+        "maximum": 6.79618596521272
+      },
+      "direction_absolute_error": {
+        "count": 4014,
+        "zero": 0,
+        "minimum": 1.6110723866091803e-13,
+        "median": 2.6973366928917386e-08,
+        "p90": 8.853234311212439e-08,
+        "p99": 6.863447995952817e-07,
+        "maximum": 3.270017651446633e-05
+      },
+      "position_absolute_error": {
+        "count": 4014,
+        "zero": 0,
+        "minimum": 9.094947017729282e-13,
+        "median": 5.292332261319643e-08,
+        "p90": 2.2246532722647323e-07,
+        "p99": 4.762644338285321e-07,
+        "maximum": 8.690816173384519e-07
+      },
+      "recovery_absolute_error": {
+        "count": 172800,
+        "zero": 169107,
+        "minimum": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "p99": 5.8079862232407375e-12,
+        "maximum": 1.0705931218704944e-09
+      },
+      "failed_pixel_ids": []
+    },
+    {
+      "seed": 982220487,
+      "seed_index": 1,
+      "paths": 57600,
+      "secondary_hits": 1353,
+      "paired_original_observed_bytes_exact": true,
+      "direction_failed_pixels": 0,
+      "direction_failed_components": 0,
+      "indirect_recovery_failed_pixels": 0,
+      "saved_unpacked_hemisphere_failures": 0,
+      "saved_unpacked_visibility_failures": 0,
+      "saved_packed_hemisphere_failures": 0,
+      "saved_packed_visibility_failures": 0,
+      "distance": {
+        "count": 1353,
+        "zero": 0,
+        "minimum": 0.002254359374395672,
+        "median": 1.804503742267088,
+        "p90": 3.991281722712362,
+        "p99": 5.744719875061022,
+        "maximum": 6.620559186441415
+      },
+      "direction_absolute_error": {
+        "count": 4059,
+        "zero": 0,
+        "minimum": 1.3542444943226428e-11,
+        "median": 2.710785496073953e-08,
+        "p90": 9.860278806228544e-08,
+        "p99": 6.711940138209519e-07,
+        "maximum": 1.1409747135093795e-05
+      },
+      "position_absolute_error": {
+        "count": 4059,
+        "zero": 0,
+        "minimum": 6.896705428971472e-13,
+        "median": 5.169479067035354e-08,
+        "p90": 2.0932570237164355e-07,
+        "p99": 4.6724786429308567e-07,
+        "maximum": 1.0384017059550388e-06
+      },
+      "recovery_absolute_error": {
+        "count": 172800,
+        "zero": 169128,
+        "minimum": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "p99": 5.663255701795663e-12,
+        "maximum": 8.765941218887539e-10
+      },
+      "failed_pixel_ids": []
+    },
+    {
+      "seed": 698117592,
+      "seed_index": 2,
+      "paths": 57600,
+      "secondary_hits": 1349,
+      "paired_original_observed_bytes_exact": true,
+      "direction_failed_pixels": 1,
+      "direction_failed_components": 3,
+      "indirect_recovery_failed_pixels": 0,
+      "saved_unpacked_hemisphere_failures": 0,
+      "saved_unpacked_visibility_failures": 0,
+      "saved_packed_hemisphere_failures": 0,
+      "saved_packed_visibility_failures": 0,
+      "distance": {
+        "count": 1349,
+        "zero": 0,
+        "minimum": 0.0012378197745798493,
+        "median": 1.788596498639499,
+        "p90": 3.921411081842532,
+        "p99": 5.151110043953203,
+        "maximum": 6.948575594717982
+      },
+      "direction_absolute_error": {
+        "count": 4047,
+        "zero": 0,
+        "minimum": 2.285494016263101e-11,
+        "median": 2.818398947557199e-08,
+        "p90": 9.883449074710171e-08,
+        "p99": 7.051692115878082e-07,
+        "maximum": 0.0003023717702514972
+      },
+      "position_absolute_error": {
+        "count": 4047,
+        "zero": 0,
+        "minimum": 4.3107184488633266e-13,
+        "median": 5.142188364004596e-08,
+        "p90": 2.1785103108129535e-07,
+        "p99": 4.46246720144927e-07,
+        "maximum": 9.165965195734316e-07
+      },
+      "recovery_absolute_error": {
+        "count": 172800,
+        "zero": 169125,
+        "minimum": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "p99": 5.657078538251707e-12,
+        "maximum": 5.33945060430754e-09
+      },
+      "failed_pixel_ids": [
+        32498
+      ]
+    },
+    {
+      "seed": 3596849703,
+      "seed_index": 3,
+      "paths": 57600,
+      "secondary_hits": 1360,
+      "paired_original_observed_bytes_exact": true,
+      "direction_failed_pixels": 0,
+      "direction_failed_components": 0,
+      "indirect_recovery_failed_pixels": 0,
+      "saved_unpacked_hemisphere_failures": 0,
+      "saved_unpacked_visibility_failures": 0,
+      "saved_packed_hemisphere_failures": 0,
+      "saved_packed_visibility_failures": 0,
+      "distance": {
+        "count": 1360,
+        "zero": 0,
+        "minimum": 0.005627463866399971,
+        "median": 1.8629966266979863,
+        "p90": 4.029472648351652,
+        "p99": 5.653921200623447,
+        "maximum": 7.6473128817059095
+      },
+      "direction_absolute_error": {
+        "count": 4080,
+        "zero": 0,
+        "minimum": 2.3961943540484754e-12,
+        "median": 2.842132762470584e-08,
+        "p90": 1.0502704415604744e-07,
+        "p99": 9.093356073819337e-07,
+        "maximum": 6.4203802123685705e-06
+      },
+      "position_absolute_error": {
+        "count": 4080,
+        "zero": 0,
+        "minimum": 1.8815171642927453e-11,
+        "median": 5.338268493915166e-08,
+        "p90": 2.262431458177616e-07,
+        "p99": 4.809616505241366e-07,
+        "maximum": 9.982128688079683e-07
+      },
+      "recovery_absolute_error": {
+        "count": 172800,
+        "zero": 169050,
+        "minimum": 0.0,
+        "median": 0.0,
+        "p90": 0.0,
+        "p99": 6.024619576681333e-12,
+        "maximum": 8.525821935245889e-10
+      },
+      "failed_pixel_ids": []
+    }
+  ],
+  "paths": 230400,
+  "secondary_hits": 5400,
+  "direction_failed_pixels": 1,
+  "direction_failed_components": 3,
+  "all_four_saved_paired_images_primary_source_bytes_exact": true,
+  "indirect_recovery_failed_pixels": 0,
+  "every_failure": [
+    {
+      "pixel": 32498,
+      "x": 178,
+      "y": 101,
+      "failed_components": [
+        true,
+        true,
+        true
+      ],
+      "origin": [
+        0.06935416907072067,
+        1.0000000116860974e-07,
+        -2.177694320678711
+      ],
+      "endpoint": [
+        0.06849999725818634,
+        0.00036217563319951296,
+        -2.178513765335083
+      ],
+      "generated_direction": [
+        -0.6903072595596313,
+        0.2926149368286133,
+        -0.6617040634155273
+      ],
+      "endpoint_direction": [
+        -0.6900615340583504,
+        0.2925107843920517,
+        -0.6620064351857788
+      ],
+      "direction_error": [
+        0.00024572550128099113,
+        -0.00010415243656158868,
+        -0.0003023717702514972
+      ],
+      "intersection_t": 0.001237379154190421,
+      "endpoint_distance": 0.0012378197745798493,
+      "barycentric_endpoint_minus_ray_endpoint": [
+        4.3107184488633266e-13,
+        1.0161871344394058e-11,
+        -6.658420588223635e-07
+      ],
+      "local_float32_spacing": [
+        7.450580596923828e-09,
+        2.9103830456733704e-11,
+        2.384185791015625e-07
+      ],
+      "primary_primitive": 301,
+      "secondary_primitive": 1194,
+      "primitive_normal_dot": 0.0,
+      "primitive_plane_gap": 0.0,
+      "source_pdf": 0.09314222633838654,
+      "source_cosine": 0.2926149368286133,
+      "geometric_cosine": 0.2925107843920517,
+      "original_raw": [
+        4.89034027850721e-05,
+        1.5001524843683e-05,
+        6.3904924900271e-05,
+        1.0
+      ],
+      "recovery_error": [
+        -5.33945060430754e-09,
+        -5.33945060430754e-09,
+        -5.33945060430754e-09
+      ],
+      "recovery_failed": false,
+      "sdk_output": [
+        [
+          1.4996185200288892e-05,
+          1.4996185200288892e-05,
+          1.4996185200288892e-05,
+          1.0
+        ],
+        [
+          10.736268997192383,
+          0.2925107777118683,
+          1.0,
+          1.0
+        ],
+        [
+          6.389958434738219e-05,
+          6.389958434738219e-05,
+          6.389958434738219e-05,
+          1.0
+        ],
+        [
+          1.5082671779964585e-05,
+          1.4988280781835783e-05,
+          1.4871766325086355e-05,
+          1.0
+        ],
+        [
+          10.736268997192383,
+          0.2925107777118683,
+          1.0,
+          1.0
+        ],
+        [
+          6.398607365554199e-05,
+          6.389168265741318e-05,
+          6.377516547217965e-05,
+          1.0
+        ]
+      ]
+    }
+  ],
+  "actual_numeric_envelope": {
+    "pid": 1424847,
+    "cpu_seconds": 1200,
+    "outer_wall_seconds": 1800,
+    "address_bytes": 4294967296,
+    "returncode": 0,
+    "reaped": true,
+    "timed_out": false
+  },
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir039-endpoint-diagnosis-v1/result.json",
+  "raw_receipt_sha256": "b1e1809fefdbda89a718be04ba88301693c9beb82d30ac98423c9f2dd633c59d",
+  "input_manifest": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir039-summary-v1/consumed-input-sha256.json",
+  "input_manifest_sha256": "735b52b67034acab594ad3e68486804a8048cde6cf99bbf5c9306e98f0162ae6",
+  "payload_manifest": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir039-summary-v1/all-payload-sha256.json",
+  "payload_manifest_sha256": "4d5aa96b196f641d12f48a84c311b0a4c1236ae1bfe6bffc14f67e15755f9da1"
+}

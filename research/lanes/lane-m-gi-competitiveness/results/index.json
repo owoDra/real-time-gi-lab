@@ -587,7 +587,14 @@
       "restir_gi_physical_gpu_include_verification": "results/232-restir-gi-physical-gpu-stop-verification.json",
       "restir_gi_physical_gpu_conditions_executed": 1,
       "restir_gi_physical_gpu_conditions_admitted": 0,
-      "restir_gi_physical_gpu_later_conditions_not_run": 5
+      "restir_gi_physical_gpu_later_conditions_not_run": 5,
+      "restir_gi_endpoint_diagnosis_protocol": "experiments/039-frozen-gpu-endpoint-discrepancy-diagnosis.md",
+      "restir_gi_endpoint_diagnosis_status": "FROZEN_ENDPOINT_DIAGNOSIS_EXECUTED_NO_ADMISSION",
+      "restir_gi_endpoint_diagnosis": "results/233-restir-gi-frozen-endpoint-diagnosis.json",
+      "restir_gi_endpoint_diagnosis_outcome": "results/234-restir-gi-frozen-endpoint-diagnosis-outcome.md",
+      "restir_gi_endpoint_diagnosis_verification": "results/235-restir-gi-frozen-endpoint-diagnosis-verification.json",
+      "restir_gi_endpoint_failed_pixels": 1,
+      "restir_gi_endpoint_old038_still_stopped": true
     }
   ]
 }
