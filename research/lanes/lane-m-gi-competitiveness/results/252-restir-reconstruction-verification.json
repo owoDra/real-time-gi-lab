@@ -1,0 +1,22 @@
+{
+  "schema": "m001-restir043-verification/1",
+  "source_commit": "7b3b431e4b20b50afc28bcb14e5ae67c33597d21",
+  "complete": true,
+  "all_pass": true,
+  "study_complete": true,
+  "classification": "RECONSTRUCTED_RESTIR_PER_FRAME_0_6_STATIC_ACCUMULATED_V1_4_6",
+  "lane_m_complete": false,
+  "new_gpu_acquisitions": 0,
+  "total_assistant_gpu_acquisitions": 204,
+  "new_reference_samples": 0,
+  "accepted_timing": false,
+  "architecture_promoted": false,
+  "rehashed_payloads": 39,
+  "summary_sha256": "903f6c51d551a0c19ecd21e01a11175e733d18d32be5824cebc471fa6e274b2b",
+  "all_lane_m_index_paths": 280,
+  "markdown_links_checked": 451,
+  "research_check_output": "research harness: OK (8 configured lane indexes, 548 declared result links; not runtime validation)\n",
+  "default_build_graph_unchanged": true,
+  "default_renderer_build_and_runtime": "NOT_RERUN",
+  "validation_layers": "NOT_RUN"
+}

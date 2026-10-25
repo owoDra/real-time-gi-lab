@@ -630,7 +630,15 @@
       "restir_gi_reuse_implementation_targets": 6,
       "restir_gi_reuse_null_trial_hypothesis_targets": 6,
       "restir_gi_reuse_quality_passing_targets": 0,
-      "restir_gi_reuse_accepted_timing": false
+      "restir_gi_reuse_accepted_timing": false,
+      "restir_reconstruction_protocol": "experiments/043-restir-reuse-quadratic-reconstruction-cpu-screen.md",
+      "restir_reconstruction_addendum": "experiments/043a-reconstruction-control-bound.md",
+      "restir_reconstruction_status": "RECONSTRUCTED_RESTIR_PER_FRAME_0_6_STATIC_ACCUMULATED_V1_4_6",
+      "restir_reconstruction_summary": "results/250-restir-reconstruction-cpu-screen.json",
+      "restir_reconstruction_outcome": "results/251-restir-reconstruction-cpu-outcome.md",
+      "restir_reconstruction_verification": "results/252-restir-reconstruction-verification.json",
+      "restir_reconstruction_per_frame_passing_targets": 0,
+      "restir_reconstruction_gpu_executed": false
     }
   ]
 }
