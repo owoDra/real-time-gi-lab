@@ -4,6 +4,40 @@
 // Transport is the unchanged n010 raw-PT estimator: grey rho=1, opaque two-sided
 // surfaces, point-light NEE with soft falloff, finite vertex count, black background.
 layout(local_size_x=32) in;
+// 049 development defaults (frozen for 050 by registration)
+#ifndef BILINEAR
+#define BILINEAR 1
+#endif
+#ifndef CAMERA_REPROJECT
+#define CAMERA_REPROJECT 1
+#endif
+#ifndef N_CAM
+#define N_CAM 16
+#endif
+#ifndef THIN_BOOST
+#define THIN_BOOST 1
+#endif
+#ifndef RANGE_SIGMA
+#define RANGE_SIGMA 25
+#endif
+#ifndef NUM_MIN
+#define NUM_MIN 0
+#endif
+#ifndef LINEAR_D
+#define LINEAR_D 1
+#endif
+#ifndef ADAPTIVE
+#define ADAPTIVE 0
+#endif
+#ifndef REPLAYS
+#define REPLAYS 65536
+#endif
+#ifndef GAMMA
+#define GAMMA 4.0
+#endif
+#ifndef RADIUS
+#define RADIUS 4
+#endif
 struct Triangle { vec4 v0; vec4 v1; vec4 v2; uvec4 metadata; };
 struct Params {
     vec4 camera_pos_near; vec4 camera_right_tan_x; vec4 camera_up_tan_y; vec4 camera_forward_far;
@@ -147,8 +181,16 @@ void primary(uint id) {
 }
 // Previous-frame position x' of the same surface point (same triangle and barycentrics in the
 // previous scene) and the previous pixel q whose stored anchor is coplanar with x' nearby; -1 if none.
+// Bilinear history taps around x' that pass the same validity test (filled by reproject).
+uint bil_j[4]; float bil_w[4]; uint bil_n;
+bool history_tap(uint j, Triangle t, vec3 np, vec3 xp, float footprint, float z) {
+    vec4 a0=previous_anchors[j*3u], a1=previous_anchors[j*3u+1u], a2=previous_anchors[j*3u+2u];
+    if(a2.w!=1.0 || floatBitsToUint(a1.w)!=t.metadata.z) return false;
+    vec3 tn=np; if(dot(tn,a1.xyz)<0.0) tn=-tn;
+    return !(dot(tn,a1.xyz)<0.999 || abs(dot(tn,a0.xyz-xp))>1.0e-3*footprint+1.0e-6*z || length(a0.xyz-xp)>2.0*footprint);
+}
 int reproject(vec3 normal, uint prim, vec2 b, out vec3 xp, out vec3 np) {
-    Triangle t=previous_triangles[prim];
+    Triangle t=previous_triangles[prim]; bil_n=0u;
     xp=t.v0.xyz+b.x*(t.v1.xyz-t.v0.xyz)+b.y*(t.v2.xyz-t.v0.xyz);
     np=normalize(cross(t.v1.xyz-t.v0.xyz,t.v2.xyz-t.v0.xyz));
     if(dot(np,normal)<0.0) np=-np;
@@ -162,12 +204,24 @@ int reproject(vec3 normal, uint prim, vec2 b, out vec3 xp, out vec3 np) {
     int ix=int(floor(fx+0.5)), iy=int(floor(fy+0.5));
     if(ix<0||iy<0||ix>=int(w)||iy>=int(h)) return -1;
     uint j=uint(iy)*w+uint(ix);
-    vec4 a0=previous_anchors[j*3u], a1=previous_anchors[j*3u+1u], a2=previous_anchors[j*3u+2u];
-    if(a2.w!=1.0 || floatBitsToUint(a1.w)!=t.metadata.z) return -1;
-    vec3 tn=np; if(dot(tn,a1.xyz)<0.0) tn=-tn;
     float footprint=2.0*z*q.camera_right_tan_x.w/float(w);
-    if(dot(tn,a1.xyz)<0.999 || abs(dot(tn,a0.xyz-xp))>1.0e-3*footprint+1.0e-6*z || length(a0.xyz-xp)>2.0*footprint) return -1;
+    if(!history_tap(j,t,np,xp,footprint,z)) return -1;
+    int x0=int(floor(fx)), y0=int(floor(fy)); float ax=fx-float(x0), ay=fy-float(y0), total=0.0;
+    for(int c=0;c<4;c++){int xx=x0+(c&1), yy=y0+(c>>1);
+        if(xx<0||yy<0||xx>=int(w)||yy>=int(h)) continue; uint o=uint(yy)*w+uint(xx);
+        float wt=((c&1)!=0?ax:1.0-ax)*((c>>1)!=0?ay:1.0-ay); if(wt<=0.0||!history_tap(o,t,np,xp,footprint,z)) continue;
+        bil_j[bil_n]=o; bil_w[bil_n]=wt; bil_n++; total+=wt;}
+    if(total>0.0){ for(uint c=0u;c<bil_n;c++) bil_w[c]/=total; } else { bil_j[0]=j; bil_w[0]=1.0; bil_n=1u; }
     return int(j);
+}
+// History at x': bilinear blend of the valid taps (BILINEAR) or the nearest valid pixel.
+void history_at(int j, out vec4 h0, out vec4 h1) {
+#if BILINEAR
+    h0=vec4(0); h1=vec4(0);
+    for(uint c=0u;c<bil_n;c++){ h0+=bil_w[c]*previous_history[bil_j[c]*2u]; h1+=bil_w[c]*previous_history[bil_j[c]*2u+1u]; }
+#else
+    h0=previous_history[uint(j)*2u]; h1=previous_history[uint(j)*2u+1u];
+#endif
 }
 void paths(uint id) {
     vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u];
@@ -192,7 +246,7 @@ void paths(uint id) {
 #endif
         H=s/float(k); m1=H; m2=ss/float(k); v=1.0/float(k); d2=0.0; count=1.0;
     } else {
-        vec4 h0=previous_history[uint(j)*2u], h1=previous_history[uint(j)*2u+1u];
+        vec4 h0, h1; history_at(j,h0,h1);
         float s1=0.0, s0=0.0, ss1=0.0, sd=0.0; uint k=pc.k;
 #if ROLE==2
         // Replay the same primary-sample-space path from x' (the same surface point in the
@@ -255,21 +309,6 @@ void composite(uint id) { float direct=anchors[id*3u+2u].z, indirect=stages[2u*p
 #endif
 
 #if ROLE==4
-#ifndef LINEAR_D
-#define LINEAR_D 1
-#endif
-#ifndef ADAPTIVE
-#define ADAPTIVE 1
-#endif
-#ifndef REPLAYS
-#define REPLAYS 65536
-#endif
-#ifndef GAMMA
-#define GAMMA 4.0
-#endif
-#ifndef RADIUS
-#define RADIUS 4
-#endif
 // Sample pass: fresh samples and the replayed difference d = mean(f1-f0) (0 when nothing changed).
 void samples(uint id) {
     vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u];
@@ -278,18 +317,29 @@ void samples(uint id) {
     if((pc.flags&NO_HISTORY)==0u) j=reproject(n,prim,a2.xy,xp,np);
     uint base=mix32(pc.seed^mix32(id)); float s1=0.0, sd=0.0, ss1=0.0;
     uint k=j<0 ? pc.k_new : pc.k; uint yprim=prim, boost=1u;
+#if THIN_BOOST>1
+    // Thin features detected in the previous frame (few coplanar neighbours) get THIN_BOOST x samples.
+    if(j>=0 && previous_history[uint(j)*2u+1u].z>1.5) boost=uint(THIN_BOOST);
+    k*=boost;
+#endif
 #if ADAPTIVE
     // Pixels whose propagated history variance v (previous frame, data-independent of this
     // pixel's samples) is still above 1/(2k) get up to 4x samples.
     if(j>=0){ float hv=previous_history[uint(j)*2u].y; boost=uint(clamp(ceil(2.0*hv*float(pc.k)),1.0,4.0)); k*=boost; }
 #endif
-#ifndef REPLAY_FROM_XPRIME
+#ifdef REPLAY_FROM_ANCHOR_Y
     // Replay from the previous pixel's anchor y (the point H_{t-1} estimates): the filtered
     // difference then also corrects the sub-pixel anchor shift under camera motion.
     if(j>=0){ vec4 b0=previous_anchors[uint(j)*3u], b1=previous_anchors[uint(j)*3u+1u]; xp=b0.xyz; np=b1.xyz; yprim=floatBitsToUint(b0.w); }
 #endif
     bool same_point=j>=0 && all(equal(xp,x)) && (pc.flags&GEOMETRY_CHANGED)==0u;
     bool same=j<0 || (same_point && (pc.flags&LIGHT_CHANGED)==0u);
+#if CAMERA_REPROJECT
+    // Camera-only frames: the scene radiance did not change, so the history is reprojected
+    // (bilinear) like established accumulation, without a replay (049 dev: anchor-shift
+    // replays were too decorrelated to pay for their cost).
+    if((pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED))==0u) same=true;
+#endif
     // The first REPLAYS samples are replayed (default: all). Replaying fewer was tried in 049
     // development and lost more quality than it saved cost.
     uint r=min(uint(REPLAYS),k);
@@ -307,10 +357,18 @@ void samples(uint id) {
 void combine(uint id) {
     vec4 a0=anchors[id*3u], a1=anchors[id*3u+1u], a2=anchors[id*3u+2u], c=scratch[id];
     if(a2.w!=1.0) { pixels[id]=vec4(0,0,0,1); history[id*2u]=vec4(0); history[id*2u+1u]=vec4(0); return; }
-    float direct=a2.z, H, v, m1, m2, dd=0.0, count, replays=0.0;
+    float direct=a2.z, H, v, m1, m2, dd=0.0, count, replays=0.0, thin_flag=1.0;
     if(c.z<0.0) { H=c.x; m1=c.x; m2=c.w; v=1.0/float(pc.k_new); count=1.0; }
     else {
         uint j=uint(c.z)/8u; float kp=float(pc.k*(uint(c.z)%8u)); vec4 h0=previous_history[j*2u], h1=previous_history[j*2u+1u];
+        bool camera_only=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED))==0u && (pc.flags&CAMERA_CHANGED)!=0u;
+#if CAMERA_REPROJECT
+        if(camera_only){ vec3 xp0,np0; if(reproject(a1.xyz,floatBitsToUint(a0.w),a2.xy,xp0,np0)>=0) history_at(int(j),h0,h1); }
+#endif
+#ifndef REPLAY_FROM_ANCHOR_Y
+        // x' replays estimate the change at the same surface point; the history at x' is resampled.
+        { vec3 xp0,np0; if(reproject(a1.xyz,floatBitsToUint(a0.w),a2.xy,xp0,np0)>=0) history_at(int(j),h0,h1); }
+#endif
         uint w=p.counts.y, h=p.counts.z; int cx=int(id%w), cy=int(id/w);
         vec3 x=a0.xyz, n=a1.xyz; uint inst=floatBitsToUint(a1.w);
         float dist=length(x-p.camera_pos_near.xyz), tol=4.0*float(RADIUS)*dist*p.camera_right_tan_x.w/float(w);
@@ -330,15 +388,27 @@ void combine(uint id) {
             uint o=uint(oy)*w+uint(ox); vec4 co=scratch[o]; if(co.z<0.0) continue;
             vec4 b0=anchors[o*3u], b1=anchors[o*3u+1u];
             if(floatBitsToUint(b1.w)!=inst || dot(b1.xyz,n)<0.95 || abs(dot(n,b0.xyz-x))>tol) continue;
-            sum+=co.y; fsum+=co.x; num+=1.0; changed=changed||co.y!=0.0;
+#if RANGE_SIGMA>0
+            // Range weight from the previous-frame history (smooth): neighbours whose radiance
+            // level differs strongly are unlikely to share this pixel's change.
+            float hq=previous_history[(uint(co.z)/8u)*2u].x, hp=h0.x;
+            float wr=exp(-abs(hq-hp)/(float(RANGE_SIGMA)*0.01*max(0.5*(abs(hq)+abs(hp)),1.0e-12)));
+#else
+            float wr=1.0;
+#endif
+            sum+=wr*co.y; fsum+=wr*co.x; num+=wr; changed=changed||co.y!=0.0;
 #if LINEAR_D
             vec3 sh=b0.xyz-previous_anchors[(uint(co.z)/8u)*3u].xyz; float u=dot(sh,tu)/fp, vv=dot(sh,tv)/fp;
-            s00+=1.0; s01+=u; s02+=vv; s11+=u*u; s12+=u*vv; s22+=vv*vv; r0+=co.y; r1+=co.y*u; r2+=co.y*vv;
+            s00+=wr; s01+=wr*u; s02+=wr*vv; s11+=wr*u*u; s12+=wr*u*vv; s22+=wr*vv*vv; r0+=wr*co.y; r1+=wr*co.y*u; r2+=wr*co.y*vv;
 #endif
         }
         float D=num>0.0 ? sum/num : c.y, A=D;
+        // Thin features (few coplanar neighbours): the box mean is biased across a sharp change;
+        // fall back to this pixel's own unbiased replay difference.
+        bool thin=num<float(NUM_MIN); if(thin) thin_flag=2.0;
+        if(thin){ D=c.y; A=c.y; }
 #if LINEAR_D
-        if(num>=6.0) {
+        if(!thin && num>=6.0) {
             float lam=0.25*num; s11+=lam; s22+=lam;  // ridge on the gradient terms only
             float c00=s11*s22-s12*s12, c01=s02*s12-s01*s22, c02=s01*s12-s02*s11;
             float det=s00*c00+s01*c01+s02*c02;
@@ -354,6 +424,9 @@ void combine(uint id) {
         uint tile=(id/w/16u)*((w+15u)/16u)+(id%w)/16u;
         bool moved=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u;
         float r=moved ? tile_ratio[tile] : 0.0, hv=h0.y;
+#if CAMERA_REPROJECT
+        if(camera_only) r=0.0;
+#endif
         // r: per-replay variance of the filtered difference in units of the per-sample variance;
         // with re replays per pixel this minimizes (1-w)^2/k + w r/re + w^2 v.
         float re=min(float(REPLAYS),kp);
@@ -364,12 +437,15 @@ void combine(uint id) {
         // (weights coupled to a pixel's own samples are biased).
         float rel=num>0.0 ? abs(A)/max(fsum/num,1.0e-12) : 0.0;
         wt=min(wt,1.0-clamp(GAMMA*rel,0.0,1.0));
+#if CAMERA_REPROJECT
+        if(camera_only) wt=min(wt,1.0-1.0/float(N_CAM));  // reprojection drift bound, as in accumulation
+#endif
         H=(1.0-wt)*c.x+wt*(h0.x+D);
         v=(1.0-wt)*(1.0-wt)/kp+wt*r/re+wt*wt*hv;
         dd=moved ? D*D : 0.0; replays=moved ? 1.0 : 0.0;
         m1=mix(h0.z,c.x,BETA); m2=mix(h0.w,c.w,BETA); count=min(h1.y+1.0,float(pc.n_max));
     }
-    history[id*2u]=vec4(H,v,m1,m2); history[id*2u+1u]=vec4(dd,count,1.0,replays);
+    history[id*2u]=vec4(H,v,m1,m2); history[id*2u+1u]=vec4(dd,count,thin_flag,replays);
     float indirect=max(H,0.0);
     pixels[id]=vec4(direct,indirect,direct+indirect,1);
 }
