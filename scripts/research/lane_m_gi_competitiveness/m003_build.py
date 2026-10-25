@@ -16,7 +16,7 @@ SRC=ROOT/'src/research/lane_m_gi_competitiveness'
 SHADER=ROOT/'shaders/research/lane_m_gi_competitiveness/rtcv_sequence.comp.glsl'
 GLSLANG=ROOT/'build/n009/_deps/glslang-build/StandAlone/glslang'
 VAL=Path('/nix/store/z5hs3p3inrq3w8cv71jycz7l4y3ny5xk-spirv-tools-1.4.363.0/bin/spirv-val')
-ROLES=range(6)
+ROLES=range(8)
 GUARD_OLD='Clock::now()-safety_started).count()<180,'
 GUARD_NEW='Clock::now()-safety_started).count()<1800,'
 

@@ -30,6 +30,12 @@ layout(local_size_x=32) in;
 #ifndef LINEAR_D
 #define LINEAR_D 1
 #endif
+#ifndef SPARSE_REPLAY
+#define SPARSE_REPLAY 1
+#endif
+#ifndef SPR_CROSS
+#define SPR_CROSS 0
+#endif
 #ifndef SPR_GAIN
 #define SPR_GAIN 4
 #endif
@@ -361,6 +367,12 @@ void samples(uint id) {
     // The first REPLAYS samples are replayed (default: all). Replaying fewer was tried in 049
     // development and lost more quality than it saved cost.
     uint r=min(uint(REPLAYS),k);
+#if SPARSE_REPLAY>1
+    // Sparse replays: only one pixel in SPARSE_REPLAY (rotating pattern) replays; the filtered
+    // difference D is formed from the replaying pixels only.
+    bool replayer=((id%p.counts.y)+(id/p.counts.y)*3u+pc.seed)%uint(SPARSE_REPLAY)==0u;
+    if(!replayer && !same){ boost|=4u; same=true; }
+#endif
     for(uint i=0u;i<k;++i) {
         uint stream=mix32(base+i); float f1,f0;
         if(same || i>=r) { f1=path(false,p.light_pos_interval,x,n,prim,stream); f0=f1; }
@@ -391,9 +403,12 @@ void spr(uint id) {
     uint w=p.counts.y, h=p.counts.z; int cx=int(id%w), cy=int(id/w);
     uint tech[(2*SPR_RADIUS+1)*(2*SPR_RADIUS+1)]; float tn[(2*SPR_RADIUS+1)*(2*SPR_RADIUS+1)]; uint nt=0u;
     for(int dy=-SPR_RADIUS;dy<=SPR_RADIUS;dy++)for(int dx=-SPR_RADIUS;dx<=SPR_RADIUS;dx++){int ox=cx+dx, oy=cy+dy;
+#if SPR_CROSS
+        if(dx!=0 && dy!=0) continue;  // cross neighbourhood: 1+4*SPR_RADIUS techniques
+#endif
         if(ox<0||oy<0||ox>=int(w)||oy>=int(h)) continue; uint o=uint(oy)*w+uint(ox); vec4 b1=anchors[o*3u+1u]; vec4 so=scratch[o];
         if(anchors[o*3u+2u].w!=1.0 || so.z<-1.5 || floatBitsToUint(b1.w)!=inst || dot(b1.xyz,n)<0.95) continue;
-        tech[nt]=o; tn[nt]=so.z<0.0 ? float(pc.k_new) : float(pc.k*(uint(so.z)%8u)); nt++;}
+        tech[nt]=o; tn[nt]=so.z<0.0 ? float(pc.k_new) : float(pc.k*((uint(so.z)%8u)&3u)); nt++;}
     float sum=0.0;
     for(uint t=0u;t<nt;t++){ uint o=tech[t];
         for(uint i=0u;i<uint(tn[t]);i++){ uint slot=(o*KSLOTS+i)*2u; vec4 s0=path_samples[slot], s1=path_samples[slot+1u];
@@ -421,7 +436,7 @@ void combine(uint id) {
 #endif
     }
     else {
-        uint j=uint(c.z)/8u; float kp=float(pc.k*(uint(c.z)%8u));
+        uint j=uint(c.z)/8u; float kp=float(pc.k*((uint(c.z)%8u)&3u));
 #if ROLE==7
         float kp_fresh=kp*float(SPR_GAIN);  // reused fresh estimate counts as SPR_GAIN x samples
 #else
@@ -452,7 +467,7 @@ void combine(uint id) {
         if((pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u)
         for(int dy=-RADIUS;dy<=RADIUS;dy++)for(int dx=-RADIUS;dx<=RADIUS;dx++) {
             int ox=cx+dx, oy=cy+dy; if(ox<0||oy<0||ox>=int(w)||oy>=int(h)) continue;
-            uint o=uint(oy)*w+uint(ox); vec4 co=scratch[o]; if(co.z<0.0) continue;
+            uint o=uint(oy)*w+uint(ox); vec4 co=scratch[o]; if(co.z<0.0 || ((uint(co.z)%8u)&4u)!=0u) continue;
             vec4 b0=anchors[o*3u], b1=anchors[o*3u+1u];
             if(floatBitsToUint(b1.w)!=inst || dot(b1.xyz,n)<0.95 || abs(dot(n,b0.xyz-x))>tol) continue;
 #if RANGE_SIGMA>0
