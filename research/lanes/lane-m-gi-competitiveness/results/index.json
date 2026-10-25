@@ -510,7 +510,9 @@
       "surface_incident_residual_correction_verification": "results/198-signed-residual-correction-six-target-verification.json",
       "surface_incident_residual_correction_joint_passes": 0,
       "surface_incident_residual_correction_quality_rejections": 6,
-      "surface_incident_residual_correction_study_complete": true
+      "surface_incident_residual_correction_study_complete": true,
+      "surface_anchor_coupled_difference_protocol": "experiments/031-surface-anchor-coupled-path-difference.md",
+      "surface_anchor_coupled_difference_status": "PREREGISTERED_NOT_RUN"
     }
   ]
 }
