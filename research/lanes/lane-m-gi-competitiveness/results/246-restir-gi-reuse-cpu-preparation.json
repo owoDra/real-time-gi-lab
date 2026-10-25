@@ -1,0 +1,301 @@
+{
+  "schema": "m001-restir042-cpu-preparation-summary/1",
+  "complete": true,
+  "all_pass": true,
+  "source_commit": "450bfebf438df4e6b691bbed29150b32abe5ec5f",
+  "classification": "CPU_REUSE_PREPARATION_PASS",
+  "new_python_contracts": 12,
+  "new_native_compilations": [
+    "restir_gi_reuse_gpu.cpp host compile+link",
+    "restir_gi_reuse_visibility.cpp UBSan -Werror"
+  ],
+  "new_hlsl_stage_compilations": 5,
+  "native_cpu_input_checks_unusable_icd": 6,
+  "exact041_producer_spirv_reused": true,
+  "qualified033_neighbor_offsets_reused": true,
+  "camera_epsilon": {
+    "H01/B2": 0.00011631423,
+    "H01/B8": 0.00011631423,
+    "H02/B2": 0.00011631423,
+    "H02/B8": 0.00011631423,
+    "H03/B2": 0.000116502531,
+    "H03/B8": 0.000116502531
+  },
+  "pinned_inputs": 1673,
+  "actual_cpu_envelopes": [
+    {
+      "label": "host-compile",
+      "pid": 1520113,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "host-link",
+      "pid": 1520163,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "visibility-compile",
+      "pid": 1520181,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s0-dependencies",
+      "pid": 1520218,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s0-compile",
+      "pid": 1520219,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s0-validate",
+      "pid": 1520220,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s0-disassemble",
+      "pid": 1520221,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s1-dependencies",
+      "pid": 1520222,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s1-compile",
+      "pid": 1520223,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s1-validate",
+      "pid": 1520224,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s1-disassemble",
+      "pid": 1520225,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s2-dependencies",
+      "pid": 1520226,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s2-compile",
+      "pid": 1520227,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s2-validate",
+      "pid": 1520228,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s2-disassemble",
+      "pid": 1520229,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s3-dependencies",
+      "pid": 1520230,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s3-compile",
+      "pid": 1520231,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s3-validate",
+      "pid": 1520232,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s3-disassemble",
+      "pid": 1520233,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s4-dependencies",
+      "pid": 1520234,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s4-compile",
+      "pid": 1520235,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s4-validate",
+      "pid": 1520236,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "reuse_s4-disassemble",
+      "pid": 1520237,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "new-python-contracts",
+      "pid": 1520238,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h01-b2",
+      "pid": 1520240,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h01-b8",
+      "pid": 1520241,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h02-b2",
+      "pid": 1520242,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h02-b8",
+      "pid": 1520243,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h03-b2",
+      "pid": 1520244,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    },
+    {
+      "label": "cpu-h03-b8",
+      "pid": 1520245,
+      "cpu_seconds": 120,
+      "outer_wall_seconds": 180,
+      "returncode": 0,
+      "reaped": true,
+      "timed_out": false
+    }
+  ],
+  "old_successful_tests_reexecuted": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir042-cpu-build-v1/result.json",
+  "raw_receipt_sha256": "c8b2a74421807e69ec2bdf57dcec3fc96b81413442f832a7039e55e847de903b",
+  "payload_files": 220
+}

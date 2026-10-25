@@ -618,7 +618,19 @@
       "session_handoff": "results/244-session-handoff-2026-10-25.md",
       "session_handoff_verification": "results/245-session-pause-handoff-verification.json",
       "resume_requires_user_instruction": true,
-      "next_042_registered": false
+      "next_042_registered": false,
+      "restir_gi_reuse_protocol": "experiments/042-receiver-frame-restir-gi-reuse.md",
+      "restir_gi_reuse_replay_addendum": "experiments/042a-replay-boundary-addendum.md",
+      "restir_gi_reuse_development_disclosure": "experiments/042b-development-smoke-disclosure.md",
+      "restir_gi_reuse_status": "RECEIVER_FRAME_REUSE_IMPLEMENTATION_PASS_6_6_NULL_TRIAL_BIAS_CONFIRMED_6_6_QUALITY_0_6",
+      "restir_gi_reuse_preparation": "results/246-restir-gi-reuse-cpu-preparation.json",
+      "restir_gi_reuse_six_targets": "results/247-restir-gi-reuse-six-targets.json",
+      "restir_gi_reuse_outcome": "results/248-restir-gi-reuse-outcome.md",
+      "restir_gi_reuse_verification": "results/249-restir-gi-reuse-verification.json",
+      "restir_gi_reuse_implementation_targets": 6,
+      "restir_gi_reuse_null_trial_hypothesis_targets": 6,
+      "restir_gi_reuse_quality_passing_targets": 0,
+      "restir_gi_reuse_accepted_timing": false
     }
   ]
 }
