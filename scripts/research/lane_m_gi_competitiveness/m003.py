@@ -116,7 +116,7 @@ CANDIDATE='RTCVS';SETTLE=156;MEASURED=32
 def committed():
     head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
     need(subprocess.check_output(['git','branch','--show-current'],cwd=ROOT,text=True).strip()=='research-lane-m-gi-competitiveness','research branch')
-    own=[EXP/'050-m003-rtcvf-unseen-heldout-validation.md',Path(__file__).resolve(),Path(Q.__file__).resolve(),ROOT/'scripts/research/lane_m_gi_competitiveness/m003_build.py',
+    own=[EXP/'050-m003-rtcvs-unseen-heldout-validation.md',Path(__file__).resolve(),Path(Q.__file__).resolve(),ROOT/'scripts/research/lane_m_gi_competitiveness/m003_build.py',
          ROOT/'src/research/lane_m_gi_competitiveness/rtcv_sequence_gpu.cpp',ROOT/'shaders/research/lane_m_gi_competitiveness/rtcv_sequence.comp.glsl']
     for f in own:need(subprocess.check_output(['git','show',head+':'+str(f.relative_to(ROOT))],cwd=ROOT)==f.read_bytes(),'commit all 050 sources before use '+f.name)
     return head

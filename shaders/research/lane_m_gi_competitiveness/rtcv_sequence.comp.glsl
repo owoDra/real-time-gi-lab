@@ -30,6 +30,15 @@ layout(local_size_x=32) in;
 #ifndef LINEAR_D
 #define LINEAR_D 1
 #endif
+#ifndef GEOM_NO_REPLAY
+#define GEOM_NO_REPLAY 1
+#endif
+#ifndef GEOM_SPARSE
+#define GEOM_SPARSE 1
+#endif
+#ifndef SHRINK
+#define SHRINK 1
+#endif
 #ifndef SPARSE_REPLAY
 #define SPARSE_REPLAY 1
 #endif
@@ -364,6 +373,16 @@ void samples(uint id) {
     // replays were too decorrelated to pay for their cost).
     if((pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED))==0u) same=true;
 #endif
+#if GEOM_NO_REPLAY
+    if((pc.flags&LIGHT_CHANGED)==0u) same=true;  // geometry changes: accumulate without replay
+#endif
+#if GEOM_SPARSE>1
+    // Geometry-only changes: one pixel in GEOM_SPARSE (rotating pattern) replays; the filtered,
+    // shrunk difference of the replaying pixels corrects and limits the history of its window.
+    if((pc.flags&LIGHT_CHANGED)==0u && !same){
+        bool replayer=((id%p.counts.y)+(id/p.counts.y)*3u+pc.seed)%uint(GEOM_SPARSE)==0u;
+        if(!replayer){ boost|=4u; same=true; } }
+#endif
     // The first REPLAYS samples are replayed (default: all). Replaying fewer was tried in 049
     // development and lost more quality than it saved cost.
     uint r=min(uint(REPLAYS),k);
@@ -444,6 +463,11 @@ void combine(uint id) {
 #endif
         vec4 h0=previous_history[j*2u], h1=previous_history[j*2u+1u];
         bool camera_only=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED))==0u && (pc.flags&CAMERA_CHANGED)!=0u;
+#if GEOM_NO_REPLAY && GEOM_SPARSE<=1
+        bool geom_only=(pc.flags&LIGHT_CHANGED)==0u && (pc.flags&GEOMETRY_CHANGED)!=0u;
+#else
+        bool geom_only=false;
+#endif
 #if CAMERA_REPROJECT
         if(camera_only){ vec3 xp0,np0; if(reproject(a1.xyz,floatBitsToUint(a0.w),a2.xy,xp0,np0)>=0) history_at(int(j),h0,h1); }
 #endif
@@ -454,7 +478,7 @@ void combine(uint id) {
         uint w=p.counts.y, h=p.counts.z; int cx=int(id%w), cy=int(id/w);
         vec3 x=a0.xyz, n=a1.xyz; uint inst=floatBitsToUint(a1.w);
         float dist=length(x-p.camera_pos_near.xyz), tol=4.0*float(RADIUS)*dist*p.camera_right_tan_x.w/float(w);
-        float sum=0.0, num=0.0, fsum=0.0; bool changed=false;
+        float sum=0.0, num=0.0, fsum=0.0, sq=0.0, w2=0.0; bool changed=false;
 #if LINEAR_D
         // Local regression of the replay difference on the anchor shift (x - y) in the tangent
         // plane: d ~ a + g.(x - y). a estimates the scene change, g the spatial gradient, so each
@@ -478,7 +502,7 @@ void combine(uint id) {
 #else
             float wr=1.0;
 #endif
-            sum+=wr*co.y; fsum+=wr*co.x; num+=wr; changed=changed||co.y!=0.0;
+            sum+=wr*co.y; fsum+=wr*co.x; num+=wr; sq+=wr*co.y*co.y; w2+=wr*wr; changed=changed||co.y!=0.0;
 #if LINEAR_D
             vec3 sh=b0.xyz-previous_anchors[(uint(co.z)/8u)*3u].xyz; float u=dot(sh,tu)/fp, vv=dot(sh,tv)/fp;
             s00+=wr; s01+=wr*u; s02+=wr*vv; s11+=wr*u*u; s12+=wr*u*vv; s22+=wr*vv*vv; r0+=wr*co.y; r1+=wr*co.y*u; r2+=wr*co.y*vv;
@@ -506,9 +530,17 @@ void combine(uint id) {
         uint tile=(id/w/16u)*((w+15u)/16u)+(id%w)/16u;
         bool moved=(pc.flags&(GEOMETRY_CHANGED|LIGHT_CHANGED|CAMERA_CHANGED))!=0u;
         float r=moved ? tile_ratio[tile] : 0.0, hv=h0.y;
+#if SHRINK
+        // Wiener shrinkage of the correction: where the filtered change is not significant
+        // against its own noise, keep the history (accumulation-like lag) instead of injecting
+        // the replay noise; significant changes are corrected in full.
+        if(num>0.0 && !thin){ float m=sum/num, noise=max(sq/num-m*m,0.0)*w2/(num*num);
+            float beta=D*D/(D*D+noise+1.0e-30); D*=beta; A*=beta; r*=beta*beta; }
+#endif
 #if CAMERA_REPROJECT
         if(camera_only) r=0.0;
 #endif
+        if(geom_only) r=0.0;
         // r: per-replay variance of the filtered difference in units of the per-sample variance;
         // with re replays per pixel this minimizes (1-w)^2/k + w r/re + w^2 v.
         float re=min(float(REPLAYS),kp);
