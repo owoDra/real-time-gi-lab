@@ -1,0 +1,24 @@
+{
+  "schema": "m001-restir034-cpu-preparation-publication/1",
+  "complete": true,
+  "all_pass": true,
+  "source_commit": "e444d4cb0612bce20ed0a262c11d0597ba9b536f",
+  "classification": "CPU_DEVICE_CONTROL_PREPARATION_PASS",
+  "new_cpu_contracts": 10,
+  "native_cpu_checks": [
+    "17x9",
+    "320x180"
+  ],
+  "unusable_icd_checks": true,
+  "actual_new_native_compiles": 1,
+  "actual_new_native_links": 1,
+  "shader_compiles": 0,
+  "old_sdk_host_or_test_reexecutions": 0,
+  "gpu_executed": false,
+  "raw_receipt": "/var/owo/workspaces/projects/gi-lab/out/research/lane-m-gi-competitiveness/m001-restir034-cpu-build-v1/result.json",
+  "raw_receipt_sha256": "ef858e33581006c6e1a65a3b68026c1881a43e964e0a8eefd8a76b8e33e557d9",
+  "compiled_dependency_count": 373,
+  "prelaunch_cli_rejection_receipt": "/var/owo/workspaces/projects/gi-lab/out/m001-restir034-relative-plan-intake-rejection-v1.json",
+  "prelaunch_cli_rejection_sha256": "5768bc3b0e769df770f62167fca34f6f5661ee7d11d75db5e303c5ccfc089673",
+  "prelaunch_cli_rejection_started_gpu": false
+}

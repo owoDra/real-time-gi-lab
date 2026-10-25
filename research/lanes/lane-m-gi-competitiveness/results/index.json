@@ -539,7 +539,15 @@
       "restir_gi_source_bridge_gpu_executed": false,
       "restir_gi_source_bridge_m001_physical_qualified": false,
       "restir_gi_analytic_device_protocol": "experiments/034-restir-gi-analytic-device-controls.md",
-      "restir_gi_analytic_device_status": "PREREGISTERED_NOT_RUN"
+      "restir_gi_analytic_device_status": "ANALYTIC_GPU_RUNTIME_CONTROL_PASS",
+      "restir_gi_analytic_device_cpu_preparation": "results/211-restir-gi-analytic-device-cpu-preparation.json",
+      "restir_gi_analytic_device_two_dimensions": "results/212-restir-gi-analytic-device-two-dimensions.json",
+      "restir_gi_analytic_device_outcome": "results/213-restir-gi-analytic-device-outcome.md",
+      "restir_gi_analytic_device_verification": "results/214-restir-gi-analytic-device-verification.json",
+      "restir_gi_analytic_device_study_complete": true,
+      "restir_gi_analytic_device_gpu_processes": 2,
+      "restir_gi_analytic_device_configurations": 96,
+      "restir_gi_analytic_device_m001_physical_or_quality_qualified": false
     }
   ]
 }
