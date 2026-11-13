@@ -7,7 +7,8 @@
 //   hybrid (c0 depth buffer, voxels when it leaves the screen and above), tri / trihybrid (same with the
 //   triangle BVH), l2 (voxel level grows 2 per cascade), rc<N> (directions stop growing above cascade N),
 //   vs<x> (c0 voxel size / c0 spacing), vo<x> (voxel trace start offset along the probe normal, voxels),
-//   vk<x> (occupied voxels entered within this many voxels are ignored), norel (diagnostic: no probe relocation).
+//   vk<x> (occupied voxels entered within this many voxels are ignored), norel (diagnostic: no probe relocation),
+//   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent).
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseGltf } from '../core/gltf.ts';
@@ -41,7 +42,8 @@ function parseConfig(name: string): RcParams {
     else if (t === 'tri') { p.world = 'tri'; p.depthCascades = 0; }
     else if (t === 'trihybrid') { p.world = 'tri'; p.depthCascades = 1; }
     else if (t === 'l2') p.levelMap = 2;
-    else if (t === 'norel') p.relocate = false;
+    else if (t === 'norel') p.relocate = 'none';
+    else if (t === 'vrel') p.relocate = 'voxel';
     else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
     else if (/^vs[\d.]+$/.test(t)) p.voxScale = Number(t.slice(2));
     else if (/^vo[\d.]+$/.test(t)) p.voxOffset = Number(t.slice(2));
@@ -68,7 +70,7 @@ else {
 const gpu = await uploadScene(device, spec.scene, upload);
 const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tri');
 const voxBench = args.includes('--vox-bench');
-const needVox = voxBench || parsed.some(([, p]) => p.world === 'voxel');
+const needVox = voxBench || parsed.some(([, p]) => p.world === 'voxel' || p.relocate === 'voxel');
 const ctx = createRunContext(device, spec, gpu, { voxel: needVox, bvh: needBvh, vox: JSON.parse(arg('--vox', '{}')) });
 log(`scene ${spec.name}: ${spec.scene.triangleCount} triangles, loaded in ${Math.round(performance.now() - t0)} ms; bounds ${spec.scene.boundsMin.map((v) => v.toFixed(2))} .. ${spec.scene.boundsMax.map((v) => v.toFixed(2))}`
   + (ctx.bvh ? `; BVH ${ctx.bvh.nodes} nodes, ${(ctx.bvh.bytes / 2 ** 20).toFixed(1)} MiB, built in ${ctx.bvh.buildMs} ms (CPU)` : ''));
@@ -126,8 +128,10 @@ for (const [name, params] of parsed) {
   if (r.moving) log(`  flicker moving ${JSON.stringify(r.moving.flicker)}`);
 }
 // Irradiance against the triangle tracer (same probes, same intervals), static camera.
-const ref = parsed.find(([, p]) => p.world === 'tri' && p.depthCascades === 0)?.[0];
-for (const [name] of parsed) {
+// The reference uses the same probe relocation when the run has one (same probe positions).
+const tris = parsed.filter(([, p]) => p.world === 'tri' && p.depthCascades === 0);
+for (const [name, params] of parsed) {
+  const ref = (tris.find(([, p]) => p.relocate === params.relocate) ?? tris[0])?.[0];
   if (!ref || name === ref || !irr[name] || !irr[ref]) continue;
   summaries[name].vsTriangle = { reference: ref, ...compareIrradiance(irr[name]!, irr[ref]!) };
   log(`${name} vs ${ref}: ${JSON.stringify(summaries[name].vsTriangle)}`);

@@ -1,0 +1,810 @@
+{
+ "kind": "exploratory (\u63a2\u7d22\u5024)",
+ "date": "2026-11-14",
+ "scene": "Khronos Sponza (leak rooms for leak)",
+ "resolution": "1920x1080",
+ "adapter": "Radeon 8060S, Dawn / Vulkan",
+ "P": 32,
+ "cascades": 5,
+ "methods": {
+  "gbuffer": "S1 relocation: plane fit to G-buffer samples (view dependent)",
+  "none": "norel: probes at grid points",
+  "voxelA": "first attempt: all cascades pushed away from occupied voxels, no visibility tests",
+  "voxelB": "c0 only pushed + gather visibility test (upper cascades on the grid)",
+  "voxel": "final (vrel): all cascades pushed + voxel visibility test in the gather (pixel->c0 probe) and the merge (probe->parent)"
+ },
+ "sponza": {
+  "nosky": {
+   "world-32-tri": {
+    "giTotalMs": 16.377,
+    "voxMs": null,
+    "giBuildMs": 0.459,
+    "giTraceMs": 15.142,
+    "giGatherMs": 0.47,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 28.917,
+    "movingCoarsePct": 9.544,
+    "controlFinePct": 4.023
+   },
+   "world-32-tri-norel": {
+    "giTotalMs": 12.543,
+    "voxMs": null,
+    "giBuildMs": 0.304,
+    "giTraceMs": 11.548,
+    "giGatherMs": 0.428,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.92,
+    "movingCoarsePct": 4.936,
+    "controlFinePct": 4.023
+   },
+   "world-32-voxel": {
+    "giTotalMs": 5.577,
+    "voxMs": 1.649,
+    "giBuildMs": 0.446,
+    "giTraceMs": 2.872,
+    "giGatherMs": 0.422,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 29.444,
+    "movingCoarsePct": 10.511,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.0784,
+     "meanAbsRel": 0.239
+    }
+   },
+   "world-32-voxel-norel": {
+    "giTotalMs": 5.75,
+    "voxMs": 1.746,
+    "giBuildMs": 0.341,
+    "giTraceMs": 2.955,
+    "giGatherMs": 0.424,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.404,
+    "movingCoarsePct": 5.088,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-norel",
+     "bias": -0.2134,
+     "meanAbsRel": 0.3997
+    }
+   },
+   "world-32-voxel-rc2": {
+    "giTotalMs": 4.331,
+    "voxMs": 1.768,
+    "giBuildMs": 0.479,
+    "giTraceMs": 1.482,
+    "giGatherMs": 0.421,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 29.737,
+    "movingCoarsePct": 10.985,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.0741,
+     "meanAbsRel": 0.2545
+    }
+   },
+   "world-32-voxel-rc2-norel": {
+    "giTotalMs": 4.134,
+    "voxMs": 1.777,
+    "giBuildMs": 0.349,
+    "giTraceMs": 1.417,
+    "giGatherMs": 0.423,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.179,
+    "movingCoarsePct": 4.923,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-norel",
+     "bias": -0.2222,
+     "meanAbsRel": 0.4152
+    }
+   },
+   "world-32-tri-vrelA": {
+    "giTotalMs": 13.834,
+    "voxMs": 1.617,
+    "giBuildMs": 0.811,
+    "giTraceMs": 10.721,
+    "giGatherMs": 0.427,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.132,
+    "movingCoarsePct": 5.15,
+    "controlFinePct": 4.023
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 17.093,
+    "voxMs": 1.723,
+    "giBuildMs": 1.023,
+    "giTraceMs": 13.121,
+    "giGatherMs": 0.94,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.296,
+    "movingCoarsePct": 5.417,
+    "controlFinePct": 4.023
+   },
+   "world-32-voxel-vrelA": {
+    "giTotalMs": 6.274,
+    "voxMs": 1.732,
+    "giBuildMs": 0.891,
+    "giTraceMs": 2.939,
+    "giGatherMs": 0.424,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.93,
+    "movingCoarsePct": 5.568,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0573,
+     "meanAbsRel": 0.2471
+    }
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 6.875,
+    "voxMs": 1.743,
+    "giBuildMs": 1.033,
+    "giTraceMs": 2.962,
+    "giGatherMs": 0.877,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 17.132,
+    "movingCoarsePct": 5.761,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0336,
+     "meanAbsRel": 0.2174
+    }
+   },
+   "world-32-voxel-rc2-vrelA": {
+    "giTotalMs": 4.651,
+    "voxMs": 1.737,
+    "giBuildMs": 0.896,
+    "giTraceMs": 1.429,
+    "giGatherMs": 0.411,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.33,
+    "movingCoarsePct": 5.48,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0605,
+     "meanAbsRel": 0.2508
+    }
+   },
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 5.296,
+    "voxMs": 1.759,
+    "giBuildMs": 1.045,
+    "giTraceMs": 1.44,
+    "giGatherMs": 0.882,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.528,
+    "movingCoarsePct": 5.684,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0349,
+     "meanAbsRel": 0.2286
+    }
+   },
+   "world-32-voxel-rc2-vrelB": {
+    "movingFinePct": 16.1,
+    "movingCoarsePct": 5.2,
+    "giTotalMs": 4.87,
+    "giBuildMs": 0.554
+   }
+  },
+  "sky": {
+   "world-32-tri": {
+    "giTotalMs": 16.799,
+    "voxMs": null,
+    "giBuildMs": 0.432,
+    "giTraceMs": 15.615,
+    "giGatherMs": 0.454,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 25.391,
+    "movingCoarsePct": 7.813,
+    "controlFinePct": 4.023
+   },
+   "world-32-tri-norel": {
+    "giTotalMs": 13.67,
+    "voxMs": null,
+    "giBuildMs": 0.311,
+    "giTraceMs": 12.659,
+    "giGatherMs": 0.43,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 15.822,
+    "movingCoarsePct": 4.354,
+    "controlFinePct": 4.023
+   },
+   "world-32-voxel": {
+    "giTotalMs": 6.085,
+    "voxMs": 1.767,
+    "giBuildMs": 0.475,
+    "giTraceMs": 3.155,
+    "giGatherMs": 0.433,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 26.765,
+    "movingCoarsePct": 8.432,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.1645,
+     "meanAbsRel": 0.2292
+    }
+   },
+   "world-32-voxel-norel": {
+    "giTotalMs": 5.765,
+    "voxMs": 1.756,
+    "giBuildMs": 0.341,
+    "giTraceMs": 2.98,
+    "giGatherMs": 0.433,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.976,
+    "movingCoarsePct": 4.32,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-norel",
+     "bias": -0.2675,
+     "meanAbsRel": 0.3382
+    }
+   },
+   "world-32-voxel-rc2": {
+    "giTotalMs": 4.451,
+    "voxMs": 1.845,
+    "giBuildMs": 0.491,
+    "giTraceMs": 1.517,
+    "giGatherMs": 0.43,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 30.751,
+    "movingCoarsePct": 9.651,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.163,
+     "meanAbsRel": 0.2434
+    }
+   },
+   "world-32-voxel-rc2-norel": {
+    "giTotalMs": 4.206,
+    "voxMs": 1.825,
+    "giBuildMs": 0.352,
+    "giTraceMs": 1.431,
+    "giGatherMs": 0.429,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.969,
+    "movingCoarsePct": 4.405,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-norel",
+     "bias": -0.2843,
+     "meanAbsRel": 0.3573
+    }
+   },
+   "world-32-tri-vrelA": {
+    "giTotalMs": 14.617,
+    "voxMs": 1.618,
+    "giBuildMs": 0.802,
+    "giTraceMs": 11.505,
+    "giGatherMs": 0.427,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.8,
+    "movingCoarsePct": 4.144,
+    "controlFinePct": 4.023
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 16.02,
+    "voxMs": 1.753,
+    "giBuildMs": 1.035,
+    "giTraceMs": 11.984,
+    "giGatherMs": 0.961,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.257,
+    "movingCoarsePct": 4.073,
+    "controlFinePct": 4.023
+   },
+   "world-32-voxel-vrelA": {
+    "giTotalMs": 5.859,
+    "voxMs": 1.629,
+    "giBuildMs": 0.827,
+    "giTraceMs": 2.741,
+    "giGatherMs": 0.422,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 15.197,
+    "movingCoarsePct": 4.309,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1649,
+     "meanAbsRel": 0.2365
+    }
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 6.884,
+    "voxMs": 1.753,
+    "giBuildMs": 1.032,
+    "giTraceMs": 2.963,
+    "giGatherMs": 0.89,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.583,
+    "movingCoarsePct": 4.224,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.128,
+     "meanAbsRel": 0.216
+    }
+   },
+   "world-32-voxel-rc2-vrelA": {
+    "giTotalMs": 4.804,
+    "voxMs": 1.821,
+    "giBuildMs": 0.926,
+    "giTraceMs": 1.458,
+    "giGatherMs": 0.423,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 15.66,
+    "movingCoarsePct": 4.474,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1699,
+     "meanAbsRel": 0.2399
+    }
+   },
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 5.072,
+    "voxMs": 1.703,
+    "giBuildMs": 0.997,
+    "giTraceMs": 1.369,
+    "giGatherMs": 0.853,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 15.084,
+    "movingCoarsePct": 4.354,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1405,
+     "meanAbsRel": 0.2155
+    }
+   },
+   "world-32-voxel-rc2-vrelB": {
+    "movingFinePct": 14.82,
+    "movingCoarsePct": 4.67,
+    "giTotalMs": 4.92,
+    "giBuildMs": 0.553
+   }
+  }
+ },
+ "leak": {
+  "0.02": {
+   "world-32-tri": {
+    "giTotalMs": 1.317,
+    "voxMs": null,
+    "giBuildMs": 0.325,
+    "giTraceMs": 0.518,
+    "giGatherMs": 0.381,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0294
+   },
+   "world-32-voxel": {
+    "giTotalMs": 1.726,
+    "voxMs": 0.169,
+    "giBuildMs": 0.332,
+    "giTraceMs": 0.744,
+    "giGatherMs": 0.384,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.5771,
+     "meanAbsRel": 0.5811
+    },
+    "leakMeanFractionOfSun": 0.0124
+   },
+   "world-32-voxel-rc2": {
+    "giTotalMs": 1.288,
+    "voxMs": 0.16,
+    "giBuildMs": 0.306,
+    "giTraceMs": 0.42,
+    "giGatherMs": 0.344,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.5799,
+     "meanAbsRel": 0.5838
+    },
+    "leakMeanFractionOfSun": 0.0123
+   },
+   "world-32-voxel-rc2-norel": {
+    "giTotalMs": 1.264,
+    "voxMs": 0.169,
+    "giBuildMs": 0.257,
+    "giTraceMs": 0.395,
+    "giGatherMs": 0.386,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": 0.7974,
+     "meanAbsRel": 1.8253
+    },
+    "leakMeanFractionOfSun": 0.0528
+   },
+   "world-32-tri-vrelA": {
+    "giTotalMs": 1.674,
+    "voxMs": 0.166,
+    "giBuildMs": 0.569,
+    "giTraceMs": 0.465,
+    "giGatherMs": 0.374,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.1095
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 2.245,
+    "voxMs": 0.183,
+    "giBuildMs": 0.698,
+    "giTraceMs": 0.489,
+    "giGatherMs": 0.774,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0483
+   },
+   "world-32-voxel-vrelA": {
+    "giTotalMs": 1.953,
+    "voxMs": 0.169,
+    "giBuildMs": 0.585,
+    "giTraceMs": 0.709,
+    "giGatherMs": 0.39,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0585,
+     "meanAbsRel": 0.2616
+    },
+    "leakMeanFractionOfSun": 0.1031
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 2.456,
+    "voxMs": 0.177,
+    "giBuildMs": 0.698,
+    "giTraceMs": 0.714,
+    "giGatherMs": 0.771,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1182,
+     "meanAbsRel": 0.3828
+    },
+    "leakMeanFractionOfSun": 0.0426
+   },
+   "world-32-voxel-rc2-vrelA": {
+    "giTotalMs": 1.61,
+    "voxMs": 0.168,
+    "giBuildMs": 0.578,
+    "giTraceMs": 0.413,
+    "giGatherMs": 0.38,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0471,
+     "meanAbsRel": 0.2799
+    },
+    "leakMeanFractionOfSun": 0.1043
+   },
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 2.116,
+    "voxMs": 0.18,
+    "giBuildMs": 0.688,
+    "giTraceMs": 0.424,
+    "giGatherMs": 0.749,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1091,
+     "meanAbsRel": 0.4109
+    },
+    "leakMeanFractionOfSun": 0.043
+   },
+   "world-32-voxel-rc2-vrelB": {
+    "leakMeanFractionOfSun": 0.0313
+   }
+  },
+  "0.1": {
+   "world-32-tri": {
+    "giTotalMs": 1.454,
+    "voxMs": null,
+    "giBuildMs": 0.352,
+    "giTraceMs": 0.589,
+    "giGatherMs": 0.397,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0168
+   },
+   "world-32-voxel": {
+    "giTotalMs": 1.79,
+    "voxMs": 0.177,
+    "giBuildMs": 0.347,
+    "giTraceMs": 0.761,
+    "giGatherMs": 0.397,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.5534,
+     "meanAbsRel": 0.5714
+    },
+    "leakMeanFractionOfSun": 0.0075
+   },
+   "world-32-voxel-rc2": {
+    "giTotalMs": 1.419,
+    "voxMs": 0.169,
+    "giBuildMs": 0.342,
+    "giTraceMs": 0.455,
+    "giGatherMs": 0.389,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.5611,
+     "meanAbsRel": 0.5848
+    },
+    "leakMeanFractionOfSun": 0.0074
+   },
+   "world-32-voxel-rc2-norel": {
+    "giTotalMs": 1.315,
+    "voxMs": 0.173,
+    "giBuildMs": 0.268,
+    "giTraceMs": 0.411,
+    "giGatherMs": 0.386,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri",
+     "bias": -0.5975,
+     "meanAbsRel": 0.8179
+    },
+    "leakMeanFractionOfSun": 0.0068
+   },
+   "world-32-tri-vrelA": {
+    "giTotalMs": 1.865,
+    "voxMs": 0.173,
+    "giBuildMs": 0.638,
+    "giTraceMs": 0.54,
+    "giGatherMs": 0.396,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.061
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 2.347,
+    "voxMs": 0.186,
+    "giBuildMs": 0.757,
+    "giTraceMs": 0.544,
+    "giGatherMs": 0.76,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0346
+   },
+   "world-32-voxel-vrelA": {
+    "giTotalMs": 2.082,
+    "voxMs": 0.177,
+    "giBuildMs": 0.652,
+    "giTraceMs": 0.74,
+    "giGatherMs": 0.408,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1809,
+     "meanAbsRel": 0.3772
+    },
+    "leakMeanFractionOfSun": 0.05
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 2.524,
+    "voxMs": 0.186,
+    "giBuildMs": 0.752,
+    "giTraceMs": 0.734,
+    "giGatherMs": 0.756,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.292,
+     "meanAbsRel": 0.5201
+    },
+    "leakMeanFractionOfSun": 0.0245
+   },
+   "world-32-voxel-rc2-vrelA": {
+    "giTotalMs": 1.662,
+    "voxMs": 0.167,
+    "giBuildMs": 0.629,
+    "giTraceMs": 0.425,
+    "giGatherMs": 0.384,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1542,
+     "meanAbsRel": 0.4043
+    },
+    "leakMeanFractionOfSun": 0.0516
+   },
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 2.238,
+    "voxMs": 0.186,
+    "giBuildMs": 0.763,
+    "giTraceMs": 0.451,
+    "giGatherMs": 0.761,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.2733,
+     "meanAbsRel": 0.5588
+    },
+    "leakMeanFractionOfSun": 0.0252
+   },
+   "world-32-voxel-rc2-vrelB": {
+    "leakMeanFractionOfSun": 0.0078
+   }
+  }
+ },
+ "mitsuba": {
+  "nosky": {
+   "reference": [
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed1.pfm"
+   ],
+   "referenceHalvesMeanAbsRel": 0.1667,
+   "results": {
+    "world-32-tri-norel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0306,
+     "bias": -0.3717,
+     "meanAbsRel": 0.4662
+    },
+    "world-32-tri-vrelA": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0334,
+     "bias": -0.3142,
+     "meanAbsRel": 0.4206
+    },
+    "world-32-tri": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0412,
+     "bias": -0.1538,
+     "meanAbsRel": 0.3432
+    },
+    "world-32-voxel-norel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0241,
+     "bias": -0.5058,
+     "meanAbsRel": 0.5603
+    },
+    "world-32-voxel-rc2-norel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0238,
+     "bias": -0.5113,
+     "meanAbsRel": 0.5675
+    },
+    "world-32-voxel-rc2-vrelA": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0314,
+     "bias": -0.3557,
+     "meanAbsRel": 0.4569
+    },
+    "world-32-voxel-rc2": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0382,
+     "bias": -0.2165,
+     "meanAbsRel": 0.37
+    },
+    "world-32-voxel-vrelA": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0315,
+     "bias": -0.3535,
+     "meanAbsRel": 0.4549
+    },
+    "world-32-voxel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.038,
+     "bias": -0.2201,
+     "meanAbsRel": 0.3642
+    },
+    "world-32-tri-vrel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.044,
+     "bias": -0.0959,
+     "meanAbsRel": 0.332
+    },
+    "world-32-voxel-rc2-vrel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0425,
+     "bias": -0.1275,
+     "meanAbsRel": 0.3565
+    },
+    "world-32-voxel-vrel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0425,
+     "bias": -0.1263,
+     "meanAbsRel": 0.3545
+    },
+    "world-32-voxel-rc2-vrelB": {
+     "bias": -0.477
+    }
+   }
+  },
+  "sky": {
+   "reference": [
+    "out/mitsuba/sponza/E-960x540-512spp-sky0.45_0.6_0.9-seed0.pfm",
+    "out/mitsuba/sponza/E-960x540-512spp-sky0.45_0.6_0.9-seed1.pfm"
+   ],
+   "referenceHalvesMeanAbsRel": 0.1783,
+   "results": {
+    "world-32-tri-norel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0519,
+     "bias": -0.2426,
+     "meanAbsRel": 0.4345
+    },
+    "world-32-tri-vrelA": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0574,
+     "bias": -0.1635,
+     "meanAbsRel": 0.3941
+    },
+    "world-32-tri": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.064,
+     "bias": -0.0668,
+     "meanAbsRel": 0.3347
+    },
+    "world-32-voxel-norel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.038,
+     "bias": -0.4452,
+     "meanAbsRel": 0.5247
+    },
+    "world-32-voxel-rc2-norel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0372,
+     "bias": -0.4579,
+     "meanAbsRel": 0.5276
+    },
+    "world-32-voxel-rc2-vrelA": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0476,
+     "bias": -0.3055,
+     "meanAbsRel": 0.4242
+    },
+    "world-32-voxel-rc2": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0536,
+     "bias": -0.2189,
+     "meanAbsRel": 0.3526
+    },
+    "world-32-voxel-vrelA": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0479,
+     "bias": -0.3014,
+     "meanAbsRel": 0.4235
+    },
+    "world-32-voxel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0535,
+     "bias": -0.2203,
+     "meanAbsRel": 0.3573
+    },
+    "world-32-tri-vrel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.07,
+     "bias": 0.0206,
+     "meanAbsRel": 0.3284
+    },
+    "world-32-voxel-rc2-vrel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0601,
+     "bias": -0.1228,
+     "meanAbsRel": 0.3333
+    },
+    "world-32-voxel-vrel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.061,
+     "bias": -0.11,
+     "meanAbsRel": 0.3363
+    },
+    "world-32-voxel-rc2-vrelB": {
+     "bias": -0.4301
+    }
+   }
+  }
+ }
+}

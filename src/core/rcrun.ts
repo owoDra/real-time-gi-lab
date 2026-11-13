@@ -125,7 +125,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   if (opts.frames * Q > 4096) throw new Error('too many frames for one query set');
   const path = cameraPath(spec.camera);
   const static0 = spec.camera;
-  const useVox = params.world === 'voxel';
+  const useVox = params.world === 'voxel' || params.relocate === 'voxel';
 
   const frameParams = (cam: Camera, prevCam: Camera, slot: number, prevValid: boolean, seed: number, p: RcParams): FrameParams => ({
     cam, prevCam, lightViewProj: lighting.lightViewProj, width, height, sunDir: spec.sunDir, sunE: SUN_E, sky: opts.sky,

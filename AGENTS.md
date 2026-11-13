@@ -75,6 +75,7 @@ mise run s0:native   # ネイティブ（Dawn / Vulkan）で G-buffer と GPU �
 mise run s1:native -- --configs world-32,screen-8 [--no-sky]   # S1 の RC（時間とちらつき率）
 mise run s2:native -- --scene sponza --configs world-32-voxel,world-32-tri [--no-sky] [--bvh] [--static-only]
                      # S2：区間トレーサ（depth / voxel / hybrid / tri）、可視性の比較、リーク（--scene leak-<厚み>）
+                     # 設定トークン vrel / norel：プローブの押し出しをボクセルから決める / しない（既定は G-buffer）
 mise run s2:native -- --scene sponza --vox-bench   # 再ボクセル化の段ごとの時間（--scene sponza-wide10 / sponza-dense9）
 mise run ref:export -- --scene sponza              # Mitsuba 用のシーン変換（out/mitsuba/<scene>）
 build/refenv/bin/python scripts/reference_irradiance.py out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N]

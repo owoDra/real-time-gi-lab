@@ -18,11 +18,12 @@
 import { BVH_TRACE_WGSL } from './bvh.ts';
 import { FRAME_WGSL } from './frame.ts';
 import type { GBuffer } from './gbuffer.ts';
-import { VOX_TRACE_WGSL } from './voxel.ts';
+import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
 
 export type Method = 'world' | 'screen' | 'split';
 /** S2: world-space interval tracer. 'none' keeps S1 (depth buffer only). */
 export type WorldTracer = 'none' | 'voxel' | 'tri';
+export type Relocate = 'gbuffer' | 'voxel' | 'none';
 
 /** S2: resources of the world-space tracers (bound in group 3). */
 export interface WorldResources {
@@ -53,13 +54,17 @@ export interface RcParams {
   voxSkip: number;      // occupied voxels entered within voxSkip voxels of the start are ignored
   resCap: number;       // directions stop growing above this cascade (res = 4 * 2^min(i, resCap))
   stats: number;        // 0: off, 1: DDA steps, 2: steps + voxel / triangle visibility comparison
-  relocate: boolean;    // diagnostic: false keeps world probes at their grid points (no view-dependent push)
+  // World probes are pushed out of the surface: 'gbuffer' fits a plane to G-buffer samples around the probe (S1,
+  // depends on the view), 'voxel' pushes probes away from the occupied voxels around the grid point (same for
+  // any view; the gather and the merge then skip probes that voxels hide), 'none' keeps them at their grid
+  // points (diagnostic).
+  relocate: Relocate;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
-  world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: true,
+  world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
 };
 
 const RC_WGSL = /* wgsl */ `
@@ -72,7 +77,7 @@ const FIX = 4096.0;
 struct CascL { hashOff: u32, hashMask: u32, probeOff: u32, cap: u32, radOff: u32, accOff: u32, res: u32, tileSize: u32,
                tilesX: u32, tilesY: u32, b0: f32, b1: f32 }
 struct Layout { hdr: vec4u, c: array<CascL, 8>, wp: vec4f, wu: vec4u, wp2: vec4u }
-// wp2: no relocation, 0, 0, 0
+// wp2: relocation (0 G-buffer, 1 none, 2 voxel), 0, 0, 0
 // hdr: cascades, total hash slots, total accum words, 0
 // wp: voxScale, voxOffset, levelMap, voxSkip; wu: world tracer (0 none, 1 voxel, 2 tri), depthCascades, stats, has BVH
 struct Probe { pos: vec4f, nrm: vec4f, grid: vec4i } // pos.w = s0 (0: invalid), nrm.w = view depth
@@ -274,6 +279,67 @@ fn relocate(p: vec3f, s: f32) -> Reloc {
   return Reloc(p, m);
 }
 
+// View-independent relocation from the voxel world. The voxel content of a world cell does not depend on the
+// camera (only the clipmap window does), so a grid point always gets the same position and normal. Level L is
+// the one the probe's own traces use (voxel ~ voxScale * spacing). The normal points away from the occupied
+// voxels of the next level in the 4^3 cube around the probe (+-1 spacing), i.e. towards the side of the surface
+// the grid point is already on; when that is ambiguous (grid point inside a thin slab) the voxels' stored
+// normals decide. The probe is then marched along the normal until its voxel and the voxel lift * spacing
+// behind it are empty. Voxels are surfaces only, so a grid point inside a thick object (a pillar) stays there:
+// the stored normals are not oriented reliably enough to tell inside from outside (a plane fit to them, as
+// relocate() does with G-buffer normals, was darker still). Probes outside a wall therefore stay outside; the
+// gather and the merge skip probes that voxels hide (segOccluded).
+fn voxCell(L: u32, p: vec3f) -> vec2u { // (brick pointer, bit), pointer VOX_MARK if empty or outside
+  let v = voxSize(L);
+  let c = vec3i(floor((p - vec3f(VX.origin[L].xyz) * v * 8.0) / v));
+  if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { return vec2u(VOX_MARK, 0u); }
+  let ptr = vox[voxPtrIndex(L, c >> vec3u(3u))];
+  if (ptr >= VOX_MARK) { return vec2u(VOX_MARK, 0u); }
+  let l = c & vec3i(7);
+  let bit = u32(l.x + 8 * l.y + 64 * l.z);
+  if ((vox[VX.b.y + ptr * ${BRICK_WORDS}u + (bit >> 5u)] & (1u << (bit & 31u))) == 0u) { return vec2u(VOX_MARK, 0u); }
+  return vec2u(ptr, bit);
+}
+fn voxStoredNormal(cell: vec2u) -> vec3f {
+  let nn = unpack2x16snorm(vox[VX.b.z + voxRank(cell.x, cell.y) * 2u + 1u]);
+  var n = vec3f(nn.x, nn.y, 1.0 - abs(nn.x) - abs(nn.y));
+  let q = max(-n.z, 0.0);
+  n.x += select(q, -q, n.x >= 0.0); n.y += select(q, -q, n.y >= 0.0);
+  return n;
+}
+fn voxOcc(L: u32, p: vec3f) -> bool { return voxCell(L, p).x != VOX_MARK; }
+fn relocateVox(p: vec3f, s0: f32, c: u32) -> Reloc {
+  let L = voxLevelFor(voxLevel(s0, c), p);
+  let Lg = voxLevelFor(min(L + 1u, u32(VX.a.y) - 1u), p);
+  let vg = voxSize(Lg);
+  var grad = vec3f(0.0); var cnt = 0.0;
+  for (var k = 0u; k < 64u; k++) {
+    let o = (vec3f(f32(k & 3u), f32((k >> 2u) & 3u), f32(k >> 4u)) - 1.5) * vg;
+    if (!voxOcc(Lg, p + o)) { continue; }
+    grad -= o; cnt += 1.0;
+  }
+  if (cnt < 1.0) { return Reloc(p, vec3f(0.0)); }
+  var n = grad;
+  if (length(grad) < 0.1 * cnt * vg) {
+    n = vec3f(0.0);
+    for (var k = 0u; k < 64u; k++) {
+      let cell = voxCell(Lg, p + (vec3f(f32(k & 3u), f32((k >> 2u) & 3u), f32(k >> 4u)) - 1.5) * vg);
+      if (cell.x != VOX_MARK) { n += voxStoredNormal(cell); }
+    }
+  }
+  if (length(n) < 1e-4) { return Reloc(p, vec3f(0.0)); }
+  n = normalize(n);
+  let s = s0 * exp2(f32(c));
+  let back = F.rc2.x * s;
+  let stp = max(0.5 * voxSize(L), 1.5 * s / 16.0);
+  for (var i = 0u; i <= 16u; i++) {
+    let q = p + n * (f32(i) * stp);
+    if (f32(i) * stp > 1.5 * s) { break; }
+    if (!voxOcc(L, q) && !voxOcc(L, q - n * back)) { return Reloc(q, n); }
+  }
+  return Reloc(p, n);
+}
+
 @compute @workgroup_size(64) fn clearKeys(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
   if (i < 72u) { atomicStore(&counts[i], 0u); }
@@ -334,6 +400,7 @@ fn relocate(p: vec3f, s: f32) -> Reloc {
   let g = rel + originOf(s);
   var r = Reloc(vec3f(g) * s, vec3f(0.0));
   if (LY.wp2.x == 0u) { r = relocate(vec3f(g) * s, s); }
+  else if (LY.wp2.x == 2u) { r = relocateVox(vec3f(g) * s, spacing(lod, 0u), c); }
   probes[L.probeOff + idx] = Probe(vec4f(r.p, spacing(lod, 0u)), vec4f(r.n, viewZ(r.p)), vec4i(g, lod));
 }
 
@@ -347,10 +414,26 @@ fn relocate(p: vec3f, s: f32) -> Reloc {
   let g = pr.grid.xyz; let lod = pr.grid.w;
   let lo = g >> vec3u(1u);
   let odd = (g & vec3i(1)) != vec3i(0);
+  var qs: array<u32, 8>;
+  var seen = 0u;
   for (var k = 0u; k < 8u; k++) {
     let o = corner(k);
     var q = NONE;
     if (!any((o > vec3i(0)) & !odd)) { q = lookup(c + 1u, keyFor(lo + o, lod, c + 1u)); }
+    qs[k] = q;
+    if (q != NONE && LY.wp2.x == 2u) {
+      let Lv = voxLevelFor(voxLevel(pr.pos.w, c), pr.pos.xyz);
+      if (segOccluded(pr.pos.xyz, probes[LY.c[c + 1u].probeOff + q].pos.xyz, Lv)) { qs[k] = NONE; } else { seen++; }
+    }
+  }
+  // All parents hidden: keep them (an empty merge would make the probe black).
+  for (var k = 0u; k < 8u; k++) {
+    var q = qs[k];
+    if (LY.wp2.x == 2u && seen == 0u) {
+      let o = corner(k);
+      q = NONE;
+      if (!any((o > vec3i(0)) & !odd)) { q = lookup(c + 1u, keyFor(lo + o, lod, c + 1u)); }
+    }
     parents[(L.probeOff + pi) * 8u + k] = q;
   }
 }
@@ -568,6 +651,23 @@ fn evalSH(pi: u32, n: vec3f) -> vec3f {
   return max(e, vec3f(0.0));
 }
 
+// Voxel relocation leaves a probe on the side of the surface its grid point is on, so probes behind a wall
+// (outside a room) would be interpolated into the room: the gather (pixel -> c0 probe) and the merge (probe ->
+// upper probe) sample the segment every voxel of the lower end's trace level and skip it when it is hidden.
+fn segOccluded(a: vec3f, b: vec3f, L: u32) -> bool {
+  let v = voxSize(L);
+  let d = b - a;
+  let k = u32(min(ceil(length(d) / v), 16.0));
+  for (var i = 0u; i < k; i++) {
+    if (voxOcc(L, a + d * ((f32(i) + 0.5) / f32(k)))) { return true; }
+  }
+  return false;
+}
+fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32) -> bool {
+  let L = voxLevelFor(voxLevel(s0, 0u), x);
+  return segOccluded(x + n * voxSize(L), p, L);
+}
+
 @compute @workgroup_size(8, 8) fn gatherWorld(@builtin(global_invocation_id) gid: vec3u) {
   if (gid.x >= u32(F.size.x) || gid.y >= u32(F.size.y)) { return; }
   let px = vec2i(gid.xy);
@@ -587,7 +687,8 @@ fn evalSH(pi: u32, n: vec3f) -> vec3f {
     let pr = probes[LY.c[0].probeOff + q];
     let dv = pr.pos.xyz - x;
     let side = dot(n, dv) / max(length(dv), 1e-5);
-    let w = (tw.x * tw.y * tw.z + 1e-4) * ((side + 1.0) * (side + 1.0) * 0.25 + 0.02);
+    var w = (tw.x * tw.y * tw.z + 1e-4) * ((side + 1.0) * (side + 1.0) * 0.25 + 0.02);
+    if (LY.wp2.x == 2u && probeOccluded(x, n, pr.pos.xyz, pr.pos.w)) { w *= 1e-3; }
     e += w * evalSH(q, n); ws += w;
   }
   textureStore(irrOut, px, vec4f(select(vec3f(0.0), e / ws, ws > 0.0), 1.0));
@@ -689,7 +790,8 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     lf[o + 10] = c.b0; lf[o + 11] = c.b1;
   });
   lf.set([params.voxScale, params.voxOffset, params.levelMap, params.voxSkip], 4 + 8 * 12);
-  lu.set([params.relocate ? 0 : 1, 0, 0, 0], 12 + 8 * 12);
+  if (params.relocate === 'voxel' && !world.hasVox) throw new Error('voxel relocation without a voxel world');
+  lu.set([{ gbuffer: 0, none: 1, voxel: 2 }[params.relocate], 0, 0, 0], 12 + 8 * 12);
   lu.set([{ none: 0, voxel: 1, tri: 2 }[params.world], params.world === 'none' ? N : Math.min(params.depthCascades, N), params.stats, world.hasBvh ? 1 : 0], 8 + 8 * 12);
   const layoutBuf = device.createBuffer({ label: 'rc.layout', size: layout.byteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   device.queue.writeBuffer(layoutBuf, 0, layout);
