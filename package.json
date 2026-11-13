@@ -1,0 +1,19 @@
+{
+  "name": "gi-lab",
+  "private": true,
+  "type": "module",
+  "description": "Program 2 research renderer (TypeScript + WebGPU; Dawn natively via the webgpu package, Chrome in the browser)",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "jpeg-js": "0.4.4",
+    "pngjs": "7.0.0",
+    "webgpu": "0.6.2"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "@types/pngjs": "6.0.5",
+    "@webgpu/types": "0.1.74",
+    "esbuild": "0.28.2",
+    "typescript": "7.0.2"
+  }
+}

@@ -1,24 +1,33 @@
 # 現状 — 2026-11-13
 
-**Program 2 を開始した。実装も計測もまだない。次の作業はスパイク S0。**
+**S0（土台）を終えた（ネイティブのみ）。GI はまだない。次の作業はスパイク S1。**
 
 ## いまの状態
 
 - 目的と必須要件：[憲章](../docs/charter.md)。
-- 方向：Radiance Cascades 系の無ノイズ放射輝度場、区間ごとに切り替えるトレーサ、
-  ボクセル化した StrataBrick、両端のスタイル演算子。すべて**未検証の仮説**
-  （[architecture](../docs/architecture.md)）。
+- 方向：Radiance Cascades 系の無ノイズ放射輝度場（可視サーフェス近傍のワールド格子プローブ）、
+  区間ごとに切り替えるトレーサ、ボクセル化した StrataBrick、両端のスタイル演算子。すべて
+  **未検証の仮説**（[architecture](../docs/architecture.md)。S0 で先行研究の本文を読んで改訂した）。
 - 評価：同じコストでの品質。予算と指標の数値は仮置き（[evaluation](../docs/evaluation.md)）。
-- 計画：S0 土台 → S1 スクリーン空間カスケード → S2 ボクセル StrataBrick →
+- 計画：S0 土台 ✓ → S1 疎プローブのカスケード → S2 ボクセル StrataBrick →
   S3 スタイル演算子 → チェックポイント C1（[roadmap](roadmap.md)）。
-- 決定：[2026-11-13 Program 2 開始](decisions/2026-11-13-program-2-start.md)。
+- 決定：[Program 2 開始](decisions/2026-11-13-program-2-start.md)、
+  [ツールチェーンとネイティブ先行](decisions/2026-11-13-s0-toolchain-native-first.md)。
 
-## 次にやること（S0）
+## S0 の結果（[記録](spikes/s0-foundation.md)）
 
-1. ツールチェーンを決める（C++ と Dawn / Rust と wgpu / TypeScript 直書き）。
-2. 参照レンダラを決める。
-3. 先行研究の本文を読む（architecture 末尾のリスト）。
-4. Sponza の G-buffer を 1080p で描き、GPU タイムスタンプをネイティブとブラウザで取る。
+- ツールチェーン：TypeScript ＋ WebGPU（WGSL）。ネイティブは Dawn（npm の `webgpu`、Vulkan）。
+- シーン：Khronos glTF Sponza（26.2 万三角形）。参照レンダラは S1 の品質計測の前に決める。
+- Sponza G-buffer 1080p：GPU 時間の中央値 0.63 ms（探索値、ネイティブ、3 回）。画像は目視で確認。
+- ブラウザでの計測は後段に回した。この作業機のブラウザは WebGPU が SwiftShader に落ちる。
+- 先行研究で最も近いのは Split RC（HWRT ありの dGPU で Sponza 8.6 ms）。GI 4 ms の予算は厳しい。
+
+## 次にやること（S1）
+
+1. 可視画素から疎なワールド格子プローブを作り、深度バッファ区間だけで拡散 GI を出す。
+2. スクリーン配置プローブをベースラインとして並べ、静止時とカメラ移動時のちらつきを測る。
+3. 区間の埋め方（方向ごとの決定的トレースとレイ分割）を比べる。
+4. 品質を測る前に参照レンダラを決める。
 
 ## リポジトリと作業機
 
@@ -35,12 +44,12 @@
     残していない。
   - `archive-local/`（96 MB）：git 管理外で、**この作業機にしかない**。外部への
     退避はしていない（下の「archive-local の扱い」）。
-  - `assets/`（288 MB、Sponza）：保持。
+  - `assets/`（288 MB、Sponza）：保持。S0 で Khronos 版 Sponza（51 MB）を追加した。
+    旧 Vulkan-Samples-Assets 版は使っていないが消していない。
   - 旧クローン `../gi-lab-old-private`（別リポジトリ phos-gi-lab、3.6 GB）：ユーザー判断で
     ディレクトリごと削除した。リモートに無かったローカルブランチ 1 本とスタッシュ 4 件も
     一緒に失われている。
-- Python 環境は未構築。必要な依存は S0 で決めて `mise.toml` に書く。
-- この整理でビルド、テスト、GPU 実行は行っていない。
+- Python 環境は未構築。S0 では不要だった（コードは TypeScript、依存は `package-lock.json`）。
 
 ### archive-local の扱い
 

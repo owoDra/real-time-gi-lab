@@ -1,0 +1,56 @@
+{
+  "kind": "exploratory (探索値)",
+  "date": "2026-11-13T12:32:20.477Z",
+  "platform": "native",
+  "implementation": "Dawn via webgpu@0.6.2 (node), backend=vulkan",
+  "userAgent": "node v22.22.3",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "rdna-3",
+    "device": "amd-radeon-8060s-graphics-radv-strix-halo-",
+    "description": "radv: Mesa 26.1.2"
+  },
+  "resolution": "1920x1080",
+  "frames": {
+    "warmup": 120,
+    "measured": 600,
+    "inFlight": 2
+  },
+  "scene": {
+    "triangles": 262267,
+    "vertices": 192496,
+    "draws": 103,
+    "materials": 25,
+    "textures": 69
+  },
+  "camera": {
+    "eye": [
+      10.827245318954033,
+      0.4821007406719928,
+      -0.3095244287641208
+    ],
+    "target": [
+      -15.367568112732783,
+      2.722561890789354,
+      -0.3095244287641208
+    ],
+    "fovYDeg": 60,
+    "near": 0.05
+  },
+  "timestampsAvailable": true,
+  "timestampGranularityNs": 7694,
+  "gbufferPass": {
+    "medianMs": 0.634,
+    "p05Ms": 0.594,
+    "p95Ms": 0.714,
+    "minMs": 0.589,
+    "maxMs": 1.204,
+    "meanMs": 0.643
+  },
+  "allocatedBytes": {
+    "scene": 415041396,
+    "gbuffer": 33177600,
+    "note": "sum of created resources, not a measured peak"
+  },
+  "loadMs": 6559
+}

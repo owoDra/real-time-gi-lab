@@ -44,7 +44,9 @@ Web で実現可能なものを相手にする。
 
 ## シーン
 
-- テクスチャ付き Sponza（`mise run assets`）。
+- テクスチャ付き Sponza（`mise run assets`。Khronos glTF-Sample-Assets 版、約 26 万三角形。
+  2026-11-13 に Vulkan-Samples-Assets 版から替えた。あちらのテクスチャは ASTC で、
+  開発機とデスクトップの WebGPU では読めない）。
 - 写実の環境にトゥーンの物体を置いた混在シーン。
 - N004 のリーク・ワールド形状シーン（[legacy/scenes/](../legacy/scenes/)）：
   thin / thick / grazing / enclosed、dense / large-horizontal / vertical-tall。
@@ -73,6 +75,17 @@ Program 1 では「光源移動」と名付けたシーケンスが全フレー�
 
 ## 参照レンダラ
 
-S0 で決める。RGB、テクスチャ、スタイルの放出側プロキシを扱える既存のパストレーサ
-（Mitsuba 3 など）を使う。Program 1 の CPU オラクル（スカラー、Lambert のみ）は拡張せず、
-必要ならタグから参照する。
+**未決（S1 の品質計測の前に決める）。** 参照はオフラインで正解画像を作る道具で、
+製品と同じ API である必要はない。RGB、テクスチャ、スタイルの放出側プロキシを扱えること。
+Program 1 の CPU オラクル（スカラー、Lambert のみ）は拡張せず、必要ならタグから参照する。
+
+候補（2026-11-13 時点）：
+
+- Mitsuba 3：信頼性が高い。AMD 機では CUDA が使えず LLVM（CPU）バリアントになる。
+  Vulkan バックエンドはない。glTF からの変換が要る。
+- Vulkan のハードウェアレイトレーシングによる GPU パストレーサ：開発機の RADV は
+  `VK_KHR_ray_tracing_pipeline` と `VK_KHR_ray_query` に対応している。既存のもの
+  （nvpro の vk_gltf_renderer。AMD で動くかは未確認）か自前。自前なら Mitsuba との
+  点検が要る。
+- 放出側プロキシは glTF の材質（放射のみ、反射率 0）としてデータで表せる見込みで、
+  その場合はどの候補でもレンダラの改造が要らない。

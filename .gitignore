@@ -15,3 +15,4 @@ __pycache__/
 
 # Machine-local archives kept outside git (see research/status.md).
 /archive-local/
+/node_modules/

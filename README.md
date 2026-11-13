@@ -10,7 +10,8 @@ WebGPU で動くリアルタイム・グローバルイルミネーションの�
 
 ## 現在地
 
-**Program 2 を 2026-11-13 に開始。まだ実装も計測もありません。**
+**Program 2 を 2026-11-13 に開始。土台（S0）として Sponza の G-buffer と GPU
+タイムスタンプの計測までできています。GI はまだありません。**
 最初に読むのは [research/status.md](research/status.md)。
 
 | 文書 | 内容 |
@@ -37,11 +38,16 @@ git show archive/program-1:research/status.md
 
 ```bash
 mise install
-mise run assets   # Sponza を assets/ に取得（git 管理外）
+npm ci            # TypeScript、esbuild、Dawn（npm の webgpu）
+mise run assets   # Khronos glTF Sponza を assets/ に取得（git 管理外）
 mise run check    # 文書のリンクと legacy 目録を検査
+mise run typecheck
+mise run s0:native   # Sponza G-buffer 1080p、ネイティブ Dawn（Vulkan）で GPU 時間を計測
+mise run s0:serve    # 同じ計測をブラウザで（http://127.0.0.1:8765/）。当面は使わない
 ```
 
-レンダラのビルド手順は、ツールチェーンを決めるスパイク S0 の後に追加します。
+レンダラは TypeScript と WebGPU（WGSL）で書き、ネイティブでは Dawn を Node から、
+ブラウザでは Chrome 系の WebGPU を使います（[S0 の記録](research/spikes/s0-foundation.md)）。
 
 ## ライセンス
 

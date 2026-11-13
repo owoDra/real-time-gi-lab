@@ -67,8 +67,20 @@ Program 1 は主に ChatGPT と OpenAI Codex CLI、N008 以降は Claude Code �
 
 ```bash
 mise install
-mise run assets   # Sponza を取得
+npm ci            # 依存はバージョン固定（package-lock.json）
+mise run assets   # Khronos glTF Sponza を取得
 mise run check    # 文書のリンクと legacy 目録を検査
+mise run typecheck
+mise run s0:native   # ネイティブ（Dawn / Vulkan）で G-buffer と GPU タイムスタンプ
+mise run s0:serve    # ブラウザ計測用サーバ（127.0.0.1:8765）。結果は out/s0/web/
 ```
+
+- コードは `src/core/`（共通）、`src/native/`、`src/web/`、`tools/`。シェーダは WGSL で、
+  ネイティブとブラウザで同じものを使う。
+- ブラウザのタイムスタンプは、`WebGPU Developer Features` フラグを有効にしないと
+  100 µs 単位に丸められる。結果 JSON の `timestampGranularityNs` で確認する。
+- **当面はネイティブだけで開発・計測する**
+  （[決定](research/decisions/2026-11-13-s0-toolchain-native-first.md)）。この作業機のブラウザは
+  WebGPU が SwiftShader（CPU）に落ちる。ブラウザの結果で `adapter` が `swiftshader` なら無効。
 
 実行していない検査は「未実行」と書く。PASS と書かない。
