@@ -1,130 +1,14 @@
 [tools]
-cmake = "4.4.3"
-ninja = "1.13.2"
 python = "3.13"
 
-[env]
-CMAKE_GENERATOR = "Ninja"
-PHOS_GI_BUILD_DIR = "build/release"
-
 [tasks.assets]
-description = "Fetch the Sponza research scene"
+description = "Fetch the Sponza scene into assets/ (not tracked by git)"
 run = "./scripts/fetch_sponza.sh"
 
-[tasks.configure]
-description = "Configure the Release build"
-run = 'cmake -S . -B "$PHOS_GI_BUILD_DIR" -DCMAKE_BUILD_TYPE=Release'
-
-[tasks.build]
-description = "Build phos-gi-lab and shaders"
-depends = ["configure"]
-run = 'cmake --build "$PHOS_GI_BUILD_DIR"'
-
-[tasks.bench]
-description = "Run the Sponza cache-locality benchmark"
-depends = ["build", "assets"]
-usage = '''
-flag "--queries <queries>" help="Number of cache queries" default="4000000"
-flag "--iterations <iterations>" help="Timed dispatch iterations" default="100"
-flag "--validation" help="Enable Vulkan validation layers"
-'''
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-args=(
-  --scene assets/Vulkan-Samples-Assets/scenes/sponza/Sponza01.gltf
-  --queries "${usage_queries?}"
-  --iterations "${usage_iterations?}"
-)
-if [ "${usage_validation:-false}" = "true" ]; then
-  args+=(--validation)
-fi
-exec bash ./scripts/run_with_vulkan.sh "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
-'''
-
-[tasks."bench:synthetic"]
-description = "Run the cache-locality benchmark without downloading Sponza"
-depends = ["build"]
-usage = '''
-flag "--queries <queries>" help="Number of cache queries" default="4000000"
-flag "--iterations <iterations>" help="Timed dispatch iterations" default="100"
-flag "--validation" help="Enable Vulkan validation layers"
-'''
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-args=(
-  --synthetic
-  --queries "${usage_queries?}"
-  --iterations "${usage_iterations?}"
-)
-if [ "${usage_validation:-false}" = "true" ]; then
-  args+=(--validation)
-fi
-exec bash ./scripts/run_with_vulkan.sh "$PHOS_GI_BUILD_DIR/phos-gi-lab" "${args[@]}"
-'''
-
-
-[tasks."bench:sweep"]
-description = "Run the reproducible M0 benchmark matrix and save artifacts"
-depends = ["build", "assets"]
-usage = '''
-flag "--query-counts <query_counts>" help="Comma-separated query counts" default="100000,500000,1000000,4000000,8000000"
-flag "--iterations <iterations>" help="Timed dispatch iterations per process" default="100"
-flag "--repeats <repeats>" help="Process-level repeats per query count" default="3"
-flag "--validation" help="Enable Vulkan validation layers"
-'''
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-args=(
-  --query-counts "${usage_query_counts?}"
-  --iterations "${usage_iterations?}"
-  --repeats "${usage_repeats?}"
-)
-if [ "${usage_validation:-false}" = "true" ]; then
-  args+=(--validation)
-fi
-exec python scripts/benchmark_matrix.py "${args[@]}"
-'''
-
-[tasks."bench:sweep:synthetic"]
-description = "Run the reproducible M0 matrix with the synthetic workload"
-depends = ["build"]
-usage = '''
-flag "--query-counts <query_counts>" help="Comma-separated query counts" default="100000,500000,1000000,4000000,8000000"
-flag "--iterations <iterations>" help="Timed dispatch iterations per process" default="100"
-flag "--repeats <repeats>" help="Process-level repeats per query count" default="3"
-'''
-run = '''
-#!/usr/bin/env bash
-set -euo pipefail
-exec python scripts/benchmark_matrix.py \
-  --synthetic \
-  --query-counts "${usage_query_counts?}" \
-  --iterations "${usage_iterations?}" \
-  --repeats "${usage_repeats?}"
-'''
+[tasks.check]
+description = "Check Markdown links and the legacy manifest"
+run = "python scripts/check.py"
 
 [tasks.clean]
-description = "Remove generated build files"
-run = 'cmake -E remove_directory build'
-
-
-[tasks."research:check"]
-description = "Validate the research harness layout and result indexes"
-run = "python scripts/research/verify.py"
-
-[tasks."research:record"]
-description = "Run one lane experiment and capture a reproducible raw artifact"
-usage = '''
-flag "--lane <lane>" help="lane-a-split-rc, lane-b-traversal, or lane-c-storage-locality" required=#true
-flag "--experiment <experiment>" help="Stable experiment id, e.g. 001-producer-stream" required=#true
-flag "--command <command>" help="Command to execute; quote it as one shell argument" required=#true
-'''
-run = '''
-exec python scripts/research/run_experiment.py \
-  --lane "${usage_lane?}" \
-  --experiment "${usage_experiment?}" \
-  --command "${usage_command?}"
-'''
+description = "Remove generated build and output directories"
+run = "rm -rf build out"

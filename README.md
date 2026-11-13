@@ -1,61 +1,51 @@
 # real-time-gi-lab
 
-**Evidence-driven research toward a competitive real-time global illumination architecture.**
+完全動的・大規模・高密度のワールドで動き、写実と非写実を同じ空間で混在でき、
+WebGPU で動くリアルタイム・グローバルイルミネーションの研究。
 
-> **AI-driven, human-supervised research.** Most of this repository's research and development was conducted through near-autonomous, iterative workflows using **ChatGPT** and **OpenAI Codex CLI** (later studies from N008 also used **Claude Code**). AI assisted with designing experiments, implementing C++/GLSL/Python code, preparing tests, analyzing reported results, and maintaining research records. A human set the research objectives and constraints, operated the GPU environment, reviewed experimental evidence, and made decisions on what to accept, reject, or investigate next. **The AI did not independently verify every scientific claim**, and this is not a fully unattended research system. See [How this project was researched](docs/ai-research-workflow.md).
+> **AI 主導、人間監督の研究です。** 設計、実装、実験、記録の大半を AI
+> （Program 1 は ChatGPT と OpenAI Codex CLI、後半と Program 2 は Claude Code）が行い、
+> 人間が目的と制約を定め、採否を決めています。AI がすべての主張を独立に検証した
+> わけではありません。[開示](docs/ai-research-workflow.md)
 
+## 現在地
 
+**Program 2 を 2026-11-13 に開始。まだ実装も計測もありません。**
+最初に読むのは [research/status.md](research/status.md)。
 
-The objective is to establish a new light-transport architecture that can outperform representative existing real-time GI techniques **in a defensible combination of image quality, end-to-end GPU cost, GPU memory, and dynamic-scene coverage**. This is not merely a Split Radiance Cascades optimization project. Producer, traversal, storage and reuse components are replaceable hypotheses, not permanent commitments.
+| 文書 | 内容 |
+|---|---|
+| [docs/charter.md](docs/charter.md) | 目的、必須要件、止め方 |
+| [docs/architecture.md](docs/architecture.md) | 検証中の仮説（Strata Cascades） |
+| [docs/evaluation.md](docs/evaluation.md) | 予算、指標、比較相手 |
+| [research/roadmap.md](research/roadmap.md) | スパイク S0〜S3 とチェックポイント |
+| [AGENTS.md](AGENTS.md) | 作業ルール |
 
-The [M001 static quality screen](research/lanes/lane-m-gi-competitiveness/results/083-m001-static-screen-outcome.md) is complete: PT passes six targets; the configured RC and corrected DDGI roles fail their quality gates. Lane M research continues; no GI speed or architecture win is accepted.
+## Program 1
 
-## Historical measured position (2026-10-11)
+2026-09-28 から 2026-11-13 までの研究（キャッシュ局所性、Split Radiance Cascades
+レンダラ、GI 競争力比較）は、目標未達のまま終了しました。全記録はタグ
+`archive/program-1` とブランチ `research` にあります。持ち越す知見は
+[docs/program-1/findings.md](docs/program-1/findings.md)、引き継いだ参照コードは
+[legacy/](legacy/) です。
 
-The laboratory has a functioning GPU image-producing Renderer and substantial measured performance results, **but has not established a generally superior GI solution**.
+```bash
+git show archive/program-1:research/status.md
+```
 
-- **Current measured design:** visibility-driven Split RC producer with natural append order; HWRT/TLAS on the measured Radeon 8060S; segment-DDA/hash plus conservative quantized Micro BVH8 as software fallback; per-probe sparse hash storage; and object-local geometry ownership/updates.
-- **Dynamic updates:** accepted Lane E heavy-boundary revalidation, including substantial GPU-time improvements on moving-rigid and stable-topology-deforming workloads. Lane M retained the Lane E incumbent for topology-changing/high-churn regimes.
-- **N003 renderer comparison:** approximately **2.35–3.11x** faster than the tested vanilla Split RC in reported cases; **approximately 24–27% more GPU memory**. These are bounded cases, not cross-GPU or universal claims.
-- **Known weaknesses:** N004 reports quality issues under camera and dynamic-geometry motion. N005 adaptive tracing is REFINE/conditional, not one universally accepted rule. N006 demonstrated reproducible Q8 image influence, **not** detectable signed quality lift from the tested extra four rays; its P1/P2/P3 progression stopped.
-- **Reference history:** N007–N009 retained their scoped negative/incomplete findings. N010 completed the Lane M handoff; new M001 heldout references and comparisons follow their own prospective gates. Historical speed figures above do not establish a current same-quality GI advantage.
-
-**Read [research/status.md](research/status.md) first.** It is the single current architecture/status synthesis. [research/roadmap.md](research/roadmap.md) defines the next major gates; [research/branch-inventory.md](research/branch-inventory.md) locates all 25 original refs and preserves abandoned/negative experiments.
-
-## Repository navigation
-
-| Path | Purpose |
-| --- | --- |
-| [docs/research.md](docs/research.md) | Stable objective, fairness rules, end-state criteria |
-| [research/status.md](research/status.md) | Current decision-grade synthesis and limitations |
-| [research/roadmap.md](research/roadmap.md) | Open research questions and exit gates |
-| [research/protocol.md](research/protocol.md) | Frozen measurement, correctness, provenance rules |
-| [research/decisions/](research/decisions/) | Cross-lane adoption decisions |
-| [research/lanes/](research/lanes/) | Frozen plans, results, and per-lane evidence |
-| [research/integration/](research/integration/) | Historical I001 evidence |
-| [src/](src/), [shaders/](shaders/) | Renderer and isolated historical research implementations |
-| [scripts/](scripts/) | Experimental runners, evidence checks, reproducibility scripts |
-
-Earlier branches remain immutable historical provenance. Imported historical lane sources are **not automatically activated in the production Renderer**. N001–N006 research variants may have separate targets; being present is not equivalent to being adopted.
-
-## Building and validating
-
-Requires a host C++20 compiler, Vulkan 1.3 loader/driver, and dependencies resolved by CMake/mise. The measured GPU for the historical results was AMD Radeon 8060S Graphics (RADV STRIX_HALO).
+## 使い方
 
 ```bash
 mise install
-mise run build
-mise run research:check
+mise run assets   # Sponza を assets/ に取得（git 管理外）
+mise run check    # 文書のリンクと legacy 目録を検査
 ```
 
-To launch a particular renderer or historical experiment, follow its lane-specific README and scripts, and confirm prerequisites and expected output before claiming a pass. Existing M0 controls are available as `mise run bench` and `mise run bench:sweep` (the Sponza scene may need downloading via `mise run assets`).
+レンダラのビルド手順は、ツールチェーンを決めるスパイク S0 の後に追加します。
 
-Raw runs under `out/research/` are local/ignored; retained results include experiment IDs, source SHAs, decision labels and artifact provenance. **Do not mistake an absent historical raw artifact for a newly reproduced result.**
+## ライセンス
 
-## License and publication security
-
-This project's own source and documentation are provided under the [Apache License 2.0](LICENSE). Downloaded dependencies, test scenes (including Khronos Sponza), and any third-party materials retain their respective original licenses; they are **not** relicensed by this file. A full history secret scan must be completed before making the repository public. See [publication readiness](docs/publication-readiness.md) and the manual [whole-history audit script](scripts/audit_public_release.sh).
-
-## Workflow
-
-Run studies on dedicated lane branches; integrate validated findings and their records into `research`; advance `main` only at a verified program checkpoint. No PR requirement and **no GitHub Actions/CI**. Follow [AGENTS.md](AGENTS.md) for evidence immutability and promotion gates.
+本プロジェクトのソースと文書は [Apache License 2.0](LICENSE)。取得した依存物と
+テストシーン（Khronos Sponza を含む）は、それぞれ元のライセンスに従います。
+リポジトリを公開する前に、履歴全体の秘密情報スキャンが必要です
+（[公開前チェック](docs/publication-readiness.md)）。

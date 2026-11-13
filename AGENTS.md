@@ -1,52 +1,74 @@
-# Research repository operation
+# 作業ルール — Program 2
 
-## Purpose and sources of truth
+## どこに何があるか
 
-- `docs/research.md`: stable mission, evaluation criteria.
-- `research/status.md`: **the single current** architecture, status and limitations.
-- `research/roadmap.md`: open, large research questions and exit gates.
-- `research/protocol.md`: reusable correctness, GPU timestamp, memory and evidence rules.
-- `research/decisions/`: cross-lane decisions, with reasons.
-- `research/lanes/<lane>/results/`: detailed outcome records; historical branches and source SHAs remain provenance, not competing current summaries.
-- Source, shader, tests: executable behavior. Do not replace source truth with prose.
+| 場所 | 役割 |
+|---|---|
+| `docs/charter.md` | 目的、必須要件、止め方。めったに変えない |
+| `docs/architecture.md` | 検証中の仮説。外れたら書き換える |
+| `docs/evaluation.md` | 予算、指標、比較相手、健全性チェック |
+| `research/status.md` | **唯一の現状要約。1 ページ以内** |
+| `research/roadmap.md` | スパイクと打ち切り基準、チェックポイント |
+| `research/decisions/` | 方針の決定。1 件 1 ファイル |
+| `research/spikes/` | スパイクの記録。1 件 1 ページ |
+| `docs/program-1/` | Program 1 から持ち越す知見 |
+| `legacy/` | Program 1 の参照コード。ビルドしない |
 
-## AI research transparency
+コードとシェーダが実際の挙動である。文書でコードの事実を置き換えない。
 
-This project was largely developed through AI-assisted, near-autonomous iterations using ChatGPT and OpenAI Codex CLI, with human oversight. Keep that provenance visible in the [research workflow disclosure](docs/ai-research-workflow.md) and README. Treat human-operated GPU measurements and archived evidence as authoritative; do not imply AI independently performed unavailable hardware verification or that every line has a known AI author.
+## ブランチ
 
-## Branch roles
+- `p2`：Program 2 の本線。探索中はここに直接コミットしてよい。
+- `p2-<名前>`：大きな試行を分けたいときの短命ブランチ。
+- `research`、`main`、`research-*`、タグ `archive/program-1`：Program 1 の記録。
+  **書き換えない、消さない、force push しない。**
+- `main` への昇格は、チェックポイントでユーザーが決めたときだけ行う。
+- プルリクエストは必須ではない。GitHub Actions や CI は追加しない。
 
-- `main`: verified, published research-result checkpoint; **not** an active experimental branch.
-- `research`: integrated, reviewed research assets and cross-lane decisions.
-- A dedicated `research-lane-*` (or explicit `research-n*`) branch per experiment. Experiment commits normally go directly to that branch.
-- **New or changed executable Renderer behavior** requires build, applicable tests, and runtime/correctness checks before architecture promotion. A **historical evidence-only consolidation** may publish with explicit user authorization, immutable source/evidence identities, verified Git ancestry, result-index/link checks, and a provably unchanged active build graph; record that tests were **not rerun** and do not claim runtime regression validation. Promote to `main` only after the appropriate checkpoint gates.
-- Preserve historical Git refs, non-promotion results, failed runs, and the exact accepted evidence bytes. No force push or ref deletion during consolidation.
-- Never use `git merge -s ours`, synthetic empty merges or misleading commit ancestry to present missing files as integrated. Preserve actual records and explain any branch kept as a historical ref.
-- No pull-request requirement for routine studies. Do not add GitHub Actions, CI workflows or secret-bearing logs.
+## 探索と確認
 
-## Current-vs-historical separation
+- **探索**（スパイク）：事前登録なし。速く回す。数値は「探索値」と明記する。
+  手続き上の失敗（ビルド、設定、スクリプトの不具合）は直して続ける。記録に残すのは
+  判断に効くものだけ。
+- **確認**（M4 など）：条件、比較相手、指標、判定規則を先に書いてコミットし、1 回だけ
+  測る。結果を見てから閾値を変えない。
 
-- Historical standalone study files may be in `src/research/`, `shaders/research/`, and `scripts/research/`, but that does **not** authorize linking them into the current Renderer or default CMake build.
-- The N-series Renderer contains pinned imported source/shader copies. Do not casually deduplicate them against historical Lane A/B/I001 trees: compare exact semantics, shader names, provenance and tests first.
-- Do not enable old A/B targets wholesale: they register overlapping shader output names with the N-series CMake definition. Keep the historical code accessible without changing the default build graph.
-- Before deleting or rewriting historical experiments, verify that their adopted/rejected results, hashes, configs and references remain reachable. Prefer retaining the original branch to destructive archival operations.
+## 計測と品質
 
-## Measurement and quality
+1. 新しいシーン、新しいシーケンス、新しい結果は、**数値の前に画像を見る**。
+2. 動的シーケンスは、参照がフレーム間でノイズを超えて変化することを生成時に assert する。
+3. 性能判断は GPU タイムスタンプ。コストは GPU 時間とメモリの真のピークを併記する。
+4. 比較は同じシーン、同じ解像度、同じ予算で行い、試した設定の範囲を書く。
+5. 負の結果は残す。短く。
+6. 開発機 1 台の結果を一般化しない。
+7. GPU の電源・クロックを特権操作で固定しない（Program 1 の Lane G で事故があった）。
+8. GPU ジョブは同時に 1 本。
 
-1. Pre-register a falsifiable question, exact comparison boundary, quality/semantic parity, evidence classifier, memory constraints, minimal detectable effect and stop conditions.
-2. GPU timestamp is the primary performance decision axis; CPU wall is health/provenance/diagnostic. Confirm the precision of the actual workload boundary (Lane K 5% is **not** transferable to Lane L's heavy boundary, which demonstrated 20%).
-3. Include end-to-end costs, persistent and true-peak memory, correctness and movement/dynamic regimes. Preserve all samples; no post-hoc threshold changes or cherry-picked scenes.
-4. Treat black/low-signal CPU HDR references as **ineligible until validated**; zero whole-frame p99 under sparse illumination is not proof of convergence. N007 remains separate; do not rewrite N006's negative result.
-5. No general superiority claims from only a single GPU/Sponza or a non-equivalent quality budget.
-6. Never request privileged GPU clock/power forcing (prior Lane G safety incident).
-7. Compare representative existing GI families fairly; report both wins and losses.
+## 生成物
 
-## Basic commands
+- ビルドは `build/`、実行出力は `out/`。どちらも git 管理外。
+- 数値の要約（JSON か Markdown、1 MB 以下）はコミットする。
+- 生の出力は要約を作ったら消す。`out/` を溜めない。Program 1 では 411 GB 残った。
+
+## コミット
+
+- コミットメッセージに `Co-` で始まるトレーラーを付けない。
+- プルリクエストに生成ツールの署名を書かない。
+- `CLAUDE.md` と `.claude/` はコミットしない。
+
+## AI による研究であることの開示
+
+Program 1 は主に ChatGPT と OpenAI Codex CLI、N008 以降は Claude Code も使い、
+人間の監督のもとで進めた。Program 2 は Claude Code を使う。目的と制約を定め、
+採否を決めるのは人間である。AI がすべての主張を独立に検証したわけではない。
+詳細は [docs/ai-research-workflow.md](docs/ai-research-workflow.md)。
+
+## 基本コマンド
 
 ```bash
 mise install
-mise run build
-mise run research:check
+mise run assets   # Sponza を取得
+mise run check    # 文書のリンクと legacy 目録を検査
 ```
 
-Perform explicit GPU/runtime smoke tests only on an environment that can execute them. Report unexecuted checks as **not run**, never PASS. Keep independent research outcomes distinct from release-level acceptance.
+実行していない検査は「未実行」と書く。PASS と書かない。
