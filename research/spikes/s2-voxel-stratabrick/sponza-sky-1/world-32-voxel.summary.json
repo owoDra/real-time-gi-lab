@@ -1,0 +1,386 @@
+{
+  "kind": "exploratory (探索値)",
+  "date": "2026-11-13T14:05:38.803Z",
+  "platform": "native",
+  "implementation": "Dawn via webgpu@0.6.2 (node), backend=vulkan",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "rdna-3",
+    "device": "amd-radeon-8060s-graphics-radv-strix-halo-",
+    "description": "radv: Mesa 26.1.2"
+  },
+  "scene": {
+    "name": "sponza",
+    "triangles": 262267,
+    "sunDir": [
+      -0.15,
+      1,
+      0.1
+    ]
+  },
+  "resolution": "1920x1080",
+  "frames": {
+    "warmup": 60,
+    "measured": 240,
+    "inFlight": 2,
+    "seedFixed": false
+  },
+  "sky": [
+    0.45,
+    0.6,
+    0.9
+  ],
+  "config": "world-32-voxel",
+  "params": {
+    "method": "world",
+    "P": 32,
+    "cascades": 5,
+    "sMin": 0.05,
+    "kInterval": 1,
+    "regStride": 1,
+    "rayStride": 1,
+    "maxSteps": 16,
+    "pxStride": 4,
+    "thicknessMin": 0.15,
+    "lift": 0.25,
+    "caps": [
+      33024,
+      9984,
+      3072,
+      1024,
+      512
+    ],
+    "analytic": false,
+    "world": "voxel",
+    "depthCascades": 0,
+    "levelMap": 1,
+    "voxScale": 0.25,
+    "voxOffset": 1,
+    "voxSkip": 0.5,
+    "resCap": 8,
+    "stats": 0
+  },
+  "allocatedBytes": 64709680,
+  "voxAllocatedBytes": 125043232,
+  "bvh": {
+    "buildMs": 1654,
+    "bytes": 21992544,
+    "nodes": 162733
+  },
+  "voxParams": {
+    "v0": 0.1,
+    "levels": 5,
+    "G": 64,
+    "maxBricks": 32768,
+    "maxVoxels": 4194304
+  },
+  "static": {
+    "timing": {
+      "gbuffer": {
+        "median": 0.682,
+        "p05": 0.641,
+        "p95": 0.754,
+        "max": 0.988
+      },
+      "shadow": {
+        "median": 0.604,
+        "p05": 0.504,
+        "p95": 0.681,
+        "max": 0.738
+      },
+      "direct": {
+        "median": 0.208,
+        "p05": 0.202,
+        "p95": 0.265,
+        "max": 0.29
+      },
+      "vox": {
+        "median": 1.848,
+        "p05": 1.555,
+        "p95": 2.083,
+        "max": 2.25
+      },
+      "giBuild": {
+        "median": 0.619,
+        "p05": 0.508,
+        "p95": 0.682,
+        "max": 0.747
+      },
+      "giTrace": {
+        "median": 3.241,
+        "p05": 2.74,
+        "p95": 3.529,
+        "max": 3.861
+      },
+      "giMerge": {
+        "median": 0.258,
+        "p05": 0.22,
+        "p95": 0.281,
+        "max": 0.295
+      },
+      "giGather": {
+        "median": 0.463,
+        "p05": 0.418,
+        "p95": 0.509,
+        "max": 0.53
+      },
+      "giSum": {
+        "median": 4.589,
+        "p05": 3.895,
+        "p95": 4.944,
+        "max": 5.385
+      },
+      "giTotal": {
+        "median": 6.428,
+        "p05": 5.456,
+        "p95": 7.02,
+        "max": 7.544
+      }
+    },
+    "flicker": {
+      "validPixelsPerFrame": 2073284,
+      "giFinePct": 0,
+      "giCoarsePct": 0,
+      "controlFinePct": 0,
+      "controlCoarsePct": 0,
+      "giMeanAbsDlog2": 0,
+      "controlMeanAbsDlog2": 0,
+      "giFineWorstFramePct": 0,
+      "fields": [
+        "valid",
+        "giFine",
+        "giCoarse",
+        "ctrlFine",
+        "ctrlCoarse",
+        "giAbsDlog2Milli",
+        "ctrlAbsDlog2Milli"
+      ]
+    },
+    "counts": [
+      24461,
+      7284,
+      2240,
+      756,
+      287
+    ],
+    "overflow": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "insertFailures": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "usedBytes": 49403424,
+    "vox": {
+      "bricks": 9522,
+      "voxels": 931039,
+      "brickOverflow": 0,
+      "bigOverflow": 0,
+      "voxelOverflow": 0,
+      "bricksPerLevel": [
+        7605,
+        1529,
+        300,
+        72,
+        16
+      ],
+      "bigPerLevel": [
+        24980,
+        13455,
+        8418,
+        976,
+        301
+      ],
+      "persistent": 13377208,
+      "buildTemp": 19501056
+    }
+  },
+  "moving": {
+    "timing": {
+      "gbuffer": {
+        "median": 0.853,
+        "p05": 0.706,
+        "p95": 0.94,
+        "max": 1.302
+      },
+      "shadow": {
+        "median": 0.534,
+        "p05": 0.507,
+        "p95": 0.555,
+        "max": 0.567
+      },
+      "direct": {
+        "median": 0.22,
+        "p05": 0.207,
+        "p95": 0.245,
+        "max": 0.291
+      },
+      "vox": {
+        "median": 1.642,
+        "p05": 1.557,
+        "p95": 1.708,
+        "max": 1.742
+      },
+      "giBuild": {
+        "median": 0.539,
+        "p05": 0.513,
+        "p95": 0.576,
+        "max": 0.594
+      },
+      "giTrace": {
+        "median": 2.845,
+        "p05": 2.653,
+        "p95": 3.042,
+        "max": 3.15
+      },
+      "giMerge": {
+        "median": 0.235,
+        "p05": 0.217,
+        "p95": 0.253,
+        "max": 0.264
+      },
+      "giGather": {
+        "median": 0.432,
+        "p05": 0.416,
+        "p95": 0.451,
+        "max": 0.48
+      },
+      "giSum": {
+        "median": 4.049,
+        "p05": 3.825,
+        "p95": 4.298,
+        "max": 4.412
+      },
+      "giTotal": {
+        "median": 5.673,
+        "p05": 5.45,
+        "p95": 5.967,
+        "max": 6.075
+      }
+    },
+    "flicker": {
+      "validPixelsPerFrame": 1983884,
+      "giFinePct": 26.765,
+      "giCoarsePct": 8.432,
+      "controlFinePct": 4.023,
+      "controlCoarsePct": 0.953,
+      "giMeanAbsDlog2": 0.092,
+      "controlMeanAbsDlog2": 0.01,
+      "giFineWorstFramePct": 32.65,
+      "fields": [
+        "valid",
+        "giFine",
+        "giCoarse",
+        "ctrlFine",
+        "ctrlCoarse",
+        "giAbsDlog2Milli",
+        "ctrlAbsDlog2Milli"
+      ]
+    },
+    "counts": [
+      22588,
+      6453,
+      1940,
+      659,
+      258
+    ],
+    "overflow": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "insertFailures": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "usedBytes": 46008640,
+    "vox": {
+      "bricks": 9546,
+      "voxels": 931775,
+      "brickOverflow": 0,
+      "bigOverflow": 0,
+      "voxelOverflow": 0,
+      "bricksPerLevel": [
+        7629,
+        1529,
+        300,
+        72,
+        16
+      ],
+      "bigPerLevel": [
+        24992,
+        13455,
+        8418,
+        976,
+        301
+      ],
+      "persistent": 13384824,
+      "buildTemp": 19550208
+    }
+  },
+  "tracer": [
+    {
+      "intervals": 391376,
+      "meanSteps": 2.76,
+      "atStepCap": 0,
+      "voxHitTriMiss": 0.033,
+      "voxMissTriHit": 0.2091,
+      "bothHit": 0.1156
+    },
+    {
+      "intervals": 466176,
+      "meanSteps": 4.547,
+      "atStepCap": 0,
+      "voxHitTriMiss": 0.179,
+      "voxMissTriHit": 0.0678,
+      "bothHit": 0.2566
+    },
+    {
+      "intervals": 573440,
+      "meanSteps": 7.5962,
+      "atStepCap": 0,
+      "voxHitTriMiss": 0.1305,
+      "voxMissTriHit": 0.0298,
+      "bothHit": 0.5189
+    },
+    {
+      "intervals": 774144,
+      "meanSteps": 8.894,
+      "atStepCap": 0,
+      "voxHitTriMiss": 0.0563,
+      "voxMissTriHit": 0.0032,
+      "bothHit": 0.7521
+    },
+    {
+      "intervals": 1175552,
+      "meanSteps": 11.6729,
+      "atStepCap": 0,
+      "voxHitTriMiss": 0.0242,
+      "voxMissTriHit": 0.0014,
+      "bothHit": 0.3152
+    }
+  ],
+  "leak": null,
+  "vsTriangle": {
+    "reference": "world-32-tri",
+    "pixels": 2073417,
+    "meanRef": 0.064,
+    "meanThis": 0.0535,
+    "bias": -0.1645,
+    "meanAbsRel": 0.2292,
+    "medianRel": 0.2625,
+    "p90Rel": 0.9635
+  }
+}

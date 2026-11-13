@@ -73,7 +73,15 @@ mise run check    # 文書のリンクと legacy 目録を検査
 mise run typecheck
 mise run s0:native   # ネイティブ（Dawn / Vulkan）で G-buffer と GPU タイムスタンプ
 mise run s1:native -- --configs world-32,screen-8 [--no-sky]   # S1 の RC（時間とちらつき率）
+mise run s2:native -- --scene sponza --configs world-32-voxel,world-32-tri [--no-sky] [--bvh] [--static-only]
+                     # S2：区間トレーサ（depth / voxel / hybrid / tri）、可視性の比較、リーク（--scene leak-<厚み>）
+mise run s2:native -- --scene sponza --vox-bench   # 再ボクセル化の段ごとの時間（--scene sponza-wide10 / sponza-dense9）
+mise run ref:export -- --scene sponza              # Mitsuba 用のシーン変換（out/mitsuba/<scene>）
+build/refenv/bin/python scripts/reference_irradiance.py out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N]
+mise run ref:compare -- --ref A.pfm,B.pfm --ours <cfg>.static.irr.f32 [--png DIR]   # 参照との誤差（s2:native --dump-irr）
 ```
+
+設定名の書式と引数は `src/native/rc.ts` の先頭に書いてある。
 
 - コードは `src/core/`（共通、WebGPU のコア機能だけ）と `src/native/`（Node から Dawn を使う実行器）。
 - **当面はネイティブだけで開発・計測する**

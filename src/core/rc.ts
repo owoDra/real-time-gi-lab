@@ -15,10 +15,20 @@
 // b_i = k (4^i - 1) / 3. Rays that leave the screen are unresolved (transmittance 1, no radiance), and rays
 // that pass the last interval return the sky radiance. Hit radiance is the direct-lit radiance texture
 // (one bounce). No history of any kind.
+import { BVH_TRACE_WGSL } from './bvh.ts';
 import { FRAME_WGSL } from './frame.ts';
 import type { GBuffer } from './gbuffer.ts';
+import { VOX_TRACE_WGSL } from './voxel.ts';
 
 export type Method = 'world' | 'screen' | 'split';
+/** S2: world-space interval tracer. 'none' keeps S1 (depth buffer only). */
+export type WorldTracer = 'none' | 'voxel' | 'tri';
+
+/** S2: resources of the world-space tracers (bound in group 3). */
+export interface WorldResources {
+  voxUniform: GPUBuffer; vox: GPUBuffer; bvhNodes: GPUBuffer; bvhTris: GPUBuffer;
+  materials: GPUBuffer; baseColor: GPUTexture; shadow: GPUTexture; hasVox: boolean; hasBvh: boolean;
+}
 
 export interface RcParams {
   method: Method;
@@ -34,11 +44,22 @@ export interface RcParams {
   lift: number;         // probes are kept at least lift * spacing in front of the surface
   caps: number[];       // max probes per cascade (world / split)
   analytic: boolean;    // placement test: intervals return a smooth world-space field instead of tracing
+  // S2
+  world: WorldTracer;   // tracer for cascades >= depthCascades, and fallback when a depth trace leaves the screen
+  depthCascades: number; // cascades traced against the depth buffer first
+  levelMap: number;     // voxel level grows by levelMap per cascade (1: follows the cone footprint, 2: follows the interval length)
+  voxScale: number;     // c0 voxel size relative to the c0 probe spacing
+  voxOffset: number;    // voxel traces start voxOffset voxels along the probe normal
+  voxSkip: number;      // occupied voxels entered within voxSkip voxels of the start are ignored
+  resCap: number;       // directions stop growing above this cascade (res = 4 * 2^min(i, resCap))
+  stats: number;        // 0: off, 1: DDA steps, 2: steps + voxel / triangle visibility comparison
+  relocate: boolean;    // diagnostic: false keeps world probes at their grid points (no view-dependent push)
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
+  world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: true,
 };
 
 const RC_WGSL = /* wgsl */ `
@@ -50,7 +71,10 @@ const FIX = 4096.0;
 
 struct CascL { hashOff: u32, hashMask: u32, probeOff: u32, cap: u32, radOff: u32, accOff: u32, res: u32, tileSize: u32,
                tilesX: u32, tilesY: u32, b0: f32, b1: f32 }
-struct Layout { hdr: vec4u, c: array<CascL, 8> } // hdr: cascades, total hash slots, total accum words, 0
+struct Layout { hdr: vec4u, c: array<CascL, 8>, wp: vec4f, wu: vec4u, wp2: vec4u }
+// wp2: no relocation, 0, 0, 0
+// hdr: cascades, total hash slots, total accum words, 0
+// wp: voxScale, voxOffset, levelMap, voxSkip; wu: world tracer (0 none, 1 voxel, 2 tri), depthCascades, stats, has BVH
 struct Probe { pos: vec4f, nrm: vec4f, grid: vec4i } // pos.w = s0 (0: invalid), nrm.w = view depth
 
 @group(0) @binding(0) var<uniform> F: Frame;
@@ -65,9 +89,68 @@ struct Probe { pos: vec4f, nrm: vec4f, grid: vec4i } // pos.w = s0 (0: invalid),
 @group(2) @binding(2) var<storage, read_write> probes: array<Probe>;
 @group(2) @binding(3) var<storage, read_write> rad: array<vec2u>;
 @group(2) @binding(4) var<storage, read_write> sh: array<vec4u>;
-@group(2) @binding(5) var<storage, read_write> counts: array<atomic<u32>>; // [0,8) probes, [8,16) overflow, [16,24) insert failures
+@group(2) @binding(5) var<storage, read_write> counts: array<atomic<u32>>;
+// [0,8) probes, [8,16) overflow, [16,24) insert failures, [24,32) world traces, [32,40) DDA steps,
+// [40,48) voxel hit / triangle miss, [48,56) voxel miss / triangle hit, [56,64) both hit, [64,72) traces at the step cap
 @group(2) @binding(6) var<storage, read_write> accum: array<atomic<u32>>;
 @group(2) @binding(7) var<storage, read_write> parents: array<u32>; // world: 8 upper-cascade probes per probe
+struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
+@group(3) @binding(0) var<uniform> VX: VoxU;
+@group(3) @binding(1) var<storage, read> vox: array<u32>;
+@group(3) @binding(2) var<storage, read> bvhNodes: array<BvhNode>;
+@group(3) @binding(3) var<storage, read> bvhTris: array<vec4f>;
+@group(3) @binding(4) var<storage, read> materials: array<Material>;
+@group(3) @binding(5) var baseColorTex: texture_2d_array<f32>;
+@group(3) @binding(6) var linSamp: sampler;
+@group(3) @binding(7) var shadowTex: texture_depth_2d;
+@group(3) @binding(8) var shadowCmp: sampler_comparison;
+
+fn sunVis(x: vec3f) -> f32 {
+  let c = F.lightViewProj * vec4f(x, 1.0);
+  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
+  if (any(uv < vec2f(0.0)) || any(uv > vec2f(1.0))) { return 1.0; }
+  return textureSampleCompareLevel(shadowTex, shadowCmp, uv, c.z - 0.0002);
+}
+// One-bounce hit radiance, as the direct pass computes it (Lambert, sun, shadow map). The normal is turned to
+// face the ray; a zero normal (opposite faces averaged in one voxel) faces the ray.
+fn shadeHit(p: vec3f, n0: vec3f, alb: vec3f, d: vec3f, bias: f32) -> vec3f {
+  var n = select(-d, n0, dot(n0, n0) > 0.01);
+  if (dot(n, d) > 0.0) { n = -n; }
+  let ndl = max(dot(n, F.sunDir.xyz), 0.0);
+  if (ndl <= 0.0) { return vec3f(0.0); }
+  return alb / PI * F.sunE.rgb * ndl * sunVis(p + n * bias);
+}
+fn voxShade(entry: vec3f, n: vec3f, alb: vec3f, d: vec3f, v: f32) -> vec3f { return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0); }
+fn triShade(p: vec3f, n: vec3f, alb: vec3f, d: vec3f) -> vec3f { return shadeHit(p, n, alb, d, 0.03); }
+${VOX_TRACE_WGSL}
+${BVH_TRACE_WGSL}
+
+fn voxLevel(s0: f32, c: u32) -> u32 {
+  let v = LY.wp.x * s0 * exp2(LY.wp.z * f32(c));
+  return u32(clamp(round(log2(v / VX.a.x)), 0.0, VX.a.y - 1.0));
+}
+// Voxel traces start voxOffset voxels along the probe's surface normal (out of the surface's own voxels) and
+// ignore occupied voxels entered within voxSkip voxels.
+fn traceWorld(o: vec3f, d: vec3f, t0: f32, t1: f32, s0: f32, c: u32, nrm: vec3f) -> vec4f {
+  if (LY.wu.x == 2u) { return traceTri(o, d, t0, t1); }
+  let L = voxLevelFor(voxLevel(s0, c), o + d * t1);
+  let v = voxSize(L);
+  voxSteps = 0u;
+  let r = traceVox(o + nrm * (LY.wp.y * v), d, t0, t1, LY.wp.w * v, L);
+  if (LY.wu.z > 0u) {
+    atomicAdd(&counts[24u + c], 1u);
+    atomicAdd(&counts[32u + c], voxSteps);
+    if (voxSteps >= 1024u) { atomicAdd(&counts[64u + c], 1u); }
+    if (LY.wu.z > 1u && LY.wu.w == 1u) {
+      let tr = traceTri(o, d, t0, t1);
+      let vh = r.a < 0.5; let th = tr.a < 0.5;
+      if (vh && !th) { atomicAdd(&counts[40u + c], 1u); }
+      if (!vh && th) { atomicAdd(&counts[48u + c], 1u); }
+      if (vh && th) { atomicAdd(&counts[56u + c], 1u); }
+    }
+  }
+  return r;
+}
 
 fn lin(wid: vec3u, nwg: vec3u, li: u32) -> u32 { return (wid.y * nwg.x + wid.x) * 64u + li; }
 fn hash32(x: u32) -> u32 {
@@ -193,7 +276,7 @@ fn relocate(p: vec3f, s: f32) -> Reloc {
 
 @compute @workgroup_size(64) fn clearKeys(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
-  if (i < 32u) { atomicStore(&counts[i], 0u); }
+  if (i < 72u) { atomicStore(&counts[i], 0u); }
   if (i < LY.hdr.y) { atomicStore(&keys[i], EMPTY); }
 }
 @compute @workgroup_size(64) fn clearAccum(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -249,7 +332,8 @@ fn relocate(p: vec3f, s: f32) -> Reloc {
   let rel = vec3i(i32((key >> 18u) & 511u), i32((key >> 9u) & 511u), i32(key & 511u));
   let s = spacing(lod, c);
   let g = rel + originOf(s);
-  let r = relocate(vec3f(g) * s, s);
+  var r = Reloc(vec3f(g) * s, vec3f(0.0));
+  if (LY.wp2.x == 0u) { r = relocate(vec3f(g) * s, s); }
   probes[L.probeOff + idx] = Probe(vec4f(r.p, spacing(lod, 0u)), vec4f(r.n, viewZ(r.p)), vec4i(g, lod));
 }
 
@@ -308,11 +392,16 @@ fn analyticInterval(o: vec3f, dir: vec3f, t0: f32, t1: f32) -> vec4f {
   let pr = probes[L.probeOff + pi];
   var out = vec4f(0.0, 0.0, 0.0, 1.0);
   if (pr.pos.w > 0.0) {
+    let dir = dirOf(di, L.res);
+    let t0 = L.b0 * pr.pos.w; let t1 = L.b1 * pr.pos.w;
     if (F.ru2.w == 1u) {
-      out = analyticInterval(pr.pos.xyz, dirOf(di, L.res), L.b0 * pr.pos.w, L.b1 * pr.pos.w);
-    } else {
-      let r = traceScreen(pr.pos.xyz, dirOf(di, L.res), L.b0 * pr.pos.w, L.b1 * pr.pos.w);
+      out = analyticInterval(pr.pos.xyz, dir, t0, t1);
+    } else if (c < LY.wu.y || LY.wu.x == 0u) {
+      let r = traceScreen(pr.pos.xyz, dir, t0, t1);
       out = vec4f(r.rgb, min(r.a, 1.0));
+      if (r.a > 1.5 && LY.wu.x != 0u) { out = traceWorld(pr.pos.xyz, dir, t0, t1, pr.pos.w, c, pr.nrm.xyz); }
+    } else {
+      out = traceWorld(pr.pos.xyz, dir, t0, t1, pr.pos.w, c, pr.nrm.xyz);
     }
   }
   rad[L.radOff + t] = packRad(out);
@@ -373,8 +462,11 @@ fn analyticInterval(o: vec3f, dir: vec3f, t0: f32, t1: f32) -> vec4f {
   rad[L.radOff + t] = packRad(out);
 }
 
-fn upperAvg(U: CascL, q: u32, u0: u32, v0: u32) -> vec3f {
-  let base = U.radOff + q * U.res * U.res + v0 * U.res + u0;
+// Upper-cascade radiance for a direction texel (u, v) of a cascade with res lr: the 2x2 block when the upper
+// cascade has twice the directions, the same texel when direction growth is capped.
+fn upperAvg(U: CascL, q: u32, u: u32, v: u32, lr: u32) -> vec3f {
+  if (U.res == lr) { return unpackRad(rad[U.radOff + q * U.res * U.res + v * U.res + u]).rgb; }
+  let base = U.radOff + q * U.res * U.res + v * 2u * U.res + u * 2u;
   return 0.25 * (unpackRad(rad[base]).rgb + unpackRad(rad[base + 1u]).rgb
                + unpackRad(rad[base + U.res]).rgb + unpackRad(rad[base + U.res + 1u]).rgb);
 }
@@ -389,12 +481,12 @@ fn upperAvg(U: CascL, q: u32, u0: u32, v0: u32) -> vec3f {
   var up = F.sky.rgb;
   if (c + 1u < LY.hdr.x && v.a > 0.0) {
     let U = LY.c[c + 1u];
-    let u0 = (di % L.res) * 2u; let v0 = (di / L.res) * 2u;
+    let u0 = di % L.res; let v0 = di / L.res;
     var acc = vec3f(0.0); var ws = 0.0;
     for (var k = 0u; k < 8u; k++) {
       let q = parents[(L.probeOff + pi) * 8u + k];
       if (q == NONE) { continue; }
-      acc += upperAvg(U, q, u0, v0); ws += 1.0;
+      acc += upperAvg(U, q, u0, v0, L.res); ws += 1.0;
     }
     up = select(vec3f(0.0), acc / max(ws, 1.0), ws > 0.0);
   }
@@ -417,7 +509,7 @@ fn upperAvg(U: CascL, q: u32, u0: u32, v0: u32) -> vec3f {
       let ctr = (vec2f(f32(pi % L.tilesX), f32(pi / L.tilesX)) + 0.5) * f32(L.tileSize);
       let uc = ctr / f32(U.tileSize) - 0.5;
       let b = vec2i(floor(uc)); let f = uc - vec2f(b);
-      let u0 = (di % L.res) * 2u; let v0 = (di / L.res) * 2u;
+      let u0 = di % L.res; let v0 = di / L.res;
       var acc = vec3f(0.0); var ws = 0.0;
       for (var k = 0u; k < 4u; k++) {
         let o = vec2i(i32(k & 1u), i32(k >> 1u));
@@ -428,7 +520,7 @@ fn upperAvg(U: CascL, q: u32, u0: u32, v0: u32) -> vec3f {
         let fw = select(1.0 - f, f, o == vec2i(1));
         let rel = abs(qp.nrm.w - pr.nrm.w) / pr.nrm.w;
         let w = (fw.x * fw.y + 1e-4) * (exp(-20.0 * rel) + 1e-4);
-        acc += w * upperAvg(U, qi, u0, v0); ws += w;
+        acc += w * upperAvg(U, qi, u0, v0, L.res); ws += w;
       }
       if (ws > 0.0) { up = acc / ws; }
     }
@@ -532,7 +624,7 @@ fn evalSH(pi: u32, n: vec3f) -> vec3f {
 const ARGS_WGSL = /* wgsl */ `
 struct CascL { hashOff: u32, hashMask: u32, probeOff: u32, cap: u32, radOff: u32, accOff: u32, res: u32, tileSize: u32,
                tilesX: u32, tilesY: u32, b0: f32, b1: f32 }
-struct Layout { hdr: vec4u, c: array<CascL, 8> }
+struct Layout { hdr: vec4u, c: array<CascL, 8>, wp: vec4f, wu: vec4u }
 @group(0) @binding(0) var<uniform> LY: Layout;
 @group(0) @binding(1) var<storage, read> counts: array<u32>;
 @group(0) @binding(2) var<storage, read_write> args: array<u32>;
@@ -561,12 +653,14 @@ export interface Rc {
   usedBytes(counts: Uint32Array): number;
   encode(enc: GPUCommandEncoder, tw: (pass: number) => GPUComputePassTimestampWrites | undefined): void;
   readCounts(): Promise<Uint32Array>;
+  /** Tracer statistics for the following frames (0 off, 1 DDA steps, 2 also voxel / triangle visibility). */
+  setStats(level: number): void;
   destroy(): void;
 }
 
 export const RC_PASSES = ['giBuild', 'giTrace', 'giMerge', 'giGather'] as const;
 
-export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: GPUBuffer, params: RcParams): Rc {
+export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: GPUBuffer, params: RcParams, world: WorldResources): Rc {
   const { width, height } = g;
   const N = params.cascades;
   if (N > 8) throw new Error('at most 8 cascades');
@@ -575,7 +669,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     tileSize: number; tilesX: number; tilesY: number; b0: number; b1: number }[] = [];
   let hashTotal = 0, probeTotal = 0, radTotal = 0, accTotal = 0;
   for (let i = 0; i < N; i++) {
-    const res = 4 << i;
+    const res = 4 << Math.min(i, params.resCap);
     const tileSize = params.P << i, tilesX = Math.ceil(width / tileSize), tilesY = Math.ceil(height / tileSize);
     const cap = screen ? tilesX * tilesY : params.caps[i];
     const hashSize = screen ? 0 : nextPow2(cap * 2);
@@ -584,7 +678,9 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     hashTotal += hashSize; probeTotal += cap; radTotal += cap * res * res; accTotal += split ? cap * res * res * 5 : 0;
   }
 
-  const layout = new ArrayBuffer(16 + 8 * 48);
+  if (params.world === 'voxel' && !world.hasVox) throw new Error('voxel tracer without a voxel world');
+  if ((params.world === 'tri' || params.stats > 1) && !world.hasBvh) throw new Error('triangle tracer without a BVH');
+  const layout = new ArrayBuffer(16 + 8 * 48 + 48);
   const lu = new Uint32Array(layout), lf = new Float32Array(layout);
   lu.set([N, hashTotal, accTotal, 0], 0);
   casc.forEach((c, i) => {
@@ -592,6 +688,9 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     lu.set([c.hashOff, Math.max(c.hashSize - 1, 0), c.probeOff, c.cap, c.radOff, c.accOff, c.res, c.tileSize, c.tilesX, c.tilesY], o);
     lf[o + 10] = c.b0; lf[o + 11] = c.b1;
   });
+  lf.set([params.voxScale, params.voxOffset, params.levelMap, params.voxSkip], 4 + 8 * 12);
+  lu.set([params.relocate ? 0 : 1, 0, 0, 0], 12 + 8 * 12);
+  lu.set([{ none: 0, voxel: 1, tri: 2 }[params.world], params.world === 'none' ? N : Math.min(params.depthCascades, N), params.stats, world.hasBvh ? 1 : 0], 8 + 8 * 12);
   const layoutBuf = device.createBuffer({ label: 'rc.layout', size: layout.byteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   device.queue.writeBuffer(layoutBuf, 0, layout);
   const ci = casc.map((_, i) => {
@@ -607,7 +706,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const probes = buf('rc.probes', probeTotal * 48);
   const rad = buf('rc.rad', radTotal * 8);
   const sh = buf('rc.sh', casc[0].cap * 64);
-  const counts = buf('rc.counts', 32 * 4, GPUBufferUsage.COPY_SRC);
+  const counts = buf('rc.counts', 72 * 4, GPUBufferUsage.COPY_SRC);
   const accum = buf('rc.accum', accTotal * 4);
   const parents = buf('rc.parents', screen ? 0 : probeTotal * 8 * 4);
   const args = buf('rc.args', 8 * 8 * 4, GPUBufferUsage.INDIRECT);
@@ -627,8 +726,14 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   ] });
   const bgl1 = device.createBindGroupLayout({ entries: [{ binding: 0, visibility: C, buffer: { type: 'uniform' } }] });
   const bgl2 = device.createBindGroupLayout({ entries: Array.from({ length: 8 }, (_, i) => ({ binding: i, visibility: C, buffer: { type: 'storage' as const } })) });
+  const RO = (binding: number) => ({ binding, visibility: C, buffer: { type: 'read-only-storage' as const } });
+  const bgl3 = device.createBindGroupLayout({ entries: [
+    { binding: 0, visibility: C, buffer: { type: 'uniform' } }, RO(1), RO(2), RO(3), RO(4),
+    { binding: 5, visibility: C, texture: { viewDimension: '2d-array' } }, { binding: 6, visibility: C, sampler: {} },
+    { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
+  ] });
   const module = device.createShaderModule({ code: RC_WGSL, label: 'rc' });
-  const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2] });
+  const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3] });
   const pipe = (entryPoint: string) => device.createComputePipeline({ label: entryPoint, layout: pl, compute: { module, entryPoint } });
   const P = Object.fromEntries(['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'linkParents', 'setupScreen', 'trace', 'deposit',
     'resolve', 'mergeWorld', 'mergeScreen', 'projectSH', 'gatherWorld', 'gatherScreen'].map((e) => [e, pipe(e)]));
@@ -642,6 +747,13 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   ] });
   const bg1 = ci.map((b) => device.createBindGroup({ layout: bgl1, entries: [{ binding: 0, resource: { buffer: b } }] }));
   const bg2 = device.createBindGroup({ layout: bgl2, entries: [keys, slotProbe, probes, rad, sh, counts, accum, parents].map((b, i) => ({ binding: i, resource: { buffer: b } })) });
+  const bg3 = device.createBindGroup({ layout: bgl3, entries: [
+    { binding: 0, resource: { buffer: world.voxUniform } }, { binding: 1, resource: { buffer: world.vox } },
+    { binding: 2, resource: { buffer: world.bvhNodes } }, { binding: 3, resource: { buffer: world.bvhTris } },
+    { binding: 4, resource: { buffer: world.materials } }, { binding: 5, resource: world.baseColor.createView({ dimension: '2d-array' }) },
+    { binding: 6, resource: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }) },
+    { binding: 7, resource: world.shadow.createView() }, { binding: 8, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
+  ] });
   const argsBG0 = device.createBindGroup({ layout: argsPipe.getBindGroupLayout(0), entries: [
     { binding: 0, resource: { buffer: layoutBuf } }, { binding: 1, resource: { buffer: counts } }, { binding: 2, resource: { buffer: args } },
   ] });
@@ -652,7 +764,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     if (groups > 0) pass.dispatchWorkgroups(x, Math.ceil(groups / x));
   };
   const use = (pass: GPUComputePassEncoder, name: string, c: number) => {
-    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[c]); pass.setBindGroup(2, bg2);
+    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[c]); pass.setBindGroup(2, bg2); pass.setBindGroup(3, bg3);
   };
   const writeArgs = (pass: GPUComputePassEncoder, c: number) => {
     pass.setPipeline(argsPipe); pass.setBindGroup(0, argsBG0); pass.setBindGroup(1, argsBG1[c]); pass.dispatchWorkgroups(1);
@@ -663,7 +775,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   return {
     irr, params, bytes,
     usedBytes(cnt) {
-      let b = hashTotal * 8 + 32 * 4 + 8 * 8 * 4;
+      let b = hashTotal * 8 + 72 * 4 + 8 * 8 * 4;
       casc.forEach((c, i) => {
         const n = Math.min(cnt[i], c.cap);
         b += n * (screen ? 48 : 48 + 32) + n * c.res * c.res * 8 * (split ? 1 + 5 / 2 : 1);
@@ -672,7 +784,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     },
     encode(enc, tw) {
       let pass = enc.beginComputePass({ label: 'giBuild', timestampWrites: tw(0) });
-      use(pass, 'clearKeys', 0); linear(pass, Math.max(hashTotal, 32));
+      use(pass, 'clearKeys', 0); linear(pass, Math.max(hashTotal, 72));
       if (screen) {
         for (let i = 0; i < N; i++) {
           use(pass, 'setupScreen', i); linear(pass, casc[i].tilesX * casc[i].tilesY);
@@ -712,15 +824,16 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
       pass.end();
     },
     async readCounts() {
-      const read = device.createBuffer({ size: 32 * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+      const read = device.createBuffer({ size: 72 * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
       const enc = device.createCommandEncoder();
-      enc.copyBufferToBuffer(counts, 0, read, 0, 32 * 4);
+      enc.copyBufferToBuffer(counts, 0, read, 0, 72 * 4);
       device.queue.submit([enc.finish()]);
       await read.mapAsync(GPUMapMode.READ);
       const r = new Uint32Array(read.getMappedRange().slice(0));
       read.unmap(); read.destroy();
       return r;
     },
+    setStats(level) { device.queue.writeBuffer(layoutBuf, (8 + 8 * 12 + 2) * 4, new Uint32Array([level])); },
     destroy() { for (const b of all) b.destroy(); irr.destroy(); },
   };
 }

@@ -1,0 +1,73 @@
+{
+  "kind": "exploratory (探索値)",
+  "reference": [
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed1.pfm"
+  ],
+  "referenceHalvesMeanAbsRel": 0.1667,
+  "results": {
+    "world-32-tri.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.0412,
+      "bias": -0.1538,
+      "meanAbsRel": 0.3432,
+      "medianRel": 0.1295,
+      "p90Rel": 0.7024
+    },
+    "world-32-voxel.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.038,
+      "bias": -0.2201,
+      "meanAbsRel": 0.3642,
+      "medianRel": 0.1302,
+      "p90Rel": 0.7553
+    },
+    "world-32-hybrid.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.0389,
+      "bias": -0.202,
+      "meanAbsRel": 0.3574,
+      "medianRel": 0.1308,
+      "p90Rel": 0.7452
+    },
+    "world-32-depth.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.0227,
+      "bias": -0.5332,
+      "meanAbsRel": 0.8332,
+      "medianRel": 0.5115,
+      "p90Rel": 2.3476
+    },
+    "world-32-voxel-rc2.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.0382,
+      "bias": -0.2165,
+      "meanAbsRel": 0.37,
+      "medianRel": 0.1482,
+      "p90Rel": 0.7729
+    },
+    "world-32-voxel-l2.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.0259,
+      "bias": -0.4686,
+      "meanAbsRel": 0.6054,
+      "medianRel": 0.1808,
+      "p90Rel": 0.967
+    },
+    "screen-8-voxel.static.irr.f32": {
+      "pixels": 518346,
+      "meanRef": 0.0487,
+      "meanOurs": 0.0371,
+      "bias": -0.2378,
+      "meanAbsRel": 0.362,
+      "medianRel": 0.1211,
+      "p90Rel": 0.8106
+    }
+  }
+}

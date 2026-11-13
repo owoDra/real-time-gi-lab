@@ -67,6 +67,7 @@ fn sunVisibility(x: vec3f) -> f32 {
 
 export interface Lighting {
   lit: GPUTexture;
+  shadow: GPUTexture;
   lightViewProj: Mat4;
   encodeShadow(enc: GPUCommandEncoder, tw?: GPURenderPassTimestampWrites): void;
   encodeDirect(enc: GPUCommandEncoder, tw?: GPUComputePassTimestampWrites): void;
@@ -114,7 +115,7 @@ export function createLighting(device: GPUDevice, scene: SceneData, gpu: SceneGp
   ] });
 
   return {
-    lit, lightViewProj, bytes: shadowSize * shadowSize * 4 + g.width * g.height * 8,
+    lit, shadow, lightViewProj, bytes: shadowSize * shadowSize * 4 + g.width * g.height * 8,
     encodeShadow(enc, tw) {
       const pass = enc.beginRenderPass({ label: 'shadow', colorAttachments: [],
         depthStencilAttachment: { view: shadow.createView(), depthLoadOp: 'clear', depthStoreOp: 'store', depthClearValue: 1 },

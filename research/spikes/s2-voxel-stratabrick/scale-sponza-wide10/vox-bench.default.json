@@ -1,0 +1,92 @@
+{
+  "kind": "exploratory (探索値)",
+  "date": "2026-11-13T14:10:52.857Z",
+  "implementation": "Dawn via webgpu@0.6.2 (node), backend=vulkan",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "rdna-3",
+    "device": "amd-radeon-8060s-graphics-radv-strix-halo-",
+    "description": "radv: Mesa 26.1.2"
+  },
+  "scene": {
+    "name": "sponza-wide10",
+    "triangles": 2622670
+  },
+  "voxParams": {
+    "v0": 0.1,
+    "levels": 5,
+    "G": 64,
+    "maxBricks": 32768,
+    "maxVoxels": 4194304
+  },
+  "stages": {
+    "clear": {
+      "median": 0.024,
+      "p05": 0.023,
+      "p95": 0.027,
+      "max": 0.084
+    },
+    "markBricks": {
+      "median": 0.553,
+      "p05": 0.53,
+      "p95": 0.586,
+      "max": 1.041
+    },
+    "allocBricks": {
+      "median": 0.257,
+      "p05": 0.233,
+      "p95": 0.277,
+      "max": 0.285
+    },
+    "voxBits": {
+      "median": 2.616,
+      "p05": 2.491,
+      "p95": 2.764,
+      "max": 2.858
+    },
+    "allocVoxels": {
+      "median": 0.024,
+      "p05": 0.018,
+      "p95": 0.029,
+      "max": 0.03
+    },
+    "resolve": {
+      "median": 0.692,
+      "p05": 0.672,
+      "p95": 0.726,
+      "max": 0.741
+    },
+    "total": {
+      "median": 4.159,
+      "p05": 4.008,
+      "p95": 4.37,
+      "max": 4.506
+    }
+  },
+  "counters": {
+    "bricks": 18084,
+    "voxels": 1796136,
+    "brickOverflow": 0,
+    "bigOverflow": 0,
+    "voxelOverflow": 0,
+    "bricksPerLevel": [
+      12649,
+      3699,
+      1200,
+      432,
+      104
+    ],
+    "bigPerLevel": [
+      42607,
+      32406,
+      33781,
+      6796,
+      3035
+    ]
+  },
+  "bytes": {
+    "persistent": 20914448,
+    "buildTemp": 37036032
+  },
+  "allocated": 125043232
+}

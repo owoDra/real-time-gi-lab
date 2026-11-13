@@ -1,0 +1,310 @@
+// Radiance-cascade runner (S1, S2): G-buffer + sun + voxel rebuild + radiance cascades, a static and a moving
+// camera, GPU timestamps per pass, the band-boundary flicker counters, tracer statistics and captures.
+import { buildBvh } from './bvh.ts';
+import { cameraMatrices, octSolidAngles, packFrame, type Camera, type FrameParams } from './frame.ts';
+import { createGBuffer, createGBufferRenderer, type GBuffer } from './gbuffer.ts';
+import { createLighting, type Lighting } from './lighting.ts';
+import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
+import { createPost, FLICKER_FIELDS } from './post.ts';
+import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
+import type { SceneGpu } from './scene_gpu.ts';
+import type { SceneSpec } from './scenes.ts';
+import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
+
+export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
+const Q = 16; // timestamp slots per frame
+const RC0 = 4; // first RC pass
+
+export const SUN_E: Vec3 = [9, 8.5, 7.8];
+export const SKY: Vec3 = [0.45, 0.6, 0.9];
+
+export interface RunContext {
+  device: GPUDevice; spec: SceneSpec; gpu: SceneGpu; g: GBuffer; frame: GPUBuffer; lighting: Lighting;
+  gbuffer: ReturnType<typeof createGBufferRenderer>; omega0: Float32Array; width: number; height: number;
+  world: WorldResources; voxWorld: VoxWorld | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
+}
+
+export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneGpu,
+  opts: { voxel: boolean; bvh: boolean; vox?: Partial<VoxParams> }, width = 1920, height = 1080): RunContext {
+  const g = createGBuffer(device, width, height);
+  const frame = device.createBuffer({ label: 'frame', size: 136 * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const lighting = createLighting(device, spec.scene, gpu, g, frame, spec.sunDir);
+  const S = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST;
+  const dummy = () => device.createBuffer({ size: 64, usage: S });
+  const table = triangleTable(spec.scene);
+  const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
+  device.queue.writeBuffer(tri, 0, table);
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }) : null;
+  let bvh: RunContext['bvh'] = null;
+  let bvhNodes = dummy(), bvhTris = dummy();
+  if (opts.bvh) {
+    const b = buildBvh(spec.scene, table);
+    bvhNodes = device.createBuffer({ label: 'bvh.nodes', size: b.nodes.byteLength, usage: S });
+    bvhTris = device.createBuffer({ label: 'bvh.tris', size: b.tris.byteLength, usage: S });
+    device.queue.writeBuffer(bvhNodes, 0, b.nodes); device.queue.writeBuffer(bvhTris, 0, b.tris);
+    bvh = { buildMs: Math.round(b.buildMs), bytes: b.nodes.byteLength + b.tris.byteLength, nodes: b.nodeCount };
+  }
+  const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh };
+  return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
+    width, height, world, voxWorld, bvh };
+}
+
+/** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. */
+export function cameraPath(c0: Camera) {
+  const f = normalize([c0.target[0] - c0.eye[0], 0, c0.target[2] - c0.eye[2]]);
+  const side = normalize(cross(f, [0, 1, 0]));
+  return (k: number): Camera => {
+    const eye = add3(add3(c0.eye, scale3(f, 0.025 * k)), scale3(side, 0.4 * Math.sin(2 * Math.PI * k / 240)));
+    const yaw = (12 * Math.PI / 180) * Math.sin(2 * Math.PI * k / 160);
+    const dir: Vec3 = [f[0] * Math.cos(yaw) - f[2] * Math.sin(yaw), (c0.target[1] - c0.eye[1]) / Math.hypot(c0.target[0] - c0.eye[0], c0.target[2] - c0.eye[2]), f[0] * Math.sin(yaw) + f[2] * Math.cos(yaw)];
+    return { eye, target: add3(eye, dir), fovYDeg: c0.fovYDeg, near: c0.near };
+  };
+}
+
+function percentile(sorted: number[], q: number) {
+  const i = (sorted.length - 1) * q, lo = Math.floor(i), hi = Math.ceil(i);
+  return sorted[lo] + (sorted[hi] - sorted[lo]) * (i - lo);
+}
+function stats(ms: number[]) {
+  const s = [...ms].sort((a, b) => a - b);
+  const r = (x: number) => Math.round(x * 1000) / 1000;
+  return { median: r(percentile(s, 0.5)), p05: r(percentile(s, 0.05)), p95: r(percentile(s, 0.95)), max: r(s[s.length - 1]) };
+}
+
+function halfToFloat(h: number) {
+  const s = h & 0x8000 ? -1 : 1, e = (h >> 10) & 0x1f, m = h & 0x3ff;
+  if (e === 0) return s * m * 2 ** -24;
+  if (e === 31) return m ? NaN : s * Infinity;
+  return s * (1 + m / 1024) * 2 ** (e - 15);
+}
+
+/** Indirect irradiance (rgb) and validity of every pixel. */
+export async function readIrradiance(device: GPUDevice, tex: GPUTexture, width: number, height: number) {
+  const bytesPerRow = Math.ceil(width * 8 / 256) * 256;
+  const buf = device.createBuffer({ size: bytesPerRow * height, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+  const enc = device.createCommandEncoder();
+  enc.copyTextureToBuffer({ texture: tex }, { buffer: buf, bytesPerRow }, [width, height]);
+  device.queue.submit([enc.finish()]);
+  await buf.mapAsync(GPUMapMode.READ);
+  const src = new Uint16Array(buf.getMappedRange().slice(0));
+  buf.unmap(); buf.destroy();
+  const rgb = new Float32Array(width * height * 3), valid = new Uint8Array(width * height);
+  for (let y = 0; y < height; y++)
+    for (let x = 0; x < width; x++) {
+      const o = y * bytesPerRow / 2 + x * 4, p = y * width + x;
+      for (let c = 0; c < 3; c++) rgb[p * 3 + c] = halfToFloat(src[o + c]);
+      valid[p] = halfToFloat(src[o + 3]) > 0.5 ? 1 : 0;
+    }
+  return { rgb, valid };
+}
+
+export const lum = (r: number, g: number, b: number) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+/** Error of an irradiance image against a reference, over pixels valid in both. */
+export function compareIrradiance(a: { rgb: Float32Array; valid: Uint8Array }, ref: { rgb: Float32Array; valid: Uint8Array }) {
+  let sa = 0, sr = 0, sabs = 0, n = 0;
+  const rel: number[] = [];
+  for (let p = 0; p < ref.valid.length; p++) {
+    if (!a.valid[p] || !ref.valid[p]) continue;
+    const la = lum(a.rgb[p * 3], a.rgb[p * 3 + 1], a.rgb[p * 3 + 2]), lr = lum(ref.rgb[p * 3], ref.rgb[p * 3 + 1], ref.rgb[p * 3 + 2]);
+    sa += la; sr += lr; sabs += Math.abs(la - lr); n++;
+    if (p % 7 === 0) rel.push(Math.abs(la - lr) / Math.max(lr, 1e-3));
+  }
+  rel.sort((x, y) => x - y);
+  const r = (x: number) => Math.round(x * 1e4) / 1e4;
+  return { pixels: n, meanRef: r(sr / n), meanThis: r(sa / n), bias: r((sa - sr) / sr), meanAbsRel: r(sabs / sr),
+    medianRel: r(percentile(rel, 0.5)), p90Rel: r(percentile(rel, 0.9)) };
+}
+
+export interface RunOptions { warmup: number; frames: number; inFlight: number; exposure: number; sky: Vec3; seedFixed?: boolean; staticOnly?: boolean; }
+
+export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOptions, log: (s: string) => void) {
+  const { device, g, frame, lighting, gbuffer, spec, width, height, voxWorld } = ctx;
+  if (opts.frames * Q > 4096) throw new Error('too many frames for one query set');
+  const path = cameraPath(spec.camera);
+  const static0 = spec.camera;
+  const useVox = params.world === 'voxel';
+
+  const frameParams = (cam: Camera, prevCam: Camera, slot: number, prevValid: boolean, seed: number, p: RcParams): FrameParams => ({
+    cam, prevCam, lightViewProj: lighting.lightViewProj, width, height, sunDir: spec.sunDir, sunE: SUN_E, sky: opts.sky,
+    sMin: p.sMin, P: p.P, lift: p.lift, thicknessMin: p.thicknessMin, pxStride: p.pxStride, exposure: opts.exposure,
+    cascades: p.cascades, slot, regStride: p.regStride, maxSteps: p.maxSteps, rayStride: p.rayStride, seed, prevValid, analytic: p.analytic, omega0: ctx.omega0,
+  });
+  const setCamera = (cam: Camera) => {
+    const m = cameraMatrices(cam, width, height);
+    const camData = new Float32Array(36);
+    camData.set(m.viewProj, 0); camData.set(m.view, 16); camData.set([...cam.eye, cam.near], 32);
+    device.queue.writeBuffer(gbuffer.camera, 0, camData);
+    if (useVox) voxWorld!.update(cam.eye);
+  };
+
+  // Sizing: run the world-probe build along the path with generous caps and keep the largest counts.
+  let caps = params.caps;
+  if (params.method !== 'screen') {
+    const sizing = createRc(device, g, lighting.lit, frame, { ...params, method: 'world', world: 'none', analytic: true, caps: DEFAULT_PARAMS.caps }, ctx.world);
+    const maxCount = new Array(params.cascades).fill(0);
+    let overflow = 0;
+    for (let k = -1; k < (spec.moving ? 240 : 0); k += 12) {
+      const cam = k < 0 ? static0 : path(k);
+      device.queue.writeBuffer(frame, 0, packFrame(frameParams(cam, cam, 0, false, 0, params)));
+      setCamera(cam);
+      const enc = device.createCommandEncoder();
+      gbuffer.encode(enc, g); lighting.encodeShadow(enc); lighting.encodeDirect(enc); sizing.encode(enc, () => undefined);
+      device.queue.submit([enc.finish()]);
+      const c = await sizing.readCounts();
+      for (let i = 0; i < params.cascades; i++) { maxCount[i] = Math.max(maxCount[i], c[i]); overflow += c[8 + i] + c[16 + i]; }
+    }
+    sizing.destroy();
+    if (overflow > 0) throw new Error(`sizing caps overflowed: ${overflow}`);
+    caps = maxCount.map((n) => Math.max(256, Math.ceil(n * 1.25 / 256) * 256));
+    log(`  sizing: max probes per cascade ${maxCount.join(', ')} -> caps ${caps.join(', ')}`);
+  }
+  const p = { ...params, caps };
+  const rc = createRc(device, g, lighting.lit, frame, p, ctx.world);
+  const post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
+  const querySet = device.createQuerySet({ type: 'timestamp', count: opts.frames * Q });
+
+  const encodeFrame = (enc: GPUCommandEncoder, tw: <T>(pass: number) => T | undefined) => {
+    gbuffer.encode(enc, g, tw(0));
+    lighting.encodeShadow(enc, tw(1));
+    lighting.encodeDirect(enc, tw(2));
+    if (useVox) voxWorld!.encode(enc, tw(3));
+    rc.encode(enc, (i) => tw(RC0 + i));
+  };
+
+  async function run(mode: 'static' | 'moving') {
+    post.clearCounters();
+    const pending: Promise<undefined>[] = [];
+    let prev = mode === 'static' ? static0 : path(0);
+    for (let f = 0; f < opts.warmup + opts.frames; f++) {
+      const k = f - opts.warmup;
+      const cam = mode === 'static' ? static0 : path(Math.max(k, 0));
+      const seed = opts.seedFixed ? 1 : f + 1;
+      device.queue.writeBuffer(frame, 0, packFrame(frameParams(cam, prev, Math.max(k, 0), k >= 1, seed, p)));
+      setCamera(cam);
+      prev = cam;
+      const tw = <T>(pass: number): T | undefined => k >= 0
+        ? { querySet, beginningOfPassWriteIndex: k * Q + 2 * pass, endOfPassWriteIndex: k * Q + 2 * pass + 1 } as T : undefined;
+      const enc = device.createCommandEncoder();
+      encodeFrame(enc, tw);
+      post.encodeFlicker(enc);
+      device.queue.submit([enc.finish()]);
+      pending.push(device.queue.onSubmittedWorkDone());
+      if (pending.length >= opts.inFlight) await pending.shift();
+    }
+    await Promise.all(pending);
+
+    const size = opts.frames * Q * 8;
+    const resolveBuf = device.createBuffer({ size, usage: GPUBufferUsage.QUERY_RESOLVE | GPUBufferUsage.COPY_SRC });
+    const read = device.createBuffer({ size, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+    const enc = device.createCommandEncoder();
+    enc.resolveQuerySet(querySet, 0, opts.frames * Q, resolveBuf, 0);
+    enc.copyBufferToBuffer(resolveBuf, 0, read, 0, size);
+    device.queue.submit([enc.finish()]);
+    await read.mapAsync(GPUMapMode.READ);
+    const ts = new BigUint64Array(read.getMappedRange().slice(0));
+    read.unmap(); read.destroy(); resolveBuf.destroy();
+    const names = PASSES.filter((n) => n !== 'vox' || useVox);
+    const passMs: Record<string, number[]> = Object.fromEntries([...names, 'giSum', 'giTotal'].map((n) => [n, []]));
+    for (let k = 0; k < opts.frames; k++) {
+      let rcMs = 0, voxMs = 0;
+      PASSES.forEach((name, i) => {
+        if (!(name in passMs)) return;
+        const ms = Number(ts[k * Q + 2 * i + 1] - ts[k * Q + 2 * i]) / 1e6;
+        passMs[name].push(ms);
+        if (i >= RC0) rcMs += ms;
+        if (name === 'vox') voxMs = ms;
+      });
+      passMs.giSum.push(rcMs);
+      passMs.giTotal.push(rcMs + voxMs);
+    }
+    const timing = Object.fromEntries(Object.entries(passMs).map(([n, v]) => [n, stats(v)]));
+
+    const cnt = await post.readCounters(opts.frames);
+    const tot = new Array(8).fill(0);
+    let worstFine = 0;
+    for (let k = 1; k < opts.frames; k++) {
+      for (let j = 0; j < 8; j++) tot[j] += cnt[k * 8 + j];
+      if (cnt[k * 8] > 0) worstFine = Math.max(worstFine, cnt[k * 8 + 1] / cnt[k * 8]);
+    }
+    const rate = (j: number) => Math.round(tot[j] / tot[0] * 1e5) / 1e3; // percent, 3 decimals
+    const flicker = {
+      validPixelsPerFrame: Math.round(tot[0] / (opts.frames - 1)),
+      giFinePct: rate(1), giCoarsePct: rate(2), controlFinePct: rate(3), controlCoarsePct: rate(4),
+      giMeanAbsDlog2: Math.round(tot[5] / tot[0]) / 1000, controlMeanAbsDlog2: Math.round(tot[6] / tot[0]) / 1000,
+      giFineWorstFramePct: Math.round(worstFine * 1e5) / 1e3,
+      fields: FLICKER_FIELDS.slice(0, 7),
+    };
+    const counts = await rc.readCounts();
+    const vox = useVox ? await voxWorld!.readCounters() : null;
+    const images: Record<string, Uint8Array> = {};
+    for (const [name, m] of [['final', 0], ['indirect', 1], ['direct', 2], ['flicker', 3]] as const) images[name] = await post.capture(m);
+    const irr = mode === 'static' ? await readIrradiance(device, rc.irr, width, height) : null;
+    return { timing, flicker, counts: Array.from(counts.slice(0, p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
+      insertFailures: Array.from(counts.slice(16, 16 + p.cascades)), usedBytes: rc.usedBytes(counts),
+      vox: vox ? { ...vox, ...voxWorld!.usedBytes(vox) } : null, images, irr };
+  }
+
+  // Tracer statistics on the static camera: DDA steps per interval and, with a BVH, voxel / triangle visibility.
+  async function traceStats() {
+    if (p.world !== 'voxel') return null;
+    rc.setStats(ctx.bvh ? 2 : 1);
+    device.queue.writeBuffer(frame, 0, packFrame(frameParams(static0, static0, 0, false, 1, p)));
+    setCamera(static0);
+    const enc = device.createCommandEncoder();
+    encodeFrame(enc, () => undefined);
+    device.queue.submit([enc.finish()]);
+    const c = await rc.readCounts();
+    rc.setStats(0);
+    return Array.from({ length: p.cascades }, (_, i) => {
+      const n = c[24 + i];
+      const r = (x: number) => Math.round(x * 1e4) / 1e4;
+      return { intervals: n, meanSteps: n ? r(c[32 + i] / n) : 0, atStepCap: c[64 + i],
+        ...(ctx.bvh ? { voxHitTriMiss: r(c[40 + i] / Math.max(n, 1)), voxMissTriHit: r(c[48 + i] / Math.max(n, 1)), bothHit: r(c[56 + i] / Math.max(n, 1)) } : {}) };
+    });
+  }
+
+  log(`  static`);
+  const st = await run('static');
+  const tracer = await traceStats();
+  let mv = null;
+  if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
+  rc.destroy(); querySet.destroy();
+  return { params: p, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, static: st, moving: mv, tracer };
+}
+
+/** Voxel rebuild alone, one pass per stage, static camera. */
+export async function benchVoxels(ctx: RunContext, frames: number) {
+  const { device, voxWorld, spec } = ctx;
+  if (!voxWorld) throw new Error('no voxel world');
+  const n = VOX_STAGES.length * 2;
+  const querySet = device.createQuerySet({ type: 'timestamp', count: frames * n });
+  voxWorld.update(spec.camera.eye);
+  for (let f = 0; f < 10 + frames; f++) {
+    const enc = device.createCommandEncoder();
+    if (f >= 10) voxWorld.encodeStaged(enc, querySet, (f - 10) * n); else voxWorld.encode(enc);
+    device.queue.submit([enc.finish()]);
+    if (f % 4 === 3) await device.queue.onSubmittedWorkDone();
+  }
+  await device.queue.onSubmittedWorkDone();
+  const size = frames * n * 8;
+  const resolveBuf = device.createBuffer({ size, usage: GPUBufferUsage.QUERY_RESOLVE | GPUBufferUsage.COPY_SRC });
+  const read = device.createBuffer({ size, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+  const enc = device.createCommandEncoder();
+  enc.resolveQuerySet(querySet, 0, frames * n, resolveBuf, 0);
+  enc.copyBufferToBuffer(resolveBuf, 0, read, 0, size);
+  device.queue.submit([enc.finish()]);
+  await read.mapAsync(GPUMapMode.READ);
+  const ts = new BigUint64Array(read.getMappedRange().slice(0));
+  read.unmap(); read.destroy(); resolveBuf.destroy(); querySet.destroy();
+  const per: Record<string, number[]> = Object.fromEntries([...VOX_STAGES, 'total'].map((s) => [s, []]));
+  for (let f = 0; f < frames; f++) {
+    let tot = 0;
+    VOX_STAGES.forEach((s, i) => { const ms = Number(ts[f * n + 2 * i + 1] - ts[f * n + 2 * i]) / 1e6; per[s].push(ms); tot += ms; });
+    per.total.push(tot);
+  }
+  const counters = await voxWorld.readCounters();
+  return { stages: Object.fromEntries(Object.entries(per).map(([k, v]) => [k, stats(v)])), counters, bytes: voxWorld.usedBytes(counters), allocated: voxWorld.bytes };
+}

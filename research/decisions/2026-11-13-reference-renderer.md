@@ -26,3 +26,7 @@ export DRJIT_LIBLLVM_PATH=$(nix-build '<nixpkgs>' -A llvmPackages_19.libllvm.lib
 
 `nix build nixpkgs#...`（flake の最新 nixpkgs）の LLVM は `GLIBC_2.44` を要求して読めなかった。システムと同じ
 チャンネルの `<nixpkgs>` から取る。
+
+追記（S2）：変換（`src/native/mitsuba_export.ts`）と、GI パスと同じ量（1 バウンスの間接放射照度）を正確な可視性で
+計算する積分器（`scripts/reference_irradiance.py`）を書いた。比較は 960×540、512 spp × 2 本（各約 5 分）。
+numpy は入れずに PFM で受け渡している。
