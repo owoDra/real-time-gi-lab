@@ -27,8 +27,29 @@
   引き継いだ参照コードは [legacy/](../legacy/)、知見は
   [docs/program-1/findings.md](../docs/program-1/findings.md)。
 - 作業機の整理（2026-11-13）：
-  - `build/`（1.4 GB）：削除。
-  - `out/`（411 GB、Program 1 の生データと Python 仮想環境）：処分前（次のコミットで確定）。
+  - `build/`（1.4 GB）：削除した。
+  - `out/`（411 GB、379,014 ファイル。Program 1 の生データと Python 仮想環境）：削除した。
+    削除前にテキスト記録 35,854 ファイル（JSON、JSONL、標準出力・エラー、ログ、小さな
+    証跡 tar、非公開ビルドのソース差分）を 95 MB に圧縮し、全ファイルの目録（サイズ、
+    日付、パス）とともに `archive-local/` に置いた。バイナリの生キャプチャ（約 410 GB）は
+    残していない。
+  - `archive-local/`（96 MB）：git 管理外で、**この作業機にしかない**。GitHub の
+    ドラフトリリースへの添付は未実施（手順は下）。
   - `assets/`（288 MB、Sponza）：保持。
+  - 旧クローン `../gi-lab-old-private`（別リポジトリ phos-gi-lab、3.6 GB）：ユーザー判断で
+    ディレクトリごと削除した。リモートに無かったローカルブランチ 1 本とスタッシュ 4 件も
+    一緒に失われている。
 - Python 環境は未構築。必要な依存は S0 で決めて `mise.toml` に書く。
 - この整理でビルド、テスト、GPU 実行は行っていない。
+
+### archive-local を GitHub に退避する手順（未実施）
+
+```bash
+gh release create archive/program-1 --draft --verify-tag \
+  --title "Program 1 text evidence archive (2026-11-13)" \
+  --notes "Text records and file inventory of the deleted Program 1 out/ directory." \
+  archive-local/program-1-text-evidence.tar.zst archive-local/program-1-out-inventory.tsv.zst
+```
+
+展開は `zstd -dc --long=27 program-1-text-evidence.tar.zst | tar -xf -`。
+チェックサムは `archive-local/SHA256SUMS`。
