@@ -72,6 +72,7 @@ mise run assets   # Khronos glTF Sponza を取得
 mise run check    # 文書のリンクと legacy 目録を検査
 mise run typecheck
 mise run s0:native   # ネイティブ（Dawn / Vulkan）で G-buffer と GPU タイムスタンプ
+mise run s1:native -- --configs world-32,screen-8 [--no-sky]   # S1 の RC（時間とちらつき率）
 ```
 
 - コードは `src/core/`（共通、WebGPU のコア機能だけ）と `src/native/`（Node から Dawn を使う実行器）。

@@ -82,7 +82,7 @@ fn toSrgb(c: vec3f) -> vec3f {
 export interface GBuffer { albedo: GPUTexture; normal: GPUTexture; depth: GPUTexture; width: number; height: number; }
 
 export function createGBuffer(device: GPUDevice, width: number, height: number): GBuffer {
-  const usage = GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING;
+  const usage = GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_SRC;
   return {
     albedo: device.createTexture({ label: 'gb.albedo', size: [width, height], format: ALBEDO_FORMAT, usage }),
     normal: device.createTexture({ label: 'gb.normal', size: [width, height], format: NORMAL_FORMAT, usage }),

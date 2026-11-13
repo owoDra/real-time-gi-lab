@@ -1,0 +1,248 @@
+{
+  "kind": "exploratory (探索値)",
+  "date": "2026-11-13T13:17:14.063Z",
+  "platform": "native",
+  "implementation": "Dawn via webgpu@0.6.2 (node), backend=vulkan",
+  "adapter": {
+    "vendor": "amd",
+    "architecture": "rdna-3",
+    "device": "amd-radeon-8060s-graphics-radv-strix-halo-",
+    "description": "radv: Mesa 26.1.2"
+  },
+  "resolution": "1920x1080",
+  "frames": {
+    "warmup": 60,
+    "measured": 240,
+    "inFlight": 2,
+    "seedFixed": false
+  },
+  "sky": [
+    0.45,
+    0.6,
+    0.9
+  ],
+  "config": "screen-16",
+  "params": {
+    "method": "screen",
+    "P": 16,
+    "cascades": 5,
+    "sMin": 0.05,
+    "kInterval": 1,
+    "regStride": 1,
+    "rayStride": 1,
+    "maxSteps": 16,
+    "pxStride": 4,
+    "thicknessMin": 0.15,
+    "lift": 0.25,
+    "caps": [
+      262144,
+      65536,
+      16384,
+      4096,
+      2048,
+      1024,
+      512,
+      256
+    ],
+    "analytic": false
+  },
+  "allocatedBytes": 23184528,
+  "static": {
+    "timing": {
+      "gbuffer": {
+        "median": 0.699,
+        "p05": 0.677,
+        "p95": 0.79,
+        "max": 0.92
+      },
+      "shadow": {
+        "median": 0.88,
+        "p05": 0.782,
+        "p95": 1.012,
+        "max": 1.08
+      },
+      "direct": {
+        "median": 0.203,
+        "p05": 0.195,
+        "p95": 0.234,
+        "max": 0.266
+      },
+      "giBuild": {
+        "median": 0.06,
+        "p05": 0.055,
+        "p95": 0.068,
+        "max": 0.071
+      },
+      "giTrace": {
+        "median": 0.528,
+        "p05": 0.474,
+        "p95": 0.604,
+        "max": 0.645
+      },
+      "giMerge": {
+        "median": 0.104,
+        "p05": 0.092,
+        "p95": 0.118,
+        "max": 0.127
+      },
+      "giGather": {
+        "median": 0.208,
+        "p05": 0.196,
+        "p95": 0.228,
+        "max": 0.246
+      },
+      "giSum": {
+        "median": 0.9,
+        "p05": 0.826,
+        "p95": 1.011,
+        "max": 1.086
+      },
+      "giSpan": {
+        "median": 0.907,
+        "p05": 0.833,
+        "p95": 1.02,
+        "max": 1.095
+      }
+    },
+    "flicker": {
+      "validPixelsPerFrame": 2073284,
+      "giFinePct": 0,
+      "giCoarsePct": 0,
+      "controlFinePct": 0,
+      "controlCoarsePct": 0,
+      "giMeanAbsDlog2": 0,
+      "controlMeanAbsDlog2": 0,
+      "giFineWorstFramePct": 0,
+      "fields": [
+        "valid",
+        "giFine",
+        "giCoarse",
+        "ctrlFine",
+        "ctrlCoarse",
+        "giAbsDlog2Milli",
+        "ctrlAbsDlog2Milli"
+      ]
+    },
+    "counts": [
+      8160,
+      2040,
+      510,
+      135,
+      40
+    ],
+    "overflow": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "insertFailures": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "usedBytes": 23183984
+  },
+  "moving": {
+    "timing": {
+      "gbuffer": {
+        "median": 0.891,
+        "p05": 0.737,
+        "p95": 0.995,
+        "max": 1.203
+      },
+      "shadow": {
+        "median": 0.781,
+        "p05": 0.705,
+        "p95": 1.032,
+        "max": 1.764
+      },
+      "direct": {
+        "median": 0.213,
+        "p05": 0.198,
+        "p95": 0.246,
+        "max": 0.279
+      },
+      "giBuild": {
+        "median": 0.056,
+        "p05": 0.05,
+        "p95": 0.067,
+        "max": 0.094
+      },
+      "giTrace": {
+        "median": 0.469,
+        "p05": 0.424,
+        "p95": 0.605,
+        "max": 1.008
+      },
+      "giMerge": {
+        "median": 0.095,
+        "p05": 0.084,
+        "p95": 0.12,
+        "max": 0.191
+      },
+      "giGather": {
+        "median": 0.2,
+        "p05": 0.189,
+        "p95": 0.226,
+        "max": 0.313
+      },
+      "giSum": {
+        "median": 0.817,
+        "p05": 0.752,
+        "p95": 1.007,
+        "max": 1.605
+      },
+      "giSpan": {
+        "median": 0.823,
+        "p05": 0.758,
+        "p95": 1.015,
+        "max": 1.619
+      }
+    },
+    "flicker": {
+      "validPixelsPerFrame": 1983884,
+      "giFinePct": 23.195,
+      "giCoarsePct": 9.219,
+      "controlFinePct": 4.023,
+      "controlCoarsePct": 0.953,
+      "giMeanAbsDlog2": 0.106,
+      "controlMeanAbsDlog2": 0.01,
+      "giFineWorstFramePct": 29.44,
+      "fields": [
+        "valid",
+        "giFine",
+        "giCoarse",
+        "ctrlFine",
+        "ctrlCoarse",
+        "giAbsDlog2Milli",
+        "ctrlAbsDlog2Milli"
+      ]
+    },
+    "counts": [
+      8160,
+      2040,
+      510,
+      135,
+      40
+    ],
+    "overflow": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "insertFailures": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "usedBytes": 23183984
+  }
+}
