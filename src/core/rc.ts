@@ -414,25 +414,15 @@ fn relocateVox(p: vec3f, s0: f32, c: u32) -> Reloc {
   let g = pr.grid.xyz; let lod = pr.grid.w;
   let lo = g >> vec3u(1u);
   let odd = (g & vec3i(1)) != vec3i(0);
-  var qs: array<u32, 8>;
-  var seen = 0u;
   for (var k = 0u; k < 8u; k++) {
     let o = corner(k);
     var q = NONE;
     if (!any((o > vec3i(0)) & !odd)) { q = lookup(c + 1u, keyFor(lo + o, lod, c + 1u)); }
-    qs[k] = q;
+    // Voxel relocation: parents hidden by voxels are not merged (when all are hidden the probe gets nothing from
+    // above; keeping them leaked light through the walls of the leak room).
     if (q != NONE && LY.wp2.x == 2u) {
       let Lv = voxLevelFor(voxLevel(pr.pos.w, c), pr.pos.xyz);
-      if (segOccluded(pr.pos.xyz, probes[LY.c[c + 1u].probeOff + q].pos.xyz, Lv)) { qs[k] = NONE; } else { seen++; }
-    }
-  }
-  // All parents hidden: keep them (an empty merge would make the probe black).
-  for (var k = 0u; k < 8u; k++) {
-    var q = qs[k];
-    if (LY.wp2.x == 2u && seen == 0u) {
-      let o = corner(k);
-      q = NONE;
-      if (!any((o > vec3i(0)) & !odd)) { q = lookup(c + 1u, keyFor(lo + o, lod, c + 1u)); }
+      if (segOccluded(pr.pos.xyz, probes[LY.c[c + 1u].probeOff + q].pos.xyz, Lv)) { q = NONE; }
     }
     parents[(L.probeOff + pi) * 8u + k] = q;
   }
@@ -655,17 +645,17 @@ fn evalSH(pi: u32, n: vec3f) -> vec3f {
 // (outside a room) would be interpolated into the room: the gather (pixel -> c0 probe) and the merge (probe ->
 // upper probe) sample the segment every voxel of the lower end's trace level and skip it when it is hidden.
 fn segOccluded(a: vec3f, b: vec3f, L: u32) -> bool {
-  let v = voxSize(L);
   let d = b - a;
-  let k = u32(min(ceil(length(d) / v), 16.0));
+  let k = u32(min(ceil(length(d) / voxSize(L)), 16.0));
   for (var i = 0u; i < k; i++) {
     if (voxOcc(L, a + d * ((f32(i) + 0.5) / f32(k)))) { return true; }
   }
   return false;
 }
-fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32) -> bool {
+// From the pixel, offset off c0 voxels along its normal.
+fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
   let L = voxLevelFor(voxLevel(s0, 0u), x);
-  return segOccluded(x + n * voxSize(L), p, L);
+  return segOccluded(x + n * (off * voxSize(L)), p, L);
 }
 
 @compute @workgroup_size(8, 8) fn gatherWorld(@builtin(global_invocation_id) gid: vec3u) {
@@ -678,7 +668,7 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32) -> bool {
   let lod = lodFor(distance(x, F.eye.xyz));
   let gp = x / spacing(lod, 0u);
   let b = vec3i(floor(gp)); let f = gp - vec3f(b);
-  var e = vec3f(0.0); var ws = 0.0;
+  var e = vec3f(0.0); var ws = 0.0; var hidden = 0u; var ww: array<f32, 8>; var qq: array<u32, 8>;
   for (var k = 0u; k < 8u; k++) {
     let o = corner(k);
     let q = lookup(0u, keyFor(b + o, lod, 0u));
@@ -687,9 +677,19 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32) -> bool {
     let pr = probes[LY.c[0].probeOff + q];
     let dv = pr.pos.xyz - x;
     let side = dot(n, dv) / max(length(dv), 1e-5);
-    var w = (tw.x * tw.y * tw.z + 1e-4) * ((side + 1.0) * (side + 1.0) * 0.25 + 0.02);
-    if (LY.wp2.x == 2u && probeOccluded(x, n, pr.pos.xyz, pr.pos.w)) { w *= 1e-3; }
+    let w = (tw.x * tw.y * tw.z + 1e-4) * ((side + 1.0) * (side + 1.0) * 0.25 + 0.02);
+    if (LY.wp2.x == 2u && probeOccluded(x, n, pr.pos.xyz, pr.pos.w, 1.0)) { hidden |= 1u << k; ww[k] = w; qq[k] = q; continue; }
     e += w * evalSH(q, n); ws += w;
+  }
+  // Every probe hidden (the offset start fell into a neighbouring face: concave corners, foliage): retest from two
+  // voxels out. Probes still hidden are not used (the pixel stays black rather than leak).
+  if (ws <= 0.0 && hidden != 0u) {
+    for (var k = 0u; k < 8u; k++) {
+      if ((hidden & (1u << k)) == 0u) { continue; }
+      let pr = probes[LY.c[0].probeOff + qq[k]];
+      if (probeOccluded(x, n, pr.pos.xyz, pr.pos.w, 2.0)) { continue; }
+      e += ww[k] * evalSH(qq[k], n); ws += ww[k];
+    }
   }
   textureStore(irrOut, px, vec4f(select(vec3f(0.0), e / ws, ws > 0.0), 1.0));
 }

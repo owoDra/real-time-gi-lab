@@ -11,7 +11,8 @@
   "none": "norel: probes at grid points",
   "voxelA": "first attempt: all cascades pushed away from occupied voxels, no visibility tests",
   "voxelB": "c0 only pushed + gather visibility test (upper cascades on the grid)",
-  "voxel": "final (vrel): all cascades pushed + voxel visibility test in the gather (pixel->c0 probe) and the merge (probe->parent)"
+  "voxel": "final (vrel): all cascades pushed; gather skips probes hidden by voxels (retest from 2 voxels out when all are hidden, else black); merge skips hidden parents (nothing from above when all are hidden)",
+  "voxelC": "all cascades pushed + visibility test in gather and merge, hidden probes kept at 1e-3 weight / all parents kept when all hidden (leaked 2-4x)"
  },
  "sponza": {
   "nosky": {
@@ -112,17 +113,6 @@
     "movingCoarsePct": 5.15,
     "controlFinePct": 4.023
    },
-   "world-32-tri-vrel": {
-    "giTotalMs": 17.093,
-    "voxMs": 1.723,
-    "giBuildMs": 1.023,
-    "giTraceMs": 13.121,
-    "giGatherMs": 0.94,
-    "staticFlickerFinePct": 0,
-    "movingFinePct": 16.296,
-    "movingCoarsePct": 5.417,
-    "controlFinePct": 4.023
-   },
    "world-32-voxel-vrelA": {
     "giTotalMs": 6.274,
     "voxMs": 1.732,
@@ -137,22 +127,6 @@
      "reference": "world-32-tri-vrel",
      "bias": -0.0573,
      "meanAbsRel": 0.2471
-    }
-   },
-   "world-32-voxel-vrel": {
-    "giTotalMs": 6.875,
-    "voxMs": 1.743,
-    "giBuildMs": 1.033,
-    "giTraceMs": 2.962,
-    "giGatherMs": 0.877,
-    "staticFlickerFinePct": 0,
-    "movingFinePct": 17.132,
-    "movingCoarsePct": 5.761,
-    "controlFinePct": 4.023,
-    "vsTriangle": {
-     "reference": "world-32-tri-vrel",
-     "bias": -0.0336,
-     "meanAbsRel": 0.2174
     }
    },
    "world-32-voxel-rc2-vrelA": {
@@ -171,7 +145,67 @@
      "meanAbsRel": 0.2508
     }
    },
-   "world-32-voxel-rc2-vrel": {
+   "world-32-voxel-rc2-vrelB": {
+    "movingFinePct": 16.1,
+    "movingCoarsePct": 5.2,
+    "giTotalMs": 4.87,
+    "giBuildMs": 0.554
+   },
+   "world-32-tri-vrelC": {
+    "giTotalMs": 17.093,
+    "voxMs": 1.723,
+    "giBuildMs": 1.023,
+    "giTraceMs": 13.121,
+    "giGatherMs": 0.94,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 16.296,
+    "movingCoarsePct": 5.417,
+    "controlFinePct": 4.023
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 17.177,
+    "voxMs": 1.729,
+    "giBuildMs": 1.023,
+    "giTraceMs": 12.958,
+    "giGatherMs": 1.23,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 13.799,
+    "movingCoarsePct": 4.863,
+    "controlFinePct": 4.023
+   },
+   "world-32-voxel-vrelC": {
+    "giTotalMs": 6.875,
+    "voxMs": 1.743,
+    "giBuildMs": 1.033,
+    "giTraceMs": 2.962,
+    "giGatherMs": 0.877,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 17.132,
+    "movingCoarsePct": 5.761,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0336,
+     "meanAbsRel": 0.2174
+    }
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 7.223,
+    "voxMs": 1.79,
+    "giBuildMs": 1.038,
+    "giTraceMs": 3.006,
+    "giGatherMs": 1.16,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.754,
+    "movingCoarsePct": 5.196,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0285,
+     "meanAbsRel": 0.2044
+    }
+   },
+   "world-32-voxel-rc2-vrelC": {
     "giTotalMs": 5.296,
     "voxMs": 1.759,
     "giBuildMs": 1.045,
@@ -187,11 +221,21 @@
      "meanAbsRel": 0.2286
     }
    },
-   "world-32-voxel-rc2-vrelB": {
-    "movingFinePct": 16.1,
-    "movingCoarsePct": 5.2,
-    "giTotalMs": 4.87,
-    "giBuildMs": 0.554
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 5.613,
+    "voxMs": 1.808,
+    "giBuildMs": 1.053,
+    "giTraceMs": 1.434,
+    "giGatherMs": 1.185,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.139,
+    "movingCoarsePct": 5.135,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.0329,
+     "meanAbsRel": 0.2155
+    }
    }
   },
   "sky": {
@@ -292,17 +336,6 @@
     "movingCoarsePct": 4.144,
     "controlFinePct": 4.023
    },
-   "world-32-tri-vrel": {
-    "giTotalMs": 16.02,
-    "voxMs": 1.753,
-    "giBuildMs": 1.035,
-    "giTraceMs": 11.984,
-    "giGatherMs": 0.961,
-    "staticFlickerFinePct": 0,
-    "movingFinePct": 14.257,
-    "movingCoarsePct": 4.073,
-    "controlFinePct": 4.023
-   },
    "world-32-voxel-vrelA": {
     "giTotalMs": 5.859,
     "voxMs": 1.629,
@@ -317,22 +350,6 @@
      "reference": "world-32-tri-vrel",
      "bias": -0.1649,
      "meanAbsRel": 0.2365
-    }
-   },
-   "world-32-voxel-vrel": {
-    "giTotalMs": 6.884,
-    "voxMs": 1.753,
-    "giBuildMs": 1.032,
-    "giTraceMs": 2.963,
-    "giGatherMs": 0.89,
-    "staticFlickerFinePct": 0,
-    "movingFinePct": 14.583,
-    "movingCoarsePct": 4.224,
-    "controlFinePct": 4.023,
-    "vsTriangle": {
-     "reference": "world-32-tri-vrel",
-     "bias": -0.128,
-     "meanAbsRel": 0.216
     }
    },
    "world-32-voxel-rc2-vrelA": {
@@ -351,7 +368,67 @@
      "meanAbsRel": 0.2399
     }
    },
-   "world-32-voxel-rc2-vrel": {
+   "world-32-voxel-rc2-vrelB": {
+    "movingFinePct": 14.82,
+    "movingCoarsePct": 4.67,
+    "giTotalMs": 4.92,
+    "giBuildMs": 0.553
+   },
+   "world-32-tri-vrelC": {
+    "giTotalMs": 16.02,
+    "voxMs": 1.753,
+    "giBuildMs": 1.035,
+    "giTraceMs": 11.984,
+    "giGatherMs": 0.961,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.257,
+    "movingCoarsePct": 4.073,
+    "controlFinePct": 4.023
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 16.23,
+    "voxMs": 1.716,
+    "giBuildMs": 1.008,
+    "giTraceMs": 11.994,
+    "giGatherMs": 1.235,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 12.27,
+    "movingCoarsePct": 3.745,
+    "controlFinePct": 4.023
+   },
+   "world-32-voxel-vrelC": {
+    "giTotalMs": 6.884,
+    "voxMs": 1.753,
+    "giBuildMs": 1.032,
+    "giTraceMs": 2.963,
+    "giGatherMs": 0.89,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 14.583,
+    "movingCoarsePct": 4.224,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.128,
+     "meanAbsRel": 0.216
+    }
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 6.746,
+    "voxMs": 1.727,
+    "giBuildMs": 1.003,
+    "giTraceMs": 2.664,
+    "giGatherMs": 1.131,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 12.431,
+    "movingCoarsePct": 3.829,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1096,
+     "meanAbsRel": 0.196
+    }
+   },
+   "world-32-voxel-rc2-vrelC": {
     "giTotalMs": 5.072,
     "voxMs": 1.703,
     "giBuildMs": 0.997,
@@ -367,11 +444,21 @@
      "meanAbsRel": 0.2155
     }
    },
-   "world-32-voxel-rc2-vrelB": {
-    "movingFinePct": 14.82,
-    "movingCoarsePct": 4.67,
-    "giTotalMs": 4.92,
-    "giBuildMs": 0.553
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 5.442,
+    "voxMs": 1.793,
+    "giBuildMs": 1.036,
+    "giTraceMs": 1.331,
+    "giGatherMs": 1.151,
+    "staticFlickerFinePct": 0,
+    "movingFinePct": 12.688,
+    "movingCoarsePct": 3.881,
+    "controlFinePct": 4.023,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1261,
+     "meanAbsRel": 0.1969
+    }
    }
   }
  },
@@ -437,15 +524,6 @@
     "staticFlickerFinePct": 0,
     "leakMeanFractionOfSun": 0.1095
    },
-   "world-32-tri-vrel": {
-    "giTotalMs": 2.245,
-    "voxMs": 0.183,
-    "giBuildMs": 0.698,
-    "giTraceMs": 0.489,
-    "giGatherMs": 0.774,
-    "staticFlickerFinePct": 0,
-    "leakMeanFractionOfSun": 0.0483
-   },
    "world-32-voxel-vrelA": {
     "giTotalMs": 1.953,
     "voxMs": 0.169,
@@ -459,20 +537,6 @@
      "meanAbsRel": 0.2616
     },
     "leakMeanFractionOfSun": 0.1031
-   },
-   "world-32-voxel-vrel": {
-    "giTotalMs": 2.456,
-    "voxMs": 0.177,
-    "giBuildMs": 0.698,
-    "giTraceMs": 0.714,
-    "giGatherMs": 0.771,
-    "staticFlickerFinePct": 0,
-    "vsTriangle": {
-     "reference": "world-32-tri-vrel",
-     "bias": -0.1182,
-     "meanAbsRel": 0.3828
-    },
-    "leakMeanFractionOfSun": 0.0426
    },
    "world-32-voxel-rc2-vrelA": {
     "giTotalMs": 1.61,
@@ -488,7 +552,56 @@
     },
     "leakMeanFractionOfSun": 0.1043
    },
-   "world-32-voxel-rc2-vrel": {
+   "world-32-voxel-rc2-vrelB": {
+    "leakMeanFractionOfSun": 0.0313
+   },
+   "world-32-tri-vrelC": {
+    "giTotalMs": 2.245,
+    "voxMs": 0.183,
+    "giBuildMs": 0.698,
+    "giTraceMs": 0.489,
+    "giGatherMs": 0.774,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0483
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 2.451,
+    "voxMs": 0.169,
+    "giBuildMs": 0.684,
+    "giTraceMs": 0.48,
+    "giGatherMs": 1.021,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.018
+   },
+   "world-32-voxel-vrelC": {
+    "giTotalMs": 2.456,
+    "voxMs": 0.177,
+    "giBuildMs": 0.698,
+    "giTraceMs": 0.714,
+    "giGatherMs": 0.771,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.1182,
+     "meanAbsRel": 0.3828
+    },
+    "leakMeanFractionOfSun": 0.0426
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 2.678,
+    "voxMs": 0.168,
+    "giBuildMs": 0.683,
+    "giTraceMs": 0.707,
+    "giGatherMs": 1.017,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.3605,
+     "meanAbsRel": 0.4384
+    },
+    "leakMeanFractionOfSun": 0.0115
+   },
+   "world-32-voxel-rc2-vrelC": {
     "giTotalMs": 2.116,
     "voxMs": 0.18,
     "giBuildMs": 0.688,
@@ -502,8 +615,19 @@
     },
     "leakMeanFractionOfSun": 0.043
    },
-   "world-32-voxel-rc2-vrelB": {
-    "leakMeanFractionOfSun": 0.0313
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 2.315,
+    "voxMs": 0.167,
+    "giBuildMs": 0.671,
+    "giTraceMs": 0.418,
+    "giGatherMs": 0.973,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.4039,
+     "meanAbsRel": 0.4708
+    },
+    "leakMeanFractionOfSun": 0.0107
    }
   },
   "0.1": {
@@ -567,15 +691,6 @@
     "staticFlickerFinePct": 0,
     "leakMeanFractionOfSun": 0.061
    },
-   "world-32-tri-vrel": {
-    "giTotalMs": 2.347,
-    "voxMs": 0.186,
-    "giBuildMs": 0.757,
-    "giTraceMs": 0.544,
-    "giGatherMs": 0.76,
-    "staticFlickerFinePct": 0,
-    "leakMeanFractionOfSun": 0.0346
-   },
    "world-32-voxel-vrelA": {
     "giTotalMs": 2.082,
     "voxMs": 0.177,
@@ -589,20 +704,6 @@
      "meanAbsRel": 0.3772
     },
     "leakMeanFractionOfSun": 0.05
-   },
-   "world-32-voxel-vrel": {
-    "giTotalMs": 2.524,
-    "voxMs": 0.186,
-    "giBuildMs": 0.752,
-    "giTraceMs": 0.734,
-    "giGatherMs": 0.756,
-    "staticFlickerFinePct": 0,
-    "vsTriangle": {
-     "reference": "world-32-tri-vrel",
-     "bias": -0.292,
-     "meanAbsRel": 0.5201
-    },
-    "leakMeanFractionOfSun": 0.0245
    },
    "world-32-voxel-rc2-vrelA": {
     "giTotalMs": 1.662,
@@ -618,7 +719,56 @@
     },
     "leakMeanFractionOfSun": 0.0516
    },
-   "world-32-voxel-rc2-vrel": {
+   "world-32-voxel-rc2-vrelB": {
+    "leakMeanFractionOfSun": 0.0078
+   },
+   "world-32-tri-vrelC": {
+    "giTotalMs": 2.347,
+    "voxMs": 0.186,
+    "giBuildMs": 0.757,
+    "giTraceMs": 0.544,
+    "giGatherMs": 0.76,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0346
+   },
+   "world-32-tri-vrel": {
+    "giTotalMs": 2.729,
+    "voxMs": 0.177,
+    "giBuildMs": 0.752,
+    "giTraceMs": 0.542,
+    "giGatherMs": 1.168,
+    "staticFlickerFinePct": 0,
+    "leakMeanFractionOfSun": 0.0093
+   },
+   "world-32-voxel-vrelC": {
+    "giTotalMs": 2.524,
+    "voxMs": 0.186,
+    "giBuildMs": 0.752,
+    "giTraceMs": 0.734,
+    "giGatherMs": 0.756,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.292,
+     "meanAbsRel": 0.5201
+    },
+    "leakMeanFractionOfSun": 0.0245
+   },
+   "world-32-voxel-vrel": {
+    "giTotalMs": 2.943,
+    "voxMs": 0.181,
+    "giBuildMs": 0.75,
+    "giTraceMs": 0.744,
+    "giGatherMs": 1.169,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.5896,
+     "meanAbsRel": 0.609
+    },
+    "leakMeanFractionOfSun": 0.0038
+   },
+   "world-32-voxel-rc2-vrelC": {
     "giTotalMs": 2.238,
     "voxMs": 0.186,
     "giBuildMs": 0.763,
@@ -632,8 +782,19 @@
     },
     "leakMeanFractionOfSun": 0.0252
    },
-   "world-32-voxel-rc2-vrelB": {
-    "leakMeanFractionOfSun": 0.0078
+   "world-32-voxel-rc2-vrel": {
+    "giTotalMs": 2.594,
+    "voxMs": 0.18,
+    "giBuildMs": 0.749,
+    "giTraceMs": 0.452,
+    "giGatherMs": 1.148,
+    "staticFlickerFinePct": 0,
+    "vsTriangle": {
+     "reference": "world-32-tri-vrel",
+     "bias": -0.6374,
+     "meanAbsRel": 0.6576
+    },
+    "leakMeanFractionOfSun": 0.0034
    }
   }
  },
@@ -699,26 +860,44 @@
      "bias": -0.2201,
      "meanAbsRel": 0.3642
     },
-    "world-32-tri-vrel": {
+    "world-32-voxel-rc2-vrelB": {
+     "bias": -0.477
+    },
+    "world-32-tri-vrelC": {
      "meanRef": 0.0487,
      "meanOurs": 0.044,
      "bias": -0.0959,
      "meanAbsRel": 0.332
     },
-    "world-32-voxel-rc2-vrel": {
-     "meanRef": 0.0487,
-     "meanOurs": 0.0425,
-     "bias": -0.1275,
-     "meanAbsRel": 0.3565
-    },
-    "world-32-voxel-vrel": {
+    "world-32-voxel-vrelC": {
      "meanRef": 0.0487,
      "meanOurs": 0.0425,
      "bias": -0.1263,
      "meanAbsRel": 0.3545
     },
-    "world-32-voxel-rc2-vrelB": {
-     "bias": -0.477
+    "world-32-voxel-rc2-vrelC": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0425,
+     "bias": -0.1275,
+     "meanAbsRel": 0.3565
+    },
+    "world-32-tri-vrel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0418,
+     "bias": -0.1411,
+     "meanAbsRel": 0.3475
+    },
+    "world-32-voxel-rc2-vrel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0404,
+     "bias": -0.1694,
+     "meanAbsRel": 0.3694
+    },
+    "world-32-voxel-vrel": {
+     "meanRef": 0.0487,
+     "meanOurs": 0.0406,
+     "bias": -0.1657,
+     "meanAbsRel": 0.3681
     }
    }
   },
@@ -783,26 +962,44 @@
      "bias": -0.2203,
      "meanAbsRel": 0.3573
     },
-    "world-32-tri-vrel": {
+    "world-32-voxel-rc2-vrelB": {
+     "bias": -0.4301
+    },
+    "world-32-tri-vrelC": {
      "meanRef": 0.0686,
      "meanOurs": 0.07,
      "bias": 0.0206,
      "meanAbsRel": 0.3284
     },
-    "world-32-voxel-rc2-vrel": {
-     "meanRef": 0.0686,
-     "meanOurs": 0.0601,
-     "bias": -0.1228,
-     "meanAbsRel": 0.3333
-    },
-    "world-32-voxel-vrel": {
+    "world-32-voxel-vrelC": {
      "meanRef": 0.0686,
      "meanOurs": 0.061,
      "bias": -0.11,
      "meanAbsRel": 0.3363
     },
-    "world-32-voxel-rc2-vrelB": {
-     "bias": -0.4301
+    "world-32-voxel-rc2-vrelC": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0601,
+     "bias": -0.1228,
+     "meanAbsRel": 0.3333
+    },
+    "world-32-tri-vrel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0649,
+     "bias": -0.054,
+     "meanAbsRel": 0.3346
+    },
+    "world-32-voxel-rc2-vrel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0567,
+     "bias": -0.1733,
+     "meanAbsRel": 0.3491
+    },
+    "world-32-voxel-vrel": {
+     "meanRef": 0.0686,
+     "meanOurs": 0.0578,
+     "bias": -0.1577,
+     "meanAbsRel": 0.3512
     }
    }
   }
