@@ -1,5 +1,7 @@
 # Lane M — GI competitiveness
 
+**PROGRAM 1 ARCHIVED — 2026-11-13 (user decision).** Lane M ends without achieving its goal; M003 was never registered or run. [Decision](../../decisions/2026-11-13-program-1-archive-and-program-2.md); development-data correction [269](results/269-dev-sequence-validity-check.md). This state is tagged `archive/program-1`; Program 2 continues on branch `p2`. Everything below is the historical record.
+
 **LANE M REOPENED — 2026-10-25 (user decision), resumes next session.** Completion now means achieving the research goal, not recording a verdict; multi-GPU is out of scope. See [reopen decision](../../decisions/2026-10-25-lane-m-reopen.md) and [handoff265](results/265-session-handoff-reopen-2026-10-25.md). The earlier [closure](../../decisions/2026-10-25-lane-m-closure.md) (LANE_M_COMPLETE_CHARTER_NOT_MET, [outcome263](results/263-lane-m-closure-outcome.md)) is preserved as history: only path-traced families meet the fixed gates; PT + fixed quadratic reconstruction is the only accepted matched-quality speedup and does not generalize on M002. No new study is running. Earlier paragraphs below retain their historical scope.
 
 [Current research status](../../status.md) is the single live summary. M001 is the first prospective static controlled heldout study, distinct from historical topology Lane M. [Issue #7](https://github.com/owoDra/real-time-gi-lab/issues/7) tracks execution.
