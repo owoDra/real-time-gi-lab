@@ -33,8 +33,8 @@
     証跡 tar、非公開ビルドのソース差分）を 95 MB に圧縮し、全ファイルの目録（サイズ、
     日付、パス）とともに `archive-local/` に置いた。バイナリの生キャプチャ（約 410 GB）は
     残していない。
-  - `archive-local/`（96 MB）：git 管理外で、**この作業機にしかない**。GitHub の
-    ドラフトリリースへの添付は未実施（手順は下）。
+  - `archive-local/`（96 MB）：git 管理外で、**この作業機にしかない**。外部への
+    退避はしていない（下の「archive-local の扱い」）。
   - `assets/`（288 MB、Sponza）：保持。
   - 旧クローン `../gi-lab-old-private`（別リポジトリ phos-gi-lab、3.6 GB）：ユーザー判断で
     ディレクトリごと削除した。リモートに無かったローカルブランチ 1 本とスタッシュ 4 件も
@@ -42,14 +42,10 @@
 - Python 環境は未構築。必要な依存は S0 で決めて `mise.toml` に書く。
 - この整理でビルド、テスト、GPU 実行は行っていない。
 
-### archive-local を GitHub に退避する手順（未実施）
+### archive-local の扱い
 
-```bash
-gh release create archive/program-1 --draft --verify-tag \
-  --title "Program 1 text evidence archive (2026-11-13)" \
-  --notes "Text records and file inventory of the deleted Program 1 out/ directory." \
-  archive-local/program-1-text-evidence.tar.zst archive-local/program-1-out-inventory.tsv.zst
-```
-
-展開は `zstd -dc --long=27 program-1-text-evidence.tar.zst | tar -xf -`。
-チェックサムは `archive-local/SHA256SUMS`。
+このリポジトリは **public** である。アーカイブにはローカルの絶対パスが大量に含まれ、
+Python 仮想環境のソースも混ざっているので、**このまま GitHub に上げない**。退避するなら
+非公開のストレージに置く。展開は
+`zstd -dc --long=27 program-1-text-evidence.tar.zst | tar -xf -`、チェックサムは
+`archive-local/SHA256SUMS`。
