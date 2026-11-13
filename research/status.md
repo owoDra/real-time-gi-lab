@@ -44,8 +44,8 @@
     残していない。
   - `archive-local/`（96 MB）：git 管理外で、**この作業機にしかない**。外部への
     退避はしていない（下の「archive-local の扱い」）。
-  - `assets/`（288 MB、Sponza）：保持。S0 で Khronos 版 Sponza（51 MB）を追加した。
-    旧 Vulkan-Samples-Assets 版は使っていないが消していない。
+  - `assets/`：S0 で Khronos 版 Sponza に替え、旧 Vulkan-Samples-Assets 版（288 MB）は
+    ユーザー判断で削除した。いまは 94 MB。
   - 旧クローン `../gi-lab-old-private`（別リポジトリ phos-gi-lab、3.6 GB）：ユーザー判断で
     ディレクトリごと削除した。リモートに無かったローカルブランチ 1 本とスタッシュ 4 件も
     一緒に失われている。
