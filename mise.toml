@@ -14,12 +14,8 @@ description = "Remove generated build and output directories"
 run = "rm -rf build out"
 
 [tasks.build]
-description = "Bundle the native runner, the browser page script and the local server into build/"
-run = [
-  "npx esbuild src/native/main.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/main.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning",
-  "npx esbuild tools/serve.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/tools/serve.mjs --external:pngjs --log-level=warning",
-  "npx esbuild src/web/main.ts --bundle --format=esm --target=es2022 --outfile=build/web/main.js --log-level=warning",
-]
+description = "Bundle the native runner into build/"
+run = "npx esbuild src/native/main.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/main.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning"
 
 [tasks.typecheck]
 description = "Type-check the TypeScript sources"
@@ -29,8 +25,3 @@ run = "npx tsc -p ."
 description = "S0: Sponza G-buffer at 1080p with GPU timestamps, native Dawn (Vulkan)"
 depends = ["build"]
 run = "bash scripts/run_with_vulkan.sh node build/native/main.mjs"
-
-[tasks."s0:serve"]
-description = "S0: serve the browser page on http://127.0.0.1:8765/ and store posted results in out/s0/web/"
-depends = ["build"]
-run = "node build/tools/serve.mjs"

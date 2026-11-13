@@ -1,5 +1,0 @@
-# Reviewed false positive (2026-10-11): the recorded line is a plain-English
-# GI storage pipeline ("update/invalidation/resolve"), not an API credential.
-# Scope: only this original historical commit, file, generic rule and line.
-# Do not add path-wide ignores or suppress the generic-api-key rule globally.
-07185e6dc180e565e53d2fa81fff0685d1a0b819:research/lanes/n006-interval-aware-allocation/001-literature-and-architecture.md:generic-api-key:38

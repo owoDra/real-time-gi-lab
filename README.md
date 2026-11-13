@@ -43,15 +43,12 @@ mise run assets   # Khronos glTF Sponza を assets/ に取得（git 管理外）
 mise run check    # 文書のリンクと legacy 目録を検査
 mise run typecheck
 mise run s0:native   # Sponza G-buffer 1080p、ネイティブ Dawn（Vulkan）で GPU 時間を計測
-mise run s0:serve    # 同じ計測をブラウザで（http://127.0.0.1:8765/）。当面は使わない
 ```
 
-レンダラは TypeScript と WebGPU（WGSL）で書き、ネイティブでは Dawn を Node から、
-ブラウザでは Chrome 系の WebGPU を使います（[S0 の記録](research/spikes/s0-foundation.md)）。
+レンダラは TypeScript と WebGPU（WGSL、コア機能のみ）で書き、当面はネイティブの Dawn を
+Node から使って開発・計測します（[S0 の記録](research/spikes/s0-foundation.md)）。
 
 ## ライセンス
 
 本プロジェクトのソースと文書は [Apache License 2.0](LICENSE)。取得した依存物と
 テストシーン（Khronos Sponza を含む）は、それぞれ元のライセンスに従います。
-リポジトリを公開する前に、履歴全体の秘密情報スキャンが必要です
-（[公開前チェック](docs/publication-readiness.md)）。
