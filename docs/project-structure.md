@@ -37,7 +37,8 @@ bash scripts/run_with_vulkan.sh node build/native/rc.mjs --scene <シーン> --c
   [--seq EVERY,COUNT] [--out box/out/<名前>]   # --seq：静止カメラで EVERY フレームおきに最終画像と間接光を保存（時間は乱れる）
 mise run s2:native -- --scene sponza --vox-bench     # 再ボクセル化の段ごとの時間
 # --dyn-stages：動的レイヤ（と全再構築では建物のボクセル）の作成を段ごとのパスに分けて時間を測り、動的レイヤの仕事の量を CPU で数える（160 フレーム以下）
-# 場面名の末尾 -bwave / -bcut：建物そのものが毎フレーム変わる（全再構築 --vox '{}' が要る。spec/10-evaluation.md）
+# 場面名の末尾 -bwave / -bcut：建物そのものが毎フレーム変わる（spec/10-evaluation.md）
+# --vox：voxel.ts の DEFAULT_VOX の上書き（v0、levels、G、maxBricks、maxVoxels、dynBricks）
 
 # 参照（Mitsuba）
 mise run ref:export -- --scene sponza                # シーン変換（box/out/mitsuba/<シーン>）
@@ -48,7 +49,7 @@ mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --our
 
 - 設定名の書式とトークン（`world-48-voxel-rc2-vrel`、`ddgi-100-128-u2-g1-noadapt` など）と引数は
   `src/native/rc.ts` の先頭に書いてある。シーン名は [spec/10-evaluation.md](spec/10-evaluation.md)。
-- 既定の構成は `--configs world-48-voxel-rc2-vrel --vox '{"anchor":"scene","local":true}'`
+- 既定の構成は `--configs world-48-voxel-rc2-vrel`（`--vox` なし。全形状を毎フレーム作り直す）
   （[spec/20-renderer.md](spec/20-renderer.md)）。
 - `scripts/m1_sweep.sh` と `scripts/m1_dynamic.sh` は、[spec/30-measurements.md](spec/30-measurements.md) の 5 節と
   7 節を測った掃引。`scripts/m1_summary.py` と `scripts/m1_dynamic_summary.py` がその要約を作る。

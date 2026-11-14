@@ -2,7 +2,9 @@
 // one point flips a whole direction bin when a shadow edge passes it); they read the direct light of the voxels,
 // injected every frame and averaged from fine to coarse levels, at the level that matches the width of the direction
 // bin's cone. Geometry (the binary bricks, built once) and radiance (every frame) are updated separately.
-// Opt-in (config token p1), not in the default configuration (docs/spec/40-dynamic-stability.md).
+// Opt-in (config token p1), not in the default configuration (docs/spec/40-dynamic-stability.md). Does not run since
+// phase 21: its lists are built once on the CPU from static bricks built once, and that path is gone (everything is
+// rebuilt every frame). Phase 31 ports it (lists built on the GPU every frame) or deletes it.
 //
 // Each occupied static voxel of levels 1.. has two radiances: the side its representative normal n points to
 // ("front") and the opposite side ("back"), so the lit face of a thin wall does not pass to the other side.
@@ -303,7 +305,7 @@ export function emptyHitRad(device: GPUDevice): GPUBuffer {
 /** Builds the layer for static bricks built once (call after VoxWorld.buildStatic). */
 export async function createHitRad(device: GPUDevice, vw: VoxWorld, frame: GPUBuffer, shadow: GPUTexture): Promise<HitRad> {
   const { levels: NL, G } = vw.params;
-  if (!vw.params.local) throw new Error('P1 hit radiance needs static bricks built once (local)');
+  // Since phase 21 nothing builds static bricks once; the runner refuses p1 before reaching here.
   const c = await vw.readCounters();
   if (c.brickOverflow || c.voxelOverflow) throw new Error('voxel pool overflow');
   // The bricks (occupancy, first attribute, level and coordinates) of the static build.

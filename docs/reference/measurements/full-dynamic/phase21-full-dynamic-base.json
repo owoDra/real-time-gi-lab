@@ -1,0 +1,369 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": 21,
+ "date": "2026-11-15",
+ "conditions": "native Dawn/Vulkan, 1920x1080, no sky (leak rooms with sky), warmup 60 + 240 frames, static and moving camera; GI = median GPU time per frame; 3 independent processes per scene, before/after alternating AB/BA/AB (DDGI after: 3 separate rounds after its segment-level fix); GPU shared with desktop apps",
+ "configs": {
+  "rc": "world-48-voxel-rc2-vrel",
+  "ddgi": "ddgi-75-128-u4-g1-noadapt"
+ },
+ "before": {
+  "G1,G2": "full rebuild every frame, level 0 of 0.1 m (phase 20 runner, --vox {})",
+  "G8 and quality": "fixed window built once, level 0 of 0.1 m (previous default)"
+ },
+ "after": "new default: camera window rebuilt every frame, level 0 of 0.2 m, coarse levels from level 0, pools 3072/327680/dyn 512, c0 spacing >= v0 (RC), DDGI segment k at voxels of segBase/4*2^k",
+ "timing": {
+  "sponza-dynobj-n64-deform-bwave": {
+   "before.rc": {
+    "staticMs": [
+     6.179,
+     6.284
+    ],
+    "movingMs": [
+     5.723,
+     5.95
+    ],
+    "allocMiB": 120.9,
+    "excessK16": 0.14672,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "before.ddgi": {
+    "staticMs": [
+     6.543,
+     6.626
+    ],
+    "movingMs": [
+     5.975,
+     6.005
+    ],
+    "allocMiB": 137.9,
+    "excessK16": 0.10885,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "after.rc": {
+    "staticMs": [
+     3.574,
+     3.65
+    ],
+    "movingMs": [
+     3.221,
+     3.282
+    ],
+    "allocMiB": 70.3,
+    "excessK16": 0.18193,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "after.ddgi": {
+    "staticMs": [
+     4.721,
+     4.946
+    ],
+    "movingMs": [
+     4.803,
+     4.955
+    ],
+    "allocMiB": 91.7,
+    "excessK16": 0.11437
+   },
+   "buildingMotion": {
+    "frames": [
+     180,
+     181
+    ],
+    "buildingVertices": 192496,
+    "movedShare": 1,
+    "staticTrianglesVoxelisedPerFrame": 262267
+   }
+  },
+  "sponza-dynobj-n64-deform-bcut": {
+   "before.rc": {
+    "staticMs": [
+     5.64,
+     5.652
+    ],
+    "movingMs": [
+     5.478,
+     5.501
+    ],
+    "allocMiB": 122.2,
+    "excessK16": 0.03533,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "before.ddgi": {
+    "staticMs": [
+     6.066,
+     6.18
+    ],
+    "movingMs": [
+     5.294,
+     5.428
+    ],
+    "allocMiB": 137.9,
+    "excessK16": 0.00292,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "after.rc": {
+    "staticMs": [
+     3.465,
+     3.621
+    ],
+    "movingMs": [
+     3.156,
+     3.276
+    ],
+    "allocMiB": 70.8,
+    "excessK16": 0.03315,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "after.ddgi": {
+    "staticMs": [
+     4.586,
+     4.694
+    ],
+    "movingMs": [
+     4.606,
+     4.665
+    ],
+    "allocMiB": 91.7,
+    "excessK16": 0.00298
+   }
+  },
+  "sponza-dynobj-n64-deform": {
+   "before.rc": {
+    "staticMs": [
+     3.791,
+     3.802
+    ],
+    "movingMs": [
+     3.603,
+     3.624
+    ],
+    "allocMiB": 80.8,
+    "excessK16": 0.00864,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "before.ddgi": {
+    "staticMs": [
+     4.396,
+     4.489
+    ],
+    "movingMs": [
+     3.814,
+     3.874
+    ],
+    "allocMiB": 97.9,
+    "excessK16": 0.00086,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "after.rc": {
+    "staticMs": [
+     3.445,
+     3.46
+    ],
+    "movingMs": [
+     3.098,
+     3.143
+    ],
+    "allocMiB": 70.3,
+    "excessK16": 0.00691,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "after.ddgi": {
+    "staticMs": [
+     4.684,
+     4.864
+    ],
+    "movingMs": [
+     4.654,
+     4.801
+    ],
+    "allocMiB": 91.7,
+    "excessK16": 0.00084
+   }
+  }
+ },
+ "gates": {
+  "G1": {
+   "rule": "RC median <= 4.0 ms, 3 runs, static and moving",
+   "value": {
+    "staticMs": [
+     3.574,
+     3.65
+    ],
+    "movingMs": [
+     3.221,
+     3.282
+    ],
+    "allocMiB": 70.3,
+    "excessK16": 0.18193,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "pass": true
+  },
+  "G2": {
+   "rule": "same, bcut",
+   "value": {
+    "staticMs": [
+     3.465,
+     3.621
+    ],
+    "movingMs": [
+     3.156,
+     3.276
+    ],
+    "allocMiB": 70.8,
+    "excessK16": 0.03315,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "pass": true
+  },
+  "G3": {
+   "rule": "allocated incl. build temporaries <= 128 MB (122.07 MiB)",
+   "rcMiB": [
+    70.3,
+    70.8
+   ],
+   "ddgiMiB": 91.7,
+   "pass": true
+  },
+  "G4": {
+   "rule": "static sponza, static camera flicker 0",
+   "rc": {
+    "flickerPct": 0,
+    "excessK16": 0
+   },
+   "pass": true
+  },
+  "G5": {
+   "rule": "excess K16 <= 0.0131 / 0.0101",
+   "rc": {
+    "sponza-dynobj": 0.01063,
+    "n64": 0.00771
+   },
+   "ddgi": {
+    "sponza-dynobj": 0.00091,
+    "n64": 0.00086,
+    "beforeSponzaDynobj": 0.00094
+   },
+   "pass": true
+  },
+  "G6": {
+   "rule": "error <= 0.42, bias -20..0%",
+   "rc": {
+    "meanAbsRel": 0.4137,
+    "bias": -0.1426
+   },
+   "ddgi": {
+    "meanAbsRel": 0.3859,
+    "bias": -0.0763,
+    "before": {
+     "meanAbsRel": 0.3622,
+     "bias": -0.0891
+    },
+    "withoutSegmentFix": {
+     "meanAbsRel": 0.4685,
+     "bias": -0.2264
+    }
+   },
+   "reproducedBefore": {
+    "meanAbsRel": 0.3999,
+    "bias": -0.1447
+   },
+   "pass": true
+  },
+  "G7": {
+   "rule": "leak <= 0.81 / 0.34 %",
+   "rcPct": [
+    0.39,
+    0.119
+   ],
+   "ddgiPct": [
+    0.649,
+    0.451
+   ],
+   "ddgiBeforePct": [
+    0.753,
+    0.454
+   ],
+   "reproducedBeforeRcPct": [
+    0.741,
+    0.31
+   ],
+   "pass": true
+  },
+  "G8": {
+   "rule": "sponza-dynobj-n64-deform <= 4.0 ms",
+   "value": {
+    "staticMs": [
+     3.445,
+     3.46
+    ],
+    "movingMs": [
+     3.098,
+     3.143
+    ],
+    "allocMiB": 70.3,
+    "excessK16": 0.00691,
+    "brickOverflow": 0,
+    "dynBrickOverflow": 0
+   },
+   "pass": true
+  }
+ },
+ "other": {
+  "movingCameraFlickerStaticSponzaPct": {
+   "rcBefore": 15.774,
+   "rcAfter": 17.984,
+   "ddgiBefore": 17.412,
+   "ddgiAfter": 18.193
+  },
+  "movingChainExcessStaticSponza": {
+   "rcBefore": 0.06633,
+   "rcAfter": 0.07771
+  },
+  "buildingJumpExcessK16": {
+   "bwave": {
+    "rcBefore01": 0.14672,
+    "rcAfter": 0.18193,
+    "ddgiAfter": 0.11437
+   },
+   "bcut": {
+    "rcBefore01": 0.03533,
+    "rcAfter": 0.03315,
+    "ddgiAfter": 0.00298
+   }
+  },
+  "staticBuildStagesMsG1": {
+   "before (0.2 m, coarse from triangles)": {
+    "clear": 0.018,
+    "markBricks": 0.105,
+    "allocBricks": 0.039,
+    "voxBits": 0.557,
+    "allocVoxels": 0.007,
+    "resolve": 0.075
+   },
+   "after": {
+    "clear": 0.019,
+    "markBricks": 0.086,
+    "allocBricks": 0.041,
+    "voxBits": 0.445,
+    "reduce": 0.072,
+    "allocVoxels": 0.007,
+    "resolve": 0.068
+   },
+   "note": "--dyn-stages, 160 frames, 1 run each, alternating"
+  },
+  "gatherAllHiddenNearCamera": "level 0 of 0.2 m with c0 spacing 0.05 m: near curtains every probe hidden (black); fixed by c0 spacing >= v0; a third retry at 3 voxels did nothing; using front-side probes untested raised leak 0.36 -> 0.88 %"
+ }
+}

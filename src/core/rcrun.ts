@@ -12,8 +12,8 @@ import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
 import { createDynLayer, DYN_MAX_BRICKS, DYN_STAGES, dynWork, mortonSortDynamic, type DynLayer } from './dynlayer.ts';
-import { createHitRad, emptyHitRad, type HitRad } from './hitrad.ts';
-import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
+import { emptyHitRad, type HitRad } from './hitrad.ts';
+import { createVoxWorld, triangleTable, VOX_STAGES, voxParams, type VoxWorld } from './voxel.ts';
 
 export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
 const Q = 16; // timestamp slots per frame
@@ -37,7 +37,7 @@ export interface RunContext {
 }
 
 export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneGpu,
-  opts: { voxel: boolean; bvh: boolean; vox?: Partial<VoxParams> }, width = 1920, height = 1080): RunContext {
+  opts: { voxel: boolean; bvh: boolean; vox?: Record<string, unknown> }, width = 1920, height = 1080): RunContext {
   const g = createGBuffer(device, width, height);
   const frame = device.createBuffer({ label: 'frame', size: FRAME_BYTES, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const lighting = createLighting(device, spec.scene, gpu, g, frame, spec.sunDir);
@@ -47,8 +47,8 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   if (spec.dynamic) mortonSortDynamic(table, spec.dynamic.firstTriangle, spec.scene.positions);
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
-  if (spec.building && (opts.bvh || opts.vox?.local)) throw new Error('a changing building needs the static bricks rebuilt every frame (--vox without local) and no BVH');
-  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle) : null;
+  if (spec.building && opts.bvh) throw new Error('a changing building needs no BVH (the BVH is built once)');
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, voxParams(opts.vox ?? {}), spec.dynamic?.firstTriangle) : null;
   // P2: dynamic triangles are in the dynamic layer, read by the voxel tracers at the cone width.
   const dynLayer = voxWorld ? createDynLayer(device, gpu, tri, voxWorld.uniform, frame, lighting.shadow, voxWorld.params,
     spec.dynamic?.firstTriangle ?? spec.scene.triangleCount, spec.scene.triangleCount) : null;
@@ -76,18 +76,6 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
     width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit, posed: new Map(),
     building: spec.building ? createBuilding(device, spec.scene, gpu, tri, table, spec.building) : null };
-}
-
-/** Static bricks built once (local): builds them and the P1 hit radiance layer over them (used by configs with p1).
- * Returns the build ms. */
-export async function buildStatic(ctx: RunContext, p1: boolean): Promise<number | null> {
-  if (!ctx.voxWorld?.params.local) return null;
-  ctx.voxWorld.update(ctx.spec.camera.eye);
-  const ms = await ctx.voxWorld.buildStatic();
-  if (p1) ctx.hitRad = await createHitRad(ctx.device, ctx.voxWorld, ctx.frame, ctx.lighting.shadow);
-  await ctx.device.queue.onSubmittedWorkDone();
-  ctx.voxWorld.releaseBuildTemp();
-  return ms;
 }
 
 /** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. */
@@ -163,8 +151,8 @@ export function compareIrradiance(a: { rgb: Float32Array; valid: Uint8Array; tag
 
 export interface RunOptions { warmup: number; frames: number; inFlight: number; exposure: number; sky: Vec3; seedFixed?: boolean; staticOnly?: boolean;
   /** Dynamic layer build timed per stage (one compute pass per stage, DYN_STAGES; the vox time is their sum) and its
-   * work counted on the CPU (dynWork) every 24 measured frames of the static camera. With static bricks rebuilt every frame
-   * (no local) their stages (VOX_STAGES) are timed too, before the dynamic layer's. No p1. */
+   * work counted on the CPU (dynWork) every 24 measured frames of the static camera. The static bricks' stages (VOX_STAGES)
+   * are timed too, before the dynamic layer's. */
   dynStages?: boolean;
   /** Dynamic scenes: hold the objects and the sun at this frame's pose. */
   poseFrame?: number;
@@ -222,6 +210,10 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     if (useVox) voxWorld!.update(cam.eye);
   };
 
+  // Phase 21: with voxels (level 0 of 0.2 m), c0 probes are never spaced finer than a level-0 voxel. Finer probes near
+  // the camera cannot be placed from the occupancy (they stay inside a surface's voxels, every probe of a pixel is
+  // hidden and the pixel goes black: the near curtains on Sponza's moving camera).
+  if (useVox && !params.ddgi) params = { ...params, sMin: Math.max(params.sMin, voxWorld!.params.v0) };
   // Sizing: run the world-probe build along the path with generous caps and keep the largest counts.
   let caps = params.caps;
   if (params.method !== 'screen' && !params.ddgi) {
@@ -245,7 +237,9 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     log(`  sizing: max probes per cascade ${maxCount.join(', ')} -> caps ${caps.join(', ')}`);
   }
   const p = { ...params, caps };
-  if (p.p1 && !ctx.hitRad) throw new Error('p1 needs static bricks built once (--vox local)');
+  // P1 builds its voxel lists once on the CPU over static bricks built once; that path is gone (phase 21, everything is
+  // rebuilt every frame). Phase 31 ports P1 to the rebuilt bricks or deletes it.
+  if (p.p1) throw new Error('p1 does not run: it needs static bricks built once, removed in phase 21 (see docs/spec/20-renderer.md)');
   const hitRad = p.p1 ? ctx.hitRad : null;
   const world = hitRad ? { ...ctx.world, hr: hitRad.buffer } : ctx.world;
   const rc = p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax])
@@ -253,10 +247,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   const post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
   const querySet = device.createQuerySet({ type: 'timestamp', count: opts.frames * Q });
   const staged = !!opts.dynStages && useVox;
-  if (staged && p.p1) throw new Error('--dyn-stages needs no p1');
-  // Static bricks rebuilt every frame: their stages (VOX_STAGES) are timed too, before the dynamic layer's.
-  const voxStaged = staged && !voxWorld!.params.local;
-  const NV = voxStaged ? VOX_STAGES.length * 2 : 0;
+  const NV = staged ? VOX_STAGES.length * 2 : 0;
   const NS = NV + DYN_STAGES.length * 2;
   if (opts.frames * NS > 4096) throw new Error(`--dyn-stages: ${opts.frames} frames x ${NS} timestamps exceed one query set (4096); use fewer frames`);
   const stageSet = staged ? device.createQuerySet({ type: 'timestamp', count: opts.frames * NS }) : null;
@@ -266,7 +257,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     lighting.encodeShadow(enc, tw(1));
     lighting.encodeDirect(enc, tw(2));
     if (staged) {
-      if (voxStaged) voxWorld!.encodeStaged(enc, k >= 0 ? stageSet : null, k * NS);
+      voxWorld!.encodeStaged(enc, k >= 0 ? stageSet : null, k * NS);
       ctx.dynLayer!.encodeStaged(enc, k >= 0 ? stageSet : null, k * NS + NV);
     }
     else if (useVox) {
@@ -284,8 +275,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   const countWork = (v: ReturnType<typeof posedVertices>) => {
     const vp = voxWorld!.params, P = spec.scene.positions.slice();
     P.set(v.pos, v.first * 3);
-    const c = [0, 1, 2].map((a) => (spec.scene.boundsMin[a] + spec.scene.boundsMax[a]) / 2);
-    const eye = vp.anchor === 'scene' ? c : spec.camera.eye;
+    const eye = spec.camera.eye;
     const origin = Array.from({ length: vp.levels }, (_, L) => [0, 1, 2].map((a) => Math.floor(eye[a] / (vp.v0 * 2 ** L * 8)) - vp.G / 2));
     return dynWork(triTable!, spec.dynamic!.firstTriangle, spec.scene.triangleCount, P, vp, origin);
   };
@@ -359,7 +349,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       await sread.mapAsync(GPUMapMode.READ);
       const sts = new BigUint64Array(sread.getMappedRange().slice(0));
       sread.unmap(); sread.destroy(); sres.destroy();
-      const stageNames = [...(voxStaged ? VOX_STAGES.map((st) => `vox.${st}`) : []), ...DYN_STAGES.map((st) => `dyn.${st}`)];
+      const stageNames = [...VOX_STAGES.map((st) => `vox.${st}`), ...DYN_STAGES.map((st) => `dyn.${st}`)];
       for (const st of stageNames) passMs[st] = [];
       passMs.vox = [];
       for (let k = 0; k < opts.frames; k++) {
@@ -499,13 +489,40 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     return { params: p, response: { from, to, curve, frames90: firstBelow(0.1), frames50: firstBelow(0.5) } };
   }
 
+  // Full-dynamic lane: every frame really changes the whole building. Wave: share of the building's vertices that move
+  // between two consecutive measured frames (read back from the GPU). There is no path that skips unchanged geometry:
+  // every frame voxelises all static triangles (voxWorld.staticTriangles).
+  async function buildingMotion() {
+    const b = ctx.building;
+    if (!b || b.spec.kind !== 'wave' || opts.poseFrame !== undefined) return null;
+    const n = b.spec.vertexCount;
+    const read = async (t: number) => {
+      b.apply(t);
+      const buf = device.createBuffer({ size: n * 12, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+      const enc = device.createCommandEncoder();
+      enc.copyBufferToBuffer(ctx.gpu.positions, 0, buf, 0, n * 12);
+      device.queue.submit([enc.finish()]);
+      await buf.mapAsync(GPUMapMode.READ);
+      const a = new Float32Array(buf.getMappedRange().slice(0));
+      buf.unmap(); buf.destroy();
+      return a;
+    };
+    const t = opts.warmup + Math.floor(opts.frames / 2);
+    const a = await read(t), c = await read(t + 1);
+    let moved = 0;
+    for (let v = 0; v < n; v++) if (Math.hypot(a[v * 3] - c[v * 3], a[v * 3 + 1] - c[v * 3 + 1], a[v * 3 + 2] - c[v * 3 + 2]) > 1e-5) moved++;
+    return { frames: [t, t + 1], buildingVertices: n, movedShare: Math.round(moved / n * 1e4) / 1e4, staticTrianglesVoxelisedPerFrame: voxWorld?.staticTriangles ?? null };
+  }
+
   log(`  static`);
   const st = await run('static');
+  const motion = await buildingMotion();
+  if (motion) log(`  building motion ${JSON.stringify(motion)}`);
   const tracer = await traceStats();
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
   rc.destroy(); post.destroy(); querySet.destroy(); stageSet?.destroy();
-  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, voxPeakBytes: useVox ? voxWorld!.peakBytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: p.p1 ? ctx.hitRad!.bytes : 0, static: st, moving: mv, tracer };
+  return { params: p, buildingMotion: motion, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: p.p1 ? ctx.hitRad!.bytes : 0, static: st, moving: mv, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */

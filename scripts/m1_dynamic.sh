@@ -8,7 +8,7 @@
 set -euo pipefail
 out=${1:?out dir}; configs=${2:?configs}; ddgi=${3:?ddgi configs}
 run() { bash scripts/run_with_vulkan.sh node build/native/rc.mjs "$@"; }
-V='{"anchor":"scene","local":true}'
+V='{}' # the measured runs (spec 30, section 7) used the removed fixed window; since phase 21 everything is rebuilt every frame
 mise run build:rc >/dev/null
 mkdir -p "$out"
 for sky in nosky sky; do

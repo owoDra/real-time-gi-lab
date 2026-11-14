@@ -54,7 +54,7 @@ function generateMips(device: GPUDevice, tex: GPUTexture) {
 }
 
 export async function uploadScene(device: GPUDevice, scene: SceneData, upload: ImageUploader): Promise<SceneGpu> {
-  const V = GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE;
+  const V = GPUBufferUsage.VERTEX | GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC; // COPY_SRC: the building motion check (rcrun.ts)
   const positions = buffer(device, scene.positions, V, 'positions');
   const normals = buffer(device, scene.normals, V, 'normals');
   const uvs = buffer(device, scene.uvs, V, 'uvs');

@@ -215,7 +215,9 @@ fn sfDir(i: u32, n: u32) -> vec3f {
   let d = vec3f(r * cos(phi), r * sin(phi), z);
   return normalize(D.rot0.xyz * d.x + D.rot1.xyz * d.y + D.rot2.xyz * d.z);
 }
-// One ray as consecutive segments [b_k, b_k+1] * segBase, b_k = (4^k - 1) / 3, at voxel level k. Returns
+// One ray as consecutive segments [b_k, b_k+1] * segBase, b_k = (4^k - 1) / 3, with voxels of segBase / 4 * 2^k
+// (level k when v0 = segBase / 4; with v0 = 0.2 m, phase 21, the first two segments read level 0, so that a coarser
+// level 0 does not coarsen every segment of the comparator: that alone took its reference error from 0.36 to 0.47). Returns
 // (radiance, distance); distance < 0 on a miss. P2: the dynamic layer is read in front of each segment's static
 // hit with the cone of one ray (4 pi / rays); the distance is the static hit's (dynamic objects do not enter the
 // depth moments). P1: static hits read the prefiltered hit radiance with the same cone.
@@ -225,10 +227,11 @@ fn traceRay(o: vec3f, d: vec3f) -> vec4f {
   coneK = kc; coneO = o;
   var b0 = 0.0;
   var acc = vec3f(0.0); var tr = 1.0;
+  let shift = u32(max(round(log2(VX.a.x * 4.0 / D.p.y)), 0.0));
   for (var k = 0u; k < nl; k++) {
     let b1 = b0 * 4.0 + 1.0;
     let t0 = b0 * D.p.y; let t1 = b1 * D.p.y;
-    let L = voxLevelFor(k, o + d * t1);
+    let L = voxLevelFor(k - min(k, shift), o + d * t1);
     let r = traceVox(o, d, t0, t1, 0.0, L);
     if (dyn[0] != 0u) {
       let dl = traceDyn(o, d, t0, select(t1, min(t1, dot(voxHitEntry - o, d)), r.a < 0.5), kc);
