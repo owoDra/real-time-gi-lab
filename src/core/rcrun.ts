@@ -72,7 +72,7 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvh: bvhBuf, materials: gpu.materials,
-    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device), dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS }; // P1: runConfig binds the layer for configs with p1
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device), dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS, maxBricks: voxWorld?.params.maxBricks ?? 0 }; // P1: runConfig binds the layer for configs with p1
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
     width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit, posed: new Map(),
     building: spec.building ? createBuilding(device, spec.scene, gpu, tri, table, spec.building) : null };
@@ -217,7 +217,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   // Sizing: run the world-probe build along the path with generous caps and keep the largest counts.
   let caps = params.caps;
   if (params.method !== 'screen' && !params.ddgi) {
-    const sizing = createRc(device, g, lighting.lit, frame, { ...params, method: 'world', world: 'none', analytic: true, caps: DEFAULT_PARAMS.caps }, ctx.world);
+    const sizing = createRc(device, g, lighting.lit, frame, { ...params, method: 'world', world: 'none', analytic: true, bounce: false, caps: DEFAULT_PARAMS.caps }, ctx.world);
     const maxCount = new Array(params.cascades).fill(0);
     let overflow = 0;
     for (let k = -1; k < (spec.moving ? 240 : 0); k += 12) {

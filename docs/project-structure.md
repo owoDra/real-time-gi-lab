@@ -17,7 +17,7 @@
 | `assets/` | テストシーン（`mise run assets` で取得） | 管理外 |
 | `archive-local/` | Program 1 のテキスト記録の圧縮アーカイブ（下の「作業機にしかないもの」） | 管理外 |
 
-`src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick、静的な形状）、`dynlayer.ts`（動的物体の被覆率と放射のレイヤ）、`hitrad.ts`（P1 のヒット放射の前置フィルタ、トークン `p1`）、`ddgi.ts`
+`src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick、静的な形状）、`dynlayer.ts`（動的物体の被覆率と放射のレイヤ）、`bounce.ts`（多重バウンスの跳ね返りボリューム）、`hitrad.ts`（P1 のヒット放射の前置フィルタ、トークン `p1`）、`ddgi.ts`
 （DDGI 系の比較相手）、`style.ts`（スタイル演算子）、`bvh.ts`（三角形の正解器）、`lighting.ts`（太陽と影）、
 `gbuffer.ts`、`scenes.ts`（シーン）、`post.ts`（表示とちらつきの指標）、`rcrun.ts`（計測の実行）。
 
@@ -42,7 +42,7 @@ mise run s2:native -- --scene sponza --vox-bench     # 再ボクセル化の段�
 
 # 参照（Mitsuba）
 mise run ref:export -- --scene sponza                # シーン変換（box/out/mitsuba/<シーン>）
-build/refenv/bin/python scripts/reference_irradiance.py box/out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N]
+build/refenv/bin/python scripts/reference_irradiance.py box/out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N] [--bounces 0]  # 0: 打ち切りなしの多重バウンス
 mise run ref:compare -- --ref A.pfm,B.pfm --ours <cfg>.static.irr.f32 [--png DIR]
 mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --ours-style y.irr.f32 [--png DIR]
 ```

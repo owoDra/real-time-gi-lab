@@ -13,8 +13,8 @@
 //
 // Cascade i: octahedral (4*2^i)^2 directions, spacing 2^i * s0, interval [b_i, b_{i+1}] * s0 with
 // b_i = k (4^i - 1) / 3. Rays that leave the screen are unresolved (transmittance 1, no radiance), and rays
-// that pass the last interval return the sky radiance. Hit radiance is the direct-lit radiance texture
-// (one bounce). No history of any kind.
+// that pass the last interval return the sky radiance. Hit radiance is the direct-lit radiance texture (S1) or the
+// direct light plus the multi-bounce of bounce.ts (voxel tracer, phase 23). No other history.
 import { BVH_TRACE_WGSL } from './bvh.ts';
 import { FRAME_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
@@ -23,6 +23,7 @@ import type { GBuffer } from './gbuffer.ts';
 import { DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
 import { HIT_READ_WGSL } from './hitrad.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
+import { BOUNCE_READ_WGSL, bounceConstants, createBounce, DEFAULT_BOUNCE, type Bounce } from './bounce.ts';
 
 export type Method = 'world' | 'screen' | 'split';
 /** S2: world-space interval tracer. 'none' keeps S1 (depth buffer only). */
@@ -35,6 +36,7 @@ export interface WorldResources {
   materials: GPUBuffer; baseColor: GPUTexture; shadow: GPUTexture; hasVox: boolean; hasBvh: boolean;
   hr: GPUBuffer; // P1 hit radiance (hitrad.ts), or an empty buffer
   dynBricks: number; // brick pool of the dynamic layer (pipeline constant of the dynamic layer's read side)
+  maxBricks: number; // brick pool of the voxel world (bounce.ts walks its voxel slots)
 }
 
 export interface RcParams {
@@ -75,13 +77,15 @@ export interface RcParams {
   // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default until its read
   // level is interpolated (docs/spec/40-dynamic-stability.md).
   p1: boolean;
+  // Phase 23: multi-bounce, on by default (RC: the bounce volume of bounce.ts; DDGI: its own probes, ddgi.ts).
+  bounce: boolean;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, p1: false,
+  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, p1: false, bounce: true,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
@@ -96,14 +100,23 @@ fn sunVis(x: vec3f) -> f32 {
 // One-bounce hit radiance, as the direct pass computes it (Lambert, sun, shadow map). The normal is turned to
 // face the ray; a zero normal (opposite faces averaged in one voxel) faces the ray.
 // S3: toon hits (alb.a = 1) inject the emission-side operator instead (style.ts).
+// Phase 23 (multi-bounce): plus albedo / pi times the indirect irradiance e at the hit. Toon hits reflect it as Lambert.
+fn shadeHitE(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32, e: vec3f) -> vec3f {
+  var n = select(-d, n0, dot(n0, n0) > 0.01);
+  if (dot(n, d) > 0.0) { n = -n; }
+  let b = alb.rgb / PI * e;
+  let ndl = max(dot(n, F.sunDir.xyz), 0.0);
+  if (ndl <= 0.0) { return b; }
+  let vis = sunVis(p + n * bias);
+  if (alb.a > 0.5 && F.style.x > 0.5) { return b + toonSun(alb.rgb, ndl, vis, F.sunE.rgb); }
+  return b + alb.rgb / PI * F.sunE.rgb * ndl * vis;
+}
+// Each includer defines bounceE(p, n, v) (the irradiance at a point, n facing the viewer v; 0 without multi-bounce)
+// and voxBounce(p, n, d, ai) (the same at a voxel hit, n the voxel's normal, d the ray; RC reads it per voxel).
 fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
   var n = select(-d, n0, dot(n0, n0) > 0.01);
   if (dot(n, d) > 0.0) { n = -n; }
-  let ndl = max(dot(n, F.sunDir.xyz), 0.0);
-  if (ndl <= 0.0) { return vec3f(0.0); }
-  let vis = sunVis(p + n * bias);
-  if (alb.a > 0.5 && F.style.x > 0.5) { return toonSun(alb.rgb, ndl, vis, F.sunE.rgb); }
-  return alb.rgb / PI * F.sunE.rgb * ndl * vis;
+  return shadeHitE(p, n0, alb, d, bias, bounceE(p, n, -d));
 }
 var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keeps hit distances)
 // P1 (config token p1): static voxel hits read the prefiltered hit radiance at the cone width (coneK, coneO set by the
@@ -111,7 +124,8 @@ var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keep
 fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32, ai: u32, L: u32, pc: vec3f) -> vec3f {
   voxHitEntry = entry;
   if (hrReady()) { let r = hitRadiance(L, pc, d, dot(entry - coneO, d), n); if (r.a > 0.0) { return r.rgb; } }
-  return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0);
+  let p = entry - d * (0.25 * v);
+  return shadeHitE(p, n, alb, d, 0.0, voxBounce(p, n, d, ai));
 }
 ${HIT_READ_WGSL}
 `;
@@ -161,6 +175,16 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(8) var shadowCmp: sampler_comparison;
 @group(3) @binding(9) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
 @group(3) @binding(10) var<storage, read> hr: array<u32>; // P1 hit radiance (hitrad.ts)
+@group(3) @binding(11) var bnTex: texture_3d<f32>; // phase 23 bounce volume of this frame (bounce.ts)
+override BN_ON: bool = false;
+${BOUNCE_READ_WGSL.replace('fn bounceE(', 'fn bounceVol(')}
+fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f { if (!BN_ON) { return vec3f(0.0); } return bounceVol(p, n, v); }
+// Voxel hits read the irradiance bnInject (bounce.ts) stored for the voxel's side the ray comes from.
+fn voxBounce(p: vec3f, n: vec3f, d: vec3f, ai: u32) -> vec3f {
+  if (!BN_ON) { return vec3f(0.0); }
+  let o = VX.c.z + ai * 4u + select(0u, 2u, dot(n, d) > 0.0);
+  return vec3f(unpack2x16float(vox[o]), unpack2x16float(vox[o + 1u]).x);
+}
 
 ${SHADE_WGSL}
 fn triShade(p: vec3f, n: vec3f, alb: vec4f, d: vec3f) -> vec3f { return shadeHit(p, n, alb, d, 0.03); }
@@ -982,7 +1006,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const irr = device.createTexture({ label: 'rc.irr', size: [width, height], format: 'rgba16float',
     usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_SRC });
   const all = [layoutBuf, ...ci, keys, slotProbe, probes, rad, sh, counts, accum, parents, args];
-  const bytes = all.reduce((s, b) => s + b.size, 0) + width * height * 8;
+  let bytes = all.reduce((s, b) => s + b.size, 0) + width * height * 8;
 
   const C = GPUShaderStage.COMPUTE;
   const bgl0 = device.createBindGroupLayout({ entries: [
@@ -1002,6 +1026,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 0, visibility: C, buffer: { type: 'uniform' } },
     { binding: 5, visibility: C, texture: { viewDimension: '2d-array' } }, { binding: 6, visibility: C, sampler: {} },
     { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
+    { binding: 11, visibility: C, texture: { sampleType: 'unfilterable-float', viewDimension: '3d' } },
   ];
   const G2 = ['keys', 'slotProbe', 'probes', 'rad', 'sh', 'counts', 'accum', 'parents'];
   const G3: Record<string, number> = { vox: 1, bvh: 2, materials: 4, dyn: 9, hr: 10 };
@@ -1012,22 +1037,29 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     6: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }),
     7: world.shadow.createView(), 8: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }),
   };
+  // Phase 23: the bounce volume (bounce.ts), rebuilt at the start of the trace pass; without it a 1-texel stand-in.
+  const BP = DEFAULT_BOUNCE;
+  const bounce: Bounce | null = params.bounce ? createBounce(device, frame, world, BP, SHADE_WGSL) : null;
+  const bnDummy = bounce ? null : device.createTexture({ size: [1, 1, 1], dimension: '3d', format: 'rgba16float', usage: GPUTextureUsage.TEXTURE_BINDING });
+  const bnViews = bounce ? bounce.views : [bnDummy!.createView(), bnDummy!.createView()];
+  const constants = { ...dynConstants(world.dynBricks), ...bounceConstants(BP), BN_ON: params.bounce ? 1 : 0 };
   const module = device.createShaderModule({ code: RC_WGSL, label: 'rc' });
   const ENTRIES = ['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'relocateVox', 'linkParents', 'setupScreen', 'trace', 'deposit',
     'resolve', 'mergeWorld', 'mergeScreen', 'projectSH', 'gatherWorld', 'gatherScreen'];
   const used = wgslUses(RC_WGSL, ENTRIES, [...G2, ...Object.keys(G3)]);
-  const P: Record<string, GPUComputePipeline> = {}, bg2: Record<string, GPUBindGroup> = {}, bg3: Record<string, GPUBindGroup> = {};
+  const P: Record<string, GPUComputePipeline> = {}, bg2: Record<string, GPUBindGroup> = {}, bg3: Record<string, GPUBindGroup[]> = {};
   for (const e of ENTRIES) {
     const b2 = G2.map((_, i) => i).filter((i) => used[e].has(G2[i]));
     const b3 = Object.entries(G3).filter(([n]) => used[e].has(n)).map(([, b]) => b);
     const bgl2 = device.createBindGroupLayout({ entries: b2.map((i) => ({ binding: i, visibility: C, buffer: { type: 'storage' as const } })) });
     const bgl3 = device.createBindGroupLayout({ entries: [...g3Fixed, ...b3.map(RO)] });
     const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3] });
-    P[e] = device.createComputePipeline({ label: e, layout, compute: { module, entryPoint: e, constants: dynConstants(world.dynBricks) } });
+    P[e] = device.createComputePipeline({ label: e, layout, compute: { module, entryPoint: e, constants } });
     bg2[e] = device.createBindGroup({ layout: bgl2, entries: b2.map((i) => ({ binding: i, resource: { buffer: g2Bufs[i] } })) });
-    bg3[e] = device.createBindGroup({ layout: bgl3, entries: [...Object.entries(g3Res).map(([b, resource]) => ({ binding: Number(b), resource })),
-      ...b3.map((b) => ({ binding: b, resource: { buffer: g3Bufs[b] } }))] });
+    bg3[e] = bnViews.map((bv) => device.createBindGroup({ layout: bgl3, entries: [...Object.entries(g3Res).map(([b, resource]) => ({ binding: Number(b), resource })),
+      { binding: 11, resource: bv }, ...b3.map((b) => ({ binding: b, resource: { buffer: g3Bufs[b] } }))] }));
   }
+  bytes += bounce?.bytes ?? 0;
   const argsModule = device.createShaderModule({ code: ARGS_WGSL, label: 'rc.args' });
   const argsPipe = device.createComputePipeline({ label: 'writeArgs', layout: 'auto', compute: { module: argsModule, entryPoint: 'writeArgs' } });
 
@@ -1048,7 +1080,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     if (groups > 0) pass.dispatchWorkgroups(x, Math.ceil(groups / x));
   };
   const use = (pass: GPUComputePassEncoder, name: string, c: number) => {
-    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[c]); pass.setBindGroup(2, bg2[name]); pass.setBindGroup(3, bg3[name]);
+    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[c]); pass.setBindGroup(2, bg2[name]); pass.setBindGroup(3, bg3[name][bounce ? bounce.parity() : 0]);
   };
   const writeArgs = (pass: GPUComputePassEncoder, c: number) => {
     pass.setPipeline(argsPipe); pass.setBindGroup(0, argsBG0); pass.setBindGroup(1, argsBG1[c]); pass.dispatchWorkgroups(1);
@@ -1098,6 +1130,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
       pass.end();
 
       pass = enc.beginComputePass({ label: 'giTrace', timestampWrites: tw(1) });
+      bounce?.encode(pass);
       if (split) {
         use(pass, 'clearAccum', 0); linear(pass, accTotal);
         use(pass, 'deposit', 0); linear(pass, Math.ceil(width / params.rayStride) * Math.ceil(height / params.rayStride));
@@ -1128,6 +1161,6 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
       return r;
     },
     setStats(level) { device.queue.writeBuffer(layoutBuf, (8 + 8 * 12 + 2) * 4, new Uint32Array([level])); },
-    destroy() { for (const b of all) b.destroy(); irr.destroy(); },
+    destroy() { for (const b of all) b.destroy(); irr.destroy(); bounce?.destroy(); bnDummy?.destroy(); },
   };
 }

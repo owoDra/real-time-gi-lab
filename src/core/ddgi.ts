@@ -13,15 +13,16 @@
 //  - rays trace the voxels exactly as the cascades' intervals do: the ray is split into segments whose voxel level
 //    grows one per segment while the segment length grows 4x (the cascades' cone-footprint level map), so a DDGI ray
 //    is the concatenation of the intervals c0..c4 of a probe with s0 = 4 v0;
-//  - transport: the same one bounce of sun light at the hit (shadeHit, including the S3 emission-side operator),
-//    sky on escape; no multi-bounce feedback from the probes (the reference and the cascades have none either);
+//  - transport: the same sun light at the hit (shadeHit, including the S3 emission-side operator), sky on escape;
 //  - probe relocation and classification come from the voxel occupancy (view independent, recomputed every frame,
 //    so they follow moving geometry): a probe whose voxel (~ spacing / 4) is occupied moves to the first free
 //    candidate among 26 directions at 0.15 / 0.3 / 0.45 spacing; a probe is active when a voxel brick of size
 //    ~ spacing / 2..spacing overlaps the box of +-1 spacing around it. Inactive probes are not traced; a probe
 //    that becomes active starts without history.
 //  - the volume is fixed in the world and covers the scene bounds (no scrolling).
-// Trace and blend are fused: one workgroup per probe keeps its rays in workgroup memory.
+// Trace and blend are two passes (phase 23); the rays of one update go through a texture.
+// Phase 23 (multi-bounce, on by default): the hit radiance adds albedo / pi times the probes' own irradiance, sampled as the
+// gather does from the state the previous update left (RTXGI's usual multi-bounce).
 import { FRAME_WGSL } from './frame.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { SHADE_WGSL, type WorldResources } from './rc.ts';
@@ -41,9 +42,10 @@ export interface DdgiParams {
   classify: boolean;
   gamma: number;        // irradiance encoding for the temporal blend (RTXGI 5; 1: linear)
   viewBias: number;     // surface bias = (n (1 - viewBias) + v viewBias) x 0.75 x spacing x 0.3 (RTXGI 0.8)
+  bounce: boolean;      // phase 23: multi-bounce from the probes' own irradiance
 }
 export const DEFAULT_DDGI: DdgiParams = { spacing: 1, rays: 128, hysteresis: 0.97, adaptive: true, updateDiv: 1, segBase: 0.4, relocate: 1, classify: true,
-  gamma: 5, viewBias: 0.8 };
+  gamma: 5, viewBias: 0.8, bounce: true };
 
 const IRR = 8;   // 6 + border
 const DEP = 16;  // 14 + border
@@ -58,7 +60,7 @@ struct DU {
   rot0: vec4f, rot1: vec4f, rot2: vec4f,
   p: vec4f,        // hysteresis, segBase, max depth (1.5 spacing), adaptive (1/0)
   u: vec4u,        // frame, updateDiv, relocate, classify
-  q: vec4f,        // gamma, viewBias, 0, 0
+  q: vec4f,        // gamma, viewBias, multi-bounce (1/0), 0
 }
 @group(0) @binding(0) var<uniform> F: Frame;
 @group(0) @binding(1) var<uniform> D: DU;
@@ -77,6 +79,47 @@ struct DU {
 @group(2) @binding(3) var shadowCmp: sampler_comparison;
 @group(2) @binding(4) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
 @group(2) @binding(5) var<storage, read> hr: array<u32>; // P1 hit radiance (hitrad.ts)
+// Phase 23 (multi-bounce): hits add albedo / pi times the irradiance of the probes as the previous update left them
+// (the trace pass only reads irr and dep; the blend pass writes them), sampled as the gather does (bounceE).
+fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f {
+  if (D.q.z < 0.5) { return vec3f(0.0); }
+  let s = D.origin.w;
+  let bp = p + (n * (1.0 - D.q.y) + v * D.q.y) * (0.75 * s * 0.3);
+  let g = (bp - D.origin.xyz) / s;
+  let b = vec3i(floor(g)); let a = g - vec3f(b);
+  var e = vec3f(0.0); var ws = 0.0;
+  for (var k = 0u; k < 8u; k++) {
+    let o = vec3i(i32(k & 1u), i32((k >> 1u) & 1u), i32((k >> 2u) & 1u));
+    let c = b + o;
+    if (any(c < vec3i(0)) || any(c >= vec3i(D.dims.xyz))) { continue; }
+    let pi = u32(c.x) + D.dims.x * (u32(c.y) + D.dims.y * u32(c.z));
+    let st = state[pi];
+    if ((u32(st.w) & 3u) != 3u) { continue; }
+    let pp = D.origin.xyz + vec3f(c) * s + st.xyz;
+    let tri = select(1.0 - a, a, o == vec3i(1));
+    let toP = normalize(pp - p);
+    let wrap = (dot(toP, n) + 1.0) * 0.5;
+    var w = wrap * wrap + 0.2;
+    let bv = bp - pp;
+    let dist = length(bv);
+    let m = sampleDep(pi, bv / max(dist, 1e-6));
+    let variance = abs(m.x * m.x - m.y);
+    var cheb = 1.0;
+    if (dist > m.x) { let t = dist - m.x; cheb = variance / (variance + t * t); cheb = max(cheb * cheb * cheb, 0.0); }
+    w *= max(0.05, cheb);
+    w = max(w, 1e-6);
+    if (w < 0.2) { w *= w * w / (0.2 * 0.2); }
+    w *= tri.x * tri.y * tri.z;
+    e += w * pow(max(sampleIrr(pi, n), vec3f(0.0)), vec3f(0.5 * D.q.x)); ws += w;
+  }
+  let eh = e / max(ws, 1e-9);
+  return select(vec3f(0.0), PI * eh * eh, ws > 0.0);
+}
+fn voxBounce(p: vec3f, n0: vec3f, d: vec3f, ai: u32) -> vec3f {
+  var n = select(-d, n0, dot(n0, n0) > 0.01);
+  if (dot(n, d) > 0.0) { n = -n; }
+  return bounceE(p, n, -d);
+}
 ${SHADE_WGSL}
 ${VOX_TRACE_WGSL}
 ${DYN_READ_WGSL}
@@ -246,19 +289,31 @@ fn traceRay(o: vec3f, d: vec3f) -> vec4f {
 fn enc(v: vec3f) -> vec3f { return pow(max(v, vec3f(0.0)), vec3f(1.0 / D.q.x)); }
 fn maxc(v: vec3f) -> f32 { return max(v.x, max(v.y, v.z)); }
 
+// Trace and blend are separate passes (phase 23: the trace reads the probes for the multi-bounce while the blend writes
+// them). The rays of listed probe slot k go to texels k * rays + r of rayOut (2048 wide).
+@group(3) @binding(0) var rayOut: texture_storage_2d<rgba32float, write>;
+@group(3) @binding(1) var rayIn: texture_2d<f32>;
+fn rayTexel(i: u32) -> vec2i { return vec2i(i32(i % 2048u), i32(i / 2048u)); }
 var<workgroup> wgProbe: u32;
+@compute @workgroup_size(64) fn traceRays(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let slot = wid.x + wid.y * nwg.x;
+  if (li == 0u) { wgProbe = select(0xffffffffu, list[slot], slot < atomicLoad(&counts[0])); }
+  let pi = workgroupUniformLoad(&wgProbe);
+  if (pi == 0xffffffffu) { return; }
+  let o = probeBase(pi) + state[pi].xyz;
+  let R = D.dims.w;
+  for (var r = li; r < R; r += 64u) { textureStore(rayOut, rayTexel(slot * R + r), traceRay(o, sfDir(r, R))); }
+}
 @compute @workgroup_size(64) fn update(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let slot = wid.x + wid.y * nwg.x;
   if (li == 0u) { wgProbe = select(0xffffffffu, list[slot], slot < atomicLoad(&counts[0])); }
   let pi = workgroupUniformLoad(&wgProbe);
   if (pi == 0xffffffffu) { return; }
   let st = state[pi];
-  let o = probeBase(pi) + st.xyz;
   let R = D.dims.w;
   for (var r = li; r < R; r += 64u) {
-    let d = sfDir(r, R);
-    let h = traceRay(o, d);
-    rayDir[r] = d; rayRad[r] = h.rgb; rayDist[r] = select(1e9, h.a, h.a >= 0.0);
+    let h = textureLoad(rayIn, rayTexel(slot * R + r), 0);
+    rayDir[r] = sfDir(r, R); rayRad[r] = h.rgb; rayDist[r] = select(1e9, h.a, h.a >= 0.0);
   }
   workgroupBarrier();
   let hasData = (u32(st.w) & 2u) != 0u;
@@ -449,8 +504,11 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
   const uni = device.createBuffer({ label: 'ddgi.u', size: 16 * 8, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const irr = device.createTexture({ label: 'ddgi.irrOut', size: [width, height], format: 'rgba16float',
     usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_SRC });
+  // At most ceil(N / updateDiv) probes are listed per frame (classify: index + frame divisible by updateDiv).
+  const rayRows = Math.ceil(Math.ceil(N / params.updateDiv) * params.rays / 2048);
+  const rayTex = device.createTexture({ label: 'ddgi.rays', size: [2048, rayRows], format: 'rgba32float', usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING });
   const all = [state, irrBuf, depBuf, counts, list, uni];
-  const bytes = all.reduce((t, b) => t + b.size, 0) + width * height * 8;
+  const bytes = all.reduce((t, b) => t + b.size, 0) + width * height * 8 + 2048 * rayRows * 16;
 
   const module = device.createShaderModule({ code: DDGI_WGSL, label: 'ddgi' });
   const C = GPUShaderStage.COMPUTE;
@@ -467,8 +525,18 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
     { binding: 4, visibility: C, buffer: { type: 'read-only-storage' } }, { binding: 5, visibility: C, buffer: { type: 'read-only-storage' } },
   ] });
   const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2] });
-  const P = Object.fromEntries(['clearCounts', 'classify', 'writeArgs', 'update', 'gather'].map((e) =>
-    [e, device.createComputePipeline({ label: `ddgi.${e}`, layout: pl, compute: { module, entryPoint: e, constants: dynConstants(world.dynBricks) } })]));
+  const bgl3w = device.createBindGroupLayout({ entries: [{ binding: 0, visibility: C, storageTexture: { access: 'write-only', format: 'rgba32float' } }] });
+  const bgl3r = device.createBindGroupLayout({ entries: [{ binding: 1, visibility: C, texture: { sampleType: 'unfilterable-float' } }] });
+  const layoutOf: Record<string, GPUPipelineLayout> = {
+    traceRays: device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3w] }),
+    update: device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3r] }),
+  };
+  const bg3: Record<string, GPUBindGroup> = {
+    traceRays: device.createBindGroup({ layout: bgl3w, entries: [{ binding: 0, resource: rayTex.createView() }] }),
+    update: device.createBindGroup({ layout: bgl3r, entries: [{ binding: 1, resource: rayTex.createView() }] }),
+  };
+  const P = Object.fromEntries(['clearCounts', 'classify', 'writeArgs', 'traceRays', 'update', 'gather'].map((e) =>
+    [e, device.createComputePipeline({ label: `ddgi.${e}`, layout: layoutOf[e] ?? pl, compute: { module, entryPoint: e, constants: dynConstants(world.dynBricks) } })]));
   const bg0 = device.createBindGroup({ layout: bgl0, entries: [
     { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: { buffer: uni } },
     { binding: 2, resource: g.depth.createView() }, { binding: 3, resource: g.normal.createView() },
@@ -482,7 +550,10 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
     { binding: 2, resource: world.shadow.createView() }, { binding: 3, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
     { binding: 4, resource: { buffer: world.dyn } }, { binding: 5, resource: { buffer: world.hr } },
   ] });
-  const use = (pass: GPUComputePassEncoder, name: string) => { pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1); pass.setBindGroup(2, bg2); };
+  const use = (pass: GPUComputePassEncoder, name: string) => {
+    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1); pass.setBindGroup(2, bg2);
+    if (bg3[name]) pass.setBindGroup(3, bg3[name]);
+  };
   let frameNo = 0;
 
   return {
@@ -493,7 +564,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
       f.set([...origin, s], 0); w.set([...dims, params.rays], 4); f.set(rotation(frameNo + 1), 8);
       f.set([params.hysteresis, params.segBase, 1.5 * Math.sqrt(3) * s, params.adaptive ? 1 : 0], 20); // RTXGI: 1.5 |spacing|
       w.set([frameNo, params.updateDiv, params.relocate, params.classify ? 1 : 0], 24);
-      f.set([params.gamma, params.viewBias, 0, 0], 28);
+      f.set([params.gamma, params.viewBias, params.bounce ? 1 : 0, 0], 28);
       device.queue.writeBuffer(uni, 0, u);
       frameNo++;
       let pass = enc.beginComputePass({ label: 'giBuild', timestampWrites: tw(0) });
@@ -505,6 +576,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
       pass.end();
       enc.copyBufferToBuffer(counts, 16, args, 0, 16);
       pass = enc.beginComputePass({ label: 'giTrace', timestampWrites: tw(1) });
+      use(pass, 'traceRays'); pass.dispatchWorkgroupsIndirect(args, 0);
       use(pass, 'update'); pass.dispatchWorkgroupsIndirect(args, 0);
       pass.end();
       pass = enc.beginComputePass({ label: 'giMerge', timestampWrites: tw(2) });
@@ -526,6 +598,6 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
       return out;
     },
     setStats() {},
-    destroy() { for (const b of [...all, args]) b.destroy(); irr.destroy(); },
+    destroy() { for (const b of [...all, args]) b.destroy(); irr.destroy(); rayTex.destroy(); },
   };
 }

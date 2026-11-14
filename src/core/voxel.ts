@@ -51,7 +51,7 @@ export const VOX_STRUCT_WGSL = /* wgsl */ `
 struct VoxU {
   a: vec4f,   // v0, levels, G, brick words
   b: vec4u,   // ptrOff, brickOff, attrOff, maxBricks
-  c: vec4u,   // maxVoxels, end of the triangles to voxelise (the static ones), 0, 0
+  c: vec4u,   // maxVoxels, end of the triangles to voxelise (the static ones), bounce words (phase 23), 0
   origin: array<vec4i, 8>, // per level: first brick of the clipmap (world brick coordinates), w unused
 }
 const VOX_EMPTY = 0xffffffffu;
@@ -550,7 +550,10 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
   const { v0, levels: NL, G, maxBricks, maxVoxels } = params;
   if (NL > 8) throw new Error('at most 8 levels');
   const ptrOff = HDR, brickOff = ptrOff + NL * G ** 3, attrOff = brickOff + maxBricks * BRICK_WORDS;
-  const words = attrOff + maxVoxels * 2;
+  // Phase 23: 4 words per voxel attribute after the attributes, the indirect irradiance on the two sides of the voxel
+  // (along its normal, then against it; rg, b as half floats), written every frame by bounce.ts (bnInject).
+  const bnOff = attrOff + maxVoxels * 2;
+  const words = bnOff + maxVoxels * 4;
   const S = GPUBufferUsage.STORAGE;
   const vox = device.createBuffer({ label: 'vox', size: words * 4, usage: S | GPUBufferUsage.COPY_SRC });
   const repBuf = device.createBuffer({ label: 'vox.rep', size: maxBricks * 512 * 4, usage: S });
@@ -638,7 +641,7 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
     const f = new Float32Array(buf), u = new Uint32Array(buf), i = new Int32Array(buf);
     f.set([v0, NL, G, BRICK_WORDS], 0);
     u.set([ptrOff, brickOff, attrOff, maxBricks], 4);
-    u.set([maxVoxels, end, 0, 0], 8);
+    u.set([maxVoxels, end, bnOff, 0], 8);
     for (let L = 0; L < NL; L++) {
       const bs = v0 * 2 ** L * 8;
       i.set([0, 1, 2].map((a) => Math.floor(eye[a] / bs) - G / 2).concat([0]), 12 + L * 4);

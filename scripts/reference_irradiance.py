@@ -10,9 +10,12 @@ interval tracers' errors. Alpha-masked materials are treated as holes where opac
 renderer's alpha test). Normal maps are not applied (the renderer's G-buffer applies them).
 S3: hits on toon materials (vertex attribute toon = 1) return the emission-side operator of src/core/style.ts
 instead of the Lambert term: sat(albedo) / pi * sunE * ramp(n.l * V) (the emission-side proxy).
+Phase 23: --bounces N follows the path for N bounces (0: unbounded, Russian roulette from the third hit); every hit adds
+its sun term times the path throughput (product of the albedos of the earlier hits), escapes add the sky. --bounces 1
+is the one-bounce reference above.
 
 Usage: python scripts/reference_irradiance.py box/out/mitsuba/sponza [--spp 256] [--width 960] [--height 540]
-         [--sky r,g,b] [--seed N] [--out FILE.pfm]
+         [--sky r,g,b] [--seed N] [--bounces N] [--out FILE.pfm]
 Needs DRJIT_LIBLLVM_PATH (see docs/spec/10-evaluation.md).
 """
 import argparse
@@ -34,6 +37,7 @@ ap.add_argument("--height", type=int, default=540)
 ap.add_argument("--sky", default="0,0,0")
 ap.add_argument("--out", default=None)
 ap.add_argument("--seed", type=int, default=0)
+ap.add_argument("--bounces", type=int, default=1, help="1: one bounce of sun light (the renderers before phase 23); 0: unbounded (Russian roulette)")
 ap.add_argument("--albedo", action="store_true", help="write the first-hit albedo instead (orientation check)")
 a = ap.parse_args()
 desc = json.load(open(os.path.join(a.scene_dir, "scene.json")))
@@ -121,23 +125,40 @@ class RefIrradiance(mi.SamplingIntegrator):
             alb = albedo(si, ray, valid)
             return dr.select(valid, alb, 0.0), valid, []
         n1 = facing(si.sh_frame.n, ray.d)
-        frame = mi.Frame3f(n1)
-        d = frame.to_world(mi.warp.square_to_cosine_hemisphere(sampler.next_2d(valid)))
-        ray2 = mi.Ray3f(si.p + n1 * 1e-3 * (1 + dr.max(dr.abs(si.p))), d)
-        si2 = intersect(scene, ray2, valid)
-        hit = valid & si2.is_valid()
-        n2 = facing(si2.n, d)
-        ndl = dr.maximum(dr.dot(n2, sun_dir), 0.0)
-        alb = albedo(si2, ray2, hit)
-        lit = hit & (ndl > 0)
-        sray = mi.Ray3f(si2.p + n2 * 1e-3 * (1 + dr.max(dr.abs(si2.p))), sun_dir)
-        sh = intersect(scene, sray, lit)
-        vis = lit & ~sh.is_valid()
-        l_hit = dr.select(vis, alb / math.pi * sun_e * ndl, 0.0)
-        if has_toon:
-            toon = hit & (si2.shape.eval_attribute_1("vertex_toon", si2, hit) > 0.5)
-            l_hit = dr.select(toon, toon_sun(alb, dr.select(vis, ndl, 0.0)), l_hit)
-        l_in = dr.select(hit, l_hit, dr.select(valid, mi.Color3f(sky), 0.0))
+        p, n, alive = si.p, n1, mi.Bool(valid)
+        thr = mi.Color3f(1.0)  # path throughput after the first (camera) surface, whose albedo is not applied
+        l_in = mi.Color3f(0.0)
+        for b in range(a.bounces if a.bounces > 0 else 64):
+            frame = mi.Frame3f(n)
+            d = frame.to_world(mi.warp.square_to_cosine_hemisphere(sampler.next_2d(alive)))
+            ray2 = mi.Ray3f(p + n * 1e-3 * (1 + dr.max(dr.abs(p))), d)
+            si2 = intersect(scene, ray2, alive)
+            hit = alive & si2.is_valid()
+            l_in += dr.select(alive & ~hit, thr * mi.Color3f(sky), 0.0)
+            n2 = facing(si2.n, d)
+            ndl = dr.maximum(dr.dot(n2, sun_dir), 0.0)
+            alb = albedo(si2, ray2, hit)
+            lit = hit & (ndl > 0)
+            sray = mi.Ray3f(si2.p + n2 * 1e-3 * (1 + dr.max(dr.abs(si2.p))), sun_dir)
+            sh = intersect(scene, sray, lit)
+            vis = lit & ~sh.is_valid()
+            l_hit = dr.select(vis, alb / math.pi * sun_e * ndl, 0.0)
+            if has_toon:
+                toon = hit & (si2.shape.eval_attribute_1("vertex_toon", si2, hit) > 0.5)
+                l_hit = dr.select(toon, toon_sun(alb, dr.select(vis, ndl, 0.0)), l_hit)
+            l_in += dr.select(hit, thr * l_hit, 0.0)
+            # Next bounce: cosine sampling of the Lambert lobe (albedo / pi), so the throughput takes the albedo
+            # (toon surfaces reflect indirect light as plain Lambert with their albedo). --bounces 0: unbounded
+            # with Russian roulette from the third hit on.
+            alive = hit
+            thr = thr * alb
+            if a.bounces <= 0 and b >= 2:
+                q = dr.minimum(dr.max(thr), 0.95)
+                alive &= sampler.next_1d(alive) < q
+                thr = thr / dr.select(q > 0, q, 1.0)
+            p, n = si2.p, n2
+            if not dr.any(alive):
+                break
         # Cosine-weighted sampling: E = pi * L_in.
         return l_in * math.pi, valid, []
 
@@ -149,6 +170,6 @@ scene = mi.load_dict(scene_dict)
 print(f"loaded {len(desc['materials'])} meshes in {time.time() - t0:.1f} s", flush=True)
 t0 = time.time()
 img = mi.render(scene, spp=a.spp, seed=a.seed)
-out = a.out or os.path.join(a.scene_dir, f"E{'-albedo' if a.albedo else ''}-{a.width}x{a.height}-{a.spp}spp-sky{a.sky.replace(',', '_')}-seed{a.seed}.pfm")
+out = a.out or os.path.join(a.scene_dir, f"E{'-albedo' if a.albedo else ''}{'' if a.bounces == 1 else f'-b{a.bounces}'}-{a.width}x{a.height}-{a.spp}spp-sky{a.sky.replace(',', '_')}-seed{a.seed}.pfm")
 mi.Bitmap(img).write(out)
 print(f"rendered {a.width}x{a.height} at {a.spp} spp in {time.time() - t0:.1f} s -> {out}", flush=True)
