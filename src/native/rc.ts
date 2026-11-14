@@ -118,7 +118,7 @@ const needVox = voxBench || parsed.some(([, p]) => p.world === 'voxel' || p.relo
 const ctx = createRunContext(device, spec, gpu, { voxel: needVox, bvh: needBvh, vox: JSON.parse(arg('--vox', '{}')) });
 const staticBuildMs = await buildStatic(ctx, parsed.some(([, p]) => p.p1));
 if (staticBuildMs !== null) log(`voxels: static triangles built once in ${staticBuildMs.toFixed(2)} ms; dynamic triangles (from ${spec.dynamic?.firstTriangle}) in the dynamic layer`
-  + (ctx.hitRad ? `; P1 hit radiance over ${ctx.hitRad.voxelsPerLevel.join(', ')} voxels per level, ${(ctx.hitRad.bytes / 2 ** 20).toFixed(1)} MiB` : ''));
+  + (ctx.hitRad ? `; P1 hit radiance over ${ctx.hitRad.voxelsPerLevel.join(", ")} voxels per level (level 1: ${ctx.hitRad.mixed} mixed, not injected), ${(ctx.hitRad.bytes / 2 ** 20).toFixed(1)} MiB` : ''));
 log(`scene ${spec.name}: ${spec.scene.triangleCount} triangles, loaded in ${Math.round(performance.now() - t0)} ms; bounds ${spec.scene.boundsMin.map((v) => v.toFixed(2))} .. ${spec.scene.boundsMax.map((v) => v.toFixed(2))}`
   + (ctx.bvh ? `; BVH ${ctx.bvh.nodes} nodes, ${(ctx.bvh.bytes / 2 ** 20).toFixed(1)} MiB, built in ${ctx.bvh.buildMs} ms (CPU)` : ''));
 mkdirSync(outDir, { recursive: true });

@@ -2,26 +2,34 @@
 // one point flips a whole direction bin when a shadow edge passes it); they read the direct light of the voxels,
 // injected every frame and averaged from fine to coarse levels, at the level that matches the width of the direction
 // bin's cone. Geometry (the binary bricks, built once) and radiance (every frame) are updated separately.
-// Opt-in (config token p1), not in the default configuration: on Sponza it removed most of the sun's jumps but raised
-// the leak of the thin-walled rooms above its limit (docs/spec/40-dynamic-stability.md).
+// Opt-in (config token p1), not in the default configuration (docs/spec/40-dynamic-stability.md).
 //
 // Each occupied static voxel of levels 1.. has two radiances: the side its representative normal n points to
 // ("front") and the opposite side ("back"), so the lit face of a thin wall does not pass to the other side.
 // Level 0 holds none: injecting its 0.73 M voxels (Sponza) with an area-averaged visibility cost about 0.5 ms, which
 // does not fit in the GI budget next to the rest; hits on level 0 read level 1 (0.2 m).
-// Build (every frame, after the shadow map; needs the static bricks built once, anchor 'scene' and local):
+// Build once (static bricks; anchor 'scene' and local):
+//  mixed      a voxel of level 1 whose level-0 voxels hold a normal more than 60 degrees from its own (a wall meeting
+//             a floor, a corner) is not injected: one value per side would mix the two sides of the wall (the lit
+//             ground outside a room into the floor inside). Its slot stays empty and hits there are shaded at one
+//             point. 6 % of level 1 on Sponza.
+//  children   the 8 children of the voxels of levels 2.., with n_child . n and, per side of the child, whether the
+//             voxel next to it on that side (same level, along the main axis of its normal) is occupied: such a side
+//             faces into geometry, the rays reach little of it, and averaging it in made the field 5 % darker.
+// Build (every frame, after the shadow map):
 //  inject     level 1: Lambert on the lit side (toon: the emission-side operator) with the sun's visibility averaged
 //             over 4 x 4 points spread over the voxel's face on that side (plane through centre + ns v / 2, normal
 //             to n, v x v). Each point is a bilinear shadow-map comparison, so the value moves continuously with the
 //             sun. 16 threads per voxel (their comparisons fall close together in the shadow map).
-//  aggregate  levels 2.., fine to coarse: the mean of the occupied children (the 8 voxels of the level below),
-//             each weighted by |n_child . n| and with its sides swapped when its normal points away from the
-//             parent's (faces normal to the parent's do not count: a corner's wall does not light a floor's side).
-//             With every child normal to the voxel, the plain mean; with no child, a negative mark (reads skip it).
+//  aggregate  levels 2.., fine to coarse, one thread per child: per side, the mean of the children's sides facing
+//             the same way (a child whose normal points away from the parent's swaps its sides), weighted by
+//             |n_child . n| (faces normal to the parent's do not count) and leaving out the sides facing into
+//             geometry. With no weight left, the plain mean; with no child, a negative mark (reads skip it).
 // Read (hitRadiance): the hit voxel's centre is looked up at the level nearest to v = w (w = cone width at the hit,
-// never finer than the traced level or level 1); the side is the one facing the ray (by the read voxel's own normal).
-// A level whose voxel at the centre is empty or marked falls back to the next finer one; with none (level-0 voxels
-// without an occupied parent), the hit is shaded at one point as before P1.
+// never finer than the traced level or level 1). The side is the one facing the ray by the hit voxel's own normal;
+// a read voxel whose normal is more than 60 degrees from the hit's is skipped (a ray along a roof hitting the wall
+// under it would read the roof's lit side through the corner). A level whose voxel is empty, marked or skipped falls
+// back to the next finer one; with none, the hit is shaded at one point as before P1.
 // The radiances of levels 1.. are stored per brick slot (512 per brick, 4 words: two rgb half triples and the voxel's
 // normal), so a read is the brick pointer, the brick's base and one slot. The lists of voxels, the child table, the
 // bricks' bases and the normals are written once after the static bricks.
@@ -40,9 +48,9 @@ export const HIT_READ_WGSL = /* wgsl */ `
 var<private> coneK: f32;    // cone width per unit distance of the current ray (set by the tracer)
 var<private> coneO: vec3f;  // where the cone starts
 fn hrReady() -> bool { return hr[0] != 0u; }
-// Radiance of the voxel of level L at p toward a ray along d (the side facing it): (rgb, 1), or 0 if the voxel is
-// empty or marked.
-fn hrAt(L: u32, p: vec3f, d: vec3f) -> vec4f {
+// Radiance of the voxel of level L at p toward a ray along d that hit a surface of normal nh (the side facing the
+// ray): (rgb, 1), or 0 if the voxel is empty, marked or its normal is more than 60 degrees from nh.
+fn hrAt(L: u32, p: vec3f, d: vec3f, nh: vec3f) -> vec4f {
   let v = voxSize(L);
   let c = vec3i(floor((p - vec3f(VX.origin[L].xyz) * v * 8.0) / v));
   if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { return vec4f(0.0); }
@@ -57,15 +65,18 @@ fn hrAt(L: u32, p: vec3f, d: vec3f) -> vec4f {
   var n = vec3f(nn.x, nn.y, 1.0 - abs(nn.x) - abs(nn.y));
   let q = max(-n.z, 0.0);
   n.x += select(q, -q, n.x >= 0.0); n.y += select(q, -q, n.y >= 0.0);
-  return vec4f(select(vec3f(w1.y, w2.x, w2.y), vec3f(w0.x, w0.y, w1.x), dot(n, d) <= 0.0), 1.0);
+  let a = dot(normalize(n), nh);
+  if (abs(a) < 0.5) { return vec4f(0.0); }
+  return vec4f(select(vec3f(w1.y, w2.x, w2.y), vec3f(w0.x, w0.y, w1.x), (dot(nh, d) <= 0.0) == (a > 0.0)), 1.0);
 }
-// P1 radiance of a static hit on a voxel of level Lh with centre pc, ray along d, hit at distance t from coneO:
-// (rgb, 1), or 0 when no level holds it.
-fn hitRadiance(Lh: u32, pc: vec3f, d: vec3f, t: f32) -> vec4f {
+// P1 radiance of a static hit on a voxel of level Lh with centre pc and normal nh0, ray along d, hit at distance t
+// from coneO: (rgb, 1), or 0 when no level holds it.
+fn hitRadiance(Lh: u32, pc: vec3f, d: vec3f, t: f32, nh0: vec3f) -> vec4f {
+  let nh = normalize(nh0);
   let lo = max(Lh, hr[1]);
   var l = u32(round(clamp(log2(max(coneK * t, 1e-6) / VX.a.x), f32(lo), VX.a.y - 1.0)));
   loop {
-    let r = hrAt(l, pc, d);
+    let r = hrAt(l, pc, d, nh);
     if (r.a > 0.0 || l <= lo) { return r; }
     l--;
   }
@@ -77,15 +88,17 @@ ${FRAME_WGSL}
 ${STYLE_WGSL}
 ${VOX_STRUCT_WGSL}
 const PI = 3.14159265;
+const MIXED = 0.5; // cos 60 degrees
 @group(0) @binding(0) var<uniform> VX: VoxU;
 @group(0) @binding(1) var<storage, read> vox: array<u32>;
 @group(0) @binding(2) var<storage, read_write> hr: array<u32>;
 @group(0) @binding(3) var<uniform> F: Frame;
-@group(0) @binding(4) var<storage, read> lists: array<vec4u>; // per level: brick << 9 | bit, attribute index, slot
+@group(0) @binding(4) var<storage, read_write> lists: array<vec4u>; // per level: brick << 9 | bit, attribute index, slot, mixed
 @group(0) @binding(5) var<uniform> HU: vec4u;                // level, first list entry, entries, first child-table entry
 @group(0) @binding(6) var shadowTex: texture_depth_2d;
 @group(0) @binding(7) var shadowCmp: sampler_comparison;
-@group(0) @binding(8) var<storage, read_write> kids: array<u32>; // 8 per voxel of levels 2..: slot | weight << 24
+// 8 per voxel of levels 2..: slot | front side blocked << 22 | back side blocked << 23 | n_child . n << 24
+@group(0) @binding(8) var<storage, read_write> kids: array<u32>;
 
 fn lin(wid: vec3u, nwg: vec3u, li: u32) -> u32 { return (wid.y * nwg.x + wid.x) * 64u + li; }
 fn normalOf(ai: u32) -> vec3f {
@@ -172,30 +185,60 @@ var<workgroup> wv: array<f32, 64>;
   store(e.idx, select(vec3f(0.0), r, lit), select(r, vec3f(0.0), lit));
 }
 
-// Once (static bricks): the 8 children of every voxel of levels 2.. with their weights n_child . n (8 bits).
+// The voxel of level L at c: its brick and bit, and whether it is occupied.
+struct Cell { base: u32, bit: u32, occ: bool }
+fn cellAt(L: u32, c: vec3i) -> Cell {
+  if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { return Cell(0u, 0u, false); }
+  let ptr = vox[voxPtrIndex(L, c >> vec3u(3u))];
+  if (ptr >= VOX_MARK) { return Cell(0u, 0u, false); }
+  let l = c & vec3i(7);
+  let bit = u32(l.x + 8 * l.y + 64 * l.z);
+  let base = VX.b.y + ptr * ${BRICK_WORDS}u;
+  return Cell(base, bit, (vox[base + (bit >> 5u)] & (1u << (bit & 31u))) != 0u);
+}
+// Attribute index of an occupied cell.
+fn cellAttr(x: Cell) -> u32 {
+  var r = countOneBits(vox[x.base + (x.bit >> 5u)] & ((1u << (x.bit & 31u)) - 1u));
+  for (var j = 0u; j < (x.bit >> 5u); j++) { r += countOneBits(vox[x.base + j]); }
+  return vox[x.base + 16u] + r;
+}
+fn childOf(e: Entry, q: u32) -> vec3i {
+  return (VX.origin[e.L].xyz * 8 + e.c) * 2 - VX.origin[e.L - 1u].xyz * 8 + vec3i(i32(q & 1u), i32((q >> 1u) & 1u), i32(q >> 2u));
+}
+// Once: the 8 children of every voxel of levels 2.., with n_child . n (8 bits) and the sides facing into geometry.
 @compute @workgroup_size(64) fn children(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
   if (i >= HU.z) { return; }
   let e = entry(i);
   let n = normalOf(e.ai);
-  let gc = (VX.origin[e.L].xyz * 8 + e.c) * 2 - VX.origin[e.L - 1u].xyz * 8;
   for (var q = 0u; q < 8u; q++) {
-    let c = gc + vec3i(i32(q & 1u), i32((q >> 1u) & 1u), i32(q >> 2u));
-    var x = 0xffffffffu;
-    if (all(c >= vec3i(0)) && all(c < vec3i(voxG() * 8))) {
-      let ptr = vox[voxPtrIndex(e.L - 1u, c >> vec3u(3u))];
-      let l = c & vec3i(7);
-      let bit = u32(l.x + 8 * l.y + 64 * l.z);
-      let base = VX.b.y + ptr * ${BRICK_WORDS}u;
-      if (ptr < VOX_MARK && (vox[base + (bit >> 5u)] & (1u << (bit & 31u))) != 0u) {
-        var r = countOneBits(vox[base + (bit >> 5u)] & ((1u << (bit & 31u)) - 1u));
-        for (var j = 0u; j < (bit >> 5u); j++) { r += countOneBits(vox[base + j]); }
-        let w = u32(round(clamp(dot(normalOf(vox[base + 16u] + r), n), -1.0, 1.0) * 127.0) + 127.0);
-        x = (hr[${HR_HDR}u + ptr] + bit) | (w << 24u);
-      }
+    let c = childOf(e, q);
+    let x = cellAt(e.L - 1u, c);
+    var k = 0xffffffffu;
+    if (x.occ) {
+      let nc = normalOf(cellAttr(x));
+      let w = u32(round(clamp(dot(nc, n), -1.0, 1.0) * 127.0) + 127.0);
+      let ax = abs(nc);
+      var st = vec3i(0);
+      if (ax.x >= ax.y && ax.x >= ax.z) { st.x = select(-1, 1, nc.x > 0.0); } else if (ax.y >= ax.z) { st.y = select(-1, 1, nc.y > 0.0); } else { st.z = select(-1, 1, nc.z > 0.0); }
+      let fb = u32(cellAt(e.L - 1u, c + st).occ); let bb = u32(cellAt(e.L - 1u, c - st).occ);
+      k = (hr[${HR_HDR}u + ((x.base - VX.b.y) / ${BRICK_WORDS}u)] + x.bit) | (fb << 22u) | (bb << 23u) | (w << 24u);
     }
-    kids[(HU.w + i) * 8u + q] = x;
+    kids[(HU.w + i) * 8u + q] = k;
   }
+}
+// Once: level 1, whether a level-0 voxel's normal is more than 60 degrees from the voxel's.
+@compute @workgroup_size(64) fn mixed(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let i = lin(wid, nwg, li);
+  if (i >= HU.z) { return; }
+  let e = entry(i);
+  let n = normalOf(e.ai);
+  var m = 0u;
+  for (var q = 0u; q < 8u; q++) {
+    let x = cellAt(e.L - 1u, childOf(e, q));
+    if (x.occ && abs(dot(normalOf(cellAttr(x)), n)) < MIXED) { m = 1u; }
+  }
+  lists[HU.y + i].w = m;
 }
 // Once: the normal of every voxel of levels 1.. into its slot.
 @compute @workgroup_size(64) fn normals(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -204,26 +247,39 @@ var<workgroup> wv: array<f32, 64>;
   let le = lists[HU.y + i];
   hr[hr[2] + le.z * 4u + 3u] = vox[VX.b.z + le.y * 2u + 1u];
 }
-// Levels 2.., fine to coarse.
+// Levels 2.., fine to coarse: 8 voxels per workgroup, one thread per child (its sides facing the parent's and their
+// weights); the first of the 8 sums.
+var<workgroup> af: array<vec4f, 64>; // aligned front side, weight (-1: no child)
+var<workgroup> ab: array<vec4f, 64>; // aligned back side, weight
 @compute @workgroup_size(64) fn aggregate(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
-  let i = lin(wid, nwg, li);
-  if (i >= HU.z) { return; }
-  var front = vec3f(0.0); var back = vec3f(0.0); var wsum = 0.0;
-  var pf = vec3f(0.0); var pb = vec3f(0.0); var cnt = 0.0;
-  for (var q = 0u; q < 8u; q++) {
+  let i = (wid.y * nwg.x + wid.x) * 8u + (li >> 3u);
+  let q = li & 7u;
+  var f = vec4f(0.0, 0.0, 0.0, -1.0); var b = vec4f(0.0);
+  if (i < HU.z) {
     let x = kids[(HU.w + i) * 8u + q];
-    if (x == 0xffffffffu) { continue; }
-    let k = f32(x >> 24u) / 127.0 - 1.0;
-    let s = loadSides(x & 0xffffffu);
-    if (s[0].x < 0.0) { continue; }
-    let f = select(s[1], s[0], k >= 0.0); let b = select(s[0], s[1], k >= 0.0);
-    front += abs(k) * f; back += abs(k) * b; wsum += abs(k);
-    pf += f; pb += b; cnt += 1.0;
+    if (x != 0xffffffffu) {
+      let s = loadSides(x & 0x3fffffu);
+      if (s[0].x >= 0.0) {
+        let k = f32(x >> 24u) / 127.0 - 1.0;
+        let wf = select(abs(k), 0.0, ((x >> 22u) & 1u) != 0u); let wb = select(abs(k), 0.0, ((x >> 23u) & 1u) != 0u);
+        f = select(vec4f(s[1], wb), vec4f(s[0], wf), k >= 0.0);
+        b = select(vec4f(s[0], wf), vec4f(s[1], wb), k >= 0.0);
+      }
+    }
+  }
+  af[li] = f; ab[li] = b;
+  workgroupBarrier();
+  if (q != 0u || i >= HU.z) { return; }
+  var front = vec4f(0.0); var back = vec4f(0.0); var pf = vec3f(0.0); var pb = vec3f(0.0); var cnt = 0.0;
+  for (var j = li; j < li + 8u; j++) {
+    let fj = af[j]; let bj = ab[j];
+    if (fj.w < 0.0) { continue; }
+    front += vec4f(fj.rgb * fj.w, fj.w); back += vec4f(bj.rgb * bj.w, bj.w);
+    pf += fj.rgb; pb += bj.rgb; cnt += 1.0;
   }
   let idx = lists[HU.y + i].z;
   if (cnt == 0.0) { store(idx, vec3f(-1.0), vec3f(-1.0)); return; }
-  if (wsum < 1e-3) { store(idx, pf / cnt, pb / cnt); return; }
-  store(idx, front / wsum, back / wsum);
+  store(idx, select(pf / cnt, front.rgb / front.w, front.w >= 1e-3), select(pb / cnt, back.rgb / back.w, back.w >= 1e-3));
 }
 `;
 
@@ -232,6 +288,8 @@ export interface HitRad {
   /** Slots, voxel lists and child table (allocated = used: sized to the static bricks). */
   bytes: number;
   voxelsPerLevel: number[];
+  /** Level-1 voxels not injected (mixed). */
+  mixed: number;
   /** This frame's injection and aggregation (after the shadow map, inside the caller's compute pass). */
   encode(pass: GPUComputePassEncoder): void;
   destroy(): void;
@@ -274,10 +332,11 @@ export async function createHitRad(device: GPUDevice, vw: VoxWorld, frame: GPUBu
     }
   }
   if (counts.reduce((a, b) => a + b, 0) !== c.voxels) throw new Error('voxel count mismatch');
+  if (slots >= 1 << 22) throw new Error('too many slots for the child table');
   const n = perLevel.map((l) => l.length / 4);
   const held = n.reduce((a, b) => a + b, 0);
   const firsts = n.map((_, L) => n.slice(0, L).reduce((a, b) => a + b, 0));
-  const lists = device.createBuffer({ label: 'hitrad.lists', size: Math.max(16, held * 16), usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
+  const lists = device.createBuffer({ label: 'hitrad.lists', size: Math.max(16, held * 16), usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
   device.queue.writeBuffer(lists, 0, Uint32Array.from(perLevel.flat()));
   const dataOff = Math.ceil((HR_HDR + c.bricks) / 4) * 4;
   const buffer = device.createBuffer({ label: 'hitrad', size: (dataOff + slots * 4) * 4, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
@@ -296,10 +355,10 @@ export async function createHitRad(device: GPUDevice, vw: VoxWorld, frame: GPUBu
   const C = GPUShaderStage.COMPUTE;
   const st = (binding: number, type: GPUBufferBindingType) => ({ binding, visibility: C, buffer: { type } });
   const bgl = device.createBindGroupLayout({ entries: [st(0, 'uniform'), st(1, 'read-only-storage'), st(2, 'storage'), st(3, 'uniform'),
-    st(4, 'read-only-storage'), st(5, 'uniform'), { binding: 6, visibility: C, texture: { sampleType: 'depth' } },
+    st(4, 'storage'), st(5, 'uniform'), { binding: 6, visibility: C, texture: { sampleType: 'depth' } },
     { binding: 7, visibility: C, sampler: { type: 'comparison' } }, st(8, 'storage')] });
   const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl] });
-  const pipes = Object.fromEntries(['inject', 'normals', 'children', 'aggregate'].map((e) =>
+  const pipes = Object.fromEntries(['inject', 'mixed', 'normals', 'children', 'aggregate'].map((e) =>
     [e, device.createComputePipeline({ label: `hitrad.${e}`, layout, compute: { module, entryPoint: e } })]));
   const cmp = device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' });
   const bgs = uni.map((u) => device.createBindGroup({ layout: bgl, entries: [
@@ -311,19 +370,31 @@ export async function createHitRad(device: GPUDevice, vw: VoxWorld, frame: GPUBu
     const x = Math.min(g, 65535);
     if (g > 0) pass.dispatchWorkgroups(x, Math.ceil(g / x));
   };
+  const rb = device.createBuffer({ size: Math.max(16, n[FIRST] * 16), usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
   {
     const e = device.createCommandEncoder();
     const pass = e.beginComputePass();
+    pass.setPipeline(pipes.mixed); pass.setBindGroup(0, bgs[FIRST]); groups(pass, Math.ceil(n[FIRST] / 64));
     for (let L = FIRST; L < NL; L++) { pass.setPipeline(pipes.normals); pass.setBindGroup(0, bgs[L]); groups(pass, Math.ceil(n[L] / 64)); }
     for (let L = FIRST + 1; L < NL; L++) { pass.setPipeline(pipes.children); pass.setBindGroup(0, bgs[L]); groups(pass, Math.ceil(n[L] / 64)); }
     pass.end();
+    e.copyBufferToBuffer(lists, firsts[FIRST] * 16, rb, 0, n[FIRST] * 16);
     device.queue.submit([e.finish()]);
   }
+  // Level 1 reordered: the voxels injected every frame first, then the mixed ones (never written: empty).
+  await rb.mapAsync(GPUMapMode.READ);
+  const l1 = new Uint32Array(rb.getMappedRange().slice(0));
+  rb.unmap(); rb.destroy();
+  const keep: number[] = [], mixed: number[] = [];
+  for (let k = 0; k < n[FIRST]; k++) (l1[k * 4 + 3] ? mixed : keep).push(l1[k * 4], l1[k * 4 + 1], l1[k * 4 + 2], l1[k * 4 + 3]);
+  const nInject = keep.length / 4;
+  device.queue.writeBuffer(lists, firsts[FIRST] * 16, Uint32Array.from(keep.concat(mixed)));
+  device.queue.writeBuffer(uni[FIRST], 0, new Uint32Array([FIRST, firsts[FIRST], nInject, 0]));
   return {
-    buffer, bytes: buffer.size + lists.size + kids.size, voxelsPerLevel: counts,
+    buffer, bytes: buffer.size + lists.size + kids.size, voxelsPerLevel: counts, mixed: mixed.length / 4,
     encode(pass) {
-      pass.setPipeline(pipes.inject); pass.setBindGroup(0, bgs[FIRST]); groups(pass, Math.ceil(n[FIRST] / 4));
-      for (let L = FIRST + 1; L < NL; L++) { pass.setPipeline(pipes.aggregate); pass.setBindGroup(0, bgs[L]); groups(pass, Math.ceil(n[L] / 64)); }
+      pass.setPipeline(pipes.inject); pass.setBindGroup(0, bgs[FIRST]); groups(pass, Math.ceil(nInject / 4));
+      for (let L = FIRST + 1; L < NL; L++) { pass.setPipeline(pipes.aggregate); pass.setBindGroup(0, bgs[L]); groups(pass, Math.ceil(n[L] / 8)); }
     },
     destroy() { buffer.destroy(); lists.destroy(); kids.destroy(); for (const u of uni) u.destroy(); },
   };

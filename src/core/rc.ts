@@ -109,7 +109,7 @@ var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keep
 // tracer). Without it (the default) or a level holding the voxel, one point on the ray's side of the voxel is shaded.
 fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32, ai: u32, L: u32, pc: vec3f) -> vec3f {
   voxHitEntry = entry;
-  if (hrReady()) { let r = hitRadiance(L, pc, d, dot(entry - coneO, d)); if (r.a > 0.0) { return r.rgb; } }
+  if (hrReady()) { let r = hitRadiance(L, pc, d, dot(entry - coneO, d), n); if (r.a > 0.0) { return r.rgb; } }
   return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0);
 }
 ${HIT_READ_WGSL}
