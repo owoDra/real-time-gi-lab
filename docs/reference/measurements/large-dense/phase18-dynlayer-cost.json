@@ -1,0 +1,509 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": 18,
+ "date": "2026-11-14",
+ "conditions": "native Dawn/Vulkan, 1920x1080, static camera, no sky, warmup 60 + 240 frames; GPU times: 3 independent runs alternating before/after (run 1 before->after, run 2 after->before, run 3 before->after); all dynamic poses computed on the CPU before timing. GPU shared with desktop apps (Blender at up to 512% CPU, a Wine game, Godot during the runs).",
+ "before": "commit c0393010 runner (dynBricks 256 for 3 objects, 2048 for 64 objects; CPU posing every frame)",
+ "after": "this phase, default pool 1536",
+ "configs": {
+  "rc": "world-48-voxel-rc2-vrel --vox {anchor:scene,local:true}",
+  "ddgi": "ddgi-75-128-u4-g1-noadapt (same vox)"
+ },
+ "reproduced": {
+  "n64 cap2048 build stagedSum ms": 3.3,
+  "n64 normal vox ms": 3.285,
+  "n64 excess k16": 0.00909,
+  "sponza-dynobj excess k16": 0.01192
+ },
+ "stagesAfter_n64_ms": {
+  "note": "--dyn-stages, 1 run each, medians; mark, alloc = parents+count+alloc+finalize",
+  "sponza-dynobj-n64": {
+   "mark": 0.087,
+   "alloc": 0.04,
+   "clear": 0.057,
+   "splat": 0.408,
+   "resolve": 0.126
+  },
+  "sponza-dynobj-n64-deform": {
+   "mark": 0.089,
+   "alloc": 0.042,
+   "clear": 0.057,
+   "splat": 0.444,
+   "resolve": 0.13
+  }
+ },
+ "workAfter_n64": {
+  "samples": 434176,
+  "samplesDeform": "458506-459658",
+  "claims": "903326-940610",
+  "bricksMax": 1219,
+  "bricksPerLevelLastFrame": [
+   892,
+   210,
+   52,
+   14,
+   8
+  ]
+ },
+ "bitIdenticalSteps": "--dump-irr sha256 compared at each step: workgroup splat window, Morton order, splat-level mark + parents, bitset allocation, sparse resolve, fixed-point level 0 equal to the before runner (n64 last frame); one-voxel sub-triangles is the only image change; load-once, begin folded into finalize and the 7-word read equal to the one-voxel version (n64, n64-deform, sponza-dynobj; RC and DDGI)",
+ "cases": [
+  {
+   "scene": "sponza-dynobj",
+   "config": "rc",
+   "side": "before",
+   "cap": 256,
+   "gi": [
+    3.235,
+    3.332,
+    3.24
+   ],
+   "vox": [
+    0.269,
+    0.281,
+    0.275
+   ],
+   "excessK16": [
+    0.01192,
+    0.01192,
+    0.01192
+   ],
+   "dynBricks": [
+    112,
+    112,
+    112
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 55.4,
+   "dynMiB": 10.0
+  },
+  {
+   "scene": "sponza-dynobj",
+   "config": "ddgi",
+   "side": "before",
+   "cap": 256,
+   "gi": [
+    3.703,
+    3.776,
+    3.74
+   ],
+   "vox": [
+    0.271,
+    0.274,
+    0.276
+   ],
+   "excessK16": [
+    0.00094,
+    0.00094,
+    0.00094
+   ],
+   "dynBricks": [
+    112,
+    112,
+    112
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 72.5,
+   "dynMiB": 10.0
+  },
+  {
+   "scene": "sponza-dynobj-n64",
+   "config": "rc",
+   "side": "before",
+   "cap": 2048,
+   "gi": [
+    6.554,
+    6.718,
+    6.633
+   ],
+   "vox": [
+    3.443,
+    3.517,
+    3.499
+   ],
+   "excessK16": [
+    0.00909,
+    0.00909,
+    0.00909
+   ],
+   "dynBricks": [
+    1195,
+    1195,
+    1195
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 90.3,
+   "dynMiB": 45.0
+  },
+  {
+   "scene": "sponza-dynobj-n64",
+   "config": "ddgi",
+   "side": "before",
+   "cap": 2048,
+   "gi": [
+    7.051,
+    6.455,
+    7.258
+   ],
+   "vox": [
+    3.372,
+    2.998,
+    3.525
+   ],
+   "excessK16": [
+    0.00087,
+    0.00087,
+    0.00087
+   ],
+   "dynBricks": [
+    1195,
+    1195,
+    1195
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 107.5,
+   "dynMiB": 45.0
+  },
+  {
+   "scene": "sponza-dynobj-n64-deform",
+   "config": "rc",
+   "side": "before",
+   "cap": 2048,
+   "gi": [
+    5.811,
+    5.908,
+    6.012
+   ],
+   "vox": [
+    3.007,
+    3.015,
+    3.046
+   ],
+   "excessK16": [
+    0.0086,
+    0.0086,
+    0.0086
+   ],
+   "dynBricks": [
+    1198,
+    1198,
+    1198
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 90.3,
+   "dynMiB": 45.0
+  },
+  {
+   "scene": "sponza-dynobj-n64-deform",
+   "config": "ddgi",
+   "side": "before",
+   "cap": 2048,
+   "gi": [
+    6.657,
+    6.503,
+    6.737
+   ],
+   "vox": [
+    3.06,
+    3.025,
+    3.083
+   ],
+   "excessK16": [
+    0.00086,
+    0.00086,
+    0.00086
+   ],
+   "dynBricks": [
+    1198,
+    1198,
+    1198
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 107.5,
+   "dynMiB": 45.0
+  },
+  {
+   "scene": "sponza-dynobj",
+   "config": "rc",
+   "side": "after",
+   "cap": 1536,
+   "gi": [
+    3.123,
+    3.224,
+    3.248
+   ],
+   "vox": [
+    0.107,
+    0.112,
+    0.119
+   ],
+   "excessK16": [
+    0.01196,
+    0.01196,
+    0.01196
+   ],
+   "dynBricks": [
+    101,
+    101,
+    101
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 80.8,
+   "dynMiB": 35.4
+  },
+  {
+   "scene": "sponza-dynobj",
+   "config": "ddgi",
+   "side": "after",
+   "cap": 1536,
+   "gi": [
+    3.483,
+    3.51,
+    3.556
+   ],
+   "vox": [
+    0.104,
+    0.106,
+    0.111
+   ],
+   "excessK16": [
+    0.00094,
+    0.00094,
+    0.00094
+   ],
+   "dynBricks": [
+    101,
+    101,
+    101
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 97.9,
+   "dynMiB": 35.4
+  },
+  {
+   "scene": "sponza-dynobj-n64",
+   "config": "rc",
+   "side": "after",
+   "cap": 1536,
+   "gi": [
+    3.862,
+    3.801,
+    3.832
+   ],
+   "vox": [
+    0.695,
+    0.699,
+    0.699
+   ],
+   "excessK16": [
+    0.00914,
+    0.00914,
+    0.00914
+   ],
+   "dynBricks": [
+    1176,
+    1176,
+    1176
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 80.8,
+   "dynMiB": 35.4
+  },
+  {
+   "scene": "sponza-dynobj-n64",
+   "config": "ddgi",
+   "side": "after",
+   "cap": 1536,
+   "gi": [
+    4.045,
+    4.466,
+    4.569
+   ],
+   "vox": [
+    0.618,
+    0.689,
+    0.711
+   ],
+   "excessK16": [
+    0.00088,
+    0.00088,
+    0.00088
+   ],
+   "dynBricks": [
+    1176,
+    1176,
+    1176
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 97.9,
+   "dynMiB": 35.4
+  },
+  {
+   "scene": "sponza-dynobj-n64-deform",
+   "config": "rc",
+   "side": "after",
+   "cap": 1536,
+   "gi": [
+    3.941,
+    3.874,
+    3.8
+   ],
+   "vox": [
+    0.763,
+    0.748,
+    0.745
+   ],
+   "excessK16": [
+    0.00864,
+    0.00864,
+    0.00864
+   ],
+   "dynBricks": [
+    1177,
+    1177,
+    1177
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 80.8,
+   "dynMiB": 35.4
+  },
+  {
+   "scene": "sponza-dynobj-n64-deform",
+   "config": "ddgi",
+   "side": "after",
+   "cap": 1536,
+   "gi": [
+    4.703,
+    4.594,
+    4.596
+   ],
+   "vox": [
+    0.782,
+    0.75,
+    0.769
+   ],
+   "excessK16": [
+    0.00086,
+    0.00086,
+    0.00086
+   ],
+   "dynBricks": [
+    1177,
+    1177,
+    1177
+   ],
+   "dropped": [
+    0,
+    0,
+    0
+   ],
+   "allocMiB": 97.9,
+   "dynMiB": 35.4
+  }
+ ],
+ "staticSponzaSha256SameBeforeAfter": [
+  "rc",
+  "ddgi"
+ ],
+ "referenceError_sponza-dynobj_pose0": {
+  "rc": {
+   "before": 0.4482,
+   "after": 0.4482,
+   "biasAfter": -0.0582
+  },
+  "ddgi": {
+   "before": 0.4247,
+   "after": 0.4247
+  }
+ },
+ "overflow_n64_cap1024": {
+  "runs": 2,
+  "dropped": 152,
+  "excessK16": [
+   0.00914,
+   0.00914
+  ],
+  "irrSha256Equal": true
+ },
+ "memory_n64_MiB": {
+  "rc": 80.8,
+  "rcP1": 100.0,
+  "ddgi": 97.9,
+  "ddgiP1": 117.1,
+  "dyn": 35.4,
+  "p1": 19.3,
+  "peakWhileBuilding": "55.8 + 35.4 + 19.3 = 110.5"
+ },
+ "firstAttempt": {
+  "note": "same design with the splat as of the first measurement (before load-once/begin fold; images identical): 3 alternating runs",
+  "n64 rc gi": [
+   3.894,
+   3.858,
+   3.853
+  ],
+  "n64-deform rc gi": [
+   3.846,
+   4.171,
+   4.01
+  ],
+  "n64-deform vox": [
+   0.736,
+   0.815,
+   0.765
+  ]
+ },
+ "splatVariants_n64_deform_ms": {
+  "note": "exploratory, 120 frames, splat stage median",
+  "half-voxel window384 wg64": 0.95,
+  "one-voxel window384 wg64": 0.55,
+  "one-voxel window192 wg64 (chosen)": "0.37-0.45",
+  "one-voxel window384 wg128": "0.36-0.39",
+  "window160/256/320": "0.45-0.49/0.48/0.55-0.58",
+  "meshlet clusters": "0.41-0.68",
+  "gather window per thread": "0.58-0.63",
+  "2 triangles per thread": 1.085
+ }
+}
