@@ -11,7 +11,7 @@ run = "python scripts/check.py"
 
 [tasks.clean]
 description = "Remove generated build and output directories"
-run = "rm -rf build out"
+run = "rm -rf build box/out"
 
 [tasks.build]
 description = "Bundle the native runner into build/"
@@ -33,7 +33,7 @@ run = "npx esbuild src/native/rc.ts --bundle --platform=node --format=esm --targ
 [tasks."s1:native"]
 description = "S1: radiance cascades over the depth buffer at 1080p (world probes, screen probes, ray splitting), native Dawn"
 depends = ["build:rc"]
-run = "bash scripts/run_with_vulkan.sh node build/native/rc.mjs --out out/s1/native"
+run = "bash scripts/run_with_vulkan.sh node build/native/rc.mjs --out box/out/s1/native"
 
 [tasks."s2:native"]
 description = "S2, S3: radiance cascades with voxel StrataBrick / triangle BVH interval tracers (S3: --scene sponza-toon), native Dawn"
@@ -41,7 +41,7 @@ depends = ["build:rc"]
 run = "bash scripts/run_with_vulkan.sh node build/native/rc.mjs"
 
 [tasks."ref:export"]
-description = "Export a scene (from our glTF parse) for the Mitsuba reference: PLY per material + scene.json into out/mitsuba/<scene>"
+description = "Export a scene (from our glTF parse) for the Mitsuba reference: PLY per material + scene.json into box/out/mitsuba/<scene>"
 run = "npx esbuild src/native/mitsuba_export.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/mitsuba_export.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning && node build/native/mitsuba_export.mjs"
 
 [tasks."ref:style"]

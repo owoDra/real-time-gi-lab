@@ -1,96 +1,96 @@
 # 作業ルール — Program 2
 
-## どこに何があるか
+## 最初に読むもの
 
-| 場所 | 役割 |
-|---|---|
-| `docs/charter.md` | 目的、必須要件、止め方。めったに変えない |
-| `docs/architecture.md` | 検証中の仮説。外れたら書き換える |
-| `docs/evaluation.md` | 予算、指標、比較相手、健全性チェック |
-| `research/status.md` | **唯一の現状要約。1 ページ以内** |
-| `research/roadmap.md` | スパイクと打ち切り基準、チェックポイント |
-| `research/decisions/` | 方針の決定。1 件 1 ファイル |
-| `research/spikes/` | スパイクの記録。1 件 1 ページ |
-| `docs/program-1/` | Program 1 から持ち越す知見 |
-| `legacy/` | Program 1 の参照コード。ビルドしない |
+作業を始めるときは [`docs/plan/README.md`](docs/plan/README.md)、列の `README.md`、今のフェーズのファイルを読み、
+続きから始める。正本は [`docs/spec/`](docs/spec/README.md)（`00-overview.md` を先に読む）。ディレクトリとコマンドは
+[`docs/project-structure.md`](docs/project-structure.md)。
 
-コードとシェーダが実際の挙動である。文書でコードの事実を置き換えない。
+## 計画の進め方
 
-## ブランチ
+- 計画は作業の列ごとにディレクトリを分ける（`docs/plan/<列>/`）。`docs/plan/README.md` に進め方と列の一覧、
+  列の `README.md` にフェーズの一覧と今のフェーズを置く。フェーズは 1 回のセッションで終えられる大きさにし、
+  1 つずつファイルを置く。中身は開始プロンプト、目的、前提、決定済みの方針、確かめる決定、やること、完了条件。
+- フェーズは 3 種類に分ける。
+  - 自走（`phase-NN-auto-<名前>.md`）：人の確認なしで最後まで進められるもの。ファイルの最初に `/goal` のプロンプトを
+    置く。`/goal` の実行中は文章の質問で止まると自動で再開してしまうので、方向、スコープ、予算、見た目に関わる判断が
+    要ったら必ず AskUserQuestion で尋ねる。軽い実装上の判断は自分で決め、最終報告に書く。
+  - 方向の確認（`phase-NN-review-<名前>.md`）：案と測った結果を比べて、ユーザーが方向を決めるもの。継続・方向転換・
+    中止の判断はこの種類でだけ行う。比べる画像と数値を Artifact（非公開のページ）にして見せ、回答は AskUserQuestion で
+    受ける。
+  - できた物の確認（`phase-NN-built-<名前>.md`）：実装した結果をユーザーが実物（画像、連番、数値）で確かめるもの。
+    気になる所の一覧を作って直し、OK をもらって終える。
+- 出力の画像を変える auto の後には必ず built を置き、画像を変える auto を 2 つ続けない。案を選んだだけ、数値が
+  目安に届いただけで次へ進まない。
+- **ユーザーに判断を求めるときは、判断できる形にする。** 専門用語の表を渡さない。同じ画角・同じフレームの並べた画像と、
+  「何が良くなり、何を失うか」の 1 行を付ける。AI はユーザーの回答なしにどの案も採用しない。
+- フェーズのファイルに、そのフェーズが触れる決定と、その確かめ方の一覧を書き、終わりに全部確かめる。決定を
+  変えたくなったら黙って変えずに AskUserQuestion で尋ねる。
+- 区切りが付いたら、やったことと次にやることを今のフェーズのファイルに書く。1 回のセッションでフェーズが
+  終わらなければ、ファイルの開始プロンプトそのものを次のセッションの続きから始める文に書き換える。
+- そのフェーズで後のフェーズの計画が変わったら、まだ始めていない後のフェーズのファイルをまとめて書き直す。
+- フェーズを終えたら、残す決定と測った結果を正本（`docs/spec/`、コード、コメント）へ還元し、そのフェーズの
+  ファイルを消す。完了したフェーズの記録は残さない（経過は git log にある）。
 
-- `p2`：Program 2 の本線。探索中はここに直接コミットしてよい。
-- `p2-<名前>`：大きな試行を分けたいときの短命ブランチ。
-- `research`、`main`、`research-*`、タグ `archive/program-1`：Program 1 の記録。
-  **書き換えない、消さない、force push しない。**
-- `main` への昇格は、チェックポイントでユーザーが決めたときだけ行う。
-- プルリクエストは必須ではない。GitHub Actions や CI は追加しない。
+## 正本と文書
+
+- ソースとコメントを挙動の正本にする。コードで表せることを docs に書かない。文書とコードが食い違うときは
+  コードを確かめる。
+- 構成、既定値、指標を変える実装では、同じ変更で対応する `docs/spec/` を更新する。
+- `docs/spec/` には、決まったこと、いまの構成、測った事実、未検証の見立て（未検証と明記する）だけを置く。
+  **外れた見立てと採らなかった方針は消す。** 測った負の結果は 1 行で残す。古い記述に追記を重ねない。
+- `docs/reference/` は資料とデータ。判断や方針を置かない。
+- 文章は、結論を先に置き、事実、推測、意見を分け、数値には条件を添える。
+- このリポジトリは公開である。ローカルの絶対パス、個人の情報、ほかの非公開のプロジェクトの名前や内容を、文書、
+  コード、コミットメッセージに書かない。
 
 ## 探索と確認
 
-- **探索**（スパイク）：事前登録なし。速く回す。数値は「探索値」と明記する。
-  手続き上の失敗（ビルド、設定、スクリプトの不具合）は直して続ける。記録に残すのは
-  判断に効くものだけ。
-- **確認**（M4 など）：条件、比較相手、指標、判定規則を先に書いてコミットし、1 回だけ
-  測る。結果を見てから閾値を変えない。
+- **探索**：事前登録なし。数値は「探索値」と明記する。手続き上の失敗（ビルド、設定、スクリプトの不具合）は
+  直して続ける。記録に残すのは判断に効くものだけ。
+- **確認**：条件、比較相手、指標、判定規則を先に書いてコミットし、1 回だけ測る。結果を見てから閾値を変えない。
 
 ## 計測と品質
 
 1. 新しいシーン、新しいシーケンス、新しい結果は、**数値の前に画像を見る**。
 2. 動的シーケンスは、参照がフレーム間でノイズを超えて変化することを生成時に assert する。
-3. 性能判断は GPU タイムスタンプ。コストは GPU 時間とメモリの真のピークを併記する。
-4. 比較は同じシーン、同じ解像度、同じ予算で行い、試した設定の範囲を書く。
-5. 負の結果は残す。短く。
-6. 開発機 1 台の結果を一般化しない。
-7. GPU の電源・クロックを特権操作で固定しない（Program 1 の Lane G で事故があった）。
-8. GPU ジョブは同時に 1 本。
+3. 以前の数値を前提にする実験は、最初にその数値を再現する。
+4. 性能判断は GPU タイムスタンプ。コストは GPU 時間とメモリを併記する。
+5. 比較は同じシーン、同じ解像度、同じ予算で行い、試した設定の範囲を書く。一方にだけ入れた改良で比べない。
+6. 予算（GI 4 ms、128 MB）は変えない。
+7. 負の結果は残す。短く。
+8. 開発機 1 台の結果を一般化しない。
+9. GPU の電源・クロックを特権操作で固定しない（Program 1 で事故があった）。
+10. GPU ジョブは同時に 1 本。参照（Mitsuba）を描いている間は GPU 時間を測らない。
+11. 実行していない検査は「未実行」と書く。PASS と書かない。
+
+## コード
+
+- `src/core/` は WebGPU のコア機能だけで書く（R6）。ネイティブ専用の機能を使わない。
+- **当面はネイティブだけで開発・計測する**（ユーザー 2026-11-13）。ブラウザ用の実行器は消してある。
+- 診断用のスイッチは、結果を spec に書いたら消す。使わなくなったコードを残さない。
+- 今は探索の段階。古い実装は必要なら消して作り直す。互換性の保護は、求められたときだけ作る。
 
 ## 生成物
 
-- ビルドは `build/`、実行出力は `out/`。どちらも git 管理外。
-- 数値の要約（JSON か Markdown、1 MB 以下）はコミットする。
-- 生の出力は要約を作ったら消す。`out/` を溜めない。Program 1 では 411 GB 残った。
+- ビルドは `build/`、実行の出力は `box/out/`、ユーザーとの受け渡しは `box/in/`。どれも git 管理外。
+- 数値の要約（JSON か Markdown、1 MB 以下）は `docs/reference/measurements/<列>/` にコミットする。
+- 生の出力は要約を作ったら消す。`box/out/` を溜めない（Program 1 では 411 GB 残った）。参照の
+  `box/out/mitsuba/` は残す。
 
-## コミット
+## ブランチとコミット
 
+- `p2`：Program 2 の本線。列が 1 本の間は直接コミットする。列を並行して進めるときは `p2-<列>` に分ける。
+- `research`、`main`、`research-*`、タグ `archive/program-1`：Program 1 の記録。
+  **書き換えない、消さない、force push しない。**
+- `main` への昇格は、ユーザーが決めたときだけ行う。push はユーザーに尋ねてから行う。
+- プルリクエストは必須ではない。GitHub Actions や CI は追加しない。
 - コミットメッセージに `Co-` で始まるトレーラーを付けない。
 - プルリクエストに生成ツールの署名を書かない。
 - `CLAUDE.md` と `.claude/` はコミットしない。
 
 ## AI による研究であることの開示
 
-Program 1 は主に ChatGPT と OpenAI Codex CLI、N008 以降は Claude Code も使い、
-人間の監督のもとで進めた。Program 2 は Claude Code を使う。目的と制約を定め、
-採否を決めるのは人間である。AI がすべての主張を独立に検証したわけではない。
-詳細は [docs/ai-research-workflow.md](docs/ai-research-workflow.md)。
-
-## 基本コマンド
-
-```bash
-mise install
-npm ci            # 依存はバージョン固定（package-lock.json）
-mise run assets   # Khronos glTF Sponza を取得
-mise run check    # 文書のリンクと legacy 目録を検査
-mise run typecheck
-mise run s0:native   # ネイティブ（Dawn / Vulkan）で G-buffer と GPU タイムスタンプ
-mise run s1:native -- --configs world-32,screen-8 [--no-sky]   # S1 の RC（時間とちらつき率）
-mise run s2:native -- --scene sponza --configs world-32-voxel,world-32-tri [--no-sky] [--bvh] [--static-only]
-                     # S2：区間トレーサ（depth / voxel / hybrid / tri）、可視性の比較、リーク（--scene leak-<厚み>）
-                     # 設定トークン vrel / norel：プローブの押し出しをボクセルから決める / しない（既定は G-buffer）
-mise run s2:native -- --scene sponza --vox-bench   # 再ボクセル化の段ごとの時間（--scene sponza-wide10 / sponza-dense9）
-mise run s2:native -- --scene sponza-toon --configs world-32-voxel-rc2-vrel[-norecv|-noemit|-soft<x>] [--no-sky]
-                     # S3：トゥーン物体とスタイル演算子（--scene sponza-objects は同じ物体を写実材質で）
-mise run ref:export -- --scene sponza              # Mitsuba 用のシーン変換（out/mitsuba/<scene>。sponza-toon / sponza-objects も）
-build/refenv/bin/python scripts/reference_irradiance.py out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N]
-mise run ref:compare -- --ref A.pfm,B.pfm --ours <cfg>.static.irr.f32 [--png DIR]   # 参照との誤差（s2:native --dump-irr）
-mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --ours-style y.irr.f32 [--png DIR]
-                     # S3：物体あり / なしで写実部分の誤差と物体の効果の再現
-```
-
-設定名の書式と引数は `src/native/rc.ts` の先頭に書いてある。
-
-- コードは `src/core/`（共通、WebGPU のコア機能だけ）と `src/native/`（Node から Dawn を使う実行器）。
-- **当面はネイティブだけで開発・計測する**
-  （[決定](research/decisions/2026-11-13-s0-toolchain-native-first.md)）。ブラウザ用の実行器は
-  消した。戻すときはコミット `876e2321` の `src/web/`、`tools/serve.ts`、`web/` を参照する。
-
-実行していない検査は「未実行」と書く。PASS と書かない。
+Program 1 は主に ChatGPT と OpenAI Codex CLI、N008 以降は Claude Code も使い、人間の監督のもとで進めた。
+Program 2 は Claude Code を使う。目的と制約を定め、採否を決めるのは人間である。AI がすべての主張を独立に
+検証したわけではない。詳細は [docs/ai-research-workflow.md](docs/ai-research-workflow.md)。

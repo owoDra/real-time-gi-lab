@@ -1,5 +1,5 @@
 /build/
-/out/
+/box/
 /.cache/
 /.idea/
 /.vscode/
@@ -13,6 +13,6 @@ mise.local.toml
 __pycache__/
 *.py[cod]
 
-# Machine-local archives kept outside git (see research/status.md).
+# Machine-local archives kept outside git (see docs/project-structure.md).
 /archive-local/
 /node_modules/

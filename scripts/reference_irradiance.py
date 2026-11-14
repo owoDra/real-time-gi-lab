@@ -11,9 +11,9 @@ renderer's alpha test). Normal maps are not applied (the renderer's G-buffer app
 S3: hits on toon materials (vertex attribute toon = 1) return the emission-side operator of src/core/style.ts
 instead of the Lambert term: sat(albedo) / pi * sunE * ramp(n.l * V) (the emission-side proxy).
 
-Usage: python scripts/reference_irradiance.py out/mitsuba/sponza [--spp 256] [--width 960] [--height 540]
+Usage: python scripts/reference_irradiance.py box/out/mitsuba/sponza [--spp 256] [--width 960] [--height 540]
          [--sky r,g,b] [--seed N] [--out FILE.pfm]
-Needs DRJIT_LIBLLVM_PATH (see research/decisions/2026-11-13-reference-renderer.md).
+Needs DRJIT_LIBLLVM_PATH (see docs/spec/10-evaluation.md).
 """
 import argparse
 import json

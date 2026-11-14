@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # M1: DDGI comparator sweep against the cascades (exploratory). Runs every config on Sponza (sun only and with sky:
 # static + moving, irradiance dumped for the Mitsuba comparison) and on the leak rooms (static), then compares the
-# dumps with the 512-spp references in out/mitsuba/sponza (rendered in S2; no reference is rendered here, so the
+# dumps with the 512-spp references in box/out/mitsuba/sponza (rendered in S2; no reference is rendered here, so the
 # GPU timings are not disturbed).
 # Usage: bash scripts/m1_sweep.sh OUT_DIR config1,config2,...
 set -euo pipefail
@@ -9,7 +9,7 @@ out=${1:?out dir}; configs=${2:?configs}
 run() { bash scripts/run_with_vulkan.sh node build/native/rc.mjs "$@"; }
 mise run build:rc >/dev/null
 mise run ref:compare -- --help >/dev/null 2>&1 || true
-R=out/mitsuba/sponza
+R=box/out/mitsuba/sponza
 for sky in nosky sky; do
   flag=$([[ $sky == nosky ]] && echo --no-sky || true)
   run --scene sponza --configs "$configs" $flag --dump-irr --out "$out/$sky" > "$out/$sky.log" 2>&1

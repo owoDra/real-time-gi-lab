@@ -29,16 +29,16 @@
   行った。他の GPU、シーン、手法に外挿しない。
 - Program 1 の終了と Program 2 の方針は、AI による全記録の評価を踏まえて人間が決めた。
   その評価で、Program 1 の開発データの一部が意図どおりでなかったことが見つかっている
-  （[記録](program-1/dev-sequence-validity-check.md)）。AI が進めた研究には、この種の
+  （[記録](reference/program-1/dev-sequence-validity-check.md)）。AI が進めた研究には、この種の
   見落としがあり得る。
 - Program 1 の生データ（約 411 GB）は 2026-11-13 に作業機から削除した。残したのは
-  テキスト記録の圧縮アーカイブとファイル目録だけである（[現状](../research/status.md)）。
+  テキスト記録の圧縮アーカイブとファイル目録だけである（[構成](project-structure.md)）。
   コミット済みの記録に残るバイナリのハッシュは、もう実データと照合できない。再現するには
   記録された SHA のソースを実行し直す必要がある。
 - Git のコミット著者は、人間と AI のどちらが書いたかを行単位で示すものではない。
 
 ## 再現と拡張
 
-[README](../README.md)、[憲章](charter.md)、[現状](../research/status.md) から始める。
+[README](../README.md)、[概要](spec/00-overview.md)、[作業計画](plan/README.md) から始める。
 コミットされたファイルだけで再現できない実験があれば、足りない計測を作らずに、
 その不足を報告する。

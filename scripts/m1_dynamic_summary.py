@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """M1 step 3: tables from scripts/m1_dynamic.sh (dynamic Sponza, light switch, cold start).
 
-Usage: python scripts/m1_dynamic_summary.py out/m1/dyn1 [--json FILE]
-The cold-start table needs out/m1/dyn1/cold-<n>/reference.json (compare_ref, run after the GPU jobs).
+Usage: python scripts/m1_dynamic_summary.py box/out/m1/dyn1 [--json FILE]
+The cold-start table needs box/out/m1/dyn1/cold-<n>/reference.json (compare_ref, run after the GPU jobs).
 """
 import json
 import os

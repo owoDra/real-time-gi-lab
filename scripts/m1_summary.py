@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """M1: one table per sweep directory (scripts/m1_sweep.sh): cost, error against Mitsuba, flicker and leakage per config.
 
-Usage: python scripts/m1_summary.py out/m1/sweep1 [--json research/spikes/m1-.../sweep.json]
+Usage: python scripts/m1_summary.py box/out/m1/sweep1 [--json docs/reference/measurements/<phase>/sweep.json]
 Times are GPU timestamp medians of one run (exploratory values). 'field' is the GI without the voxel rebuild
 (build + trace + merge + gather); the rebuild is the same for every config.
 """

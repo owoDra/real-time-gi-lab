@@ -8,7 +8,7 @@ import { createNativeDevice, loadSponza, writePng, IMPLEMENTATION, ROOT } from '
 
 const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
-const outDir = resolve(arg('--out', join(ROOT, 'out/s0/native')));
+const outDir = resolve(arg('--out', join(ROOT, 'box/out/s0/native')));
 const options = { ...DEFAULT_OPTIONS, frames: Number(arg('--frames', String(DEFAULT_OPTIONS.frames))), warmup: Number(arg('--warmup', String(DEFAULT_OPTIONS.warmup))) };
 
 const { device, adapterInfo } = await createNativeDevice();

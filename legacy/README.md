@@ -15,7 +15,7 @@
 | `split-rc/` | `shaders/research/lane_a_split_rc/` | Split RC の producer / gather / merge / resolve。カスケード合成の移植元 |
 | `scenes/n004_scene_factory.py` | `scripts/research/lane_n_end_to_end_renderer/` | リーク（thin / thick / grazing / enclosed など）とワールド形状（dense / large-horizontal / vertical-tall）のシーン生成 |
 
-計測値と結論は [docs/program-1/findings.md](../docs/program-1/findings.md)。
+計測値と結論は [docs/reference/program-1/findings.md](../docs/reference/program-1/findings.md)。
 
 ここに無いもの（Split RC レンダラ本体、HWRT 経路、参照オラクル、タイミング較正、
 DDGI / NRD / ReSTIR GI のハーネス、全実験記録）はタグにある：

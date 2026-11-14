@@ -18,7 +18,7 @@ const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const sceneName = arg('--scene', 'sponza');
 const poseFrame = Number(arg('--pose-frame', '0'));
-const outDir = resolve(arg('--out', join(ROOT, 'out/mitsuba', sceneName + (sceneName.startsWith('sponza-dyn') ? `-f${poseFrame}` : ''))));
+const outDir = resolve(arg('--out', join(ROOT, 'box/out/mitsuba', sceneName + (sceneName.startsWith('sponza-dyn') ? `-f${poseFrame}` : ''))));
 mkdirSync(join(outDir, 'meshes'), { recursive: true });
 mkdirSync(join(outDir, 'textures'), { recursive: true });
 

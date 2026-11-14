@@ -1,4 +1,4 @@
-// Native radiance-cascade runs (S1, S2).
+// Native radiance-cascade runs.
 // Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|leak-<t>] [--configs a,b,...]
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
@@ -27,7 +27,7 @@ const log = (s: string) => { writeSync(1, s + '\n'); };
 const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const sceneName = arg('--scene', 'sponza');
-const outDir = resolve(arg('--out', join(ROOT, 'out/rc/native', sceneName)));
+const outDir = resolve(arg('--out', join(ROOT, 'box/out/rc/native', sceneName)));
 const configs = arg('--configs', 'world-32').split(',');
 const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--frames', '240')), inFlight: 2,
   exposure: Number(arg('--exposure', '1.0')), seedFixed: args.includes('--seed-fixed'), staticOnly: args.includes('--static-only'),
