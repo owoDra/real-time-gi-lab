@@ -42,6 +42,9 @@ Web で実現可能なものを相手にする。
 - ボクセルコーントレーシング
 - 参考：Program 1 の Split RC レンダラ（ネイティブ、HWRT。タグ `archive/program-1`）
 
+最初に測るのは DDGI 系（C1 で決めた）。同じボクセル表現でプローブをトレースし、同じ 4 ms で比べる。M1 の中で測り、
+M1 の終わりの判定（C2 の条件）に使う。
+
 ## シーン
 
 - テクスチャ付き Sponza（`mise run assets`。Khronos glTF-Sample-Assets 版、約 26 万三角形。

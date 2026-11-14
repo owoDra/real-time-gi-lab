@@ -10,8 +10,9 @@ WebGPU で動くリアルタイム・グローバルイルミネーションの�
 
 ## 現在地
 
-**Program 2 を 2026-11-13 に開始。土台（S0）として Sponza の G-buffer と GPU
-タイムスタンプの計測までできています。GI はまだありません。**
+**Program 2 を 2026-11-13 に開始。スパイク S0〜S3（土台、疎プローブのカスケード、ボクセル
+StrataBrick、スタイル演算子）を終え、2026-11-14 のチェックポイント C1 で条件付きの継続を決めました
+（GI の予算は 4 ms で確定）。次は M1 統合です。数値はすべてネイティブでの探索値です。**
 最初に読むのは [research/status.md](research/status.md)。
 
 | 文書 | 内容 |
@@ -19,7 +20,7 @@ WebGPU で動くリアルタイム・グローバルイルミネーションの�
 | [docs/charter.md](docs/charter.md) | 目的、必須要件、止め方 |
 | [docs/architecture.md](docs/architecture.md) | 検証中の仮説（Strata Cascades） |
 | [docs/evaluation.md](docs/evaluation.md) | 予算、指標、比較相手 |
-| [research/roadmap.md](research/roadmap.md) | スパイク S0〜S3 とチェックポイント |
+| [research/roadmap.md](research/roadmap.md) | スパイク S0〜S3、チェックポイント、M1〜M4 |
 | [AGENTS.md](AGENTS.md) | 作業ルール |
 
 ## Program 1
