@@ -66,6 +66,8 @@ export interface RcParams {
   styleEmit: boolean;
   styleRecv: boolean;
   rampSoft: number;
+  // E7 (diagnostic, triangle tracer): the moving sphere 0 as triangles, 1 out of the GI rays, 2 analytic cone, 3 analytic ray.
+  diagSphere: number;
   // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
   ddgi: DdgiParams | null;
 }
@@ -74,7 +76,7 @@ export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null,
+  styleEmit: true, styleRecv: true, rampSoft: 0, diagSphere: 0, ddgi: null,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
@@ -152,6 +154,45 @@ fn triShade(p: vec3f, n: vec3f, alb: vec4f, d: vec3f) -> vec3f { return shadeHit
 ${VOX_TRACE_WGSL}
 ${BVH_TRACE_WGSL}
 
+// E7 (diagnostic): the moving sphere (F.diag) as an analytic occluder of the triangle trace. The interval is a
+// cone from the probe with the solid angle of a direction bin (4 pi / res^2; mode 3: a ray). Its weight is the
+// fraction of the cone covered by the sphere (intersection of two spherical caps), times the fraction of the
+// sphere's depth [D - r, D + r] inside [t0, min(t1, triangle hit)]. Covered: the sphere's one-bounce radiance at
+// the axis hit, or (axis misses) at the sphere point towards the axis. Uncovered: the triangle result.
+fn capOverlap(a: f32, b: f32, g: f32) -> f32 {
+  if (g >= a + b) { return 0.0; }
+  if (g <= abs(a - b)) { let m = min(a, b); return 4.0 * PI * sin(0.5 * m) * sin(0.5 * m); }
+  let ca = cos(a); let sa = sin(a); let cb = cos(b); let sb = sin(b); let cg = cos(g); let sg = sin(g);
+  let x = acos(clamp((cg - ca * cb) / (sa * sb), -1.0, 1.0));
+  let y = acos(clamp((cb - cg * ca) / (sg * sa), -1.0, 1.0));
+  let z = acos(clamp((ca - cg * cb) / (sg * sb), -1.0, 1.0));
+  return max(2.0 * (PI - x - y * ca - z * cb), 0.0);
+}
+fn sphereCover(o: vec3f, d: vec3f, t0: f32, t1: f32, tri: vec4f, c: u32) -> vec4f {
+  let ctr = F.diag.xyz; let rs = F.diag.w;
+  let oc = ctr - o; let D = length(oc);
+  let te = select(t1, min(t1, triHitT), tri.a < 0.5);
+  let w = clamp((min(te, D + rs) - max(t0, D - rs)) / (2.0 * rs), 0.0, 1.0);
+  if (w <= 0.0) { return tri; }
+  let beta = asin(min(rs / max(D, 1e-6), 1.0));
+  let gam = atan2(length(cross(d, oc)), dot(d, oc));
+  var cov = select(0.0, 1.0, gam < beta);
+  if (F.diagU.x == 2u) {
+    let res = f32(LY.c[c].res);
+    let alpha = 2.0 * asin(sqrt(1.0 / (res * res))); // 2 pi (1 - cos alpha) = 4 pi / res^2
+    cov = min(capOverlap(alpha, beta, gam) / (4.0 * PI * sin(0.5 * alpha) * sin(0.5 * alpha)), 1.0);
+  }
+  cov *= w;
+  if (cov <= 0.0) { return tri; }
+  let tc = dot(oc, d); let h2 = rs * rs - (D * D - tc * tc);
+  var p = ctr + rs * normalize(o + d * max(tc, 0.0) - ctr + vec3f(1e-7, 0.0, 0.0));
+  if (h2 >= 0.0) { let th = tc - sqrt(h2); p = o + d * select(tc + sqrt(h2), th, th > 0.0); }
+  let m = materials[F.diagU.y];
+  let alb = vec4f((textureSampleLevel(baseColorTex, linSamp, vec2f(0.0), m.layers.x, 3.0) * m.baseColorFactor).rgb, select(0.0, 1.0, (m.layers.w & 4u) != 0u));
+  let ls = shadeHit(p, (p - ctr) / rs, alb, d, 0.03);
+  return vec4f(mix(tri.rgb, ls, cov), (1.0 - cov) * tri.a);
+}
+
 fn voxLevel(s0: f32, c: u32) -> u32 {
   let v = LY.wp.x * s0 * exp2(LY.wp.z * f32(c));
   return u32(clamp(round(log2(v / VX.a.x)), 0.0, VX.a.y - 1.0));
@@ -159,7 +200,11 @@ fn voxLevel(s0: f32, c: u32) -> u32 {
 // Voxel traces start voxOffset voxels along the probe's surface normal (out of the surface's own voxels) and
 // ignore occupied voxels entered within voxSkip voxels.
 fn traceWorld(o: vec3f, d: vec3f, t0: f32, t1: f32, s0: f32, c: u32, nrm: vec3f) -> vec4f {
-  if (LY.wu.x == 2u) { return traceTri(o, d, t0, t1); }
+  if (LY.wu.x == 2u) {
+    let r = traceTri(o, d, t0, t1);
+    if (F.diagU.x >= 2u) { return sphereCover(o, d, t0, t1, r, c); }
+    return r;
+  }
   let L = voxLevelFor(voxLevel(s0, c), o + d * t1);
   let v = voxSize(L);
   voxSteps = 0u;

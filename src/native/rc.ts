@@ -11,6 +11,8 @@
 //   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent),
 //   S3 (toon materials, scene sponza-toon): noemit (toon surfaces inject plain Lambert), norecv (toon pixels receive
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
+//   E7 (diagnostic, tri, sponza-dynobj-sphereonly): dsph0 (the sphere out of the GI rays), dsphcone (analytic cone
+//   coverage of the sphere), dsphray (analytic sphere, one ray).
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseGltf } from '../core/gltf.ts';
@@ -73,6 +75,9 @@ function parseConfig(name: string): RcParams {
     else if (t === 'noemit') p.styleEmit = false;
     else if (t === 'norecv') p.styleRecv = false;
     else if (/^soft[\d.]+$/.test(t)) p.rampSoft = Number(t.slice(4));
+    else if (t === 'dsph0') p.diagSphere = 1;
+    else if (t === 'dsphcone') p.diagSphere = 2;
+    else if (t === 'dsphray') p.diagSphere = 3;
     else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
     else if (/^vs[\d.]+$/.test(t)) p.voxScale = Number(t.slice(2));
     else if (/^vo[\d.]+$/.test(t)) p.voxOffset = Number(t.slice(2));
@@ -99,6 +104,7 @@ else {
     : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true)
     : sceneName === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : sceneName === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
     : sceneName === 'sponza-dynobj-sunonly' ? dynamicSponza(base, true, -1, 'sun') : sceneName === 'sponza-dynobj-objectsonly' ? dynamicSponza(base, true, -1, 'objects')
+    : sceneName === 'sponza-dynobj-sphereonly' ? dynamicSponza(base, true, -1, 'sphere')
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
 }

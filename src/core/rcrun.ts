@@ -152,6 +152,18 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
 
   // M1: fully dynamic scenes pose their objects and the sun per frame (t counts every frame of a run, warm-up included).
   let sunDir = spec.sunDir;
+  // E7 (diagnostic): the sphere is dynamic object 0 (bounding-box centre and half height at rest, its material).
+  let sphere: { rest: Vec3; radius: number; material: number; center: Vec3 } | null = null;
+  if (params.diagSphere && spec.dynamic) {
+    const o = spec.dynamic.objects[0], P = spec.scene.positions;
+    const mn = [Infinity, Infinity, Infinity], mx = [-Infinity, -Infinity, -Infinity];
+    for (let v = o.firstVertex; v < o.firstVertex + o.vertexCount; v++)
+      for (let a = 0; a < 3; a++) { mn[a] = Math.min(mn[a], P[v * 3 + a]); mx[a] = Math.max(mx[a], P[v * 3 + a]); }
+    const rest: Vec3 = [(mn[0] + mx[0]) / 2, (mn[1] + mx[1]) / 2, (mn[2] + mx[2]) / 2];
+    const material = spec.scene.primitives.find((q) => q.baseVertex === o.firstVertex)!.material;
+    sphere = { rest, radius: (mx[1] - mn[1]) / 2, material, center: rest };
+    log(`  E7 sphere: centre ${rest.map((x) => x.toFixed(3))}, radius ${sphere.radius.toFixed(4)}, material ${material}, mode ${params.diagSphere}`);
+  }
   const pose = (t: number) => {
     const d = spec.dynamic;
     if (!d) return;
@@ -162,6 +174,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     ctx.voxWorld?.h4Frame(opts.poseFrame ?? t, v.first, v.pos);
     ctx.refitBvh?.(v.first, v.pos);
     sunDir = ps.sunDir;
+    if (sphere) sphere.center = add3(sphere.rest, ps.poses[0].offset);
     lighting.setSun(sunDir);
   };
   const frameParams = (cam: Camera, prevCam: Camera, slot: number, prevValid: boolean, seed: number, p: RcParams): FrameParams => ({
@@ -169,6 +182,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     sMin: p.sMin, P: p.P, lift: p.lift, thicknessMin: p.thicknessMin, pxStride: p.pxStride, exposure: opts.exposure,
     cascades: p.cascades, slot, regStride: p.regStride, maxSteps: p.maxSteps, rayStride: p.rayStride, seed, prevValid, analytic: p.analytic, omega0: ctx.omega0,
     style: [p.styleEmit ? 1 : 0, p.styleRecv ? 1 : 0, p.rampSoft],
+    diag: sphere ? { center: sphere.center, radius: sphere.radius, mode: p.diagSphere, material: sphere.material } : undefined,
   });
   const setCamera = (cam: Camera) => {
     const m = cameraMatrices(cam, width, height);
