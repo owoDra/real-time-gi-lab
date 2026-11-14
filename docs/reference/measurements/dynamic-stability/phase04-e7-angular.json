@@ -1,0 +1,204 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability 04 (E7)",
+ "date": "2026-11-14",
+ "conditions": "1920x1080, AMD Radeon 8060S, Dawn/Vulkan native, sun only (no sky), static camera, warmup 60 + 240 frames, voxels {anchor: scene, local: true}, photoreal objects, 1 run each. Scene sponza-dynobj-sphereonly: only the sphere (radius 0.7 m) moves, +-1.6 m sideways, period 240 frames; the ring and the figure are dynamic triangles at rest. Triangle configs use voxel relocation (vrel) and the voxel occlusion tests of the gather and the merge, which still contain the sphere (common to rows 1-4). GI ms of triangle and diagnostic runs are not timing results.",
+ "switches": "Removed after this phase. dsph0: sphere triangles skipped by the GI rays (shadow map keeps the sphere). dsphcone / dsphconeavg: sphere skipped, then each interval is a cone from the probe with the mean direction-bin solid angle 4 pi / res^2 (sin(alpha/2) = 1/res); weight = solid angle of (cone cap intersect sphere cap) / cone solid angle x fraction of the sphere depth [D-r, D+r] inside [t0, min(t1, triangle hit)]; result = mix(triangle, sphere radiance, weight), transmittance x (1 - weight). dsphray / dsphrayavg: same with zero width (weight 0 or 1). Sphere radiance: plain = one-point shading (axis hit, else the sphere point towards the axis; sun visibility at that point); avg = mean over the whole sphere surface (albedo/pi x E x 1/4 x sun visibility at the sub-solar point), the planned rule.",
+ "reproduction": {
+  "sponza-dynobj-objectsonly voxel": 0.06499,
+  "sponza-dynobj-objectsonly tri": 0.03484,
+  "note": "excess K=16, equal to phase 02 to 5 digits"
+ },
+ "imageCheck": "default config static irradiance (sponza, sky on, --dump-irr, 30 frames) bit-identical before adding, with, and after removing the switches (sha256 prefix b419acfd80f139b9)",
+ "rule": "pre-registered in the phase file (commit 8c4486ea): tri remainder = 1 - 2, after cone = 3 - 2; if 4 differs from 1 by >= 20 %, compare 3 with 4. A supported <= 30 %, partial 30-70 %, rejected >= 70 % remaining. The first run used one-point sphere radiance against the planned surface mean; rows 3 and 4 are judged on the avg runs (committed d5ab6e2f before they were measured).",
+ "judgement": {
+  "metric": "excess K=16 log2",
+  "row4VsRow1": -0.53,
+  "compareWith": "row 4",
+  "remaining": 0.477,
+  "result": "A partial",
+  "crossCheckLinearAbs": {
+   "row4VsRow1": -0.158,
+   "compareWith": "row 1",
+   "remaining": 0.447,
+   "result": "A partial"
+  }
+ },
+ "chainK16": {
+  "note": "telescoping differences of K=16 excess, share of 1 - 2 = 0.02084",
+  "analyticVsTriangles(1-dsphray)": 0.00246,
+  "onePointSphereShading(dsphray-dsphrayavg)": 0.00961,
+  "coneWidth(dsphrayavg-dsphconeavg)": 0.00459,
+  "afterCone(dsphconeavg-2)": 0.00418
+ },
+ "chainLinearAbs": {
+  "note": "same on the linear absolute excess, share of 1 - 2 = 2.09e-4",
+  "analyticVsTriangles": 4.05e-05,
+  "onePointSphereShading": 2.1e-06,
+  "coneWidth": 7.3e-05,
+  "afterCone": 9.35e-05
+ },
+ "runs": [
+  {
+   "row": 1,
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-tri-rc2-vrel",
+   "tracer": "tri",
+   "sphere": "triangles (baseline)",
+   "role": "tri remainder of the sphere",
+   "usedForJudgement": true,
+   "excess": {
+    "k8": 0.01683,
+    "k16": 0.02279,
+    "k32": 0.02919
+   },
+   "tvK16": 0.0438,
+   "k16linear": {
+    "excessRelPerFrame": 0.00751,
+    "meanIrradiance": 0.03586,
+    "excessAbsPerFrame": 0.0002693
+   },
+   "photoFinePct": 8.946,
+   "staticFinePct": 8.946,
+   "giMs": 5.634
+  },
+  {
+   "row": 2,
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-tri-rc2-vrel-dsph0",
+   "tracer": "tri",
+   "sphere": "out of the GI rays, shadow kept",
+   "role": "shadow of the sphere over static hit points (D)",
+   "usedForJudgement": true,
+   "excess": {
+    "k8": 0.00139,
+    "k16": 0.00195,
+    "k32": 0.00315
+   },
+   "tvK16": 0.00766,
+   "k16linear": {
+    "excessRelPerFrame": 0.00184,
+    "meanIrradiance": 0.0327,
+    "excessAbsPerFrame": 6.02e-05
+   },
+   "photoFinePct": 1.615,
+   "staticFinePct": 1.615,
+   "giMs": 5.667
+  },
+  {
+   "row": 3,
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-tri-rc2-vrel-dsphconeavg",
+   "tracer": "tri",
+   "sphere": "analytic cone, surface-mean radiance",
+   "role": "left after the cone",
+   "usedForJudgement": true,
+   "excess": {
+    "k8": 0.00349,
+    "k16": 0.00613,
+    "k32": 0.01114
+   },
+   "tvK16": 0.03215,
+   "k16linear": {
+    "excessRelPerFrame": 0.00436,
+    "meanIrradiance": 0.03525,
+    "excessAbsPerFrame": 0.0001537
+   },
+   "photoFinePct": 5.918,
+   "staticFinePct": 5.918,
+   "giMs": 5.678
+  },
+  {
+   "row": 4,
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-tri-rc2-vrel-dsphrayavg",
+   "tracer": "tri",
+   "sphere": "analytic sphere, one ray, surface-mean radiance",
+   "role": "analytic itself",
+   "usedForJudgement": true,
+   "excess": {
+    "k8": 0.00783,
+    "k16": 0.01072,
+    "k32": 0.01719
+   },
+   "tvK16": 0.03872,
+   "k16linear": {
+    "excessRelPerFrame": 0.00641,
+    "meanIrradiance": 0.03537,
+    "excessAbsPerFrame": 0.0002267
+   },
+   "photoFinePct": 7.126,
+   "staticFinePct": 7.126,
+   "giMs": 5.705
+  },
+  {
+   "row": 5,
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "tracer": "voxel",
+   "sphere": "default",
+   "role": "voxel reference",
+   "usedForJudgement": true,
+   "excess": {
+    "k8": 0.02495,
+    "k16": 0.03025,
+    "k32": 0.03542
+   },
+   "tvK16": 0.04768,
+   "k16linear": {
+    "excessRelPerFrame": 0.01021,
+    "meanIrradiance": 0.03145,
+    "excessAbsPerFrame": 0.0003211
+   },
+   "photoFinePct": 11.238,
+   "staticFinePct": 11.238,
+   "giMs": 2.874
+  },
+  {
+   "row": "3p",
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-tri-rc2-vrel-dsphcone",
+   "tracer": "tri",
+   "sphere": "analytic cone, one-point radiance (not the planned rule)",
+   "role": "exploratory",
+   "usedForJudgement": false,
+   "excess": {
+    "k8": 0.03712,
+    "k16": 0.04116,
+    "k32": 0.04593
+   },
+   "tvK16": 0.05606,
+   "k16linear": {
+    "excessRelPerFrame": 0.00848,
+    "meanIrradiance": 0.03507,
+    "excessAbsPerFrame": 0.0002974
+   },
+   "photoFinePct": 14.058,
+   "staticFinePct": 14.057,
+   "giMs": 5.637
+  },
+  {
+   "row": "4p",
+   "scene": "sponza-dynobj-sphereonly",
+   "config": "world-48-tri-rc2-vrel-dsphray",
+   "tracer": "tri",
+   "sphere": "analytic sphere, one ray, one-point radiance (not the planned rule)",
+   "role": "exploratory",
+   "usedForJudgement": false,
+   "excess": {
+    "k8": 0.01466,
+    "k16": 0.02033,
+    "k32": 0.02666
+   },
+   "tvK16": 0.04002,
+   "k16linear": {
+    "excessRelPerFrame": 0.00643,
+    "meanIrradiance": 0.03558,
+    "excessAbsPerFrame": 0.0002288
+   },
+   "photoFinePct": 9.279,
+   "staticFinePct": 9.279,
+   "giMs": 5.657
+  }
+ ]
+}

@@ -72,6 +72,7 @@ Web で実現可能なものを相手にする。
 | `sponza-toon` / `sponza-objects` | 日なたの床にトゥーンの物体 3 つ（球、リング、人形。計 2 万三角形）/ 同じ物体を写実材質で |
 | `sponza-dyn` / `sponza-dynobj` | 物体 3 つが動き（周期 160〜320 フレーム）、太陽が約 ±20° 振れる（周期 400）/ 同じ物体を写実材質で |
 | `sponza-dyn-sunonly` / `-objectsonly` | 太陽だけ / 物体だけ動かす（写実の物体では `sponza-dynobj-sunonly` / `-objectsonly`） |
+| `sponza-dynobj-sphereonly` | 写実の物体のうち球だけを動かす（リングと人形は止まった動的三角形）。E7 で使った |
 | `sponza-dyn-switch<N>` | フレーム N で太陽が別の向きへ跳ぶ（物体は止める） |
 
 まだ無いもの：数画素の小物体が並ぶシーン、広さと密度を段階的に変えられる合成ワールド、N004 のワールド形状

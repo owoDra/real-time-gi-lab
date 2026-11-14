@@ -148,7 +148,6 @@ fn boxHit(mn: vec3f, mx: vec3f, o: vec3f, inv: vec3f, tMax: f32) -> f32 {
   let tf = min(min(max(ta.x, tb.x), max(ta.y, tb.y)), max(ta.z, tb.z));
   return select(1e30, max(tn, 0.0), tf >= max(tn, 0.0) && tn < tMax);
 }
-var<private> triHitT: f32; // E7 (diagnostic): distance of the last triangle hit (t1 on a miss)
 fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
   let inv = 1.0 / select(d, vec3f(1e-12), abs(d) < vec3f(1e-12));
   var best = t1; var hit = 0xffffffffu; var hb = vec2f(0.0);
@@ -172,7 +171,6 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
         if (v < 0.0 || u + v > 1.0) { continue; }
         let t = dot(e2, qv) * id;
         if (t <= t0 || t >= best) { continue; }
-        if (F.diagU.x != 0u && bitcast<u32>(q0.w) == F.diagU.y) { continue; } // E7: the sphere is not in the GI rays
         let m = materials[bitcast<u32>(q0.w)];
         if ((m.layers.w & 1u) != 0u) {
           let q3 = bvhTris[k * 4u + 3u];
@@ -198,7 +196,6 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
     if (tfar < 1e29 && sp < 40u) { stack[sp] = far; sp++; }
     ni = near;
   }
-  triHitT = best;
   if (hit == 0xffffffffu) { return vec4f(0.0, 0.0, 0.0, 1.0); }
   let q0 = bvhTris[hit * 4u]; let q1 = bvhTris[hit * 4u + 1u]; let q2 = bvhTris[hit * 4u + 2u]; let q3 = bvhTris[hit * 4u + 3u];
   let m = materials[bitcast<u32>(q0.w)];
