@@ -83,6 +83,9 @@ function halfToFloat(h: number) {
   return s * (1 + m / 1024) * 2 ** (e - 15);
 }
 
+let halfLut: Float32Array | null = null;
+const half = (h: number) => (halfLut ??= Float32Array.from({ length: 65536 }, (_, i) => halfToFloat(i)))[h];
+
 /** Indirect irradiance (rgb), validity and the gather's tag (1 photoreal, >= 2 toon) of every pixel. */
 export async function readIrradiance(device: GPUDevice, tex: GPUTexture, width: number, height: number) {
   const bytesPerRow = Math.ceil(width * 8 / 256) * 256;
@@ -97,8 +100,8 @@ export async function readIrradiance(device: GPUDevice, tex: GPUTexture, width: 
   for (let y = 0; y < height; y++)
     for (let x = 0; x < width; x++) {
       const o = y * bytesPerRow / 2 + x * 4, p = y * width + x;
-      for (let c = 0; c < 3; c++) rgb[p * 3 + c] = halfToFloat(src[o + c]);
-      const a = halfToFloat(src[o + 3]);
+      for (let c = 0; c < 3; c++) rgb[p * 3 + c] = half(src[o + c]);
+      const a = half(src[o + 3]);
       valid[p] = a > 0.5 ? 1 : 0; tag[p] = Math.round(a);
     }
   return { rgb, valid, tag };

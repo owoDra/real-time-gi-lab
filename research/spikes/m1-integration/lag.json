@@ -1,0 +1,234 @@
+{
+ "kind": "exploratory (\u63a2\u7d22\u5024)",
+ "note": "error against Mitsuba at poses 140 and 300 of sponza-dyn, sun only, photoreal pixels; moving: animated from pose 0, frozen: held at the pose (converged)",
+ "results": {
+  "ddgi-100-128-u2-g1-noadapt-h0.8": {
+   "moving-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0344,
+    "bias": 0.1218,
+    "meanAbsRel": 0.5211,
+    "medianRel": 0.2148,
+    "p90Rel": 0.8121
+   },
+   "frozen-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0372,
+    "bias": 0.2139,
+    "meanAbsRel": 0.5373,
+    "medianRel": 0.2424,
+    "p90Rel": 0.866
+   },
+   "moving-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0684,
+    "bias": -0.0013,
+    "meanAbsRel": 0.4309,
+    "medianRel": 0.451,
+    "p90Rel": 0.9984
+   },
+   "frozen-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0727,
+    "bias": 0.062,
+    "meanAbsRel": 0.4493,
+    "medianRel": 0.4527,
+    "p90Rel": 0.9995
+   }
+  },
+  "ddgi-100-128-u2-g1-noadapt": {
+   "moving-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0313,
+    "bias": 0.0211,
+    "meanAbsRel": 0.4422,
+    "medianRel": 0.2157,
+    "p90Rel": 0.7973
+   },
+   "frozen-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0367,
+    "bias": 0.1966,
+    "meanAbsRel": 0.5233,
+    "medianRel": 0.2357,
+    "p90Rel": 0.8637
+   },
+   "moving-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0538,
+    "bias": -0.2137,
+    "meanAbsRel": 0.4897,
+    "medianRel": 0.4991,
+    "p90Rel": 0.9906
+   },
+   "frozen-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0714,
+    "bias": 0.0433,
+    "meanAbsRel": 0.4363,
+    "medianRel": 0.4556,
+    "p90Rel": 0.9913
+   }
+  },
+  "ddgi-100-128-u2": {
+   "moving-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0157,
+    "bias": -0.4877,
+    "meanAbsRel": 0.6249,
+    "medianRel": 0.3084,
+    "p90Rel": 0.9822
+   },
+   "frozen-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.028,
+    "bias": -0.0859,
+    "meanAbsRel": 0.5107,
+    "medianRel": 0.2558,
+    "p90Rel": 0.9131
+   },
+   "moving-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0168,
+    "bias": -0.7549,
+    "meanAbsRel": 0.8066,
+    "medianRel": 0.4952,
+    "p90Rel": 1
+   },
+   "frozen-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0596,
+    "bias": -0.1294,
+    "meanAbsRel": 0.4198,
+    "medianRel": 0.3344,
+    "p90Rel": 0.9996
+   }
+  },
+  "ddgi-75-128-u4-g1-noadapt": {
+   "moving-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0367,
+    "bias": 0.197,
+    "meanAbsRel": 0.5907,
+    "medianRel": 0.3005,
+    "p90Rel": 1.0089
+   },
+   "frozen-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0385,
+    "bias": 0.2577,
+    "meanAbsRel": 0.5408,
+    "medianRel": 0.2412,
+    "p90Rel": 0.8978
+   },
+   "moving-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0506,
+    "bias": -0.2612,
+    "meanAbsRel": 0.5513,
+    "medianRel": 0.5585,
+    "p90Rel": 0.9988
+   },
+   "frozen-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.076,
+    "bias": 0.1104,
+    "meanAbsRel": 0.4532,
+    "medianRel": 0.4534,
+    "p90Rel": 1.0025
+   }
+  },
+  "world-32-voxel-rc2-vrel": {
+   "moving-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0347,
+    "bias": 0.1323,
+    "meanAbsRel": 0.5453,
+    "medianRel": 0.3689,
+    "p90Rel": 1.6886
+   },
+   "frozen-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0347,
+    "bias": 0.1323,
+    "meanAbsRel": 0.5453,
+    "medianRel": 0.3689,
+    "p90Rel": 1.6886
+   },
+   "moving-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0647,
+    "bias": -0.0547,
+    "meanAbsRel": 0.3584,
+    "medianRel": 0.3116,
+    "p90Rel": 1
+   },
+   "frozen-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0647,
+    "bias": -0.0547,
+    "meanAbsRel": 0.3584,
+    "medianRel": 0.3116,
+    "p90Rel": 1
+   }
+  },
+  "world-48-voxel-rc2-vrel": {
+   "moving-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0357,
+    "bias": 0.1649,
+    "meanAbsRel": 0.6011,
+    "medianRel": 0.3802,
+    "p90Rel": 1.6521
+   },
+   "frozen-140": {
+    "pixels": 498479,
+    "meanRef": 0.0306,
+    "meanOurs": 0.0357,
+    "bias": 0.1649,
+    "meanAbsRel": 0.6011,
+    "medianRel": 0.3802,
+    "p90Rel": 1.6521
+   },
+   "moving-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0693,
+    "bias": 0.012,
+    "meanAbsRel": 0.4153,
+    "medianRel": 0.3318,
+    "p90Rel": 1
+   },
+   "frozen-300": {
+    "pixels": 500500,
+    "meanRef": 0.0685,
+    "meanOurs": 0.0693,
+    "bias": 0.012,
+    "meanAbsRel": 0.4153,
+    "medianRel": 0.3318,
+    "p90Rel": 1
+   }
+  }
+ }
+}

@@ -97,6 +97,7 @@ else {
     : sceneName === 'sponza-dense9' ? densify(base) : sceneName === 'sponza-toon' ? toonSponza(base)
     : sceneName === 'sponza-objects' ? toonSponza(base, true)
     : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true)
+    : sceneName === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : sceneName === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
 }
@@ -184,6 +185,6 @@ for (const [name, params] of parsed) {
   summaries[name].vsTriangle = { reference: ref, ...compareIrradiance(irr[name]!, irr[ref]!) };
   log(`${name} vs ${ref}: ${JSON.stringify(summaries[name].vsTriangle)}`);
 }
-for (const [name] of parsed) writeFileSync(join(outDir, `${name}.summary.json`), JSON.stringify(summaries[name], null, 2));
+for (const [name] of parsed) if (summaries[name]) writeFileSync(join(outDir, `${name}.summary.json`), JSON.stringify(summaries[name], null, 2));
 device.destroy();
 process.exit(process.exitCode ?? 0);

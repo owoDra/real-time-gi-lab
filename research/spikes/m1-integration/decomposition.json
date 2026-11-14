@@ -1,0 +1,76 @@
+{
+ "kind": "exploratory (\u63a2\u7d22\u5024)",
+ "note": "fine-band flicker of photoreal pixels, sun only; only the sun / only the objects move",
+ "rows": [
+  {
+   "scene": "sponza-dyn-sunonly",
+   "config": "ddgi-100-128-u2",
+   "flickerStaticCam": 1.068,
+   "flickerMovingCam": 16.555,
+   "giMean": 3.104
+  },
+  {
+   "scene": "sponza-dyn-sunonly",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "flickerStaticCam": 2.945,
+   "flickerMovingCam": 15.682,
+   "giMean": 3.091
+  },
+  {
+   "scene": "sponza-dyn-sunonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "flickerStaticCam": 7.67,
+   "flickerMovingCam": 22.171,
+   "giMean": 2.986
+  },
+  {
+   "scene": "sponza-dyn-objectsonly",
+   "config": "ddgi-100-128-u2",
+   "flickerStaticCam": 1.144,
+   "flickerMovingCam": 17.116,
+   "giMean": 3.012
+  },
+  {
+   "scene": "sponza-dyn-objectsonly",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "flickerStaticCam": 2.052,
+   "flickerMovingCam": 15.487,
+   "giMean": 3.031
+  },
+  {
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "flickerStaticCam": 17.884,
+   "flickerMovingCam": 36.01,
+   "giMean": 2.984
+  },
+  {
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-norel",
+   "flickerStaticCam": 18.677,
+   "flickerMovingCam": 35.129,
+   "giMean": 1.981
+  },
+  {
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2",
+   "flickerStaticCam": 20.664,
+   "flickerMovingCam": 52.772,
+   "giMean": 2.1
+  },
+  {
+   "scene": "sponza-dyn-sunonly",
+   "config": "world-48-voxel-rc2-norel",
+   "flickerStaticCam": 6.836,
+   "flickerMovingCam": 21.979,
+   "giMean": 1.97
+  },
+  {
+   "scene": "sponza-dyn-sunonly",
+   "config": "world-48-voxel-rc2",
+   "flickerStaticCam": 8.609,
+   "flickerMovingCam": 40.67,
+   "giMean": 2.112
+  }
+ ]
+}

@@ -290,7 +290,7 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
  * and the sun swings by about +-20 degrees along the atrium and a little across it (its lit patches move over the
  * floor and the walls in view; a larger swing across the narrow atrium puts the whole visible floor in shadow).
  * Optional light switch for R1: from frame switchAt the sun jumps to another direction. */
-export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1): SceneSpec {
+export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1, only: 'all' | 'sun' | 'objects' = 'all'): SceneSpec {
   const s = toonSponza(base, photoreal, true);
   const cam = s.camera;
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
@@ -298,17 +298,18 @@ export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1)
   const d = s.dynamic!;
   const sun = (t: number): Vec3 => {
     if (switchAt >= 0) return t < switchAt ? SPONZA_SUN : [0.45, 1, -0.25];
+    if (only === 'objects') t = 0;
     const a = 2 * Math.PI * t / 400;
     return [-0.15 + 0.4 * Math.sin(a), 1, 0.1 + 0.08 * Math.sin(2 * a + 0.5)];
   };
   d.at = (t: number) => ({
     sunDir: sun(t), sunScale: 1,
-    poses: switchAt >= 0 ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) : [
+    poses: switchAt >= 0 || only === 'sun' ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) : [
       { rotY: 0, offset: scale3(side, -1.6 * Math.sin(2 * Math.PI * t / 240)) },
       { rotY: 2 * Math.PI * t / 320, offset: [0, 0, 0] },
       { rotY: 0, offset: scale3(f, 1.5 * Math.sin(2 * Math.PI * t / 160)) },
     ],
   });
-  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '');
+  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '');
   return { ...s, name, sunDir: sun(0), dynamic: d };
 }
