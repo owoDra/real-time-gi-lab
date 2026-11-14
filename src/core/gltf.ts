@@ -13,6 +13,10 @@ export interface MaterialDesc {
   alphaMask: boolean;
   alphaCutoff: number;
   doubleSided: boolean;
+  /** S3: 1 for toon (style operators of style.ts), 0 or absent for photoreal. */
+  style?: number;
+  /** S3 measurement: pixels of this material are counted with the toon pixels (objects), whatever the style. */
+  object?: boolean;
 }
 
 export interface Primitive { firstIndex: number; indexCount: number; baseVertex: number; material: number; }

@@ -4,6 +4,7 @@ import type { SceneData } from './gltf.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { FRAME_WGSL } from './frame.ts';
+import { STYLE_WGSL } from './style.ts';
 import { add3, lookAt, mul, orthoZO, scale3, sub, type Mat4, type Vec3 } from './math.ts';
 
 const SHADOW_WGSL = /* wgsl */ `
@@ -27,6 +28,7 @@ struct VsOut { @builtin(position) clip: vec4f, @location(0) uv: vec2f, @location
 
 const DIRECT_WGSL = /* wgsl */ `
 ${FRAME_WGSL}
+${STYLE_WGSL}
 const PI = 3.14159265;
 @group(0) @binding(0) var<uniform> F: Frame;
 @group(0) @binding(1) var albedoTex: texture_2d<f32>;
@@ -57,11 +59,14 @@ fn sunVisibility(x: vec3f) -> f32 {
   if (d <= 0.0) { textureStore(litOut, px, vec4f(0.0)); return; }
   let x = worldAt(px, d);
   let n = textureLoad(normalTex, px, 0).xyz;
-  let a = textureLoad(albedoTex, px, 0).rgb;
+  let ab = textureLoad(albedoTex, px, 0);
+  let a = ab.rgb;
   let ndl = max(dot(n, F.sunDir.xyz), 0.0);
   var vis = 0.0;
   if (ndl > 0.0) { vis = sunVisibility(x + n * 0.03); }
-  textureStore(litOut, px, vec4f(a / PI * F.sunE.rgb * ndl * vis, ndl * vis));
+  var l = a / PI * F.sunE.rgb * ndl * vis;
+  if (ab.a > 0.75 && F.style.x > 0.5) { l = toonSun(a, ndl, vis, F.sunE.rgb); } // S3 emission-side operator
+  textureStore(litOut, px, vec4f(l, ndl * vis));
 }
 `;
 

@@ -27,7 +27,7 @@ depends = ["build"]
 run = "bash scripts/run_with_vulkan.sh node build/native/main.mjs"
 
 [tasks."build:rc"]
-description = "Bundle the radiance-cascade native runner (S1, S2) into build/"
+description = "Bundle the radiance-cascade native runner (S1-S3) into build/"
 run = "npx esbuild src/native/rc.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/rc.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning"
 
 [tasks."s1:native"]
@@ -36,13 +36,17 @@ depends = ["build:rc"]
 run = "bash scripts/run_with_vulkan.sh node build/native/rc.mjs --out out/s1/native"
 
 [tasks."s2:native"]
-description = "S2: radiance cascades with voxel StrataBrick / triangle BVH interval tracers, native Dawn"
+description = "S2, S3: radiance cascades with voxel StrataBrick / triangle BVH interval tracers (S3: --scene sponza-toon), native Dawn"
 depends = ["build:rc"]
 run = "bash scripts/run_with_vulkan.sh node build/native/rc.mjs"
 
 [tasks."ref:export"]
 description = "Export a scene (from our glTF parse) for the Mitsuba reference: PLY per material + scene.json into out/mitsuba/<scene>"
 run = "npx esbuild src/native/mitsuba_export.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/mitsuba_export.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning && node build/native/mitsuba_export.mjs"
+
+[tasks."ref:style"]
+description = "S3: photoreal error next to toon objects (with / without the objects) and the objects' effect, against Mitsuba"
+run = "npx esbuild src/native/compare_style.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/compare_style.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning && node build/native/compare_style.mjs"
 
 [tasks."ref:compare"]
 description = "Compare dumped irradiance (--dump-irr) with a Mitsuba reference PFM"

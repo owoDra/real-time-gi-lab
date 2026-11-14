@@ -3,7 +3,7 @@
 // Level L has voxels of v0 * 2^L. A brick is 8^3 voxels (16 words of occupancy bits) plus the index of its
 // first voxel attribute. Each level is a camera-relative clipmap of G^3 brick pointers (dense, so memory is
 // bounded by G and the number of occupied bricks, not by the size of the world); only occupied bricks are
-// allocated. Occupied voxels carry an albedo and a normal (8 bytes), addressed by the rank of their bit in the
+// allocated. Occupied voxels carry an albedo (alpha: toon flag, S3) and a normal (8 bytes), addressed by the rank of their bit in the
 // brick, taken from one representative triangle (the highest index overlapping the voxel, so the choice does
 // not depend on scheduling) at the voxel centre projected onto it. Voxelisation is conservative (triangle /
 // box overlap); alpha-masked materials are tested at the projected voxel centre. Everything is rebuilt from
@@ -47,7 +47,7 @@ fn voxPtrIndex(L: u32, b: vec3i) -> u32 {
 `;
 
 /** Tracer: hierarchical DDA (empty bricks are skipped whole) over one level. Needs VX, vox (array<u32>) and
- * a hit-shading function voxShade(entry, n, albedo, dir, v) -> vec3f, where entry is the point where the ray
+ * a hit-shading function voxShade(entry, n, albedo (a: toon flag), dir, v) -> vec3f, where entry is the point where the ray
  * enters the voxel (lighting is evaluated on the ray's side: a voxel that straddles a thin wall is lit from
  * the side the ray comes from). Occupied voxels entered before tSkip are ignored. Returns (radiance, T), T = 0
  * on a hit. */
@@ -117,7 +117,7 @@ fn traceVox(o: vec3f, d: vec3f, t0: f32, t1: f32, tSkip: f32, L: u32) -> vec4f {
     let tExit = min(min(tMax.x, tMax.y), tMax.z);
     if ((occ & (1u << (bit & 31u))) != 0u && tIn >= tSkip) {
       let ai = voxRank(ptr, bit);
-      let alb = unpack4x8unorm(vox[VX.b.z + ai * 2u]).rgb;
+      let alb = unpack4x8unorm(vox[VX.b.z + ai * 2u]);
       let nn = unpack2x16snorm(vox[VX.b.z + ai * 2u + 1u]);
       var n = vec3f(nn.x, nn.y, 1.0 - abs(nn.x) - abs(nn.y));
       let q = max(-n.z, 0.0);
@@ -213,18 +213,18 @@ fn voxRange(T: Tri, L: u32, cell: f32) -> Range {
 }
 
 // Alpha test at the voxel centre projected onto the triangle; also returns the attributes there.
-struct Surf { ok: bool, albedo: vec3f, n: vec3f }
+struct Surf { ok: bool, albedo: vec3f, n: vec3f, toon: f32 }
 fn surfaceAt(T: Tri, p: vec3f, L: u32, wantAttr: bool) -> Surf {
   let m = materials[T.idx.w];
   let masked = (m.layers.w & 1u) != 0u;
-  if (!masked && !wantAttr) { return Surf(true, vec3f(0.0), vec3f(0.0)); }
+  if (!masked && !wantAttr) { return Surf(true, vec3f(0.0), vec3f(0.0), 0.0); }
   let w = closestBary(p, T.a, T.b, T.c);
   let uv = UV(T.idx.x) * w.x + UV(T.idx.y) * w.y + UV(T.idx.z) * w.z;
   let tex = textureSampleLevel(baseColorTex, samp, uv, m.layers.x, f32(3u + L)) * m.baseColorFactor;
-  if (masked && tex.a < m.params.z) { return Surf(false, vec3f(0.0), vec3f(0.0)); }
+  if (masked && tex.a < m.params.z) { return Surf(false, vec3f(0.0), vec3f(0.0), 0.0); }
   var n = N(T.idx.x) * w.x + N(T.idx.y) * w.y + N(T.idx.z) * w.z;
   n = select(cross(T.b - T.a, T.c - T.a), n, dot(n, n) > 1e-12);
-  return Surf(true, tex.rgb, normalize(n));
+  return Surf(true, tex.rgb, normalize(n), select(0.0, 1.0, (m.layers.w & 4u) != 0u));
 }
 
 @compute @workgroup_size(64) fn clear(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -386,7 +386,7 @@ fn octEnc(n: vec3f) -> vec2f {
   let p = regionLo(L) + (vec3f(c) + 0.5) * voxSize(L);
   let t = atomicLoad(&rep[ptr * 512u + bit]) - 1u;
   let s = surfaceAt(loadTri(t), p, L, true);
-  atomicStore(&vox[VX.b.z + ai * 2u], pack4x8unorm(vec4f(s.albedo, 1.0)));
+  atomicStore(&vox[VX.b.z + ai * 2u], pack4x8unorm(vec4f(s.albedo, s.toon)));
   atomicStore(&vox[VX.b.z + ai * 2u + 1u], pack2x16snorm(octEnc(s.n)));
 }
 `;

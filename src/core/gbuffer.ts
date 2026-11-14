@@ -1,5 +1,5 @@
 // G-buffer pass and a debug visualisation pass.
-// Layout: albedo rgba8unorm-srgb (rgb = base colour, a = metallic),
+// Layout: albedo rgba8unorm-srgb (rgb = base colour, a = 1 toon, 0.5 other measured object, 0 photoreal (S3); metallic is not used),
 //         normal rgba16float (xyz = world shading normal, w = roughness),
 //         depth32float, reversed Z with an infinite far plane.
 import type { SceneData } from './gltf.ts';
@@ -47,7 +47,7 @@ struct FsOut { @location(0) albedo: vec4f, @location(1) normal: vec4f }
     let b = cross(n, t) * i.tan.w * flip;
     n = normalize(t * tn.x + b * tn.y + n * tn.z);
   }
-  return FsOut(vec4f(base.rgb, mr.b * m.params.x), vec4f(n, mr.g * m.params.y));
+  return FsOut(vec4f(base.rgb, select(select(0.0, 0.5, (m.layers.w & 8u) != 0u), 1.0, (m.layers.w & 4u) != 0u)), vec4f(n, mr.g * m.params.y));
 }
 `;
 

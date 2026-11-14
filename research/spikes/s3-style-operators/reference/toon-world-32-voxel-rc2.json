@@ -1,0 +1,122 @@
+{
+  "kind": "exploratory (探索値)",
+  "refBase": [
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed1.pfm"
+  ],
+  "refStyle": [
+    "out/mitsuba/sponza-toon/E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "out/mitsuba/sponza-toon/E-960x540-512spp-sky0_0_0-seed1.pfm"
+  ],
+  "oursBase": "out/s3/irr/world-32-voxel-rc2.static.irr.f32",
+  "blockPx": 8,
+  "affectedThreshold": 0.1,
+  "results": {
+    "world-32-voxel-rc2.static.irr.f32": {
+      "allPhotoreal": {
+        "base": {
+          "pixels": 492206,
+          "meanRef": 0.0394,
+          "meanOurs": 0.0311,
+          "bias": -0.2098,
+          "meanAbsRel": 0.3773
+        },
+        "style": {
+          "pixels": 492206,
+          "meanRef": 0.0482,
+          "meanOurs": 0.048,
+          "bias": -0.0055,
+          "meanAbsRel": 0.3873
+        }
+      },
+      "affected": {
+        "blocks": 4990,
+        "base": {
+          "pixels": 318609,
+          "meanRef": 0.0302,
+          "meanOurs": 0.0242,
+          "bias": -0.1974,
+          "meanAbsRel": 0.3506
+        },
+        "style": {
+          "pixels": 318609,
+          "meanRef": 0.0429,
+          "meanOurs": 0.0454,
+          "bias": 0.0583,
+          "meanAbsRel": 0.3904
+        },
+        "effect": {
+          "ref": 0.0128,
+          "ours": 0.0212,
+          "captured": 1.6608,
+          "meanAbsErrorOverMeanAbsRef": 0.9136
+        },
+        "effectRgb": {
+          "ref": [
+            0.0435,
+            0.0052,
+            -0.0025
+          ],
+          "ours": [
+            0.0593,
+            0.0119,
+            0.0013
+          ]
+        }
+      }
+    },
+    "world-32-voxel-rc2-noemit.static.irr.f32": {
+      "allPhotoreal": {
+        "base": {
+          "pixels": 492206,
+          "meanRef": 0.0394,
+          "meanOurs": 0.0311,
+          "bias": -0.2098,
+          "meanAbsRel": 0.3773
+        },
+        "style": {
+          "pixels": 492206,
+          "meanRef": 0.0482,
+          "meanOurs": 0.0326,
+          "bias": -0.3231,
+          "meanAbsRel": 0.4337
+        }
+      },
+      "affected": {
+        "blocks": 4990,
+        "base": {
+          "pixels": 318609,
+          "meanRef": 0.0302,
+          "meanOurs": 0.0242,
+          "bias": -0.1974,
+          "meanAbsRel": 0.3506
+        },
+        "style": {
+          "pixels": 318609,
+          "meanRef": 0.0429,
+          "meanOurs": 0.0276,
+          "bias": -0.3572,
+          "meanAbsRel": 0.4373
+        },
+        "effect": {
+          "ref": 0.0128,
+          "ours": 0.0033,
+          "captured": 0.2559,
+          "meanAbsErrorOverMeanAbsRef": 0.8737
+        },
+        "effectRgb": {
+          "ref": [
+            0.0435,
+            0.0052,
+            -0.0025
+          ],
+          "ours": [
+            0.0123,
+            0.0011,
+            -0.002
+          ]
+        }
+      }
+    }
+  }
+}

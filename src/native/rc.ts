@@ -1,5 +1,5 @@
 // Native radiance-cascade runs (S1, S2).
-// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|leak-<t>] [--configs a,b,...]
+// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|leak-<t>] [--configs a,b,...]
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
 // Config names: <method>-<P>[-<token>...], method world | screen | split. Tokens:
@@ -8,7 +8,9 @@
 //   triangle BVH), l2 (voxel level grows 2 per cascade), rc<N> (directions stop growing above cascade N),
 //   vs<x> (c0 voxel size / c0 spacing), vo<x> (voxel trace start offset along the probe normal, voxels),
 //   vk<x> (occupied voxels entered within this many voxels are ignored), norel (diagnostic: no probe relocation),
-//   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent).
+//   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent),
+//   S3 (toon materials, scene sponza-toon): noemit (toon surfaces inject plain Lambert), norecv (toon pixels receive
+//   the physical irradiance), soft<x> (receiving ramp half width in n.d).
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseGltf } from '../core/gltf.ts';
@@ -16,7 +18,7 @@ import type { Vec3 } from '../core/math.ts';
 import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
 import { benchVoxels, compareIrradiance, createRunContext, lum, runConfig, SKY } from '../core/rcrun.ts';
 import { uploadScene } from '../core/scene_gpu.ts';
-import { densify, leakRoom, sponzaSpec, widen, type SceneSpec } from '../core/scenes.ts';
+import { densify, leakRoom, sponzaSpec, toonSponza, widen, type SceneSpec } from '../core/scenes.ts';
 import { createNativeDevice, IMPLEMENTATION, loadSponza, ROOT, writePng } from './env.ts';
 
 // Synchronous logging: a native abort would otherwise drop buffered output.
@@ -44,6 +46,9 @@ function parseConfig(name: string): RcParams {
     else if (t === 'l2') p.levelMap = 2;
     else if (t === 'norel') p.relocate = 'none';
     else if (t === 'vrel') p.relocate = 'voxel';
+    else if (t === 'noemit') p.styleEmit = false;
+    else if (t === 'norecv') p.styleRecv = false;
+    else if (/^soft[\d.]+$/.test(t)) p.rampSoft = Number(t.slice(4));
     else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
     else if (/^vs[\d.]+$/.test(t)) p.voxScale = Number(t.slice(2));
     else if (/^vo[\d.]+$/.test(t)) p.voxOffset = Number(t.slice(2));
@@ -65,7 +70,8 @@ else {
   upload = s.upload;
   const base = parseGltf(s.json, s.bin);
   spec = sceneName === 'sponza' ? sponzaSpec(base) : sceneName === 'sponza-wide10' ? widen(base, 10)
-    : sceneName === 'sponza-dense9' ? densify(base) : (() => { throw new Error(`unknown scene ${sceneName}`); })();
+    : sceneName === 'sponza-dense9' ? densify(base) : sceneName === 'sponza-toon' ? toonSponza(base)
+    : sceneName === 'sponza-objects' ? toonSponza(base, true) : (() => { throw new Error(`unknown scene ${sceneName}`); })();
 }
 const gpu = await uploadScene(device, spec.scene, upload);
 const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tri');
@@ -93,9 +99,9 @@ for (const [name, params] of parsed) {
     if (res) for (const [img, rgba] of Object.entries(res.images)) writeFileSync(join(outDir, `${name}.${mode}.${img}.png`), writePng(ctx.width, ctx.height, rgba));
   irr[name] = r.static.irr;
   if (args.includes('--dump-irr') && r.static.irr) {
-    // rgb + valid as float32, rows top to bottom (for the Mitsuba comparison).
-    const { rgb, valid } = r.static.irr, f = new Float32Array(valid.length * 4);
-    for (let p = 0; p < valid.length; p++) { f.set(rgb.subarray(p * 3, p * 3 + 3), p * 4); f[p * 4 + 3] = valid[p]; }
+    // rgb + tag (0 invalid, 1 photoreal, >= 2 toon) as float32, rows top to bottom (for the Mitsuba comparison).
+    const { rgb, tag } = r.static.irr, f = new Float32Array(tag.length * 4);
+    for (let p = 0; p < tag.length; p++) { f.set(rgb.subarray(p * 3, p * 3 + 3), p * 4); f[p * 4 + 3] = tag[p]; }
     writeFileSync(join(outDir, `${name}.static.irr.f32`), Buffer.from(f.buffer));
   }
   const strip = (x: typeof r.static | null) => { if (!x) return null; const { images: _, irr: __, ...rest } = x; return rest; };

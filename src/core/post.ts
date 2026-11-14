@@ -6,6 +6,9 @@
 // Fine bands are 1/4 stop, coarse bands 1 stop. A world-fixed smooth analytic field goes through the same
 // reprojection as a control (it also depends on the shading normal, as irradiance does), so its rate is the
 // floor that the measurement itself produces.
+// S3: toon pixels (irradiance alpha >= 2, written by the gather; photoreal objects flagged for measurement too) are also counted on their own, with the change of
+// their receiving ramp band (only where the directional part is visible in both frames) and, as a control, the
+// change of a ramp band against a fixed world direction (what reprojection and normal maps produce alone).
 import { FRAME_WGSL } from './frame.ts';
 import type { GBuffer } from './gbuffer.ts';
 
@@ -48,7 +51,7 @@ ${FRAME_WGSL}
 @group(0) @binding(6) var irrPrev: texture_2d<f32>;
 @group(0) @binding(7) var<storage, read_write> counters: array<atomic<u32>>;
 @group(0) @binding(8) var heat: texture_storage_2d<rgba8unorm, write>;
-var<workgroup> wc: array<atomic<u32>, 8>;
+var<workgroup> wc: array<atomic<u32>, 16>;
 
 // World-fixed smooth field with a cosine-like normal dependence, like irradiance.
 fn control(x: vec3f, n: vec3f) -> f32 {
@@ -57,7 +60,7 @@ fn control(x: vec3f, n: vec3f) -> f32 {
 fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
 
 @compute @workgroup_size(8, 8) fn flicker(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
-  if (li < 8u) { atomicStore(&wc[li], 0u); }
+  if (li < 16u) { atomicStore(&wc[li], 0u); }
   workgroupBarrier();
   var ok = gid.x < u32(F.size.x) && gid.y < u32(F.size.y) && F.ru2.z == 1u;
   let px = vec2i(gid.xy);
@@ -86,8 +89,9 @@ fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
       let nq = textureLoad(normalPrev, q, 0).xyz;
       ok = distance(x, xq) < tol && dot(n, nq) > 0.9;
       if (ok) {
-        let e = lb(luminance(textureLoad(irrTex, px, 0).rgb));
-        let eq = lb(luminance(textureLoad(irrPrev, q, 0).rgb));
+        let ir = textureLoad(irrTex, px, 0); let iq = textureLoad(irrPrev, q, 0);
+        let e = lb(luminance(ir.rgb));
+        let eq = lb(luminance(iq.rgb));
         let c0 = lb(control(x, n)); let c1 = lb(control(xq, nq));
         atomicAdd(&wc[0], 1u);
         hv = vec4f(0.25, 0.25, 0.25, 1.0);
@@ -97,19 +101,33 @@ fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
         if (floor(c0) != floor(c1)) { atomicAdd(&wc[4], 1u); }
         atomicAdd(&wc[5], u32(min(abs(e - eq), 10.0) * 1000.0));
         atomicAdd(&wc[6], u32(min(abs(c0 - c1), 10.0) * 1000.0));
+        if (ir.a > 1.5 && iq.a > 1.5) {
+          atomicAdd(&wc[7], 1u);
+          if (floor(e * 4.0) != floor(eq * 4.0)) { atomicAdd(&wc[8], 1u); hv = vec4f(1.0, 0.9, 0.1, 1.0); }
+          if (floor(e) != floor(eq)) { atomicAdd(&wc[9], 1u); }
+          if (ir.a > 3.5 && iq.a > 3.5) {
+            atomicAdd(&wc[12], 1u);
+            if (ir.a != iq.a) { atomicAdd(&wc[10], 1u); }
+          }
+          let k = normalize(vec3f(0.3, 0.8, 0.5));
+          if ((dot(n, k) > 0.0) != (dot(nq, k) > 0.0)) { atomicAdd(&wc[11], 1u); }
+          atomicAdd(&wc[13], u32(min(abs(e - eq), 10.0) * 1000.0));
+        }
       }
     }
   }
   if (gid.x < u32(F.size.x) && gid.y < u32(F.size.y)) { textureStore(heat, px, hv); }
   workgroupBarrier();
-  if (li < 8u) {
+  if (li < 16u) {
     let v = atomicLoad(&wc[li]);
-    if (v > 0u) { atomicAdd(&counters[F.ru.y * 8u + li], v); }
+    if (v > 0u) { atomicAdd(&counters[F.ru.y * 16u + li], v); }
   }
 }
 `;
 
-export const FLICKER_FIELDS = ['valid', 'giFine', 'giCoarse', 'ctrlFine', 'ctrlCoarse', 'giAbsDlog2Milli', 'ctrlAbsDlog2Milli', 'unused'] as const;
+export const FLICKER_FIELDS = ['valid', 'giFine', 'giCoarse', 'ctrlFine', 'ctrlCoarse', 'giAbsDlog2Milli', 'ctrlAbsDlog2Milli',
+  'toonValid', 'toonFine', 'toonCoarse', 'toonRampChange', 'ctrlRampChange', 'toonSignificant', 'toonAbsDlog2Milli', 'unused', 'unused'] as const;
+export const FLICKER_SLOT = 16; // counter words per frame
 
 export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit: GPUTexture, irr: GPUTexture, maxSlots: number) {
   const { width, height } = g;
@@ -133,7 +151,7 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
   const irrPrev = device.createTexture({ size: [width, height], format: irr.format, usage });
   const heat = device.createTexture({ label: 'flicker.heat', size: [width, height], format: 'rgba8unorm',
     usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_SRC });
-  const counters = device.createBuffer({ size: maxSlots * 32, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
+  const counters = device.createBuffer({ size: maxSlots * FLICKER_SLOT * 4, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
   const fm = device.createShaderModule({ code: FLICKER_WGSL, label: 'flicker' });
   const flickerPipe = device.createComputePipeline({ layout: 'auto', compute: { module: fm, entryPoint: 'flicker' } });
   const flickerBG = device.createBindGroup({ layout: flickerPipe.getBindGroupLayout(0), entries: [
@@ -157,18 +175,18 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
       enc.copyTextureToTexture({ texture: irr }, { texture: irrPrev }, [width, height]);
     },
     async readCounters(slots: number): Promise<Uint32Array> {
-      const read = device.createBuffer({ size: slots * 32, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+      const read = device.createBuffer({ size: slots * FLICKER_SLOT * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
       const enc = device.createCommandEncoder();
-      enc.copyBufferToBuffer(counters, 0, read, 0, slots * 32);
+      enc.copyBufferToBuffer(counters, 0, read, 0, slots * FLICKER_SLOT * 4);
       device.queue.submit([enc.finish()]);
       await read.mapAsync(GPUMapMode.READ);
       const r = new Uint32Array(read.getMappedRange().slice(0));
       read.unmap(); read.destroy();
       return r;
     },
-    clearCounters() { device.queue.writeBuffer(counters, 0, new Uint8Array(maxSlots * 32)); },
+    clearCounters() { device.queue.writeBuffer(counters, 0, new Uint8Array(maxSlots * FLICKER_SLOT * 4)); },
     /** Mode 0: final (direct + indirect), 1: indirect irradiance on a 0.8 albedo, 2: direct only,
-     * 3: flicker heatmap of the last measured frame (red: fine band changed, grey: valid). Tightly packed RGBA8. */
+     * 3: flicker heatmap of the last measured frame (red: fine band changed, yellow: on a toon pixel, grey: valid). Tightly packed RGBA8. */
     async capture(mode: number): Promise<Uint8Array> {
       const enc = device.createCommandEncoder();
       if (mode < 3) {

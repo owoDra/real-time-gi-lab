@@ -1,29 +1,18 @@
 // Compares the renderer's static indirect irradiance (--dump-irr) with the Mitsuba reference
-// (scripts/reference_irradiance.py). Ours is box-filtered down to the reference resolution.
+// (scripts/reference_irradiance.py). Ours is box-filtered down to the reference resolution. Only photoreal pixels are
+// compared (a reference pixel is used when every one of our pixels in it is photoreal: tag 1).
 // Usage: node build/native/compare_ref.mjs --ref E.pfm[,E2.pfm...] --ours a.static.irr.f32[,b...] [--width 1920 --height 1080]
 //   [--png DIR]  (side-by-side images: reference | ours, same exposure) [--json FILE]
 import { readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { lum } from '../core/rcrun.ts';
 import { writePng } from './env.ts';
+import { readPfm } from './pfm.ts';
 
 const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const W = Number(arg('--width', '1920')), H = Number(arg('--height', '1080'));
 
-function readPfm(file: string) {
-  const buf = readFileSync(file);
-  let off = 0;
-  const line = () => { const e = buf.indexOf(10, off); const s = buf.toString('ascii', off, e).trim(); off = e + 1; return s; };
-  const kind = line(); if (kind !== 'PF') throw new Error(`not an RGB PFM: ${kind}`);
-  const [w, h] = line().split(/\s+/).map(Number); const scale = Number(line());
-  const le = scale < 0, rgb = new Float32Array(w * h * 3);
-  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) for (let c = 0; c < 3; c++) {
-    const o = off + ((h - 1 - y) * w + x) * 12 + c * 4; // PFM rows go bottom to top
-    rgb[(y * w + x) * 3 + c] = le ? buf.readFloatLE(o) : buf.readFloatBE(o);
-  }
-  return { w, h, rgb };
-}
 
 // Several reference files (independent seeds) are averaged; the difference between the first two shows the
 // reference's own noise (the average's error is about half of it).
@@ -46,14 +35,15 @@ const tonemap = (v: number) => Math.round(255 * Math.min(1, Math.pow(Math.max(v,
 const results: Record<string, unknown> = {};
 for (const file of arg('--ours', '').split(',')) {
   const raw = readFileSync(file), f = new Float32Array(raw.buffer, raw.byteOffset, raw.byteLength / 4);
-  const ours = new Float32Array(ref.w * ref.h * 3), ok = new Uint8Array(ref.w * ref.h);
+  // ok: every pixel photoreal (compared); shown: every pixel valid (toon pixels are drawn but not compared).
+  const ours = new Float32Array(ref.w * ref.h * 3), ok = new Uint8Array(ref.w * ref.h), shown = new Uint8Array(ref.w * ref.h);
   for (let y = 0; y < ref.h; y++) for (let x = 0; x < ref.w; x++) {
-    let n = 0; const s = [0, 0, 0];
+    let n = 0, photo = 0; const s = [0, 0, 0];
     for (let j = 0; j < fy; j++) for (let i = 0; i < fx; i++) {
       const p = (y * fy + j) * W + x * fx + i;
-      if (f[p * 4 + 3] > 0.5) { n++; for (let c = 0; c < 3; c++) s[c] += f[p * 4 + c]; }
+      if (f[p * 4 + 3] > 0.5) { n++; if (f[p * 4 + 3] < 1.5) photo++; for (let c = 0; c < 3; c++) s[c] += f[p * 4 + c]; }
     }
-    if (n === fx * fy) { ok[y * ref.w + x] = 1; for (let c = 0; c < 3; c++) ours[(y * ref.w + x) * 3 + c] = s[c] / n; }
+    if (n === fx * fy) { shown[y * ref.w + x] = 1; ok[y * ref.w + x] = photo === n ? 1 : 0; for (let c = 0; c < 3; c++) ours[(y * ref.w + x) * 3 + c] = s[c] / n; }
   }
   let sr = 0, so = 0, sabs = 0, cnt = 0;
   const rel: number[] = [];
@@ -77,7 +67,7 @@ for (const file of arg('--ours', '').split(',')) {
       const p = y * ref.w + x;
       for (let c = 0; c < 3; c++) {
         img[(y * ref.w * 2 + x) * 4 + c] = tonemap(ref.rgb[p * 3 + c] * k);
-        img[(y * ref.w * 2 + ref.w + x) * 4 + c] = ok[p] ? tonemap(ours[p * 3 + c] * k) : 255 * (c === 0 ? 1 : 0);
+        img[(y * ref.w * 2 + ref.w + x) * 4 + c] = shown[p] ? tonemap(ours[p * 3 + c] * k) : 255 * (c === 0 ? 1 : 0);
       }
       img[(y * ref.w * 2 + x) * 4 + 3] = 255; img[(y * ref.w * 2 + ref.w + x) * 4 + 3] = 255;
     }

@@ -1,11 +1,11 @@
 // Radiance-cascade runner (S1, S2): G-buffer + sun + voxel rebuild + radiance cascades, a static and a moving
 // camera, GPU timestamps per pass, the band-boundary flicker counters, tracer statistics and captures.
 import { buildBvh } from './bvh.ts';
-import { cameraMatrices, octSolidAngles, packFrame, type Camera, type FrameParams } from './frame.ts';
+import { cameraMatrices, FRAME_BYTES, octSolidAngles, packFrame, type Camera, type FrameParams } from './frame.ts';
 import { createGBuffer, createGBufferRenderer, type GBuffer } from './gbuffer.ts';
 import { createLighting, type Lighting } from './lighting.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
-import { createPost, FLICKER_FIELDS } from './post.ts';
+import { createPost, FLICKER_FIELDS, FLICKER_SLOT } from './post.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 import type { SceneSpec } from './scenes.ts';
@@ -27,7 +27,7 @@ export interface RunContext {
 export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneGpu,
   opts: { voxel: boolean; bvh: boolean; vox?: Partial<VoxParams> }, width = 1920, height = 1080): RunContext {
   const g = createGBuffer(device, width, height);
-  const frame = device.createBuffer({ label: 'frame', size: 136 * 4, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const frame = device.createBuffer({ label: 'frame', size: FRAME_BYTES, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const lighting = createLighting(device, spec.scene, gpu, g, frame, spec.sunDir);
   const S = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST;
   const dummy = () => device.createBuffer({ size: 64, usage: S });
@@ -80,7 +80,7 @@ function halfToFloat(h: number) {
   return s * (1 + m / 1024) * 2 ** (e - 15);
 }
 
-/** Indirect irradiance (rgb) and validity of every pixel. */
+/** Indirect irradiance (rgb), validity and the gather's tag (1 photoreal, >= 2 toon) of every pixel. */
 export async function readIrradiance(device: GPUDevice, tex: GPUTexture, width: number, height: number) {
   const bytesPerRow = Math.ceil(width * 8 / 256) * 256;
   const buf = device.createBuffer({ size: bytesPerRow * height, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
@@ -90,24 +90,25 @@ export async function readIrradiance(device: GPUDevice, tex: GPUTexture, width: 
   await buf.mapAsync(GPUMapMode.READ);
   const src = new Uint16Array(buf.getMappedRange().slice(0));
   buf.unmap(); buf.destroy();
-  const rgb = new Float32Array(width * height * 3), valid = new Uint8Array(width * height);
+  const rgb = new Float32Array(width * height * 3), valid = new Uint8Array(width * height), tag = new Uint8Array(width * height);
   for (let y = 0; y < height; y++)
     for (let x = 0; x < width; x++) {
       const o = y * bytesPerRow / 2 + x * 4, p = y * width + x;
       for (let c = 0; c < 3; c++) rgb[p * 3 + c] = halfToFloat(src[o + c]);
-      valid[p] = halfToFloat(src[o + 3]) > 0.5 ? 1 : 0;
+      const a = halfToFloat(src[o + 3]);
+      valid[p] = a > 0.5 ? 1 : 0; tag[p] = Math.round(a);
     }
-  return { rgb, valid };
+  return { rgb, valid, tag };
 }
 
 export const lum = (r: number, g: number, b: number) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-/** Error of an irradiance image against a reference, over pixels valid in both. */
-export function compareIrradiance(a: { rgb: Float32Array; valid: Uint8Array }, ref: { rgb: Float32Array; valid: Uint8Array }) {
+/** Error of an irradiance image against a reference, over photoreal pixels valid in both. */
+export function compareIrradiance(a: { rgb: Float32Array; valid: Uint8Array; tag: Uint8Array }, ref: { rgb: Float32Array; valid: Uint8Array; tag: Uint8Array }) {
   let sa = 0, sr = 0, sabs = 0, n = 0;
   const rel: number[] = [];
   for (let p = 0; p < ref.valid.length; p++) {
-    if (!a.valid[p] || !ref.valid[p]) continue;
+    if (!a.valid[p] || !ref.valid[p] || a.tag[p] >= 2 || ref.tag[p] >= 2) continue;
     const la = lum(a.rgb[p * 3], a.rgb[p * 3 + 1], a.rgb[p * 3 + 2]), lr = lum(ref.rgb[p * 3], ref.rgb[p * 3 + 1], ref.rgb[p * 3 + 2]);
     sa += la; sr += lr; sabs += Math.abs(la - lr); n++;
     if (p % 7 === 0) rel.push(Math.abs(la - lr) / Math.max(lr, 1e-3));
@@ -131,6 +132,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     cam, prevCam, lightViewProj: lighting.lightViewProj, width, height, sunDir: spec.sunDir, sunE: SUN_E, sky: opts.sky,
     sMin: p.sMin, P: p.P, lift: p.lift, thicknessMin: p.thicknessMin, pxStride: p.pxStride, exposure: opts.exposure,
     cascades: p.cascades, slot, regStride: p.regStride, maxSteps: p.maxSteps, rayStride: p.rayStride, seed, prevValid, analytic: p.analytic, omega0: ctx.omega0,
+    style: [p.styleEmit ? 1 : 0, p.styleRecv ? 1 : 0, p.rampSoft],
   });
   const setCamera = (cam: Camera) => {
     const m = cameraMatrices(cam, width, height);
@@ -223,19 +225,27 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     const timing = Object.fromEntries(Object.entries(passMs).map(([n, v]) => [n, stats(v)]));
 
     const cnt = await post.readCounters(opts.frames);
-    const tot = new Array(8).fill(0);
+    const tot = new Array(FLICKER_SLOT).fill(0);
     let worstFine = 0;
     for (let k = 1; k < opts.frames; k++) {
-      for (let j = 0; j < 8; j++) tot[j] += cnt[k * 8 + j];
-      if (cnt[k * 8] > 0) worstFine = Math.max(worstFine, cnt[k * 8 + 1] / cnt[k * 8]);
+      for (let j = 0; j < FLICKER_SLOT; j++) tot[j] += cnt[k * FLICKER_SLOT + j];
+      if (cnt[k * FLICKER_SLOT] > 0) worstFine = Math.max(worstFine, cnt[k * FLICKER_SLOT + 1] / cnt[k * FLICKER_SLOT]);
     }
-    const rate = (j: number) => Math.round(tot[j] / tot[0] * 1e5) / 1e3; // percent, 3 decimals
+    const pct = (j: number, d: number) => tot[d] ? Math.round(tot[j] / tot[d] * 1e5) / 1e3 : null; // percent, 3 decimals
+    const rate = (j: number) => pct(j, 0);
+    // Photoreal pixels: all valid pixels minus the toon ones.
+    const photo = tot[0] - tot[7];
     const flicker = {
       validPixelsPerFrame: Math.round(tot[0] / (opts.frames - 1)),
       giFinePct: rate(1), giCoarsePct: rate(2), controlFinePct: rate(3), controlCoarsePct: rate(4),
       giMeanAbsDlog2: Math.round(tot[5] / tot[0]) / 1000, controlMeanAbsDlog2: Math.round(tot[6] / tot[0]) / 1000,
       giFineWorstFramePct: Math.round(worstFine * 1e5) / 1e3,
-      fields: FLICKER_FIELDS.slice(0, 7),
+      photoFinePct: photo ? Math.round((tot[1] - tot[8]) / photo * 1e5) / 1e3 : null,
+      photoCoarsePct: photo ? Math.round((tot[2] - tot[9]) / photo * 1e5) / 1e3 : null,
+      toonPixelsPerFrame: Math.round(tot[7] / (opts.frames - 1)),
+      toonFinePct: pct(8, 7), toonCoarsePct: pct(9, 7), toonMeanAbsDlog2: tot[7] ? Math.round(tot[13] / tot[7]) / 1000 : null,
+      toonSignificantPct: pct(12, 7), toonRampChangePct: pct(10, 12), controlRampChangePct: pct(11, 7),
+      fields: FLICKER_FIELDS.slice(0, 14),
     };
     const counts = await rc.readCounts();
     const vox = useVox ? await voxWorld!.readCounters() : null;

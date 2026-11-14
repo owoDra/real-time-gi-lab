@@ -1,0 +1,69 @@
+{
+  "kind": "exploratory (探索値)",
+  "refBase": [
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "out/mitsuba/sponza/E-960x540-512spp-sky0_0_0-seed1.pfm"
+  ],
+  "refStyle": [
+    "out/mitsuba/sponza-objects/E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "out/mitsuba/sponza-objects/E-960x540-512spp-sky0_0_0-seed1.pfm"
+  ],
+  "oursBase": "out/s3/irr/world-32-tri-rc2.static.irr.f32",
+  "blockPx": 8,
+  "affectedThreshold": 0.1,
+  "results": {
+    "world-32-tri-rc2.static.irr.f32": {
+      "allPhotoreal": {
+        "base": {
+          "pixels": 492206,
+          "meanRef": 0.0394,
+          "meanOurs": 0.0342,
+          "bias": -0.1316,
+          "meanAbsRel": 0.3602
+        },
+        "style": {
+          "pixels": 492206,
+          "meanRef": 0.0393,
+          "meanOurs": 0.0344,
+          "bias": -0.1242,
+          "meanAbsRel": 0.3645
+        }
+      },
+      "affected": {
+        "blocks": 4595,
+        "base": {
+          "pixels": 293380,
+          "meanRef": 0.0222,
+          "meanOurs": 0.0186,
+          "bias": -0.1632,
+          "meanAbsRel": 0.3892
+        },
+        "style": {
+          "pixels": 293380,
+          "meanRef": 0.0229,
+          "meanOurs": 0.0205,
+          "bias": -0.1082,
+          "meanAbsRel": 0.3871
+        },
+        "effect": {
+          "ref": 0.0007,
+          "ours": 0.0018,
+          "captured": 2.642,
+          "meanAbsErrorOverMeanAbsRef": 6.6521
+        },
+        "effectRgb": {
+          "ref": [
+            0.0082,
+            -0.0012,
+            -0.0031
+          ],
+          "ours": [
+            0.0092,
+            0,
+            -0.0023
+          ]
+        }
+      }
+    }
+  }
+}

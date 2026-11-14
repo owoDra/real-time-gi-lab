@@ -77,9 +77,13 @@ mise run s2:native -- --scene sponza --configs world-32-voxel,world-32-tri [--no
                      # S2：区間トレーサ（depth / voxel / hybrid / tri）、可視性の比較、リーク（--scene leak-<厚み>）
                      # 設定トークン vrel / norel：プローブの押し出しをボクセルから決める / しない（既定は G-buffer）
 mise run s2:native -- --scene sponza --vox-bench   # 再ボクセル化の段ごとの時間（--scene sponza-wide10 / sponza-dense9）
-mise run ref:export -- --scene sponza              # Mitsuba 用のシーン変換（out/mitsuba/<scene>）
+mise run s2:native -- --scene sponza-toon --configs world-32-voxel-rc2-vrel[-norecv|-noemit|-soft<x>] [--no-sky]
+                     # S3：トゥーン物体とスタイル演算子（--scene sponza-objects は同じ物体を写実材質で）
+mise run ref:export -- --scene sponza              # Mitsuba 用のシーン変換（out/mitsuba/<scene>。sponza-toon / sponza-objects も）
 build/refenv/bin/python scripts/reference_irradiance.py out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N]
 mise run ref:compare -- --ref A.pfm,B.pfm --ours <cfg>.static.irr.f32 [--png DIR]   # 参照との誤差（s2:native --dump-irr）
+mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --ours-style y.irr.f32 [--png DIR]
+                     # S3：物体あり / なしで写実部分の誤差と物体の効果の再現
 ```
 
 設定名の書式と引数は `src/native/rc.ts` の先頭に書いてある。

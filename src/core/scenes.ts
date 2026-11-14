@@ -1,9 +1,10 @@
 // S2 scenes: Sponza, Sponza made 10x wider (ten copies in a row) or 10x denser (every triangle split into
 // nine with the same surface), and enclosed leak rooms after N004 (legacy/scenes/n004_scene_factory.py).
+// S3: Sponza with toon objects (saturated, untextured, toon style) standing on the atrium floor in the sun.
 import { s0Camera } from './bench.ts';
 import type { Camera } from './frame.ts';
 import type { MaterialDesc, SceneData } from './gltf.ts';
-import { normalize, type Vec3 } from './math.ts';
+import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
 
 export interface SceneSpec {
   name: string;
@@ -142,4 +143,104 @@ export function leakRoom(t: number): SceneSpec {
   const scene = b.scene();
   return { name: `leak-${t}`, scene, camera: { eye: [2.6, 1.6, 1.8], target: [0.2, 1.0, -1.4], fovYDeg: 75, near: 0.05 },
     moving: false, sunDir: [-1, 1.1, 0.35], enclosed: true };
+}
+
+/** Smooth closed surface over a (u, v) grid, u wrapping; f returns position and outward normal. Each triangle is
+ * wound counter-clockwise seen from outside (the G-buffer flips the normal of back faces, double-sided or not). */
+function surface(nu: number, nv: number, f: (u: number, v: number) => [Vec3, Vec3]) {
+  const pos: number[] = [], nrm: number[] = [], idx: number[] = [];
+  for (let j = 0; j <= nv; j++)
+    for (let i = 0; i <= nu; i++) { const [p, n] = f(i / nu, j / nv); pos.push(...p); nrm.push(...normalize(n)); }
+  const at = (i: number, j: number) => j * (nu + 1) + i;
+  const tri = (a: number, b: number, c: number) => {
+    const P = (k: number): Vec3 => [pos[k * 3], pos[k * 3 + 1], pos[k * 3 + 2]];
+    const [pa, pb, pc] = [P(a), P(b), P(c)];
+    const g = cross([pb[0] - pa[0], pb[1] - pa[1], pb[2] - pa[2]], [pc[0] - pa[0], pc[1] - pa[1], pc[2] - pa[2]]);
+    const n = [0, 1, 2].map((q) => nrm[a * 3 + q] + nrm[b * 3 + q] + nrm[c * 3 + q]);
+    if (g[0] * n[0] + g[1] * n[1] + g[2] * n[2] >= 0) idx.push(a, b, c); else idx.push(a, c, b);
+  };
+  for (let j = 0; j < nv; j++)
+    for (let i = 0; i < nu; i++) { tri(at(i, j), at(i, j + 1), at(i + 1, j + 1)); tri(at(i, j), at(i + 1, j + 1), at(i + 1, j)); }
+  return { pos, nrm, idx };
+}
+/** Surface of revolution about the y axis through c. profile(v) -> [radius, height, normal radial, normal y]. */
+function revolve(c: Vec3, profile: (v: number) => [number, number, number, number], nv: number) {
+  return surface(64, nv, (u, v) => {
+    const [r, y, nr, ny] = profile(v), a = 2 * Math.PI * u;
+    return [[c[0] + r * Math.cos(a), c[1] + y, c[2] + r * Math.sin(a)], [nr * Math.cos(a), ny, nr * Math.sin(a)]];
+  });
+}
+const sphere = (c: Vec3, r: number) => revolve(c, (v) => { const t = Math.PI * v; return [r * Math.sin(t), -r * Math.cos(t), Math.sin(t), -Math.cos(t)]; }, 32);
+/** Vertical capsule standing on c (radius r, total height h). */
+const capsule = (c: Vec3, r: number, h: number) => revolve(c, (v) => {
+  const L = h - 2 * r, total = Math.PI * r + L, s = v * total;
+  if (s < Math.PI * r / 2) { const t = s / r; return [r * Math.sin(t), r - r * Math.cos(t), Math.sin(t), -Math.cos(t)]; }
+  if (s < Math.PI * r / 2 + L) return [r, r + s - Math.PI * r / 2, 1, 0];
+  const t = (s - L) / r; return [r * Math.sin(t), r + L - r * Math.cos(t), Math.sin(t), -Math.cos(t)];
+}, 48);
+/** Torus around the unit axis a through c. */
+function torus(c: Vec3, a: Vec3, R: number, r: number) {
+  const e1 = normalize(cross(a, Math.abs(a[1]) < 0.9 ? [0, 1, 0] : [1, 0, 0])), e2 = cross(a, e1);
+  return surface(96, 32, (u, v) => {
+    const p = 2 * Math.PI * u, q = 2 * Math.PI * v;
+    const radial = add3(scale3(e1, Math.cos(p)), scale3(e2, Math.sin(p)));
+    const n = add3(scale3(radial, Math.cos(q)), scale3(a, Math.sin(q)));
+    return [add3(c, add3(scale3(radial, R), scale3(n, r))), n];
+  });
+}
+
+const toonMaterial = (name: string, rgb: [number, number, number]): MaterialDesc => ({ name, baseColorFactor: [...rgb, 1], baseColorImage: -1,
+  normalImage: -1, metallicRoughnessImage: -1, metallicFactor: 0, roughnessFactor: 1, alphaMask: false, alphaCutoff: 0.5, doubleSided: true, style: 1 });
+
+/** Height of the highest surface below `top` on the vertical line through (x, z). */
+function groundAt(s: SceneData, x: number, z: number, top: number) {
+  let best = -Infinity;
+  for (const p of s.primitives)
+    for (let k = p.firstIndex; k < p.firstIndex + p.indexCount; k += 3) {
+      const v = [0, 1, 2].map((q) => (s.indices[k + q] + p.baseVertex) * 3);
+      const [ax, az, bx, bz, cx, cz] = [s.positions[v[0]], s.positions[v[0] + 2], s.positions[v[1]], s.positions[v[1] + 2], s.positions[v[2]], s.positions[v[2] + 2]];
+      const d = (bz - cz) * (ax - cx) + (cx - bx) * (az - cz);
+      if (Math.abs(d) < 1e-12) continue;
+      const w0 = ((bz - cz) * (x - cx) + (cx - bx) * (z - cz)) / d, w1 = ((cz - az) * (x - cx) + (ax - cx) * (z - cz)) / d, w2 = 1 - w0 - w1;
+      if (w0 < 0 || w1 < 0 || w2 < 0) continue;
+      const y = w0 * s.positions[v[0] + 1] + w1 * s.positions[v[1] + 1] + w2 * s.positions[v[2] + 1];
+      if (y < top && y > best) best = y;
+    }
+  return best;
+}
+
+/** Sponza with toon objects on the atrium floor ahead of the camera, along the moving camera's path (which walks
+ * 6 m forward): an orange sphere, a blue ring facing the camera and a green capsule figure with a head. With
+ * photoreal = true the same objects get photoreal materials (style 0). */
+export function toonSponza(base: SceneData, photoreal = false): SceneSpec {
+  const cam = s0Camera(base);
+  const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
+  const side = normalize(cross(f, [0, 1, 0]));
+  const at = (ahead: number, aside: number, y: number): Vec3 => {
+    const p = add3(add3(cam.eye, scale3(f, ahead)), scale3(side, aside));
+    return [p[0], groundAt(base, p[0], p[2], cam.eye[1]) + y, p[2]];
+  };
+  const objects = [
+    { mat: toonMaterial('toon-orange', [0.75, 0.28, 0.06]), mesh: [sphere(at(5, 1.0, 0.7), 0.7)] },
+    { mat: toonMaterial('toon-blue', [0.12, 0.25, 0.8]), mesh: [torus(at(7, -1.0, 0.95), f, 0.7, 0.25)] },
+    { mat: toonMaterial('toon-green', [0.15, 0.65, 0.18]), mesh: [capsule(at(9.5, 0.3, 0), 0.35, 1.4), sphere(at(9.5, 0.3, 1.73), 0.33)] },
+  ];
+  const pos = Array.from(base.positions), nrm = Array.from(base.normals), idx = Array.from(base.indices);
+  const materials = base.materials.slice(), primitives = base.primitives.slice();
+  for (const o of objects) {
+    const material = materials.length;
+    materials.push(photoreal ? { ...o.mat, name: o.mat.name.replace('toon', 'plain'), style: 0, object: true } : o.mat);
+    for (const m of o.mesh) {
+      const baseVertex = pos.length / 3, firstIndex = idx.length;
+      pos.push(...m.pos); nrm.push(...m.nrm); idx.push(...m.idx);
+      primitives.push({ firstIndex, indexCount: m.idx.length, baseVertex, material });
+    }
+  }
+  const positions = new Float32Array(pos), V = positions.length / 3;
+  const uvs = new Float32Array(V * 2), tangents = new Float32Array(V * 4);
+  uvs.set(base.uvs); tangents.set(base.tangents);
+  const [boundsMin, boundsMax] = bounds(positions);
+  const scene: SceneData = { ...base, positions, normals: new Float32Array(nrm), uvs, tangents, indices: new Uint32Array(idx), primitives, materials,
+    boundsMin, boundsMax, triangleCount: idx.length / 3 };
+  return { name: photoreal ? 'sponza-objects' : 'sponza-toon', scene, camera: cam, moving: true, sunDir: SPONZA_SUN, enclosed: false };
 }

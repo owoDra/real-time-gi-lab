@@ -166,7 +166,7 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
   let q0 = bvhTris[hit * 4u]; let q1 = bvhTris[hit * 4u + 1u]; let q2 = bvhTris[hit * 4u + 2u]; let q3 = bvhTris[hit * 4u + 3u];
   let m = materials[bitcast<u32>(q0.w)];
   let uv = vec2f(q1.w, q2.w) * (1.0 - hb.x - hb.y) + q3.xy * hb.x + q3.zw * hb.y;
-  let alb = (textureSampleLevel(baseColorTex, linSamp, uv, m.layers.x, 3.0) * m.baseColorFactor).rgb;
+  let alb = vec4f((textureSampleLevel(baseColorTex, linSamp, uv, m.layers.x, 3.0) * m.baseColorFactor).rgb, select(0.0, 1.0, (m.layers.w & 4u) != 0u));
   let n = normalize(cross(q1.xyz, q2.xyz));
   return vec4f(triShade(o + d * best, n, alb, d), 0.0);
 }

@@ -15,6 +15,7 @@ struct Frame {
   ru: vec4u,      // cascades, frame slot, registration stride, max steps per interval
   ru2: vec4u,     // ray stride (split), random seed, previous frame valid, analytic trace (placement test)
   omega0: array<vec4f, 4>, // solid angle of each c0 octahedral texel (4x4)
+  style: vec4f,   // S3: emission operator on (1/0), receiving operator (0 physical, 1 ramp), ramp half width, 0
 }
 fn worldAt(px: vec2i, d: f32) -> vec3f {
   let ndc = vec2f((f32(px.x) + 0.5) * F.size.z * 2.0 - 1.0, 1.0 - (f32(px.y) + 0.5) * F.size.w * 2.0);
@@ -28,7 +29,7 @@ fn prevWorldAt(px: vec2i, d: f32) -> vec3f {
 }
 fn luminance(c: vec3f) -> f32 { return dot(c, vec3f(0.2126, 0.7152, 0.0722)); }
 `;
-export const FRAME_BYTES = 136 * 4;
+export const FRAME_BYTES = 140 * 4;
 
 export interface Camera { eye: Vec3; target: Vec3; fovYDeg: number; near: number; }
 
@@ -45,6 +46,7 @@ export interface FrameParams {
   sMin: number; P: number; lift: number; thicknessMin: number; pxStride: number; exposure: number;
   cascades: number; slot: number; regStride: number; maxSteps: number; rayStride: number; seed: number; prevValid: boolean; analytic: boolean;
   omega0: Float32Array;
+  style: [number, number, number];
 }
 
 export function packFrame(p: FrameParams): ArrayBuffer {
@@ -61,6 +63,7 @@ export function packFrame(p: FrameParams): ArrayBuffer {
   u.set([p.cascades, p.slot, p.regStride, p.maxSteps], 112);
   u.set([p.rayStride, p.seed, p.prevValid ? 1 : 0, p.analytic ? 1 : 0], 116);
   f.set(p.omega0, 120);
+  f.set([...p.style, 0], 136);
   return buf;
 }
 

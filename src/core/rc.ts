@@ -17,6 +17,7 @@
 // (one bounce). No history of any kind.
 import { BVH_TRACE_WGSL } from './bvh.ts';
 import { FRAME_WGSL } from './frame.ts';
+import { STYLE_WGSL } from './style.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
 
@@ -59,16 +60,23 @@ export interface RcParams {
   // any view; the gather and the merge then skip probes that voxels hide), 'none' keeps them at their grid
   // points (diagnostic).
   relocate: Relocate;
+  // S3 style operators on toon materials (style.ts): emission side, receiving side (ramp on the dominant direction;
+  // off: the physical irradiance), half width of the receiving ramp in n.d.
+  styleEmit: boolean;
+  styleRecv: boolean;
+  rampSoft: number;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
+  styleEmit: true, styleRecv: true, rampSoft: 0,
 };
 
 const RC_WGSL = /* wgsl */ `
 ${FRAME_WGSL}
+${STYLE_WGSL}
 const PI = 3.14159265;
 const EMPTY = 0u;
 const NONE = 0xffffffffu;
@@ -88,6 +96,7 @@ struct Probe { pos: vec4f, nrm: vec4f, grid: vec4i } // pos.w = s0 (0: invalid),
 @group(0) @binding(3) var normalTex: texture_2d<f32>;
 @group(0) @binding(4) var litTex: texture_2d<f32>;
 @group(0) @binding(5) var irrOut: texture_storage_2d<rgba16float, write>;
+@group(0) @binding(6) var albedoTex: texture_2d<f32>; // a: 1 toon, 0.5 measured photoreal object (S3)
 @group(1) @binding(0) var<uniform> CI: vec4u;
 @group(2) @binding(0) var<storage, read_write> keys: array<atomic<u32>>;
 @group(2) @binding(1) var<storage, read_write> slotProbe: array<u32>;
@@ -118,15 +127,18 @@ fn sunVis(x: vec3f) -> f32 {
 }
 // One-bounce hit radiance, as the direct pass computes it (Lambert, sun, shadow map). The normal is turned to
 // face the ray; a zero normal (opposite faces averaged in one voxel) faces the ray.
-fn shadeHit(p: vec3f, n0: vec3f, alb: vec3f, d: vec3f, bias: f32) -> vec3f {
+// S3: toon hits (alb.a = 1) inject the emission-side operator instead (style.ts).
+fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
   var n = select(-d, n0, dot(n0, n0) > 0.01);
   if (dot(n, d) > 0.0) { n = -n; }
   let ndl = max(dot(n, F.sunDir.xyz), 0.0);
   if (ndl <= 0.0) { return vec3f(0.0); }
-  return alb / PI * F.sunE.rgb * ndl * sunVis(p + n * bias);
+  let vis = sunVis(p + n * bias);
+  if (alb.a > 0.5 && F.style.x > 0.5) { return toonSun(alb.rgb, ndl, vis, F.sunE.rgb); }
+  return alb.rgb / PI * F.sunE.rgb * ndl * vis;
 }
-fn voxShade(entry: vec3f, n: vec3f, alb: vec3f, d: vec3f, v: f32) -> vec3f { return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0); }
-fn triShade(p: vec3f, n: vec3f, alb: vec3f, d: vec3f) -> vec3f { return shadeHit(p, n, alb, d, 0.03); }
+fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32) -> vec3f { return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0); }
+fn triShade(p: vec3f, n: vec3f, alb: vec4f, d: vec3f) -> vec3f { return shadeHit(p, n, alb, d, 0.03); }
 ${VOX_TRACE_WGSL}
 ${BVH_TRACE_WGSL}
 
@@ -640,6 +652,17 @@ fn evalSH(pi: u32, n: vec3f) -> vec3f {
   for (var k = 0u; k < 9u; k++) { e += vec3f(v[k * 3u], v[k * 3u + 1u], v[k * 3u + 2u]) * y[k]; }
   return max(e, vec3f(0.0));
 }
+// L0 and L1 coefficients (irradiance-convolved, basis order 0, y, z, x).
+struct ShL1 { c0: vec3f, cy: vec3f, cz: vec3f, cx: vec3f }
+fn shL1(pi: u32) -> ShL1 {
+  var v: array<f32, 16>;
+  for (var q = 0u; q < 2u; q++) {
+    let w = sh[pi * 4u + q];
+    for (var j = 0u; j < 4u; j++) { let f = unpack2x16float(w[j]); v[q * 8u + j * 2u] = f.x; v[q * 8u + j * 2u + 1u] = f.y; }
+  }
+  return ShL1(vec3f(v[0], v[1], v[2]), vec3f(v[3], v[4], v[5]), vec3f(v[6], v[7], v[8]), vec3f(v[9], v[10], v[11]));
+}
+fn shAdd(a: ShL1, b: ShL1, w: f32) -> ShL1 { return ShL1(a.c0 + w * b.c0, a.cy + w * b.cy, a.cz + w * b.cz, a.cx + w * b.cx); }
 
 // Voxel relocation leaves a probe on the side of the surface its grid point is on, so probes behind a wall
 // (outside a room) would be interpolated into the room: the gather (pixel -> c0 probe) and the merge (probe ->
@@ -669,6 +692,10 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
   let gp = x / spacing(lod, 0u);
   let b = vec3i(floor(gp)); let f = gp - vec3f(b);
   var e = vec3f(0.0); var ws = 0.0; var hidden = 0u; var ww: array<f32, 8>; var qq: array<u32, 8>;
+  // S3: toon pixels also interpolate the L0 / L1 coefficients for the receiving-side operator.
+  let tagA = textureLoad(albedoTex, px, 0).a;
+  let toon = tagA > 0.75;
+  var s1 = ShL1(vec3f(0.0), vec3f(0.0), vec3f(0.0), vec3f(0.0));
   for (var k = 0u; k < 8u; k++) {
     let o = corner(k);
     let q = lookup(0u, keyFor(b + o, lod, 0u));
@@ -680,6 +707,7 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
     let w = (tw.x * tw.y * tw.z + 1e-4) * ((side + 1.0) * (side + 1.0) * 0.25 + 0.02);
     if (LY.wp2.x == 2u && probeOccluded(x, n, pr.pos.xyz, pr.pos.w, 1.0)) { hidden |= 1u << k; ww[k] = w; qq[k] = q; continue; }
     e += w * evalSH(q, n); ws += w;
+    if (toon) { s1 = shAdd(s1, shL1(q), w); }
   }
   // Every probe hidden (the offset start fell into a neighbouring face: concave corners, foliage): retest from two
   // voxels out. Probes still hidden are not used (the pixel stays black rather than leak).
@@ -689,9 +717,20 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
       let pr = probes[LY.c[0].probeOff + qq[k]];
       if (probeOccluded(x, n, pr.pos.xyz, pr.pos.w, 2.0)) { continue; }
       e += ww[k] * evalSH(qq[k], n); ws += ww[k];
+      if (toon) { s1 = shAdd(s1, shL1(qq[k]), ww[k]); }
     }
   }
-  textureStore(irrOut, px, vec4f(select(vec3f(0.0), e / ws, ws > 0.0), 1.0));
+  var outE = select(vec3f(0.0), e / ws, ws > 0.0);
+  // Alpha: 1 photoreal; toon 2 + ramp band (0 / 1) + 2 when the directional part is at least 10% of the ambient;
+  // photoreal objects flagged for measurement 2.
+  var alpha = 1.0;
+  if (toon && ws > 0.0) {
+    let iw = 1.0 / ws;
+    let r = toonReceive(s1.c0 * iw, s1.cy * iw, s1.cz * iw, s1.cx * iw, n, F.style.z);
+    if (F.style.y > 0.5) { outE = r.e; }
+    alpha = 2.0 + r.band + select(0.0, 2.0, r.contrast >= 0.1);
+  } else if (toon || tagA > 0.25) { alpha = 2.0; }
+  textureStore(irrOut, px, vec4f(outE, alpha));
 }
 
 @compute @workgroup_size(8, 8) fn gatherScreen(@builtin(global_invocation_id) gid: vec3u) {
@@ -825,6 +864,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 3, visibility: C, texture: { sampleType: 'unfilterable-float' } },
     { binding: 4, visibility: C, texture: { sampleType: 'unfilterable-float' } },
     { binding: 5, visibility: C, storageTexture: { access: 'write-only', format: 'rgba16float' } },
+    { binding: 6, visibility: C, texture: { sampleType: 'unfilterable-float' } },
   ] });
   const bgl1 = device.createBindGroupLayout({ entries: [{ binding: 0, visibility: C, buffer: { type: 'uniform' } }] });
   const bgl2 = device.createBindGroupLayout({ entries: Array.from({ length: 8 }, (_, i) => ({ binding: i, visibility: C, buffer: { type: 'storage' as const } })) });
@@ -846,6 +886,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: { buffer: layoutBuf } },
     { binding: 2, resource: g.depth.createView() }, { binding: 3, resource: g.normal.createView() },
     { binding: 4, resource: lit.createView() }, { binding: 5, resource: irr.createView() },
+    { binding: 6, resource: g.albedo.createView() },
   ] });
   const bg1 = ci.map((b) => device.createBindGroup({ layout: bgl1, entries: [{ binding: 0, resource: { buffer: b } }] }));
   const bg2 = device.createBindGroup({ layout: bgl2, entries: [keys, slotProbe, probes, rad, sh, counts, accum, parents].map((b, i) => ({ binding: i, resource: { buffer: b } })) });

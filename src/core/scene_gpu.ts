@@ -92,7 +92,8 @@ export async function uploadScene(device: GPUDevice, scene: SceneData, upload: I
     for (const [img, layer] of layerOf[ri]) await upload(device, textures[ri], layer, img);
   textures.forEach((t) => generateMips(device, t));
 
-  // struct Material { baseColorFactor: vec4f, layers: vec4u (bc, n, mr, flags), params: vec4f (metal, rough, cutoff, 0) }
+  // struct Material { baseColorFactor: vec4f, layers: vec4u (bc, n, mr, flags: 1 alpha mask, 2 double-sided, 4 toon, 8 object),
+  //                   params: vec4f (metal, rough, cutoff, 0) }
   const mat = new ArrayBuffer(scene.materials.length * 48);
   scene.materials.forEach((m, i) => {
     const f = new Float32Array(mat, i * 48, 12), u = new Uint32Array(mat, i * 48, 12);
@@ -100,7 +101,7 @@ export async function uploadScene(device: GPUDevice, scene: SceneData, upload: I
     u[4] = layerOf[0].get(m.baseColorImage) ?? 0;
     u[5] = layerOf[1].get(m.normalImage) ?? 0;
     u[6] = layerOf[2].get(m.metallicRoughnessImage) ?? 0;
-    u[7] = (m.alphaMask ? 1 : 0) | (m.doubleSided ? 2 : 0);
+    u[7] = (m.alphaMask ? 1 : 0) | (m.doubleSided ? 2 : 0) | (m.style === 1 ? 4 : 0) | (m.object ? 8 : 0);
     f[8] = m.metallicFactor; f[9] = m.roughnessFactor; f[10] = m.alphaCutoff;
   });
   const materials = buffer(device, new Uint8Array(mat), GPUBufferUsage.STORAGE, 'materials');
