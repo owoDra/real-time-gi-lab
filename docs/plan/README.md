@@ -109,7 +109,7 @@ built（できた物の確認）の進め方：
 
 | 列 | ディレクトリ | ブランチ | 内容 | 今のフェーズ |
 |---|---|---|---|---|
-| 動的な安定性 | [`dynamic-stability/`](dynamic-stability/README.md) | `p2` | 物体や光源が動くと場が跳ぶ問題の対策（RC に遅れ 0 の前置フィルタ）と DDGI 系との比べ直し | 12 |
+| 動的な安定性 | [`dynamic-stability/`](dynamic-stability/README.md) | `p2` | 物体や光源が動くと場が跳ぶ問題の対策（RC に遅れ 0 の前置フィルタ）と DDGI 系との比べ直し | 13 |
 
 この後の列（大規模・高密度、ブラウザ計測、WebGL2 ティア、確認実験）は [spec/50-roadmap.md](../spec/50-roadmap.md)
 にあり、始めるときにディレクトリと `README.md` を作ってこの表に行を足す。フェーズの番号は列をまたいで通しにする。

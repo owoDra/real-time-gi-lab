@@ -1,0 +1,56 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 12: make the vrel relocation and occlusion tests cheaper without changing the image (measurement only)",
+ "date": "2026-11-14",
+ "conditions": {
+  "before": "f96ba232",
+  "checkCommitted": "be2acea8",
+  "default": "world-48-voxel-rc2-vrel",
+  "p1": "world-48-voxel-rc2-vrel-p1",
+  "scene": "sponza-dynobj, sky off",
+  "resolution": "1920x1080",
+  "frames": "warm-up 60 + 240",
+  "vox": {"anchor": "scene", "local": true},
+  "order": "before default -> after default -> after p1, three pairs, one GPU job at a time",
+  "gpu": "native Dawn / Vulkan, one development machine; a web browser, an editor and another 3D application were running and share the GPU (busy 3-5% just before the alternating runs, 12-44% earlier)"
+ },
+ "reproduced": {"excessK16": 0.01192, "giStatic": 3.534, "giMoving": 3.593, "vox": 0.242, "build": 0.861, "trace": 1.105, "merge": 0.082, "gather": 1.241},
+ "bitIdentity": {
+  "method": "sha256 of --dump-irr --static-only, before and after; before taken twice with the same hashes",
+  "sponza (sky)": "b419acfd80f139b957f97495446c8ad3e1db36af34139af56b57273bfaaa1c9a",
+  "sponza-dynobj --pose-frame 0 --no-sky": "7496723f142daae94b9c0757d1b9c0178d6a689f039dedf2e61844239a3b88e9",
+  "sponza-dynobj world-48-voxel-rc2": "5ac742a1020c4157b06603ad8fff66c851a8f157973647de1e55a43d89a582b1",
+  "sponza-dynobj world-48-voxel-rc2-vrel-p1": "498083dc899f9728f5c35ea53b0286332348f13fc67996b70d5575e59dc0a49d",
+  "result": "identical for all four; excess and flicker identical to 5 digits in every alternating run; PNGs byte-identical"
+ },
+ "alternating": {
+  "unit": "GI median ms; passes are static camera",
+  "runs": [
+   {"pair": 1, "config": "before", "static": 3.475, "moving": 3.502, "vox": 0.25, "build": 0.841, "trace": 1.078, "merge": 0.078, "gather": 1.226},
+   {"pair": 1, "config": "after", "static": 3.052, "moving": 3.034, "vox": 0.252, "build": 0.46, "trace": 1.116, "merge": 0.082, "gather": 1.136},
+   {"pair": 1, "config": "after p1", "static": 3.34, "moving": 3.369, "vox": 0.569, "build": 0.458, "trace": 1.118, "merge": 0.073, "gather": 1.124},
+   {"pair": 2, "config": "before", "static": 3.462, "moving": 3.54, "vox": 0.246, "build": 0.836, "trace": 1.081, "merge": 0.075, "gather": 1.219},
+   {"pair": 2, "config": "after", "static": 3.109, "moving": 3.121, "vox": 0.255, "build": 0.468, "trace": 1.137, "merge": 0.082, "gather": 1.166},
+   {"pair": 2, "config": "after p1", "static": 3.349, "moving": 3.373, "vox": 0.578, "build": 0.46, "trace": 1.105, "merge": 0.078, "gather": 1.13},
+   {"pair": 3, "config": "before", "static": 3.612, "moving": 3.657, "vox": 0.254, "build": 0.867, "trace": 1.131, "merge": 0.081, "gather": 1.271},
+   {"pair": 3, "config": "after", "static": 3.195, "moving": 3.149, "vox": 0.264, "build": 0.483, "trace": 1.165, "merge": 0.086, "gather": 1.192},
+   {"pair": 3, "config": "after p1", "static": 3.497, "moving": 3.516, "vox": 0.583, "build": 0.48, "trace": 1.166, "merge": 0.078, "gather": 1.179}
+  ],
+  "beforeMinusAfterStatic": [0.423, 0.353, 0.417],
+  "beforeMinusAfterMoving": [0.468, 0.419, 0.508],
+  "excessK16": {"before": 0.01192, "after": 0.01192, "afterP1": 0.00408},
+  "memoryMiB": {"before": {"used": 25.6, "allocated": 29.6}, "after": {"used": 25.6, "allocated": 29.6}}
+ },
+ "verdict": {
+  "target (all three >= 0.40 ms)": "not met (pair 2: 0.353)",
+  "median": 0.417,
+  "rule": "median >= 0.2 and target missed: proceed to phase 13 only if after-p1 GI <= 4 ms in all three pairs (static and moving)",
+  "afterP1Max": {"static": 3.497, "moving": 3.516},
+  "next": "phase 13 (P1 two-level interpolated read, into the default if its gates hold)"
+ },
+ "exploration": {
+  "buildOnly": {"build": 0.453, "gather": 1.255, "note": "one run, sponza-dynobj pose 0"},
+  "segmentWordCache": {"gather": 1.2},
+  "hoistedLevelAndStart": {"gather": 1.12}
+ }
+}

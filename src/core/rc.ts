@@ -71,8 +71,8 @@ export interface RcParams {
   rampSoft: number;
   // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
   ddgi: DdgiParams | null;
-  // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default: it costs
-  // 0.35-0.45 ms and GI goes over 4 ms (docs/spec/40-dynamic-stability.md).
+  // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default until its read
+  // level is interpolated (docs/spec/40-dynamic-stability.md).
   p1: boolean;
 }
 
@@ -353,36 +353,83 @@ fn voxStoredNormal(cell: vec2u) -> vec3f {
   return n;
 }
 fn voxOcc(L: u32, p: vec3f) -> bool { return voxCell(L, p).x != VOX_MARK; }
-fn relocateVox(p: vec3f, s0: f32, c: u32) -> Reloc {
+fn cubeOff(k: u32, vg: f32) -> vec3f { return (vec3f(f32(k & 3u), f32((k >> 2u) & 3u), f32(k >> 4u)) - 1.5) * vg; }
+
+// One workgroup per probe (relocateVox, linkParents): the occupancy reads are spread over the 64 threads, and every
+// floating-point sum is still taken by one thread in the order of the serial loop (the result is bit-identical).
+var<workgroup> wN: u32;
+var<workgroup> wFlag: u32;
+var<workgroup> wDir: vec3f;
+var<workgroup> wCell: array<vec2u, 64>;
+var<workgroup> wNrm: array<vec3f, 64>;
+var<workgroup> wStep: array<u32, 17>;
+var<workgroup> wPar: array<u32, 8>;
+var<workgroup> wHid: atomic<u32>;
+fn probeOfGroup(wid: vec3u, nwg: vec3u, li: u32, c: u32) -> u32 {
+  if (li == 0u) { wN = probeCount(c); }
+  let n = workgroupUniformLoad(&wN);
+  let pi = wid.y * nwg.x + wid.x;
+  return select(NONE, pi, pi < n);
+}
+@compute @workgroup_size(64) fn relocateVox(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let c = CI.x;
+  let pi = probeOfGroup(wid, nwg, li, c);
+  if (pi == NONE) { return; }
+  let slot = LY.c[c].probeOff + pi;
+  let g = probes[slot].grid.xyz; let lod = probes[slot].grid.w;
+  let s0 = spacing(lod, 0u);
+  let p = vec3f(g) * spacing(lod, c);
   let L = voxLevelFor(voxLevel(s0, c), p);
   let Lg = voxLevelFor(min(L + 1u, u32(VX.a.y) - 1u), p);
   let vg = voxSize(Lg);
-  var grad = vec3f(0.0); var cnt = 0.0;
-  for (var k = 0u; k < 64u; k++) {
-    let o = (vec3f(f32(k & 3u), f32((k >> 2u) & 3u), f32(k >> 4u)) - 1.5) * vg;
-    if (!voxOcc(Lg, p + o)) { continue; }
-    grad -= o; cnt += 1.0;
-  }
-  if (cnt < 1.0) { return Reloc(p, vec3f(0.0)); }
-  var n = grad;
-  if (length(grad) < 0.1 * cnt * vg) {
-    n = vec3f(0.0);
+  // The normal points away from the occupied voxels of the next level in the 4^3 cube around the grid point.
+  wCell[li] = voxCell(Lg, p + cubeOff(li, vg));
+  workgroupBarrier();
+  if (li == 0u) {
+    var grad = vec3f(0.0); var cnt = 0.0;
     for (var k = 0u; k < 64u; k++) {
-      let cell = voxCell(Lg, p + (vec3f(f32(k & 3u), f32((k >> 2u) & 3u), f32(k >> 4u)) - 1.5) * vg);
-      if (cell.x != VOX_MARK) { n += voxStoredNormal(cell); }
+      if (wCell[k].x == VOX_MARK) { continue; }
+      grad -= cubeOff(k, vg); cnt += 1.0;
+    }
+    wDir = grad;
+    wFlag = select(select(2u, 1u, length(grad) < 0.1 * cnt * vg), 0u, cnt < 1.0); // 0 none, 1 ambiguous, 2 gradient
+  }
+  // Ambiguous (grid point inside a thin slab): the voxels' stored normals decide.
+  if (workgroupUniformLoad(&wFlag) == 1u) {
+    if (wCell[li].x != VOX_MARK) { wNrm[li] = voxStoredNormal(wCell[li]); }
+    workgroupBarrier();
+    if (li == 0u) {
+      var n = vec3f(0.0);
+      for (var k = 0u; k < 64u; k++) { if (wCell[k].x != VOX_MARK) { n += wNrm[k]; } }
+      wDir = n;
     }
   }
-  if (length(n) < 1e-4) { return Reloc(p, vec3f(0.0)); }
-  n = normalize(n);
+  if (li == 0u && wFlag != 0u) {
+    if (length(wDir) < 1e-4) { wFlag = 0u; } else { wDir = normalize(wDir); wFlag = 2u; }
+  }
+  if (workgroupUniformLoad(&wFlag) == 0u) {
+    if (li == 0u) { probes[slot].nrm = vec4f(0.0, 0.0, 0.0, viewZ(p)); probes[slot].pos = vec4f(p, s0); }
+    return;
+  }
+  // March along the normal until the probe's voxel and the voxel lift * spacing behind it are empty: step i on thread i.
+  let n = wDir;
   let s = s0 * exp2(f32(c));
   let back = F.rc2.x * s;
   let stp = max(0.5 * voxSize(L), 1.5 * s / 16.0);
-  for (var i = 0u; i <= 16u; i++) {
-    let q = p + n * (f32(i) * stp);
-    if (f32(i) * stp > 1.5 * s) { break; }
-    if (!voxOcc(L, q) && !voxOcc(L, q - n * back)) { return Reloc(q, n); }
+  if (li <= 16u) {
+    let q = p + n * (f32(li) * stp);
+    if (f32(li) * stp > 1.5 * s) { wStep[li] = 2u; }
+    else { wStep[li] = select(0u, 1u, !voxOcc(L, q) && !voxOcc(L, q - n * back)); }
   }
-  return Reloc(p, n);
+  workgroupBarrier();
+  if (li == 0u) {
+    var r = p;
+    for (var i = 0u; i <= 16u; i++) {
+      if (wStep[i] == 2u) { break; }
+      if (wStep[i] == 1u) { r = p + n * (f32(i) * stp); break; }
+    }
+    probes[slot].pos = vec4f(r, s0); probes[slot].nrm = vec4f(n, viewZ(r));
+  }
 }
 
 @compute @workgroup_size(64) fn clearKeys(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -445,32 +492,42 @@ fn relocateVox(p: vec3f, s0: f32, c: u32) -> Reloc {
   let g = rel + originOf(s);
   var r = Reloc(vec3f(g) * s, vec3f(0.0));
   if (LY.wp2.x == 0u) { r = relocate(vec3f(g) * s, s); }
-  else if (LY.wp2.x == 2u) { r = relocateVox(vec3f(g) * s, spacing(lod, 0u), c); }
+  // Voxel relocation (wp2.x == 2) runs afterwards in relocateVox, one workgroup per probe.
   probes[L.probeOff + idx] = Probe(vec4f(r.p, spacing(lod, 0u)), vec4f(r.n, viewZ(r.p)), vec4i(g, lod));
 }
 
 // World probes: find the (up to 8) probes of cascade c+1 that the merge of a cascade-c probe reads, once
-// per probe instead of once per (probe, direction).
+// per probe instead of once per (probe, direction). One workgroup per probe: parent k on threads 8k..8k+7.
 @compute @workgroup_size(64) fn linkParents(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let c = CI.x; let L = LY.c[c];
-  let pi = lin(wid, nwg, li);
-  if (pi >= probeCount(c)) { return; }
+  if (li == 0u) { atomicStore(&wHid, 0u); }
+  let pi = probeOfGroup(wid, nwg, li, c);
+  if (pi == NONE) { return; }
   let pr = probes[L.probeOff + pi];
-  let g = pr.grid.xyz; let lod = pr.grid.w;
-  let lo = g >> vec3u(1u);
-  let odd = (g & vec3i(1)) != vec3i(0);
-  for (var k = 0u; k < 8u; k++) {
+  let k = li >> 3u; let j = li & 7u;
+  if (j == 0u) {
+    let g = pr.grid.xyz; let lod = pr.grid.w;
     let o = corner(k);
     var q = NONE;
-    if (!any((o > vec3i(0)) & !odd)) { q = lookup(c + 1u, keyFor(lo + o, lod, c + 1u)); }
-    // Voxel relocation: parents hidden by voxels are not merged (when all are hidden the probe gets nothing from
-    // above; keeping them leaked light through the walls of the leak room).
-    if (q != NONE && LY.wp2.x == 2u) {
-      let Lv = voxLevelFor(voxLevel(pr.pos.w, c), pr.pos.xyz);
-      if (segOccluded(pr.pos.xyz, probes[LY.c[c + 1u].probeOff + q].pos.xyz, Lv)) { q = NONE; }
-    }
-    parents[(L.probeOff + pi) * 8u + k] = q;
+    if (!any((o > vec3i(0)) & !((g & vec3i(1)) != vec3i(0)))) { q = lookup(c + 1u, keyFor((g >> vec3u(1u)) + o, lod, c + 1u)); }
+    wPar[k] = q;
   }
+  workgroupBarrier();
+  let q = wPar[k];
+  // Voxel relocation: parents hidden by voxels are not merged (when all are hidden the probe gets nothing from
+  // above; keeping them leaked light through the walls of the leak room). The segment's samples (segOccluded) are
+  // spread over the parent's 8 threads.
+  if (q != NONE && LY.wp2.x == 2u) {
+    let Lv = voxLevelFor(voxLevel(pr.pos.w, c), pr.pos.xyz);
+    let a = pr.pos.xyz;
+    let d = probes[LY.c[c + 1u].probeOff + q].pos.xyz - a;
+    let kk = u32(min(ceil(length(d) / voxSize(Lv)), 16.0));
+    for (var i = j; i < kk; i += 8u) {
+      if (voxOcc(Lv, a + d * ((f32(i) + 0.5) / f32(kk)))) { atomicOr(&wHid, 1u << k); break; }
+    }
+  }
+  workgroupBarrier();
+  if (j == 0u) { parents[(L.probeOff + pi) * 8u + k] = select(q, NONE, (atomicLoad(&wHid) & (1u << k)) != 0u); }
 }
 
 @compute @workgroup_size(64) fn setupScreen(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -703,15 +760,25 @@ fn shAdd(a: ShL1, b: ShL1, w: f32) -> ShL1 { return ShL1(a.c0 + w * b.c0, a.cy +
 fn segOccluded(a: vec3f, b: vec3f, L: u32) -> bool {
   let d = b - a;
   let k = u32(min(ceil(length(d) / voxSize(L)), 16.0));
+  // Consecutive samples mostly fall into the same brick and occupancy word: read each once (same result as voxOcc).
+  var lastW = NONE; var occ = 0u;
   for (var i = 0u; i < k; i++) {
-    if (voxOcc(L, a + d * ((f32(i) + 0.5) / f32(k)))) { return true; }
+    let p = a + d * ((f32(i) + 0.5) / f32(k));
+    let v = voxSize(L);
+    let c = vec3i(floor((p - vec3f(VX.origin[L].xyz) * v * 8.0) / v));
+    if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { continue; }
+    let l = c & vec3i(7);
+    let bit = u32(l.x + 8 * l.y + 64 * l.z);
+    let w = voxPtrIndex(L, c >> vec3u(3u)) * 16u + (bit >> 5u);
+    if (w != lastW) {
+      lastW = w;
+      let ptr = vox[w >> 4u];
+      occ = 0u;
+      if (ptr < VOX_MARK) { occ = vox[VX.b.y + ptr * ${BRICK_WORDS}u + (bit >> 5u)]; }
+    }
+    if ((occ & (1u << (bit & 31u))) != 0u) { return true; }
   }
   return false;
-}
-// From the pixel, offset off c0 voxels along its normal.
-fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
-  let L = voxLevelFor(voxLevel(s0, 0u), x);
-  return segOccluded(x + n * (off * voxSize(L)), p, L);
 }
 
 @compute @workgroup_size(8, 8) fn gatherWorld(@builtin(global_invocation_id) gid: vec3u) {
@@ -729,6 +796,10 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
   let tagA = textureLoad(albedoTex, px, 0).a;
   let toon = tagA > 0.75;
   var s1 = ShL1(vec3f(0.0), vec3f(0.0), vec3f(0.0), vec3f(0.0));
+  // Occlusion tests start off c0 voxels along the pixel's normal, at the level of the c0 traces. The c0 probes of a
+  // pixel all have pos.w = spacing(lod, 0), so the level and the start are the same for the 8 of them.
+  let Lo = voxLevelFor(voxLevel(spacing(lod, 0u), 0u), x);
+  let xo1 = x + n * (1.0 * voxSize(Lo));
   for (var k = 0u; k < 8u; k++) {
     let o = corner(k);
     let q = lookup(0u, keyFor(b + o, lod, 0u));
@@ -738,17 +809,18 @@ fn probeOccluded(x: vec3f, n: vec3f, p: vec3f, s0: f32, off: f32) -> bool {
     let dv = pr.pos.xyz - x;
     let side = dot(n, dv) / max(length(dv), 1e-5);
     let w = (tw.x * tw.y * tw.z + 1e-4) * ((side + 1.0) * (side + 1.0) * 0.25 + 0.02);
-    if (LY.wp2.x == 2u && probeOccluded(x, n, pr.pos.xyz, pr.pos.w, 1.0)) { hidden |= 1u << k; ww[k] = w; qq[k] = q; continue; }
+    if (LY.wp2.x == 2u && segOccluded(xo1, pr.pos.xyz, Lo)) { hidden |= 1u << k; ww[k] = w; qq[k] = q; continue; }
     e += w * evalSH(q, n); ws += w;
     if (toon) { s1 = shAdd(s1, shL1(q), w); }
   }
   // Every probe hidden (the offset start fell into a neighbouring face: concave corners, foliage): retest from two
   // voxels out. Probes still hidden are not used (the pixel stays black rather than leak).
   if (ws <= 0.0 && hidden != 0u) {
+    let xo2 = x + n * (2.0 * voxSize(Lo));
     for (var k = 0u; k < 8u; k++) {
       if ((hidden & (1u << k)) == 0u) { continue; }
       let pr = probes[LY.c[0].probeOff + qq[k]];
-      if (probeOccluded(x, n, pr.pos.xyz, pr.pos.w, 2.0)) { continue; }
+      if (segOccluded(xo2, pr.pos.xyz, Lo)) { continue; }
       e += ww[k] * evalSH(qq[k], n); ws += ww[k];
       if (toon) { s1 = shAdd(s1, shL1(qq[k]), ww[k]); }
     }
@@ -910,7 +982,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const module = device.createShaderModule({ code: RC_WGSL, label: 'rc' });
   const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3] });
   const pipe = (entryPoint: string) => device.createComputePipeline({ label: entryPoint, layout: pl, compute: { module, entryPoint } });
-  const P = Object.fromEntries(['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'linkParents', 'setupScreen', 'trace', 'deposit',
+  const P = Object.fromEntries(['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'relocateVox', 'linkParents', 'setupScreen', 'trace', 'deposit',
     'resolve', 'mergeWorld', 'mergeScreen', 'projectSH', 'gatherWorld', 'gatherScreen'].map((e) => [e, pipe(e)]));
   const argsModule = device.createShaderModule({ code: ARGS_WGSL, label: 'rc.args' });
   const argsPipe = device.createComputePipeline({ label: 'writeArgs', layout: 'auto', compute: { module: argsModule, entryPoint: 'writeArgs' } });
@@ -968,14 +1040,24 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
           writeArgs(pass, i);
         }
       } else {
+        // One workgroup per probe up to the cascade's capacity (groups past the probe count return at once), so that
+        // the indirect arguments stay as they are.
+        const perProbe = (name: string, c: number) => {
+          use(pass, name, c);
+          const x = Math.min(casc[c].cap, 65535);
+          pass.dispatchWorkgroups(x, Math.ceil(casc[c].cap / x));
+        };
+        const vrel = params.relocate === 'voxel';
         use(pass, 'registerPixels', 0); linear(pass, Math.ceil(width / params.regStride) * Math.ceil(height / params.regStride));
         use(pass, 'compact', 0); linear(pass, casc[0].hashSize);
+        if (vrel) perProbe('relocateVox', 0);
         writeArgs(pass, 0);
         for (let i = 1; i < N; i++) {
           use(pass, 'registerUp', i); pass.dispatchWorkgroupsIndirect(args, probeArgs(i - 1));
           use(pass, 'compact', i); linear(pass, casc[i].hashSize);
+          if (vrel) perProbe('relocateVox', i);
           writeArgs(pass, i);
-          use(pass, 'linkParents', i - 1); pass.dispatchWorkgroupsIndirect(args, probeArgs(i - 1));
+          perProbe('linkParents', i - 1);
         }
       }
       pass.end();
