@@ -182,7 +182,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     sMin: p.sMin, P: p.P, lift: p.lift, thicknessMin: p.thicknessMin, pxStride: p.pxStride, exposure: opts.exposure,
     cascades: p.cascades, slot, regStride: p.regStride, maxSteps: p.maxSteps, rayStride: p.rayStride, seed, prevValid, analytic: p.analytic, omega0: ctx.omega0,
     style: [p.styleEmit ? 1 : 0, p.styleRecv ? 1 : 0, p.rampSoft],
-    diag: sphere ? { center: sphere.center, radius: sphere.radius, mode: p.diagSphere, material: sphere.material } : undefined,
+    diag: sphere ? { center: sphere.center, radius: sphere.radius, mode: p.diagSphere, material: sphere.material, avg: p.diagSphereAvg } : undefined,
   });
   const setCamera = (cam: Camera) => {
     const m = cameraMatrices(cam, width, height);

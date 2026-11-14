@@ -17,7 +17,7 @@ struct Frame {
   omega0: array<vec4f, 4>, // solid angle of each c0 octahedral texel (4x4)
   style: vec4f,   // S3: emission operator on (1/0), receiving operator (0 physical, 1 ramp), ramp half width, 0
   diag: vec4f,    // E7 (diagnostic): moving sphere centre xyz, radius
-  diagU: vec4u,   // E7 (diagnostic): sphere mode (0 off, 1 out of the GI rays, 2 analytic cone, 3 analytic ray), material
+  diagU: vec4u,   // E7 (diagnostic): sphere mode (0 off, 1 out of the GI rays, 2 analytic cone, 3 analytic ray), material, radiance (0 point, 1 surface mean)
 }
 fn worldAt(px: vec2i, d: f32) -> vec3f {
   let ndc = vec2f((f32(px.x) + 0.5) * F.size.z * 2.0 - 1.0, 1.0 - (f32(px.y) + 0.5) * F.size.w * 2.0);
@@ -50,7 +50,7 @@ export interface FrameParams {
   omega0: Float32Array;
   style: [number, number, number];
   /** E7 (diagnostic): the moving sphere. */
-  diag?: { center: Vec3; radius: number; mode: number; material: number };
+  diag?: { center: Vec3; radius: number; mode: number; material: number; avg: number };
 }
 
 export function packFrame(p: FrameParams): ArrayBuffer {
@@ -68,7 +68,7 @@ export function packFrame(p: FrameParams): ArrayBuffer {
   u.set([p.rayStride, p.seed, p.prevValid ? 1 : 0, p.analytic ? 1 : 0], 116);
   f.set(p.omega0, 120);
   f.set([...p.style, 0], 136);
-  if (p.diag) { f.set([...p.diag.center, p.diag.radius], 140); u.set([p.diag.mode, p.diag.material, 0, 0], 144); }
+  if (p.diag) { f.set([...p.diag.center, p.diag.radius], 140); u.set([p.diag.mode, p.diag.material, p.diag.avg, 0], 144); }
   return buf;
 }
 

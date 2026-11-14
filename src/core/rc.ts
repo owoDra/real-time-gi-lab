@@ -68,6 +68,8 @@ export interface RcParams {
   rampSoft: number;
   // E7 (diagnostic, triangle tracer): the moving sphere 0 as triangles, 1 out of the GI rays, 2 analytic cone, 3 analytic ray.
   diagSphere: number;
+  // E7: radiance of the covered part, 0 one point on the sphere, 1 mean over the sphere surface.
+  diagSphereAvg: number;
   // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
   ddgi: DdgiParams | null;
 }
@@ -76,7 +78,7 @@ export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, diagSphere: 0, ddgi: null,
+  styleEmit: true, styleRecv: true, rampSoft: 0, diagSphere: 0, diagSphereAvg: 0, ddgi: null,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
@@ -158,7 +160,8 @@ ${BVH_TRACE_WGSL}
 // cone from the probe with the solid angle of a direction bin (4 pi / res^2; mode 3: a ray). Its weight is the
 // fraction of the cone covered by the sphere (intersection of two spherical caps), times the fraction of the
 // sphere's depth [D - r, D + r] inside [t0, min(t1, triangle hit)]. Covered: the sphere's one-bounce radiance at
-// the axis hit, or (axis misses) at the sphere point towards the axis. Uncovered: the triangle result.
+// the axis hit, or (axis misses) at the sphere point towards the axis; with F.diagU.z = 1 the mean radiance of
+// the whole sphere surface. Uncovered: the triangle result.
 fn capOverlap(a: f32, b: f32, g: f32) -> f32 {
   if (g >= a + b) { return 0.0; }
   if (g <= abs(a - b)) { let m = min(a, b); return 4.0 * PI * sin(0.5 * m) * sin(0.5 * m); }
@@ -189,7 +192,13 @@ fn sphereCover(o: vec3f, d: vec3f, t0: f32, t1: f32, tri: vec4f, c: u32) -> vec4
   if (h2 >= 0.0) { let th = tc - sqrt(h2); p = o + d * select(tc + sqrt(h2), th, th > 0.0); }
   let m = materials[F.diagU.y];
   let alb = vec4f((textureSampleLevel(baseColorTex, linSamp, vec2f(0.0), m.layers.x, 3.0) * m.baseColorFactor).rgb, select(0.0, 1.0, (m.layers.w & 4u) != 0u));
-  let ls = shadeHit(p, (p - ctr) / rs, alb, d, 0.03);
+  var ls = shadeHit(p, (p - ctr) / rs, alb, d, 0.03);
+  if (F.diagU.z == 1u) {
+    // Mean radiance over the whole sphere surface (Lambert: the mean of max(n.l, 0) is 1/4), the sun visibility
+    // taken at the sub-solar point.
+    let sd = F.sunDir.xyz;
+    ls = alb.rgb / PI * F.sunE.rgb * 0.25 * sunVis(ctr + sd * (rs + 0.03));
+  }
   return vec4f(mix(tri.rgb, ls, cov), (1.0 - cov) * tri.a);
 }
 

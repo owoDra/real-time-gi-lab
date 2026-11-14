@@ -12,7 +12,7 @@
 //   S3 (toon materials, scene sponza-toon): noemit (toon surfaces inject plain Lambert), norecv (toon pixels receive
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
 //   E7 (diagnostic, tri, sponza-dynobj-sphereonly): dsph0 (the sphere out of the GI rays), dsphcone (analytic cone
-//   coverage of the sphere), dsphray (analytic sphere, one ray).
+//   coverage of the sphere), dsphray (analytic sphere, one ray); ...avg: the covered part has the sphere's mean surface radiance.
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseGltf } from '../core/gltf.ts';
@@ -78,6 +78,8 @@ function parseConfig(name: string): RcParams {
     else if (t === 'dsph0') p.diagSphere = 1;
     else if (t === 'dsphcone') p.diagSphere = 2;
     else if (t === 'dsphray') p.diagSphere = 3;
+    else if (t === 'dsphconeavg') { p.diagSphere = 2; p.diagSphereAvg = 1; }
+    else if (t === 'dsphrayavg') { p.diagSphere = 3; p.diagSphereAvg = 1; }
     else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
     else if (/^vs[\d.]+$/.test(t)) p.voxScale = Number(t.slice(2));
     else if (/^vo[\d.]+$/.test(t)) p.voxOffset = Number(t.slice(2));
