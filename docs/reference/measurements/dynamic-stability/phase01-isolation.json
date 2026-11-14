@@ -1,0 +1,1972 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability 01",
+ "date": "2026-11-14",
+ "conditions": "1920x1080, AMD Radeon 8060S, Dawn/Vulkan native, sun only (no sky), static camera, warmup 60 + 240 frames, voxels {anchor: scene, local: true}, 1 run each. GI ms = median GPU timestamps (tri runs: BVH refit on the CPU outside the timing).",
+ "metrics": {
+  "photoFinePct": "band-boundary flicker, fine (1/4 stop), photoreal pixels (unchanged definition)",
+  "staticFinePct": "same, pixels not a dynamic object in either frame",
+  "excess.kK.excessPerFrame": "excess variation, log2 luminance, window K, stops per frame (spec 10)",
+  "excess.kK.tvPerFrame": "total variation per frame, same windows",
+  "excess.k16linear.excessRelPerFrame": "same on linear luminance divided by the window mean"
+ },
+ "runs": [
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.471,
+   "photoFinePct": 1.144,
+   "staticFinePct": 1.144,
+   "giFinePct": 1.231,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00089,
+     "tvPerFrame": 0.00343,
+     "excessShare": 0.25836
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00118,
+     "tvPerFrame": 0.00334,
+     "excessShare": 0.35294
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00143,
+     "tvPerFrame": 0.00337,
+     "excessShare": 0.42563
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00127,
+     "tvRelPerFrame": 0.00374,
+     "meanIrradiance": 0.03116
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.5,
+   "photoFinePct": 2.052,
+   "staticFinePct": 2.052,
+   "giFinePct": 2.159,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00179,
+     "tvPerFrame": 0.00515,
+     "excessShare": 0.34732
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00243,
+     "tvPerFrame": 0.00516,
+     "excessShare": 0.47079
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00295,
+     "tvPerFrame": 0.0052,
+     "excessShare": 0.56712
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.0011,
+     "tvRelPerFrame": 0.00317,
+     "meanIrradiance": 0.04797
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.386,
+   "photoFinePct": 17.884,
+   "staticFinePct": 17.883,
+   "giFinePct": 18.211,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.06933,
+     "tvPerFrame": 0.11178,
+     "excessShare": 0.62026
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.08146,
+     "tvPerFrame": 0.11074,
+     "excessShare": 0.73562
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.09205,
+     "tvPerFrame": 0.1133,
+     "excessShare": 0.8124
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.03711,
+     "tvRelPerFrame": 0.05089,
+     "meanIrradiance": 0.04163
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn-sunonly",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.402,
+   "photoFinePct": 1.068,
+   "staticFinePct": 1.068,
+   "giFinePct": 1.082,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.00032,
+     "tvPerFrame": 0.00312,
+     "excessShare": 0.10136
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.00041,
+     "tvPerFrame": 0.00313,
+     "excessShare": 0.13018
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.00054,
+     "tvPerFrame": 0.00308,
+     "excessShare": 0.17507
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00082,
+     "tvRelPerFrame": 0.00575,
+     "meanIrradiance": 0.0136
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn-sunonly",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.401,
+   "photoFinePct": 2.945,
+   "staticFinePct": 2.945,
+   "giFinePct": 3.065,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.00153,
+     "tvPerFrame": 0.00789,
+     "excessShare": 0.19446
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.00211,
+     "tvPerFrame": 0.00777,
+     "excessShare": 0.27235
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.00247,
+     "tvPerFrame": 0.00748,
+     "excessShare": 0.33028
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00072,
+     "tvRelPerFrame": 0.00461,
+     "meanIrradiance": 0.03783
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn-sunonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.313,
+   "photoFinePct": 7.67,
+   "staticFinePct": 7.67,
+   "giFinePct": 7.868,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.00898,
+     "tvPerFrame": 0.03356,
+     "excessShare": 0.2676
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.0126,
+     "tvPerFrame": 0.03327,
+     "excessShare": 0.37869
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.01391,
+     "tvPerFrame": 0.03333,
+     "excessShare": 0.41735
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00922,
+     "tvRelPerFrame": 0.02051,
+     "meanIrradiance": 0.03934
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.419,
+   "photoFinePct": 1.286,
+   "staticFinePct": 1.286,
+   "giFinePct": 1.316,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00048,
+     "tvPerFrame": 0.00409,
+     "excessShare": 0.11665
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00056,
+     "tvPerFrame": 0.00395,
+     "excessShare": 0.14246
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00064,
+     "tvPerFrame": 0.00378,
+     "excessShare": 0.17066
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.0011,
+     "tvRelPerFrame": 0.00587,
+     "meanIrradiance": 0.01488
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.448,
+   "photoFinePct": 2.971,
+   "staticFinePct": 2.971,
+   "giFinePct": 3.147,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00159,
+     "tvPerFrame": 0.00802,
+     "excessShare": 0.19884
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00212,
+     "tvPerFrame": 0.00786,
+     "excessShare": 0.26994
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00248,
+     "tvPerFrame": 0.00745,
+     "excessShare": 0.33352
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00091,
+     "tvRelPerFrame": 0.00494,
+     "meanIrradiance": 0.03983
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza-dyn",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.38,
+   "photoFinePct": 19.551,
+   "staticFinePct": 19.551,
+   "giFinePct": 19.752,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.06844,
+     "tvPerFrame": 0.12269,
+     "excessShare": 0.5578
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.08134,
+     "tvPerFrame": 0.1214,
+     "excessShare": 0.67003
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.09228,
+     "tvPerFrame": 0.12141,
+     "excessShare": 0.76013
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.04042,
+     "tvRelPerFrame": 0.05898,
+     "meanIrradiance": 0.03677
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.14,
+   "photoFinePct": 0.727,
+   "staticFinePct": 0.727,
+   "giFinePct": 0.727,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 62202510,
+     "excessPerFrame": 0.00087,
+     "tvPerFrame": 0.00187,
+     "excessShare": 0.46671
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 31101255,
+     "excessPerFrame": 0.0011,
+     "tvPerFrame": 0.00193,
+     "excessShare": 0.56945
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 14513919,
+     "excessPerFrame": 0.0013,
+     "tvPerFrame": 0.00201,
+     "excessShare": 0.64562
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00116,
+     "tvRelPerFrame": 0.00181,
+     "meanIrradiance": 0.03973
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.35,
+   "photoFinePct": 1.194,
+   "staticFinePct": 1.194,
+   "giFinePct": 1.194,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 62202510,
+     "excessPerFrame": 0.0013,
+     "tvPerFrame": 0.00305,
+     "excessShare": 0.42739
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 31101255,
+     "excessPerFrame": 0.00175,
+     "tvPerFrame": 0.00307,
+     "excessShare": 0.57072
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 14513919,
+     "excessPerFrame": 0.0021,
+     "tvPerFrame": 0.00313,
+     "excessShare": 0.67058
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00073,
+     "tvRelPerFrame": 0.00128,
+     "meanIrradiance": 0.04467
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "baseline",
+   "scene": "sponza",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.262,
+   "photoFinePct": 0,
+   "staticFinePct": 0,
+   "giFinePct": 0,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 62202510,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 31101255,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 14513919,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0,
+     "tvRelPerFrame": 0,
+     "meanIrradiance": 0.04163
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-tri-rc2-norel",
+   "giMs": 5.767,
+   "photoFinePct": 12.282,
+   "staticFinePct": 12.282,
+   "giFinePct": 12.546,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.03553,
+     "tvPerFrame": 0.08147,
+     "excessShare": 0.43618
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.05,
+     "tvPerFrame": 0.08017,
+     "excessShare": 0.62366
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.05922,
+     "tvPerFrame": 0.08181,
+     "excessShare": 0.72388
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.01928,
+     "tvRelPerFrame": 0.02997,
+     "meanIrradiance": 0.02806
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-tri-rc2-vrel",
+   "giMs": 6.603,
+   "photoFinePct": 11.826,
+   "staticFinePct": 11.826,
+   "giFinePct": 12.194,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.03113,
+     "tvPerFrame": 0.07973,
+     "excessShare": 0.39045
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.04506,
+     "tvPerFrame": 0.07867,
+     "excessShare": 0.57272
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.05498,
+     "tvPerFrame": 0.07993,
+     "excessShare": 0.68786
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.01993,
+     "tvRelPerFrame": 0.03232,
+     "meanIrradiance": 0.0401
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-norel",
+   "giMs": 1.762,
+   "photoFinePct": 18.677,
+   "staticFinePct": 18.677,
+   "giFinePct": 18.957,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.07333,
+     "tvPerFrame": 0.11843,
+     "excessShare": 0.61918
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.09202,
+     "tvPerFrame": 0.11875,
+     "excessShare": 0.77489
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.1029,
+     "tvPerFrame": 0.12288,
+     "excessShare": 0.83741
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.04125,
+     "tvRelPerFrame": 0.05466,
+     "meanIrradiance": 0.02772
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-norel",
+   "giMs": 5.504,
+   "photoFinePct": 12.734,
+   "staticFinePct": 12.733,
+   "giFinePct": 13.21,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.02519,
+     "tvPerFrame": 0.05762,
+     "excessShare": 0.43724
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.03603,
+     "tvPerFrame": 0.05774,
+     "excessShare": 0.624
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.04411,
+     "tvPerFrame": 0.05955,
+     "excessShare": 0.74068
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.01223,
+     "tvRelPerFrame": 0.01946,
+     "meanIrradiance": 0.02452
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-vrel",
+   "giMs": 6.374,
+   "photoFinePct": 12.362,
+   "staticFinePct": 12.362,
+   "giFinePct": 12.978,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.02455,
+     "tvPerFrame": 0.06159,
+     "excessShare": 0.39853
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.03484,
+     "tvPerFrame": 0.06093,
+     "excessShare": 0.57172
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.04361,
+     "tvPerFrame": 0.06273,
+     "excessShare": 0.69521
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.01386,
+     "tvRelPerFrame": 0.0229,
+     "meanIrradiance": 0.03486
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-norel",
+   "giMs": 1.755,
+   "photoFinePct": 17.78,
+   "staticFinePct": 17.78,
+   "giFinePct": 18.113,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.05595,
+     "tvPerFrame": 0.08788,
+     "excessShare": 0.63658
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.06863,
+     "tvPerFrame": 0.08805,
+     "excessShare": 0.7795
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.07817,
+     "tvPerFrame": 0.09217,
+     "excessShare": 0.84815
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.02357,
+     "tvRelPerFrame": 0.03243,
+     "meanIrradiance": 0.02051
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza",
+   "config": "world-48-tri-rc2-norel",
+   "giMs": 5.081,
+   "photoFinePct": 0,
+   "staticFinePct": 0,
+   "giFinePct": 0,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 62202510,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 31101255,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 14513919,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0,
+     "tvRelPerFrame": 0,
+     "meanIrradiance": 0.0304
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza",
+   "config": "world-48-tri-rc2-vrel",
+   "giMs": 6.113,
+   "photoFinePct": 0,
+   "staticFinePct": 0,
+   "giFinePct": 0,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 62202510,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 31101255,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 14513919,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0,
+     "tvRelPerFrame": 0,
+     "meanIrradiance": 0.0483
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E1 triangle tracer",
+   "scene": "sponza",
+   "config": "world-48-voxel-rc2-norel",
+   "giMs": 1.879,
+   "photoFinePct": 0,
+   "staticFinePct": 0,
+   "giFinePct": 0,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 62202510,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 31101255,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 14513919,
+     "excessPerFrame": 0,
+     "tvPerFrame": 0,
+     "excessShare": null
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0,
+     "tvRelPerFrame": 0,
+     "meanIrradiance": 0.02595
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.37,
+   "photoFinePct": 1.06,
+   "staticFinePct": 1.06,
+   "giFinePct": 1.633,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.0009,
+     "tvPerFrame": 0.00316,
+     "excessShare": 0.28603
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00118,
+     "tvPerFrame": 0.00308,
+     "excessShare": 0.38308
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00143,
+     "tvPerFrame": 0.00311,
+     "excessShare": 0.46007
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00144,
+     "tvRelPerFrame": 0.00345,
+     "meanIrradiance": 0.02496
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.38,
+   "photoFinePct": 1.813,
+   "staticFinePct": 1.812,
+   "giFinePct": 2.297,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00163,
+     "tvPerFrame": 0.00459,
+     "excessShare": 0.35597
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00218,
+     "tvPerFrame": 0.00459,
+     "excessShare": 0.47539
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00265,
+     "tvPerFrame": 0.00464,
+     "excessShare": 0.57144
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00092,
+     "tvRelPerFrame": 0.00256,
+     "meanIrradiance": 0.0342
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.302,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.064,
+   "giFinePct": 17.597,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.05453,
+     "tvPerFrame": 0.08725,
+     "excessShare": 0.62501
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.06499,
+     "tvPerFrame": 0.08747,
+     "excessShare": 0.74294
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.0733,
+     "tvPerFrame": 0.08944,
+     "excessShare": 0.81948
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.02222,
+     "tvRelPerFrame": 0.03184,
+     "meanIrradiance": 0.03113
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.373,
+   "photoFinePct": 0.97,
+   "staticFinePct": 0.97,
+   "giFinePct": 1.119,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.0003,
+     "tvPerFrame": 0.00283,
+     "excessShare": 0.10493
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.00037,
+     "tvPerFrame": 0.00284,
+     "excessShare": 0.12957
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.00045,
+     "tvPerFrame": 0.00278,
+     "excessShare": 0.16017
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00083,
+     "tvRelPerFrame": 0.0054,
+     "meanIrradiance": 0.01132
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.377,
+   "photoFinePct": 2.659,
+   "staticFinePct": 2.659,
+   "giFinePct": 2.75,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.00137,
+     "tvPerFrame": 0.00718,
+     "excessShare": 0.19066
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.00183,
+     "tvPerFrame": 0.00706,
+     "excessShare": 0.25964
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.00215,
+     "tvPerFrame": 0.00674,
+     "excessShare": 0.3198
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00054,
+     "tvRelPerFrame": 0.00461,
+     "meanIrradiance": 0.02574
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.286,
+   "photoFinePct": 8.123,
+   "staticFinePct": 8.123,
+   "giFinePct": 8.392,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.00943,
+     "tvPerFrame": 0.0314,
+     "excessShare": 0.30031
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.01299,
+     "tvPerFrame": 0.03146,
+     "excessShare": 0.41295
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.01421,
+     "tvPerFrame": 0.03162,
+     "excessShare": 0.44943
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00878,
+     "tvRelPerFrame": 0.02101,
+     "meanIrradiance": 0.02746
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj",
+   "config": "ddgi-100-128-u2",
+   "giMs": 3.368,
+   "photoFinePct": 1.209,
+   "staticFinePct": 1.209,
+   "giFinePct": 1.508,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00043,
+     "tvPerFrame": 0.00384,
+     "excessShare": 0.11198
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.0005,
+     "tvPerFrame": 0.00371,
+     "excessShare": 0.13601
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00055,
+     "tvPerFrame": 0.00355,
+     "excessShare": 0.15599
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00107,
+     "tvRelPerFrame": 0.006,
+     "meanIrradiance": 0.01318
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMs": 3.371,
+   "photoFinePct": 2.728,
+   "staticFinePct": 2.727,
+   "giFinePct": 3.215,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.00132,
+     "tvPerFrame": 0.0074,
+     "excessShare": 0.17867
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.00178,
+     "tvPerFrame": 0.00725,
+     "excessShare": 0.24568
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.00219,
+     "tvPerFrame": 0.0069,
+     "excessShare": 0.31773
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00069,
+     "tvRelPerFrame": 0.00464,
+     "meanIrradiance": 0.02911
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 photoreal objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.309,
+   "photoFinePct": 18.244,
+   "staticFinePct": 18.243,
+   "giFinePct": 18.568,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.05165,
+     "tvPerFrame": 0.09281,
+     "excessShare": 0.55645
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.06249,
+     "tvPerFrame": 0.09254,
+     "excessShare": 0.67529
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.07101,
+     "tvPerFrame": 0.09409,
+     "excessShare": 0.75476
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.0271,
+     "tvRelPerFrame": 0.04321,
+     "meanIrradiance": 0.02855
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 noemit",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-noemit",
+   "giMs": 3.325,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.064,
+   "giFinePct": 17.223,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.05453,
+     "tvPerFrame": 0.08725,
+     "excessShare": 0.62501
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.06499,
+     "tvPerFrame": 0.08747,
+     "excessShare": 0.74294
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.0733,
+     "tvPerFrame": 0.08944,
+     "excessShare": 0.81948
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.02222,
+     "tvRelPerFrame": 0.03184,
+     "meanIrradiance": 0.03113
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 noemit",
+   "scene": "sponza-dyn-sunonly",
+   "config": "world-48-voxel-rc2-vrel-noemit",
+   "giMs": 3.297,
+   "photoFinePct": 8.123,
+   "staticFinePct": 8.123,
+   "giFinePct": 8.169,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59127300,
+     "excessPerFrame": 0.00943,
+     "tvPerFrame": 0.0314,
+     "excessShare": 0.30031
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29563650,
+     "excessPerFrame": 0.01299,
+     "tvPerFrame": 0.03146,
+     "excessShare": 0.41295
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13796370,
+     "excessPerFrame": 0.01421,
+     "tvPerFrame": 0.03162,
+     "excessShare": 0.44943
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.00878,
+     "tvRelPerFrame": 0.02101,
+     "meanIrradiance": 0.02746
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E5 noemit",
+   "scene": "sponza-dyn",
+   "config": "world-48-voxel-rc2-vrel-noemit",
+   "giMs": 3.311,
+   "photoFinePct": 18.244,
+   "staticFinePct": 18.243,
+   "giFinePct": 18.348,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.05165,
+     "tvPerFrame": 0.09281,
+     "excessShare": 0.55645
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.06249,
+     "tvPerFrame": 0.09254,
+     "excessShare": 0.67529
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.07101,
+     "tvPerFrame": 0.09409,
+     "excessShare": 0.75476
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.0271,
+     "tvRelPerFrame": 0.04321,
+     "meanIrradiance": 0.02855
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E6 (diagnostic registration switch, removed)",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-vrel + diagnostic: no probe registration from object pixels",
+   "giMs": 3.125,
+   "photoFinePct": 17.884,
+   "staticFinePct": 17.883,
+   "giFinePct": 17.622,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.06933,
+     "tvPerFrame": 0.11178,
+     "excessShare": 0.62026
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.08146,
+     "tvPerFrame": 0.11074,
+     "excessShare": 0.73562
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.09205,
+     "tvPerFrame": 0.1133,
+     "excessShare": 0.8124
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.03711,
+     "tvRelPerFrame": 0.05089,
+     "meanIrradiance": 0.04163
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E6 (diagnostic registration switch, removed)",
+   "scene": "sponza-dyn-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.137,
+   "photoFinePct": 17.884,
+   "staticFinePct": 17.883,
+   "giFinePct": 18.211,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.06933,
+     "tvPerFrame": 0.11178,
+     "excessShare": 0.62026
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.08146,
+     "tvPerFrame": 0.11074,
+     "excessShare": 0.73562
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.09205,
+     "tvPerFrame": 0.1133,
+     "excessShare": 0.8124
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.03711,
+     "tvRelPerFrame": 0.05089,
+     "meanIrradiance": 0.04163
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E6 (diagnostic registration switch, removed)",
+   "scene": "sponza-dyn",
+   "config": "world-48-voxel-rc2-vrel + diagnostic: no probe registration from object pixels",
+   "giMs": 3.112,
+   "photoFinePct": 19.551,
+   "staticFinePct": 19.551,
+   "giFinePct": 19.222,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.06844,
+     "tvPerFrame": 0.12269,
+     "excessShare": 0.5578
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.08134,
+     "tvPerFrame": 0.1214,
+     "excessShare": 0.67003
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.09228,
+     "tvPerFrame": 0.12141,
+     "excessShare": 0.76013
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.04042,
+     "tvRelPerFrame": 0.05898,
+     "meanIrradiance": 0.03677
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "group": "E6 (diagnostic registration switch, removed)",
+   "scene": "sponza-dyn",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMs": 3.155,
+   "photoFinePct": 19.551,
+   "staticFinePct": 19.551,
+   "giFinePct": 19.752,
+   "excess": {
+    "k8": {
+     "windows": 30,
+     "pixelWindows": 59810854,
+     "excessPerFrame": 0.06844,
+     "tvPerFrame": 0.12269,
+     "excessShare": 0.5578
+    },
+    "k16": {
+     "windows": 15,
+     "pixelWindows": 29775121,
+     "excessPerFrame": 0.08134,
+     "tvPerFrame": 0.1214,
+     "excessShare": 0.67003
+    },
+    "k32": {
+     "windows": 7,
+     "pixelWindows": 13766291,
+     "excessPerFrame": 0.09228,
+     "tvPerFrame": 0.12141,
+     "excessShare": 0.76013
+    },
+    "k16linear": {
+     "excessRelPerFrame": 0.04042,
+     "tvRelPerFrame": 0.05898,
+     "meanIrradiance": 0.03677
+    }
+   },
+   "overflowLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "insertFailuresLastFrame": [
+    0,
+    0,
+    0,
+    0,
+    0
+   ]
+  }
+ ],
+ "e6PerFrameCounters": {
+  "note": "read after every measured frame (diagnostic, removed): max probes per cascade, overflow and insert failures summed over 240 frames; same on sponza-dyn and sponza-dyn-objectsonly",
+  "default": {
+   "maxProbes": [
+    13094,
+    4016,
+    1301,
+    477,
+    205
+   ],
+   "caps": [
+    16128,
+    5120,
+    1792,
+    768,
+    512
+   ],
+   "overflow": 0,
+   "insertFailures": 0
+  },
+  "noObjectRegistration": {
+   "maxProbes": [
+    12634,
+    3916,
+    1282,
+    473,
+    203
+   ],
+   "caps": [
+    15616,
+    4864,
+    1792,
+    768,
+    512
+   ],
+   "overflow": 0,
+   "insertFailures": 0
+  }
+ },
+ "reproduction": {
+  "original": {
+   "sponza-dyn": 19.6,
+   "sponza-dyn-sunonly": 7.7,
+   "sponza-dyn-objectsonly": 17.9
+  },
+  "reproduced": {
+   "sponza-dyn": {
+    "photoFinePct": 19.551,
+    "giMs": 3.176,
+    "fieldUsedMiB": 25.6,
+    "fieldAllocatedMiB": 29.6,
+    "voxPersistentMiB": 12.8
+   },
+   "sponza-dyn-sunonly": {
+    "photoFinePct": 7.67,
+    "giMs": 3.15,
+    "fieldUsedMiB": 25.7,
+    "fieldAllocatedMiB": 29.6,
+    "voxPersistentMiB": 12.8
+   },
+   "sponza-dyn-objectsonly": {
+    "photoFinePct": 17.884,
+    "giMs": 3.237,
+    "fieldUsedMiB": 25.6,
+    "fieldAllocatedMiB": 29.6,
+    "voxPersistentMiB": 12.8
+   }
+  }
+ },
+ "imageCheck": "default config static irradiance (sponza, --dump-irr, 30 frames) bit-identical before and after the change (sha256 prefix 9e2d8013febd19ca)"
+}

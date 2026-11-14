@@ -9,6 +9,15 @@
 // S3: toon pixels (irradiance alpha >= 2, written by the gather; photoreal objects flagged for measurement too) are also counted on their own, with the change of
 // their receiving ramp band (only where the directional part is visible in both frames) and, as a control, the
 // change of a ramp band against a fixed world direction (what reprojection and normal maps produce alone).
+// Dynamic stability: the fine band rate is also counted over static pixels only (not a dynamic object in either
+// frame: irradiance alpha < 1.5 in both, which also drops the occluded / exposed pixels), and, on the static camera,
+// the excess variation: per pixel and window of K frames (K = 8, 16, 32, aligned on the frame slot), with
+// l = log2 of the indirect irradiance luminance (same clamp as the bands),
+//   excess = sum_t |l_t - l_(t-1)| - |l_end - l_start|  (K - 1 differences, >= 0).
+// A smooth one-way change gives 0; only back-and-forth jumps remain. A window is dropped for a pixel that is a
+// dynamic object or invalid in any of its frames. Reported per frame (divided by K - 1), in stops. For K = 16 the same
+// is also summed on the linear luminance E and divided by the sum of the window means of E (relative excess), as a
+// check that dark pixels do not dominate the log2 value.
 import { FRAME_WGSL } from './frame.ts';
 import type { GBuffer } from './gbuffer.ts';
 
@@ -113,6 +122,10 @@ fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
           if ((dot(n, k) > 0.0) != (dot(nq, k) > 0.0)) { atomicAdd(&wc[11], 1u); }
           atomicAdd(&wc[13], u32(min(abs(e - eq), 10.0) * 1000.0));
         }
+        if (ir.a < 1.5 && iq.a < 1.5) {
+          atomicAdd(&wc[14], 1u);
+          if (floor(e * 4.0) != floor(eq * 4.0)) { atomicAdd(&wc[15], 1u); }
+        }
       }
     }
   }
@@ -125,8 +138,122 @@ fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
 }
 `;
 
+// Excess variation, static camera only. State per pixel (EX_WORDS u32): l_prev, l_start[3], tv[3] (f32 bits),
+// mask bits (window i masked: bit i; ever masked: bit 3), sum of the K = 16 window excesses (f32 bits),
+// linear K = 16: E_prev, E_start, tv, sum of E.
+export const EXCESS_K = [8, 16, 32] as const;
+const EX_WORDS = 13;
+// Counter words per frame: per K, [pixel windows, sum tv, sum excess] (EXCESS_SCALE units per stop), then linear
+// K = 16 [sum excess, sum tv, sum of window means] (EXCESS_LIN_SCALE units per irradiance unit).
+export const EXCESS_SLOT = 12;
+export const EXCESS_SCALE = 64;
+export const EXCESS_LIN_SCALE = 16;
+const EXCESS_WGSL = /* wgsl */ `
+${FRAME_WGSL}
+@group(0) @binding(0) var<uniform> F: Frame;
+@group(0) @binding(1) var depthTex: texture_depth_2d;
+@group(0) @binding(2) var irrTex: texture_2d<f32>;
+@group(0) @binding(3) var<storage, read_write> st: array<u32>;
+@group(0) @binding(4) var<storage, read_write> counters: array<atomic<u32>>;
+var<workgroup> wtv: array<vec3f, 64>;
+var<workgroup> wex: array<vec3f, 64>;
+var<workgroup> wn: array<atomic<u32>, 3>;
+var<workgroup> wlin: array<vec3f, 64>;
+const SCALE = ${EXCESS_SCALE}.0; // counter units per stop (overflows above ~33 stops per pixel and window at 1080p)
+fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
+
+@compute @workgroup_size(8, 8) fn excess(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
+  if (li < 3u) { atomicStore(&wn[li], 0u); }
+  workgroupBarrier();
+  let k = F.ru.y;
+  var tv3 = vec3f(0.0); var ex3 = vec3f(0.0); var lin3 = vec3f(0.0);
+  if (gid.x < u32(F.size.x) && gid.y < u32(F.size.y)) {
+    let px = vec2i(gid.xy);
+    let o = (gid.y * u32(F.size.x) + gid.x) * ${EX_WORDS}u;
+    let ir = textureLoad(irrTex, px, 0);
+    let bad = textureLoad(depthTex, px, 0) <= 0.0 || ir.a < 0.5 || ir.a > 1.5;
+    let E = luminance(ir.rgb);
+    let l = lb(E);
+    let lPrev = bitcast<f32>(st[o]);
+    let ePrev = bitcast<f32>(st[o + 9u]);
+    var eStart = bitcast<f32>(st[o + 10u]); var eTv = bitcast<f32>(st[o + 11u]); var eSum = bitcast<f32>(st[o + 12u]);
+    if (k % 16u == 0u) { eStart = E; eTv = 0.0; eSum = E; } else { eTv += abs(E - ePrev); eSum += E; }
+    var mask = st[o + 7u];
+    if (bad) { mask |= 8u; }
+    var acc = bitcast<f32>(st[o + 8u]);
+    for (var i = 0u; i < 3u; i++) {
+      let K = 8u << i;
+      var start = bitcast<f32>(st[o + 1u + i]);
+      var tv = bitcast<f32>(st[o + 4u + i]);
+      if (k % K == 0u) {
+        start = l; tv = 0.0;
+        mask = (mask & ~(1u << i)) | select(0u, 1u << i, bad);
+      } else {
+        tv += abs(l - lPrev);
+        if (bad) { mask |= 1u << i; }
+      }
+      if (k % K == K - 1u && (mask & (1u << i)) == 0u) {
+        let ex = max(tv - abs(l - start), 0.0);
+        tv3[i] = tv; ex3[i] = ex;
+        atomicAdd(&wn[i], 1u);
+        if (i == 1u) { acc += ex; lin3 = vec3f(max(eTv - abs(E - eStart), 0.0), eTv, eSum / 16.0); }
+      }
+      st[o + 1u + i] = bitcast<u32>(start);
+      st[o + 4u + i] = bitcast<u32>(tv);
+    }
+    st[o] = bitcast<u32>(l);
+    st[o + 7u] = mask;
+    st[o + 8u] = bitcast<u32>(acc);
+    st[o + 9u] = bitcast<u32>(E); st[o + 10u] = bitcast<u32>(eStart); st[o + 11u] = bitcast<u32>(eTv); st[o + 12u] = bitcast<u32>(eSum);
+  }
+  wtv[li] = tv3; wex[li] = ex3; wlin[li] = lin3;
+  workgroupBarrier();
+  for (var s = 32u; s > 0u; s >>= 1u) {
+    if (li < s) { wtv[li] += wtv[li + s]; wex[li] += wex[li + s]; wlin[li] += wlin[li + s]; }
+    workgroupBarrier();
+  }
+  if (li < 3u) {
+    let n = atomicLoad(&wn[li]);
+    if (n > 0u) {
+      let b = k * ${EXCESS_SLOT}u + li * 3u;
+      atomicAdd(&counters[b], n);
+      atomicAdd(&counters[b + 1u], u32(round(wtv[0][li] * SCALE)));
+      atomicAdd(&counters[b + 2u], u32(round(wex[0][li] * SCALE)));
+      if (li == 1u) {
+        let c = k * ${EXCESS_SLOT}u + 9u;
+        atomicAdd(&counters[c], u32(round(wlin[0].x * ${EXCESS_LIN_SCALE}.0)));
+        atomicAdd(&counters[c + 1u], u32(round(wlin[0].y * ${EXCESS_LIN_SCALE}.0)));
+        atomicAdd(&counters[c + 2u], u32(round(wlin[0].z * ${EXCESS_LIN_SCALE}.0)));
+      }
+    }
+  }
+}
+
+`;
+
+// Map of the mean K = 16 excess per frame: 0 grey, 0.1 stop per frame and above white through red and yellow
+// (black: a dynamic object or invalid at some point of the run).
+const EXCESS_MAP_WGSL = /* wgsl */ `
+@group(0) @binding(0) var<storage, read> st: array<u32>;
+@group(0) @binding(1) var heat: texture_storage_2d<rgba8unorm, write>;
+@group(0) @binding(2) var<uniform> m: vec4f; // width, 1 / (windows * 15), 0, 0
+@compute @workgroup_size(8, 8) fn exmap(@builtin(global_invocation_id) gid: vec3u) {
+  let size = textureDimensions(heat);
+  if (gid.x >= size.x || gid.y >= size.y) { return; }
+  let o = (gid.y * size.x + gid.x) * ${EX_WORDS}u;
+  var c = vec3f(0.0);
+  if ((st[o + 7u] & 8u) == 0u) {
+    let t = clamp(bitcast<f32>(st[o + 8u]) * m.y / 0.1, 0.0, 1.0);
+    let red = vec3f(1.0, 0.1, 0.05); let yellow = vec3f(1.0, 0.9, 0.1);
+    c = select(select(mix(yellow, vec3f(1.0), 3.0 * t - 2.0), mix(red, yellow, 3.0 * t - 1.0), t < 2.0 / 3.0),
+      mix(vec3f(0.25), red, 3.0 * t), t < 1.0 / 3.0);
+  }
+  textureStore(heat, gid.xy, vec4f(c, 1.0));
+}
+`;
+
 export const FLICKER_FIELDS = ['valid', 'giFine', 'giCoarse', 'ctrlFine', 'ctrlCoarse', 'giAbsDlog2Milli', 'ctrlAbsDlog2Milli',
-  'toonValid', 'toonFine', 'toonCoarse', 'toonRampChange', 'ctrlRampChange', 'toonSignificant', 'toonAbsDlog2Milli', 'unused', 'unused'] as const;
+  'toonValid', 'toonFine', 'toonCoarse', 'toonRampChange', 'ctrlRampChange', 'toonSignificant', 'toonAbsDlog2Milli', 'staticValid', 'staticFine'] as const;
 export const FLICKER_SLOT = 16; // counter words per frame
 
 export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit: GPUTexture, irr: GPUTexture, maxSlots: number) {
@@ -162,8 +289,53 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
     { binding: 8, resource: heat.createView() },
   ] });
 
+  const exState = device.createBuffer({ label: 'excess.state', size: width * height * EX_WORDS * 4, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
+  const exCounters = device.createBuffer({ label: 'excess.counters', size: maxSlots * EXCESS_SLOT * 4,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
+  const em = device.createShaderModule({ code: EXCESS_WGSL, label: 'excess' });
+  const excessPipe = device.createComputePipeline({ layout: 'auto', compute: { module: em, entryPoint: 'excess' } });
+  const excessBG = device.createBindGroup({ layout: excessPipe.getBindGroupLayout(0), entries: [
+    { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: g.depth.createView() },
+    { binding: 2, resource: irr.createView() }, { binding: 3, resource: { buffer: exState } }, { binding: 4, resource: { buffer: exCounters } },
+  ] });
+  const xm = device.createShaderModule({ code: EXCESS_MAP_WGSL, label: 'excess.map' });
+  const mapPipe = device.createComputePipeline({ layout: 'auto', compute: { module: xm, entryPoint: 'exmap' } });
+  const mapUniform = device.createBuffer({ size: 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const mapBG = device.createBindGroup({ layout: mapPipe.getBindGroupLayout(0), entries: [
+    { binding: 0, resource: { buffer: exState } }, { binding: 1, resource: heat.createView() }, { binding: 2, resource: { buffer: mapUniform } },
+  ] });
+
+  const readU32 = async (src: GPUBuffer, bytes: number) => {
+    const read = device.createBuffer({ size: bytes, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+    const enc = device.createCommandEncoder();
+    enc.copyBufferToBuffer(src, 0, read, 0, bytes);
+    device.queue.submit([enc.finish()]);
+    await read.mapAsync(GPUMapMode.READ);
+    const r = new Uint32Array(read.getMappedRange().slice(0));
+    read.unmap(); read.destroy();
+    return r;
+  };
+
   return {
     counters,
+    /** Excess variation of this frame (static camera only; the frame slot sets the windows). */
+    encodeExcess(enc: GPUCommandEncoder) {
+      const pass = enc.beginComputePass({ label: 'excess' });
+      pass.setPipeline(excessPipe); pass.setBindGroup(0, excessBG);
+      pass.dispatchWorkgroups(Math.ceil(width / 8), Math.ceil(height / 8));
+      pass.end();
+    },
+    readExcess: (slots: number) => readU32(exCounters, slots * EXCESS_SLOT * 4),
+    /** Writes the excess map (mean K = 16 excess per frame over `windows` windows) into the heatmap texture. */
+    encodeExcessMap(windows: number) {
+      device.queue.writeBuffer(mapUniform, 0, new Float32Array([width, 1 / Math.max(windows * 15, 1), 0, 0]));
+      const enc = device.createCommandEncoder();
+      const pass = enc.beginComputePass({ label: 'excess.map' });
+      pass.setPipeline(mapPipe); pass.setBindGroup(0, mapBG);
+      pass.dispatchWorkgroups(Math.ceil(width / 8), Math.ceil(height / 8));
+      pass.end();
+      device.queue.submit([enc.finish()]);
+    },
     /** Measures against the previous frame (if the frame uniform says it is valid), then keeps this frame. */
     encodeFlicker(enc: GPUCommandEncoder) {
       const pass = enc.beginComputePass({ label: 'flicker' });
@@ -174,19 +346,18 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
       enc.copyTextureToTexture({ texture: g.normal }, { texture: normalPrev }, [width, height]);
       enc.copyTextureToTexture({ texture: irr }, { texture: irrPrev }, [width, height]);
     },
-    async readCounters(slots: number): Promise<Uint32Array> {
-      const read = device.createBuffer({ size: slots * FLICKER_SLOT * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+    readCounters: (slots: number) => readU32(counters, slots * FLICKER_SLOT * 4),
+    clearCounters() {
+      device.queue.writeBuffer(counters, 0, new Uint8Array(maxSlots * FLICKER_SLOT * 4));
+      device.queue.writeBuffer(exCounters, 0, new Uint8Array(maxSlots * EXCESS_SLOT * 4));
       const enc = device.createCommandEncoder();
-      enc.copyBufferToBuffer(counters, 0, read, 0, slots * FLICKER_SLOT * 4);
+      enc.clearBuffer(exState);
       device.queue.submit([enc.finish()]);
-      await read.mapAsync(GPUMapMode.READ);
-      const r = new Uint32Array(read.getMappedRange().slice(0));
-      read.unmap(); read.destroy();
-      return r;
     },
-    clearCounters() { device.queue.writeBuffer(counters, 0, new Uint8Array(maxSlots * FLICKER_SLOT * 4)); },
+    destroy() { for (const b of [counters, exState, exCounters, mapUniform]) b.destroy(); for (const t of [out, depthPrev, normalPrev, irrPrev, heat]) t.destroy(); },
     /** Mode 0: final (direct + indirect), 1: indirect irradiance on a 0.8 albedo, 2: direct only,
-     * 3: flicker heatmap of the last measured frame (red: fine band changed, yellow: on a toon pixel, grey: valid). Tightly packed RGBA8. */
+     * 3: flicker heatmap of the last measured frame (red: fine band changed, yellow: on a toon pixel, grey: valid),
+     * or the excess map after encodeExcessMap. Tightly packed RGBA8. */
     async capture(mode: number): Promise<Uint8Array> {
       const enc = device.createCommandEncoder();
       if (mode < 3) {

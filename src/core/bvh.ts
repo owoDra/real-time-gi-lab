@@ -1,9 +1,10 @@
 // S2: triangle BVH, the ground truth that the voxel tracer is compared against (same interface, same hit
-// shading). Built once on the CPU (binned SAH, up to 4 triangles per leaf), traversed with a stack in WGSL.
+// shading). Built once on the CPU (binned SAH, up to 4 triangles per leaf), refitted on the CPU each frame for
+// moving triangles (refitBvh), traversed with a stack in WGSL.
 // Alpha-masked materials are tested at the hit, as in the G-buffer.
 import type { SceneData } from './gltf.ts';
 
-export interface Bvh { nodes: Float32Array; tris: Float32Array; buildMs: number; nodeCount: number; }
+export interface Bvh { nodes: Float32Array; tris: Float32Array; buildMs: number; nodeCount: number; order: Uint32Array; }
 
 /** nodes: 8 words per node (min xyz, leftFirst | max xyz, count); count 0 = inner node with children
  * leftFirst and leftFirst + 1. tris: 16 words per triangle in BVH order:
@@ -102,7 +103,40 @@ export function buildBvh(scene: SceneData, triTable: Uint32Array): Bvh {
     tris.set([P[c * 3] - p0[0], P[c * 3 + 1] - p0[1], P[c * 3 + 2] - p0[2], U[a * 2 + 1]], i * 16 + 8);
     tris.set([U[b * 2], U[b * 2 + 1], U[c * 2], U[c * 2 + 1]], i * 16 + 12);
   }
-  return { nodes: nodes.slice(0, used * 8), tris, buildMs: performance.now() - t0, nodeCount: used };
+  return { nodes: nodes.slice(0, used * 8), tris, buildMs: performance.now() - t0, nodeCount: used, order };
+}
+
+/** Dynamic scenes: rewrites the triangles from firstTri on with the current positions and refits every node's
+ * bounds (same topology; exact hits, slower traversal as the moved triangles spread their nodes). Children are
+ * allocated after their parent, so a reverse sweep is bottom-up. Returns the first changed triangle slot range. */
+export function refitBvh(b: Bvh, P: Float32Array, triTable: Uint32Array, firstTri: number) {
+  const { nodes, tris, order } = b;
+  const nu = new Uint32Array(nodes.buffer, nodes.byteOffset, nodes.length);
+  for (let i = 0; i < order.length; i++) {
+    const t = order[i];
+    if (t < firstTri) continue;
+    const [a, bb, c] = [triTable[t * 4], triTable[t * 4 + 1], triTable[t * 4 + 2]];
+    for (let k = 0; k < 3; k++) {
+      tris[i * 16 + k] = P[a * 3 + k];
+      tris[i * 16 + 4 + k] = P[bb * 3 + k] - P[a * 3 + k];
+      tris[i * 16 + 8 + k] = P[c * 3 + k] - P[a * 3 + k];
+    }
+  }
+  for (let ni = b.nodeCount - 1; ni >= 0; ni--) {
+    const o = ni * 8, first = nu[o + 3], count = nu[o + 7];
+    const mn = [Infinity, Infinity, Infinity], mx = [-Infinity, -Infinity, -Infinity];
+    if (count > 0) {
+      for (let i = first; i < first + count; i++)
+        for (let k = 0; k < 3; k++) {
+          const p0 = tris[i * 16 + k], e1 = tris[i * 16 + 4 + k], e2 = tris[i * 16 + 8 + k];
+          mn[k] = Math.min(mn[k], p0, p0 + e1, p0 + e2); mx[k] = Math.max(mx[k], p0, p0 + e1, p0 + e2);
+        }
+    } else {
+      for (const ch of [first, first + 1])
+        for (let k = 0; k < 3; k++) { mn[k] = Math.min(mn[k], nodes[ch * 8 + k]); mx[k] = Math.max(mx[k], nodes[ch * 8 + 4 + k]); }
+    }
+    nodes.set(mn, o); nodes.set(mx, o + 4);
+  }
 }
 
 /** Needs bvhNodes, bvhTris (array<vec4f>), materials, baseColorTex, linSamp and voxShade-like triShade. */

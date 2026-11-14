@@ -98,6 +98,7 @@ else {
     : sceneName === 'sponza-objects' ? toonSponza(base, true)
     : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true)
     : sceneName === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : sceneName === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
+    : sceneName === 'sponza-dynobj-sunonly' ? dynamicSponza(base, true, -1, 'sun') : sceneName === 'sponza-dynobj-objectsonly' ? dynamicSponza(base, true, -1, 'objects')
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
 }
@@ -174,6 +175,7 @@ for (const [name, params] of parsed) {
   if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
   if (leak) log(`  leak ${JSON.stringify(leak)}`);
   log(`  flicker static ${JSON.stringify(r.static.flicker)}`);
+  log(`  excess static ${JSON.stringify(r.static.excess)}`);
   if (r.moving) log(`  flicker moving ${JSON.stringify(r.moving.flicker)}`);
 }
 // Irradiance against the triangle tracer (same probes, same intervals), static camera.

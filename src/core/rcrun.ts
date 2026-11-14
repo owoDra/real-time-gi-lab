@@ -1,11 +1,11 @@
 // Radiance-cascade runner (S1, S2): G-buffer + sun + voxel rebuild + radiance cascades, a static and a moving
 // camera, GPU timestamps per pass, the band-boundary flicker counters, tracer statistics and captures.
-import { buildBvh } from './bvh.ts';
+import { buildBvh, refitBvh, type Bvh } from './bvh.ts';
 import { cameraMatrices, FRAME_BYTES, octSolidAngles, packFrame, type Camera, type FrameParams } from './frame.ts';
 import { createGBuffer, createGBufferRenderer, type GBuffer } from './gbuffer.ts';
 import { createLighting, type Lighting } from './lighting.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
-import { createPost, FLICKER_FIELDS, FLICKER_SLOT } from './post.ts';
+import { createPost, EXCESS_K, EXCESS_LIN_SCALE, EXCESS_SCALE, EXCESS_SLOT, FLICKER_FIELDS, FLICKER_SLOT } from './post.ts';
 import { createDdgi } from './ddgi.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
@@ -23,6 +23,8 @@ export interface RunContext {
   device: GPUDevice; spec: SceneSpec; gpu: SceneGpu; g: GBuffer; frame: GPUBuffer; lighting: Lighting;
   gbuffer: ReturnType<typeof createGBufferRenderer>; omega0: Float32Array; width: number; height: number;
   world: WorldResources; voxWorld: VoxWorld | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
+  /** Dynamic scenes with a BVH: refits it to the posed vertices (CPU, outside the GPU timing). */
+  refitBvh: ((first: number, pos: Float32Array) => void) | null;
 }
 
 export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneGpu,
@@ -38,7 +40,7 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const dv = spec.dynamic ? { first: spec.dynamic.objects[0].firstVertex,
     count: spec.dynamic.objects.reduce((n, o) => n + o.vertexCount, 0) } : undefined;
   const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle, dv) : null;
-  let bvh: RunContext['bvh'] = null;
+  let bvh: RunContext['bvh'] = null, refit: RunContext['refitBvh'] = null;
   let bvhNodes = dummy(), bvhTris = dummy();
   if (opts.bvh) {
     const b = buildBvh(spec.scene, table);
@@ -46,12 +48,21 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
     bvhTris = device.createBuffer({ label: 'bvh.tris', size: b.tris.byteLength, usage: S });
     device.queue.writeBuffer(bvhNodes, 0, b.nodes); device.queue.writeBuffer(bvhTris, 0, b.tris);
     bvh = { buildMs: Math.round(b.buildMs), bytes: b.nodes.byteLength + b.tris.byteLength, nodes: b.nodeCount };
+    if (spec.dynamic) {
+      const P = spec.scene.positions.slice(), firstTri = spec.dynamic.firstTriangle, nodesBuf = bvhNodes, trisBuf = bvhTris, bb: Bvh = b;
+      refit = (first, pos) => {
+        P.set(pos, first * 3);
+        refitBvh(bb, P, table, firstTri);
+        device.queue.writeBuffer(nodesBuf, 0, bb.nodes);
+        device.queue.writeBuffer(trisBuf, 0, bb.tris);
+      };
+    }
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
     baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh };
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
-    width, height, world, voxWorld, bvh };
+    width, height, world, voxWorld, bvh, refitBvh: refit };
 }
 
 /** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. */
@@ -149,6 +160,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     device.queue.writeBuffer(ctx.gpu.positions, v.first * 12, v.pos);
     device.queue.writeBuffer(ctx.gpu.normals, v.first * 12, v.nrm);
     ctx.voxWorld?.h4Frame(opts.poseFrame ?? t, v.first, v.pos);
+    ctx.refitBvh?.(v.first, v.pos);
     sunDir = ps.sunDir;
     lighting.setSun(sunDir);
   };
@@ -219,6 +231,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       const enc = device.createCommandEncoder();
       encodeFrame(enc, tw);
       post.encodeFlicker(enc);
+      if (mode === 'static') post.encodeExcess(enc);
       device.queue.submit([enc.finish()]);
       pending.push(device.queue.onSubmittedWorkDone());
       if (pending.length >= opts.inFlight) await pending.shift();
@@ -272,14 +285,32 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       toonPixelsPerFrame: Math.round(tot[7] / (opts.frames - 1)),
       toonFinePct: pct(8, 7), toonCoarsePct: pct(9, 7), toonMeanAbsDlog2: tot[7] ? Math.round(tot[13] / tot[7]) / 1000 : null,
       toonSignificantPct: pct(12, 7), toonRampChangePct: pct(10, 12), controlRampChangePct: pct(11, 7),
-      fields: FLICKER_FIELDS.slice(0, 14),
+      staticFinePct: pct(15, 14), staticPixelsPerFrame: Math.round(tot[14] / (opts.frames - 1)),
+      fields: FLICKER_FIELDS,
     };
+    // Excess variation (static camera): per K, mean over pixel windows of excess / (K - 1) and tv / (K - 1), in stops per frame.
+    let excess: Record<string, Record<string, number | null>> | null = null;
+    if (mode === 'static') {
+      const ex = await post.readExcess(opts.frames);
+      const r5 = (x: number) => Math.round(x * 1e5) / 1e5;
+      excess = Object.fromEntries(EXCESS_K.map((K, i) => {
+        let n = 0, tv = 0, e = 0;
+        for (let k = 0; k < opts.frames; k++) { const b = k * EXCESS_SLOT + i * 3; n += ex[b]; tv += ex[b + 1]; e += ex[b + 2]; }
+        const per = (s: number) => n ? r5(s / EXCESS_SCALE / n / (K - 1)) : null;
+        return [`k${K}`, { windows: Math.floor(opts.frames / K), pixelWindows: n, excessPerFrame: per(e), tvPerFrame: per(tv), excessShare: tv ? r5(e / tv) : null }];
+      }));
+      let le = 0, lt = 0, lm = 0;
+      for (let k = 0; k < opts.frames; k++) { const b = k * EXCESS_SLOT + 9; le += ex[b]; lt += ex[b + 1]; lm += ex[b + 2]; }
+      // Relative to the mean irradiance (per frame): sum excess / sum window mean / 15.
+      excess.k16linear = { excessRelPerFrame: lm ? r5(le / lm / 15) : null, tvRelPerFrame: lm ? r5(lt / lm / 15) : null, meanIrradiance: excess.k16.pixelWindows ? r5(lm / EXCESS_LIN_SCALE / excess.k16.pixelWindows) : null };
+    }
     const counts = await rc.readCounts();
     const vox = useVox ? await voxWorld!.readCounters() : null;
     const images: Record<string, Uint8Array> = {};
     for (const [name, m] of [['final', 0], ['indirect', 1], ['direct', 2], ['flicker', 3]] as const) images[name] = await post.capture(m);
+    if (mode === 'static') { post.encodeExcessMap(Math.floor(opts.frames / 16)); images.excess = await post.capture(3); }
     const irr = mode === 'static' ? await readIrradiance(device, rc.irr, width, height) : null;
-    return { timing, flicker, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
+    return { timing, flicker, excess, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
       insertFailures: Array.from(counts.slice(16, 16 + p.cascades)), usedBytes: rc.usedBytes(counts),
       vox: vox ? { ...vox, ...voxWorld!.usedBytes(vox) } : null, images, irr };
   }
@@ -333,7 +364,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       return Math.round(d / d0 * 1e4) / 1e4;
     });
     const firstBelow = (x: number) => { const i = curve.findIndex((c, k) => c <= x && curve.slice(k).every((v) => v <= x)); return i < 0 ? null : i + 1; };
-    rc.destroy(); querySet.destroy();
+    rc.destroy(); post.destroy(); querySet.destroy();
     return { params: p, response: { from, to, curve, frames90: firstBelow(0.1), frames50: firstBelow(0.5) } };
   }
 
@@ -342,7 +373,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   const tracer = await traceStats();
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
-  rc.destroy(); querySet.destroy();
+  rc.destroy(); post.destroy(); querySet.destroy();
   return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, static: st, moving: mv, tracer };
 }
 
