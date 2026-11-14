@@ -71,13 +71,16 @@ export interface RcParams {
   rampSoft: number;
   // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
   ddgi: DdgiParams | null;
+  // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default: it raised the
+  // leak above its limit (docs/spec/40-dynamic-stability.md).
+  p1: boolean;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null,
+  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, p1: false,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
@@ -102,8 +105,8 @@ fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
   return alb.rgb / PI * F.sunE.rgb * ndl * vis;
 }
 var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keeps hit distances)
-// P1: static voxel hits read the prefiltered hit radiance at the cone width (coneK, coneO set by the tracer). Without
-// the layer (voxels rebuilt every frame) or a level holding the voxel, one point on the ray's side is shaded.
+// P1 (config token p1): static voxel hits read the prefiltered hit radiance at the cone width (coneK, coneO set by the
+// tracer). Without it (the default) or a level holding the voxel, one point on the ray's side of the voxel is shaded.
 fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32, ai: u32, L: u32, pc: vec3f) -> vec3f {
   voxHitEntry = entry;
   if (hrReady()) { let r = hitRadiance(L, pc, d, dot(entry - coneO, d)); if (r.a > 0.0) { return r.rgb; } }

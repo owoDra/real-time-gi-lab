@@ -63,18 +63,18 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
-    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device) };
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device) }; // P1: runConfig binds the layer for configs with p1
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
     width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit };
 }
 
-/** Static bricks built once (local): builds them and the P1 hit radiance layer over them. Returns the build ms. */
-export async function buildStatic(ctx: RunContext): Promise<number | null> {
+/** Static bricks built once (local): builds them and the P1 hit radiance layer over them (used by configs with p1).
+ * Returns the build ms. */
+export async function buildStatic(ctx: RunContext, p1: boolean): Promise<number | null> {
   if (!ctx.voxWorld?.params.local) return null;
   ctx.voxWorld.update(ctx.spec.camera.eye);
   const ms = await ctx.voxWorld.buildStatic();
-  ctx.hitRad = await createHitRad(ctx.device, ctx.voxWorld, ctx.frame, ctx.lighting.shadow);
-  ctx.world.hr = ctx.hitRad.buffer;
+  if (p1) ctx.hitRad = await createHitRad(ctx.device, ctx.voxWorld, ctx.frame, ctx.lighting.shadow);
   return ms;
 }
 
@@ -215,8 +215,11 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     log(`  sizing: max probes per cascade ${maxCount.join(', ')} -> caps ${caps.join(', ')}`);
   }
   const p = { ...params, caps };
-  const rc = p.ddgi ? createDdgi(device, g, frame, p.ddgi, ctx.world, [spec.scene.boundsMin, spec.scene.boundsMax])
-    : createRc(device, g, lighting.lit, frame, p, ctx.world);
+  if (p.p1 && !ctx.hitRad) throw new Error('p1 needs static bricks built once (--vox local)');
+  const hitRad = p.p1 ? ctx.hitRad : null;
+  const world = hitRad ? { ...ctx.world, hr: hitRad.buffer } : ctx.world;
+  const rc = p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax])
+    : createRc(device, g, lighting.lit, frame, p, world);
   const post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
   const querySet = device.createQuerySet({ type: 'timestamp', count: opts.frames * Q });
 
@@ -228,7 +231,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       const pass = enc.beginComputePass({ label: 'vox', timestampWrites: tw(3) });
       voxWorld!.encode(pass);
       ctx.dynLayer!.encode(pass);
-      ctx.hitRad?.encode(pass);
+      hitRad?.encode(pass);
       pass.end();
     }
     rc.encode(enc, (i) => tw(RC0 + i));
@@ -398,7 +401,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
   rc.destroy(); post.destroy(); querySet.destroy();
-  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: useVox ? ctx.hitRad?.bytes ?? 0 : 0, static: st, moving: mv, tracer };
+  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: p.p1 ? ctx.hitRad!.bytes : 0, static: st, moving: mv, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */

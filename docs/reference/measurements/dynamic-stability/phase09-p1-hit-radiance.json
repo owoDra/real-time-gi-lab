@@ -1,0 +1,560 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 09: P1 prefiltered hit radiance in the tracer shared by RC and DDGI",
+ "date": "2026-11-14",
+ "conditions": {
+  "resolution": "1920x1080",
+  "frames": "warm-up 60 + 240 (leak rooms 120)",
+  "runs": "1 (GI time: 3 independent runs, before / after alternated)",
+  "rc": "world-48-voxel-rc2-vrel",
+  "vox": {
+   "anchor": "scene",
+   "local": true
+  },
+  "sky": "none (sun only); leak rooms with sky",
+  "camera": "static (excess); moving for the moving-camera flicker and time",
+  "device": "AMD Radeon 8060S, Dawn / Vulkan (RADV), native",
+  "before": "commit 8d4fbf91",
+  "after": "commit feed8a78 (now the config token p1)",
+  "p1": "level 1 injected every frame (4 x 4 shadow-map points over the lit face), levels 2-4 averaged from children (front / back by |n.n|), read at the level nearest to the cone width; level 0 not held (cost)"
+ },
+ "reproduction": {
+  "sunonlyK16": 0.00901,
+  "dynobjK16": 0.01192,
+  "objectsonlyK16": 0.00299,
+  "expected": [
+   0.009,
+   0.0119,
+   0.003
+  ]
+ },
+ "scenes": {
+  "sponza-dynobj-sunonly": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00675,
+     "excessK16": 0.00901,
+     "excessK32": 0.00997,
+     "linearRelK16": 0.00714,
+     "meanIrradiance": 0.02873,
+     "staticCamFinePct": 7.659,
+     "movingCamFinePct": 22.248
+    },
+    "after": {
+     "excessK8": 0.00144,
+     "excessK16": 0.00223,
+     "excessK32": 0.00346,
+     "linearRelK16": 0.00151,
+     "meanIrradiance": 0.02665,
+     "staticCamFinePct": 6.954,
+     "movingCamFinePct": 20.635
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.00075,
+     "excessK16": 0.00095,
+     "excessK32": 0.00105,
+     "linearRelK16": 0.0004,
+     "meanIrradiance": 0.02673,
+     "staticCamFinePct": 2.287,
+     "movingCamFinePct": 16.143
+    },
+    "after": {
+     "excessK8": 0.0009,
+     "excessK16": 0.00112,
+     "excessK32": 0.00126,
+     "linearRelK16": 0.00028,
+     "meanIrradiance": 0.02286,
+     "staticCamFinePct": 2.618,
+     "movingCamFinePct": 16.976
+    }
+   },
+   "ddgiRtxgi": {
+    "before": {
+     "excessK8": 0.00071,
+     "excessK16": 0.0008,
+     "excessK32": 0.00083,
+     "linearRelK16": 0.00057,
+     "meanIrradiance": 0.01365,
+     "staticCamFinePct": 1.631,
+     "movingCamFinePct": 18.145
+    },
+    "after": {
+     "excessK8": 0.00093,
+     "excessK16": 0.00113,
+     "excessK32": 0.00117,
+     "linearRelK16": 0.00048,
+     "meanIrradiance": 0.01231,
+     "staticCamFinePct": 2.15,
+     "movingCamFinePct": 18.259
+    }
+   },
+   "ddgiLinear1mH08": {
+    "before": {
+     "excessK8": 0.01563,
+     "excessK16": 0.02043,
+     "excessK32": 0.02349,
+     "linearRelK16": 0.00882,
+     "meanIrradiance": 0.0277,
+     "staticCamFinePct": 12.251,
+     "movingCamFinePct": 21.31
+    },
+    "after": {
+     "excessK8": 0.01572,
+     "excessK16": 0.01983,
+     "excessK32": 0.02216,
+     "linearRelK16": 0.00691,
+     "meanIrradiance": 0.02431,
+     "staticCamFinePct": 13.215,
+     "movingCamFinePct": 22.522
+    }
+   }
+  },
+  "sponza-dynobj": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00873,
+     "excessK16": 0.01192,
+     "excessK32": 0.01476,
+     "linearRelK16": 0.00989,
+     "meanIrradiance": 0.02825,
+     "staticCamFinePct": 10.525,
+     "movingCamFinePct": 24.607
+    },
+    "after": {
+     "excessK8": 0.00259,
+     "excessK16": 0.00435,
+     "excessK32": 0.0073,
+     "linearRelK16": 0.00272,
+     "meanIrradiance": 0.02664,
+     "staticCamFinePct": 9.742,
+     "movingCamFinePct": 23.444
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.00075,
+     "excessK16": 0.00094,
+     "excessK32": 0.00105,
+     "linearRelK16": 0.0004,
+     "meanIrradiance": 0.02891,
+     "staticCamFinePct": 2.321,
+     "movingCamFinePct": 17.015
+    },
+    "after": {
+     "excessK8": 0.00081,
+     "excessK16": 0.001,
+     "excessK32": 0.00116,
+     "linearRelK16": 0.0003,
+     "meanIrradiance": 0.02521,
+     "staticCamFinePct": 2.631,
+     "movingCamFinePct": 17.891
+    }
+   },
+   "ddgiRtxgi": {
+    "before": {
+     "excessK8": 0.00065,
+     "excessK16": 0.00082,
+     "excessK32": 0.00095,
+     "linearRelK16": 0.00067,
+     "meanIrradiance": 0.01466,
+     "staticCamFinePct": 1.61,
+     "movingCamFinePct": 19.283
+    },
+    "after": {
+     "excessK8": 0.00095,
+     "excessK16": 0.00114,
+     "excessK32": 0.00129,
+     "linearRelK16": 0.00059,
+     "meanIrradiance": 0.01367,
+     "staticCamFinePct": 2.076,
+     "movingCamFinePct": 19.068
+    }
+   },
+   "ddgiLinear1mH08": {
+    "before": {
+     "excessK8": 0.01568,
+     "excessK16": 0.01991,
+     "excessK32": 0.02409,
+     "linearRelK16": 0.00884,
+     "meanIrradiance": 0.02925,
+     "staticCamFinePct": 12.785,
+     "movingCamFinePct": 23.592
+    },
+    "after": {
+     "excessK8": 0.01568,
+     "excessK16": 0.01983,
+     "excessK32": 0.02245,
+     "linearRelK16": 0.00706,
+     "meanIrradiance": 0.02596,
+     "staticCamFinePct": 13.59,
+     "movingCamFinePct": 24.522
+    }
+   }
+  },
+  "sponza-dynobj-objectsonly": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00178,
+     "excessK16": 0.00299,
+     "excessK32": 0.00456,
+     "linearRelK16": 0.0034,
+     "meanIrradiance": 0.03097,
+     "staticCamFinePct": 6.983,
+     "movingCamFinePct": 24.642
+    },
+    "after": {
+     "excessK8": 0.00112,
+     "excessK16": 0.00211,
+     "excessK32": 0.00352,
+     "linearRelK16": 0.00159,
+     "meanIrradiance": 0.02937,
+     "staticCamFinePct": 6.722,
+     "movingCamFinePct": 24.144
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.00089,
+     "excessK16": 0.00117,
+     "excessK32": 0.0014,
+     "linearRelK16": 0.00072,
+     "meanIrradiance": 0.03398,
+     "staticCamFinePct": 1.344,
+     "movingCamFinePct": 15.927
+    },
+    "after": {
+     "excessK8": 0.00113,
+     "excessK16": 0.00149,
+     "excessK32": 0.00176,
+     "linearRelK16": 0.00056,
+     "meanIrradiance": 0.0305,
+     "staticCamFinePct": 1.59,
+     "movingCamFinePct": 16.946
+    }
+   },
+   "ddgiRtxgi": {
+    "before": {
+     "excessK8": 0.00107,
+     "excessK16": 0.00133,
+     "excessK32": 0.00158,
+     "linearRelK16": 0.00108,
+     "meanIrradiance": 0.02757,
+     "staticCamFinePct": 1.782,
+     "movingCamFinePct": 17.423
+    },
+    "after": {
+     "excessK8": 0.00155,
+     "excessK16": 0.00194,
+     "excessK32": 0.00221,
+     "linearRelK16": 0.00091,
+     "meanIrradiance": 0.02663,
+     "staticCamFinePct": 2.026,
+     "movingCamFinePct": 18.206
+    }
+   },
+   "ddgiLinear1mH08": {
+    "before": {
+     "excessK8": 0.01736,
+     "excessK16": 0.02239,
+     "excessK32": 0.02643,
+     "linearRelK16": 0.01099,
+     "meanIrradiance": 0.03319,
+     "staticCamFinePct": 13.36,
+     "movingCamFinePct": 22.94
+    },
+    "after": {
+     "excessK8": 0.01706,
+     "excessK16": 0.02198,
+     "excessK32": 0.02483,
+     "linearRelK16": 0.0092,
+     "meanIrradiance": 0.03087,
+     "staticCamFinePct": 13.752,
+     "movingCamFinePct": 24.344
+    }
+   }
+  },
+  "sponza-dyn (toon objects)": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00855,
+     "excessK16": 0.01214,
+     "excessK32": 0.01552,
+     "linearRelK16": 0.00947,
+     "meanIrradiance": 0.03225,
+     "staticCamFinePct": 11.66,
+     "movingCamFinePct": 25.865,
+     "toonRampChangePct": 1.398,
+     "controlRampChangePct": 1.151
+    },
+    "after": {
+     "excessK8": 0.00284,
+     "excessK16": 0.00527,
+     "excessK32": 0.00872,
+     "linearRelK16": 0.00335,
+     "meanIrradiance": 0.03063,
+     "staticCamFinePct": 10.813,
+     "movingCamFinePct": 24.686,
+     "toonRampChangePct": 1.477,
+     "controlRampChangePct": 1.151
+    }
+   }
+  },
+  "sponza (static)": {
+   "rc": {
+    "before": {
+     "excessK8": 0,
+     "excessK16": 0,
+     "excessK32": 0,
+     "linearRelK16": 0,
+     "meanIrradiance": 0.04163,
+     "staticCamFinePct": 0,
+     "movingCamFinePct": 15.774
+    },
+    "after": {
+     "excessK8": 0,
+     "excessK16": 0,
+     "excessK32": 0,
+     "linearRelK16": 0,
+     "meanIrradiance": 0.03908,
+     "staticCamFinePct": 0,
+     "movingCamFinePct": 17.136
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.0013,
+     "excessK16": 0.00175,
+     "excessK32": 0.0021,
+     "linearRelK16": 0.00073,
+     "meanIrradiance": 0.04467,
+     "staticCamFinePct": 1.194,
+     "movingCamFinePct": 17.412
+    },
+    "after": {
+     "excessK8": 0.00141,
+     "excessK16": 0.00185,
+     "excessK32": 0.00217,
+     "linearRelK16": 0.00057,
+     "meanIrradiance": 0.03858,
+     "staticCamFinePct": 1.248,
+     "movingCamFinePct": 18.481
+    }
+   }
+  }
+ },
+ "reference": {
+  "scene": "sponza static, sun only",
+  "mitsuba": "960x540, 512 spp x 2 seeds (half difference 0.167)",
+  "rc": {
+   "before": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0417,
+    "bias": -0.1447,
+    "meanAbsRel": 0.3999,
+    "medianRel": 0.1449,
+    "p90Rel": 0.8955
+   },
+   "after": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0391,
+    "bias": -0.1969,
+    "meanAbsRel": 0.3946,
+    "medianRel": 0.1303,
+    "p90Rel": 0.7868
+   }
+  },
+  "ddgiLinear075": {
+   "before": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0444,
+    "bias": -0.0891,
+    "meanAbsRel": 0.3622,
+    "medianRel": 0.1789,
+    "p90Rel": 0.9105
+   },
+   "after": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0383,
+    "bias": -0.2145,
+    "meanAbsRel": 0.3997,
+    "medianRel": 0.1766,
+    "p90Rel": 0.7967
+   }
+  }
+ },
+ "leakPct": {
+  "0.02": {
+   "before": 0.741,
+   "after": 1.275
+  },
+  "0.1": {
+   "before": 0.31,
+   "after": 0.526
+  }
+ },
+ "response90Frames": {
+  "before": 1,
+  "after": 1
+ },
+ "cost": [
+  {
+   "run": 1,
+   "state": "before",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMsStatic": 3.464,
+   "giMsMoving": 3.535,
+   "voxPassMsStatic": 0.248,
+   "traceMsStatic": 1.077,
+   "usedMiB": 48.3,
+   "p1MiB": 0.0,
+   "allocatedMiB": 158.8
+  },
+  {
+   "run": 1,
+   "state": "after",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMsStatic": 3.928,
+   "giMsMoving": 4.04,
+   "voxPassMsStatic": 0.647,
+   "traceMsStatic": 1.043,
+   "usedMiB": 67.6,
+   "p1MiB": 19.3,
+   "allocatedMiB": 178.1
+  },
+  {
+   "run": 1,
+   "state": "after",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMsStatic": 3.934,
+   "giMsMoving": 3.524,
+   "voxPassMsStatic": 0.66,
+   "traceMsStatic": 2.418,
+   "usedMiB": 88.6,
+   "p1MiB": 19.3,
+   "allocatedMiB": 195.1
+  },
+  {
+   "run": 1,
+   "state": "after",
+   "config": "ddgi-100-128-u2",
+   "giMsStatic": 3.853,
+   "giMsMoving": 3.527,
+   "voxPassMsStatic": 0.642,
+   "traceMsStatic": 2.545,
+   "usedMiB": 72.1,
+   "p1MiB": 19.3,
+   "allocatedMiB": 178.6
+  },
+  {
+   "run": 2,
+   "state": "before",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMsStatic": 3.63,
+   "giMsMoving": 3.7,
+   "voxPassMsStatic": 0.259,
+   "traceMsStatic": 1.141,
+   "usedMiB": 48.3,
+   "p1MiB": 0.0,
+   "allocatedMiB": 158.8
+  },
+  {
+   "run": 2,
+   "state": "after",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMsStatic": 3.735,
+   "giMsMoving": 3.515,
+   "voxPassMsStatic": 0.606,
+   "traceMsStatic": 0.988,
+   "usedMiB": 67.6,
+   "p1MiB": 19.3,
+   "allocatedMiB": 178.1
+  },
+  {
+   "run": 2,
+   "state": "after",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMsStatic": 3.841,
+   "giMsMoving": 3.482,
+   "voxPassMsStatic": 0.622,
+   "traceMsStatic": 2.379,
+   "usedMiB": 88.6,
+   "p1MiB": 19.3,
+   "allocatedMiB": 195.1
+  },
+  {
+   "run": 2,
+   "state": "after",
+   "config": "ddgi-100-128-u2",
+   "giMsStatic": 3.884,
+   "giMsMoving": 3.454,
+   "voxPassMsStatic": 0.635,
+   "traceMsStatic": 2.585,
+   "usedMiB": 72.1,
+   "p1MiB": 19.3,
+   "allocatedMiB": 178.6
+  },
+  {
+   "run": 3,
+   "state": "before",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMsStatic": 3.684,
+   "giMsMoving": 3.706,
+   "voxPassMsStatic": 0.265,
+   "traceMsStatic": 1.158,
+   "usedMiB": 48.3,
+   "p1MiB": 0.0,
+   "allocatedMiB": 158.8
+  },
+  {
+   "run": 3,
+   "state": "after",
+   "config": "world-48-voxel-rc2-vrel",
+   "giMsStatic": 3.958,
+   "giMsMoving": 3.986,
+   "voxPassMsStatic": 0.632,
+   "traceMsStatic": 1.065,
+   "usedMiB": 67.6,
+   "p1MiB": 19.3,
+   "allocatedMiB": 178.1
+  },
+  {
+   "run": 3,
+   "state": "after",
+   "config": "ddgi-75-128-u4-g1-noadapt",
+   "giMsStatic": 3.94,
+   "giMsMoving": 3.517,
+   "voxPassMsStatic": 0.641,
+   "traceMsStatic": 2.459,
+   "usedMiB": 88.6,
+   "p1MiB": 19.3,
+   "allocatedMiB": 195.1
+  },
+  {
+   "run": 3,
+   "state": "after",
+   "config": "ddgi-100-128-u2",
+   "giMsStatic": 3.874,
+   "giMsMoving": 3.509,
+   "voxPassMsStatic": 0.642,
+   "traceMsStatic": 2.567,
+   "usedMiB": 72.1,
+   "p1MiB": 19.3,
+   "allocatedMiB": 178.6
+  }
+ ],
+ "criteria": {
+  "D": "sunonly K16 0.00901 -> 0.00223 <= 0.003: taken",
+  "objectsonly": "0.00211 <= 0.0045: ok",
+  "staticError": "0.395 <= 0.44, still 0 static flicker / excess: ok",
+  "leak": "0.02 m 1.275% > 1.1%, 0.1 m 0.526% > 0.5%: FAILED",
+  "response": "1 frame: ok",
+  "cost": "static 3.74-3.96 ms ok; moving 3.52-4.04 ms, one run > 4 ms: FAILED; used 67.7 MiB <= 128 ok",
+  "decision": "not in the default configuration (leak and cost); kept as config token p1"
+ }
+}

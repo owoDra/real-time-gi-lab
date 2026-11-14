@@ -12,6 +12,7 @@
 //   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent),
 //   S3 (toon materials, scene sponza-toon): noemit (toon surfaces inject plain Lambert), norecv (toon pixels receive
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
+//   p1 (RC and DDGI, needs --vox local): static voxel hits read the prefiltered hit radiance (src/core/hitrad.ts).
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseGltf } from '../core/gltf.ts';
@@ -41,10 +42,11 @@ const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--fram
   response: args.includes('--response') ? (([a, b]) => ({ from: a, to: b }))(arg('--response', '').split(',').map(Number)) : undefined };
 const overrides = JSON.parse(arg('--params', '{}')) as Partial<RcParams>;
 
-// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>]
+// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>][-p1]
 function parseDdgi(name: string): RcParams {
   const [, sp, rays, ...tokens] = name.split('-');
   const d: DdgiParams = { ...DEFAULT_DDGI, spacing: Number(sp) / 100, rays: Number(rays) };
+  let p1 = false;
   for (const t of tokens) {
     if (/^h[\d.]+$/.test(t)) d.hysteresis = Number(t.slice(1));
     else if (t === 'noadapt') d.adaptive = false;
@@ -55,9 +57,10 @@ function parseDdgi(name: string): RcParams {
     else if (/^sb[\d.]+$/.test(t)) d.segBase = Number(t.slice(2));
     else if (/^g[\d.]+$/.test(t)) d.gamma = Number(t.slice(1));
     else if (/^vb[\d.]+$/.test(t)) d.viewBias = Number(t.slice(2));
+    else if (t === 'p1') p1 = true;
     else throw new Error(`unknown ddgi token ${t} in ${name}`);
   }
-  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d };
+  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d, p1 };
 }
 
 function parseConfig(name: string): RcParams {
@@ -75,6 +78,7 @@ function parseConfig(name: string): RcParams {
     else if (t === 'norel') p.relocate = 'none';
     else if (t === 'vrel') p.relocate = 'voxel';
     else if (t === 'noemit') p.styleEmit = false;
+    else if (t === 'p1') p.p1 = true;
     else if (t === 'norecv') p.styleRecv = false;
     else if (/^soft[\d.]+$/.test(t)) p.rampSoft = Number(t.slice(4));
     else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
@@ -112,9 +116,9 @@ const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tr
 const voxBench = args.includes('--vox-bench');
 const needVox = voxBench || parsed.some(([, p]) => p.world === 'voxel' || p.relocate === 'voxel');
 const ctx = createRunContext(device, spec, gpu, { voxel: needVox, bvh: needBvh, vox: JSON.parse(arg('--vox', '{}')) });
-const staticBuildMs = await buildStatic(ctx);
-if (staticBuildMs !== null) log(`voxels: static triangles built once in ${staticBuildMs.toFixed(2)} ms; dynamic triangles (from ${spec.dynamic?.firstTriangle}) in the dynamic layer;`
-  + ` P1 hit radiance over ${ctx.hitRad!.voxelsPerLevel.join(', ')} voxels per level, ${(ctx.hitRad!.bytes / 2 ** 20).toFixed(1)} MiB`);
+const staticBuildMs = await buildStatic(ctx, parsed.some(([, p]) => p.p1));
+if (staticBuildMs !== null) log(`voxels: static triangles built once in ${staticBuildMs.toFixed(2)} ms; dynamic triangles (from ${spec.dynamic?.firstTriangle}) in the dynamic layer`
+  + (ctx.hitRad ? `; P1 hit radiance over ${ctx.hitRad.voxelsPerLevel.join(', ')} voxels per level, ${(ctx.hitRad.bytes / 2 ** 20).toFixed(1)} MiB` : ''));
 log(`scene ${spec.name}: ${spec.scene.triangleCount} triangles, loaded in ${Math.round(performance.now() - t0)} ms; bounds ${spec.scene.boundsMin.map((v) => v.toFixed(2))} .. ${spec.scene.boundsMax.map((v) => v.toFixed(2))}`
   + (ctx.bvh ? `; BVH ${ctx.bvh.nodes} nodes, ${(ctx.bvh.bytes / 2 ** 20).toFixed(1)} MiB, built in ${ctx.bvh.buildMs} ms (CPU)` : ''));
 mkdirSync(outDir, { recursive: true });

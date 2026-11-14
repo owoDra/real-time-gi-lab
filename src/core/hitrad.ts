@@ -2,6 +2,8 @@
 // one point flips a whole direction bin when a shadow edge passes it); they read the direct light of the voxels,
 // injected every frame and averaged from fine to coarse levels, at the level that matches the width of the direction
 // bin's cone. Geometry (the binary bricks, built once) and radiance (every frame) are updated separately.
+// Opt-in (config token p1), not in the default configuration: on Sponza it removed most of the sun's jumps but raised
+// the leak of the thin-walled rooms above its limit (docs/spec/40-dynamic-stability.md).
 //
 // Each occupied static voxel of levels 1.. has two radiances: the side its representative normal n points to
 // ("front") and the opposite side ("back"), so the lit face of a thin wall does not pass to the other side.
@@ -235,7 +237,7 @@ export interface HitRad {
   destroy(): void;
 }
 
-/** Empty layer: hits keep the one-point shading (voxel worlds rebuilt every frame). */
+/** Empty layer: hits keep the one-point shading (configs without p1). */
 export function emptyHitRad(device: GPUDevice): GPUBuffer {
   return device.createBuffer({ label: 'hitrad.empty', size: 16, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
 }
