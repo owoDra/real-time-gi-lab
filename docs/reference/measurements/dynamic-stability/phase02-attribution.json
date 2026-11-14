@@ -1,0 +1,980 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability 02",
+ "date": "2026-11-14",
+ "conditions": "1920x1080, AMD Radeon 8060S, Dawn/Vulkan native, sun only (no sky), static camera, warmup 60 + 240 frames, voxels {anchor: scene, local: true} unless vox.local is false (E3), 1 run each. Diagnostic switches (removed after this phase): dvis1 hit-side sun visibility = 1; dvisobj the same on hits of dynamic-object materials only (vox diagTagObj); drays2 2x2 rays per direction bin averaged; vox diagDynMask levels that get the dynamic triangles; vox diagStaticWins static triangles win the voxel representative. GI ms: diagnostic and triangle runs are not timing results.",
+ "metrics": {
+  "photoFinePct": "band-boundary flicker, fine (1/4 stop), photoreal pixels",
+  "staticFinePct": "same, pixels not a dynamic object in either frame",
+  "excess.kK": "excess variation, log2 luminance, window K, stops per frame",
+  "k16linear.excessAbsPerFrame": "linear excess relative value x mean irradiance (absolute, irradiance units per frame); read this when a switch changes the brightness of the field"
+ },
+ "reproduction": {
+  "sponza-dynobj-objectsonly voxel": 0.06499,
+  "sponza-dynobj-objectsonly tri": 0.03484,
+  "sponza-dynobj-sunonly voxel": 0.01299,
+  "note": "excess K=16, equal to phase 01 to 5 digits; mask31, full rebuild and the tag-only run equal the default to 5 digits"
+ },
+ "imageCheck": "default config static irradiance (sponza, --dump-irr, 30 frames) bit-identical before and after adding the switches (sha256 prefix 9e2d8013febd19ca)",
+ "runs": [
+  {
+   "group": "obj",
+   "experiment": "E4 / E1 / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-vrel-drays2",
+   "vox": {
+    "local": true
+   },
+   "giMs": 19.957,
+   "photoFinePct": 15.585,
+   "staticFinePct": 15.585,
+   "excess": {
+    "k8": 0.0294,
+    "k16": 0.03634,
+    "k32": 0.0414
+   },
+   "tvK16": 0.05506,
+   "k16linear": {
+    "excessRelPerFrame": 0.01016,
+    "tvRelPerFrame": 0.01686,
+    "meanIrradiance": 0.03348,
+    "excessAbsPerFrame": 0.00034
+   }
+  },
+  {
+   "group": "obj",
+   "experiment": "E4 / E1 / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-vrel-dvis1",
+   "vox": {
+    "local": true
+   },
+   "giMs": 6.19,
+   "photoFinePct": 6.802,
+   "staticFinePct": 6.802,
+   "excess": {
+    "k8": 0.01513,
+    "k16": 0.01902,
+    "k32": 0.02191
+   },
+   "tvK16": 0.0264,
+   "k16linear": {
+    "excessRelPerFrame": 0.00228,
+    "tvRelPerFrame": 0.00343,
+    "meanIrradiance": 0.41801,
+    "excessAbsPerFrame": 0.000953
+   }
+  },
+  {
+   "group": "obj",
+   "experiment": "E4 / E1 / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-vrel",
+   "vox": {
+    "local": true
+   },
+   "giMs": 6.356,
+   "photoFinePct": 12.362,
+   "staticFinePct": 12.362,
+   "excess": {
+    "k8": 0.02455,
+    "k16": 0.03484,
+    "k32": 0.04361
+   },
+   "tvK16": 0.06093,
+   "k16linear": {
+    "excessRelPerFrame": 0.01386,
+    "tvRelPerFrame": 0.0229,
+    "meanIrradiance": 0.03486,
+    "excessAbsPerFrame": 0.000483
+   }
+  },
+  {
+   "group": "obj",
+   "experiment": "E4 / E1 / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-drays2",
+   "vox": {
+    "local": true
+   },
+   "giMs": 5.278,
+   "photoFinePct": 17.967,
+   "staticFinePct": 17.967,
+   "excess": {
+    "k8": 0.04065,
+    "k16": 0.04597,
+    "k32": 0.04868
+   },
+   "tvK16": 0.06148,
+   "k16linear": {
+    "excessRelPerFrame": 0.01374,
+    "tvRelPerFrame": 0.02068,
+    "meanIrradiance": 0.03035,
+    "excessAbsPerFrame": 0.000417
+   }
+  },
+  {
+   "group": "obj",
+   "experiment": "E4 / E1 / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true
+   },
+   "giMs": 2.597,
+   "photoFinePct": 6.922,
+   "staticFinePct": 6.922,
+   "excess": {
+    "k8": 0.01489,
+    "k16": 0.0177,
+    "k32": 0.01941
+   },
+   "tvK16": 0.02263,
+   "k16linear": {
+    "excessRelPerFrame": 0.00293,
+    "tvRelPerFrame": 0.00414,
+    "meanIrradiance": 0.39841,
+    "excessAbsPerFrame": 0.001167
+   }
+  },
+  {
+   "group": "obj",
+   "experiment": "E4 / E1 / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true
+   },
+   "giMs": 2.911,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.064,
+   "excess": {
+    "k8": 0.05453,
+    "k16": 0.06499,
+    "k32": 0.0733
+   },
+   "tvK16": 0.08747,
+   "k16linear": {
+    "excessRelPerFrame": 0.02222,
+    "tvRelPerFrame": 0.03184,
+    "meanIrradiance": 0.03113,
+    "excessAbsPerFrame": 0.000692
+   }
+  },
+  {
+   "group": "sun",
+   "experiment": "E4 sun only",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-tri-rc2-vrel-dvis1",
+   "vox": {
+    "local": true
+   },
+   "giMs": 5.361,
+   "photoFinePct": 4.854,
+   "staticFinePct": 4.854,
+   "excess": {
+    "k8": 0.0009,
+    "k16": 0.00096,
+    "k32": 0.00156
+   },
+   "tvK16": 0.01444,
+   "k16linear": {
+    "excessRelPerFrame": 3e-05,
+    "tvRelPerFrame": 0.00123,
+    "meanIrradiance": 0.41012,
+    "excessAbsPerFrame": 1.2e-05
+   }
+  },
+  {
+   "group": "sun",
+   "experiment": "E4 sun only",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-tri-rc2-vrel",
+   "vox": {
+    "local": true
+   },
+   "giMs": 5.59,
+   "photoFinePct": 9.8,
+   "staticFinePct": 9.8,
+   "excess": {
+    "k8": 0.01179,
+    "k16": 0.01654,
+    "k32": 0.01953
+   },
+   "tvK16": 0.04029,
+   "k16linear": {
+    "excessRelPerFrame": 0.01203,
+    "tvRelPerFrame": 0.02534,
+    "meanIrradiance": 0.03061,
+    "excessAbsPerFrame": 0.000368
+   }
+  },
+  {
+   "group": "sun",
+   "experiment": "E4 sun only",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true
+   },
+   "giMs": 2.592,
+   "photoFinePct": 4.326,
+   "staticFinePct": 4.326,
+   "excess": {
+    "k8": 0.00112,
+    "k16": 0.00118,
+    "k32": 0.0025
+   },
+   "tvK16": 0.01197,
+   "k16linear": {
+    "excessRelPerFrame": 4e-05,
+    "tvRelPerFrame": 0.00121,
+    "meanIrradiance": 0.39085,
+    "excessAbsPerFrame": 1.6e-05
+   }
+  },
+  {
+   "group": "sun",
+   "experiment": "E4 sun only",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true
+   },
+   "giMs": 2.865,
+   "photoFinePct": 8.123,
+   "staticFinePct": 8.123,
+   "excess": {
+    "k8": 0.00943,
+    "k16": 0.01299,
+    "k32": 0.01421
+   },
+   "tvK16": 0.03146,
+   "k16linear": {
+    "excessRelPerFrame": 0.00878,
+    "tvRelPerFrame": 0.02101,
+    "meanIrradiance": 0.02746,
+    "excessAbsPerFrame": 0.000241
+   }
+  },
+  {
+   "group": "both",
+   "experiment": "E4 sun and objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-tri-rc2-vrel-dvis1",
+   "vox": {
+    "local": true
+   },
+   "giMs": 6.401,
+   "photoFinePct": 8.574,
+   "staticFinePct": 8.574,
+   "excess": {
+    "k8": 0.01339,
+    "k16": 0.01633,
+    "k32": 0.02036
+   },
+   "tvK16": 0.03478,
+   "k16linear": {
+    "excessRelPerFrame": 0.00218,
+    "tvRelPerFrame": 0.00416,
+    "meanIrradiance": 0.41159,
+    "excessAbsPerFrame": 0.000897
+   }
+  },
+  {
+   "group": "both",
+   "experiment": "E4 sun and objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-tri-rc2-vrel",
+   "vox": {
+    "local": true
+   },
+   "giMs": 6.542,
+   "photoFinePct": 16.433,
+   "staticFinePct": 16.433,
+   "excess": {
+    "k8": 0.03033,
+    "k16": 0.03955,
+    "k32": 0.04942
+   },
+   "tvK16": 0.07877,
+   "k16linear": {
+    "excessRelPerFrame": 0.02286,
+    "tvRelPerFrame": 0.04002,
+    "meanIrradiance": 0.03108,
+    "excessAbsPerFrame": 0.00071
+   }
+  },
+  {
+   "group": "both",
+   "experiment": "E4 sun and objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true
+   },
+   "giMs": 2.628,
+   "photoFinePct": 9.409,
+   "staticFinePct": 9.409,
+   "excess": {
+    "k8": 0.01906,
+    "k16": 0.02187,
+    "k32": 0.02519
+   },
+   "tvK16": 0.03589,
+   "k16linear": {
+    "excessRelPerFrame": 0.00284,
+    "tvRelPerFrame": 0.00486,
+    "meanIrradiance": 0.39151,
+    "excessAbsPerFrame": 0.001112
+   }
+  },
+  {
+   "group": "both",
+   "experiment": "E4 sun and objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true
+   },
+   "giMs": 2.879,
+   "photoFinePct": 18.244,
+   "staticFinePct": 18.243,
+   "excess": {
+    "k8": 0.05165,
+    "k16": 0.06249,
+    "k32": 0.07101
+   },
+   "tvK16": 0.09254,
+   "k16linear": {
+    "excessRelPerFrame": 0.0271,
+    "tvRelPerFrame": 0.04321,
+    "meanIrradiance": 0.02855,
+    "excessAbsPerFrame": 0.000774
+   }
+  },
+  {
+   "group": "mask0",
+   "experiment": "E2 layer mask 0 (no level)",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true,
+    "diagDynMask": 0
+   },
+   "giMs": 2.962,
+   "photoFinePct": 0,
+   "staticFinePct": 0,
+   "excess": {
+    "k8": 0,
+    "k16": 0,
+    "k32": 0
+   },
+   "tvK16": 0,
+   "k16linear": {
+    "excessRelPerFrame": 0,
+    "tvRelPerFrame": 0,
+    "meanIrradiance": 0.39789,
+    "excessAbsPerFrame": 0.0
+   }
+  },
+  {
+   "group": "mask0",
+   "experiment": "E2 layer mask 0 (no level)",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagDynMask": 0
+   },
+   "giMs": 3.269,
+   "photoFinePct": 1.304,
+   "staticFinePct": 1.303,
+   "excess": {
+    "k8": 0.00084,
+    "k16": 0.00137,
+    "k32": 0.00188
+   },
+   "tvK16": 0.00377,
+   "k16linear": {
+    "excessRelPerFrame": 0.00192,
+    "tvRelPerFrame": 0.00613,
+    "meanIrradiance": 0.02699,
+    "excessAbsPerFrame": 5.2e-05
+   }
+  },
+  {
+   "group": "mask1",
+   "experiment": "E2 levels 0",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true,
+    "diagDynMask": 1
+   },
+   "giMs": 2.803,
+   "photoFinePct": 2.371,
+   "staticFinePct": 2.371,
+   "excess": {
+    "k8": 0.00583,
+    "k16": 0.0071,
+    "k32": 0.00746
+   },
+   "tvK16": 0.00941,
+   "k16linear": {
+    "excessRelPerFrame": 0.00065,
+    "tvRelPerFrame": 0.00095,
+    "meanIrradiance": 0.39794,
+    "excessAbsPerFrame": 0.000259
+   }
+  },
+  {
+   "group": "mask1",
+   "experiment": "E2 levels 0",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagDynMask": 1
+   },
+   "giMs": 3.218,
+   "photoFinePct": 6.593,
+   "staticFinePct": 6.592,
+   "excess": {
+    "k8": 0.01516,
+    "k16": 0.01885,
+    "k32": 0.02103
+   },
+   "tvK16": 0.0289,
+   "k16linear": {
+    "excessRelPerFrame": 0.00568,
+    "tvRelPerFrame": 0.01164,
+    "meanIrradiance": 0.02662,
+    "excessAbsPerFrame": 0.000151
+   }
+  },
+  {
+   "group": "mask3",
+   "experiment": "E2 levels 0-1",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true,
+    "diagDynMask": 3
+   },
+   "giMs": 2.888,
+   "photoFinePct": 6.184,
+   "staticFinePct": 6.184,
+   "excess": {
+    "k8": 0.01318,
+    "k16": 0.01558,
+    "k32": 0.01722
+   },
+   "tvK16": 0.02,
+   "k16linear": {
+    "excessRelPerFrame": 0.00228,
+    "tvRelPerFrame": 0.00321,
+    "meanIrradiance": 0.39849,
+    "excessAbsPerFrame": 0.000909
+   }
+  },
+  {
+   "group": "mask3",
+   "experiment": "E2 levels 0-1",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagDynMask": 3
+   },
+   "giMs": 3.116,
+   "photoFinePct": 15.37,
+   "staticFinePct": 15.37,
+   "excess": {
+    "k8": 0.05052,
+    "k16": 0.06018,
+    "k32": 0.06778
+   },
+   "tvK16": 0.07904,
+   "k16linear": {
+    "excessRelPerFrame": 0.01864,
+    "tvRelPerFrame": 0.02748,
+    "meanIrradiance": 0.03045,
+    "excessAbsPerFrame": 0.000568
+   }
+  },
+  {
+   "group": "mask7",
+   "experiment": "E2 levels 0-2",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true,
+    "diagDynMask": 7
+   },
+   "giMs": 2.807,
+   "photoFinePct": 6.74,
+   "staticFinePct": 6.739,
+   "excess": {
+    "k8": 0.01462,
+    "k16": 0.01734,
+    "k32": 0.01906
+   },
+   "tvK16": 0.02218,
+   "k16linear": {
+    "excessRelPerFrame": 0.00278,
+    "tvRelPerFrame": 0.00395,
+    "meanIrradiance": 0.39893,
+    "excessAbsPerFrame": 0.001109
+   }
+  },
+  {
+   "group": "mask7",
+   "experiment": "E2 levels 0-2",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagDynMask": 7
+   },
+   "giMs": 3.136,
+   "photoFinePct": 16.795,
+   "staticFinePct": 16.795,
+   "excess": {
+    "k8": 0.05392,
+    "k16": 0.06452,
+    "k32": 0.07294
+   },
+   "tvK16": 0.08673,
+   "k16linear": {
+    "excessRelPerFrame": 0.02119,
+    "tvRelPerFrame": 0.03052,
+    "meanIrradiance": 0.03092,
+    "excessAbsPerFrame": 0.000655
+   }
+  },
+  {
+   "group": "mask15",
+   "experiment": "E2 levels 0-3",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true,
+    "diagDynMask": 15
+   },
+   "giMs": 3.005,
+   "photoFinePct": 6.921,
+   "staticFinePct": 6.921,
+   "excess": {
+    "k8": 0.01489,
+    "k16": 0.0177,
+    "k32": 0.01941
+   },
+   "tvK16": 0.02263,
+   "k16linear": {
+    "excessRelPerFrame": 0.00293,
+    "tvRelPerFrame": 0.00413,
+    "meanIrradiance": 0.39841,
+    "excessAbsPerFrame": 0.001167
+   }
+  },
+  {
+   "group": "mask15",
+   "experiment": "E2 levels 0-3",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagDynMask": 15
+   },
+   "giMs": 3.284,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.065,
+   "excess": {
+    "k8": 0.05453,
+    "k16": 0.06499,
+    "k32": 0.0733
+   },
+   "tvK16": 0.08748,
+   "k16linear": {
+    "excessRelPerFrame": 0.02222,
+    "tvRelPerFrame": 0.03184,
+    "meanIrradiance": 0.03113,
+    "excessAbsPerFrame": 0.000692
+   }
+  },
+  {
+   "group": "mask31",
+   "experiment": "E2 all levels (= default)",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": true,
+    "diagDynMask": 31
+   },
+   "giMs": 3.052,
+   "photoFinePct": 6.922,
+   "staticFinePct": 6.922,
+   "excess": {
+    "k8": 0.01489,
+    "k16": 0.0177,
+    "k32": 0.01941
+   },
+   "tvK16": 0.02263,
+   "k16linear": {
+    "excessRelPerFrame": 0.00293,
+    "tvRelPerFrame": 0.00414,
+    "meanIrradiance": 0.39841,
+    "excessAbsPerFrame": 0.001167
+   }
+  },
+  {
+   "group": "mask31",
+   "experiment": "E2 all levels (= default)",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagDynMask": 31
+   },
+   "giMs": 3.346,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.064,
+   "excess": {
+    "k8": 0.05453,
+    "k16": 0.06499,
+    "k32": 0.0733
+   },
+   "tvK16": 0.08747,
+   "k16linear": {
+    "excessRelPerFrame": 0.02222,
+    "tvRelPerFrame": 0.03184,
+    "meanIrradiance": 0.03113,
+    "excessAbsPerFrame": 0.000692
+   }
+  },
+  {
+   "group": "full",
+   "experiment": "E3 full rebuild, default rule (highest index wins)",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": false
+   },
+   "giMs": 4.994,
+   "photoFinePct": 6.922,
+   "staticFinePct": 6.922,
+   "excess": {
+    "k8": 0.01489,
+    "k16": 0.0177,
+    "k32": 0.01941
+   },
+   "tvK16": 0.02263,
+   "k16linear": {
+    "excessRelPerFrame": 0.00293,
+    "tvRelPerFrame": 0.00414,
+    "meanIrradiance": 0.39841,
+    "excessAbsPerFrame": 0.001167
+   }
+  },
+  {
+   "group": "full",
+   "experiment": "E3 full rebuild, default rule (highest index wins)",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": false
+   },
+   "giMs": 5.214,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.064,
+   "excess": {
+    "k8": 0.05453,
+    "k16": 0.06499,
+    "k32": 0.0733
+   },
+   "tvK16": 0.08747,
+   "k16linear": {
+    "excessRelPerFrame": 0.02222,
+    "tvRelPerFrame": 0.03184,
+    "meanIrradiance": 0.03113,
+    "excessAbsPerFrame": 0.000692
+   }
+  },
+  {
+   "group": "statwin",
+   "experiment": "E3 full rebuild, static triangles win",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvis1",
+   "vox": {
+    "local": false,
+    "diagStaticWins": true
+   },
+   "giMs": 4.99,
+   "photoFinePct": 6.754,
+   "staticFinePct": 6.754,
+   "excess": {
+    "k8": 0.01458,
+    "k16": 0.01734,
+    "k32": 0.01897
+   },
+   "tvK16": 0.02221,
+   "k16linear": {
+    "excessRelPerFrame": 0.00278,
+    "tvRelPerFrame": 0.0039,
+    "meanIrradiance": 0.39709,
+    "excessAbsPerFrame": 0.001104
+   }
+  },
+  {
+   "group": "statwin",
+   "experiment": "E3 full rebuild, static triangles win",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": false,
+    "diagStaticWins": true
+   },
+   "giMs": 5.304,
+   "photoFinePct": 16.882,
+   "staticFinePct": 16.882,
+   "excess": {
+    "k8": 0.05437,
+    "k16": 0.06419,
+    "k32": 0.07238
+   },
+   "tvK16": 0.08694,
+   "k16linear": {
+    "excessRelPerFrame": 0.02201,
+    "tvRelPerFrame": 0.03166,
+    "meanIrradiance": 0.03096,
+    "excessAbsPerFrame": 0.000681
+   }
+  },
+  {
+   "group": "objtag",
+   "experiment": "E4b vis = 1 on dynamic-object hits only / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-vrel-dvisobj-drays2",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 19.738,
+   "photoFinePct": 18.84,
+   "staticFinePct": 18.84,
+   "excess": {
+    "k8": 0.03293,
+    "k16": 0.04162,
+    "k32": 0.04817
+   },
+   "tvK16": 0.06084,
+   "k16linear": {
+    "excessRelPerFrame": 0.01226,
+    "tvRelPerFrame": 0.01968,
+    "meanIrradiance": 0.04449,
+    "excessAbsPerFrame": 0.000545
+   }
+  },
+  {
+   "group": "objtag",
+   "experiment": "E4b vis = 1 on dynamic-object hits only / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-tri-rc2-vrel-dvisobj",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 6.491,
+   "photoFinePct": 16.915,
+   "staticFinePct": 16.915,
+   "excess": {
+    "k8": 0.03363,
+    "k16": 0.04395,
+    "k32": 0.05428
+   },
+   "tvK16": 0.07107,
+   "k16linear": {
+    "excessRelPerFrame": 0.0176,
+    "tvRelPerFrame": 0.02789,
+    "meanIrradiance": 0.04576,
+    "excessAbsPerFrame": 0.000805
+   }
+  },
+  {
+   "group": "objtag",
+   "experiment": "E4b vis = 1 on dynamic-object hits only / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvisobj-drays2",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 5.205,
+   "photoFinePct": 20.2,
+   "staticFinePct": 20.2,
+   "excess": {
+    "k8": 0.03728,
+    "k16": 0.04354,
+    "k32": 0.04798
+   },
+   "tvK16": 0.06486,
+   "k16linear": {
+    "excessRelPerFrame": 0.01552,
+    "tvRelPerFrame": 0.02451,
+    "meanIrradiance": 0.04103,
+    "excessAbsPerFrame": 0.000637
+   }
+  },
+  {
+   "group": "objtag",
+   "experiment": "E4b vis = 1 on dynamic-object hits only / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel-dvisobj",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 2.904,
+   "photoFinePct": 22.993,
+   "staticFinePct": 22.993,
+   "excess": {
+    "k8": 0.05923,
+    "k16": 0.072,
+    "k32": 0.08186
+   },
+   "tvK16": 0.10102,
+   "k16linear": {
+    "excessRelPerFrame": 0.02542,
+    "tvRelPerFrame": 0.03684,
+    "meanIrradiance": 0.04149,
+    "excessAbsPerFrame": 0.001055
+   }
+  },
+  {
+   "group": "objtag",
+   "experiment": "E4b vis = 1 on dynamic-object hits only / ray check",
+   "scene": "sponza-dynobj-objectsonly",
+   "config": "world-48-voxel-rc2-vrel",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 2.898,
+   "photoFinePct": 17.065,
+   "staticFinePct": 17.064,
+   "excess": {
+    "k8": 0.05453,
+    "k16": 0.06499,
+    "k32": 0.0733
+   },
+   "tvK16": 0.08747,
+   "k16linear": {
+    "excessRelPerFrame": 0.02222,
+    "tvRelPerFrame": 0.03184,
+    "meanIrradiance": 0.03113,
+    "excessAbsPerFrame": 0.000692
+   }
+  },
+  {
+   "group": "suntag",
+   "experiment": "E4b sun only",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-tri-rc2-vrel-dvisobj",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 6.093,
+   "photoFinePct": 7.61,
+   "staticFinePct": 7.61,
+   "excess": {
+    "k8": 0.00828,
+    "k16": 0.01057,
+    "k32": 0.01164
+   },
+   "tvK16": 0.02847,
+   "k16linear": {
+    "excessRelPerFrame": 0.00766,
+    "tvRelPerFrame": 0.01696,
+    "meanIrradiance": 0.03913,
+    "excessAbsPerFrame": 0.0003
+   }
+  },
+  {
+   "group": "suntag",
+   "experiment": "E4b sun only",
+   "scene": "sponza-dynobj-sunonly",
+   "config": "world-48-voxel-rc2-vrel-dvisobj",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 2.967,
+   "photoFinePct": 5.87,
+   "staticFinePct": 5.87,
+   "excess": {
+    "k8": 0.00564,
+    "k16": 0.00714,
+    "k32": 0.00745
+   },
+   "tvK16": 0.02024,
+   "k16linear": {
+    "excessRelPerFrame": 0.00522,
+    "tvRelPerFrame": 0.01324,
+    "meanIrradiance": 0.03622,
+    "excessAbsPerFrame": 0.000189
+   }
+  },
+  {
+   "group": "bothtag",
+   "experiment": "E4b sun and objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-tri-rc2-vrel-dvisobj",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 6.603,
+   "photoFinePct": 21.112,
+   "staticFinePct": 21.112,
+   "excess": {
+    "k8": 0.03973,
+    "k16": 0.05057,
+    "k32": 0.06023
+   },
+   "tvK16": 0.08926,
+   "k16linear": {
+    "excessRelPerFrame": 0.02428,
+    "tvRelPerFrame": 0.04049,
+    "meanIrradiance": 0.04419,
+    "excessAbsPerFrame": 0.001073
+   }
+  },
+  {
+   "group": "bothtag",
+   "experiment": "E4b sun and objects",
+   "scene": "sponza-dynobj",
+   "config": "world-48-voxel-rc2-vrel-dvisobj",
+   "vox": {
+    "local": true,
+    "diagTagObj": true
+   },
+   "giMs": 2.9,
+   "photoFinePct": 24.532,
+   "staticFinePct": 24.532,
+   "excess": {
+    "k8": 0.05837,
+    "k16": 0.0709,
+    "k32": 0.07887
+   },
+   "tvK16": 0.10541,
+   "k16linear": {
+    "excessRelPerFrame": 0.02891,
+    "tvRelPerFrame": 0.04465,
+    "meanIrradiance": 0.04147,
+    "excessAbsPerFrame": 0.001199
+   }
+  }
+ ]
+}
