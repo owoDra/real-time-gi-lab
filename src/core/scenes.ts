@@ -20,8 +20,14 @@ export interface SceneSpec {
   dynamic?: DynamicSpec;
 }
 
-export interface DynamicObject { firstVertex: number; vertexCount: number; pivot: Vec3; }
-export interface DynamicPose { sunDir: Vec3; sunScale: number; poses: { rotY: number; offset: Vec3 }[]; }
+/** height: rest height above the pivot (top of the object), used by the bend deformation. */
+export interface DynamicObject { firstVertex: number; vertexCount: number; pivot: Vec3; height: number; }
+/** Deformation of an object's rest mesh at time t (frames), applied before the rigid pose; the topology never
+ * changes. wave: every vertex moves along its rest normal by a smooth field of its rest position (two travelling
+ * waves, 0.9 m long, +-8 cm), so vertices shared by a seam stay together; the normal is tilted by the field's
+ * tangential gradient. bend: the object bends sideways (+-0.4 m at the top, quadratic in height, period 120). */
+export interface Deform { kind: 'wave' | 'bend'; t: number; }
+export interface DynamicPose { sunDir: Vec3; sunScale: number; poses: { rotY: number; offset: Vec3; deform?: Deform }[]; }
 export interface DynamicSpec {
   firstTriangle: number;
   objects: DynamicObject[];
@@ -29,19 +35,49 @@ export interface DynamicSpec {
   at(frame: number): DynamicPose;
 }
 
+const WAVE_A = 0.08, WAVE_K = 2 * Math.PI / 0.9, BEND_B = 0.4;
+/** Deformed local position and normal (x, y, z relative to the pivot) into p[0..2], n[0..2]. */
+function deformVertex(df: Deform, height: number, p: number[], n: number[]) {
+  const [x, y, z] = p;
+  if (df.kind === 'wave') {
+    const a1 = WAVE_K * (0.8 * x + 0.6 * y) + 2 * Math.PI * df.t / 70, a2 = WAVE_K * (0.8 * z - 0.6 * y) + 2 * Math.PI * df.t / 90;
+    const h = WAVE_A * 0.5 * (Math.sin(a1) + Math.sin(a2));
+    const c1 = WAVE_A * 0.5 * WAVE_K * Math.cos(a1), c2 = WAVE_A * 0.5 * WAVE_K * Math.cos(a2);
+    const g = [0.8 * c1, 0.6 * c1 - 0.6 * c2, 0.8 * c2];
+    const gn = g[0] * n[0] + g[1] * n[1] + g[2] * n[2];
+    for (let a = 0; a < 3; a++) p[a] += n[a] * h;
+    const m = [n[0] - (g[0] - gn * n[0]), n[1] - (g[1] - gn * n[1]), n[2] - (g[2] - gn * n[2])];
+    const l = Math.hypot(m[0], m[1], m[2]);
+    for (let a = 0; a < 3; a++) n[a] = m[a] / l;
+  } else {
+    // z += b(y), b = B (y / H)^2 sin(2 pi t / 120); normals by the inverse transpose: n_y -= b'(y) n_z.
+    const s = Math.sin(2 * Math.PI * df.t / 120), u = Math.max(y, 0) / height;
+    p[2] = z + BEND_B * u * u * s;
+    n[1] -= 2 * BEND_B * u / height * s * n[2];
+    const l = Math.hypot(n[0], n[1], n[2]);
+    for (let a = 0; a < 3; a++) n[a] /= l;
+  }
+}
+
 /** Positions and normals of the dynamic vertices at a pose (rest data from `scene`), packed for the vertex buffers. */
 export function posedVertices(scene: SceneData, d: DynamicSpec, pose: DynamicPose) {
   const first = d.objects[0].firstVertex;
   const last = d.objects[d.objects.length - 1].firstVertex + d.objects[d.objects.length - 1].vertexCount;
   const pos = new Float32Array((last - first) * 3), nrm = new Float32Array((last - first) * 3);
+  const lp = [0, 0, 0], ln = [0, 0, 0];
   d.objects.forEach((o, i) => {
-    const { rotY, offset } = pose.poses[i];
+    const { rotY, offset, deform } = pose.poses[i];
     const c = Math.cos(rotY), s = Math.sin(rotY);
     for (let v = o.firstVertex; v < o.firstVertex + o.vertexCount; v++) {
-      const x = scene.positions[v * 3] - o.pivot[0], y = scene.positions[v * 3 + 1] - o.pivot[1], z = scene.positions[v * 3 + 2] - o.pivot[2];
+      let x = scene.positions[v * 3] - o.pivot[0], y = scene.positions[v * 3 + 1] - o.pivot[1], z = scene.positions[v * 3 + 2] - o.pivot[2];
+      let nx = scene.normals[v * 3], ny = scene.normals[v * 3 + 1], nz = scene.normals[v * 3 + 2];
+      if (deform) {
+        lp[0] = x; lp[1] = y; lp[2] = z; ln[0] = nx; ln[1] = ny; ln[2] = nz;
+        deformVertex(deform, o.height, lp, ln);
+        [x, y, z] = lp; [nx, ny, nz] = ln;
+      }
       const q = (v - first) * 3;
       pos[q] = o.pivot[0] + c * x + s * z + offset[0]; pos[q + 1] = o.pivot[1] + y + offset[1]; pos[q + 2] = o.pivot[2] - s * x + c * z + offset[2];
-      const nx = scene.normals[v * 3], ny = scene.normals[v * 3 + 1], nz = scene.normals[v * 3 + 2];
       nrm[q] = c * nx + s * nz; nrm[q + 1] = ny; nrm[q + 2] = -s * nx + c * nz;
     }
   });
@@ -243,7 +279,7 @@ function groundAt(s: SceneData, x: number, z: number, top: number) {
 /** Sponza with toon objects on the atrium floor ahead of the camera, along the moving camera's path (which walks
  * 6 m forward): an orange sphere, a blue ring facing the camera and a green capsule figure with a head. With
  * photoreal = true the same objects get photoreal materials (style 0). */
-export function toonSponza(base: SceneData, photoreal = false, withDynamic = false, groups = 1): SceneSpec {
+export function toonSponza(base: SceneData, photoreal = false, withDynamic = false, groups = 1, grid = 0): SceneSpec {
   const cam = s0Camera(base);
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
@@ -251,14 +287,24 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
     const p = add3(add3(cam.eye, scale3(f, ahead)), scale3(side, aside));
     return [p[0], groundAt(base, p[0], p[2], cam.eye[1]) + y, p[2]];
   };
-  // Groups (stress scenes): group g is moved g * 16 / groups m along the view, odd groups mirrored sideways.
-  const objects: { mat: MaterialDesc; mesh: ReturnType<typeof surface>[]; pivot?: Vec3 }[] = [];
-  for (let g = 0; g < groups; g++) {
-    const a = g * 16 / groups, m = g % 2 ? -1 : 1;
-    objects.push(
-      { mat: toonMaterial('toon-orange', [0.75, 0.28, 0.06]), mesh: [sphere(at(5 + a, 1.0 * m, 0.7), 0.7)] },
-      { mat: toonMaterial('toon-blue', [0.12, 0.25, 0.8]), mesh: [torus(at(7 + a, -1.0 * m, 0.95), f, 0.7, 0.25)] },
-      { mat: toonMaterial('toon-green', [0.15, 0.65, 0.18]), mesh: [capsule(at(9.5 + a, 0.3 * m, 0), 0.35, 1.4), sphere(at(9.5 + a, 0.3 * m, 1.73), 0.33)] });
+  const kinds = [
+    (ahead: number, aside: number) => ({ mat: toonMaterial('toon-orange', [0.75, 0.28, 0.06]), mesh: [sphere(at(ahead, aside, 0.7), 0.7)] }),
+    (ahead: number, aside: number) => ({ mat: toonMaterial('toon-blue', [0.12, 0.25, 0.8]), mesh: [torus(at(ahead, aside, 0.95), f, 0.7, 0.25)] }),
+    (ahead: number, aside: number) => ({ mat: toonMaterial('toon-green', [0.15, 0.65, 0.18]), mesh: [capsule(at(ahead, aside, 0), 0.35, 1.4), sphere(at(ahead, aside, 1.73), 0.33)] }),
+  ];
+  const objects: { mat: MaterialDesc; mesh: ReturnType<typeof surface>[] }[] = [];
+  if (grid > 0) {
+    // Grid (stress scenes sponza-dynobj-n<N>): object k is kind k mod 3 (sphere, ring, figure), in lane k mod 4 (the
+    // two side corridors and two lanes of the atrium) and row floor(k / 4), rows 1.1 m apart from 5 m ahead (16 rows
+    // end at 21.5 m, inside the floor, which ends about 22 m ahead).
+    const lanes = [-3.4, -0.9, 0.9, 3.4];
+    for (let k = 0; k < grid; k++) objects.push(kinds[k % 3](5 + 1.1 * Math.floor(k / 4), lanes[k % 4]));
+  } else {
+    // Groups (stress scenes): group g is moved g * 16 / groups m along the view, odd groups mirrored sideways.
+    for (let g = 0; g < groups; g++) {
+      const a = g * 16 / groups, m = g % 2 ? -1 : 1;
+      objects.push(kinds[0](5 + a, 1.0 * m), kinds[1](7 + a, -1.0 * m), kinds[2](9.5 + a, 0.3 * m));
+    }
   }
   const pos = Array.from(base.positions), nrm = Array.from(base.normals), idx = Array.from(base.indices);
   const materials = base.materials.slice(), primitives = base.primitives.slice();
@@ -274,9 +320,11 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
       primitives.push({ firstIndex, indexCount: m.idx.length, baseVertex, material });
     }
     const vertexCount = pos.length / 3 - firstVertex;
-    let cx = 0, cz = 0, ymin = Infinity;
-    for (let v = firstVertex; v < firstVertex + vertexCount; v++) { cx += pos[v * 3]; cz += pos[v * 3 + 2]; ymin = Math.min(ymin, pos[v * 3 + 1]); }
-    dynObjects.push({ firstVertex, vertexCount, pivot: [cx / vertexCount, ymin, cz / vertexCount] });
+    let cx = 0, cz = 0, ymin = Infinity, ymax = -Infinity;
+    for (let v = firstVertex; v < firstVertex + vertexCount; v++) {
+      cx += pos[v * 3]; cz += pos[v * 3 + 2]; ymin = Math.min(ymin, pos[v * 3 + 1]); ymax = Math.max(ymax, pos[v * 3 + 1]);
+    }
+    dynObjects.push({ firstVertex, vertexCount, pivot: [cx / vertexCount, ymin, cz / vertexCount], height: ymax - ymin });
   }
   const positions = new Float32Array(pos), V = positions.length / 3;
   const uvs = new Float32Array(V * 2), tangents = new Float32Array(V * 4);
@@ -295,9 +343,13 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
  * floor and the walls in view; a larger swing across the narrow atrium puts the whole visible floor in shadow).
  * Optional light switch for R1: from frame switchAt the sun jumps to another direction. only: 'sun' or 'objects' moves
  * just those; 'sphere' moves the sphere alone (the ring and the figure stay at rest, still dynamic triangles).
- * groups > 1 (stress scenes sponza-dynobj-many<N>): N copies of the three objects, see toonSponza. */
-export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1, only: 'all' | 'sun' | 'objects' | 'sphere' = 'all', groups = 1): SceneSpec {
-  const s = toonSponza(base, photoreal, true, groups);
+ * groups > 1 (stress scenes sponza-dynobj-many<N>): N copies of the three objects, see toonSponza.
+ * grid > 0 (stress scenes sponza-dynobj-n<N>): N objects on a grid (see toonSponza) with smaller moves so that
+ * neighbours seldom touch: spheres roll +-0.35 m sideways, rings turn, figures walk +-0.4 m, object k 13 k frames ahead.
+ * deform (suffix -deform): every object also deforms (Deform: spheres and rings wave, figures bend). */
+export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1, only: 'all' | 'sun' | 'objects' | 'sphere' = 'all', groups = 1,
+  grid = 0, deform = false): SceneSpec {
+  const s = toonSponza(base, photoreal, true, groups, grid);
   const cam = s.camera;
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
@@ -308,18 +360,30 @@ export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1,
     const a = 2 * Math.PI * t / 400;
     return [-0.15 + 0.4 * Math.sin(a), 1, 0.1 + 0.08 * Math.sin(2 * a + 0.5)];
   };
-  d.at = (t: number) => ({
-    sunDir: sun(t), sunScale: 1,
+  const rigid = (t: number) => switchAt >= 0 || only === 'sun' ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 }))
+    : grid > 0 ? d.objects.map((_, k) => {
+      const tk = t + 13 * k;
+      return [
+        { rotY: 0, offset: scale3(side, -0.35 * Math.sin(2 * Math.PI * tk / 240)) },
+        { rotY: 2 * Math.PI * tk / 320, offset: [0, 0, 0] as Vec3 },
+        { rotY: 0, offset: scale3(f, 0.4 * Math.sin(2 * Math.PI * tk / 160)) },
+      ][k % 3];
+    })
     // Group g runs 37 g frames ahead, mirrored sideways when odd.
-    poses: switchAt >= 0 || only === 'sun' ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) : Array.from({ length: groups }, (_, g) => {
+    : Array.from({ length: groups }, (_, g) => {
       const tg = t + 37 * g, m = g % 2 ? -1 : 1;
       return [
         { rotY: 0, offset: scale3(side, -1.6 * m * Math.sin(2 * Math.PI * tg / 240)) },
         { rotY: only === 'sphere' ? 0 : 2 * Math.PI * tg / 320, offset: [0, 0, 0] as Vec3 },
         { rotY: 0, offset: only === 'sphere' ? [0, 0, 0] as Vec3 : scale3(f, 1.5 * Math.sin(2 * Math.PI * tg / 160)) },
       ];
-    }).flat(),
+    }).flat();
+  d.at = (t: number) => ({
+    sunDir: sun(t), sunScale: 1,
+    // Object k (kind k mod 3: sphere, ring, figure) deforms 11 k frames ahead.
+    poses: rigid(t).map((p, k) => deform ? { ...p, deform: { kind: k % 3 === 2 ? 'bend' as const : 'wave' as const, t: t + 11 * k } } : p),
   });
-  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '') + (groups > 1 ? `-many${groups}` : '');
+  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '')
+    + (groups > 1 ? `-many${groups}` : '') + (grid > 0 ? `-n${grid}` : '') + (deform ? '-deform' : '');
   return { ...s, name, sunDir: sun(0), dynamic: d };
 }

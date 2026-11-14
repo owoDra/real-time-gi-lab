@@ -1,0 +1,1980 @@
+{
+ "kind": "exploratory (\u63a2\u7d22\u5024)",
+ "phase": 17,
+ "date": "2026-11-14",
+ "conditions": "native Dawn/Vulkan, 1920x1080, static camera, no sky, warmup 60 + 240 frames, 3 independent runs (2nd in reverse order); each case run normally (GI, vox, excess) and with --dyn-stages (one pass per stage); dynamic triangles counted on the CPU every 24 frames (dynWork). GPU shared with desktop apps.",
+ "configs": {
+  "rc": "world-48-voxel-rc2-vrel --vox {anchor:scene,local:true,dynBricks:cap}",
+  "ddgi": "ddgi-75-128-u4-g1-noadapt (same vox)"
+ },
+ "reproduced": {
+  "sponza-dynobj excess k16 rc": 0.01192,
+  "sponza-dynobj-many8 cap1024 excess k16 rc": 0.0111
+ },
+ "defaultImagesSha256SameBeforeAfter": [
+  "sponza rc",
+  "sponza ddgi",
+  "sponza-dynobj pose0 rc",
+  "sponza-dynobj pose0 ddgi"
+ ],
+ "stagedEqualsNormalIrradiance": "sha256 of --dump-irr equal for all 12 case/config pairs (run 1)",
+ "fields": "giNormal/voxNormal: median ms per run (normal pass); voxStagedSum: sum of stage passes; stages: median ms per run; poseCpu: CPU ms per frame to pose (and deform) the dynamic vertices; work: CPU count min/mean/max; mem MiB",
+ "cases": [
+  {
+   "case": "sponza-dynobj-2048",
+   "config": "ddgi",
+   "scene": "sponza-dynobj",
+   "cap": 2048,
+   "triangles": 282747,
+   "work": {
+    "triangles": {
+     "min": 20480,
+     "mean": 20480,
+     "max": 20480
+    },
+    "samples": {
+     "min": 60416,
+     "mean": 60416,
+     "max": 60416
+    },
+    "claims": {
+     "min": 235493,
+     "mean": 278572,
+     "max": 330088
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 103,
+     "mean": 114,
+     "max": 125
+    }
+   },
+   "mem": {
+    "fieldMiB": 46.6,
+    "voxMiB": 15.8,
+    "dynMiB": 45.0,
+    "totalMiB": 107.5,
+    "peakWhileBuildingMiB": 100.9
+   },
+   "giNormal": [
+    3.605,
+    3.736,
+    3.696
+   ],
+   "voxNormal": [
+    0.295,
+    0.323,
+    0.305
+   ],
+   "giStaged": [
+    3.601,
+    3.826,
+    3.515
+   ],
+   "voxStagedSum": [
+    0.302,
+    0.32,
+    0.295
+   ],
+   "stages": {
+    "reset": [
+     0.004,
+     0.005,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.018,
+     0.019,
+     0.018
+    ],
+    "clear": [
+     0.025,
+     0.025,
+     0.025
+    ],
+    "splat": [
+     0.145,
+     0.155,
+     0.141
+    ],
+    "resolve": [
+     0.106,
+     0.111,
+     0.102
+    ],
+    "end": [
+     0.002,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    0.115,
+    0.142,
+    0.131
+   ],
+   "excessK16": [
+    0.00094,
+    0.00094,
+    0.00094
+   ],
+   "excessK16Staged": [
+    0.00094,
+    0.00094,
+    0.00094
+   ],
+   "excessLinRel": [
+    0.0004,
+    0.0004,
+    0.0004
+   ],
+   "dynBricksLast": [
+    112,
+    112,
+    112
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 3,
+   "giWithoutBuild": [
+    3.31,
+    3.413,
+    3.391
+   ],
+   "stageMedians": {
+    "reset": 0.004,
+    "begin": 0.002,
+    "mark": 0.018,
+    "clear": 0.025,
+    "splat": 0.145,
+    "resolve": 0.106,
+    "end": 0.002
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.1007,
+    "splatNsPerSample": 2.4,
+    "markNsPerClaim": 0.065,
+    "resolveUsPerBrick": 0.93,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 13.6,
+    "share": {
+     "reset": 0.013,
+     "begin": 0.007,
+     "mark": 0.06,
+     "clear": 0.083,
+     "splat": 0.48,
+     "resolve": 0.351,
+     "end": 0.007
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-2048",
+   "config": "rc",
+   "scene": "sponza-dynobj",
+   "cap": 2048,
+   "triangles": 282747,
+   "work": {
+    "triangles": {
+     "min": 20480,
+     "mean": 20480,
+     "max": 20480
+    },
+    "samples": {
+     "min": 60416,
+     "mean": 60416,
+     "max": 60416
+    },
+    "claims": {
+     "min": 235493,
+     "mean": 278572,
+     "max": 330088
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 103,
+     "mean": 114,
+     "max": 125
+    }
+   },
+   "mem": {
+    "fieldMiB": 29.6,
+    "voxMiB": 15.8,
+    "dynMiB": 45.0,
+    "totalMiB": 90.4,
+    "peakWhileBuildingMiB": 100.9
+   },
+   "giNormal": [
+    3.122,
+    3.223,
+    3.195
+   ],
+   "voxNormal": [
+    0.29,
+    0.303,
+    0.298
+   ],
+   "giStaged": [
+    3.093,
+    3.33,
+    3.236
+   ],
+   "voxStagedSum": [
+    0.296,
+    0.317,
+    0.304
+   ],
+   "stages": {
+    "reset": [
+     0.004,
+     0.005,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.018,
+     0.019,
+     0.018
+    ],
+    "clear": [
+     0.025,
+     0.025,
+     0.025
+    ],
+    "splat": [
+     0.142,
+     0.154,
+     0.146
+    ],
+    "resolve": [
+     0.103,
+     0.111,
+     0.106
+    ],
+    "end": [
+     0.002,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    0.116,
+    0.117,
+    0.114
+   ],
+   "excessK16": [
+    0.01192,
+    0.01192,
+    0.01192
+   ],
+   "excessK16Staged": [
+    0.01192,
+    0.01192,
+    0.01192
+   ],
+   "excessLinRel": [
+    0.00989,
+    0.00989,
+    0.00989
+   ],
+   "dynBricksLast": [
+    112,
+    112,
+    112
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 3,
+   "giWithoutBuild": [
+    2.832,
+    2.92,
+    2.897
+   ],
+   "stageMedians": {
+    "reset": 0.004,
+    "begin": 0.002,
+    "mark": 0.018,
+    "clear": 0.025,
+    "splat": 0.146,
+    "resolve": 0.106,
+    "end": 0.002
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.1013,
+    "splatNsPerSample": 2.42,
+    "markNsPerClaim": 0.065,
+    "resolveUsPerBrick": 0.93,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 13.6,
+    "share": {
+     "reset": 0.013,
+     "begin": 0.007,
+     "mark": 0.059,
+     "clear": 0.082,
+     "splat": 0.48,
+     "resolve": 0.349,
+     "end": 0.007
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-256",
+   "config": "ddgi",
+   "scene": "sponza-dynobj",
+   "cap": 256,
+   "triangles": 282747,
+   "work": {
+    "triangles": {
+     "min": 20480,
+     "mean": 20480,
+     "max": 20480
+    },
+    "samples": {
+     "min": 60416,
+     "mean": 60416,
+     "max": 60416
+    },
+    "claims": {
+     "min": 235493,
+     "mean": 278572,
+     "max": 330088
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 103,
+     "mean": 114,
+     "max": 125
+    }
+   },
+   "mem": {
+    "fieldMiB": 46.6,
+    "voxMiB": 15.8,
+    "dynMiB": 10.0,
+    "totalMiB": 72.5,
+    "peakWhileBuildingMiB": 65.8
+   },
+   "giNormal": [
+    3.603,
+    3.752,
+    3.796
+   ],
+   "voxNormal": [
+    0.258,
+    0.273,
+    0.277
+   ],
+   "giStaged": [
+    3.668,
+    3.795,
+    3.677
+   ],
+   "voxStagedSum": [
+    0.272,
+    0.277,
+    0.268
+   ],
+   "stages": {
+    "reset": [
+     0.004,
+     0.005,
+     0.005
+    ],
+    "begin": [
+     0.002,
+     0.003,
+     0.002
+    ],
+    "mark": [
+     0.019,
+     0.02,
+     0.019
+    ],
+    "clear": [
+     0.014,
+     0.008,
+     0.008
+    ],
+    "splat": [
+     0.151,
+     0.156,
+     0.15
+    ],
+    "resolve": [
+     0.082,
+     0.084,
+     0.082
+    ],
+    "end": [
+     0.003,
+     0.003,
+     0.003
+    ]
+   },
+   "poseCpu": [
+    0.122,
+    0.143,
+    0.159
+   ],
+   "excessK16": [
+    0.00094,
+    0.00094,
+    0.00094
+   ],
+   "excessK16Staged": [
+    0.00094,
+    0.00094,
+    0.00094
+   ],
+   "excessLinRel": [
+    0.0004,
+    0.0004,
+    0.0004
+   ],
+   "dynBricksLast": [
+    112,
+    112,
+    112
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 3,
+   "giWithoutBuild": [
+    3.345,
+    3.479,
+    3.519
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.019,
+    "clear": 0.008,
+    "splat": 0.151,
+    "resolve": 0.082,
+    "end": 0.003
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0907,
+    "splatNsPerSample": 2.5,
+    "markNsPerClaim": 0.068,
+    "resolveUsPerBrick": 0.719,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 13.6,
+    "share": {
+     "reset": 0.018,
+     "begin": 0.007,
+     "mark": 0.07,
+     "clear": 0.029,
+     "splat": 0.555,
+     "resolve": 0.301,
+     "end": 0.011
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-256",
+   "config": "rc",
+   "scene": "sponza-dynobj",
+   "cap": 256,
+   "triangles": 282747,
+   "work": {
+    "triangles": {
+     "min": 20480,
+     "mean": 20480,
+     "max": 20480
+    },
+    "samples": {
+     "min": 60416,
+     "mean": 60416,
+     "max": 60416
+    },
+    "claims": {
+     "min": 235493,
+     "mean": 278572,
+     "max": 330088
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 103,
+     "mean": 114,
+     "max": 125
+    }
+   },
+   "mem": {
+    "fieldMiB": 29.6,
+    "voxMiB": 15.8,
+    "dynMiB": 10.0,
+    "totalMiB": 55.4,
+    "peakWhileBuildingMiB": 65.8
+   },
+   "giNormal": [
+    3.084,
+    3.187,
+    3.269
+   ],
+   "voxNormal": [
+    0.253,
+    0.262,
+    0.27
+   ],
+   "giStaged": [
+    3.126,
+    3.189,
+    3.268
+   ],
+   "voxStagedSum": [
+    0.262,
+    0.265,
+    0.273
+   ],
+   "stages": {
+    "reset": [
+     0.004,
+     0.004,
+     0.005
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.018,
+     0.019,
+     0.019
+    ],
+    "clear": [
+     0.013,
+     0.008,
+     0.008
+    ],
+    "splat": [
+     0.145,
+     0.148,
+     0.153
+    ],
+    "resolve": [
+     0.078,
+     0.079,
+     0.083
+    ],
+    "end": [
+     0.002,
+     0.003,
+     0.003
+    ]
+   },
+   "poseCpu": [
+    0.106,
+    0.115,
+    0.116
+   ],
+   "excessK16": [
+    0.01192,
+    0.01192,
+    0.01192
+   ],
+   "excessK16Staged": [
+    0.01192,
+    0.01192,
+    0.01192
+   ],
+   "excessLinRel": [
+    0.00989,
+    0.00989,
+    0.00989
+   ],
+   "dynBricksLast": [
+    112,
+    112,
+    112
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 3,
+   "giWithoutBuild": [
+    2.831,
+    2.925,
+    2.999
+   ],
+   "stageMedians": {
+    "reset": 0.004,
+    "begin": 0.002,
+    "mark": 0.019,
+    "clear": 0.008,
+    "splat": 0.148,
+    "resolve": 0.079,
+    "end": 0.003
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0883,
+    "splatNsPerSample": 2.45,
+    "markNsPerClaim": 0.068,
+    "resolveUsPerBrick": 0.693,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 13.6,
+    "share": {
+     "reset": 0.015,
+     "begin": 0.008,
+     "mark": 0.072,
+     "clear": 0.03,
+     "splat": 0.558,
+     "resolve": 0.298,
+     "end": 0.011
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-deform-256",
+   "config": "ddgi",
+   "scene": "sponza-dynobj-deform",
+   "cap": 256,
+   "triangles": 282747,
+   "work": {
+    "triangles": {
+     "min": 20480,
+     "mean": 20480,
+     "max": 20480
+    },
+    "samples": {
+     "min": 58650,
+     "mean": 60412,
+     "max": 62556
+    },
+    "claims": {
+     "min": 240897,
+     "mean": 278561,
+     "max": 324694
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 107,
+     "mean": 116,
+     "max": 128
+    }
+   },
+   "mem": {
+    "fieldMiB": 46.6,
+    "voxMiB": 15.8,
+    "dynMiB": 10.0,
+    "totalMiB": 72.5,
+    "peakWhileBuildingMiB": 65.8
+   },
+   "giNormal": [
+    3.821,
+    3.779,
+    3.639
+   ],
+   "voxNormal": [
+    0.289,
+    0.282,
+    0.275
+   ],
+   "giStaged": [
+    3.855,
+    3.822,
+    3.628
+   ],
+   "voxStagedSum": [
+    0.301,
+    0.292,
+    0.285
+   ],
+   "stages": {
+    "reset": [
+     0.005,
+     0.005,
+     0.005
+    ],
+    "begin": [
+     0.003,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.019,
+     0.02,
+     0.019
+    ],
+    "clear": [
+     0.013,
+     0.008,
+     0.014
+    ],
+    "splat": [
+     0.171,
+     0.169,
+     0.162
+    ],
+    "resolve": [
+     0.087,
+     0.087,
+     0.082
+    ],
+    "end": [
+     0.003,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    1.015,
+    1.076,
+    0.994
+   ],
+   "excessK16": [
+    0.00093,
+    0.00093,
+    0.00093
+   ],
+   "excessK16Staged": [
+    0.00093,
+    0.00093,
+    0.00093
+   ],
+   "excessLinRel": [
+    0.0004,
+    0.0004,
+    0.0004
+   ],
+   "dynBricksLast": [
+    114,
+    114,
+    114
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 3,
+   "giWithoutBuild": [
+    3.532,
+    3.497,
+    3.364
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.019,
+    "clear": 0.013,
+    "splat": 0.169,
+    "resolve": 0.087,
+    "end": 0.003
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0973,
+    "splatNsPerSample": 2.8,
+    "markNsPerClaim": 0.068,
+    "resolveUsPerBrick": 0.75,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 13.6,
+    "share": {
+     "reset": 0.017,
+     "begin": 0.007,
+     "mark": 0.065,
+     "clear": 0.045,
+     "splat": 0.579,
+     "resolve": 0.298,
+     "end": 0.01
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-deform-256",
+   "config": "rc",
+   "scene": "sponza-dynobj-deform",
+   "cap": 256,
+   "triangles": 282747,
+   "work": {
+    "triangles": {
+     "min": 20480,
+     "mean": 20480,
+     "max": 20480
+    },
+    "samples": {
+     "min": 58650,
+     "mean": 60412,
+     "max": 62556
+    },
+    "claims": {
+     "min": 240897,
+     "mean": 278561,
+     "max": 324694
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 107,
+     "mean": 116,
+     "max": 128
+    }
+   },
+   "mem": {
+    "fieldMiB": 29.6,
+    "voxMiB": 15.8,
+    "dynMiB": 10.0,
+    "totalMiB": 55.4,
+    "peakWhileBuildingMiB": 65.8
+   },
+   "giNormal": [
+    3.302,
+    3.345,
+    3.134
+   ],
+   "voxNormal": [
+    0.286,
+    0.287,
+    0.271
+   ],
+   "giStaged": [
+    3.223,
+    3.308,
+    3.1
+   ],
+   "voxStagedSum": [
+    0.286,
+    0.299,
+    0.276
+   ],
+   "stages": {
+    "reset": [
+     0.005,
+     0.005,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.019,
+     0.02,
+     0.018
+    ],
+    "clear": [
+     0.013,
+     0.008,
+     0.014
+    ],
+    "splat": [
+     0.162,
+     0.174,
+     0.156
+    ],
+    "resolve": [
+     0.083,
+     0.089,
+     0.079
+    ],
+    "end": [
+     0.002,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    1.014,
+    1.011,
+    0.97
+   ],
+   "excessK16": [
+    0.01207,
+    0.01207,
+    0.01207
+   ],
+   "excessK16Staged": [
+    0.01207,
+    0.01207,
+    0.01207
+   ],
+   "excessLinRel": [
+    0.00991,
+    0.00991,
+    0.00991
+   ],
+   "dynBricksLast": [
+    114,
+    114,
+    114
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 3,
+   "giWithoutBuild": [
+    3.016,
+    3.058,
+    2.863
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.019,
+    "clear": 0.013,
+    "splat": 0.162,
+    "resolve": 0.083,
+    "end": 0.002
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0953,
+    "splatNsPerSample": 2.68,
+    "markNsPerClaim": 0.068,
+    "resolveUsPerBrick": 0.716,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 13.6,
+    "share": {
+     "reset": 0.017,
+     "begin": 0.007,
+     "mark": 0.066,
+     "clear": 0.045,
+     "splat": 0.566,
+     "resolve": 0.29,
+     "end": 0.007
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-many8-1024",
+   "config": "ddgi",
+   "scene": "sponza-dynobj-many8",
+   "cap": 1024,
+   "triangles": 426107,
+   "work": {
+    "triangles": {
+     "min": 163840,
+     "mean": 163840,
+     "max": 163840
+    },
+    "samples": {
+     "min": 483328,
+     "mean": 483328,
+     "max": 483328
+    },
+    "claims": {
+     "min": 2233404,
+     "mean": 2304422,
+     "max": 2400474
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 509,
+     "mean": 525,
+     "max": 550
+    }
+   },
+   "mem": {
+    "fieldMiB": 46.6,
+    "voxMiB": 15.8,
+    "dynMiB": 25.0,
+    "totalMiB": 87.5,
+    "peakWhileBuildingMiB": 80.8
+   },
+   "giNormal": [
+    5.023,
+    5.031,
+    4.751
+   ],
+   "voxNormal": [
+    1.419,
+    1.433,
+    1.344
+   ],
+   "giStaged": [
+    5.177,
+    5.103,
+    4.685
+   ],
+   "voxStagedSum": [
+    1.469,
+    1.445,
+    1.324
+   ],
+   "stages": {
+    "reset": [
+     0.005,
+     0.005,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.061,
+     0.063,
+     0.06
+    ],
+    "clear": [
+     0.037,
+     0.028,
+     0.025
+    ],
+    "splat": [
+     1.074,
+     1.06,
+     0.963
+    ],
+    "resolve": [
+     0.289,
+     0.284,
+     0.262
+    ],
+    "end": [
+     0.003,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    0.67,
+    0.703,
+    0.634
+   ],
+   "excessK16": [
+    0.00099,
+    0.00099,
+    0.00099
+   ],
+   "excessK16Staged": [
+    0.00099,
+    0.00099,
+    0.00099
+   ],
+   "excessLinRel": [
+    0.00041,
+    0.00041,
+    0.00041
+   ],
+   "dynBricksLast": [
+    535,
+    535,
+    535
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 24,
+   "giWithoutBuild": [
+    3.604,
+    3.598,
+    3.407
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.061,
+    "clear": 0.028,
+    "splat": 1.06,
+    "resolve": 0.284,
+    "end": 0.003
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0602,
+    "splatNsPerSample": 2.19,
+    "markNsPerClaim": 0.026,
+    "resolveUsPerBrick": 0.541,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 14.1,
+    "share": {
+     "reset": 0.003,
+     "begin": 0.001,
+     "mark": 0.042,
+     "clear": 0.019,
+     "splat": 0.734,
+     "resolve": 0.197,
+     "end": 0.002
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-many8-1024",
+   "config": "rc",
+   "scene": "sponza-dynobj-many8",
+   "cap": 1024,
+   "triangles": 426107,
+   "work": {
+    "triangles": {
+     "min": 163840,
+     "mean": 163840,
+     "max": 163840
+    },
+    "samples": {
+     "min": 483328,
+     "mean": 483328,
+     "max": 483328
+    },
+    "claims": {
+     "min": 2233404,
+     "mean": 2304422,
+     "max": 2400474
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 509,
+     "mean": 525,
+     "max": 550
+    }
+   },
+   "mem": {
+    "fieldMiB": 29.5,
+    "voxMiB": 15.8,
+    "dynMiB": 25.0,
+    "totalMiB": 70.3,
+    "peakWhileBuildingMiB": 80.8
+   },
+   "giNormal": [
+    4.407,
+    4.585,
+    4.286
+   ],
+   "voxNormal": [
+    1.42,
+    1.482,
+    1.382
+   ],
+   "giStaged": [
+    4.428,
+    4.507,
+    4.126
+   ],
+   "voxStagedSum": [
+    1.426,
+    1.459,
+    1.329
+   ],
+   "stages": {
+    "reset": [
+     0.005,
+     0.005,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.06,
+     0.063,
+     0.06
+    ],
+    "clear": [
+     0.036,
+     0.028,
+     0.025
+    ],
+    "splat": [
+     1.04,
+     1.071,
+     0.965
+    ],
+    "resolve": [
+     0.281,
+     0.286,
+     0.264
+    ],
+    "end": [
+     0.003,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    0.559,
+    0.611,
+    0.525
+   ],
+   "excessK16": [
+    0.0111,
+    0.0111,
+    0.0111
+   ],
+   "excessK16Staged": [
+    0.0111,
+    0.0111,
+    0.0111
+   ],
+   "excessLinRel": [
+    0.00876,
+    0.00876,
+    0.00876
+   ],
+   "dynBricksLast": [
+    535,
+    535,
+    535
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 24,
+   "giWithoutBuild": [
+    2.987,
+    3.103,
+    2.904
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.06,
+    "clear": 0.028,
+    "splat": 1.04,
+    "resolve": 0.281,
+    "end": 0.003
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0594,
+    "splatNsPerSample": 2.15,
+    "markNsPerClaim": 0.026,
+    "resolveUsPerBrick": 0.535,
+    "samplesPerTriangle": 2.95,
+    "claimsPerTriangle": 14.1,
+    "share": {
+     "reset": 0.004,
+     "begin": 0.001,
+     "mark": 0.042,
+     "clear": 0.02,
+     "splat": 0.729,
+     "resolve": 0.197,
+     "end": 0.002
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-n64-2048",
+   "config": "ddgi",
+   "scene": "sponza-dynobj-n64",
+   "cap": 2048,
+   "triangles": 696443,
+   "work": {
+    "triangles": {
+     "min": 434176,
+     "mean": 434176,
+     "max": 434176
+    },
+    "samples": {
+     "min": 1285120,
+     "mean": 1285120,
+     "max": 1285120
+    },
+    "claims": {
+     "min": 4966348,
+     "mean": 5163939,
+     "max": 5316551
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 1180,
+     "mean": 1207,
+     "max": 1238
+    }
+   },
+   "mem": {
+    "fieldMiB": 46.6,
+    "voxMiB": 15.8,
+    "dynMiB": 45.0,
+    "totalMiB": 107.5,
+    "peakWhileBuildingMiB": 100.9
+   },
+   "giNormal": [
+    7.092,
+    7.078,
+    6.752
+   ],
+   "voxNormal": [
+    3.406,
+    3.375,
+    3.228
+   ],
+   "giStaged": [
+    7.056,
+    7.232,
+    6.99
+   ],
+   "voxStagedSum": [
+    3.36,
+    3.439,
+    3.351
+   ],
+   "stages": {
+    "reset": [
+     0.005,
+     0.005,
+     0.005
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.116,
+     0.12,
+     0.116
+    ],
+    "clear": [
+     0.061,
+     0.064,
+     0.062
+    ],
+    "splat": [
+     2.595,
+     2.657,
+     2.583
+    ],
+    "resolve": [
+     0.572,
+     0.598,
+     0.573
+    ],
+    "end": [
+     0.003,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    1.501,
+    1.663,
+    1.639
+   ],
+   "excessK16": [
+    0.00087,
+    0.00087,
+    0.00087
+   ],
+   "excessK16Staged": [
+    0.00087,
+    0.00087,
+    0.00087
+   ],
+   "excessLinRel": [
+    0.0005,
+    0.0005,
+    0.0005
+   ],
+   "dynBricksLast": [
+    1195,
+    1195,
+    1195
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 64,
+   "giWithoutBuild": [
+    3.686,
+    3.703,
+    3.524
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.116,
+    "clear": 0.062,
+    "splat": 2.595,
+    "resolve": 0.573,
+    "end": 0.003
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0525,
+    "splatNsPerSample": 2.02,
+    "markNsPerClaim": 0.022,
+    "resolveUsPerBrick": 0.475,
+    "samplesPerTriangle": 2.96,
+    "claimsPerTriangle": 11.9,
+    "share": {
+     "reset": 0.001,
+     "begin": 0.001,
+     "mark": 0.035,
+     "clear": 0.018,
+     "splat": 0.772,
+     "resolve": 0.171,
+     "end": 0.001
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-n64-2048",
+   "config": "rc",
+   "scene": "sponza-dynobj-n64",
+   "cap": 2048,
+   "triangles": 696443,
+   "work": {
+    "triangles": {
+     "min": 434176,
+     "mean": 434176,
+     "max": 434176
+    },
+    "samples": {
+     "min": 1285120,
+     "mean": 1285120,
+     "max": 1285120
+    },
+    "claims": {
+     "min": 4966348,
+     "mean": 5163939,
+     "max": 5316551
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 1180,
+     "mean": 1207,
+     "max": 1238
+    }
+   },
+   "mem": {
+    "fieldMiB": 29.5,
+    "voxMiB": 15.8,
+    "dynMiB": 45.0,
+    "totalMiB": 90.3,
+    "peakWhileBuildingMiB": 100.9
+   },
+   "giNormal": [
+    6.391,
+    6.412,
+    6.338
+   ],
+   "voxNormal": [
+    3.353,
+    3.347,
+    3.33
+   ],
+   "giStaged": [
+    6.362,
+    6.49,
+    6.372
+   ],
+   "voxStagedSum": [
+    3.329,
+    3.387,
+    3.356
+   ],
+   "stages": {
+    "reset": [
+     0.005,
+     0.005,
+     0.005
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.114,
+     0.117,
+     0.115
+    ],
+    "clear": [
+     0.061,
+     0.062,
+     0.062
+    ],
+    "splat": [
+     2.568,
+     2.616,
+     2.596
+    ],
+    "resolve": [
+     0.568,
+     0.583,
+     0.573
+    ],
+    "end": [
+     0.002,
+     0.003,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    1.341,
+    1.491,
+    1.416
+   ],
+   "excessK16": [
+    0.00909,
+    0.00909,
+    0.00909
+   ],
+   "excessK16Staged": [
+    0.00909,
+    0.00909,
+    0.00909
+   ],
+   "excessLinRel": [
+    0.00639,
+    0.00639,
+    0.00639
+   ],
+   "dynBricksLast": [
+    1195,
+    1195,
+    1195
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 64,
+   "giWithoutBuild": [
+    3.038,
+    3.065,
+    3.008
+   ],
+   "stageMedians": {
+    "reset": 0.005,
+    "begin": 0.002,
+    "mark": 0.115,
+    "clear": 0.062,
+    "splat": 2.596,
+    "resolve": 0.573,
+    "end": 0.002
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0524,
+    "splatNsPerSample": 2.02,
+    "markNsPerClaim": 0.022,
+    "resolveUsPerBrick": 0.475,
+    "samplesPerTriangle": 2.96,
+    "claimsPerTriangle": 11.9,
+    "share": {
+     "reset": 0.001,
+     "begin": 0.001,
+     "mark": 0.034,
+     "clear": 0.018,
+     "splat": 0.774,
+     "resolve": 0.171,
+     "end": 0.001
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-n64-deform-2048",
+   "config": "ddgi",
+   "scene": "sponza-dynobj-n64-deform",
+   "cap": 2048,
+   "triangles": 696443,
+   "work": {
+    "triangles": {
+     "min": 434176,
+     "mean": 434176,
+     "max": 434176
+    },
+    "samples": {
+     "min": 1287426,
+     "mean": 1288524,
+     "max": 1289688
+    },
+    "claims": {
+     "min": 5001967,
+     "mean": 5176012,
+     "max": 5338052
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 1191,
+     "mean": 1216,
+     "max": 1241
+    }
+   },
+   "mem": {
+    "fieldMiB": 46.6,
+    "voxMiB": 15.8,
+    "dynMiB": 45.0,
+    "totalMiB": 107.5,
+    "peakWhileBuildingMiB": 100.9
+   },
+   "giNormal": [
+    6.53,
+    6.4,
+    6.321
+   ],
+   "voxNormal": [
+    3.012,
+    2.965,
+    2.952
+   ],
+   "giStaged": [
+    6.486,
+    6.527,
+    6.484
+   ],
+   "voxStagedSum": [
+    2.996,
+    3.008,
+    2.986
+   ],
+   "stages": {
+    "reset": [
+     0.004,
+     0.004,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.105,
+     0.107,
+     0.104
+    ],
+    "clear": [
+     0.059,
+     0.058,
+     0.061
+    ],
+    "splat": [
+     2.299,
+     2.317,
+     2.288
+    ],
+    "resolve": [
+     0.528,
+     0.532,
+     0.519
+    ],
+    "end": [
+     0.002,
+     0.002,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    20.371,
+    20.221,
+    20.061
+   ],
+   "excessK16": [
+    0.00086,
+    0.00086,
+    0.00086
+   ],
+   "excessK16Staged": [
+    0.00086,
+    0.00086,
+    0.00086
+   ],
+   "excessLinRel": [
+    0.00051,
+    0.00051,
+    0.00051
+   ],
+   "dynBricksLast": [
+    1198,
+    1198,
+    1198
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 64,
+   "giWithoutBuild": [
+    3.518,
+    3.435,
+    3.369
+   ],
+   "stageMedians": {
+    "reset": 0.004,
+    "begin": 0.002,
+    "mark": 0.105,
+    "clear": 0.059,
+    "splat": 2.299,
+    "resolve": 0.528,
+    "end": 0.002
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0468,
+    "splatNsPerSample": 1.78,
+    "markNsPerClaim": 0.02,
+    "resolveUsPerBrick": 0.434,
+    "samplesPerTriangle": 2.97,
+    "claimsPerTriangle": 11.9,
+    "share": {
+     "reset": 0.001,
+     "begin": 0.001,
+     "mark": 0.035,
+     "clear": 0.02,
+     "splat": 0.767,
+     "resolve": 0.176,
+     "end": 0.001
+    }
+   }
+  },
+  {
+   "case": "sponza-dynobj-n64-deform-2048",
+   "config": "rc",
+   "scene": "sponza-dynobj-n64-deform",
+   "cap": 2048,
+   "triangles": 696443,
+   "work": {
+    "triangles": {
+     "min": 434176,
+     "mean": 434176,
+     "max": 434176
+    },
+    "samples": {
+     "min": 1287426,
+     "mean": 1288524,
+     "max": 1289688
+    },
+    "claims": {
+     "min": 5001967,
+     "mean": 5176012,
+     "max": 5338052
+    },
+    "outside": {
+     "min": 0,
+     "mean": 0,
+     "max": 0
+    },
+    "bricks": {
+     "min": 1191,
+     "mean": 1216,
+     "max": 1241
+    }
+   },
+   "mem": {
+    "fieldMiB": 29.5,
+    "voxMiB": 15.8,
+    "dynMiB": 45.0,
+    "totalMiB": 90.3,
+    "peakWhileBuildingMiB": 100.9
+   },
+   "giNormal": [
+    5.899,
+    5.818,
+    5.645
+   ],
+   "voxNormal": [
+    3.011,
+    2.986,
+    2.931
+   ],
+   "giStaged": [
+    5.827,
+    5.772,
+    5.736
+   ],
+   "voxStagedSum": [
+    2.992,
+    2.965,
+    2.945
+   ],
+   "stages": {
+    "reset": [
+     0.004,
+     0.004,
+     0.004
+    ],
+    "begin": [
+     0.002,
+     0.002,
+     0.002
+    ],
+    "mark": [
+     0.104,
+     0.104,
+     0.104
+    ],
+    "clear": [
+     0.059,
+     0.056,
+     0.06
+    ],
+    "splat": [
+     2.295,
+     2.278,
+     2.262
+    ],
+    "resolve": [
+     0.524,
+     0.518,
+     0.508
+    ],
+    "end": [
+     0.002,
+     0.002,
+     0.002
+    ]
+   },
+   "poseCpu": [
+    19.296,
+    19.676,
+    19.783
+   ],
+   "excessK16": [
+    0.0086,
+    0.0086,
+    0.0086
+   ],
+   "excessK16Staged": [
+    0.0086,
+    0.0086,
+    0.0086
+   ],
+   "excessLinRel": [
+    0.00609,
+    0.00609,
+    0.00609
+   ],
+   "dynBricksLast": [
+    1198,
+    1198,
+    1198
+   ],
+   "overflow": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "objects": 64,
+   "giWithoutBuild": [
+    2.888,
+    2.832,
+    2.714
+   ],
+   "stageMedians": {
+    "reset": 0.004,
+    "begin": 0.002,
+    "mark": 0.104,
+    "clear": 0.059,
+    "splat": 2.278,
+    "resolve": 0.518,
+    "end": 0.002
+   },
+   "ratios": {
+    "buildPerObjectMs": 0.0463,
+    "splatNsPerSample": 1.77,
+    "markNsPerClaim": 0.02,
+    "resolveUsPerBrick": 0.426,
+    "samplesPerTriangle": 2.97,
+    "claimsPerTriangle": 11.9,
+    "share": {
+     "reset": 0.001,
+     "begin": 0.001,
+     "mark": 0.035,
+     "clear": 0.02,
+     "splat": 0.768,
+     "resolve": 0.175,
+     "end": 0.001
+    }
+   }
+  }
+ ]
+}

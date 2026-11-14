@@ -312,11 +312,51 @@ fn shadeSample(m: Material, p: vec3f, n: vec3f, uv: vec2f, L: u32) -> vec4f {
 }
 `;
 
+/** Stages of the build, in order (resolve covers all levels). */
+export const DYN_STAGES = ['reset', 'begin', 'mark', 'clear', 'splat', 'resolve', 'end'] as const;
+
+/** CPU count of the build's work at one pose, mirroring the shaders (splatLevel, the mark loop, the splat
+ * subdivision): dynamic triangles, splat samples (sub-triangles), mark claims (brick visits over all levels) and
+ * distinct bricks claimed per level (without a pool limit). tri is the triangle table (triangleTable), pos the
+ * positions of all vertices, origin[L] the clipmap origin of level L in bricks (as in the voxel uniform). */
+export function dynWork(tri: Uint32Array, first: number, end: number, pos: Float32Array, vp: { v0: number; levels: number; G: number }, origin: number[][]) {
+  const vs = (L: number) => vp.v0 * 2 ** L;
+  const lo = (L: number, a: number) => origin[L][a] * vs(L) * 8;
+  let samples = 0, claims = 0, outside = 0;
+  const bricks = Array.from({ length: vp.levels }, () => new Set<number>());
+  const mn = [0, 0, 0], mx = [0, 0, 0];
+  for (let t = first; t < end; t++) {
+    const ia = tri[t * 4] * 3, ib = tri[t * 4 + 1] * 3, ic = tri[t * 4 + 2] * 3;
+    for (let a = 0; a < 3; a++) { mn[a] = Math.min(pos[ia + a], pos[ib + a], pos[ic + a]); mx[a] = Math.max(pos[ia + a], pos[ib + a], pos[ic + a]); }
+    let Ls = -1;
+    for (let L = 0; L < vp.levels && Ls < 0; L++) {
+      const v = vs(L), hi = (a: number) => lo(L, a) + vp.G * v * 8;
+      if ([0, 1, 2].every((a) => mn[a] - 2 * v > lo(L, a) && mx[a] + 2 * v < hi(a))) Ls = L;
+    }
+    if (Ls < 0) { outside++; continue; }
+    for (let L = Ls; L < vp.levels; L++) {
+      const v = vs(L), bs = v * 8;
+      const g0 = [0, 1, 2].map((a) => Math.floor((mn[a] - v - lo(L, a)) / bs)), g1 = [0, 1, 2].map((a) => Math.floor((mx[a] + v - lo(L, a)) / bs));
+      for (let z = g0[2]; z <= g1[2]; z++) for (let y = g0[1]; y <= g1[1]; y++) for (let x = g0[0]; x <= g1[0]; x++) {
+        claims++; bricks[L].add((z * vp.G + y) * vp.G + x);
+      }
+    }
+    const e = Math.max(...[[ia, ib], [ib, ic], [ic, ia]].map(([p, q]) => Math.hypot(pos[q] - pos[p], pos[q + 1] - pos[p + 1], pos[q + 2] - pos[p + 2])));
+    const m = Math.min(Math.max(Math.ceil(e / (0.5 * vs(Ls))), 1), 16);
+    samples += m * m;
+  }
+  const perLevel = bricks.map((s) => s.size);
+  return { triangles: end - first, samples, claims, outside, bricks: perLevel.reduce((a, b) => a + b, 0), bricksPerLevel: perLevel };
+}
+
 export interface DynLayer {
   buffer: GPUBuffer;
   bytes: number;
   /** Builds this frame's layer (after the shadow map, inside the caller's compute pass). */
   encode(pass: GPUComputePassEncoder): void;
+  /** Same work, one compute pass per stage (DYN_STAGES), with timestamps at slots [base, base + 2 * DYN_STAGES.length)
+   * when querySet is given. */
+  encodeStaged(enc: GPUCommandEncoder, querySet: GPUQuerySet | null, base: number): void;
   /** Claimed bricks, brick overflow and triangles outside every clipmap (last frame). */
   readCounters(): Promise<{ bricks: number; brickOverflow: number; outside: number }>;
   destroy(): void;
@@ -363,17 +403,28 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
     if (g > 0) pass.dispatchWorkgroups(x, Math.ceil(g / x));
   };
   const use = (pass: GPUComputePassEncoder, name: string, L = 0) => { pass.setPipeline(pipes[name]); pass.setBindGroup(0, bgs[L]); };
+  const stage = (pass: GPUComputePassEncoder, st: typeof DYN_STAGES[number]) => {
+    if (st === 'reset') { use(pass, 'reset'); lin(pass, NB); }
+    else if (st === 'begin') { use(pass, 'begin'); pass.dispatchWorkgroups(1); }
+    else if (st === 'mark') { use(pass, 'mark'); lin(pass, nDyn); }
+    else if (st === 'clear') { use(pass, 'clear'); lin(pass, NB * 512); }
+    else if (st === 'splat') { use(pass, 'splat'); lin(pass, nDyn); }
+    else if (st === 'resolve') for (let L = 0; L < vp.levels; L++) { use(pass, 'resolve', L); lin(pass, NB * 512); }
+    else { use(pass, 'end'); pass.dispatchWorkgroups(1); }
+  };
   return {
     buffer, bytes: buffer.size,
     encode(pass) {
       if (nDyn <= 0) return;
-      use(pass, 'reset'); lin(pass, NB);
-      use(pass, 'begin'); pass.dispatchWorkgroups(1);
-      use(pass, 'mark'); lin(pass, nDyn);
-      use(pass, 'clear'); lin(pass, NB * 512);
-      use(pass, 'splat'); lin(pass, nDyn);
-      for (let L = 0; L < vp.levels; L++) { use(pass, 'resolve', L); lin(pass, NB * 512); }
-      use(pass, 'end'); pass.dispatchWorkgroups(1);
+      for (const st of DYN_STAGES) stage(pass, st);
+    },
+    encodeStaged(enc, querySet, base) {
+      DYN_STAGES.forEach((st, i) => {
+        const pass = enc.beginComputePass({ label: `dyn.${st}`,
+          timestampWrites: querySet ? { querySet, beginningOfPassWriteIndex: base + 2 * i, endOfPassWriteIndex: base + 2 * i + 1 } : undefined });
+        if (nDyn > 0) stage(pass, st);
+        pass.end();
+      });
     },
     async readCounters() {
       const read = device.createBuffer({ size: HDR * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });

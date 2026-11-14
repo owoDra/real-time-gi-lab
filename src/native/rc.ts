@@ -3,6 +3,7 @@
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
 //   [--pose-frame F] [--seq EVERY,COUNT]  (static camera: final and indirect images every EVERY frames, timings disturbed)
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
+//   [--dyn-stages]  (dynamic layer build timed per stage in separate passes, and its work counted; needs --vox local)
 // Config names: <method>-<P>[-<token>...], method world | screen | split. Tokens:
 //   analytic (placement test), depth (S1: depth buffer only, the default), voxel (all intervals in voxels),
 //   hybrid (c0 depth buffer, voxels when it leaves the screen and above), tri / trihybrid (same with the
@@ -33,6 +34,7 @@ const outDir = resolve(arg('--out', join(ROOT, 'box/out/rc/native', sceneName)))
 const configs = arg('--configs', 'world-32').split(',');
 const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--frames', '240')), inFlight: 2,
   exposure: Number(arg('--exposure', '1.0')), seedFixed: args.includes('--seed-fixed'), staticOnly: args.includes('--static-only'),
+  dynStages: args.includes('--dyn-stages'),
   sky: (args.includes('--no-sky') ? [0, 0, 0] : SKY) as Vec3,
   poseFrame: args.includes('--pose-frame') ? Number(arg('--pose-frame', '0')) : undefined,
   // --seq EVERY,COUNT: static camera, final and indirect images every EVERY measured frames (timings are disturbed).
@@ -102,14 +104,16 @@ else {
   const s = loadSponza();
   upload = s.upload;
   const base = parseGltf(s.json, s.bin);
-  spec = sceneName === 'sponza' ? sponzaSpec(base) : sceneName === 'sponza-wide10' ? widen(base, 10)
+  // Stress scenes: sponza-dynobj-many<G> (G groups of the three objects), -n<N> (N objects on a grid), -deform.
+  const stress = /^sponza-dynobj(?:-many(\d+)|-n(\d+))?(-deform)?$/.exec(sceneName);
+  spec =sceneName === 'sponza' ? sponzaSpec(base) : sceneName === 'sponza-wide10' ? widen(base, 10)
     : sceneName === 'sponza-dense9' ? densify(base) : sceneName === 'sponza-toon' ? toonSponza(base)
     : sceneName === 'sponza-objects' ? toonSponza(base, true)
     : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true)
     : sceneName === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : sceneName === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
     : sceneName === 'sponza-dynobj-sunonly' ? dynamicSponza(base, true, -1, 'sun') : sceneName === 'sponza-dynobj-objectsonly' ? dynamicSponza(base, true, -1, 'objects')
     : sceneName === 'sponza-dynobj-sphereonly' ? dynamicSponza(base, true, -1, 'sphere')
-    : sceneName.startsWith('sponza-dynobj-many') ? dynamicSponza(base, true, -1, 'all', Number(sceneName.slice('sponza-dynobj-many'.length)))
+    : stress ? dynamicSponza(base, true, -1, 'all', Number(stress[1] ?? 1), Number(stress[2] ?? 0), !!stress[3])
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
 }
@@ -182,6 +186,8 @@ for (const [name, params] of parsed) {
   const M = (b: number) => (b / 2 ** 20).toFixed(1);
   log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes + r.hitRadBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} [peak while building ${M(r.voxPeakBytes)}], dyn ${M(r.dynAllocatedBytes)}, p1 ${M(r.hitRadBytes)})`);
   if (r.static.vox) log(`  vox ${JSON.stringify(r.static.vox)}`);
+  if (opts.dynStages) log(`  dyn stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.')).map(([k, v]) => `${k.slice(4)} ${v.median}`).join(', ')}; pose CPU ${t.poseCpu?.median} ms`);
+  if (r.static.dynWork) log(`  dyn work ${JSON.stringify(r.static.dynWork)}; last frame ${JSON.stringify(r.static.dynWorkLast)}`);
   if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
   if (leak) log(`  leak ${JSON.stringify(leak)}`);
   log(`  flicker static ${JSON.stringify(r.static.flicker)}`);

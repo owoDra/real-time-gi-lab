@@ -36,6 +36,7 @@ bash scripts/run_with_vulkan.sh node build/native/rc.mjs --scene <シーン> --c
   [--no-sky] [--vox JSON] [--frames N] [--warmup N] [--dump-irr] [--response FROM,TO] [--pose-frame F] \
   [--seq EVERY,COUNT] [--out box/out/<名前>]   # --seq：静止カメラで EVERY フレームおきに最終画像と間接光を保存（時間は乱れる）
 mise run s2:native -- --scene sponza --vox-bench     # 再ボクセル化の段ごとの時間
+# --dyn-stages：動的レイヤの作成を段ごとのパスに分けて時間を測り、仕事の量（小片、ブリック）を CPU で数える（--vox local が要る）
 
 # 参照（Mitsuba）
 mise run ref:export -- --scene sponza                # シーン変換（box/out/mitsuba/<シーン>）
