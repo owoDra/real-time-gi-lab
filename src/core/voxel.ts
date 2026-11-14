@@ -34,7 +34,7 @@ export interface VoxParams {
 }
 // Pools sized for Sponza (9546 bricks, 931775 voxels used) so that GI memory stays within 128 MB also while the static bricks are
 // built (budget, user 2026-11-14); bigger scenes need bigger pools (the overflow counters tell).
-export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 12288, maxVoxels: 1310720, anchor: 'camera', local: false, dynBricks: 256 };
+export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 12288, maxVoxels: 1310720, anchor: 'camera', local: false, dynBricks: 1536 };
 
 const HDR = 64;        // counter words at the start of the vox buffer
 export const BRICK_WORDS = 18; // 16 occupancy words, first attribute, level and brick coordinates

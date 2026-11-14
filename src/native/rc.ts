@@ -186,7 +186,7 @@ for (const [name, params] of parsed) {
   const M = (b: number) => (b / 2 ** 20).toFixed(1);
   log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes + r.hitRadBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} [peak while building ${M(r.voxPeakBytes)}], dyn ${M(r.dynAllocatedBytes)}, p1 ${M(r.hitRadBytes)})`);
   if (r.static.vox) log(`  vox ${JSON.stringify(r.static.vox)}`);
-  if (opts.dynStages) log(`  dyn stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.')).map(([k, v]) => `${k.slice(4)} ${v.median}`).join(', ')}; pose CPU ${t.poseCpu?.median} ms`);
+  if (opts.dynStages) log(`  dyn stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.')).map(([k, v]) => `${k.slice(4)} ${v.median}`).join(', ')}`);
   if (r.static.dynWork) log(`  dyn work ${JSON.stringify(r.static.dynWork)}; last frame ${JSON.stringify(r.static.dynWorkLast)}`);
   if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
   if (leak) log(`  leak ${JSON.stringify(leak)}`);

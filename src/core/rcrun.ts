@@ -10,7 +10,7 @@ import { createDdgi } from './ddgi.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
-import { createDynLayer, DYN_STAGES, dynWork, type DynLayer } from './dynlayer.ts';
+import { createDynLayer, DYN_MAX_BRICKS, DYN_STAGES, dynWork, mortonSortDynamic, type DynLayer } from './dynlayer.ts';
 import { createHitRad, emptyHitRad, type HitRad } from './hitrad.ts';
 import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
 
@@ -27,6 +27,10 @@ export interface RunContext {
   world: WorldResources; voxWorld: VoxWorld | null; dynLayer: DynLayer | null; hitRad: HitRad | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
   /** Dynamic scenes with a BVH: refits it to the posed vertices (CPU, outside the GPU timing). */
   refitBvh: ((first: number, pos: Float32Array) => void) | null;
+  /** Posed dynamic vertices by pose frame, computed on the CPU before the frames that use them are timed, so
+   * that posing (and deforming, about 20 ms per frame at 64 objects) never leaves the GPU waiting between frames.
+   * Shared by the configs of a run. */
+  posed: Map<number, ReturnType<typeof posedVertices>>;
 }
 
 export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneGpu,
@@ -37,6 +41,7 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const S = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST;
   const dummy = () => device.createBuffer({ size: 64, usage: S });
   const table = triangleTable(spec.scene);
+  if (spec.dynamic) mortonSortDynamic(table, spec.dynamic.firstTriangle, spec.scene.positions);
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
   const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle) : null;
@@ -63,9 +68,9 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvh: bvhBuf, materials: gpu.materials,
-    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device), dynBricks: voxWorld?.params.dynBricks ?? 256 }; // P1: runConfig binds the layer for configs with p1
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device), dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS }; // P1: runConfig binds the layer for configs with p1
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
-    width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit };
+    width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit, posed: new Map() };
 }
 
 /** Static bricks built once (local): builds them and the P1 hit radiance layer over them (used by configs with p1).
@@ -172,14 +177,22 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
 
   // M1: fully dynamic scenes pose their objects and the sun per frame (t counts every frame of a run, warm-up included).
   let sunDir = spec.sunDir;
-  let lastPosed: ReturnType<typeof posedVertices> | null = null, poseCpuMs = 0;
+  let lastPosed: ReturnType<typeof posedVertices> | null = null;
+  const posedAt = (f: number) => {
+    let v = ctx.posed.get(f);
+    if (!v) { v = posedVertices(spec.scene, spec.dynamic!, spec.dynamic!.at(f)); ctx.posed.set(f, v); }
+    return v;
+  };
+  if (spec.dynamic && !opts.response) {
+    const c0 = performance.now(), n = ctx.posed.size;
+    for (let f = 0; f < opts.warmup + opts.frames; f++) posedAt(opts.poseFrame ?? f);
+    if (ctx.posed.size > n) log(`  posed ${ctx.posed.size - n} frames on the CPU before timing in ${Math.round(performance.now() - c0)} ms`);
+  }
   const pose = (t: number) => {
     const d = spec.dynamic;
     if (!d) return;
-    const c0 = performance.now();
     const ps = d.at(opts.poseFrame ?? t);
-    const v = posedVertices(spec.scene, d, ps);
-    poseCpuMs = performance.now() - c0;
+    const v = posedAt(opts.poseFrame ?? t);
     lastPosed = v;
     device.queue.writeBuffer(ctx.gpu.positions, v.first * 12, v.pos);
     device.queue.writeBuffer(ctx.gpu.normals, v.first * 12, v.nrm);
@@ -264,7 +277,6 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
 
   async function run(mode: 'static' | 'moving') {
     post.clearCounters();
-    const poseCpu: number[] = [];
     const work: ReturnType<typeof dynWork>[] = [];
     const pending: Promise<undefined>[] = [];
     let prev = mode === 'static' ? static0 : path(0);
@@ -280,7 +292,6 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
         ? { querySet, beginningOfPassWriteIndex: k * Q + 2 * pass, endOfPassWriteIndex: k * Q + 2 * pass + 1 } as T : undefined;
       const enc = device.createCommandEncoder();
       encodeFrame(enc, tw, k);
-      if (k >= 0) poseCpu.push(poseCpuMs);
       if (staged && mode === 'static' && k >= 0 && k % 24 === 0 && lastPosed) work.push(countWork(lastPosed));
       post.encodeChainExcess(enc);
       post.encodeFlicker(enc);
@@ -339,7 +350,6 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
         passMs.giTotal[k] = passMs.giSum[k] + sum;
       }
     }
-    if (poseCpu.length) passMs.poseCpu = poseCpu;
     const timing = Object.fromEntries(Object.entries(passMs).map(([n, v]) => [n, stats(v)]));
     const dynWorkStats = work.length ? Object.fromEntries(Object.keys(work[0]).filter((key) => key !== 'bricksPerLevel').map((key) => {
       const v = work.map((w) => (w as any)[key] as number);
