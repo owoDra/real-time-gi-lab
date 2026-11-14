@@ -63,7 +63,7 @@ mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --our
 ## 作業機にしかないもの
 
 - `box/out/mitsuba/`：Mitsuba 用のシーンと、512 spp の参照（`sponza`、`sponza-toon`、`sponza-objects`、
-  `sponza-dyn-f140`、`sponza-dyn-f300`）。描き直すと 1 本約 5 分。`mise run clean` は `build` と `box/out` を消すので、
+  `sponza-dyn-f140`、`sponza-dyn-f300`、`sponza-dynobj-f0`）。描き直すと 1 本約 5 分。`mise run clean` は `build` と `box/out` を消すので、
   参照も消える。
 - `build/refenv`：参照レンダラの Python 環境。
 - `archive-local/`（96 MB）：Program 1 のテキスト記録 35,854 ファイルの圧縮アーカイブと、全ファイルの目録。

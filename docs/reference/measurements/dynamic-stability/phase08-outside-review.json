@@ -1,0 +1,51 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 08, outside review: checks by measurement only",
+ "date": "2026-11-14",
+ "conditions": {
+  "resolution": "1920x1080", "frames": "warm-up 60 + 240", "runs": 1,
+  "rc": "world-48-voxel-rc2-vrel", "vox": { "anchor": "scene", "local": true },
+  "ddgiLinear": "ddgi-75-128-u4-g1-noadapt", "ddgiRtxgi": "ddgi-100-128-u2",
+  "sky": "none (sun only) unless noted",
+  "device": "AMD Radeon 8060S, Dawn / Vulkan (RADV), native", "commit": "7f75b176"
+ },
+ "reproduction": { "objectsonlyK16": 0.00299, "dynobjK16": 0.01192, "expected": [0.0030, 0.0119] },
+ "dynamic": {
+  "sponza-dynobj-objectsonly": {
+   "rc": { "excessK16": 0.00299, "linearRelK16": 0.0034, "staticCamFinePct": 6.983, "movingCamFinePct": 24.642, "giMsStatic": 3.667, "giMsMoving": 3.66 },
+   "ddgiLinear": { "excessK16": 0.00117, "linearRelK16": 0.00072, "staticCamFinePct": 1.344, "movingCamFinePct": 15.927, "giMsStatic": 3.669, "giMsMoving": 3.544, "usedMiB": 46.6 },
+   "ddgiRtxgi": { "excessK16": 0.00133, "linearRelK16": 0.00108, "staticCamFinePct": 1.782, "movingCamFinePct": 17.423, "giMsStatic": 3.6, "giMsMoving": 3.24, "usedMiB": 30.1 }
+  },
+  "sponza-dynobj": {
+   "rc": { "excessK16": 0.01192, "linearRelK16": 0.00989, "staticCamFinePct": 10.525, "movingCamFinePct": 24.607, "giMsStatic": 3.69, "giMsMoving": 3.73 },
+   "ddgiLinear": { "excessK16": 0.00094, "linearRelK16": 0.0004, "staticCamFinePct": 2.321, "movingCamFinePct": 17.015, "giMsStatic": 3.676, "giMsMoving": 3.18 },
+   "ddgiRtxgi": { "excessK16": 0.00082, "linearRelK16": 0.00067, "staticCamFinePct": 1.61, "movingCamFinePct": 19.283, "meanIrradiance": 0.01466, "giMsStatic": 3.496, "giMsMoving": 3.162 }
+  },
+  "sponza-dynobj, sky on, static camera only": {
+   "rc": { "excessK16": 0.00764, "linearRelK16": 0.00742, "staticCamFinePct": 6.762, "giMsStatic": 3.752 },
+   "ddgiLinear": { "excessK16": 0.0019, "linearRelK16": 0.00062, "staticCamFinePct": 2.642, "giMsStatic": 3.731 }
+  },
+  "sponza-dyn (toon objects)": {
+   "rc": { "excessK16": 0.01214, "linearRelK16": 0.00947, "staticCamFinePct": 11.66, "movingCamFinePct": 25.865, "toonFinePctStatic": 19.292, "toonRampChangePctStatic": 1.398, "controlRampChangePctStatic": 1.151, "toonRampChangePctMoving": 1.93, "controlRampChangePctMoving": 0.88, "giMsStatic": 3.707, "giMsMoving": 3.73 },
+   "ddgiLinear": { "excessK16": 0.00082, "linearRelK16": 0.00038, "staticCamFinePct": 2.345, "movingCamFinePct": 16.856, "toonFinePctStatic": 7.727, "toonRampChangePctStatic": 1.009, "toonRampChangePctMoving": 0.94, "giMsStatic": 3.71, "giMsMoving": 3.738 }
+  }
+ },
+ "nearObjectBrightness": {
+  "scene": "sponza-dynobj-objectsonly held at frame 0 (= sponza-dynobj frame 0), sun only",
+  "reference": "Mitsuba 3.6.4, 960x540, 512 spp x 2 seeds (difference of the two halves / mean = 0.192)",
+  "metric": "mean irradiance luminance of photoreal pixels in the phase 06 rectangles",
+  "values": {
+   "mitsubaSeed0": { "sphereContact": 0.00873, "sphereFrontShade": 0.00838, "ringFloor": 0.02108, "farControl": 0.00602, "wholeImage": 0.03518 },
+   "mitsubaSeed1": { "sphereContact": 0.00865, "sphereFrontShade": 0.00837, "ringFloor": 0.02107, "farControl": 0.00606, "wholeImage": 0.03523 },
+   "p2": { "sphereContact": 0.01625, "sphereFrontShade": 0.00847, "ringFloor": 0.0325, "farControl": 0.01172, "wholeImage": 0.03318 },
+   "triangles": { "sphereContact": 0.0046, "sphereFrontShade": 0.00446, "ringFloor": 0.01776, "farControl": 0.00423, "wholeImage": 0.03567 },
+   "diagnostic: dynamic layer radiance set to 0 (black objects)": { "sphereContact": 0.0078, "sphereFrontShade": 0.0003, "ringFloor": 0.00393, "farControl": 0.00051, "wholeImage": 0.01954 },
+   "diagnostic: radiance kept per face direction (6 x rgb, read for the faces against the ray)": { "sphereContact": 0.0152, "sphereFrontShade": 0.00756, "ringFloor": 0.03143, "farControl": 0.0104, "wholeImage": 0.03296, "objectsonlyExcessK16": 0.00267, "sphereonlyExcessK16": 0.00226, "giMsStatic": [3.939, 4.147] }
+  },
+  "errorAgainstMitsuba": {
+   "p2": { "meanAbsRel": 0.4482, "bias": -0.058, "medianRel": 0.3065, "p90Rel": 0.8948 },
+   "triangles": { "meanAbsRel": 0.5224, "bias": 0.0134, "medianRel": 0.2991, "p90Rel": 1.7499 }
+  },
+  "reading": "Against the independent reference P2 is 1.0-1.9x at and near the objects and the triangle tracer 0.53-0.84x; the earlier 1.8-3.5x was against the triangle tracer. The floor in front is lit almost only by the objects' bounce. Per-direction radiance is not the main cause (-11 %). The diagnostics were temporary and are not in the tree."
+ }
+}
