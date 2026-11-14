@@ -18,7 +18,7 @@ import { parseGltf } from '../core/gltf.ts';
 import type { Vec3 } from '../core/math.ts';
 import { DEFAULT_DDGI, type DdgiParams } from '../core/ddgi.ts';
 import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
-import { benchVoxels, compareIrradiance, createRunContext, lum, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
+import { benchVoxels, buildStatic, compareIrradiance, createRunContext, lum, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
 import { uploadScene } from '../core/scene_gpu.ts';
 import { densify, dynamicSponza, leakRoom, sponzaSpec, toonSponza, widen, type SceneSpec } from '../core/scenes.ts';
 import { createNativeDevice, IMPLEMENTATION, loadSponza, ROOT, writePng } from './env.ts';
@@ -112,12 +112,9 @@ const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tr
 const voxBench = args.includes('--vox-bench');
 const needVox = voxBench || parsed.some(([, p]) => p.world === 'voxel' || p.relocate === 'voxel');
 const ctx = createRunContext(device, spec, gpu, { voxel: needVox, bvh: needBvh, vox: JSON.parse(arg('--vox', '{}')) });
-let staticBuildMs: number | null = null;
-if (ctx.voxWorld?.params.local) {
-  ctx.voxWorld.update(spec.camera.eye);
-  staticBuildMs = await ctx.voxWorld.buildStatic();
-  log(`voxels: static triangles built once in ${staticBuildMs.toFixed(2)} ms; dynamic triangles (from ${spec.dynamic?.firstTriangle}) in the dynamic layer`);
-}
+const staticBuildMs = await buildStatic(ctx);
+if (staticBuildMs !== null) log(`voxels: static triangles built once in ${staticBuildMs.toFixed(2)} ms; dynamic triangles (from ${spec.dynamic?.firstTriangle}) in the dynamic layer;`
+  + ` P1 hit radiance over ${ctx.hitRad!.voxelsPerLevel.join(', ')} voxels per level, ${(ctx.hitRad!.bytes / 2 ** 20).toFixed(1)} MiB`);
 log(`scene ${spec.name}: ${spec.scene.triangleCount} triangles, loaded in ${Math.round(performance.now() - t0)} ms; bounds ${spec.scene.boundsMin.map((v) => v.toFixed(2))} .. ${spec.scene.boundsMax.map((v) => v.toFixed(2))}`
   + (ctx.bvh ? `; BVH ${ctx.bvh.nodes} nodes, ${(ctx.bvh.bytes / 2 ** 20).toFixed(1)} MiB, built in ${ctx.bvh.buildMs} ms (CPU)` : ''));
 mkdirSync(outDir, { recursive: true });
@@ -169,7 +166,7 @@ for (const [name, params] of parsed) {
     kind: 'exploratory (探索値)', date: new Date().toISOString(), platform: 'native', implementation: IMPLEMENTATION, adapter: adapterInfo,
     scene: { name: spec.name, triangles: spec.scene.triangleCount, sunDir: spec.sunDir }, resolution: `${ctx.width}x${ctx.height}`,
     frames: { warmup: opts.warmup, measured: opts.frames, inFlight: opts.inFlight, seedFixed: opts.seedFixed }, sky: opts.sky,
-    config: name, params: r.params, ddgiDims: r.ddgiDims, voxStaticBuildMs: staticBuildMs, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, bvh: ctx.bvh,
+    config: name, params: r.params, ddgiDims: r.ddgiDims, voxStaticBuildMs: staticBuildMs, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, hitRadBytes: r.hitRadBytes, bvh: ctx.bvh,
     voxParams: ctx.voxWorld?.params ?? null, static: strip(r.static), moving: strip(r.moving), tracer: r.tracer, leak,
   };
   const t = r.static.timing, m = r.moving?.timing;

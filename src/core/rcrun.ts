@@ -11,6 +11,7 @@ import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
 import { createDynLayer, type DynLayer } from './dynlayer.ts';
+import { createHitRad, emptyHitRad, type HitRad } from './hitrad.ts';
 import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
 
 export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
@@ -23,7 +24,7 @@ export const SKY: Vec3 = [0.45, 0.6, 0.9];
 export interface RunContext {
   device: GPUDevice; spec: SceneSpec; gpu: SceneGpu; g: GBuffer; frame: GPUBuffer; lighting: Lighting;
   gbuffer: ReturnType<typeof createGBufferRenderer>; omega0: Float32Array; width: number; height: number;
-  world: WorldResources; voxWorld: VoxWorld | null; dynLayer: DynLayer | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
+  world: WorldResources; voxWorld: VoxWorld | null; dynLayer: DynLayer | null; hitRad: HitRad | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
   /** Dynamic scenes with a BVH: refits it to the posed vertices (CPU, outside the GPU timing). */
   refitBvh: ((first: number, pos: Float32Array) => void) | null;
 }
@@ -62,9 +63,19 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
-    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh };
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device) };
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
-    width, height, world, voxWorld, dynLayer, bvh, refitBvh: refit };
+    width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit };
+}
+
+/** Static bricks built once (local): builds them and the P1 hit radiance layer over them. Returns the build ms. */
+export async function buildStatic(ctx: RunContext): Promise<number | null> {
+  if (!ctx.voxWorld?.params.local) return null;
+  ctx.voxWorld.update(ctx.spec.camera.eye);
+  const ms = await ctx.voxWorld.buildStatic();
+  ctx.hitRad = await createHitRad(ctx.device, ctx.voxWorld, ctx.frame, ctx.lighting.shadow);
+  ctx.world.hr = ctx.hitRad.buffer;
+  return ms;
 }
 
 /** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. */
@@ -217,6 +228,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       const pass = enc.beginComputePass({ label: 'vox', timestampWrites: tw(3) });
       voxWorld!.encode(pass);
       ctx.dynLayer!.encode(pass);
+      ctx.hitRad?.encode(pass);
       pass.end();
     }
     rc.encode(enc, (i) => tw(RC0 + i));
@@ -386,7 +398,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
   rc.destroy(); post.destroy(); querySet.destroy();
-  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, static: st, moving: mv, tracer };
+  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: useVox ? ctx.hitRad?.bytes ?? 0 : 0, static: st, moving: mv, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */

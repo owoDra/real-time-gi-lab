@@ -55,10 +55,9 @@ fn voxPtrIndex(L: u32, b: vec3i) -> u32 {
 `;
 
 /** Tracer: hierarchical DDA (empty bricks are skipped whole) over one level. Needs VX, vox (array<u32>) and
- * a hit-shading function voxShade(entry, n, albedo (a: toon flag), dir, v) -> vec3f, where entry is the point where the ray
- * enters the voxel (lighting is evaluated on the ray's side: a voxel that straddles a thin wall is lit from
- * the side the ray comes from). Occupied voxels entered before tSkip are ignored. Returns (radiance, T), T = 0
- * on a hit. */
+ * a hit-shading function voxShade(entry, n, albedo (a: toon flag), dir, v, attribute index, level, voxel centre) -> vec3f,
+ * where entry is the point where the ray enters the voxel (the side the ray comes from). Occupied voxels entered
+ * before tSkip are ignored. Returns (radiance, T), T = 0 on a hit. */
 export const VOX_TRACE_WGSL = /* wgsl */ `
 ${VOX_STRUCT_WGSL}
 fn voxRank(brick: u32, bit: u32) -> u32 {
@@ -130,7 +129,7 @@ fn traceVox(o: vec3f, d: vec3f, t0: f32, t1: f32, tSkip: f32, L: u32) -> vec4f {
       var n = vec3f(nn.x, nn.y, 1.0 - abs(nn.x) - abs(nn.y));
       let q = max(-n.z, 0.0);
       n.x += select(q, -q, n.x >= 0.0); n.y += select(q, -q, n.y >= 0.0);
-      return vec4f(voxShade(o + d * tIn, n, alb, d, v), 0.0);
+      return vec4f(voxShade(o + d * tIn, n, alb, d, v, ai, L, lo + (vec3f(c) + 0.5) * v), 0.0);
     }
     if (tExit >= tEnd) { break; }
     tIn = tExit;
