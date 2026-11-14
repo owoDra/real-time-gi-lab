@@ -10,7 +10,8 @@ import { createDdgi } from './ddgi.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
-import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_LOCAL_STAGES, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
+import { createDynLayer, type DynLayer } from './dynlayer.ts';
+import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
 
 export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
 const Q = 16; // timestamp slots per frame
@@ -22,7 +23,7 @@ export const SKY: Vec3 = [0.45, 0.6, 0.9];
 export interface RunContext {
   device: GPUDevice; spec: SceneSpec; gpu: SceneGpu; g: GBuffer; frame: GPUBuffer; lighting: Lighting;
   gbuffer: ReturnType<typeof createGBufferRenderer>; omega0: Float32Array; width: number; height: number;
-  world: WorldResources; voxWorld: VoxWorld | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
+  world: WorldResources; voxWorld: VoxWorld | null; dynLayer: DynLayer | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
   /** Dynamic scenes with a BVH: refits it to the posed vertices (CPU, outside the GPU timing). */
   refitBvh: ((first: number, pos: Float32Array) => void) | null;
 }
@@ -37,9 +38,10 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const table = triangleTable(spec.scene);
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
-  const dv = spec.dynamic ? { first: spec.dynamic.objects[0].firstVertex,
-    count: spec.dynamic.objects.reduce((n, o) => n + o.vertexCount, 0) } : undefined;
-  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle, dv) : null;
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle) : null;
+  // P2: dynamic triangles are in the dynamic layer, read by the voxel tracers at the cone width.
+  const dynLayer = voxWorld ? createDynLayer(device, gpu, tri, voxWorld.uniform, frame, lighting.shadow, voxWorld.params,
+    spec.dynamic?.firstTriangle ?? spec.scene.triangleCount, spec.scene.triangleCount) : null;
   let bvh: RunContext['bvh'] = null, refit: RunContext['refitBvh'] = null;
   let bvhNodes = dummy(), bvhTris = dummy();
   if (opts.bvh) {
@@ -59,10 +61,10 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
     }
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
-  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
+  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
     baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh };
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
-    width, height, world, voxWorld, bvh, refitBvh: refit };
+    width, height, world, voxWorld, dynLayer, bvh, refitBvh: refit };
 }
 
 /** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. */
@@ -159,7 +161,6 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     const v = posedVertices(spec.scene, d, ps);
     device.queue.writeBuffer(ctx.gpu.positions, v.first * 12, v.pos);
     device.queue.writeBuffer(ctx.gpu.normals, v.first * 12, v.nrm);
-    ctx.voxWorld?.h4Frame(opts.poseFrame ?? t, v.first, v.pos);
     ctx.refitBvh?.(v.first, v.pos);
     sunDir = ps.sunDir;
     lighting.setSun(sunDir);
@@ -210,7 +211,12 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     gbuffer.encode(enc, g, tw(0));
     lighting.encodeShadow(enc, tw(1));
     lighting.encodeDirect(enc, tw(2));
-    if (useVox) voxWorld!.encode(enc, tw(3));
+    if (useVox) {
+      const pass = enc.beginComputePass({ label: 'vox', timestampWrites: tw(3) });
+      voxWorld!.encode(pass);
+      ctx.dynLayer!.encode(pass);
+      pass.end();
+    }
     rc.encode(enc, (i) => tw(RC0 + i));
   };
 
@@ -305,7 +311,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       excess.k16linear = { excessRelPerFrame: lm ? r5(le / lm / 15) : null, tvRelPerFrame: lm ? r5(lt / lm / 15) : null, meanIrradiance: excess.k16.pixelWindows ? r5(lm / EXCESS_LIN_SCALE / excess.k16.pixelWindows) : null };
     }
     const counts = await rc.readCounts();
-    const vox = useVox ? await voxWorld!.readCounters() : null;
+    const vox = useVox ? { ...await voxWorld!.readCounters(), dyn: await ctx.dynLayer!.readCounters() } : null;
     const images: Record<string, Uint8Array> = {};
     for (const [name, m] of [['final', 0], ['indirect', 1], ['direct', 2], ['flicker', 3]] as const) images[name] = await post.capture(m);
     if (mode === 'static') { post.encodeExcessMap(Math.floor(opts.frames / 16)); images.excess = await post.capture(3); }
@@ -374,20 +380,20 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
   rc.destroy(); post.destroy(); querySet.destroy();
-  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, static: st, moving: mv, tracer };
+  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, static: st, moving: mv, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */
 export async function benchVoxels(ctx: RunContext, frames: number) {
   const { device, voxWorld, spec } = ctx;
   if (!voxWorld) throw new Error('no voxel world');
-  const names = voxWorld.params.local ? VOX_LOCAL_STAGES : VOX_STAGES;
+  const names = VOX_STAGES;
   const n = names.length * 2;
   const querySet = device.createQuerySet({ type: 'timestamp', count: frames * n });
   voxWorld.update(spec.camera.eye);
   for (let f = 0; f < 10 + frames; f++) {
     const enc = device.createCommandEncoder();
-    if (f >= 10) voxWorld.encodeStaged(enc, querySet, (f - 10) * n); else voxWorld.encode(enc);
+    if (f >= 10) voxWorld.encodeStaged(enc, querySet, (f - 10) * n);
     device.queue.submit([enc.finish()]);
     if (f % 4 === 3) await device.queue.onSubmittedWorkDone();
   }

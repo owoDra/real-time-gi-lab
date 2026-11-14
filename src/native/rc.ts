@@ -112,7 +112,7 @@ let staticBuildMs: number | null = null;
 if (ctx.voxWorld?.params.local) {
   ctx.voxWorld.update(spec.camera.eye);
   staticBuildMs = await ctx.voxWorld.buildStatic();
-  log(`voxel local update: static build ${staticBuildMs.toFixed(2)} ms (once), dynamic triangles from ${spec.dynamic?.firstTriangle}`);
+  log(`voxels: static triangles built once in ${staticBuildMs.toFixed(2)} ms; dynamic triangles (from ${spec.dynamic?.firstTriangle}) in the dynamic layer`);
 }
 log(`scene ${spec.name}: ${spec.scene.triangleCount} triangles, loaded in ${Math.round(performance.now() - t0)} ms; bounds ${spec.scene.boundsMin.map((v) => v.toFixed(2))} .. ${spec.scene.boundsMax.map((v) => v.toFixed(2))}`
   + (ctx.bvh ? `; BVH ${ctx.bvh.nodes} nodes, ${(ctx.bvh.bytes / 2 ** 20).toFixed(1)} MiB, built in ${ctx.bvh.buildMs} ms (CPU)` : ''));

@@ -20,6 +20,7 @@ import { FRAME_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
 import type { DdgiParams } from './ddgi.ts';
 import type { GBuffer } from './gbuffer.ts';
+import { DYN_READ_WGSL } from './dynlayer.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
 
 export type Method = 'world' | 'screen' | 'split';
@@ -29,7 +30,7 @@ export type Relocate = 'gbuffer' | 'voxel' | 'none';
 
 /** S2: resources of the world-space tracers (bound in group 3). */
 export interface WorldResources {
-  voxUniform: GPUBuffer; vox: GPUBuffer; bvhNodes: GPUBuffer; bvhTris: GPUBuffer;
+  voxUniform: GPUBuffer; vox: GPUBuffer; dyn: GPUBuffer; bvhNodes: GPUBuffer; bvhTris: GPUBuffer;
   materials: GPUBuffer; baseColor: GPUTexture; shadow: GPUTexture; hasVox: boolean; hasBvh: boolean;
 }
 
@@ -146,10 +147,12 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(6) var linSamp: sampler;
 @group(3) @binding(7) var shadowTex: texture_depth_2d;
 @group(3) @binding(8) var shadowCmp: sampler_comparison;
+@group(3) @binding(9) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
 
 ${SHADE_WGSL}
 fn triShade(p: vec3f, n: vec3f, alb: vec4f, d: vec3f) -> vec3f { return shadeHit(p, n, alb, d, 0.03); }
 ${VOX_TRACE_WGSL}
+${DYN_READ_WGSL}
 ${BVH_TRACE_WGSL}
 
 fn voxLevel(s0: f32, c: u32) -> u32 {
@@ -163,7 +166,13 @@ fn traceWorld(o: vec3f, d: vec3f, t0: f32, t1: f32, s0: f32, c: u32, nrm: vec3f)
   let L = voxLevelFor(voxLevel(s0, c), o + d * t1);
   let v = voxSize(L);
   voxSteps = 0u;
-  let r = traceVox(o + nrm * (LY.wp.y * v), d, t0, t1, LY.wp.w * v, L);
+  var r = traceVox(o + nrm * (LY.wp.y * v), d, t0, t1, LY.wp.w * v, L);
+  // P2: the dynamic layer in front of the static hit, read at the width of the direction bin's cone.
+  if (dyn[0] != 0u) {
+    let tS = select(t1, dot(voxHitEntry - o, d), r.a < 0.5);
+    let dl = traceDyn(o, d, t0, min(t1, tS), 3.5449077 / f32(LY.c[c].res));
+    if (dl.a > 0.0) { r = vec4f(dl.rgb + (1.0 - dl.a) * r.rgb, (1.0 - dl.a) * r.a); }
+  }
   if (LY.wu.z > 0u) {
     atomicAdd(&counts[24u + c], 1u);
     atomicAdd(&counts[32u + c], voxSteps);
@@ -882,7 +891,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const bgl3 = device.createBindGroupLayout({ entries: [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } }, RO(1), RO(2), RO(3), RO(4),
     { binding: 5, visibility: C, texture: { viewDimension: '2d-array' } }, { binding: 6, visibility: C, sampler: {} },
-    { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
+    { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } }, RO(9),
   ] });
   const module = device.createShaderModule({ code: RC_WGSL, label: 'rc' });
   const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3] });
@@ -906,6 +915,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 4, resource: { buffer: world.materials } }, { binding: 5, resource: world.baseColor.createView({ dimension: '2d-array' }) },
     { binding: 6, resource: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }) },
     { binding: 7, resource: world.shadow.createView() }, { binding: 8, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
+    { binding: 9, resource: { buffer: world.dyn } },
   ] });
   const argsBG0 = device.createBindGroup({ layout: argsPipe.getBindGroupLayout(0), entries: [
     { binding: 0, resource: { buffer: layoutBuf } }, { binding: 1, resource: { buffer: counts } }, { binding: 2, resource: { buffer: args } },
