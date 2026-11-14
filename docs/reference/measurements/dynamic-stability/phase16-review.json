@@ -1,0 +1,104 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": 16,
+ "date": "2026-11-14",
+ "purpose": "re-render comparison images for the same-budget review; reproduce phase 15 values",
+ "conditions": {
+  "resolution": "1920x1080",
+  "frames": "warm-up 60 + 240",
+  "sky": "off",
+  "vox": {
+   "anchor": "scene",
+   "local": true
+  },
+  "configs": [
+   "world-48-voxel-rc2-vrel",
+   "world-48-voxel-rc2-vrel-p1",
+   "ddgi-75-128-u4-g1-noadapt",
+   "ddgi-100-128-u2"
+  ],
+  "runs": 1
+ },
+ "sponza-dynobj": {
+  "staticExcessK16": [
+   0.01192,
+   0.00408,
+   0.00094,
+   0.00082
+  ],
+  "movingChainExcess": [
+   0.0646,
+   0.05528,
+   0.03691,
+   0.05017
+  ],
+  "movingChainExcessRel": [
+   0.04056,
+   0.03319,
+   0.0305,
+   0.0373
+  ]
+ },
+ "sponza": {
+  "movingChainExcess": [
+   0.06633,
+   0.0864,
+   0.04199,
+   0.04176
+  ],
+  "movingChainExcessRel": [
+   0.03799,
+   0.03786,
+   0.03712,
+   0.04012
+  ],
+  "movingFlickerPhotoFinePct": [
+   15.774,
+   19.574,
+   17.412,
+   17.578
+  ]
+ },
+ "referenceErrorDynobjPose0": {
+  "reference": "Mitsuba 512 spp x 2 (seeds 0, 1), halves differ 0.1918",
+  "meanAbsRel": [
+   0.4482,
+   0.4403,
+   0.4247,
+   0.4156
+  ],
+  "bias": [
+   -0.058,
+   -0.0706,
+   -0.0693,
+   -0.19
+  ],
+  "ddgiAfter16Frames": {
+   "meanAbsRel": [
+    0.4302,
+    0.412
+   ]
+  }
+ },
+ "many8_24objects": {
+  "cap256": {
+   "rcDefaultExcessK16": 0.08484,
+   "ddgiLinearExcessK16": 0.00119,
+   "note": "overflow: value changes run to run (phase 15: 0.0600)"
+  },
+  "cap1024": {
+   "rcDefaultExcessK16": 0.0111,
+   "ddgiLinearExcessK16": 0.00099,
+   "giStaticMs": {
+    "rcDefault": 4.591,
+    "ddgiLinear": 4.499
+   },
+   "dynBuildMs": {
+    "rcDefault": 1.502,
+    "ddgiLinear": 1.275
+   }
+  }
+ },
+ "decision": "AI: continue RC; close the dynamic-stability lane; next lane large-dense starts with 64 dynamic objects (user target) within 4 ms; P1 stays opt-in; no multi-bounce yet",
+ "artifact": "https://claude.ai/artifact/My7iX9PUrPtk6ngYGpPu8B"
+}

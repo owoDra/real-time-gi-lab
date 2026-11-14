@@ -109,9 +109,10 @@ built（できた物の確認）の進め方：
 
 | 列 | ディレクトリ | ブランチ | 内容 | 今のフェーズ |
 |---|---|---|---|---|
-| 動的な安定性 | [`dynamic-stability/`](dynamic-stability/README.md) | `p2` | 物体や光源が動くと場が跳ぶ問題の対策（RC に遅れ 0 の前置フィルタ）と DDGI 系との比べ直し | 16 |
+| 大規模・高密度 | [`large-dense/`](large-dense/README.md) | `p2` | 動く物体 64 個（変形するメッシュを含む）を 4 ms に入れる、その後ワールドの窓のスクロールと三角形の多い場面で DDGI 系と比べる | 17 |
 
-この後の列（大規模・高密度、ブラウザ計測、WebGL2 ティア、確認実験）は [spec/50-roadmap.md](../spec/50-roadmap.md)
+動的な安定性の列（Phase 01〜16）は 2026-11-14 に閉じた（[spec/40-dynamic-stability.md](../spec/40-dynamic-stability.md)）。
+この後の列（ブラウザ計測、WebGL2 ティア、確認実験）は [spec/50-roadmap.md](../spec/50-roadmap.md)
 にあり、始めるときにディレクトリと `README.md` を作ってこの表に行を足す。フェーズの番号は列をまたいで通しにする。
 
 列が 1 本の間は `p2` に直接コミットする。列を並行して進めるときは、列ごとにブランチ（`p2-<列>`）と worktree を
