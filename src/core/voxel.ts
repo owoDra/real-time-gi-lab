@@ -446,8 +446,8 @@ export interface VoxWorld {
   buildStatic(): Promise<number>;
   /** This frame's work inside the caller's pass (nothing when the static bricks are built once). */
   encode(pass: GPUComputePassEncoder): void;
-  /** Same work, one pass per stage with timestamps at slots [base, base + 2 * VOX_STAGES.length). */
-  encodeStaged(enc: GPUCommandEncoder, querySet: GPUQuerySet, base: number): void;
+  /** Same work, one pass per stage with timestamps at slots [base, base + 2 * VOX_STAGES.length) when querySet is given. */
+  encodeStaged(enc: GPUCommandEncoder, querySet: GPUQuerySet | null, base: number): void;
   readCounters(): Promise<{ bricks: number; voxels: number; brickOverflow: number; bigOverflow: number; voxelOverflow: number; bricksPerLevel: number[]; bigPerLevel: number[] }>;
   usedBytes(c: { bricks: number; voxels: number }): { persistent: number; buildTemp: number };
   destroy(): void;
@@ -588,7 +588,8 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
     },
     encodeStaged(enc, querySet, base) {
       VOX_STAGES.forEach((st, i) => {
-        const pass = enc.beginComputePass({ label: `vox.${st}`, timestampWrites: { querySet, beginningOfPassWriteIndex: base + 2 * i, endOfPassWriteIndex: base + 2 * i + 1 } });
+        const pass = enc.beginComputePass({ label: `vox.${st}`,
+          timestampWrites: querySet ? { querySet, beginningOfPassWriteIndex: base + 2 * i, endOfPassWriteIndex: base + 2 * i + 1 } : undefined });
         stage(pass, st);
         pass.end();
       });

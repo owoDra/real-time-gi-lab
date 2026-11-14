@@ -1,9 +1,11 @@
 // Native radiance-cascade runs.
-// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>] [--configs a,b,...]
+// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>][-bwave|-bcut] [--configs a,b,...]
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
 //   [--pose-frame F] [--seq EVERY,COUNT]  (static camera: final and indirect images every EVERY frames, timings disturbed)
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
-//   [--dyn-stages]  (dynamic layer build timed per stage in separate passes, and its work counted; needs --vox local)
+//   [--dyn-stages]  (dynamic layer build, and with a rebuilt-every-frame window the static voxel build, timed per stage in
+//                    separate passes, and the dynamic layer's work counted; at most 4096 / timestamps-per-frame frames)
+//   Scene suffix -bwave / -bcut: the building itself changes every frame (src/core/building.ts; needs --vox without local).
 // Config names: <method>-<P>[-<token>...], method world | screen | split. Tokens:
 //   analytic (placement test), depth (S1: depth buffer only, the default), voxel (all intervals in voxels),
 //   hybrid (c0 depth buffer, voxels when it leaves the screen and above), tri / trihybrid (same with the
@@ -22,15 +24,18 @@ import { DEFAULT_DDGI, type DdgiParams } from '../core/ddgi.ts';
 import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
 import { benchVoxels, buildStatic, compareIrradiance, createRunContext, lum, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
 import { uploadScene } from '../core/scene_gpu.ts';
-import { densify, dynamicSponza, leakRoom, sponzaSpec, toonSponza, widen, type SceneSpec } from '../core/scenes.ts';
+import { densify, dynamicSponza, leakRoom, sponzaSpec, toonSponza, widen, withBuildingMotion, type SceneSpec } from '../core/scenes.ts';
 import { createNativeDevice, IMPLEMENTATION, loadSponza, ROOT, writePng } from './env.ts';
 
 // Synchronous logging: a native abort would otherwise drop buffered output.
 const log = (s: string) => { writeSync(1, s + '\n'); };
 const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
-const sceneName = arg('--scene', 'sponza');
-const outDir = resolve(arg('--out', join(ROOT, 'box/out/rc/native', sceneName)));
+const sceneArg = arg('--scene', 'sponza');
+// Full-dynamic lane: suffix -bwave / -bcut on any Sponza scene makes the building itself change every frame (building.ts).
+const buildingKind = /-b(wave|cut)$/.exec(sceneArg)?.[1] as 'wave' | 'cut' | undefined;
+const sceneName = buildingKind ? sceneArg.slice(0, -('-b'.length + buildingKind.length)) : sceneArg;
+const outDir = resolve(arg('--out', join(ROOT, 'box/out/rc/native', sceneArg)));
 const configs = arg('--configs', 'world-32').split(',');
 const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--frames', '240')), inFlight: 2,
   exposure: Number(arg('--exposure', '1.0')), seedFixed: args.includes('--seed-fixed'), staticOnly: args.includes('--static-only'),
@@ -116,6 +121,7 @@ else {
     : stress ? dynamicSponza(base, true, -1, 'all', Number(stress[1] ?? 1), Number(stress[2] ?? 0), !!stress[3])
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
+  if (buildingKind) spec = withBuildingMotion(spec, buildingKind);
 }
 const gpu = await uploadScene(device, spec.scene, upload);
 const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tri');
@@ -186,7 +192,8 @@ for (const [name, params] of parsed) {
   const M = (b: number) => (b / 2 ** 20).toFixed(1);
   log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes + r.hitRadBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} [peak while building ${M(r.voxPeakBytes)}], dyn ${M(r.dynAllocatedBytes)}, p1 ${M(r.hitRadBytes)})`);
   if (r.static.vox) log(`  vox ${JSON.stringify(r.static.vox)}`);
-  if (opts.dynStages) log(`  dyn stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.')).map(([k, v]) => `${k.slice(4)} ${v.median}`).join(', ')}`);
+  if (opts.dynStages) log(`  stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.') || k.startsWith('vox.')).map(([k, v]) => `${k} ${v.median}`).join(', ')}`);
+  if (r.static.buildingChange) log(`  building change (first vs last measured frame, static camera) ${JSON.stringify(r.static.buildingChange)}`);
   if (r.static.dynWork) log(`  dyn work ${JSON.stringify(r.static.dynWork)}; last frame ${JSON.stringify(r.static.dynWorkLast)}`);
   if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
   if (leak) log(`  leak ${JSON.stringify(leak)}`);

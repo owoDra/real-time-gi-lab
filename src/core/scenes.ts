@@ -5,6 +5,7 @@ import { s0Camera } from './bench.ts';
 import type { Camera } from './frame.ts';
 import type { MaterialDesc, SceneData } from './gltf.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
+import { withBuilding, type BuildingSpec } from './building.ts';
 
 export interface SceneSpec {
   name: string;
@@ -18,6 +19,16 @@ export interface SceneSpec {
   /** M1: fully dynamic scenes. Rigid objects (vertex ranges at the end of the vertex buffer; their triangles are
    * the last ones of the triangle table, from firstTriangle on) and the sun move with the frame number. */
   dynamic?: DynamicSpec;
+  /** Full-dynamic lane: the building itself changes every frame (building.ts). */
+  building?: BuildingSpec;
+}
+
+/** Full-dynamic lane: suffix -bwave (every building vertex moves every frame) or -bcut (parts of the building appear
+ * and vanish every CUT_PERIOD frames), see building.ts. */
+export function withBuildingMotion(s: SceneSpec, kind: 'wave' | 'cut'): SceneSpec {
+  const firstVertex = s.dynamic ? s.dynamic.objects[0].firstVertex : s.scene.positions.length / 3;
+  const r = withBuilding(s.scene, kind, firstVertex, s.dynamic?.firstTriangle ?? s.scene.triangleCount);
+  return { ...s, name: `${s.name}-b${kind}`, scene: r.scene, building: r.building };
 }
 
 /** height: rest height above the pivot (top of the object), used by the bend deformation. */
