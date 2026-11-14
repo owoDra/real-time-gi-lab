@@ -1,0 +1,54 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 11: review (fit P1 into 4 ms or proceed without it), measurement only",
+ "date": "2026-11-14",
+ "conditions": {
+  "commit": "fac13c06",
+  "default": "world-48-voxel-rc2-vrel",
+  "p1": "world-48-voxel-rc2-vrel-p1",
+  "resolution": "1920x1080",
+  "frames": "warm-up 60 + 240",
+  "sky": "off",
+  "vox": {"anchor": "scene", "local": true},
+  "gpu": "native Dawn / Vulkan, one development machine; a web browser and an editor were running and share the GPU; clocks drifted between a faster and a slower state during the session",
+  "diagnostics": "norel is an existing diagnostic token (no relocation, no occlusion tests; images differ). The pinned read level was a temporary shader change (P1 reads level max(trace level, 1) only), not committed."
+ },
+ "reproduced": {
+  "sponza-dynobj default excessK16": 0.01192,
+  "sponza default movingCamPhotoFinePct": 15.774,
+  "sponza p1 movingCamPhotoFinePct": 19.574
+ },
+ "costAlternating": {
+  "scene": "sponza-dynobj",
+  "unit": "GI median ms; passes are static camera",
+  "runs": [
+   {"config": "default", "static": 3.501, "moving": 3.51, "vox": 0.25, "build": 0.848, "trace": 1.101, "merge": 0.083, "gather": 1.22},
+   {"config": "p1", "static": 3.831, "moving": 3.848, "vox": 0.564, "build": 0.843, "trace": 1.109, "merge": 0.075, "gather": 1.233},
+   {"config": "default", "static": 3.503, "moving": 3.662, "vox": 0.25, "build": 0.848, "trace": 1.099, "merge": 0.078, "gather": 1.235},
+   {"config": "p1", "static": 3.897, "moving": 4.044, "vox": 0.57, "build": 0.858, "trace": 1.136, "merge": 0.072, "gather": 1.26},
+   {"config": "default", "static": 3.876, "moving": 3.854, "vox": 0.277, "build": 0.934, "trace": 1.22, "merge": 0.087, "gather": 1.355},
+   {"config": "p1", "static": 4.196, "moving": 4.138, "vox": 0.602, "build": 0.922, "trace": 1.233, "merge": 0.083, "gather": 1.347}
+  ],
+  "p1MinusDefaultStatic": [0.33, 0.39, 0.32]
+ },
+ "vrelCost": {
+  "scene": "sponza-dynobj, static camera, slower clock state, alternating",
+  "runs": [
+   {"config": "vrel (default)", "gi": 3.889, "build": 0.933, "gather": 1.362},
+   {"config": "norel (diagnostic)", "gi": 2.538, "build": 0.323, "gather": 0.619},
+   {"config": "vrel (default)", "gi": 3.915, "build": 0.95, "gather": 1.362}
+  ],
+  "vrelShare": {"total": 1.36, "build": 0.62, "gather": 0.74},
+  "buildWork": "relocateVox (64 occupancy reads, a second 64 when ambiguous, up to 2 x 17 in the march) and linkParents (8 segments, up to 16 reads each) for about 18k probes: at most about 4.7M reads in 0.62 ms",
+  "gatherWork": "2.07M pixels x 8 probes, segment of up to 16 reads each: on the order of 100M reads in 0.74 ms"
+ },
+ "registrationStride": {
+  "scene": "sponza-dynobj, static camera",
+  "stride1": {"gi": 3.879, "build": 0.94},
+  "stride2": {"gi": 3.714, "build": 0.826, "note": "probe set changes slightly (12179 vs 12390 c0 probes); images differ"}
+ },
+ "p1ReadLevel": {
+  "sponza movingCamPhotoFinePct": {"default": 15.774, "p1": 19.574, "p1PinnedLevel": 16.921},
+  "sponza-dynobj-sunonly excessK16": {"default": 0.00901, "p1": 0.00216, "p1PinnedLevel": 0.00299}
+ }
+}
