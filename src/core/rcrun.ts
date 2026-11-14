@@ -35,7 +35,9 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const table = triangleTable(spec.scene);
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
-  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle) : null;
+  const dv = spec.dynamic ? { first: spec.dynamic.objects[0].firstVertex,
+    count: spec.dynamic.objects.reduce((n, o) => n + o.vertexCount, 0) } : undefined;
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle, dv) : null;
   let bvh: RunContext['bvh'] = null;
   let bvhNodes = dummy(), bvhTris = dummy();
   if (opts.bvh) {
@@ -71,7 +73,7 @@ function percentile(sorted: number[], q: number) {
 function stats(ms: number[]) {
   const s = [...ms].sort((a, b) => a - b);
   const r = (x: number) => Math.round(x * 1000) / 1000;
-  return { median: r(percentile(s, 0.5)), p05: r(percentile(s, 0.05)), p95: r(percentile(s, 0.95)), max: r(s[s.length - 1]) };
+  return { median: r(percentile(s, 0.5)), mean: r(s.reduce((a, b) => a + b, 0) / s.length), p05: r(percentile(s, 0.05)), p95: r(percentile(s, 0.95)), max: r(s[s.length - 1]) };
 }
 
 function halfToFloat(h: number) {
@@ -143,6 +145,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     const v = posedVertices(spec.scene, d, ps);
     device.queue.writeBuffer(ctx.gpu.positions, v.first * 12, v.pos);
     device.queue.writeBuffer(ctx.gpu.normals, v.first * 12, v.nrm);
+    ctx.voxWorld?.h4Frame(opts.poseFrame ?? t, v.first, v.pos);
     sunDir = ps.sunDir;
     lighting.setSun(sunDir);
   };

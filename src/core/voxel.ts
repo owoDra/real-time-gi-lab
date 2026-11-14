@@ -33,8 +33,13 @@ export interface VoxParams {
   // dynamic triangles (the tail of the triangle table) touch are rebuilt every frame (needs anchor 'scene').
   anchor: 'camera' | 'scene';
   local: boolean;
+  // H4 (local update only): 'cost' voxelises the dynamic triangles of level L only every 2^L frames (the other
+  // levels lose them that frame: for timing only); 'stale' voxelises every level every frame but level L from the
+  // dynamic vertices of the last frame that was a multiple of 2^L (the content of a 1/2^L update, for quality).
+  // 'l0' / 'none': only level 0 / no level gets the dynamic triangles (timing references for H4).
+  h4: 'off' | 'cost' | 'stale' | 'l0' | 'none';
 }
-export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 1 << 15, maxVoxels: 4 << 20, anchor: 'camera', local: false };
+export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 1 << 15, maxVoxels: 4 << 20, anchor: 'camera', local: false, h4: 'off' };
 
 const HDR = 64;        // counter words at the start of the vox buffer
 export const BRICK_WORDS = 18; // 16 occupancy words, first attribute, level and brick coordinates
@@ -45,7 +50,7 @@ struct VoxU {
   a: vec4f,   // v0, levels, G, brick words
   b: vec4u,   // ptrOff, brickOff, attrOff, maxBricks
   c: vec4u,   // maxVoxels, end of the triangles to voxelise, first triangle, static pointer copy offset (local update)
-  origin: array<vec4i, 8>, // per level: first brick of the clipmap (world brick coordinates)
+  origin: array<vec4i, 8>, // per level: first brick of the clipmap (world brick coordinates), w: 1 if the level's dynamic triangles are voxelised this frame
 }
 const VOX_EMPTY = 0xffffffffu;
 const VOX_MARK = 0xfffffffeu;
@@ -166,6 +171,17 @@ const BIG = 8u;
 const BIG_CAP = 1u << 18u;
 fn lin(wid: vec3u, nwg: vec3u, li: u32) -> u32 { return (wid.y * nwg.x + wid.x) * 64u + li; }
 fn P(i: u32) -> vec3f { return vec3f(positions[i * 3u], positions[i * 3u + 1u], positions[i * 3u + 2u]); }
+// H4 'stale': big[4] first dynamic vertex, big[5] dynamic vertices, big[6] on; per-level copies after the big lists.
+const DYN_OFF = 8u + 16u * (1u << 18u);
+fn PL(i: u32, L: u32) -> vec3f {
+  if (big[6] != 0u && i >= big[4] && i < big[4] + big[5]) {
+    let o = DYN_OFF + (L * big[5] + (i - big[4])) * 3u;
+    return vec3f(bitcast<f32>(big[o]), bitcast<f32>(big[o + 1u]), bitcast<f32>(big[o + 2u]));
+  }
+  return P(i);
+}
+fn loadTriL(t: u32, L: u32) -> Tri { let i = tri[t]; return Tri(PL(i.x, L), PL(i.y, L), PL(i.z, L), i); }
+fn levelOn(L: u32) -> bool { return (VX.origin[L].w & 1) != 0; }
 fn N(i: u32) -> vec3f { return vec3f(normals[i * 3u], normals[i * 3u + 1u], normals[i * 3u + 2u]); }
 fn UV(i: u32) -> vec2f { return vec2f(uvs[i * 2u], uvs[i * 2u + 1u]); }
 
@@ -242,7 +258,7 @@ fn surfaceAt(T: Tri, p: vec3f, L: u32, wantAttr: bool) -> Surf {
   let i = lin(wid, nwg, li);
   let G = u32(VX.a.z);
   if (i < ${HDR}u) { atomicStore(&vox[i], 0u); }
-  if (i < 8u) { big[i] = 0u; }
+  if (i < 4u) { big[i] = 0u; }
   if (i < u32(VX.a.y) * G * G * G) { atomicStore(&vox[VX.b.x + i], VOX_EMPTY); }
 }
 
@@ -320,8 +336,10 @@ fn voxelizeOne(T: Tri, t: u32, L: u32, c: vec3i, single: bool) {
 
 fn voxelizeSmall(t: u32) {
   if (t >= VX.c.y) { return; }
-  let T = loadTri(t);
+  var T = loadTri(t);
   for (var L = 0u; L < u32(VX.a.y); L++) {
+    if (!levelOn(L)) { continue; }
+    if (big[6] != 0u) { T = loadTriL(t, L); }
     let r = voxRange(T, L, voxSize(L));
     let n = r.n.x * r.n.y * r.n.z;
     if (n == 0) { continue; }
@@ -348,7 +366,7 @@ fn voxelizeBig(wi: u32, li: u32) {
   }
   if (k >= min(atomicLoad(&vox[16u + L]), BIG_CAP)) { return; }
   let t = big[8u + L * BIG_CAP + k];
-  let T = loadTri(t);
+  let T = loadTriL(t, L);
   let r = voxRange(T, L, voxSize(L));
   let n = u32(r.n.x * r.n.y * r.n.z);
   for (var j = li; j < n; j += 64u) {
@@ -396,7 +414,7 @@ fn octEnc(n: vec3f) -> vec2f {
   let c = b * 8 + vec3i(i32(bit & 7u), i32((bit >> 3u) & 7u), i32(bit >> 6u));
   let p = regionLo(L) + (vec3f(c) + 0.5) * voxSize(L);
   let t = atomicLoad(&rep[ptr * 512u + bit]) - 1u;
-  let s = surfaceAt(loadTri(t), p, L, true);
+  let s = surfaceAt(loadTriL(t, L), p, L, true);
   atomicStore(&vox[VX.b.z + ai * 2u], pack4x8unorm(vec4f(s.albedo, s.toon)));
   atomicStore(&vox[VX.b.z + ai * 2u + 1u], pack2x16snorm(octEnc(s.n)));
 }
@@ -466,8 +484,9 @@ fn claimBrick(L: u32, b: vec3i) {
 @compute @workgroup_size(64) fn markDyn(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let t = lin(wid, nwg, li) + VX.c.z;
   if (t >= VX.c.y) { return; }
-  let T = loadTri(t);
   for (var L = 0u; L < u32(VX.a.y); L++) {
+    if (!levelOn(L)) { continue; }
+    let T = loadTriL(t, L);
     let bs = voxSize(L) * 8.0;
     let lo = regionLo(L);
     let r = voxRange(T, L, bs);
@@ -523,6 +542,8 @@ export interface VoxWorld {
   update(eye: [number, number, number]): void;
   /** Local update: voxelises the static triangles once (call after the first update, before encoding frames). */
   buildStatic(): Promise<number>;
+  /** H4: frame t's level schedule ('cost') or stale per-level copies of the dynamic vertices ('stale'). */
+  h4Frame(t: number, firstVertex: number, pos: Float32Array): void;
   encode(enc: GPUCommandEncoder, tw?: GPUComputePassTimestampWrites): void;
   /** Same work, one pass per stage with timestamps at slots [base, base + 2 * VOX_STAGES.length). */
   encodeStaged(enc: GPUCommandEncoder, querySet: GPUQuerySet, base: number): void;
@@ -543,7 +564,8 @@ export function triangleTable(scene: SceneData): Uint32Array {
   return t;
 }
 
-export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams, firstDynamicTri = scene.triangleCount): VoxWorld {
+export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams, firstDynamicTri = scene.triangleCount,
+  dynVerts = { first: 0, count: 0 }): VoxWorld {
   const { v0, levels: NL, G, maxBricks, maxVoxels } = params;
   if (NL > 8) throw new Error('at most 8 levels');
   if (params.local && params.anchor !== 'scene') throw new Error('the local update needs a fixed window (anchor scene)');
@@ -554,7 +576,9 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
   const vox = device.createBuffer({ label: 'vox', size: words * 4, usage: S | GPUBufferUsage.COPY_SRC });
   const repBuf = device.createBuffer({ label: 'vox.rep', size: maxBricks * 512 * 4, usage: S });
   const BIG_CAP = 1 << 18;
-  const big = device.createBuffer({ label: 'vox.big', size: (8 + 16 * BIG_CAP) * 4, usage: S });
+  const dyn = params.h4 === 'stale' ? dynVerts : { first: 0, count: 0 };
+  const big = device.createBuffer({ label: 'vox.big', size: (8 + 16 * BIG_CAP + NL * dyn.count * 3) * 4, usage: S | GPUBufferUsage.COPY_DST });
+  device.queue.writeBuffer(big, 16, new Uint32Array([dyn.first, dyn.count, params.h4 === 'stale' ? 1 : 0, 0]));
   const args = device.createBuffer({ label: 'vox.args', size: 24 * 4, usage: S | GPUBufferUsage.INDIRECT });
   const uniform = device.createBuffer({ label: 'vox.u', size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const C = GPUShaderStage.COMPUTE;
@@ -642,7 +666,8 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
 
   const centre = [0, 1, 2].map((a) => (scene.boundsMin[a] + scene.boundsMax[a]) / 2) as [number, number, number];
   let lastEye: [number, number, number] = centre;
-  const writeUniform = (eye: [number, number, number], end: number, first: number) => {
+  let levelMask = (1 << NL) - 1;
+  const writeUniform = (eye: [number, number, number], end: number, first: number, mask = (1 << NL) - 1) => {
     const buf = new ArrayBuffer(48 + 8 * 16);
     const f = new Float32Array(buf), u = new Uint32Array(buf), i = new Int32Array(buf);
     f.set([v0, NL, G, BRICK_WORDS], 0);
@@ -650,7 +675,7 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
     u.set([maxVoxels, end, first, staticPtrOff], 8);
     for (let L = 0; L < NL; L++) {
       const bs = v0 * 2 ** L * 8;
-      i.set([0, 1, 2].map((a) => Math.floor(eye[a] / bs) - G / 2).concat([0]), 12 + L * 4);
+      i.set([0, 1, 2].map((a) => Math.floor(eye[a] / bs) - G / 2).concat([(mask >> L) & 1]), 12 + L * 4);
     }
     device.queue.writeBuffer(uniform, 0, buf);
   };
@@ -660,7 +685,16 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
     params, vox, uniform, bytes,
     update(eye) {
       lastEye = params.anchor === 'scene' ? centre : eye;
-      writeUniform(lastEye, T, params.local ? firstDynamicTri : 0);
+      writeUniform(lastEye, T, params.local ? firstDynamicTri : 0, levelMask);
+    },
+    h4Frame(t, first, pos) {
+      if (params.h4 === 'l0') levelMask = 1;
+      if (params.h4 === 'none') levelMask = 0;
+      if (params.h4 === 'cost') levelMask = Array.from({ length: NL }, (_, L) => (t % (1 << L) === 0 ? 1 << L : 0)).reduce((a, b) => a | b, 0);
+      if (params.h4 === 'stale') {
+        if (first !== dyn.first || pos.length !== dyn.count * 3) throw new Error('dynamic vertex range mismatch');
+        for (let L = 0; L < NL; L++) if (t % (1 << L) === 0) device.queue.writeBuffer(big, (8 + 16 * BIG_CAP + L * dyn.count * 3) * 4, pos);
+      }
     },
     async buildStatic() {
       if (!params.local) return 0;
