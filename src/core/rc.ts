@@ -112,7 +112,15 @@ fn shadeHitE(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32, e: vec3f) -> 
   return b + alb.rgb / PI * F.sunE.rgb * ndl * vis;
 }
 // Each includer defines bounceE(p, n, v) (the irradiance at a point, n facing the viewer v; 0 without multi-bounce)
-// and voxBounce(p, n, d, ai) (the same at a voxel hit, n the voxel's normal, d the ray; RC reads it per voxel).
+// and voxBounce(p, n, d, ai, pc) (the same at a voxel hit: n the voxel's normal, d the ray, pc the voxel centre; RC reads
+// it per voxel). voxSide gives the side of the voxel the ray comes from: the side of its entry point, not the sign of
+// n.d, which is arbitrary when the ray runs along the surface (rays from inside a closed room read the outside of a
+// corner voxel whose normal was the roof's: phase 24).
+fn voxSide(p: vec3f, n: vec3f, d: vec3f, pc: vec3f, v: f32) -> f32 {
+  let s = dot(p - pc, n);
+  if (abs(s) > 0.05 * v) { return select(-1.0, 1.0, s > 0.0); }
+  return select(1.0, -1.0, dot(n, d) > 0.0);
+}
 fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
   var n = select(-d, n0, dot(n0, n0) > 0.01);
   if (dot(n, d) > 0.0) { n = -n; }
@@ -125,7 +133,7 @@ fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32, ai: u32, L: u3
   voxHitEntry = entry;
   if (hrReady()) { let r = hitRadiance(L, pc, d, dot(entry - coneO, d), n); if (r.a > 0.0) { return r.rgb; } }
   let p = entry - d * (0.25 * v);
-  return shadeHitE(p, n, alb, d, 0.0, voxBounce(p, n, d, ai));
+  return shadeHitE(p, n, alb, d, 0.0, voxBounce(p, n, d, ai, pc, v));
 }
 ${HIT_READ_WGSL}
 `;
@@ -180,9 +188,9 @@ override BN_ON: bool = false;
 ${BOUNCE_READ_WGSL.replace('fn bounceE(', 'fn bounceVol(')}
 fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f { if (!BN_ON) { return vec3f(0.0); } return bounceVol(p, n, v); }
 // Voxel hits read the irradiance bnInject (bounce.ts) stored for the voxel's side the ray comes from.
-fn voxBounce(p: vec3f, n: vec3f, d: vec3f, ai: u32) -> vec3f {
+fn voxBounce(p: vec3f, n: vec3f, d: vec3f, ai: u32, pc: vec3f, v: f32) -> vec3f {
   if (!BN_ON) { return vec3f(0.0); }
-  let o = VX.c.z + ai * 4u + select(0u, 2u, dot(n, d) > 0.0);
+  let o = VX.c.z + ai * 4u + select(0u, 2u, voxSide(p, n, d, pc, v) < 0.0);
   return vec3f(unpack2x16float(vox[o]), unpack2x16float(vox[o + 1u]).x);
 }
 

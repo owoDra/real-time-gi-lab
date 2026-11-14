@@ -115,10 +115,9 @@ fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f {
   let eh = e / max(ws, 1e-9);
   return select(vec3f(0.0), PI * eh * eh, ws > 0.0);
 }
-fn voxBounce(p: vec3f, n0: vec3f, d: vec3f, ai: u32) -> vec3f {
-  var n = select(-d, n0, dot(n0, n0) > 0.01);
-  if (dot(n, d) > 0.0) { n = -n; }
-  return bounceE(p, n, -d);
+fn voxBounce(p: vec3f, n0: vec3f, d: vec3f, ai: u32, pc: vec3f, v: f32) -> vec3f {
+  if (dot(n0, n0) <= 0.01) { return bounceE(p, -d, -d); }
+  return bounceE(p, n0 * voxSide(p, n0, d, pc, v), -d);
 }
 ${SHADE_WGSL}
 ${VOX_TRACE_WGSL}

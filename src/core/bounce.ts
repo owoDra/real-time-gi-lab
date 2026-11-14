@@ -5,8 +5,8 @@
 // the previous frame, so the volume holds all bounces with one frame of lag per bounce beyond the second. The
 // cascades' hits (shadeHit in rc.ts) read the volume of the current frame: the second bounce has no lag, the third
 // one frame, and so on.
-// Reads are trilinear over the 8 probes around a point half a cell in front of the surface, skipping inactive probes
-// (no surface near, or the probe inside a level-0 voxel) and probes whose way to the point is blocked (bounceE).
+// Reads are trilinear over the 8 probes around the point, skipping inactive probes (no surface near, or the probe inside
+// a level-0 voxel), probes on the other side of the surface and probes whose way to the point is blocked (bnRead).
 // The texture holds the six axes stacked along z (axis a at z = a * DZ + z), alpha: the reach along the axis (0 inactive),
 // and the volume's origin (probe coordinates of probe 0) in the texel (0, 0, 6 DZ).
 // Not included: dynamic objects neither receive the bounce (their radiance comes from the dynamic layer, dynlayer.ts)
@@ -31,7 +31,8 @@ export function bounceConstants(b: BounceParams): Record<string, number> {
   return { BN_CELL: b.cell, BN_DX: b.dims[0], BN_DY: b.dims[1], BN_DZ: b.dims[2] };
 }
 
-/** Read side: bounceE(p, n, v) -> irradiance at p for normal n. Needs `bnTex: texture_3d<f32>` and the overrides. */
+/** Read side: bounceE(p, n, v) -> irradiance at p for normal n. Needs `bnTex: texture_3d<f32>`, the voxel uniform VX and
+ * the overrides. */
 export const BOUNCE_READ_WGSL = /* wgsl */ `
 override BN_CELL: f32 = 0.8;
 override BN_DX: i32 = 48;
@@ -39,32 +40,36 @@ override BN_DY: i32 = 24;
 override BN_DZ: i32 = 48;
 fn bnOrigin() -> vec3i { return vec3i(textureLoad(bnTex, vec3i(0, 0, 6 * BN_DZ), 0).xyz); }
 fn bnAxis(c: vec3i, a: i32) -> vec4f { return textureLoad(bnTex, vec3i(c.x, c.y, a * BN_DZ + c.z), 0); }
-// Irradiance at p for normal n: trilinear over the 8 probes around p + n cell / 2. A probe counts when it is active and
-// the read point lies within the distances it sees free along its axes towards the point (alpha of an axis: distance to
-// the first hit along it, 0 for an inactive probe), so that probes behind a wall, beside or under the surface, do not
-// light it. (Checking only the dominant axis left bright wedges along the walls of the closed room.)
-fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f {
-  let o = bnOrigin();
-  let q = p + n * (0.5 * BN_CELL);
-  let g = q / BN_CELL - vec3f(o);
-  let b = vec3i(floor(g)); let a = g - vec3f(b);
+// Irradiance on the side n of a surface at p, read at q (q = p, or moved towards that side): trilinear over the 8 probes
+// around q. A probe counts when it is active, lies on that side of p, and q is within the reach it sees along its axes
+// towards q (plus half a level-0 voxel: its axis rays stop at the surface's voxel), so that probes behind a wall, beside
+// or under the surface do not light it. (Reading half a cell in front of the surface instead moved the read point
+// through floors at wall junctions and lit the closed room from outside: phase 24.)
+fn bnRead(q: vec3f, p: vec3f, n: vec3f) -> vec3f {
+  let org = bnOrigin();
+  let g = q / BN_CELL - vec3f(org);
+  let bb = vec3i(floor(g)); let fr = g - vec3f(bb);
   let n2 = n * n;
-  let ax = vec3i(select(1, 0, n.x >= 0.0), select(3, 2, n.y >= 0.0), select(5, 4, n.z >= 0.0));
+  let tol = 0.5 * VX.a.x;
   var e = vec3f(0.0); var ws = 0.0;
   for (var k = 0u; k < 8u; k++) {
     let off = vec3i(i32(k & 1u), i32((k >> 1u) & 1u), i32((k >> 2u) & 1u));
-    let c = b + off;
-    if (any(c < vec3i(0)) || any(c >= vec3i(BN_DX, BN_DY, BN_DZ))) { continue; }
-    // The read point must lie inside the free box the probe sees along its three axes (towards the point).
-    let u = q - vec3f(o + c) * BN_CELL;
-    let rx = bnAxis(c, select(1, 0, u.x >= 0.0)).a;
-    if (rx <= 0.0 || abs(u.x) > rx) { continue; }
-    if (abs(u.y) > bnAxis(c, select(3, 2, u.y >= 0.0)).a || abs(u.z) > bnAxis(c, select(5, 4, u.z >= 0.0)).a) { continue; }
-    let w = (select(1.0 - a, a, off == vec3i(1))).x * (select(1.0 - a, a, off == vec3i(1))).y * (select(1.0 - a, a, off == vec3i(1))).z;
-    e += w * (n2.x * bnAxis(c, ax.x).rgb + n2.y * bnAxis(c, ax.y).rgb + n2.z * bnAxis(c, ax.z).rgb); ws += w;
+    let cc = bb + off;
+    if (any(cc < vec3i(0)) || any(cc >= vec3i(BN_DX, BN_DY, BN_DZ))) { continue; }
+    let pp = vec3f(org + cc) * BN_CELL;
+    let u = q - pp;
+    if (bnAxis(cc, 0).a <= 0.0) { continue; }
+    if (abs(u.x) > bnAxis(cc, select(1, 0, u.x >= 0.0)).a + tol || abs(u.y) > bnAxis(cc, select(3, 2, u.y >= 0.0)).a + tol
+        || abs(u.z) > bnAxis(cc, select(5, 4, u.z >= 0.0)).a + tol) { continue; }
+    let t3 = select(1.0 - fr, fr, off == vec3i(1));
+    let w = t3.x * t3.y * t3.z * smoothstep(-0.05, 0.25, dot(pp - p, n) / BN_CELL);
+    if (w <= 0.0) { continue; }
+    e += w * (n2.x * bnAxis(cc, select(1, 0, n.x >= 0.0)).rgb + n2.y * bnAxis(cc, select(3, 2, n.y >= 0.0)).rgb + n2.z * bnAxis(cc, select(5, 4, n.z >= 0.0)).rgb);
+    ws += w;
   }
   return select(vec3f(0.0), e / ws, ws > 1e-6);
 }
+fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f { return bnRead(p, p, n); }
 `;
 
 const BOUNCE_WGSL = /* wgsl */ `
@@ -84,10 +89,9 @@ const PI = 3.14159265;
 override BN_RAYS: u32 = 32u;
 ${VOX_TRACE_WGSL}
 ${BOUNCE_READ_WGSL}
-fn voxBounce(p: vec3f, n0: vec3f, d: vec3f, ai: u32) -> vec3f {
-  var n = select(-d, n0, dot(n0, n0) > 0.01);
-  if (dot(n, d) > 0.0) { n = -n; }
-  return bounceE(p, n, -d);
+fn voxBounce(p: vec3f, n0: vec3f, d: vec3f, ai: u32, pc: vec3f, v: f32) -> vec3f {
+  if (dot(n0, n0) <= 0.01) { return bounceE(p, -d, -d); }
+  return bounceE(p, n0 * voxSide(p, n0, d, pc, v), -d);
 }
 SHADE_PLACEHOLDER
 
@@ -206,6 +210,9 @@ ${VOX_STRUCT_WGSL}
 @group(0) @binding(1) var<storage, read_write> vox: array<u32>;
 @group(0) @binding(2) var bnTex: texture_3d<f32>;
 ${BOUNCE_READ_WGSL}
+// One side (normal n) of a voxel centred at p: level 0 is read at the centre, coarser levels half a voxel towards that
+// side (a coarse voxel's centre may lie metres from the surface).
+fn bnSide(p: vec3f, n: vec3f, v: f32, L: u32) -> vec3f { return bnRead(p + n * select(0.5 * v, 0.0, L == 0u), p, n); }
 @compute @workgroup_size(64) fn bnInject(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = (wid.y * nwg.x + wid.x) * 64u + li;
   let ptr = i >> 9u; let bit = i & 511u;
@@ -230,35 +237,8 @@ ${BOUNCE_READ_WGSL}
   let q = max(-n.z, 0.0);
   n.x += select(q, -q, n.x >= 0.0); n.y += select(q, -q, n.y >= 0.0);
   let nf = select(vec3f(0.0, 1.0, 0.0), normalize(n), dot(n, n) > 0.01);
-  // The 8 probes around the voxel centre, each read once (all six axes): it lights the side of the voxel it lies on
-  // when the centre is within the reach it sees towards it (plus the voxel's half size: the axis ray stops at the voxel).
-  let org = bnOrigin();
-  let g = p / BN_CELL - vec3f(org);
-  let bb = vec3i(floor(g)); let fr = g - vec3f(bb);
-  let n2 = nf * nf;
-  var ef = vec3f(0.0); var wf = 0.0; var eb = vec3f(0.0); var wb = 0.0;
-  for (var k = 0u; k < 8u; k++) {
-    let off = vec3i(i32(k & 1u), i32((k >> 1u) & 1u), i32((k >> 2u) & 1u));
-    let cc = bb + off;
-    if (any(cc < vec3i(0)) || any(cc >= vec3i(BN_DX, BN_DY, BN_DZ))) { continue; }
-    var ax: array<vec4f, 6>;
-    for (var a = 0; a < 6; a++) { ax[a] = bnAxis(cc, a); }
-    let u = p - vec3f(org + cc) * BN_CELL;
-    let tol = 0.5 * v;
-    if (ax[0].a <= 0.0) { continue; }
-    if (abs(u.x) > ax[select(1, 0, u.x >= 0.0)].a + tol || abs(u.y) > ax[select(3, 2, u.y >= 0.0)].a + tol
-        || abs(u.z) > ax[select(5, 4, u.z >= 0.0)].a + tol) { continue; }
-    let t3 = select(1.0 - fr, fr, off == vec3i(1));
-    let t = t3.x * t3.y * t3.z;
-    let side = -dot(u, nf) / BN_CELL; // > 0: the probe is on the side the normal points to
-    let w1 = t * smoothstep(-0.05, 0.25, side);
-    let w2 = t * smoothstep(-0.05, 0.25, -side);
-    let cf = n2.x * ax[select(1, 0, nf.x >= 0.0)].rgb + n2.y * ax[select(3, 2, nf.y >= 0.0)].rgb + n2.z * ax[select(5, 4, nf.z >= 0.0)].rgb;
-    let cb = n2.x * ax[select(0, 1, nf.x >= 0.0)].rgb + n2.y * ax[select(2, 3, nf.y >= 0.0)].rgb + n2.z * ax[select(4, 5, nf.z >= 0.0)].rgb;
-    ef += w1 * cf; wf += w1; eb += w2 * cb; wb += w2;
-  }
-  ef = select(vec3f(0.0), ef / wf, wf > 1e-6);
-  eb = select(vec3f(0.0), eb / wb, wb > 1e-6);
+  let ef = bnSide(p, nf, v, L);
+  let eb = bnSide(p, -nf, v, L);
   let o = VX.c.z + ai * 4u;
   vox[o] = pack2x16float(ef.rg); vox[o + 1u] = pack2x16float(vec2f(ef.b, 0.0));
   vox[o + 2u] = pack2x16float(eb.rg); vox[o + 3u] = pack2x16float(vec2f(eb.b, 0.0));

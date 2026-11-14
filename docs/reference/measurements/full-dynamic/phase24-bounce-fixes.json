@@ -1,0 +1,33 @@
+{
+  "kind": "exploratory (探索値)",
+  "phase": 24,
+  "date": "2026-11-15",
+  "note": "Built phase checked by the AI (the user's look moves to phase 26, user 2026-11-15). Same conditions as phase 23.",
+  "changes": [
+    "bounce reads (volume ray hits and per-voxel injection) are taken at the point itself, not half a cell along the normal; probes count by side of the surface and by their axis reach (tolerance half a level-0 voxel for all levels)",
+    "coarse voxels read each side half a voxel towards that side",
+    "the side of a voxel hit is chosen by the entry point relative to the voxel centre (voxSide), not by the sign of n.d"
+  ],
+  "gates": {
+    "M1_gi_ms": { "after": [3.752, 3.699, 3.672], "after_moving": [3.41, 3.386, 3.366], "phase23": [3.702, 3.648, 3.593], "pass": true },
+    "M2_static_flicker": { "rc": 0, "pass": true },
+    "M3_response": { "rc": [1, 1], "curve_first": [0.0406, 0.0053, 0.0023], "pass": true },
+    "M4_vs_multibounce_ref": { "rc": { "error": 0.4191, "bias": -0.1721 }, "ddgi": { "error": 0.3706, "bias": -0.0626 }, "pass": true },
+    "M4_vs_onebounce_ref": { "rc": { "error": 0.4423, "bias": -0.0477 } },
+    "M5_excess_k16": { "rc": 0.01126, "gate": 0.01329, "pass": true },
+    "M6_leak_pct": { "rc": [0.772, 0.36], "gate": [0.49, 0.15], "pass": false },
+    "M7_allocated_mib": { "rc": 76.8, "pass": true }
+  },
+  "moving_camera_flicker_pct_sponza": { "rc": 18.99 },
+  "leak_probes": {
+    "rc_hits_not_reading_bounce": [0.389, 0.119],
+    "side_by_entry_point": [0.779, 0.366],
+    "no_offset_reads": [0.772, 0.36],
+    "reach_tolerance_0": [0.745, 0.396],
+    "stricter_side_weight": [0.738, 0.342],
+    "all_probes_excluded": [0.403, 0.122],
+    "finding": "the volume holds about 0.3 % of the sun inside the closed room (seen with a debug read); no read-side condition removes it; its source was not found. Interior albedo 0.7 would amplify leaked light up to 3.3x."
+  },
+  "sha256_default_static_dump": { "cmd": "--no-sky --static-only --dump-irr --frames 60 [--pose-frame 0]", "sponza_rc": "e5a44335320fce9cdb26d9eab606b343e48c1544b0e4629bce4eb197ccd5e2d9", "sponza-dynobj_rc": "19a21466463c5805b782799a5dda9765d60ce60fae1d274ce238b169d495c688", "sponza_ddgi": "9298216d81b7de24af419b76f2f0f049c4926c8a65d2e4ce6c7cffcd90be33d7", "sponza-dynobj_ddgi": "bea962db3077e9a454c6cf368e9cb89e71e685e856d05bdf51077b9a1e972cb7" },
+  "page_material": "box/in/phase24-check (machine only): before/after grids (static and moving) for sponza, sponza with sky, 64 objects, building wave, building cut, toon objects; light-switch sequence RC vs DDGI; building-change sequences RC vs DDGI; excess maps (building wave); reference comparisons (multi-bounce ref | RC, | DDGI)"
+}

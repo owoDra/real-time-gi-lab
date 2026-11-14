@@ -115,7 +115,7 @@ built（できた物の確認）の進め方：
 
 | 列 | ディレクトリ | ブランチ | 内容 | 今のフェーズ |
 |---|---|---|---|---|
-| 完全動的 | [`full-dynamic/`](full-dynamic/README.md) | `p2` | A 建物を含む全形状が毎フレーム変わっても 4 ms に入る土台、B 多重バウンス、C DDGI 系との比べ直し | 24 |
+| 完全動的 | [`full-dynamic/`](full-dynamic/README.md) | `p2` | A 建物を含む全形状が毎フレーム変わっても 4 ms に入る土台、B 多重バウンス、C DDGI 系との比べ直し | 25 |
 | 仕上げと確認 | [`finish/`](finish/README.md) | `p2` | D 広さと密度、E カメラ移動時のちらつき、F P1 の最後の判定、G ブラウザ、H WebGL2、I 確認実験と結論 | 完全動的の列の後（27 から） |
 
 動的な安定性の列（Phase 01〜16）は 2026-11-14 に閉じた（[spec/40-dynamic-stability.md](../spec/40-dynamic-stability.md)）。
