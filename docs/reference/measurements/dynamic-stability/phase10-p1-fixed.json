@@ -1,0 +1,526 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 10: P1 fixed for leak and darkness (built), judged once",
+ "date": "2026-11-14",
+ "conditions": {
+  "commit": "25ac37f2",
+  "before": "world-48-voxel-rc2-vrel (default)",
+  "after": "world-48-voxel-rc2-vrel-p1",
+  "resolution": "1920x1080",
+  "frames": "warm-up 60 + 240 (leak rooms 120)",
+  "sky": "off except leak rooms",
+  "vox": {
+   "anchor": "scene",
+   "local": true
+  },
+  "gpu": "native Dawn / Vulkan, one development machine; the GPU was shared with another process for part of the run (default GI 0.2-0.4 ms slower than phase 09)"
+ },
+ "scenes": {
+  "sponza-dynobj-sunonly": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00675,
+     "excessK16": 0.00901,
+     "excessK32": 0.00997,
+     "linearRelK16": 0.00714,
+     "meanIrradiance": 0.02873,
+     "staticCamFinePct": 7.659,
+     "movingCamFinePct": 22.248
+    },
+    "after": {
+     "excessK8": 0.00138,
+     "excessK16": 0.00216,
+     "excessK32": 0.00343,
+     "linearRelK16": 0.00155,
+     "meanIrradiance": 0.02875,
+     "staticCamFinePct": 6.925,
+     "movingCamFinePct": 20.31
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.00075,
+     "excessK16": 0.00095,
+     "excessK32": 0.00105,
+     "linearRelK16": 0.0004,
+     "meanIrradiance": 0.02673,
+     "staticCamFinePct": 2.287,
+     "movingCamFinePct": 16.143
+    },
+    "after": {
+     "excessK8": 0.00098,
+     "excessK16": 0.00131,
+     "excessK32": 0.00147,
+     "linearRelK16": 0.00032,
+     "meanIrradiance": 0.02631,
+     "staticCamFinePct": 2.654,
+     "movingCamFinePct": 16.313
+    }
+   },
+   "ddgiRtxgi": {
+    "before": {
+     "excessK8": 0.00071,
+     "excessK16": 0.0008,
+     "excessK32": 0.00083,
+     "linearRelK16": 0.00057,
+     "meanIrradiance": 0.01365,
+     "staticCamFinePct": 1.631,
+     "movingCamFinePct": 18.145
+    },
+    "after": {
+     "excessK8": 0.00066,
+     "excessK16": 0.00076,
+     "excessK32": 0.00076,
+     "linearRelK16": 0.0005,
+     "meanIrradiance": 0.01505,
+     "staticCamFinePct": 1.749,
+     "movingCamFinePct": 17.522
+    }
+   },
+   "ddgiLinear1mH08": {
+    "before": {
+     "excessK8": 0.01563,
+     "excessK16": 0.02043,
+     "excessK32": 0.02349,
+     "linearRelK16": 0.00882,
+     "meanIrradiance": 0.0277,
+     "staticCamFinePct": 12.251,
+     "movingCamFinePct": 21.31
+    },
+    "after": {
+     "excessK8": 0.01813,
+     "excessK16": 0.02269,
+     "excessK32": 0.02507,
+     "linearRelK16": 0.00743,
+     "meanIrradiance": 0.02808,
+     "staticCamFinePct": 13.605,
+     "movingCamFinePct": 21.736
+    }
+   }
+  },
+  "sponza-dynobj": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00873,
+     "excessK16": 0.01192,
+     "excessK32": 0.01476,
+     "linearRelK16": 0.00989,
+     "meanIrradiance": 0.02825,
+     "staticCamFinePct": 10.525,
+     "movingCamFinePct": 24.607
+    },
+    "after": {
+     "excessK8": 0.00251,
+     "excessK16": 0.00408,
+     "excessK32": 0.0069,
+     "linearRelK16": 0.00266,
+     "meanIrradiance": 0.02886,
+     "staticCamFinePct": 9.637,
+     "movingCamFinePct": 23.479
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.00075,
+     "excessK16": 0.00094,
+     "excessK32": 0.00105,
+     "linearRelK16": 0.0004,
+     "meanIrradiance": 0.02891,
+     "staticCamFinePct": 2.321,
+     "movingCamFinePct": 17.015
+    },
+    "after": {
+     "excessK8": 0.00096,
+     "excessK16": 0.00127,
+     "excessK32": 0.00144,
+     "linearRelK16": 0.00033,
+     "meanIrradiance": 0.02879,
+     "staticCamFinePct": 2.662,
+     "movingCamFinePct": 17.19
+    }
+   },
+   "ddgiRtxgi": {
+    "before": {
+     "excessK8": 0.00065,
+     "excessK16": 0.00082,
+     "excessK32": 0.00095,
+     "linearRelK16": 0.00067,
+     "meanIrradiance": 0.01466,
+     "staticCamFinePct": 1.61,
+     "movingCamFinePct": 19.283
+    },
+    "after": {
+     "excessK8": 0.00067,
+     "excessK16": 0.00081,
+     "excessK32": 0.00093,
+     "linearRelK16": 0.00061,
+     "meanIrradiance": 0.01641,
+     "staticCamFinePct": 1.705,
+     "movingCamFinePct": 18.317
+    }
+   },
+   "ddgiLinear1mH08": {
+    "before": {
+     "excessK8": 0.01568,
+     "excessK16": 0.01991,
+     "excessK32": 0.02409,
+     "linearRelK16": 0.00884,
+     "meanIrradiance": 0.02925,
+     "staticCamFinePct": 12.785,
+     "movingCamFinePct": 23.592
+    },
+    "after": {
+     "excessK8": 0.01711,
+     "excessK16": 0.02201,
+     "excessK32": 0.02529,
+     "linearRelK16": 0.0074,
+     "meanIrradiance": 0.0299,
+     "staticCamFinePct": 13.744,
+     "movingCamFinePct": 23.584
+    }
+   }
+  },
+  "sponza-dynobj-objectsonly": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00178,
+     "excessK16": 0.00299,
+     "excessK32": 0.00456,
+     "linearRelK16": 0.0034,
+     "meanIrradiance": 0.03097,
+     "staticCamFinePct": 6.983,
+     "movingCamFinePct": 24.642
+    },
+    "after": {
+     "excessK8": 0.00112,
+     "excessK16": 0.00215,
+     "excessK32": 0.00358,
+     "linearRelK16": 0.00156,
+     "meanIrradiance": 0.03109,
+     "staticCamFinePct": 6.528,
+     "movingCamFinePct": 23.325
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.00089,
+     "excessK16": 0.00117,
+     "excessK32": 0.0014,
+     "linearRelK16": 0.00072,
+     "meanIrradiance": 0.03398,
+     "staticCamFinePct": 1.344,
+     "movingCamFinePct": 15.927
+    },
+    "after": {
+     "excessK8": 0.00132,
+     "excessK16": 0.00176,
+     "excessK32": 0.00207,
+     "linearRelK16": 0.00061,
+     "meanIrradiance": 0.03383,
+     "staticCamFinePct": 1.721,
+     "movingCamFinePct": 16.408
+    }
+   },
+   "ddgiRtxgi": {
+    "before": {
+     "excessK8": 0.00107,
+     "excessK16": 0.00133,
+     "excessK32": 0.00158,
+     "linearRelK16": 0.00108,
+     "meanIrradiance": 0.02757,
+     "staticCamFinePct": 1.782,
+     "movingCamFinePct": 17.423
+    },
+    "after": {
+     "excessK8": 0.00121,
+     "excessK16": 0.0015,
+     "excessK32": 0.00168,
+     "linearRelK16": 0.00097,
+     "meanIrradiance": 0.02934,
+     "staticCamFinePct": 1.779,
+     "movingCamFinePct": 17.394
+    }
+   },
+   "ddgiLinear1mH08": {
+    "before": {
+     "excessK8": 0.01736,
+     "excessK16": 0.02239,
+     "excessK32": 0.02643,
+     "linearRelK16": 0.01099,
+     "meanIrradiance": 0.03319,
+     "staticCamFinePct": 13.36,
+     "movingCamFinePct": 22.94
+    },
+    "after": {
+     "excessK8": 0.01963,
+     "excessK16": 0.02545,
+     "excessK32": 0.02984,
+     "linearRelK16": 0.00959,
+     "meanIrradiance": 0.03412,
+     "staticCamFinePct": 14.511,
+     "movingCamFinePct": 24.326
+    }
+   }
+  },
+  "sponza-dyn": {
+   "rc": {
+    "before": {
+     "excessK8": 0.00855,
+     "excessK16": 0.01214,
+     "excessK32": 0.01552,
+     "linearRelK16": 0.00947,
+     "meanIrradiance": 0.03225,
+     "staticCamFinePct": 11.66,
+     "movingCamFinePct": 25.865,
+     "toonRampChangePct": 1.398,
+     "controlRampChangePct": 1.151
+    },
+    "after": {
+     "excessK8": 0.00276,
+     "excessK16": 0.005,
+     "excessK32": 0.00845,
+     "linearRelK16": 0.00327,
+     "meanIrradiance": 0.03285,
+     "staticCamFinePct": 10.672,
+     "movingCamFinePct": 24.486,
+     "toonRampChangePct": 1.521,
+     "controlRampChangePct": 1.151
+    }
+   }
+  },
+  "sponza": {
+   "rc": {
+    "before": {
+     "excessK8": 0,
+     "excessK16": 0,
+     "excessK32": 0,
+     "linearRelK16": 0,
+     "meanIrradiance": 0.04163,
+     "staticCamFinePct": 0,
+     "movingCamFinePct": 15.774
+    },
+    "after": {
+     "excessK8": 0,
+     "excessK16": 0,
+     "excessK32": 0,
+     "linearRelK16": 0,
+     "meanIrradiance": 0.0421,
+     "staticCamFinePct": 0,
+     "movingCamFinePct": 19.574
+    }
+   },
+   "ddgiLinear075": {
+    "before": {
+     "excessK8": 0.0013,
+     "excessK16": 0.00175,
+     "excessK32": 0.0021,
+     "linearRelK16": 0.00073,
+     "meanIrradiance": 0.04467,
+     "staticCamFinePct": 1.194,
+     "movingCamFinePct": 17.412
+    },
+    "after": {
+     "excessK8": 0.00159,
+     "excessK16": 0.00224,
+     "excessK32": 0.00258,
+     "linearRelK16": 0.0006,
+     "meanIrradiance": 0.04473,
+     "staticCamFinePct": 1.493,
+     "movingCamFinePct": 17.784
+    }
+   }
+  }
+ },
+ "reference": {
+  "refs": "Mitsuba 512 spp x 2 (seed 0, 1), static sponza, sun only",
+  "halvesMeanAbsRel": 0.1667,
+  "results": {
+   "world-48-voxel-rc2-vrel": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0417,
+    "bias": -0.1447,
+    "meanAbsRel": 0.3999,
+    "medianRel": 0.1449,
+    "p90Rel": 0.8955
+   },
+   "world-48-voxel-rc2-vrel-p1": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0421,
+    "bias": -0.1351,
+    "meanAbsRel": 0.3803,
+    "medianRel": 0.1328,
+    "p90Rel": 0.8277
+   },
+   "ddgi-75-128-u4-g1-noadapt": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0444,
+    "bias": -0.0891,
+    "meanAbsRel": 0.3622,
+    "medianRel": 0.1789,
+    "p90Rel": 0.9105
+   },
+   "ddgi-75-128-u4-g1-noadapt-p1": {
+    "pixels": 518346,
+    "meanRef": 0.0487,
+    "meanOurs": 0.0445,
+    "bias": -0.0871,
+    "meanAbsRel": 0.358,
+    "medianRel": 0.1995,
+    "p90Rel": 0.8741
+   }
+  }
+ },
+ "leakPct": {
+  "0.02": {
+   "before": 0.741,
+   "after": 0.737
+  },
+  "0.1": {
+   "before": 0.31,
+   "after": 0.413
+  }
+ },
+ "response": {
+  "before": {
+   "frames50": 1,
+   "frames90": 1
+  },
+  "after": {
+   "frames50": 1,
+   "frames90": 1
+  }
+ },
+ "cost": {
+  "before": [
+   {
+    "static": 3.845,
+    "moving": 3.877,
+    "vox": 0.276,
+    "trace": 1.201,
+    "usedMiB": 48.3,
+    "allocatedMiB": 158.8,
+    "hitRadMiB": 0.0
+   },
+   {
+    "static": 3.94,
+    "moving": 3.833,
+    "vox": 0.281,
+    "trace": 1.242,
+    "usedMiB": 48.3,
+    "allocatedMiB": 158.8,
+    "hitRadMiB": 0.0
+   },
+   {
+    "static": 3.999,
+    "moving": 3.947,
+    "vox": 0.287,
+    "trace": 1.252,
+    "usedMiB": 48.3,
+    "allocatedMiB": 158.8,
+    "hitRadMiB": 0.0
+   }
+  ],
+  "after": [
+   {
+    "static": 4.315,
+    "moving": 4.392,
+    "vox": 0.621,
+    "trace": 1.262,
+    "usedMiB": 67.6,
+    "allocatedMiB": 178.1,
+    "hitRadMiB": 19.3
+   },
+   {
+    "static": 4.382,
+    "moving": 4.201,
+    "vox": 0.63,
+    "trace": 1.276,
+    "usedMiB": 67.6,
+    "allocatedMiB": 178.1,
+    "hitRadMiB": 19.3
+   },
+   {
+    "static": 4.269,
+    "moving": 4.303,
+    "vox": 0.62,
+    "trace": 1.247,
+    "usedMiB": 67.6,
+    "allocatedMiB": 178.1,
+    "hitRadMiB": 19.3
+   }
+  ],
+  "ddgiLinear075": [
+   {
+    "static": 4.276,
+    "moving": 3.729,
+    "vox": 0.611,
+    "trace": 2.739,
+    "usedMiB": 88.6,
+    "allocatedMiB": 195.1,
+    "hitRadMiB": 19.3
+   },
+   {
+    "static": 4.231,
+    "moving": 3.708,
+    "vox": 0.608,
+    "trace": 2.724,
+    "usedMiB": 88.6,
+    "allocatedMiB": 195.1,
+    "hitRadMiB": 19.3
+   },
+   {
+    "static": 4.316,
+    "moving": 3.665,
+    "vox": 0.624,
+    "trace": 2.758,
+    "usedMiB": 88.6,
+    "allocatedMiB": 195.1,
+    "hitRadMiB": 19.3
+   }
+  ],
+  "ddgiRtxgi": [
+   {
+    "static": 4.204,
+    "moving": 3.743,
+    "vox": 0.608,
+    "trace": 2.879,
+    "usedMiB": 72.1,
+    "allocatedMiB": 178.6,
+    "hitRadMiB": 19.3
+   },
+   {
+    "static": 4.067,
+    "moving": 3.698,
+    "vox": 0.595,
+    "trace": 2.772,
+    "usedMiB": 72.1,
+    "allocatedMiB": 178.6,
+    "hitRadMiB": 19.3
+   },
+   {
+    "static": 4.015,
+    "moving": 3.711,
+    "vox": 0.585,
+    "trace": 2.73,
+    "usedMiB": 72.1,
+    "allocatedMiB": 178.6,
+    "hitRadMiB": 19.3
+   }
+  ]
+ },
+ "criteria": {
+  "sunOnlyExcessK16<=0.003": true,
+  "objectsOnlyExcessK16<=0.0045": true,
+  "referenceMeanAbsRel<=0.44": true,
+  "staticFlicker==0": true,
+  "leakPct<=1.1/0.5": true,
+  "response==1frame": true,
+  "giMs<=4 (static and moving, all 3)": false,
+  "usedMemory<=128MB": true,
+  "decision": "not default (cost); kept as token p1; user OK after seeing the images; direction review (phase 11) next"
+ },
+ "newFinding": "moving-camera fine flicker on static sponza 15.8% -> 19.6% with p1 (not a criterion)"
+}

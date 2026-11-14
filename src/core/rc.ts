@@ -71,8 +71,8 @@ export interface RcParams {
   rampSoft: number;
   // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
   ddgi: DdgiParams | null;
-  // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default: it raised the
-  // leak above its limit (docs/spec/40-dynamic-stability.md).
+  // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default: it costs
+  // 0.35-0.45 ms and GI goes over 4 ms (docs/spec/40-dynamic-stability.md).
   p1: boolean;
 }
 
