@@ -1,0 +1,167 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 13: P1 read level interpolated between two adjacent levels in log2 of the cone width; into the default if all gates hold",
+ "date": "2026-11-14",
+ "conditions": {
+  "before": "63d97383 world-48-voxel-rc2-vrel-p1 (nearest level)",
+  "after": "two-level linear interpolation in log2 cone width (finer level falls back to finer ones; coarser unreadable -> finer alone; only coarser readable -> mixed with the one-point shading by the fraction)",
+  "gatesCommitted": "08ddf27b",
+  "resolution": "1920x1080",
+  "frames": "warm-up 60 + 240 (leak rooms 120)",
+  "sky": "off except leak rooms",
+  "vox": {
+   "anchor": "scene",
+   "local": true
+  },
+  "gpu": "native Dawn / Vulkan, one development machine; a web browser, an editor, Godot and a game under Wine shared the GPU (busy 4-32%); no Mitsuba rendering during the session"
+ },
+ "reproduced": {
+  "sponza-dynobj excessK16": {
+   "default": 0.01192,
+   "p1": 0.00408
+  },
+  "sponza movingCamPhotoFinePct": {
+   "default": 15.774,
+   "p1": 19.574
+  },
+  "sponza-dynobj GI": {
+   "default": {
+    "static": 3.349,
+    "moving": 3.382
+   },
+   "p1": {
+    "static": 3.598,
+    "moving": 3.666
+   }
+  }
+ },
+ "gates": {
+  "sunOnlyExcessK16": {
+   "before": 0.00217,
+   "after": 0.00214,
+   "limit": 0.003,
+   "pass": true
+  },
+  "objectsOnlyExcessK16": {
+   "before": 0.00215,
+   "after": 0.00213,
+   "limit": 0.0045,
+   "pass": true
+  },
+  "referenceMeanAbsRel (static sponza, Mitsuba 512 spp x2)": {
+   "before": 0.3803,
+   "after": 0.3824,
+   "biasBefore": -0.1351,
+   "biasAfter": -0.1303,
+   "limit": 0.44,
+   "pass": true
+  },
+  "leakPct": {
+   "0.02": {
+    "before": 0.737,
+    "after": 0.74,
+    "limit": 1.1
+   },
+   "0.1": {
+    "before": 0.413,
+    "after": 0.432,
+    "limit": 0.5
+   },
+   "pass": true
+  },
+  "staticSponza": {
+   "staticFinePct": 0,
+   "excessK16": 0,
+   "pass": true
+  },
+  "response sponza-dyn-switch200": {
+   "frames50": 1,
+   "frames90": 1,
+   "pass": true
+  },
+  "movingCamPhotoFinePct (static sponza)": {
+   "before": 19.574,
+   "after": 19.504,
+   "limit": 17.0,
+   "pass": false
+  },
+  "giAlternating sponza-dynobj": {
+   "before": [
+    {
+     "static": 3.506,
+     "moving": 3.517,
+     "trace": 1.16
+    },
+    {
+     "static": 3.549,
+     "moving": 3.558,
+     "trace": 1.179
+    },
+    {
+     "static": 3.551,
+     "moving": 3.575,
+     "trace": 1.175
+    }
+   ],
+   "after": [
+    {
+     "static": 3.707,
+     "moving": 3.689,
+     "trace": 1.332
+    },
+    {
+     "static": 3.669,
+     "moving": 3.676,
+     "trace": 1.323
+    },
+    {
+     "static": 3.659,
+     "moving": 3.674,
+     "trace": 1.301
+    }
+   ],
+   "limit": 4.0,
+   "pass": true
+  },
+  "usedMiB": {
+   "field": 25.6,
+   "vox": 12.8,
+   "dyn": 10.0,
+   "p1": 19.3,
+   "total": 67.6,
+   "limit": "128 MB",
+   "pass": true
+  }
+ },
+ "supplementary": {
+  "sponza-dynobj-f0 referenceMeanAbsRel": {
+   "before": 0.4403,
+   "after": 0.4365
+  },
+  "ddgi-75-128-u4-g1-noadapt-p1": {
+   "sunOnlyExcessK16": {
+    "before": 0.00131,
+    "after": 0.00121
+   },
+   "referenceMeanAbsRel": {
+    "before": 0.358,
+    "after": 0.3562
+   }
+  }
+ },
+ "verdict": "moving-camera flicker gate missed (19.504 > 17.0): not default; p1 stays opt-in with the nearest-level read (interpolation reverted: +0.11-0.20 ms for no measurable gain); next phase 15 (widening measurement), no phase 14",
+ "exploration": {
+  "metric": "static sponza movingCamPhotoFinePct, one run each",
+  "pinnedLevel max(trace,1)": 16.921,
+  "pinned+0.5 (interpolated)": 18.13,
+  "pinned+1": 20.042,
+  "coneWidth-1 (interpolated)": 18.656,
+  "coneWidth (interpolated)": 19.504,
+  "coneWidth with continuous LOD spacing (interpolated)": 20.469,
+  "trilinear within levels + interpolated": {
+   "flicker": 20.187,
+   "giStatic": 4.829
+  },
+  "finding": "flicker rises with the coarseness of the read level, not with discontinuities of the level choice"
+ }
+}
