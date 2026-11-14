@@ -33,7 +33,8 @@ mise run build:rc # 実行器をバンドル（build/native/rc.mjs）
 
 # レンダラの実行と計測（ネイティブ、Dawn / Vulkan）
 bash scripts/run_with_vulkan.sh node build/native/rc.mjs --scene <シーン> --configs <設定,...> \
-  [--no-sky] [--vox JSON] [--frames N] [--warmup N] [--dump-irr] [--response FROM,TO] [--out box/out/<名前>]
+  [--no-sky] [--vox JSON] [--frames N] [--warmup N] [--dump-irr] [--response FROM,TO] [--pose-frame F] \
+  [--seq EVERY,COUNT] [--out box/out/<名前>]   # --seq：静止カメラで EVERY フレームおきに最終画像と間接光を保存（時間は乱れる）
 mise run s2:native -- --scene sponza --vox-bench     # 再ボクセル化の段ごとの時間
 
 # 参照（Mitsuba）

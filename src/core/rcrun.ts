@@ -141,6 +141,8 @@ export function compareIrradiance(a: { rgb: Float32Array; valid: Uint8Array; tag
 export interface RunOptions { warmup: number; frames: number; inFlight: number; exposure: number; sky: Vec3; seedFixed?: boolean; staticOnly?: boolean;
   /** Dynamic scenes: hold the objects and the sun at this frame's pose. */
   poseFrame?: number;
+  /** Static camera: capture the final and indirect images every `every` measured frames, `count` times. */
+  seq?: { every: number; count: number; sink: (k: number, images: Record<string, Uint8Array>) => void };
   /** R1: static camera only; read the irradiance of every frame from `from` to `to` (inclusive, warm-up counted as
    * frame 0..) and return the response curve to a light switch at `from` (the scene's switch frame). */
   response?: { from: number; to: number }; }
@@ -241,6 +243,10 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       device.queue.submit([enc.finish()]);
       pending.push(device.queue.onSubmittedWorkDone());
       if (pending.length >= opts.inFlight) await pending.shift();
+      if (mode === 'static' && opts.seq && k >= 0 && k % opts.seq.every === 0 && k / opts.seq.every < opts.seq.count) {
+        await Promise.all(pending.splice(0));
+        opts.seq.sink(k, { final: await post.capture(0), indirect: await post.capture(1) });
+      }
     }
     await Promise.all(pending);
 

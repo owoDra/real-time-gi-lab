@@ -1,6 +1,7 @@
 // Native radiance-cascade runs.
 // Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>] [--configs a,b,...]
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
+//   [--pose-frame F] [--seq EVERY,COUNT]  (static camera: final and indirect images every EVERY frames, timings disturbed)
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
 // Config names: <method>-<P>[-<token>...], method world | screen | split. Tokens:
 //   analytic (placement test), depth (S1: depth buffer only, the default), voxel (all intervals in voxels),
@@ -33,6 +34,9 @@ const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--fram
   exposure: Number(arg('--exposure', '1.0')), seedFixed: args.includes('--seed-fixed'), staticOnly: args.includes('--static-only'),
   sky: (args.includes('--no-sky') ? [0, 0, 0] : SKY) as Vec3,
   poseFrame: args.includes('--pose-frame') ? Number(arg('--pose-frame', '0')) : undefined,
+  // --seq EVERY,COUNT: static camera, final and indirect images every EVERY measured frames (timings are disturbed).
+  seq: args.includes('--seq') ? (([every, count]) => ({ every, count, sink: (k: number, im: Record<string, Uint8Array>) => {
+    for (const [img, rgba] of Object.entries(im)) writeFileSync(join(outDir, `seq.${String(k).padStart(3, '0')}.${img}.png`), writePng(ctx.width, ctx.height, rgba)); } }))(arg('--seq', '').split(',').map(Number)) : undefined,
   // R1: --response FROM,TO (use with a sponza-dyn-switch<FROM> scene)
   response: args.includes('--response') ? (([a, b]) => ({ from: a, to: b }))(arg('--response', '').split(',').map(Number)) : undefined };
 const overrides = JSON.parse(arg('--params', '{}')) as Partial<RcParams>;
