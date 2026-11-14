@@ -97,7 +97,7 @@ function percentile(sorted: number[], q: number) {
 function stats(ms: number[]) {
   const s = [...ms].sort((a, b) => a - b);
   const r = (x: number) => Math.round(x * 1000) / 1000;
-  return { median: r(percentile(s, 0.5)), mean: r(s.reduce((a, b) => a + b, 0) / s.length), p05: r(percentile(s, 0.05)), p95: r(percentile(s, 0.95)), max: r(s[s.length - 1]) };
+  return { median: r(percentile(s, 0.5)), mean: r(s.reduce((a, b) => a + b, 0) / s.length), p05: r(percentile(s, 0.05)), p95: r(percentile(s, 0.95)), p99: r(percentile(s, 0.99)), max: r(s[s.length - 1]) };
 }
 
 function halfToFloat(h: number) {

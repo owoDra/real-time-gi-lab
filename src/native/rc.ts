@@ -1,5 +1,5 @@
 // Native radiance-cascade runs.
-// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>][-bwave|-bcut] [--configs a,b,...]
+// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>|town*][-bwave|-bcut] [--configs a,b,...]
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
 //   [--pose-frame F] [--seq EVERY,COUNT]  (static camera: final and indirect images every EVERY frames, timings disturbed)
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
@@ -26,7 +26,7 @@ import { DEFAULT_DDGI, type DdgiParams } from '../core/ddgi.ts';
 import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
 import { benchVoxels, compareIrradiance, createRunContext, lum, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
 import { uploadScene } from '../core/scene_gpu.ts';
-import { densify, dynamicSponza, leakRoom, sponzaSpec, toonSponza, widen, withBuildingMotion, type SceneSpec } from '../core/scenes.ts';
+import { densify, dynamicSponza, leakRoom, sponzaSpec, toonSponza, townScene, widen, withBuildingMotion, type SceneSpec } from '../core/scenes.ts';
 import { createNativeDevice, IMPLEMENTATION, loadSponza, ROOT, writePng } from './env.ts';
 
 // Synchronous logging: a native abort would otherwise drop buffered output.
@@ -107,6 +107,7 @@ const t0 = performance.now();
 let spec: SceneSpec;
 let upload: Parameters<typeof uploadScene>[2] = async () => undefined;
 if (sceneName.startsWith('leak-')) spec = leakRoom(Number(sceneName.slice(5)));
+else if (sceneName.startsWith('town')) spec = townScene(sceneName);
 else {
   const s = loadSponza();
   upload = s.upload;
@@ -123,8 +124,8 @@ else {
     : stress ? dynamicSponza(base, true, -1, 'all', Number(stress[1] ?? 1), Number(stress[2] ?? 0), !!stress[3])
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
-  if (buildingKind) spec = withBuildingMotion(spec, buildingKind);
 }
+if (buildingKind) spec = withBuildingMotion(spec, buildingKind);
 const gpu = await uploadScene(device, spec.scene, upload);
 const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tri');
 const voxBench = args.includes('--vox-bench');

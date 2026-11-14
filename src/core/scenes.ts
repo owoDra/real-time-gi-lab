@@ -173,13 +173,18 @@ const GREY: MaterialDesc = { name: 'grey', baseColorFactor: [0.7, 0.7, 0.7, 1], 
   metallicFactor: 0, roughnessFactor: 1, alphaMask: false, alphaCutoff: 0.5, doubleSided: false };
 
 class Builder {
-  pos: number[] = []; nrm: number[] = []; idx: number[] = [];
+  pos: number[] = []; nrm: number[] = []; idx: number[][] = [[]];
+  /** Material of the quads added next (index into materials). */
+  mat = 0;
+  /** Added to every position. */
+  offset: Vec3 = [0, 0, 0];
+  constructor(readonly materials: MaterialDesc[] = [GREY]) { this.idx = materials.map(() => []); }
   quad(a: Vec3, b: Vec3, c: Vec3, d: Vec3) {
     const e1 = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], e2 = [c[0] - a[0], c[1] - a[1], c[2] - a[2]];
     const n = normalize([e1[1] * e2[2] - e1[2] * e2[1], e1[2] * e2[0] - e1[0] * e2[2], e1[0] * e2[1] - e1[1] * e2[0]]);
     const base = this.pos.length / 3;
-    for (const p of [a, b, c, d]) { this.pos.push(...p); this.nrm.push(...n); }
-    this.idx.push(base, base + 1, base + 2, base, base + 2, base + 3);
+    for (const p of [a, b, c, d]) { this.pos.push(p[0] + this.offset[0], p[1] + this.offset[1], p[2] + this.offset[2]); this.nrm.push(...n); }
+    this.idx[this.mat].push(base, base + 1, base + 2, base, base + 2, base + 3);
   }
   /** Axis-aligned box with outward faces. */
   box(c: Vec3, h: Vec3) {
@@ -195,10 +200,58 @@ class Builder {
     const positions = new Float32Array(this.pos);
     const [boundsMin, boundsMax] = bounds(positions);
     const V = positions.length / 3;
+    const primitives: SceneData['primitives'] = [];
+    let firstIndex = 0;
+    this.idx.forEach((l, material) => { if (l.length) primitives.push({ firstIndex, indexCount: l.length, baseVertex: 0, material }); firstIndex += l.length; });
+    const indices = new Uint32Array(this.idx.flat());
     return { positions, normals: new Float32Array(this.nrm), uvs: new Float32Array(V * 2), tangents: new Float32Array(V * 4),
-      indices: new Uint32Array(this.idx), primitives: [{ firstIndex: 0, indexCount: this.idx.length, baseVertex: 0, material: 0 }],
-      materials: [GREY], imageUris: [], boundsMin, boundsMax, triangleCount: this.idx.length / 3 };
+      indices, primitives, materials: this.materials, imageUris: [], boundsMin, boundsMax, triangleCount: indices.length / 3 };
   }
+}
+
+const plain = (name: string, rgb: [number, number, number]): MaterialDesc => ({ ...GREY, name, baseColorFactor: [...rgb, 1] });
+export const TOWN_SUN: Vec3 = [-0.5, 1, 0.7];
+
+/** W2 (phase 25): a scene that is not Sponza, with inside and outside, thin shapes and wide surfaces. A house
+ * (8 x 6 m, 3 m high, 0.2 m walls; a door and a window in the front wall, a red partition and a green panel inside)
+ * with a porch on two thin columns, a pergola of thin slats (6 x 20 cm, 33 cm apart), a fence of thin pickets, a tower,
+ * a long wall behind and a low wall on the right, on a 40 x 34 m ground of 1 m cells. The camera stands 11 m in front
+ * of the door; the sun is low in front, so light enters the house through the door and the window.
+ * The whole scene is moved by a few centimetres off the 0.2 m voxel grid (TOWN_OFFSET): with grid = true it is not,
+ * and the ground and the house's faces lie on level-0 voxel faces (town-grid, phase 25 finding). */
+export const TOWN_OFFSET: Vec3 = [0.031, 0.037, 0.043];
+export function townSpec(grid = false): SceneSpec {
+  const b = new Builder([plain('ground', [0.5, 0.47, 0.4]), plain('plaster', [0.8, 0.77, 0.7]), plain('red', [0.65, 0.15, 0.1]),
+    plain('green', [0.2, 0.5, 0.2]), plain('slate', [0.35, 0.4, 0.5]), plain('wood', [0.45, 0.3, 0.18]), plain('ochre', [0.8, 0.65, 0.3])]);
+  if (!grid) b.offset = TOWN_OFFSET;
+  b.mat = 0;
+  for (let z = -14; z < 20; z++) for (let x = -20; x < 20; x++) b.quad([x, 0, z + 1], [x + 1, 0, z + 1], [x + 1, 0, z], [x, 0, z]);
+  b.mat = 1; // house
+  b.box([0, 1.5, -3.1], [4.2, 1.5, 0.1]);
+  b.box([-4.1, 1.5, 0], [0.1, 1.5, 3]);
+  b.box([4.1, 1.5, 0], [0.1, 1.5, 3]);
+  b.box([-2.6, 1.5, 3.1], [1.6, 1.5, 0.1]);   // front wall: left of the door (x -1..1, 2.4 m high)
+  b.box([0, 2.7, 3.1], [1, 0.3, 0.1]);         // above the door
+  b.box([1.5, 1.5, 3.1], [0.5, 1.5, 0.1]);     // between the door and the window (x 2..3.2, y 1..2)
+  b.box([3.7, 1.5, 3.1], [0.5, 1.5, 0.1]);
+  b.box([2.6, 0.5, 3.1], [0.6, 0.5, 0.1]);
+  b.box([2.6, 2.5, 3.1], [0.6, 0.5, 0.1]);
+  b.box([0, 3.1, 0], [4.4, 0.1, 3.4]);         // roof
+  b.box([11, 0.6, 2], [0.15, 0.6, 6]);         // low wall on the right
+  b.mat = 2; b.box([0.5, 1.5, -1.25], [0.08, 1.5, 1.75]);   // partition, open towards the door
+  b.mat = 3; b.box([-2, 1.4, -2.97], [1.8, 1.2, 0.03]);     // panel on the back wall
+  b.mat = 4; b.box([0, 2, -9], [14, 2, 0.25]);             // long wall behind
+  b.mat = 6; b.box([-9, 4.5, -3], [2.5, 4.5, 2.5]);        // tower
+  b.mat = 5; // wood: porch, pergola, fence
+  b.box([0, 2.85, 4.45], [2.2, 0.06, 1.25]);
+  for (const x of [-2, 2]) b.box([x, 1.4, 5.55], [0.06, 1.4, 0.06]);
+  for (const x of [5, 9]) for (const z of [-2, 4]) b.box([x, 1.3, z], [0.05, 1.3, 0.05]);
+  for (let k = 0; k < 13; k++) b.box([5 + k / 3, 2.7, 1], [0.03, 0.1, 3.2]);
+  b.box([7, 0.25, 1], [1.2, 0.25, 0.3]);                   // bench under the pergola
+  for (let k = 0; k < 29; k++) b.box([-12 + k / 4, 0.6, 6], [0.025, 0.6, 0.025]);
+  b.box([-8.5, 1.0, 6.04], [3.6, 0.04, 0.015]);
+  return { name: grid ? 'town-grid' : 'town', scene: b.scene(), camera: { eye: [1.2, 1.6, 11], target: [-0.3, 1.2, 0], fovYDeg: 60, near: 0.05 },
+    moving: true, sunDir: TOWN_SUN, enclosed: false };
 }
 
 /** A closed room (inside x 0..3, y 0..2.7, z -2.25..2.25) whose walls and roof are `t` thick, on an 8 m floor
@@ -290,8 +343,8 @@ function groundAt(s: SceneData, x: number, z: number, top: number) {
 /** Sponza with toon objects on the atrium floor ahead of the camera, along the moving camera's path (which walks
  * 6 m forward): an orange sphere, a blue ring facing the camera and a green capsule figure with a head. With
  * photoreal = true the same objects get photoreal materials (style 0). */
-export function toonSponza(base: SceneData, photoreal = false, withDynamic = false, groups = 1, grid = 0): SceneSpec {
-  const cam = s0Camera(base);
+export function toonSponza(base: SceneData, photoreal = false, withDynamic = false, groups = 1, grid = 0, place?: SceneSpec): SceneSpec {
+  const cam = place?.camera ?? s0Camera(base);
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
   const at = (ahead: number, aside: number, y: number): Vec3 => {
@@ -343,8 +396,9 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
   const [boundsMin, boundsMax] = bounds(positions);
   const scene: SceneData = { ...base, positions, normals: new Float32Array(nrm), uvs, tangents, indices: new Uint32Array(idx), primitives, materials,
     boundsMin, boundsMax, triangleCount: idx.length / 3 };
-  return { name: photoreal ? 'sponza-objects' : 'sponza-toon', scene, camera: cam, moving: true, sunDir: SPONZA_SUN, enclosed: false,
-    dynamic: !withDynamic ? undefined : { firstTriangle, objects: dynObjects, at: () => ({ sunDir: SPONZA_SUN, sunScale: 1, poses: dynObjects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) }) } };
+  const prefix = place?.name ?? 'sponza';
+  return { name: photoreal ? `${prefix}-objects` : `${prefix}-toon`, scene, camera: cam, moving: true, sunDir: place?.sunDir ?? SPONZA_SUN, enclosed: false,
+    dynamic: !withDynamic ? undefined : { firstTriangle, objects: dynObjects, at: () => ({ sunDir: place?.sunDir ?? SPONZA_SUN, sunScale: 1, poses: dynObjects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) }) } };
 }
 
 /** M1: fully dynamic Sponza. The S3 objects (toon, or photoreal with photoreal = true) move on the atrium floor and
@@ -359,17 +413,18 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
  * neighbours seldom touch: spheres roll +-0.35 m sideways, rings turn, figures walk +-0.4 m, object k 13 k frames ahead.
  * deform (suffix -deform): every object also deforms (Deform: spheres and rings wave, figures bend). */
 export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1, only: 'all' | 'sun' | 'objects' | 'sphere' = 'all', groups = 1,
-  grid = 0, deform = false): SceneSpec {
-  const s = toonSponza(base, photoreal, true, groups, grid);
+  grid = 0, deform = false, place?: SceneSpec): SceneSpec {
+  const s = toonSponza(base, photoreal, true, groups, grid, place);
+  const sun0 = place?.sunDir ?? SPONZA_SUN;
   const cam = s.camera;
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
   const d = s.dynamic!;
   const sun = (t: number): Vec3 => {
-    if (switchAt >= 0) return t < switchAt ? SPONZA_SUN : [0.45, 1, -0.25];
+    if (switchAt >= 0) return t < switchAt ? sun0 : [0.45, 1, -0.25];
     if (only === 'objects' || only === 'sphere') t = 0;
     const a = 2 * Math.PI * t / 400;
-    return [-0.15 + 0.4 * Math.sin(a), 1, 0.1 + 0.08 * Math.sin(2 * a + 0.5)];
+    return [sun0[0] + 0.4 * Math.sin(a), sun0[1], sun0[2] + 0.08 * Math.sin(2 * a + 0.5)];
   };
   const rigid = (t: number) => switchAt >= 0 || only === 'sun' ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 }))
     : grid > 0 ? d.objects.map((_, k) => {
@@ -394,7 +449,18 @@ export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1,
     // Object k (kind k mod 3: sphere, ring, figure) deforms 11 k frames ahead.
     poses: rigid(t).map((p, k) => deform ? { ...p, deform: { kind: k % 3 === 2 ? 'bend' as const : 'wave' as const, t: t + 11 * k } } : p),
   });
-  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '')
+  const name = (place?.name ?? 'sponza') + (photoreal ? '-dynobj' : '-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '')
     + (groups > 1 ? `-many${groups}` : '') + (grid > 0 ? `-n${grid}` : '') + (deform ? '-deform' : '');
   return { ...s, name, sunDir: sun(0), dynamic: d };
+}
+
+/** W2 scenes by name: town, town-grid (on the voxel grid), town-toon, town-objects (objects at rest), town-dyn (toon objects and the sun move),
+ * town-dynobj (photoreal objects). The objects stand where they stand in Sponza, relative to the camera. */
+export function townScene(name: string): SceneSpec {
+  if (name === 'town-grid') return townSpec(true);
+  const t = townSpec();
+  if (name === 'town') return t;
+  if (name === 'town-toon' || name === 'town-objects') return toonSponza(t.scene, name === 'town-objects', false, 1, 0, t);
+  if (name === 'town-dyn' || name === 'town-dynobj') return dynamicSponza(t.scene, name === 'town-dynobj', -1, 'all', 1, 0, false, t);
+  throw new Error(`unknown scene ${name}`);
 }

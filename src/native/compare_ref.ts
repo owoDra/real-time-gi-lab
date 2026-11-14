@@ -3,6 +3,9 @@
 // compared (a reference pixel is used when every one of our pixels in it is photoreal: tag 1).
 // Usage: node build/native/compare_ref.mjs --ref E.pfm[,E2.pfm...] --ours a.static.irr.f32[,b...] [--width 1920 --height 1080]
 //   [--png DIR]  (side-by-side images: reference | ours, same exposure) [--json FILE]
+// Block errors (W3, phase 25): the same mean |ours - ref| / mean ref over means of B x B reference pixels (B = 8, 16;
+// a block counts when at least 3/4 of its pixels are compared). Averaging B^2 pixels divides the reference's own
+// noise by about B, so two independent references agree within a few percent where single pixels differ by 20-30%.
 import { readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { lum } from '../core/rcrun.ts';
@@ -18,6 +21,23 @@ const W = Number(arg('--width', '1920')), H = Number(arg('--height', '1080'));
 // reference's own noise (the average's error is about half of it).
 const refs = arg('--ref', '').split(',').map(readPfm);
 const ref = refs[0];
+const BLOCKS = [8, 16];
+/** Mean |a - b| / mean b over B x B block means of luminance (pixels where ok is set). */
+function blockErr(a: Float32Array, b: Float32Array, ok: Uint8Array | null, w: number, h: number, B: number) {
+  let sd = 0, sb = 0, sa = 0;
+  for (let by = 0; by + B <= h; by += B) for (let bx = 0; bx + B <= w; bx += B) {
+    let n = 0, la = 0, lb = 0;
+    for (let y = by; y < by + B; y++) for (let x = bx; x < bx + B; x++) {
+      const p = y * w + x;
+      if (ok && !ok[p]) continue;
+      n++; la += lum(a[p * 3], a[p * 3 + 1], a[p * 3 + 2]); lb += lum(b[p * 3], b[p * 3 + 1], b[p * 3 + 2]);
+    }
+    if (n * 4 < B * B * 3) continue;
+    sd += Math.abs(la - lb) / n; sb += lb / n; sa += la / n;
+  }
+  return { meanAbsRel: Math.round(sd / sb * 1e4) / 1e4, bias: Math.round((sa - sb) / sb * 1e4) / 1e4 };
+}
+let refNoiseBlocks: Record<string, number> | null = null;
 let refNoise: number | null = null;
 if (refs.length > 1) {
   let sd = 0, ss = 0;
@@ -26,6 +46,8 @@ if (refs.length > 1) {
     sd += Math.abs(a - b); ss += (a + b) / 2;
   }
   refNoise = Math.round(sd / ss * 1e4) / 1e4;
+  refNoiseBlocks = Object.fromEntries(BLOCKS.map((B) => [`b${B}`, blockErr(refs[0].rgb, refs[1].rgb, null, ref.w, ref.h, B).meanAbsRel]));
+  console.log(`reference halves, block means: ${JSON.stringify(refNoiseBlocks)}`);
   ref.rgb = ref.rgb.map((_, i) => refs.reduce((s, r) => s + r.rgb[i], 0) / refs.length);
   console.log(`reference: ${refs.length} renders averaged; mean |half A - half B| / mean = ${refNoise}`);
 }
@@ -56,7 +78,8 @@ for (const file of arg('--ours', '').split(',')) {
   rel.sort((a, b) => a - b);
   const r4 = (x: number) => Math.round(x * 1e4) / 1e4;
   const res = { pixels: cnt, meanRef: r4(sr / cnt), meanOurs: r4(so / cnt), bias: r4((so - sr) / sr), meanAbsRel: r4(sabs / sr),
-    medianRel: r4(rel[Math.floor(rel.length * 0.5)]), p90Rel: r4(rel[Math.floor(rel.length * 0.9)]) };
+    medianRel: r4(rel[Math.floor(rel.length * 0.5)]), p90Rel: r4(rel[Math.floor(rel.length * 0.9)]),
+    blocks: Object.fromEntries(BLOCKS.map((B) => [`b${B}`, blockErr(ours, ref.rgb, ok, ref.w, ref.h, B)])) };
   results[basename(file)] = res;
   console.log(basename(file), JSON.stringify(res));
   const pngDir = arg('--png', '');
@@ -75,4 +98,4 @@ for (const file of arg('--ours', '').split(',')) {
   }
 }
 const jsonOut = arg('--json', '');
-if (jsonOut) writeFileSync(jsonOut, JSON.stringify({ kind: 'exploratory (探索値)', reference: arg('--ref', '').split(','), referenceHalvesMeanAbsRel: refNoise, results }, null, 2));
+if (jsonOut) writeFileSync(jsonOut, JSON.stringify({ kind: 'exploratory (探索値)', reference: arg('--ref', '').split(','), referenceHalvesMeanAbsRel: refNoise, referenceHalvesBlocks: refNoiseBlocks, results }, null, 2));

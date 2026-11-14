@@ -1,0 +1,988 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": 25,
+ "date": "2026-11-15",
+ "note": "measurement only, no judgement (Phase 26 judges). GPU timing and Mitsuba references in separate time slots. Native Dawn/Vulkan, AMD Radeon 8060S (RDNA 3.5), 1920x1080, no sky unless noted.",
+ "configs": {
+  "rc": "world-48-voxel-rc2-vrel",
+  "ddgi_linear": "ddgi-100-128-u8-g1-noadapt (re-picked)",
+  "ddgi_rtxgi": "ddgi-100-128-u8 (re-picked)"
+ },
+ "reproduce": {
+  "M1_gi_ms_rc": [
+   3.687,
+   3.673,
+   3.673
+  ],
+  "M1_moving": [
+   3.297,
+   3.356,
+   3.335
+  ],
+  "M1_mib": 76.8,
+  "M5_excess_k16_rc": 0.01126,
+  "sha256_rc": {
+   "sponza": "e5a44335320fce9cdb26d9eab606b343e48c1544b0e4629bce4eb197ccd5e2d9",
+   "sponza-dynobj_pose0": "19a21466463c5805b782799a5dda9765d60ce60fae1d274ce238b169d495c688",
+   "match_phase24": true
+  },
+  "sha256_new_ddgi": {
+   "sponza": {
+    "ddgi-100-128-u8-g1-noadapt": "80b96c60bde93aa4005fdff7561ab38411a81434b560b95ec7b8ff90e5382c84",
+    "ddgi-100-128-u8": "bfc4f71a46faae6ffeb02c46d9a2fb5ce617ff106cc083956ad1460ef88df744"
+   },
+   "sponza-dynobj_pose0": {
+    "ddgi-100-128-u8-g1-noadapt": "8b32758eb9552ca074ab5cd3ab56571569bdd73ebfba7bd533f6befd420c0cae",
+    "ddgi-100-128-u8": "f72724da51c9af33955dc84e667e17ad49313d28aaf4f07ce88928899606436c"
+   }
+  }
+ },
+ "ddgi_repick": {
+  "scene": "sponza-dynobj-n64-deform-bwave",
+  "gi_ms_static": {
+   "ddgi-75-128-u4-g1-noadapt": 6.522,
+   "ddgi-75-128-u8-g1-noadapt": 4.258,
+   "ddgi-75-64-u4-g1-noadapt": 4.407,
+   "ddgi-75-64-u8-g1-noadapt": 3.205,
+   "ddgi-100-128-u4-g1-noadapt": 4.219,
+   "ddgi-100-64-u4-g1-noadapt": 3.065,
+   "ddgi-100-128-u8-g1-noadapt": 3.151,
+   "ddgi-125-128-u4-g1-noadapt": 3.271,
+   "ddgi-125-64-u2-g1-noadapt": 3.174,
+   "ddgi-100-128-u2": 5.912,
+   "ddgi-100-128-u4": 4.074
+  },
+  "within_4ms_quality": {
+   "_columns": "error vs sponza multi-bounce ref (pixel, bias, b8), excess k16 sponza-dynobj, light switch 90% frames",
+   "ddgi-75-64-u8-g1-noadapt": [
+    0.3867,
+    -0.0615,
+    0.3095,
+    0.00063,
+    91
+   ],
+   "ddgi-100-64-u4-g1-noadapt": [
+    0.358,
+    -0.0421,
+    0.2869,
+    0.00086,
+    88
+   ],
+   "ddgi-100-128-u8-g1-noadapt": [
+    0.3579,
+    -0.065,
+    0.2859,
+    0.0002,
+    90
+   ],
+   "ddgi-125-128-u4-g1-noadapt": [
+    0.4301,
+    -0.1037,
+    0.3713,
+    0.0006,
+    88
+   ],
+   "ddgi-125-64-u2-g1-noadapt": [
+    0.4189,
+    -0.0936,
+    0.3578,
+    0.00176,
+    83
+   ],
+   "ddgi-100-128-u8": [
+    0.3801,
+    -0.1416,
+    0.3115,
+    0.00013,
+    49
+   ],
+   "ddgi-100-128-u8-h0.9-g1-noadapt": [
+    0.3539,
+    null,
+    0.2835,
+    0.00058,
+    84
+   ],
+   "ddgi-100-128-u8-h0.8-g1-noadapt": [
+    0.3572,
+    null,
+    0.2867,
+    0.00141,
+    74
+   ]
+  },
+  "chosen": "ddgi-100-128-u8-g1-noadapt: 3.13-3.15 ms, 82.5 MiB, lowest error and excess among those under 4 ms; lower hysteresis barely shortens the response and raises the excess",
+  "m1_scene_chosen": {
+   "ddgi-100-128-u8-g1-noadapt": [
+    3.135,
+    3.146,
+    82.5
+   ],
+   "ddgi-100-128-u8": [
+    3.085,
+    3.123,
+    82.5
+   ]
+  }
+ },
+ "W1_toon": {
+  "sponza-dyn": {
+   "ddgi-100-128-u8-g1-noadapt": {
+    "gi_ms": 2.594,
+    "gi_ms_moving": 2.682,
+    "gi_ms_moving_p99_max": [
+     3.286,
+     3.328
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 1.19,
+    "flicker_fine_pct_moving": 13.906,
+    "control_fine_pct_moving": 3.586,
+    "toon_ramp_change_pct_static": 1.025,
+    "control_ramp_change_pct_static": 1.151,
+    "toon_ramp_change_pct_moving": 1.13,
+    "excess_k16_static": 0.0002,
+    "chain_excess_moving": 0.02904,
+    "chain_excess_control_moving": 0.00728
+   },
+   "ddgi-100-128-u8": {
+    "gi_ms": 2.615,
+    "gi_ms_moving": 2.694,
+    "gi_ms_moving_p99_max": [
+     3.241,
+     3.349
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 0.723,
+    "flicker_fine_pct_moving": 12.991,
+    "control_fine_pct_moving": 3.586,
+    "toon_ramp_change_pct_static": 0.867,
+    "control_ramp_change_pct_static": 1.151,
+    "toon_ramp_change_pct_moving": 0.999,
+    "excess_k16_static": 0.00012,
+    "chain_excess_moving": 0.02908,
+    "chain_excess_control_moving": 0.00728
+   },
+   "world-48-voxel-rc2-vrel": {
+    "gi_ms": 3.125,
+    "gi_ms_moving": 3.032,
+    "gi_ms_moving_p99_max": [
+     3.261,
+     3.31
+    ],
+    "allocated_mib": 76.9,
+    "flicker_fine_pct_static": 10.075,
+    "flicker_fine_pct_moving": 21.74,
+    "control_fine_pct_moving": 3.586,
+    "toon_ramp_change_pct_static": 1.258,
+    "control_ramp_change_pct_static": 1.151,
+    "toon_ramp_change_pct_moving": 1.678,
+    "excess_k16_static": 0.01036,
+    "chain_excess_moving": 0.05401,
+    "chain_excess_control_moving": 0.00728
+   }
+  },
+  "sponza-dyn-bwave": {
+   "ddgi-100-128-u8-g1-noadapt": {
+    "gi_ms": 2.795,
+    "gi_ms_moving": 2.85,
+    "gi_ms_moving_p99_max": [
+     3.43,
+     3.439
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 21.883,
+    "flicker_fine_pct_moving": 25.309,
+    "control_fine_pct_moving": 7.064,
+    "toon_ramp_change_pct_static": 1.05,
+    "control_ramp_change_pct_static": 1.155,
+    "toon_ramp_change_pct_moving": 0.751,
+    "excess_k16_static": 0.10519,
+    "chain_excess_moving": 0.05171,
+    "chain_excess_control_moving": 0.01116
+   },
+   "ddgi-100-128-u8": {
+    "gi_ms": 2.66,
+    "gi_ms_moving": 2.734,
+    "gi_ms_moving_p99_max": [
+     3.015,
+     3.102
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 18.56,
+    "flicker_fine_pct_moving": 24.453,
+    "control_fine_pct_moving": 7.064,
+    "toon_ramp_change_pct_static": 0.822,
+    "control_ramp_change_pct_static": 1.155,
+    "toon_ramp_change_pct_moving": 1.029,
+    "excess_k16_static": 0.09248,
+    "chain_excess_moving": 0.05086,
+    "chain_excess_control_moving": 0.01116
+   },
+   "world-48-voxel-rc2-vrel": {
+    "gi_ms": 3.286,
+    "gi_ms_moving": 3.146,
+    "gi_ms_moving_p99_max": [
+     3.357,
+     3.388
+    ],
+    "allocated_mib": 77.1,
+    "flicker_fine_pct_static": 38.118,
+    "flicker_fine_pct_moving": 41.102,
+    "control_fine_pct_moving": 7.064,
+    "toon_ramp_change_pct_static": 2.186,
+    "control_ramp_change_pct_static": 1.155,
+    "toon_ramp_change_pct_moving": 1.718,
+    "excess_k16_static": 0.19125,
+    "chain_excess_moving": 0.17994,
+    "chain_excess_control_moving": 0.01116
+   }
+  },
+  "sponza-dyn-bcut": {
+   "ddgi-100-128-u8-g1-noadapt": {
+    "gi_ms": 2.552,
+    "gi_ms_moving": 2.652,
+    "gi_ms_moving_p99_max": [
+     3.141,
+     3.251
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 2.176,
+    "flicker_fine_pct_moving": 13.17,
+    "control_fine_pct_moving": 3.301,
+    "toon_ramp_change_pct_static": 1.033,
+    "control_ramp_change_pct_static": 1.15,
+    "toon_ramp_change_pct_moving": 1.217,
+    "excess_k16_static": 0.00104,
+    "chain_excess_moving": 0.02682,
+    "chain_excess_control_moving": 0.00666
+   },
+   "ddgi-100-128-u8": {
+    "gi_ms": 2.562,
+    "gi_ms_moving": 2.627,
+    "gi_ms_moving_p99_max": [
+     3.15,
+     3.22
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 0.979,
+    "flicker_fine_pct_moving": 13.344,
+    "control_fine_pct_moving": 3.301,
+    "toon_ramp_change_pct_static": 0.857,
+    "control_ramp_change_pct_static": 1.15,
+    "toon_ramp_change_pct_moving": 1.257,
+    "excess_k16_static": 0.00046,
+    "chain_excess_moving": 0.02887,
+    "chain_excess_control_moving": 0.00666
+   },
+   "world-48-voxel-rc2-vrel": {
+    "gi_ms": 3.224,
+    "gi_ms_moving": 3.168,
+    "gi_ms_moving_p99_max": [
+     3.388,
+     3.475
+    ],
+    "allocated_mib": 77.9,
+    "flicker_fine_pct_static": 17.175,
+    "flicker_fine_pct_moving": 23.459,
+    "control_fine_pct_moving": 3.301,
+    "toon_ramp_change_pct_static": 1.471,
+    "control_ramp_change_pct_static": 1.15,
+    "toon_ramp_change_pct_moving": 1.59,
+    "excess_k16_static": 0.03585,
+    "chain_excess_moving": 0.0634,
+    "chain_excess_control_moving": 0.00666
+   }
+  }
+ },
+ "W2_town": {
+  "scenes": {
+   "town": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "gi_ms": 1.43,
+     "gi_ms_moving": 1.515,
+     "gi_ms_moving_p99_max": [
+      1.604,
+      1.627
+     ],
+     "allocated_mib": 94.6,
+     "flicker_fine_pct_static": 0.946,
+     "flicker_fine_pct_moving": 4.786,
+     "control_fine_pct_moving": 0.679,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": null,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00109,
+     "chain_excess_moving": 0.00549,
+     "chain_excess_control_moving": 0.00093
+    },
+    "ddgi-100-128-u8": {
+     "gi_ms": 1.422,
+     "gi_ms_moving": 1.512,
+     "gi_ms_moving_p99_max": [
+      1.644,
+      1.922
+     ],
+     "allocated_mib": 94.6,
+     "flicker_fine_pct_static": 0.879,
+     "flicker_fine_pct_moving": 4.849,
+     "control_fine_pct_moving": 0.679,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": null,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00102,
+     "chain_excess_moving": 0.00555,
+     "chain_excess_control_moving": 0.00093
+    },
+    "world-48-voxel-rc2-vrel": {
+     "gi_ms": 1.85,
+     "gi_ms_moving": 1.879,
+     "gi_ms_moving_p99_max": [
+      2.036,
+      2.057
+     ],
+     "allocated_mib": 75.3,
+     "flicker_fine_pct_static": 0,
+     "flicker_fine_pct_moving": 1.077,
+     "control_fine_pct_moving": 0.679,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": null,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0,
+     "chain_excess_moving": 0.00533,
+     "chain_excess_control_moving": 0.00093
+    }
+   },
+   "town-dynobj": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "gi_ms": 1.554,
+     "gi_ms_moving": 1.629,
+     "gi_ms_moving_p99_max": [
+      1.746,
+      1.771
+     ],
+     "allocated_mib": 94.6,
+     "flicker_fine_pct_static": 1.194,
+     "flicker_fine_pct_moving": 4.527,
+     "control_fine_pct_moving": 0.832,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": 0.38,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00107,
+     "chain_excess_moving": 0.00499,
+     "chain_excess_control_moving": 0.00096
+    },
+    "ddgi-100-128-u8": {
+     "gi_ms": 1.542,
+     "gi_ms_moving": 1.61,
+     "gi_ms_moving_p99_max": [
+      1.738,
+      1.744
+     ],
+     "allocated_mib": 94.6,
+     "flicker_fine_pct_static": 1.112,
+     "flicker_fine_pct_moving": 4.623,
+     "control_fine_pct_moving": 0.832,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": 0.38,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00101,
+     "chain_excess_moving": 0.00509,
+     "chain_excess_control_moving": 0.00096
+    },
+    "world-48-voxel-rc2-vrel": {
+     "gi_ms": 2.105,
+     "gi_ms_moving": 2.129,
+     "gi_ms_moving_p99_max": [
+      2.299,
+      2.335
+     ],
+     "allocated_mib": 75.5,
+     "flicker_fine_pct_static": 3.254,
+     "flicker_fine_pct_moving": 4.252,
+     "control_fine_pct_moving": 0.832,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": 0.38,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00296,
+     "chain_excess_moving": 0.00815,
+     "chain_excess_control_moving": 0.00096
+    }
+   },
+   "town-dynobj-bwave": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "gi_ms": 1.625,
+     "gi_ms_moving": 1.725,
+     "gi_ms_moving_p99_max": [
+      1.836,
+      1.845
+     ],
+     "allocated_mib": 94.6,
+     "flicker_fine_pct_static": 5.662,
+     "flicker_fine_pct_moving": 3.917,
+     "control_fine_pct_moving": 1.307,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": 0.38,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00735,
+     "chain_excess_moving": 0.00329,
+     "chain_excess_control_moving": 0.00039
+    },
+    "ddgi-100-128-u8": {
+     "gi_ms": 1.599,
+     "gi_ms_moving": 1.687,
+     "gi_ms_moving_p99_max": [
+      1.813,
+      1.821
+     ],
+     "allocated_mib": 94.6,
+     "flicker_fine_pct_static": 9.874,
+     "flicker_fine_pct_moving": 7.965,
+     "control_fine_pct_moving": 1.307,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": 0.38,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.00928,
+     "chain_excess_moving": 0.00578,
+     "chain_excess_control_moving": 0.00039
+    },
+    "world-48-voxel-rc2-vrel": {
+     "gi_ms": 2.507,
+     "gi_ms_moving": 2.457,
+     "gi_ms_moving_p99_max": [
+      2.698,
+      2.765
+     ],
+     "allocated_mib": 76.6,
+     "flicker_fine_pct_static": 22.792,
+     "flicker_fine_pct_moving": 19.297,
+     "control_fine_pct_moving": 1.307,
+     "toon_ramp_change_pct_static": null,
+     "control_ramp_change_pct_static": 0.38,
+     "toon_ramp_change_pct_moving": null,
+     "excess_k16_static": 0.23861,
+     "chain_excess_moving": 0.17742,
+     "chain_excess_control_moving": 0.00039
+    }
+   }
+  },
+  "vs_ref": {
+   "town_onebounce": {
+    "reference": [
+     "E-960x540-512spp-sky0_0_0-seed0.pfm",
+     "E-960x540-512spp-sky0_0_0-seed1.pfm"
+    ],
+    "ref_noise_pixel": 0.0783,
+    "ref_noise_blocks": {
+     "b8": 0.0097,
+     "b16": 0.0046
+    },
+    "results": {
+     "ddgi-100-128-u8-g1-noadapt": {
+      "pixel": 0.2852,
+      "bias": 0.0138,
+      "b8": 0.2765,
+      "b16": 0.2694
+     },
+     "ddgi-100-128-u8": {
+      "pixel": 0.259,
+      "bias": -0.0281,
+      "b8": 0.2499,
+      "b16": 0.2431
+     },
+     "world-48-voxel-rc2-vrel": {
+      "pixel": 0.2275,
+      "bias": 0.1019,
+      "b8": 0.2075,
+      "b16": 0.1974
+     }
+    }
+   },
+   "town_multibounce": {
+    "reference": [
+     "E-b0-960x540-256spp-sky0_0_0-seed0.pfm",
+     "E-b0-960x540-256spp-sky0_0_0-seed1.pfm"
+    ],
+    "ref_noise_pixel": 0.106,
+    "ref_noise_blocks": {
+     "b8": 0.0134,
+     "b16": 0.0066
+    },
+    "results": {
+     "ddgi-100-128-u8-g1-noadapt": {
+      "pixel": 0.3076,
+      "bias": -0.2362,
+      "b8": 0.2971,
+      "b16": 0.2923
+     },
+     "ddgi-100-128-u8": {
+      "pixel": 0.3148,
+      "bias": -0.2678,
+      "b8": 0.3038,
+      "b16": 0.2995
+     },
+     "world-48-voxel-rc2-vrel": {
+      "pixel": 0.2388,
+      "bias": -0.1698,
+      "b8": 0.2279,
+      "b16": 0.2209
+     }
+    }
+   },
+   "town-dynobj_pose0_onebounce": {
+    "reference": [
+     "E-960x540-512spp-sky0_0_0-seed0.pfm",
+     "E-960x540-512spp-sky0_0_0-seed1.pfm"
+    ],
+    "ref_noise_pixel": 0.0782,
+    "ref_noise_blocks": {
+     "b8": 0.0096,
+     "b16": 0.0046
+    },
+    "results": {
+     "ddgi-100-128-u8-g1-noadapt": {
+      "pixel": 0.3057,
+      "bias": -0.0143,
+      "b8": 0.2978,
+      "b16": 0.2895
+     },
+     "ddgi-100-128-u8": {
+      "pixel": 0.2787,
+      "bias": -0.055,
+      "b8": 0.2709,
+      "b16": 0.2629
+     },
+     "world-48-voxel-rc2-vrel": {
+      "pixel": 0.2285,
+      "bias": 0.0959,
+      "b8": 0.2081,
+      "b16": 0.196
+     }
+    }
+   },
+   "town-dynobj_pose0_multibounce": {
+    "reference": [
+     "E-b0-960x540-256spp-sky0_0_0-seed0.pfm",
+     "E-b0-960x540-256spp-sky0_0_0-seed1.pfm"
+    ],
+    "ref_noise_pixel": 0.1054,
+    "ref_noise_blocks": {
+     "b8": 0.0133,
+     "b16": 0.0065
+    },
+    "results": {
+     "ddgi-100-128-u8-g1-noadapt": {
+      "pixel": 0.3236,
+      "bias": -0.2557,
+      "b8": 0.313,
+      "b16": 0.3079
+     },
+     "ddgi-100-128-u8": {
+      "pixel": 0.329,
+      "bias": -0.2865,
+      "b8": 0.3178,
+      "b16": 0.3132
+     },
+     "world-48-voxel-rc2-vrel": {
+      "pixel": 0.2354,
+      "bias": -0.1726,
+      "b8": 0.2237,
+      "b16": 0.2173
+     }
+    }
+   }
+  },
+  "pools": "Sponza pools fit: town 1042 bricks, 73k voxels; town-dynobj-bwave 1756 bricks, dyn 54; no overflow",
+  "grid_aligned": "town-grid (faces on level-0 voxel faces): large black patches of indirect light on the ground (RC) and a dark ground (DDGI); vs multi-bounce ref b8 RC 0.366 / DDGI 0.343, bias -33 / -28 %. Moving the whole scene by a few cm removes it",
+  "sanity": "reference of town-dynobj changes between pose 0 and pose 120 by 16.2 % per pixel / 14.8 % in 8x8 blocks (noise 7.8 / 1.0 %); objects visible; -bwave runtime image-change check passed"
+ },
+ "W3_reference_noise": {
+  "method": "8x8 block means of the 960x540 reference (blocks with >= 3/4 compared pixels); 16x16 also reported",
+  "sponza_onebounce": {
+   "reference": [
+    "E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "E-960x540-512spp-sky0_0_0-seed1.pfm"
+   ],
+   "ref_noise_pixel": 0.1667,
+   "ref_noise_blocks": {
+    "b8": 0.0218,
+    "b16": 0.011
+   },
+   "results": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "pixel": 0.4199,
+     "bias": 0.0755,
+     "b8": 0.352,
+     "b16": 0.3212
+    },
+    "ddgi-100-128-u8": {
+     "pixel": 0.4103,
+     "bias": -0.0125,
+     "b8": 0.3422,
+     "b16": 0.3099
+    },
+    "world-48-voxel-rc2-vrel": {
+     "pixel": 0.4423,
+     "bias": -0.0477,
+     "b8": 0.365,
+     "b16": 0.337
+    }
+   }
+  },
+  "sponza_multibounce": {
+   "reference": [
+    "E-b0-960x540-256spp-sky0_0_0-seed0.pfm",
+    "E-b0-960x540-256spp-sky0_0_0-seed1.pfm"
+   ],
+   "ref_noise_pixel": 0.2353,
+   "ref_noise_blocks": {
+    "b8": 0.0298,
+    "b16": 0.0148
+   },
+   "results": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "pixel": 0.3579,
+     "bias": -0.065,
+     "b8": 0.2859,
+     "b16": 0.259
+    },
+    "ddgi-100-128-u8": {
+     "pixel": 0.3801,
+     "bias": -0.1416,
+     "b8": 0.3115,
+     "b16": 0.2811
+    },
+    "world-48-voxel-rc2-vrel": {
+     "pixel": 0.4191,
+     "bias": -0.1721,
+     "b8": 0.3455,
+     "b16": 0.3207
+    }
+   }
+  },
+  "sponza-dynobj_pose0_onebounce": {
+   "reference": [
+    "E-960x540-512spp-sky0_0_0-seed0.pfm",
+    "E-960x540-512spp-sky0_0_0-seed1.pfm"
+   ],
+   "ref_noise_pixel": 0.1918,
+   "ref_noise_blocks": {
+    "b8": 0.0247,
+    "b16": 0.0128
+   },
+   "results": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "pixel": 0.4555,
+     "bias": 0.0689,
+     "b8": 0.3874,
+     "b16": 0.355
+    },
+    "ddgi-100-128-u8": {
+     "pixel": 0.4363,
+     "bias": -0.0241,
+     "b8": 0.3689,
+     "b16": 0.3373
+    },
+    "world-48-voxel-rc2-vrel": {
+     "pixel": 0.5064,
+     "bias": 0.0367,
+     "b8": 0.4291,
+     "b16": 0.4009
+    }
+   }
+  },
+  "sponza-dynobj_pose0_multibounce": {
+   "reference": [
+    "E-b0-960x540-128spp-sky0_0_0-seed0.pfm",
+    "E-b0-960x540-128spp-sky0_0_0-seed1.pfm"
+   ],
+   "ref_noise_pixel": 0.351,
+   "ref_noise_blocks": {
+    "b8": 0.0465,
+    "b16": 0.0236
+   },
+   "results": {
+    "ddgi-100-128-u8-g1-noadapt": {
+     "pixel": 0.3885,
+     "bias": -0.1174,
+     "b8": 0.2779,
+     "b16": 0.2509
+    },
+    "ddgi-100-128-u8": {
+     "pixel": 0.4051,
+     "bias": -0.1942,
+     "b8": 0.3064,
+     "b16": 0.2801
+    },
+    "world-48-voxel-rc2-vrel": {
+     "pixel": 0.4548,
+     "bias": -0.144,
+     "b8": 0.3458,
+     "b16": 0.3194
+    }
+   }
+  },
+  "town_high_spp": {
+   "onebounce_4096spp_x2": {
+    "noise_pixel": 0.0276,
+    "noise_b8": 0.0035,
+    "rc": [
+     0.2224,
+     0.1019,
+     0.2073
+    ],
+    "ddgi_linear": [
+     0.2832,
+     0.0138,
+     0.2764
+    ],
+    "ddgi_rtxgi": [
+     0.2563,
+     -0.0281,
+     0.2498
+    ]
+   },
+   "multibounce_1024spp_x2": {
+    "noise_pixel": 0.053,
+    "noise_b8": 0.0068,
+    "rc": [
+     0.2349,
+     -0.1698,
+     0.2279
+    ],
+    "ddgi_linear": [
+     0.3031,
+     -0.2362,
+     0.2969
+    ],
+    "ddgi_rtxgi": [
+     0.3095,
+     -0.2678,
+     0.3036
+    ]
+   },
+   "_columns": "pixel error, bias, b8 error; town is cheap enough for pixel-level noise near 5 % (multi-bounce 1024 spp about 6-7 min each)"
+  }
+ },
+ "W4_moving_flicker_ablation": {
+  "scene": "sponza moving camera",
+  "columns": "fine-band flicker % / control % / chain excess / control chain excess",
+  "rc_default": [
+   18.991,
+   4.023,
+   0.06881,
+   0.00773
+  ],
+  "rc_registration_fixed_to_first_camera": [
+   18.799,
+   4.023,
+   0.06665,
+   0.00773
+  ],
+  "rc_no_normal_maps": [
+   3.263,
+   0.925,
+   0.01451,
+   0.0013
+  ],
+  "rc_registration_fixed_no_normal_maps": [
+   3.098,
+   0.925,
+   0.01346,
+   0.0013
+  ],
+  "rc_no_relocation": [
+   43.335,
+   4.023,
+   0.132,
+   0.00773
+  ],
+  "rc_no_relocation_registration_fixed_no_normal_maps": [
+   24.506,
+   0.925,
+   0.06211,
+   0.0013
+  ],
+  "ddgi-75-128-u4-g1-noadapt": [
+   16.102,
+   4.023,
+   0.03629,
+   0.00773
+  ],
+  "ddgi-75-128-u4-g1-noadapt_no_normal_maps": [
+   4.236,
+   0.925,
+   0.00691,
+   0.0013
+  ],
+  "reading": "normal maps make most of the moving-camera flicker of both (the reprojected pixel lands on another texel of the normal map); without them the measurement floor (control field, half-pixel drift) is 0.93 % / 0.0013; probe registration following the camera adds about 0.2 points; the diagnostic switches were removed"
+ },
+ "W5_response": {
+  "light_switch_sponza-dyn-switch200": {
+   "rc_frames90_50": [
+    1,
+    1
+   ],
+   "ddgi-75-128-u4-g1-noadapt": [
+    88,
+    43
+   ],
+   "ddgi-100-128-u8-g1-noadapt": [
+    90,
+    47
+   ],
+   "ddgi-100-128-u8": [
+    49,
+    11
+   ]
+  },
+  "building_cut_sponza-bcut_frame60": {
+   "rc": [
+    1,
+    1
+   ],
+   "ddgi-75-128-u4-g1-noadapt": [
+    12,
+    1
+   ],
+   "ddgi-100-128-u8-g1-noadapt": [
+    7,
+    1
+   ]
+  },
+  "lag_vs_frozen_pose_frame179": {
+   "_columns": "mean |moving - frozen| / frozen, bias (pixel)",
+   "sponza-dynobj": {
+    "rc": [
+     0.0005,
+     -0.0001
+    ],
+    "ddgi-75-128-u4-g1-noadapt": [
+     0.2175,
+     -0.1894
+    ],
+    "ddgi-100-128-u8-g1-noadapt": [
+     0.2616,
+     -0.1614
+    ]
+   },
+   "sponza-dynobj-bwave": {
+    "rc": [
+     0.0023,
+     -0.0011
+    ],
+    "ddgi-75-128-u4-g1-noadapt": [
+     0.4594,
+     -0.2403
+    ],
+    "ddgi-100-128-u8-g1-noadapt": [
+     0.4523,
+     -0.1835
+    ]
+   }
+  },
+  "images": "w5-switch / w5-bcut .seq-{indirect,final}.png: rows 1-2 RC, rows 3-4 ddgi-100-128-u8-g1-noadapt, 16 frames (switch at the 5th)"
+ },
+ "W6_wide_dense": {
+  "dense9": {
+   "ddgi-100-128-u8-g1-noadapt": {
+    "gi_ms": 3.228,
+    "gi_ms_moving": 3.161,
+    "gi_ms_moving_p99_max": [
+     3.425,
+     3.484
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 19.594,
+    "flicker_fine_pct_moving": 29.291,
+    "control_fine_pct_moving": 8.379,
+    "toon_ramp_change_pct_static": null,
+    "control_ramp_change_pct_static": null,
+    "toon_ramp_change_pct_moving": null,
+    "excess_k16_static": 0.093,
+    "chain_excess_moving": 0.05959,
+    "chain_excess_control_moving": 0.01231
+   },
+   "ddgi-100-128-u8": {
+    "gi_ms": 3.304,
+    "gi_ms_moving": 3.083,
+    "gi_ms_moving_p99_max": [
+     3.388,
+     3.426
+    ],
+    "allocated_mib": 82.5,
+    "flicker_fine_pct_static": 17.772,
+    "flicker_fine_pct_moving": 30.479,
+    "control_fine_pct_moving": 8.379,
+    "toon_ramp_change_pct_static": null,
+    "control_ramp_change_pct_static": null,
+    "toon_ramp_change_pct_moving": null,
+    "excess_k16_static": 0.09165,
+    "chain_excess_moving": 0.06474,
+    "chain_excess_control_moving": 0.01231
+   },
+   "world-48-voxel-rc2-vrel": {
+    "gi_ms": 3.789,
+    "gi_ms_moving": 3.768,
+    "gi_ms_moving_p99_max": [
+     3.915,
+     3.986
+    ],
+    "allocated_mib": 77.3,
+    "flicker_fine_pct_static": 43.966,
+    "flicker_fine_pct_moving": 49.124,
+    "control_fine_pct_moving": 8.379,
+    "toon_ramp_change_pct_static": null,
+    "control_ramp_change_pct_static": null,
+    "toon_ramp_change_pct_moving": null,
+    "excess_k16_static": 0.23802,
+    "chain_excess_moving": 0.26525,
+    "chain_excess_control_moving": 0.01231
+   }
+  },
+  "wide10_default_pools": {
+   "world-48-voxel-rc2-vrel": {
+    "gi_ms": 3.428,
+    "gi_ms_moving": 3.456,
+    "gi_ms_moving_p99_max": [
+     3.605,
+     3.628
+    ],
+    "allocated_mib": 77.2,
+    "flicker_fine_pct_static": 14.865,
+    "flicker_fine_pct_moving": 30.714,
+    "control_fine_pct_moving": 8.105,
+    "toon_ramp_change_pct_static": null,
+    "control_ramp_change_pct_static": null,
+    "toon_ramp_change_pct_moving": null,
+    "excess_k16_static": 0.1545,
+    "chain_excess_moving": 0.2076,
+    "chain_excess_control_moving": 0.01167
+   }
+  },
+  "wide10_pools_8192_786432": {
+   "world-48-voxel-rc2-vrel": {
+    "gi_ms": 4.405,
+    "gi_ms_moving": 4.352,
+    "gi_ms_moving_p99_max": [
+     4.497,
+     4.527
+    ],
+    "allocated_mib": 98.0,
+    "flicker_fine_pct_static": 42.33,
+    "flicker_fine_pct_moving": 47.417,
+    "control_fine_pct_moving": 8.105,
+    "toon_ramp_change_pct_static": null,
+    "control_ramp_change_pct_static": null,
+    "toon_ramp_change_pct_moving": null,
+    "excess_k16_static": 0.23049,
+    "chain_excess_moving": 0.25391,
+    "chain_excess_control_moving": 0.01167
+   }
+  },
+  "wide10_pool_need": "5512 bricks, 603998 voxels (default 3072 / 327680 overflows by 2440 bricks: only level 0 is filled, indirect light mostly missing)",
+  "ddgi_wide10": "ddgi-100-128-u8-g1-noadapt runs with a 318x15x20 grid but allocates 251.6 MiB (field 180.7): over the 128 MiB budget"
+ },
+ "page_material": "box/in/phase25-check (working machine)",
+ "timeslots": "GPU timing batch 04:5x-05:0x local, references afterwards (town, town-dynobj, town-grid, sponza-dynobj pose 0 seed 1); image-only and response runs overlapped references, no GPU time taken from them"
+}

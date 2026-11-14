@@ -3,14 +3,14 @@
 // scene.json (materials, camera, sun, sky, toon ramp). See scripts/reference_irradiance.py.
 // Toon materials (S3) are flagged per vertex (toon = 1): the reference shades them as emitters of the emission-side
 // operator (the emission-side proxy).
-// Usage: node build/native/mitsuba_export.mjs [--scene sponza|sponza-toon|sponza-objects|sponza-dyn|sponza-dynobj|leak-<t>]
+// Usage: node build/native/mitsuba_export.mjs [--scene sponza|sponza-toon|sponza-objects|sponza-dyn|sponza-dynobj|leak-<t>|town*]
 //   [--pose-frame N] (dynamic scenes: objects and sun at frame N; default 0) [--out DIR]
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { PNG } from 'pngjs';
 import { parseGltf } from '../core/gltf.ts';
 import { SUN_E } from '../core/rcrun.ts';
-import { dynamicSponza, leakRoom, posedVertices, sponzaSpec, toonSponza, type SceneSpec } from '../core/scenes.ts';
+import { dynamicSponza, leakRoom, townScene, posedVertices, sponzaSpec, toonSponza, type SceneSpec } from '../core/scenes.ts';
 import { TOON } from '../core/style.ts';
 import { ROOT } from './env.ts';
 
@@ -18,13 +18,14 @@ const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const sceneName = arg('--scene', 'sponza');
 const poseFrame = Number(arg('--pose-frame', '0'));
-const outDir = resolve(arg('--out', join(ROOT, 'box/out/mitsuba', sceneName + (sceneName.startsWith('sponza-dyn') ? `-f${poseFrame}` : ''))));
+const outDir = resolve(arg('--out', join(ROOT, 'box/out/mitsuba', sceneName + (/^(sponza|town)-dyn/.test(sceneName) ? `-f${poseFrame}` : ''))));
 mkdirSync(join(outDir, 'meshes'), { recursive: true });
 mkdirSync(join(outDir, 'textures'), { recursive: true });
 
 let spec: SceneSpec, imageDir = '';
 let images: string[] = [];
 if (sceneName.startsWith('leak-')) spec = leakRoom(Number(sceneName.slice(5)));
+else if (sceneName.startsWith('town')) spec = townScene(sceneName);
 else {
   imageDir = join(ROOT, 'assets/glTF-Sample-Assets/Models/Sponza/glTF');
   const json = JSON.parse(readFileSync(join(imageDir, 'Sponza.gltf'), 'utf8'));
