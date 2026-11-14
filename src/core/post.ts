@@ -231,6 +231,127 @@ fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
 
 `;
 
+// Excess variation along reprojected chains (moving camera; also run on the static camera, where it equals the K = 16
+// excess above). Each pixel pulls its window state from the previous frame's state at its reprojected pixel (the
+// flicker test: nearest pixel, world positions within two pixel footprints, normals agree); a window (K = 16, aligned
+// on the frame slot) restarts the state. A window is dropped for a chain that failed the reprojection, was invalid or
+// a dynamic object in any of its frames. The world-fixed control field goes through the same chains (its excess is the
+// floor from chains drifting by up to half a pixel per frame and from normal maps). State (MX_WORDS u32 per pixel,
+// ping-pong): l_prev, l_start, tv, c_prev, c_start, c_tv, E_prev, E_start, E_tv, E_sum, bad (f32 bits but the last).
+// Counter words per frame (MEXCESS_SLOT): pixel windows, sum tv, sum excess, control tv, control excess (EXCESS_SCALE
+// units per stop), linear excess, linear tv, sum of window means (EXCESS_LIN_SCALE units).
+const MX_WORDS = 11;
+export const MEXCESS_SLOT = 8;
+const MEXCESS_WGSL = /* wgsl */ `
+${FRAME_WGSL}
+@group(0) @binding(0) var<uniform> F: Frame;
+@group(0) @binding(1) var depthTex: texture_depth_2d;
+@group(0) @binding(2) var normalTex: texture_2d<f32>;
+@group(0) @binding(3) var irrTex: texture_2d<f32>;
+@group(0) @binding(4) var depthPrev: texture_depth_2d;
+@group(0) @binding(5) var normalPrev: texture_2d<f32>;
+@group(0) @binding(6) var<storage, read> stPrev: array<u32>;
+@group(0) @binding(7) var<storage, read_write> st: array<u32>;
+@group(0) @binding(8) var<storage, read_write> counters: array<atomic<u32>>;
+@group(0) @binding(9) var heat: texture_storage_2d<rgba8unorm, write>;
+var<workgroup> wa: array<vec4f, 64>;
+var<workgroup> wb: array<vec4f, 64>;
+var<workgroup> wn: atomic<u32>;
+const SCALE = ${EXCESS_SCALE}.0;
+fn control(x: vec3f, n: vec3f) -> f32 {
+  return exp2(1.5 * sin(0.9 * x.x + 0.3) * sin(0.7 * x.y + 1.1) + sin(0.8 * x.z + 0.5)) * (0.7 + 0.2 * n.y + 0.1 * n.x);
+}
+fn lb(v: f32) -> f32 { return log2(max(v, 1e-3)); }
+fn heatColor(t: f32) -> vec3f {
+  let red = vec3f(1.0, 0.1, 0.05); let yellow = vec3f(1.0, 0.9, 0.1);
+  return select(select(mix(yellow, vec3f(1.0), 3.0 * t - 2.0), mix(red, yellow, 3.0 * t - 1.0), t < 2.0 / 3.0),
+    mix(vec3f(0.25), red, 3.0 * t), t < 1.0 / 3.0);
+}
+
+@compute @workgroup_size(8, 8) fn mexcess(@builtin(global_invocation_id) gid: vec3u, @builtin(local_invocation_index) li: u32) {
+  if (li == 0u) { atomicStore(&wn, 0u); }
+  workgroupBarrier();
+  let k = F.ru.y;
+  let start = k % 16u == 0u;
+  let last = k % 16u == 15u;
+  var a = vec4f(0.0); var b = vec4f(0.0);
+  let inside = gid.x < u32(F.size.x) && gid.y < u32(F.size.y);
+  if (inside) {
+    let px = vec2i(gid.xy);
+    let o = (gid.y * u32(F.size.x) + gid.x) * ${MX_WORDS}u;
+    let d = textureLoad(depthTex, px, 0);
+    let ir = textureLoad(irrTex, px, 0);
+    var bad = d <= 0.0 || ir.a < 0.5 || ir.a > 1.5;
+    var x = vec3f(0.0); var n = vec3f(0.0, 1.0, 0.0);
+    if (d > 0.0) { x = worldAt(px, d); n = textureLoad(normalTex, px, 0).xyz; }
+    let l = lb(luminance(ir.rgb)); let E = luminance(ir.rgb); let c = lb(control(x, n));
+    var s: array<f32, 10>;
+    var sbad = 0u;
+    if (start) {
+      s = array<f32, 10>(l, l, 0.0, c, c, 0.0, E, E, 0.0, E);
+    } else {
+      // Pull the chain from the previous frame.
+      var q = vec2i(0); var ok = !bad && F.ru2.z == 1u;
+      if (ok) {
+        let cp = F.prevViewProj * vec4f(x, 1.0);
+        ok = cp.w > F.eye.w;
+        if (ok) {
+          let ndc = cp.xy / cp.w;
+          ok = all(abs(ndc) < vec2f(1.0));
+          q = clamp(vec2i(floor(vec2f(ndc.x * 0.5 + 0.5, 0.5 - ndc.y * 0.5) * F.size.xy)), vec2i(0), vec2i(F.size.xy) - 1);
+        }
+      }
+      if (ok) {
+        let dq = textureLoad(depthPrev, q, 0);
+        ok = dq > 0.0;
+        if (ok) {
+          let xq = prevWorldAt(q, dq);
+          let tol = 2.0 * distance(x, F.eye.xyz) * F.rc.y + 0.005;
+          ok = distance(x, xq) < tol && dot(n, textureLoad(normalPrev, q, 0).xyz) > 0.9;
+        }
+      }
+      let oq = (u32(q.y) * u32(F.size.x) + u32(q.x)) * ${MX_WORDS}u;
+      if (ok) {
+        for (var i = 0u; i < 10u; i++) { s[i] = bitcast<f32>(stPrev[oq + i]); }
+        sbad = stPrev[oq + 10u];
+      } else { sbad = 1u; }
+      s[2] += abs(l - s[0]); s[0] = l;
+      s[5] += abs(c - s[3]); s[3] = c;
+      s[8] += abs(E - s[6]); s[6] = E; s[9] += E;
+    }
+    if (bad) { sbad = 1u; }
+    for (var i = 0u; i < 10u; i++) { st[o + i] = bitcast<u32>(s[i]); }
+    st[o + 10u] = sbad;
+    if (last) {
+      var hc = vec3f(0.0);
+      if (sbad == 0u) {
+        let ex = max(s[2] - abs(l - s[1]), 0.0);
+        a = vec4f(s[2], ex, s[5], max(s[5] - abs(c - s[4]), 0.0));
+        b = vec4f(max(s[8] - abs(E - s[7]), 0.0), s[8], s[9] / 16.0, 0.0);
+        atomicAdd(&wn, 1u);
+        hc = heatColor(clamp(ex / 15.0 / 0.1, 0.0, 1.0));
+      }
+      textureStore(heat, px, vec4f(hc, 1.0));
+    }
+  }
+  wa[li] = a; wb[li] = b;
+  workgroupBarrier();
+  for (var s2 = 32u; s2 > 0u; s2 >>= 1u) {
+    if (li < s2) { wa[li] += wa[li + s2]; wb[li] += wb[li + s2]; }
+    workgroupBarrier();
+  }
+  if (li == 0u) {
+    let nw = atomicLoad(&wn);
+    if (nw > 0u) {
+      let c0 = k * ${MEXCESS_SLOT}u;
+      atomicAdd(&counters[c0], nw);
+      for (var i = 0u; i < 4u; i++) { atomicAdd(&counters[c0 + 1u + i], u32(round(wa[0][i] * SCALE))); }
+      for (var i = 0u; i < 3u; i++) { atomicAdd(&counters[c0 + 5u + i], u32(round(wb[0][i] * ${EXCESS_LIN_SCALE}.0))); }
+    }
+  }
+}
+`;
+
 // Map of the mean K = 16 excess per frame: 0 grey, 0.1 stop per frame and above white through red and yellow
 // (black: a dynamic object or invalid at some point of the run).
 const EXCESS_MAP_WGSL = /* wgsl */ `
@@ -305,6 +426,22 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
     { binding: 0, resource: { buffer: exState } }, { binding: 1, resource: heat.createView() }, { binding: 2, resource: { buffer: mapUniform } },
   ] });
 
+  const mxState = [0, 1].map((i) => device.createBuffer({ label: `mexcess.state${i}`, size: width * height * MX_WORDS * 4, usage: GPUBufferUsage.STORAGE }));
+  const mxCounters = device.createBuffer({ label: 'mexcess.counters', size: maxSlots * MEXCESS_SLOT * 4,
+    usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
+  const mxHeat = device.createTexture({ label: 'mexcess.heat', size: [width, height], format: 'rgba8unorm',
+    usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.COPY_SRC });
+  const mxm = device.createShaderModule({ code: MEXCESS_WGSL, label: 'mexcess' });
+  const mxPipe = device.createComputePipeline({ layout: 'auto', compute: { module: mxm, entryPoint: 'mexcess' } });
+  const mxBG = [0, 1].map((i) => device.createBindGroup({ layout: mxPipe.getBindGroupLayout(0), entries: [
+    { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: g.depth.createView() },
+    { binding: 2, resource: g.normal.createView() }, { binding: 3, resource: irr.createView() },
+    { binding: 4, resource: depthPrev.createView() }, { binding: 5, resource: normalPrev.createView() },
+    { binding: 6, resource: { buffer: mxState[1 - i] } }, { binding: 7, resource: { buffer: mxState[i] } },
+    { binding: 8, resource: { buffer: mxCounters } }, { binding: 9, resource: mxHeat.createView() },
+  ] }));
+  let mxParity = 0;
+
   const readU32 = async (src: GPUBuffer, bytes: number) => {
     const read = device.createBuffer({ size: bytes, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
     const enc = device.createCommandEncoder();
@@ -326,6 +463,15 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
       pass.end();
     },
     readExcess: (slots: number) => readU32(exCounters, slots * EXCESS_SLOT * 4),
+    /** Excess variation along reprojected chains (before encodeFlicker, which replaces the previous frame). */
+    encodeChainExcess(enc: GPUCommandEncoder) {
+      const pass = enc.beginComputePass({ label: 'mexcess' });
+      pass.setPipeline(mxPipe); pass.setBindGroup(0, mxBG[mxParity]);
+      pass.dispatchWorkgroups(Math.ceil(width / 8), Math.ceil(height / 8));
+      pass.end();
+      mxParity = 1 - mxParity;
+    },
+    readChainExcess: (slots: number) => readU32(mxCounters, slots * MEXCESS_SLOT * 4),
     /** Writes the excess map (mean K = 16 excess per frame over `windows` windows) into the heatmap texture. */
     encodeExcessMap(windows: number) {
       device.queue.writeBuffer(mapUniform, 0, new Float32Array([width, 1 / Math.max(windows * 15, 1), 0, 0]));
@@ -350,14 +496,15 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
     clearCounters() {
       device.queue.writeBuffer(counters, 0, new Uint8Array(maxSlots * FLICKER_SLOT * 4));
       device.queue.writeBuffer(exCounters, 0, new Uint8Array(maxSlots * EXCESS_SLOT * 4));
+      device.queue.writeBuffer(mxCounters, 0, new Uint8Array(maxSlots * MEXCESS_SLOT * 4));
       const enc = device.createCommandEncoder();
       enc.clearBuffer(exState);
       device.queue.submit([enc.finish()]);
     },
-    destroy() { for (const b of [counters, exState, exCounters, mapUniform]) b.destroy(); for (const t of [out, depthPrev, normalPrev, irrPrev, heat]) t.destroy(); },
+    destroy() { for (const b of [counters, exState, exCounters, mapUniform, ...mxState, mxCounters]) b.destroy(); for (const t of [out, depthPrev, normalPrev, irrPrev, heat, mxHeat]) t.destroy(); },
     /** Mode 0: final (direct + indirect), 1: indirect irradiance on a 0.8 albedo, 2: direct only,
      * 3: flicker heatmap of the last measured frame (red: fine band changed, yellow: on a toon pixel, grey: valid),
-     * or the excess map after encodeExcessMap. Tightly packed RGBA8. */
+     * or the excess map after encodeExcessMap; 4: the chain excess map of the last K = 16 window. Tightly packed RGBA8. */
     async capture(mode: number): Promise<Uint8Array> {
       const enc = device.createCommandEncoder();
       if (mode < 3) {
@@ -368,7 +515,7 @@ export function createPost(device: GPUDevice, g: GBuffer, frame: GPUBuffer, lit:
       }
       const bytesPerRow = Math.ceil(width * 4 / 256) * 256;
       const readback = device.createBuffer({ size: bytesPerRow * height, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
-      enc.copyTextureToBuffer({ texture: mode < 3 ? out : heat }, { buffer: readback, bytesPerRow }, [width, height]);
+      enc.copyTextureToBuffer({ texture: mode < 3 ? out : mode === 3 ? heat : mxHeat }, { buffer: readback, bytesPerRow }, [width, height]);
       device.queue.submit([enc.finish()]);
       await readback.mapAsync(GPUMapMode.READ);
       const src = new Uint8Array(readback.getMappedRange());

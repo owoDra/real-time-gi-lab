@@ -27,7 +27,7 @@ import type { GBuffer } from './gbuffer.ts';
 import { SHADE_WGSL, type WorldResources } from './rc.ts';
 import { STYLE_WGSL } from './style.ts';
 import type { Vec3 } from './math.ts';
-import { DYN_READ_WGSL } from './dynlayer.ts';
+import { DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
 import { VOX_TRACE_WGSL } from './voxel.ts';
 
 export interface DdgiParams {
@@ -465,7 +465,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
   ] });
   const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2] });
   const P = Object.fromEntries(['clearCounts', 'classify', 'writeArgs', 'update', 'gather'].map((e) =>
-    [e, device.createComputePipeline({ label: `ddgi.${e}`, layout: pl, compute: { module, entryPoint: e } })]));
+    [e, device.createComputePipeline({ label: `ddgi.${e}`, layout: pl, compute: { module, entryPoint: e, constants: dynConstants(world.dynBricks) } })]));
   const bg0 = device.createBindGroup({ layout: bgl0, entries: [
     { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: { buffer: uni } },
     { binding: 2, resource: g.depth.createView() }, { binding: 3, resource: g.normal.createView() },

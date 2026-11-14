@@ -91,8 +91,9 @@ function parseConfig(name: string): RcParams {
 }
 const parsed = configs.map((c) => [c, parseConfig(c)] as const);
 
-// Exploration only: beyond WebGPU's default limits (128 MiB bindings, 8 storage buffers per stage).
-const { device, adapterInfo } = await createNativeDevice({ maxStorageBufferBindingSize: 1 << 30, maxBufferSize: 1 << 30, maxStorageBuffersPerShaderStage: 16 });
+// WebGPU's default limits (128 MiB per binding, 256 MiB per buffer, 8 storage buffers per stage).
+const { device, adapterInfo } = await createNativeDevice();
+log(`limits: maxStorageBufferBindingSize ${device.limits.maxStorageBufferBindingSize}, maxBufferSize ${device.limits.maxBufferSize}, maxStorageBuffersPerShaderStage ${device.limits.maxStorageBuffersPerShaderStage}`);
 const t0 = performance.now();
 let spec: SceneSpec;
 let upload: Parameters<typeof uploadScene>[2] = async () => undefined;
@@ -108,6 +109,7 @@ else {
     : sceneName === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : sceneName === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
     : sceneName === 'sponza-dynobj-sunonly' ? dynamicSponza(base, true, -1, 'sun') : sceneName === 'sponza-dynobj-objectsonly' ? dynamicSponza(base, true, -1, 'objects')
     : sceneName === 'sponza-dynobj-sphereonly' ? dynamicSponza(base, true, -1, 'sphere')
+    : sceneName.startsWith('sponza-dynobj-many') ? dynamicSponza(base, true, -1, 'all', Number(sceneName.slice('sponza-dynobj-many'.length)))
     : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
     : (() => { throw new Error(`unknown scene ${sceneName}`); })();
 }
@@ -170,19 +172,23 @@ for (const [name, params] of parsed) {
     kind: 'exploratory (探索値)', date: new Date().toISOString(), platform: 'native', implementation: IMPLEMENTATION, adapter: adapterInfo,
     scene: { name: spec.name, triangles: spec.scene.triangleCount, sunDir: spec.sunDir }, resolution: `${ctx.width}x${ctx.height}`,
     frames: { warmup: opts.warmup, measured: opts.frames, inFlight: opts.inFlight, seedFixed: opts.seedFixed }, sky: opts.sky,
-    config: name, params: r.params, ddgiDims: r.ddgiDims, voxStaticBuildMs: staticBuildMs, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, hitRadBytes: r.hitRadBytes, bvh: ctx.bvh,
+    config: name, params: r.params, ddgiDims: r.ddgiDims, voxStaticBuildMs: staticBuildMs, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, voxPeakBytes: r.voxPeakBytes, dynAllocatedBytes: r.dynAllocatedBytes, hitRadBytes: r.hitRadBytes, bvh: ctx.bvh,
     voxParams: ctx.voxWorld?.params ?? null, static: strip(r.static), moving: strip(r.moving), tracer: r.tracer, leak,
   };
   const t = r.static.timing, m = r.moving?.timing;
   if (r.ddgiDims) log(`  ddgi grid ${r.ddgiDims.join('x')}; active, updated, relocated, stuck: ${r.static.counts.join(', ')}`);
   log(`  GI static ${t.giTotal.median} ms (vox ${t.vox?.median ?? '-'}, build ${t.giBuild.median}, trace ${t.giTrace.median}, merge ${t.giMerge.median}, gather ${t.giGather.median})` + (m ? `; moving ${m.giTotal.median} ms` : ''));
   log(`  probes ${r.static.counts.join(', ')}; used ${(r.static.usedBytes / 2 ** 20).toFixed(1)} MiB, allocated ${(r.allocatedBytes / 2 ** 20).toFixed(1)} MiB`);
+  const M = (b: number) => (b / 2 ** 20).toFixed(1);
+  log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes + r.hitRadBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} [peak while building ${M(r.voxPeakBytes)}], dyn ${M(r.dynAllocatedBytes)}, p1 ${M(r.hitRadBytes)})`);
   if (r.static.vox) log(`  vox ${JSON.stringify(r.static.vox)}`);
   if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
   if (leak) log(`  leak ${JSON.stringify(leak)}`);
   log(`  flicker static ${JSON.stringify(r.static.flicker)}`);
   log(`  excess static ${JSON.stringify(r.static.excess)}`);
+  log(`  chain excess static ${JSON.stringify(r.static.chainExcess)}`);
   if (r.moving) log(`  flicker moving ${JSON.stringify(r.moving.flicker)}`);
+  if (r.moving) log(`  chain excess moving ${JSON.stringify(r.moving.chainExcess)}`);
 }
 // Irradiance against the triangle tracer (same probes, same intervals), static camera.
 // The reference uses the same probe relocation when the run has one (same probe positions).

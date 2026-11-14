@@ -243,7 +243,7 @@ function groundAt(s: SceneData, x: number, z: number, top: number) {
 /** Sponza with toon objects on the atrium floor ahead of the camera, along the moving camera's path (which walks
  * 6 m forward): an orange sphere, a blue ring facing the camera and a green capsule figure with a head. With
  * photoreal = true the same objects get photoreal materials (style 0). */
-export function toonSponza(base: SceneData, photoreal = false, withDynamic = false): SceneSpec {
+export function toonSponza(base: SceneData, photoreal = false, withDynamic = false, groups = 1): SceneSpec {
   const cam = s0Camera(base);
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
@@ -251,11 +251,15 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
     const p = add3(add3(cam.eye, scale3(f, ahead)), scale3(side, aside));
     return [p[0], groundAt(base, p[0], p[2], cam.eye[1]) + y, p[2]];
   };
-  const objects: { mat: MaterialDesc; mesh: ReturnType<typeof surface>[]; pivot?: Vec3 }[] = [
-    { mat: toonMaterial('toon-orange', [0.75, 0.28, 0.06]), mesh: [sphere(at(5, 1.0, 0.7), 0.7)] },
-    { mat: toonMaterial('toon-blue', [0.12, 0.25, 0.8]), mesh: [torus(at(7, -1.0, 0.95), f, 0.7, 0.25)] },
-    { mat: toonMaterial('toon-green', [0.15, 0.65, 0.18]), mesh: [capsule(at(9.5, 0.3, 0), 0.35, 1.4), sphere(at(9.5, 0.3, 1.73), 0.33)] },
-  ];
+  // Groups (stress scenes): group g is moved g * 16 / groups m along the view, odd groups mirrored sideways.
+  const objects: { mat: MaterialDesc; mesh: ReturnType<typeof surface>[]; pivot?: Vec3 }[] = [];
+  for (let g = 0; g < groups; g++) {
+    const a = g * 16 / groups, m = g % 2 ? -1 : 1;
+    objects.push(
+      { mat: toonMaterial('toon-orange', [0.75, 0.28, 0.06]), mesh: [sphere(at(5 + a, 1.0 * m, 0.7), 0.7)] },
+      { mat: toonMaterial('toon-blue', [0.12, 0.25, 0.8]), mesh: [torus(at(7 + a, -1.0 * m, 0.95), f, 0.7, 0.25)] },
+      { mat: toonMaterial('toon-green', [0.15, 0.65, 0.18]), mesh: [capsule(at(9.5 + a, 0.3 * m, 0), 0.35, 1.4), sphere(at(9.5 + a, 0.3 * m, 1.73), 0.33)] });
+  }
   const pos = Array.from(base.positions), nrm = Array.from(base.normals), idx = Array.from(base.indices);
   const materials = base.materials.slice(), primitives = base.primitives.slice();
   const dynObjects: DynamicObject[] = [];
@@ -290,9 +294,10 @@ export function toonSponza(base: SceneData, photoreal = false, withDynamic = fal
  * and the sun swings by about +-20 degrees along the atrium and a little across it (its lit patches move over the
  * floor and the walls in view; a larger swing across the narrow atrium puts the whole visible floor in shadow).
  * Optional light switch for R1: from frame switchAt the sun jumps to another direction. only: 'sun' or 'objects' moves
- * just those; 'sphere' moves the sphere alone (the ring and the figure stay at rest, still dynamic triangles). */
-export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1, only: 'all' | 'sun' | 'objects' | 'sphere' = 'all'): SceneSpec {
-  const s = toonSponza(base, photoreal, true);
+ * just those; 'sphere' moves the sphere alone (the ring and the figure stay at rest, still dynamic triangles).
+ * groups > 1 (stress scenes sponza-dynobj-many<N>): N copies of the three objects, see toonSponza. */
+export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1, only: 'all' | 'sun' | 'objects' | 'sphere' = 'all', groups = 1): SceneSpec {
+  const s = toonSponza(base, photoreal, true, groups);
   const cam = s.camera;
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
@@ -305,12 +310,16 @@ export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1,
   };
   d.at = (t: number) => ({
     sunDir: sun(t), sunScale: 1,
-    poses: switchAt >= 0 || only === 'sun' ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) : [
-      { rotY: 0, offset: scale3(side, -1.6 * Math.sin(2 * Math.PI * t / 240)) },
-      { rotY: only === 'sphere' ? 0 : 2 * Math.PI * t / 320, offset: [0, 0, 0] },
-      { rotY: 0, offset: only === 'sphere' ? [0, 0, 0] : scale3(f, 1.5 * Math.sin(2 * Math.PI * t / 160)) },
-    ],
+    // Group g runs 37 g frames ahead, mirrored sideways when odd.
+    poses: switchAt >= 0 || only === 'sun' ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) : Array.from({ length: groups }, (_, g) => {
+      const tg = t + 37 * g, m = g % 2 ? -1 : 1;
+      return [
+        { rotY: 0, offset: scale3(side, -1.6 * m * Math.sin(2 * Math.PI * tg / 240)) },
+        { rotY: only === 'sphere' ? 0 : 2 * Math.PI * tg / 320, offset: [0, 0, 0] as Vec3 },
+        { rotY: 0, offset: only === 'sphere' ? [0, 0, 0] as Vec3 : scale3(f, 1.5 * Math.sin(2 * Math.PI * tg / 160)) },
+      ];
+    }).flat(),
   });
-  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '');
+  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '') + (only !== 'all' ? `-${only}only` : '') + (groups > 1 ? `-many${groups}` : '');
   return { ...s, name, sunDir: sun(0), dynamic: d };
 }

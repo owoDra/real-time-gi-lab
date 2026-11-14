@@ -1,11 +1,11 @@
 // Radiance-cascade runner (S1, S2): G-buffer + sun + voxel rebuild + radiance cascades, a static and a moving
 // camera, GPU timestamps per pass, the band-boundary flicker counters, tracer statistics and captures.
-import { buildBvh, refitBvh, type Bvh } from './bvh.ts';
+import { buildBvh, bvhGpuLayout, refitBvh, type Bvh } from './bvh.ts';
 import { cameraMatrices, FRAME_BYTES, octSolidAngles, packFrame, type Camera, type FrameParams } from './frame.ts';
 import { createGBuffer, createGBufferRenderer, type GBuffer } from './gbuffer.ts';
 import { createLighting, type Lighting } from './lighting.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
-import { createPost, EXCESS_K, EXCESS_LIN_SCALE, EXCESS_SCALE, EXCESS_SLOT, FLICKER_FIELDS, FLICKER_SLOT } from './post.ts';
+import { createPost, EXCESS_K, EXCESS_LIN_SCALE, EXCESS_SCALE, EXCESS_SLOT, FLICKER_FIELDS, FLICKER_SLOT, MEXCESS_SLOT } from './post.ts';
 import { createDdgi } from './ddgi.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
@@ -44,26 +44,26 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const dynLayer = voxWorld ? createDynLayer(device, gpu, tri, voxWorld.uniform, frame, lighting.shadow, voxWorld.params,
     spec.dynamic?.firstTriangle ?? spec.scene.triangleCount, spec.scene.triangleCount) : null;
   let bvh: RunContext['bvh'] = null, refit: RunContext['refitBvh'] = null;
-  let bvhNodes = dummy(), bvhTris = dummy();
+  let bvhBuf = dummy();
   if (opts.bvh) {
     const b = buildBvh(spec.scene, table);
-    bvhNodes = device.createBuffer({ label: 'bvh.nodes', size: b.nodes.byteLength, usage: S });
-    bvhTris = device.createBuffer({ label: 'bvh.tris', size: b.tris.byteLength, usage: S });
-    device.queue.writeBuffer(bvhNodes, 0, b.nodes); device.queue.writeBuffer(bvhTris, 0, b.tris);
-    bvh = { buildMs: Math.round(b.buildMs), bytes: b.nodes.byteLength + b.tris.byteLength, nodes: b.nodeCount };
+    const L = bvhGpuLayout(b);
+    bvhBuf = device.createBuffer({ label: 'bvh', size: L.bytes, usage: S });
+    device.queue.writeBuffer(bvhBuf, 0, L.header); device.queue.writeBuffer(bvhBuf, L.nodesOff, b.nodes); device.queue.writeBuffer(bvhBuf, L.trisOff, b.tris);
+    bvh = { buildMs: Math.round(b.buildMs), bytes: L.bytes, nodes: b.nodeCount };
     if (spec.dynamic) {
-      const P = spec.scene.positions.slice(), firstTri = spec.dynamic.firstTriangle, nodesBuf = bvhNodes, trisBuf = bvhTris, bb: Bvh = b;
+      const P = spec.scene.positions.slice(), firstTri = spec.dynamic.firstTriangle, buf = bvhBuf, bb: Bvh = b;
       refit = (first, pos) => {
         P.set(pos, first * 3);
         refitBvh(bb, P, table, firstTri);
-        device.queue.writeBuffer(nodesBuf, 0, bb.nodes);
-        device.queue.writeBuffer(trisBuf, 0, bb.tris);
+        device.queue.writeBuffer(buf, L.nodesOff, bb.nodes);
+        device.queue.writeBuffer(buf, L.trisOff, bb.tris);
       };
     }
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
-  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvhNodes, bvhTris, materials: gpu.materials,
-    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device) }; // P1: runConfig binds the layer for configs with p1
+  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvh: bvhBuf, materials: gpu.materials,
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device), dynBricks: voxWorld?.params.dynBricks ?? 256 }; // P1: runConfig binds the layer for configs with p1
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
     width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit };
 }
@@ -75,6 +75,8 @@ export async function buildStatic(ctx: RunContext, p1: boolean): Promise<number 
   ctx.voxWorld.update(ctx.spec.camera.eye);
   const ms = await ctx.voxWorld.buildStatic();
   if (p1) ctx.hitRad = await createHitRad(ctx.device, ctx.voxWorld, ctx.frame, ctx.lighting.shadow);
+  await ctx.device.queue.onSubmittedWorkDone();
+  ctx.voxWorld.releaseBuildTemp();
   return ms;
 }
 
@@ -253,6 +255,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
         ? { querySet, beginningOfPassWriteIndex: k * Q + 2 * pass, endOfPassWriteIndex: k * Q + 2 * pass + 1 } as T : undefined;
       const enc = device.createCommandEncoder();
       encodeFrame(enc, tw);
+      post.encodeChainExcess(enc);
       post.encodeFlicker(enc);
       if (mode === 'static') post.encodeExcess(enc);
       device.queue.submit([enc.finish()]);
@@ -331,13 +334,23 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       // Relative to the mean irradiance (per frame): sum excess / sum window mean / 15.
       excess.k16linear = { excessRelPerFrame: lm ? r5(le / lm / 15) : null, tvRelPerFrame: lm ? r5(lt / lm / 15) : null, meanIrradiance: excess.k16.pixelWindows ? r5(lm / EXCESS_LIN_SCALE / excess.k16.pixelWindows) : null };
     }
+    // Excess along reprojected chains (K = 16; on the static camera it equals excess.k16).
+    const mx = await post.readChainExcess(opts.frames);
+    const ms = new Array(MEXCESS_SLOT).fill(0);
+    for (let k = 0; k < opts.frames; k++) for (let j = 0; j < MEXCESS_SLOT; j++) ms[j] += mx[k * MEXCESS_SLOT + j];
+    const r5c = (x: number) => Math.round(x * 1e5) / 1e5;
+    const perC = (s: number) => ms[0] ? r5c(s / EXCESS_SCALE / ms[0] / 15) : null;
+    const chainExcess = { windows: Math.floor(opts.frames / 16), pixelWindows: ms[0], pixelWindowsPerWindow: Math.round(ms[0] / Math.max(Math.floor(opts.frames / 16), 1)),
+      excessPerFrame: perC(ms[2]), tvPerFrame: perC(ms[1]), controlExcessPerFrame: perC(ms[4]), controlTvPerFrame: perC(ms[3]),
+      excessRelPerFrame: ms[7] ? r5c(ms[5] / ms[7] / 15) : null, tvRelPerFrame: ms[7] ? r5c(ms[6] / ms[7] / 15) : null };
     const counts = await rc.readCounts();
     const vox = useVox ? { ...await voxWorld!.readCounters(), dyn: await ctx.dynLayer!.readCounters() } : null;
     const images: Record<string, Uint8Array> = {};
     for (const [name, m] of [['final', 0], ['indirect', 1], ['direct', 2], ['flicker', 3]] as const) images[name] = await post.capture(m);
     if (mode === 'static') { post.encodeExcessMap(Math.floor(opts.frames / 16)); images.excess = await post.capture(3); }
+    else images.excess = await post.capture(4);
     const irr = mode === 'static' ? await readIrradiance(device, rc.irr, width, height) : null;
-    return { timing, flicker, excess, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
+    return { timing, flicker, excess, chainExcess, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
       insertFailures: Array.from(counts.slice(16, 16 + p.cascades)), usedBytes: rc.usedBytes(counts),
       vox: vox ? { ...vox, ...voxWorld!.usedBytes(vox) } : null, images, irr };
   }
@@ -401,7 +414,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
   rc.destroy(); post.destroy(); querySet.destroy();
-  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: p.p1 ? ctx.hitRad!.bytes : 0, static: st, moving: mv, tracer };
+  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, voxPeakBytes: useVox ? voxWorld!.peakBytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: p.p1 ? ctx.hitRad!.bytes : 0, static: st, moving: mv, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */

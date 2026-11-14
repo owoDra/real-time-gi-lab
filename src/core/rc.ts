@@ -20,7 +20,7 @@ import { FRAME_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
 import type { DdgiParams } from './ddgi.ts';
 import type { GBuffer } from './gbuffer.ts';
-import { DYN_READ_WGSL } from './dynlayer.ts';
+import { DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
 import { HIT_READ_WGSL } from './hitrad.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
 
@@ -31,9 +31,10 @@ export type Relocate = 'gbuffer' | 'voxel' | 'none';
 
 /** S2: resources of the world-space tracers (bound in group 3). */
 export interface WorldResources {
-  voxUniform: GPUBuffer; vox: GPUBuffer; dyn: GPUBuffer; bvhNodes: GPUBuffer; bvhTris: GPUBuffer;
+  voxUniform: GPUBuffer; vox: GPUBuffer; dyn: GPUBuffer; bvh: GPUBuffer;
   materials: GPUBuffer; baseColor: GPUTexture; shadow: GPUTexture; hasVox: boolean; hasBvh: boolean;
   hr: GPUBuffer; // P1 hit radiance (hitrad.ts), or an empty buffer
+  dynBricks: number; // brick pool of the dynamic layer (pipeline constant of the dynamic layer's read side)
 }
 
 export interface RcParams {
@@ -152,8 +153,7 @@ struct Probe { pos: vec4f, nrm: vec4f, grid: vec4i } // pos.w = s0 (0: invalid),
 struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(0) var<uniform> VX: VoxU;
 @group(3) @binding(1) var<storage, read> vox: array<u32>;
-@group(3) @binding(2) var<storage, read> bvhNodes: array<BvhNode>;
-@group(3) @binding(3) var<storage, read> bvhTris: array<vec4f>;
+@group(3) @binding(2) var<storage, read> bvh: array<vec4f>; // triangle BVH (bvh.ts, bvhGpuLayout)
 @group(3) @binding(4) var<storage, read> materials: array<Material>;
 @group(3) @binding(5) var baseColorTex: texture_2d_array<f32>;
 @group(3) @binding(6) var linSamp: sampler;
@@ -905,6 +905,29 @@ export interface Rc {
 
 export const RC_PASSES = ['giBuild', 'giTrace', 'giMerge', 'giGather'] as const;
 
+/** Which of `names` (module-scope resources) each entry point of a WGSL module uses, following its calls. A use is the
+ * name as a word not after a dot (field accesses do not count). */
+export function wgslUses(code: string, entries: string[], names: string[]): Record<string, Set<string>> {
+  const body: Record<string, string> = {};
+  const re = /\bfn\s+(\w+)\s*\(/g;
+  for (let m; (m = re.exec(code));) {
+    let i = code.indexOf('{', m.index), depth = 0, j = i;
+    for (; j < code.length; j++) { if (code[j] === '{') depth++; else if (code[j] === '}' && --depth === 0) break; }
+    body[m[1]] = code.slice(i, j + 1);
+  }
+  const words = (t: string) => new Set(Array.from(t.matchAll(/(?<![.\w])([A-Za-z_]\w*)/g), (x) => x[1]));
+  return Object.fromEntries(entries.map((e) => {
+    const seen = new Set<string>([e]), todo = [e], out = new Set<string>();
+    while (todo.length) {
+      for (const w of words(body[todo.pop()!] ?? '')) {
+        if (names.includes(w)) out.add(w);
+        if (body[w] !== undefined && !seen.has(w)) { seen.add(w); todo.push(w); }
+      }
+    }
+    return [e, out];
+  }));
+}
+
 export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: GPUBuffer, params: RcParams, world: WorldResources): Rc {
   const { width, height } = g;
   const N = params.cascades;
@@ -972,18 +995,39 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 6, visibility: C, texture: { sampleType: 'unfilterable-float' } },
   ] });
   const bgl1 = device.createBindGroupLayout({ entries: [{ binding: 0, visibility: C, buffer: { type: 'uniform' } }] });
-  const bgl2 = device.createBindGroupLayout({ entries: Array.from({ length: 8 }, (_, i) => ({ binding: i, visibility: C, buffer: { type: 'storage' as const } })) });
+  // Groups 2 and 3: each entry point's layout holds only the storage buffers it uses (WebGPU's default limit is 8
+  // storage buffers per stage; all of them together are 13).
   const RO = (binding: number) => ({ binding, visibility: C, buffer: { type: 'read-only-storage' as const } });
-  const bgl3 = device.createBindGroupLayout({ entries: [
-    { binding: 0, visibility: C, buffer: { type: 'uniform' } }, RO(1), RO(2), RO(3), RO(4),
+  const g3Fixed: GPUBindGroupLayoutEntry[] = [
+    { binding: 0, visibility: C, buffer: { type: 'uniform' } },
     { binding: 5, visibility: C, texture: { viewDimension: '2d-array' } }, { binding: 6, visibility: C, sampler: {} },
-    { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } }, RO(9), RO(10),
-  ] });
+    { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
+  ];
+  const G2 = ['keys', 'slotProbe', 'probes', 'rad', 'sh', 'counts', 'accum', 'parents'];
+  const G3: Record<string, number> = { vox: 1, bvh: 2, materials: 4, dyn: 9, hr: 10 };
+  const g2Bufs = [keys, slotProbe, probes, rad, sh, counts, accum, parents];
+  const g3Bufs: Record<number, GPUBuffer> = { 1: world.vox, 2: world.bvh, 4: world.materials, 9: world.dyn, 10: world.hr };
+  const g3Res: Record<number, GPUBindingResource> = {
+    0: { buffer: world.voxUniform }, 5: world.baseColor.createView({ dimension: '2d-array' }),
+    6: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }),
+    7: world.shadow.createView(), 8: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }),
+  };
   const module = device.createShaderModule({ code: RC_WGSL, label: 'rc' });
-  const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3] });
-  const pipe = (entryPoint: string) => device.createComputePipeline({ label: entryPoint, layout: pl, compute: { module, entryPoint } });
-  const P = Object.fromEntries(['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'relocateVox', 'linkParents', 'setupScreen', 'trace', 'deposit',
-    'resolve', 'mergeWorld', 'mergeScreen', 'projectSH', 'gatherWorld', 'gatherScreen'].map((e) => [e, pipe(e)]));
+  const ENTRIES = ['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'relocateVox', 'linkParents', 'setupScreen', 'trace', 'deposit',
+    'resolve', 'mergeWorld', 'mergeScreen', 'projectSH', 'gatherWorld', 'gatherScreen'];
+  const used = wgslUses(RC_WGSL, ENTRIES, [...G2, ...Object.keys(G3)]);
+  const P: Record<string, GPUComputePipeline> = {}, bg2: Record<string, GPUBindGroup> = {}, bg3: Record<string, GPUBindGroup> = {};
+  for (const e of ENTRIES) {
+    const b2 = G2.map((_, i) => i).filter((i) => used[e].has(G2[i]));
+    const b3 = Object.entries(G3).filter(([n]) => used[e].has(n)).map(([, b]) => b);
+    const bgl2 = device.createBindGroupLayout({ entries: b2.map((i) => ({ binding: i, visibility: C, buffer: { type: 'storage' as const } })) });
+    const bgl3 = device.createBindGroupLayout({ entries: [...g3Fixed, ...b3.map(RO)] });
+    const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2, bgl3] });
+    P[e] = device.createComputePipeline({ label: e, layout, compute: { module, entryPoint: e, constants: dynConstants(world.dynBricks) } });
+    bg2[e] = device.createBindGroup({ layout: bgl2, entries: b2.map((i) => ({ binding: i, resource: { buffer: g2Bufs[i] } })) });
+    bg3[e] = device.createBindGroup({ layout: bgl3, entries: [...Object.entries(g3Res).map(([b, resource]) => ({ binding: Number(b), resource })),
+      ...b3.map((b) => ({ binding: b, resource: { buffer: g3Bufs[b] } }))] });
+  }
   const argsModule = device.createShaderModule({ code: ARGS_WGSL, label: 'rc.args' });
   const argsPipe = device.createComputePipeline({ label: 'writeArgs', layout: 'auto', compute: { module: argsModule, entryPoint: 'writeArgs' } });
 
@@ -994,15 +1038,6 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 6, resource: g.albedo.createView() },
   ] });
   const bg1 = ci.map((b) => device.createBindGroup({ layout: bgl1, entries: [{ binding: 0, resource: { buffer: b } }] }));
-  const bg2 = device.createBindGroup({ layout: bgl2, entries: [keys, slotProbe, probes, rad, sh, counts, accum, parents].map((b, i) => ({ binding: i, resource: { buffer: b } })) });
-  const bg3 = device.createBindGroup({ layout: bgl3, entries: [
-    { binding: 0, resource: { buffer: world.voxUniform } }, { binding: 1, resource: { buffer: world.vox } },
-    { binding: 2, resource: { buffer: world.bvhNodes } }, { binding: 3, resource: { buffer: world.bvhTris } },
-    { binding: 4, resource: { buffer: world.materials } }, { binding: 5, resource: world.baseColor.createView({ dimension: '2d-array' }) },
-    { binding: 6, resource: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }) },
-    { binding: 7, resource: world.shadow.createView() }, { binding: 8, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
-    { binding: 9, resource: { buffer: world.dyn } }, { binding: 10, resource: { buffer: world.hr } },
-  ] });
   const argsBG0 = device.createBindGroup({ layout: argsPipe.getBindGroupLayout(0), entries: [
     { binding: 0, resource: { buffer: layoutBuf } }, { binding: 1, resource: { buffer: counts } }, { binding: 2, resource: { buffer: args } },
   ] });
@@ -1013,7 +1048,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     if (groups > 0) pass.dispatchWorkgroups(x, Math.ceil(groups / x));
   };
   const use = (pass: GPUComputePassEncoder, name: string, c: number) => {
-    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[c]); pass.setBindGroup(2, bg2); pass.setBindGroup(3, bg3);
+    pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[c]); pass.setBindGroup(2, bg2[name]); pass.setBindGroup(3, bg3[name]);
   };
   const writeArgs = (pass: GPUComputePassEncoder, c: number) => {
     pass.setPipeline(argsPipe); pass.setBindGroup(0, argsBG0); pass.setBindGroup(1, argsBG1[c]); pass.dispatchWorkgroups(1);

@@ -29,14 +29,17 @@ import type { SceneGpu } from './scene_gpu.ts';
 import { STYLE_WGSL } from './style.ts';
 import { VOX_STRUCT_WGSL, type VoxParams } from './voxel.ts';
 
+/** Default brick pool of the dynamic layer (VoxParams.dynBricks; the shaders take it as the override constant DYN_MAX_BRICKS). */
 export const DYN_MAX_BRICKS = 256;
+/** Pipeline constants for a pool other than the default (none for the default). */
+export const dynConstants = (n: number): Record<string, number> | undefined => n === DYN_MAX_BRICKS ? undefined : { DYN_MAX_BRICKS: n };
 const HDR = 64;
 const WORDS = 10; // per voxel: P+x P-x P+y P-y P+z P-z, area, area x radiance (rgb)
 const FIX = 65536;
 
 /** Read side, shared by the RC and DDGI tracers. Needs VX (VoxU), voxSize, voxG, voxLevelFor, dyn (array<u32>). */
 export const DYN_READ_WGSL = /* wgsl */ `
-const DYN_MAX_BRICKS = ${DYN_MAX_BRICKS}u;
+override DYN_MAX_BRICKS: u32 = ${DYN_MAX_BRICKS}u;
 fn dynPtrOff() -> u32 { return ${HDR}u; }
 fn dynDataOff() -> u32 { let G = u32(VX.a.z); return ${HDR}u + u32(VX.a.y) * G * G * G + DYN_MAX_BRICKS; }
 // Data base of the voxel of level L at p, or 0xffffffff.
@@ -132,12 +135,12 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(0) @binding(12) var shadowTex: texture_depth_2d;
 @group(0) @binding(13) var shadowCmp: sampler_comparison;
 
-const MAXB = ${DYN_MAX_BRICKS}u;
+override DYN_MAX_BRICKS: u32 = ${DYN_MAX_BRICKS}u;
 const W = ${WORDS}u;
 const FIX = ${FIX}.0;
 fn ptrCount() -> u32 { let G = u32(VX.a.z); return u32(VX.a.y) * G * G * G; }
 fn metaOff() -> u32 { return ${HDR}u + ptrCount(); }
-fn dataOff() -> u32 { return metaOff() + MAXB; }
+fn dataOff() -> u32 { return metaOff() + DYN_MAX_BRICKS; }
 fn lin(wid: vec3u, nwg: vec3u, li: u32) -> u32 { return (wid.y * nwg.x + wid.x) * 64u + li; }
 fn P(i: u32) -> vec3f { return vec3f(positions[i * 3u], positions[i * 3u + 1u], positions[i * 3u + 2u]); }
 fn N(i: u32) -> vec3f { return vec3f(normals[i * 3u], normals[i * 3u + 1u], normals[i * 3u + 2u]); }
@@ -162,14 +165,14 @@ fn sunVis(x: vec3f) -> f32 {
 
 @compute @workgroup_size(64) fn reset(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
-  if (i >= min(atomicLoad(&dyn[8]), MAXB)) { return; }
+  if (i >= min(atomicLoad(&dyn[8]), DYN_MAX_BRICKS)) { return; }
   atomicStore(&dyn[${HDR}u + atomicLoad(&dyn[metaOff() + i])], 0xffffffffu);
 }
 @compute @workgroup_size(1) fn begin() {
   atomicStore(&dyn[0], 0u); atomicStore(&dyn[1], 0u); atomicStore(&dyn[9], 0u);
   for (var k = 2u; k < 5u; k++) { atomicStore(&dyn[k], 0xffffffffu); atomicStore(&dyn[k + 3u], 0u); }
 }
-@compute @workgroup_size(1) fn end() { atomicStore(&dyn[8], min(atomicLoad(&dyn[0]), MAXB)); }
+@compute @workgroup_size(1) fn end() { atomicStore(&dyn[8], min(atomicLoad(&dyn[0]), DYN_MAX_BRICKS)); }
 
 fn claim(L: u32, b: vec3i) {
   let pi = ptrIndex(L, b);
@@ -180,7 +183,7 @@ fn claim(L: u32, b: vec3i) {
     if (q.old_value != 0xffffffffu) { return; }
   }
   let idx = atomicAdd(&dyn[0], 1u);
-  if (idx >= MAXB) { atomicAdd(&dyn[1], 1u); atomicStore(&dyn[${HDR}u + pi], 0xffffffffu); return; }
+  if (idx >= DYN_MAX_BRICKS) { atomicAdd(&dyn[1], 1u); atomicStore(&dyn[${HDR}u + pi], 0xffffffffu); return; }
   atomicStore(&dyn[metaOff() + idx], pi);
   atomicStore(&dyn[${HDR}u + pi], idx);
 }
@@ -208,7 +211,7 @@ fn claim(L: u32, b: vec3i) {
 }
 @compute @workgroup_size(64) fn clear(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
-  if (i / 512u >= min(atomicLoad(&dyn[0]), MAXB)) { return; }
+  if (i / 512u >= min(atomicLoad(&dyn[0]), DYN_MAX_BRICKS)) { return; }
   for (var k = 0u; k < W; k++) { atomicStore(&dyn[dataOff() + i * W + k], 0u); }
 }
 
@@ -228,7 +231,7 @@ fn splatSample(L: u32, p: vec3f, n: vec3f, area: f32, rad: vec3f) {
     let w = tw.x * tw.y * tw.z * s;
     if (w <= 0.0) { continue; }
     let ptr = atomicLoad(&dyn[${HDR}u + ptrIndex(L, c >> vec3u(3u))]);
-    if (ptr >= MAXB) { continue; }
+    if (ptr >= DYN_MAX_BRICKS) { continue; }
     let l = c & vec3i(7);
     let base = dataOff() + (ptr * 512u + u32(l.x + 8 * l.y + 64 * l.z)) * W;
     addFix(base, 0u, w * pn.x); addFix(base, 1u, w * nn.x);
@@ -282,7 +285,7 @@ fn shadeSample(m: Material, p: vec3f, n: vec3f, uv: vec2f, L: u32) -> vec4f {
 @compute @workgroup_size(64) fn resolve(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
   let bi = i / 512u;
-  if (bi >= min(atomicLoad(&dyn[0]), MAXB)) { return; }
+  if (bi >= min(atomicLoad(&dyn[0]), DYN_MAX_BRICKS)) { return; }
   let L = DL.z;
   let G = u32(VX.a.z);
   let pi = atomicLoad(&dyn[metaOff() + bi]);
@@ -299,7 +302,7 @@ fn shadeSample(m: Material, p: vec3f, n: vec3f, uv: vec2f, L: u32) -> vec4f {
       let cc = gc + vec3i(i32(q & 1u), i32((q >> 1u) & 1u), i32(q >> 2u));
       if (any(cc < vec3i(0)) || any(cc >= vec3i(i32(G) * 8))) { continue; }
       let ptr = atomicLoad(&dyn[${HDR}u + ptrIndex(L - 1u, cc >> vec3u(3u))]);
-      if (ptr >= MAXB) { continue; }
+      if (ptr >= DYN_MAX_BRICKS) { continue; }
       let l = cc & vec3i(7);
       let cb = dataOff() + (ptr * 512u + u32(l.x + 8 * l.y + 64 * l.z)) * W;
       for (var k = 0u; k < W; k++) { acc[k] += 0.25 * bitcast<f32>(atomicLoad(&dyn[cb + k])); }
@@ -322,7 +325,8 @@ export interface DynLayer {
 export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer, voxUniform: GPUBuffer, frame: GPUBuffer, shadow: GPUTexture,
   vp: VoxParams, firstDynamicTri: number, triangleCount: number): DynLayer {
   const ptrCount = vp.levels * vp.G ** 3;
-  const words = HDR + ptrCount + DYN_MAX_BRICKS + DYN_MAX_BRICKS * 512 * WORDS;
+  const NB = vp.dynBricks;
+  const words = HDR + ptrCount + NB + NB * 512 * WORDS;
   const buffer = device.createBuffer({ label: 'dyn', size: words * 4, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST | GPUBufferUsage.COPY_SRC });
   const init = new Uint32Array(HDR + ptrCount);
   init.fill(0xffffffff, HDR);
@@ -338,7 +342,7 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
   const module = device.createShaderModule({ code: BUILD_WGSL, label: 'dyn.build' });
   const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl] });
   const pipes = Object.fromEntries(['reset', 'begin', 'mark', 'clear', 'splat', 'resolve', 'end'].map((e) =>
-    [e, device.createComputePipeline({ label: `dyn.${e}`, layout, compute: { module, entryPoint: e } })]));
+    [e, device.createComputePipeline({ label: `dyn.${e}`, layout, compute: { module, entryPoint: e, constants: dynConstants(NB) } })]));
   const sampler = device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' });
   const cmp = device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' });
   const uni = Array.from({ length: vp.levels }, (_, L) => {
@@ -363,12 +367,12 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
     buffer, bytes: buffer.size,
     encode(pass) {
       if (nDyn <= 0) return;
-      use(pass, 'reset'); lin(pass, DYN_MAX_BRICKS);
+      use(pass, 'reset'); lin(pass, NB);
       use(pass, 'begin'); pass.dispatchWorkgroups(1);
       use(pass, 'mark'); lin(pass, nDyn);
-      use(pass, 'clear'); lin(pass, DYN_MAX_BRICKS * 512);
+      use(pass, 'clear'); lin(pass, NB * 512);
       use(pass, 'splat'); lin(pass, nDyn);
-      for (let L = 0; L < vp.levels; L++) { use(pass, 'resolve', L); lin(pass, DYN_MAX_BRICKS * 512); }
+      for (let L = 0; L < vp.levels; L++) { use(pass, 'resolve', L); lin(pass, NB * 512); }
       use(pass, 'end'); pass.dispatchWorkgroups(1);
     },
     async readCounters() {

@@ -30,8 +30,9 @@ export interface VoxParams {
   // otherwise they are rebuilt every frame.
   anchor: 'camera' | 'scene';
   local: boolean;
+  dynBricks: number; // P2: brick pool of the dynamic layer (dynlayer.ts), all levels
 }
-export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 1 << 15, maxVoxels: 4 << 20, anchor: 'camera', local: false };
+export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 1 << 15, maxVoxels: 4 << 20, anchor: 'camera', local: false, dynBricks: 256 };
 
 const HDR = 64;        // counter words at the start of the vox buffer
 export const BRICK_WORDS = 18; // 16 occupancy words, first attribute, level and brick coordinates
@@ -434,7 +435,10 @@ export interface VoxWorld {
   params: VoxParams;
   vox: GPUBuffer;
   uniform: GPUBuffer;
-  bytes: number;           // allocated
+  bytes: number;           // allocated now (after releaseBuildTemp: without the build temporaries)
+  peakBytes: number;       // allocated with the build temporaries
+  /** Local: frees the build temporaries (vox.rep, vox.big) once the static bricks are built; nothing uses them after. */
+  releaseBuildTemp(): void;
   update(eye: [number, number, number]): void;
   /** Local: voxelises the static triangles once (call after the first update, before encoding frames). */
   buildStatic(): Promise<number>;
@@ -504,7 +508,8 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
     if (g > 0) pass.dispatchWorkgroups(x, Math.ceil(g / x));
   };
   const use = (pass: GPUComputePassEncoder, name: string) => { pass.setPipeline(pipes[name]); pass.setBindGroup(0, bgs[name]); };
-  const bytes = vox.size + repBuf.size + big.size + args.size + uniform.size;
+  const peakBytes = vox.size + repBuf.size + big.size + args.size + uniform.size;
+  let bytes = peakBytes;
   const stage = (pass: GPUComputePassEncoder, st: typeof VOX_STAGES[number], tris = T) => {
     switch (st) {
       case 'clear': use(pass, 'clear'); lin(pass, Math.max(NL * G ** 3, HDR)); break;
@@ -548,7 +553,13 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
   const stages = params.local ? [] : VOX_STAGES;
 
   return {
-    params, vox, uniform, bytes,
+    params, vox, uniform, peakBytes,
+    get bytes() { return bytes; },
+    releaseBuildTemp() {
+      if (!params.local || bytes < peakBytes) return;
+      repBuf.destroy(); big.destroy();
+      bytes = peakBytes - repBuf.size - big.size;
+    },
     update(eye) {
       lastEye = params.anchor === 'scene' ? centre : eye;
       writeUniform(lastEye, T);

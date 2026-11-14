@@ -139,9 +139,20 @@ export function refitBvh(b: Bvh, P: Float32Array, triTable: Uint32Array, firstTr
   }
 }
 
-/** Needs bvhNodes, bvhTris (array<vec4f>), materials, baseColorTex, linSamp and voxShade-like triShade. */
+/** GPU layout of bvhGpu: one array<vec4f> (fewer storage buffers per stage): word 0 the vec4 index of the first triangle,
+ * then the nodes from vec4 1 (2 per node), then the triangles (4 per triangle). */
+export function bvhGpuLayout(b: { nodes: Float32Array; tris: Float32Array }) {
+  const nodesOff = 16, trisOff = 16 + b.nodes.byteLength;
+  return { nodesOff, trisOff, bytes: trisOff + b.tris.byteLength, header: new Uint32Array([trisOff / 16, 0, 0, 0]) };
+}
+
+/** Needs bvh (array<vec4f>, bvhGpuLayout), materials, baseColorTex, linSamp and voxShade-like triShade. */
 export const BVH_TRACE_WGSL = /* wgsl */ `
 struct BvhNode { mn: vec3f, a: u32, mx: vec3f, n: u32 }
+fn bvhNode(i: u32) -> BvhNode {
+  let p = bvh[1u + 2u * i]; let q = bvh[2u + 2u * i];
+  return BvhNode(p.xyz, bitcast<u32>(p.w), q.xyz, bitcast<u32>(q.w));
+}
 fn boxHit(mn: vec3f, mx: vec3f, o: vec3f, inv: vec3f, tMax: f32) -> f32 {
   let ta = (mn - o) * inv; let tb = (mx - o) * inv;
   let tn = max(max(min(ta.x, tb.x), min(ta.y, tb.y)), min(ta.z, tb.z));
@@ -153,11 +164,12 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
   var best = t1; var hit = 0xffffffffu; var hb = vec2f(0.0);
   var stack: array<u32, 40>; var sp = 0u;
   var ni = 0u;
+  let bvhTris = bitcast<u32>(bvh[0].x);
   for (var it = 0u; it < 4096u; it++) {
-    let nd = bvhNodes[ni];
+    let nd = bvhNode(ni);
     if (nd.n > 0u) {
       for (var k = nd.a; k < nd.a + nd.n; k++) {
-        let q0 = bvhTris[k * 4u]; let q1 = bvhTris[k * 4u + 1u]; let q2 = bvhTris[k * 4u + 2u];
+        let q0 = bvh[bvhTris + k * 4u]; let q1 = bvh[bvhTris + k * 4u + 1u]; let q2 = bvh[bvhTris + k * 4u + 2u];
         let e1 = q1.xyz; let e2 = q2.xyz;
         let pv = cross(d, e2);
         let det = dot(e1, pv);
@@ -173,7 +185,7 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
         if (t <= t0 || t >= best) { continue; }
         let m = materials[bitcast<u32>(q0.w)];
         if ((m.layers.w & 1u) != 0u) {
-          let q3 = bvhTris[k * 4u + 3u];
+          let q3 = bvh[bvhTris + k * 4u + 3u];
           let uv = vec2f(q1.w, q2.w) * (1.0 - u - v) + q3.xy * u + q3.zw * v;
           let a = textureSampleLevel(baseColorTex, linSamp, uv, m.layers.x, 3.0).a * m.baseColorFactor.a;
           if (a < m.params.z) { continue; }
@@ -184,7 +196,7 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
       sp--; ni = stack[sp];
       continue;
     }
-    let l = bvhNodes[nd.a]; let r = bvhNodes[nd.a + 1u];
+    let l = bvhNode(nd.a); let r = bvhNode(nd.a + 1u);
     let tl = boxHit(l.mn, l.mx, o, inv, best); let tr = boxHit(r.mn, r.mx, o, inv, best);
     if (tl > 1e29 && tr > 1e29) {
       if (sp == 0u) { break; }
@@ -197,7 +209,7 @@ fn traceTri(o: vec3f, d: vec3f, t0: f32, t1: f32) -> vec4f {
     ni = near;
   }
   if (hit == 0xffffffffu) { return vec4f(0.0, 0.0, 0.0, 1.0); }
-  let q0 = bvhTris[hit * 4u]; let q1 = bvhTris[hit * 4u + 1u]; let q2 = bvhTris[hit * 4u + 2u]; let q3 = bvhTris[hit * 4u + 3u];
+  let q0 = bvh[bvhTris + hit * 4u]; let q1 = bvh[bvhTris + hit * 4u + 1u]; let q2 = bvh[bvhTris + hit * 4u + 2u]; let q3 = bvh[bvhTris + hit * 4u + 3u];
   let m = materials[bitcast<u32>(q0.w)];
   let uv = vec2f(q1.w, q2.w) * (1.0 - hb.x - hb.y) + q3.xy * hb.x + q3.zw * hb.y;
   let alb = vec4f((textureSampleLevel(baseColorTex, linSamp, uv, m.layers.x, 3.0) * m.baseColorFactor).rgb, select(0.0, 1.0, (m.layers.w & 4u) != 0u));
