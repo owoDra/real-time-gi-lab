@@ -1,0 +1,460 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": 19,
+ "date": "2026-11-14",
+ "conditions": "native Dawn/Vulkan, 1920x1080, static camera and the scene's moving camera, no sky unless '-sky', warmup 60 + 240 frames, GPU timestamp medians, 1 run each (GPU shared with desktop apps). '-seq' runs capture images every 8 frames (timings disturbed, not used).",
+ "before": "commit c0393010 runner (dynBricks 256 for sponza-dynobj, 2048 for 64 objects)",
+ "after": "phase 18 runner (dynBricks 1536)",
+ "configs": {
+  "rc": "world-48-voxel-rc2-vrel --vox {anchor:scene,local:true}",
+  "p1": "world-48-voxel-rc2-vrel-p1",
+  "ddgi": "ddgi-75-128-u4-g1-noadapt"
+ },
+ "userCheck": "user OK on images (before/after indirect, final, excess maps, moving camera, cap 1024, sky, p1, DDGI, sequences)",
+ "referenceError_sponza-dynobj_pose0": {
+  "before": {
+   "meanAbsRel": 0.4482,
+   "bias": -0.058
+  },
+  "after": {
+   "meanAbsRel": 0.4482,
+   "bias": -0.0582
+  }
+ },
+ "imageDiff8bit": {
+  "sponza-dynobj.static.indirect": {
+   "meanAbs8bit": 0.021,
+   "fracOver8": 0
+  },
+  "sponza-dynobj.static.final": {
+   "meanAbs8bit": 0.005,
+   "fracOver8": 0
+  },
+  "sponza-dynobj.static.excess": {
+   "meanAbs8bit": 0.484,
+   "fracOver8": 0.00103
+  },
+  "sponza-dynobj.moving.indirect": {
+   "meanAbs8bit": 0.081,
+   "fracOver8": 0
+  },
+  "sponza-dynobj.moving.excess": {
+   "meanAbs8bit": 0.906,
+   "fracOver8": 0.02231
+  },
+  "sponza-dynobj-n64.static.indirect": {
+   "meanAbs8bit": 0.02,
+   "fracOver8": 0
+  },
+  "sponza-dynobj-n64.static.final": {
+   "meanAbs8bit": 0.006,
+   "fracOver8": 0
+  },
+  "sponza-dynobj-n64.static.excess": {
+   "meanAbs8bit": 0.398,
+   "fracOver8": 0.00135
+  },
+  "sponza-dynobj-n64.moving.indirect": {
+   "meanAbs8bit": 0.167,
+   "fracOver8": 0
+  },
+  "sponza-dynobj-n64.moving.excess": {
+   "meanAbs8bit": 0.452,
+   "fracOver8": 0.01422
+  },
+  "sponza-dynobj-n64-deform.static.indirect": {
+   "meanAbs8bit": 0.027,
+   "fracOver8": 0
+  },
+  "sponza-dynobj-n64-deform.static.final": {
+   "meanAbs8bit": 0.009,
+   "fracOver8": 0
+  },
+  "sponza-dynobj-n64-deform.static.excess": {
+   "meanAbs8bit": 0.372,
+   "fracOver8": 0.00084
+  },
+  "sponza-dynobj-n64-deform.moving.indirect": {
+   "meanAbs8bit": 0.229,
+   "fracOver8": 0
+  },
+  "sponza-dynobj-n64-deform.moving.excess": {
+   "meanAbs8bit": 0.286,
+   "fracOver8": 0.00422
+  },
+  "cap1024.static.indirect": {
+   "meanAbs8bit": 0.021,
+   "fracOver8": 0
+  },
+  "cap1024.static.final": {
+   "meanAbs8bit": 0.006,
+   "fracOver8": 0
+  },
+  "cap1024.static.excess": {
+   "meanAbs8bit": 0.406,
+   "fracOver8": 0.00136
+  },
+  "cap1024.moving.indirect": {
+   "meanAbs8bit": 0.167,
+   "fracOver8": 0
+  },
+  "cap1024.moving.excess": {
+   "meanAbs8bit": 0.452,
+   "fracOver8": 0.01422
+  },
+  "cap1024b.static.indirect": {
+   "meanAbs8bit": 0.021,
+   "fracOver8": 0
+  },
+  "cap1024b.static.final": {
+   "meanAbs8bit": 0.006,
+   "fracOver8": 0
+  },
+  "cap1024b.static.excess": {
+   "meanAbs8bit": 0.406,
+   "fracOver8": 0.00136
+  },
+  "cap1024b.moving.indirect": {
+   "meanAbs8bit": 0.167,
+   "fracOver8": 0
+  },
+  "cap1024b.moving.excess": {
+   "meanAbs8bit": 0.452,
+   "fracOver8": 0.01422
+  },
+  "drop.static.indirect": {
+   "meanAbs8bit": 0,
+   "fracOver8": 0
+  },
+  "drop.static.final": {
+   "meanAbs8bit": 0,
+   "fracOver8": 0
+  },
+  "drop.static.excess": {
+   "meanAbs8bit": 0.017,
+   "fracOver8": 0
+  },
+  "drop.moving.indirect": {
+   "meanAbs8bit": 0,
+   "fracOver8": 0
+  },
+  "drop.moving.excess": {
+   "meanAbs8bit": 0,
+   "fracOver8": 0
+  },
+  "sky.static.indirect": {
+   "meanAbs8bit": 0.021,
+   "fracOver8": 0
+  },
+  "sky.static.final": {
+   "meanAbs8bit": 0.006,
+   "fracOver8": 0
+  },
+  "sky.static.excess": {
+   "meanAbs8bit": 0.236,
+   "fracOver8": 0.0002
+  },
+  "sky.moving.indirect": {
+   "meanAbs8bit": 0.166,
+   "fracOver8": 0
+  },
+  "sky.moving.excess": {
+   "meanAbs8bit": 0.208,
+   "fracOver8": 0.00433
+  },
+  "p1.static.indirect": {
+   "meanAbs8bit": 0.021,
+   "fracOver8": 0
+  },
+  "p1.static.final": {
+   "meanAbs8bit": 0.006,
+   "fracOver8": 0
+  },
+  "p1.static.excess": {
+   "meanAbs8bit": 0.306,
+   "fracOver8": 0.00082
+  },
+  "p1.moving.indirect": {
+   "meanAbs8bit": 0.166,
+   "fracOver8": 0
+  },
+  "p1.moving.excess": {
+   "meanAbs8bit": 0.419,
+   "fracOver8": 0.01324
+  },
+  "ddgi.static.indirect": {
+   "meanAbs8bit": 0.006,
+   "fracOver8": 0
+  },
+  "ddgi.static.final": {
+   "meanAbs8bit": 0.002,
+   "fracOver8": 0
+  },
+  "ddgi.static.excess": {
+   "meanAbs8bit": 0.058,
+   "fracOver8": 0
+  },
+  "ddgi.moving.indirect": {
+   "meanAbs8bit": 0.06,
+   "fracOver8": 0
+  },
+  "ddgi.moving.excess": {
+   "meanAbs8bit": 0.059,
+   "fracOver8": 0
+  },
+  "pose0.static.indirect": {
+   "meanAbs8bit": 0.015,
+   "fracOver8": 0
+  },
+  "pose0.static.final": {
+   "meanAbs8bit": 0.003,
+   "fracOver8": 0
+  },
+  "pose0.static.excess": {
+   "meanAbs8bit": 0,
+   "fracOver8": 0
+  }
+ },
+ "runs": {
+  "after-sponza-dynobj": {
+   "gi": 3.31,
+   "vox": 0.115,
+   "giMoving": 2.841,
+   "allocMiB": 80.8,
+   "dynMiB": 35.4,
+   "excessK16": 0.01196,
+   "chainExcessMoving": 0.06466,
+   "flickerMovingFinePct": 25.35,
+   "dyn": {
+    "bricks": 101,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64": {
+   "gi": 3.834,
+   "vox": 0.679,
+   "giMoving": 3.679,
+   "allocMiB": 80.8,
+   "dynMiB": 35.4,
+   "excessK16": 0.00914,
+   "chainExcessMoving": 0.04766,
+   "flickerMovingFinePct": 21.531,
+   "dyn": {
+    "bricks": 1176,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64-cap1024a": {
+   "gi": 3.502,
+   "vox": 0.585,
+   "giMoving": 3.335,
+   "allocMiB": 70.7,
+   "dynMiB": 25.4,
+   "excessK16": 0.00914,
+   "chainExcessMoving": 0.04766,
+   "flickerMovingFinePct": 21.532,
+   "dyn": {
+    "bricks": 1024,
+    "brickOverflow": 152,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64-cap1024b": {
+   "gi": 3.644,
+   "vox": 0.607,
+   "giMoving": 3.373,
+   "allocMiB": 70.7,
+   "dynMiB": 25.4,
+   "excessK16": 0.00914,
+   "chainExcessMoving": 0.04766,
+   "flickerMovingFinePct": 21.532,
+   "dyn": {
+    "bricks": 1024,
+    "brickOverflow": 152,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64-ddgi": {
+   "gi": 4.6,
+   "vox": 0.686,
+   "giMoving": 4.457,
+   "allocMiB": 97.9,
+   "dynMiB": 35.4,
+   "excessK16": 0.00088,
+   "chainExcessMoving": 0.03006,
+   "flickerMovingFinePct": 13.148,
+   "dyn": {
+    "bricks": 1176,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64-deform": {
+   "gi": 3.724,
+   "vox": 0.702,
+   "giMoving": 3.544,
+   "allocMiB": 80.8,
+   "dynMiB": 35.4,
+   "excessK16": 0.00864,
+   "chainExcessMoving": 0.04643,
+   "flickerMovingFinePct": 22.286,
+   "dyn": {
+    "bricks": 1177,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64-p1": {
+   "gi": 4.146,
+   "vox": 1.018,
+   "giMoving": 4.033,
+   "allocMiB": 100,
+   "dynMiB": 35.4,
+   "excessK16": 0.0033,
+   "chainExcessMoving": 0.04201,
+   "flickerMovingFinePct": 20.183,
+   "dyn": {
+    "bricks": 1176,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "after-sponza-dynobj-n64-sky": {
+   "gi": 3.897,
+   "vox": 0.691,
+   "giMoving": 3.699,
+   "allocMiB": 80.8,
+   "dynMiB": 35.4,
+   "excessK16": 0.00635,
+   "chainExcessMoving": 0.0394,
+   "flickerMovingFinePct": 17.276,
+   "dyn": {
+    "bricks": 1176,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj": {
+   "gi": 3.732,
+   "vox": 0.314,
+   "giMoving": 2.856,
+   "allocMiB": 55.4,
+   "dynMiB": 10,
+   "excessK16": 0.01192,
+   "chainExcessMoving": 0.0646,
+   "flickerMovingFinePct": 25.312,
+   "dyn": {
+    "bricks": 112,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64": {
+   "gi": 6.686,
+   "vox": 3.527,
+   "giMoving": 5.414,
+   "allocMiB": 90.3,
+   "dynMiB": 45,
+   "excessK16": 0.00909,
+   "chainExcessMoving": 0.04759,
+   "flickerMovingFinePct": 21.501,
+   "dyn": {
+    "bricks": 1195,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64-cap1024a": {
+   "gi": 6.105,
+   "vox": 3.023,
+   "giMoving": 5.73,
+   "allocMiB": 70.3,
+   "dynMiB": 25,
+   "excessK16": 0.0091,
+   "chainExcessMoving": 0.04761,
+   "flickerMovingFinePct": 21.506,
+   "dyn": {
+    "bricks": 1024,
+    "brickOverflow": 1221,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64-cap1024b": {
+   "gi": 5.958,
+   "vox": 2.94,
+   "giMoving": 5.759,
+   "allocMiB": 70.3,
+   "dynMiB": 25,
+   "excessK16": 0.0091,
+   "chainExcessMoving": 0.0476,
+   "flickerMovingFinePct": 21.505,
+   "dyn": {
+    "bricks": 1024,
+    "brickOverflow": 1208,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64-ddgi": {
+   "gi": 7.79,
+   "vox": 3.764,
+   "giMoving": 6.261,
+   "allocMiB": 107.5,
+   "dynMiB": 45,
+   "excessK16": 0.00087,
+   "chainExcessMoving": 0.03006,
+   "flickerMovingFinePct": 13.148,
+   "dyn": {
+    "bricks": 1195,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64-deform": {
+   "gi": 5.75,
+   "vox": 2.972,
+   "giMoving": 5.574,
+   "allocMiB": 90.3,
+   "dynMiB": 45,
+   "excessK16": 0.0086,
+   "chainExcessMoving": 0.04635,
+   "flickerMovingFinePct": 22.269,
+   "dyn": {
+    "bricks": 1198,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64-p1": {
+   "gi": 7.114,
+   "vox": 3.879,
+   "giMoving": 5.704,
+   "allocMiB": 109.6,
+   "dynMiB": 45,
+   "excessK16": 0.00327,
+   "chainExcessMoving": 0.04192,
+   "flickerMovingFinePct": 20.156,
+   "dyn": {
+    "bricks": 1195,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  },
+  "before-sponza-dynobj-n64-sky": {
+   "gi": 6.837,
+   "vox": 3.599,
+   "giMoving": 5.359,
+   "allocMiB": 90.3,
+   "dynMiB": 45,
+   "excessK16": 0.00633,
+   "chainExcessMoving": 0.03937,
+   "flickerMovingFinePct": 17.255,
+   "dyn": {
+    "bricks": 1195,
+    "brickOverflow": 0,
+    "outside": 0
+   }
+  }
+ }
+}

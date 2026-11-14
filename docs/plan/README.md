@@ -109,7 +109,7 @@ built（できた物の確認）の進め方：
 
 | 列 | ディレクトリ | ブランチ | 内容 | 今のフェーズ |
 |---|---|---|---|---|
-| 大規模・高密度 | [`large-dense/`](large-dense/README.md) | `p2` | 動く物体 64 個（変形するメッシュを含む）を 4 ms に入れる、その後ワールドの窓のスクロールと三角形の多い場面で DDGI 系と比べる | 19 |
+| 大規模・高密度 | [`large-dense/`](large-dense/README.md) | `p2` | 動く物体 64 個（変形するメッシュを含む）を 4 ms に入れる（済）、その後ワールドの窓のスクロールと三角形の多い場面で DDGI 系と比べる | 20 |
 
 動的な安定性の列（Phase 01〜16）は 2026-11-14 に閉じた（[spec/40-dynamic-stability.md](../spec/40-dynamic-stability.md)）。
 この後の列（ブラウザ計測、WebGL2 ティア、確認実験）は [spec/50-roadmap.md](../spec/50-roadmap.md)
