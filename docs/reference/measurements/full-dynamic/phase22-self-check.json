@@ -1,0 +1,25 @@
+{
+  "kind": "exploratory (探索値)",
+  "phase": 22,
+  "date": "2026-11-15",
+  "note": "Phase 22 built check run by the AI without the user's look (user instruction 2026-11-15: human checks of phases 22-25 move to phase 26). 1920x1080, warmup 60 + 240 frames, no sky unless noted, one run each. Before = phase 20 runner (fixed window 0.1 m, or full rebuild 0.1 m for the building-change scenes).",
+  "sha256_default": { "sponza": "46340e742c859d78648d91da0ca6b65ee465c6cf8d06567faed154313d07e5d7", "sponza-dynobj_pose0": "12c808eef4c04fb1c0288fac772917302cc226ed2579967d433eff7708126d2c" },
+  "gi_ms_static_moving": {
+    "sponza-dynobj-n64-deform-bwave": { "rc": [3.54, 3.15], "ddgi": [4.715, 4.092], "rc_before": [6.226, 5.965], "ddgi_before": [6.577, 5.937] },
+    "sponza-dynobj-n64-deform-bcut": { "rc": [3.439, 3.086], "ddgi": [4.407, 4.197], "rc_before": [5.3, 5.365], "ddgi_before": [6.144, 5.316] },
+    "sponza-dynobj-n64-deform": { "rc": [3.421, 3.113], "ddgi": [4.706, 4.062], "rc_before_fixed": [3.791, 3.636] },
+    "sponza": { "rc": [2.769, 2.775], "ddgi": [3.808, 3.406], "rc_before_fixed": [2.68, 2.652] },
+    "sponza_sky": { "rc": [2.867, 2.81], "ddgi": [3.798, 3.32], "rc_before_fixed": [2.61, 2.579] },
+    "sponza-dyn": { "rc": [3.027, 2.916], "ddgi": [4.047, 3.556], "rc_before_fixed": [2.981, 2.992] }
+  },
+  "allocated_mib": { "bwave": { "rc": 70.3, "ddgi": 91.7 }, "bcut": { "rc": 70.8, "ddgi": 91.7 } },
+  "excess_k16_static": { "bwave": { "rc": 0.18193, "ddgi": 0.11437 }, "bcut": { "rc": 0.03315, "ddgi": 0.00298 } },
+  "moving_flicker_fine_pct": { "bwave": { "rc": 32.45, "ddgi": 24.33 }, "bcut": { "rc": 21.19, "ddgi": 13.29 } },
+  "ai_findings": [
+    "static camera: before and after indistinguishable at 1/3 size on all scenes; building changes show in shape, bounce light and shadow in both RC and DDGI sequences",
+    "moving camera: the black squares on the near curtains of the fixed-window 0.1 m runner are gone; indirect is softer near the camera",
+    "full size: more small black notches next to thin shapes (vase foot, arch soffits, behind column tops) with 0.2 m voxels",
+    "sky: the floor near the camera gets less sky fill than before (DDGI is also dark there); not checked against a reference",
+    "regressions carried: moving-camera flicker 15.8 -> 18.0 %, building-wave jumps RC 0.182 vs DDGI 0.114, DDGI over 4 ms"
+  ]
+}
