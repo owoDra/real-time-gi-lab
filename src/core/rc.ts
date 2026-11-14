@@ -18,6 +18,7 @@
 import { BVH_TRACE_WGSL } from './bvh.ts';
 import { FRAME_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
+import type { DdgiParams } from './ddgi.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
 
@@ -65,14 +66,41 @@ export interface RcParams {
   styleEmit: boolean;
   styleRecv: boolean;
   rampSoft: number;
+  // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
+  ddgi: DdgiParams | null;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0,
+  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null,
 };
+
+/** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
+ * shadowCmp and toonSun (style.ts). */
+export const SHADE_WGSL = /* wgsl */ `
+fn sunVis(x: vec3f) -> f32 {
+  let c = F.lightViewProj * vec4f(x, 1.0);
+  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
+  if (any(uv < vec2f(0.0)) || any(uv > vec2f(1.0))) { return 1.0; }
+  return textureSampleCompareLevel(shadowTex, shadowCmp, uv, c.z - 0.0002);
+}
+// One-bounce hit radiance, as the direct pass computes it (Lambert, sun, shadow map). The normal is turned to
+// face the ray; a zero normal (opposite faces averaged in one voxel) faces the ray.
+// S3: toon hits (alb.a = 1) inject the emission-side operator instead (style.ts).
+fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
+  var n = select(-d, n0, dot(n0, n0) > 0.01);
+  if (dot(n, d) > 0.0) { n = -n; }
+  let ndl = max(dot(n, F.sunDir.xyz), 0.0);
+  if (ndl <= 0.0) { return vec3f(0.0); }
+  let vis = sunVis(p + n * bias);
+  if (alb.a > 0.5 && F.style.x > 0.5) { return toonSun(alb.rgb, ndl, vis, F.sunE.rgb); }
+  return alb.rgb / PI * F.sunE.rgb * ndl * vis;
+}
+var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keeps hit distances)
+fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32) -> vec3f { voxHitEntry = entry; return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0); }
+`;
 
 const RC_WGSL = /* wgsl */ `
 ${FRAME_WGSL}
@@ -119,25 +147,7 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(7) var shadowTex: texture_depth_2d;
 @group(3) @binding(8) var shadowCmp: sampler_comparison;
 
-fn sunVis(x: vec3f) -> f32 {
-  let c = F.lightViewProj * vec4f(x, 1.0);
-  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
-  if (any(uv < vec2f(0.0)) || any(uv > vec2f(1.0))) { return 1.0; }
-  return textureSampleCompareLevel(shadowTex, shadowCmp, uv, c.z - 0.0002);
-}
-// One-bounce hit radiance, as the direct pass computes it (Lambert, sun, shadow map). The normal is turned to
-// face the ray; a zero normal (opposite faces averaged in one voxel) faces the ray.
-// S3: toon hits (alb.a = 1) inject the emission-side operator instead (style.ts).
-fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
-  var n = select(-d, n0, dot(n0, n0) > 0.01);
-  if (dot(n, d) > 0.0) { n = -n; }
-  let ndl = max(dot(n, F.sunDir.xyz), 0.0);
-  if (ndl <= 0.0) { return vec3f(0.0); }
-  let vis = sunVis(p + n * bias);
-  if (alb.a > 0.5 && F.style.x > 0.5) { return toonSun(alb.rgb, ndl, vis, F.sunE.rgb); }
-  return alb.rgb / PI * F.sunE.rgb * ndl * vis;
-}
-fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32) -> vec3f { return shadeHit(entry - d * (0.25 * v), n, alb, d, 0.0); }
+${SHADE_WGSL}
 fn triShade(p: vec3f, n: vec3f, alb: vec4f, d: vec3f) -> vec3f { return shadeHit(p, n, alb, d, 0.03); }
 ${VOX_TRACE_WGSL}
 ${BVH_TRACE_WGSL}

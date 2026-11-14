@@ -15,6 +15,37 @@ export interface SceneSpec {
   sunDir: Vec3;
   /** Leak scenes: every visible point is enclosed, so all indirect irradiance is leakage. */
   enclosed: boolean;
+  /** M1: fully dynamic scenes. Rigid objects (vertex ranges at the end of the vertex buffer; their triangles are
+   * the last ones of the triangle table, from firstTriangle on) and the sun move with the frame number. */
+  dynamic?: DynamicSpec;
+}
+
+export interface DynamicObject { firstVertex: number; vertexCount: number; pivot: Vec3; }
+export interface DynamicPose { sunDir: Vec3; sunScale: number; poses: { rotY: number; offset: Vec3 }[]; }
+export interface DynamicSpec {
+  firstTriangle: number;
+  objects: DynamicObject[];
+  /** Pose of every object (rotation about the vertical axis through its pivot, then a translation) and the sun. */
+  at(frame: number): DynamicPose;
+}
+
+/** Positions and normals of the dynamic vertices at a pose (rest data from `scene`), packed for the vertex buffers. */
+export function posedVertices(scene: SceneData, d: DynamicSpec, pose: DynamicPose) {
+  const first = d.objects[0].firstVertex;
+  const last = d.objects[d.objects.length - 1].firstVertex + d.objects[d.objects.length - 1].vertexCount;
+  const pos = new Float32Array((last - first) * 3), nrm = new Float32Array((last - first) * 3);
+  d.objects.forEach((o, i) => {
+    const { rotY, offset } = pose.poses[i];
+    const c = Math.cos(rotY), s = Math.sin(rotY);
+    for (let v = o.firstVertex; v < o.firstVertex + o.vertexCount; v++) {
+      const x = scene.positions[v * 3] - o.pivot[0], y = scene.positions[v * 3 + 1] - o.pivot[1], z = scene.positions[v * 3 + 2] - o.pivot[2];
+      const q = (v - first) * 3;
+      pos[q] = o.pivot[0] + c * x + s * z + offset[0]; pos[q + 1] = o.pivot[1] + y + offset[1]; pos[q + 2] = o.pivot[2] - s * x + c * z + offset[2];
+      const nx = scene.normals[v * 3], ny = scene.normals[v * 3 + 1], nz = scene.normals[v * 3 + 2];
+      nrm[q] = c * nx + s * nz; nrm[q + 1] = ny; nrm[q + 2] = -s * nx + c * nz;
+    }
+  });
+  return { first, pos, nrm };
 }
 
 export const SPONZA_SUN: Vec3 = [-0.15, 1, 0.1];
@@ -212,7 +243,7 @@ function groundAt(s: SceneData, x: number, z: number, top: number) {
 /** Sponza with toon objects on the atrium floor ahead of the camera, along the moving camera's path (which walks
  * 6 m forward): an orange sphere, a blue ring facing the camera and a green capsule figure with a head. With
  * photoreal = true the same objects get photoreal materials (style 0). */
-export function toonSponza(base: SceneData, photoreal = false): SceneSpec {
+export function toonSponza(base: SceneData, photoreal = false, withDynamic = false): SceneSpec {
   const cam = s0Camera(base);
   const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
@@ -220,21 +251,28 @@ export function toonSponza(base: SceneData, photoreal = false): SceneSpec {
     const p = add3(add3(cam.eye, scale3(f, ahead)), scale3(side, aside));
     return [p[0], groundAt(base, p[0], p[2], cam.eye[1]) + y, p[2]];
   };
-  const objects = [
+  const objects: { mat: MaterialDesc; mesh: ReturnType<typeof surface>[]; pivot?: Vec3 }[] = [
     { mat: toonMaterial('toon-orange', [0.75, 0.28, 0.06]), mesh: [sphere(at(5, 1.0, 0.7), 0.7)] },
     { mat: toonMaterial('toon-blue', [0.12, 0.25, 0.8]), mesh: [torus(at(7, -1.0, 0.95), f, 0.7, 0.25)] },
     { mat: toonMaterial('toon-green', [0.15, 0.65, 0.18]), mesh: [capsule(at(9.5, 0.3, 0), 0.35, 1.4), sphere(at(9.5, 0.3, 1.73), 0.33)] },
   ];
   const pos = Array.from(base.positions), nrm = Array.from(base.normals), idx = Array.from(base.indices);
   const materials = base.materials.slice(), primitives = base.primitives.slice();
+  const dynObjects: DynamicObject[] = [];
+  const firstTriangle = base.triangleCount;
   for (const o of objects) {
     const material = materials.length;
+    const firstVertex = pos.length / 3;
     materials.push(photoreal ? { ...o.mat, name: o.mat.name.replace('toon', 'plain'), style: 0, object: true } : o.mat);
     for (const m of o.mesh) {
       const baseVertex = pos.length / 3, firstIndex = idx.length;
       pos.push(...m.pos); nrm.push(...m.nrm); idx.push(...m.idx);
       primitives.push({ firstIndex, indexCount: m.idx.length, baseVertex, material });
     }
+    const vertexCount = pos.length / 3 - firstVertex;
+    let cx = 0, cz = 0, ymin = Infinity;
+    for (let v = firstVertex; v < firstVertex + vertexCount; v++) { cx += pos[v * 3]; cz += pos[v * 3 + 2]; ymin = Math.min(ymin, pos[v * 3 + 1]); }
+    dynObjects.push({ firstVertex, vertexCount, pivot: [cx / vertexCount, ymin, cz / vertexCount] });
   }
   const positions = new Float32Array(pos), V = positions.length / 3;
   const uvs = new Float32Array(V * 2), tangents = new Float32Array(V * 4);
@@ -242,5 +280,35 @@ export function toonSponza(base: SceneData, photoreal = false): SceneSpec {
   const [boundsMin, boundsMax] = bounds(positions);
   const scene: SceneData = { ...base, positions, normals: new Float32Array(nrm), uvs, tangents, indices: new Uint32Array(idx), primitives, materials,
     boundsMin, boundsMax, triangleCount: idx.length / 3 };
-  return { name: photoreal ? 'sponza-objects' : 'sponza-toon', scene, camera: cam, moving: true, sunDir: SPONZA_SUN, enclosed: false };
+  return { name: photoreal ? 'sponza-objects' : 'sponza-toon', scene, camera: cam, moving: true, sunDir: SPONZA_SUN, enclosed: false,
+    dynamic: !withDynamic ? undefined : { firstTriangle, objects: dynObjects, at: () => ({ sunDir: SPONZA_SUN, sunScale: 1, poses: dynObjects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) }) } };
+}
+
+/** M1: fully dynamic Sponza. The S3 objects (toon, or photoreal with photoreal = true) move on the atrium floor and
+ * the sun swings, all with the frame number t (periods of 160-400 frames, so a 240-frame run sees all of it):
+ * the sphere rolls sideways by +-1.6 m, the ring turns about the vertical, the figure walks +-1.5 m along the view
+ * and the sun swings by about +-20 degrees along the atrium and a little across it (its lit patches move over the
+ * floor and the walls in view; a larger swing across the narrow atrium puts the whole visible floor in shadow).
+ * Optional light switch for R1: from frame switchAt the sun jumps to another direction. */
+export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1): SceneSpec {
+  const s = toonSponza(base, photoreal, true);
+  const cam = s.camera;
+  const f = normalize([cam.target[0] - cam.eye[0], 0, cam.target[2] - cam.eye[2]]);
+  const side = normalize(cross(f, [0, 1, 0]));
+  const d = s.dynamic!;
+  const sun = (t: number): Vec3 => {
+    if (switchAt >= 0) return t < switchAt ? SPONZA_SUN : [0.45, 1, -0.25];
+    const a = 2 * Math.PI * t / 400;
+    return [-0.15 + 0.4 * Math.sin(a), 1, 0.1 + 0.08 * Math.sin(2 * a + 0.5)];
+  };
+  d.at = (t: number) => ({
+    sunDir: sun(t), sunScale: 1,
+    poses: switchAt >= 0 ? d.objects.map(() => ({ rotY: 0, offset: [0, 0, 0] as Vec3 })) : [
+      { rotY: 0, offset: scale3(side, -1.6 * Math.sin(2 * Math.PI * t / 240)) },
+      { rotY: 2 * Math.PI * t / 320, offset: [0, 0, 0] },
+      { rotY: 0, offset: scale3(f, 1.5 * Math.sin(2 * Math.PI * t / 160)) },
+    ],
+  });
+  const name = (photoreal ? 'sponza-dynobj' : 'sponza-dyn') + (switchAt >= 0 ? `-switch${switchAt}` : '');
+  return { ...s, name, sunDir: sun(0), dynamic: d };
 }

@@ -74,6 +74,8 @@ export interface Lighting {
   lit: GPUTexture;
   shadow: GPUTexture;
   lightViewProj: Mat4;
+  /** M1: moves the sun (shadow map projection); lightViewProj is updated in place. */
+  setSun(sunDir: Vec3): void;
   encodeShadow(enc: GPUCommandEncoder, tw?: GPURenderPassTimestampWrites): void;
   encodeDirect(enc: GPUCommandEncoder, tw?: GPUComputePassTimestampWrites): void;
   bytes: number;
@@ -83,9 +85,12 @@ export function createLighting(device: GPUDevice, scene: SceneData, gpu: SceneGp
   sunDir: Vec3, shadowSize = 4096): Lighting {
   const center = scale3(add3(scene.boundsMin, scene.boundsMax), 0.5);
   const radius = Math.hypot(...sub(scene.boundsMax, scene.boundsMin)) / 2;
-  const len = Math.hypot(...sunDir), dir = scale3(sunDir, 1 / len);
-  const up: Vec3 = Math.abs(dir[1]) > 0.99 ? [0, 0, 1] : [0, 1, 0];
-  const lightViewProj = mul(orthoZO(radius, radius, 0, 2 * radius), lookAt(add3(center, scale3(dir, radius)), center, up));
+  const sunMatrix = (sd: Vec3) => {
+    const dir = scale3(sd, 1 / Math.hypot(...sd));
+    const up: Vec3 = Math.abs(dir[1]) > 0.99 ? [0, 0, 1] : [0, 1, 0];
+    return mul(orthoZO(radius, radius, 0, 2 * radius), lookAt(add3(center, scale3(dir, radius)), center, up));
+  };
+  const lightViewProj = sunMatrix(sunDir);
 
   const shadow = device.createTexture({ label: 'shadow', size: [shadowSize, shadowSize], format: 'depth32float',
     usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.TEXTURE_BINDING });
@@ -120,6 +125,10 @@ export function createLighting(device: GPUDevice, scene: SceneData, gpu: SceneGp
   ] });
 
   return {
+    setSun(sd) {
+      lightViewProj.set(sunMatrix(sd));
+      device.queue.writeBuffer(lightBuf, 0, lightViewProj);
+    },
     lit, shadow, lightViewProj, bytes: shadowSize * shadowSize * 4 + g.width * g.height * 8,
     encodeShadow(enc, tw) {
       const pass = enc.beginRenderPass({ label: 'shadow', colorAttachments: [],

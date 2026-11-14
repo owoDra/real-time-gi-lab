@@ -6,10 +6,11 @@ import { createGBuffer, createGBufferRenderer, type GBuffer } from './gbuffer.ts
 import { createLighting, type Lighting } from './lighting.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
 import { createPost, FLICKER_FIELDS, FLICKER_SLOT } from './post.ts';
+import { createDdgi } from './ddgi.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
-import type { SceneSpec } from './scenes.ts';
-import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
+import { posedVertices, type SceneSpec } from './scenes.ts';
+import { createVoxWorld, DEFAULT_VOX, triangleTable, VOX_LOCAL_STAGES, VOX_STAGES, type VoxParams, type VoxWorld } from './voxel.ts';
 
 export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
 const Q = 16; // timestamp slots per frame
@@ -34,7 +35,7 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const table = triangleTable(spec.scene);
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
-  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }) : null;
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, { ...DEFAULT_VOX, ...opts.vox }, spec.dynamic?.firstTriangle) : null;
   let bvh: RunContext['bvh'] = null;
   let bvhNodes = dummy(), bvhTris = dummy();
   if (opts.bvh) {
@@ -119,17 +120,34 @@ export function compareIrradiance(a: { rgb: Float32Array; valid: Uint8Array; tag
     medianRel: r(percentile(rel, 0.5)), p90Rel: r(percentile(rel, 0.9)) };
 }
 
-export interface RunOptions { warmup: number; frames: number; inFlight: number; exposure: number; sky: Vec3; seedFixed?: boolean; staticOnly?: boolean; }
+export interface RunOptions { warmup: number; frames: number; inFlight: number; exposure: number; sky: Vec3; seedFixed?: boolean; staticOnly?: boolean;
+  /** Dynamic scenes: hold the objects and the sun at this frame's pose. */
+  poseFrame?: number;
+  /** R1: static camera only; read the irradiance of every frame from `from` to `to` (inclusive, warm-up counted as
+   * frame 0..) and return the response curve to a light switch at `from` (the scene's switch frame). */
+  response?: { from: number; to: number }; }
 
 export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOptions, log: (s: string) => void) {
   const { device, g, frame, lighting, gbuffer, spec, width, height, voxWorld } = ctx;
   if (opts.frames * Q > 4096) throw new Error('too many frames for one query set');
   const path = cameraPath(spec.camera);
   const static0 = spec.camera;
-  const useVox = params.world === 'voxel' || params.relocate === 'voxel';
+  const useVox = params.world === 'voxel' || params.relocate === 'voxel' || !!params.ddgi;
 
+  // M1: fully dynamic scenes pose their objects and the sun per frame (t counts every frame of a run, warm-up included).
+  let sunDir = spec.sunDir;
+  const pose = (t: number) => {
+    const d = spec.dynamic;
+    if (!d) return;
+    const ps = d.at(opts.poseFrame ?? t);
+    const v = posedVertices(spec.scene, d, ps);
+    device.queue.writeBuffer(ctx.gpu.positions, v.first * 12, v.pos);
+    device.queue.writeBuffer(ctx.gpu.normals, v.first * 12, v.nrm);
+    sunDir = ps.sunDir;
+    lighting.setSun(sunDir);
+  };
   const frameParams = (cam: Camera, prevCam: Camera, slot: number, prevValid: boolean, seed: number, p: RcParams): FrameParams => ({
-    cam, prevCam, lightViewProj: lighting.lightViewProj, width, height, sunDir: spec.sunDir, sunE: SUN_E, sky: opts.sky,
+    cam, prevCam, lightViewProj: lighting.lightViewProj, width, height, sunDir, sunE: SUN_E, sky: opts.sky,
     sMin: p.sMin, P: p.P, lift: p.lift, thicknessMin: p.thicknessMin, pxStride: p.pxStride, exposure: opts.exposure,
     cascades: p.cascades, slot, regStride: p.regStride, maxSteps: p.maxSteps, rayStride: p.rayStride, seed, prevValid, analytic: p.analytic, omega0: ctx.omega0,
     style: [p.styleEmit ? 1 : 0, p.styleRecv ? 1 : 0, p.rampSoft],
@@ -144,12 +162,13 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
 
   // Sizing: run the world-probe build along the path with generous caps and keep the largest counts.
   let caps = params.caps;
-  if (params.method !== 'screen') {
+  if (params.method !== 'screen' && !params.ddgi) {
     const sizing = createRc(device, g, lighting.lit, frame, { ...params, method: 'world', world: 'none', analytic: true, caps: DEFAULT_PARAMS.caps }, ctx.world);
     const maxCount = new Array(params.cascades).fill(0);
     let overflow = 0;
     for (let k = -1; k < (spec.moving ? 240 : 0); k += 12) {
       const cam = k < 0 ? static0 : path(k);
+      pose(Math.max(k, 0));
       device.queue.writeBuffer(frame, 0, packFrame(frameParams(cam, cam, 0, false, 0, params)));
       setCamera(cam);
       const enc = device.createCommandEncoder();
@@ -164,7 +183,8 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     log(`  sizing: max probes per cascade ${maxCount.join(', ')} -> caps ${caps.join(', ')}`);
   }
   const p = { ...params, caps };
-  const rc = createRc(device, g, lighting.lit, frame, p, ctx.world);
+  const rc = p.ddgi ? createDdgi(device, g, frame, p.ddgi, ctx.world, [spec.scene.boundsMin, spec.scene.boundsMax])
+    : createRc(device, g, lighting.lit, frame, p, ctx.world);
   const post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
   const querySet = device.createQuerySet({ type: 'timestamp', count: opts.frames * Q });
 
@@ -184,6 +204,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       const k = f - opts.warmup;
       const cam = mode === 'static' ? static0 : path(Math.max(k, 0));
       const seed = opts.seedFixed ? 1 : f + 1;
+      pose(f);
       device.queue.writeBuffer(frame, 0, packFrame(frameParams(cam, prev, Math.max(k, 0), k >= 1, seed, p)));
       setCamera(cam);
       prev = cam;
@@ -252,15 +273,16 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     const images: Record<string, Uint8Array> = {};
     for (const [name, m] of [['final', 0], ['indirect', 1], ['direct', 2], ['flicker', 3]] as const) images[name] = await post.capture(m);
     const irr = mode === 'static' ? await readIrradiance(device, rc.irr, width, height) : null;
-    return { timing, flicker, counts: Array.from(counts.slice(0, p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
+    return { timing, flicker, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
       insertFailures: Array.from(counts.slice(16, 16 + p.cascades)), usedBytes: rc.usedBytes(counts),
       vox: vox ? { ...vox, ...voxWorld!.usedBytes(vox) } : null, images, irr };
   }
 
   // Tracer statistics on the static camera: DDA steps per interval and, with a BVH, voxel / triangle visibility.
   async function traceStats() {
-    if (p.world !== 'voxel') return null;
+    if (p.world !== 'voxel' || p.ddgi) return null;
     rc.setStats(ctx.bvh ? 2 : 1);
+    pose(0);
     device.queue.writeBuffer(frame, 0, packFrame(frameParams(static0, static0, 0, false, 1, p)));
     setCamera(static0);
     const enc = device.createCommandEncoder();
@@ -276,20 +298,54 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     });
   }
 
+  // R1: response to a light switch (static camera). E_t is read every frame; the curve is
+  // sum |E_t - E_end| / sum |E_(from-1) - E_end| over photoreal pixels (luminance), E_end the last frame.
+  if (opts.response) {
+    const { from, to } = opts.response;
+    const lums: Float32Array[] = [];
+    let prev = static0;
+    for (let f = 0; f <= to; f++) {
+      pose(f);
+      device.queue.writeBuffer(frame, 0, packFrame(frameParams(static0, prev, 0, f > 0, f + 1, p)));
+      setCamera(static0);
+      const enc = device.createCommandEncoder();
+      encodeFrame(enc, () => undefined);
+      device.queue.submit([enc.finish()]);
+      if (f >= from - 1) {
+        const ir = await readIrradiance(device, rc.irr, width, height);
+        const l = new Float32Array(ir.valid.length);
+        for (let q = 0; q < l.length; q++) l[q] = ir.valid[q] && ir.tag[q] < 2 ? lum(ir.rgb[q * 3], ir.rgb[q * 3 + 1], ir.rgb[q * 3 + 2]) : NaN;
+        lums.push(l);
+      } else if (f % 8 === 7) await device.queue.onSubmittedWorkDone();
+    }
+    const end = lums[lums.length - 1], before = lums[0];
+    let d0 = 0;
+    for (let q = 0; q < end.length; q++) if (!Number.isNaN(end[q]) && !Number.isNaN(before[q])) d0 += Math.abs(before[q] - end[q]);
+    const curve = lums.slice(1).map((l) => {
+      let d = 0;
+      for (let q = 0; q < end.length; q++) if (!Number.isNaN(end[q]) && !Number.isNaN(l[q])) d += Math.abs(l[q] - end[q]);
+      return Math.round(d / d0 * 1e4) / 1e4;
+    });
+    const firstBelow = (x: number) => { const i = curve.findIndex((c, k) => c <= x && curve.slice(k).every((v) => v <= x)); return i < 0 ? null : i + 1; };
+    rc.destroy(); querySet.destroy();
+    return { params: p, response: { from, to, curve, frames90: firstBelow(0.1), frames50: firstBelow(0.5) } };
+  }
+
   log(`  static`);
   const st = await run('static');
   const tracer = await traceStats();
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
   rc.destroy(); querySet.destroy();
-  return { params: p, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, static: st, moving: mv, tracer };
+  return { params: p, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, static: st, moving: mv, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */
 export async function benchVoxels(ctx: RunContext, frames: number) {
   const { device, voxWorld, spec } = ctx;
   if (!voxWorld) throw new Error('no voxel world');
-  const n = VOX_STAGES.length * 2;
+  const names = voxWorld.params.local ? VOX_LOCAL_STAGES : VOX_STAGES;
+  const n = names.length * 2;
   const querySet = device.createQuerySet({ type: 'timestamp', count: frames * n });
   voxWorld.update(spec.camera.eye);
   for (let f = 0; f < 10 + frames; f++) {
@@ -309,10 +365,10 @@ export async function benchVoxels(ctx: RunContext, frames: number) {
   await read.mapAsync(GPUMapMode.READ);
   const ts = new BigUint64Array(read.getMappedRange().slice(0));
   read.unmap(); read.destroy(); resolveBuf.destroy(); querySet.destroy();
-  const per: Record<string, number[]> = Object.fromEntries([...VOX_STAGES, 'total'].map((s) => [s, []]));
+  const per: Record<string, number[]> = Object.fromEntries([...names, 'total'].map((s) => [s, []]));
   for (let f = 0; f < frames; f++) {
     let tot = 0;
-    VOX_STAGES.forEach((s, i) => { const ms = Number(ts[f * n + 2 * i + 1] - ts[f * n + 2 * i]) / 1e6; per[s].push(ms); tot += ms; });
+    names.forEach((s, i) => { const ms = Number(ts[f * n + 2 * i + 1] - ts[f * n + 2 * i]) / 1e6; per[s].push(ms); tot += ms; });
     per.total.push(tot);
   }
   const counters = await voxWorld.readCounters();

@@ -9,6 +9,12 @@
 // box overlap); alpha-masked materials are tested at the projected voxel centre. Everything is rebuilt from
 // the triangles every frame (an upper bound for a fully dynamic scene) and the result is deterministic.
 //
+// Header words: 0 bricks, 1 voxels, 2-4 overflows, 8-15 bricks per level, 16-31 big-triangle lists, 40 static bricks,
+// 41 static voxels, 42 end of last frame's dynamic bricks, 43 first brick of this build (0, or 40 in a local update).
+// Local update (M1): dynRestore (pointers of last frame's copies back to the static bricks) -> dynReset -> markDyn
+// (each brick a dynamic triangle overlaps gets a copy of its static brick: occupancy and representatives) ->
+// voxBits on the dynamic triangles -> allocVoxels / resolveAttr on the copies -> dynEnd. The representative rule
+// (highest triangle index) and the dynamic triangles being last make the result equal to a full rebuild.
 // Build: clear -> markBricks (per triangle and level, brick granularity) -> allocBricks -> clearKeys ->
 // voxBits (per triangle and level: bit + representative) -> allocVoxels -> resolveAttr (per occupied voxel).
 // In both triangle passes, triangles that cover more than 8 cells of a level go to a list processed one
@@ -22,8 +28,13 @@ export interface VoxParams {
   G: number;         // bricks per axis per level (clipmap)
   maxBricks: number; // brick pool, all levels
   maxVoxels: number; // voxel attribute pool, all levels
+  // M1: clipmap windows centred on the camera (S2) or fixed on the scene's centre (the window then never scrolls;
+  // scrolling updates are M2's streaming). local: static triangles are voxelised once and only the bricks that the
+  // dynamic triangles (the tail of the triangle table) touch are rebuilt every frame (needs anchor 'scene').
+  anchor: 'camera' | 'scene';
+  local: boolean;
 }
-export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 1 << 15, maxVoxels: 4 << 20 };
+export const DEFAULT_VOX: VoxParams = { v0: 0.1, levels: 5, G: 64, maxBricks: 1 << 15, maxVoxels: 4 << 20, anchor: 'camera', local: false };
 
 const HDR = 64;        // counter words at the start of the vox buffer
 export const BRICK_WORDS = 18; // 16 occupancy words, first attribute, level and brick coordinates
@@ -33,7 +44,7 @@ export const VOX_STRUCT_WGSL = /* wgsl */ `
 struct VoxU {
   a: vec4f,   // v0, levels, G, brick words
   b: vec4u,   // ptrOff, brickOff, attrOff, maxBricks
-  c: vec4u,   // maxVoxels, triangles, 0, 0
+  c: vec4u,   // maxVoxels, end of the triangles to voxelise, first triangle, static pointer copy offset (local update)
   origin: array<vec4i, 8>, // per level: first brick of the clipmap (world brick coordinates)
 }
 const VOX_EMPTY = 0xffffffffu;
@@ -248,7 +259,7 @@ fn markRange(T: Tri, L: u32, r: Range, start: u32, stride: u32) {
   }
 }
 @compute @workgroup_size(64) fn markBricks(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
-  let t = lin(wid, nwg, li);
+  let t = lin(wid, nwg, li) + VX.c.z;
   if (t >= VX.c.y) { return; }
   let T = loadTri(t);
   for (var L = 0u; L < u32(VX.a.y); L++) {
@@ -325,7 +336,7 @@ fn voxelizeSmall(t: u32) {
   }
 }
 @compute @workgroup_size(64) fn voxBits(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
-  voxelizeSmall(lin(wid, nwg, li));
+  voxelizeSmall(lin(wid, nwg, li) + VX.c.z);
 }
 // One workgroup per large (triangle, level); the level is in big's segment.
 fn voxelizeBig(wi: u32, li: u32) {
@@ -350,7 +361,7 @@ fn voxelizeBig(wi: u32, li: u32) {
 }
 
 @compute @workgroup_size(64) fn allocVoxels(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
-  let b = lin(wid, nwg, li);
+  let b = lin(wid, nwg, li) + atomicLoad(&vox[43]);
   if (b >= min(atomicLoad(&vox[0]), VX.b.w)) { return; }
   let base = VX.b.y + b * ${BRICK_WORDS}u;
   var n = 0u;
@@ -368,7 +379,7 @@ fn octEnc(n: vec3f) -> vec2f {
 // One thread per (brick, voxel slot): occupied voxels take albedo and normal from their representative.
 @compute @workgroup_size(64) fn resolveAttr(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
-  let ptr = i >> 9u; let bit = i & 511u;
+  let ptr = (i >> 9u) + atomicLoad(&vox[43]); let bit = i & 511u;
   if (ptr >= min(atomicLoad(&vox[0]), VX.b.w)) { return; }
   let base = VX.b.y + ptr * ${BRICK_WORDS}u;
   let w = bit >> 5u;
@@ -389,6 +400,84 @@ fn octEnc(n: vec3f) -> vec2f {
   atomicStore(&vox[VX.b.z + ai * 2u], pack4x8unorm(vec4f(s.albedo, s.toon)));
   atomicStore(&vox[VX.b.z + ai * 2u + 1u], pack2x16snorm(octEnc(s.n)));
 }
+
+// ---- local update (M1) ----
+fn ptrCount() -> u32 { let G = u32(VX.a.z); return u32(VX.a.y) * G * G * G; }
+// After the static build: keep the pointer grid and the counts.
+@compute @workgroup_size(64) fn snapStatic(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let i = lin(wid, nwg, li);
+  if (i < ptrCount()) {
+    atomicStore(&vox[VX.c.w + i], atomicLoad(&vox[VX.b.x + i]));
+    atomicStore(&vox[VX.c.w + ptrCount() + i], 0u);
+  }
+  if (i == 0u) {
+    let nb = min(atomicLoad(&vox[0]), VX.b.w);
+    atomicStore(&vox[40], nb); atomicStore(&vox[41], atomicLoad(&vox[1])); atomicStore(&vox[42], nb);
+  }
+}
+fn brickPtrIndex(b: u32) -> u32 {
+  let code = atomicLoad(&vox[VX.b.y + b * ${BRICK_WORDS}u + 17u]);
+  let G = u32(VX.a.z);
+  return (code >> 27u) * G * G * G + ((code & 511u) * G + ((code >> 9u) & 511u)) * G + ((code >> 18u) & 511u);
+}
+@compute @workgroup_size(64) fn dynRestore(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let b = lin(wid, nwg, li) + atomicLoad(&vox[40]);
+  if (b >= atomicLoad(&vox[42])) { return; }
+  let i = brickPtrIndex(b);
+  atomicStore(&vox[VX.b.x + i], atomicLoad(&vox[VX.c.w + i]));
+  atomicStore(&vox[VX.c.w + ptrCount() + i], 0u);
+}
+@compute @workgroup_size(1) fn dynReset() {
+  atomicStore(&vox[0], atomicLoad(&vox[40])); atomicStore(&vox[1], atomicLoad(&vox[41])); atomicStore(&vox[43], atomicLoad(&vox[40]));
+  for (var k = 2u; k < 5u; k++) { atomicStore(&vox[k], 0u); }
+  for (var k = 16u; k < 32u; k++) { atomicStore(&vox[k], 0u); }
+  big[0] = 0u;
+}
+@compute @workgroup_size(1) fn dynEnd() { atomicStore(&vox[42], min(atomicLoad(&vox[0]), VX.b.w)); }
+// The first thread to reach a brick copies its static content into a new brick and points the grid at the copy.
+fn claimBrick(L: u32, b: vec3i) {
+  let G = u32(VX.a.z);
+  let i = voxPtrIndex(L, b) - VX.b.x;
+  let di = VX.c.w + ptrCount() + i;
+  loop {
+    if (atomicLoad(&vox[di]) != 0u) { return; }
+    let r = atomicCompareExchangeWeak(&vox[di], 0u, 1u);
+    if (r.exchanged) { break; }
+    if (r.old_value != 0u) { return; }
+  }
+  let nb = atomicAdd(&vox[0], 1u);
+  if (nb >= VX.b.w) { atomicAdd(&vox[2], 1u); return; }
+  let sb = atomicLoad(&vox[VX.c.w + i]);
+  let dst = VX.b.y + nb * ${BRICK_WORDS}u;
+  for (var w = 0u; w < 16u; w++) {
+    atomicStore(&vox[dst + w], select(0u, atomicLoad(&vox[VX.b.y + sb * ${BRICK_WORDS}u + w]), sb < VOX_MARK));
+  }
+  atomicStore(&vox[dst + 16u], sb); // the static brick until allocVoxels; dynCopy copies its representatives
+  atomicStore(&vox[dst + 17u], (L << 27u) | (u32(b.x) << 18u) | (u32(b.y) << 9u) | u32(b.z));
+  atomicStore(&vox[VX.b.x + i], nb);
+}
+@compute @workgroup_size(64) fn dynCopy(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let i = lin(wid, nwg, li);
+  let nb = (i >> 9u) + atomicLoad(&vox[40]); let k = i & 511u;
+  if (nb >= min(atomicLoad(&vox[0]), VX.b.w)) { return; }
+  let sb = atomicLoad(&vox[VX.b.y + nb * ${BRICK_WORDS}u + 16u]);
+  atomicStore(&rep[nb * 512u + k], select(0u, atomicLoad(&rep[sb * 512u + k]), sb < VOX_MARK));
+}
+@compute @workgroup_size(64) fn markDyn(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let t = lin(wid, nwg, li) + VX.c.z;
+  if (t >= VX.c.y) { return; }
+  let T = loadTri(t);
+  for (var L = 0u; L < u32(VX.a.y); L++) {
+    let bs = voxSize(L) * 8.0;
+    let lo = regionLo(L);
+    let r = voxRange(T, L, bs);
+    let n = r.n.x * r.n.y * r.n.z;
+    for (var q = 0; q < n; q++) {
+      let b = r.lo + vec3i(q % r.n.x, (q / r.n.x) % r.n.y, q / (r.n.x * r.n.y));
+      if (n == 1 || triBox(lo + (vec3f(b) + 0.5) * bs, vec3f(0.5 * bs * 1.0001), T.a, T.b, T.c)) { claimBrick(L, b); }
+    }
+  }
+}
 `;
 
 const ARGS_WGSL = /* wgsl */ `
@@ -402,24 +491,29 @@ const BIG_CAP = 1u << 18u;
   for (var L = 0u; L < u32(VX.a.y); L++) { nb += min(vox[16u + L], BIG_CAP); }
   let x = min(nb, 65535u);
   args[0] = x; args[1] = select(0u, (nb + x - 1u) / max(x, 1u), x > 0u); args[2] = 1u;
-  let nv = (min(vox[0], VX.b.w) * 512u + 63u) / 64u;
+  let nb0 = min(vox[0], VX.b.w) - min(vox[43], min(vox[0], VX.b.w));
+  let nv = (nb0 * 512u + 63u) / 64u;
   let y = min(nv, 65535u);
   args[4] = y; args[5] = select(0u, (nv + y - 1u) / max(y, 1u), y > 0u); args[6] = 1u;
-  let nr = (min(vox[0], VX.b.w) * 512u + 63u) / 64u;
+  let nr = (nb0 * 512u + 63u) / 64u;
   let z = min(nr, 65535u);
   args[8] = z; args[9] = select(0u, (nr + z - 1u) / max(z, 1u), z > 0u); args[10] = 1u;
-  let na = (min(vox[0], VX.b.w) + 63u) / 64u;
+  let na = (nb0 + 63u) / 64u;
   let w = min(na, 65535u);
   args[12] = w; args[13] = select(0u, (na + w - 1u) / max(w, 1u), w > 0u); args[14] = 1u;
   var nm = 0u;
   for (var L = 0u; L < u32(VX.a.y); L++) { nm += min(vox[24u + L], BIG_CAP); }
   let m = min(nm, 65535u);
   args[16] = m; args[17] = select(0u, (nm + m - 1u) / max(m, 1u), m > 0u); args[18] = 1u;
+  let nd = (vox[42] - min(vox[40], vox[42]) + 63u) / 64u;
+  let q = min(nd, 65535u);
+  args[20] = q; args[21] = select(0u, (nd + q - 1u) / max(q, 1u), q > 0u); args[22] = 1u;
 }
 
 `;
 
 export const VOX_STAGES = ['clear', 'markBricks', 'allocBricks', 'voxBits', 'allocVoxels', 'resolve'] as const;
+export const VOX_LOCAL_STAGES = ['restore', 'markDyn', 'voxBitsDyn', 'allocDyn', 'resolveDyn'] as const;
 
 export interface VoxWorld {
   params: VoxParams;
@@ -427,6 +521,8 @@ export interface VoxWorld {
   uniform: GPUBuffer;
   bytes: number;           // allocated
   update(eye: [number, number, number]): void;
+  /** Local update: voxelises the static triangles once (call after the first update, before encoding frames). */
+  buildStatic(): Promise<number>;
   encode(enc: GPUCommandEncoder, tw?: GPUComputePassTimestampWrites): void;
   /** Same work, one pass per stage with timestamps at slots [base, base + 2 * VOX_STAGES.length). */
   encodeStaged(enc: GPUCommandEncoder, querySet: GPUQuerySet, base: number): void;
@@ -447,17 +543,19 @@ export function triangleTable(scene: SceneData): Uint32Array {
   return t;
 }
 
-export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams): VoxWorld {
+export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams, firstDynamicTri = scene.triangleCount): VoxWorld {
   const { v0, levels: NL, G, maxBricks, maxVoxels } = params;
   if (NL > 8) throw new Error('at most 8 levels');
+  if (params.local && params.anchor !== 'scene') throw new Error('the local update needs a fixed window (anchor scene)');
   const ptrOff = HDR, brickOff = ptrOff + NL * G ** 3, attrOff = brickOff + maxBricks * BRICK_WORDS;
-  const words = attrOff + maxVoxels * 2;
+  const staticPtrOff = attrOff + maxVoxels * 2;
+  const words = staticPtrOff + (params.local ? 2 * NL * G ** 3 : 0);
   const S = GPUBufferUsage.STORAGE;
   const vox = device.createBuffer({ label: 'vox', size: words * 4, usage: S | GPUBufferUsage.COPY_SRC });
   const repBuf = device.createBuffer({ label: 'vox.rep', size: maxBricks * 512 * 4, usage: S });
   const BIG_CAP = 1 << 18;
   const big = device.createBuffer({ label: 'vox.big', size: (8 + 16 * BIG_CAP) * 4, usage: S });
-  const args = device.createBuffer({ label: 'vox.args', size: 20 * 4, usage: S | GPUBufferUsage.INDIRECT });
+  const args = device.createBuffer({ label: 'vox.args', size: 24 * 4, usage: S | GPUBufferUsage.INDIRECT });
   const uniform = device.createBuffer({ label: 'vox.u', size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const C = GPUShaderStage.COMPUTE;
   const st = (type: GPUBufferBindingType) => ({ visibility: C, buffer: { type } });
@@ -470,7 +568,7 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
   const module = device.createShaderModule({ code: BUILD_WGSL, label: 'vox.build' });
   const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl] });
   const pipes: Record<string, GPUComputePipeline> = Object.fromEntries(['clear', 'markBricks', 'markBricksBig', 'allocBricks', 'clearKeys', 'voxBits', 'voxBitsBig',
-    'allocVoxels', 'resolveAttr'].map((e) => [e, device.createComputePipeline({ label: `vox.${e}`, layout, compute: { module, entryPoint: e } })]));
+    'allocVoxels', 'resolveAttr', 'snapStatic', 'dynRestore', 'dynReset', 'dynEnd', 'markDyn', 'dynCopy'].map((e) => [e, device.createComputePipeline({ label: `vox.${e}`, layout, compute: { module, entryPoint: e } })]));
   const sampler = device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' });
   const bg = device.createBindGroup({ layout: bgl, entries: [
     { binding: 0, resource: { buffer: uniform } }, { binding: 1, resource: { buffer: vox } }, { binding: 2, resource: { buffer: repBuf } },
@@ -492,11 +590,35 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
   };
   const use = (pass: GPUComputePassEncoder, name: string) => { pass.setPipeline(pipes[name]); pass.setBindGroup(0, bgs[name]); };
   const bytes = vox.size + repBuf.size + big.size + args.size + uniform.size;
-  const stage = (pass: GPUComputePassEncoder, st: typeof VOX_STAGES[number]) => {
+  const Tdyn = T - firstDynamicTri;
+  const stage = (pass: GPUComputePassEncoder, st: typeof VOX_STAGES[number] | typeof VOX_LOCAL_STAGES[number], tris = T) => {
     switch (st) {
+      case 'restore':
+        use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
+        use(pass, 'dynRestore'); pass.dispatchWorkgroupsIndirect(args, 80);
+        use(pass, 'dynReset'); pass.dispatchWorkgroups(1);
+        break;
+      case 'markDyn':
+        use(pass, 'markDyn'); lin(pass, Tdyn);
+        use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
+        use(pass, 'dynCopy'); pass.dispatchWorkgroupsIndirect(args, 32);
+        break;
+      case 'voxBitsDyn':
+        use(pass, 'voxBits'); lin(pass, Tdyn);
+        use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
+        use(pass, 'voxBitsBig'); pass.dispatchWorkgroupsIndirect(args, 0);
+        break;
+      case 'allocDyn':
+        use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
+        use(pass, 'allocVoxels'); pass.dispatchWorkgroupsIndirect(args, 48);
+        break;
+      case 'resolveDyn':
+        use(pass, 'resolveAttr'); pass.dispatchWorkgroupsIndirect(args, 32);
+        use(pass, 'dynEnd'); pass.dispatchWorkgroups(1);
+        break;
       case 'clear': use(pass, 'clear'); lin(pass, Math.max(NL * G ** 3, HDR)); break;
       case 'markBricks':
-        use(pass, 'markBricks'); lin(pass, T);
+        use(pass, 'markBricks'); lin(pass, tris);
         use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
         use(pass, 'markBricksBig'); pass.dispatchWorkgroupsIndirect(args, 64);
         break;
@@ -506,36 +628,66 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
         use(pass, 'clearKeys'); pass.dispatchWorkgroupsIndirect(args, 16);
         break;
       case 'voxBits':
-        use(pass, 'voxBits'); lin(pass, T);
+        use(pass, 'voxBits'); lin(pass, tris);
         use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
         use(pass, 'voxBitsBig'); pass.dispatchWorkgroupsIndirect(args, 0);
         break;
-      case 'allocVoxels': use(pass, 'allocVoxels'); pass.dispatchWorkgroupsIndirect(args, 48); break;
+      case 'allocVoxels':
+        use(pass, 'writeArgs'); pass.dispatchWorkgroups(1);
+        use(pass, 'allocVoxels'); pass.dispatchWorkgroupsIndirect(args, 48);
+        break;
       case 'resolve': use(pass, 'resolveAttr'); pass.dispatchWorkgroupsIndirect(args, 32); break;
     }
   };
 
+  const centre = [0, 1, 2].map((a) => (scene.boundsMin[a] + scene.boundsMax[a]) / 2) as [number, number, number];
+  let lastEye: [number, number, number] = centre;
+  const writeUniform = (eye: [number, number, number], end: number, first: number) => {
+    const buf = new ArrayBuffer(48 + 8 * 16);
+    const f = new Float32Array(buf), u = new Uint32Array(buf), i = new Int32Array(buf);
+    f.set([v0, NL, G, BRICK_WORDS], 0);
+    u.set([ptrOff, brickOff, attrOff, maxBricks], 4);
+    u.set([maxVoxels, end, first, staticPtrOff], 8);
+    for (let L = 0; L < NL; L++) {
+      const bs = v0 * 2 ** L * 8;
+      i.set([0, 1, 2].map((a) => Math.floor(eye[a] / bs) - G / 2).concat([0]), 12 + L * 4);
+    }
+    device.queue.writeBuffer(uniform, 0, buf);
+  };
+  const stages = params.local ? VOX_LOCAL_STAGES : VOX_STAGES;
+
   return {
     params, vox, uniform, bytes,
     update(eye) {
-      const buf = new ArrayBuffer(48 + 8 * 16);
-      const f = new Float32Array(buf), u = new Uint32Array(buf), i = new Int32Array(buf);
-      f.set([v0, NL, G, BRICK_WORDS], 0);
-      u.set([ptrOff, brickOff, attrOff, maxBricks], 4);
-      u.set([maxVoxels, T, 0, 0], 8);
-      for (let L = 0; L < NL; L++) {
-        const bs = v0 * 2 ** L * 8;
-        i.set([0, 1, 2].map((a) => Math.floor(eye[a] / bs) - G / 2).concat([0]), 12 + L * 4);
-      }
-      device.queue.writeBuffer(uniform, 0, buf);
+      lastEye = params.anchor === 'scene' ? centre : eye;
+      writeUniform(lastEye, T, params.local ? firstDynamicTri : 0);
+    },
+    async buildStatic() {
+      if (!params.local) return 0;
+      writeUniform(lastEye, firstDynamicTri, 0);
+      const qs = device.createQuerySet({ type: 'timestamp', count: 2 });
+      const enc = device.createCommandEncoder();
+      const pass = enc.beginComputePass({ label: 'vox.static', timestampWrites: { querySet: qs, beginningOfPassWriteIndex: 0, endOfPassWriteIndex: 1 } });
+      for (const st of VOX_STAGES) stage(pass, st, firstDynamicTri);
+      use(pass, 'snapStatic'); lin(pass, Math.max(NL * G ** 3, 1));
+      pass.end();
+      const rb = device.createBuffer({ size: 16, usage: GPUBufferUsage.QUERY_RESOLVE | GPUBufferUsage.COPY_SRC });
+      const rd = device.createBuffer({ size: 16, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+      enc.resolveQuerySet(qs, 0, 2, rb, 0); enc.copyBufferToBuffer(rb, 0, rd, 0, 16);
+      device.queue.submit([enc.finish()]);
+      writeUniform(lastEye, T, firstDynamicTri);
+      await rd.mapAsync(GPUMapMode.READ);
+      const ts = new BigUint64Array(rd.getMappedRange().slice(0));
+      rd.unmap(); rd.destroy(); rb.destroy(); qs.destroy();
+      return Number(ts[1] - ts[0]) / 1e6;
     },
     encode(enc, tw) {
       const pass = enc.beginComputePass({ label: 'vox', timestampWrites: tw });
-      for (const st of VOX_STAGES) stage(pass, st);
+      for (const st of stages) stage(pass, st);
       pass.end();
     },
     encodeStaged(enc, querySet, base) {
-      VOX_STAGES.forEach((st, i) => {
+      stages.forEach((st, i) => {
         const pass = enc.beginComputePass({ label: `vox.${st}`, timestampWrites: { querySet, beginningOfPassWriteIndex: base + 2 * i, endOfPassWriteIndex: base + 2 * i + 1 } });
         stage(pass, st);
         pass.end();

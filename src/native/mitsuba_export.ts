@@ -3,20 +3,22 @@
 // scene.json (materials, camera, sun, sky, toon ramp). See scripts/reference_irradiance.py.
 // Toon materials (S3) are flagged per vertex (toon = 1): the reference shades them as emitters of the emission-side
 // operator (the emission-side proxy).
-// Usage: node build/native/mitsuba_export.mjs [--scene sponza|sponza-toon|sponza-objects|leak-<t>] [--out DIR]
+// Usage: node build/native/mitsuba_export.mjs [--scene sponza|sponza-toon|sponza-objects|sponza-dyn|sponza-dynobj|leak-<t>]
+//   [--pose-frame N] (dynamic scenes: objects and sun at frame N; default 0) [--out DIR]
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { PNG } from 'pngjs';
 import { parseGltf } from '../core/gltf.ts';
 import { SUN_E } from '../core/rcrun.ts';
-import { leakRoom, sponzaSpec, toonSponza, type SceneSpec } from '../core/scenes.ts';
+import { dynamicSponza, leakRoom, posedVertices, sponzaSpec, toonSponza, type SceneSpec } from '../core/scenes.ts';
 import { TOON } from '../core/style.ts';
 import { ROOT } from './env.ts';
 
 const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const sceneName = arg('--scene', 'sponza');
-const outDir = resolve(arg('--out', join(ROOT, 'out/mitsuba', sceneName)));
+const poseFrame = Number(arg('--pose-frame', '0'));
+const outDir = resolve(arg('--out', join(ROOT, 'out/mitsuba', sceneName + (sceneName.startsWith('sponza-dyn') ? `-f${poseFrame}` : ''))));
 mkdirSync(join(outDir, 'meshes'), { recursive: true });
 mkdirSync(join(outDir, 'textures'), { recursive: true });
 
@@ -29,10 +31,20 @@ else {
   const binFile = readFileSync(join(imageDir, json.buffers[0].uri));
   const base = parseGltf(json, binFile.buffer.slice(binFile.byteOffset, binFile.byteOffset + binFile.byteLength));
   spec = sceneName === 'sponza' ? sponzaSpec(base) : sceneName === 'sponza-toon' ? toonSponza(base)
-    : sceneName === 'sponza-objects' ? toonSponza(base, true) : (() => { throw new Error(`unknown scene ${sceneName}`); })();
+    : sceneName === 'sponza-objects' ? toonSponza(base, true)
+    : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true) : (() => { throw new Error(`unknown scene ${sceneName}`); })();
   images = json.images.map((i: any) => i.uri as string);
 }
-const s = spec.scene;
+let s = spec.scene;
+let sunDir = spec.sunDir;
+if (spec.dynamic) {
+  const pose = spec.dynamic.at(poseFrame);
+  const v = posedVertices(s, spec.dynamic, pose);
+  const positions = s.positions.slice(), normals = s.normals.slice();
+  positions.set(v.pos, v.first * 3); normals.set(v.nrm, v.first * 3);
+  s = { ...s, positions, normals };
+  sunDir = pose.sunDir;
+}
 
 // Triangles per material, re-indexed.
 const perMat = new Map<number, number[]>();
@@ -82,6 +94,6 @@ for (const [m, idx] of perMat) {
   materials.push({ mesh, triangles: faces.length / 3, texture, factor: md.baseColorFactor.slice(0, 3), opacity, cutoff: md.alphaCutoff, doubleSided: md.doubleSided, toon: md.style === 1 });
 }
 writeFileSync(join(outDir, 'scene.json'), JSON.stringify({
-  scene: spec.name, materials, camera: spec.camera, sunDir: spec.sunDir, sunE: SUN_E, toon: TOON,
+  scene: spec.name, poseFrame: spec.dynamic ? poseFrame : null, materials, camera: spec.camera, sunDir, sunE: SUN_E, toon: TOON,
 }, null, 2));
 console.log(`exported ${spec.name}: ${materials.length} materials, ${s.triangleCount} triangles -> ${outDir}`);
