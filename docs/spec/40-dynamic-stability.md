@@ -8,7 +8,7 @@ P1 を 4 ms に入れる道を作って試すと決めた。Phase 12 で `vrel` 
 （`p1` で 3.34〜3.52 ms）。Phase 13 で P1 の読む層を 2 層の補間にしたが、カメラが動くときのちらつきが下がらず（19.5%、目安 17.0%）、
 P1 は `p1` のまま。Phase 15 で条件を広げて測った（移動カメラ、物体の数、メモリ、参照）。Phase 16（review）で、RC を続け、
 この作業の列を閉じると決めた（下の「同じ 4 ms での比べ」）。P1 の既定入りは、動く物体 64 個を 4 ms に入れた後に測る。**
-次の作業は [plan/large-dense/](../plan/large-dense/README.md)。
+次の作業は [plan/full-dynamic/](../plan/full-dynamic/README.md)。
 
 ## 方向（2026-11-14、ユーザー決定）
 
