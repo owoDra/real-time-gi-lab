@@ -6,8 +6,7 @@
 // allocated. Occupied voxels carry an albedo (alpha: toon flag, S3) and a normal (8 bytes), addressed by the rank of their bit in the
 // brick, taken from one representative triangle (the highest index overlapping the voxel, so the choice does
 // not depend on scheduling) at the voxel centre projected onto it. Voxelisation is conservative (triangle /
-// box overlap); alpha-masked materials are tested at the projected voxel centre. Everything is rebuilt from
-// the triangles every frame (an upper bound for a fully dynamic scene) and the result is deterministic.
+// box overlap); alpha-masked materials are tested at the projected voxel centre. The build is deterministic.
 //
 // Header words: 0 bricks, 1 voxels, 2-4 overflows, 8-15 bricks per level, 16-31 big-triangle lists.
 // P2: only the static triangles (the head of the triangle table) are voxelised. Dynamic triangles go to the
@@ -464,7 +463,7 @@ export function triangleTable(scene: SceneData): Uint32Array {
 export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams, firstDynamicTri = scene.triangleCount): VoxWorld {
   const { v0, levels: NL, G, maxBricks, maxVoxels } = params;
   if (NL > 8) throw new Error('at most 8 levels');
-  if (params.local && params.anchor !== 'scene') throw new Error('the local update needs a fixed window (anchor scene)');
+  if (params.local && params.anchor !== 'scene') throw new Error('static bricks built once need a fixed window (anchor scene)');
   const ptrOff = HDR, brickOff = ptrOff + NL * G ** 3, attrOff = brickOff + maxBricks * BRICK_WORDS;
   const words = attrOff + maxVoxels * 2;
   const S = GPUBufferUsage.STORAGE;

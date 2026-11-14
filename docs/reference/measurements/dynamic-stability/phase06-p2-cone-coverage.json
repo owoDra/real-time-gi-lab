@@ -1,0 +1,387 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": "dynamic-stability phase 06, P2 dynamic layer read at the cone width",
+ "date": "2026-11-14",
+ "conditions": {
+  "resolution": "1920x1080",
+  "camera": "static",
+  "sky": "none (sun only)",
+  "materials": "photoreal objects",
+  "frames": "warm-up 60 + 240",
+  "runs": 1,
+  "config": "world-48-voxel-rc2-vrel",
+  "vox": {
+   "anchor": "scene",
+   "local": true
+  },
+  "device": "AMD Radeon 8060S, Dawn / Vulkan (RADV), native",
+  "before": "commit ae259ec4 (dynamic triangles in the binary bricks, per-frame local update)",
+  "after": "commit cbcade6c (P2 dynamic layer)"
+ },
+ "reproduction": {
+  "objectsonlyK16": 0.06499,
+  "sphereonlyK16": 0.03025,
+  "expected": [
+   0.065,
+   0.0303
+  ]
+ },
+ "staticSponzaBitIdentical": true,
+ "scenes": {
+  "sponza-dynobj-objectsonly": {
+   "before": {
+    "excessK8": 0.05453,
+    "excessK16": 0.06499,
+    "excessK32": 0.0733,
+    "excessShareK16": 0.74294,
+    "linearRelK16": 0.02222,
+    "meanIrradiance": 0.03113,
+    "linearAbsK16e4": 6.92,
+    "flickerPhotoFinePct": 17.065,
+    "giMs": {
+     "giTotal": 3.369,
+     "vox": 0.121,
+     "giBuild": 0.895,
+     "giTrace": 0.947,
+     "giMerge": 0.086,
+     "giGather": 1.314
+    },
+    "fieldUsedMiB": 25.57,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.83,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": null,
+    "dynOverflow": null
+   },
+   "after": {
+    "excessK8": 0.00178,
+    "excessK16": 0.00299,
+    "excessK32": 0.00456,
+    "excessShareK16": 0.16631,
+    "linearRelK16": 0.0034,
+    "meanIrradiance": 0.03097,
+    "linearAbsK16e4": 1.05,
+    "flickerPhotoFinePct": 6.983,
+    "giMs": {
+     "giTotal": 3.637,
+     "vox": 0.257,
+     "giBuild": 0.863,
+     "giTrace": 1.15,
+     "giMerge": 0.088,
+     "giGather": 1.281
+    },
+    "fieldUsedMiB": 25.57,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.76,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": 112,
+    "dynOverflow": 0
+   }
+  },
+  "sponza-dynobj-sphereonly": {
+   "before": {
+    "excessK8": 0.02495,
+    "excessK16": 0.03025,
+    "excessK32": 0.03542,
+    "excessShareK16": 0.63436,
+    "linearRelK16": 0.01021,
+    "meanIrradiance": 0.03145,
+    "linearAbsK16e4": 3.21,
+    "flickerPhotoFinePct": 11.238,
+    "giMs": {
+     "giTotal": 3.312,
+     "vox": 0.116,
+     "giBuild": 0.875,
+     "giTrace": 0.937,
+     "giMerge": 0.082,
+     "giGather": 1.296
+    },
+    "fieldUsedMiB": 25.58,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.83,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": null,
+    "dynOverflow": null
+   },
+   "after": {
+    "excessK8": 0.00127,
+    "excessK16": 0.00228,
+    "excessK32": 0.00356,
+    "excessShareK16": 0.13799,
+    "linearRelK16": 0.00241,
+    "meanIrradiance": 0.03116,
+    "linearAbsK16e4": 0.75,
+    "flickerPhotoFinePct": 6.421,
+    "giMs": {
+     "giTotal": 3.635,
+     "vox": 0.262,
+     "giBuild": 0.86,
+     "giTrace": 1.154,
+     "giMerge": 0.081,
+     "giGather": 1.272
+    },
+    "fieldUsedMiB": 25.58,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.76,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": 116,
+    "dynOverflow": 0
+   }
+  },
+  "sponza-dynobj": {
+   "before": {
+    "excessK8": 0.05165,
+    "excessK16": 0.06249,
+    "excessK32": 0.07101,
+    "excessShareK16": 0.67529,
+    "linearRelK16": 0.0271,
+    "meanIrradiance": 0.02855,
+    "linearAbsK16e4": 7.74,
+    "flickerPhotoFinePct": 18.244,
+    "giMs": {
+     "giTotal": 3.337,
+     "vox": 0.119,
+     "giBuild": 0.888,
+     "giTrace": 0.936,
+     "giMerge": 0.085,
+     "giGather": 1.305
+    },
+    "fieldUsedMiB": 25.57,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.83,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": null,
+    "dynOverflow": null
+   },
+   "after": {
+    "excessK8": 0.00873,
+    "excessK16": 0.01192,
+    "excessK32": 0.01476,
+    "excessShareK16": 0.34683,
+    "linearRelK16": 0.00989,
+    "meanIrradiance": 0.02825,
+    "linearAbsK16e4": 2.79,
+    "flickerPhotoFinePct": 10.525,
+    "giMs": {
+     "giTotal": 3.623,
+     "vox": 0.254,
+     "giBuild": 0.866,
+     "giTrace": 1.136,
+     "giMerge": 0.084,
+     "giGather": 1.276
+    },
+    "fieldUsedMiB": 25.57,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.76,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": 112,
+    "dynOverflow": 0
+   }
+  },
+  "sponza-dynobj-sunonly": {
+   "before": {
+    "excessK8": 0.00943,
+    "excessK16": 0.01299,
+    "excessK32": 0.01421,
+    "excessShareK16": 0.41295,
+    "linearRelK16": 0.00878,
+    "meanIrradiance": 0.02746,
+    "linearAbsK16e4": 2.41,
+    "flickerPhotoFinePct": 8.123,
+    "giMs": {
+     "giTotal": 3.318,
+     "vox": 0.117,
+     "giBuild": 0.88,
+     "giTrace": 0.937,
+     "giMerge": 0.084,
+     "giGather": 1.3
+    },
+    "fieldUsedMiB": 25.68,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.84,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": null,
+    "dynOverflow": null
+   },
+   "after": {
+    "excessK8": 0.00675,
+    "excessK16": 0.00901,
+    "excessK32": 0.00997,
+    "excessShareK16": 0.35551,
+    "linearRelK16": 0.00714,
+    "meanIrradiance": 0.02873,
+    "linearAbsK16e4": 2.05,
+    "flickerPhotoFinePct": 7.659,
+    "giMs": {
+     "giTotal": 3.648,
+     "vox": 0.263,
+     "giBuild": 0.871,
+     "giTrace": 1.154,
+     "giMerge": 0.088,
+     "giGather": 1.271
+    },
+    "fieldUsedMiB": 25.68,
+    "fieldAllocatedMiB": 29.56,
+    "voxPersistentMiB": 12.76,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": 114,
+    "dynOverflow": 0
+   }
+  },
+  "sponza": {
+   "before": {
+    "excessK8": 0,
+    "excessK16": 0,
+    "excessK32": null,
+    "excessShareK16": null,
+    "linearRelK16": 0,
+    "meanIrradiance": 0.04163,
+    "linearAbsK16e4": 0.0,
+    "flickerPhotoFinePct": 0,
+    "giMs": {
+     "giTotal": 3.226,
+     "vox": 0.026,
+     "giBuild": 0.893,
+     "giTrace": 0.937,
+     "giMerge": 0.084,
+     "giGather": 1.297
+    },
+    "fieldUsedMiB": 26.06,
+    "fieldAllocatedMiB": 30.01,
+    "voxPersistentMiB": 12.76,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": null,
+    "dynOverflow": null
+   },
+   "after": {
+    "excessK8": 0,
+    "excessK16": 0,
+    "excessK32": null,
+    "excessShareK16": null,
+    "linearRelK16": 0,
+    "meanIrradiance": 0.04163,
+    "linearAbsK16e4": 0.0,
+    "flickerPhotoFinePct": 0,
+    "giMs": {
+     "giTotal": 3.126,
+     "vox": 0.002,
+     "giBuild": 0.875,
+     "giTrace": 0.91,
+     "giMerge": 0.087,
+     "giGather": 1.261
+    },
+    "fieldUsedMiB": 26.06,
+    "fieldAllocatedMiB": 30.01,
+    "voxPersistentMiB": 12.76,
+    "dynAllocatedMiB": 0.0,
+    "dynBricks": 0,
+    "dynOverflow": 0
+   }
+  }
+ },
+ "criteria": {
+  "B (objectsonly K16 <= 0.035)": true,
+  "A and G (sphereonly K16 <= 0.0107)": true,
+  "miss (objectsonly > 0.050 or sphereonly > 0.0303)": false,
+  "cost (sponza-dynobj GI <= 4 ms, memory <= 128 MB)": true
+ },
+ "cost": {
+  "scene": "sponza-dynobj",
+  "giMedianMs": {
+   "before": 3.337,
+   "after": 3.623
+  },
+  "giP95Ms": {
+   "before": 3.49,
+   "after": 3.762
+  },
+  "voxPassMs": {
+   "before": 0.119,
+   "after": 0.254
+  },
+  "traceMs": {
+   "before": 0.936,
+   "after": 1.136
+  },
+  "usedMiB": {
+   "field": 25.57,
+   "voxelPersistent": 12.76,
+   "dynamicLayerAllocated": 10.0,
+   "total": 48.33
+  },
+  "allocatedMiB": {
+   "before": {
+    "field": 29.56,
+    "voxelPools": 129.3,
+    "total": 158.9
+   },
+   "after": {
+    "field": 29.56,
+    "voxelPools": 119.3,
+    "dynamicLayer": 10.0,
+    "total": 158.9
+   }
+  },
+  "note": "the budget is judged on used memory as in earlier phases; the voxel pools are exploration-sized (the brick and representative pools)"
+ },
+ "occlusion": {
+  "scene": "sponza-dynobj-objectsonly held at frame 0",
+  "metric": "mean irradiance luminance of photoreal pixels in screen rectangles (x0,y0,x1,y1)",
+  "rects": {
+   "sphereContact": [
+    1060,
+    708,
+    1260,
+    735
+   ],
+   "sphereFrontShade": [
+    1000,
+    760,
+    1300,
+    860
+   ],
+   "ringFloor": [
+    720,
+    700,
+    940,
+    760
+   ],
+   "farControl": [
+    300,
+    800,
+    600,
+    900
+   ],
+   "wholeImage": [
+    0,
+    0,
+    1920,
+    1080
+   ]
+  },
+  "values": {
+   "voxelBefore": {
+    "sphereContact": 0.00095,
+    "sphereFrontShade": 0.0052,
+    "ringFloor": 0.01732,
+    "farControl": 0.00395,
+    "wholeImage": 0.03086
+   },
+   "voxelAfterP2": {
+    "sphereContact": 0.01625,
+    "sphereFrontShade": 0.00847,
+    "ringFloor": 0.0325,
+    "farControl": 0.01172,
+    "wholeImage": 0.03318
+   },
+   "triangles": {
+    "sphereContact": 0.0046,
+    "sphereFrontShade": 0.00446,
+    "ringFloor": 0.01776,
+    "farControl": 0.00423,
+    "wholeImage": 0.03567
+   }
+  },
+  "reading": "P2 lights the floor at and in front of the objects more than the triangle tracer (contact 3.5x, front shade 1.9x, ring floor 1.8x); the binary voxels darkened the contact (0.2x). Under-occlusion near the objects."
+ }
+}

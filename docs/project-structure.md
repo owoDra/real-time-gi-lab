@@ -17,7 +17,7 @@
 | `assets/` | テストシーン（`mise run assets` で取得） | 管理外 |
 | `archive-local/` | Program 1 のテキスト記録の圧縮アーカイブ（下の「作業機にしかないもの」） | 管理外 |
 
-`src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick と局所更新）、`ddgi.ts`
+`src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick、静的な形状）、`dynlayer.ts`（動的物体の被覆率と放射のレイヤ）、`ddgi.ts`
 （DDGI 系の比較相手）、`style.ts`（スタイル演算子）、`bvh.ts`（三角形の正解器）、`lighting.ts`（太陽と影）、
 `gbuffer.ts`、`scenes.ts`（シーン）、`post.ts`（表示とちらつきの指標）、`rcrun.ts`（計測の実行）。
 

@@ -165,7 +165,7 @@ for (const [name, params] of parsed) {
     kind: 'exploratory (探索値)', date: new Date().toISOString(), platform: 'native', implementation: IMPLEMENTATION, adapter: adapterInfo,
     scene: { name: spec.name, triangles: spec.scene.triangleCount, sunDir: spec.sunDir }, resolution: `${ctx.width}x${ctx.height}`,
     frames: { warmup: opts.warmup, measured: opts.frames, inFlight: opts.inFlight, seedFixed: opts.seedFixed }, sky: opts.sky,
-    config: name, params: r.params, ddgiDims: r.ddgiDims, voxStaticBuildMs: staticBuildMs, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, bvh: ctx.bvh,
+    config: name, params: r.params, ddgiDims: r.ddgiDims, voxStaticBuildMs: staticBuildMs, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, bvh: ctx.bvh,
     voxParams: ctx.voxWorld?.params ?? null, static: strip(r.static), moving: strip(r.moving), tracer: r.tracer, leak,
   };
   const t = r.static.timing, m = r.moving?.timing;
