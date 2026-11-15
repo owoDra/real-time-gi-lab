@@ -11,6 +11,7 @@
 | 測った結果（探索値）の表 | [`30-measurements.md`](30-measurements.md) |
 | 動的なシーンでの跳び：見立て、切り分けの実験、対策の案 | [`40-dynamic-stability.md`](40-dynamic-stability.md) |
 | 全体の順、未決のこと、持ち越している課題 | [`50-roadmap.md`](50-roadmap.md) |
+| 確認実験（先に書いた条件、主張、判定の規則と、1 回の計測の結果） | [`60-confirmation.md`](60-confirmation.md) |
 | 今のフェーズと後のフェーズの計画（正本ではない） | [`../plan/README.md`](../plan/README.md) |
 | 先行研究、Program 1 の知見、数値の要約（JSON） | [`../reference/`](../reference/) |
 

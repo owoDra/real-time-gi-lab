@@ -455,9 +455,24 @@ export function dynamicSponza(base: SceneData, photoreal = false, switchAt = -1,
   return { ...s, name, sunDir: sun(0), dynamic: d };
 }
 
+/** Phase 34 (confirmation): suffix -cam2 replaces the static camera (and so the moving camera's start) with a view never
+ * used while tuning; objects, sun and building stay where the base scene puts them. Sponza: from the other end of the
+ * atrium, raised, looking back along it and down (the base camera stands low at the +x end looking -x). town: from the
+ * front right, about 45 degrees off the base camera, raised. */
+export function withHeldOutCamera(s: SceneSpec): SceneSpec {
+  let camera: Camera;
+  if (s.name.startsWith('town')) camera = { eye: [12, 2.6, 12], target: [-1, 1.0, 1], fovYDeg: 60, near: 0.05 };
+  else {
+    const [x0, y0, z0] = s.scene.boundsMin, [x1, y1, z1] = s.scene.boundsMax;
+    camera = { eye: [x0 + 0.20 * (x1 - x0), y0 + 0.25 * (y1 - y0), (z0 + z1) / 2], target: [x1, y0 + 0.10 * (y1 - y0), (z0 + z1) / 2], fovYDeg: 60, near: 0.05 };
+  }
+  return { ...s, name: `${s.name}-cam2`, camera };
+}
+
 /** W2 scenes by name: town, town-grid (on the voxel grid), town-toon, town-objects (objects at rest), town-dyn (toon objects and the sun move),
  * town-dynobj (photoreal objects). The objects stand where they stand in Sponza, relative to the camera. */
 export function townScene(name: string): SceneSpec {
+  if (name.endsWith('-cam2')) return withHeldOutCamera(townScene(name.slice(0, -'-cam2'.length)));
   if (name === 'town-grid') return townSpec(true);
   const t = townSpec();
   if (name === 'town') return t;
@@ -470,6 +485,7 @@ export function townScene(name: string): SceneSpec {
  * objects), -n<N> (N objects on a grid), -deform. Phase 32: sponza-wide<N>[-...] is any Sponza scene with its building
  * copied N times in a row (widen); sponza-wide<N>-fly flies the moving camera along the row at 0.5 m per frame (D4). */
 export function sponzaScene(name: string, base: SceneData): SceneSpec {
+  if (name.endsWith('-cam2')) return withHeldOutCamera(sponzaScene(name.slice(0, -'-cam2'.length), base));
   const wide = /^sponza-wide(\d+)(-fly)?(.*)$/.exec(name);
   if (wide) return { ...widen(sponzaScene('sponza' + wide[3], base), Number(wide[1])), name, ...(wide[2] ? { fly: 0.5 } : {}) };
   const stress = /^sponza-dynobj(?:-many(\d+)|-n(\d+))?(-deform)?$/.exec(name);

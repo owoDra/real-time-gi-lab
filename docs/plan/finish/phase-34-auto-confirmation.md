@@ -64,6 +64,10 @@
 1. 主張と条件を書いてコミットする。2. 新しい場面の健全性を確かめる。3. 中立な対照を測る。4. 1 回測る。
 5. 結果を `docs/spec/60-confirmation.md` に足し、要約を `docs/reference/measurements/finish/` に置く。
 
+進み具合（2026-11-16）：機械は空けられない（AskUserQuestion）。探索で使っていない視点 `-cam2` を足し、健全性を確かめた（物体が見え、フレーム間で変わる）。
+既定の画像は同じ。条件、主張 C1〜C20e、判定の規則を `docs/spec/60-confirmation.md` に書き、実行と判定のスクリプト（`scripts/p34_confirm.sh`、`scripts/p34_judge.py`）と一緒にコミットした。
+次は `prereq` → `refs` と `quality` → `timing` → `compare` → 判定。
+
 ## 完了条件
 
 - 主張ごとに成立 / 不成立が書いてある。共通の完了定義（[`../README.md`](../README.md)）を満たしている。
