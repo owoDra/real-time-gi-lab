@@ -419,5 +419,102 @@
   ],
   "coarseCellWholeVoxel": "no gain (wide100 4.267-4.407 vs 4.31-4.344)",
   "G64_vs_G32": "G=64 put 2-3 buildings in level 0 (wide10 4.38 explicit G=32 vs 4.96 G=64 with 8192 pool)"
+ },
+ "idleRerun": {
+  "note": "user freed the machine after the phase; round 1 idle (load 1.45), rounds 2-3 load rose to 8-10 again",
+  "RC_static_ms": {
+   "sponza-n64": [
+    3.914,
+    3.881,
+    4.056
+   ],
+   "wide10": [
+    4.445,
+    4.404,
+    4.559
+   ],
+   "wide100": [
+    4.417,
+    4.454,
+    4.748
+   ],
+   "sponza-bwave": [
+    3.333,
+    3.255,
+    3.077
+   ],
+   "dense10-bwave": [
+    3.431,
+    3.344,
+    3.36
+   ],
+   "obj": [
+    4.133,
+    4.062,
+    4.003
+   ]
+  },
+  "DDGI_static_ms": {
+   "sponza-n64": [
+    3.462,
+    3.517,
+    3.457
+   ],
+   "wide10": [
+    3.8,
+    3.756,
+    3.893
+   ],
+   "wide100": [
+    3.862,
+    3.774,
+    3.687
+   ],
+   "sponza-bwave": [
+    2.905,
+    2.89,
+    2.985
+   ],
+   "dense10-bwave": [
+    2.853,
+    2.902,
+    2.855
+   ]
+  },
+  "fly_RC": {
+   "movingMedian": [
+    3.464,
+    3.527,
+    3.546
+   ],
+   "p99": [
+    3.778,
+    4.127,
+    4.224
+   ],
+   "max": [
+    3.869,
+    4.318,
+    4.287
+   ]
+  },
+  "fly_DDGI": {
+   "movingMedian": [
+    3.171,
+    3.066,
+    3.19
+   ],
+   "p99": [
+    3.435,
+    3.238,
+    3.455
+   ],
+   "max": [
+    3.473,
+    3.254,
+    3.528
+   ]
+  },
+  "verdict": "D1 RC not met on the idle machine either (wide100 4.42 ms = 1.13 x Sponza 3.91); D3 met (dense10 1.03-1.09 x); D4 RC met only in the idle round (max 3.87, p99/median 1.09); obj over 4.0 in every round"
  }
 }
