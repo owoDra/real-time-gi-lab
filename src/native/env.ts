@@ -5,6 +5,7 @@ import { create, globals } from 'webgpu';
 import jpeg from 'jpeg-js';
 import { PNG } from 'pngjs';
 import { TEXTURE_SIZE, type ImageUploader } from '../core/scene_gpu.ts';
+import { toTextureSize } from '../runner/texture.ts';
 
 Object.assign(globalThis, globals);
 
@@ -34,18 +35,6 @@ function decode(file: string): { width: number; height: number; data: Uint8Array
   if (file.endsWith('.png')) { const p = PNG.sync.read(buf); return { width: p.width, height: p.height, data: new Uint8Array(p.data) }; }
   const j = jpeg.decode(buf, { useTArray: true, formatAsRGBA: true, maxMemoryUsageInMB: 2048 });
   return { width: j.width, height: j.height, data: j.data };
-}
-
-/** Nearest-neighbour resize to TEXTURE_SIZE; only used for the odd 4x4 placeholder image. */
-function toTextureSize(img: { width: number; height: number; data: Uint8Array }) {
-  if (img.width === TEXTURE_SIZE && img.height === TEXTURE_SIZE) return img.data;
-  const out = new Uint8Array(TEXTURE_SIZE * TEXTURE_SIZE * 4);
-  for (let y = 0; y < TEXTURE_SIZE; y++)
-    for (let x = 0; x < TEXTURE_SIZE; x++) {
-      const sx = Math.floor(x * img.width / TEXTURE_SIZE), sy = Math.floor(y * img.height / TEXTURE_SIZE);
-      out.set(img.data.subarray((sy * img.width + sx) * 4, (sy * img.width + sx) * 4 + 4), (y * TEXTURE_SIZE + x) * 4);
-    }
-  return out;
 }
 
 export function loadSponza() {

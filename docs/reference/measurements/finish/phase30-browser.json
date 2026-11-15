@@ -1,0 +1,255 @@
+{
+ "kind": "exploratory (探索値)",
+ "phase": 30,
+ "date": "2026-11-15",
+ "machine": {
+  "gpu": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+  "adapter": {
+   "vendor": "amd",
+   "architecture": "rdna-3",
+   "device": "0x1586",
+   "description": "AMD Radeon 8060S Graphics (RADV STRIX_HALO)",
+   "isFallbackAdapter": false
+  },
+  "note": "one development machine (APU); another process kept ~1.3 CPU cores busy during all timings (GPU busy 7-39% before the runs); idle-machine values not measured"
+ },
+ "browser": {
+  "name": "Brave 1.91.168 (Chromium 149)",
+  "userAgent": "browser WebGPU (Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36)",
+  "launch": "--enable-unsafe-webgpu --enable-webgpu-developer-features --ignore-gpu-blocklist --ozone-platform=wayland, Vulkan loader on the library path (scripts/run_with_vulkan.sh); GPU sandbox on",
+  "limits": "WebGPU defaults (128 MiB binding, 256 MiB buffer, 8 storage buffers per stage)",
+  "timestampResolution": "sub-microsecond (repeated identical passes differ in ~40 ns steps), with or without --enable-webgpu-developer-features"
+ },
+ "native": "Dawn via webgpu@0.6.2 (node), backend=vulkan, same GPU and driver",
+ "imageMatch": {
+  "rule": "8-bit indirect image, mean absolute difference <= 0.5 level",
+  "result": "bit-identical (indirect, final, direct PNGs and the float irradiance dump; mean difference 0 levels)",
+  "cases": [
+   "sponza (sky, static, 60 frames)",
+   "sponza-dynobj-n64-deform-bwave --pose-frame 100 (static, 60 frames)",
+   "sponza-toon (static, 60 frames)",
+   "sponza-dynobj-n64-deform-bwave full default run, 240 frames, 3 pairs (images and all metrics equal)",
+   "ddgi-100-128-u8-g1-noadapt on sponza",
+   "--seq frames, --response curve (sponza-dyn-switch200, 90% after 4, 50% after 2)"
+  ]
+ },
+ "timing": {
+  "scene": "sponza-dynobj-n64-deform-bwave",
+  "config": "world-48-voxel-rc2-vrel",
+  "frames": "warmup 60 + 240, 1080p, sky on",
+  "method": "GPU timestamps per pass, median over 240 frames; native and browser alternated, 3 pairs",
+  "pairs": [
+   {
+    "order": "native then browser",
+    "native": {
+     "giStatic": {
+      "median": 3.868,
+      "mean": 3.871,
+      "p05": 3.521,
+      "p95": 4.319,
+      "p99": 4.566,
+      "max": 4.715
+     },
+     "giMoving": {
+      "median": 3.285,
+      "mean": 3.273,
+      "p05": 2.967,
+      "p95": 3.512,
+      "p99": 3.584,
+      "max": 3.76
+     },
+     "staticStages": {
+      "vox": 1.372,
+      "giBuild": 0.388,
+      "giTrace": 1.027,
+      "giMerge": 0.082,
+      "giGather": 0.998
+     }
+    },
+    "browser": {
+     "giStatic": {
+      "median": 4.117,
+      "mean": 4.125,
+      "p05": 3.904,
+      "p95": 4.45,
+      "p99": 4.605,
+      "max": 4.697
+     },
+     "giMoving": {
+      "median": 3.259,
+      "mean": 3.514,
+      "p05": 3.002,
+      "p95": 4.12,
+      "p99": 4.383,
+      "max": 4.48
+     },
+     "staticStages": {
+      "vox": 1.48,
+      "giBuild": 0.41,
+      "giTrace": 1.098,
+      "giMerge": 0.086,
+      "giGather": 1.048
+     }
+    }
+   },
+   {
+    "order": "native then browser",
+    "native": {
+     "giStatic": {
+      "median": 4.1,
+      "mean": 4.088,
+      "p05": 3.812,
+      "p95": 4.293,
+      "p99": 4.386,
+      "max": 4.492
+     },
+     "giMoving": {
+      "median": 3.377,
+      "mean": 3.516,
+      "p05": 2.955,
+      "p95": 4.109,
+      "p99": 4.204,
+      "max": 4.254
+     },
+     "staticStages": {
+      "vox": 1.48,
+      "giBuild": 0.414,
+      "giTrace": 1.08,
+      "giMerge": 0.09,
+      "giGather": 1.038
+     }
+    },
+    "browser": {
+     "giStatic": {
+      "median": 4.082,
+      "mean": 4.091,
+      "p05": 3.897,
+      "p95": 4.299,
+      "p99": 4.404,
+      "max": 4.815
+     },
+     "giMoving": {
+      "median": 3.289,
+      "mean": 3.524,
+      "p05": 2.953,
+      "p95": 4.191,
+      "p99": 4.24,
+      "max": 4.354
+     },
+     "staticStages": {
+      "vox": 1.454,
+      "giBuild": 0.415,
+      "giTrace": 1.094,
+      "giMerge": 0.086,
+      "giGather": 1.036
+     }
+    }
+   },
+   {
+    "order": "native then browser",
+    "native": {
+     "giStatic": {
+      "median": 4.088,
+      "mean": 4.072,
+      "p05": 3.788,
+      "p95": 4.292,
+      "p99": 4.565,
+      "max": 4.765
+     },
+     "giMoving": {
+      "median": 3.761,
+      "mean": 3.672,
+      "p05": 2.981,
+      "p95": 4.081,
+      "p99": 4.151,
+      "max": 4.184
+     },
+     "staticStages": {
+      "vox": 1.469,
+      "giBuild": 0.413,
+      "giTrace": 1.076,
+      "giMerge": 0.089,
+      "giGather": 1.042
+     }
+    },
+    "browser": {
+     "giStatic": {
+      "median": 4.046,
+      "mean": 4.043,
+      "p05": 3.819,
+      "p95": 4.253,
+      "p99": 4.38,
+      "max": 4.581
+     },
+     "giMoving": {
+      "median": 3.732,
+      "mean": 3.771,
+      "p05": 3.38,
+      "p95": 4.248,
+      "p99": 4.474,
+      "max": 4.533
+     },
+     "staticStages": {
+      "vox": 1.441,
+      "giBuild": 0.409,
+      "giTrace": 1.088,
+      "giMerge": 0.085,
+      "giGather": 1.026
+     }
+    }
+   }
+  ],
+  "dynStagesStatic60": {
+   "native": {
+    "giTotal": 4.042,
+    "vox.clear": 0.019,
+    "vox.markBricks": 0.085,
+    "vox.allocBricks": 0.039,
+    "vox.voxBits": 0.445,
+    "vox.reduce": 0.073,
+    "vox.allocVoxels": 0.007,
+    "vox.resolve": 0.068,
+    "vox.sun": 0.279,
+    "dyn.mark": 0.08,
+    "dyn.alloc": 0.038,
+    "dyn.clear": 0.015,
+    "dyn.splat": 0.24,
+    "dyn.resolve": 0.047
+   },
+   "browser": {
+    "giTotal": 3.946,
+    "vox.clear": 0.019,
+    "vox.markBricks": 0.086,
+    "vox.allocBricks": 0.037,
+    "vox.voxBits": 0.439,
+    "vox.reduce": 0.077,
+    "vox.allocVoxels": 0.007,
+    "vox.resolve": 0.066,
+    "vox.sun": 0.268,
+    "dyn.mark": 0.081,
+    "dyn.alloc": 0.037,
+    "dyn.clear": 0.014,
+    "dyn.splat": 0.237,
+    "dyn.resolve": 0.046
+   }
+  },
+  "allocatedMiB": 81.3
+ },
+ "notRunning": [
+  {
+   "feature": "triangle tracer config world-48-tri",
+   "where": "native and browser",
+   "why": "rc.rad is 192 MiB > maxStorageBufferBindingSize 128 MiB (default limits)"
+  }
+ ],
+ "ranInBrowser": [
+  "default RC config",
+  "DDGI linear",
+  "--dyn-stages",
+  "--response",
+  "--seq",
+  "--vox-bench",
+  "--pose-frame",
+  "--dump-irr"
+ ]
+}

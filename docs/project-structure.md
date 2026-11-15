@@ -5,7 +5,9 @@
 | 場所 | 役割 | git |
 |---|---|---|
 | `src/core/` | レンダラの本体。WebGPU のコア機能だけで書く（WGSL は TypeScript の中） | 管理 |
-| `src/native/` | Node から Dawn を使う実行器（計測、参照との比較、シーンの変換） | 管理 |
+| `src/native/` | Node から Dawn を使う実行器（計測、参照との比較、シーンの変換）と、ブラウザの実行の駆動（`browser.ts`） | 管理 |
+| `src/web/`、`web/` | ブラウザの実行器（`src/web/rc.ts` とページ `web/rc.html`。`src/core/` をそのまま使う） | 管理 |
+| `src/runner/` | ネイティブとブラウザの実行器が共有する部分（設定名、場面名、ログと要約、テクスチャの大きさ） | 管理 |
 | `scripts/` | 計測の掃引、要約、参照レンダラの積分器、文書の検査 | 管理 |
 | `docs/spec/` | 正本（目的、評価、構成、測った結果、方向） | 管理 |
 | `docs/plan/` | 作業の計画（列とフェーズ） | 管理 |
@@ -36,6 +38,14 @@ bash scripts/run_with_vulkan.sh node build/native/rc.mjs --scene <シーン> --c
   [--no-sky] [--vox JSON] [--frames N] [--warmup N] [--dump-irr] [--response FROM,TO] [--pose-frame F] \
   [--seq EVERY,COUNT] [--out box/out/<名前>]   # --seq：静止カメラで EVERY フレームおきに最終画像と間接光を保存（時間は乱れる）
 mise run s2:native -- --scene sponza --vox-bench     # 再ボクセル化の段ごとの時間
+
+# ブラウザ（Phase 30）。ページを 127.0.0.1 で配り、ブラウザを新しいプロファイルで開き、終わったら閉じる（同じプロファイルのプロセスが残らないことを確かめる）
+mise run build:web
+bash scripts/run_with_vulkan.sh node build/native/browser.mjs --scene <シーン> --configs <設定,...> [rc.mjs と同じ引数] \
+  [--browser brave] [--browser-flags "--ozone-platform=wayland"] [--no-launch] [--out box/out/<名前>]
+#   既定で付ける起動の引数：--enable-unsafe-webgpu --enable-webgpu-developer-features（タイムスタンプを丸めない）--ignore-gpu-blocklist
+#   --no-launch：URL を出して待つ（別の機械や手で開くブラウザ用）。ネイティブの引数は全部使える（--bvh、--dyn-stages、--response、--seq、--vox-bench も）
+node build/native/compare_runs.mjs --a <ネイティブの出力> --b <ブラウザの出力> --config <設定> [--png DIR]   # 画像の一致（8 ビットの差、間接光の相対差）
 # --dyn-stages：動的レイヤ（と全再構築では建物のボクセル）の作成を段ごとのパスに分けて時間を測り、動的レイヤの仕事の量を CPU で数える（160 フレーム以下）
 # 場面名の末尾 -bwave / -bcut：建物そのものが毎フレーム変わる（spec/10-evaluation.md）
 # --vox：voxel.ts の DEFAULT_VOX の上書き（v0、levels、G、maxBricks、maxVoxels、dynBricks）
@@ -59,7 +69,9 @@ mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --our
 
 - ネイティブの Vulkan / Dawn は `bash scripts/run_with_vulkan.sh <コマンド>` 経由で動かす（ライブラリのパスを足す）。
   その環境変数を `git` や `gh` に渡さない。
-- ブラウザの WebGPU は SwiftShader（CPU）に落ちる。ブラウザでの計測はしていない。
+- ブラウザ（Brave 1.91、Chromium 149）の WebGPU は、既定の起動とヘッドレスでは SwiftShader（CPU）に落ちる。`scripts/run_with_vulkan.sh` 経由で
+  起動し（Vulkan のローダーが見える）、Wayland の窓（`--ozone-platform=wayland`）にすると実 GPU（AMD Radeon 8060S、RADV）になる。GPU のサンドボックスは切らない。
+  `brave` は起動用のスクリプトなので、それだけを止めると本体が残る（`browser.ts` はプロセスグループとプロファイルで止める）。
 - 参照レンダラのセットアップは [spec/10-evaluation.md](spec/10-evaluation.md)。Mitsuba（CPU 32 スレッド）と GPU の計測は
   同じ電力枠を使うので、同時に走らせない。
 

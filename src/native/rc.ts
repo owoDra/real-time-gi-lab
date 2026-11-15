@@ -18,13 +18,13 @@
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
-import { parseGltf } from '../core/gltf.ts';
 import type { Vec3 } from '../core/math.ts';
-import { DEFAULT_DDGI, type DdgiParams } from '../core/ddgi.ts';
-import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
-import { benchVoxels, compareIrradiance, createRunContext, lum, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
+import type { RcParams } from '../core/rc.ts';
+import { benchVoxels, compareIrradiance, createRunContext, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
 import { uploadScene } from '../core/scene_gpu.ts';
-import { leakRoom, sponzaScene, townScene, withBuildingMotion, type SceneSpec } from '../core/scenes.ts';
+import { parseConfig } from '../runner/configs.ts';
+import { packIrradiance, reportConfig } from '../runner/report.ts';
+import { loadScene } from '../runner/scene.ts';
 import { createNativeDevice, IMPLEMENTATION, loadSponza, ROOT, writePng } from './env.ts';
 
 // Synchronous logging: a native abort would otherwise drop buffered output.
@@ -32,9 +32,6 @@ const log = (s: string) => { writeSync(1, s + '\n'); };
 const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const sceneArg = arg('--scene', 'sponza');
-// Full-dynamic lane: suffix -bwave / -bcut on any Sponza scene makes the building itself change every frame (building.ts).
-const buildingKind = /-b(wave|cut)$/.exec(sceneArg)?.[1] as 'wave' | 'cut' | undefined;
-const sceneName = buildingKind ? sceneArg.slice(0, -('-b'.length + buildingKind.length)) : sceneArg;
 const outDir = resolve(arg('--out', join(ROOT, 'box/out/rc/native', sceneArg)));
 const configs = arg('--configs', 'world-32').split(',');
 const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--frames', '240')), inFlight: 2,
@@ -49,67 +46,13 @@ const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--fram
   response: args.includes('--response') ? (([a, b]) => ({ from: a, to: b }))(arg('--response', '').split(',').map(Number)) : undefined };
 const overrides = JSON.parse(arg('--params', '{}')) as Partial<RcParams>;
 
-// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>]
-function parseDdgi(name: string): RcParams {
-  const [, sp, rays, ...tokens] = name.split('-');
-  const d: DdgiParams = { ...DEFAULT_DDGI, spacing: Number(sp) / 100, rays: Number(rays) };
-  for (const t of tokens) {
-    if (/^h[\d.]+$/.test(t)) d.hysteresis = Number(t.slice(1));
-    else if (t === 'noadapt') d.adaptive = false;
-    else if (/^u\d+$/.test(t)) d.updateDiv = Number(t.slice(1));
-    else if (t === 'norel') d.relocate = 0;
-    else if (t === 'rg') d.relocate = 2;
-    else if (t === 'nocls') d.classify = false;
-    else if (/^sb[\d.]+$/.test(t)) d.segBase = Number(t.slice(2));
-    else if (/^g[\d.]+$/.test(t)) d.gamma = Number(t.slice(1));
-    else if (/^vb[\d.]+$/.test(t)) d.viewBias = Number(t.slice(2));
-    else throw new Error(`unknown ddgi token ${t} in ${name}`);
-  }
-  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d };
-}
-
-function parseConfig(name: string): RcParams {
-  if (name.startsWith('ddgi-')) return parseDdgi(name);
-  const [method, P, ...tokens] = name.split('-');
-  const p: RcParams = { ...DEFAULT_PARAMS, ...overrides, method: method as Method, P: Number(P) };
-  for (const t of tokens) {
-    if (t === 'analytic') p.analytic = true;
-    else if (t === 'depth') p.world = 'none';
-    else if (t === 'voxel') { p.world = 'voxel'; p.depthCascades = 0; }
-    else if (t === 'hybrid') { p.world = 'voxel'; p.depthCascades = 1; }
-    else if (t === 'tri') { p.world = 'tri'; p.depthCascades = 0; }
-    else if (t === 'trihybrid') { p.world = 'tri'; p.depthCascades = 1; }
-    else if (t === 'l2') p.levelMap = 2;
-    else if (t === 'norel') p.relocate = 'none';
-    else if (t === 'vrel') p.relocate = 'voxel';
-    else if (t === 'noemit') p.styleEmit = false;
-    else if (t === 'norecv') p.styleRecv = false;
-    else if (/^soft[\d.]+$/.test(t)) p.rampSoft = Number(t.slice(4));
-    else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
-    else if (/^vs[\d.]+$/.test(t)) p.voxScale = Number(t.slice(2));
-    else if (/^vo[\d.]+$/.test(t)) p.voxOffset = Number(t.slice(2));
-    else if (/^vk[\d.]+$/.test(t)) p.voxSkip = Number(t.slice(2));
-    else throw new Error(`unknown config token ${t} in ${name}`);
-  }
-  return p;
-}
-const parsed = configs.map((c) => [c, parseConfig(c)] as const);
+const parsed = configs.map((c) => [c, parseConfig(c, overrides)] as const);
 
 // WebGPU's default limits (128 MiB per binding, 256 MiB per buffer, 8 storage buffers per stage).
 const { device, adapterInfo } = await createNativeDevice();
 log(`limits: maxStorageBufferBindingSize ${device.limits.maxStorageBufferBindingSize}, maxBufferSize ${device.limits.maxBufferSize}, maxStorageBuffersPerShaderStage ${device.limits.maxStorageBuffersPerShaderStage}`);
 const t0 = performance.now();
-let spec: SceneSpec;
-let upload: Parameters<typeof uploadScene>[2] = async () => undefined;
-if (sceneName.startsWith('leak-')) spec = leakRoom(Number(sceneName.slice(5)));
-else if (sceneName.startsWith('town')) spec = townScene(sceneName);
-else {
-  const s = loadSponza();
-  upload = s.upload;
-  const base = parseGltf(s.json, s.bin);
-  spec = sponzaScene(sceneName, base);
-}
-if (buildingKind) spec = withBuildingMotion(spec, buildingKind);
+const { spec, upload } = await loadScene(sceneArg, async () => loadSponza());
 const gpu = await uploadScene(device, spec.scene, upload);
 const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tri');
 const voxBench = args.includes('--vox-bench');
@@ -144,52 +87,9 @@ for (const [name, params] of parsed) {
     if (res) for (const [img, rgba] of Object.entries(res.images)) writeFileSync(join(outDir, `${name}.${mode}.${img}.png`), writePng(ctx.width, ctx.height, rgba));
   irr[name] = r.static.irr;
   if (args.includes('--dump-irr') && r.static.irr) {
-    // rgb + tag (0 invalid, 1 photoreal, >= 2 toon) as float32, rows top to bottom (for the Mitsuba comparison).
-    const { rgb, tag } = r.static.irr, f = new Float32Array(tag.length * 4);
-    for (let p = 0; p < tag.length; p++) { f.set(rgb.subarray(p * 3, p * 3 + 3), p * 4); f[p * 4 + 3] = tag[p]; }
-    writeFileSync(join(outDir, `${name}.static.irr.f32`), Buffer.from(f.buffer));
+    writeFileSync(join(outDir, `${name}.static.irr.f32`), Buffer.from(packIrradiance(r.static.irr).buffer));
   }
-  const strip = <T extends { images: unknown }>(x: T | null) => { if (!x) return null; const { images: _, irr: __, ...rest } = x as T & { irr?: unknown }; return rest; };
-  let leak = null;
-  if (spec.enclosed && r.static.irr) {
-    const { rgb, valid } = r.static.irr;
-    let s = 0, n = 0, mx = 0;
-    const all: number[] = [];
-    for (let p = 0; p < valid.length; p++) if (valid[p]) { const l = lum(rgb[p * 3], rgb[p * 3 + 1], rgb[p * 3 + 2]); s += l; n++; mx = Math.max(mx, l); if (p % 5 === 0) all.push(l); }
-    all.sort((a, b) => a - b);
-    // Reference scale: the sun's irradiance on the floor outside.
-    const sd = spec.sunDir, sunOnFloor = lum(9, 8.5, 7.8) * sd[1] / Math.hypot(...sd);
-    leak = { meanIrradiance: s / n, p99Irradiance: all[Math.floor(all.length * 0.99)], maxIrradiance: mx, sunOnFloor,
-      meanFractionOfSun: s / n / sunOnFloor, pixels: n };
-  }
-  summaries[name] = {
-    kind: 'exploratory (探索値)', date: new Date().toISOString(), platform: 'native', implementation: IMPLEMENTATION, adapter: adapterInfo,
-    scene: { name: spec.name, triangles: spec.scene.triangleCount, sunDir: spec.sunDir }, resolution: `${ctx.width}x${ctx.height}`,
-    frames: { warmup: opts.warmup, measured: opts.frames, inFlight: opts.inFlight, seedFixed: opts.seedFixed }, sky: opts.sky,
-    config: name, params: r.params, ddgiDims: r.ddgiDims, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, bvh: ctx.bvh,
-    voxParams: ctx.voxWorld?.params ?? null, buildingMotion: r.buildingMotion, static: strip(r.static), moving: strip(r.moving), staticGeo: strip(r.staticGeo), movingGeo: strip(r.movingGeo), tracer: r.tracer, leak,
-  };
-  const t = r.static.timing, m = r.moving?.timing;
-  if (r.ddgiDims) log(`  ddgi grid ${r.ddgiDims.join('x')}; active, updated, relocated, stuck: ${r.static.counts.join(', ')}`);
-  log(`  GI static ${t.giTotal.median} ms (vox ${t.vox?.median ?? '-'}, build ${t.giBuild.median}, trace ${t.giTrace.median}, merge ${t.giMerge.median}, gather ${t.giGather.median})` + (m ? `; moving ${m.giTotal.median} ms` : ''));
-  log(`  probes ${r.static.counts.join(', ')}; used ${(r.static.usedBytes / 2 ** 20).toFixed(1)} MiB, allocated ${(r.allocatedBytes / 2 ** 20).toFixed(1)} MiB`);
-  const M = (b: number) => (b / 2 ** 20).toFixed(1);
-  log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} incl. build temporaries, dyn ${M(r.dynAllocatedBytes)})`);
-  if (r.static.vox) log(`  vox ${JSON.stringify(r.static.vox)}`);
-  if (opts.dynStages) log(`  stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.') || k.startsWith('vox.')).map(([k, v]) => `${k} ${v.median}`).join(', ')}`);
-  if (r.static.buildingChange) log(`  building change (first vs last measured frame, static camera) ${JSON.stringify(r.static.buildingChange)}`);
-  if (r.static.dynWork) log(`  dyn work ${JSON.stringify(r.static.dynWork)}; last frame ${JSON.stringify(r.static.dynWorkLast)}`);
-  if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
-  if (leak) log(`  leak ${JSON.stringify(leak)}`);
-  if (r.static.blackPct !== null) log(`  black pixels ${r.static.blackPct} % of the photoreal pixels (every c0 probe hidden, last frame)`);
-  log(`  flicker static ${JSON.stringify(r.static.flicker)}`);
-  log(`  excess static ${JSON.stringify(r.static.excess)}`);
-  log(`  chain excess static ${JSON.stringify(r.static.chainExcess)}`);
-  if (r.moving) log(`  flicker moving ${JSON.stringify(r.moving.flicker)}`);
-  if (r.moving) log(`  chain excess moving ${JSON.stringify(r.moving.chainExcess)}`);
-  // Without normal maps (the main values on a moving camera and a moving building).
-  if (r.staticGeo) log(`  geo static: flicker fine ${r.staticGeo.flicker.staticFinePct} % (control ${r.staticGeo.flicker.controlFinePct}), excess k16 ${r.staticGeo.excess?.k16.excessPerFrame} (linear ${r.staticGeo.excess?.k16linear.excessRelPerFrame})`);
-  if (r.movingGeo) log(`  geo moving: flicker fine ${r.movingGeo.flicker.staticFinePct} % (control ${r.movingGeo.flicker.controlFinePct}), chain excess ${r.movingGeo.chainExcess.excessPerFrame} (linear ${r.movingGeo.chainExcess.excessRelPerFrame}, control ${r.movingGeo.chainExcess.controlExcessPerFrame})`);
+  summaries[name] = reportConfig(name, r, ctx, opts, { platform: 'native', implementation: IMPLEMENTATION, adapter: adapterInfo }, log);
 }
 // Irradiance against the triangle tracer (same probes, same intervals), static camera.
 // The reference uses the same probe relocation when the run has one (same probe positions).
