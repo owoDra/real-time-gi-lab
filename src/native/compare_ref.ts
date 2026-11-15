@@ -3,6 +3,7 @@
 // compared (a reference pixel is used when every one of our pixels in it is photoreal: tag 1).
 // Usage: node build/native/compare_ref.mjs --ref E.pfm[,E2.pfm...] --ours a.static.irr.f32[,b...] [--width 1920 --height 1080]
 //   [--png DIR]  (side-by-side images: reference | ours, same exposure) [--json FILE]
+//   [--objects]  (scenes with flagged photoreal objects: also their pixels on their own)
 // Block errors (W3, phase 25): the same mean |ours - ref| / mean ref over means of B x B reference pixels (B = 8, 16;
 // a block counts when at least 3/4 of its pixels are compared). Averaging B^2 pixels divides the reference's own
 // noise by about B, so two independent references agree within a few percent where single pixels differ by 20-30%.
@@ -21,6 +22,7 @@ const W = Number(arg('--width', '1920')), H = Number(arg('--height', '1080'));
 // reference's own noise (the average's error is about half of it).
 const refs = arg('--ref', '').split(',').map(readPfm);
 const ref = refs[0];
+const halfA = refs[0].rgb.slice(), halfB = refs.length > 1 ? refs[1].rgb : null;
 const BLOCKS = [8, 16];
 /** Mean |a - b| / mean b over B x B block means of luminance (pixels where ok is set). */
 function blockErr(a: Float32Array, b: Float32Array, ok: Uint8Array | null, w: number, h: number, B: number) {
@@ -51,35 +53,53 @@ if (refs.length > 1) {
   ref.rgb = ref.rgb.map((_, i) => refs.reduce((s, r) => s + r.rgb[i], 0) / refs.length);
   console.log(`reference: ${refs.length} renders averaged; mean |half A - half B| / mean = ${refNoise}`);
 }
+/** The reference's own noise over a mask: mean |half A - half B| / mean, per pixel and on 8 x 8 block means. */
+function halves(mask: Uint8Array) {
+  let sd = 0, ss = 0;
+  for (let p = 0; p < mask.length; p++) {
+    if (!mask[p]) continue;
+    const a = lum(halfA[p * 3], halfA[p * 3 + 1], halfA[p * 3 + 2]), b = lum(halfB![p * 3], halfB![p * 3 + 1], halfB![p * 3 + 2]);
+    sd += Math.abs(a - b); ss += (a + b) / 2;
+  }
+  return { pixel: Math.round(sd / ss * 1e4) / 1e4, b8: blockErr(halfA, halfB!, mask, ref.w, ref.h, 8).meanAbsRel };
+}
 const fx = W / ref.w, fy = H / ref.h;
 if (!Number.isInteger(fx) || fx !== fy) throw new Error('resolution must be an integer multiple of the reference');
 const tonemap = (v: number) => Math.round(255 * Math.min(1, Math.pow(Math.max(v, 0) / (1 + Math.max(v, 0)), 1 / 2.2)));
 const results: Record<string, unknown> = {};
 for (const file of arg('--ours', '').split(',')) {
   const raw = readFileSync(file), f = new Float32Array(raw.buffer, raw.byteOffset, raw.byteLength / 4);
-  // ok: every pixel photoreal (compared); shown: every pixel valid (toon pixels are drawn but not compared).
-  const ours = new Float32Array(ref.w * ref.h * 3), ok = new Uint8Array(ref.w * ref.h), shown = new Uint8Array(ref.w * ref.h);
+  // ok: every pixel photoreal (compared); obj: every pixel a flagged photoreal object (tag 2; compared with --objects);
+  // shown: every pixel valid (toon pixels are drawn but not compared).
+  const ours = new Float32Array(ref.w * ref.h * 3), ok = new Uint8Array(ref.w * ref.h), obj = new Uint8Array(ref.w * ref.h), shown = new Uint8Array(ref.w * ref.h);
   for (let y = 0; y < ref.h; y++) for (let x = 0; x < ref.w; x++) {
-    let n = 0, photo = 0; const s = [0, 0, 0];
+    let n = 0, photo = 0, object = 0; const s = [0, 0, 0];
     for (let j = 0; j < fy; j++) for (let i = 0; i < fx; i++) {
-      const p = (y * fy + j) * W + x * fx + i;
-      if (f[p * 4 + 3] > 0.5) { n++; if (f[p * 4 + 3] < 1.5) photo++; for (let c = 0; c < 3; c++) s[c] += f[p * 4 + c]; }
+      const p = (y * fy + j) * W + x * fx + i, t = f[p * 4 + 3];
+      if (t > 0.5) { n++; if (t < 1.5) photo++; else if (t < 2.5) object++; for (let c = 0; c < 3; c++) s[c] += f[p * 4 + c]; }
     }
-    if (n === fx * fy) { shown[y * ref.w + x] = 1; ok[y * ref.w + x] = photo === n ? 1 : 0; for (let c = 0; c < 3; c++) ours[(y * ref.w + x) * 3 + c] = s[c] / n; }
+    if (n === fx * fy) { const q = y * ref.w + x; shown[q] = 1; ok[q] = photo === n ? 1 : 0; obj[q] = object === n ? 1 : 0; for (let c = 0; c < 3; c++) ours[q * 3 + c] = s[c] / n; }
   }
-  let sr = 0, so = 0, sabs = 0, cnt = 0;
-  const rel: number[] = [];
-  for (let p = 0; p < ok.length; p++) {
-    if (!ok[p]) continue;
-    const lr = lum(ref.rgb[p * 3], ref.rgb[p * 3 + 1], ref.rgb[p * 3 + 2]), lo = lum(ours[p * 3], ours[p * 3 + 1], ours[p * 3 + 2]);
-    sr += lr; so += lo; sabs += Math.abs(lo - lr); cnt++;
-    rel.push(Math.abs(lo - lr) / Math.max(lr, 0.01));
-  }
-  rel.sort((a, b) => a - b);
   const r4 = (x: number) => Math.round(x * 1e4) / 1e4;
-  const res = { pixels: cnt, meanRef: r4(sr / cnt), meanOurs: r4(so / cnt), bias: r4((so - sr) / sr), meanAbsRel: r4(sabs / sr),
-    medianRel: r4(rel[Math.floor(rel.length * 0.5)]), p90Rel: r4(rel[Math.floor(rel.length * 0.9)]),
-    blocks: Object.fromEntries(BLOCKS.map((B) => [`b${B}`, blockErr(ours, ref.rgb, ok, ref.w, ref.h, B)])) };
+  const compare = (mask: Uint8Array) => {
+    let sr = 0, so = 0, sabs = 0, cnt = 0;
+    const rel: number[] = [];
+    for (let p = 0; p < mask.length; p++) {
+      if (!mask[p]) continue;
+      const lr = lum(ref.rgb[p * 3], ref.rgb[p * 3 + 1], ref.rgb[p * 3 + 2]), lo = lum(ours[p * 3], ours[p * 3 + 1], ours[p * 3 + 2]);
+      sr += lr; so += lo; sabs += Math.abs(lo - lr); cnt++;
+      rel.push(Math.abs(lo - lr) / Math.max(lr, 0.01));
+    }
+    rel.sort((a, b) => a - b);
+    return { pixels: cnt, meanRef: r4(sr / cnt), meanOurs: r4(so / cnt), bias: r4((so - sr) / sr), meanAbsRel: r4(sabs / sr),
+      medianRel: r4(rel[Math.floor(rel.length * 0.5)]), p90Rel: r4(rel[Math.floor(rel.length * 0.9)]),
+      blocks: Object.fromEntries(BLOCKS.map((B) => [`b${B}`, blockErr(ours, ref.rgb, mask, ref.w, ref.h, B)])) };
+  };
+  // --objects (phase 27): the pixels of the flagged photoreal objects (the moving objects of the -dynobj scenes), which
+  // the main comparison leaves out, compared on their own. Not for toon scenes (a toon pixel's irradiance went through
+  // the receiving-side operator and its tag can be 2 as well).
+  const res = { ...compare(ok), ...(args.includes('--objects') ? { objects: { ...compare(obj),
+    refHalvesMeanAbsRel: refs.length > 1 ? halves(obj) : null } } : {}) };
   results[basename(file)] = res;
   console.log(basename(file), JSON.stringify(res));
   const pngDir = arg('--png', '');

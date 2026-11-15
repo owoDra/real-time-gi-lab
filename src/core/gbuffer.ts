@@ -2,6 +2,8 @@
 // Layout: albedo rgba8unorm-srgb (rgb = base colour, a = 1 toon, 0.5 other measured object, 0 photoreal (S3); metallic is not used),
 //         normal rgba16float (xyz = world shading normal, w = roughness),
 //         depth32float, reversed Z with an infinite far plane.
+// Measurement only (phase 27): GEO_NORMALS leaves the normal map out (the interpolated vertex normal), for the
+// flicker and excess metrics on a moving camera or a moving building (docs/spec/10-evaluation.md).
 import type { SceneData } from './gltf.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 
@@ -32,6 +34,7 @@ struct VsOut {
   return VsOut(cam.viewProj * vec4f(i.pos, 1), i.nrm, i.uv, i.tan, i.mat);
 }
 
+override GEO_NORMALS: bool = false;
 struct FsOut { @location(0) albedo: vec4f, @location(1) normal: vec4f }
 @fragment fn fs(i: VsOut, @builtin(front_facing) front: bool) -> FsOut {
   let m = materials[i.mat];
@@ -42,7 +45,7 @@ struct FsOut { @location(0) albedo: vec4f, @location(1) normal: vec4f }
   let flip = select(-1.0, 1.0, front);
   var n = normalize(i.nrm) * flip;
   let tl = length(i.tan.xyz);
-  if (tl > 1e-4) {
+  if (tl > 1e-4 && !GEO_NORMALS) {
     let t = normalize(i.tan.xyz - n * dot(n, i.tan.xyz));
     let b = cross(n, t) * i.tan.w * flip;
     n = normalize(t * tn.x + b * tn.y + n * tn.z);
@@ -95,7 +98,8 @@ export function gbufferBytes(g: GBuffer) { return g.width * g.height * (4 + 8 + 
 
 export interface GBufferRenderer {
   camera: GPUBuffer;
-  encode(enc: GPUCommandEncoder, g: GBuffer, timestampWrites?: GPURenderPassTimestampWrites): void;
+  /** geoNormals: without the normal map (measurement only). */
+  encode(enc: GPUCommandEncoder, g: GBuffer, timestampWrites?: GPURenderPassTimestampWrites, geoNormals?: boolean): void;
   drawCount: number;
 }
 
@@ -127,8 +131,8 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
     ],
   });
   const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl] });
-  const pipelineFor = (doubleSided: boolean) => device.createRenderPipeline({
-    label: `gbuffer.${doubleSided ? 'two' : 'one'}-sided`, layout,
+  const pipelineFor = (doubleSided: boolean, geo = false) => device.createRenderPipeline({
+    label: `gbuffer.${doubleSided ? 'two' : 'one'}-sided${geo ? '.geo' : ''}`, layout,
     vertex: {
       module, buffers: [
         { arrayStride: 12, attributes: [{ shaderLocation: 0, offset: 0, format: 'float32x3' }] },
@@ -137,18 +141,20 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
         { arrayStride: 16, attributes: [{ shaderLocation: 3, offset: 0, format: 'float32x4' }] },
       ],
     },
-    fragment: { module, targets: [{ format: ALBEDO_FORMAT }, { format: NORMAL_FORMAT }] },
+    fragment: { module, targets: [{ format: ALBEDO_FORMAT }, { format: NORMAL_FORMAT }], constants: { GEO_NORMALS: geo ? 1 : 0 } },
     primitive: { topology: 'triangle-list', cullMode: doubleSided ? 'none' : 'back', frontFace: 'ccw' },
     depthStencil: { format: DEPTH_FORMAT, depthWriteEnabled: true, depthCompare: 'greater' },
   });
   const pipelines = [pipelineFor(false), pipelineFor(true)];
+  let geoPipelines: GPURenderPipeline[] | null = null;
   // Opaque single-sided first, then double-sided / alpha-masked.
   const draws = scene.primitives.map((p) => ({ p, ds: scene.materials[p.material].doubleSided, mask: scene.materials[p.material].alphaMask }))
     .sort((a, b) => Number(a.ds) - Number(b.ds) || Number(a.mask) - Number(b.mask));
 
   return {
     camera, drawCount: draws.length,
-    encode(enc, g, timestampWrites) {
+    encode(enc, g, timestampWrites, geoNormals = false) {
+      const pipes = geoNormals ? (geoPipelines ??= [pipelineFor(false, true), pipelineFor(true, true)]) : pipelines;
       const pass = enc.beginRenderPass({
         label: 'gbuffer',
         colorAttachments: [
@@ -165,7 +171,7 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
       let current = -1;
       for (const d of draws) {
         const pi = d.ds ? 1 : 0;
-        if (pi !== current) { pass.setPipeline(pipelines[pi]); current = pi; }
+        if (pi !== current) { pass.setPipeline(pipes[pi]); current = pi; }
         pass.drawIndexed(d.p.indexCount, 1, d.p.firstIndex, d.p.baseVertex, d.p.material);
       }
       pass.end();

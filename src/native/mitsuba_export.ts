@@ -3,14 +3,14 @@
 // scene.json (materials, camera, sun, sky, toon ramp). See scripts/reference_irradiance.py.
 // Toon materials (S3) are flagged per vertex (toon = 1): the reference shades them as emitters of the emission-side
 // operator (the emission-side proxy).
-// Usage: node build/native/mitsuba_export.mjs [--scene sponza|sponza-toon|sponza-objects|sponza-dyn|sponza-dynobj|leak-<t>|town*]
+// Usage: node build/native/mitsuba_export.mjs [--scene <any scene of src/core/scenes.ts without a building-motion suffix>]
 //   [--pose-frame N] (dynamic scenes: objects and sun at frame N; default 0) [--out DIR]
 import { copyFileSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { PNG } from 'pngjs';
 import { parseGltf } from '../core/gltf.ts';
 import { SUN_E } from '../core/rcrun.ts';
-import { dynamicSponza, leakRoom, townScene, posedVertices, sponzaSpec, toonSponza, type SceneSpec } from '../core/scenes.ts';
+import { leakRoom, townScene, posedVertices, sponzaScene, type SceneSpec } from '../core/scenes.ts';
 import { TOON } from '../core/style.ts';
 import { ROOT } from './env.ts';
 
@@ -31,9 +31,7 @@ else {
   const json = JSON.parse(readFileSync(join(imageDir, 'Sponza.gltf'), 'utf8'));
   const binFile = readFileSync(join(imageDir, json.buffers[0].uri));
   const base = parseGltf(json, binFile.buffer.slice(binFile.byteOffset, binFile.byteOffset + binFile.byteLength));
-  spec = sceneName === 'sponza' ? sponzaSpec(base) : sceneName === 'sponza-toon' ? toonSponza(base)
-    : sceneName === 'sponza-objects' ? toonSponza(base, true)
-    : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true) : (() => { throw new Error(`unknown scene ${sceneName}`); })();
+  spec = sponzaScene(sceneName, base);
   images = json.images.map((i: any) => i.uri as string);
 }
 let s = spec.scene;

@@ -1,0 +1,33 @@
+{
+  "kind": "exploratory (探索値)",
+  "phase": 26,
+  "date": "2026-11-15",
+  "note": "Outside review before the direction decision. One run each, native Dawn/Vulkan, AMD Radeon 8060S, 1920x1080, warm-up 60 + 240 frames, no sky (leak: sky). Default image sha256 unchanged (sponza e5a44335...).",
+  "ddgi_frontier": {
+    "_columns": "GI ms static / moving (sponza-dynobj-n64-deform-bwave), allocated MiB, excess k16 bwave, excess k16 sponza-dynobj, static flicker fine % (sponza), light switch frames to 90 % / 50 % (sponza-dyn-switch200, 320 frames after the switch, end frame taken as converged), error vs sponza multi-bounce reference pixel / 8x8 block / bias",
+    "world-48-voxel-rc2-vrel": [3.801, 3.446, 76.8, 0.17812, 0.01126, 0, 1, 1, 0.4191, 0.3455, -0.1721],
+    "ddgi-100-128-u8-g1-noadapt": [3.179, 3.139, 82.5, 0.10551, 0.0002, 0.573, 268, 120, 0.3532, 0.2829, -0.0502],
+    "ddgi-100-128-u8-h0.5-g1-noadapt": [3.196, 2.946, 82.5, 0.09887, 0.00523, 4.318, 33, 10, 0.359, 0.2867, -0.0237],
+    "ddgi-100-64-u4-h0.8-g1-noadapt": [3.154, 2.879, 82.5, 0.1002, 0.00713, 4.924, 51, 15, 0.359, 0.2879, -0.0295],
+    "ddgi-100-64-u4-h0.5-g1-noadapt": [3.24, 2.894, 82.5, 0.12199, 0.02633, 10.786, 18, 6, 0.3674, 0.2943, -0.0394],
+    "ddgi-125-64-u2-h0.8-g1-noadapt": [3.31, 2.995, 76.3, 0.10237, 0.0188, 9.635, 26, 8, 0.4323, 0.3706, -0.0829],
+    "ddgi-125-64-u2-h0.5-g1-noadapt": [3.318, 3.076, 76.3, 0.1567, 0.06349, 21.875, 10, 3, 0.4408, 0.3788, -0.0905],
+    "ddgi-150-64-u1-h0.8-g1-noadapt": [3.495, 3.221, 73.5, 0.11193, 0.04279, 17.565, 14, 4, 0.396, 0.3302, -0.0242],
+    "ddgi-150-64-u1-h0.5-g1-noadapt": [3.617, 3.272, 73.5, 0.19689, 0.12999, 36.133, 6, 2, 0.4055, 0.3413, -0.043]
+  },
+  "response_metric_flaw": "The response curve takes the last frame of the run as the converged value. With 320 frames after the switch ddgi-100-128-u8-g1-noadapt still has 12.7 % left at frame 256; the 90 frames of phase 25 came from a shorter run.",
+  "leak_pct_of_sun_2cm_10cm": {
+    "world-48-voxel-rc2-vrel": [0.773, 0.361],
+    "ddgi-100-128-u8-g1-noadapt": [2.109, 1.794],
+    "ddgi-125-64-u2-h0.5-g1-noadapt": [2.009, 1.967]
+  },
+  "frozen_pose_regions": {
+    "_note": "Mean luminance of the indirect irradiance in image boxes (1920x1080: near left column 430-560 x 350-700, near right column 1340-1460 x 350-700, near floor 700-1200 x 800-1000, near right object 1080-1180 x 500-640). Poses frozen (--pose-frame), so DDGI has converged.",
+    "sponza_multibounce": { "reference": [0.02082, 0.03851, 0.01309], "rc": [0.01125, 0.01274, 0.00652], "ddgi": [0.00904, 0.01278, 0.01147] },
+    "sponza-dyn_f140_onebounce_reference": { "reference": [0.00003, 0.00002, 0.00589], "rc": [0.0011, 0.00133, 0.01246], "ddgi": [0.00159, 0.0013, 0.00808] },
+    "sponza-dyn_f300_onebounce_reference": { "reference": [0.06905, 0.19344, 0.00318], "rc": [0.06412, 0.13261, 0.02538], "ddgi": [0.04551, 0.08331, 0.03372] },
+    "sponza-dynobj-n64-deform-bwave_f120": { "rc": [0.00029, 0.00143, 0.00494, 0.00148], "ddgi": [0.00045, 0.00164, 0.00537, 0.00128] },
+    "sponza-dynobj-n64-deform-bwave_f300": { "rc": [0.06989, 0.08524, 0.01748, 0.22774], "ddgi": [0.05525, 0.05955, 0.0313, 0.24933] },
+    "reading": "The near objects that are black with RC and lit with DDGI in the moving sequence agree once DDGI has converged on the frozen pose: the difference in the sequence is the lag of DDGI, not light missing from RC."
+  }
+}

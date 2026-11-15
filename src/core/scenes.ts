@@ -464,3 +464,19 @@ export function townScene(name: string): SceneSpec {
   if (name === 'town-dyn' || name === 'town-dynobj') return dynamicSponza(t.scene, name === 'town-dynobj', -1, 'all', 1, 0, false, t);
   throw new Error(`unknown scene ${name}`);
 }
+
+/** Sponza scenes by name (docs/spec/10-evaluation.md). Stress scenes: sponza-dynobj-many<G> (G groups of the three
+ * objects), -n<N> (N objects on a grid), -deform. */
+export function sponzaScene(name: string, base: SceneData): SceneSpec {
+  const stress = /^sponza-dynobj(?:-many(\d+)|-n(\d+))?(-deform)?$/.exec(name);
+  return name === 'sponza' ? sponzaSpec(base) : name === 'sponza-wide10' ? widen(base, 10)
+    : name === 'sponza-dense9' ? densify(base) : name === 'sponza-toon' ? toonSponza(base)
+    : name === 'sponza-objects' ? toonSponza(base, true)
+    : name === 'sponza-dyn' ? dynamicSponza(base) : name === 'sponza-dynobj' ? dynamicSponza(base, true)
+    : name === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : name === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
+    : name === 'sponza-dynobj-sunonly' ? dynamicSponza(base, true, -1, 'sun') : name === 'sponza-dynobj-objectsonly' ? dynamicSponza(base, true, -1, 'objects')
+    : name === 'sponza-dynobj-sphereonly' ? dynamicSponza(base, true, -1, 'sphere')
+    : stress ? dynamicSponza(base, true, -1, 'all', Number(stress[1] ?? 1), Number(stress[2] ?? 0), !!stress[3])
+    : name.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(name.slice('sponza-dyn-switch'.length)))
+    : (() => { throw new Error(`unknown scene ${name}`); })();
+}

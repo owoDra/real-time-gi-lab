@@ -78,7 +78,6 @@ struct DU {
 @group(2) @binding(2) var shadowTex: texture_depth_2d;
 @group(2) @binding(3) var shadowCmp: sampler_comparison;
 @group(2) @binding(4) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
-@group(2) @binding(5) var<storage, read> hr: array<u32>; // P1 hit radiance (hitrad.ts)
 // Phase 23 (multi-bounce): hits add albedo / pi times the irradiance of the probes as the previous update left them
 // (the trace pass only reads irr and dep; the blend pass writes them), sampled as the gather does (bounceE).
 fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f {
@@ -262,11 +261,10 @@ fn sfDir(i: u32, n: u32) -> vec3f {
 // level 0 does not coarsen every segment of the comparator: that alone took its reference error from 0.36 to 0.47). Returns
 // (radiance, distance); distance < 0 on a miss. P2: the dynamic layer is read in front of each segment's static
 // hit with the cone of one ray (4 pi / rays); the distance is the static hit's (dynamic objects do not enter the
-// depth moments). P1: static hits read the prefiltered hit radiance with the same cone.
+// depth moments).
 fn traceRay(o: vec3f, d: vec3f) -> vec4f {
   let nl = u32(VX.a.y);
   let kc = sqrt(4.0 * PI / f32(D.dims.w));
-  coneK = kc; coneO = o;
   var b0 = 0.0;
   var acc = vec3f(0.0); var tr = 1.0;
   let shift = u32(max(round(log2(VX.a.x * 4.0 / D.p.y)), 0.0));
@@ -521,7 +519,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
   const bgl2 = device.createBindGroupLayout({ entries: [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } }, { binding: 1, visibility: C, buffer: { type: 'read-only-storage' } },
     { binding: 2, visibility: C, texture: { sampleType: 'depth' } }, { binding: 3, visibility: C, sampler: { type: 'comparison' } },
-    { binding: 4, visibility: C, buffer: { type: 'read-only-storage' } }, { binding: 5, visibility: C, buffer: { type: 'read-only-storage' } },
+    { binding: 4, visibility: C, buffer: { type: 'read-only-storage' } },
   ] });
   const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2] });
   const bgl3w = device.createBindGroupLayout({ entries: [{ binding: 0, visibility: C, storageTexture: { access: 'write-only', format: 'rgba32float' } }] });
@@ -547,7 +545,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
   const bg2 = device.createBindGroup({ layout: bgl2, entries: [
     { binding: 0, resource: { buffer: world.voxUniform } }, { binding: 1, resource: { buffer: world.vox } },
     { binding: 2, resource: world.shadow.createView() }, { binding: 3, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
-    { binding: 4, resource: { buffer: world.dyn } }, { binding: 5, resource: { buffer: world.hr } },
+    { binding: 4, resource: { buffer: world.dyn } },
   ] });
   const use = (pass: GPUComputePassEncoder, name: string) => {
     pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1); pass.setBindGroup(2, bg2);

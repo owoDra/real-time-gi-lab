@@ -21,7 +21,6 @@ import { STYLE_WGSL } from './style.ts';
 import type { DdgiParams } from './ddgi.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
-import { HIT_READ_WGSL } from './hitrad.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
 import { BOUNCE_READ_WGSL, bounceConstants, createBounce, DEFAULT_BOUNCE, type Bounce } from './bounce.ts';
 
@@ -34,7 +33,6 @@ export type Relocate = 'gbuffer' | 'voxel' | 'none';
 export interface WorldResources {
   voxUniform: GPUBuffer; vox: GPUBuffer; dyn: GPUBuffer; bvh: GPUBuffer;
   materials: GPUBuffer; baseColor: GPUTexture; shadow: GPUTexture; hasVox: boolean; hasBvh: boolean;
-  hr: GPUBuffer; // P1 hit radiance (hitrad.ts), or an empty buffer
   dynBricks: number; // brick pool of the dynamic layer (pipeline constant of the dynamic layer's read side)
   maxBricks: number; // brick pool of the voxel world (bounce.ts walks its voxel slots)
 }
@@ -74,9 +72,6 @@ export interface RcParams {
   rampSoft: number;
   // M1: DDGI-style comparator instead of the cascades (ddgi.ts); the cascade fields are then unused.
   ddgi: DdgiParams | null;
-  // P1 (hitrad.ts): static voxel hits read the prefiltered hit radiance (RC and DDGI). Off by default until its read
-  // level is interpolated (docs/spec/40-dynamic-stability.md).
-  p1: boolean;
   // Phase 23: multi-bounce, on by default (RC: the bounce volume of bounce.ts; DDGI: its own probes, ddgi.ts).
   bounce: boolean;
 }
@@ -85,11 +80,11 @@ export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, p1: false, bounce: true,
+  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, bounce: true,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
- * shadowCmp, toonSun (style.ts), the voxel tracer and hr (P1, hitrad.ts). */
+ * shadowCmp, toonSun (style.ts) and the voxel tracer. */
 export const SHADE_WGSL = /* wgsl */ `
 fn sunVis(x: vec3f) -> f32 {
   let c = F.lightViewProj * vec4f(x, 1.0);
@@ -127,15 +122,12 @@ fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
   return shadeHitE(p, n0, alb, d, bias, bounceE(p, n, -d));
 }
 var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keeps hit distances)
-// P1 (config token p1): static voxel hits read the prefiltered hit radiance at the cone width (coneK, coneO set by the
-// tracer). Without it (the default) or a level holding the voxel, one point on the ray's side of the voxel is shaded.
+// A static voxel hit shades one point on the ray's side of the voxel.
 fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32, ai: u32, L: u32, pc: vec3f) -> vec3f {
   voxHitEntry = entry;
-  if (hrReady()) { let r = hitRadiance(L, pc, d, dot(entry - coneO, d), n); if (r.a > 0.0) { return r.rgb; } }
   let p = entry - d * (0.25 * v);
   return shadeHitE(p, n, alb, d, 0.0, voxBounce(p, n, d, ai, pc, v));
 }
-${HIT_READ_WGSL}
 `;
 
 const RC_WGSL = /* wgsl */ `
@@ -182,7 +174,6 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(7) var shadowTex: texture_depth_2d;
 @group(3) @binding(8) var shadowCmp: sampler_comparison;
 @group(3) @binding(9) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
-@group(3) @binding(10) var<storage, read> hr: array<u32>; // P1 hit radiance (hitrad.ts)
 @group(3) @binding(11) var bnTex: texture_3d<f32>; // phase 23 bounce volume of this frame (bounce.ts)
 override BN_ON: bool = false;
 ${BOUNCE_READ_WGSL.replace('fn bounceE(', 'fn bounceVol(')}
@@ -211,7 +202,7 @@ fn traceWorld(o: vec3f, d: vec3f, t0: f32, t1: f32, s0: f32, c: u32, nrm: vec3f)
   let L = voxLevelFor(voxLevel(s0, c), o + d * t1);
   let v = voxSize(L);
   voxSteps = 0u;
-  coneK = 3.5449077 / f32(LY.c[c].res); coneO = o;
+  let coneK = 3.5449077 / f32(LY.c[c].res); // width of the direction bin's cone per unit distance
   var r = traceVox(o + nrm * (LY.wp.y * v), d, t0, t1, LY.wp.w * v, L);
   // P2: the dynamic layer in front of the static hit, read at the width of the direction bin's cone.
   if (dyn[0] != 0u) {
@@ -1037,9 +1028,9 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 11, visibility: C, texture: { sampleType: 'unfilterable-float', viewDimension: '3d' } },
   ];
   const G2 = ['keys', 'slotProbe', 'probes', 'rad', 'sh', 'counts', 'accum', 'parents'];
-  const G3: Record<string, number> = { vox: 1, bvh: 2, materials: 4, dyn: 9, hr: 10 };
+  const G3: Record<string, number> = { vox: 1, bvh: 2, materials: 4, dyn: 9 };
   const g2Bufs = [keys, slotProbe, probes, rad, sh, counts, accum, parents];
-  const g3Bufs: Record<number, GPUBuffer> = { 1: world.vox, 2: world.bvh, 4: world.materials, 9: world.dyn, 10: world.hr };
+  const g3Bufs: Record<number, GPUBuffer> = { 1: world.vox, 2: world.bvh, 4: world.materials, 9: world.dyn };
   const g3Res: Record<number, GPUBindingResource> = {
     0: { buffer: world.voxUniform }, 5: world.baseColor.createView({ dimension: '2d-array' }),
     6: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }),

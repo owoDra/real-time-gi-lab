@@ -79,7 +79,6 @@ const PI = 3.14159265;
 @group(0) @binding(0) var<uniform> F: Frame;
 @group(0) @binding(1) var<uniform> VX: VoxU;
 @group(0) @binding(2) var<storage, read> vox: array<u32>;
-@group(0) @binding(3) var<storage, read> hr: array<u32>;
 @group(0) @binding(4) var shadowTex: texture_depth_2d;
 @group(0) @binding(5) var shadowCmp: sampler_comparison;
 @group(0) @binding(6) var<storage, read_write> list: array<atomic<u32>>; // 0 count, 1 frame counter, 4.. probes
@@ -267,7 +266,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
   const C = GPUShaderStage.COMPUTE;
   const bgl0 = device.createBindGroupLayout({ entries: [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } }, { binding: 1, visibility: C, buffer: { type: 'uniform' } },
-    { binding: 2, visibility: C, buffer: { type: 'read-only-storage' } }, { binding: 3, visibility: C, buffer: { type: 'read-only-storage' } },
+    { binding: 2, visibility: C, buffer: { type: 'read-only-storage' } },
     { binding: 4, visibility: C, texture: { sampleType: 'depth' } }, { binding: 5, visibility: C, sampler: { type: 'comparison' } },
     { binding: 6, visibility: C, buffer: { type: 'storage' } },
   ] });
@@ -285,7 +284,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
     { binding: 6, resource: { buffer: list } }, { binding: 7, resource: { buffer: args } }] });
   const bg0 = device.createBindGroup({ layout: bgl0, entries: [
     { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: { buffer: world.voxUniform } },
-    { binding: 2, resource: { buffer: world.vox } }, { binding: 3, resource: { buffer: world.hr } },
+    { binding: 2, resource: { buffer: world.vox } },
     { binding: 4, resource: world.shadow.createView() }, { binding: 5, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
     { binding: 6, resource: { buffer: list } },
   ] });

@@ -1,9 +1,9 @@
-# Phase 37（review）：結論と限界をまとめ、この先を決める
+# Phase 35（review）：結論と限界をまとめ、この先を決める
 
 ## 開始プロンプト
 
 ```
-AGENTS.md と docs/plan/README.md と docs/plan/finish/README.md と docs/plan/finish/phase-37-review-conclusion.md を読み、Phase 37（review）を進めてください。確認実験（Phase 36）の結果と、ここまでに測ったことから、この GI が目的（完全動的、スタイル混在、WebGPU）と必須要件 R1〜R6 をどこまで満たしたか、既存手法に対して何が優れ何が劣るか、分かっている限界は何かを、画像と数値を付けた 1 枚のページにして非公開の Artifact に公開し、私には平易に報告してください。この先（終える、main へ上げる、次の課題へ進む）の案を理由をつけて示してください。main への昇格と push は私が決めます。
+AGENTS.md と docs/plan/README.md と docs/plan/finish/README.md と docs/plan/finish/phase-35-review-conclusion.md を読み、Phase 35（review）を進めてください。確認実験（Phase 34）の結果と、ここまでに測ったことから、この GI が目的（完全動的、スタイル混在、WebGPU）と必須要件 R1〜R6 をどこまで満たしたか、既存手法に対して何が優れ何が劣るか、分かっている限界は何かを、画像と数値を付けた 1 枚のページにして非公開の Artifact に公開し、私には平易に報告してください。この先（終える、main へ上げる、次の課題へ進む）の案を理由をつけて示してください。main への昇格と push は私が決めます。
 ```
 
 ## 目的

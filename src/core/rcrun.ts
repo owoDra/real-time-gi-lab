@@ -12,12 +12,15 @@ import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
 import { createDynLayer, DYN_MAX_BRICKS, DYN_STAGES, dynWork, mortonSortDynamic, type DynLayer } from './dynlayer.ts';
-import { emptyHitRad, type HitRad } from './hitrad.ts';
 import { createVoxWorld, triangleTable, VOX_STAGES, voxParams, type VoxWorld } from './voxel.ts';
 
 export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
 const Q = 16; // timestamp slots per frame
 const RC0 = 4; // first RC pass
+
+// Response metric: frames per window of the held pose, frames between reads, tolerance on the change of the window's
+// mean irradiance, most windows, frames after the switch read one by one.
+const RESP_WINDOW = 1008, RESP_EVERY = 9, RESP_TOL = 0.01, RESP_MAX = 8, RESP_DENSE = 64;
 
 export const SUN_E: Vec3 = [9, 8.5, 7.8];
 export const SKY: Vec3 = [0.45, 0.6, 0.9];
@@ -25,7 +28,7 @@ export const SKY: Vec3 = [0.45, 0.6, 0.9];
 export interface RunContext {
   device: GPUDevice; spec: SceneSpec; gpu: SceneGpu; g: GBuffer; frame: GPUBuffer; lighting: Lighting;
   gbuffer: ReturnType<typeof createGBufferRenderer>; omega0: Float32Array; width: number; height: number;
-  world: WorldResources; voxWorld: VoxWorld | null; dynLayer: DynLayer | null; hitRad: HitRad | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
+  world: WorldResources; voxWorld: VoxWorld | null; dynLayer: DynLayer | null; bvh: { buildMs: number; bytes: number; nodes: number } | null;
   /** Dynamic scenes with a BVH: refits it to the posed vertices (CPU, outside the GPU timing). */
   refitBvh: ((first: number, pos: Float32Array) => void) | null;
   /** Posed dynamic vertices by pose frame, computed on the CPU before the frames that use them are timed, so
@@ -72,9 +75,9 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvh: bvhBuf, materials: gpu.materials,
-    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, hr: emptyHitRad(device), dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS, maxBricks: voxWorld?.params.maxBricks ?? 0 }; // P1: runConfig binds the layer for configs with p1
+    baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS, maxBricks: voxWorld?.params.maxBricks ?? 0 };
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
-    width, height, world, voxWorld, dynLayer, hitRad: null, bvh, refitBvh: refit, posed: new Map(),
+    width, height, world, voxWorld, dynLayer, bvh, refitBvh: refit, posed: new Map(),
     building: spec.building ? createBuilding(device, spec.scene, gpu, tri, table, spec.building) : null };
 }
 
@@ -159,7 +162,8 @@ export interface RunOptions { warmup: number; frames: number; inFlight: number; 
   /** Static camera: capture the final and indirect images every `every` measured frames, `count` times. */
   seq?: { every: number; count: number; sink: (k: number, images: Record<string, Uint8Array>) => void };
   /** R1: static camera only; read the irradiance of every frame from `from` to `to` (inclusive, warm-up counted as
-   * frame 0..) and return the response curve to a light switch at `from` (the scene's switch frame). */
+   * frame 0..) and return the response curve to a light switch at `from` (the scene's switch frame), against the
+   * irradiance converged on the pose of frame `to`. Frames to 50% / 90% beyond 64 are multiples of 8. */
   response?: { from: number; to: number }; }
 
 export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOptions, log: (s: string) => void) {
@@ -237,14 +241,11 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     log(`  sizing: max probes per cascade ${maxCount.join(', ')} -> caps ${caps.join(', ')}`);
   }
   const p = { ...params, caps };
-  // P1 builds its voxel lists once on the CPU over static bricks built once; that path is gone (phase 21, everything is
-  // rebuilt every frame). Phase 31 ports P1 to the rebuilt bricks or deletes it.
-  if (p.p1) throw new Error('p1 does not run: it needs static bricks built once, removed in phase 21 (see docs/spec/20-renderer.md)');
-  const hitRad = p.p1 ? ctx.hitRad : null;
-  const world = hitRad ? { ...ctx.world, hr: hitRad.buffer } : ctx.world;
-  const rc = p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax])
+  const world = ctx.world;
+  const createField = () => p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax])
     : createRc(device, g, lighting.lit, frame, p, world);
-  const post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
+  let rc = createField();
+  let post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
   const querySet = device.createQuerySet({ type: 'timestamp', count: opts.frames * Q });
   const staged = !!opts.dynStages && useVox;
   const NV = staged ? VOX_STAGES.length * 2 : 0;
@@ -252,8 +253,10 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   if (opts.frames * NS > 4096) throw new Error(`--dyn-stages: ${opts.frames} frames x ${NS} timestamps exceed one query set (4096); use fewer frames`);
   const stageSet = staged ? device.createQuerySet({ type: 'timestamp', count: opts.frames * NS }) : null;
 
+  // Measurement only: the G-buffer without normal maps (the runs that give the flicker and excess floors).
+  let geoNormals = false;
   const encodeFrame = (enc: GPUCommandEncoder, tw: <T>(pass: number) => T | undefined, k = -1) => {
-    gbuffer.encode(enc, g, tw(0));
+    gbuffer.encode(enc, g, tw(0), geoNormals);
     lighting.encodeShadow(enc, tw(1));
     lighting.encodeDirect(enc, tw(2));
     if (staged) {
@@ -264,7 +267,6 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       const pass = enc.beginComputePass({ label: 'vox', timestampWrites: tw(3) });
       voxWorld!.encode(pass);
       ctx.dynLayer!.encode(pass);
-      hitRad?.encode(pass);
       pass.end();
     }
     rc.encode(enc, (i) => tw(RC0 + i));
@@ -280,7 +282,8 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     return dynWork(triTable!, spec.dynamic!.firstTriangle, spec.scene.triangleCount, P, vp, origin);
   };
 
-  async function run(mode: 'static' | 'moving') {
+  async function run(mode: 'static' | 'moving', geo = false) {
+    geoNormals = geo;
     post.clearCounters();
     let firstFinal: Uint8Array | null = null;
     const work: ReturnType<typeof dynWork>[] = [];
@@ -306,8 +309,8 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       pending.push(device.queue.onSubmittedWorkDone());
       if (pending.length >= opts.inFlight) await pending.shift();
       // A changing building must change the image (checked against the last frame after the run).
-      if (ctx.building && mode === 'static' && k === 0 && opts.poseFrame === undefined) { await Promise.all(pending.splice(0)); firstFinal = await post.capture(0); }
-      if (mode === 'static' && opts.seq && k >= 0 && k % opts.seq.every === 0 && k / opts.seq.every < opts.seq.count) {
+      if (ctx.building && mode === 'static' && !geo && k === 0 && opts.poseFrame === undefined) { await Promise.all(pending.splice(0)); firstFinal = await post.capture(0); }
+      if (mode === 'static' && !geo && opts.seq && k >= 0 && k % opts.seq.every === 0 && k / opts.seq.every < opts.seq.count) {
         await Promise.all(pending.splice(0));
         opts.seq.sink(k, { final: await post.capture(0), indirect: await post.capture(1) });
       }
@@ -420,7 +423,8 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     for (const [name, m] of [['final', 0], ['indirect', 1], ['direct', 2], ['flicker', 3]] as const) images[name] = await post.capture(m);
     if (mode === 'static') { post.encodeExcessMap(Math.floor(opts.frames / 16)); images.excess = await post.capture(3); }
     else images.excess = await post.capture(4);
-    const irr = mode === 'static' ? await readIrradiance(device, rc.irr, width, height) : null;
+    const irr = mode === 'static' && !geo ? await readIrradiance(device, rc.irr, width, height) : null;
+    geoNormals = false;
     // Share of pixels whose final colour changed by more than 2 levels between the first and the last measured frame.
     let buildingChange: { changedPct: number; presentFirst: number; presentLast: number } | null = null;
     if (firstFinal) {
@@ -456,27 +460,61 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     });
   }
 
-  // R1: response to a light switch (static camera). E_t is read every frame; the curve is
-  // sum |E_t - E_end| / sum |E_(from-1) - E_end| over photoreal pixels (luminance), E_end the last frame.
+  // R1: response to a light switch (static camera). E_t is read every frame for RESP_DENSE frames after the switch and
+  // every 8th frame after that (a long run does not fit in memory otherwise); the curve is
+  // sum |E_t - E_end| / sum |E_(from-1) - E_end| over photoreal pixels (luminance).
+  // E_end is the converged irradiance of the pose after the switch (phase 27): the pose of frame `to` is held and the
+  // run goes on in windows of RESP_WINDOW frames, read every RESP_EVERY frames. E_end is the mean of the first window
+  // whose mean irradiance (summed over the pixels) differs from the previous window's by less than RESP_TOL, or of the
+  // last window at RESP_MAX windows (end.converged false). A field that does not change at all over the first reads
+  // (no history, no noise) is taken as it is. The last frame of the run is not the converged value of a method with
+  // a long history: it made the curve reach 0 at `to` whatever the method. The test is on the summed irradiance of a
+  // long window because a stochastic field never stops changing pixel by pixel (the mean of 7 frames still differs
+  // from the next 7 by 1 % for the linear DDGI comparator and by 7-9 % for its fast settings, converged or not).
   if (opts.response) {
     const { from, to } = opts.response;
     const lums: Float32Array[] = [];
     let prev = static0;
-    for (let f = 0; f <= to; f++) {
-      pose(f);
+    const step = async (f: number, poseAt: number, read: boolean) => {
+      pose(poseAt);
       device.queue.writeBuffer(frame, 0, packFrame(frameParams(static0, prev, 0, f > 0, f + 1, p)));
       setCamera(static0);
       const enc = device.createCommandEncoder();
       encodeFrame(enc, () => undefined);
       device.queue.submit([enc.finish()]);
-      if (f >= from - 1) {
-        const ir = await readIrradiance(device, rc.irr, width, height);
-        const l = new Float32Array(ir.valid.length);
-        for (let q = 0; q < l.length; q++) l[q] = ir.valid[q] && ir.tag[q] < 2 ? lum(ir.rgb[q * 3], ir.rgb[q * 3 + 1], ir.rgb[q * 3 + 2]) : NaN;
-        lums.push(l);
-      } else if (f % 8 === 7) await device.queue.onSubmittedWorkDone();
+      if (!read) { if (f % 8 === 7) await device.queue.onSubmittedWorkDone(); return null; }
+      const ir = await readIrradiance(device, rc.irr, width, height);
+      const l = new Float32Array(ir.valid.length);
+      for (let q = 0; q < l.length; q++) l[q] = ir.valid[q] && ir.tag[q] < 2 ? lum(ir.rgb[q * 3], ir.rgb[q * 3 + 1], ir.rgb[q * 3 + 2]) : NaN;
+      return l;
+    };
+    const at: number[] = []; // frames after the switch of lums[1..]
+    for (let f = 0; f <= to; f++) {
+      const l = await step(f, f, f >= from - 1 && (f - from < RESP_DENSE || (f - from) % 8 === 7 || f === to));
+      if (l) { lums.push(l); if (f >= from) at.push(f - from + 1); }
     }
-    const end = lums[lums.length - 1], before = lums[0];
+    const before = lums[0];
+    let end = new Float32Array(before.length), endChange: number | null = null, windows = 0, f = to + 1, lastSum = 0, still = true;
+    const sums: number[] = [];
+    while (windows < RESP_MAX && !(endChange !== null && Math.abs(endChange) < RESP_TOL)) {
+      const mean = new Float32Array(before.length), reads = RESP_WINDOW / RESP_EVERY;
+      let first: Float32Array | null = null;
+      for (let i = 0; i < RESP_WINDOW; i++, f++) {
+        const l = await step(f, to, i % RESP_EVERY === RESP_EVERY - 1);
+        if (!l) continue;
+        for (let q = 0; q < l.length; q++) mean[q] += l[q] / reads;
+        if (windows === 0 && still) {
+          if (!first) first = l;
+          else for (let q = 0; q < l.length && still; q++) if (l[q] !== first[q] && !(Number.isNaN(l[q]) && Number.isNaN(first[q]))) still = false;
+          if (still && i >= 7 * RESP_EVERY) { end = l; break; }
+        }
+      }
+      if (windows === 0 && still) { endChange = 0; windows = 1; f++; break; }
+      let sum = 0;
+      for (let q = 0; q < mean.length; q++) if (!Number.isNaN(mean[q])) sum += mean[q];
+      if (windows > 0) endChange = (sum - lastSum) / lastSum;
+      sums.push(sum); lastSum = sum; end = mean; windows++;
+    }
     let d0 = 0;
     for (let q = 0; q < end.length; q++) if (!Number.isNaN(end[q]) && !Number.isNaN(before[q])) d0 += Math.abs(before[q] - end[q]);
     const curve = lums.slice(1).map((l) => {
@@ -484,9 +522,13 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       for (let q = 0; q < end.length; q++) if (!Number.isNaN(end[q]) && !Number.isNaN(l[q])) d += Math.abs(l[q] - end[q]);
       return Math.round(d / d0 * 1e4) / 1e4;
     });
-    const firstBelow = (x: number) => { const i = curve.findIndex((c, k) => c <= x && curve.slice(k).every((v) => v <= x)); return i < 0 ? null : i + 1; };
+    // First frame from which the curve stays at or below x (null: not within the frames read).
+    const firstBelow = (x: number) => { const i = curve.findIndex((c, k) => c <= x && curve.slice(k).every((v) => v <= x)); return i < 0 ? null : at[i]; };
     rc.destroy(); post.destroy(); querySet.destroy();
-    return { params: p, response: { from, to, curve, frames90: firstBelow(0.1), frames50: firstBelow(0.5) } };
+    const r5 = (x: number) => Math.round(x * 1e5) / 1e5;
+    return { params: p, response: { from, to, curve, curveFrames: at, frames90: firstBelow(0.1), frames50: firstBelow(0.5),
+      end: { poseFrame: to, framesHeld: f - to - 1, still, windows, lastWindowChange: endChange === null ? null : r5(endChange),
+        converged: endChange !== null && Math.abs(endChange) < RESP_TOL, windowMeans: sums.map((x) => r5(x / sums[sums.length - 1])) } } };
   }
 
   // Full-dynamic lane: every frame really changes the whole building. Wave: share of the building's vertices that move
@@ -521,8 +563,23 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   const tracer = await traceStats();
   let mv = null;
   if (spec.moving && !opts.staticOnly) { log(`  moving`); mv = await run('moving'); }
+  // The same runs without normal maps (phase 27): on a moving camera or a moving building a reprojected pixel lands on
+  // another texel of the normal map, which the flicker and excess metrics count as a change of the irradiance. These
+  // runs give the metrics without that; their timings are not used.
+  const metrics = (r: Awaited<ReturnType<typeof run>>) => ({ flicker: r.flicker, excess: r.excess, chainExcess: r.chainExcess, overflow: r.overflow, insertFailures: r.insertFailures,
+    images: { indirect: r.images.indirect, flicker: r.images.flicker, excess: r.images.excess } });
+  let stGeo = null, mvGeo = null;
+  const ddgiDims = 'dims' in rc ? rc.dims : null, allocatedBytes = rc.bytes;
+  if (!opts.dynStages && !opts.seq) {
+    // A new field: a method with a history starts these runs from the same state as the runs above.
+    rc.destroy(); post.destroy();
+    rc = createField(); post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
+    log(`  static, geometric normals`);
+    stGeo = metrics(await run('static', true));
+    if (mv) { log(`  moving, geometric normals`); mvGeo = metrics(await run('moving', true)); }
+  }
   rc.destroy(); post.destroy(); querySet.destroy(); stageSet?.destroy();
-  return { params: p, buildingMotion: motion, ddgiDims: 'dims' in rc ? rc.dims : null, allocatedBytes: rc.bytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, hitRadBytes: p.p1 ? ctx.hitRad!.bytes : 0, static: st, moving: mv, tracer };
+  return { params: p, buildingMotion: motion, ddgiDims, allocatedBytes, voxAllocatedBytes: useVox ? voxWorld!.bytes : 0, dynAllocatedBytes: useVox ? ctx.dynLayer!.bytes : 0, static: st, moving: mv, staticGeo: stGeo, movingGeo: mvGeo, tracer };
 }
 
 /** Voxel rebuild alone, one pass per stage, static camera. */

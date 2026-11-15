@@ -1,0 +1,99 @@
+{
+  "phase": 27,
+  "date": "2026-11-15",
+  "kind": "exploratory measurement (one run each unless noted), 1080p, warmup 60 + 240 frames, no sky (leak with sky)",
+  "spec": "docs/spec/30-measurements.md section 31; metric definitions in docs/spec/10-evaluation.md",
+  "defaultImageSha256": {
+    "sponza --no-sky --static-only --dump-irr --frames 60": "e5a44335320fce9cdb26d9eab606b343e48c1544b0e4629bce4eb197ccd5e2d9",
+    "sponza-dynobj --pose-frame 0 --no-sky --static-only --dump-irr --frames 60": "19a21466463c5805b782799a5dda9765d60ce60fae1d274ce238b169d495c688",
+    "unchangedFromPhase26": true
+  },
+  "configs": {
+    "rc": "world-48-voxel-rc2-vrel",
+    "ddgiLinear": "ddgi-100-128-u8-g1-noadapt",
+    "ddgiFast": ["ddgi-100-128-u8-h0.5-g1-noadapt", "ddgi-150-64-u1-h0.8-g1-noadapt", "ddgi-125-64-u2-h0.5-g1-noadapt"]
+  },
+  "reproduction": {
+    "sponzaDynobjExcessK16": 0.01126,
+    "lagFrame179Pct": 0.07,
+    "giMsBwave64": {
+      "note": "GPU shared with another process all day (idle GPU busy 29%); alternated with the phase 26 runner, 3 runs each",
+      "phase26Runner": { "static": [4.254, 4.237, 4.325], "moving": [3.787, 3.726, 3.938] },
+      "phase27": { "static": [4.113, 4.222, 4.055], "moving": [3.788, 3.214, 3.779] },
+      "allocatedMiB": 76.8,
+      "phase26Reference": "3.67-3.80"
+    }
+  },
+  "response": {
+    "scene": "sponza-dyn-switch200 (switch at frame 200), frames to 90% / 50%",
+    "before_lastFrameAsEnd_200_520": {
+      "rc": [1, 1], "ddgiLinear": [268, 120], "ddgi-100-128-u8-h0.5": [33, 10], "ddgi-150-64-u1-h0.8": [14, 4], "ddgi-125-64-u2-h0.5": [10, 3]
+    },
+    "after_frozenConvergedEnd": {
+      "rc": [1, 1], "ddgiLinear_200_2600": [712, 216], "ddgi-100-128-u8-h0.5": [33, 10], "ddgi-150-64-u1-h0.8": [14, 4], "ddgi-125-64-u2-h0.5": [9, 3]
+    },
+    "ddgiLinearResidualAfterSwitch": { "1": 0.9967, "64": 0.8108, "200": 0.52, "520": 0.1833, "1200": 0.0212, "2400": 0.0044 }
+  },
+  "normalMapFloor": {
+    "note": "flicker = fine band %, excess = K16 log2 per frame (static camera) or chain excess (moving camera); [with normal maps, geometric normals]",
+    "sponza_moving": {
+      "rc": { "flicker": [18.991, 3.259], "excess": [0.06881, 0.01444] },
+      "ddgiLinear": { "flicker": [15.551, 3.49], "excess": [0.03422, 0.00499] },
+      "control": { "flicker": [4.023, 0.925], "excess": [0.00773, 0.0013] }
+    },
+    "sponza-dynobj": {
+      "rc": { "staticExcess": [0.01126, 0.01126], "movingExcess": [0.0563, 0.02639] },
+      "ddgiLinear": { "staticExcess": [0.0002, 0.0002], "movingExcess": [0.02949, 0.00466] }
+    },
+    "sponza-dynobj-n64-deform-bwave": {
+      "rc": { "staticExcess": [0.17812, 0.11431], "staticFlicker": [35.101, 23.568], "movingExcess": [0.14044, 0.08861] },
+      "ddgiLinear": { "staticExcess": [0.10551, 0.03812], "staticFlicker": [22.512, 5.862], "movingExcess": [0.04777, 0.0063] },
+      "control": { "staticExcess": [0.00596, 0.00022], "movingExcess": [0.00928, 0.00069] }
+    },
+    "town-dynobj-bwave_noNormalMaps": {
+      "rc": { "staticExcess": 0.23861, "staticFlicker": 23.403, "movingExcess": 0.17791 },
+      "ddgiLinear": { "staticExcess": 0.00735, "staticFlicker": 5.61, "movingExcess": 0.00329 }
+    },
+    "sponza-bcut": {
+      "rc": { "staticExcess": [0.00282, 0.0028], "movingExcess": [0.0723, 0.01725] },
+      "ddgiLinear": { "staticExcess": [0.00102, 0.00102], "movingExcess": [0.03256, 0.00453] }
+    },
+    "sponza-dynobj-n64-deform-bcut": {
+      "rc": { "staticExcess": [0.03447, 0.03448], "movingExcess": [0.04769, 0.02729] },
+      "ddgiLinear": { "staticExcess": [0.00097, 0.00096], "movingExcess": [0.02207, 0.00391] }
+    }
+  },
+  "ddgiFastGeoStaticExcess": {
+    "order": ["ddgi-100-128-u8-h0.5", "ddgi-150-64-u1-h0.8", "ddgi-125-64-u2-h0.5"],
+    "sponza-dynobj-n64-deform-bwave": [0.05056, 0.08135, 0.12513],
+    "town-dynobj-bwave": [0.03889, 0.05661, 0.08914],
+    "sponza-dynobj-n64-deform-bcut": [0.01297, 0.05584, 0.09951],
+    "sponza-dynobj": [0.00531, 0.04352, 0.06407],
+    "sponza_staticFlickerPct": [4.318, 17.565, 21.875]
+  },
+  "objectPixels": {
+    "note": "block 8x8 meanAbsRel / bias against the multi-bounce Mitsuba reference; DDGI warmed up 2400 frames with the pose frozen",
+    "sponza-dynobj-n64-deform-f0": {
+      "reference": "128 spp, 1 render",
+      "rc": { "objects": [0.3536, -0.2787], "building": [0.3848, -0.2565] },
+      "ddgiLinear": { "objects": [0.5264, -0.4451], "building": [0.3173, -0.1189] }
+    },
+    "sponza-dynobj-n64-deform-f100": {
+      "reference": "128 spp, 1 render; objects in shade",
+      "rc": { "objects": [0.2759, -0.1733], "building": [0.3739, -0.1498] },
+      "ddgiLinear": { "objects": [0.4903, -0.4309], "building": [0.3524, -0.1691] }
+    },
+    "sponza-dynobj-f0": {
+      "reference": "128 spp x 2 (existing)",
+      "rc": { "objects": [0.3962, -0.3239], "building": [0.3458, -0.1452] },
+      "referenceHalvesObjectsB8": 0.0279
+    }
+  },
+  "errorAndLeak": {
+    "sponzaB8": { "rc": [0.3455, -0.1717], "ddgiLinear": [0.2829, -0.0498], "ddgiLinearWarmup2400": [0.2852, -0.0339] },
+    "townB8": { "rc": 0.2279, "ddgiLinear": 0.2899 },
+    "townGridB8": { "rc": [0.3657, -0.3288], "ddgiLinear": [0.3376, -0.2732] },
+    "leakPct_2cm_10cm_60frames": { "rc": [0.77, 0.36], "ddgiLinear": [1.85, 1.58] }
+  },
+  "p1Removed": true
+}

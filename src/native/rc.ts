@@ -16,8 +16,6 @@
 //   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent),
 //   S3 (toon materials, scene sponza-toon): noemit (toon surfaces inject plain Lambert), norecv (toon pixels receive
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
-//   p1 (RC and DDGI): static voxel hits read the prefiltered hit radiance (src/core/hitrad.ts). Does not run since
-//   phase 21 (it needs static bricks built once); phase 31 ports or deletes it.
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { parseGltf } from '../core/gltf.ts';
@@ -26,7 +24,7 @@ import { DEFAULT_DDGI, type DdgiParams } from '../core/ddgi.ts';
 import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
 import { benchVoxels, compareIrradiance, createRunContext, lum, readIrradiance, runConfig, SKY } from '../core/rcrun.ts';
 import { uploadScene } from '../core/scene_gpu.ts';
-import { densify, dynamicSponza, leakRoom, sponzaSpec, toonSponza, townScene, widen, withBuildingMotion, type SceneSpec } from '../core/scenes.ts';
+import { leakRoom, sponzaScene, townScene, withBuildingMotion, type SceneSpec } from '../core/scenes.ts';
 import { createNativeDevice, IMPLEMENTATION, loadSponza, ROOT, writePng } from './env.ts';
 
 // Synchronous logging: a native abort would otherwise drop buffered output.
@@ -51,11 +49,10 @@ const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--fram
   response: args.includes('--response') ? (([a, b]) => ({ from: a, to: b }))(arg('--response', '').split(',').map(Number)) : undefined };
 const overrides = JSON.parse(arg('--params', '{}')) as Partial<RcParams>;
 
-// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>][-p1]
+// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>]
 function parseDdgi(name: string): RcParams {
   const [, sp, rays, ...tokens] = name.split('-');
   const d: DdgiParams = { ...DEFAULT_DDGI, spacing: Number(sp) / 100, rays: Number(rays) };
-  let p1 = false;
   for (const t of tokens) {
     if (/^h[\d.]+$/.test(t)) d.hysteresis = Number(t.slice(1));
     else if (t === 'noadapt') d.adaptive = false;
@@ -66,10 +63,9 @@ function parseDdgi(name: string): RcParams {
     else if (/^sb[\d.]+$/.test(t)) d.segBase = Number(t.slice(2));
     else if (/^g[\d.]+$/.test(t)) d.gamma = Number(t.slice(1));
     else if (/^vb[\d.]+$/.test(t)) d.viewBias = Number(t.slice(2));
-    else if (t === 'p1') p1 = true;
     else throw new Error(`unknown ddgi token ${t} in ${name}`);
   }
-  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d, p1 };
+  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d };
 }
 
 function parseConfig(name: string): RcParams {
@@ -87,7 +83,6 @@ function parseConfig(name: string): RcParams {
     else if (t === 'norel') p.relocate = 'none';
     else if (t === 'vrel') p.relocate = 'voxel';
     else if (t === 'noemit') p.styleEmit = false;
-    else if (t === 'p1') p.p1 = true;
     else if (t === 'norecv') p.styleRecv = false;
     else if (/^soft[\d.]+$/.test(t)) p.rampSoft = Number(t.slice(4));
     else if (/^rc\d$/.test(t)) p.resCap = Number(t.slice(2));
@@ -112,18 +107,7 @@ else {
   const s = loadSponza();
   upload = s.upload;
   const base = parseGltf(s.json, s.bin);
-  // Stress scenes: sponza-dynobj-many<G> (G groups of the three objects), -n<N> (N objects on a grid), -deform.
-  const stress = /^sponza-dynobj(?:-many(\d+)|-n(\d+))?(-deform)?$/.exec(sceneName);
-  spec =sceneName === 'sponza' ? sponzaSpec(base) : sceneName === 'sponza-wide10' ? widen(base, 10)
-    : sceneName === 'sponza-dense9' ? densify(base) : sceneName === 'sponza-toon' ? toonSponza(base)
-    : sceneName === 'sponza-objects' ? toonSponza(base, true)
-    : sceneName === 'sponza-dyn' ? dynamicSponza(base) : sceneName === 'sponza-dynobj' ? dynamicSponza(base, true)
-    : sceneName === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : sceneName === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')
-    : sceneName === 'sponza-dynobj-sunonly' ? dynamicSponza(base, true, -1, 'sun') : sceneName === 'sponza-dynobj-objectsonly' ? dynamicSponza(base, true, -1, 'objects')
-    : sceneName === 'sponza-dynobj-sphereonly' ? dynamicSponza(base, true, -1, 'sphere')
-    : stress ? dynamicSponza(base, true, -1, 'all', Number(stress[1] ?? 1), Number(stress[2] ?? 0), !!stress[3])
-    : sceneName.startsWith('sponza-dyn-switch') ? dynamicSponza(base, false, Number(sceneName.slice('sponza-dyn-switch'.length)))
-    : (() => { throw new Error(`unknown scene ${sceneName}`); })();
+  spec = sponzaScene(sceneName, base);
 }
 if (buildingKind) spec = withBuildingMotion(spec, buildingKind);
 const gpu = await uploadScene(device, spec.scene, upload);
@@ -150,13 +134,13 @@ for (const [name, params] of parsed) {
   const r0 = await runConfig(ctx, params, opts, (s) => log(s));
   if (r0.response) {
     const rr = r0.response;
-    log(`  response: 90% after ${rr.frames90} frames, 50% after ${rr.frames50}; curve ${rr.curve.slice(0, 12).join(', ')} ...`);
+    log(`  response: 90% after ${rr.frames90} frames, 50% after ${rr.frames50}; end value ${JSON.stringify(rr.end)}; curve ${rr.curve.slice(0, 12).join(', ')} ... last ${rr.curve[rr.curve.length - 1]}`);
     writeFileSync(join(outDir, `${name}.response.json`), JSON.stringify({ kind: 'exploratory (探索値)', date: new Date().toISOString(), scene: spec.name,
       config: name, params: r0.params, ...rr }, null, 2));
     continue;
   }
   const r = r0 as Required<typeof r0>;
-  for (const [mode, res] of [['static', r.static], ['moving', r.moving]] as const)
+  for (const [mode, res] of [['static', r.static], ['moving', r.moving], ['static-geo', r.staticGeo], ['moving-geo', r.movingGeo]] as const)
     if (res) for (const [img, rgba] of Object.entries(res.images)) writeFileSync(join(outDir, `${name}.${mode}.${img}.png`), writePng(ctx.width, ctx.height, rgba));
   irr[name] = r.static.irr;
   if (args.includes('--dump-irr') && r.static.irr) {
@@ -165,7 +149,7 @@ for (const [name, params] of parsed) {
     for (let p = 0; p < tag.length; p++) { f.set(rgb.subarray(p * 3, p * 3 + 3), p * 4); f[p * 4 + 3] = tag[p]; }
     writeFileSync(join(outDir, `${name}.static.irr.f32`), Buffer.from(f.buffer));
   }
-  const strip = (x: typeof r.static | null) => { if (!x) return null; const { images: _, irr: __, ...rest } = x; return rest; };
+  const strip = <T extends { images: unknown }>(x: T | null) => { if (!x) return null; const { images: _, irr: __, ...rest } = x as T & { irr?: unknown }; return rest; };
   let leak = null;
   if (spec.enclosed && r.static.irr) {
     const { rgb, valid } = r.static.irr;
@@ -182,15 +166,15 @@ for (const [name, params] of parsed) {
     kind: 'exploratory (探索値)', date: new Date().toISOString(), platform: 'native', implementation: IMPLEMENTATION, adapter: adapterInfo,
     scene: { name: spec.name, triangles: spec.scene.triangleCount, sunDir: spec.sunDir }, resolution: `${ctx.width}x${ctx.height}`,
     frames: { warmup: opts.warmup, measured: opts.frames, inFlight: opts.inFlight, seedFixed: opts.seedFixed }, sky: opts.sky,
-    config: name, params: r.params, ddgiDims: r.ddgiDims, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, hitRadBytes: r.hitRadBytes, bvh: ctx.bvh,
-    voxParams: ctx.voxWorld?.params ?? null, buildingMotion: r.buildingMotion, static: strip(r.static), moving: strip(r.moving), tracer: r.tracer, leak,
+    config: name, params: r.params, ddgiDims: r.ddgiDims, allocatedBytes: r.allocatedBytes, voxAllocatedBytes: r.voxAllocatedBytes, dynAllocatedBytes: r.dynAllocatedBytes, bvh: ctx.bvh,
+    voxParams: ctx.voxWorld?.params ?? null, buildingMotion: r.buildingMotion, static: strip(r.static), moving: strip(r.moving), staticGeo: strip(r.staticGeo), movingGeo: strip(r.movingGeo), tracer: r.tracer, leak,
   };
   const t = r.static.timing, m = r.moving?.timing;
   if (r.ddgiDims) log(`  ddgi grid ${r.ddgiDims.join('x')}; active, updated, relocated, stuck: ${r.static.counts.join(', ')}`);
   log(`  GI static ${t.giTotal.median} ms (vox ${t.vox?.median ?? '-'}, build ${t.giBuild.median}, trace ${t.giTrace.median}, merge ${t.giMerge.median}, gather ${t.giGather.median})` + (m ? `; moving ${m.giTotal.median} ms` : ''));
   log(`  probes ${r.static.counts.join(', ')}; used ${(r.static.usedBytes / 2 ** 20).toFixed(1)} MiB, allocated ${(r.allocatedBytes / 2 ** 20).toFixed(1)} MiB`);
   const M = (b: number) => (b / 2 ** 20).toFixed(1);
-  log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes + r.hitRadBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} incl. build temporaries, dyn ${M(r.dynAllocatedBytes)}, p1 ${M(r.hitRadBytes)})`);
+  log(`  GI allocated ${M(r.allocatedBytes + r.voxAllocatedBytes + r.dynAllocatedBytes)} MiB (field ${M(r.allocatedBytes)}, vox ${M(r.voxAllocatedBytes)} incl. build temporaries, dyn ${M(r.dynAllocatedBytes)})`);
   if (r.static.vox) log(`  vox ${JSON.stringify(r.static.vox)}`);
   if (opts.dynStages) log(`  stages (median ms) ${Object.entries(t).filter(([k]) => k.startsWith('dyn.') || k.startsWith('vox.')).map(([k, v]) => `${k} ${v.median}`).join(', ')}`);
   if (r.static.buildingChange) log(`  building change (first vs last measured frame, static camera) ${JSON.stringify(r.static.buildingChange)}`);
@@ -202,6 +186,9 @@ for (const [name, params] of parsed) {
   log(`  chain excess static ${JSON.stringify(r.static.chainExcess)}`);
   if (r.moving) log(`  flicker moving ${JSON.stringify(r.moving.flicker)}`);
   if (r.moving) log(`  chain excess moving ${JSON.stringify(r.moving.chainExcess)}`);
+  // Without normal maps (the main values on a moving camera and a moving building).
+  if (r.staticGeo) log(`  geo static: flicker fine ${r.staticGeo.flicker.staticFinePct} % (control ${r.staticGeo.flicker.controlFinePct}), excess k16 ${r.staticGeo.excess?.k16.excessPerFrame} (linear ${r.staticGeo.excess?.k16linear.excessRelPerFrame})`);
+  if (r.movingGeo) log(`  geo moving: flicker fine ${r.movingGeo.flicker.staticFinePct} % (control ${r.movingGeo.flicker.controlFinePct}), chain excess ${r.movingGeo.chainExcess.excessPerFrame} (linear ${r.movingGeo.chainExcess.excessRelPerFrame}, control ${r.movingGeo.chainExcess.controlExcessPerFrame})`);
 }
 // Irradiance against the triangle tracer (same probes, same intervals), static camera.
 // The reference uses the same probe relocation when the run has one (same probe positions).
