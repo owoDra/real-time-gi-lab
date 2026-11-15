@@ -71,6 +71,7 @@ mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --our
   （[spec/20-renderer.md](spec/20-renderer.md)）。
 - `scripts/m1_sweep.sh` と `scripts/m1_dynamic.sh` は、[spec/30-measurements.md](spec/30-measurements.md) の 5 節と
   7 節を測った掃引。`scripts/m1_summary.py` と `scripts/m1_dynamic_summary.py` がその要約を作る。
+- `scripts/p34_confirm.sh` と `scripts/p34_judge.py` は確認実験（[spec/60-confirmation.md](spec/60-confirmation.md)）の実行と判定。場面名の `-cam2` は探索で使っていない視点。
 - 光源切替への応答（`--response`）は 1080p の放射照度を毎フレーム読むので、設定 1 つに 1〜3 分かかる。
 
 ## 作業機の事情（開発機、NixOS）

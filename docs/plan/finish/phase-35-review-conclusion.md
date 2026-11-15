@@ -10,6 +10,13 @@ AGENTS.md と docs/plan/README.md と docs/plan/finish/README.md と docs/plan/f
 
 段階 I の出口。Program 2 の結論を、成立したことと成立しなかったことを分けて書く。
 
+## 前提（Phase 34 の後、2026-11-16）
+
+- 確認実験の結果は [spec/60-confirmation.md](../../spec/60-confirmation.md) の「結果」と `docs/reference/measurements/finish/phase34-confirmation.json`。26 の主張のうち 19 成立、7 不成立。
+  不成立：混んだ機械での GI 4.0 ms 以下（C1、C2、C15、C19a。RC は 3.8〜4.1 ms、広さ 100 倍 4.25〜4.47 ms）、`town` 系で RC が参照に近い（C9。`town-cam2` で再現しない）、動く物体の偏りと接地点の床（C11、C12）。
+  空いた機械での時間は未実行（機械が空かなかった）。
+- 同じ画角の並べた画像の元：`box/out/p34/` は要約の後に消したので、ページの画像はこのフェーズで描き直す（`scripts/p34_confirm.sh` の品質の実行と同じ引数）。
+
 ## 決定済みの方針
 
 - 要件ごとに「満たした / 一部 / 満たしていない」を、確認実験の結果で書く。探索値しか無いものは探索値と書く。
