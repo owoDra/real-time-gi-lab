@@ -1,8 +1,10 @@
 // Native radiance-cascade runs.
-// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide10|sponza-dense9|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>|town*][-bwave|-bcut] [--configs a,b,...]
+// Usage: node build/native/rc.mjs [--scene sponza|sponza-wide<N>[-fly][-...]|sponza-dense10|sponza-toon|sponza-objects|sponza-dyn*|leak-<t>|town*][-bwave|-bcut] [--configs a,b,...]
 //   [--frames N] [--warmup N] [--out DIR] [--no-sky] [--params JSON] [--vox JSON] [--bvh] [--static-only]
 //   [--pose-frame F] [--seq EVERY,COUNT]  (static camera: final and indirect images every EVERY frames, timings disturbed)
+//   [--seq-moving]  (--seq on the moving camera instead)  [--dump-moving EVERY]  (moving camera: irradiance every EVERY frames, mov.<k>.irr.f32)
 //   [--vox-bench [--tag T]]  (voxel rebuild alone, per stage)  [--dump-irr]  (static irradiance as float32)
+//   [--lod0 CELL]  (clustering cell of the level-0 voxel copy in m, 0 = full triangles; default 0.1)
 //   [--dyn-stages]  (the static voxel build and the dynamic layer build timed per stage in separate passes, and the dynamic
 //                    layer's work counted; at most 4096 / timestamps-per-frame frames)
 //   --vox JSON overrides voxel.ts DEFAULT_VOX (v0, levels, G, maxBricks, maxVoxels, dynBricks).
@@ -42,8 +44,11 @@ const opts = { warmup: Number(arg('--warmup', '60')), frames: Number(arg('--fram
   sky: (args.includes('--no-sky') ? [0, 0, 0] : SKY) as Vec3,
   poseFrame: args.includes('--pose-frame') ? Number(arg('--pose-frame', '0')) : undefined,
   // --seq EVERY,COUNT: static camera, final and indirect images every EVERY measured frames (timings are disturbed).
-  seq: args.includes('--seq') ? (([every, count]) => ({ every, count, sink: (k: number, im: Record<string, Uint8Array>) => {
+  seq: args.includes('--seq') ? (([every, count]) => ({ every, count, moving: args.includes('--seq-moving'), sink: (k: number, im: Record<string, Uint8Array>) => {
     for (const [img, rgba] of Object.entries(im)) writeFileSync(join(outDir, `seq.${String(k).padStart(3, '0')}.${img}.png`), writePng(ctx.width, ctx.height, rgba)); } }))(arg('--seq', '').split(',').map(Number)) : undefined,
+  dumpMoving: args.includes('--dump-moving') ? { every: Number(arg('--dump-moving', '1')), sink: (k: number, ir: Parameters<typeof packIrradiance>[0], vox: unknown) => {
+    writeFileSync(join(outDir, `mov.${String(k).padStart(3, '0')}.irr.f32`), Buffer.from(packIrradiance(ir).buffer));
+    log(`  moving frame ${k}: vox ${JSON.stringify(vox)}`); } } : undefined,
   // R1: --response FROM,TO (use with a sponza-dyn-switch<FROM> scene)
   response: args.includes('--response') ? (([a, b]) => ({ from: a, to: b }))(arg('--response', '').split(',').map(Number)) : undefined };
 const overrides = JSON.parse(arg('--params', '{}')) as Partial<RcParams>;
@@ -54,7 +59,7 @@ const parsed = configs.map((c) => [c, parseConfig(c, overrides)] as const);
 const { device, adapterInfo } = await createNativeDevice();
 log(`limits: maxStorageBufferBindingSize ${device.limits.maxStorageBufferBindingSize}, maxBufferSize ${device.limits.maxBufferSize}, maxStorageBuffersPerShaderStage ${device.limits.maxStorageBuffersPerShaderStage}`);
 const t0 = performance.now();
-const { spec, upload } = await loadScene(sceneArg, async () => loadSponza());
+const { spec, upload } = await loadScene(sceneArg, async () => loadSponza(), args.includes('--lod0') ? Number(arg('--lod0', '0')) : undefined);
 const gpu = await uploadScene(device, spec.scene, upload);
 const needBvh = args.includes('--bvh') || parsed.some(([, p]) => p.world === 'tri');
 const voxBench = args.includes('--vox-bench');

@@ -12,6 +12,7 @@
 // as degenerate). The index buffer (raster) and the triangle table (voxels) are rewritten when the set changes.
 import type { SceneData } from './gltf.ts';
 import type { SceneGpu } from './scene_gpu.ts';
+import type { World } from './world.ts';
 
 export const CUT_PERIOD = 30, CUT_SHARE = 0.2, CUT_CELL = 2;
 const FAR_Y = -1e4;
@@ -38,7 +39,7 @@ export function withBuilding(scene: SceneData, kind: 'wave' | 'cut', firstDynami
 }
 
 const WAVE_WGSL = /* wgsl */ `
-struct U { t: f32, n: u32, pad0: u32, pad1: u32 }
+struct U { t: f32, n: u32, lodFirst: u32, lodN: u32 } // phase 32: then the clustered copies' vertices (world.ts)
 @group(0) @binding(0) var<uniform> u: U;
 @group(0) @binding(1) var<storage, read> restP: array<f32>;
 @group(0) @binding(2) var<storage, read> restN: array<f32>;
@@ -50,10 +51,11 @@ const W0 = vec3f(0.0, 0.8, 0.6);
 const W1 = vec3f(0.6, 0.0, 0.8);
 const W2 = vec3f(0.8, 0.6, 0.0);
 @compute @workgroup_size(64) fn wave(@builtin(global_invocation_id) gid: vec3u, @builtin(num_workgroups) nwg: vec3u) {
-  let v = gid.y * nwg.x * 64u + gid.x;
-  if (v >= u.n) { return; }
-  let p = vec3f(restP[v * 3u], restP[v * 3u + 1u], restP[v * 3u + 2u]);
-  let n = vec3f(restN[v * 3u], restN[v * 3u + 1u], restN[v * 3u + 2u]);
+  let k = gid.y * nwg.x * 64u + gid.x;
+  if (k >= u.n + u.lodN) { return; }
+  let v = select(u.lodFirst + k - u.n, k, k < u.n);
+  let p = vec3f(restP[k * 3u], restP[k * 3u + 1u], restP[k * 3u + 2u]);
+  let n = vec3f(restN[k * 3u], restN[k * 3u + 1u], restN[k * 3u + 2u]);
   let a = vec3f(K * dot(W0, p) + 6.283185 * u.t / 90.0, K * dot(W1, p) + 6.283185 * u.t / 110.0 + 1.3, K * dot(W2, p) + 6.283185 * u.t / 130.0 + 2.6);
   let d = A * sin(a);
   let c = A * K * cos(a);  // D_ij = c_i W_i[j]
@@ -81,27 +83,33 @@ function hash3(x: number, y: number, z: number, e: number) {
   return (h >>> 0) / 4294967296;
 }
 
-export function createBuilding(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, table: Uint32Array, spec: BuildingSpec): Building {
+export function createBuilding(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, table: Uint32Array, spec: BuildingSpec,
+  world: World | null = null): Building {
+  if (world && spec.kind !== 'wave') throw new Error('instanced worlds support the wave only');
   if (spec.kind === 'wave') {
-    const n = spec.vertexCount;
+    const n = spec.vertexCount, lodFirst = world?.lodFirstVertex ?? 0, lodN = world?.lodVertexCount ?? 0;
     const S = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST;
-    const restP = device.createBuffer({ label: 'building.restP', size: n * 12, usage: S });
-    const restN = device.createBuffer({ label: 'building.restN', size: n * 12, usage: S });
+    const restP = device.createBuffer({ label: 'building.restP', size: (n + lodN) * 12, usage: S });
+    const restN = device.createBuffer({ label: 'building.restN', size: (n + lodN) * 12, usage: S });
     device.queue.writeBuffer(restP, 0, scene.positions, 0, n * 3);
     device.queue.writeBuffer(restN, 0, scene.normals, 0, n * 3);
+    if (lodN) {
+      device.queue.writeBuffer(restP, n * 12, scene.positions, lodFirst * 3, lodN * 3);
+      device.queue.writeBuffer(restN, n * 12, scene.normals, lodFirst * 3, lodN * 3);
+    }
     const uni = device.createBuffer({ size: 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
     const pipe = device.createComputePipeline({ layout: 'auto', compute: { module: device.createShaderModule({ code: WAVE_WGSL, label: 'building.wave' }), entryPoint: 'wave' } });
-    // Writes only the building range of the vertex buffers (the dynamic objects' range is written by the runner).
+    // Writes only the building's vertices (and the clustered copies'); the dynamic objects' range is written by the runner.
     const bg = device.createBindGroup({ layout: pipe.getBindGroupLayout(0), entries: [
       { binding: 0, resource: { buffer: uni } }, { binding: 1, resource: { buffer: restP } }, { binding: 2, resource: { buffer: restN } },
-      { binding: 3, resource: { buffer: gpu.positions, offset: 0, size: n * 12 } }, { binding: 4, resource: { buffer: gpu.normals, offset: 0, size: n * 12 } },
+      { binding: 3, resource: { buffer: gpu.positions } }, { binding: 4, resource: { buffer: gpu.normals } },
     ] });
-    const g = Math.ceil(n / 64), x = Math.min(g, 65535);
+    const g = Math.ceil((n + lodN) / 64), x = Math.min(g, 65535);
     return {
       spec,
       apply(t) {
         const b = new ArrayBuffer(16);
-        new Float32Array(b, 0, 1)[0] = t; new Uint32Array(b, 4, 1)[0] = n;
+        new Float32Array(b, 0, 1)[0] = t; new Uint32Array(b, 4, 3).set([n, lodFirst, lodN]);
         device.queue.writeBuffer(uni, 0, b);
         const enc = device.createCommandEncoder();
         const pass = enc.beginComputePass({ label: 'building.wave' });

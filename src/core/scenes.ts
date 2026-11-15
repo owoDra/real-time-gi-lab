@@ -1,11 +1,12 @@
-// S2 scenes: Sponza, Sponza made 10x wider (ten copies in a row) or 10x denser (every triangle split into
-// nine with the same surface), and enclosed leak rooms after N004 (legacy/scenes/n004_scene_factory.py).
+// S2 scenes: Sponza, Sponza made wider (phase 32: copies of its building in a row, as instances) or 10x denser (every
+// triangle split into ten with the same surface), and enclosed leak rooms after N004 (legacy/scenes/n004_scene_factory.py).
 // S3: Sponza with toon objects (saturated, untextured, toon style) standing on the atrium floor in the sun.
 import { s0Camera } from './bench.ts';
 import type { Camera } from './frame.ts';
 import type { MaterialDesc, SceneData } from './gltf.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
 import { withBuilding, type BuildingSpec } from './building.ts';
+import type { World } from './world.ts';
 
 export interface SceneSpec {
   name: string;
@@ -21,6 +22,11 @@ export interface SceneSpec {
   dynamic?: DynamicSpec;
   /** Full-dynamic lane: the building itself changes every frame (building.ts). */
   building?: BuildingSpec;
+  /** Phase 32: the static part is placed at these offsets (instance 0 at the origin); loadScene builds `world` from it. */
+  instances?: Vec3[];
+  world?: World;
+  /** Phase 32 (D4): the moving camera flies along +x at this speed (m per frame), looking along the row. */
+  fly?: number;
 }
 
 /** Full-dynamic lane: suffix -bwave (every building vertex moves every frame) or -bcut (parts of the building appear
@@ -108,52 +114,47 @@ export function sponzaSpec(scene: SceneData): SceneSpec {
   return { name: 'sponza', scene, camera: s0Camera(scene), moving: true, sunDir: SPONZA_SUN, enclosed: false };
 }
 
-/** n copies along +x, 2 m apart. The camera stays in the first copy. */
-export function widen(base: SceneData, n: number): SceneSpec {
-  const V = base.positions.length / 3, I = base.indices.length;
-  const dx = base.boundsMax[0] - base.boundsMin[0] + 2;
-  const positions = new Float32Array(V * 3 * n), normals = new Float32Array(V * 3 * n), uvs = new Float32Array(V * 2 * n);
-  const tangents = new Float32Array(V * 4 * n), indices = new Uint32Array(I * n);
-  const primitives: SceneData['primitives'] = [];
-  for (let k = 0; k < n; k++) {
-    for (let i = 0; i < V; i++) {
-      positions[(k * V + i) * 3] = base.positions[i * 3] + k * dx;
-      positions[(k * V + i) * 3 + 1] = base.positions[i * 3 + 1];
-      positions[(k * V + i) * 3 + 2] = base.positions[i * 3 + 2];
-    }
-    normals.set(base.normals, k * V * 3); uvs.set(base.uvs, k * V * 2); tangents.set(base.tangents, k * V * 4);
-    indices.set(base.indices, k * I);
-    for (const p of base.primitives) primitives.push({ ...p, firstIndex: p.firstIndex + k * I, baseVertex: p.baseVertex + k * V });
-  }
-  const [boundsMin, boundsMax] = bounds(positions);
-  const scene: SceneData = { ...base, positions, normals, uvs, tangents, indices, primitives, boundsMin, boundsMax, triangleCount: base.triangleCount * n };
-  return { name: `sponza-wide${n}`, scene, camera: s0Camera(base), moving: true, sunDir: SPONZA_SUN, enclosed: false };
+/** Phase 32: the building of `s` copied n times along +x, 2 m apart (instances of its static part, not new geometry).
+ * The camera, the sun and the dynamic objects stay in the first copy; the camera looks along -x, the copies lie behind it. */
+export function widen(s: SceneSpec, n: number): SceneSpec {
+  const b = s.scene, V = s.dynamic ? s.dynamic.objects[0].firstVertex : b.positions.length / 3;
+  let x0 = Infinity, x1 = -Infinity;
+  for (let v = 0; v < V; v++) { x0 = Math.min(x0, b.positions[v * 3]); x1 = Math.max(x1, b.positions[v * 3]); }
+  const dx = x1 - x0 + 2;
+  return { ...s, name: s.name.replace(/^sponza/, `sponza-wide${n}`), instances: Array.from({ length: n }, (_, k): Vec3 => [k * dx, 0, 0]) };
 }
 
-/** Every triangle split into 9 (edges in thirds): same surface, 9x the triangles. */
+/** Every triangle split into 10 with the same surface: the 9 of a degree-3 barycentric grid, the middle one halved. */
 export function densify(base: SceneData): SceneSpec {
   const T = base.triangleCount;
-  const positions = new Float32Array(T * 10 * 3), normals = new Float32Array(T * 10 * 3), uvs = new Float32Array(T * 10 * 2);
-  const tangents = new Float32Array(T * 10 * 4), indices = new Uint32Array(T * 27);
+  const positions = new Float32Array(T * 11 * 3), normals = new Float32Array(T * 11 * 3), uvs = new Float32Array(T * 11 * 2);
+  const tangents = new Float32Array(T * 11 * 4), indices = new Uint32Array(T * 30);
   const primitives: SceneData['primitives'] = [];
   // Barycentric grid of degree 3: point (i, j), i + j <= 3.
+  // Point 10 is the midpoint of the middle triangle's edge (1,2)-(1,1) (it lies on (i, j) = (1, 1.5)).
   const pts: [number, number][] = [];
   for (let j = 0; j <= 3; j++) for (let i = 0; i <= 3 - j; i++) pts.push([i, j]);
   const at = (i: number, j: number) => pts.findIndex(([a, b]) => a === i && b === j);
+  pts.push([1, 1.5]);
   const local: number[] = [];
   for (let j = 0; j < 3; j++)
     for (let i = 0; i < 3 - j; i++) {
       local.push(at(i, j), at(i + 1, j), at(i, j + 1));
-      if (i + j < 2) local.push(at(i + 1, j), at(i + 1, j + 1), at(i, j + 1));
+      if (i + j < 2) {
+        // The upside-down triangle (i+1, j), (i+1, j+1), (i, j+1); the one at (0, 1) is split at point 10.
+        if (i === 0 && j === 1) local.push(at(1, 1), 10, at(0, 2), 10, at(1, 2), at(0, 2));
+        else local.push(at(i + 1, j), at(i + 1, j + 1), at(i, j + 1));
+      }
     }
+  if (local.length !== 30) throw new Error('densify: 10 triangles per triangle');
   let t = 0;
   for (const p of base.primitives) {
-    const firstIndex = t * 27;
+    const firstIndex = t * 30;
     for (let k = p.firstIndex; k < p.firstIndex + p.indexCount; k += 3, t++) {
       const v = [0, 1, 2].map((q) => base.indices[k + q] + p.baseVertex);
       pts.forEach(([i, j], n) => {
         const w = [1 - (i + j) / 3, i / 3, j / 3];
-        const o = t * 10 + n;
+        const o = t * 11 + n;
         for (let a = 0; a < 3; a++) {
           positions[o * 3 + a] = w[0] * base.positions[v[0] * 3 + a] + w[1] * base.positions[v[1] * 3 + a] + w[2] * base.positions[v[2] * 3 + a];
           normals[o * 3 + a] = w[0] * base.normals[v[0] * 3 + a] + w[1] * base.normals[v[1] * 3 + a] + w[2] * base.normals[v[2] * 3 + a];
@@ -161,12 +162,12 @@ export function densify(base: SceneData): SceneSpec {
         for (let a = 0; a < 2; a++) uvs[o * 2 + a] = w[0] * base.uvs[v[0] * 2 + a] + w[1] * base.uvs[v[1] * 2 + a] + w[2] * base.uvs[v[2] * 2 + a];
         for (let a = 0; a < 4; a++) tangents[o * 4 + a] = w[0] * base.tangents[v[0] * 4 + a] + w[1] * base.tangents[v[1] * 4 + a] + w[2] * base.tangents[v[2] * 4 + a];
       });
-      local.forEach((l, q) => { indices[t * 27 + q] = t * 10 + l; });
+      local.forEach((l, q) => { indices[t * 30 + q] = t * 11 + l; });
     }
-    primitives.push({ firstIndex, indexCount: t * 27 - firstIndex, baseVertex: 0, material: p.material });
+    primitives.push({ firstIndex, indexCount: t * 30 - firstIndex, baseVertex: 0, material: p.material });
   }
-  const scene: SceneData = { ...base, positions, normals, uvs, tangents, indices, primitives, triangleCount: T * 9 };
-  return { name: 'sponza-dense9', scene, camera: s0Camera(base), moving: true, sunDir: SPONZA_SUN, enclosed: false };
+  const scene: SceneData = { ...base, positions, normals, uvs, tangents, indices, primitives, triangleCount: T * 10 };
+  return { name: 'sponza-dense10', scene, camera: s0Camera(base), moving: true, sunDir: SPONZA_SUN, enclosed: false };
 }
 
 const GREY: MaterialDesc = { name: 'grey', baseColorFactor: [0.7, 0.7, 0.7, 1], baseColorImage: -1, normalImage: -1, metallicRoughnessImage: -1,
@@ -466,11 +467,14 @@ export function townScene(name: string): SceneSpec {
 }
 
 /** Sponza scenes by name (docs/spec/10-evaluation.md). Stress scenes: sponza-dynobj-many<G> (G groups of the three
- * objects), -n<N> (N objects on a grid), -deform. */
+ * objects), -n<N> (N objects on a grid), -deform. Phase 32: sponza-wide<N>[-...] is any Sponza scene with its building
+ * copied N times in a row (widen); sponza-wide<N>-fly flies the moving camera along the row at 0.5 m per frame (D4). */
 export function sponzaScene(name: string, base: SceneData): SceneSpec {
+  const wide = /^sponza-wide(\d+)(-fly)?(.*)$/.exec(name);
+  if (wide) return { ...widen(sponzaScene('sponza' + wide[3], base), Number(wide[1])), name, ...(wide[2] ? { fly: 0.5 } : {}) };
   const stress = /^sponza-dynobj(?:-many(\d+)|-n(\d+))?(-deform)?$/.exec(name);
-  return name === 'sponza' ? sponzaSpec(base) : name === 'sponza-wide10' ? widen(base, 10)
-    : name === 'sponza-dense9' ? densify(base) : name === 'sponza-toon' ? toonSponza(base)
+  return name === 'sponza' ? sponzaSpec(base)
+    : name === 'sponza-dense10' ? densify(base) : name === 'sponza-toon' ? toonSponza(base)
     : name === 'sponza-objects' ? toonSponza(base, true)
     : name === 'sponza-dyn' ? dynamicSponza(base) : name === 'sponza-dynobj' ? dynamicSponza(base, true)
     : name === 'sponza-dyn-sunonly' ? dynamicSponza(base, false, -1, 'sun') : name === 'sponza-dyn-objectsonly' ? dynamicSponza(base, false, -1, 'objects')

@@ -19,7 +19,7 @@
 | `assets/` | テストシーン（`mise run assets` で取得） | 管理外 |
 | `archive-local/` | Program 1 のテキスト記録の圧縮アーカイブ（下の「作業機にしかないもの」） | 管理外 |
 
-`src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick、静的な形状）、`dynlayer.ts`（動的物体の被覆率と放射のレイヤ）、`bounce.ts`（多重バウンスの跳ね返りボリューム）、`ddgi.ts`
+`src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick、静的な形状）、`world.ts`（ワールド：建物のインスタンス、区画、ボクセルにするまとめた形状。`-bcut` 以外の全場面）、`dynlayer.ts`（動的物体の被覆率と放射のレイヤ）、`bounce.ts`（多重バウンスの跳ね返りボリューム）、`ddgi.ts`
 （DDGI 系の比較相手）、`style.ts`（スタイル演算子）、`bvh.ts`（三角形の正解器）、`lighting.ts`（太陽と影）、
 `gbuffer.ts`、`scenes.ts`（シーン）、`post.ts`（表示とちらつきの指標）、`rcrun.ts`（計測の実行）。
 
@@ -36,7 +36,10 @@ mise run build:rc # 実行器をバンドル（build/native/rc.mjs）
 # レンダラの実行と計測（ネイティブ、Dawn / Vulkan）
 bash scripts/run_with_vulkan.sh node build/native/rc.mjs --scene <シーン> --configs <設定,...> \
   [--no-sky] [--vox JSON] [--frames N] [--warmup N] [--dump-irr] [--response FROM,TO] [--pose-frame F] \
-  [--seq EVERY,COUNT] [--out box/out/<名前>]   # --seq：静止カメラで EVERY フレームおきに最終画像と間接光を保存（時間は乱れる）
+  [--seq EVERY,COUNT [--seq-moving]] [--dump-moving EVERY] [--lod0 CELL] [--out box/out/<名前>]
+#   --seq：静止カメラ（--seq-moving で移動カメラ）で EVERY フレームおきに最終画像と間接光を保存（時間は乱れる）
+#   --dump-moving：移動カメラの放射照度を EVERY フレームおきに mov.<k>.irr.f32 へ（あふれの比べ、Phase 32）
+#   --lod0 CELL：層 0 のまとめのセル（m、0 で全三角形。既定 0.1、三角形が半分以下に減る区画だけ）
 mise run s2:native -- --scene sponza --vox-bench     # 再ボクセル化の段ごとの時間
 
 # ブラウザ（Phase 30）。ページを 127.0.0.1 で配り、ブラウザを新しいプロファイルで開き、終わったら閉じる（同じプロファイルのプロセスが残らないことを確かめる）
@@ -48,6 +51,8 @@ bash scripts/run_with_vulkan.sh node build/native/browser.mjs --scene <シーン
 node build/native/compare_runs.mjs --a <ネイティブの出力> --b <ブラウザの出力> --config <設定> [--png DIR]   # 画像の一致（8 ビットの差、間接光の相対差）
 # --dyn-stages：動的レイヤ（と全再構築では建物のボクセル）の作成を段ごとのパスに分けて時間を測り、動的レイヤの仕事の量を CPU で数える（160 フレーム以下）
 # 場面名の末尾 -bwave / -bcut：建物そのものが毎フレーム変わる（spec/10-evaluation.md）
+# 場面名の頭 sponza-wide<N>[-fly]：建物を N 個並べた広いワールド（インスタンス）。-fly は移動カメラが列に沿って 1 フレーム 0.5 m 進む（Phase 32）
+node build/native/compare_blocks.mjs --a <十分なプールの出力> --b <比べる出力>   # --dump-moving の 8 × 8 ブロックの比（Phase 32、あふれの目安 D7）
 # --vox：voxel.ts の DEFAULT_VOX の上書き（v0、levels、G、maxBricks、maxVoxels、dynBricks）
 
 # 参照（Mitsuba）

@@ -4,8 +4,55 @@
 //         depth32float, reversed Z with an infinite far plane.
 // Measurement only (phase 27): GEO_NORMALS leaves the normal map out (the interpolated vertex normal), for the
 // flicker and excess metrics on a moving camera or a moving building (docs/spec/10-evaluation.md).
-import type { SceneData } from './gltf.ts';
+import type { Primitive, SceneData } from './gltf.ts';
+import type { Mat4 } from './math.ts';
 import type { SceneGpu } from './scene_gpu.ts';
+import { MOTION_MARGIN, type World } from './world.ts';
+
+// Phase 32: instanced worlds. A draw's firstInstance carries the material (low 16 bits) and the instance (high bits); the
+// vertex shader moves the vertex by the instance's offset (instance 0: none). The static primitives are drawn once per
+// instance whose box the camera (or the shadow layer) sees, the dynamic ones once.
+export const INSTANCE_WGSL = /* wgsl */ `
+fn instOffsetOf(ii: u32) -> vec3f { return instOffset[ii >> 16u].xyz; }
+`;
+export interface InstancedDraws {
+  offsets: GPUBuffer;
+  /** Instances whose box is inside the clip volume of m (perspective or orthographic). */
+  visible(m: Mat4): number[];
+  instancesOf(p: Primitive, visible: number[]): number[];
+  firstInstance(p: Primitive, inst: number): number;
+}
+export function instancedDraws(device: GPUDevice, scene: SceneData, world: World | null): InstancedDraws {
+  const inst = world?.instances ?? [[0, 0, 0]];
+  const data = new Float32Array(inst.length * 4);
+  inst.forEach((o, i) => data.set(o, i * 4));
+  const offsets = device.createBuffer({ label: 'instances', size: data.byteLength, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
+  device.queue.writeBuffer(offsets, 0, data);
+  const zero = [0];
+  const T = world?.staticTriangles ?? scene.triangleCount;
+  return {
+    offsets,
+    visible(m) {
+      if (!world) return zero;
+      const out: number[] = [];
+      const lo = world.staticMin.map((x) => x - MOTION_MARGIN), hi = world.staticMax.map((x) => x + MOTION_MARGIN);
+      inst.forEach((o, i) => {
+        let ax = 0, bx = 0, ay = 0, by = 0, az = 0, bz = 0, behind = 0;
+        for (let k = 0; k < 8; k++) {
+          const x = (k & 1 ? hi[0] : lo[0]) + o[0], y = (k & 2 ? hi[1] : lo[1]) + o[1], z = (k & 4 ? hi[2] : lo[2]) + o[2];
+          const cx = m[0] * x + m[4] * y + m[8] * z + m[12], cy = m[1] * x + m[5] * y + m[9] * z + m[13];
+          const cz = m[2] * x + m[6] * y + m[10] * z + m[14], cw = m[3] * x + m[7] * y + m[11] * z + m[15];
+          if (cx > cw) ax++; if (cx < -cw) bx++; if (cy > cw) ay++; if (cy < -cw) by++;
+          if (cz > cw) az++; if (cz < 0) bz++; if (cw <= 0) behind++;
+        }
+        if (ax < 8 && bx < 8 && ay < 8 && by < 8 && az < 8 && bz < 8 && behind < 8) out.push(i);
+      });
+      return out;
+    },
+    instancesOf: (p, visible) => world && p.firstIndex / 3 < T ? visible : zero,
+    firstInstance: (p, i) => p.material | (i << 16),
+  };
+}
 
 export const ALBEDO_FORMAT: GPUTextureFormat = 'rgba8unorm-srgb';
 export const NORMAL_FORMAT: GPUTextureFormat = 'rgba16float';
@@ -20,10 +67,12 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(0) @binding(3) var baseColorTex: texture_2d_array<f32>;
 @group(0) @binding(4) var normalTex: texture_2d_array<f32>;
 @group(0) @binding(5) var mrTex: texture_2d_array<f32>;
+@group(0) @binding(6) var<storage, read> instOffset: array<vec4f>;
+${INSTANCE_WGSL}
 
 struct VsIn {
   @location(0) pos: vec3f, @location(1) nrm: vec3f, @location(2) uv: vec2f, @location(3) tan: vec4f,
-  @builtin(instance_index) mat: u32, // firstInstance carries the material index
+  @builtin(instance_index) ii: u32, // firstInstance carries the material index and the instance (phase 32)
 }
 struct VsOut {
   @builtin(position) clip: vec4f,
@@ -31,7 +80,7 @@ struct VsOut {
   @location(3) @interpolate(flat) mat: u32,
 }
 @vertex fn vs(i: VsIn) -> VsOut {
-  return VsOut(cam.viewProj * vec4f(i.pos, 1), i.nrm, i.uv, i.tan, i.mat);
+  return VsOut(cam.viewProj * vec4f(i.pos + instOffsetOf(i.ii), 1), i.nrm, i.uv, i.tan, i.ii & 0xffffu);
 }
 
 override GEO_NORMALS: bool = false;
@@ -100,10 +149,14 @@ export interface GBufferRenderer {
   camera: GPUBuffer;
   /** geoNormals: without the normal map (measurement only). */
   encode(enc: GPUCommandEncoder, g: GBuffer, timestampWrites?: GPURenderPassTimestampWrites, geoNormals?: boolean): void;
+  /** Phase 32: the instances seen by this view-projection (instanced worlds) for the next encode. */
+  cull(viewProj: Mat4): void;
   drawCount: number;
 }
 
-export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: SceneGpu): GBufferRenderer {
+export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: SceneGpu, world: World | null = null): GBufferRenderer {
+  const inst = instancedDraws(device, scene, world);
+  let visible = [0];
   const module = device.createShaderModule({ code: GBUFFER_WGSL, label: 'gbuffer' });
   const camera = device.createBuffer({ label: 'camera', size: 144, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const bgl = device.createBindGroupLayout({
@@ -114,6 +167,7 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
       { binding: 3, visibility: GPUShaderStage.FRAGMENT, texture: { viewDimension: '2d-array' } },
       { binding: 4, visibility: GPUShaderStage.FRAGMENT, texture: { viewDimension: '2d-array' } },
       { binding: 5, visibility: GPUShaderStage.FRAGMENT, texture: { viewDimension: '2d-array' } },
+      { binding: 6, visibility: GPUShaderStage.VERTEX, buffer: { type: 'read-only-storage' } },
     ],
   });
   const sampler = device.createSampler({
@@ -128,6 +182,7 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
       { binding: 3, resource: gpu.baseColor.createView({ dimension: '2d-array' }) },
       { binding: 4, resource: gpu.normal.createView({ dimension: '2d-array' }) },
       { binding: 5, resource: gpu.metallicRoughness.createView({ dimension: '2d-array' }) },
+      { binding: 6, resource: { buffer: inst.offsets } },
     ],
   });
   const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl] });
@@ -153,6 +208,7 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
 
   return {
     camera, drawCount: draws.length,
+    cull(viewProj) { visible = inst.visible(viewProj); },
     encode(enc, g, timestampWrites, geoNormals = false) {
       const pipes = geoNormals ? (geoPipelines ??= [pipelineFor(false, true), pipelineFor(true, true)]) : pipelines;
       const pass = enc.beginRenderPass({
@@ -172,7 +228,7 @@ export function createGBufferRenderer(device: GPUDevice, scene: SceneData, gpu: 
       for (const d of draws) {
         const pi = d.ds ? 1 : 0;
         if (pi !== current) { pass.setPipeline(pipes[pi]); current = pi; }
-        pass.drawIndexed(d.p.indexCount, 1, d.p.firstIndex, d.p.baseVertex, d.p.material);
+        for (const i of inst.instancesOf(d.p, visible)) pass.drawIndexed(d.p.indexCount, 1, d.p.firstIndex, d.p.baseVertex, inst.firstInstance(d.p, i));
       }
       pass.end();
     },

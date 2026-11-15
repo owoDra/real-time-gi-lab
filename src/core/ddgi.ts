@@ -19,7 +19,10 @@
 //    candidate among 26 directions at 0.15 / 0.3 / 0.45 spacing; a probe is active when a voxel brick of size
 //    ~ spacing / 2..spacing overlaps the box of +-1 spacing around it. Inactive probes are not traced; a probe
 //    that becomes active starts without history.
-//  - the volume is fixed in the world and covers the scene bounds (no scrolling).
+//  - the volume covers the scene bounds, fixed in the world; on an instanced world (phase 32) it follows the camera
+//    instead (RTXGI's infinite scrolling): a fixed number of probes on the world grid, each world cell kept in the slot
+//    (cell - base) mod dims, the volume moved by whole cells; a slot whose cell was not inside the previous volume starts
+//    without history.
 // Trace and blend are two passes (phase 23); the rays of one update go through a texture.
 // Phase 23 (multi-bounce, on by default): the hit radiance adds albedo / pi times the probes' own irradiance, sampled as the
 // gather does from the state the previous update left (RTXGI's usual multi-bounce).
@@ -64,6 +67,21 @@ struct DU {
   p: vec4f,        // hysteresis, segBase, max depth (1.5 spacing), adaptive (1/0)
   u: vec4u,        // frame, updateDiv, relocate, classify
   q: vec4f,        // gamma, viewBias, multi-bounce (1/0), 0
+  cell0: vec4i,    // phase 32: first world cell of the volume (origin = cell0 * spacing)
+  prev0: vec4i,    // the previous frame's
+  shift: vec4i,    // (cell0 - base) mod dims: world cell w is kept in the slot (w - base) mod dims (fixed volume: base = cell0)
+}
+fn slotOf(c: vec3i) -> u32 { // c: grid cell relative to the volume's origin, inside [0, dims)
+  let d = vec3i(D.dims.xyz);
+  let m0 = c + D.shift.xyz;
+  let m = select(m0, m0 - d, m0 >= d);
+  return u32(m.x) + D.dims.x * (u32(m.y) + D.dims.y * u32(m.z));
+}
+fn cellOfSlot(i: u32) -> vec3i { // world cell held by slot i
+  let d = vec3i(D.dims.xyz);
+  let m = vec3i(i32(i % D.dims.x), i32((i / D.dims.x) % D.dims.y), i32(i / (D.dims.x * D.dims.y)));
+  let r = m - D.shift.xyz;
+  return D.cell0.xyz + select(r, r + d, r < vec3i(0));
 }
 @group(0) @binding(0) var<uniform> F: Frame;
 @group(0) @binding(1) var<uniform> D: DU;
@@ -78,7 +96,7 @@ struct DU {
 @group(1) @binding(4) var<storage, read_write> list: array<u32>;
 @group(2) @binding(0) var<uniform> VX: VoxU;
 @group(2) @binding(1) var<storage, read> vox: array<u32>;
-@group(2) @binding(2) var shadowTex: texture_depth_2d;
+@group(2) @binding(2) var shadowTex: texture_depth_2d_array;
 @group(2) @binding(3) var shadowCmp: sampler_comparison;
 @group(2) @binding(4) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
 // Phase 23 (multi-bounce): hits add albedo / pi times the irradiance of the probes as the previous update left them
@@ -94,7 +112,7 @@ fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f {
     let o = vec3i(i32(k & 1u), i32((k >> 1u) & 1u), i32((k >> 2u) & 1u));
     let c = b + o;
     if (any(c < vec3i(0)) || any(c >= vec3i(D.dims.xyz))) { continue; }
-    let pi = u32(c.x) + D.dims.x * (u32(c.y) + D.dims.y * u32(c.z));
+    let pi = slotOf(c);
     let st = state[pi];
     if ((u32(st.w) & 3u) != 3u) { continue; }
     let pp = D.origin.xyz + vec3f(c) * s + st.xyz;
@@ -126,8 +144,7 @@ ${VOX_TRACE_WGSL}
 ${DYN_READ_WGSL}
 
 fn probeCount() -> u32 { return D.dims.x * D.dims.y * D.dims.z; }
-fn probeGrid(i: u32) -> vec3u { return vec3u(i % D.dims.x, (i / D.dims.x) % D.dims.y, i / (D.dims.x * D.dims.y)); }
-fn probeBase(i: u32) -> vec3f { return D.origin.xyz + vec3f(probeGrid(i)) * D.origin.w; }
+fn probeBase(i: u32) -> vec3f { return D.origin.xyz + vec3f(cellOfSlot(i) - D.cell0.xyz) * D.origin.w; }
 
 fn octDecode(uv: vec2f) -> vec3f {
   let f = uv * 2.0 - 1.0;
@@ -161,11 +178,7 @@ fn occ(L0: u32, p: vec3f) -> bool {
   let v = voxSize(L);
   let c = vec3i(floor((p - vec3f(VX.origin[L].xyz) * v * 8.0) / v));
   if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { return false; }
-  let ptr = vox[voxPtrIndex(L, c >> vec3u(3u))];
-  if (ptr >= VOX_MARK) { return false; }
-  let l = c & vec3i(7);
-  let bit = u32(l.x + 8 * l.y + 64 * l.z);
-  return (vox[VX.b.y + ptr * BRICK_W + (bit >> 5u)] & (1u << (bit & 31u))) != 0u;
+  return voxAt(L, c).x != VOX_EMPTY; // phase 32: a dropped brick reads the coarser level
 }
 const BRICK_W = 18u;
 fn levelFor(size: f32) -> u32 { return u32(clamp(floor(log2(max(size, 1e-4) / VX.a.x)), 0.0, VX.a.y - 1.0)); }
@@ -189,6 +202,9 @@ fn anyBrick(p: vec3f, r: f32) -> bool {
   let p = probeBase(i);
   let prev = state[i];
   var flags = u32(prev.w);
+  // Phase 32: a cell that has just entered the scrolling volume takes over a slot: no history.
+  let wc = cellOfSlot(i);
+  if (any(wc < D.prev0.xyz) || any(wc >= D.prev0.xyz + vec3i(D.dims.xyz))) { flags = 0u; }
   var isActive = true;
   if (D.u.w == 1u) { isActive = anyBrick(p, s); }
   var off = vec3f(0.0);
@@ -413,7 +429,7 @@ fn sampleDep(pi: u32, d: vec3f) -> vec2f {
     let o = vec3i(i32(k & 1u), i32((k >> 1u) & 1u), i32((k >> 2u) & 1u));
     let c = b + o;
     if (any(c < vec3i(0)) || any(c >= vec3i(D.dims.xyz))) { continue; }
-    let pi = u32(c.x) + D.dims.x * (u32(c.y) + D.dims.y * u32(c.z));
+    let pi = slotOf(c);
     let st = state[pi];
     if ((u32(st.w) & 3u) != 3u) { continue; }
     let pp = D.origin.xyz + vec3f(c) * s + st.xyz;
@@ -470,6 +486,8 @@ export interface Ddgi {
   encode(enc: GPUCommandEncoder, tw: (pass: number) => GPUComputePassTimestampWrites | undefined): void;
   readCounts(): Promise<Uint32Array>;
   setStats(level: number): void;
+  /** Phase 32: a scrolling volume follows the camera (no effect on a fixed volume). */
+  setCamera(eye: Vec3, fwd: Vec3): void;
   destroy(): void;
 }
 
@@ -485,14 +503,23 @@ function rotation(seed: number): number[] {
     2 * (x * z + y * w), 2 * (y * z - x * w), 1 - 2 * (x * x + y * y), 0];
 }
 
+// Phase 32: the scrolling volume of an instanced world: SCROLL_EXTENT m (x, y, z), its horizontal centre a quarter of its
+// width ahead of the camera (the view covers more ahead than behind), the camera a quarter of its height above its bottom.
+export const SCROLL_EXTENT: Vec3 = [32, 16, 32];
+
+/** bounds: the fixed volume's extent; scroll (instanced worlds): a volume of SCROLL_EXTENT that follows the camera. */
 export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, params: DdgiParams, world: WorldResources,
-  bounds: [Vec3, Vec3]): Ddgi {
+  bounds: [Vec3, Vec3], scroll = false): Ddgi {
   if (!world.hasVox) throw new Error('DDGI needs the voxel world');
   if (params.rays % 64 !== 0 || params.rays > 256) throw new Error('rays must be a multiple of 64, <= 256');
   const { width, height } = g;
   const s = params.spacing;
-  const origin = bounds[0].map((v) => Math.floor(v / s) * s) as Vec3;
-  const dims = [0, 1, 2].map((a) => Math.ceil((bounds[1][a] - origin[a]) / s) + 1) as [number, number, number];
+  let origin = bounds[0].map((v) => Math.floor(v / s) * s) as Vec3;
+  const dims = scroll ? SCROLL_EXTENT.map((e) => Math.ceil(e / s)) as [number, number, number]
+    : [0, 1, 2].map((a) => Math.ceil((bounds[1][a] - origin[a]) / s) + 1) as [number, number, number];
+  let cell0 = bounds[0].map((v) => Math.floor(v / s)) as Vec3;
+  let prev0: Vec3 | null = null;
+  const base: Vec3 = scroll ? [0, 0, 0] : [...cell0];
   const N = dims[0] * dims[1] * dims[2];
   const S = GPUBufferUsage.STORAGE;
   const buf = (label: string, size: number, extra = 0) => device.createBuffer({ label, size: Math.max(16, Math.ceil(size / 16) * 16), usage: S | extra });
@@ -501,7 +528,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
   const depBuf = buf('ddgi.dep', N * DEP * DEP * 4);
   const counts = buf('ddgi.counts', 8 * 4, GPUBufferUsage.COPY_SRC | GPUBufferUsage.INDIRECT);
   const list = buf('ddgi.list', N * 4);
-  const uni = device.createBuffer({ label: 'ddgi.u', size: 16 * 8, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const uni = device.createBuffer({ label: 'ddgi.u', size: 16 * 11, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const irr = device.createTexture({ label: 'ddgi.irrOut', size: [width, height], format: 'rgba16float',
     usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_SRC });
   // At most ceil(N / updateDiv) probes are listed per frame (classify: index + frame divisible by updateDiv).
@@ -521,7 +548,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
   const bgl1 = device.createBindGroupLayout({ entries: Array.from({ length: 5 }, (_, i) => ({ binding: i, visibility: C, buffer: { type: 'storage' as const } })) });
   const bgl2 = device.createBindGroupLayout({ entries: [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } }, { binding: 1, visibility: C, buffer: { type: 'read-only-storage' } },
-    { binding: 2, visibility: C, texture: { sampleType: 'depth' } }, { binding: 3, visibility: C, sampler: { type: 'comparison' } },
+    { binding: 2, visibility: C, texture: { sampleType: 'depth', viewDimension: '2d-array' } }, { binding: 3, visibility: C, sampler: { type: 'comparison' } },
     { binding: 4, visibility: C, buffer: { type: 'read-only-storage' } },
   ] });
   const pl = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1, bgl2] });
@@ -561,7 +588,7 @@ ${DYN_INJECT_WGSL}`;
   const bg1 = device.createBindGroup({ layout: bgl1, entries: [state, irrBuf, depBuf, counts, list].map((b, i) => ({ binding: i, resource: { buffer: b } })) });
   const bg2 = device.createBindGroup({ layout: bgl2, entries: [
     { binding: 0, resource: { buffer: world.voxUniform } }, { binding: 1, resource: { buffer: world.vox } },
-    { binding: 2, resource: world.shadow.createView() }, { binding: 3, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
+    { binding: 2, resource: world.shadow.createView({ dimension: '2d-array' }) }, { binding: 3, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
     { binding: 4, resource: { buffer: world.dyn } },
   ] });
   const injBG = injPipe ? [0, 1, 2].map((i) => device.createBindGroup({ layout: injPipe.getBindGroupLayout(i), entries: [
@@ -578,9 +605,19 @@ ${DYN_INJECT_WGSL}`;
   return {
     irr, params, dims, bytes: bytes + args.size,
     usedBytes(cnt) { return state.size + irrBuf.size + depBuf.size + cnt[0] * 4 + width * height * 8; },
+    setCamera(eye, fwd) {
+      if (!scroll) return;
+      const h = Math.hypot(fwd[0], fwd[2]) || 1;
+      const c = [eye[0] + fwd[0] / h * SCROLL_EXTENT[0] / 4, eye[1] + SCROLL_EXTENT[1] / 4, eye[2] + fwd[2] / h * SCROLL_EXTENT[2] / 4];
+      cell0 = [0, 1, 2].map((a) => Math.floor(c[a] / s) - Math.floor(dims[a] / 2)) as Vec3;
+      origin = cell0.map((x) => x * s) as Vec3;
+    },
     encode(enc, tw) {
-      const u = new ArrayBuffer(16 * 8), f = new Float32Array(u), w = new Uint32Array(u);
+      const u = new ArrayBuffer(16 * 11), f = new Float32Array(u), w = new Uint32Array(u), i32 = new Int32Array(u);
       f.set([...origin, s], 0); w.set([...dims, params.rays], 4); f.set(rotation(frameNo + 1), 8);
+      i32.set([...cell0, 0], 32); i32.set([...(prev0 ?? cell0), 0], 36);
+      i32.set([...[0, 1, 2].map((a) => (((cell0[a] - base[a]) % dims[a]) + dims[a]) % dims[a]), 0], 40);
+      prev0 = [...cell0];
       f.set([params.hysteresis, params.segBase, 1.5 * Math.sqrt(3) * s, params.adaptive ? 1 : 0], 20); // RTXGI: 1.5 |spacing|
       w.set([frameNo, params.updateDiv, params.relocate, params.classify ? 1 : 0], 24);
       f.set([params.gamma, params.viewBias, params.bounce ? 1 : 0, 0], 28);

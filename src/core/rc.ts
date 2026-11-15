@@ -16,7 +16,7 @@
 // that pass the last interval return the sky radiance. Hit radiance is the direct-lit radiance texture (S1) or the
 // direct light plus the multi-bounce of bounce.ts (voxel tracer, phase 23). No other history.
 import { BVH_TRACE_WGSL } from './bvh.ts';
-import { FRAME_WGSL } from './frame.ts';
+import { FRAME_WGSL, SHADOW_TAP_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
 import type { DdgiParams } from './ddgi.ts';
 import type { GBuffer } from './gbuffer.ts';
@@ -90,12 +90,8 @@ export const DEFAULT_PARAMS: RcParams = {
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
  * shadowCmp, toonSun (style.ts) and the voxel tracer. */
 export const SHADE_WGSL = /* wgsl */ `
-fn sunVis(x: vec3f) -> f32 {
-  let c = F.lightViewProj * vec4f(x, 1.0);
-  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
-  if (any(uv < vec2f(0.0)) || any(uv > vec2f(1.0))) { return 1.0; }
-  return textureSampleCompareLevel(shadowTex, shadowCmp, uv, c.z - 0.0002);
-}
+${SHADOW_TAP_WGSL}
+fn sunVis(x: vec3f) -> f32 { return shadowTap(x); }
 // One-bounce hit radiance, as the direct pass computes it (Lambert, sun, shadow map). The normal is turned to
 // face the ray; a zero normal (opposite faces averaged in one voxel) faces the ray.
 // S3: toon hits (alb.a = 1) inject the emission-side operator instead (style.ts).
@@ -186,7 +182,7 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(4) var<storage, read> materials: array<Material>;
 @group(3) @binding(5) var baseColorTex: texture_2d_array<f32>;
 @group(3) @binding(6) var linSamp: sampler;
-@group(3) @binding(7) var shadowTex: texture_depth_2d;
+@group(3) @binding(7) var shadowTex: texture_depth_2d_array;
 @group(3) @binding(8) var shadowCmp: sampler_comparison;
 @group(3) @binding(9) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
 @group(3) @binding(11) var bnTex: texture_3d<f32>; // phase 23 bounce volume of this frame (bounce.ts)
@@ -381,12 +377,9 @@ fn voxCell(L: u32, p: vec3f) -> vec2u { // (brick pointer, bit), pointer VOX_MAR
   let v = voxSize(L);
   let c = vec3i(floor((p - vec3f(VX.origin[L].xyz) * v * 8.0) / v));
   if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { return vec2u(VOX_MARK, 0u); }
-  let ptr = vox[voxPtrIndex(L, c >> vec3u(3u))];
-  if (ptr >= VOX_MARK) { return vec2u(VOX_MARK, 0u); }
-  let l = c & vec3i(7);
-  let bit = u32(l.x + 8 * l.y + 64 * l.z);
-  if ((vox[VX.b.y + ptr * ${BRICK_WORDS}u + (bit >> 5u)] & (1u << (bit & 31u))) == 0u) { return vec2u(VOX_MARK, 0u); }
-  return vec2u(ptr, bit);
+  let r = voxAt(L, c); // phase 32: a dropped brick reads the coarser level
+  if (r.x == VOX_EMPTY) { return vec2u(VOX_MARK, 0u); }
+  return r.xy;
 }
 fn voxStoredNormal(cell: vec2u) -> vec3f {
   let nn = unpack2x16snorm(vox[VX.b.z + voxRank(cell.x, cell.y) * 2u + 1u]);
@@ -850,7 +843,7 @@ fn segOccluded(a: vec3f, b: vec3f, L: u32) -> bool {
   let d = b - a;
   let k = u32(min(ceil(length(d) / voxSize(L)), 16.0));
   // Consecutive samples mostly fall into the same brick and occupancy word: read each once (same result as voxOcc).
-  var lastW = NONE; var occ = 0u;
+  var lastW = NONE; var occ = 0u; var dropped = false;
   for (var i = 0u; i < k; i++) {
     let p = a + d * ((f32(i) + 0.5) / f32(k));
     let v = voxSize(L);
@@ -863,8 +856,10 @@ fn segOccluded(a: vec3f, b: vec3f, L: u32) -> bool {
       lastW = w;
       let ptr = vox[w >> 4u];
       occ = 0u;
+      dropped = ptr == VOX_DROP;
       if (ptr < VOX_MARK) { occ = vox[VX.b.y + ptr * ${BRICK_WORDS}u + (bit >> 5u)]; }
     }
+    if (dropped) { if (voxAt(L, c).x != VOX_EMPTY) { return true; } continue; }
     if ((occ & (1u << (bit & 31u))) != 0u) { return true; }
   }
   return false;
@@ -1094,7 +1089,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const g3Fixed: GPUBindGroupLayoutEntry[] = [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } },
     { binding: 5, visibility: C, texture: { viewDimension: '2d-array' } }, { binding: 6, visibility: C, sampler: {} },
-    { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
+    { binding: 7, visibility: C, texture: { sampleType: 'depth', viewDimension: '2d-array' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
     { binding: 11, visibility: C, texture: { sampleType: 'unfilterable-float', viewDimension: '3d' } },
   ];
   const G2 = ['keys', 'slotProbe', 'probes', 'rad', 'sh', 'counts', 'accum', 'parents', 'hist'];
@@ -1104,7 +1099,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const g3Res: Record<number, GPUBindingResource> = {
     0: { buffer: world.voxUniform }, 5: world.baseColor.createView({ dimension: '2d-array' }),
     6: device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' }),
-    7: world.shadow.createView(), 8: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }),
+    7: world.shadow.createView({ dimension: '2d-array' }), 8: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }),
   };
   // Phase 23: the bounce volume (bounce.ts), rebuilt at the start of the trace pass; without it a 1-texel stand-in.
   const BP = DEFAULT_BOUNCE;

@@ -83,7 +83,7 @@ const PI = 3.14159265;
 @group(0) @binding(1) var<uniform> VX: VoxU;
 @group(0) @binding(2) var<storage, read> vox: array<u32>;
 @group(0) @binding(3) var<storage, read> dyn: array<u32>; // phase 31: the dynamic layer (dynlayer.ts)
-@group(0) @binding(4) var shadowTex: texture_depth_2d;
+@group(0) @binding(4) var shadowTex: texture_depth_2d_array;
 @group(0) @binding(5) var shadowCmp: sampler_comparison;
 @group(0) @binding(6) var<storage, read_write> list: array<atomic<u32>>; // 0 count, 1 frame counter, 4.. probes
 @group(0) @binding(7) var<storage, read_write> args: array<u32>;         // indirect arguments of bnUpdate
@@ -105,11 +105,7 @@ fn occAt(L: u32, p: vec3f) -> bool {
   let v = voxSize(L);
   let c = vec3i(floor((p - vec3f(VX.origin[L].xyz) * v * 8.0) / v));
   if (any(c < vec3i(0)) || any(c >= vec3i(voxG() * 8))) { return false; }
-  let ptr = vox[voxPtrIndex(L, c >> vec3u(3u))];
-  if (ptr >= VOX_MARK) { return false; }
-  let l = c & vec3i(7);
-  let bit = u32(l.x + 8 * l.y + 64 * l.z);
-  return (vox[VX.b.y + ptr * 18u + (bit >> 5u)] & (1u << (bit & 31u))) != 0u;
+  return voxAt(L, c).x != VOX_EMPTY; // phase 32: a dropped brick reads the coarser level
 }
 fn levelOf(size: f32) -> u32 { return u32(clamp(round(log2(max(size, 1e-4) / VX.a.x)), 0.0, VX.a.y - 1.0)); }
 
@@ -326,7 +322,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
   const bgl0 = device.createBindGroupLayout({ entries: [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } }, { binding: 1, visibility: C, buffer: { type: 'uniform' } },
     { binding: 2, visibility: C, buffer: { type: 'read-only-storage' } }, { binding: 3, visibility: C, buffer: { type: 'read-only-storage' } },
-    { binding: 4, visibility: C, texture: { sampleType: 'depth' } }, { binding: 5, visibility: C, sampler: { type: 'comparison' } },
+    { binding: 4, visibility: C, texture: { sampleType: 'depth', viewDimension: '2d-array' } }, { binding: 5, visibility: C, sampler: { type: 'comparison' } },
     { binding: 6, visibility: C, buffer: { type: 'storage' } },
   ] });
   const bgl1 = device.createBindGroupLayout({ entries: [
@@ -344,7 +340,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
   const bg0 = device.createBindGroup({ layout: bgl0, entries: [
     { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: { buffer: world.voxUniform } },
     { binding: 2, resource: { buffer: world.vox } }, { binding: 3, resource: { buffer: world.dyn } },
-    { binding: 4, resource: world.shadow.createView() }, { binding: 5, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
+    { binding: 4, resource: world.shadow.createView({ dimension: '2d-array' }) }, { binding: 5, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
     { binding: 6, resource: { buffer: list } },
   ] });
   // Parity p writes texture p and reads texture 1 - p.

@@ -36,6 +36,7 @@ run = [
   "npx esbuild src/web/rc.ts --bundle --platform=browser --format=esm --target=es2022 --outfile=build/web/rc.js --log-level=warning",
   "npx esbuild src/native/browser.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/browser.mjs --external:pngjs --log-level=warning",
   "npx esbuild src/native/compare_runs.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/compare_runs.mjs --external:webgpu --external:pngjs --log-level=warning",
+  "npx esbuild src/native/compare_blocks.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/compare_blocks.mjs --log-level=warning",
 ]
 
 [tasks."s1:native"]

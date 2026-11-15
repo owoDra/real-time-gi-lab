@@ -16,6 +16,8 @@ struct Frame {
   ru2: vec4u,     // ray stride (split), random seed, previous frame valid, analytic trace (placement test)
   omega0: array<vec4f, 4>, // solid angle of each c0 octahedral texel (4x4)
   style: vec4f,   // S3: emission operator on (1/0), receiving operator (0 physical, 1 ramp), ramp half width, 0
+  lightViewProjFar: mat4x4f, // phase 32: the second shadow-map layer (wide worlds)
+  shadow: vec4f,  // shadow-map layers (1 or 2), depth bias of layer 0, of layer 1, 0
 }
 fn worldAt(px: vec2i, d: f32) -> vec3f {
   let ndc = vec2f((f32(px.x) + 0.5) * F.size.z * 2.0 - 1.0, 1.0 - (f32(px.y) + 0.5) * F.size.w * 2.0);
@@ -28,8 +30,28 @@ fn prevWorldAt(px: vec2i, d: f32) -> vec3f {
   return h.xyz / h.w;
 }
 fn luminance(c: vec3f) -> f32 { return dot(c, vec3f(0.2126, 0.7152, 0.0722)); }
+// Shadow-map coordinates of x: uv, biased depth, layer (-1 outside every layer). Layer 0 is the whole scene (one layer) or
+// the camera's surroundings; layer 1 (phase 32, wide worlds) the windows' extent.
+fn shadowCoord(x: vec3f) -> vec4f {
+  let c = F.lightViewProj * vec4f(x, 1.0);
+  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
+  if (all(uv >= vec2f(0.0)) && all(uv <= vec2f(1.0))) { return vec4f(uv, c.z - F.shadow.y, 0.0); }
+  if (F.shadow.x < 1.5) { return vec4f(0.0, 0.0, 0.0, -1.0); }
+  let c1 = F.lightViewProjFar * vec4f(x, 1.0);
+  let uv1 = c1.xy * vec2f(0.5, -0.5) + 0.5;
+  if (all(uv1 >= vec2f(0.0)) && all(uv1 <= vec2f(1.0))) { return vec4f(uv1, c1.z - F.shadow.z, 1.0); }
+  return vec4f(0.0, 0.0, 0.0, -1.0);
+}
 `;
-export const FRAME_BYTES = 140 * 4;
+/** One comparison tap of the shadow map (needs F, shadowTex: texture_depth_2d_array, shadowCmp). */
+export const SHADOW_TAP_WGSL = /* wgsl */ `
+fn shadowTap(x: vec3f) -> f32 {
+  let s = shadowCoord(x);
+  if (s.w < 0.0) { return 1.0; }
+  return textureSampleCompareLevel(shadowTex, shadowCmp, s.xy, i32(s.w), s.z);
+}
+`;
+export const FRAME_BYTES = 160 * 4;
 
 export interface Camera { eye: Vec3; target: Vec3; fovYDeg: number; near: number; }
 
@@ -42,6 +64,8 @@ export function cameraMatrices(c: Camera, width: number, height: number) {
 
 export interface FrameParams {
   cam: Camera; prevCam: Camera; lightViewProj: Mat4; width: number; height: number;
+  /** Phase 32: the shadow map's layers (see Lighting). */
+  shadow: { far: Mat4 | null; bias: [number, number] };
   sunDir: Vec3; sunE: Vec3; sky: Vec3;
   sMin: number; P: number; lift: number; thicknessMin: number; pxStride: number; exposure: number;
   cascades: number; slot: number; regStride: number; maxSteps: number; rayStride: number; seed: number; prevValid: boolean; analytic: boolean;
@@ -64,6 +88,8 @@ export function packFrame(p: FrameParams): ArrayBuffer {
   u.set([p.rayStride, p.seed, p.prevValid ? 1 : 0, p.analytic ? 1 : 0], 116);
   f.set(p.omega0, 120);
   f.set([...p.style, 0], 136);
+  if (p.shadow.far) f.set(p.shadow.far, 140);
+  f.set([p.shadow.far ? 2 : 1, p.shadow.bias[0], p.shadow.bias[1], 0], 156);
   return buf;
 }
 

@@ -12,7 +12,7 @@ import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
 import { createDynLayer, DYN_MAX_BRICKS, DYN_STAGES, dynWork, mortonSortDynamic, type DynLayer } from './dynlayer.ts';
-import { createVoxWorld, triangleTable, VOX_STAGES, voxParams, type VoxWorld } from './voxel.ts';
+import { createVoxWorld, triangleTable, VOX_STAGES, VOX_UNIFORM_BYTES, voxParams, type VoxWorld } from './voxel.ts';
 
 export const PASSES = ['gbuffer', 'shadow', 'direct', 'vox', ...RC_PASSES] as const;
 const Q = 16; // timestamp slots per frame
@@ -43,22 +43,30 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   opts: { voxel: boolean; bvh: boolean; vox?: Record<string, unknown> }, width = 1920, height = 1080): RunContext {
   const g = createGBuffer(device, width, height);
   const frame = device.createBuffer({ label: 'frame', size: FRAME_BYTES, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
-  const lighting = createLighting(device, spec.scene, gpu, g, frame, spec.sunDir);
+  // Phase 32: every static scene is a world (chunks, clustered copies for the voxel build); only a world of several instances
+  // (wide) has the camera-following shadow layers, instanced draws and the scrolling DDGI volume.
+  const wide = spec.world && spec.world.instances.length > 1 ? spec.world : null;
+  const lighting = createLighting(device, spec.scene, gpu, g, frame, spec.sunDir, wide);
   const S = GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST;
   const dummy = () => device.createBuffer({ size: 64, usage: S });
-  const table = triangleTable(spec.scene);
-  if (spec.dynamic) mortonSortDynamic(table, spec.dynamic.firstTriangle, spec.scene.positions);
+  const raster = triangleTable(spec.scene);
+  if (spec.dynamic) mortonSortDynamic(raster, spec.dynamic.firstTriangle, spec.scene.positions);
+  // Phase 32: the rows of the clustered copies of a world follow the scene's rows (not drawn).
+  const table = spec.world ? new Uint32Array(raster.length + spec.world.lodTable.length) : raster;
+  if (spec.world) { table.set(raster); table.set(spec.world.lodTable, raster.length); }
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
   if (spec.building && opts.bvh) throw new Error('a changing building needs no BVH (the BVH is built once)');
-  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, voxParams(opts.vox ?? {}), { frame, shadow: lighting.shadow }, spec.dynamic?.firstTriangle) : null;
+  if (wide && opts.bvh) throw new Error('no BVH for instanced worlds');
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, table.length / 4, voxParams(opts.vox ?? {}), { frame, shadow: lighting.shadow },
+    spec.dynamic?.firstTriangle, spec.world ?? null) : null;
   // P2: dynamic triangles are in the dynamic layer, read by the voxel tracers at the cone width.
   const dynLayer = voxWorld ? createDynLayer(device, gpu, tri, voxWorld.uniform, frame, lighting.shadow, voxWorld.params,
     spec.dynamic?.firstTriangle ?? spec.scene.triangleCount, spec.scene.triangleCount) : null;
   let bvh: RunContext['bvh'] = null, refit: RunContext['refitBvh'] = null;
   let bvhBuf = dummy();
   if (opts.bvh) {
-    const b = buildBvh(spec.scene, table);
+    const b = buildBvh(spec.scene, raster);
     const L = bvhGpuLayout(b);
     bvhBuf = device.createBuffer({ label: 'bvh', size: L.bytes, usage: S });
     device.queue.writeBuffer(bvhBuf, 0, L.header); device.queue.writeBuffer(bvhBuf, L.nodesOff, b.nodes); device.queue.writeBuffer(bvhBuf, L.trisOff, b.tris);
@@ -67,22 +75,27 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
       const P = spec.scene.positions.slice(), firstTri = spec.dynamic.firstTriangle, buf = bvhBuf, bb: Bvh = b;
       refit = (first, pos) => {
         P.set(pos, first * 3);
-        refitBvh(bb, P, table, firstTri);
+        refitBvh(bb, P, raster, firstTri);
         device.queue.writeBuffer(buf, L.nodesOff, bb.nodes);
         device.queue.writeBuffer(buf, L.trisOff, bb.tris);
       };
     }
   }
-  const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+  const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: VOX_UNIFORM_BYTES, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
   const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), dynArgs: dynLayer?.args ?? null, bvh: bvhBuf, materials: gpu.materials,
     baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS, maxBricks: voxWorld?.params.maxBricks ?? 0 };
-  return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
+  return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu, wide), omega0: octSolidAngles(4),
     width, height, world, voxWorld, dynLayer, bvh, refitBvh: refit, posed: new Map(),
-    building: spec.building ? createBuilding(device, spec.scene, gpu, tri, table, spec.building) : null };
+    building: spec.building ? createBuilding(device, spec.scene, gpu, tri, table, spec.building, spec.world ?? null) : null };
 }
 
-/** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. */
-export function cameraPath(c0: Camera) {
+/** Moving camera: walks 2.5 cm per frame along the view direction, swaying sideways and yawing. Phase 32 (D4, fly > 0): flies
+ * along +x at `fly` m per frame, looking along +x and a little down, without sway. */
+export function cameraPath(c0: Camera, fly = 0) {
+  if (fly > 0) return (k: number): Camera => {
+    const eye: Vec3 = [c0.eye[0] + fly * k, c0.eye[1], c0.eye[2]];
+    return { eye, target: add3(eye, [1, -0.12, 0]), fovYDeg: c0.fovYDeg, near: c0.near };
+  };
   const f = normalize([c0.target[0] - c0.eye[0], 0, c0.target[2] - c0.eye[2]]);
   const side = normalize(cross(f, [0, 1, 0]));
   return (k: number): Camera => {
@@ -159,8 +172,10 @@ export interface RunOptions { warmup: number; frames: number; inFlight: number; 
   dynStages?: boolean;
   /** Dynamic scenes: hold the objects and the sun at this frame's pose. */
   poseFrame?: number;
-  /** Static camera: capture the final and indirect images every `every` measured frames, `count` times. */
-  seq?: { every: number; count: number; sink: (k: number, images: Record<string, Uint8Array>) => void };
+  /** Static camera (moving camera with `moving`): capture the final and indirect images every `every` measured frames, `count` times. */
+  seq?: { every: number; count: number; moving?: boolean; sink: (k: number, images: Record<string, Uint8Array>) => void };
+  /** Phase 32 (D7): moving camera, the irradiance of every `every`-th measured frame (timings are disturbed). */
+  dumpMoving?: { every: number; sink: (k: number, irr: Awaited<ReturnType<typeof readIrradiance>>, vox: unknown) => void };
   /** R1: static camera only; read the irradiance of every frame from `from` to `to` (inclusive, warm-up counted as
    * frame 0..) and return the response curve to a light switch at `from` (the scene's switch frame), against the
    * irradiance converged on the pose of frame `to`. Frames to 50% / 90% beyond 64 are multiples of 8. */
@@ -169,7 +184,7 @@ export interface RunOptions { warmup: number; frames: number; inFlight: number; 
 export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOptions, log: (s: string) => void) {
   const { device, g, frame, lighting, gbuffer, spec, width, height, voxWorld } = ctx;
   if (opts.frames * Q > 4096) throw new Error('too many frames for one query set');
-  const path = cameraPath(spec.camera);
+  const path = cameraPath(spec.camera, spec.fly);
   const static0 = spec.camera;
   const useVox = params.world === 'voxel' || params.relocate === 'voxel' || !!params.ddgi;
 
@@ -200,17 +215,22 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     sunDir = ps.sunDir;
     lighting.setSun(sunDir);
   };
-  const frameParams = (cam: Camera, prevCam: Camera, slot: number, prevValid: boolean, seed: number, p: RcParams): FrameParams => ({
-    cam, prevCam, lightViewProj: lighting.lightViewProj, width, height, sunDir, sunE: SUN_E, sky: opts.sky,
+  // Phase 32: an instanced world's shadow layers follow the camera, so they are placed before the frame is packed.
+  const frameParams = (cam: Camera, prevCam: Camera, slot: number, prevValid: boolean, seed: number, p: RcParams): FrameParams => (lighting.setCamera(cam.eye), {
+    cam, prevCam, lightViewProj: lighting.lightViewProj, shadow: { far: lighting.shadowFar, bias: lighting.shadowBias }, width, height, sunDir, sunE: SUN_E, sky: opts.sky,
     sMin: p.sMin, P: p.P, lift: p.lift, thicknessMin: p.thicknessMin, pxStride: p.pxStride, exposure: opts.exposure,
     cascades: p.cascades, slot, regStride: p.regStride, maxSteps: p.maxSteps, rayStride: p.rayStride, seed, prevValid, analytic: p.analytic, omega0: ctx.omega0,
     style: [p.styleEmit ? 1 : 0, p.styleRecv ? 1 : 0, p.rampSoft],
   });
+  // Phase 32: a scrolling DDGI volume follows the camera (set once the field exists).
+  let follow: ((eye: Vec3, fwd: Vec3) => void) | null = null;
   const setCamera = (cam: Camera) => {
     const m = cameraMatrices(cam, width, height);
     const camData = new Float32Array(36);
     camData.set(m.viewProj, 0); camData.set(m.view, 16); camData.set([...cam.eye, cam.near], 32);
     device.queue.writeBuffer(gbuffer.camera, 0, camData);
+    gbuffer.cull(m.viewProj);
+    follow?.(cam.eye, m.fwd);
     if (useVox) voxWorld!.update(cam.eye);
   };
 
@@ -245,9 +265,10 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   // pay for the albedo of the dynamic layer.
   const world = { ...ctx.world, dynArgs: p.objects ? ctx.world.dynArgs : null };
   ctx.dynLayer?.setAlbedo(p.objects);
-  const createField = () => p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax])
+  const createField = () => p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax], !!spec.world && spec.world.instances.length > 1)
     : createRc(device, g, lighting.lit, frame, p, world);
   let rc = createField();
+  follow = 'setCamera' in rc ? (e, f) => (rc as ReturnType<typeof createDdgi>).setCamera(e, f) : null;
   let post = createPost(device, g, frame, lighting.lit, rc.irr, 256);
   const querySet = device.createQuerySet({ type: 'timestamp', count: opts.frames * Q });
   const staged = !!opts.dynStages && useVox;
@@ -313,9 +334,13 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       if (pending.length >= opts.inFlight) await pending.shift();
       // A changing building must change the image (checked against the last frame after the run).
       if (ctx.building && mode === 'static' && !geo && k === 0 && opts.poseFrame === undefined) { await Promise.all(pending.splice(0)); firstFinal = await post.capture(0); }
-      if (mode === 'static' && !geo && opts.seq && k >= 0 && k % opts.seq.every === 0 && k / opts.seq.every < opts.seq.count) {
+      if (mode === (opts.seq?.moving ? 'moving' : 'static') && !geo && opts.seq && k >= 0 && k % opts.seq.every === 0 && k / opts.seq.every < opts.seq.count) {
         await Promise.all(pending.splice(0));
         opts.seq.sink(k, { final: await post.capture(0), indirect: await post.capture(1) });
+      }
+      if (mode === 'moving' && !geo && opts.dumpMoving && k >= 0 && k % opts.dumpMoving.every === 0) {
+        await Promise.all(pending.splice(0));
+        opts.dumpMoving.sink(k, await readIrradiance(device, rc.irr, width, height), useVox ? await voxWorld!.readCounters() : null);
       }
     }
     await Promise.all(pending);
@@ -565,7 +590,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     const a = await read(t), c = await read(t + 1);
     let moved = 0;
     for (let v = 0; v < n; v++) if (Math.hypot(a[v * 3] - c[v * 3], a[v * 3 + 1] - c[v * 3 + 1], a[v * 3 + 2] - c[v * 3 + 2]) > 1e-5) moved++;
-    return { frames: [t, t + 1], buildingVertices: n, movedShare: Math.round(moved / n * 1e4) / 1e4, staticTrianglesVoxelisedPerFrame: voxWorld?.staticTriangles ?? null };
+    return { frames: [t, t + 1], buildingVertices: n, movedShare: Math.round(moved / n * 1e4) / 1e4, staticTrianglesVoxelisedPerFrame: voxWorld?.staticTriangles() ?? null };
   }
 
   log(`  static`);

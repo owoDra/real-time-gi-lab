@@ -1,0 +1,423 @@
+{
+ "phase": 32,
+ "date": "2026-11-15",
+ "kind": "exploratory (探索値)",
+ "spec": "docs/spec/30-measurements.md section 36",
+ "machine": "work machine, AMD Radeon 8060S (RADV), native Dawn/Vulkan; another user's processes kept load average 7-14 for the whole phase: idle-machine absolute timing not run (未実行); before/after read from interleaved runs",
+ "default": {
+  "voxel": {
+   "G": 32,
+   "maxBricks": 4608,
+   "maxVoxels": 524288,
+   "dynBricks": 512,
+   "overflow": "coarse-first deterministic allocation, dropped bricks read at the next coarser level"
+  },
+  "world": "every non-cut scene is a world (8 m chunks, per-frame work items); level 0 from a 0.1 m vertex-clustered copy (normal-direction keyed) only in chunks it shrinks to <= 50 % (never in Sponza); coarse levels from half-voxel clustered copies; rows numbered in source order, collapsed first",
+  "wideOnly": "instanced draws, 2 camera-following shadow layers (+-32 m, +-410 m), DDGI scrolling 32x16x32 m volume",
+  "images": {
+   "sponza": "9589339d (was 74c185ab, G=32)",
+   "sponza-dynobj pose 0": "44c7e830 (was 9f8083b1, G=32)",
+   "indirect8bitMeanDiff": 0.063
+  }
+ },
+ "gates": {
+  "S5_O3_pairs_ms": {
+   "scene": "sponza-dynobj-n64-deform-bwave RC static",
+   "phase31": [
+    4.274,
+    4.33,
+    3.963
+   ],
+   "now": [
+    4.27,
+    4.1,
+    4.054
+   ],
+   "diff": [
+    -0.004,
+    -0.23,
+    0.091
+   ]
+  },
+  "D1_ms": {
+   "RC": {
+    "sponza-n64": [
+     4.182,
+     4.232,
+     3.995
+    ],
+    "wide10": [
+     4.697,
+     4.504,
+     4.273
+    ],
+    "wide100": [
+     4.729,
+     4.404,
+     4.441
+    ],
+    "wide100_over_sponza": [
+     1.13,
+     1.04,
+     1.11
+    ],
+    "wide100_over_wide10": [
+     1.01,
+     0.98,
+     1.04
+    ],
+    "verdict": "not met (over 4.0 on the busy machine, ratio over 1.1 in 2 of 3)"
+   },
+   "DDGI_linear": {
+    "sponza-n64": [
+     3.674,
+     3.666,
+     3.54
+    ],
+    "wide10": [
+     3.609,
+     3.774,
+     3.705
+    ],
+    "wide100": [
+     3.751,
+     3.854,
+     3.867
+    ],
+    "wide100_over_sponza": [
+     1.02,
+     1.05,
+     1.09
+    ],
+    "verdict": "met"
+   },
+   "voxBench_stages_ms": {
+    "sponza-n64": {
+     "markBricks": 0.051,
+     "voxBits": 0.305,
+     "resolve": 0.05,
+     "sun": 0.036,
+     "total": 0.553,
+     "bricks": 1925
+    },
+    "wide100": {
+     "markBricks": 0.112,
+     "voxBits": 0.471,
+     "resolve": 0.095,
+     "sun": 0.073,
+     "total": 0.912,
+     "bricks": 3591
+    }
+   },
+   "saved": "box/out/p32/tm/<1-3>/ (deleted after summary)"
+  },
+  "D2_MiB": {
+   "RC": {
+    "sponza-n64": 84.6,
+    "wide10": 86.1,
+    "wide100": 86.1,
+    "fly": 86.5,
+    "dense10": 89.4
+   },
+   "DDGI_linear": {
+    "sponza-n64": 88.3,
+    "wide10": 101.5,
+    "wide100": 101.5,
+    "dense10": 91.6
+   },
+   "verdict": "met"
+  },
+  "D3_ms": {
+   "RC": {
+    "sponza-bwave": [
+     3.515,
+     3.636,
+     4.414
+    ],
+    "dense10-bwave": [
+     3.549,
+     4.364,
+     3.681
+    ],
+    "ratio": [
+     1.01,
+     1.2,
+     0.83
+    ],
+    "vox": {
+     "sponza": [
+      1.096,
+      1.098,
+      1.346
+     ],
+     "dense10": [
+      1.041,
+      1.231,
+      1.068
+     ]
+    }
+   },
+   "DDGI_linear": {
+    "sponza-bwave": [
+     3.163,
+     3.364,
+     3.456
+    ],
+    "dense10-bwave": [
+     2.893,
+     3.016,
+     3.077
+    ],
+    "ratio": [
+     0.91,
+     0.9,
+     0.89
+    ]
+   },
+   "before_full_triangles_RC": {
+    "sponza-bwave": [
+     3.451,
+     3.273,
+     3.416
+    ],
+    "dense10-bwave": [
+     4.756,
+     4.54,
+     4.235
+    ],
+    "ratio": [
+     1.38,
+     1.39,
+     1.24
+    ]
+   },
+   "verdict": "met (ratio); absolute 2 of 3 under 4.0 on the busy machine",
+   "saved": "box/out/p32/t3/<1-3>/ (deleted)"
+  },
+  "D4": {
+   "scene": "sponza-wide100-fly-bwave (0.5 m/frame, 240 frames)",
+   "RC": {
+    "movingMedian": [
+     3.555,
+     3.533,
+     3.55
+    ],
+    "p99": [
+     4.37,
+     3.923,
+     4.166
+    ],
+    "max": [
+     4.501,
+     3.938,
+     4.464
+    ],
+    "p99_over_median": [
+     1.23,
+     1.11,
+     1.17
+    ],
+    "verdict": "not met (max over 4.0, p99/median over 1.2 once)"
+   },
+   "DDGI_linear": {
+    "movingMedian": [
+     3.038,
+     3.106,
+     3.022
+    ],
+    "p99": [
+     3.289,
+     3.418,
+     3.228
+    ],
+    "max": [
+     3.295,
+     3.447,
+     3.263
+    ],
+    "p99_over_median": [
+     1.08,
+     1.1,
+     1.07
+    ],
+    "verdict": "met"
+   },
+   "overflow": "none (max 4151 bricks, 446k voxels)"
+  },
+  "D5_movingFlicker_pct": {
+   "threshold": "geometric normals 3.26 x 1.1 = 3.59 (normal maps 19.0 x 1.1 = 20.9)",
+   "phase31_runner_sponza": {
+    "RC": [
+     20.16,
+     3.34
+    ],
+    "DDGI": [
+     16.08,
+     3.57
+    ]
+   },
+   "now": {
+    "sponza": {
+     "RC": [
+      20.27,
+      3.32
+     ],
+     "DDGI": [
+      16.18,
+      3.49
+     ]
+    },
+    "wide10": {
+     "RC": [
+      20.27,
+      3.32
+     ],
+     "DDGI": [
+      16.17,
+      3.49
+     ]
+    },
+    "wide100": {
+     "RC": [
+      20.27,
+      3.32
+     ],
+     "DDGI": [
+      16.17,
+      3.49
+     ]
+    },
+    "wide100-fly": {
+     "RC": [
+      19.35,
+      4.16
+     ],
+     "DDGI": [
+      16.42,
+      8.76
+     ]
+    }
+   },
+   "verdict": "met on the standard moving path; the fly path (through walls, 0.5 m/frame) has no Sponza counterpart and is higher for both"
+  },
+  "D6": {
+   "sponzaErr8x8": [
+    0.3405,
+    0.3397
+   ],
+   "bias": [
+    "-15.7%",
+    "-15.5%"
+   ],
+   "townErr8x8": [
+    0.2204,
+    0.2217
+   ],
+   "leak": [
+    [
+     0.707,
+     0.378
+    ],
+    [
+     0.694,
+     0.374
+    ]
+   ],
+   "lagPct": [
+    1.317,
+    1.32
+   ],
+   "response90_50": [
+    [
+     4,
+     2
+    ],
+    [
+     4,
+     2
+    ]
+   ],
+   "jumpSponzaDynobj": [
+    0.00554,
+    0.00544
+   ],
+   "toonBandPct": [
+    1.165,
+    1.157
+   ],
+   "staticFlicker": [
+    0,
+    0
+   ],
+   "blackPct": [
+    3.43,
+    3.43
+   ],
+   "verdict": "met (S5/O3 absolute idle not run; pairs unchanged)"
+  },
+  "D7": {
+   "path": "sponza-wide100-fly-bwave, irradiance every 12 frames vs pools 12288/1572864",
+   "default4608": {
+    "inRangePct": 100,
+    "overflow": 0
+   },
+   "pool3072": {
+    "inRangePct": 99.65,
+    "worstFramePct": 96.85,
+    "overflowMax": 1079
+   },
+   "pool2048": {
+    "inRangePct": 57.93,
+    "worstFramePct": 29.7,
+    "overflowMax": 2103
+   },
+   "verdict": "met with pools down to 3072"
+  },
+  "O3_obj_ms": {
+   "default": [
+    3.995,
+    4.85,
+    4.21
+   ],
+   "obj": [
+    4.074,
+    5.082,
+    4.41
+   ],
+   "diff": [
+    0.079,
+    0.232,
+    0.2
+   ],
+   "decision": "obj stays opt-in"
+  },
+  "browser": {
+   "brave149": {
+    "wide100_ms": 4.436,
+    "dense10_ms": 4.155,
+    "imagesBitIdentical": true
+   }
+  }
+ },
+ "tried": {
+  "lod0_all_chunks_0.1": {
+   "dense10_vox_ms": 0.861,
+   "toonBand": 1.233,
+   "verdict": "O4 broken"
+  },
+  "lod0_0.05": {
+   "dense10_vox_ms": 1.166,
+   "toonBand": 1.226
+  },
+  "lod0_without_normal_key_leak": [
+   4.19,
+   1.5
+  ],
+  "lod0_chunk_order_rows_leak": [
+   1.37,
+   0.97
+  ],
+  "coarseCellWholeVoxel": "no gain (wide100 4.267-4.407 vs 4.31-4.344)",
+  "G64_vs_G32": "G=64 put 2-3 buildings in level 0 (wide10 4.38 explicit G=32 vs 4.96 G=64 with 8192 pool)"
+ }
+}

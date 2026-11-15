@@ -35,7 +35,7 @@
 // object (the relocation sees only the static voxels) look out through it instead of at its inner shell. Coverage is accumulated additively front to back and clamped at 1
 // (a wall split between two voxels then still covers the ray fully); the covered part carries the voxels' mean
 // radiance (area-weighted mean of the samples).
-import { FRAME_WGSL } from './frame.ts';
+import { FRAME_WGSL, SHADOW_TAP_WGSL } from './frame.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 import { STYLE_WGSL } from './style.ts';
 import { DEFAULT_VOX, VOX_STRUCT_WGSL, type VoxParams } from './voxel.ts';
@@ -209,7 +209,7 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(0) @binding(9) var<storage, read> materials: array<Material>;
 @group(0) @binding(10) var baseColorTex: texture_2d_array<f32>;
 @group(0) @binding(11) var samp: sampler;
-@group(0) @binding(12) var shadowTex: texture_depth_2d;
+@group(0) @binding(12) var shadowTex: texture_depth_2d_array;
 @group(0) @binding(13) var shadowCmp: sampler_comparison;
 // Indirect dispatch sizes (finalize only): clear, then resolve of each level.
 @group(1) @binding(0) var<storage, read_write> args: array<u32>;
@@ -236,12 +236,8 @@ fn splatLevel(mn: vec3f, mx: vec3f) -> u32 {
   }
   return NONE;
 }
-fn sunVis(x: vec3f) -> f32 {
-  let c = F.lightViewProj * vec4f(x, 1.0);
-  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
-  if (any(uv < vec2f(0.0)) || any(uv > vec2f(1.0))) { return 1.0; }
-  return textureSampleCompareLevel(shadowTex, shadowCmp, uv, c.z - 0.0002);
-}
+${SHADOW_TAP_WGSL}
+fn sunVis(x: vec3f) -> f32 { return shadowTap(x); }
 
 
 // Brick b of level L is wanted this frame (bit order: coarse levels first).
@@ -694,7 +690,7 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
     st(0, 'uniform'), st(1, 'storage'), st(2, 'uniform'), st(3, 'uniform'),
     st(5, 'read-only-storage'), st(6, 'read-only-storage'), st(7, 'read-only-storage'), st(8, 'read-only-storage'), st(9, 'read-only-storage'),
     { binding: 10, visibility: C, texture: { viewDimension: '2d-array' } }, { binding: 11, visibility: C, sampler: {} },
-    { binding: 12, visibility: C, texture: { sampleType: 'depth' } }, { binding: 13, visibility: C, sampler: { type: 'comparison' } },
+    { binding: 12, visibility: C, texture: { sampleType: 'depth', viewDimension: '2d-array' } }, { binding: 13, visibility: C, sampler: { type: 'comparison' } },
   ] });
   const bglArgs = device.createBindGroupLayout({ entries: [st(0, 'storage')] });
   const module = device.createShaderModule({ code: BUILD_WGSL, label: 'dyn.build' });
@@ -717,7 +713,7 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
     { binding: 3, resource: { buffer: u } }, { binding: 5, resource: { buffer: gpu.positions } }, { binding: 6, resource: { buffer: gpu.normals } },
     { binding: 7, resource: { buffer: gpu.uvs } }, { binding: 8, resource: { buffer: tri } }, { binding: 9, resource: { buffer: gpu.materials } },
     { binding: 10, resource: gpu.baseColor.createView({ dimension: '2d-array' }) }, { binding: 11, resource: sampler },
-    { binding: 12, resource: shadow.createView() }, { binding: 13, resource: cmp },
+    { binding: 12, resource: shadow.createView({ dimension: '2d-array' }) }, { binding: 13, resource: cmp },
   ] }));
   const bgArgs = device.createBindGroup({ layout: bglArgs, entries: [{ binding: 0, resource: { buffer: args } }] });
   const nDyn = triangleCount - firstDynamicTri;
