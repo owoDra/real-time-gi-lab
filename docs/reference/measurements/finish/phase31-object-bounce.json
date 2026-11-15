@@ -1,0 +1,68 @@
+{
+  "phase": 31,
+  "date": "2026-11-15",
+  "kind": "exploratory (探索値); quality runs are deterministic, 1 run each; 1080p; warmup 60 + 240 frames unless noted; no sky (leak rooms with sky, 60 frames); DDGI object/floor comparisons with warmup 2400",
+  "spec": "docs/spec/30-measurements.md section 35",
+  "machine": "one development machine (AMD Radeon 8060S APU); the machine was never idle: another process used about 1.3 CPU cores and a second ~0.5-1 core during all timings (user could not free it, asked twice by AskUserQuestion)",
+  "default": {
+    "change": "cascade rays skip the dynamic layer within one level-0 voxel (0.2 m) of the probe (a probe registered by an object's pixels saw that object's own surface); splat window 144 voxels (values identical, cheaper)",
+    "imagesSha256_noSky_staticOnly_dumpIrr_frames60": {"sponza": "74c185ab (unchanged)", "sponza-dynobj --pose-frame 0": "9f8083b1 (was a1fae68e)"},
+    "allocatedMiB": {"before": 81.3, "after": 84.3, "note": "the dynamic layer holds 13 words per voxel (3 albedo words, written only by obj configs)"}
+  },
+  "option_obj": "config token obj (RC and ddgi-...): the dynamic layer splats area x albedo; dynInject adds albedo / pi x irradiance (RC: previous frame's bounce volume, DDGI: its probes) per voxel, weighted over the six face areas; the bounce volume's irradiance rays read the dynamic layer (cone of one of 16 rays). Not in the default: +0.15 ms GI and the budget could not be judged on an idle machine",
+  "timingStart_busy": {
+    "scene": "sponza-dynobj-n64-deform-bwave, sky, default config, native then browser alternated",
+    "nativeStatic": [4.373, 4.090, 4.227], "browserStatic": [4.333, 3.604, 4.230],
+    "nativeMoving": [4.017, 3.822, 3.434], "browserMoving": [3.304, 3.292, 3.858], "allocatedMiB": 81.3,
+    "idle": "not run (未実行)"
+  },
+  "gates": {
+    "O1_objectPixelBias": {
+      "rule": "|bias| <= half of the current value (current = after phase 29: pose 0 -21.85 % pixel / -22.1 % 8x8, pose 100 -14.9 % / -16.2 %); both readings must pass: pose 0 <= 10.9 %, pose 100 <= 7.45 %",
+      "reference": "multi-bounce Mitsuba 128 spp, box/out/mitsuba/sponza-dynobj-n64-deform-f0 / -f100",
+      "RC_before": {"f0": [-0.2185, -0.2210], "f100": [-0.1490, -0.1621]},
+      "RC_default_after": {"f0": [-0.2076, -0.2096], "f100": [-0.1629, -0.1735]},
+      "RC_obj": {"f0": [-0.1284, -0.1304], "f100": [0.0088, -0.0001], "met": "pose 100 yes, pose 0 no"},
+      "DDGI_linear_before": {"f0": [-0.1268, -0.1435], "f100": [-0.0563, -0.0822]},
+      "DDGI_linear_obj": {"f0": [-0.0623, -0.0804], "f100": [0.1279, 0.1042]},
+      "RC_obj_steps_f0_pixelBias": {"receive_only": -0.1735, "block_only": -0.2111, "both_without_skip": -0.1348, "both_with_skip": -0.1284},
+      "note": "values are [pixel bias, 8x8 block bias]"
+    },
+    "O2_floorNearObjects": {
+      "rule": "ratio to the reference 0.7-1.4 at all 4 rectangles (contact, front shade, under the ring, far shade)",
+      "scene": "sponza-dynobj --pose-frame 0, reference multi-bounce 128 spp x 2 (box/out/mitsuba/sponza-dynobj-f0/E-b0)",
+      "rects": "1060,708,1260,735; 1000,760,1300,860; 720,700,940,760; 300,800,600,900 (compare_ref --rects)",
+      "RC_before": [0.310, 0.709, 0.888, 1.069],
+      "RC_default_after": [0.477, 0.709, 0.888, 1.069],
+      "RC_obj": [0.785, 0.792, 1.022, 1.123],
+      "DDGI_linear_before": [0.664, 1.174, 1.483, 1.234],
+      "DDGI_linear_obj": [1.557, 1.260, 1.636, 1.313]
+    },
+    "O3_budget": {
+      "rule": "3 runs <= 4.0 ms static and moving on an idle machine, <= 128 MB",
+      "idle": "not run (未実行)",
+      "busy_native_alternated": {"phase30": [4.195, 4.115, 3.849], "default": [4.054, 4.129, 3.877], "obj": [4.005, 4.274, 4.225],
+        "movingPhase30": [3.873, 3.807, 3.627], "movingDefault": [3.690, 3.847, 3.678], "movingObj": [3.877, 3.982, 3.961]},
+      "busy_native_pairs_phase30_vs_obj": {"phase30": [3.867, 4.068, 3.906], "obj": [4.018, 4.056, 4.175]},
+      "busy_browser": {"default": [4.099, 4.102, 4.077], "obj": [4.148, 4.182, 4.159], "movingDefault": [3.745, 3.771, 3.749], "movingObj": [3.874, 3.841, 3.883]},
+      "DDGI_linear_native": {"default": [3.382, 3.397, 3.562], "obj": [3.556, 3.555, 3.747], "allocatedMiB": 88.0},
+      "allocatedMiB": {"default": 84.3, "obj": 84.3},
+      "objCostStages": {"dyn.splat": "0.237 -> 0.327 ms (albedo words; 0.36 with the 192 window)", "trace": "+0.01-0.03 dynInject, +0.01-0.02 volume rays"}
+    },
+    "O4_noRegression": {
+      "rule": "static flicker 0, response 4/2, lag <= 2 %, sponza-dynobj jump <= 1.2 x 0.0055, errors and leak <= 1.1 x, toon band changes not more than before",
+      "before": {"staticFlicker": 0, "response": [4, 2], "lagPct": 1.317, "dynobjJump": 0.00554, "errSponza": 0.3405, "errTown": 0.2204, "leakPct": [0.707, 0.378], "toonBandPct": 1.268, "toonControlPct": 1.151},
+      "RC_default_after": {"staticFlicker": 0, "response": [4, 2], "lagPct": 1.315, "dynobjJump": 0.00554, "errSponza": 0.3405, "errTown": 0.2204, "leakPct": [0.707, 0.378], "toonBandPct": 1.165},
+      "RC_obj": {"staticFlicker": 0, "response": [4, 2], "lagPct": 1.283, "dynobjJump": 0.00486, "errSponza": 0.3405, "errTown": 0.2204, "leakPct": [0.707, 0.378], "toonBandPct": 1.171},
+      "DDGI_linear_before": {"staticFlickerPct": 0.608, "response": [712, 216], "lagPct": 28.56, "dynobjJump": 0.00017, "errSponza": 0.3296, "errTown": 0.3037, "leakPct": [2.127, 1.338], "toonBandPct": 1.046},
+      "DDGI_linear_obj": {"staticFlickerPct": 0.608, "response": [744, 224], "lagPct": 28.62, "dynobjJump": 0.00016, "errSponza": 0.3296, "errTown": 0.3037, "leakPct": [2.127, 1.338], "toonBandPct": 1.030}
+    }
+  },
+  "tried": {
+    "obj_without_skip": {"toonBandPct": 1.354, "receiveOnly": 1.308, "blockOnly": 1.317, "volumeEveryFrame": "1.343 (base 1.264): not the 2-frame volume update"},
+    "sunVisibility2points": "vox.sun 0.24-0.27 -> 0.17-0.18 ms, cut-scene jump 0.0158 -> 0.0173, but toon band 1.171 -> 1.331 %: rejected",
+    "voxSunMergedIntoResolveAttr": "same cost (0.28-0.30 vs 0.063 + 0.23 ms), not bit-identical: rejected",
+    "splatWindow": {"192": 0.36, "144": 0.327, "112": 0.325}
+  },
+  "town_dynobj_pose0_vs_multiBounceRef": {"before": {"err8x8": 0.221, "objPixelBias": -0.1444}, "obj": {"err8x8": 0.2105, "objPixelBias": -0.1335}}
+}

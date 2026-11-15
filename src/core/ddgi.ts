@@ -23,12 +23,15 @@
 // Trace and blend are two passes (phase 23); the rays of one update go through a texture.
 // Phase 23 (multi-bounce, on by default): the hit radiance adds albedo / pi times the probes' own irradiance, sampled as the
 // gather does from the state the previous update left (RTXGI's usual multi-bounce).
+// Phase 31: before the rays are traced, the dynamic layer's voxels receive the probes' irradiance as the previous update
+// left it (dynInject, DYN_INJECT_WGSL in dynlayer.ts; E per axis face sampled as the hits sample it), so the rays see
+// objects lit by direct and indirect light. The rays already read the layer's coverage (the objects block).
 import { FRAME_WGSL } from './frame.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { SHADE_WGSL, type WorldResources } from './rc.ts';
 import { STYLE_WGSL } from './style.ts';
 import type { Vec3 } from './math.ts';
-import { DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
+import { DYN_INJECT_WGSL, DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
 import { VOX_TRACE_WGSL } from './voxel.ts';
 
 export interface DdgiParams {
@@ -532,6 +535,20 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
     traceRays: device.createBindGroup({ layout: bgl3w, entries: [{ binding: 0, resource: rayTex.createView() }] }),
     update: device.createBindGroup({ layout: bgl3r, entries: [{ binding: 1, resource: rayTex.createView() }] }),
   };
+  // Phase 31: the same module with the dynamic layer writable, for dynInject alone.
+  const injCode = DDGI_WGSL.replace('@group(2) @binding(4) var<storage, read> dyn: array<u32>;', '@group(2) @binding(4) var<storage, read_write> dyn: array<u32>;') + `
+fn dynE(p: vec3f, P: array<f32, 6>, v: f32, L: u32) -> vec3f {
+  var s = vec3f(0.0); var ps = 0.0;
+  for (var a = 0; a < 6; a++) {
+    if (P[a] <= 0.0) { continue; }
+    var n = vec3f(0.0); n[a / 2] = select(1.0, -1.0, (a & 1) == 1);
+    s += P[a] * bounceE(p, n, n); ps += P[a];
+  }
+  return s / max(ps, 1e-9);
+}
+${DYN_INJECT_WGSL}`;
+  const injPipe = world.dynArgs ? device.createComputePipeline({ label: 'ddgi.dynInject', layout: 'auto',
+    compute: { module: device.createShaderModule({ code: injCode, label: 'ddgi.dynInject' }), entryPoint: 'dynInject', constants: dynConstants(world.dynBricks) } }) : null;
   const P = Object.fromEntries(['clearCounts', 'classify', 'writeArgs', 'traceRays', 'update', 'gather'].map((e) =>
     [e, device.createComputePipeline({ label: `ddgi.${e}`, layout: layoutOf[e] ?? pl, compute: { module, entryPoint: e, constants: dynConstants(world.dynBricks) } })]));
   const bg0 = device.createBindGroup({ layout: bgl0, entries: [
@@ -547,6 +564,11 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
     { binding: 2, resource: world.shadow.createView() }, { binding: 3, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
     { binding: 4, resource: { buffer: world.dyn } },
   ] });
+  const injBG = injPipe ? [0, 1, 2].map((i) => device.createBindGroup({ layout: injPipe.getBindGroupLayout(i), entries: [
+    [{ binding: 1, resource: { buffer: uni } }],
+    [state, irrBuf, depBuf].map((b, k) => ({ binding: k, resource: { buffer: b } })),
+    [{ binding: 0, resource: { buffer: world.voxUniform } }, { binding: 4, resource: { buffer: world.dyn } }],
+  ][i] })) : null;
   const use = (pass: GPUComputePassEncoder, name: string) => {
     pass.setPipeline(P[name]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1); pass.setBindGroup(2, bg2);
     if (bg3[name]) pass.setBindGroup(3, bg3[name]);
@@ -573,6 +595,7 @@ export function createDdgi(device: GPUDevice, g: GBuffer, frame: GPUBuffer, para
       pass.end();
       enc.copyBufferToBuffer(counts, 16, args, 0, 16);
       pass = enc.beginComputePass({ label: 'giTrace', timestampWrites: tw(1) });
+      if (injPipe && params.bounce) { pass.setPipeline(injPipe); injBG!.forEach((bg, i) => pass.setBindGroup(i, bg)); pass.dispatchWorkgroupsIndirect(world.dynArgs!, 0); }
       use(pass, 'traceRays'); pass.dispatchWorkgroupsIndirect(args, 0);
       use(pass, 'update'); pass.dispatchWorkgroupsIndirect(args, 0);
       pass.end();

@@ -53,7 +53,7 @@ node build/native/compare_runs.mjs --a <ネイティブの出力> --b <ブラウ
 # 参照（Mitsuba）
 mise run ref:export -- --scene sponza                # シーン変換（box/out/mitsuba/<シーン>）
 build/refenv/bin/python scripts/reference_irradiance.py box/out/mitsuba/sponza --spp 512 [--sky r,g,b] [--seed N] [--bounces 0]  # 0: 打ち切りなしの多重バウンス
-mise run ref:compare -- --ref A.pfm,B.pfm --ours <cfg>.static.irr.f32 [--png DIR]
+mise run ref:compare -- --ref A.pfm,B.pfm --ours <cfg>.static.irr.f32 [--png DIR] [--objects] [--rects "x0,y0,x1,y1;..."]
 mise run ref:style -- --ref-base A,B --ref-style C,D --ours-base x.irr.f32 --ours-style y.irr.f32 [--png DIR]
 ```
 

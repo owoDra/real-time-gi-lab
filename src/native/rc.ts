@@ -16,6 +16,8 @@
 //   vrel (probes relocated from the voxel occupancy instead of the G-buffer: view independent),
 //   S3 (toon materials, scene sponza-toon): noemit (toon surfaces inject plain Lambert), norecv (toon pixels receive
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
+//   obj (phase 31: the dynamic objects receive the indirect light and block the bounce volume's rays; also for ddgi-...;
+//   not in the default, +0.15 ms of GI).
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { Vec3 } from '../core/math.ts';

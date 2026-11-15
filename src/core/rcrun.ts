@@ -74,7 +74,7 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
     }
   }
   const voxUniform = voxWorld?.uniform ?? device.createBuffer({ size: 48 + 8 * 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
-  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), bvh: bvhBuf, materials: gpu.materials,
+  const world: WorldResources = { voxUniform, vox: voxWorld?.vox ?? dummy(), dyn: dynLayer?.buffer ?? dummy(), dynArgs: dynLayer?.args ?? null, bvh: bvhBuf, materials: gpu.materials,
     baseColor: gpu.baseColor, shadow: lighting.shadow, hasVox: !!voxWorld, hasBvh: !!bvh, dynBricks: voxWorld?.params.dynBricks ?? DYN_MAX_BRICKS, maxBricks: voxWorld?.params.maxBricks ?? 0 };
   return { device, spec, gpu, g, frame, lighting, gbuffer: createGBufferRenderer(device, spec.scene, gpu), omega0: octSolidAngles(4),
     width, height, world, voxWorld, dynLayer, bvh, refitBvh: refit, posed: new Map(),
@@ -241,7 +241,10 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     log(`  sizing: max probes per cascade ${maxCount.join(', ')} -> caps ${caps.join(', ')}`);
   }
   const p = { ...params, caps };
-  const world = ctx.world;
+  // Phase 31: only configs with the token obj let the dynamic objects receive and block the bounce (dynArgs), and only they
+  // pay for the albedo of the dynamic layer.
+  const world = { ...ctx.world, dynArgs: p.objects ? ctx.world.dynArgs : null };
+  ctx.dynLayer?.setAlbedo(p.objects);
   const createField = () => p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax])
     : createRc(device, g, lighting.lit, frame, p, world);
   let rc = createField();

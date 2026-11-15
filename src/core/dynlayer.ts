@@ -49,9 +49,9 @@ export const dynConstants = (n: number): Record<string, number> | undefined => n
 // clipmap, 10 frame counter (bitset parity), 16 + L first slot of level L, 24 + L bricks of level L, 32..37 bounds and
 // 38 outside count being marked (published by finalize).
 const HDR = 64;
-const WORDS = 10; // per voxel: P+x P-x P+y P-y P+z P-z, area, area x radiance (rgb)
+const WORDS = 13; // per voxel: P+x P-x P+y P-y P+z P-z, area, area x radiance (rgb), area x albedo (rgb; phase 31)
 const FIX = 65536;
-const WIN = 192; // voxels of the splat window in workgroup memory (WIN * WORDS words; half of the 16 KiB, for occupancy)
+const WIN = 144; // voxels of the splat window in workgroup memory (WIN * WORDS words, 7.3 of the 16 KiB; phase 31: 192 with 13 words cost 0.03 ms more)
 const SWG = 64; // splat workgroup size
 /** Words before the voxel data: header, pointer table, two bitsets, block counts, slot -> brick, and per slot
  * 16 words of bits of its non-zero voxels (build only). */
@@ -159,6 +159,36 @@ fn traceDyn(o: vec3f, d: vec3f, t0: f32, t1: f32, k: f32) -> vec4f {
     t = te;
   }
   return vec4f(rad, cov);
+}
+`;
+
+/** Phase 31: the dynamic objects receive the indirect light. After the build, one thread per voxel of the allocated
+ * bricks (every level; dispatched with DynLayer.args, as clear) adds albedo / pi x irradiance to the voxel's radiance:
+ * area x albedo (words 10..12) / pi x E, with E the irradiance of the GI method that includes it (RC: the bounce
+ * volume, DDGI: its probes; both as the previous frame left them), weighted over the six axis faces by the voxel's
+ * projected areas: E = sum_a P_a E_a / sum_a P_a. A toon object reflects it as Lambert (the emission-side operator acts
+ * on the sun term only, as at the voxel hits). The includer binds dyn as read_write array<u32>, includes DYN_READ_WGSL
+ * and VX, defines PI and dynE(p, P, v, L) -> E (p the voxel centre, P the six projected areas, v the voxel size). */
+export const DYN_INJECT_WGSL = /* wgsl */ `
+@compute @workgroup_size(64) fn dynInject(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let i = (wid.y * nwg.x + wid.x) * 64u + li;
+  let slot = i / 512u; let bit = i % 512u;
+  if (slot >= dyn[8]) { return; }
+  let G = u32(VX.a.z); let G3 = G * G * G;
+  let pi = dyn[dynMetaOff() + slot];
+  let L = pi / G3; let r = pi % G3;
+  let base = dynDataOff() + (slot * 512u + bit) * ${WORDS}u;
+  if (dynWord(base, 6u, L) <= 0.0) { return; }
+  var P: array<f32, 6>;
+  for (var k = 0u; k < 6u; k++) { P[k] = dynWord(base, k, L); }
+  let c = vec3i(i32(r % G), i32((r / G) % G), i32(r / (G * G))) * 8 + vec3i(i32(bit & 7u), i32((bit >> 3u) & 7u), i32(bit >> 6u));
+  let v = voxSize(L);
+  let p = vec3f(VX.origin[L].xyz) * v * 8.0 + (vec3f(c) + 0.5) * v;
+  let add = vec3f(dynWord(base, 10u, L), dynWord(base, 11u, L), dynWord(base, 12u, L)) / PI * dynE(p, P, v, L);
+  for (var k = 0u; k < 3u; k++) {
+    if (L == 0u) { dyn[base + 7u + k] += u32(round(add[k] * ${FIX}.0)); }
+    else { dyn[base + 7u + k] = bitcast<u32>(bitcast<f32>(dyn[base + 7u + k]) + add[k]); }
+  }
 }
 `;
 
@@ -381,7 +411,7 @@ var<private> winD: vec3i;
 fn setMask(ptr: u32, v: u32) { atomicOr(&dyn[dynMaskOff() + ptr * 16u + (v >> 5u)], 1u << (v & 31u)); }
 fn addFix(base: u32, k: u32, x: f32) { let q = u32(round(x * FIX)); if (q > 0u) { atomicAdd(&dyn[base + k], q); } }
 fn addWin(j: u32, k: u32, x: f32) { let q = u32(round(x * FIX)); if (q > 0u) { atomicAdd(&wacc[j * W + k], q); } }
-fn splatSample(L: u32, p: vec3f, n: vec3f, area: f32, rad: vec3f) {
+fn splatSample(L: u32, p: vec3f, n: vec3f, area: f32, rad: vec3f, alb: vec3f) {
   let v = voxSize(L);
   let g = (p - regionLo(L)) / v - 0.5;
   let c0 = vec3i(floor(g)); let f = g - vec3f(c0);
@@ -403,6 +433,7 @@ fn splatSample(L: u32, p: vec3f, n: vec3f, area: f32, rad: vec3f) {
       addWin(j, 4u, w * pn.z); addWin(j, 5u, w * nn.z);
       addWin(j, 6u, w);
       addWin(j, 7u, w * rad.x); addWin(j, 8u, w * rad.y); addWin(j, 9u, w * rad.z);
+      if (DYN_ALB) { addWin(j, 10u, w * alb.x); addWin(j, 11u, w * alb.y); addWin(j, 12u, w * alb.z); }
       continue;
     }
     let ptr = atomicLoad(&dyn[${HDR}u + ptrIndex(L, c >> vec3u(3u))]);
@@ -416,11 +447,15 @@ fn splatSample(L: u32, p: vec3f, n: vec3f, area: f32, rad: vec3f) {
     addFix(base, 4u, w * pn.z); addFix(base, 5u, w * nn.z);
     addFix(base, 6u, w);
     addFix(base, 7u, w * rad.x); addFix(base, 8u, w * rad.y); addFix(base, 9u, w * rad.z);
+    if (DYN_ALB) { addFix(base, 10u, w * alb.x); addFix(base, 11u, w * alb.y); addFix(base, 12u, w * alb.z); }
   }
 }
+override DYN_ALB: bool = true; // phase 31: splat the albedo (only runs whose objects receive light, DynLayer.setAlbedo)
+var<private> sampleAlb: vec3f; // albedo of the last shaded sample (phase 31: dynInject adds the received light)
 fn shadeSample(m: Material, p: vec3f, n: vec3f, uv: vec2f, L: u32) -> vec4f {
   let tex = textureSampleLevel(baseColorTex, samp, uv, m.layers.x, f32(3u + L)) * m.baseColorFactor;
   if ((m.layers.w & 1u) != 0u && tex.a < m.params.z) { return vec4f(0.0, 0.0, 0.0, -1.0); }
+  sampleAlb = tex.rgb;
   let ndl = max(dot(n, F.sunDir.xyz), 0.0);
   if (ndl <= 0.0) { return vec4f(0.0); }
   let vis = sunVis(p + n * 0.03);
@@ -456,7 +491,7 @@ fn splatTri() {
         let uv = UV(i.x) * wa + UV(i.y) * wb + UV(i.z) * wc;
         let s = shadeSample(mat, p, n, uv, L);
         if (s.a < 0.0) { continue; }
-        splatSample(L, p, n, sa, s.rgb);
+        splatSample(L, p, n, sa, s.rgb, sampleAlb);
       }
     }
   }
@@ -626,12 +661,16 @@ export function mortonSortDynamic(table: Uint32Array, first: number, pos: Float3
 
 export interface DynLayer {
   buffer: GPUBuffer;
+  /** Indirect dispatch size of one thread per voxel of the allocated bricks (clear; DYN_INJECT_WGSL). */
+  args: GPUBuffer;
   bytes: number;
   /** Builds this frame's layer (after the shadow map, inside the caller's compute pass). */
   encode(pass: GPUComputePassEncoder): void;
   /** Same work, one compute pass per stage (DYN_STAGES), with timestamps at slots [base, base + 2 * DYN_STAGES.length)
    * when querySet is given. */
   encodeStaged(enc: GPUCommandEncoder, querySet: GPUQuerySet | null, base: number): void;
+  /** Phase 31: whether the splat writes the albedo words (configs with objects receiving light); otherwise they stay 0. */
+  setAlbedo(on: boolean): void;
   /** Allocated bricks, dropped bricks (pool too small) and triangles outside every clipmap (last frame). */
   readCounters(): Promise<{ bricks: number; brickOverflow: number; outside: number }>;
   destroy(): void;
@@ -663,6 +702,9 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
   const layout1 = device.createPipelineLayout({ bindGroupLayouts: [bgl, bglArgs] });
   const pipes = Object.fromEntries(DYN_PASSES.map((e) =>
     [e, device.createComputePipeline({ label: `dyn.${e}`, layout: e === 'finalize' ? layout1 : layout0, compute: { module, entryPoint: e, constants: dynConstants(NB) } })]));
+  const splatAlb = pipes.splat;
+  const splatNoAlb = device.createComputePipeline({ label: 'dyn.splat', layout: layout0, compute: { module, entryPoint: 'splat', constants: { ...dynConstants(NB), DYN_ALB: 0 } } });
+  pipes.splat = splatNoAlb;
   const sampler = device.createSampler({ minFilter: 'linear', magFilter: 'linear', mipmapFilter: 'linear', addressModeU: 'repeat', addressModeV: 'repeat' });
   const cmp = device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' });
   const uni = Array.from({ length: vp.levels }, (_, L) => {
@@ -694,7 +736,8 @@ export function createDynLayer(device: GPUDevice, gpu: SceneGpu, tri: GPUBuffer,
     else for (let L = 1; L < vp.levels; L++) { use(pass, 'resolve', L); pass.dispatchWorkgroupsIndirect(args, 12 * (1 + L)); }
   };
   return {
-    buffer, bytes: buffer.size,
+    buffer, args, bytes: buffer.size,
+    setAlbedo(on) { pipes.splat = on ? splatAlb : splatNoAlb; },
     encode(pass) {
       if (nDyn <= 0) return;
       for (const st of DYN_PASSES) stage(pass, st);

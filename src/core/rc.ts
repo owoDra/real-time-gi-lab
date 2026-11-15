@@ -32,6 +32,7 @@ export type Relocate = 'gbuffer' | 'voxel' | 'none';
 /** S2: resources of the world-space tracers (bound in group 3). */
 export interface WorldResources {
   voxUniform: GPUBuffer; vox: GPUBuffer; dyn: GPUBuffer; bvh: GPUBuffer;
+  dynArgs: GPUBuffer | null; // indirect size of one thread per voxel of the dynamic layer (phase 31, dynInject); null: objects do not take part
   materials: GPUBuffer; baseColor: GPUTexture; shadow: GPUTexture; hasVox: boolean; hasBvh: boolean;
   dynBricks: number; // brick pool of the dynamic layer (pipeline constant of the dynamic layer's read side)
   maxBricks: number; // brick pool of the voxel world (bounce.ts walks its voxel slots)
@@ -74,13 +75,16 @@ export interface RcParams {
   ddgi: DdgiParams | null;
   // Phase 23: multi-bounce, on by default (RC: the bounce volume of bounce.ts; DDGI: its own probes, ddgi.ts).
   bounce: boolean;
+  // Phase 31 (token obj, not default: +0.15 ms): the dynamic objects receive the indirect light (dynInject) and block and reflect
+  // the bounce volume's rays (RC); DDGI: they receive its probes' light (its rays read the layer already).
+  objects: boolean;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, bounce: true,
+  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, bounce: true, objects: false,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,
@@ -217,10 +221,13 @@ fn traceWorld(o: vec3f, d: vec3f, t0: f32, t1: f32, s0: f32, c: u32, nrm: vec3f)
   voxSteps = 0u;
   let coneK = 3.5449077 / f32(LY.c[c].res); // width of the direction bin's cone per unit distance
   var r = traceVox(o + nrm * (LY.wp.y * v), d, t0, t1, LY.wp.w * v, L);
-  // P2: the dynamic layer in front of the static hit, read at the width of the direction bin's cone.
+  // P2: the dynamic layer in front of the static hit, read at the width of the direction bin's cone. Phase 31: not within
+  // one level-0 voxel of the probe: a probe that a dynamic object's pixels registered lies on that object's surface and
+  // saw the surface itself (its own radiance and coverage; a convex object cannot light itself), which moved the receiving
+  // ramp of toon objects (bands changing 1.27 -> 1.35 % once the objects reflect indirect light, 1.17 % with the skip).
   if (dyn[0] != 0u) {
     let tS = select(t1, dot(voxHitEntry - o, d), r.a < 0.5);
-    let dl = traceDyn(o, d, t0, min(t1, tS), coneK);
+    let dl = traceDyn(o, d, max(t0, VX.a.x), min(t1, tS), coneK);
     if (dl.a > 0.0) { r = vec4f(dl.rgb + (1.0 - dl.a) * r.rgb, (1.0 - dl.a) * r.a); }
   }
   if (LY.wu.z > 0u) {

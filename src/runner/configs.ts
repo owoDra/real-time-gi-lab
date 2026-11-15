@@ -3,10 +3,11 @@
 import { DEFAULT_DDGI, type DdgiParams } from '../core/ddgi.ts';
 import { DEFAULT_PARAMS, type Method, type RcParams } from '../core/rc.ts';
 
-// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>]
+// DDGI comparator: ddgi-<spacing cm>-<rays>[-h<hysteresis>][-noadapt][-u<div>][-norel|-rg][-nocls][-sb<segBase m>][-g<gamma>][-vb<view bias>][-obj]
 function parseDdgi(name: string, overrides: Partial<RcParams>): RcParams {
   const [, sp, rays, ...tokens] = name.split('-');
   const d: DdgiParams = { ...DEFAULT_DDGI, spacing: Number(sp) / 100, rays: Number(rays) };
+  let objects = false;
   for (const t of tokens) {
     if (/^h[\d.]+$/.test(t)) d.hysteresis = Number(t.slice(1));
     else if (t === 'noadapt') d.adaptive = false;
@@ -17,9 +18,10 @@ function parseDdgi(name: string, overrides: Partial<RcParams>): RcParams {
     else if (/^sb[\d.]+$/.test(t)) d.segBase = Number(t.slice(2));
     else if (/^g[\d.]+$/.test(t)) d.gamma = Number(t.slice(1));
     else if (/^vb[\d.]+$/.test(t)) d.viewBias = Number(t.slice(2));
+    else if (t === 'obj') objects = true;
     else throw new Error(`unknown ddgi token ${t} in ${name}`);
   }
-  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d };
+  return { ...DEFAULT_PARAMS, ...overrides, world: 'voxel', depthCascades: 0, ddgi: d, objects };
 }
 
 export function parseConfig(name: string, overrides: Partial<RcParams> = {}): RcParams {
@@ -43,6 +45,7 @@ export function parseConfig(name: string, overrides: Partial<RcParams> = {}): Rc
     else if (/^vs[\d.]+$/.test(t)) p.voxScale = Number(t.slice(2));
     else if (/^vo[\d.]+$/.test(t)) p.voxOffset = Number(t.slice(2));
     else if (/^vk[\d.]+$/.test(t)) p.voxSkip = Number(t.slice(2));
+    else if (t === 'obj') p.objects = true;
     else throw new Error(`unknown config token ${t} in ${name}`);
   }
   return p;

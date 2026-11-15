@@ -9,8 +9,11 @@
 // a level-0 voxel), probes on the other side of the surface and probes whose way to the point is blocked (bnRead).
 // The texture holds the six axes stacked along z (axis a at z = a * DZ + z), alpha: the reach along the axis (0 inactive),
 // and the volume's origin (probe coordinates of probe 0) in the texel (0, 0, 6 DZ).
-// Not included: dynamic objects neither receive the bounce (their radiance comes from the dynamic layer, dynlayer.ts)
-// nor block the volume's rays.
+// Phase 31 (configs with the token obj only, world.dynArgs set; not the default): the dynamic objects take part. The volume's irradiance rays read the dynamic layer in front of the static hit
+// at the width of one ray's cone (the objects block and reflect light), and dynInject (DYN_INJECT_WGSL, dynlayer.ts) adds
+// the light the objects receive from the previous frame's volume to the layer before the volume is traced, so that the
+// cascades and the volume see objects lit by direct and indirect light (one frame of lag for the received part).
+import { DYN_INJECT_WGSL, DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
 import { FRAME_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
 import { BRICK_WORDS, VOX_STRUCT_WGSL, VOX_TRACE_WGSL } from './voxel.ts';
@@ -79,6 +82,7 @@ const PI = 3.14159265;
 @group(0) @binding(0) var<uniform> F: Frame;
 @group(0) @binding(1) var<uniform> VX: VoxU;
 @group(0) @binding(2) var<storage, read> vox: array<u32>;
+@group(0) @binding(3) var<storage, read> dyn: array<u32>; // phase 31: the dynamic layer (dynlayer.ts)
 @group(0) @binding(4) var shadowTex: texture_depth_2d;
 @group(0) @binding(5) var shadowCmp: sampler_comparison;
 @group(0) @binding(6) var<storage, read_write> list: array<atomic<u32>>; // 0 count, 1 frame counter, 4.. probes
@@ -86,7 +90,9 @@ const PI = 3.14159265;
 @group(1) @binding(0) var bnTex: texture_3d<f32>;                       // previous frame (read)
 @group(1) @binding(1) var bnOut: texture_storage_3d<rgba16float, write>; // this frame
 override BN_RAYS: u32 = 32u;
+override BN_DYN: bool = false; // phase 31 (token obj): the irradiance rays read the dynamic layer
 ${VOX_TRACE_WGSL}
+${DYN_READ_WGSL}
 ${BOUNCE_READ_WGSL}
 fn voxBounce(p: vec3f, n0: vec3f, d: vec3f, ai: u32, pc: vec3f, v: f32) -> vec3f {
   if (dot(n0, n0) <= 0.01) { return bounceE(p, -d, -d); }
@@ -168,6 +174,13 @@ fn bnTrace(o: vec3f, d: vec3f, tMax: f32) -> vec4f {
   }
   return vec4f(F.sky.rgb, 1e9);
 }
+// An irradiance ray: the static result behind the dynamic layer (phase 31), read with the cone of one of BN_RAYS rays.
+fn bnTraceDyn(o: vec3f, d: vec3f) -> vec3f {
+  let r = bnTrace(o, d, 1e9);
+  if (!BN_DYN || dyn[0] == 0u) { return r.rgb; }
+  let dl = traceDyn(o, d, 0.0, min(r.a, 1e4), sqrt(4.0 * PI / f32(BN_RAYS)));
+  return dl.rgb + (1.0 - dl.a) * r.rgb;
+}
 
 var<workgroup> wgRad: array<vec3f, 64>;
 var<workgroup> wgReach: array<f32, 6>;
@@ -181,7 +194,7 @@ var<workgroup> wgProbe: u32;
   if (i == 0xffffffffu) { return; }
   let c = vec3i(i32(i % u32(BN_DX)), i32((i / u32(BN_DX)) % u32(BN_DY)), i32(i / u32(BN_DX * BN_DY)));
   let p = vec3f(bnOriginNow() + c) * BN_CELL;
-  if (li < BN_RAYS) { wgRad[li] = bnTrace(p, sfDir(li, BN_RAYS), 1e9).rgb; }
+  if (li < BN_RAYS) { wgRad[li] = bnTraceDyn(p, sfDir(li, BN_RAYS)); }
   else if (li < BN_RAYS + 6u) {
     let a = li - BN_RAYS;
     var axis = vec3f(0.0); axis[a / 2u] = select(1.0, -1.0, (a & 1u) == 1u);
@@ -244,6 +257,52 @@ fn bnSide(p: vec3f, n: vec3f, v: f32, L: u32) -> vec3f { return bnRead(p + n * s
 }
 `;
 
+// Phase 31: the dynamic layer's voxels receive the previous frame's volume (DYN_INJECT_WGSL). E over the six faces in one
+// pass over the 8 probes around the voxel centre, with the same rules as bnRead (active, reach, side of the face).
+const DYN_INJECT_BN_WGSL = /* wgsl */ `
+${VOX_STRUCT_WGSL}
+const PI = 3.14159265;
+@group(0) @binding(0) var<uniform> VX: VoxU;
+@group(0) @binding(1) var<storage, read_write> dyn: array<u32>;
+@group(0) @binding(2) var bnTex: texture_3d<f32>;
+fn voxLevelFor(L: u32, p: vec3f) -> u32 { return L; }
+${DYN_READ_WGSL}
+${BOUNCE_READ_WGSL}
+fn dynE(p: vec3f, P: array<f32, 6>, v: f32, L: u32) -> vec3f {
+  let org = bnOrigin();
+  let g = p / BN_CELL - vec3f(org);
+  let bb = vec3i(floor(g)); let fr = g - vec3f(bb);
+  let tol = 0.5 * VX.a.x;
+  var e: array<vec3f, 6>; var ws: array<f32, 6>;
+  for (var k = 0u; k < 8u; k++) {
+    let off = vec3i(i32(k & 1u), i32((k >> 1u) & 1u), i32((k >> 2u) & 1u));
+    let cc = bb + off;
+    if (any(cc < vec3i(0)) || any(cc >= vec3i(BN_DX, BN_DY, BN_DZ))) { continue; }
+    let pp = vec3f(org + cc) * BN_CELL;
+    let u = p - pp;
+    if (bnAxis(cc, 0).a <= 0.0) { continue; }
+    if (abs(u.x) > bnAxis(cc, select(1, 0, u.x >= 0.0)).a + tol || abs(u.y) > bnAxis(cc, select(3, 2, u.y >= 0.0)).a + tol
+        || abs(u.z) > bnAxis(cc, select(5, 4, u.z >= 0.0)).a + tol) { continue; }
+    let t3 = select(1.0 - fr, fr, off == vec3i(1));
+    let wt = t3.x * t3.y * t3.z;
+    for (var a = 0; a < 6; a++) {
+      if (P[a] <= 0.0) { continue; }
+      var n = vec3f(0.0); n[a / 2] = select(1.0, -1.0, (a & 1) == 1);
+      let w = wt * smoothstep(-0.05, 0.25, dot(pp - p, n) / BN_CELL);
+      if (w <= 0.0) { continue; }
+      e[a] += w * bnAxis(cc, a).rgb; ws[a] += w;
+    }
+  }
+  var s = vec3f(0.0); var ps = 0.0;
+  for (var a = 0; a < 6; a++) {
+    if (ws[a] > 1e-6) { s += P[a] * e[a] / ws[a]; }
+    ps += P[a];
+  }
+  return s / max(ps, 1e-9);
+}
+${DYN_INJECT_WGSL}
+`;
+
 export interface Bounce {
   bytes: number;
   /** The volume the cascades read this frame (written by the last encode). */
@@ -266,7 +325,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
   const C = GPUShaderStage.COMPUTE;
   const bgl0 = device.createBindGroupLayout({ entries: [
     { binding: 0, visibility: C, buffer: { type: 'uniform' } }, { binding: 1, visibility: C, buffer: { type: 'uniform' } },
-    { binding: 2, visibility: C, buffer: { type: 'read-only-storage' } },
+    { binding: 2, visibility: C, buffer: { type: 'read-only-storage' } }, { binding: 3, visibility: C, buffer: { type: 'read-only-storage' } },
     { binding: 4, visibility: C, texture: { sampleType: 'depth' } }, { binding: 5, visibility: C, sampler: { type: 'comparison' } },
     { binding: 6, visibility: C, buffer: { type: 'storage' } },
   ] });
@@ -275,7 +334,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
     { binding: 1, visibility: C, storageTexture: { access: 'write-only', format: 'rgba16float', viewDimension: '3d' } },
   ] });
   const layout = device.createPipelineLayout({ bindGroupLayouts: [bgl0, bgl1] });
-  const constants = { ...bounceConstants(b), BN_RAYS: b.rays, BN_DIV: b.div };
+  const constants = { ...bounceConstants(b), BN_RAYS: b.rays, BN_DIV: b.div, BN_DYN: world.dynArgs ? 1 : 0, ...dynConstants(world.dynBricks) };
   const P = Object.fromEntries(['bnClear', 'bnClassify', 'bnUpdate'].map((e) => [e,
     device.createComputePipeline({ label: e, layout, compute: { module, entryPoint: e, constants } })]));
   // bnArgs alone binds the indirect arguments as storage (a dispatch may not use them both ways).
@@ -284,7 +343,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
     { binding: 6, resource: { buffer: list } }, { binding: 7, resource: { buffer: args } }] });
   const bg0 = device.createBindGroup({ layout: bgl0, entries: [
     { binding: 0, resource: { buffer: frame } }, { binding: 1, resource: { buffer: world.voxUniform } },
-    { binding: 2, resource: { buffer: world.vox } },
+    { binding: 2, resource: { buffer: world.vox } }, { binding: 3, resource: { buffer: world.dyn } },
     { binding: 4, resource: world.shadow.createView() }, { binding: 5, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
     { binding: 6, resource: { buffer: list } },
   ] });
@@ -294,6 +353,12 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
   const injPipe = device.createComputePipeline({ label: 'bnInject', layout: 'auto', compute: { module: injModule, entryPoint: 'bnInject', constants: bounceConstants(b) } });
   const injBG = views.map((v) => device.createBindGroup({ layout: injPipe.getBindGroupLayout(0), entries: [
     { binding: 0, resource: { buffer: world.voxUniform } }, { binding: 1, resource: { buffer: world.vox } }, { binding: 2, resource: v }] }));
+  const dynModule = device.createShaderModule({ code: DYN_INJECT_BN_WGSL, label: 'bounce.dynInject' });
+  const dynPipe = device.createComputePipeline({ label: 'bnDynInject', layout: 'auto', compute: { module: dynModule, entryPoint: 'dynInject',
+    constants: { ...bounceConstants(b), ...dynConstants(world.dynBricks) } } });
+  // Parity p (this frame's volume is texture p) reads texture 1 - p: the previous frame's volume.
+  const dynBG = [0, 1].map((p) => device.createBindGroup({ layout: dynPipe.getBindGroupLayout(0), entries: [
+    { binding: 0, resource: { buffer: world.voxUniform } }, { binding: 1, resource: { buffer: world.dyn } }, { binding: 2, resource: views[1 - p] }] }));
   const maxSlots = world.maxBricks * 512;
   let par = 1;
   const use = (pass: GPUComputePassEncoder, e: string) => { pass.setPipeline(P[e]); pass.setBindGroup(0, bg0); pass.setBindGroup(1, bg1[par]); };
@@ -304,6 +369,7 @@ export function createBounce(device: GPUDevice, frame: GPUBuffer, world: WorldRe
     parity: () => par,
     encode(pass) {
       par = 1 - par;
+      if (world.dynArgs) { pass.setPipeline(dynPipe); pass.setBindGroup(0, dynBG[par]); pass.dispatchWorkgroupsIndirect(world.dynArgs, 0); }
       use(pass, 'bnClear'); pass.dispatchWorkgroups(1);
       const groups = Math.ceil((n + 1) / 64), x = Math.min(groups, 65535);
       use(pass, 'bnClassify'); pass.dispatchWorkgroups(x, Math.ceil(groups / x));
