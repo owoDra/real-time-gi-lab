@@ -4,6 +4,7 @@
 // Usage: node build/native/compare_ref.mjs --ref E.pfm[,E2.pfm...] --ours a.static.irr.f32[,b...] [--width 1920 --height 1080]
 //   [--png DIR]  (side-by-side images: reference | ours, same exposure) [--json FILE]
 //   [--objects]  (scenes with flagged photoreal objects: also their pixels on their own)
+//   [--rects "x0,y0,x1,y1;..."]  (mean of the photoreal pixels in rectangles at the run's resolution, ours / reference)
 // Block errors (W3, phase 25): the same mean |ours - ref| / mean ref over means of B x B reference pixels (B = 8, 16;
 // a block counts when at least 3/4 of its pixels are compared). Averaging B^2 pixels divides the reference's own
 // noise by about B, so two independent references agree within a few percent where single pixels differ by 20-30%.
@@ -98,7 +99,19 @@ for (const file of arg('--ours', '').split(',')) {
   // --objects (phase 27): the pixels of the flagged photoreal objects (the moving objects of the -dynobj scenes), which
   // the main comparison leaves out, compared on their own. Not for toon scenes (a toon pixel's irradiance went through
   // the receiving-side operator and its tag can be 2 as well).
-  const res = { ...compare(ok), ...(args.includes('--objects') ? { objects: { ...compare(obj),
+  // --rects (phase 31, O2): mean luminance of the photoreal pixels in rectangles given at the run's resolution
+  // ("x0,y0,x1,y1;..."), ours over the reference.
+  const rects = arg('--rects', '') ? arg('--rects', '').split(';').map((r) => {
+    const [x0, y0, x1, y1] = r.split(',').map((v) => Number(v) / fx);
+    let sr = 0, so = 0, n = 0;
+    for (let y = Math.floor(y0); y < Math.ceil(y1); y++) for (let x = Math.floor(x0); x < Math.ceil(x1); x++) {
+      const p = y * ref.w + x;
+      if (!ok[p]) continue;
+      sr += lum(ref.rgb[p * 3], ref.rgb[p * 3 + 1], ref.rgb[p * 3 + 2]); so += lum(ours[p * 3], ours[p * 3 + 1], ours[p * 3 + 2]); n++;
+    }
+    return { rect: r, pixels: n, ref: Math.round(sr / n * 1e5) / 1e5, ours: Math.round(so / n * 1e5) / 1e5, ratio: r4(so / sr) };
+  }) : null;
+  const res = { ...compare(ok), ...(rects ? { rects } : {}), ...(args.includes('--objects') ? { objects: { ...compare(obj),
     refHalvesMeanAbsRel: refs.length > 1 ? halves(obj) : null } } : {}) };
   results[basename(file)] = res;
   console.log(basename(file), JSON.stringify(res));
