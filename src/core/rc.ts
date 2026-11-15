@@ -99,10 +99,15 @@ fn sunVis(x: vec3f) -> f32 {
 fn shadeHitE(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32, e: vec3f) -> vec3f {
   var n = select(-d, n0, dot(n0, n0) > 0.01);
   if (dot(n, d) > 0.0) { n = -n; }
+  return shadeHitV(n0, alb, d, e, select(1.0, sunVis(p + n * bias), dot(n, F.sunDir.xyz) > 0.0));
+}
+// The same with the sun visibility given (phase 29: voxel hits read their voxel's, voxSun in voxel.ts).
+fn shadeHitV(n0: vec3f, alb: vec4f, d: vec3f, e: vec3f, vis: f32) -> vec3f {
+  var n = select(-d, n0, dot(n0, n0) > 0.01);
+  if (dot(n, d) > 0.0) { n = -n; }
   let b = alb.rgb / PI * e;
   let ndl = max(dot(n, F.sunDir.xyz), 0.0);
   if (ndl <= 0.0) { return b; }
-  let vis = sunVis(p + n * bias);
   if (alb.a > 0.5 && F.style.x > 0.5) { return b + toonSun(alb.rgb, ndl, vis, F.sunE.rgb); }
   return b + alb.rgb / PI * F.sunE.rgb * ndl * vis;
 }
@@ -122,11 +127,13 @@ fn shadeHit(p: vec3f, n0: vec3f, alb: vec4f, d: vec3f, bias: f32) -> vec3f {
   return shadeHitE(p, n0, alb, d, bias, bounceE(p, n, -d));
 }
 var<private> voxHitEntry: vec3f; // entry point of the last voxel hit (DDGI keeps hit distances)
-// A static voxel hit shades one point on the ray's side of the voxel.
+// A static voxel hit shades one point on the ray's side of the voxel, with the sun visibility of the voxel's face
+// (phase 29: the mean over the face computed once per frame, not the shadow map at that point, which flipped on shadow
+// edges as the shadow map's grid moved).
 fn voxShade(entry: vec3f, n: vec3f, alb: vec4f, d: vec3f, v: f32, ai: u32, L: u32, pc: vec3f) -> vec3f {
   voxHitEntry = entry;
   let p = entry - d * (0.25 * v);
-  return shadeHitE(p, n, alb, d, 0.0, voxBounce(p, n, d, ai, pc, v));
+  return shadeHitV(n, alb, d, voxBounce(p, n, d, ai, pc, v), bitcast<f32>(vox[VX.c.w + VX.c.x + ai]));
 }
 `;
 
@@ -161,9 +168,13 @@ struct Probe { pos: vec4f, nrm: vec4f, grid: vec4i } // pos.w = s0 (0: invalid),
 @group(2) @binding(4) var<storage, read_write> sh: array<vec4u>;
 @group(2) @binding(5) var<storage, read_write> counts: array<atomic<u32>>;
 // [0,8) probes, [8,16) overflow, [16,24) insert failures, [24,32) world traces, [32,40) DDA steps,
-// [40,48) voxel hit / triangle miss, [48,56) voxel miss / triangle hit, [56,64) both hit, [64,72) traces at the step cap
+// [40,48) voxel hit / triangle miss, [48,56) voxel miss / triangle hit, [56,64) both hit, [64,72) traces at the step cap,
+// [72,80) photoreal pixels with every c0 probe hidden (black, phase 29; summed over the 8 words)
 @group(2) @binding(6) var<storage, read_write> accum: array<atomic<u32>>;
 @group(2) @binding(7) var<storage, read_write> parents: array<u32>; // world: 8 upper-cascade probes per probe
+// Phase 29: the c0 history, two parities (CI.y: the one written this frame): hash (H words: probe + 1), grid and LOD of each
+// probe (4 words), its SH (16 words, f16).
+@group(2) @binding(8) var<storage, read_write> hist: array<atomic<u32>>;
 struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(0) var<uniform> VX: VoxU;
 @group(3) @binding(1) var<storage, read> vox: array<u32>;
@@ -176,6 +187,8 @@ struct Material { baseColorFactor: vec4f, layers: vec4u, params: vec4f }
 @group(3) @binding(9) var<storage, read> dyn: array<u32>; // P2 dynamic layer (dynlayer.ts)
 @group(3) @binding(11) var bnTex: texture_3d<f32>; // phase 23 bounce volume of this frame (bounce.ts)
 override BN_ON: bool = false;
+override HIST_ON: bool = false; // phase 29: c0 history on (world probes)
+const HIST_W = 0.5;
 ${BOUNCE_READ_WGSL.replace('fn bounceE(', 'fn bounceVol(')}
 fn bounceE(p: vec3f, n: vec3f, v: vec3f) -> vec3f { if (!BN_ON) { return vec3f(0.0); } return bounceVol(p, n, v); }
 // Voxel hits read the irradiance bnInject (bounce.ts) stored for the voxel's side the ray comes from.
@@ -457,7 +470,7 @@ fn probeOfGroup(wid: vec3u, nwg: vec3u, li: u32, c: u32) -> u32 {
 
 @compute @workgroup_size(64) fn clearKeys(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
   let i = lin(wid, nwg, li);
-  if (i < 72u) { atomicStore(&counts[i], 0u); }
+  if (i < 80u) { atomicStore(&counts[i], 0u); }
   if (i < LY.hdr.y) { atomicStore(&keys[i], EMPTY); }
 }
 @compute @workgroup_size(64) fn clearAccum(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -748,11 +761,57 @@ fn shBasis(n: vec3f) -> array<f32, 9> {
     let a = select(select(PI / 4.0, 2.0 * PI / 3.0, k < 4u), PI, k == 0u);
     v[k * 3u] = cf[k].x * a; v[k * 3u + 1u] = cf[k].y * a; v[k * 3u + 2u] = cf[k].z * a;
   }
+  if (HIST_ON) { histBlend(pi, &v); }
   for (var q = 0u; q < 4u; q++) {
     let b = q * 8u;
     sh[pi * 4u + q] = vec4u(pack2x16float(vec2f(v[b], v[b + 1u])), pack2x16float(vec2f(v[b + 2u], v[b + 3u])),
                             pack2x16float(vec2f(v[b + 4u], v[b + 5u])), pack2x16float(vec2f(v[b + 6u], v[b + 7u])));
+    if (HIST_ON) { for (var j = 0u; j < 4u; j++) { atomicStore(&hist[histSh(CI.y, pi) + q * 4u + j], sh[pi * 4u + q][j]); } }
   }
+}
+// Phase 29: a short history on the c0 irradiance. The probe's SH is mixed with the SH that the probe at the same grid point
+// and LOD had in the previous frame (weight HIST_W on the new frame: 0.5 reaches 90 % of a step in 4 frames, counting the step's own frame); without such a
+// probe (first frame, a LOD change, a new grid point) the frame's own value.
+fn histH() -> u32 { return LY.c[0].hashMask + 1u; }
+fn histGrid(p: u32, pi: u32) -> u32 { return 2u * histH() + (p * LY.c[0].cap + pi) * 4u; }
+fn histSh(p: u32, pi: u32) -> u32 { return 2u * histH() + 8u * LY.c[0].cap + (p * LY.c[0].cap + pi) * 16u; }
+fn histHash(g: vec3i, lod: i32) -> u32 {
+  return hash32((u32(g.x) * 73856093u) ^ (u32(g.y) * 19349663u) ^ (u32(g.z) * 83492791u) ^ (u32(lod) * 2654435761u));
+}
+fn histBlend(pi: u32, v: ptr<function, array<f32, 32>>) {
+  let pr = probes[LY.c[0].probeOff + pi];
+  let g = pr.grid.xyz; let lod = pr.grid.w;
+  let cur = CI.y; let prv = 1u - cur;
+  let H = histH();
+  let h0 = histHash(g, lod) & (H - 1u);
+  var h = h0; var found = NONE;
+  for (var i = 0u; i < 64u; i++) {
+    let sl = atomicLoad(&hist[prv * H + h]);
+    if (sl == 0u) { break; }
+    let q = sl - 1u; let o = histGrid(prv, q);
+    if (i32(atomicLoad(&hist[o])) == g.x && i32(atomicLoad(&hist[o + 1u])) == g.y && i32(atomicLoad(&hist[o + 2u])) == g.z
+        && i32(atomicLoad(&hist[o + 3u])) == lod) { found = q; break; }
+    h = (h + 1u) & (H - 1u);
+  }
+  if (found != NONE) {
+    let o = histSh(prv, found);
+    for (var q = 0u; q < 16u; q++) {
+      let f = unpack2x16float(atomicLoad(&hist[o + q]));
+      (*v)[q * 2u] = mix(f.x, (*v)[q * 2u], HIST_W); (*v)[q * 2u + 1u] = mix(f.y, (*v)[q * 2u + 1u], HIST_W);
+    }
+  }
+  let og = histGrid(cur, pi);
+  atomicStore(&hist[og], u32(g.x)); atomicStore(&hist[og + 1u], u32(g.y)); atomicStore(&hist[og + 2u], u32(g.z)); atomicStore(&hist[og + 3u], u32(lod));
+  h = h0;
+  for (var i = 0u; i < 64u; i++) {
+    let r = atomicCompareExchangeWeak(&hist[cur * H + h], 0u, pi + 1u);
+    if (r.exchanged) { break; }
+    if (r.old_value != 0u) { h = (h + 1u) & (H - 1u); }
+  }
+}
+@compute @workgroup_size(64) fn clearHist(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let i = lin(wid, nwg, li);
+  if (i < histH()) { atomicStore(&hist[CI.y * histH() + i], 0u); }
 }
 fn evalSH(pi: u32, n: vec3f) -> vec3f {
   let y = shBasis(n);
@@ -848,6 +907,7 @@ fn segOccluded(a: vec3f, b: vec3f, L: u32) -> bool {
       if (toon) { s1 = shAdd(s1, shL1(qq[k]), ww[k]); }
     }
   }
+  if (ws <= 0.0 && hidden != 0u && tagA <= 0.25) { atomicAdd(&counts[72u + (gid.x & 7u)], 1u); }
   var outE = select(vec3f(0.0), e / ws, ws > 0.0);
   // Alpha: 1 photoreal; toon 2 + ramp band (0 / 1) + 2 when the directional part is at least 10% of the ambient;
   // photoreal objects flagged for measurement 2.
@@ -998,13 +1058,16 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const probes = buf('rc.probes', probeTotal * 48);
   const rad = buf('rc.rad', radTotal * 8);
   const sh = buf('rc.sh', casc[0].cap * 64);
-  const counts = buf('rc.counts', 72 * 4, GPUBufferUsage.COPY_SRC);
+  const counts = buf('rc.counts', 80 * 4, GPUBufferUsage.COPY_SRC);
   const accum = buf('rc.accum', accTotal * 4);
   const parents = buf('rc.parents', screen ? 0 : probeTotal * 8 * 4);
   const args = buf('rc.args', 8 * 8 * 4, GPUBufferUsage.INDIRECT);
+  // Phase 29: the c0 history (world probes only): 2 parities of the hash, and per probe its grid point (4 words) and SH (16).
+  const histOn = !screen;
+  const hist = buf('rc.hist', histOn ? (2 * casc[0].hashSize + 2 * casc[0].cap * 20) * 4 : 16);
   const irr = device.createTexture({ label: 'rc.irr', size: [width, height], format: 'rgba16float',
     usage: GPUTextureUsage.STORAGE_BINDING | GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_SRC });
-  const all = [layoutBuf, ...ci, keys, slotProbe, probes, rad, sh, counts, accum, parents, args];
+  const all = [layoutBuf, ...ci, keys, slotProbe, probes, rad, sh, counts, accum, parents, hist, args];
   let bytes = all.reduce((s, b) => s + b.size, 0) + width * height * 8;
 
   const C = GPUShaderStage.COMPUTE;
@@ -1027,9 +1090,9 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
     { binding: 7, visibility: C, texture: { sampleType: 'depth' } }, { binding: 8, visibility: C, sampler: { type: 'comparison' } },
     { binding: 11, visibility: C, texture: { sampleType: 'unfilterable-float', viewDimension: '3d' } },
   ];
-  const G2 = ['keys', 'slotProbe', 'probes', 'rad', 'sh', 'counts', 'accum', 'parents'];
+  const G2 = ['keys', 'slotProbe', 'probes', 'rad', 'sh', 'counts', 'accum', 'parents', 'hist'];
   const G3: Record<string, number> = { vox: 1, bvh: 2, materials: 4, dyn: 9 };
-  const g2Bufs = [keys, slotProbe, probes, rad, sh, counts, accum, parents];
+  const g2Bufs = [keys, slotProbe, probes, rad, sh, counts, accum, parents, hist];
   const g3Bufs: Record<number, GPUBuffer> = { 1: world.vox, 2: world.bvh, 4: world.materials, 9: world.dyn };
   const g3Res: Record<number, GPUBindingResource> = {
     0: { buffer: world.voxUniform }, 5: world.baseColor.createView({ dimension: '2d-array' }),
@@ -1041,9 +1104,9 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   const bounce: Bounce | null = params.bounce ? createBounce(device, frame, world, BP, SHADE_WGSL) : null;
   const bnDummy = bounce ? null : device.createTexture({ size: [1, 1, 1], dimension: '3d', format: 'rgba16float', usage: GPUTextureUsage.TEXTURE_BINDING });
   const bnViews = bounce ? bounce.views : [bnDummy!.createView(), bnDummy!.createView()];
-  const constants = { ...dynConstants(world.dynBricks), ...bounceConstants(BP), BN_ON: params.bounce ? 1 : 0 };
+  const constants = { ...dynConstants(world.dynBricks), ...bounceConstants(BP), BN_ON: params.bounce ? 1 : 0, HIST_ON: histOn ? 1 : 0 };
   const module = device.createShaderModule({ code: RC_WGSL, label: 'rc' });
-  const ENTRIES = ['clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'relocateVox', 'linkParents', 'setupScreen', 'trace', 'deposit',
+  const ENTRIES = ['clearHist', 'clearKeys', 'clearAccum', 'registerPixels', 'registerUp', 'compact', 'relocateVox', 'linkParents', 'setupScreen', 'trace', 'deposit',
     'resolve', 'mergeWorld', 'mergeScreen', 'projectSH', 'gatherWorld', 'gatherScreen'];
   const used = wgslUses(RC_WGSL, ENTRIES, [...G2, ...Object.keys(G3)]);
   const P: Record<string, GPUComputePipeline> = {}, bg2: Record<string, GPUBindGroup> = {}, bg3: Record<string, GPUBindGroup[]> = {};
@@ -1086,20 +1149,22 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
   };
   const probeArgs = (c: number) => c * 32;
   const slotArgs = (c: number) => c * 32 + 12;
+  let histPar = 0;
 
   return {
     irr, params, bytes,
     usedBytes(cnt) {
-      let b = hashTotal * 8 + 72 * 4 + 8 * 8 * 4;
+      let b = hashTotal * 8 + 80 * 4 + 8 * 8 * 4;
       casc.forEach((c, i) => {
         const n = Math.min(cnt[i], c.cap);
         b += n * (screen ? 48 : 48 + 32) + n * c.res * c.res * 8 * (split ? 1 + 5 / 2 : 1);
       });
-      return b + Math.min(cnt[0], casc[0].cap) * 64 + width * height * 8;
+      return b + Math.min(cnt[0], casc[0].cap) * (64 + (histOn ? 2 * 80 : 0)) + (histOn ? 2 * casc[0].hashSize * 4 : 0) + width * height * 8;
     },
     encode(enc, tw) {
+      if (histOn) { histPar = 1 - histPar; device.queue.writeBuffer(ci[0], 4, new Uint32Array([histPar])); }
       let pass = enc.beginComputePass({ label: 'giBuild', timestampWrites: tw(0) });
-      use(pass, 'clearKeys', 0); linear(pass, Math.max(hashTotal, 72));
+      use(pass, 'clearKeys', 0); linear(pass, Math.max(hashTotal, 80));
       if (screen) {
         for (let i = 0; i < N; i++) {
           use(pass, 'setupScreen', i); linear(pass, casc[i].tilesX * casc[i].tilesY);
@@ -1141,6 +1206,7 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
 
       pass = enc.beginComputePass({ label: 'giMerge', timestampWrites: tw(2) });
       for (let i = N - 1; i >= 0; i--) { use(pass, screen ? 'mergeScreen' : 'mergeWorld', i); pass.dispatchWorkgroupsIndirect(args, slotArgs(i)); }
+      if (histOn) { use(pass, 'clearHist', 0); linear(pass, casc[0].hashSize); }
       use(pass, 'projectSH', 0); pass.dispatchWorkgroupsIndirect(args, probeArgs(0));
       pass.end();
 
@@ -1150,9 +1216,9 @@ export function createRc(device: GPUDevice, g: GBuffer, lit: GPUTexture, frame: 
       pass.end();
     },
     async readCounts() {
-      const read = device.createBuffer({ size: 72 * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+      const read = device.createBuffer({ size: 80 * 4, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
       const enc = device.createCommandEncoder();
-      enc.copyBufferToBuffer(counts, 0, read, 0, 72 * 4);
+      enc.copyBufferToBuffer(counts, 0, read, 0, 80 * 4);
       device.queue.submit([enc.finish()]);
       await read.mapAsync(GPUMapMode.READ);
       const r = new Uint32Array(read.getMappedRange().slice(0));

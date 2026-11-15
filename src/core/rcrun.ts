@@ -51,7 +51,7 @@ export function createRunContext(device: GPUDevice, spec: SceneSpec, gpu: SceneG
   const tri = device.createBuffer({ label: 'tri', size: table.byteLength, usage: S });
   device.queue.writeBuffer(tri, 0, table);
   if (spec.building && opts.bvh) throw new Error('a changing building needs no BVH (the BVH is built once)');
-  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, voxParams(opts.vox ?? {}), spec.dynamic?.firstTriangle) : null;
+  const voxWorld = opts.voxel ? createVoxWorld(device, spec.scene, gpu, tri, voxParams(opts.vox ?? {}), { frame, shadow: lighting.shadow }, spec.dynamic?.firstTriangle) : null;
   // P2: dynamic triangles are in the dynamic layer, read by the voxel tracers at the cone width.
   const dynLayer = voxWorld ? createDynLayer(device, gpu, tri, voxWorld.uniform, frame, lighting.shadow, voxWorld.params,
     spec.dynamic?.firstTriangle ?? spec.scene.triangleCount, spec.scene.triangleCount) : null;
@@ -435,7 +435,16 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
       buildingChange = { changedPct: r4(changed / (a.length / 4) * 100), presentFirst: r4(ctx.building!.present(opts.warmup)), presentLast: r4(ctx.building!.present(opts.warmup + opts.frames - 1)) };
       if (buildingChange.changedPct < 0.5) throw new Error(`the building changes but the image did not: ${JSON.stringify(buildingChange)}`);
     }
-    return { timing, flicker, excess, chainExcess, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
+    // Black photoreal pixels of the last frame (RC: every c0 probe found hidden), percent of the photoreal pixels.
+    let blackPct: number | null = null;
+    if (irr && !p.ddgi) {
+      let ph = 0;
+      for (let q = 0; q < irr.tag.length; q++) if (irr.tag[q] === 1) ph++;
+      let nb = 0;
+      for (let j = 72; j < 80; j++) nb += counts[j];
+      blackPct = ph ? Math.round(nb / ph * 1e5) / 1e3 : null;
+    }
+    return { timing, flicker, excess, chainExcess, blackPct, counts: Array.from(counts.slice(0, p.ddgi ? 4 : p.cascades)), overflow: Array.from(counts.slice(8, 8 + p.cascades)),
       insertFailures: Array.from(counts.slice(16, 16 + p.cascades)), usedBytes: rc.usedBytes(counts),
       vox: vox ? { ...vox, ...voxWorld!.usedBytes(vox) } : null, buildingChange, dynWork: dynWorkStats, dynWorkLast: work.length && lastPosed ? countWork(lastPosed) : null, images, irr };
   }

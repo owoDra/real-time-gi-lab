@@ -1,0 +1,244 @@
+{
+ "phase": 29,
+ "date": "2026-11-15",
+ "kind": "fixes for building-motion jumps; one run each (deterministic), 1080p, warmup 60 + 240 frames, no sky (leak with sky, 60 frames), static camera; intermediate stages are exploratory (探索値), diagnostic switches removed after recording",
+ "spec": "docs/spec/30-measurements.md section 33, docs/spec/40-dynamic-stability.md 'building motion' section",
+ "metric": "excess variation K = 16 (log2 stops per frame) without normal maps (staticGeo); linear = k16linear relative; black = photoreal pixels whose 8 c0 probes are all hidden after the retry (GPU counter counts[72..80), last frame)",
+ "default": {
+  "fix2": "voxel hits read the sun visibility of their voxel: mean of 2x2 points on the representative plane (+-1/4 voxel along two tangents, lifted 1/4 voxel + 3 cm sunward), each a hardware 2x2 compare, computed once per frame per voxel (voxSun); shared by RC cascades, bounce volume, DDGI",
+  "fix3": "c0 SH mixed with the previous frame's SH of the same grid point and LOD, new-frame weight 0.5 (policy said 0.44: response 5 frames > gate 4)",
+  "fix1": "not in default (fails S6: leak 0.61 % in leak-0.1, sponza error 0.395); code removed"
+ },
+ "gates": {
+  "S1_town-dynobj-bwave": {
+   "gate": "<= 0.0795",
+   "phase28": 0.23861,
+   "final": 0.19359,
+   "finalLinear": 0.02456,
+   "ddgiLinear": 0.00621,
+   "met": false
+  },
+  "S2_sponza-dynobj-n64-deform-bwave": {
+   "gate": "<= same-run DDGI linear",
+   "phase28": 0.11431,
+   "final": 0.09037,
+   "finalLinear": 0.05911,
+   "ddgiLinear": 0.03805,
+   "met": false
+  },
+  "S3_sponza-dynobj-n64-deform-bcut": {
+   "gate": "<= 0.0115",
+   "phase28": 0.03448,
+   "final": 0.0171,
+   "finalLinear": 0.00688,
+   "ddgiLinear": 0.00093,
+   "met": false
+  },
+  "S4_town-grid": {
+   "gate": "bias within -20 %, black <= 1.5x town",
+   "final": {
+    "blockB8": 0.3636,
+    "bias": -0.3368,
+    "blackPct": 35.846,
+    "townBlackPct": 1.48
+   },
+   "ddgiLinear": {
+    "blockB8": 0.3302,
+    "bias": -0.2763,
+    "blackPct": 0.588
+   },
+   "met": false
+  },
+  "S5_budget": {
+   "gate": "3 runs <= 4.0 ms static and moving, <= 128 MB",
+   "allocatedMiB": {
+    "phase28": 76.8,
+    "final": 81.3
+   },
+   "overflow": 0,
+   "alternated_busyMachine": {
+    "note": "another process kept the GPU 56-100 % busy; two clock states (~3.8 and ~5.3 ms for the same runner)",
+    "phase28": {
+     "static": [
+      5.329,
+      3.862,
+      3.792,
+      5.32,
+      4.031,
+      5.319
+     ],
+     "moving": [
+      4.911,
+      4.69,
+      3.629,
+      4.956,
+      5.771,
+      4.915
+     ]
+    },
+    "final": {
+     "static": [
+      7.098,
+      5.32,
+      5.389,
+      5.281,
+      3.792,
+      5.313
+     ],
+     "moving": [
+      4.182,
+      4.831,
+      5.071,
+      4.961,
+      3.22,
+      5.012
+     ]
+    },
+    "sameStatePairs": "pairs 4-6: final 5.281/3.792/5.313 vs phase28 5.32/4.031/5.319"
+   },
+   "stagesSlowState": {
+    "vox.sun": 0.225,
+    "traceDelta": -0.26,
+    "mergeDelta": 0.03
+   },
+   "idleMachine3runs": null,
+   "met": "not verified on an idle machine"
+  },
+  "S6": {
+   "staticFlicker": 0,
+   "response90_50": [
+    4,
+    2
+   ],
+   "lagPct": 1.317,
+   "sponzaDynobjJump": 0.00554,
+   "errorB8": {
+    "sponza": [
+     0.3405,
+     -0.1565
+    ],
+    "town": [
+     0.2202,
+     -0.1761
+    ]
+   },
+   "leakPct": [
+    0.7,
+    0.37
+   ],
+   "met": true
+  }
+ },
+ "stages": {
+  "phase28": {
+   "S1": 0.23861,
+   "S2": 0.11431,
+   "S3": 0.03448,
+   "townGridBias": -0.329,
+   "leak": [
+    0.77,
+    0.36
+   ],
+   "sponza": 0.3455
+  },
+  "fix1+2": {
+   "S1": 0.0565,
+   "S2": 0.162,
+   "S3": 0.029,
+   "townGridBias": -0.111,
+   "townGridBlack": 0.843,
+   "townBlack": 0.668,
+   "leak": [
+    0.62,
+    0.61
+   ],
+   "sponza": [
+    0.3953,
+    -0.266
+   ],
+   "town": 0.2131,
+   "dynobj": 0.0099,
+   "response": [
+    1,
+    1
+   ],
+   "lagPct": 0.118
+  },
+  "fix2": {
+   "S1": 0.241,
+   "S2": 0.111,
+   "S3": 0.0297,
+   "leak": [
+    0.7,
+    0.37
+   ],
+   "dynobj": 0.0105,
+   "sponza": 0.34,
+   "town": 0.22,
+   "lagPct": 0.1,
+   "response": [
+    1,
+    1
+   ]
+  },
+  "fix2+3_w0.44": {
+   "S1": 0.188,
+   "S2": 0.088,
+   "S3": 0.0158,
+   "response": [
+    5,
+    2
+   ],
+   "lagPct": 1.55,
+   "dynobj": 0.005
+  },
+  "fix2+3_w0.5_default": {
+   "S1": 0.19359,
+   "S2": 0.09037,
+   "S3": 0.0171,
+   "response": [
+    4,
+    2
+   ],
+   "lagPct": 1.317,
+   "dynobj": 0.00554
+  }
+ },
+ "ddgiAfterFix2": {
+  "sponzaB8": [
+   0.3153,
+   -0.0739
+  ],
+  "sponzaB8Before": [
+   0.2829,
+   -0.0498
+  ],
+  "townB8": [
+   0.2947,
+   -0.2386
+  ],
+  "townGridB8": [
+   0.3302,
+   -0.2763
+  ]
+ },
+ "movingCamera": {
+  "S2chainExcess": {
+   "phase28": 0.08861,
+   "final": 0.05697
+  },
+  "sponzaChainExcess": {
+   "phase28": 0.01301,
+   "final": 0.01313
+  },
+  "sponzaToonChainExcess": {
+   "phase28": 0.01342,
+   "final": 0.01347
+  }
+ },
+ "defaultImageSha256": {
+  "sponza --no-sky --static-only --dump-irr --frames 60": "74c185ab3d3826a35a8a1fefd0bfb5392d06ad311bf0f4d556b4ca9fed5a8f72",
+  "sponza-dynobj --pose-frame 0 --no-sky --static-only --dump-irr --frames 60": "a1fae68eeb0c38a8c30a37be9a3d5148ce98e1bc5d35d0074dc395737683ff85",
+  "changedFromPhase28": true
+ }
+}

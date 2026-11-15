@@ -181,6 +181,7 @@ for (const [name, params] of parsed) {
   if (r.static.dynWork) log(`  dyn work ${JSON.stringify(r.static.dynWork)}; last frame ${JSON.stringify(r.static.dynWorkLast)}`);
   if (r.tracer) log(`  tracer ${JSON.stringify(r.tracer)}`);
   if (leak) log(`  leak ${JSON.stringify(leak)}`);
+  if (r.static.blackPct !== null) log(`  black pixels ${r.static.blackPct} % of the photoreal pixels (every c0 probe hidden, last frame)`);
   log(`  flicker static ${JSON.stringify(r.static.flicker)}`);
   log(`  excess static ${JSON.stringify(r.static.excess)}`);
   log(`  chain excess static ${JSON.stringify(r.static.chainExcess)}`);

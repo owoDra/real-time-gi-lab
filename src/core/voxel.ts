@@ -22,6 +22,7 @@
 // bit + representative) -> reduce (levels 1.., fine to coarse) -> allocVoxels -> resolveAttr (per occupied voxel).
 // In both triangle passes, triangles that cover more than 8 cells of a level go to a list processed one
 // workgroup each: a few large triangles otherwise hold whole waves (markBricks went from 0.7 to 0.05 ms).
+import { FRAME_WGSL } from './frame.ts';
 import type { SceneData } from './gltf.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 
@@ -51,7 +52,7 @@ export const VOX_STRUCT_WGSL = /* wgsl */ `
 struct VoxU {
   a: vec4f,   // v0, levels, G, brick words
   b: vec4u,   // ptrOff, brickOff, attrOff, maxBricks
-  c: vec4u,   // maxVoxels, end of the triangles to voxelise (the static ones), bounce words (phase 23), 0
+  c: vec4u,   // maxVoxels, end of the triangles to voxelise (the static ones), bounce words (phase 23), plane words (phase 29)
   origin: array<vec4i, 8>, // per level: first brick of the clipmap (world brick coordinates), w unused
 }
 const VOX_EMPTY = 0xffffffffu;
@@ -242,19 +243,19 @@ fn finerHoldsRange(L: u32, r: Range, s: i32) -> bool {
 }
 
 // Alpha test at the voxel centre projected onto the triangle (when wantAttr is false); also returns the attributes
-// there (when wantAttr is true: no alpha test, the voxel is occupied already).
-struct Surf { ok: bool, albedo: vec3f, n: vec3f, toon: f32 }
+// there (when wantAttr is true: no alpha test, the voxel is occupied already) and the projected point q.
+struct Surf { ok: bool, albedo: vec3f, n: vec3f, toon: f32, q: vec3f }
 fn surfaceAt(T: Tri, p: vec3f, L: u32, wantAttr: bool) -> Surf {
   let m = materials[T.idx.w];
   let masked = (m.layers.w & 1u) != 0u && !wantAttr;
-  if (!masked && !wantAttr) { return Surf(true, vec3f(0.0), vec3f(0.0), 0.0); }
+  if (!masked && !wantAttr) { return Surf(true, vec3f(0.0), vec3f(0.0), 0.0, p); }
   let w = closestBary(p, T.a, T.b, T.c);
   let uv = UV(T.idx.x) * w.x + UV(T.idx.y) * w.y + UV(T.idx.z) * w.z;
   let tex = textureSampleLevel(baseColorTex, samp, uv, m.layers.x, f32(3u + L)) * m.baseColorFactor;
-  if (masked && tex.a < m.params.z) { return Surf(false, vec3f(0.0), vec3f(0.0), 0.0); }
+  if (masked && tex.a < m.params.z) { return Surf(false, vec3f(0.0), vec3f(0.0), 0.0, p); }
   var n = N(T.idx.x) * w.x + N(T.idx.y) * w.y + N(T.idx.z) * w.z;
   n = select(cross(T.b - T.a, T.c - T.a), n, dot(n, n) > 1e-12);
-  return Surf(true, tex.rgb, normalize(n), select(0.0, 1.0, (m.layers.w & 4u) != 0u));
+  return Surf(true, tex.rgb, normalize(n), select(0.0, 1.0, (m.layers.w & 4u) != 0u), T.a * w.x + T.b * w.y + T.c * w.z);
 }
 
 @compute @workgroup_size(64) fn clear(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
@@ -480,8 +481,66 @@ fn octEnc(n: vec3f) -> vec2f {
   let s = surfaceAt(loadTri(t), p, L, true);
   atomicStore(&vox[VX.b.z + ai * 2u], pack4x8unorm(vec4f(s.albedo, s.toon)));
   atomicStore(&vox[VX.b.z + ai * 2u + 1u], pack2x16snorm(octEnc(s.n)));
+  // Phase 29: the representative's plane, the stored normal through the projected point: its offset from the centre (voxSun).
+  atomicStore(&vox[VX.c.w + ai], bitcast<u32>(dot(s.n, s.q - p)));
 }
 
+`;
+
+// Phase 29: the sun visibility of every occupied voxel, once per frame after the shadow map and resolveAttr: the mean of
+// 2 x 2 points on the representative's plane, a quarter voxel from the centre's projection along two tangents and
+// (0.25 voxel + 3 cm) off the plane on its sunward side, each a hardware 2 x 2 comparison of the shadow map. The tracers'
+// voxel hits read it (voxShade in rc.ts: RC cascades, the bounce volume and DDGI) instead of the shadow map at one point of
+// the hit: under a moving sun the shadow map's grid moves, and one point on the edge of a shadow flipped between lit and
+// shadowed (phase 28: 89 % of the jump of the cut scene; this took 14 %, phase 29). It replaces the point by a mean over
+// the voxel's face, with fewer shadow-map reads than one per hit.
+const SUN_WGSL = /* wgsl */ `
+${FRAME_WGSL}
+${VOX_STRUCT_WGSL}
+@group(0) @binding(0) var<uniform> VX: VoxU;
+@group(0) @binding(1) var<storage, read_write> vox: array<u32>;
+@group(0) @binding(2) var<uniform> F: Frame;
+@group(0) @binding(3) var shadowTex: texture_depth_2d;
+@group(0) @binding(4) var shadowCmp: sampler_comparison;
+fn sunVisAt(x: vec3f) -> f32 {
+  let c = F.lightViewProj * vec4f(x, 1.0);
+  let uv = c.xy * vec2f(0.5, -0.5) + 0.5;
+  if (any(uv < vec2f(0.0)) || any(uv > vec2f(1.0))) { return 1.0; }
+  return textureSampleCompareLevel(shadowTex, shadowCmp, uv, c.z - 0.0002);
+}
+@compute @workgroup_size(64) fn voxSun(@builtin(workgroup_id) wid: vec3u, @builtin(num_workgroups) nwg: vec3u, @builtin(local_invocation_index) li: u32) {
+  let i = (wid.y * nwg.x + wid.x) * 64u + li;
+  let ptr = i >> 9u; let bit = i & 511u;
+  if (ptr >= min(vox[0], VX.b.w)) { return; }
+  let base = VX.b.y + ptr * ${BRICK_WORDS}u;
+  let w = bit >> 5u;
+  let word = vox[base + w];
+  if ((word & (1u << (bit & 31u))) == 0u) { return; }
+  let first = vox[base + 16u];
+  if (first >= VOX_MARK) { return; }
+  var r = countOneBits(word & ((1u << (bit & 31u)) - 1u));
+  for (var j = 0u; j < w; j++) { r += countOneBits(vox[base + j]); }
+  let ai = first + r;
+  let code = vox[base + 17u];
+  let L = code >> 27u;
+  let b = vec3i(i32((code >> 18u) & 511u), i32((code >> 9u) & 511u), i32(code & 511u));
+  let c = b * 8 + vec3i(i32(bit & 7u), i32((bit >> 3u) & 7u), i32(bit >> 6u));
+  let v = voxSize(L);
+  let pc = vec3f(VX.origin[L].xyz) * v * 8.0 + (vec3f(c) + 0.5) * v;
+  let e = unpack2x16snorm(vox[VX.b.z + ai * 2u + 1u]);
+  var n = vec3f(e.x, e.y, 1.0 - abs(e.x) - abs(e.y));
+  let q0 = max(-n.z, 0.0);
+  n.x += select(q0, -q0, n.x >= 0.0); n.y += select(q0, -q0, n.y >= 0.0);
+  var q = pc;
+  if (dot(n, n) > 1e-4) { n = normalize(n); q = pc + n * bitcast<f32>(vox[VX.c.w + ai]); } else { n = vec3f(0.0, 1.0, 0.0); }
+  let ns = select(n, -n, dot(n, F.sunDir.xyz) < 0.0);
+  let t1 = normalize(cross(ns, select(vec3f(0.0, 1.0, 0.0), vec3f(1.0, 0.0, 0.0), abs(ns.y) > 0.9)));
+  let t2 = cross(ns, t1);
+  let h = 0.25 * v;
+  let o = q + ns * (0.25 * v + 0.03);
+  let vis = 0.25 * (sunVisAt(o + h * (t1 + t2)) + sunVisAt(o + h * (t1 - t2)) + sunVisAt(o - h * (t1 + t2)) + sunVisAt(o - h * (t1 - t2)));
+  vox[VX.c.w + VX.c.x + ai] = bitcast<u32>(vis);
+}
 `;
 
 const ARGS_WGSL = /* wgsl */ `
@@ -516,7 +575,7 @@ const BIG_CAP = 1u << 18u;
 
 `;
 
-export const VOX_STAGES = ['clear', 'markBricks', 'allocBricks', 'voxBits', 'reduce', 'allocVoxels', 'resolve'] as const;
+export const VOX_STAGES = ['clear', 'markBricks', 'allocBricks', 'voxBits', 'reduce', 'allocVoxels', 'resolve', 'sun'] as const;
 
 export interface VoxWorld {
   params: VoxParams;
@@ -546,14 +605,19 @@ export function triangleTable(scene: SceneData): Uint32Array {
   return t;
 }
 
-export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams, firstDynamicTri = scene.triangleCount): VoxWorld {
+/** sun: the frame uniform and the shadow map (drawn before encode) for the voxels' sun visibility. */
+export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGpu, tri: GPUBuffer, params: VoxParams, sun: { frame: GPUBuffer; shadow: GPUTexture },
+  firstDynamicTri = scene.triangleCount): VoxWorld {
   const { v0, levels: NL, G, maxBricks, maxVoxels } = params;
   if (NL > 8) throw new Error('at most 8 levels');
   const ptrOff = HDR, brickOff = ptrOff + NL * G ** 3, attrOff = brickOff + maxBricks * BRICK_WORDS;
   // Phase 23: 4 words per voxel attribute after the attributes, the indirect irradiance on the two sides of the voxel
   // (along its normal, then against it; rg, b as half floats), written every frame by bounce.ts (bnInject).
   const bnOff = attrOff + maxVoxels * 2;
-  const words = bnOff + maxVoxels * 4;
+  // Phase 29: then 1 word per voxel attribute, the representative's plane offset from the voxel centre along the stored normal
+  // (f32, m), and 1 word, the sun visibility of the voxel's face (voxSun).
+  const plOff = bnOff + maxVoxels * 4;
+  const words = plOff + maxVoxels * 2;
   const S = GPUBufferUsage.STORAGE;
   const vox = device.createBuffer({ label: 'vox', size: words * 4, usage: S | GPUBufferUsage.COPY_SRC });
   const repBuf = device.createBuffer({ label: 'vox.rep', size: maxBricks * 512 * 4, usage: S });
@@ -592,7 +656,14 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
   const bg = levelBg[0];
   const argsModule = device.createShaderModule({ code: ARGS_WGSL, label: 'vox.args' });
   pipes.writeArgs = device.createComputePipeline({ label: 'vox.writeArgs', layout: 'auto', compute: { module: argsModule, entryPoint: 'writeArgs' } });
+  const sunModule = device.createShaderModule({ code: SUN_WGSL, label: 'vox.sun' });
+  pipes.voxSun = device.createComputePipeline({ label: 'vox.voxSun', layout: 'auto', compute: { module: sunModule, entryPoint: 'voxSun' } });
   const bgs: Record<string, GPUBindGroup> = Object.fromEntries(Object.keys(pipes).map((n) => [n, bg]));
+  bgs.voxSun = device.createBindGroup({ layout: pipes.voxSun.getBindGroupLayout(0), entries: [
+    { binding: 0, resource: { buffer: uniform } }, { binding: 1, resource: { buffer: vox } }, { binding: 2, resource: { buffer: sun.frame } },
+    { binding: 3, resource: sun.shadow.createView() },
+    { binding: 4, resource: device.createSampler({ compare: 'less-equal', minFilter: 'linear', magFilter: 'linear' }) },
+  ] });
   bgs.writeArgs = device.createBindGroup({ layout: pipes.writeArgs.getBindGroupLayout(0), entries: [
     { binding: 0, resource: { buffer: uniform } }, { binding: 1, resource: { buffer: vox } }, { binding: 2, resource: { buffer: args } },
   ] });
@@ -633,6 +704,7 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
         use(pass, 'allocVoxels'); pass.dispatchWorkgroupsIndirect(args, 48);
         break;
       case 'resolve': use(pass, 'resolveAttr'); pass.dispatchWorkgroupsIndirect(args, 32); break;
+      case 'sun': use(pass, 'voxSun'); pass.dispatchWorkgroupsIndirect(args, 32); break;
     }
   };
 
@@ -641,7 +713,7 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
     const f = new Float32Array(buf), u = new Uint32Array(buf), i = new Int32Array(buf);
     f.set([v0, NL, G, BRICK_WORDS], 0);
     u.set([ptrOff, brickOff, attrOff, maxBricks], 4);
-    u.set([maxVoxels, end, bnOff, 0], 8);
+    u.set([maxVoxels, end, bnOff, plOff], 8);
     for (let L = 0; L < NL; L++) {
       const bs = v0 * 2 ** L * 8;
       i.set([0, 1, 2].map((a) => Math.floor(eye[a] / bs) - G / 2).concat([0]), 12 + L * 4);
@@ -675,7 +747,7 @@ export function createVoxWorld(device: GPUDevice, scene: SceneData, gpu: SceneGp
         bricksPerLevel: Array.from(c.slice(8, 8 + NL)), bigPerLevel: Array.from(c.slice(16, 16 + NL)) };
     },
     usedBytes(c) {
-      return { persistent: (HDR + NL * G ** 3 + c.bricks * BRICK_WORDS + Math.min(c.voxels, maxVoxels) * 2) * 4 + uniform.size,
+      return { persistent: (HDR + NL * G ** 3 + c.bricks * BRICK_WORDS + Math.min(c.voxels, maxVoxels) * 8) * 4 + uniform.size,
         buildTemp: c.bricks * 512 * 4 };
     },
     destroy() { for (const b of [vox, repBuf, big, args, uniform, ...levelU]) b.destroy(); },
