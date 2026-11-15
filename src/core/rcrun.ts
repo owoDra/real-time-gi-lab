@@ -8,6 +8,7 @@ import { createLighting, type Lighting } from './lighting.ts';
 import { add3, cross, normalize, scale3, type Vec3 } from './math.ts';
 import { createPost, EXCESS_K, EXCESS_LIN_SCALE, EXCESS_SCALE, EXCESS_SLOT, FLICKER_FIELDS, FLICKER_SLOT, MEXCESS_SLOT } from './post.ts';
 import { createDdgi } from './ddgi.ts';
+import { createGl2 } from './gl2.ts';
 import { createRc, DEFAULT_PARAMS, RC_PASSES, type RcParams, type WorldResources } from './rc.ts';
 import type { SceneGpu } from './scene_gpu.ts';
 import { posedVertices, type SceneSpec } from './scenes.ts';
@@ -265,7 +266,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   // pay for the albedo of the dynamic layer.
   const world = { ...ctx.world, dynArgs: p.objects ? ctx.world.dynArgs : null };
   ctx.dynLayer?.setAlbedo(p.objects);
-  const createField = () => p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax], !!spec.world && spec.world.instances.length > 1)
+  const createField = () => p.gl2 ? createGl2(device, g, lighting, frame, spec.scene, ctx.gpu, p.gl2) : p.ddgi ? createDdgi(device, g, frame, p.ddgi, world, [spec.scene.boundsMin, spec.scene.boundsMax], !!spec.world && spec.world.instances.length > 1)
     : createRc(device, g, lighting.lit, frame, p, world);
   let rc = createField();
   follow = 'setCamera' in rc ? (e, f) => (rc as ReturnType<typeof createDdgi>).setCamera(e, f) : null;
@@ -465,7 +466,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
     }
     // Black photoreal pixels of the last frame (RC: every c0 probe found hidden), percent of the photoreal pixels.
     let blackPct: number | null = null;
-    if (irr && !p.ddgi) {
+    if (irr && !p.ddgi && !p.gl2) {
       let ph = 0;
       for (let q = 0; q < irr.tag.length; q++) if (irr.tag[q] === 1) ph++;
       let nb = 0;
@@ -606,7 +607,7 @@ export async function runConfig(ctx: RunContext, params: RcParams, opts: RunOpti
   const metrics = (r: Awaited<ReturnType<typeof run>>) => ({ flicker: r.flicker, excess: r.excess, chainExcess: r.chainExcess, overflow: r.overflow, insertFailures: r.insertFailures,
     images: { indirect: r.images.indirect, flicker: r.images.flicker, excess: r.images.excess } });
   let stGeo = null, mvGeo = null;
-  const ddgiDims = 'dims' in rc ? rc.dims : null, allocatedBytes = rc.bytes;
+  const ddgiDims = 'dims' in rc ? (rc as ReturnType<typeof createDdgi>).dims : null, allocatedBytes = rc.bytes;
   if (!opts.dynStages && !opts.seq) {
     // A new field: a method with a history starts these runs from the same state as the runs above.
     rc.destroy(); post.destroy();

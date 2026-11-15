@@ -95,6 +95,16 @@ export interface Lighting {
 // of the default clipmap). Depth covers DEPTH_R m on either side of the camera along the sun. Biases in metres.
 const NEAR_R = 32, FAR_R = 410, DEPTH_R = 300, NEAR_BIAS = 0.012, FAR_BIAS = 0.15;
 
+/** The sun's view-projection over the scene's bounding sphere (scenes that are not instanced worlds). Shared with the
+ * WebGL2 runner (src/web/gl2.ts). */
+export function sceneSunViewProj(boundsMin: Vec3, boundsMax: Vec3, sunDir: Vec3): Mat4 {
+  const center = scale3(add3(boundsMin, boundsMax), 0.5);
+  const radius = Math.hypot(...sub(boundsMax, boundsMin)) / 2;
+  const dir = scale3(sunDir, 1 / Math.hypot(...sunDir));
+  const up: Vec3 = Math.abs(dir[1]) > 0.99 ? [0, 0, 1] : [0, 1, 0];
+  return mul(orthoZO(radius, radius, 0, 2 * radius), lookAt(add3(center, scale3(dir, radius)), center, up));
+}
+
 export function createLighting(device: GPUDevice, scene: SceneData, gpu: SceneGpu, g: GBuffer, frame: GPUBuffer,
   sunDir: Vec3, world: World | null = null, shadowSize = 4096): Lighting {
   const center = scale3(add3(scene.boundsMin, scene.boundsMax), 0.5);
@@ -102,10 +112,7 @@ export function createLighting(device: GPUDevice, scene: SceneData, gpu: SceneGp
   let sun = scale3(sunDir, 1 / Math.hypot(...sunDir));
   let eye: Vec3 = center;
   const upOf = (dir: Vec3): Vec3 => Math.abs(dir[1]) > 0.99 ? [0, 0, 1] : [0, 1, 0];
-  const sunMatrix = (sd: Vec3) => {
-    const dir = scale3(sd, 1 / Math.hypot(...sd));
-    return mul(orthoZO(radius, radius, 0, 2 * radius), lookAt(add3(center, scale3(dir, radius)), center, upOf(dir)));
-  };
+  const sunMatrix = (sd: Vec3) => sceneSunViewProj(scene.boundsMin, scene.boundsMax, sd);
   // A layer of half width r around the camera, its centre snapped to the layer's texels across the sun.
   const cameraMatrix = (dir: Vec3, r: number) => {
     const up0 = upOf(dir), right = normalize(cross(up0, dir)), up = cross(dir, right);

@@ -1,8 +1,9 @@
-// Browser runs of src/web/rc.ts: serves the page, the bundle and the assets on 127.0.0.1, opens the page in a browser,
+// Browser runs of src/web/rc.ts (or, with --page gl2, the WebGL2 tier src/web/gl2.ts): serves the page, the bundle and the assets on 127.0.0.1, opens the page in a browser,
 // prints the page's log lines and stores what it posts (PNGs, summaries, irradiance dumps) in --out.
 // Usage: node build/native/browser.mjs [--scene S] [--configs a,b] [--frames N] [--warmup N] [--exposure X] [--no-sky]
 //   [--static-only] [--seed-fixed] [--pose-frame F] [--vox JSON] [--params JSON] [--dump-irr] [--bvh] [--dyn-stages] [--vox-bench]
 //   [--response FROM,TO] [--seq EVERY,COUNT] [--out DIR]
+//   [--page rc|gl2] (web/<page>.html; gl2 takes --scene, --configs (one gl2-... config), --frames, --warmup, --exposure, --no-sky)
 //   [--browser CMD] (default brave) [--browser-flags "..."] (added to the launch flags) [--no-launch] (print the URL and wait: open it in a browser yourself) [--port P] [--timeout S]
 // The flags mirror src/native/rc.ts. The browser is started with a fresh profile and closed when the page is done.
 import { spawn } from 'node:child_process';
@@ -17,6 +18,8 @@ const args = process.argv.slice(2);
 const arg = (name: string, dflt: string) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : dflt; };
 const flag = (name: string) => args.includes(name);
 const scene = arg('--scene', 'sponza');
+const page = arg('--page', 'rc');
+if (!['rc', 'gl2'].includes(page)) throw new Error(`unknown page ${page}`);
 const outDir = resolve(arg('--out', join(ROOT, 'box/out/rc/browser', scene)));
 const q = new URLSearchParams({ scene, configs: arg('--configs', 'world-48-voxel-rc2-vrel'), frames: arg('--frames', '240'),
   warmup: arg('--warmup', '60'), exposure: arg('--exposure', '1.0') });
@@ -47,7 +50,7 @@ const server = createServer((req, res) => {
     });
     return;
   }
-  const rel = url.pathname === '/' ? 'web/rc.html' : normalize(decodeURIComponent(url.pathname)).replace(/^\/+/, '');
+  const rel = url.pathname === '/' ? `web/${page}.html` : normalize(decodeURIComponent(url.pathname)).replace(/^\/+/, '');
   if (!/^(web|build\/web|assets)\//.test(rel) || rel.includes('..')) { res.writeHead(404).end(); return; }
   const file = join(ROOT, rel);
   if (!existsSync(file) || !statSync(file).isFile()) { res.writeHead(404).end(); return; }

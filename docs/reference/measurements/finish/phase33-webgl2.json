@@ -1,0 +1,193 @@
+{
+ "phase": 33,
+ "date": "2026-11-16",
+ "kind": "exploratory (探索値)",
+ "spec": "docs/spec/30-measurements.md section 37; docs/spec/20-renderer.md 'WebGL2 ティア'",
+ "machine": "work machine, AMD Radeon 8060S; native Dawn/Vulkan (RADV) for the WGSL version, Brave 149 WebGL2 (ANGLE OpenGL ES 3.2 on radeonsi, real GPU) for the GLSL version; another user's processes kept load average 4.6-6.4: idle-machine absolute timing not run",
+ "config": {
+  "name": "gl2-8-8",
+  "tile": 8,
+  "dirs": "8x8 per hemisphere, fixed per-tile rotation",
+  "steps": 16,
+  "length_m": 8,
+  "thickness": "max(0.3 m, 0.05 x depth)",
+  "offscreen": "reflective shadow map 512^2, 8 rings x 24 bilinear samples per probe -> L0+L1 radiance SH; sky x screen sky fraction",
+  "filter": "5x5 probes, plane and normal weights",
+  "history": "new-frame weight 0.5, reprojected to previous probes on the same plane",
+  "gather": "4 nearest probes, plane and normal weights; toon pixels use the receiving operator"
+ },
+ "decision": "kept as the degraded WebGL2 tier (H1-H3 met)",
+ "comparedTo": "world-48-voxel-rc2-vrel (WebGPU default, RC)",
+ "gates": {
+  "H1_time_ms": {
+   "scene": "sponza-dynobj-n64-deform-bwave static, native, alternated",
+   "gl2": [
+    2.844,
+    2.348,
+    2.3
+   ],
+   "rc": [
+    3.973,
+    3.896,
+    3.942
+   ],
+   "browser_sponza": 2.236,
+   "browser_sponza_dyn": 1.874,
+   "verdict": "met"
+  },
+  "H2_static_flicker": {
+   "gl2": 0,
+   "history": "weight 0.5",
+   "response_frames_90": 4,
+   "response_frames_50": 1,
+   "rc_response": [
+    4,
+    2
+   ],
+   "verdict": "met"
+  },
+  "H3_toon": {
+   "rampChangePct_sponza_dyn": 1.298,
+   "control": 1.151,
+   "rc": 1.157,
+   "limit": 2.314,
+   "style_effect_on_photoreal_x": {
+    "gl2": 1.09,
+    "rc": 1.84
+   },
+   "verdict": "met"
+  },
+  "H4_offscreen": {
+   "sponza_bias_without_rsm": -0.8899,
+   "sponza_b8_without_rsm": 0.9016,
+   "verdict": "listed as cannot (sky, occlusion, multi-bounce off screen); sun first bounce via RSM"
+  }
+ },
+ "memoryMiB": {
+  "gl2": 51.2,
+  "rc": 86.1
+ },
+ "browser": {
+  "stages_ms_sponza": {
+   "rsm_and_prep": 0.339,
+   "trace": 1.148,
+   "sh_and_filter": 0.533,
+   "gather": 0.215
+  },
+  "vsNative": {
+   "sponza_indirect8bitMeanDiff": 0.0353,
+   "max": 97,
+   "pixelsOver2Levels_pct": 0.04,
+   "irr_medianRel": 0.0008,
+   "irr_p90Rel": 0.028,
+   "bias": 0,
+   "sponza_dyn_indirect8bitMeanDiff": 0.0489
+  },
+  "glErrors": 0
+ },
+ "metrics": {
+  "reference_b8_meanAbsRel_bias": {
+   "sponza": {
+    "gl2": [
+     0.4674,
+     -0.2772
+    ],
+    "rc": [
+     0.3397,
+     -0.1557
+    ]
+   },
+   "town": {
+    "gl2": [
+     0.211,
+     -0.1635
+    ],
+    "rc": [
+     0.2217,
+     -0.1743
+    ]
+   }
+  },
+  "moving_camera_geo": {
+   "flickerFinePct": {
+    "gl2": 25.6,
+    "rc": 3.3
+   },
+   "chainExcess": {
+    "gl2": 0.0965,
+    "rc": 0.0142
+   }
+  },
+  "excess_k16": {
+   "sponza-dyn": {
+    "gl2": 0.0463,
+    "gl2_linear": 0.0121,
+    "rc": 0.00501
+   },
+   "sponza-dynobj": {
+    "gl2": 0.0339,
+    "rc": 0.00544
+   },
+   "town-dynobj-bwave": {
+    "gl2": 0.0083,
+    "rc": 0.194
+   },
+   "sponza-n64-bwave": {
+    "gl2": 0.102,
+    "gl2_linear": 0.041,
+    "rc": 0.09,
+    "rc_linear": 0.059
+   },
+   "sponza-n64-bcut": {
+    "gl2": 0.279,
+    "gl2_linear": 0.238,
+    "rc": 0.017,
+    "gl2_without_rsm": 0.037,
+    "gl2_without_history": 0.84
+   }
+  },
+  "leak_meanFractionOfSun_pct": {
+   "0.02m": {
+    "gl2": 2.94,
+    "rc": 0.694
+   },
+   "0.1m": {
+    "gl2": 2.58,
+    "rc": 0.374
+   }
+  }
+ },
+ "rejected": {
+  "constant_environment_offscreen": {
+   "b8": 0.961,
+   "bias": -0.367
+  },
+  "longer_rays_16_30m_or_24_steps_or_1m_thickness": {
+   "b8_range": [
+    0.91,
+    0.99
+   ]
+  },
+  "rsm_nearest_reads": {
+   "b8": 0.486,
+   "bias": -0.113
+  },
+  "feedback_multibounce": {
+   "b8": 0.451,
+   "bias": -0.294,
+   "extra_ms": 0.65
+  },
+  "filter_radius_3": {
+   "b8": 0.46,
+   "bias": -0.314,
+   "extra_ms": 0.33
+  },
+  "no_per_tile_rotation": {
+   "moving_flicker_pct": 24.1
+  }
+ },
+ "webgpuDefaultImages": {
+  "sponza": "9589339d (unchanged)",
+  "sponza-dynobj pose 0": "44c7e830 (unchanged)"
+ }
+}

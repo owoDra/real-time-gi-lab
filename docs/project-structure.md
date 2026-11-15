@@ -6,7 +6,7 @@
 |---|---|---|
 | `src/core/` | レンダラの本体。WebGPU のコア機能だけで書く（WGSL は TypeScript の中） | 管理 |
 | `src/native/` | Node から Dawn を使う実行器（計測、参照との比較、シーンの変換）と、ブラウザの実行の駆動（`browser.ts`） | 管理 |
-| `src/web/`、`web/` | ブラウザの実行器（`src/web/rc.ts` とページ `web/rc.html`。`src/core/` をそのまま使う） | 管理 |
+| `src/web/`、`web/` | ブラウザの実行器（`src/web/rc.ts` とページ `web/rc.html`。`src/core/` をそのまま使う）と、WebGL2 ティアの実行器（`src/web/gl2.ts` とページ `web/gl2.html`。GLSL で書き直した同じ処理） | 管理 |
 | `src/runner/` | ネイティブとブラウザの実行器が共有する部分（設定名、場面名、ログと要約、テクスチャの大きさ） | 管理 |
 | `scripts/` | 計測の掃引、要約、参照レンダラの積分器、文書の検査 | 管理 |
 | `docs/spec/` | 正本（目的、評価、構成、測った結果、方向） | 管理 |
@@ -20,7 +20,7 @@
 | `archive-local/` | Program 1 のテキスト記録の圧縮アーカイブ（下の「作業機にしかないもの」） | 管理外 |
 
 `src/core/` の主なファイル：`rc.ts`（放射輝度場）、`voxel.ts`（ボクセル StrataBrick、静的な形状）、`world.ts`（ワールド：建物のインスタンス、区画、ボクセルにするまとめた形状。`-bcut` 以外の全場面）、`dynlayer.ts`（動的物体の被覆率と放射のレイヤ）、`bounce.ts`（多重バウンスの跳ね返りボリューム）、`ddgi.ts`
-（DDGI 系の比較相手）、`style.ts`（スタイル演算子）、`bvh.ts`（三角形の正解器）、`lighting.ts`（太陽と影）、
+（DDGI 系の比較相手）、`gl2.ts`（WebGL2 ティアの WGSL 版。ネイティブで測るため、設定 `gl2-8-8`）、`style.ts`（スタイル演算子）、`bvh.ts`（三角形の正解器）、`lighting.ts`（太陽と影）、
 `gbuffer.ts`、`scenes.ts`（シーン）、`post.ts`（表示とちらつきの指標）、`rcrun.ts`（計測の実行）。
 
 ## コマンド
@@ -48,6 +48,9 @@ bash scripts/run_with_vulkan.sh node build/native/browser.mjs --scene <シーン
   [--browser brave] [--browser-flags "--ozone-platform=wayland"] [--no-launch] [--out box/out/<名前>]
 #   既定で付ける起動の引数：--enable-unsafe-webgpu --enable-webgpu-developer-features（タイムスタンプを丸めない）--ignore-gpu-blocklist
 #   --no-launch：URL を出して待つ（別の機械や手で開くブラウザ用）。ネイティブの引数は全部使える（--bvh、--dyn-stages、--response、--seq、--vox-bench も）
+# WebGL2 ティア（Phase 33）：--page gl2 で web/gl2.html を開く。使える引数は --scene、--configs（gl2-... を 1 つ）、--frames、--warmup、--exposure、--no-sky。
+#   静止カメラだけ、建物が動く場面とインスタンスのワールドは扱わない。最終画像、間接光、放射照度（.static.irr.f32）と要約を出す
+bash scripts/run_with_vulkan.sh node build/native/browser.mjs --page gl2 --scene sponza --configs gl2-8-8 --browser-flags "--ozone-platform=wayland"
 node build/native/compare_runs.mjs --a <ネイティブの出力> --b <ブラウザの出力> --config <設定> [--png DIR]   # 画像の一致（8 ビットの差、間接光の相対差）
 # --dyn-stages：動的レイヤ（と全再構築では建物のボクセル）の作成を段ごとのパスに分けて時間を測り、動的レイヤの仕事の量を CPU で数える（160 フレーム以下）
 # 場面名の末尾 -bwave / -bcut：建物そのものが毎フレーム変わる（spec/10-evaluation.md）

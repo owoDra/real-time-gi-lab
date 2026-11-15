@@ -19,6 +19,7 @@ import { BVH_TRACE_WGSL } from './bvh.ts';
 import { FRAME_WGSL, SHADOW_TAP_WGSL } from './frame.ts';
 import { STYLE_WGSL } from './style.ts';
 import type { DdgiParams } from './ddgi.ts';
+import type { Gl2Params } from './gl2.ts';
 import type { GBuffer } from './gbuffer.ts';
 import { DYN_READ_WGSL, dynConstants } from './dynlayer.ts';
 import { BRICK_WORDS, VOX_TRACE_WGSL } from './voxel.ts';
@@ -78,13 +79,15 @@ export interface RcParams {
   // Phase 31 (token obj, not default: +0.15 ms): the dynamic objects receive the indirect light (dynInject) and block and reflect
   // the bounce volume's rays (RC); DDGI: they receive its probes' light (its rays read the layer already).
   objects: boolean;
+  // Phase 33: the WebGL2 tier (gl2.ts, fragment passes over the screen only) instead of the cascades.
+  gl2: Gl2Params | null;
 }
 
 export const DEFAULT_PARAMS: RcParams = {
   method: 'world', P: 8, cascades: 5, sMin: 0.05, kInterval: 1, regStride: 1, rayStride: 1,
   maxSteps: 16, pxStride: 4, thicknessMin: 0.15, lift: 0.25, caps: [1 << 18, 1 << 16, 1 << 14, 1 << 12, 1 << 11, 1 << 10, 1 << 9, 1 << 8], analytic: false,
   world: 'none', depthCascades: 8, levelMap: 1, voxScale: 0.25, voxOffset: 1, voxSkip: 0.5, resCap: 8, stats: 0, relocate: 'gbuffer',
-  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, bounce: true, objects: false,
+  styleEmit: true, styleRecv: true, rampSoft: 0, ddgi: null, bounce: true, objects: false, gl2: null,
 };
 
 /** One-bounce hit shading shared by the interval tracers (RC and the DDGI comparator). Needs F, PI, shadowTex,

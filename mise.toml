@@ -31,9 +31,10 @@ description = "Bundle the radiance-cascade native runner (S1-S3) into build/"
 run = "npx esbuild src/native/rc.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/rc.mjs --external:webgpu --external:pngjs --external:jpeg-js --log-level=warning"
 
 [tasks."build:web"]
-description = "Bundle the browser runner (build/web/rc.js, the page web/rc.html) and its driver (build/native/browser.mjs)"
+description = "Bundle the browser runners (build/web/rc.js and the WebGL2 tier build/web/gl2.js, pages web/rc.html and web/gl2.html) and their driver (build/native/browser.mjs)"
 run = [
   "npx esbuild src/web/rc.ts --bundle --platform=browser --format=esm --target=es2022 --outfile=build/web/rc.js --log-level=warning",
+  "npx esbuild src/web/gl2.ts --bundle --platform=browser --format=esm --target=es2022 --outfile=build/web/gl2.js --log-level=warning",
   "npx esbuild src/native/browser.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/browser.mjs --external:pngjs --log-level=warning",
   "npx esbuild src/native/compare_runs.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/compare_runs.mjs --external:webgpu --external:pngjs --log-level=warning",
   "npx esbuild src/native/compare_blocks.ts --bundle --platform=node --format=esm --target=node22 --outfile=build/native/compare_blocks.mjs --log-level=warning",

@@ -20,6 +20,8 @@
 //   the physical irradiance), soft<x> (receiving ramp half width in n.d).
 //   obj (phase 31: the dynamic objects receive the indirect light and block the bounce volume's rays; also for ddgi-...;
 //   not in the default, +0.15 ms of GI).
+// Other comparators: ddgi-<spacing cm>-<rays>[-...] and the WebGL2 tier gl2-<tile>-<dirs>[-...] (src/core/gl2.ts,
+// default gl2-8-8); their tokens are listed in src/runner/configs.ts.
 import { mkdirSync, writeFileSync, writeSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import type { Vec3 } from '../core/math.ts';
