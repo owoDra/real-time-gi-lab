@@ -1,0 +1,739 @@
+{
+ "phase": 28,
+ "date": "2026-11-15",
+ "kind": "exploratory measurement (探索値), one run each (runs are deterministic: repeated configs gave identical values), 1080p, warmup 60 + 240 frames, no sky, static camera",
+ "spec": "docs/spec/30-measurements.md section 32, docs/spec/40-dynamic-stability.md 'building motion' section",
+ "metric": "excess variation K = 16 (log2 stops per frame) of the run without normal maps (staticGeo); k16linearRel = the same on linear luminance relative to the window mean; staticFinePct = fine band flicker over static pixels",
+ "masks": {
+  "b": "probe relocation (relocateVox) reads the building's voxels held at the pose of the first measured frame",
+  "c": "gather and merge occlusion (gatherWorld, linkParents) read the held voxels",
+  "d": "cascade trace reads the held voxels (and their bounce words)",
+  "e": "voxel hits grey (0.5) and facing the ray, bounce read facing the ray (RC, bounce volume, DDGI)",
+  "f": "bounce volume (bnClassify, bnUpdate) traces the held voxels",
+  "g": "cascade trace on the triangle BVH refitted to the building wave every frame",
+  "h": "cascade rays ignore the dynamic layer (objects)",
+  "sunVisibilityAtHits1": "every hit sees the sun (shadow map not read at hits; brightens the field: read the linear value)",
+  "holdSun": "runner option: the sun held at the first measured frame, objects still move"
+ },
+ "defaultImageSha256": {
+  "sponza --no-sky --static-only --dump-irr --frames 60": "e5a44335320fce9cdb26d9eab606b343e48c1544b0e4629bce4eb197ccd5e2d9",
+  "sponza-dynobj --pose-frame 0 --no-sky --static-only --dump-irr --frames 60": "19a21466463c5805b782799a5dda9765d60ce60fae1d274ce238b169d495c688",
+  "unchangedFromPhase27": true,
+  "withDiagnosticSwitchesPresent": "same",
+  "afterSwitchesRemoved": "same"
+ },
+ "reproduction": {
+  "excessK16Geo": {
+   "town-dynobj-bwave": {
+    "rc": 0.23861,
+    "ddgiLinear": 0.00735
+   },
+   "sponza-dynobj-n64-deform-bwave": {
+    "rc": 0.11431,
+    "ddgiLinear": 0.03812
+   },
+   "sponza-dynobj-n64-deform-bcut": {
+    "rc": 0.03448,
+    "ddgiLinear": 0.00096
+   }
+  },
+  "town-grid": {
+   "rc": {
+    "blockB8": 0.3657,
+    "bias": -0.3288
+   },
+   "ddgiLinear60frames": {
+    "blockB8": 0.3425,
+    "bias": -0.2861
+   }
+  },
+  "giMsBwave64": {
+   "idleMachine_3runs": {
+    "static": [
+     3.825,
+     3.84,
+     3.879
+    ],
+    "moving": [
+     3.514,
+     3.501,
+     3.456
+    ],
+    "allocatedMiB": 76.8,
+    "overflow": 0,
+    "gpuBusyIdlePct": "3-4"
+   },
+   "underConcurrentCpuLoad_alternated": {
+    "note": "another process started loading the CPU (the APU shares its power budget); both runners alike",
+    "phase26Runner": {
+     "static": [
+      3.91,
+      4.04,
+      4.169
+     ],
+     "moving": [
+      3.556,
+      3.833,
+      3.809
+     ]
+    },
+    "head": {
+     "static": [
+      4.072,
+      3.987,
+      4.052
+     ],
+     "moving": [
+      3.706,
+      3.61,
+      3.726
+     ]
+    }
+   },
+   "phase24to26Reference": "3.67-3.80"
+  }
+ },
+ "breakdown": {
+  "town-dynobj-bwave": {
+   "default": {
+    "k16": 0.23861,
+    "k16linearRel": 0.03163,
+    "staticFinePct": 23.403
+   },
+   "b_relocationFrozen": {
+    "k16": 0.08769,
+    "k16linearRel": 0.0165,
+    "staticFinePct": 12.971
+   },
+   "c_occlusionFrozen": {
+    "k16": 0.14474,
+    "k16linearRel": 0.02291,
+    "staticFinePct": 17.656
+   },
+   "b+c": {
+    "k16": 0.03073,
+    "k16linearRel": 0.00984,
+    "staticFinePct": 11.667
+   },
+   "d_traceFrozen": {
+    "k16": 0.2406,
+    "k16linearRel": 0.03146,
+    "staticFinePct": 21.796
+   },
+   "e_hitMaterialNormalRemoved": {
+    "k16": 0.22725,
+    "k16linearRel": 0.04298,
+    "staticFinePct": 20.99
+   },
+   "f_bounceVolumeFrozen": {
+    "k16": 0.23192,
+    "k16linearRel": 0.02937,
+    "staticFinePct": 22.45
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.01696,
+    "k16linearRel": 0.00533,
+    "staticFinePct": 8.005
+   },
+   "bcdf+e": {
+    "k16": 0.01646,
+    "k16linearRel": 0.00743,
+    "staticFinePct": 7.315
+   },
+   "h_dynamicLayerRemoved": {
+    "k16": 0.24624,
+    "k16linearRel": 0.03175,
+    "staticFinePct": 23.715
+   },
+   "bcdf+h": {
+    "k16": 0.01775,
+    "k16linearRel": 0.00541,
+    "staticFinePct": 7.677
+   },
+   "sunVisibilityAtHits1": {
+    "k16": 0.24266,
+    "k16linearRel": 0.03132,
+    "staticFinePct": 21.405
+   },
+   "bcdf+sunVisibilityAtHits1": {
+    "k16": 0.01433,
+    "k16linearRel": 0.00404,
+    "staticFinePct": 5.83
+   },
+   "g_triangleTracer": {
+    "k16": 0.22857,
+    "k16linearRel": 0.03201,
+    "staticFinePct": 23.746
+   },
+   "g+bcf": {
+    "k16": 0.03106,
+    "k16linearRel": 0.00962,
+    "staticFinePct": 12.853
+   },
+   "ddgiLinear": {
+    "k16": 0.00735,
+    "k16linearRel": 0.00369,
+    "staticFinePct": 5.61
+   },
+   "ddgi_d_traceFrozen": {
+    "k16": 0.01073,
+    "k16linearRel": 0.00465,
+    "staticFinePct": 6.693
+   },
+   "ddgi_e_removed": {
+    "k16": 0.00788,
+    "k16linearRel": 0.0059,
+    "staticFinePct": 5.494
+   },
+   "ddgi_d+e": {
+    "k16": 0.00988,
+    "k16linearRel": 0.00672,
+    "staticFinePct": 6.105
+   }
+  },
+  "town-dynobj (no building motion)": {
+   "default": {
+    "k16": 0.00296,
+    "k16linearRel": 0.00152,
+    "staticFinePct": 3.225
+   },
+   "ddgiLinear": {
+    "k16": 0.00107,
+    "k16linearRel": 0.00013,
+    "staticFinePct": 0.988
+   }
+  },
+  "town-bwave (building only)": {
+   "default": {
+    "k16": 0.24274,
+    "k16linearRel": 0.03218,
+    "staticFinePct": 23.177
+   },
+   "b_relocationFrozen": {
+    "k16": 0.08709,
+    "k16linearRel": 0.01588,
+    "staticFinePct": 12.99
+   },
+   "c_occlusionFrozen": {
+    "k16": 0.1434,
+    "k16linearRel": 0.02321,
+    "staticFinePct": 17.444
+   },
+   "b+c": {
+    "k16": 0.0315,
+    "k16linearRel": 0.00929,
+    "staticFinePct": 10.805
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.01592,
+    "k16linearRel": 0.00444,
+    "staticFinePct": 6.622
+   },
+   "ddgiLinear": {
+    "k16": 0.00754,
+    "k16linearRel": 0.00346,
+    "staticFinePct": 5.541
+   }
+  },
+  "sponza-dynobj-n64-deform-bwave": {
+   "default": {
+    "k16": 0.11431,
+    "k16linearRel": 0.07326,
+    "staticFinePct": 23.568
+   },
+   "b_relocationFrozen": {
+    "k16": 0.07887,
+    "k16linearRel": 0.06288,
+    "staticFinePct": 15.125
+   },
+   "c_occlusionFrozen": {
+    "k16": 0.08947,
+    "k16linearRel": 0.07827,
+    "staticFinePct": 16.779
+   },
+   "b+c": {
+    "k16": 0.065,
+    "k16linearRel": 0.05305,
+    "staticFinePct": 13.486
+   },
+   "d_traceFrozen": {
+    "k16": 0.10595,
+    "k16linearRel": 0.06885,
+    "staticFinePct": 20.921
+   },
+   "e_hitMaterialNormalRemoved": {
+    "k16": 0.12521,
+    "k16linearRel": 0.05977,
+    "staticFinePct": 25.173
+   },
+   "f_bounceVolumeFrozen": {
+    "k16": 0.11135,
+    "k16linearRel": 0.072,
+    "staticFinePct": 23.188
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.05373,
+    "k16linearRel": 0.04539,
+    "staticFinePct": 9.874
+   },
+   "bcdf+e": {
+    "k16": 0.06349,
+    "k16linearRel": 0.03854,
+    "staticFinePct": 10.654
+   },
+   "h_dynamicLayerRemoved": {
+    "k16": 0.14836,
+    "k16linearRel": 0.09935,
+    "staticFinePct": 30.078
+   },
+   "bcdf+h": {
+    "k16": 0.05712,
+    "k16linearRel": 0.05676,
+    "staticFinePct": 10.603
+   },
+   "sunVisibilityAtHits1": {
+    "k16": 0.14162,
+    "k16linearRel": 0.04357,
+    "staticFinePct": 20.818
+   },
+   "bcdf+sunVisibilityAtHits1": {
+    "k16": 0.07676,
+    "k16linearRel": 0.02635,
+    "staticFinePct": 4.386
+   },
+   "g_triangleTracer": {
+    "k16": 0.18175,
+    "k16linearRel": 0.08969,
+    "staticFinePct": 35.815
+   },
+   "g+bcf": {
+    "k16": 0.10001,
+    "k16linearRel": 0.06863,
+    "staticFinePct": 20.683
+   },
+   "ddgiLinear": {
+    "k16": 0.03812,
+    "k16linearRel": 0.03394,
+    "staticFinePct": 5.862
+   },
+   "ddgi_d_traceFrozen": {
+    "k16": 0.03703,
+    "k16linearRel": 0.03541,
+    "staticFinePct": 7.695
+   },
+   "ddgi_e_removed": {
+    "k16": 0.04075,
+    "k16linearRel": 0.02993,
+    "staticFinePct": 6.186
+   },
+   "ddgi_d+e": {
+    "k16": 0.04437,
+    "k16linearRel": 0.03124,
+    "staticFinePct": 9.728
+   }
+  },
+  "sponza-dynobj-n64-deform-bwave --hold-sun": {
+   "default": {
+    "k16": 0.0908,
+    "k16linearRel": 0.07609,
+    "staticFinePct": 18.966
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.03786,
+    "k16linearRel": 0.0392,
+    "staticFinePct": 6.215
+   },
+   "ddgiLinear": {
+    "k16": 0.02817,
+    "k16linearRel": 0.03502,
+    "staticFinePct": 4.346
+   }
+  },
+  "sponza-dynobj-n64-deform (no building motion)": {
+   "default": {
+    "k16": 0.00799,
+    "k16linearRel": 0.00557,
+    "staticFinePct": 9.27
+   },
+   "ddgiLinear": {
+    "k16": 0.00026,
+    "k16linearRel": 0.00014,
+    "staticFinePct": 1.081
+   }
+  },
+  "sponza-dynobj-n64-deform --hold-sun": {
+   "default": {
+    "k16": 0.00272,
+    "k16linearRel": 0.00101,
+    "staticFinePct": 4.091
+   },
+   "ddgiLinear": {
+    "k16": 0.00027,
+    "k16linearRel": 0.00017,
+    "staticFinePct": 0.377
+   }
+  },
+  "sponza-bwave (building only)": {
+   "default": {
+    "k16": 0.16617,
+    "k16linearRel": 0.08146,
+    "staticFinePct": 32.991
+   },
+   "b_relocationFrozen": {
+    "k16": 0.11084,
+    "k16linearRel": 0.06483,
+    "staticFinePct": 21.454
+   },
+   "c_occlusionFrozen": {
+    "k16": 0.12677,
+    "k16linearRel": 0.0822,
+    "staticFinePct": 23.582
+   },
+   "b+c": {
+    "k16": 0.09068,
+    "k16linearRel": 0.05402,
+    "staticFinePct": 19.153
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.05735,
+    "k16linearRel": 0.04254,
+    "staticFinePct": 7.048
+   },
+   "ddgiLinear": {
+    "k16": 0.04224,
+    "k16linearRel": 0.03863,
+    "staticFinePct": 6.084
+   },
+   "sunVisibilityAtHits1": {
+    "k16": 0.15016,
+    "k16linearRel": 0.04062,
+    "staticFinePct": 20.275
+   },
+   "bcdf+sunVisibilityAtHits1": {
+    "k16": 0.07945,
+    "k16linearRel": 0.02308,
+    "staticFinePct": 3.772
+   }
+  },
+  "sponza-dynobj-n64-deform-bcut": {
+   "default": {
+    "k16": 0.03448,
+    "k16linearRel": 0.01497,
+    "staticFinePct": 16.528
+   },
+   "b_relocationFrozen": {
+    "k16": 0.03264,
+    "k16linearRel": 0.0145,
+    "staticFinePct": 15.992
+   },
+   "c_occlusionFrozen": {
+    "k16": 0.03403,
+    "k16linearRel": 0.01466,
+    "staticFinePct": 16.635
+   },
+   "b+c": {
+    "k16": 0.03267,
+    "k16linearRel": 0.01434,
+    "staticFinePct": 16.445
+   },
+   "d_traceFrozen": {
+    "k16": 0.03922,
+    "k16linearRel": 0.01751,
+    "staticFinePct": 17.994
+   },
+   "e_hitMaterialNormalRemoved": {
+    "k16": 0.02415,
+    "k16linearRel": 0.01181,
+    "staticFinePct": 16.236
+   },
+   "f_bounceVolumeFrozen": {
+    "k16": 0.03521,
+    "k16linearRel": 0.01459,
+    "staticFinePct": 16.461
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.03311,
+    "k16linearRel": 0.01579,
+    "staticFinePct": 16.319
+   },
+   "bcdf+e": {
+    "k16": 0.02119,
+    "k16linearRel": 0.01074,
+    "staticFinePct": 14.257
+   },
+   "h_dynamicLayerRemoved": {
+    "k16": 0.04604,
+    "k16linearRel": 0.0236,
+    "staticFinePct": 19.107
+   },
+   "bcdf+h": {
+    "k16": 0.0494,
+    "k16linearRel": 0.0257,
+    "staticFinePct": 19.682
+   },
+   "sunVisibilityAtHits1": {
+    "k16": 0.00382,
+    "k16linearRel": 0.00127,
+    "staticFinePct": 3.967
+   },
+   "bcdf+sunVisibilityAtHits1": {
+    "k16": 0.00097,
+    "k16linearRel": 0.00033,
+    "staticFinePct": 2.105
+   },
+   "ddgiLinear": {
+    "k16": 0.00096,
+    "k16linearRel": 0.00036,
+    "staticFinePct": 1.736
+   },
+   "ddgi_d_traceFrozen": {
+    "k16": 0.00082,
+    "k16linearRel": 0.00031,
+    "staticFinePct": 1.642
+   },
+   "ddgi_e_removed": {
+    "k16": 0.00085,
+    "k16linearRel": 0.00033,
+    "staticFinePct": 1.774
+   },
+   "ddgi_d+e": {
+    "k16": 0.00094,
+    "k16linearRel": 0.00029,
+    "staticFinePct": 1.91
+   }
+  },
+  "sponza-dynobj-n64-deform-bcut --hold-sun": {
+   "default": {
+    "k16": 0.00749,
+    "k16linearRel": 0.00273,
+    "staticFinePct": 6.669
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.0056,
+    "k16linearRel": 0.00216,
+    "staticFinePct": 5.384
+   },
+   "ddgiLinear": {
+    "k16": 0.00075,
+    "k16linearRel": 0.0004,
+    "staticFinePct": 1.153
+   }
+  },
+  "sponza-bcut (building only, fixed sun)": {
+   "default": {
+    "k16": 0.0028,
+    "k16linearRel": 0.00038,
+    "staticFinePct": 3.195
+   },
+   "b_relocationFrozen": {
+    "k16": 0.00292,
+    "k16linearRel": 0.00038,
+    "staticFinePct": 3.035
+   },
+   "c_occlusionFrozen": {
+    "k16": 0.00281,
+    "k16linearRel": 0.00038,
+    "staticFinePct": 3.198
+   },
+   "b+c": {
+    "k16": 0.00297,
+    "k16linearRel": 0.00038,
+    "staticFinePct": 3.058
+   },
+   "bcdf_allVoxelsFrozen": {
+    "k16": 0.0003,
+    "k16linearRel": 4e-05,
+    "staticFinePct": 0.927
+   },
+   "ddgiLinear": {
+    "k16": 0.00102,
+    "k16linearRel": 0.00033,
+    "staticFinePct": 1.74
+   }
+  }
+ },
+ "shareOfDefault_k16": {
+  "town-dynobj-bwave": {
+   "b": 0.63,
+   "c": 0.39,
+   "b+c": 0.87,
+   "d": -0.01,
+   "e": 0.05,
+   "f": 0.03,
+   "bcdf": 0.93,
+   "unexplained": 0.07
+  },
+  "sponza-dynobj-n64-deform-bwave": {
+   "b": 0.31,
+   "c": 0.22,
+   "b+c": 0.43,
+   "d+f|b,c": 0.1,
+   "bcdf": 0.53,
+   "sunMotion|bcdf": 0.14,
+   "objectsAndSunOnlyHeldSun": 0.02,
+   "unexplained": 0.31,
+   "unexplainedNote": "0.035 left with all voxels held and the sun held; in the maps it sits on the sunlit upper arches, where the linear DDGI shows the same (DDGI with the sun held 0.028)"
+  },
+  "sponza-dynobj-n64-deform-bcut": {
+   "bcdf": 0.04,
+   "e": 0.3,
+   "sunVisibilityAtHits": 0.89,
+   "sunVisibilityAtHitsLinear": 0.92,
+   "holdSun": 0.78,
+   "h_dynamicLayer": -0.34,
+   "unexplained": 0.11
+  }
+ },
+ "blackPixels": {
+  "definition": "valid photoreal pixels whose 8 c0 probes are all hidden (after the retest from two voxels out), percent of valid pixels; cause of each: probeInside (most hidden probes inside an occupied voxel: b), startInside (the retest start inside an occupied voxel: c), pathBlocked (c)",
+  "town-grid": {
+   "blackPct": 35.846,
+   "probeInsidePct": 0.676,
+   "startInsidePct": 2.309,
+   "pathBlockedPct": 32.861
+  },
+  "town": {
+   "blackPct": 1.48,
+   "probeInsidePct": 0.067,
+   "startInsidePct": 1.414,
+   "pathBlockedPct": 0
+  },
+  "town-dynobj-bwave poses 60..270 step 30": {
+   "blackPct": [
+    3.1,
+    3.288,
+    3.337,
+    3.199,
+    3.745,
+    3.355,
+    2.985,
+    3.215
+   ],
+   "probeInsidePct": "0.10-0.52",
+   "startInsidePct": "1.14-1.61",
+   "pathBlockedPct": "1.20-2.01"
+  },
+  "sponza": {
+   "blackPct": 3.43,
+   "probeInsidePct": 0.934,
+   "startInsidePct": 2.287,
+   "pathBlockedPct": 0.208
+  },
+  "sponza-dynobj-n64-deform-bwave poses 60,120,180,240": {
+   "blackPct": [
+    3.977,
+    3.552,
+    3.509,
+    4.182
+   ]
+  },
+  "gatherOcclusionRemoved": {
+   "town-grid": {
+    "blockB8": 0.5154,
+    "bias": -0.4923
+   },
+   "town": {
+    "blockB8": 0.3046,
+    "bias": -0.2801
+   },
+   "townDefault": {
+    "blockB8": 0.228,
+    "bias": -0.1706
+   },
+   "note": "the test is needed: probes it hides are dark"
+  }
+ },
+ "shortHistoryEstimate": {
+  "method": "offline, every 6th pixel of every measured frame (--diag-seq), exponential history on the gathered luminance, weight on the new frame 0.684 / 0.536 / 0.438 = 90 % of a step in 2 / 3 / 4 frames; raw matches the GPU metric (0.1142 vs 0.1143)",
+  "note": "optimistic for a history on the c0 probes: on the screen it also smooths the gather's weight changes",
+  "town-dynobj-bwave": {
+   "default": [
+    0.23874,
+    0.14675,
+    0.11218,
+    0.08897
+   ],
+   "b+c": [
+    0.03065,
+    0.02259,
+    0.01914,
+    0.01668
+   ],
+   "bcdf": [
+    0.01683,
+    0.0133,
+    0.01182,
+    0.0107
+   ],
+   "ddgiLinear": [
+    0.00736,
+    0.0056,
+    0.0048,
+    0.0042
+   ]
+  },
+  "sponza-dynobj-n64-deform-bwave": {
+   "default": [
+    0.1142,
+    0.07817,
+    0.06375,
+    0.05376
+   ],
+   "b+c": [
+    0.06505,
+    0.04433,
+    0.03716,
+    0.03216
+   ],
+   "bcdf": [
+    0.0539,
+    0.037,
+    0.0313,
+    0.02731
+   ],
+   "ddgiLinear": [
+    0.03824,
+    0.02702,
+    0.02287,
+    0.01985
+   ]
+  },
+  "sponza-dynobj-n64-deform-bcut": {
+   "default": [
+    0.03451,
+    0.02376,
+    0.01947,
+    0.01658
+   ],
+   "b+c": [
+    0.03266,
+    0.02255,
+    0.01854,
+    0.01583
+   ],
+   "bcdf": [
+    0.0331,
+    0.02219,
+    0.01767,
+    0.01456
+   ],
+   "ddgiLinear": [
+    0.00097,
+    0.0007,
+    0.00064,
+    0.00059
+   ]
+  },
+  "order": [
+   "raw",
+   "h2",
+   "h3",
+   "h4"
+  ]
+ },
+ "decisionForPhase29": [
+  "surface plane per voxel; relocation by the plane's signed distance and occlusion by segment-plane crossing (b, c, black pixels)",
+  "sun visibility of voxel hits as the mean over the voxel's face, stored per voxel once per frame (D: the cut scene, the moving sun)",
+  "short history on the c0 irradiance, 90 % within 4 frames, only if S2 is still missed after the first two"
+ ]
+}
