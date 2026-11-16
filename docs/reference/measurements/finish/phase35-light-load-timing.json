@@ -1,0 +1,25 @@
+{
+  "phase": 35,
+  "kind": "exploratory (探索値): measured during the review, after the confirmation run; it does not change any phase 34 verdict",
+  "date": "2026-11-16",
+  "machine": "work machine, AMD Radeon 8060S (RADV), native Dawn/Vulkan, shortly after a reboot. Lightly loaded, not idle: another GPU application was running, the 1-minute load average was 0.9 at the first run and rose to 5-8 during the later runs (the runs themselves add load)",
+  "conditions": "1920x1080, warmup 60 + 240 frames, no sky, one process per run, GI GPU timestamp total, median per run (static camera; moving camera where given). Default image sha256 checked first (sponza 9589339d)",
+  "order": "first block: RC x3 on sponza-dynobj-n64-deform-bwave; then 3 rounds of [RC cam2, RC static-only, RC wide100 static-only, RC-obj, DDGI linear]",
+  "staticMs": {
+    "rc_sponza-dynobj-n64-deform-bwave_firstBlock": [3.71, 3.659, 3.617],
+    "rc_sponza-dynobj-n64-deform-bwave_rounds": [3.677, 3.857, 3.888],
+    "rc_sponza-dynobj-n64-deform-cam2-bwave": [3.752, 3.798, 3.983],
+    "rcObj_sponza-dynobj-n64-deform-bwave": [3.765, 3.782, 3.968],
+    "rc_sponza-wide100-dynobj-n64-deform-bwave": [4.172, 4.329, 4.3],
+    "ddgiLinear_sponza-dynobj-n64-deform-bwave": [3.579, 3.288, 3.257]
+  },
+  "movingMs": {
+    "rc_sponza-dynobj-n64-deform-bwave_firstBlock": [3.423, 3.402, 3.408],
+    "rc_sponza-dynobj-n64-deform-cam2-bwave": [3.67, 3.674, 3.938],
+    "rcObj_sponza-dynobj-n64-deform-bwave": [3.548, 3.625, 3.661],
+    "ddgiLinear_sponza-dynobj-n64-deform-bwave": [3.606, 3.363, 3.571]
+  },
+  "loadAverage1minAtStart": {"firstBlock": [0.94, 3.35, 5.95], "round1": [3.69, 5.16, 5.37, 5.73, 5.75], "round2": [6.8, 7.55, 8.33, 8.57, 8.42], "round3": [7.39, 6.42, 6.1, 4.95, 6.06]},
+  "reading": "RC default and the held-out view were at or below 4.0 ms in all 9 runs (3.62-3.98), RC-obj in all 3 (3.77-3.97), the 100x-wide world above 4.0 ms in all 3 (4.17-4.33). Values rose with the load during the session; the margin is 0.02-0.4 ms. Not a preregistered idle-machine judgement (未実行)",
+  "reproduced": "quality values rerun for the page images match phase 34: building jumps 0.19399 / 0.09019, object jumps 0.00544 (RC) / 0.00017 (DDGI linear) / 0.03606 (DF1), leak-0.05 0.565 % / 2.127 % / 2.783 %"
+}

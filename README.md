@@ -10,18 +10,21 @@ WebGPU で動くリアルタイム・グローバルイルミネーションの�
 
 ## 現在地
 
-**Program 2（2026-11-13 開始）。Radiance Cascades 系の放射輝度場（履歴なし、ボクセルでトレース）と、比較相手の
-DDGI 系のプローブを、完全動的な Sponza で同じ約 3.4 ms（予算 4 ms）で比べ終えました。RC は光源切替への応答
-（1 フレーム）と静止したシーンの安定性で上、DDGI は静的な誤差と、物体や光源が動くシーンの安定性で上です。
-RC は物体や光源が動くと場が広い範囲で跳びます。原因の切り分けを終え、RC を土台に続けて、跳びを遅れなしに抑える前置フィルタを作る段階です
-（DDGI 系は比較相手として残します）。数値はすべてネイティブでの探索値です。**
+**Program 2（2026-11-13〜2026-11-16）は、一部達成で終えました。** Radiance Cascades 系の放射輝度場（RC。ボクセルでトレースし、建物を含む全形状を毎フレーム作り直す）を作り、
+同じ予算（GI 4 ms、128 MB）の DDGI 系のプローブと比べ、条件を先に書いて 1 回だけ測る確認実験を行いました（26 の主張のうち 19 成立、7 不成立）。
 
-次にやることは [docs/plan/README.md](docs/plan/README.md) の「列の一覧」から辿れます。
+- **確かめられたこと**：実際のブラウザの WebGPU（コア機能だけ）で動き、画像はネイティブとビット単位で同じ。静止時のちらつき 0、光源の切り替えへの応答 4 フレーム。
+  同じくらい速く応答する DDGI 系より、物体が動くときの跳びが 1/7〜1/15。リークは DDGI 系の 1/3〜1/4。広さ 100 倍でメモリが増えず、三角形 10 倍で GI 1.07 倍。機能を絞った WebGL2 版も動く。
+- **届かなかったこと**：建物そのものが動くと間接光が DDGI 系の 2.4〜30 倍跳ぶ。参照（Mitsuba）との誤差は DDGI 系より小さくない。GI の時間は予算の境（混んだ機械で 3.8〜4.1 ms）で、
+  建物が並ぶ広いワールドでは 4 ms を超える。既定では動く物体が参照より 17〜22% 暗い。
+- **限界**：開発機 1 台（AMD Radeon 8060S）と Brave 149 だけの結果で、一般化しません。
+
+結論は [docs/spec/00-overview.md](docs/spec/00-overview.md) の「結論」、確認実験は [docs/spec/60-confirmation.md](docs/spec/60-confirmation.md)、残っている課題は [docs/spec/50-roadmap.md](docs/spec/50-roadmap.md)。
 
 | 文書 | 内容 |
 |---|---|
 | [docs/README.md](docs/README.md) | 文書の入口 |
-| [docs/spec/](docs/spec/README.md) | 正本：目的と必須要件、評価方法、いまの構成、測った結果、動的な跳びの見立て、ロードマップ |
+| [docs/spec/](docs/spec/README.md) | 正本：目的と必須要件と結論、評価方法、いまの構成、測った結果、動的な跳びの見立て、ロードマップ、確認実験 |
 | [docs/plan/](docs/plan/README.md) | 作業の計画（列とフェーズ） |
 | [docs/project-structure.md](docs/project-structure.md) | ディレクトリとコマンド |
 | [docs/reference/](docs/reference/) | 先行研究、Program 1 の知見、数値の要約 |
@@ -49,11 +52,11 @@ mise run check    # 文書のリンクと legacy 目録を検査
 mise run typecheck
 mise run build:rc # 実行器をバンドル
 bash scripts/run_with_vulkan.sh node build/native/rc.mjs --scene sponza-dyn \
-  --configs world-48-voxel-rc2-vrel --no-sky --vox '{"anchor":"scene","local":true}'
+  --configs world-48-voxel-rc2-vrel --no-sky
 ```
 
-レンダラは TypeScript と WebGPU（WGSL、コア機能のみ）で書き、当面はネイティブの Dawn を Node から使って
-開発・計測します。コマンドの一覧は [docs/project-structure.md](docs/project-structure.md)。
+レンダラは TypeScript と WebGPU（WGSL、コア機能のみ）で書き、ネイティブの Dawn を Node から使って
+開発・計測しました（ブラウザの実行器は `src/web/`）。コマンドの一覧は [docs/project-structure.md](docs/project-structure.md)。
 
 ## ライセンス
 
